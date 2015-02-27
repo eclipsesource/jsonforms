@@ -1,0 +1,12 @@
+<div>
+    <form role="form" class="qb-form rounded">
+
+        <recelement ng-repeat="child in elements" element="child" bindings="bindings" top-open-date="openDate" top-validate-number="validateNumber" top-validate-integer="validateInteger"></recelement>
+
+        <div class="row">
+            <div class="move-right">
+                <button type="button" class="btn btn-primary top-buffer bottom-buffer-s" ng-click="sendData()">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>

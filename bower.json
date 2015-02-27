@@ -1,0 +1,16 @@
+{
+  "name": "jsonForms",
+  "description": "A starter project for QB Forms",
+  "version": "0.0.1",
+  "homepage": "https://github.com/qb-project/jsonforms",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-loader": "1.2.x",
+    "angular-mocks": "~1.2.x",
+    "angular-ui": "0.4.0",
+    "angular-ui-grid": "3.0.0-RC.18"
+  }
+}

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="jsonForms" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="jsonForms" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="jsonForms" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="jsonForms" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>QB Forms!</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
+    <link rel="stylesheet" href="css/qb-bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <!--script src="bower_components/dist/less.js" type="text/javascript"></script-->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui/build/angular-ui.js"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+
+    <script src="js/app.js" type="text/javascript"></script>
+    <script src="js/services.js" type="text/javascript"></script>
+    <script src="js/controllers.js" type="text/javascript"></script>
+    <script src="js/directives.js" type="text/javascript"></script>
+    <script src="js/ui-bootstrap-tpls-0.11.2.js" type="text/javascript"></script>
+    <script src="js/ui-utils.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <nav>
+            <ul class="nav nav-pills pull-right">
+                <li role="presentation" class="active"><a href="#">Home</a></li>
+                <li role="presentation"><a href="#">About</a></li>
+                <li role="presentation"><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <h3 class="text-muted">QB Forms</h3>
+    </div>
+
+    <div class="jumbotron top-buffer">
+        <h1>QB Forms Embedded Demonstration</h1>
+        <p class="lead">QB Forms advances EMF Forms into the Web! Based purely on web technology (Jason Schema, AngularJS and Bootstrap) modeling form-based interfaces is as easy as it gets</p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+    </div>
+
+    <div class="row marketing">
+        <div class="col-sm-6">
+            <h4>Web Technology</h4>
+            <p>Based purely on web technology, QB Forms is fast and furious.</p>
+
+            <h4>Open Source</h4>
+            <p>You want to tailor qb Forms to fit exactly to your business requirements? No Problem! The code is Open Source and free of charge.</p>
+
+        </div>
+
+        <div class="col-sm-6">
+            <h4>Check it out! </h4>
+            <p><a class="btn btn-md btn-success" href="#user/Create" role="button">Server Example</a>
+                <a class="btn btn-md btn-success" href="#/localdemo" role="button">Local Example</a></p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+            <div ng-view class="bootstrap-qbwrapper"/>
+        </div>
+
+    </div>
+
+
+    <div class ="row">
+        <footer class="footer col-sm-12">
+            <p>&copy; Eclipse Source 2015</p>
+        </footer>
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>
