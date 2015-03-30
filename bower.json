@@ -13,6 +13,8 @@
     "angular-ui": "0.4.0",
     "angular-ui-grid": "3.0.0-RC.18",
     "angular-ui-router": "0.2.13",
-    "jquery": "1.11.x"
+    "jquery": "1.11.x",
+    "dojo": "1.10.x",
+    "dojox": "1.10.x"
   }
 }
