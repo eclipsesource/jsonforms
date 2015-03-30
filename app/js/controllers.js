@@ -2,16 +2,14 @@
 
 /* Controllers */
 
-var jsonFormsControllers = angular.module('jsonForms.controllers', []);
+var qbFormsControllers = angular.module('jsonForms.controllers', []);
 
-jsonFormsControllers
-    .controller('FormCtrlLocal', ['$scope', 'SendData', '$routeParams',
-
-        function($scope, Data, SendData, $routeParams) {
+qbFormsControllers
+    .controller('FormCtrlLocal', ['$scope', 'GetData', 'BindingService', 'RenderService', 'SendData', '$routeParams',
+        function($scope, Data, BindingService, RenderService, SendData, $routeParams) {
 
             $scope.localModelDefault = JSON.stringify(getDefaultModelObject(), undefined, 2);
             $scope.localViewDefault = JSON.stringify(getDefaultViewObject(), undefined, 2);
-
             if($scope.localModel === undefined){
                 $scope.localModel = $scope.localModelDefault;
             }
@@ -26,10 +24,9 @@ jsonFormsControllers
                 $scope.localModel = JSON.stringify(localModelObject, undefined, 2);
                 $scope.localView = JSON.stringify(localViewObject, undefined, 2);
 
-                var mergedData = Data.getLocalData(localModelObject, localViewObject);
+                var mergedData = RenderService.renderAll(localModelObject, localViewObject, undefined)
 
-                $scope.elements = mergedData.layoutTree;
-                $scope.bindings = mergedData.bindings;
+                $scope.elements = mergedData;
                 $scope.id = mergedData.id;
 
                 $scope.opened = false;
@@ -89,17 +86,22 @@ jsonFormsControllers
 
 var baseUrl = "assets";
 
-jsonFormsControllers
-    .controller('FormCtrl', ['$scope', 'GetDataRemote', 'SendData', '$routeParams',
-        function($scope, Data, SendData, $routeParams) {
+qbFormsControllers
+    .controller('FormCtrl', ['$scope', 'GetData', 'SendData', 'RenderService', '$routeParams',
+        function($scope, Data, SendData, RenderService, $routeParams) {
 
-
-                Data.getFormData("", $routeParams.type, $routeParams.id, $scope).then(function(data) {
-                    $scope.elements = data.layoutTree;
-                    $scope.id = data.id;
-                    $scope.bindings = data.bindings;
-                });
-                $scope.opened = false;
+            // TODO: fix me
+            Data.getFormData("http://localhost:9000", $routeParams.type, $routeParams.id, $scope).then(function(data) {
+                //viewModelData: viewModelData,
+                //    ecoreModelData: ecoreModelData,
+                //    rawInstanceData: rawInstanceData,
+                //    instanceData: instanceData
+                console.log("Call me plz");
+                $scope.elements = RenderService.renderAll(data.ecoreModelData, data.viewModelData, data.rawInstanceData, $scope); //data.layoutTree;
+                $scope.id = data.id;
+                //$scope.bindings = data.bindings;
+            });
+            $scope.opened = false;
 
 
             $scope.openDate = function($event, element) {
@@ -120,7 +122,7 @@ jsonFormsControllers
                         data[key] = $scope.bindings[key];
                     }
                 }
-                
+
                 SendData.sendData(baseUrl, $routeParams.type, $scope.id, data);
             };
 
@@ -155,88 +157,100 @@ jsonFormsControllers
     ]);
 
 
+qbFormsControllers
+    .controller('ListCtrl', ['$scope', 'GetData', '$routeParams',
+        function($scope, Data, $routeParams) {
+            //Fetch data from service and bind it to elements
+            Data.getRawInstanceData(baseUrl, $routeParams.type).then(function(data) {
+                $scope.elements = data;
+                $scope.type = $routeParams.type;
+            });
+        }
+    ]);
+
+
 function getDefaultViewObject(){
     return {
         "elements": [
-        {
-            "type": "QBHorizontalLayout",
-            "elements": [
-                {
-                    "type": "QBVerticalLayout",
-                    "elements": [
-                        {
-                            "type": "Label",
-                            "text": "Personal Data"
-                        },
-                        {
-                            "type": "Control",
-                            "path": "firstName",
-                            "name": "First Name"
-                        },
-                        {
-                            "type": "Control",
-                            "path": "lastName",
-                            "name": "Last Name"
-                        },
-                        {
-                            "type": "Control",
-                            "path": "dateOfBirth",
-                            "name": "Date Of Birth"
-                        },
-                        {
-                            "type": "QBHorizontalLayout",
-                            "elements": [
-                                {
-                                    "type": "Control",
-                                    "path": "weight",
-                                    "name": "Weight"
-                                },
-                                {
-                                    "type": "Control",
-                                    "path": "heigth",
-                                    "name": "Heigth"
-                                },
-                                {
-                                    "type": "Control",
-                                    "path": "nationality",
-                                    "name": "Nationality"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "Control",
-                            "path": "gender",
-                            "name": "Gender"
-                        }
-                    ]
-                },
-                {
-                    "type": "QBVerticalLayout",
-                    "elements": [
-                        {
-                            "type": "Label",
-                            "text": "Site Related Data"
-                        },
-                        {
-                            "type": "Control",
-                            "path": "timeOfRegistration",
-                            "name": "Time Of Registration"
-                        },
-                        {
-                            "type": "Control",
-                            "path": "email",
-                            "name": "Email"
-                        },
-                        {
-                            "type": "Control",
-                            "path": "active",
-                            "name": "Active"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+            {
+                "type": "QBHorizontalLayout",
+                "elements": [
+                    {
+                        "type": "QBVerticalLayout",
+                        "elements": [
+                            {
+                                "type": "Label",
+                                "text": "Personal Data"
+                            },
+                            {
+                                "type": "Control",
+                                "path": "firstName",
+                                "name": "First Name"
+                            },
+                            {
+                                "type": "Control",
+                                "path": "lastName",
+                                "name": "Last Name"
+                            },
+                            {
+                                "type": "Control",
+                                "path": "dateOfBirth",
+                                "name": "Date Of Birth"
+                            },
+                            {
+                                "type": "QBHorizontalLayout",
+                                "elements": [
+                                    {
+                                        "type": "Control",
+                                        "path": "weight",
+                                        "name": "Weight"
+                                    },
+                                    {
+                                        "type": "Control",
+                                        "path": "heigth",
+                                        "name": "Heigth"
+                                    },
+                                    {
+                                        "type": "Control",
+                                        "path": "nationality",
+                                        "name": "Nationality"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Control",
+                                "path": "gender",
+                                "name": "Gender"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "QBVerticalLayout",
+                        "elements": [
+                            {
+                                "type": "Label",
+                                "text": "Site Related Data"
+                            },
+                            {
+                                "type": "Control",
+                                "path": "timeOfRegistration",
+                                "name": "Time Of Registration"
+                            },
+                            {
+                                "type": "Control",
+                                "path": "email",
+                                "name": "Email"
+                            },
+                            {
+                                "type": "Control",
+                                "path": "active",
+                                "name": "Active"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     };
 }
 
