@@ -2,6 +2,22 @@
 
 var jsonFormsDirectives = angular.module('jsonForms.directives', []);
 
+jsonFormsDirectives.directive('qbMapping', function() {
+    console.log("Directive was run");
+    return {
+        restrict: "E",
+        replace: true,
+        link: function ($scope, element, attrs) {
+            console.log("link  was run");
+            $scope.baseUrl = attrs.baseUrl;
+        },
+        scope: {
+            baseUrl: "&"
+        },
+        controller: "FormCtrl"
+    };
+});
+
 jsonFormsDirectives.directive('control', function() {
     return {
         restrict: "E",

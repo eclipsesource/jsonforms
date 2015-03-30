@@ -11,6 +11,8 @@
     "angular-loader": "1.2.x",
     "angular-mocks": "~1.2.x",
     "angular-ui": "0.4.0",
-    "angular-ui-grid": "3.0.0-RC.18"
+    "angular-ui-grid": "3.0.0-RC.18",
+    "angular-ui-router": "0.2.13",
+    "jquery": "1.11.x"
   }
 }
