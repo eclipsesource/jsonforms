@@ -56,7 +56,7 @@ describe('Dojox Json referencing', function() {
     var jsonObject = dojox.json.ref.fromJson(jsonString, {assignAbsoluteIds:false})
     expect(jsonObject.__id).toBeUndefined();
 
-    // now we set the flag to false, so unique ids are assigned
+    // now we set the flag to true, so unique ids are assigned
     var jsonObject = dojox.json.ref.fromJson(jsonString, {assignAbsoluteIds:true})
     expect(jsonObject.__id).toBeDefined();
   });
@@ -65,14 +65,12 @@ describe('Dojox Json referencing', function() {
     var jsonString = '{\
       refersTo: {$ref: "http://localhost:9876/test"}\
     }';
-    var counter = 0;
-    var jsonObject = dojox.json.ref.fromJson(jsonString,
-      {loader:function() { counter = counter + 1} }
-    );
+    var spy = jasmine.createSpy();
+    var jsonObject = dojox.json.ref.fromJson(jsonString, {loader:spy } );
 
-    expect(counter).toBe(0);
+    expect(spy).not.toHaveBeenCalled();
     jsonObject.refersTo._loadObject.call();
-    expect(counter).toBe(1);
+    expect(spy).toHaveBeenCalled();
   });
 
 });
