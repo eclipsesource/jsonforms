@@ -6,16 +6,11 @@ angular.module('jsonForms', [
     'ui.validate',
     'ui.router',
     'ui.grid',
-    //'ui.grid.paging',
     'ui.grid.pagination',
     'ui.grid.autoResize',
-    'jsonForms.data.common',
-    //'jsonForms.data.local',
-    'jsonForms.data.endpoint',
+    'jsonForms.services',
     'jsonForms.data.remote',
     'jsonForms.data.send',
-    'jsonForms.renderService',
-    'jsonForms.bindingService',
     'jsonForms.verticalLayout',
     'jsonForms.horizontalLayout',
     'jsonForms.label',
@@ -25,8 +20,7 @@ angular.module('jsonForms', [
     'jsonForms.utilityServices',
     'jsonForms.dataServices',
     'jsonForms.directives'
-    //'underscore'
-    ]).
+]).
     config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.when('/localdemo', {
@@ -52,5 +46,41 @@ angular.module('jsonForms', [
                 redirectTo: '/localdemo'
             });
         }
-    ]);
+    ]).run(['EndpointMapping', function(EndpointMapping) {
+        var testUrl = "http://localhost:9000/";
+        console.log(JSON.stringify(EndpointMapping));
+        EndpointMapping.register("user",  {
+            single: "user/",
+            many: "user",
+            "size": testUrl + "user/count",
+            "pagination": {
+                url: testUrl + "user/search",
+                paramNames: {
+                    pageNr: "page",
+                    pageSize: "pageSize"
+                },
+                // TODO: these should be put somewhere else
+                defaultPageSize: 5,
+                defaultPage: 1,
+                defaultPageSizes: [5, 10]
+            },
+            "filtering": {
+                url: testUrl + "user/search" //?userId={{id}}"
+            }
+        });
+        EndpointMapping.register("task", {
+            "single": "task/",
+            "many": testUrl + "task",
+            "pagination": {
+                url: testUrl + "task/search?userId={{id}}", // TODO: userId
+                paramNames: {
+                    pageNr: "page",
+                    pageSize: "pageSize"
+                },
+                defaultPageSize: 5,
+                defaultPage: 1,
+                defaultPageSizes: [5, 10]
+            }
+        });
+    }]);
 
