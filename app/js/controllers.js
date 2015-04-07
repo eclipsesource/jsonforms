@@ -24,7 +24,7 @@ qbFormsControllers
                 $scope.localModel = JSON.stringify(localModelObject, undefined, 2);
                 $scope.localView = JSON.stringify(localViewObject, undefined, 2);
 
-                var mergedData = RenderService.renderAll(localModelObject, localViewObject, undefined)
+                var mergedData = RenderService.renderAll(localModelObject, localViewObject, undefined);
 
                 $scope.elements = mergedData;
                 $scope.id = mergedData.id;
@@ -87,19 +87,15 @@ qbFormsControllers
 var baseUrl = "assets";
 
 qbFormsControllers
-    .controller('FormCtrl', ['$scope', 'GetData', 'SendData', 'RenderService', '$routeParams',
-        function($scope, Data, SendData, RenderService, $routeParams) {
+    .controller('FormCtrl', ['$scope', 'GetData', 'SendData', 'RenderService', 'BindingService', '$routeParams',
+        function($scope, Data, SendData, RenderService, BindingService, $routeParams) {
 
             // TODO: fix me
             Data.getFormData("http://localhost:9000", $routeParams.type, $routeParams.id, $scope).then(function(data) {
-                //viewModelData: viewModelData,
-                //    ecoreModelData: ecoreModelData,
-                //    rawInstanceData: rawInstanceData,
-                //    instanceData: instanceData
                 console.log("Call me plz");
                 $scope.elements = RenderService.renderAll(data.ecoreModelData, data.viewModelData, data.rawInstanceData, $scope); //data.layoutTree;
-                $scope.id = data.id;
-                //$scope.bindings = data.bindings;
+                $scope.id = data.rawInstanceData.id;
+                $scope.bindings = BindingService.all();
             });
             $scope.opened = false;
 

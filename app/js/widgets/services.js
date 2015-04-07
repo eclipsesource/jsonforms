@@ -1,11 +1,36 @@
+angular.module('jsonForms.services', []).provider('BindingService', function() {
 
-var module = angular.module("jsonForms.data.common", []);
+    var bindings = {};
 
-module.factory('DataCommon', ['$http', '$q', function($http, $q) {
+    this.addBinding = function(id, element) {
+        bindings[id] = element;
+    };
 
-    function isObjectType(element) {
-        return element.type === "object";
-    }
+    this.binding = function(id) {
+        return bindings[id];
+    };
+
+    this.all = function(ignoreUndefined) {
+        var data = {};
+        for (var key in bindings) {
+            var value = bindings[key];
+            if (value != null || (value == null && !ignoreUndefined)) {
+                data[key] = value;
+            }
+        }
+        console.log(data);
+        return data;
+    };
+
+    this.$get = function() {
+        var that = this;
+        return {
+            add: that.addBinding,
+            binding: that.binding,
+            all: that.all
+        }
+    };
+}).factory('DataCommon', ['$http', '$q', function($http, $q) {
 
     function getType(elementName, schema) {
         var properties = schema.properties;
@@ -46,7 +71,6 @@ module.factory('DataCommon', ['$http', '$q', function($http, $q) {
 
         return result;
     }
-
 
     function getValue(elementName, instanceData) {
         if (instanceData === undefined) {
@@ -112,17 +136,6 @@ module.factory('DataCommon', ['$http', '$q', function($http, $q) {
     return {
         getValue: getValue,
         getType: getType,
-        isObjectType: isObjectType,
-        fetchSchema: function(endpoint) {
-            var defer = $q.defer();
-            var promise = $http.get(endpoint);
-            $q.all([promise]).then(function(schema) {
-                defer.resolve(schema);
-            });
-
-            return defer.promise;
-        },
-
         getFormData: function(url, type, id) {
 
             var defer = $q.defer();
@@ -171,4 +184,119 @@ module.factory('DataCommon', ['$http', '$q', function($http, $q) {
             return result;
         }
     }
-}]);
+}]).factory('EndpointMapping', function() {
+
+        var mapping = {};
+
+        var mergeObjects = function(obj1, obj2) {
+            var obj3 = {};
+            for (var attr1 in obj1) { obj3[attr1] = obj1[attr1] }
+            for (var attr2 in obj2) { obj3[attr2] = obj2[attr2] }
+            return obj3;
+        };
+
+        return {
+            register: function(schemaType, schemaMapping) {
+                mapping[schemaType] = schemaMapping;
+            },
+            map: function(schemaType) {
+
+                var m = mapping[schemaType];
+
+                return mergeObjects(m, {
+                    isPaginationEnabled: function() {
+                        return m.pagination !== undefined;
+                    },
+                    isFilteringEnabled: function() {
+                        return m.filtering !== undefined;
+                    },
+                    page: function(currentPage, pageSize) {
+                        var paginationUrl = m.pagination.url;
+                        var pageNrParam = m.pagination.paramNames.pageNr;
+                        var pageSizeParam = m.pagination.paramNames.pageSize;
+                        var separator = paginationUrl.indexOf("?") > -1 ? "&" : "?";
+                        return paginationUrl + separator + pageNrParam + "=" + (currentPage - 1) + "&" + pageSizeParam + "=" + pageSize;
+                    },
+                    filter: function (searchTerms) {
+                        var filterUrl = m.filtering.url + "?";
+                        var separator = filterUrl.indexOf("?") > -1 ? "&" : "?";
+                        for (var i = 0; i < searchTerms.length; i++) {
+                            filterUrl += "&" + searchTerms[i].column + "=" + searchTerms[i].term;
+                        }
+                        return filterUrl;
+                    },
+                    count: function() {
+                        // TODO
+                        console.log("schemaType " + JSON.stringify(schemaType));
+                        console.log(JSON.stringify(m));
+                        return m.many;
+                    }
+                });
+            }
+        };
+    }
+).provider('RenderService', function() {
+
+    /**
+     * Maps viewmodel types to renderers
+     */
+    var renderers = {};
+
+    this.addRenderer = function(renderer) {
+        renderers[renderer.id] = renderer.render;
+    };
+
+    this.$get = ['DataCommon', function(Data) {
+        var that = this;
+        return {
+            // can be made private?
+            createUiElement: function(displayName, path, type, value) {
+                return {
+                    displayname: displayName,
+                    id: path,
+                    value: value,
+                    type: type.type,
+                    options: type.enum,
+                    isOpen: false,
+                    alerts: []
+                };
+            },
+            hasRendererFor: function(element) {
+                return renderers.hasOwnProperty(element.type);
+            },
+            render: function (element, model, instance, $scope) {
+                var renderer = renderers[element.type];
+                return renderer(element, model, instance, $scope);
+            },
+            renderAll: function(schema, viewModel, instance, $scope) {
+                var result = [];
+
+                if (viewModel.elements === undefined) {
+                    return result;
+                }
+
+                var elements = viewModel.elements;
+
+                for (var i = 0; i < elements.length; i++) {
+
+                    var element = elements[i];
+
+                    if (this.hasRendererFor(element)) {
+                        var renderedElement = this.render(element, schema, instance, $scope);
+                        result.push(renderedElement);
+                    }
+                }
+
+                return result;
+            },
+            register: function (renderer) {
+                that.addRenderer(renderer);
+            },
+            unregister: function () {
+
+            }
+        }
+    }];
+
+    //return service;
+});

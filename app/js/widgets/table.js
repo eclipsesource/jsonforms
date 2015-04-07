@@ -3,17 +3,12 @@ var app = angular.module('jsonForms.table', []);
 
 app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$http', '$q', '$location', function(RenderService, BindingService, EndpointMapping, DataCommon, $http, $q, $location) {
 
-    function createTableUIElement(element, type, instanceData, schema) {
+    function createTableUIElement(element, typeName, instanceData, schema) {
 
-        var paginationEnabled = false;
-        var filteringEnabled  = false;
+        var paginationEnabled = EndpointMapping.map(typeName).isPaginationEnabled();
+        var filteringEnabled = EndpointMapping.map(typeName).isFilteringEnabled();
 
-        if (DataCommon.isObjectType(element)) {
-            paginationEnabled = EndpointMapping.map(type).isPaginationEnabled();
-            filteringEnabled = EndpointMapping.map(type).isFilteringEnabled();
-        }
-
-        var uiElement = RenderService.createUiElement(element.displayname, element.feature.name, type, element.value);
+        var uiElement = RenderService.createUiElement(element.displayname, element.feature.name, typeName, element.value);
         var tableOptions = {
             columns: element.columns,
             gridOptions: {
@@ -23,7 +18,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
                 enableAutoResize: true,
                 columnDefs: [{
                     field: element.idLabel.toLowerCase(),
-                    cellTemplate: '<a href="#/<<TYPE>>/{{row.entity.id}}">{{row.entity[col.field]}}</a>'
+                    cellTemplate: '<a href="#/<<TYPE>>{{row.entity.id}}">{{row.entity[col.field]}}</a>'
                 }],
                 data: [],
                 useExternalFiltering: true
@@ -50,12 +45,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
         }
 
         var firstColumnDef = tableOptions.gridOptions.columnDefs[0];
-
-        if (DataCommon.isObjectType(type)) {
-            firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", EndpointMapping.map(type).many);
-        } else {
-            console.log("INFO: data not fetched since no object type present.");
-        }
+        firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", EndpointMapping.map(typeName).single);
 
         // convenience methods --
         uiElement.enablePaginationControls = function() {
@@ -71,55 +61,29 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
             var currentPage = tableOptions.gridOptions.paginationPage;
             var pageSize = tableOptions.gridOptions.paginationPageSize;
 
-
-            var resolverKind = EndpointMapping.resolverKind(type.type, element.feature.name);
-
-            // TODO
-            if (resolverKind.kind === 2) {
-                var attributeType  = resolverKind.type;
-                if (attributeType !== undefined) {
-                    if (currentPage === undefined) {
-                        currentPage = EndpointMapping.map(resolverKind.type).pagination.defaultPage;
-                    }
-                    if (pageSize === undefined) {
-                        pageSize = EndpointMapping.map(resolverKind.type).pagination.defaultPageSize;
-                    }
-                    var u = EndpointMapping.map(resolverKind.type).page(currentPage, pageSize);
-                    var segments = $location.absUrl().split("/");
-                    var hostId = segments[segments.length - 1];
-
-                    u = u.replace("{{id}}", hostId);
-
-                    $http.get(u).success(function (newData) {
-                        console.log("INFO: fetched data from " + u + " of size " + newData.length);
-                        console.log("INFO: fetch data is " + JSON.stringify(newData));
-                        tableOptions.gridOptions.data = newData;
-                        that.setTotalItems();
-                    });
-                }
-            }
-
             if (currentPage === undefined) {
-                currentPage = EndpointMapping.map(type).pagination.defaultPage;
+                currentPage = EndpointMapping.map(typeName).pagination.defaultPage;
             }
             if (pageSize === undefined) {
-                pageSize = EndpointMapping.map(type).pagination.defaultPageSize;
+                pageSize = EndpointMapping.map(typeName).pagination.defaultPageSize;
             }
-            if (DataCommon.isObjectType(type)) {
-                var url = EndpointMapping.map(type).page(currentPage, pageSize);
-                $http.get(url).success(function (newData) {
-                    console.log("INFO: fetched data from " + url + " of size " + newData.length);
-                    console.log("INFO: fetch data is " + JSON.stringify(newData));
-                    tableOptions.gridOptions.data = newData;
-                    that.setTotalItems();
-                });
-            } else {
-                tableOptions.gridOptions.data = instanceData;
-                console.log("INFO: data not fetched since no object type present.");
-            }
+
+            var u = EndpointMapping.map(typeName).page(currentPage, pageSize);
+            // TODO: relies on url
+            var segments = $location.absUrl().split("/");
+            var hostId = segments[segments.length - 1];
+
+            u = u.replace("{{id}}", hostId);
+
+            $http.get(u).success(function (newData) {
+                console.log("INFO: fetched data from " + u + " of size " + newData.length);
+                console.log("INFO: fetch data is " + JSON.stringify(newData));
+                tableOptions.gridOptions.data = newData;
+                that.setTotalItems();
+            });
         };
         uiElement.fetchFilteredData = function(searchTerms) {
-            var url = EndpointMapping.map(type).filter(searchTerms);
+            var url = EndpointMapping.map(typeName).filter(searchTerms);
             console.log("INFO: search terms are " + JSON.stringify(searchTerms));
             console.log("INFO: filter URL is " + url);
             $http.get(url).success(function (data) {
@@ -128,10 +92,10 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
 
         };
         uiElement.setTotalItems = function() {
-            var url = EndpointMapping.map(type).count();
-            $http.get(url).success(function (countObj) {
-                console.log("INFO: totalItems are " + JSON.stringify(countObj.count));
-                tableOptions.gridOptions.totalItems = countObj.count;
+            var url = EndpointMapping.map(typeName).count();
+            $http.get(url).success(function (objs) {
+                console.log("INFO: totalItems are " + JSON.stringify(objs.length));
+                tableOptions.gridOptions.totalItems = objs.size;
             });
         };
         uiElement.registerCallbacks = function($scope) {
@@ -163,10 +127,10 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
     }
 
     // type is a domain type, not an UI type
-    function createTypeTableUIElement(element, type) {
+    function createTypeTableUIElement(element, typeName) {
 
-        var paginationEnabled = EndpointMapping.map(type).isPaginationEnabled();
-        var filteringEnabled = EndpointMapping.map(type).isFilteringEnabled();
+        var paginationEnabled = EndpointMapping.map(typeName).isPaginationEnabled();
+        var filteringEnabled = EndpointMapping.map(typeName).isFilteringEnabled();
 
         var uiElement = RenderService.createUiElement(element.displayname, element.scope.type, {type: "array"}, element.value);
         var tableOptions = {
@@ -205,7 +169,8 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
         }
 
         var firstColumnDef = tableOptions.gridOptions.columnDefs[0];
-        firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", EndpointMapping.map(type).many);
+        console.log("INFO: mapped type " + JSON.stringify(EndpointMapping.map(typeName)));
+        firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", EndpointMapping.map(typeName).many);
 
         // convenience methods --
         uiElement.enablePaginationControls = function() {
@@ -221,7 +186,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
             var currentPage = tableOptions.gridOptions.paginationPage;
             var pageSize = tableOptions.gridOptions.paginationPageSize;
 
-            var url = EndpointMapping.map(type).page(currentPage, pageSize);
+            var url = EndpointMapping.map(typeName).page(currentPage, pageSize);
             $http.get(url).success(function (newData) {
                 console.log("INFO: fetched data from " + url + " of size " + newData.length);
                 console.log("INFO: fetch data is " + JSON.stringify(newData));
@@ -230,7 +195,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
             });
         };
         uiElement.fetchFilteredData = function(searchTerms) {
-            var url = EndpointMapping.map(type).filter(searchTerms);
+            var url = EndpointMapping.map(typeName).filter(searchTerms);
             console.log("INFO: search terms are " + JSON.stringify(searchTerms));
             console.log("INFO: filter URL is " + url);
             $http.get(url).success(function (data) {
@@ -239,10 +204,10 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
 
         };
         uiElement.setTotalItems = function() {
-            var url = EndpointMapping.map(type).count();
-            $http.get(url).success(function (countObj) {
-                console.log("INFO: totalItems are " + JSON.stringify(countObj.count));
-                tableOptions.gridOptions.totalItems = countObj.count;
+            var url = EndpointMapping.map(typeName).count();
+            $http.get(url).success(function (data) {
+                console.log("INFO: totalItems are " + JSON.stringify(data));
+                tableOptions.gridOptions.totalItems = data.size;
             });
         };
         uiElement.registerCallbacks = function($scope) {
@@ -320,8 +285,10 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
             var value = DataCommon.getValue(element.feature.name, instanceData);
             var type = DataCommon.getType(element.feature.name, schema);
             if (type.type == "array") {
-                console.log(JSON.stringify(schema));
-                var tableUiElement = createTableUIElement(element, type, value, schema);
+                // TODO: resolve array.items type and feed into function as 2nd parameter
+                var ref = type.items.$ref;
+                var typeName = ref.substring(ref.lastIndexOf('/') + 1, ref.length);
+                var tableUiElement = createTableUIElement(element, typeName, value, schema);
 
                 tableUiElement.registerCallbacks($scope);
                 tableUiElement.fetchPagedData();
