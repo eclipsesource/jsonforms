@@ -18,7 +18,6 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
                 data[key] = value;
             }
         }
-        console.log(data);
         return data;
     };
 
@@ -88,7 +87,6 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
             isArray = true;
             index = elementName[bracketIdx + 1];
             var property = elementName.substr(bracketIdx + 4);
-            console.log(property);
         }
 
         if (isArray) {
@@ -227,8 +225,6 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
                     },
                     count: function() {
                         // TODO
-                        console.log("schemaType " + JSON.stringify(schemaType));
-                        console.log(JSON.stringify(m));
                         return m.many;
                     }
                 });
