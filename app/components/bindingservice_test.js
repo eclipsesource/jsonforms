@@ -3,7 +3,7 @@
 
 describe('The BindingService', function() {
 
-    beforeEach(module('jsonForms.bindingService'));
+    beforeEach(module('jsonForms.services'));
 
     it('should allow adding new bindings', inject(function(BindingService) {
         expect(BindingService).not.toBeUndefined();
@@ -17,12 +17,12 @@ describe('The BindingService', function() {
         BindingService.add("foo", 42);
         BindingService.add("bar", undefined);
         expect(Object.keys(BindingService.all(false)).length).toBe(2);
-    }))
+    }));
 
     it('should allow to retrieve all bindings', inject(function(BindingService) {
         expect(BindingService).not.toBeUndefined();
         BindingService.add("foo", 42);
         BindingService.add("bar", undefined);
         expect(Object.keys(BindingService.all(true)).length).toBe(1);
-    }))
+    }));
 });

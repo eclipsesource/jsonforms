@@ -13,10 +13,7 @@ module.exports = function(config){
       'app/bower_components/dojox/json/schema.js',
       {pattern: 'app/bower_components/dojo*/*.js', included: false, watched: false},
       {pattern: 'app/bower_components/dojo*/**/*.js', included: false, watched: false},
-      'app/components/**/*.js',
-      //'app/view*/**/*.js',
-      //'app/js/*.js',
-      'app/js/widgets/*.js'
+      'app/components/**/*.js'
     ],
 
     autoWatch : true,
