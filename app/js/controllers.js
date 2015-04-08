@@ -92,7 +92,6 @@ qbFormsControllers
 
             // TODO: fix me
             Data.getFormData("http://localhost:9000", $routeParams.type, $routeParams.id, $scope).then(function(data) {
-                console.log("Call me plz");
                 $scope.elements = RenderService.renderAll(data.ecoreModelData, data.viewModelData, data.rawInstanceData, $scope); //data.layoutTree;
                 $scope.id = data.rawInstanceData.id;
                 $scope.bindings = BindingService.all();

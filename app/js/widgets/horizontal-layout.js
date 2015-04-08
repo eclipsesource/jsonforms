@@ -16,7 +16,6 @@ app.run(['RenderService', function(RenderService) {
             };
 
             var renderedElements = renderElements(horizontalLayoutElement.elements);
-            console.log("My rendered elements are: " + renderedElements);
             var size = renderedElements.length;
             var individualSize = Math.floor(maxSize / size);
             for (var j = 0; j < renderedElements.length; j++) {

@@ -8,7 +8,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
         var paginationEnabled = EndpointMapping.map(typeName).isPaginationEnabled();
         var filteringEnabled = EndpointMapping.map(typeName).isFilteringEnabled();
 
-        var uiElement = RenderService.createUiElement(element.displayname, element.feature.name, typeName, element.value);
+        var uiElement = RenderService.createUiElement(element.displayname, element.feature.name, {type: "array" }, instanceData);
         var tableOptions = {
             columns: element.columns,
             gridOptions: {
@@ -266,7 +266,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
         render: function (element, schema, instance, $scope) {
 
             var tObject = createTableControlObject();
-            var tableUiElement = createTypeTableUIElement(element, element.scope.name);
+            var tableUiElement = createTypeTableUIElement(element, element.scope.name, instance);
 
             tableUiElement.registerCallbacks($scope);
             tableUiElement.fetchPagedData();
