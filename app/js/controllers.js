@@ -179,17 +179,23 @@ function getDefaultViewObject(){
                             },
                             {
                                 "type": "Control",
-                                "path": "firstName",
+                                "feature": {
+                                  name: "firstName"
+                                },
                                 "name": "First Name"
                             },
                             {
                                 "type": "Control",
-                                "path": "lastName",
+                                "feature": {
+                                    name: "lastName"
+                                },
                                 "name": "Last Name"
                             },
                             {
                                 "type": "Control",
-                                "path": "dateOfBirth",
+                                "feature": {
+                                    name: "dateOfBirth"
+                                },
                                 "name": "Date Of Birth"
                             },
                             {
@@ -197,24 +203,32 @@ function getDefaultViewObject(){
                                 "elements": [
                                     {
                                         "type": "Control",
-                                        "path": "weight",
+                                        "feature": {
+                                            name: "weight"
+                                        },
                                         "name": "Weight"
                                     },
                                     {
                                         "type": "Control",
-                                        "path": "heigth",
+                                        "feature": {
+                                            name: "heigth"
+                                        },
                                         "name": "Heigth"
                                     },
                                     {
                                         "type": "Control",
-                                        "path": "nationality",
+                                        "feature": {
+                                            name: "nationality"
+                                        },
                                         "name": "Nationality"
                                     }
                                 ]
                             },
                             {
                                 "type": "Control",
-                                "path": "gender",
+                                "feature": {
+                                    name: "gender"
+                                },
                                 "name": "Gender"
                             }
                         ]
@@ -228,17 +242,23 @@ function getDefaultViewObject(){
                             },
                             {
                                 "type": "Control",
-                                "path": "timeOfRegistration",
+                                "feature": {
+                                    name: "timeOfRegistration"
+                                },
                                 "name": "Time Of Registration"
                             },
                             {
                                 "type": "Control",
-                                "path": "email",
+                                "feature": {
+                                    name: "email"
+                                },
                                 "name": "Email"
                             },
                             {
                                 "type": "Control",
-                                "path": "active",
+                                "feature": {
+                                    name: "active"
+                                },
                                 "name": "Active"
                             }
                         ]
