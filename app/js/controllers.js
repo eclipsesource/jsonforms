@@ -256,7 +256,7 @@ function getDefaultViewObject(){
                                 "type": "Control",
                                 "feature": {
                                     "path": {$ref: "/user-schema.json#/timeOfRegistration"},
-                                    "name": "Gender"
+                                    "name": "Time of Registration"
                                 }
                             },
                             {
