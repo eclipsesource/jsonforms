@@ -5,6 +5,7 @@ angular.module('jsonForms', [
     'ui.bootstrap',
     'ui.validate',
     'ui.router',
+    'ui.ace',
     'ui.grid',
     'ui.grid.pagination',
     'ui.grid.autoResize',

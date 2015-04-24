@@ -44,7 +44,6 @@
 }
 
 .qb-form {
-    background: #fffbff;
     margin-left:20px;
     margin-right:20px;
     margin-top:20px;
@@ -223,11 +222,11 @@ fieldset.inline2 {
     }
 }
 
-#localModel {
+#localModelEditor {
     max-width: 100%;
     min-height: 300px;
 }
-#localView {
+#localViewEditor {
     max-width: 100%;
     min-height: 300px;
 }
