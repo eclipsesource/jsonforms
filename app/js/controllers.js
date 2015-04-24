@@ -2,9 +2,9 @@
 
 /* Controllers */
 
-var qbFormsControllers = angular.module('jsonForms.controllers', []);
+var formsControllers = angular.module('jsonForms.controllers', []);
 
-qbFormsControllers
+formsControllers
     .controller('FormCtrlLocal', ['$scope', 'GetData', 'BindingService', 'RenderService', 'SendData', '$routeParams',
         function($scope, Data, BindingService, RenderService, SendData, $routeParams) {
 
@@ -88,7 +88,7 @@ qbFormsControllers
 
 var baseUrl = "assets";
 
-qbFormsControllers
+formsControllers
     .controller('FormCtrl', ['$scope', 'GetData', 'SendData', 'RenderService', 'BindingService', '$routeParams',
         function($scope, Data, SendData, RenderService, BindingService, $routeParams) {
 
@@ -154,7 +154,7 @@ qbFormsControllers
     ]);
 
 
-qbFormsControllers
+formsControllers
     .controller('ListCtrl', ['$scope', 'GetData', '$routeParams',
         function($scope, Data, $routeParams) {
             //Fetch data from service and bind it to elements
@@ -170,10 +170,10 @@ function getDefaultViewObject(){
     return {
         "elements": [
             {
-                "type": "QBHorizontalLayout",
+                "type": "HorizontalLayout",
                 "elements": [
                     {
-                        "type": "QBVerticalLayout",
+                        "type": "VerticalLayout",
                         "elements": [
                             {
                                 "type": "Label",
@@ -201,7 +201,7 @@ function getDefaultViewObject(){
                                 }
                             },
                             {
-                                "type": "QBHorizontalLayout",
+                                "type": "HorizontalLayout",
                                 "elements": [
                                     {
                                         "type": "Control",
@@ -236,7 +236,7 @@ function getDefaultViewObject(){
                         ]
                     },
                     {
-                        "type": "QBVerticalLayout",
+                        "type": "VerticalLayout",
                         "elements": [
                             {
                                 "type": "Label",

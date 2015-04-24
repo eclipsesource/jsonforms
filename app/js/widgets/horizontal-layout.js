@@ -3,7 +3,7 @@ var app = angular.module('jsonForms.horizontalLayout', []);
 
 app.run(['RenderService', function(RenderService) {
     RenderService.register({
-        id: "QBHorizontalLayout",
+        id: "HorizontalLayout",
         render: function (horizontalLayoutElement, model, instance, $scope) {
             var renderElements = function (elements) {
                 if (elements === undefined || elements.length == 0) {
