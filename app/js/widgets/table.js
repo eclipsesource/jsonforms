@@ -8,7 +8,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
         var paginationEnabled = EndpointMapping.map(typeName).isPaginationEnabled();
         var filteringEnabled = EndpointMapping.map(typeName).isFilteringEnabled();
 
-        var uiElement = RenderService.createUiElement(element.displayname, element.feature.name, {type: "array" }, instanceData);
+        var uiElement = RenderService.createUiElement(element.displayname, element.feature.path, {type: "array" }, instanceData);
         var tableOptions = {
             columns: element.columns,
             gridOptions: {
@@ -37,9 +37,9 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
 
         // push all columns defined in the view model
         for (var j = 0; j < element.columns.length; j++) {
-            if (element.idLabel.toLowerCase() !== element.columns[j].feature.name){
+            if (element.idLabel.toLowerCase() !== element.columns[j].feature.path){
                 tableOptions.gridOptions.columnDefs.push({
-                    field: element.columns[j].feature.name
+                    field: element.columns[j].feature.path
                 });
             }
         }
@@ -161,9 +161,9 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
 
         // push all columns defined in the view model
         for (var j = 0; j < element.columns.length; j++) {
-            if (element.idLabel.toLowerCase() !== element.columns[j].feature.name){
+            if (element.idLabel.toLowerCase() !== element.columns[j].feature.path){
                 tableOptions.gridOptions.columnDefs.push({
-                    field: element.columns[j].feature.name
+                    field: element.columns[j].feature.path
                 });
             }
         }
@@ -282,8 +282,8 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
         id: "Table",
         render: function (element, schema, instanceData, $scope) {
             var tObject = createTableControlObject();
-            var value = DataCommon.getValue(element.feature.name, instanceData);
-            var type = DataCommon.getType(element.feature.name, schema);
+            var value = DataCommon.getValue(element.feature.path, instanceData);
+            var type = DataCommon.getType(element.feature.path, schema);
             if (type.type == "array") {
                 // TODO: resolve array.items type and feed into function as 2nd parameter
                 var ref = type.items.$ref;
@@ -297,7 +297,7 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', 'DataCommon', '$h
                 BindingService.add(tableUiElement.id, tableUiElement.value);
                 return tObject;
             } else {
-                console.log("WARNING: " + element.feature.name + " has not expected type array.")
+                console.log("WARNING: " + element.feature.path + " has not expected type array.")
             }
 
         }

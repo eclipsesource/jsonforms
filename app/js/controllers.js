@@ -24,6 +24,8 @@ qbFormsControllers
                 $scope.localModel = JSON.stringify(localModelObject, undefined, 2);
                 $scope.localView = JSON.stringify(localViewObject, undefined, 2);
 
+                replaceRefLinks(localViewObject);
+
                 var mergedData = RenderService.renderAll(localModelObject, localViewObject, undefined);
 
                 $scope.elements = mergedData;
@@ -180,23 +182,23 @@ function getDefaultViewObject(){
                             {
                                 "type": "Control",
                                 "feature": {
-                                  name: "firstName"
-                                },
-                                "name": "First Name"
+                                    "path": {$ref: "/user-schema.json#/firstName"},
+                                    "name": "First Name"
+                                }
                             },
                             {
                                 "type": "Control",
                                 "feature": {
-                                    name: "lastName"
-                                },
-                                "name": "Last Name"
+                                    "path": {$ref: "/user-schema.json#/lastName"},
+                                    "name": "Last Name"
+                                }
                             },
                             {
                                 "type": "Control",
                                 "feature": {
-                                    name: "dateOfBirth"
-                                },
-                                "name": "Date Of Birth"
+                                    "path": {$ref: "/user-schema.json#/dateOfBirth"},
+                                    "name": "Date Of Birth"
+                                }
                             },
                             {
                                 "type": "QBHorizontalLayout",
@@ -204,32 +206,32 @@ function getDefaultViewObject(){
                                     {
                                         "type": "Control",
                                         "feature": {
-                                            name: "weight"
-                                        },
-                                        "name": "Weight"
+                                            "path": {$ref: "/user-schema.json#/weight"},
+                                            "name": "Weight"
+                                        }
                                     },
                                     {
                                         "type": "Control",
                                         "feature": {
-                                            name: "heigth"
-                                        },
-                                        "name": "Heigth"
+                                            "path": {$ref: "/user-schema.json#/height"},
+                                            "name": "Height"
+                                        }
                                     },
                                     {
                                         "type": "Control",
                                         "feature": {
-                                            name: "nationality"
-                                        },
-                                        "name": "Nationality"
+                                            "path": {$ref: "/user-schema.json#/nationality"},
+                                            "name": "Nationality"
+                                        }
                                     }
                                 ]
                             },
                             {
                                 "type": "Control",
                                 "feature": {
-                                    name: "gender"
-                                },
-                                "name": "Gender"
+                                    "path": {$ref: "/user-schema.json#/gender"},
+                                    "name": "Gender"
+                                }
                             }
                         ]
                     },
@@ -243,23 +245,23 @@ function getDefaultViewObject(){
                             {
                                 "type": "Control",
                                 "feature": {
-                                    name: "timeOfRegistration"
-                                },
-                                "name": "Time Of Registration"
+                                    "path": {$ref: "/user-schema.json#/timeOfRegistration"},
+                                    "name": "Gender"
+                                }
                             },
                             {
                                 "type": "Control",
                                 "feature": {
-                                    name: "email"
-                                },
-                                "name": "Email"
+                                    "path": {$ref: "/user-schema.json#/email"},
+                                    "name": "Email"
+                                }
                             },
                             {
                                 "type": "Control",
                                 "feature": {
-                                    name: "active"
-                                },
-                                "name": "Active"
+                                    "path": {$ref: "/user-schema.json#/active"},
+                                    "name": "Active"
+                                }
                             }
                         ]
                     }
@@ -303,7 +305,7 @@ function getDefaultModelObject(){
             "weight": {
                 "type": "number"
             },
-            "heigth": {
+            "height": {
                 "type": "integer"
             },
             "nationality": {
@@ -330,4 +332,24 @@ function getDefaultModelObject(){
             "email"
         ]
     };
+}
+
+function replaceRefLinks(viewModelObject){
+    for (var key in viewModelObject) {
+        if (key == "feature") {
+            var featureObject = viewModelObject[key];
+            var pathObject = featureObject["path"];
+
+            var refString = pathObject["$ref"];
+            refString = refString.replace(new RegExp(escapeRegExp("/user-schema.json#/"), 'g'), "");
+            featureObject["path"] = refString;
+
+        }else if (viewModelObject[key] !== null && typeof(viewModelObject[key]) === "object"){
+            replaceRefLinks(viewModelObject[key]);
+        }
+    }
+}
+
+function escapeRegExp(string) {
+    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
 }
