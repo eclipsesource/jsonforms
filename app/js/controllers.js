@@ -83,6 +83,16 @@ formsControllers
                 element.alerts = [];
                 return true;
             };
+
+            $scope.aceLoaded = function(editor) {
+                editor.$blockScrolling = Infinity;
+                editor.getSession().setMode("ace/mode/javascript");
+                editor.setOptions({
+                    enableSnippets: true,
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true
+                });
+            };
         }
     ]);
 
