@@ -1,7 +1,7 @@
 module.exports = function(config){
   config.set({
 
-    basePath : './',
+    basePath : '../../',
 
     files : [
       'app/bower_components/angular/angular.js',
@@ -13,7 +13,7 @@ module.exports = function(config){
       'app/bower_components/dojox/json/schema.js',
       {pattern: 'app/bower_components/dojo*/*.js', included: false, watched: false},
       {pattern: 'app/bower_components/dojo*/**/*.js', included: false, watched: false},
-      'app/components/**/*.js',
+      'tests/unit-tests/**/*.js',
       'app/js/**/*.js'
     ],
 

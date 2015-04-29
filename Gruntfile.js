@@ -43,7 +43,7 @@ module.exports = function(grunt) {
         // Config for Karma (=Test) Task
         karma: {
             unit: {
-                configFile: 'karma.conf.js',
+                configFile: 'tests/unit-tests/karma.conf.js',
                 singleRun: true
             }
         }
@@ -59,6 +59,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify', 'karma']);
+    grunt.registerTask('default', ['karma', 'concat', 'uglify']);
 
 };
