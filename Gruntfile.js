@@ -38,6 +38,14 @@ module.exports = function(grunt) {
                 src: 'bin/<%= pkg.name %>_<%= pkg.version %>.js',
                 dest: 'bin/<%= pkg.name %>_<%= pkg.version %>.min.js'
             }
+        },
+
+        // Config for Karma (=Test) Task
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                singleRun: true
+            }
         }
     });
 
@@ -47,7 +55,10 @@ module.exports = function(grunt) {
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
+    // Load the plugin that provides the "karma" task.
+    grunt.loadNpmTasks('grunt-karma');
+
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['concat', 'uglify', 'karma']);
 
 };
