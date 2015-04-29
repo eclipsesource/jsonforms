@@ -1,4 +1,8 @@
 exports.config = {
+
+  // Starts automatically if not specified
+  // seleniumAddress: 'http://localhost:4444/wd/hub',
+
   allScriptsTimeout: 11000,
 
   specs: [
@@ -9,7 +13,7 @@ exports.config = {
     'browserName': 'chrome'
   },
 
-  baseUrl: 'http://localhost:8000/app/',
+  baseUrl: 'http://localhost:8000/',
 
   framework: 'jasmine',
 
