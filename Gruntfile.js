@@ -40,6 +40,13 @@ module.exports = function(grunt) {
             }
         },
 
+        // Config for Jshint Task
+        jshint: {
+            beforeconcat: ['app/js/**'],
+            afterconcat: ['bin/<%= pkg.name %>_<%= pkg.version %>.js'],
+            options: { jshintrc: '.jshintrc' }
+        },
+
         // Config for Karma (Unit Test) Task
         karma: {
             unit: {
@@ -70,6 +77,8 @@ module.exports = function(grunt) {
     // Load the plugin that provides the "concat" task.
     grunt.loadNpmTasks('grunt-contrib-concat');
 
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
@@ -93,6 +102,11 @@ module.exports = function(grunt) {
         'karma',
         'connect',
         'protractor'
+    ]);
+
+    // Hint task
+    grunt.registerTask('hint', [
+        'jshint'
     ]);
 
 };
