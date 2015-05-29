@@ -47,6 +47,27 @@ module.exports = function(grunt) {
             options: { jshintrc: '.jshintrc' }
         },
 
+        less: {
+            bootstrap: {
+                options: {
+                    modifyVars: {
+                        "grid-columns": 100
+                    }
+                },
+                files: {
+                    'bin/modifiedbootstrap/bootstrap100col.css': 'node_modules/bootstrap/less/bootstrap.less'
+                }
+            },
+            jsonforms: {
+                options: {
+                    paths: ['bin/modifiedbootstrap']
+                },
+                files: {
+                    'bin/jsonforms.css': 'css/jsonforms.css'
+                }
+            }
+        },
+
         // Config for Karma (Unit Test) Task
         karma: {
             unit: {
@@ -77,7 +98,11 @@ module.exports = function(grunt) {
     // Load the plugin that provides the "concat" task.
     grunt.loadNpmTasks('grunt-contrib-concat');
 
+    grunt.loadNpmTasks('grunt-contrib-copy');
+
     grunt.loadNpmTasks('grunt-contrib-jshint');
+
+    grunt.loadNpmTasks('grunt-contrib-less');
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -94,6 +119,8 @@ module.exports = function(grunt) {
     // Default task(s).
     grunt.registerTask('default', [
         'karma',
+        'less:bootstrap',
+        'less:jsonforms',
         'concat',
         'uglify']);
 
