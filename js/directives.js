@@ -13,7 +13,7 @@ jsonFormsDirectives.directive('control', function() {
             topValidateNumber: '=',
             topValidateInteger: '='
         },
-        templateUrl: 'templates/control.html'
+        templateUrl: '../app/templates/control.html'
     };
 });
 
@@ -28,7 +28,7 @@ jsonFormsDirectives.directive('recelement', function(RecursionHelper) {
             topValidateNumber: '=',            
             topValidateInteger: '='
         },
-        templateUrl: 'templates/element.html',
+        templateUrl: '../app/templates/element.html',
         compile: function(element){
             return RecursionHelper.compile(element);
         }

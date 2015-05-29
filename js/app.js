@@ -25,22 +25,22 @@ angular.module('jsonForms', [
     config(['$routeProvider',
         function($routeProvider) {
             $routeProvider.when('/localdemo', {
-                templateUrl: 'localform.html',
+                templateUrl: 'templates/localform.html',
                 controller: 'FormCtrlLocal'
             });
 
             $routeProvider.when('/rest-demo', {
-                templateUrl: 'serverform.html',
+                templateUrl: 'templates/serverform.html',
                 controller: 'FormCtrl'
             });
 
             $routeProvider.when('/:type', {
-                templateUrl: 'table.html',
+                templateUrl: 'templates/table.html',
                 controller: 'FormCtrl'
             });
 
             $routeProvider.when('/:type/:id', {
-                templateUrl: 'form.html',
+                templateUrl: 'templates/form.html',
                 controller: 'FormCtrl'
             });
             $routeProvider.otherwise({

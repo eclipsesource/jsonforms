@@ -1,9 +1,12 @@
 logs/*
 !.gitkeep
 node_modules/
-bower_components/
-bin/
-tmp
+app/bower_components/
+app/css/jsonforms.css
+app/js
+app/templates
+temp/
+dist/
 .DS_Store
 .idea
 *.log

@@ -22,10 +22,25 @@ module.exports = function(grunt) {
                 "'use strict';\n"
             },
             dist: {
-                // Concat all files from app/js directory
-                src: ['app/js/**'],
+                // Concat all files from js directory
+                src: ['js/**'],
                 filter: 'isFile',
-                dest: 'bin/<%= pkg.name %>_<%= pkg.version %>.js'
+                dest: 'dist/js/<%= pkg.name %>.js'
+            }
+        },
+
+        copy: {
+            dist: {
+                files: [
+                    // templates
+                    {expand:true, cwd: 'templates/', src: ['**'], dest: 'dist/templates'}
+                ]
+            },
+            app: {
+                files: [
+                    // dist to app
+                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'app'},
+                ]
             }
         },
 
@@ -34,16 +49,16 @@ module.exports = function(grunt) {
             options: {
                 // Use default
             },
-            build: {
-                src: 'bin/<%= pkg.name %>_<%= pkg.version %>.js',
-                dest: 'bin/<%= pkg.name %>_<%= pkg.version %>.min.js'
+            dist: {
+                src: 'dist/js/<%= pkg.name %>.js',
+                dest: 'dist/js/<%= pkg.name %>.min.js'
             }
         },
 
         // Config for Jshint Task
         jshint: {
-            beforeconcat: ['app/js/**'],
-            afterconcat: ['bin/<%= pkg.name %>_<%= pkg.version %>.js'],
+            beforeconcat: ['js/**'],
+            afterconcat: ['dist/js/<%= pkg.name %>.js'],
             options: { jshintrc: '.jshintrc' }
         },
 
@@ -55,15 +70,15 @@ module.exports = function(grunt) {
                     }
                 },
                 files: {
-                    'bin/modifiedbootstrap/bootstrap100col.css': 'node_modules/bootstrap/less/bootstrap.less'
+                    'temp/bootstrap100col.css': 'node_modules/bootstrap/less/bootstrap.less'
                 }
             },
             jsonforms: {
                 options: {
-                    paths: ['bin/modifiedbootstrap']
+                    paths: ['temp']
                 },
                 files: {
-                    'bin/jsonforms.css': 'css/jsonforms.css'
+                    'dist/css/jsonforms.css': 'css/jsonforms.css'
                 }
             }
         },
@@ -89,9 +104,28 @@ module.exports = function(grunt) {
         // Config for Protractor (e2e Test) Task
         protractor: {
             options: {
-                configFile: "tests/e2e-tests/protractor.conf.js"
+                configFile: 'tests/e2e-tests/protractor.conf.js'
             },
             run: {}
+        },
+
+        watch: {
+            js: {
+                files: 'js/**',
+                tasks: ['concat:dist', 'uglify:dist']
+            },
+            css: {
+                files: 'css/**',
+                tasks: ['less:bootstrap', 'less:jsonforms']
+            },
+            templates: {
+                files: 'templates/**',
+                tasks: ['copy:dist']
+            },
+            app: {
+                files: ['dist/**'],
+                tasks: ['copy:app']
+            }
         }
     });
 
@@ -116,15 +150,24 @@ module.exports = function(grunt) {
     // Load the plugin that provides the "protractor" task.
     grunt.loadNpmTasks('grunt-protractor-runner');
 
-    // Default task(s).
-    grunt.registerTask('default', [
-        'karma',
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+    // Build distribution
+    grunt.registerTask('dist', [
         'less:bootstrap',
         'less:jsonforms',
-        'concat',
-        'uglify']);
+        'concat:dist',
+        'uglify:dist',
+        'copy:dist',
+    ]);
 
-    // Test tasks
+    // Build example application
+    grunt.registerTask('app', [
+        'dist',
+        'copy:app'
+    ]);
+
+    // Test unit and e2e tests
     grunt.registerTask('test', [
         'karma',
         'connect',
@@ -134,6 +177,11 @@ module.exports = function(grunt) {
     // Hint task
     grunt.registerTask('hint', [
         'jshint'
+    ]);
+
+    // Build distribution as default
+    grunt.registerTask('default', [
+        'dist'
     ]);
 
 };
