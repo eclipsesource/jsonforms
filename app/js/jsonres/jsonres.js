@@ -6,13 +6,16 @@
 // Contributors:
 // (c) 2015 Philip Langer - initial API and implementation
 
-var ResolvingJsonParser = function () {
-  // To be able to access this in a function
+var ResolvingJsonParser = function (resolver) {
+  // To be able to access this instance in functions later on
   var thisParser = this;
 
   // Setting default implementation of resolver and mapper
-  // Clients may overwrite this
-  this.resolver = new Resolver(new AbsolutReferenceToUrlMapper());
+  if (resolver === undefined) {
+    this.resolver = new Resolver(new AbsolutReferenceToUrlMapper());
+  } else {
+    this.resolver = resolver;
+  }
 
   this.fromJson = function (/*String*/ str,/*Object?*/ args) {
     var args = {
@@ -31,7 +34,7 @@ var ResolvingJsonParser = function () {
       return;
     }
 
-    jsonObject[ResolvingJsonParser.parserProperty] = thisParser;
+    jsonObject[ResolvingJsonParser.PARSER_PROPERTY] = thisParser;
     injectIsProxyFunction(jsonObject);
     injectResolveFunction(jsonObject);
 
@@ -46,13 +49,13 @@ var ResolvingJsonParser = function () {
 
   function injectIsProxyFunction(jsonObject) {
     jsonObject.isProxy = function() {
-      return this[ResolvingJsonParser.referenceProperty] !== undefined;
+      return this[ResolvingJsonParser.REFERENCE_PROPERTY] !== undefined;
     };
   };
 
   function injectResolveFunction(jsonObject) {
     jsonObject.resolve = function() {
-      this[ResolvingJsonParser.parserProperty].resolver.resolve(this);
+      this[ResolvingJsonParser.PARSER_PROPERTY].resolver.resolve(this);
     };
   };
 
@@ -74,8 +77,8 @@ var ResolvingJsonParser = function () {
   function shouldFollowPropertyOnRecursion(object, property) {
     return object.hasOwnProperty(property)
       && property.indexOf("_") !== 0
-      && property !== ResolvingJsonParser.referenceProperty
-      && property !== ResolvingJsonParser.parserProperty;
+      && property !== ResolvingJsonParser.REFERENCE_PROPERTY
+      && property !== ResolvingJsonParser.PARSER_PROPERTY;
   };
 
   function isObjectArray(value) {
@@ -83,27 +86,25 @@ var ResolvingJsonParser = function () {
   };
 
   function isObject(value) {
-    return value !== null && typeof value === 'object';
+    return value instanceof Object && !(value instanceof Function);
   };
 };
 
-ResolvingJsonParser.referenceProperty = '$ref';
-ResolvingJsonParser.parserProperty = '__parser';
+ResolvingJsonParser.REFERENCE_PROPERTY = '$ref';
+ResolvingJsonParser.PARSER_PROPERTY = '__parser';
 
 var Resolver = function (referenceToUrlMapper) {
-
-  var referenceToUrlMapper = referenceToUrlMapper;
 
   this.resolve = function(/*Object*/ jsonObject) {
     if (!jsonObject || !jsonObject.isProxy()) {
       return jsonObject;
     }
 
-    var reference = jsonObject[ResolvingJsonParser.referenceProperty];
+    var reference = jsonObject[ResolvingJsonParser.REFERENCE_PROPERTY];
     var url = referenceToUrlMapper.getUrl(reference);
     var result = this.fetchUrlBody(url);
 
-    var parser = jsonObject[ResolvingJsonParser.parserProperty];
+    var parser = jsonObject[ResolvingJsonParser.PARSER_PROPERTY];
     var jsonResult = parser.fromJson(result);
     return mixInObject(clearReferenceProperty(jsonObject), jsonResult);
   }
@@ -121,7 +122,7 @@ var Resolver = function (referenceToUrlMapper) {
   }
 
   function clearReferenceProperty(object) {
-    object[ResolvingJsonParser.referenceProperty] = undefined;
+    object[ResolvingJsonParser.REFERENCE_PROPERTY] = undefined;
     return object;
   }
 

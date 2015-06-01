@@ -19,10 +19,10 @@ describe('ResolvingJsonParser', function() {
       property: "value",\
       refersTo: {$ref: "http://localhost:9876/test"}\
     }';
-    var resultionResult = function() {
+    var resolutionResult = function() {
       return '{subProperty: "subValue"}';
     };
-    var parser = createParserWithMockResolver(resultionResult);
+    var parser = createParserWithMockResolver(resolutionResult);
     var jsonObject = parser.fromJson(jsonString)
     jsonObject.refersTo.resolve();
 
@@ -34,10 +34,10 @@ describe('ResolvingJsonParser', function() {
       property: "value",\
       refersTo: {$ref: "http://localhost:9876/test"}\
     }';
-    var resultionResult = function() {
+    var resolutionResult = function() {
       return '{subProperty: "subValue"}';
     };
-    var parser = createParserWithMockResolver(resultionResult);
+    var parser = createParserWithMockResolver(resolutionResult);
     var jsonObject = parser.fromJson(jsonString)
 
     expect(jsonObject.refersTo.isProxy()).toBe(true);
@@ -45,14 +45,12 @@ describe('ResolvingJsonParser', function() {
     expect(jsonObject.refersTo.isProxy()).toBe(false);
   });
 
-  function createParserWithMockResolver(resultionResult) {
+  function createParserWithMockResolver(resolutionResult) {
     var mockResolver = new Resolver(new AbsolutReferenceToUrlMapper());
     mockResolver.fetchUrlBody = function() {
-      return resultionResult.call();
+      return resolutionResult.call();
     };
-    var parser = new ResolvingJsonParser();
-    parser.resolver = mockResolver;
-    return parser;
+    return new ResolvingJsonParser(mockResolver);
   }
 
 });
