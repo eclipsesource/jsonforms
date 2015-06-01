@@ -9,7 +9,7 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 * Clone this repository
 * Execute "npm install" in root of your cloned repository
 
-# How to use
+# Build
 JSON Forms uses Grunt to build and test.
 
 * Run "grunt" or "grunt dist" to build the distribution
