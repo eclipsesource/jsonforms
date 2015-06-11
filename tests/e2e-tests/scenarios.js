@@ -5,7 +5,7 @@
 describe('Test Local App', function() {
 
   it('check app title', function(){
-    browser.get('embed-index.html#/localdemo');
+    browser.get('embed-index.html#/local');
     expect(browser.getTitle()).toEqual('JSONForms');
   });
 

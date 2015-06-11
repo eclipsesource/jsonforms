@@ -48,6 +48,9 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 // Use default
+
+                // Uncomment to ease debugging
+                // mangle: false
             },
             dist: {
                 src: 'dist/js/<%= pkg.name %>.js',

@@ -12,13 +12,14 @@
     "angular-mocks": "~1.2.x",
     "angular-ui": "0.4.0",
     "angular-ui-ace": "0.2.3",
-    "angular-ui-grid": "3.0.0-RC.18",
+    "angular-ui-grid": "3.0.0-rc.21",
     "angular-ui-router": "0.2.13",
     "angular-ui-bootstrap-bower": "0.11.2",
     "bootstrap": "3.3.4",
     "ui-utils": "0.1.1",
     "jquery": "1.11.x",
     "dojo": "1.10.x",
-    "dojox": "1.10.x"
+    "dojox": "1.10.x",
+    "jsonary": "latest"
   }
 }

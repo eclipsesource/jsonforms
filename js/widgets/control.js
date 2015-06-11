@@ -3,21 +3,16 @@ var app = angular.module('jsonForms.control', []);
 
 app.run(['RenderService', 'BindingService', 'DataCommon', function(RenderService, BindingService, DataCommon) {
 
-
-
     RenderService.register({
         id: "Control",
-        render: function (element, model, instance) {
+        render: function (element) {
 
-            var elementName = element.feature.name;
+            var elementName = element.name;
             if (elementName === undefined || elementName === null) {
-                elementName = element.feature.path;
+                elementName = element.scope.path;
             }
 
-            var elementTypeInfo = DataCommon.getType(element.feature.path, model);
-            var instanceValue = DataCommon.getValue(element.feature.path, instance);
-
-            var uiElement = RenderService.createUiElement(elementName, element.feature.path, elementTypeInfo, instanceValue);
+            var uiElement = RenderService.createUiElement(elementName, element.scope.path)
             // TODO: id == path should be more obvious
             BindingService.add(uiElement.id, uiElement.value);
 
