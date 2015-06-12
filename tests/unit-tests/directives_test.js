@@ -45,8 +45,7 @@ describe('jsonforms directive', function() {
             });
             return deferred.promise;
         };
-        element = '<jsonforms schema="fetchSchema" data="fetchData" ui-schema="fetchUiSchema">';
-        el = $compile(element)(scope);
+        el = $compile('<jsonforms schema="fetchSchema" data="fetchData" ui-schema="fetchUiSchema">')(scope);
         scope.$digest();
     }));
 
