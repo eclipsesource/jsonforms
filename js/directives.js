@@ -2,6 +2,87 @@
 
 var jsonFormsDirectives = angular.module('jsonForms.directives', []);
 
+jsonFormsDirectives.directive('jsonforms', ['RenderService', 'BindingService', '$q', function(RenderService, BindingService, $q) {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            schema: "&",
+            uiSchema: "&",
+            data: "&"
+        },
+        // TODO: fix template for tests
+        templateUrl: '../templates/form.html',
+        controller: function($scope) {
+
+            // TODO: call syntax
+            $q.all([$scope.schema()(), $scope.uiSchema()(), $scope.data()()]).then(function(values) {
+
+                var schema = values[0];
+                var view = values[1];
+                var data = values[2];
+
+                $scope.elements = RenderService.renderAll(schema, view, data, $scope);
+                $scope.id = data.id;
+                $scope.bindings = BindingService.all();
+
+                $scope.opened = false;
+
+                $scope.openDate = function($event, element) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+
+                    element.isOpen = true;
+                };
+
+                $scope.sendData = function() {
+                    var data = {};
+
+                    var bindingsKeys = Object.keys($scope.bindings);
+
+                    for (var i = 0; i < bindingsKeys.length; i++) {
+                        var key = bindingsKeys[i];
+                        if($scope.bindings[key] != null){
+                            data[key] = $scope.bindings[key];
+                        }
+                    }
+
+                    // TODO: implement submit
+                    //SendData.sendData(baseUrl, $routeParams.type, $scope.id, data);
+                };
+
+                $scope.validateNumber = function(value, element) {
+                    if (value !== undefined && value !== null && isNaN(value)) {
+                        element.alerts = [];
+                        var alert = {
+                            type: 'danger',
+                            msg: 'Must be a valid number!'
+                        };
+                        element.alerts.push(alert);
+                        return false;
+                    }
+                    element.alerts = [];
+                    return true;
+                };
+
+                $scope.validateInteger = function(value, element) {
+                    if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
+                        element.alerts = [];
+                        var alert = {
+                            type: 'danger',
+                            msg: 'Must be a valid integer!'
+                        };
+                        element.alerts.push(alert);
+                        return false;
+                    }
+                    element.alerts = [];
+                    return true;
+                };
+            });
+        }
+    };
+}]);
+
 jsonFormsDirectives.directive('control', function() {
     return {
         restrict: "E",
@@ -13,11 +94,11 @@ jsonFormsDirectives.directive('control', function() {
             topValidateNumber: '=',
             topValidateInteger: '='
         },
-        templateUrl: '../app/templates/control.html'
+        templateUrl: '../templates/control.html'
     };
 });
 
-jsonFormsDirectives.directive('recelement', function(RecursionHelper) {
+jsonFormsDirectives.directive('recelement', ['RecursionHelper', function(RecursionHelper) {
     return {
         restrict: "E",
         replace: true,
@@ -25,14 +106,14 @@ jsonFormsDirectives.directive('recelement', function(RecursionHelper) {
             element: '=',
             bindings: '=',
             topOpenDate: '=',
-            topValidateNumber: '=',            
+            topValidateNumber: '=',
             topValidateInteger: '='
         },
-        templateUrl: '../app/templates/element.html',
+        templateUrl: '../templates/element.html',
         compile: function(element){
             return RecursionHelper.compile(element);
         }
     };
-});
+}]);
 
 

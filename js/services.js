@@ -2,7 +2,6 @@
 
 /* Services */
 var dataServices = angular.module('jsonForms.dataServices', []);
-var utilityServices = angular.module('jsonForms.utilityServices', []);
 var maxSize = 99;
 
 //http://stackoverflow.com/questions/14430655/recursion-in-angular-directives
