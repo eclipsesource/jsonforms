@@ -3,8 +3,9 @@ logs/*
 node_modules/
 app/bower_components/
 app/css/jsonforms.css
-app/js
 app/templates
+app/js/jsonforms.js
+app/js/jsonforms.min.js
 temp/
 dist/
 .DS_Store
