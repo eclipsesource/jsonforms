@@ -94,7 +94,7 @@ angular.module('jsonForms.services', [])
         renderers[renderer.id] = renderer.render;
     };
 
-    this.$get = ['DataCommon', function() {
+    this.$get = function() {
         var that = this;
         return {
             // can be made private?
@@ -144,5 +144,5 @@ angular.module('jsonForms.services', [])
 
             }
         }
-    }];
+    };
 });
