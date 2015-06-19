@@ -20,6 +20,7 @@
     "jquery": "1.11.x",
     "dojo": "1.10.x",
     "dojox": "1.10.x",
-    "jsonary": "latest"
+    "jsonary": "latest",
+    "tv4": "latest"
   }
 }

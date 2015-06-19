@@ -19,6 +19,7 @@ module.exports = function(config){
     },
 
     files : [
+      'app/bower_components/tv4/tv4.js',
       'app/bower_components/angular/angular.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/angular-mocks/angular-mocks.js',
