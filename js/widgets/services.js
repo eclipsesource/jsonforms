@@ -55,9 +55,15 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
                 // TODO: provide filterKeywords function
                 return filterNonKeywords(toPropertyFragments(path)).join("/");
             },
+            /**
+             * Takes an JSON object and a schema path and resolve the schema path against the instance.
+             * @param instance a JSON object
+             * @param path a valid JSON path expression
+             * @returns the dereferenced value
+             */
             resolve: function(instance, path) {
                 var p = path + "/scope/$ref";
-                if (referenceMap.hasOwnProperty(p)) {
+                if (referenceMap !== undefined && referenceMap.hasOwnProperty(p)) {
                     p = referenceMap[p];
                 }
                 var fragments = toPropertyFragments(this.normalize(p));

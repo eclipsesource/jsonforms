@@ -1,30 +1,27 @@
 'use strict';
 
-describe('ReferencResolver', function() {
+describe('ReferenceResolver', function() {
 
-    var InstanceRefResolver;
+    var ReferenceResolver;
 
     beforeEach(module('jsonForms.services'));
     beforeEach(inject(function($injector) {
-        InstanceRefResolver = $injector.get('ReferenceResolver');
+        ReferenceResolver = $injector.get('ReferenceResolver');
     }));
-
-    it("should correctly normalize paths", function () {
-        expect(InstanceRefResolver.normalize("/foo")).toBe("foo");
-    });
 
     it("should resolve properties path on instance", function () {
 
         var obj = {
             "foo": {
                 "bar": {
-                    "baz": 1,
-                    "quux": 2
+                    "scope": {
+                        "$ref": { "type": "string" }
+                    }
                 }
             }
         };
 
-        expect(InstanceRefResolver.resolve(obj, "foo/bar/baz")).toBe(1);
+        expect(ReferenceResolver.resolve(obj, "#/foo/bar").type).toBe("string");
     });
 
 });
