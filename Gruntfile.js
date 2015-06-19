@@ -135,6 +135,12 @@ module.exports = function(grunt) {
                 files: ['dist/**'],
                 tasks: ['copy:app']
             }
+        },
+
+        clean: {
+            dist: ["dist", "temp"],
+            app: ["app/js/jsonforms*", "app/css/jsonforms*"],
+            all: ["dist", "temp", "app/js/jsonforms*", "app/css/jsonforms*", "node_modules", "app/bower_components"]
         }
     });
 
@@ -146,6 +152,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.loadNpmTasks('grunt-contrib-less');
+
+    // clean
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     // inline templates into jsonforms.js
     grunt.loadNpmTasks('grunt-angular-templates');
@@ -170,8 +179,7 @@ module.exports = function(grunt) {
         'less:jsonforms',
         'ngtemplates:dist',
         'concat:dist',
-        'uglify:dist',
-        'copy:dist'
+        'uglify:dist'
     ]);
 
     // Build example application
