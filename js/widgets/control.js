@@ -1,19 +1,23 @@
 
 var app = angular.module('jsonForms.control', []);
 
-app.run(['RenderService', 'BindingService', function(RenderService, BindingService) {
+app.run(['RenderService', 'BindingService', 'ReferenceResolver',
+    function(RenderService, BindingService, ReferenceResolver) {
 
     RenderService.register({
         id: "Control",
-        render: function (element) {
+        render: function (resolvedElement, schema, instance, path) {
 
-            var elementName = element.name;
+            resolvedElement.id = resolvedElement.scope.$ref;
+
+            var elementName = resolvedElement.name;
             if (elementName === undefined || elementName === null) {
-                elementName = element.scope.path;
+                elementName = resolvedElement.path;
             }
 
-            var uiElement = RenderService.createUiElement(elementName, element.scope.path)
-            // TODO: id == path should be more obvious
+            var value = ReferenceResolver.resolve(instance, path);
+            var uiElement = RenderService.createUiElement(elementName, resolvedElement, value);
+
             BindingService.add(uiElement.id, uiElement.value);
 
             return {

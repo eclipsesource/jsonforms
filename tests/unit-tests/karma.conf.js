@@ -12,7 +12,7 @@ module.exports = function(config){
       // If your build process changes the path to your templates,
       // use stripPrefix and prependPrefix to adjust it.
       //stripPrefix: "..",
-      prependPrefix: "../",
+      prependPrefix: "../"
 
       // the name of the Angular module to create
       //moduleName: "jsonForms.templates"

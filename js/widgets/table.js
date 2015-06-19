@@ -1,9 +1,9 @@
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['RenderService', 'BindingService', 'EndpointMapping', '$http', '$q', '$location', function(RenderService, BindingService, EndpointMapping, $http) {
+app.run(['RenderService', 'BindingService', 'ReferenceResolver', function(RenderService, BindingService, ReferenceResolver) {
 
-    function createTableUIElement(element, instanceData) {
+    function createTableUIElement(element, schema, instanceData, path) {
 
         // TODO: how to configure paging/filtering
         var paginationEnabled = true;
@@ -12,15 +12,6 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', '$http', '$q', '$
         // TODO: what are the exact requirements for our UI element?
         //var uiElement = RenderService.createUiElement(element.displayname, element.scope.path, {type: "array" }, instanceData);
 
-        //var uiElement = {
-        //    displayname: displayName,
-        //    id: path,
-        //    value: value,
-        //    type: type.type,
-        //    options: type.enum,
-        //    isOpen: false,
-        //    alerts: []
-        //};
         var uiElement = {
             type: "array"
         };
@@ -53,16 +44,6 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', '$http', '$q', '$
             tableOptions.gridOptions.paginationPage = 1;
         }
 
-
-        // push all columns defined in the view model
-        for (var j = 0; j < element.columns.length; j++) {
-            //if (element.idLabel.toLowerCase() !== element.columns[j].scope.path){
-                tableOptions.gridOptions.columnDefs.push({
-                    field: element.columns[j].scope.path
-                });
-            //}
-        }
-
         // TODO:
         //var firstColumnDef = tableOptions.gridOptions.columnDefs[0];
         //firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", path);
@@ -74,52 +55,40 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', '$http', '$q', '$
         uiElement.disablePaginationControls = function() {
             tableOptions.gridOptions.enablePaginationControls = false;
         };
-        uiElement.fetchPagedData = function() {
-
-            var hasScope = element.scope !== undefined;
-
-            var data;
-            if (hasScope) {
-                var path = element.scope.path;
-                data = instanceData[0][path];
-            } else {
-                data = instanceData;
-            }
-
+        uiElement.fetchPagedData = function(path) {
+            var data = ReferenceResolver.resolve(instanceData, path);
             tableOptions.gridOptions.data = data;
-
         };
         uiElement.fetchFilteredData = function(searchTerms) {
-            var url = EndpointMapping.map(typeName).filter(searchTerms);
-            $http.get(url).success(function (data) {
-                tableOptions.gridOptions.data = data;
-            });
-
+            //var url = EndpointMapping.map(typeName).filter(searchTerms);
+            //$http.get(url).success(function (data) {
+            //    tableOptions.gridOptions.data = data;
+            //});
         };
         uiElement.setTotalItems = function() {
             // TODO: determine total items
         };
-        uiElement.registerCallbacks = function($scope) {
-            var that = this;
-            tableOptions.gridOptions.onRegisterApi = function (gridApi) {
-                gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-                    tableOptions.gridOptions.paginationPage = newPage;
-                    tableOptions.gridOptions.paginationPageSize = pageSize;
-                    that.fetchPagedData();
-                });
-                gridApi.core.on.filterChanged($scope, function () {
-                    var grid = this.grid;
-                    var searchTerms = findSearchTerms(grid);
-                    if (searchTerms.length > 0) {
-                        that.fetchFilteredData(searchTerms);
-                        that.disablePaginationControls();
-                    } else {
-                        that.fetchPagedData();
-                        that.enablePaginationControls();
-                    }
-                });
-
-            }
+        uiElement.registerCallbacks = function() {
+            //var that = this;
+            //tableOptions.gridOptions.onRegisterApi = function (gridApi) {
+            //    gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+            //        tableOptions.gridOptions.paginationPage = newPage;
+            //        tableOptions.gridOptions.paginationPageSize = pageSize;
+            //        that.fetchPagedData();
+            //    });
+            //    gridApi.core.on.filterChanged($scope, function () {
+            //        var grid = this.grid;
+            //        var searchTerms = findSearchTerms(grid);
+            //        if (searchTerms.length > 0) {
+            //            that.fetchFilteredData(searchTerms);
+            //            that.disablePaginationControls();
+            //        } else {
+            //            that.fetchPagedData();
+            //            that.enablePaginationControls();
+            //        }
+            //    });
+            //
+            //}
         };
 
         uiElement.tableOptions = tableOptions;
@@ -152,24 +121,18 @@ app.run(['RenderService', 'BindingService', 'EndpointMapping', '$http', '$q', '$
 
     RenderService.register({
         id: "Table",
-        render: function (element, schema, instanceData, $scope) {
+        // TODO: we completly ignore the schema here
+        render: function (uiElement, schema, instanceData, path) {
             var tObject = createTableControlObject();
 
-            if (schema.type == "array") {
+            var tableUiElement = createTableUIElement(uiElement, schema, instanceData, path);
 
-                var tableUiElement = createTableUIElement(element, instanceData);
+            tableUiElement.registerCallbacks();
+            tableUiElement.fetchPagedData(path);
 
-                tableUiElement.registerCallbacks($scope);
-                tableUiElement.fetchPagedData();
-
-                tObject.elements.push(tableUiElement);
-                BindingService.add(tableUiElement.id, tableUiElement.value);
-                return tObject;
-            } else {
-                // TODO: rather throw exception
-                console.log("WARNING: " + element.feature.path + " has not expected type array.")
-            }
-
+            tObject.elements.push(tableUiElement);
+            BindingService.add(tableUiElement.id, tableUiElement.value);
+            return tObject;
         }
     });
 }]);

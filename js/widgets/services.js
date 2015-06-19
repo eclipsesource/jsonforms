@@ -1,6 +1,6 @@
-angular.module('jsonForms.services', [])
+var jsonRefs = require("json-refs");
 
-    .provider('BindingService', function() {
+angular.module('jsonForms.services', []).provider('BindingService', function() {
 
     var bindings = {};
 
@@ -31,59 +31,43 @@ angular.module('jsonForms.services', [])
             all: that.all
         }
     };
-}).factory('EndpointMapping', function() {
-        var mapping = {};
-        var uiSchemaMapping = {};
-        var urlMapping = {};
+}).factory('ReferenceResolver', function () {
+        var referenceMap;
+        var keywords = ["items", "properties", "#"];
 
-        var elements = {};
+        function toPropertyFragments(path) {
+            return path.split('/').filter(function(fragment) {
+                return fragment.length > 0;
+            })
+        }
+
+        function filterNonKeywords(fragments) {
+            return fragments.filter(function (fragment) {
+                return !(keywords.indexOf(fragment) !== -1);
+            });
+        }
 
         return {
-            //TODO
-            registerElement: function(element, schema, data) {
-                console.log("Adding schema " + schema());
-                console.log("Adding data " + data());
-              elements[element] = {
-                  schema: schema(),
-                  data: data()
-              };
+            set: function (referenceMapping) {
+                referenceMap = referenceMapping;
             },
-            getElement: function(element) {
-                return elements[element];
+            normalize: function(path) {
+                // TODO: provide filterKeywords function
+                return filterNonKeywords(toPropertyFragments(path)).join("/");
             },
-            registerSchema: function(schemaType, schema) {
-                console.log("Registered schema for " + schemaType);
-                mapping[schemaType] = schema;
-                // TODO: naive
-                mapping[schemaType + "s"] = {
-                    "type": "array",
-                    "items": schema
-                };
-                console.log("multi " + mapping[schemaType + "s"]);
-            },
-            registerUISchema: function(schemaType, uiSchema) {
-                uiSchemaMapping[schemaType] = uiSchema;
-            },
-            registerUrl: function(schemaType, url) {
-                console.log("Registered " + url + " for type " + schemaType);
-                urlMapping[schemaType] = url;
-            },
-            getSchema: function(schemaId) {
-                console.log("Fetching schema for " + schemaId);
-                return mapping[schemaId];
-            },
-            getUiSchema: function(schemaId, isMulti) {
-                if (isMulti) {
-                    return uiSchemaMapping[schemaId.substring(0, schemaId.length - 2)];
+            resolve: function(instance, path) {
+                var p = path + "/scope/$ref";
+                if (referenceMap.hasOwnProperty(p)) {
+                    p = referenceMap[p];
                 }
-                return uiSchemaMapping[schemaId];
-            },
-            getInstanceDataUrl: function(schemaId) {
-                return urlMapping[schemaId];
+                var fragments = toPropertyFragments(this.normalize(p));
+                var data = fragments.reduce(function(currObj, fragment) {
+                   return currObj[fragment];
+                }, instance);
+                return data;
             }
         };
-    }
-).provider('RenderService', function() {
+}).provider('RenderService', function() {
 
     /**
      * Maps viewmodel types to renderers
@@ -98,13 +82,14 @@ angular.module('jsonForms.services', [])
         var that = this;
         return {
             // can be made private?
-            createUiElement: function(displayName, path, type, value) {
+            createUiElement: function(displayName, resolvedElement, value) {
                 return {
                     displayname: displayName,
-                    id: path,
+                    id: resolvedElement.id,
+                    type: resolvedElement.scope !== undefined ? resolvedElement.scope.type : "",
                     value: value,
-                    type: type.type,
-                    options: type.enum,
+                    // FIXME
+                    //options: type.enum,
                     isOpen: false,
                     alerts: []
                 };
@@ -112,25 +97,27 @@ angular.module('jsonForms.services', [])
             hasRendererFor: function(element) {
                 return renderers.hasOwnProperty(element.type);
             },
-            render: function (element, model, instance, $scope) {
+            render: function (element, schema, instance, path) {
                 var renderer = renderers[element.type];
-                return renderer(element, model, instance, $scope);
+                return renderer(element, schema, instance, path);
             },
-            renderAll: function(schema, viewModel, instance, $scope) {
+            renderAll: function(schema, uiSchema, instance) {
                 var result = [];
 
-                if (viewModel.elements === undefined) {
+                if (uiSchema.elements === undefined) {
                     return result;
                 }
 
-                var elements = viewModel.elements;
+                var uiElements = uiSchema.elements;
+                var basePath = "#/elements/";
 
-                for (var i = 0; i < elements.length; i++) {
+                for (var i = 0; i < uiElements.length; i++) {
 
-                    var element = elements[i];
+                    var uiElement = uiElements[i];
+                    var path = basePath + i;
 
-                    if (this.hasRendererFor(element)) {
-                        var renderedElement = this.render(element, schema, instance, $scope);
+                    if (this.hasRendererFor(uiElement)) {
+                        var renderedElement = this.render(uiElement, schema, instance, path);
                         result.push(renderedElement);
                     }
                 }
@@ -139,9 +126,6 @@ angular.module('jsonForms.services', [])
             },
             register: function (renderer) {
                 that.addRenderer(renderer);
-            },
-            unregister: function () {
-
             }
         }
     };
