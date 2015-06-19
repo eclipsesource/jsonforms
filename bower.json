@@ -1,10 +1,24 @@
 {
-  "name": "jsonForms",
-  "description": "A starter project for QB Forms",
-  "version": "0.0.1",
+  "name": "json-forms",
+  "description": "Generating forms for JSON Schema based on JSON view models",
+  "keywords": [
+    "json-schema",
+    "json-forms",
+    "json",
+    "forms",
+    "generator",
+    "ui",
+    "angular",
+    "bootstrap"
+  ],
+  "authors": [
+    { "name": "EclipseSource Munich",
+      "email": "info@jsonforms.org",
+      "homepage": "http://eclipsesource.com/munich"
+    }
+  ],
   "homepage": "https://github.com/qb-project/jsonforms",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "angular": "1.2.x",
     "angular-route": "1.2.x",
@@ -16,11 +30,13 @@
     "angular-ui-router": "0.2.13",
     "angular-ui-bootstrap-bower": "0.11.2",
     "bootstrap": "3.3.4",
-    "ui-utils": "0.1.1",
-    "jquery": "1.11.x",
-    "dojo": "1.10.x",
-    "dojox": "1.10.x",
-    "jsonary": "latest",
+    "ui-utils": "0.1.1"
+  },
+  "devDependencies": {
     "tv4": "latest"
-  }
+  },
+  "ignore": [
+    ".gitignore",
+    ".travis.yml"
+  ]
 }
