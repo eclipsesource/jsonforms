@@ -21,6 +21,7 @@
     "dojo": "1.10.x",
     "dojox": "1.10.x",
     "jsonary": "latest",
-    "tv4": "latest"
+    "tv4": "latest",
+    "json-refs": "~0.2.0"
   }
 }
