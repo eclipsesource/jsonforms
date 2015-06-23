@@ -22,20 +22,26 @@ module.exports = function(grunt) {
                 "'use strict';\n"
             },
             dist: {
-                // Concat all files from js directory
-                src: ['js/**'],
+                // Concat all files from js directory and include the embedded templates
+                src: ['js/**', '<%= ngtemplates.dist.dest %>'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
 
+        //Config for embedding templates in angular module
+        ngtemplates:  {
+            dist:  {
+                src: 'templates/**/*.html',
+                dest: 'temp/templates.js',
+                options:    {
+                    htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
+                    module: "jsonForms"
+                }
+            }
+        },
+
         copy: {
-            dist: {
-                files: [
-                     // templates
-                    {expand:true, cwd: 'templates/', src: ['**'], dest: 'dist/templates'}
-                ]
-            },
             app: {
                 files: [
                     // dist to app
@@ -123,7 +129,7 @@ module.exports = function(grunt) {
             },
             templates: {
                 files: 'templates/**',
-                tasks: ['copy:dist']
+                tasks: ['ngtemplates:dist', "concat:dist", 'uglify:dist']
             },
             app: {
                 files: ['dist/**'],
@@ -139,6 +145,15 @@ module.exports = function(grunt) {
                 //dest: 'build/target.js'
                 // Note: The entire `browserify-shim` config is inside `package.json`.
             }
+        },
+        clean: {
+            dist: ["dist", "temp"],
+            app: ["app/js/jsonforms*", "app/css/jsonforms*"],
+            all: ["dist", "temp", "app/js/jsonforms*", "app/css/jsonforms*", "node_modules", "app/bower_components"]
+
+
+
+
         }
     });
 
@@ -150,6 +165,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.loadNpmTasks('grunt-contrib-less');
+
+    // clean
+    grunt.loadNpmTasks('grunt-contrib-clean');
+
+    // inline templates into jsonforms.js
+    grunt.loadNpmTasks('grunt-angular-templates');
 
     // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -171,10 +192,9 @@ module.exports = function(grunt) {
     grunt.registerTask('dist', [
         'less:bootstrap',
         'less:jsonforms',
+        'ngtemplates:dist',
         'concat:dist',
         'browserify:dist',
-        'uglify:dist',
-        'copy:dist'
     ]);
 
     // Build example application
