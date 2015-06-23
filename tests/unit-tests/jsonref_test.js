@@ -69,7 +69,7 @@ describe('Dojox Json referencing', function() {
     var jsonObject = dojox.json.ref.fromJson(jsonString, {loader:spy } );
 
     expect(spy).not.toHaveBeenCalled();
-    jsonObject.refersTo._loadObject.call();
+    jsonObject.refersTo._loadObject();
     expect(spy).toHaveBeenCalled();
   });
 
