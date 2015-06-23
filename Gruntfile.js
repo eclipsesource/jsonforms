@@ -32,14 +32,14 @@ module.exports = function(grunt) {
         copy: {
             dist: {
                 files: [
-                    // templates
+                     // templates
                     {expand:true, cwd: 'templates/', src: ['**'], dest: 'dist/templates'}
                 ]
             },
             app: {
                 files: [
                     // dist to app
-                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'app'},
+                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'app'}
                 ]
             }
         },
@@ -129,6 +129,16 @@ module.exports = function(grunt) {
                 files: ['dist/**'],
                 tasks: ['copy:app']
             }
+        },
+
+        browserify: {
+            dist: {
+                //dest: 'dist/js/<%= pkg.name %>.js'
+                src: ['dist/js/<%= pkg.name %>.js'],
+                dest: 'dist/js/<%= pkg.name %>.js'
+                //dest: 'build/target.js'
+                // Note: The entire `browserify-shim` config is inside `package.json`.
+            }
         }
     });
 
@@ -155,13 +165,16 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
+    grunt.loadNpmTasks('grunt-browserify');
+
     // Build distribution
     grunt.registerTask('dist', [
         'less:bootstrap',
         'less:jsonforms',
         'concat:dist',
+        'browserify:dist',
         'uglify:dist',
-        'copy:dist',
+        'copy:dist'
     ]);
 
     // Build example application

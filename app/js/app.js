@@ -3,19 +3,27 @@
 angular.module('makeithappen', [
     'ngRoute',
     'jsonForms'
-]).controller('LocalController', ['$scope', function($scope) {
-    $scope.getSchema = function() {
-        return {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
+]).controller('LocalController', ['$scope', '$q', function($scope, $q) {
+
+    var schema = {
+        "type": "object",
+        "properties": {
+            "id": "user.json",
+            "name": {
+                "type": "string"
             }
-        };
+        }
     };
+
+    $scope.getSchema = function() {
+        var deferred = $q.defer();
+        deferred.resolve(schema);
+        return deferred.promise;
+    };
+
     $scope.getUiSchema = function() {
-        return {
+        var deferred = $q.defer();
+        deferred.resolve({
             "elements": [
                 {
                     "type": "HorizontalLayout",
@@ -30,8 +38,7 @@ angular.module('makeithappen', [
                                 {
                                     "type": "Control",
                                     "scope": {
-                                        "type": "relative",
-                                        "path": "name"
+                                        "$ref": "#/properties/name"
                                     }
                                 }
                             ]
@@ -39,7 +46,8 @@ angular.module('makeithappen', [
                     ]
                 }
             ]
-        };
+        });
+        return deferred.promise;
     };
     $scope.getData = function() {
         return {
@@ -52,7 +60,10 @@ angular.module('makeithappen', [
         var deferred = $q.defer();
         $http.get("http://localhost:3000/users")
             .success(function(response) {
-                deferred.resolve(response);
+                deferred.resolve({
+                        "users": response
+                    }
+                );
             });
         return deferred.promise;
     };
@@ -62,33 +73,21 @@ angular.module('makeithappen', [
         deferred.resolve({
             "elements": [{
                 "type": "Table",
-                "idProperty": "id", // TODO
-                "columns": [
-                    {
-                        "type": "Column",
-                        "label": "First name",
-                        "scope": {
-                            "type": "relative",
-                            "path": "firstName"
-                        }
-                    }, {
-                        "type": "Column",
-                        "label": "Height",
-                        "scope": {
-                            "type": "relative",
-                            "path": "height"
-                        }
-                    }, {
-                        "type": "Column",
-                        "label": "Nationality",
-                        "scope": {
-                            "type": "relative",
-                            "path": "nationality"
-                        }
-                    }
-                ]
-            }
-            ]
+                "scope": {
+                    "$ref": "#/properties/users/items"
+                },
+                "columns": [{
+                    "label": "First name",
+                    "property": "firstName"
+
+                }, {
+                    "label": "Height",
+                    "property": "height"
+                }, {
+                    "label": "Nationality",
+                    "property": "nationality"
+                }]
+            }]
         });
         return deferred.promise;
     };
@@ -96,62 +95,67 @@ angular.module('makeithappen', [
     $scope.getSchema = function() {
         var deferred = $q.defer();
         deferred.resolve({
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "objectId"
-                    },
-                    "lastName": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "firstName": {
-                        "type": "string"
-                    },
-                    "gender": {
-                        "type": "string",
-                        "enum": [
-                            "Male",
-                            "Female"
-                        ]
-                    },
-                    "active": {
-                        "type": "boolean"
-                    },
-                    "registrationTime": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "weight": {
-                        "type": "number"
-                    },
-                    "height": {
-                        "type": "integer"
-                    },
-                    "nationality": {
-                        "type": "string",
-                        "enum": [
-                            "German",
-                            "French",
-                            "UK",
-                            "US",
-                            "Spanish",
-                            "Italian",
-                            "Russian"
-                        ]
-                    },
-                    "birthDate": {
-                        "type": "string",
-                        "format": "date-time"
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "format": "objectId"
+                            },
+                            "lastName": {
+                                "type": "string"
+                            },
+                            "email": {
+                                "type": "string"
+                            },
+                            "firstName": {
+                                "type": "string"
+                            },
+                            "gender": {
+                                "type": "string",
+                                "enum": [
+                                    "Male",
+                                    "Female"
+                                ]
+                            },
+                            "active": {
+                                "type": "boolean"
+                            },
+                            "registrationTime": {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            "weight": {
+                                "type": "number"
+                            },
+                            "height": {
+                                "type": "integer"
+                            },
+                            "nationality": {
+                                "type": "string",
+                                "enum": [
+                                    "German",
+                                    "French",
+                                    "UK",
+                                    "US",
+                                    "Spanish",
+                                    "Italian",
+                                    "Russian"
+                                ]
+                            },
+                            "birthDate": {
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": ["firstName"]
                     }
-                },
-                "additionalProperties": false,
-                "required": ["firstName"]
+                }
             }
         });
         return deferred.promise;
@@ -163,7 +167,7 @@ angular.module('makeithappen', [
         var deferred = $q.defer();
         $http.get("http://localhost:3000/users?id=54c63acb1803009383463bd0")
             .success(function(response) {
-                deferred.resolve(response);
+                deferred.resolve(response[0]);
             });
         return deferred.promise;
     };
@@ -181,25 +185,19 @@ angular.module('makeithappen', [
                         },
                         {
                             "type": "Table",
-                            "idProperty": "id", // TODO
                             "scope": {
-                                "type": "relative",
-                                "path": "albums"
+                                "$ref": "#/items/properties/albums/items/properties"
                             },
                             "columns": [
                                 {
-                                    "type": "Column",
                                     "label": "Album name",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "name"
+                                    property: {
+                                        "$ref": "#/items/properties/albums/items/properties/name"
                                     }
                                 }, {
-                                    "type": "Column",
                                     "label": "Release Year",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "releaseYear"
+                                    "property": {
+                                        "$ref": "#/items/properties/albums/items/properties/name"
                                     }
                                 }
                             ]
@@ -544,7 +542,4 @@ angular.module('makeithappen', [
             controller: 'EditorController'
         })
     }
-]).run(['EndpointMapping', function(EndpointMapping) {
-
-}]);
-
+])

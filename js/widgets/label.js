@@ -4,12 +4,17 @@ var app = angular.module('jsonForms.label', []);
 app.run(['RenderService', function(RenderService) {
     RenderService.register({
         id: "Label",
-        render: function (element) {
+        render: function (uiElement, schema, instance, path) {
 
-            var uiElement = RenderService.createUiElement("", "", {type:"Label"}, element.text);
+            if (schema.hasOwnProperty("path")) {
+                uiElement.schemaType = schema["path"]["type"];
+                console.log("element is " + JSON.stringify(uiElement));
+            }
+
+            var uiElement = RenderService.createUiElement("", "Label", "Label", uiElement.schemaType, uiElement.text);
 
             return {
-                "type": element.type,
+                "type": "Label",
                 "elements": [uiElement],
                 "size": maxSize
             };
