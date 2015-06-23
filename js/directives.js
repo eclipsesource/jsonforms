@@ -13,7 +13,7 @@ jsonFormsDirectives.directive('jsonforms', ['RenderService', 'BindingService', '
         },
         // TODO: fix template for tests
         templateUrl: '../templates/form.html',
-        controller: function($scope) {
+        controller: ['$scope', function($scope) {
 
             // TODO: call syntax
             $q.all([$scope.schema()(), $scope.uiSchema()(), $scope.data()()]).then(function(values) {
@@ -85,7 +85,7 @@ jsonFormsDirectives.directive('jsonforms', ['RenderService', 'BindingService', '
                     };
                 });
             });
-        }
+        }]
     };
 }]);
 
