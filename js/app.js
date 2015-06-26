@@ -1,6 +1,5 @@
 
 angular.module('jsonForms', [
-    'ngRoute',
     'ui.bootstrap',
     'ui.validate',
     'ui.router',
