@@ -8,21 +8,17 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver',
         id: "Control",
         render: function (resolvedElement, schema, instance, path) {
 
-            resolvedElement.id = resolvedElement.scope.$ref;
-
-            var elementName = resolvedElement.name;
-            if (elementName === undefined || elementName === null) {
-                elementName = resolvedElement.path;
-            }
-
-            var value = ReferenceResolver.resolve(instance, path);
-            var uiElement = RenderService.createUiElement(elementName, resolvedElement, value);
-
-            BindingService.add(uiElement.id, uiElement.value);
+            var control = {};
+            control["schemaType"] = resolvedElement.scope !== undefined ? resolvedElement.scope.type : "";
+            control["bindings"] = instance;
+            control["path"] = ReferenceResolver.normalize(ReferenceResolver.get(path));
+            control["label"] = resolvedElement.label;
+            // TODO: create unique ID?
+            control.id = path;
 
             return {
                 "type": "Control",
-                "elements": [uiElement],
+                "elements": [control],
                 "size": 99
             };
         }

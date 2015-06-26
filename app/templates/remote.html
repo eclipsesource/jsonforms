@@ -1,8 +1,8 @@
-<h1>Remote data, absolute scope</h1>
+<h1>Async Table bound to list of users</h1>
 <div ng-controller="RemoteController">
-    <jsonforms schema="getSchema" ui-schema="getUiSchema" data="getData"></jsonforms>
+    <jsonforms schema="schema" ui-schema="uiSchema" async-data-provider="UserDataProvider"></jsonforms>
 </div>
-<h1>Remote data, relative scope</h1>
+<h1>Async Table bound to albums property of a single user</h1>
 <div ng-controller="RelativeScopeRemoteController">
-    <jsonforms schema="getSchema" ui-schema="getUiSchema" data="getData"></jsonforms>
+    <jsonforms schema="schema" ui-schema="uiSchema" async-data-provider="AlbumDataProvider"></jsonforms>
 </div>

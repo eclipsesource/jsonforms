@@ -4,14 +4,14 @@ var app = angular.module('jsonForms.verticalLayout', []);
 app.run(['RenderService', function(RenderService) {
     RenderService.register({
         id: "VerticalLayout",
-        render: function (verticalLayoutElement, schema, instance, path) {
+        render: function (verticalLayoutElement, schema, instance, path, dataProvider) {
             var renderElements = function (elements) {
                 if (elements === undefined || elements.length == 0) {
                     return [];
                 } else {
                     var basePath = path + "/elements/";
                     return elements.reduce(function (acc, curr, idx, els) {
-                        acc.push(RenderService.render(curr, schema, instance, basePath + idx));
+                        acc.push(RenderService.render(curr, schema, instance, basePath + idx, dataProvider));
                         return acc;
                     }, []);
                 }

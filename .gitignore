@@ -6,7 +6,6 @@ app/css/jsonforms.css
 app/js/jsonforms.js
 app/js/jsonforms.min.js
 temp/
-dist/
 .DS_Store
 .idea
 *.log

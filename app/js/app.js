@@ -2,179 +2,228 @@
 
 angular.module('makeithappen', [
     'ngRoute',
+    'ngResource',
     'jsonForms'
-]).controller('LocalController', ['$scope', '$q', function($scope, $q) {
+]).controller('LocalController', ['$scope', function($scope) {
 
-    var schema = {
+    $scope.schema = {
         "type": "object",
         "properties": {
             "id": "user.json",
             "name": {
                 "type": "string"
+            },
+            "age": {
+                "type": "integer"
+            }
+        }
+    };
+    $scope.uiSchema = {
+        "elements": [
+            {
+                "type": "HorizontalLayout",
+                "elements": [
+                    {
+                        "type": "VerticalLayout",
+                        "elements": [
+                            {
+                                "type": "Control",
+                                "label": "Name",
+                                "scope": {
+                                    "$ref": "#/properties/name"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VerticalLayout",
+                        "elements": [
+                            {
+                                "type": "Control",
+                                "label": "Age",
+                                "scope": {
+                                    "$ref": "#/properties/age"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+    $scope.usersSchema = {
+        "type": "array",
+        "items": $scope.schema
+    };
+    $scope.usersUiSchema = {
+        "elements": [
+            {
+                "type": "Table",
+                "scope": {
+                    "$ref": "#/items"
+                },
+                "columns": [
+                    {
+                        "label": "Name",
+                        "scope": {
+                            "$ref": "#/items/properties/name"
+                        }
+                    },
+                    {
+                        "label": "Age",
+                        "scope": {
+                            "$ref": "#/items/properties/age"
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+
+    $scope.data = {
+        name: 'John Doe',
+        age: 36
+    };
+
+    $scope.users = [
+        $scope.data,
+        {
+            name: 'Todd',
+            age: 33
+        },
+        {
+            name: 'Jimmy',
+            age: 34
+        }
+    ];
+
+    $scope.formattedData = function() {
+        return JSON.stringify($scope.data, null, 4);
+    };
+
+}]).controller('RemoteController', ['$scope', '$http', '$q', '$resource', function($scope, $http, $q, $resource) {
+
+    var Users = $resource('http://localhost:3000/users/:id');
+    var pageSize = 1;
+
+    $scope.UserDataProvider = {
+        fetchData: function() {
+            return Users.query();
+        },
+        fetchPage: function(page, size) {
+            var startPage = page/pageSize;
+            return Users.query({_start: startPage, _end: startPage + pageSize})
+        },
+        setPageSize: function(newSize) {
+            pageSize = newSize;
+        }
+    };
+
+    $scope.uiSchema = {
+        "elements": [{
+            "type": "Table",
+            "scope": {
+                "$ref": "#/properties/users/items"
+            },
+            "columns": [{
+                "label": "First name",
+                "scope": {
+                    "$ref":  "#/properties/users/items/firstName"
+                }
+            }, {
+                "label": "Height",
+                "scope": {
+                    "$ref": "#/properties/users/items/height"
+                }
+            }, {
+                "label": "Nationality",
+                "scope": {
+                    "$ref":  "#/properties/users/items/nationality"
+                }
+            }]
+        }]
+    };
+
+    $scope.schema = {
+        "type": "object",
+        "properties": {
+            "users": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string",
+                            "format": "objectId"
+                        },
+                        "lastName": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "firstName": {
+                            "type": "string"
+                        },
+                        "gender": {
+                            "type": "string",
+                            "enum": [
+                                "Male",
+                                "Female"
+                            ]
+                        },
+                        "active": {
+                            "type": "boolean"
+                        },
+                        "registrationTime": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "weight": {
+                            "type": "number"
+                        },
+                        "height": {
+                            "type": "integer"
+                        },
+                        "nationality": {
+                            "type": "string",
+                            "enum": [
+                                "German",
+                                "French",
+                                "UK",
+                                "US",
+                                "Spanish",
+                                "Italian",
+                                "Russian"
+                            ]
+                        },
+                        "birthDate": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": ["firstName"]
+                }
             }
         }
     };
 
-    $scope.getSchema = function() {
-        var deferred = $q.defer();
-        deferred.resolve(schema);
-        return deferred.promise;
+}]).controller('RelativeScopeRemoteController', ['$scope', '$http', '$q', '$resource', function($scope, $http, $q, $resource) {
+
+    var Albums = $resource('http://localhost:3000/users/:id');
+    $scope.data = Albums.get({id: "54732f005b00004e12c5190c"});
+
+    $scope.AlbumDataProvider = {
+        fetchData: function() {
+            return Albums.get({id: "54732f005b00004e12c5190c"});
+        }
+        // no paging, filtering etc. configured
     };
 
-    $scope.getUiSchema = function() {
-        var deferred = $q.defer();
-        deferred.resolve({
-            "elements": [
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "VerticalLayout",
-                            "elements": [
-                                {
-                                    "type": "Label",
-                                    "text": "Name"
-                                },
-                                {
-                                    "type": "Control",
-                                    "scope": {
-                                        "$ref": "#/properties/name"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        });
-        return deferred.promise;
-    };
-    $scope.getData = function() {
-        return {
-            name: 'John Doe'
-        };
-    };
-}]).controller('RemoteController', ['$scope', '$http', '$q', function($scope, $http, $q) {
-
-    $scope.getData = function() {
-        var deferred = $q.defer();
-        $http.get("http://localhost:3000/users")
-            .success(function(response) {
-                deferred.resolve({
-                        "users": response
-                    }
-                );
-            });
-        return deferred.promise;
-    };
-
-    $scope.getUiSchema = function() {
-        var deferred = $q.defer();
-        deferred.resolve({
-            "elements": [{
-                "type": "Table",
-                "scope": {
-                    "$ref": "#/properties/users/items"
-                },
-                "columns": [{
-                    "label": "First name",
-                    "property": "firstName"
-
-                }, {
-                    "label": "Height",
-                    "property": "height"
-                }, {
-                    "label": "Nationality",
-                    "property": "nationality"
-                }]
-            }]
-        });
-        return deferred.promise;
-    };
-
-    $scope.getSchema = function() {
-        var deferred = $q.defer();
-        deferred.resolve({
-            "type": "object",
-            "properties": {
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string",
-                                "format": "objectId"
-                            },
-                            "lastName": {
-                                "type": "string"
-                            },
-                            "email": {
-                                "type": "string"
-                            },
-                            "firstName": {
-                                "type": "string"
-                            },
-                            "gender": {
-                                "type": "string",
-                                "enum": [
-                                    "Male",
-                                    "Female"
-                                ]
-                            },
-                            "active": {
-                                "type": "boolean"
-                            },
-                            "registrationTime": {
-                                "type": "string",
-                                "format": "date-time"
-                            },
-                            "weight": {
-                                "type": "number"
-                            },
-                            "height": {
-                                "type": "integer"
-                            },
-                            "nationality": {
-                                "type": "string",
-                                "enum": [
-                                    "German",
-                                    "French",
-                                    "UK",
-                                    "US",
-                                    "Spanish",
-                                    "Italian",
-                                    "Russian"
-                                ]
-                            },
-                            "birthDate": {
-                                "type": "string",
-                                "format": "date-time"
-                            }
-                        },
-                        "additionalProperties": false,
-                        "required": ["firstName"]
-                    }
-                }
-            }
-        });
-        return deferred.promise;
-    }
-
-}]).controller('RelativeScopeRemoteController', ['$scope', '$http', '$q', function($scope, $http, $q) {
-
-    $scope.getData = function() {
-        var deferred = $q.defer();
-        $http.get("http://localhost:3000/users?id=54c63acb1803009383463bd0")
-            .success(function(response) {
-                deferred.resolve(response[0]);
-            });
-        return deferred.promise;
-    };
-
-    $scope.getUiSchema = function() {
-        var deferred = $q.defer();
-        deferred.resolve({
+    $scope.uiSchema ={
             "elements": [
                 {
                     "type": "HorizontalLayout",
@@ -186,18 +235,18 @@ angular.module('makeithappen', [
                         {
                             "type": "Table",
                             "scope": {
-                                "$ref": "#/items/properties/albums/items/properties"
+                                "$ref": "#/items/properties/albums/items"
                             },
                             "columns": [
                                 {
                                     "label": "Album name",
-                                    property: {
+                                    "scope": {
                                         "$ref": "#/items/properties/albums/items/properties/name"
                                     }
                                 }, {
                                     "label": "Release Year",
-                                    "property": {
-                                        "$ref": "#/items/properties/albums/items/properties/name"
+                                    "scope": {
+                                        "$ref": "#/items/properties/albums/items/properties/releaseYear"
                                     }
                                 }
                             ]
@@ -205,13 +254,9 @@ angular.module('makeithappen', [
                     ]
                 }
             ]
-        });
-        return deferred.promise;
-    };
+        };
 
-    $scope.getSchema = function() {
-        var deferred = $q.defer();
-        deferred.resolve({
+    $scope.schema = {
             "type": "array",
             "items": {
                 "type": "object",
@@ -283,9 +328,7 @@ angular.module('makeithappen', [
                 "additionalProperties": false,
                 "required": ["firstName"]
             }
-        });
-        return deferred.promise;
-    }
+        };
 
 }]).controller('EditorController', ['RenderService', '$scope', function(RenderService, $scope) {
 
