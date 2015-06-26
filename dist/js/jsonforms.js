@@ -4,11 +4,8 @@
 // Source: js/app.js
 
 angular.module('jsonForms', [
-    'ngRoute',
     'ui.bootstrap',
     'ui.validate',
-    'ui.router',
-    'ui.ace',
     'ui.grid',
     'ui.grid.pagination',
     'ui.grid.autoResize',
@@ -453,7 +450,7 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', 'uiGridConstants', function(RenderService, BindingService, ReferenceResolver, $rootScope, uiGridConstants) {
+app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', function(RenderService, BindingService, ReferenceResolver, $rootScope) {
 
     var gridAPI;
 
@@ -537,12 +534,10 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', '
         tableOptions.gridOptions.onRegisterApi = function(gridApi) {
             gridAPI = gridApi;
             gridApi.pagination.on.paginationChanged($rootScope, function (newPage, pageSize) {
-                console.log("paginationChanged " + newPage + "/" + pageSize);
                 tableOptions.gridOptions.paginationPage = newPage;
                 tableOptions.gridOptions.paginationPageSize = pageSize;
                 dataProvider.setPageSize(pageSize);
                 dataProvider.fetchPage(newPage, pageSize).$promise.then(function(newData, headers) {
-                    console.log(headers);
                     var resolvedData = resolveColumnData(path, newData, colDefs);
                     tableOptions.gridOptions.data = resolvedData;
                 });
@@ -590,11 +585,8 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', '
 
             if (dataProvider === undefined) {
                 control["bindings"] = control.tableOptions.gridOptions.data;
-                instanceData[0].name = "LOL";
-                control.tableOptions.gridOptions.data[0].name = "FUCK";
             } else {
-                var resolvedData = resolveColumnData(path, instanceData, control.tableOptions.gridOptions.columnDefs);
-                control.tableOptions.gridOptions.data = resolvedData;
+                control.tableOptions.gridOptions.data = resolveColumnData(path, instanceData, control.tableOptions.gridOptions.columnDefs);
             }
 
             return {
