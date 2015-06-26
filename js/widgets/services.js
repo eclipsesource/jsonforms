@@ -32,7 +32,7 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
         }
     };
 }).factory('ReferenceResolver', function () {
-        var referenceMap;
+        var referenceMap = {};
         var keywords = ["items", "properties", "#"];
 
         function toPropertyFragments(path) {
@@ -48,8 +48,15 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
         }
 
         return {
-            set: function (referenceMapping) {
-                referenceMap = referenceMapping;
+            addToMapping: function (addition) {
+                for (var ref in addition) {
+                    if (addition.hasOwnProperty(ref)) {
+                        referenceMap[ref] = addition[ref];
+                    }
+                }
+            },
+            get: function (uiSchemaPath) {
+              return referenceMap[uiSchemaPath + "/scope/$ref"];
             },
             normalize: function(path) {
                 // TODO: provide filterKeywords function
@@ -66,11 +73,18 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
                 if (referenceMap !== undefined && referenceMap.hasOwnProperty(p)) {
                     p = referenceMap[p];
                 }
-                var fragments = toPropertyFragments(this.normalize(p));
-                var data = fragments.reduce(function(currObj, fragment) {
-                   return currObj[fragment];
+                return this.resolveModelPath(instance, p);
+            },
+            resolveModelPath: function(instance, path) {
+                var fragments = toPropertyFragments(this.normalize(path));
+                return fragments.reduce(function (currObj, fragment) {
+                    if (currObj instanceof Array) {
+                        return currObj.map(function(item) {
+                            return item[fragment];
+                        });
+                    }
+                    return currObj[fragment];
                 }, instance);
-                return data;
             }
         };
 }).provider('RenderService', function() {
@@ -87,27 +101,27 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
     this.$get = function() {
         var that = this;
         return {
-            // can be made private?
-            createUiElement: function(displayName, resolvedElement, value) {
-                return {
-                    displayname: displayName,
-                    id: resolvedElement.id,
-                    type: resolvedElement.scope !== undefined ? resolvedElement.scope.type : "",
-                    value: value,
-                    // FIXME
-                    //options: type.enum,
-                    isOpen: false,
-                    alerts: []
-                };
-            },
+            // TODO
+            //createUiElement: function(displayName, resolvedElement, value, path) {
+            //    return {
+            //        //displayname: displayName,
+            //        //id: path,
+            //        type: resolvedElement.scope !== undefined ? resolvedElement.scope.type : "",
+            //        value: value,
+            //        // FIXME
+            //        //options: type.enum,
+            //        isOpen: false,
+            //        alerts: []
+            //    };
+            //},
             hasRendererFor: function(element) {
                 return renderers.hasOwnProperty(element.type);
             },
-            render: function (element, schema, instance, path) {
+            render: function (element, schema, instance, path, dataProvider) {
                 var renderer = renderers[element.type];
-                return renderer(element, schema, instance, path);
+                return renderer(element, schema, instance, path, dataProvider);
             },
-            renderAll: function(schema, uiSchema, instance) {
+            renderAll: function(schema, uiSchema, instance, dataProvider) {
                 var result = [];
 
                 if (uiSchema.elements === undefined) {
@@ -123,7 +137,7 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
                     var path = basePath + i;
 
                     if (this.hasRendererFor(uiElement)) {
-                        var renderedElement = this.render(uiElement, schema, instance, path);
+                        var renderedElement = this.render(uiElement, schema, instance, path, dataProvider);
                         result.push(renderedElement);
                     }
                 }

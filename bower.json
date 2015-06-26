@@ -22,6 +22,10 @@
     "dojox": "1.10.x",
     "jsonary": "latest",
     "tv4": "latest",
-    "json-refs": "~0.2.0"
+    "json-refs": "~0.2.0",
+    "angular-resource": "~1.4.1"
+  },
+  "resolutions": {
+    "angular": "1.4.1"
   }
 }

@@ -1,20 +1,38 @@
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['RenderService', 'BindingService', 'ReferenceResolver', function(RenderService, BindingService, ReferenceResolver) {
+app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', function(RenderService, BindingService, ReferenceResolver, $rootScope) {
 
-    function createTableUIElement(element, schema, instanceData, path) {
+    var gridAPI;
+
+    function createTableUIElement(element, schema, instanceData, path, dataProvider) {
+
+        if (dataProvider === undefined) {
+            dataProvider = {};
+        }
 
         // TODO: how to configure paging/filtering
-        var paginationEnabled = true;
-        var filteringEnabled = true;
+        var paginationEnabled = dataProvider.fetchPage !== undefined;
+        var filteringEnabled = false;
 
         // TODO: what are the exact requirements for our UI element?
         //var uiElement = RenderService.createUiElement(element.displayname, element.scope.path, {type: "array" }, instanceData);
 
         var uiElement = {
-            type: "array"
+            schemaType: "array"
         };
+
+        var parentScope = ReferenceResolver.get(path);
+
+        var prefix = ReferenceResolver.normalize(parentScope);
+        var colDefs = element.columns.map(function(col, idx) {
+            return {
+                field:  ReferenceResolver.normalize(ReferenceResolver.get(path + "/columns/" + idx)).replace(prefix + "/", ''),
+                displayName: col.label
+            }
+        });
+
+        console.log("cols are " + JSON.stringify(colDefs));
 
         var tableOptions = {
             columns: element.columns,
@@ -24,12 +42,7 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver', function(Render
                 enableColumnResizing: true,
                 enableAutoResize: true,
                 // TODO: make cell clickable somehow
-                columnDefs: [
-                    //{
-                //    field: element.idLabel.toLowerCase(),
-                //    cellTemplate: '<a href="#/<<TYPE>>/{{row.entity.id}}">{{row.entity[col.field]}}</a>'
-                //}
-                 ],
+                columnDefs: colDefs,
                 data: [],
                 useExternalFiltering: true
             }
@@ -38,9 +51,9 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver', function(Render
         if (paginationEnabled) {
             tableOptions.gridOptions.enablePagination = paginationEnabled;
             tableOptions.gridOptions.useExternalPagination = true;
-            // TODO: dummys
-            tableOptions.gridOptions.paginationPageSizes = [5,10];
-            tableOptions.gridOptions.paginationPageSize = 5;
+            // TODO: dummies
+            tableOptions.gridOptions.paginationPageSizes = [1,2,3,4,5];
+            tableOptions.gridOptions.paginationPageSize = 1;
             tableOptions.gridOptions.paginationPage = 1;
         }
 
@@ -68,40 +81,31 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver', function(Render
         uiElement.setTotalItems = function() {
             // TODO: determine total items
         };
-        uiElement.registerCallbacks = function() {
-            //var that = this;
-            //tableOptions.gridOptions.onRegisterApi = function (gridApi) {
-            //    gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-            //        tableOptions.gridOptions.paginationPage = newPage;
-            //        tableOptions.gridOptions.paginationPageSize = pageSize;
-            //        that.fetchPagedData();
-            //    });
-            //    gridApi.core.on.filterChanged($scope, function () {
-            //        var grid = this.grid;
-            //        var searchTerms = findSearchTerms(grid);
-            //        if (searchTerms.length > 0) {
-            //            that.fetchFilteredData(searchTerms);
-            //            that.disablePaginationControls();
-            //        } else {
-            //            that.fetchPagedData();
-            //            that.enablePaginationControls();
-            //        }
-            //    });
-            //
-            //}
-        };
 
+        tableOptions.gridOptions.onRegisterApi = function(gridApi) {
+            gridAPI = gridApi;
+            gridApi.pagination.on.paginationChanged($rootScope, function (newPage, pageSize) {
+                tableOptions.gridOptions.paginationPage = newPage;
+                tableOptions.gridOptions.paginationPageSize = pageSize;
+                dataProvider.setPageSize(pageSize);
+                dataProvider.fetchPage(newPage, pageSize).$promise.then(function(newData, headers) {
+                    var resolvedData = resolveColumnData(path, newData, colDefs);
+                    tableOptions.gridOptions.data = resolvedData;
+                });
+            });
+        } ;
         uiElement.tableOptions = tableOptions;
 
         return uiElement;
     }
 
-    function createTableControlObject() {
-        return {
-            "type": "Control",
-            "elements": [],
-            "size": maxSize
-        };
+    function resolveColumnData(uiPath, data) {
+        if (data instanceof Array) {
+            return data;
+        } else {
+            // relative scope
+            return ReferenceResolver.resolve(data, uiPath);
+        }
     }
 
     var findSearchTerms = function(grid) {
@@ -122,17 +126,25 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver', function(Render
     RenderService.register({
         id: "Table",
         // TODO: we completly ignore the schema here
-        render: function (uiElement, schema, instanceData, path) {
-            var tObject = createTableControlObject();
+        render: function (resolvedElement, schema, instanceData, path, dataProvider) {
 
-            var tableUiElement = createTableUIElement(uiElement, schema, instanceData, path);
+            var control = createTableUIElement(resolvedElement, schema, instanceData, path, dataProvider);
 
-            tableUiElement.registerCallbacks();
-            tableUiElement.fetchPagedData(path);
+            control.tableOptions.gridOptions.data = instanceData;
+            control["schemaType"] = "array";
+            control["label"] = resolvedElement.label;
 
-            tObject.elements.push(tableUiElement);
-            BindingService.add(tableUiElement.id, tableUiElement.value);
-            return tObject;
+            if (dataProvider === undefined) {
+                control["bindings"] = control.tableOptions.gridOptions.data;
+            } else {
+                control.tableOptions.gridOptions.data = resolveColumnData(path, instanceData, control.tableOptions.gridOptions.columnDefs);
+            }
+
+            return {
+                    "type": "Control",
+                    "elements": [control],
+                    "size": maxSize
+            };
         }
     });
 }]);

@@ -2,89 +2,82 @@
 
 var jsonFormsDirectives = angular.module('jsonForms.directives', []);
 
-jsonFormsDirectives.directive('jsonforms', ['RenderService', 'BindingService', 'ReferenceResolver', '$q', function(RenderService, BindingService, ReferenceResolver, $q) {
+jsonFormsDirectives.directive('jsonforms',
+    ['RenderService', 'BindingService', 'ReferenceResolver',
+        function(RenderService, BindingService, ReferenceResolver) {
+
     return {
         restrict: "E",
         replace: true,
         scope: {
             schema: "&",
             uiSchema: "&",
-            data: "&"
+            data: "&",
+            asyncDataProvider: "="
         },
         // TODO: fix template for tests
         templateUrl: '../templates/form.html',
         controller: ['$scope', function($scope) {
 
             // TODO: call syntax
-            $q.all([$scope.schema()(), $scope.uiSchema()(), $scope.data()()]).then(function(values) {
+            var schema = $scope.schema();
+            var uiSchema = $scope.uiSchema();
+            var dataProvider = $scope.asyncDataProvider;
 
-                var schema = values[0];
-                var uiSchema = values[1];
-                var data = values[2];
-                // let all $refs resolve by adding the UI schema to the regular schema
-                schema["uiSchema"] = uiSchema;
-                ReferenceResolver.set(jsonRefs.findRefs(uiSchema));
+            schema["uiSchema"] = uiSchema;
+            ReferenceResolver.addToMapping(jsonRefs.findRefs(uiSchema));
 
-                jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-
-                    $scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data);
-                    $scope.id = data.id;
-                    $scope.bindings = BindingService.all();
-
-                    $scope.opened = false;
-
-                    $scope.openDate = function($event, element) {
-                        $event.preventDefault();
-                        $event.stopPropagation();
-
-                        element.isOpen = true;
-                    };
-
-                    $scope.sendData = function() {
-                        var data = {};
-
-                        var bindingsKeys = Object.keys($scope.bindings);
-
-                        for (var i = 0; i < bindingsKeys.length; i++) {
-                            var key = bindingsKeys[i];
-                            if($scope.bindings[key] != null){
-                                data[key] = $scope.bindings[key];
-                            }
-                        }
-
-                        // TODO: implement submit
-                        //SendData.sendData(baseUrl, $routeParams.type, $scope.id, data);
-                    };
-
-                    $scope.validateNumber = function(value, element) {
-                        if (value !== undefined && value !== null && isNaN(value)) {
-                            element.alerts = [];
-                            var alert = {
-                                type: 'danger',
-                                msg: 'Must be a valid number!'
-                            };
-                            element.alerts.push(alert);
-                            return false;
-                        }
-                        element.alerts = [];
-                        return true;
-                    };
-
-                    $scope.validateInteger = function(value, element) {
-                        if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
-                            element.alerts = [];
-                            var alert = {
-                                type: 'danger',
-                                msg: 'Must be a valid integer!'
-                            };
-                            element.alerts.push(alert);
-                            return false;
-                        }
-                        element.alerts = [];
-                        return true;
-                    };
+            if (dataProvider !== undefined) {
+                dataProvider.fetchData().$promise.then(function(data) {
+                    jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                        $scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data, $scope.asyncDataProvider);
+                    });
                 });
-            });
+            } else {
+                var data = $scope.data();
+                jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                    $scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data);
+                });
+            }
+
+
+            $scope.bindings = BindingService.all();
+            $scope.opened = false;
+
+            $scope.openDate = function($event, element) {
+                $event.preventDefault();
+                $event.stopPropagation();
+
+                element.isOpen = true;
+            };
+
+            $scope.validateNumber = function(value, element) {
+                if (value !== undefined && value !== null && isNaN(value)) {
+                    element.alerts = [];
+                    var alert = {
+                        type: 'danger',
+                        msg: 'Must be a valid number!'
+                    };
+                    element.alerts.push(alert);
+                    return false;
+                }
+                element.alerts = [];
+                return true;
+            };
+
+            $scope.validateInteger = function(value, element) {
+                if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
+                    element.alerts = [];
+                    var alert = {
+                        type: 'danger',
+                        msg: 'Must be a valid integer!'
+                    };
+                    element.alerts.push(alert);
+                    return false;
+                }
+                element.alerts = [];
+                return true;
+            };
         }]
     };
 }]);
