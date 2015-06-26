@@ -37,7 +37,7 @@ jsonFormsDirectives.directive('jsonforms',
             asyncDataProvider: "="
         },
         // TODO: fix template for tests
-        templateUrl: '../templates/form.html',
+        templateUrl: 'templates/form.html',
         controller: ['$scope', function($scope) {
 
             // TODO: call syntax
@@ -114,7 +114,7 @@ jsonFormsDirectives.directive('control', function() {
             topValidateNumber: '=',
             topValidateInteger: '='
         },
-        templateUrl: '../templates/control.html'
+        templateUrl: 'templates/control.html'
     };
 });
 
@@ -129,7 +129,7 @@ jsonFormsDirectives.directive('recelement', ['RecursionHelper', function(Recursi
             topValidateNumber: '=',
             topValidateInteger: '='
         },
-        templateUrl: '../templates/element.html',
+        templateUrl: 'templates/element.html',
         compile: function(element){
             return RecursionHelper.compile(element);
         }
