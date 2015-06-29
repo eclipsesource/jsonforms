@@ -8,49 +8,37 @@ describe('jsonforms directive', function() {
     beforeEach(module('jsonForms.dataServices'));
     beforeEach(module('jsonForms.directives'));
     beforeEach(module('jsonForms.services'));
-    beforeEach(module('../templates/form.html'));
-    beforeEach(module('../templates/element.html'));
+    beforeEach(module('templates/form.html'));
+    beforeEach(module('templates/element.html'));
 
     beforeEach(inject(function($rootScope, $compile, $q) {
         scope = $rootScope.$new();
         // the jsonforms directive expects functions that return promises
-        scope.fetchSchema = function() {
-            var deferred = $q.defer();
-            deferred.resolve({
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    }
+        scope.schema = {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
                 }
-            });
-            return deferred.promise;
+            }
         };
-        scope.fetchData = function () {
-            var deferred = $q.defer();
-            deferred.resolve({
-                name: 'John Doe'
-            });
-            return deferred.promise;
+        scope.data = {
+            name: 'John Doe'
         };
-        scope.fetchUiSchema = function() {
-            var deferred = $q.defer();
-            deferred.resolve({
-                "type": "Control",
-                "name": "First name",
-                "scope": {
-                    "type": "relative",
-                    "path": "name"
-                }
-            });
-            return deferred.promise;
+        scope.uiSchema = {
+            "type": "Control",
+            "label": "First name",
+            "scope": {
+                "$ref": "#/properties/name"
+            }
         };
-        el = $compile('<jsonforms schema="fetchSchema" data="fetchData" ui-schema="fetchUiSchema">')(scope);
+        el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')(scope);
         scope.$digest();
     }));
 
     it("should render a simple input field", inject(function () {
         // simple assert, we should test for more complex logic here
+        console.log("!!" + el);
         expect(el.html()).toContain("form");
     }));
 
