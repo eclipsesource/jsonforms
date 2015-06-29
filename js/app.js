@@ -5,7 +5,7 @@ angular.module('jsonForms', [
     'ui.grid',
     'ui.grid.pagination',
     'ui.grid.autoResize',
-    'jsonForms.services', ,
+    'jsonForms.services',
     'jsonForms.verticalLayout',
     'jsonForms.horizontalLayout',
     'jsonForms.label',
