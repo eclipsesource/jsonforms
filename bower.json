@@ -17,9 +17,6 @@
     "ui-utils": "0.1.1",
     "jquery": "1.11.x",
     "json-refs": "~0.2.0",
-    "angular-resource": "~1.4.1"
-  },
-  "resolutions": {
-    "angular": "1.4.1"
+    "angular-resource": "~1.2.x"
   }
 }
