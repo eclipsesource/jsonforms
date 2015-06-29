@@ -5,6 +5,16 @@
   "homepage": "https://github.com/qb-project/jsonforms",
   "license": "MIT",
   "private": true,
+  "main": [
+    "dist/js/jsonforms.js",
+    "dist/css/jsonforms.css"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ],
   "dependencies": {
     "angular": "1.2.x",
     "angular-route": "1.2.x",
