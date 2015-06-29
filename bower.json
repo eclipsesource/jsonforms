@@ -4,7 +4,6 @@
   "version": "0.0.1",
   "homepage": "https://github.com/qb-project/jsonforms",
   "license": "MIT",
-  "private": true,
   "main": [
     "dist/js/jsonforms.js",
     "dist/css/jsonforms.css"
