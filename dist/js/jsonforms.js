@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-06-26 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.1 - 2015-06-29 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 
@@ -10,7 +10,6 @@ angular.module('jsonForms', [
     'ui.grid.pagination',
     'ui.grid.autoResize',
     'jsonForms.services',
-    'jsonForms.data.send',
     'jsonForms.verticalLayout',
     'jsonForms.horizontalLayout',
     'jsonForms.label',
@@ -211,32 +210,6 @@ app.run(['RenderService', 'BindingService', 'ReferenceResolver',
         }
     });
 }]);
-// Source: js/widgets/data-send-service.js
-var module = angular.module('jsonForms.data.send', []);
-
-module.factory('SendData', ['$http', function($http) {
-    return {
-        sendData: function(url, type, id, data) {
-
-            if (id !== "") {
-                data.id = id;
-                console.log("post url is " + url + type + "/" + id);
-                $http.post(url + type + "/" + id, data).success(function() {
-                    alert("Update Data successful");
-                }).error(function(){
-                    alert("Update Data failed!");
-                });
-            } else {
-                $http.post("/" + type, data).success(function() {
-                    alert("Create Data successful");
-                }).error(function(){
-                    alert("Create Data failed!");
-                });
-            }
-        }
-    };
-}]);
-
 // Source: js/widgets/horizontal-layout.js
 
 var app = angular.module('jsonForms.horizontalLayout', []);
@@ -646,16 +619,6 @@ $templateCache.put('templates/control.html',
 
   $templateCache.put('templates/list.html',
     "<div class=\"container\"><div class=\"row\"><div class=\"col-xs-30\"><!--Sidebar content--><div class=\"row\"><div class=\"col-xs-100\">Search: <input ng-model=\"query\"></div></div><div class=\"row top-buffer\"><div class=\"col-xs-100\"><a class=\"btn btn-primary\" href=\"#/{{type}}/Create\">Create New</a></div></div></div><div class=\"col-xs-70\"><!--Body content--><ul><li ng-repeat=\"element in elements | filter:query \"><a href=\"#/{{type}}/{{element.id}}\">{{element.id}}</a></li></ul></div></div></div>"
-  );
-
-
-  $templateCache.put('templates/localform.html',
-    "<form role=\"form\"><div class=\"row\"><div class=\"form-group col-sm-50\"><label for=\"localModelEditor\">JSON Schema:</label><div ui-ace=\"{onLoad: aceLoaded}\" ng-model=\"localModel\" id=\"localModelEditor\"></div></div><div class=\"form-group col-sm-50\"><label for=\"localViewEditor\">View:</label><div ui-ace=\"{onLoad: aceLoaded}\" ng-model=\"localView\" id=\"localViewEditor\"></div></div></div><div class=\"row\"><div class=\"col-sm-20 col-sm-offset-40\"><button type=\"button\" class=\"btn\" ng-click=\"reparse()\">Render view</button></div></div></form><div class=\"row\"><form role=\"form\" class=\"qb-form\"><recelement ng-repeat=\"child in elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"openDate\" top-validate-number=\"validateNumber\" top-validate-integer=\"validateInteger\"></recelement></form></div>"
-  );
-
-
-  $templateCache.put('templates/serverform.html',
-    "<form role=\"form\"><div class=\"row\"><div class=\"form-group col-sm-50\"><label for=\"localModel\">JSON Schema:</label><textarea ng-model=\"localModel\" id=\"localModel\" class=\"form-control\">{{localModelDefault}}</textarea></div><div class=\"form-group col-sm-50\"><label for=\"localView\">View:</label><textarea ng-model=\"localView\" id=\"localView\" class=\"form-control\">{{localViewDefault}}</textarea></div></div><div class=\"row\"><div class=\"col-sm-20 col-sm-offset-40\"><button type=\"button\" class=\"btn\" ng-click=\"reparse()\">Render view</button></div></div></form><div class=\"row\"><form role=\"form\" class=\"qb-form\"><recelement ng-repeat=\"child in elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"openDate\" top-validate-number=\"validateNumber\" top-validate-integer=\"validateInteger\"></recelement></form></div>"
   );
 
 

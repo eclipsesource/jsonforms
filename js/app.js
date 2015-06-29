@@ -6,7 +6,6 @@ angular.module('jsonForms', [
     'ui.grid.pagination',
     'ui.grid.autoResize',
     'jsonForms.services',
-    'jsonForms.data.send',
     'jsonForms.verticalLayout',
     'jsonForms.horizontalLayout',
     'jsonForms.label',

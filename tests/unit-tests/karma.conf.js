@@ -12,7 +12,6 @@ module.exports = function(config){
       // If your build process changes the path to your templates,
       // use stripPrefix and prependPrefix to adjust it.
       //stripPrefix: "..",
-      prependPrefix: "../"
 
       // the name of the Angular module to create
       //moduleName: "jsonForms.templates"
@@ -29,12 +28,6 @@ module.exports = function(config){
       //'app/bower_components/angular-ui/build/angular-ui.js',
       'app/bower_components/ui-utils/ui-utils.js',
       'app/bower_components/angular-ui-bootstrap-bower/ui-bootstrap.js',
-      'app/bower_components/dojo/dojo.js',
-      'app/bower_components/dojox/json/ref.js',
-      'app/bower_components/dojox/json/query.js',
-      'app/bower_components/dojox/json/schema.js',
-      {pattern: 'app/bower_components/dojo*/*.js', included: false, watched: false},
-      {pattern: 'app/bower_components/dojo*/**/*.js', included: false, watched: false},
       'tests/unit-tests/**/*.js',
       'app/js/*.js',
       // templates
