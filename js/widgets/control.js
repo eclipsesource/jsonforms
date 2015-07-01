@@ -1,8 +1,8 @@
 
 var app = angular.module('jsonForms.control', []);
 
-app.run(['RenderService', 'BindingService', 'ReferenceResolver',
-    function(RenderService, BindingService, ReferenceResolver) {
+app.run(['RenderService', 'ReferenceResolver',
+    function(RenderService, ReferenceResolver) {
 
     RenderService.register({
         id: "Control",

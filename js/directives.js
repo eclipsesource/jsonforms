@@ -3,8 +3,8 @@
 var jsonFormsDirectives = angular.module('jsonForms.directives', []);
 
 jsonFormsDirectives.directive('jsonforms',
-    ['RenderService', 'BindingService', 'ReferenceResolver',
-        function(RenderService, BindingService, ReferenceResolver) {
+    ['RenderService', 'ReferenceResolver',
+        function(RenderService, ReferenceResolver) {
 
     return {
         restrict: "E",
@@ -41,7 +41,7 @@ jsonFormsDirectives.directive('jsonforms',
             }
 
 
-            $scope.bindings = BindingService.all();
+            //$scope.bindings = BindingService.all();
             $scope.opened = false;
 
             $scope.openDate = function($event, element) {

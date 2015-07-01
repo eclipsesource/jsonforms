@@ -1,37 +1,6 @@
 var jsonRefs = require("json-refs");
 
-angular.module('jsonForms.services', []).provider('BindingService', function() {
-
-    var bindings = {};
-
-    this.addBinding = function(id, element) {
-        bindings[id] = element;
-    };
-
-    this.binding = function(id) {
-        return bindings[id];
-    };
-
-    this.all = function(ignoreUndefined) {
-        var data = {};
-        for (var key in bindings) {
-            var value = bindings[key];
-            if (value != null || (value == null && !ignoreUndefined)) {
-                data[key] = value;
-            }
-        }
-        return data;
-    };
-
-    this.$get = function() {
-        var that = this;
-        return {
-            add: that.addBinding,
-            binding: that.binding,
-            all: that.all
-        }
-    };
-}).factory('ReferenceResolver', function () {
+angular.module('jsonForms.services', []).factory('ReferenceResolver', function () {
         var referenceMap = {};
         var keywords = ["items", "properties", "#"];
 

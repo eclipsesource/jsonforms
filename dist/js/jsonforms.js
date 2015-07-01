@@ -23,8 +23,8 @@ angular.module('jsonForms', [
 var jsonFormsDirectives = angular.module('jsonForms.directives', []);
 
 jsonFormsDirectives.directive('jsonforms',
-    ['RenderService', 'BindingService', 'ReferenceResolver',
-        function(RenderService, BindingService, ReferenceResolver) {
+    ['RenderService', 'ReferenceResolver',
+        function(RenderService, ReferenceResolver) {
 
     return {
         restrict: "E",
@@ -61,7 +61,7 @@ jsonFormsDirectives.directive('jsonforms',
             }
 
 
-            $scope.bindings = BindingService.all();
+            //$scope.bindings = BindingService.all();
             $scope.opened = false;
 
             $scope.openDate = function($event, element) {
@@ -187,8 +187,8 @@ dataServices.factory('RecursionHelper', ['$compile',
 
 var app = angular.module('jsonForms.control', []);
 
-app.run(['RenderService', 'BindingService', 'ReferenceResolver',
-    function(RenderService, BindingService, ReferenceResolver) {
+app.run(['RenderService', 'ReferenceResolver',
+    function(RenderService, ReferenceResolver) {
 
     RenderService.register({
         id: "Control",
@@ -268,38 +268,7 @@ app.run(['RenderService', 'ReferenceResolver', function(RenderService, Reference
 // Source: js/widgets/services.js
 var jsonRefs = require("json-refs");
 
-angular.module('jsonForms.services', []).provider('BindingService', function() {
-
-    var bindings = {};
-
-    this.addBinding = function(id, element) {
-        bindings[id] = element;
-    };
-
-    this.binding = function(id) {
-        return bindings[id];
-    };
-
-    this.all = function(ignoreUndefined) {
-        var data = {};
-        for (var key in bindings) {
-            var value = bindings[key];
-            if (value != null || (value == null && !ignoreUndefined)) {
-                data[key] = value;
-            }
-        }
-        return data;
-    };
-
-    this.$get = function() {
-        var that = this;
-        return {
-            add: that.addBinding,
-            binding: that.binding,
-            all: that.all
-        }
-    };
-}).factory('ReferenceResolver', function () {
+angular.module('jsonForms.services', []).factory('ReferenceResolver', function () {
         var referenceMap = {};
         var keywords = ["items", "properties", "#"];
 
@@ -423,7 +392,7 @@ angular.module('jsonForms.services', []).provider('BindingService', function() {
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', function(RenderService, BindingService, ReferenceResolver, $rootScope) {
+app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
 
     var gridAPI;
 

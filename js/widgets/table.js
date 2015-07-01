@@ -1,7 +1,7 @@
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['RenderService', 'BindingService', 'ReferenceResolver', '$rootScope', function(RenderService, BindingService, ReferenceResolver, $rootScope) {
+app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
 
     var gridAPI;
 
