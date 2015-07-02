@@ -3,7 +3,8 @@
 angular.module('makeithappen', [
     'ngRoute',
     'ngResource',
-    'jsonForms'
+    'jsonForms',
+    'ui.ace'
 ]).controller('LocalController', ['$scope', function($scope) {
 
     $scope.schema = {
@@ -224,130 +225,120 @@ angular.module('makeithappen', [
     };
 
     $scope.uiSchema ={
-            "elements": [
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "Label",
-                            "text": "Can labels have a scope?"
+        "elements": [
+            {
+                "type": "HorizontalLayout",
+                "elements": [
+                    {
+                        "type": "Label",
+                        "text": "Can labels have a scope?"
+                    },
+                    {
+                        "type": "Table",
+                        "scope": {
+                            "$ref": "#/items/properties/albums/items"
                         },
-                        {
-                            "type": "Table",
-                            "scope": {
-                                "$ref": "#/items/properties/albums/items"
-                            },
-                            "columns": [
-                                {
-                                    "label": "Album name",
-                                    "scope": {
-                                        "$ref": "#/items/properties/albums/items/properties/name"
-                                    }
-                                }, {
-                                    "label": "Release Year",
-                                    "scope": {
-                                        "$ref": "#/items/properties/albums/items/properties/releaseYear"
-                                    }
+                        "columns": [
+                            {
+                                "label": "Album name",
+                                "scope": {
+                                    "$ref": "#/items/properties/albums/items/properties/name"
                                 }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
-
-    $scope.schema = {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "objectId"
-                    },
-                    "lastName": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "firstName": {
-                        "type": "string"
-                    },
-                    "albums": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string"
-                                },
-                                "releaseYear": {
-                                    "type": "number"
+                            }, {
+                                "label": "Release Year",
+                                "scope": {
+                                    "$ref": "#/items/properties/albums/items/properties/releaseYear"
                                 }
                             }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+    $scope.schema = {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "objectId"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "albums": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "releaseYear": {
+                                "type": "number"
+                            }
                         }
-                    },
-                    "gender": {
-                        "type": "string",
-                        "enum": [
-                            "Male",
-                            "Female"
-                        ]
-                    },
-                    "active": {
-                        "type": "boolean"
-                    },
-                    "registrationTime": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "weight": {
-                        "type": "number"
-                    },
-                    "height": {
-                        "type": "integer"
-                    },
-                    "nationality": {
-                        "type": "string",
-                        "enum": [
-                            "German",
-                            "French",
-                            "UK",
-                            "US",
-                            "Spanish",
-                            "Italian",
-                            "Russian"
-                        ]
-                    },
-                    "birthDate": {
-                        "type": "string",
-                        "format": "date-time"
                     }
                 },
-                "additionalProperties": false,
-                "required": ["firstName"]
-            }
-        };
+                "gender": {
+                    "type": "string",
+                    "enum": [
+                        "Male",
+                        "Female"
+                    ]
+                },
+                "active": {
+                    "type": "boolean"
+                },
+                "registrationTime": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "weight": {
+                    "type": "number"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "nationality": {
+                    "type": "string",
+                    "enum": [
+                        "German",
+                        "French",
+                        "UK",
+                        "US",
+                        "Spanish",
+                        "Italian",
+                        "Russian"
+                    ]
+                },
+                "birthDate": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["firstName"]
+        }
+    };
 
 }]).controller('EditorController', ['RenderService', '$scope', function(RenderService, $scope) {
 
-    $scope.localModelDefault = JSON.stringify(getDefaultSchema(), undefined, 2);
-    $scope.localViewDefault = JSON.stringify(getDefaultUiSchema(), undefined, 2);
+    $scope.localModelDefault = JSON.stringify($scope.schema, undefined, 2);
+    $scope.localViewDefault = JSON.stringify($scope.uiSchema, undefined, 2);
     $scope.localModel = $scope.localModelDefault;
-    $scope.localView= $scope.localViewDefault;
+    $scope.localView = $scope.localViewDefault;
 
-    $scope.getSchema = function() {
-        return $scope.localModel;
-    };
-
-    $scope.getUiSchema = function() {
-        return $scope.localView;
-    };
-
-    $scope.getData = function() {
-        return {};
-    };
+    $scope.data = {};
 
     $scope.reparse = function() {
         var localModelObject = JSON.parse($scope.localModel);
@@ -393,183 +384,169 @@ angular.module('makeithappen', [
         }
     }
 
-    function getDefaultUiSchema(){
-        return {
-            "elements": [
-                {
-                    "type": "HorizontalLayout",
-                    "elements": [
-                        {
-                            "type": "VerticalLayout",
-                            "elements": [
-                                {
-                                    "type": "Label",
-                                    "text": "Personal Data"
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "First name",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "firstName"
-                                    }
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "Last name",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "lastName"
-                                    }
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "Birth date",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "birthDate"
-                                    }
-                                },
-                                {
-                                    "type": "HorizontalLayout",
-                                    "elements": [
-                                        {
-                                            "type": "Control",
-                                            "name": "Weight",
-                                            "scope": {
-                                                "type": "relative",
-                                                "path": "weight"
-                                            }
-                                        },
-                                        {
-                                            "type": "Control",
-                                            "name": "Height",
-                                            "scope": {
-                                                "type": "relative",
-                                                "path": "height"
-                                            }
-                                        },
-                                        {
-                                            "type": "Control",
-                                            "name": "Nationality",
-                                            "scope": {
-                                                "type": "relative",
-                                                "path": "nationality"
-                                            }
+    $scope.uiSchema = {
+        "elements": [
+            {
+                "type": "HorizontalLayout",
+                "elements": [
+                    {
+                        "type": "VerticalLayout",
+                        "elements": [
+                            {
+                                "type": "Label",
+                                "text": "Personal Data"
+                            },
+                            {
+                                "type": "Control",
+                                "label": "First name",
+                                "scope": {
+                                    "$ref": "#/properties/firstName"
+                                }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Last name",
+                                "scope": {
+                                    "$ref": "#/properties/lastName"
+                                }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Birth date",
+                                "scope": {
+                                    "$ref": "#/properties/birthData"
+                                }
+                            },
+                            {
+                                "type": "HorizontalLayout",
+                                "elements": [
+                                    {
+                                        "type": "Control",
+                                        "label": "Weight",
+                                        "scope": {
+                                            "$ref": "#/properties/weight"
                                         }
-                                    ]
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "Gender",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "gender"
+                                    },
+                                    {
+                                        "type": "Control",
+                                        "label": "Height",
+                                        "scope": {
+                                            "$ref": "#/properties/height"
+                                        }
+                                    },
+                                    {
+                                        "type": "Control",
+                                        "label": "Nationality",
+                                        "scope": {
+                                            "$ref": "#/properties/nationality"
+                                        }
                                     }
+                                ]
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Gender",
+                                "scope": {
+                                    "$ref": "#/properties/gender"
                                 }
-                            ]
-                        },
-                        {
-                            "type": "VerticalLayout",
-                            "elements": [
-                                {
-                                    "type": "Label",
-                                    "text": "Site Related Data"
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "Registration time",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "registrationTime"
-                                    }
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "Email",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "email"
-                                    }
-                                },
-                                {
-                                    "type": "Control",
-                                    "name": "Active",
-                                    "scope": {
-                                        "type": "relative",
-                                        "path": "active"
-                                    }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VerticalLayout",
+                        "elements": [
+                            {
+                                "type": "Label",
+                                "text": "Site Related Data"
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Registration time",
+                                "scope": {
+                                    "$ref": "#/properties/registrationTime"
                                 }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
-    }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Email",
+                                "scope": {
+                                    "$ref": "#/properties/email"
+                                }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Active",
+                                "scope": {
+                                    "$ref": "#/properties/active"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
 
-    function getDefaultSchema() {
-        return {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "format": "objectId"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "gender": {
-                    "type": "string",
-                    "enum": [
-                        "Male",
-                        "Female"
-                    ]
-                },
-                "active": {
-                    "type": "boolean"
-                },
-                "registrationTime": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "weight": {
-                    "type": "number"
-                },
-                "height": {
-                    "type": "integer"
-                },
-                "nationality": {
-                    "type": "string",
-                    "enum": [
-                        "German",
-                        "French",
-                        "UK",
-                        "US",
-                        "Spanish",
-                        "Italian",
-                        "Russian"
-                    ]
-                },
-                "birthDate": {
-                    "type": "string",
-                    "format": "date-time"
-                }
+    $scope.schema = {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": "string",
+                "format": "objectId"
             },
-            "additionalProperties": false,
-            "required": [
-                "id",
-                "lastName",
-                "email"
-            ]
-        };
-    }
+            "lastName": {
+                "type": "string"
+            },
+            "email": {
+                "type": "string"
+            },
+            "firstName": {
+                "type": "string"
+            },
+            "gender": {
+                "type": "string",
+                "enum": [
+                    "Male",
+                    "Female"
+                ]
+            },
+            "active": {
+                "type": "boolean"
+            },
+            "registrationTime": {
+                "type": "string",
+                "format": "date-time"
+            },
+            "weight": {
+                "type": "number"
+            },
+            "height": {
+                "type": "integer"
+            },
+            "nationality": {
+                "type": "string",
+                "enum": [
+                    "German",
+                    "French",
+                    "UK",
+                    "US",
+                    "Spanish",
+                    "Italian",
+                    "Russian"
+                ]
+            },
+            "birthDate": {
+                "type": "string",
+                "format": "date-time"
+            }
+        },
+        "additionalProperties": false,
+        "required": [
+            "id",
+            "lastName",
+            "email"
+        ]
+    };
 }]).config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/local', {

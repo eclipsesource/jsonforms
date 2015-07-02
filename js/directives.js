@@ -10,9 +10,9 @@ jsonFormsDirectives.directive('jsonforms',
         restrict: "E",
         replace: true,
         scope: {
-            schema: "&",
-            uiSchema: "&",
-            data: "&",
+            schema: "=",
+            uiSchema: "=",
+            data: "=",
             asyncDataProvider: "="
         },
         // TODO: fix template for tests
@@ -20,8 +20,8 @@ jsonFormsDirectives.directive('jsonforms',
         controller: ['$scope', function($scope) {
 
             // TODO: call syntax
-            var schema = $scope.schema();
-            var uiSchema = $scope.uiSchema();
+            var schema = $scope.schema;
+            var uiSchema = $scope.uiSchema;
             var dataProvider = $scope.asyncDataProvider;
 
             schema["uiSchema"] = uiSchema;
@@ -34,7 +34,7 @@ jsonFormsDirectives.directive('jsonforms',
                     });
                 });
             } else {
-                var data = $scope.data();
+                var data = $scope.data;
                 jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
                     $scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data);
                 });
