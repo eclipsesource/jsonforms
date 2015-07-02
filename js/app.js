@@ -11,6 +11,5 @@ angular.module('jsonForms', [
     'jsonForms.label',
     'jsonForms.control',
     'jsonForms.table',
-    'jsonForms.dataServices',
     'jsonForms.directives'
 ]);

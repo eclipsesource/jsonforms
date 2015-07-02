@@ -33,6 +33,13 @@ angular.module('makeithappen', [
                                 "scope": {
                                     "$ref": "#/properties/name"
                                 }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Foobar",
+                                "scope": {
+                                    "$ref": "#/properties/age"
+                                }
                             }
                         ]
                     },

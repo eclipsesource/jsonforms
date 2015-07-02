@@ -5,9 +5,8 @@ describe('jsonforms directive', function() {
     var el, scope;
 
     // load all necessary modules and templates
-    beforeEach(module('jsonForms.dataServices'));
-    beforeEach(module('jsonForms.directives'));
     beforeEach(module('jsonForms.services'));
+    beforeEach(module('jsonForms.directives'));
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/element.html'));
 

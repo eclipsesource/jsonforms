@@ -97,12 +97,12 @@ angular.module('jsonForms.services', []).factory('ReferenceResolver', function (
                     return result;
                 }
 
-                var uiElements = uiSchema.elements;
+                var uiSchemaElements = uiSchema.elements;
                 var basePath = "#/elements/";
 
-                for (var i = 0; i < uiElements.length; i++) {
+                for (var i = 0; i < uiSchemaElements.length; i++) {
 
-                    var uiElement = uiElements[i];
+                    var uiElement = uiSchemaElements[i];
                     var path = basePath + i;
 
                     if (this.hasRendererFor(uiElement)) {

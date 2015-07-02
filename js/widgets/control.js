@@ -1,21 +1,16 @@
-
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
 var app = angular.module('jsonForms.control', []);
-
-app.run(['RenderService', 'ReferenceResolver',
-    function(RenderService, ReferenceResolver) {
-
+app.run(['RenderService', 'BindingService', 'ReferenceResolver', function (RenderService, BindingService, ReferenceResolver) {
     RenderService.register({
         id: "Control",
         render: function (resolvedElement, schema, instance, path) {
-
             var control = {};
             control["schemaType"] = resolvedElement.scope !== undefined ? resolvedElement.scope.type : "";
             control["bindings"] = instance;
             control["path"] = ReferenceResolver.normalize(ReferenceResolver.get(path));
             control["label"] = resolvedElement.label;
             // TODO: create unique ID?
-            control.id = path;
-
+            control["id"] = path;
             return {
                 "type": "Control",
                 "elements": [control],
@@ -24,3 +19,4 @@ app.run(['RenderService', 'ReferenceResolver',
         }
     });
 }]);
+//# sourceMappingURL=control.js.map

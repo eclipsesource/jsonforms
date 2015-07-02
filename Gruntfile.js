@@ -29,6 +29,18 @@ module.exports = function(grunt) {
             }
         },
 
+        typescript: {
+            dist: {
+                src: ['js/**/*.ts'],
+                dest: 'dist/js/jsonforms.js',
+                options: {
+                    module: 'commonjs',
+                    sourcemap: true,
+                    declaration: false
+                }
+            }
+        },
+
         //Config for embedding templates in angular module
         ngtemplates:  {
             dist:  {
@@ -188,13 +200,16 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-browserify');
 
+    grunt.loadNpmTasks('grunt-typescript');
+
     // Build distribution
     grunt.registerTask('dist', [
         'less:bootstrap',
         'less:jsonforms',
+        'typescript:dist',
         'ngtemplates:dist',
         'concat:dist',
-        'browserify:dist',
+        'browserify:dist'
     ]);
 
     // Build example application
@@ -205,6 +220,7 @@ module.exports = function(grunt) {
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
+        'typescript',
         'karma',
         'connect',
         'protractor'

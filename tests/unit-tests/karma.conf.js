@@ -29,7 +29,8 @@ module.exports = function(config){
       'app/bower_components/ui-utils/ui-utils.js',
       'app/bower_components/angular-ui-bootstrap-bower/ui-bootstrap.js',
       'tests/unit-tests/**/*.js',
-      'app/js/*.js',
+      'dist/js/jsonforms.js',
+      //'app/js/*.js',
       // templates
       // if you wanna load template files in nested directories, you must use this
       'templates/*.html'
