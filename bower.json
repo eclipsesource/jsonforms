@@ -21,6 +21,7 @@
     "angular-loader": "1.2.x",
     "angular-mocks": "~1.2.x",
     "angular-ui": "0.4.0",
+    "angular-ui-ace": "0.2.3",
     "angular-ui-grid": "3.0.0-rc.21",
     "angular-ui-bootstrap-bower": "0.11.2",
     "bootstrap": "3.3.4",

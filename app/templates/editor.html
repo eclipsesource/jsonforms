@@ -20,7 +20,7 @@
     <div class="row">
         <form role="form" class="qb-form">
 
-            <jsonforms id="editor" schema="getSchema" ui-schema="getUiSchema" data="getData"></jsonforms>
+            <jsonforms id="editor" schema="schema" ui-schema="uiSchema" data="data"></jsonforms>
 
             <recelement ng-repeat="child in elements" element="child" bindings="bindings" top-open-date="openDate" top-validate-number="validateNumber" top-validate-integer="validateInteger"></recelement>
         </form>
