@@ -1,8 +1,417 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-07-02 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
-'use strict';
-// Source: js/app.js
-
+/// <reference path="../typings/angularjs/angular.d.ts"/>
+var jsonforms;
+(function (jsonforms) {
+    var services;
+    (function (services) {
+        var UISchemaElement = (function () {
+            function UISchemaElement(json) {
+                this.json = json;
+                this.type = json['type'];
+                this.elements = json['elements'];
+            }
+            return UISchemaElement;
+        })();
+        services.UISchemaElement = UISchemaElement;
+        // TODO: EXPORT
+        var RenderService = (function () {
+            // $compile can then be used as this.$compile
+            function RenderService($compile) {
+                var _this = this;
+                this.$compile = $compile;
+                this.renderers = [];
+                this.render = function (element, schema, instance, path, dataProvider) {
+                    var foundRenderer;
+                    for (var i = 0; i < _this.renderers.length; i++) {
+                        if (_this.renderers[i].isApplicable(element)) {
+                            if (foundRenderer == undefined || _this.renderers[i].priority > foundRenderer.priority) {
+                                foundRenderer = _this.renderers[i];
+                            }
+                        }
+                    }
+                    if (foundRenderer === undefined) {
+                        throw new Error("No applicable renderer found for element " + JSON.stringify(element));
+                    }
+                    return foundRenderer.render(element, schema, instance, path, dataProvider);
+                };
+                this.register = function (renderer) {
+                    _this.renderers.push(renderer);
+                };
+            }
+            RenderService.$inject = ["$compile"];
+            return RenderService;
+        })();
+        services.RenderService = RenderService;
+        var ReferenceResolver = (function () {
+            // $compile can then be used as this.$compile
+            function ReferenceResolver($compile) {
+                var _this = this;
+                this.$compile = $compile;
+                this.pathMapping = {};
+                this.Keywords = ["items", "properties", "#"];
+                this.addToMapping = function (addition) {
+                    for (var ref in addition) {
+                        if (addition.hasOwnProperty(ref)) {
+                            _this.pathMapping[ref] = addition[ref];
+                        }
+                    }
+                };
+                this.get = function (uiSchemaPath) {
+                    return _this.pathMapping[uiSchemaPath + "/scope/$ref"];
+                };
+                this.normalize = function (path) {
+                    return _this.filterNonKeywords(_this.toPropertyFragments(path)).join("/");
+                };
+                this.resolve = function (instance, path) {
+                    var p = path + "/scope/$ref";
+                    if (_this.pathMapping !== undefined && _this.pathMapping.hasOwnProperty(p)) {
+                        p = _this.pathMapping[p];
+                    }
+                    return _this.resolveModelPath(instance, p);
+                };
+                this.resolveModelPath = function (instance, path) {
+                    var fragments = _this.toPropertyFragments(_this.normalize(path));
+                    return fragments.reduce(function (currObj, fragment) {
+                        if (currObj instanceof Array) {
+                            return currObj.map(function (item) {
+                                return item[fragment];
+                            });
+                        }
+                        return currObj[fragment];
+                    }, instance);
+                };
+                this.toPropertyFragments = function (path) {
+                    return path.split('/').filter(function (fragment) {
+                        return fragment.length > 0;
+                    });
+                };
+                this.filterNonKeywords = function (fragments) {
+                    var that = _this;
+                    return fragments.filter(function (fragment) {
+                        return !(that.Keywords.indexOf(fragment) !== -1);
+                    });
+                };
+            }
+            ReferenceResolver.$inject = ["$compile"];
+            return ReferenceResolver;
+        })();
+        services.ReferenceResolver = ReferenceResolver;
+        var RecursionHelper = (function () {
+            // $compile can then be used as this.$compile
+            function RecursionHelper($compile) {
+                var _this = this;
+                this.$compile = $compile;
+                this.compile = function (element, link) {
+                    // Normalize the link parameter
+                    if (angular.isFunction(link)) {
+                        link = { post: link };
+                    }
+                    // Break the recursion loop by removing the contents
+                    var contents = element.contents().remove();
+                    var compiledContents;
+                    var that = _this;
+                    return {
+                        pre: (link && link.pre) ? link.pre : null,
+                        /**
+                         * Compiles and re-adds the contents
+                         */
+                        post: function (scope, element) {
+                            // Compile the contents
+                            if (!compiledContents) {
+                                compiledContents = that.$compile(contents);
+                            }
+                            // Re-add the compiled contents to the element
+                            compiledContents(scope, function (clone) {
+                                element.append(clone);
+                            });
+                            // Call the post-linking function, if any
+                            if (link && link.post) {
+                                link.post.apply(null, arguments);
+                            }
+                        }
+                    };
+                };
+            }
+            RecursionHelper.$inject = ["$compile"];
+            return RecursionHelper;
+        })();
+        services.RecursionHelper = RecursionHelper;
+    })(services = jsonforms.services || (jsonforms.services = {}));
+})(jsonforms || (jsonforms = {}));
+angular.module('jsonForms.services', [])
+    .service('RecursionHelper', jsonforms.services.RecursionHelper)
+    .service('ReferenceResolver', jsonforms.services.ReferenceResolver)
+    .service('RenderService', jsonforms.services.RenderService);
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../services.ts"/>
+var ControlRenderer = (function () {
+    function ControlRenderer(refResolver) {
+        this.refResolver = refResolver;
+        this.priority = 1;
+    }
+    ControlRenderer.prototype.render = function (element, schema, instance, path, dataProvider) {
+        var control = {};
+        control["schemaType"] = element['scope']['type'];
+        control["bindings"] = instance;
+        control["path"] = this.refResolver.normalize(this.refResolver.get(path));
+        control["label"] = element['label'];
+        // TODO: create unique ID?
+        control["id"] = path;
+        return {
+            "type": "Control",
+            "elements": [control],
+            "size": 99 // TODO
+        };
+    };
+    ControlRenderer.prototype.isApplicable = function (element) {
+        return element.type == "Control";
+    };
+    return ControlRenderer;
+})();
+var app = angular.module('jsonForms.control', []);
+app.run(['RenderService', 'ReferenceResolver', function (RenderService, ReferenceResolver) {
+        RenderService.register(new ControlRenderer((ReferenceResolver)));
+    }]);
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../services.ts"/>
+var HorizontalLayoutRenderer = (function () {
+    function HorizontalLayoutRenderer(renderServ) {
+        var _this = this;
+        this.renderServ = renderServ;
+        this.priority = 1;
+        this.render = function (element, schema, instance, path, dataProvider) {
+            var that = _this;
+            var renderElements = function (elements) {
+                if (elements === undefined || elements.length == 0) {
+                    return [];
+                }
+                else {
+                    var basePath = path + "/elements/";
+                    return elements.reduce(function (acc, curr, idx, els) {
+                        acc.push(that.renderServ.render(curr, schema, instance, basePath + idx, dataProvider));
+                        return acc;
+                    }, []);
+                }
+            };
+            // TODO
+            var maxSize = 99;
+            var renderedElements = renderElements(element.elements);
+            var size = renderedElements.length;
+            var individualSize = Math.floor(maxSize / size);
+            for (var j = 0; j < renderedElements.length; j++) {
+                renderedElements[j].size = individualSize;
+            }
+            return {
+                "type": "HorizontalLayout",
+                "elements": renderedElements,
+                "size": maxSize
+            };
+        };
+    }
+    HorizontalLayoutRenderer.prototype.isApplicable = function (element) {
+        return element.type == "HorizontalLayout";
+    };
+    return HorizontalLayoutRenderer;
+})();
+var app = angular.module('jsonForms.horizontalLayout', []);
+app.run(['RenderService', function (RenderService) {
+        RenderService.register(new HorizontalLayoutRenderer(RenderService));
+    }]);
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../services.ts"/>
+var LabelRenderer = (function () {
+    function LabelRenderer() {
+        this.priority = 1;
+    }
+    LabelRenderer.prototype.render = function (element, schema, instance, path, dataProvider) {
+        var label = {};
+        label["text"] = element['text'];
+        return {
+            "type": "Label",
+            "elements": [label],
+            // TODO
+            "size": 99
+        };
+    };
+    LabelRenderer.prototype.isApplicable = function (element) {
+        return element.type == "Label";
+    };
+    return LabelRenderer;
+})();
+var app = angular.module('jsonForms.label', ['jsonForms.services']);
+app.run(['RenderService', function (RenderService) {
+        RenderService.register(new LabelRenderer());
+    }]);
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../services.ts"/>
+var TableRenderer = (function () {
+    function TableRenderer(refResolver, scope) {
+        this.refResolver = refResolver;
+        this.scope = scope;
+        this.maxSize = 99;
+        this.priority = 2;
+    }
+    TableRenderer.prototype.isApplicable = function (element) {
+        return element['type'] == 'Control' && element['scope']['type'] == 'array';
+    };
+    TableRenderer.prototype.render = function (resolvedElement, schema, instanceData, path, dataProvider) {
+        var control = this.createTableUIElement(resolvedElement, schema, instanceData, path, dataProvider);
+        control['tableOptions'].gridOptions.data = instanceData;
+        control["schemaType"] = "array";
+        control["label"] = resolvedElement['label'];
+        if (dataProvider === undefined) {
+            control["bindings"] = instanceData;
+        }
+        else {
+            control['tableOptions'].gridOptions.data = this.resolveColumnData(path, instanceData);
+        }
+        return {
+            "type": "Control",
+            "elements": [control],
+            "size": this.maxSize
+        };
+    };
+    TableRenderer.prototype.resolveColumnData = function (uiPath, data) {
+        if (data instanceof Array) {
+            return data;
+        }
+        else {
+            // relative scope
+            return this.refResolver.resolve(data, uiPath);
+        }
+    };
+    TableRenderer.prototype.createTableUIElement = function (element, schema, instanceData, path, dataProvider) {
+        if (dataProvider === undefined) {
+            dataProvider = {};
+        }
+        // TODO: how to configure paging/filtering
+        var paginationEnabled = dataProvider.fetchPage !== undefined;
+        var filteringEnabled = false;
+        var uiElement = {
+            schemaType: "array"
+        };
+        var parentScope = this.refResolver.get(path);
+        var that = this;
+        var prefix = this.refResolver.normalize(parentScope);
+        var colDefs = element.columns.map(function (col, idx) {
+            return {
+                field: that.refResolver.normalize(that.refResolver.get(path + "/columns/" + idx)).replace(prefix + "/", ''),
+                displayName: col.label
+            };
+        });
+        var tableOptions = {
+            columns: element.columns,
+            gridOptions: {
+                enableFiltering: filteringEnabled,
+                enablePaginationControls: paginationEnabled,
+                enableColumnResizing: true,
+                enableAutoResize: true,
+                // TODO: make cell clickable somehow
+                columnDefs: colDefs,
+                data: [],
+                useExternalFiltering: true
+            }
+        };
+        if (paginationEnabled) {
+            tableOptions['gridOptions']['enablePagination'] = paginationEnabled;
+            tableOptions['gridOptions']['useExternalPagination'] = true;
+            // TODO: dummies
+            tableOptions['gridOptions']['paginationPageSizes'] = [1, 2, 3, 4, 5];
+            tableOptions['gridOptions']['paginationPageSize'] = 1;
+            tableOptions['gridOptions']['paginationPage'] = 1;
+        }
+        // TODO:
+        //var firstColumnDef = tableOptions.gridOptions.columnDefs[0];
+        //firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", path);
+        // convenience methods --
+        uiElement['enablePaginationControls'] = function () {
+            tableOptions.gridOptions.enablePaginationControls = true;
+        };
+        uiElement['disablePaginationControls'] = function () {
+            tableOptions.gridOptions.enablePaginationControls = false;
+        };
+        uiElement['fetchPagedData'] = function (path) {
+            tableOptions.gridOptions.data = this.refResolver.resolve(instanceData, path);
+        };
+        uiElement['fetchFilteredData'] = function (searchTerms) {
+            //var url = EndpointMapping.map(typeName).filter(searchTerms);
+            //$http.get(url).success(function (data) {
+            //    tableOptions.gridOptions.data = data;
+            //});
+        };
+        uiElement['setTotalItems'] = function () {
+            // TODO: determine total items
+        };
+        tableOptions.gridOptions['onRegisterApi'] = function (gridApi) {
+            //gridAPI = gridApi;
+            gridApi.pagination.on.paginationChanged(that.scope, function (newPage, pageSize) {
+                tableOptions.gridOptions['paginationPage'] = newPage;
+                tableOptions.gridOptions['paginationPageSize'] = pageSize;
+                dataProvider.setPageSize(pageSize);
+                dataProvider.fetchPage(newPage, pageSize).$promise.then(function (newData, headers) {
+                    tableOptions.gridOptions.data = this.resolveColumnData(path, newData, colDefs);
+                });
+            });
+        };
+        uiElement['tableOptions'] = tableOptions;
+        return uiElement;
+    };
+    TableRenderer.prototype.findSearchTerms = function (grid) {
+        var searchTerms = [];
+        for (var i = 0; i < grid.columns.length; i++) {
+            var searchTerm = grid.columns[i].filters[0].term;
+            if (searchTerm !== undefined && searchTerm !== null) {
+                searchTerms.push({
+                    column: grid.columns[i].name,
+                    term: searchTerm
+                });
+            }
+        }
+        return searchTerms;
+    };
+    return TableRenderer;
+})();
+var app = angular.module('jsonForms.table', []);
+app.run(['RenderService', 'ReferenceResolver', '$rootScope', function (RenderService, ReferenceResolver, $rootScope) {
+        RenderService.register(new TableRenderer(ReferenceResolver, $rootScope));
+    }]);
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../services.ts"/>
+var VerticalLayoutRenderer = (function () {
+    function VerticalLayoutRenderer(renderService) {
+        this.renderService = renderService;
+        this.priority = 1;
+    }
+    VerticalLayoutRenderer.prototype.render = function (element, schema, instance, path, dataProvider) {
+        var that = this;
+        var renderElements = function (elements) {
+            if (elements === undefined || elements.length == 0) {
+                return [];
+            }
+            else {
+                var basePath = path + "/elements/";
+                return elements.reduce(function (acc, curr, idx, els) {
+                    acc.push(that.renderService.render(curr, schema, instance, basePath + idx, dataProvider));
+                    return acc;
+                }, []);
+            }
+        };
+        var renderedElements = renderElements(element.elements);
+        return {
+            "type": "VerticalLayout",
+            "elements": renderedElements,
+            "size": 99
+        };
+    };
+    VerticalLayoutRenderer.prototype.isApplicable = function (element) {
+        return element.type == "VerticalLayout";
+    };
+    return VerticalLayoutRenderer;
+})();
+var app = angular.module('jsonForms.verticalLayout', ['jsonForms.services']);
+app.run(['RenderService', function (RenderService) {
+        RenderService.register(new VerticalLayoutRenderer(RenderService));
+    }]);
+/// <reference path="../typings/angularjs/angular.d.ts"/>
 angular.module('jsonForms', [
     'ui.bootstrap',
     'ui.validate',
@@ -10,281 +419,128 @@ angular.module('jsonForms', [
     'ui.grid.pagination',
     'ui.grid.autoResize',
     'jsonForms.services',
-    'jsonForms.verticalLayout',
-    'jsonForms.horizontalLayout',
+    'jsonForms.directives',
     'jsonForms.label',
     'jsonForms.control',
-    'jsonForms.table',
-    'jsonForms.dataServices',
-    'jsonForms.directives'
+    'jsonForms.verticalLayout',
+    'jsonForms.horizontalLayout',
+    'jsonForms.table'
 ]);
-
-// Source: js/directives.js
-var jsonFormsDirectives = angular.module('jsonForms.directives', []);
-
-jsonFormsDirectives.directive('jsonforms',
-    ['RenderService', 'ReferenceResolver',
-        function(RenderService, ReferenceResolver) {
-
+/// <reference path="../typings/angularjs/angular.d.ts"/>
+/// <reference path="./services.ts"/>
+var jsonFormsDirectives = angular.module('jsonForms.directives', ['jsonForms.services']);
+var JsonFormsDiretiveController = (function () {
+    function JsonFormsDiretiveController(RenderService, ReferenceResolver, $scope) {
+        this.RenderService = RenderService;
+        this.ReferenceResolver = ReferenceResolver;
+        this.$scope = $scope;
+        // TODO: call syntax
+        var schema = $scope.schema;
+        var dataProvider = $scope.providerName;
+        schema["uiSchema"] = $scope.uiSchema;
+        ReferenceResolver.addToMapping(JsonRefs.findRefs($scope.uiSchema));
+        var that = this;
+        // TODO
+        if (dataProvider !== undefined) {
+            dataProvider.fetchData().$promise.then(function (data) {
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                    var ui = resolvedSchema["uiSchema"];
+                    $scope['elements'] = [that.RenderService.render(ui, schema, data, "#", dataProvider)];
+                });
+            });
+        }
+        else {
+            var data = $scope.data;
+            JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                var ui = resolvedSchema['uiSchema'];
+                $scope['elements'] = [that.RenderService.render(ui, schema, data, "#", null)];
+            });
+        }
+        // TODO
+        $scope['opened'] = false;
+        $scope['openDate'] = function ($event, element) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            element.isOpen = true;
+        };
+        $scope['validateNumber'] = function (value, element) {
+            if (value !== undefined && value !== null && isNaN(value)) {
+                element.alerts = [];
+                var alert = {
+                    type: 'danger',
+                    msg: 'Must be a valid number!'
+                };
+                element.alerts.push(alert);
+                return false;
+            }
+            element.alerts = [];
+            return true;
+        };
+        $scope['validateInteger'] = function (value, element) {
+            if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
+                element.alerts = [];
+                var alert = {
+                    type: 'danger',
+                    msg: 'Must be a valid integer!'
+                };
+                element.alerts.push(alert);
+                return false;
+            }
+            element.alerts = [];
+            return true;
+        };
+    }
+    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', '$scope'];
+    return JsonFormsDiretiveController;
+})();
+var RecElement = (function () {
+    function RecElement(recursionHelper) {
+        var _this = this;
+        this.recursionHelper = recursionHelper;
+        this.restrict = "E";
+        this.replace = true;
+        this.scope = {
+            element: '=',
+            bindings: '=',
+            topOpenDate: '=',
+            topValidateNumber: '=',
+            topValidateInteger: '='
+        };
+        this.templateUrl = 'templates/element.html';
+        this.compile = function (element, attr, trans) {
+            return _this.recursionHelper.compile(element, trans);
+        };
+    }
+    return RecElement;
+})();
+jsonFormsDirectives.directive('control', function () {
     return {
         restrict: "E",
         replace: true,
         scope: {
-            schema: "=",
-            uiSchema: "=",
-            data: "=",
-            asyncDataProvider: "="
+            control: '=',
+            bindings: '=',
+            topOpenDate: '=',
+            topValidateNumber: '=',
+            topValidateInteger: '='
+        },
+        templateUrl: 'templates/control.html'
+    };
+}).directive('jsonforms', function () {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            schema: '=',
+            uiSchema: '=',
+            data: '=',
+            providerName: '='
         },
         // TODO: fix template for tests
         templateUrl: 'templates/form.html',
-        controller: ['$scope', function($scope) {
-
-            // TODO: call syntax
-            var schema = $scope.schema;
-            var uiSchema = $scope.uiSchema;
-            var dataProvider = $scope.asyncDataProvider;
-
-            schema["uiSchema"] = uiSchema;
-            ReferenceResolver.addToMapping(jsonRefs.findRefs(uiSchema));
-
-            if (dataProvider !== undefined) {
-                dataProvider.fetchData().$promise.then(function(data) {
-                    jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                        $scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data, $scope.asyncDataProvider);
-                    });
-                });
-            } else {
-                var data = $scope.data;
-                jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                    $scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data);
-                });
-            }
-
-
-            //$scope.bindings = BindingService.all();
-            $scope.opened = false;
-
-            $scope.openDate = function($event, element) {
-                $event.preventDefault();
-                $event.stopPropagation();
-
-                element.isOpen = true;
-            };
-
-            $scope.validateNumber = function(value, element) {
-                if (value !== undefined && value !== null && isNaN(value)) {
-                    element.alerts = [];
-                    var alert = {
-                        type: 'danger',
-                        msg: 'Must be a valid number!'
-                    };
-                    element.alerts.push(alert);
-                    return false;
-                }
-                else if (json['type'] === 'VerticalLayout') {
-                    return new VerticalLayout(children);
-                }
-            }
-            else if (json.hasOwnProperty('scope')) {
-                if (json['type'] === 'Control') {
-                    return new Control(json['label'], json['scope']['$ref']);
-                }
-            }
-            console.log("unmatched " + JSON.stringify((json)));
-            return new Label(json['text']);
-        };
-        return Json;
-    })();
-    jsonforms.Json = Json;
-    var HorizontalLayout = (function () {
-        function HorizontalLayout(elements) {
-            this.id = 'HorizontalLayout';
-            this.elements = elements;
-        }
-        return HorizontalLayout;
-    })();
-    jsonforms.HorizontalLayout = HorizontalLayout;
-    var VerticalLayout = (function () {
-        function VerticalLayout(elements) {
-            this.id = 'VerticalLayout';
-            this.elements = elements;
-        }
-        return VerticalLayout;
-    })();
-    jsonforms.VerticalLayout = VerticalLayout;
-    var JSONPointer = (function () {
-        function JSONPointer(path) {
-            this.fragments = path.split("/");
-        }
-        return JSONPointer;
-    })();
-    jsonforms.JSONPointer = JSONPointer;
-})(jsonforms || (jsonforms = {}));
-/// <reference path="../typings/angularjs/angular.d.ts"/>
-/// <reference path="./jsonforms.ts"/>
-var RenderService = (function () {
-    function RenderService() {
-        //renderers = { [id: string]: IRenderer } = {};
-        this.renderers = {};
-    }
-    RenderService.prototype.$get = function () {
-        var _this = this;
-        return {
-            render: function (element, schema, instance, path, dataProvider) {
-                var renderer = _this.renderers[element.id];
-                return renderer.render(element, schema, instance, path, dataProvider);
-            },
-            hasRendererFor: function (element) {
-                return _this.renderers.hasOwnProperty(element.id);
-            },
-            renderAll: function (schema, uiSchema, instance, dataProvider) {
-                var result = [];
-                if (uiSchema.elements === undefined) {
-                    return result;
-                }
-                var uiElements = uiSchema.elements;
-                var basePath = "#/elements/";
-                for (var i = 0; i < uiElements.length; i++) {
-                    var uiElement = uiElements[i];
-                    var path = basePath + i;
-                    if (_this.$get().hasRendererFor(uiElement)) {
-                        var renderedElement = _this.$get().render(uiElement, schema, instance, path, dataProvider);
-                        result.push(renderedElement);
-                    }
-                }
-                return result;
-            },
-            register: function (renderer) {
-                _this.renderers[renderer.id] = renderer;
-            }
-        };
+        controller: JsonFormsDiretiveController
     };
-    return RenderService;
-})();
-angular.module('jsonForms.services', []).factory('ReferenceResolver', function () {
-    var referenceMap = {};
-    var keywords = ["items", "properties", "#"];
-    function toPropertyFragments(path) {
-        return path.split('/').filter(function (fragment) {
-            return fragment.length > 0;
-        });
-    }
-    function filterNonKeywords(fragments) {
-        return fragments.filter(function (fragment) {
-            return !(keywords.indexOf(fragment) !== -1);
-        });
-    }
-    return {
-        addToMapping: function (addition) {
-            for (var ref in addition) {
-                if (addition.hasOwnProperty(ref)) {
-                    referenceMap[ref] = addition[ref];
-                }
-            }
-        },
-        get: function (uiSchemaPath) {
-            return referenceMap[uiSchemaPath + "/scope/$ref"];
-        },
-        normalize: function (path) {
-            // TODO: provide filterKeywords function
-            return filterNonKeywords(toPropertyFragments(path)).join("/");
-        },
-        /**
-         * Takes an JSON object and a schema path and resolve the schema path against the instance.
-         * @param instance a JSON object
-         * @param path a valid JSON path expression
-         * @returns the dereferenced value
-         */
-        resolve: function (instance, path) {
-            var p = path + "/scope/$ref";
-            if (referenceMap !== undefined && referenceMap.hasOwnProperty(p)) {
-                p = referenceMap[p];
-            }
-            return this.resolveModelPath(instance, p);
-        },
-        resolveModelPath: function (instance, path) {
-            var fragments = toPropertyFragments(this.normalize(path));
-            return fragments.reduce(function (currObj, fragment) {
-                if (currObj instanceof Array) {
-                    return currObj.map(function (item) {
-                        return item[fragment];
-                    });
-                }
-                return currObj[fragment];
-            }, instance);
-        }
-    };
-}).provider('RenderService', RenderService);
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-var app = angular.module('jsonForms.control', []);
-app.run(['RenderService', 'BindingService', 'ReferenceResolver',
-    function (RenderService, BindingService, ReferenceResolver) {
-        RenderService.register({
-            id: "Control",
-            render: function (resolvedElement, schema, instance, path) {
-                var control = {};
-                control["schemaType"] = resolvedElement.scope !== undefined ? resolvedElement.scope.type : "";
-                control["bindings"] = instance;
-                control["path"] = ReferenceResolver.normalize(ReferenceResolver.get(path));
-                control["label"] = resolvedElement.label;
-                // TODO: create unique ID?
-                control["id"] = path;
-                return {
-                    "type": "Control",
-                    "elements": [control],
-                    "size": 99
-                };
-            }
-        });
+}).directive('recelement', ['RecursionHelper', function (recHelper) {
+        return new RecElement(recHelper);
     }]);
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-var app = angular.module('jsonForms.horizontalLayout', []);
-app.run(['RenderService', function (RenderService) {
-        RenderService.register({
-            id: "HorizontalLayout",
-            render: function (horizontalLayoutElement, schema, instance, path, dataProvider) {
-                var renderElements = function (elements) {
-                    if (elements === undefined || elements.length == 0) {
-                        return [];
-                    }
-                    else {
-                        var basePath = path + "/elements/";
-                        return elements.reduce(function (acc, curr, idx, els) {
-                            acc.push(RenderService.render(curr, schema, instance, basePath + idx, dataProvider));
-                            return acc;
-                        }, []);
-                    }
-                };
-                // TODO
-                var maxSize = 99;
-                var renderedElements = renderElements(horizontalLayoutElement.elements);
-                var size = renderedElements.length;
-                var individualSize = Math.floor(maxSize / size);
-                for (var j = 0; j < renderedElements.length; j++) {
-                    renderedElements[j].size = individualSize;
-                }
-                return {
-                    "type": "HorizontalLayout",
-                    "elements": renderedElements,
-                    "size": maxSize
-                };
-            }
-        });
-    }]);
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-var app = angular.module('jsonForms.label', []);
-app.run(['RenderService', 'ReferenceResolver', function (RenderService, ReferenceResolver) {
-        RenderService.register({
-            id: "Label",
-            render: function (uiElement, schema, instance, path, dataProvider) {
-                var label = {};
-                label["text"] = uiElement.text;
-                return {
-                    "type": "Label",
-                    "elements": [label],
-                    // TODO
-                    "size": 99
-                };
-            }
-        });
-    }]);
+//# sourceMappingURL=jsonforms.js.map

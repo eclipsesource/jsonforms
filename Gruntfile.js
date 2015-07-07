@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 // Concat all files from js directory and include the embedded templates
-                src: ['js/**', '<%= ngtemplates.dist.dest %>'],
+                src: ['dist/js/jsonforms.js', '<%= ngtemplates.dist.dest %>'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
@@ -31,12 +31,21 @@ module.exports = function(grunt) {
 
         typescript: {
             dist: {
-                src: ['js/**/*.ts'],
+                src: ['js/renderers/*.ts', 'js/*.ts'],
                 dest: 'dist/js/jsonforms.js',
                 options: {
                     module: 'commonjs',
                     sourcemap: true,
                     declaration: false
+                }
+            },
+            test: {
+                src: ['js/renderers/*.ts', 'js/*.ts'],
+                dest: 'dist/js/jsonforms.js',
+                options: {
+                    target: 'es5',
+                    module: 'commonjs',
+                    sourceMap: true
                 }
             }
         },
@@ -220,7 +229,7 @@ module.exports = function(grunt) {
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
-        'typescript',
+        'typescript:test',
         'karma',
         'connect',
         'protractor'

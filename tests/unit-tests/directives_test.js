@@ -7,8 +7,10 @@ describe('jsonforms directive', function() {
     // load all necessary modules and templates
     beforeEach(module('jsonForms.services'));
     beforeEach(module('jsonForms.directives'));
+    beforeEach(module('jsonForms.control'));
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/element.html'));
+    beforeEach(module('templates/control.html'));
 
     beforeEach(inject(function($rootScope, $compile, $q) {
         scope = $rootScope.$new();
@@ -37,7 +39,6 @@ describe('jsonforms directive', function() {
 
     it("should render a simple input field", inject(function () {
         // simple assert, we should test for more complex logic here
-        console.log("!!" + el);
         expect(el.html()).toContain("form");
     }));
 
