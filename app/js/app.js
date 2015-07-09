@@ -331,29 +331,35 @@ angular.module('makeithappen', [
         }
     };
 
-}]).controller('EditorController', ['RenderService', '$scope', function(RenderService, $scope) {
-
-    $scope.localModelDefault = JSON.stringify($scope.schema, undefined, 2);
-    $scope.localViewDefault = JSON.stringify($scope.uiSchema, undefined, 2);
-    $scope.localModel = $scope.localModelDefault;
-    $scope.localView = $scope.localViewDefault;
+}]).controller('EditorController', ['RenderService', 'ReferenceResolver', '$scope', function(RenderService, ReferenceResolver, $scope) {
 
     $scope.data = {};
 
     $scope.reparse = function() {
-        var localModelObject = JSON.parse($scope.localModel);
-        var localViewObject = JSON.parse($scope.localView);
 
-        $scope.localModel = JSON.stringify(localModelObject, undefined, 2);
-        $scope.localView = JSON.stringify(localViewObject, undefined, 2);
+        $scope.schema = JSON.parse($scope.localModel);
+        $scope.uiSchema = JSON.parse($scope.localView);
 
-        replaceRefLinks(localViewObject);
+        replaceRefLinks($scope.uiSchema);
 
         // TODO: does 2-way databinding work for provided schema/ui-schema?
-        var mergedData = RenderService.renderAll(localModelObject, localViewObject, undefined);
 
-        $scope.elements = mergedData;
-        $scope.id = mergedData.id;
+        //console.log(JSON.stringify(localModelObject));
+        //console.log(JSON.stringify(localViewObject));
+
+        $scope.schema["uiSchema"] = $scope.uiSchema;
+        ReferenceResolver.addToMapping(JsonRefs.findRefs($scope.uiSchema));
+
+        JsonRefs.resolveRefs($scope.schema, {}, function (err, resolvedSchema, meta) {
+            $scope.elements = RenderService.renderAll($scope.schema, resolvedSchema['uiSchema'], undefined);
+            //$scope.id = mergedData.id;
+        });
+
+        //jsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+            //$scope.elements = RenderService.renderAll(schema, resolvedSchema["uiSchema"], data, $scope.asyncDataProvider);
+        //});
+
+        //$scope.elements = mergedData;
 
         $scope.opened = false;
     };
@@ -547,6 +553,13 @@ angular.module('makeithappen', [
             "email"
         ]
     };
+
+
+    $scope.localModelDefault = JSON.stringify($scope.schema, undefined, 2);
+    $scope.localViewDefault = JSON.stringify($scope.uiSchema, undefined, 2);
+    $scope.localModel = $scope.localModelDefault;
+    $scope.localView = $scope.localViewDefault;
+
 }]).config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/local', {
