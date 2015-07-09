@@ -20,35 +20,21 @@ angular.module('makeithappen', [
         }
     };
     $scope.uiSchema = {
+        "type": "HorizontalLayout",
         "elements": [
             {
-                "type": "HorizontalLayout",
-                "elements": [
-                    {
-                        "type": "VerticalLayout",
-                        "elements": [
-                            {
-                                "type": "Control",
-                                "label": "Name",
-                                "scope": {
-                                    "$ref": "#/properties/name"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "VerticalLayout",
-                        "elements": [
-                            {
-                                "type": "Control",
-                                "label": "Age",
-                                "scope": {
-                                    "$ref": "#/properties/age"
-                                }
-                            }
-                        ]
-                    }
-                ]
+                "type": "Control",
+                "label": "Name",
+                "scope": {
+                    "$ref": "#/properties/name"
+                }
+            },
+            {
+                "type": "Control",
+                "label": "Age",
+                "scope": {
+                    "$ref": "#/properties/age"
+                }
             }
         ]
     };
@@ -60,7 +46,7 @@ angular.module('makeithappen', [
     $scope.usersUiSchema = {
         "elements": [
             {
-                "type": "Table",
+                "type": "Control",
                 "scope": {
                     "$ref": "#/items"
                 },
@@ -82,12 +68,10 @@ angular.module('makeithappen', [
         ]
     };
 
-
     $scope.data = {
         name: 'John Doe',
         age: 36
     };
-
     $scope.users = [
         $scope.data,
         {
@@ -123,27 +107,25 @@ angular.module('makeithappen', [
     };
 
     $scope.uiSchema = {
-        "elements": [{
-            "type": "Table",
+        "type": "Control",
+        "scope": {
+            "$ref": "#/properties/users"
+        },
+        "columns": [{
+            "label": "First name",
             "scope": {
-                "$ref": "#/properties/users/items"
-            },
-            "columns": [{
-                "label": "First name",
-                "scope": {
-                    "$ref":  "#/properties/users/items/firstName"
-                }
-            }, {
-                "label": "Height",
-                "scope": {
-                    "$ref": "#/properties/users/items/height"
-                }
-            }, {
-                "label": "Nationality",
-                "scope": {
-                    "$ref":  "#/properties/users/items/nationality"
-                }
-            }]
+                "$ref":  "#/properties/users/items/firstName"
+            }
+        }, {
+            "label": "Height",
+            "scope": {
+                "$ref": "#/properties/users/items/height"
+            }
+        }, {
+            "label": "Nationality",
+            "scope": {
+                "$ref":  "#/properties/users/items/nationality"
+            }
         }]
     };
 
@@ -225,32 +207,28 @@ angular.module('makeithappen', [
     };
 
     $scope.uiSchema ={
+        "type": "HorizontalLayout",
         "elements": [
             {
-                "type": "HorizontalLayout",
-                "elements": [
+                "type": "Label",
+                "text": "Can labels have a scope?"
+            },
+            {
+                "type": "Control",
+                "scope": {
+                    "$ref": "#/items/properties/albums"
+                },
+                "columns": [
                     {
-                        "type": "Label",
-                        "text": "Can labels have a scope?"
-                    },
-                    {
-                        "type": "Table",
+                        "label": "Album name",
                         "scope": {
-                            "$ref": "#/items/properties/albums/items"
-                        },
-                        "columns": [
-                            {
-                                "label": "Album name",
-                                "scope": {
-                                    "$ref": "#/items/properties/albums/items/properties/name"
-                                }
-                            }, {
-                                "label": "Release Year",
-                                "scope": {
-                                    "$ref": "#/items/properties/albums/items/properties/releaseYear"
-                                }
-                            }
-                        ]
+                            "$ref": "#/items/properties/albums/items/properties/name"
+                        }
+                    }, {
+                        "label": "Release Year",
+                        "scope": {
+                            "$ref": "#/items/properties/albums/items/properties/releaseYear"
+                        }
                     }
                 ]
             }

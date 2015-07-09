@@ -23,9 +23,30 @@ module.exports = function(grunt) {
             },
             dist: {
                 // Concat all files from js directory and include the embedded templates
-                src: ['js/**', '<%= ngtemplates.dist.dest %>'],
+                src: ['dist/js/jsonforms.js', '<%= ngtemplates.dist.dest %>'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
+            }
+        },
+
+        typescript: {
+            dist: {
+                src: ['js/renderers/*.ts', 'js/*.ts'],
+                dest: 'dist/js/jsonforms.js',
+                options: {
+                    module: 'commonjs',
+                    sourcemap: true,
+                    declaration: false
+                }
+            },
+            test: {
+                src: ['js/renderers/*.ts', 'js/*.ts'],
+                dest: 'dist/js/jsonforms.js',
+                options: {
+                    target: 'es5',
+                    module: 'commonjs',
+                    sourceMap: true
+                }
             }
         },
 
@@ -188,13 +209,16 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-browserify');
 
+    grunt.loadNpmTasks('grunt-typescript');
+
     // Build distribution
     grunt.registerTask('dist', [
         'less:bootstrap',
         'less:jsonforms',
+        'typescript:dist',
         'ngtemplates:dist',
         'concat:dist',
-        'browserify:dist',
+        'browserify:dist'
     ]);
 
     // Build example application
@@ -205,6 +229,7 @@ module.exports = function(grunt) {
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
+        'typescript:test',
         'karma',
         'connect',
         'protractor'

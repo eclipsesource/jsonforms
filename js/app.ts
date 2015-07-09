@@ -1,4 +1,5 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
+
 angular.module('jsonForms', [
     'ui.bootstrap',
     'ui.validate',
@@ -13,4 +14,3 @@ angular.module('jsonForms', [
     'jsonForms.horizontalLayout',
     'jsonForms.table'
 ]);
-//# sourceMappingURL=app.js.map

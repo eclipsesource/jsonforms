@@ -9,3 +9,4 @@ temp/
 .DS_Store
 .idea
 *.log
+js/renderers/*.js
