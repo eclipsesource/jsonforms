@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('makeithappen').controller('EditorController', ['RenderService', '$scope', function(RenderService, $scope) {
+angular.module('makeithappen').controller('EditorController', ['RenderService', 'ReferenceResolver', '$scope', function(RenderService, ReferenceResolver, $scope) {
 
     $scope.localModelDefault = JSON.stringify($scope.schema, undefined, 2);
     $scope.localViewDefault = JSON.stringify($scope.uiSchema, undefined, 2);
@@ -10,19 +10,24 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
     $scope.data = {};
 
     $scope.reparse = function() {
-        var localModelObject = JSON.parse($scope.localModel);
-        var localViewObject = JSON.parse($scope.localView);
 
-        $scope.localModel = JSON.stringify(localModelObject, undefined, 2);
-        $scope.localView = JSON.stringify(localViewObject, undefined, 2);
+        $scope.schema = JSON.parse($scope.localModel);
+        $scope.uiSchema = JSON.parse($scope.localView);
 
-        replaceRefLinks(localViewObject);
+        replaceRefLinks($scope.uiSchema);
 
         // TODO: does 2-way databinding work for provided schema/ui-schema?
-        var mergedData = RenderService.renderAll(localModelObject, localViewObject, undefined);
 
-        $scope.elements = mergedData;
-        $scope.id = mergedData.id;
+        //console.log(JSON.stringify(localModelObject));
+        //console.log(JSON.stringify(localViewObject));
+
+        $scope.schema["uiSchema"] = $scope.uiSchema;
+        ReferenceResolver.addToMapping(JsonRefs.findRefs($scope.uiSchema));
+
+        JsonRefs.resolveRefs($scope.schema, {}, function (err, resolvedSchema, meta) {
+            $scope.elements = [RenderService.render(resolvedSchema['uiSchema'], $scope.schema, $scope.data, "#", undefined)];
+            console.log($scope.elements);
+        });
 
         $scope.opened = false;
     };
@@ -54,102 +59,99 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
     }
 
     $scope.uiSchema = {
+
+        "type": "HorizontalLayout",
         "elements": [
             {
-                "type": "HorizontalLayout",
+                "type": "VerticalLayout",
                 "elements": [
                     {
-                        "type": "VerticalLayout",
+                        "type": "Label",
+                        "text": "Personal Data"
+                    },
+                    {
+                        "type": "Control",
+                        "label": "First name",
+                        "scope": {
+                            "$ref": "#/properties/firstName"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Last name",
+                        "scope": {
+                            "$ref": "#/properties/lastName"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Birth date",
+                        "scope": {
+                            "$ref": "#/properties/birthDate"
+                        }
+                    },
+                    {
+                        "type": "HorizontalLayout",
                         "elements": [
                             {
-                                "type": "Label",
-                                "text": "Personal Data"
-                            },
-                            {
                                 "type": "Control",
-                                "label": "First name",
+                                "label": "Weight",
                                 "scope": {
-                                    "$ref": "#/properties/firstName"
+                                    "$ref": "#/properties/weight"
                                 }
                             },
                             {
                                 "type": "Control",
-                                "label": "Last name",
+                                "label": "Height",
                                 "scope": {
-                                    "$ref": "#/properties/lastName"
+                                    "$ref": "#/properties/height"
                                 }
                             },
                             {
                                 "type": "Control",
-                                "label": "Birth date",
+                                "label": "Nationality",
                                 "scope": {
-                                    "$ref": "#/properties/birthData"
-                                }
-                            },
-                            {
-                                "type": "HorizontalLayout",
-                                "elements": [
-                                    {
-                                        "type": "Control",
-                                        "label": "Weight",
-                                        "scope": {
-                                            "$ref": "#/properties/weight"
-                                        }
-                                    },
-                                    {
-                                        "type": "Control",
-                                        "label": "Height",
-                                        "scope": {
-                                            "$ref": "#/properties/height"
-                                        }
-                                    },
-                                    {
-                                        "type": "Control",
-                                        "label": "Nationality",
-                                        "scope": {
-                                            "$ref": "#/properties/nationality"
-                                        }
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "Control",
-                                "label": "Gender",
-                                "scope": {
-                                    "$ref": "#/properties/gender"
+                                    "$ref": "#/properties/nationality"
                                 }
                             }
                         ]
                     },
                     {
-                        "type": "VerticalLayout",
-                        "elements": [
-                            {
-                                "type": "Label",
-                                "text": "Site Related Data"
-                            },
-                            {
-                                "type": "Control",
-                                "label": "Registration time",
-                                "scope": {
-                                    "$ref": "#/properties/registrationTime"
-                                }
-                            },
-                            {
-                                "type": "Control",
-                                "label": "Email",
-                                "scope": {
-                                    "$ref": "#/properties/email"
-                                }
-                            },
-                            {
-                                "type": "Control",
-                                "label": "Active",
-                                "scope": {
-                                    "$ref": "#/properties/active"
-                                }
-                            }
-                        ]
+                        "type": "Control",
+                        "label": "Gender",
+                        "scope": {
+                            "$ref": "#/properties/gender"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "VerticalLayout",
+                "elements": [
+                    {
+                        "type": "Label",
+                        "text": "Site Related Data"
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Registration time",
+                        "scope": {
+                            "$ref": "#/properties/registrationTime"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Email",
+                        "scope": {
+                            "$ref": "#/properties/email"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Active",
+                        "scope": {
+                            "$ref": "#/properties/active"
+                        }
                     }
                 ]
             }

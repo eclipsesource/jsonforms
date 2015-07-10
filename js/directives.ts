@@ -19,6 +19,7 @@ class JsonFormsDiretiveController {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
+            console.log("data is "  + JSON.stringify(data));
             schema['uiSchema'] = uiSchema;
             ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
             JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
@@ -99,11 +100,12 @@ class JsonFormsDiretiveController {
         var dataProvider: jsonforms.services.IDataProvider = <jsonforms.services.IDataProvider> this.$scope.asyncDataProvider;
         var data = this.$scope.data;
 
-        if (dataProvider != undefined && data != undefined) {
+        if (dataProvider && data) {
             throw new Error("You cannot specify both the 'data' and the 'async-data-provider' attribute at the same time.")
-        } else if (dataProvider !== undefined) {
-            return dataProvider.fetchData();
-        } else if (this.$scope.data != undefined) {
+        } else if (dataProvider) {
+            var prom = dataProvider.fetchData();
+            return prom.$promise;
+        } else if (this.$scope.data) {
             var p = this.$q.defer();
             p.resolve(this.$scope.data);
             return p.promise;

@@ -108,7 +108,6 @@ angular.module('makeithappen').controller('RemoteController', ['$scope', '$http'
 }]).controller('RelativeScopeRemoteController', ['$scope', '$http', '$q', '$resource', function($scope, $http, $q, $resource) {
 
     var Albums = $resource('http://localhost:3000/users/:id');
-    $scope.data = Albums.get({id: "54732f005b00004e12c5190c"});
 
     $scope.AlbumDataProvider = {
         fetchData: function() {
