@@ -2,8 +2,6 @@
 
 describe('jsonforms directive', function() {
 
-    var el, scope;
-
     // load all necessary modules and templates
     beforeEach(module('jsonForms.services'));
     beforeEach(module('jsonForms.directives'));
@@ -12,34 +10,99 @@ describe('jsonforms directive', function() {
     beforeEach(module('templates/element.html'));
     beforeEach(module('templates/control.html'));
 
-    beforeEach(inject(function($rootScope, $compile, $q) {
-        scope = $rootScope.$new();
-        // the jsonforms directive expects functions that return promises
-        scope.schema = {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                }
-            }
-        };
-        scope.data = {
-            name: 'John Doe'
-        };
-        scope.uiSchema = {
-            "type": "Control",
-            "label": "First name",
-            "scope": {
-                "$ref": "#/properties/name"
-            }
-        };
-        el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')(scope);
-        scope.$digest();
+    //it("should render a simple input field", inject(function ($rootScope, $compile) {
+    //    var scope = $rootScope.$new();
+    //    // the jsonforms directive expects functions that return promises
+    //    scope.schema = {
+    //        "type": "object",
+    //        "properties": {
+    //            "name": { "type": "string" }
+    //        }
+    //    };
+    //    scope.data = { name: 'John Doe' };
+    //    scope.uiSchema = {
+    //        "type": "Control",
+    //        "label": "First name",
+    //        "scope": { "$ref": "#/properties/name" }
+    //    };
+    //    var el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')(scope);
+    //    scope.$digest();
+    //    // simple assert, we should test for more complex logic here
+    //    expect(el.html()).toContain("form");
+    //}));
+
+
+    it("should throw an error in case the data attribute is missing", inject(function($rootScope, $compile) {
+        var scope = $rootScope.$new();
+        scope.schema = {};
+        scope.uiSchema = {};
+        expect(function() {
+            $compile('<jsonforms schema="schema" ui-schema="uiSchema"/>')(scope);
+            scope.$digest();
+        }).toThrow(Error("Either the 'data' or the 'async-data-provider' attribute must be specified."))
     }));
 
-    it("should render a simple input field", inject(function () {
-        // simple assert, we should test for more complex logic here
-        expect(el.html()).toContain("form");
+    it("should throw an error in case both data attributes are present", inject(function($rootScope, $compile) {
+        var scope = $rootScope.$new();
+        scope.schema = {};
+        scope.uiSchema = {};
+        scope.data = {};
+        scope.dataProvider = {};
+        expect(function() {
+            $compile('<jsonforms data="data" async-data-provider="dataProvider" schema="schema" ui-schema="uiSchema"/>')(scope);
+            scope.$digest();
+        }).toThrow(Error("You cannot specify both the 'data' and the 'async-data-provider' attribute at the same time."))
     }));
 
+    it("should throw an error in case the schema attribute is missing", inject(function($rootScope, $compile) {
+        var scope = $rootScope.$new();
+        scope.data = {};
+        scope.uiSchema = {};
+        expect(function() {
+            $compile('<jsonforms data="data" ui-schema="uiSchema"/>')(scope);
+            scope.$digest();
+        }).toThrow(Error("Either the 'schema' or the 'async-schema' attribute must be specified."))
+    }));
+
+    it("should throw an error in case both schema attributes are present", inject(function($rootScope, $compile, $q) {
+        var scope = $rootScope.$new();
+        scope.schema = {};
+        scope.fetchSchema = function() {
+            var p = $q.defer();
+            p.resolve(scope.schema);
+            return p;
+        };
+        scope.uiSchema = {};
+        scope.data = {};
+        expect(function() {
+            $compile('<jsonforms data="data" schema="schema" async-schema="fetchSchema()" ui-schema="uiSchema"/>')(scope);
+            scope.$digest();
+        }).toThrow(Error("You cannot specify both the 'schema' and the 'async-schema' attribute at the same time."))
+    }));
+
+    it("should throw an error in case the ui-schema attribute is missing", inject(function($rootScope, $compile) {
+        var scope = $rootScope.$new();
+        scope.schema = {};
+        scope.data = {};
+        expect(function() {
+            $compile('<jsonforms schema="schema" data="data"/>')(scope);
+            scope.$digest();
+        }).toThrow(Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified."))
+    }));
+
+    it("should throw an error in case both ui-schema attributes are present", inject(function($rootScope, $compile, $q) {
+        var scope = $rootScope.$new();
+        scope.schema = {};
+        scope.uiSchema = {};
+        scope.data = {};
+        scope.fetchUiSchema = function() {
+            var p = $q.defer();
+            p.resolve(scope.uiSchema);
+            return p
+        };
+        expect(function() {
+            $compile('<jsonforms data="data" async-ui-schema="fetchUiSchema()" ui-schema="uiSchema" schema="schema"/>')(scope);
+            scope.$digest();
+        }).toThrow(Error("You cannot specify both the 'ui-schema' and the 'async-ui-schema' attribute at the same time."))
+    }));
 });

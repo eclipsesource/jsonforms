@@ -430,32 +430,22 @@ angular.module('jsonForms', [
 /// <reference path="./services.ts"/>
 var jsonFormsDirectives = angular.module('jsonForms.directives', ['jsonForms.services']);
 var JsonFormsDiretiveController = (function () {
-    function JsonFormsDiretiveController(RenderService, ReferenceResolver, $scope) {
+    function JsonFormsDiretiveController(RenderService, ReferenceResolver, $scope, $q) {
         this.RenderService = RenderService;
         this.ReferenceResolver = ReferenceResolver;
         this.$scope = $scope;
-        // TODO: call syntax
-        var schema = $scope.schema;
-        var dataProvider = $scope.providerName;
-        schema["uiSchema"] = $scope.uiSchema;
-        ReferenceResolver.addToMapping(JsonRefs.findRefs($scope.uiSchema));
-        var that = this;
-        // TODO
-        if (dataProvider !== undefined) {
-            dataProvider.fetchData().$promise.then(function (data) {
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                    var ui = resolvedSchema["uiSchema"];
-                    $scope['elements'] = [that.RenderService.render(ui, schema, data, "#", dataProvider)];
-                });
-            });
-        }
-        else {
-            var data = $scope.data;
+        this.$q = $q;
+        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise, this.fetchData()]).then(function (values) {
+            var schema = values[0];
+            var uiSchema = values[1];
+            var data = values[2];
+            schema['uiSchema'] = uiSchema;
+            ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
             JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                var ui = resolvedSchema['uiSchema'];
-                $scope['elements'] = [that.RenderService.render(ui, schema, data, "#", null)];
+                var ui = resolvedSchema["uiSchema"];
+                $scope['elements'] = [RenderService.render(ui, schema, data, "#", $scope.asyncDataProvider)];
             });
-        }
+        });
         // TODO
         $scope['opened'] = false;
         $scope['openDate'] = function ($event, element) {
@@ -490,7 +480,51 @@ var JsonFormsDiretiveController = (function () {
             return true;
         };
     }
-    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', '$scope'];
+    JsonFormsDiretiveController.prototype.fetchSchema = function () {
+        if (this.$scope.schema && this.$scope.asyncSchema()) {
+            throw new Error("You cannot specify both the 'schema' and the 'async-schema' attribute at the same time.");
+        }
+        else if (this.$scope.schema) {
+            var p = this.$q.defer();
+            p.resolve(this.$scope.schema);
+            return p;
+        }
+        else if (this.$scope.asyncSchema()) {
+            return this.$scope.asyncSchema();
+        }
+        throw new Error("Either the 'schema' or the 'async-schema' attribute must be specified.");
+    };
+    JsonFormsDiretiveController.prototype.fetchUiSchema = function () {
+        if (this.$scope.uiSchema && this.$scope.asyncUiSchema()) {
+            throw new Error("You cannot specify both the 'ui-schema' and the 'async-ui-schema' attribute at the same time.");
+        }
+        else if (this.$scope.uiSchema) {
+            var p = this.$q.defer();
+            p.resolve(this.$scope.uiSchema);
+            return p;
+        }
+        else if (this.$scope.asyncUiSchema()) {
+            return this.$scope.asyncUiSchema();
+        }
+        throw new Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified.");
+    };
+    JsonFormsDiretiveController.prototype.fetchData = function () {
+        var dataProvider = this.$scope.asyncDataProvider;
+        var data = this.$scope.data;
+        if (dataProvider != undefined && data != undefined) {
+            throw new Error("You cannot specify both the 'data' and the 'async-data-provider' attribute at the same time.");
+        }
+        else if (dataProvider !== undefined) {
+            return dataProvider.fetchData();
+        }
+        else if (this.$scope.data != undefined) {
+            var p = this.$q.defer();
+            p.resolve(this.$scope.data);
+            return p.promise;
+        }
+        throw new Error("Either the 'data' or the 'async-data-provider' attribute must be specified.");
+    };
+    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', '$scope', '$q'];
     return JsonFormsDiretiveController;
 })();
 var RecElement = (function () {
@@ -534,7 +568,9 @@ jsonFormsDirectives.directive('control', function () {
             schema: '=',
             uiSchema: '=',
             data: '=',
-            providerName: '='
+            asyncSchema: '&',
+            asyncUiSchema: '&',
+            asyncDataProvider: '='
         },
         // TODO: fix template for tests
         templateUrl: 'templates/form.html',
