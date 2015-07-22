@@ -18,10 +18,14 @@ angular.module('makeithappen', [
         $routeProvider.when('/editor', {
             templateUrl: 'templates/editor.html',
             controller: 'EditorController'
-        })
+        });
         $routeProvider.when('/async', {
             templateUrl: 'templates/async.html',
             controller: 'AsyncController'
+        });
+        $routeProvider.when('/defaultui', {
+            templateUrl: 'templates/defaultui.html',
+            controller: 'DefaultUISchemaController'
         })
     }
 ])

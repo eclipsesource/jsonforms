@@ -1,3 +1,7 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/*! jsonforms - v0.0.1 - 2015-07-22 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+'use strict';
+// Source: dist/js/jsonforms.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 var jsonforms;
 (function (jsonforms) {
@@ -95,6 +99,33 @@ var jsonforms;
             return ReferenceResolver;
         })();
         services.ReferenceResolver = ReferenceResolver;
+        var UISchemaGenerator = (function () {
+            function UISchemaGenerator() {
+                this.generateDefaultUISchema = function (jsonSchema) {
+                    var uiSchema = {
+                        type: "VerticalLayout",
+                        elements: []
+                    };
+                    for (var property in jsonSchema.properties) {
+                        if (property === "id") {
+                            //ignore id for now
+                            continue;
+                        }
+                        var control = {
+                            type: "Control",
+                            label: property.charAt(0).toUpperCase() + property.slice(1),
+                            scope: {
+                                $ref: "#/properties/" + property
+                            }
+                        };
+                        uiSchema.elements.push(control);
+                    }
+                    return uiSchema;
+                };
+            }
+            return UISchemaGenerator;
+        })();
+        services.UISchemaGenerator = UISchemaGenerator;
         var RecursionHelper = (function () {
             // $compile can then be used as this.$compile
             function RecursionHelper($compile) {
@@ -140,7 +171,8 @@ var jsonforms;
 angular.module('jsonForms.services', [])
     .service('RecursionHelper', jsonforms.services.RecursionHelper)
     .service('ReferenceResolver', jsonforms.services.ReferenceResolver)
-    .service('RenderService', jsonforms.services.RenderService);
+    .service('RenderService', jsonforms.services.RenderService)
+    .service('UISchemaGenerator', jsonforms.services.UISchemaGenerator);
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 var ControlRenderer = (function () {
@@ -430,15 +462,19 @@ angular.module('jsonForms', [
 /// <reference path="./services.ts"/>
 var jsonFormsDirectives = angular.module('jsonForms.directives', ['jsonForms.services']);
 var JsonFormsDiretiveController = (function () {
-    function JsonFormsDiretiveController(RenderService, ReferenceResolver, $scope, $q) {
+    function JsonFormsDiretiveController(RenderService, ReferenceResolver, UISchemaGenerator, $scope, $q) {
         this.RenderService = RenderService;
         this.ReferenceResolver = ReferenceResolver;
+        this.UISchemaGenerator = UISchemaGenerator;
         this.$scope = $scope;
         this.$q = $q;
         $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise, this.fetchData()]).then(function (values) {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
+            if (uiSchema === undefined || uiSchema === null || uiSchema === "") {
+                uiSchema = UISchemaGenerator.generateDefaultUISchema(schema);
+            }
             console.log("data is " + JSON.stringify(data));
             schema['uiSchema'] = uiSchema;
             ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
@@ -507,7 +543,12 @@ var JsonFormsDiretiveController = (function () {
         else if (this.$scope.asyncUiSchema()) {
             return this.$scope.asyncUiSchema();
         }
-        throw new Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified.");
+        // throw new Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified.");
+        // return undefined to indicate that no way of obtaining a ui schema was defined
+        // TODO: Maybe return defaultUISchema or generator function?
+        var p = this.$q.defer();
+        p.resolve(undefined);
+        return p;
     };
     JsonFormsDiretiveController.prototype.fetchData = function () {
         var dataProvider = this.$scope.asyncDataProvider;
@@ -526,7 +567,7 @@ var JsonFormsDiretiveController = (function () {
         }
         throw new Error("Either the 'data' or the 'async-data-provider' attribute must be specified.");
     };
-    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', '$scope', '$q'];
+    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', 'UISchemaGenerator', '$scope', '$q'];
     return JsonFormsDiretiveController;
 })();
 var RecElement = (function () {
@@ -581,4 +622,23 @@ jsonFormsDirectives.directive('control', function () {
 }).directive('recelement', ['RecursionHelper', function (recHelper) {
         return new RecElement(recHelper);
     }]);
-//# sourceMappingURL=jsonforms.js.map
+
+// Source: temp/templates.js
+angular.module('jsonForms').run(['$templateCache', function($templateCache) {
+$templateCache.put('templates/control.html',
+    "<div ng-switch on=\"control.schemaType\" class=\"form-group top-buffer\"><label for=\"control.id\" ng-class=\"control.labelclass\">{{control.label}}</label><div ng-class=\"control.inputclass\"><div ng-switch-when=\"array\" name=\"control.label\"><div class=\"row\"><div ui-grid=\"control.tableOptions.gridOptions\" ui-grid-auto-resize ui-grid-pagination class=\"grid\"></div></div></div><input ng-switch-when=\"string\" type=\"text\" ng-model=\"control.bindings[control.path]\" id=\"control.id\" class=\"form-control qb-control qb-control-string\" name=\"control.displayname\"> <input ng-switch-when=\"number\" type=\"text\" ng-model=\"control.bindings[control.path]\" ui-validate=\"'topValidateNumber($value, control)'\" id=\"control.id\" class=\"form-control qb-control qb-control-number\" name=\"control.displayname\"> <input ng-switch-when=\"integer\" type=\"text\" ng-model=\"control.bindings[control.path]\" ui-validate=\"'topValidateInteger($value, control)'\" id=\"control.id\" class=\"form-control qb-control qb-control-integer\" name=\"control.displayname\"><div ng-switch-when=\"boolean\" class=\"checkbox-inline\" for=\"control.value\"><input type=\"checkbox\" ng-model=\"control.bindings[control.path]\" name=\"control.displayname\" id=\"control.id\" class=\"qb-control qb-control-boolean\">&nbsp;</div><div ng-switch-when=\"date-time\" class=\"input-group\"><input type=\"text\" datepicker-popup=\"dd.MM.yyyy\" ng-model=\"control.bindings[control.path]\" close-text=\"Close\" is-open=\"control.isOpen\" id=\"control.id\" class=\"form-control qb-control qb-control-datetime\" n ame=\"control.displayname\"> <span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"topOpenDate($event,control)\"><i class=\"glyphicon glyphicon-calendar\"></i></button></span></div><select ng-switch-when=\"enum\" ng-model=\"control.bindings[control.path]\" ng-options=\"option as option for option in control.options\" id=\"control.id\" class=\"form-control qb-control qb-control-enum\" name=\"control.label\"></select><alert ng-repeat=\"alert in control.alerts\" type=\"{{alert.type}}\" class=\"top-buffer-s qb-alert\">{{alert.msg}}</alert></div></div>"
+  );
+
+
+  $templateCache.put('templates/element.html',
+    "<recursive><div ng-if=\"element.type=='Label'\" class=\"col-sm-{{element.size}} qb-label\">{{element.elements[0].text}}</div><control ng-if=\"element.type=='Control'\" control=\"element.elements[0]\" bindings=\"element.elements[0].bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\" class=\"col-sm-{{element.size}}\"></control><!-- this should be moved to control.html ? --><fieldset ng-if=\"element.type=='HorizontalLayout'\" class=\"col-sm-{{element.size}}\"><div class=\"row\"><recelement ng-repeat=\"child in element.elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\"></recelement></div></fieldset><fieldset ng-if=\"element.type=='VerticalLayout'\" class=\"col-sm-{{element.size}}\"><recelement ng-repeat=\"child in element.elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\"></recelement></fieldset></recursive>"
+  );
+
+
+  $templateCache.put('templates/form.html',
+    "<div><form role=\"form\" class=\"qb-form rounded\"><recelement ng-repeat=\"child in elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"openDate\" top-validate-number=\"validateNumber\" top-validate-integer=\"validateInteger\"></recelement></form></div>"
+  );
+
+}]);
+
+},{}]},{},[1]);

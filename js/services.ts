@@ -41,6 +41,10 @@ module jsonforms.services {
         resolveModelPath(instance:any, path:string): any
     }
 
+    export interface IUISchemaGenerator {
+        generateDefaultUISchema(jsonSchema:any): any
+    }
+
     // TODO: EXPORT
     export class RenderService {
 
@@ -135,11 +139,38 @@ module jsonforms.services {
 
     }
 
+    export class UISchemaGenerator{
+        generateDefaultUISchema = (jsonSchema:any):any =>{
+            var uiSchema = {
+                type: "VerticalLayout",
+                elements: []
+            }
+            for(var property in jsonSchema.properties){
+                if(property === "id"){
+                    //ignore id for now
+                    continue;
+                }
+                var control = {
+                    type: "Control",
+                    label: property.charAt(0).toUpperCase() + property.slice(1),
+                    scope: {
+                        $ref: "#/properties/" + property
+                    }
+                }
+
+                uiSchema.elements.push(control);
+            }
+            return uiSchema;
+        };
+    }
+
+
     export class RecursionHelper {
 
         static $inject = ["$compile"];
         // $compile can then be used as this.$compile
-        constructor(private $compile:ng.ICompileService) { }
+        constructor(private $compile:ng.ICompileService) {
+        }
 
         compile = (element, link) => {
 
@@ -176,9 +207,11 @@ module jsonforms.services {
             };
         }
     }
+
 }
 
 angular.module('jsonForms.services', [])
     .service('RecursionHelper', jsonforms.services.RecursionHelper)
     .service('ReferenceResolver', jsonforms.services.ReferenceResolver)
-    .service('RenderService', jsonforms.services.RenderService);
+    .service('RenderService', jsonforms.services.RenderService)
+    .service('UISchemaGenerator', jsonforms.services.UISchemaGenerator);
