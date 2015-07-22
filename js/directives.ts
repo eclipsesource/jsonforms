@@ -143,7 +143,7 @@ class RecElement implements ng.IDirective {
     templateUrl = 'templates/element.html';
 
     compile: ng.IDirectiveCompileFn = (element, attr, trans) => {
-        return this.recursionHelper.compile(element, trans);
+        return <ng.IDirectivePrePost>this.recursionHelper.compile(element, trans);
     };
 
 }
