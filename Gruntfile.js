@@ -229,6 +229,7 @@ module.exports = function(grunt) {
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
+        'app',
         'typescript:test',
         'karma',
         'connect',
