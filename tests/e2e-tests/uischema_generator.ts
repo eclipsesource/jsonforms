@@ -1,9 +1,5 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
-/// <reference path="../../typings/schemas/uischema.d.ts"/>
 /// <reference path="../../typings/angular-protractor/angular-protractor.d.ts"/>
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 
 describe('Test UI Schema Generator', function() {
 

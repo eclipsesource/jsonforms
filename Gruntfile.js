@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 // Concat all files from js directory and include the embedded templates
-                src: ['dist/js/jsonforms.js', '<%= ngtemplates.dist.dest %>'],
+                src: ['js/**/*.js', '<%= ngtemplates.dist.dest %>'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
@@ -31,8 +31,8 @@ module.exports = function(grunt) {
 
         typescript: {
             dist: {
-                src: ['js/renderers/*.ts', 'js/*.ts'],
-                dest: 'dist/js/jsonforms.js',
+                src: ['js/**/*.ts'],
+                dest: '',
                 options: {
                     module: 'commonjs',
                     sourcemap: true,
@@ -40,12 +40,11 @@ module.exports = function(grunt) {
                 }
             },
             test: {
-                src: ['js/renderers/*.ts', 'js/*.ts'],
-                dest: 'dist/js/jsonforms.js',
+                src: ['tests/**/*.ts'],
+                dest: '',
                 options: {
                     target: 'es5',
-                    module: 'commonjs',
-                    sourceMap: true
+                    module: 'commonjs'
                 }
             }
         },
@@ -168,13 +167,9 @@ module.exports = function(grunt) {
             }
         },
         clean: {
-            dist: ["dist", "temp"],
+            dist: ["dist/**", "temp/**"],
             app: ["app/js/jsonforms*", "app/css/jsonforms*"],
             all: ["dist", "temp", "app/js/jsonforms*", "app/css/jsonforms*", "node_modules", "app/bower_components"]
-
-
-
-
         }
     });
 
@@ -218,7 +213,8 @@ module.exports = function(grunt) {
         'typescript:dist',
         'ngtemplates:dist',
         'concat:dist',
-        'browserify:dist'
+        'browserify:dist',
+        'uglify:dist'
     ]);
 
     // Build example application
