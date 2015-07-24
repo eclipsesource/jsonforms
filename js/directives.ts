@@ -22,6 +22,7 @@ class JsonFormsDiretiveController {
             var data = values[2];
 
             if(uiSchema === undefined || uiSchema === null || uiSchema === ""){
+                //TODO: resolve schema to allow for proper ui schema generation
                 uiSchema = UISchemaGenerator.generateDefaultUISchema(schema);
             }
 

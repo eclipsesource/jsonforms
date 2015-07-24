@@ -1,4 +1,5 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
+/// <reference path="../typings/schemas/uischema.d.ts"/>
 
 module jsonforms.services {
 
@@ -141,27 +142,115 @@ module jsonforms.services {
 
     export class UISchemaGenerator{
         generateDefaultUISchema = (jsonSchema:any):any =>{
-            var uiSchema = {
-                type: "VerticalLayout",
-                elements: []
-            }
-            for(var property in jsonSchema.properties){
-                if(property === "id"){
-                    //ignore id for now
-                    continue;
-                }
-                var control = {
-                    type: "Control",
-                    label: property.charAt(0).toUpperCase() + property.slice(1),
-                    scope: {
-                        $ref: "#/properties/" + property
-                    }
-                }
+            var uiSchemaElements = [];
+            this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
 
-                uiSchema.elements.push(control);
-            }
-            return uiSchema;
+            console.log("generated schema: " + JSON.stringify(uiSchemaElements[0]))
+
+            return uiSchemaElements[0];
         };
+
+        private generateUISchema = (jsonSchema:any, schemaElements:IUISchemaElement[], currentRef:string, schemaName:string):any =>{
+            if(!jsonSchema.type){
+                throw new Error("No type found for JSON Schema element " + JSON.stringify(jsonSchema));
+            }
+
+            switch(jsonSchema.type) {
+
+                case "object":
+
+                    if (!jsonSchema.properties) {
+                        // If there are no properties ignore the element
+                        return;
+                    }
+
+                    // Add a vertical layout with a label for the element name (if it exists)
+
+                    var verticalLayout:IVerticalLayout = {
+                        type: "VerticalLayout",
+                        elements: []
+                    };
+                    schemaElements.push(verticalLayout);
+
+                    if (schemaName && schemaName !== "") {
+                        // add label with name
+                        var label:ILabel = {
+                            type: "Label",
+                            text: this.beautify(schemaName)
+                        };
+                        verticalLayout.elements.push(label);
+                    }
+
+                    // traverse properties
+
+                    var nextRef:string = currentRef + '/' + "properties";
+                    for (var property in jsonSchema.properties) {
+                        if(property === "id"){
+                            //skip ids
+                            continue;
+                        }
+                        this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
+                    }
+
+                    break;
+
+                case "array":
+
+                    if (!jsonSchema.items) {
+                        // If there are no items ignore the element
+                        return;
+                    }
+
+                    var horizontalLayout:IHorizontalLayout = {
+                        type: "HorizontalLayout",
+                        elements: []
+                    };
+                    schemaElements.push(horizontalLayout);
+
+                    var nextRef:string = currentRef + '/' + "items";
+
+                    //check if items is object or array
+                    if(jsonSchema.items instanceof Array){
+                        for(var i=0; i<jsonSchema.items.length; i++){
+                            this.generateUISchema(jsonSchema.items[i], horizontalLayout.elements, nextRef  + '[' + i + ']', "");
+                        }
+                    }else{
+                        this.generateUISchema(jsonSchema.items, horizontalLayout.elements, nextRef, "");
+                    }
+
+                    break;
+
+                case "string":
+                case "number":
+                case "integer":
+                case "boolean":
+                    var controlObject:IControlObject = this.getControlObject(this.beautify(schemaName), currentRef);
+                    schemaElements.push(controlObject);
+                    break;
+
+                default:
+                    throw new Error("Unknown type: " + JSON.stringify(jsonSchema));
+            }
+
+        };
+
+        private getControlObject = (label: string, ref: string): IControlObject =>{
+            return {
+                type: "Control",
+                label: label,
+                scope: {
+                    $ref: ref
+                }
+            };
+        };
+
+        private beautify = (text: string): string => {
+            if(text && text.length > 0){
+                text = text.charAt(0).toUpperCase() + text.slice(1);
+            }
+            return text;
+        };
+
     }
 
 

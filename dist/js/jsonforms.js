@@ -1,8 +1,5 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-07-22 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
-'use strict';
-// Source: dist/js/jsonforms.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
+/// <reference path="../typings/schemas/uischema.d.ts"/>
 var jsonforms;
 (function (jsonforms) {
     var services;
@@ -101,26 +98,93 @@ var jsonforms;
         services.ReferenceResolver = ReferenceResolver;
         var UISchemaGenerator = (function () {
             function UISchemaGenerator() {
+                var _this = this;
                 this.generateDefaultUISchema = function (jsonSchema) {
-                    var uiSchema = {
-                        type: "VerticalLayout",
-                        elements: []
-                    };
-                    for (var property in jsonSchema.properties) {
-                        if (property === "id") {
-                            //ignore id for now
-                            continue;
-                        }
-                        var control = {
-                            type: "Control",
-                            label: property.charAt(0).toUpperCase() + property.slice(1),
-                            scope: {
-                                $ref: "#/properties/" + property
-                            }
-                        };
-                        uiSchema.elements.push(control);
+                    var uiSchemaElements = [];
+                    _this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
+                    console.log("generated schema: " + JSON.stringify(uiSchemaElements[0]));
+                    return uiSchemaElements[0];
+                };
+                this.generateUISchema = function (jsonSchema, schemaElements, currentRef, schemaName) {
+                    if (!jsonSchema.type) {
+                        throw new Error("No type found for JSON Schema element " + JSON.stringify(jsonSchema));
                     }
-                    return uiSchema;
+                    switch (jsonSchema.type) {
+                        case "object":
+                            if (!jsonSchema.properties) {
+                                // If there are no properties ignore the element
+                                return;
+                            }
+                            // Add a vertical layout with a label for the element name (if it exists)
+                            var verticalLayout = {
+                                type: "VerticalLayout",
+                                elements: []
+                            };
+                            schemaElements.push(verticalLayout);
+                            if (schemaName && schemaName !== "") {
+                                // add label with name
+                                var label = {
+                                    type: "Label",
+                                    text: _this.beautify(schemaName)
+                                };
+                                verticalLayout.elements.push(label);
+                            }
+                            // traverse properties
+                            var nextRef = currentRef + '/' + "properties";
+                            for (var property in jsonSchema.properties) {
+                                if (property === "id") {
+                                    //skip ids
+                                    continue;
+                                }
+                                _this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
+                            }
+                            break;
+                        case "array":
+                            if (!jsonSchema.items) {
+                                // If there are no items ignore the element
+                                return;
+                            }
+                            var horizontalLayout = {
+                                type: "HorizontalLayout",
+                                elements: []
+                            };
+                            schemaElements.push(horizontalLayout);
+                            var nextRef = currentRef + '/' + "items";
+                            //check if items is object or array
+                            if (jsonSchema.items instanceof Array) {
+                                for (var i = 0; i < jsonSchema.items.length; i++) {
+                                    _this.generateUISchema(jsonSchema.items[i], horizontalLayout.elements, nextRef + '[' + i + ']', "");
+                                }
+                            }
+                            else {
+                                _this.generateUISchema(jsonSchema.items, horizontalLayout.elements, nextRef, "");
+                            }
+                            break;
+                        case "string":
+                        case "number":
+                        case "integer":
+                        case "boolean":
+                            var controlObject = _this.getControlObject(_this.beautify(schemaName), currentRef);
+                            schemaElements.push(controlObject);
+                            break;
+                        default:
+                            throw new Error("Unknown type: " + JSON.stringify(jsonSchema));
+                    }
+                };
+                this.getControlObject = function (label, ref) {
+                    return {
+                        type: "Control",
+                        label: label,
+                        scope: {
+                            $ref: ref
+                        }
+                    };
+                };
+                this.beautify = function (text) {
+                    if (text && text.length > 0) {
+                        text = text.charAt(0).toUpperCase() + text.slice(1);
+                    }
+                    return text;
                 };
             }
             return UISchemaGenerator;
@@ -473,6 +537,7 @@ var JsonFormsDiretiveController = (function () {
             var uiSchema = values[1];
             var data = values[2];
             if (uiSchema === undefined || uiSchema === null || uiSchema === "") {
+                //TODO: resolve schema to allow for proper ui schema generation
                 uiSchema = UISchemaGenerator.generateDefaultUISchema(schema);
             }
             console.log("data is " + JSON.stringify(data));
@@ -622,23 +687,4 @@ jsonFormsDirectives.directive('control', function () {
 }).directive('recelement', ['RecursionHelper', function (recHelper) {
         return new RecElement(recHelper);
     }]);
-
-// Source: temp/templates.js
-angular.module('jsonForms').run(['$templateCache', function($templateCache) {
-$templateCache.put('templates/control.html',
-    "<div ng-switch on=\"control.schemaType\" class=\"form-group top-buffer\"><label for=\"control.id\" ng-class=\"control.labelclass\">{{control.label}}</label><div ng-class=\"control.inputclass\"><div ng-switch-when=\"array\" name=\"control.label\"><div class=\"row\"><div ui-grid=\"control.tableOptions.gridOptions\" ui-grid-auto-resize ui-grid-pagination class=\"grid\"></div></div></div><input ng-switch-when=\"string\" type=\"text\" ng-model=\"control.bindings[control.path]\" id=\"control.id\" class=\"form-control qb-control qb-control-string\" name=\"control.displayname\"> <input ng-switch-when=\"number\" type=\"text\" ng-model=\"control.bindings[control.path]\" ui-validate=\"'topValidateNumber($value, control)'\" id=\"control.id\" class=\"form-control qb-control qb-control-number\" name=\"control.displayname\"> <input ng-switch-when=\"integer\" type=\"text\" ng-model=\"control.bindings[control.path]\" ui-validate=\"'topValidateInteger($value, control)'\" id=\"control.id\" class=\"form-control qb-control qb-control-integer\" name=\"control.displayname\"><div ng-switch-when=\"boolean\" class=\"checkbox-inline\" for=\"control.value\"><input type=\"checkbox\" ng-model=\"control.bindings[control.path]\" name=\"control.displayname\" id=\"control.id\" class=\"qb-control qb-control-boolean\">&nbsp;</div><div ng-switch-when=\"date-time\" class=\"input-group\"><input type=\"text\" datepicker-popup=\"dd.MM.yyyy\" ng-model=\"control.bindings[control.path]\" close-text=\"Close\" is-open=\"control.isOpen\" id=\"control.id\" class=\"form-control qb-control qb-control-datetime\" n ame=\"control.displayname\"> <span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"topOpenDate($event,control)\"><i class=\"glyphicon glyphicon-calendar\"></i></button></span></div><select ng-switch-when=\"enum\" ng-model=\"control.bindings[control.path]\" ng-options=\"option as option for option in control.options\" id=\"control.id\" class=\"form-control qb-control qb-control-enum\" name=\"control.label\"></select><alert ng-repeat=\"alert in control.alerts\" type=\"{{alert.type}}\" class=\"top-buffer-s qb-alert\">{{alert.msg}}</alert></div></div>"
-  );
-
-
-  $templateCache.put('templates/element.html',
-    "<recursive><div ng-if=\"element.type=='Label'\" class=\"col-sm-{{element.size}} qb-label\">{{element.elements[0].text}}</div><control ng-if=\"element.type=='Control'\" control=\"element.elements[0]\" bindings=\"element.elements[0].bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\" class=\"col-sm-{{element.size}}\"></control><!-- this should be moved to control.html ? --><fieldset ng-if=\"element.type=='HorizontalLayout'\" class=\"col-sm-{{element.size}}\"><div class=\"row\"><recelement ng-repeat=\"child in element.elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\"></recelement></div></fieldset><fieldset ng-if=\"element.type=='VerticalLayout'\" class=\"col-sm-{{element.size}}\"><recelement ng-repeat=\"child in element.elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\"></recelement></fieldset></recursive>"
-  );
-
-
-  $templateCache.put('templates/form.html',
-    "<div><form role=\"form\" class=\"qb-form rounded\"><recelement ng-repeat=\"child in elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"openDate\" top-validate-number=\"validateNumber\" top-validate-integer=\"validateInteger\"></recelement></form></div>"
-  );
-
-}]);
-
-},{}]},{},[1]);
+//# sourceMappingURL=jsonforms.js.map

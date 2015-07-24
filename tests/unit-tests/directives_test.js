@@ -80,16 +80,6 @@ describe('jsonforms directive', function() {
         }).toThrow(Error("You cannot specify both the 'schema' and the 'async-schema' attribute at the same time."))
     }));
 
-    it("should throw an error in case the ui-schema attribute is missing", inject(function($rootScope, $compile) {
-        var scope = $rootScope.$new();
-        scope.schema = {};
-        scope.data = {};
-        expect(function() {
-            $compile('<jsonforms schema="schema" data="data"/>')(scope);
-            scope.$digest();
-        }).toThrow(Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified."))
-    }));
-
     it("should throw an error in case both ui-schema attributes are present", inject(function($rootScope, $compile, $q) {
         var scope = $rootScope.$new();
         scope.schema = {};
