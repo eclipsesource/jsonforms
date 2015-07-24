@@ -18,10 +18,13 @@ angular.module('makeithappen', [
         $routeProvider.when('/editor', {
             templateUrl: 'templates/editor.html',
             controller: 'EditorController'
-        })
+        });
         $routeProvider.when('/async', {
             templateUrl: 'templates/async.html',
             controller: 'AsyncController'
+        });
+        $routeProvider.otherwise({
+            redirectTo: '/local'
         })
     }
-])
+]);
