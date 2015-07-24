@@ -181,6 +181,12 @@ module jsonforms.services {
 
                     var nextRef:string = currentRef + '/' + "properties";
                     for (var property in jsonSchema.properties) {
+                        if(property === "id"){
+                            // could be a string (json-schema-id). Ignore in that case
+                            if(typeof jsonSchema.properties[property] === "string"){
+                                continue;
+                            }
+                        }
                         this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                     }
 

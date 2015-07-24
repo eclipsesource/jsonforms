@@ -50,6 +50,65 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
+    it("ignore json-schema id attributes", function () {
+        var schema = {
+            type: "object",
+            properties: {
+                id: "ignore me",
+                name: {
+                    type: "string"
+                }
+            }
+        };
+        var uiSchema = {
+            type: "VerticalLayout",
+            elements: [
+                {
+                    type: "Control",
+                    label: "Name",
+                    scope: {
+                        $ref: "#/properties/name"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
+
+    it("don't ignore non-json-schema id attributes", function () {
+        var schema = {
+            type: "object",
+            properties: {
+                id: {
+                    type: "string"
+                },
+                name: {
+                    type: "string"
+                }
+            }
+        };
+        var uiSchema = {
+            type: "VerticalLayout",
+            elements: [
+                {
+                    type: "Control",
+                    label: "Id",
+                    scope: {
+                        $ref: "#/properties/id"
+                    }
+                },
+                {
+                    type: "Control",
+                    label: "Name",
+                    scope: {
+                        $ref: "#/properties/name"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
+
     it("generate ui schema for schema with multiple properties", function () {
         var schema = {
             "type": "object",
