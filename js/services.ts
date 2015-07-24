@@ -56,7 +56,6 @@ module jsonforms.services {
         constructor(private $compile:ng.ICompileService) {
         }
 
-
         render = (element:jsonforms.services.UISchemaElement, schema, instance, path, dataProvider) => {
 
             var foundRenderer;
@@ -158,14 +157,7 @@ module jsonforms.services {
             switch(jsonSchema.type) {
 
                 case "object":
-
-                    if (!jsonSchema.properties) {
-                        // If there are no properties ignore the element
-                        return;
-                    }
-
                     // Add a vertical layout with a label for the element name (if it exists)
-
                     var verticalLayout:IVerticalLayout = {
                         type: "VerticalLayout",
                         elements: []
@@ -182,24 +174,19 @@ module jsonforms.services {
                     }
 
                     // traverse properties
+                    if (!jsonSchema.properties) {
+                        // If there are no properties return
+                        return;
+                    }
 
                     var nextRef:string = currentRef + '/' + "properties";
                     for (var property in jsonSchema.properties) {
-                        if(property === "id"){
-                            //skip ids
-                            continue;
-                        }
                         this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                     }
 
                     break;
 
                 case "array":
-
-                    if (!jsonSchema.items) {
-                        // If there are no items ignore the element
-                        return;
-                    }
 
                     var horizontalLayout:IHorizontalLayout = {
                         type: "HorizontalLayout",
@@ -208,6 +195,11 @@ module jsonforms.services {
                     schemaElements.push(horizontalLayout);
 
                     var nextRef:string = currentRef + '/' + "items";
+
+                    if (!jsonSchema.items) {
+                        // If there are no items ignore the element
+                        return;
+                    }
 
                     //check if items is object or array
                     if(jsonSchema.items instanceof Array){
@@ -244,9 +236,14 @@ module jsonforms.services {
             };
         };
 
+        //1. split on uppercase letters
+        //2. transform uppercase letters to lowercase
+        //3. transform first letter uppercase
         private beautify = (text: string): string => {
             if(text && text.length > 0){
-                text = text.charAt(0).toUpperCase() + text.slice(1);
+                var textArray = text.split(/(?=[A-Z])/).map((x)=>{return x.toLowerCase()});
+                textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
+                text = textArray.join(' ');
             }
             return text;
         };

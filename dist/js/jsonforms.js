@@ -111,10 +111,6 @@ var jsonforms;
                     }
                     switch (jsonSchema.type) {
                         case "object":
-                            if (!jsonSchema.properties) {
-                                // If there are no properties ignore the element
-                                return;
-                            }
                             // Add a vertical layout with a label for the element name (if it exists)
                             var verticalLayout = {
                                 type: "VerticalLayout",
@@ -130,26 +126,26 @@ var jsonforms;
                                 verticalLayout.elements.push(label);
                             }
                             // traverse properties
+                            if (!jsonSchema.properties) {
+                                // If there are no properties return
+                                return;
+                            }
                             var nextRef = currentRef + '/' + "properties";
                             for (var property in jsonSchema.properties) {
-                                if (property === "id") {
-                                    //skip ids
-                                    continue;
-                                }
                                 _this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                             }
                             break;
                         case "array":
-                            if (!jsonSchema.items) {
-                                // If there are no items ignore the element
-                                return;
-                            }
                             var horizontalLayout = {
                                 type: "HorizontalLayout",
                                 elements: []
                             };
                             schemaElements.push(horizontalLayout);
                             var nextRef = currentRef + '/' + "items";
+                            if (!jsonSchema.items) {
+                                // If there are no items ignore the element
+                                return;
+                            }
                             //check if items is object or array
                             if (jsonSchema.items instanceof Array) {
                                 for (var i = 0; i < jsonSchema.items.length; i++) {
@@ -180,9 +176,14 @@ var jsonforms;
                         }
                     };
                 };
+                //1. split on uppercase letters
+                //2. transform uppercase letters to lowercase
+                //3. transform first letter uppercase
                 this.beautify = function (text) {
                     if (text && text.length > 0) {
-                        text = text.charAt(0).toUpperCase() + text.slice(1);
+                        var textArray = text.split(/(?=[A-Z])/).map(function (x) { return x.toLowerCase(); });
+                        textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
+                        text = textArray.join(' ');
                     }
                     return text;
                 };
