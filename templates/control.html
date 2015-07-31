@@ -17,7 +17,7 @@
                type="text"
                ng-model="control.bindings[control.path]"
                id="control.id"
-               class="form-control qb-control qb-control-string "
+               class="form-control jsf-control jsf-control-string "
                name="control.displayname" />
 
         <input ng-switch-when="number"
@@ -25,7 +25,7 @@
                ng-model="control.bindings[control.path]"
                ui-validate="'topValidateNumber($value, control)'"
                id="control.id"
-               class="form-control qb-control qb-control-number"
+               class="form-control jsf-control jsf-control-number"
                name="control.displayname" />
 
         <input ng-switch-when="integer"
@@ -33,7 +33,7 @@
                ng-model="control.bindings[control.path]"
                ui-validate="'topValidateInteger($value, control)'"
                id="control.id"
-               class="form-control qb-control qb-control-integer"
+               class="form-control jsf-control jsf-control-integer"
                name="control.displayname" />
 
         <div ng-switch-when="boolean"
@@ -43,7 +43,7 @@
             <input type="checkbox"
                    ng-model="control.bindings[control.path]"
                    name="control.displayname"
-                   id="control.id" class="qb-control qb-control-boolean"/>&nbsp;
+                   id="control.id" class="jsf-control jsf-control-boolean"/>&nbsp;
         </div>
 
         <div ng-switch-when="date-time" class="input-group">
@@ -53,7 +53,7 @@
                    close-text="Close"
                    is-open="control.isOpen"
                    id="control.id"
-                   class="form-control qb-control qb-control-datetime" n
+                   class="form-control jsf-control jsf-control-datetime" n
                    ame="control.displayname" />
             <span class="input-group-btn">
                 <button type="button"
@@ -68,11 +68,11 @@
                 ng-model="control.bindings[control.path]"
                 ng-options="option as option for option in control.options"
                 id="control.id"
-                class="form-control qb-control qb-control-enum"
+                class="form-control jsf-control jsf-control-enum"
                 name="control.label"></select>
 
         <alert ng-repeat="alert in control.alerts"
                type="{{alert.type}}"
-               class="top-buffer-s qb-alert">{{alert.msg}}</alert>
+               class="top-buffer-s jsf-alert">{{alert.msg}}</alert>
     </div>
 </div>
