@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-07-24 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.1 - 2015-07-31 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
@@ -29,21 +29,37 @@ var JsonFormsDiretiveController = (function () {
         this.UISchemaGenerator = UISchemaGenerator;
         this.$scope = $scope;
         this.$q = $q;
-        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise, this.fetchData()]).then(function (values) {
+        var resolvedSchemaDeferred = $q.defer();
+        var resolvedUISchemaDeferred = $q.defer();
+        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then(function (values) {
+            var schema = values[0];
+            var uiSchemaMaybe = values[1];
+            var uiSchemaDeferred = $q.defer();
+            $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
+                schema['uiSchema'] = uiSchema;
+                ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                    resolvedSchemaDeferred.resolve(resolvedSchema);
+                    resolvedUISchemaDeferred.resolve(resolvedSchema['uiSchema']);
+                });
+            });
+            if (uiSchemaMaybe === undefined || uiSchemaMaybe === null || uiSchemaMaybe === "") {
+                // resolve JSON schema, then generate ui Schema
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                    var uiSchema = UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
+                    uiSchemaDeferred.resolve(uiSchema);
+                });
+            }
+            else {
+                // directly resolve ui schema
+                uiSchemaDeferred.resolve(uiSchemaMaybe);
+            }
+        });
+        $q.all([resolvedSchemaDeferred.promise, resolvedUISchemaDeferred.promise, this.fetchData()]).then(function (values) {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
-            if (uiSchema === undefined || uiSchema === null || uiSchema === "") {
-                //TODO: resolve schema to allow for proper ui schema generation
-                uiSchema = UISchemaGenerator.generateDefaultUISchema(schema);
-            }
-            console.log("data is " + JSON.stringify(data));
-            schema['uiSchema'] = uiSchema;
-            ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
-            JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                var ui = resolvedSchema["uiSchema"];
-                $scope['elements'] = [RenderService.render(ui, schema, data, "#", $scope.asyncDataProvider)];
-            });
+            $scope['elements'] = [RenderService.render(uiSchema, schema, data, "#", $scope.asyncDataProvider)];
         });
         // TODO
         $scope['opened'] = false;
