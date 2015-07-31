@@ -39,11 +39,11 @@
      border-radius: 0px;
  }
 
-.bootstrap-qbwrapper .btn {
+.jsf .btn {
     border-radius: 0px;
 }
 
-.qb-form {
+.jsf-form {
     margin-left:20px;
     margin-right:20px;
     margin-top:20px;
@@ -54,38 +54,38 @@
     padding-bottom:10px;
 }
 
-.qb-label{
+.jsf-label{
   padding-left:0px;
   padding-right:0px;
   font-weight: bold;
   font-size: 1.3em;
 }
 
-.bootstrap-qbwrapper .form-control{
+.jsf .form-control{
     border-radius: 0px;
 }
 
-.qb-control {
+.jsf-control {
 
 }
 
-.qb-control-number {
+.jsf-control-number {
 
 }
 
-.qb-control-integer {
+.jsf-control-integer {
 
 }
 
-.qb-control-string {
+.jsf-control-string {
 
 }
 
-.qb-control-datetime {
+.jsf-control-datetime {
 
 }
 
-.qb-control-enum {
+.jsf-control-enum {
 
 }
 
