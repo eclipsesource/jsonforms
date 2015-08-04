@@ -10,10 +10,15 @@ class ControlRenderer implements jsonforms.services.IRenderer {
     render(element:jsonforms.services.UISchemaElement, schema, instance, path: string, dataProvider) {
 
         var control = {};
-        control["schemaType"] = element['scope']['type'];
+        if (element["scope"]["enum"]) {
+            control["schemaType"] = "enum";
+            control["options"] = element["scope"]["enum"];
+        } else {
+            control["schemaType"] = element["scope"]["type"];
+        }
         control["bindings"] = instance;
         control["path"] = this.refResolver.normalize(this.refResolver.get(path));
-        control["label"] = element['label'];
+        control["label"] = element["label"];
         // TODO: create unique ID?
         control["id"] = path;
 
