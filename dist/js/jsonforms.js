@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-07-31 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.1 - 2015-08-11 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
@@ -23,9 +23,10 @@ angular.module('jsonForms', [
 /// <reference path="./services.ts"/>
 var jsonFormsDirectives = angular.module('jsonForms.directives', ['jsonForms.services']);
 var JsonFormsDiretiveController = (function () {
-    function JsonFormsDiretiveController(RenderService, ReferenceResolver, UISchemaGenerator, $scope, $q) {
+    function JsonFormsDiretiveController(RenderService, ReferenceResolver, SchemaGenerator, UISchemaGenerator, $scope, $q) {
         this.RenderService = RenderService;
         this.ReferenceResolver = ReferenceResolver;
+        this.SchemaGenerator = SchemaGenerator;
         this.UISchemaGenerator = UISchemaGenerator;
         this.$scope = $scope;
         this.$q = $q;
@@ -107,6 +108,9 @@ var JsonFormsDiretiveController = (function () {
         else if (this.$scope.asyncSchema()) {
             return this.$scope.asyncSchema();
         }
+        else if (this.$scope.data) {
+            return this.SchemaGenerator.generateDefaultSchema(this.$scope.data);
+        }
         throw new Error("Either the 'schema' or the 'async-schema' attribute must be specified.");
     };
     JsonFormsDiretiveController.prototype.fetchUiSchema = function () {
@@ -145,7 +149,7 @@ var JsonFormsDiretiveController = (function () {
         }
         throw new Error("Either the 'data' or the 'async-data-provider' attribute must be specified.");
     };
-    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', 'UISchemaGenerator', '$scope', '$q'];
+    JsonFormsDiretiveController.$inject = ['RenderService', 'ReferenceResolver', 'SchemaGenerator', 'UISchemaGenerator', '$scope', '$q'];
     return JsonFormsDiretiveController;
 })();
 var RecElement = (function () {
@@ -580,13 +584,96 @@ var jsonforms;
             return ReferenceResolver;
         })();
         services.ReferenceResolver = ReferenceResolver;
+        var SchemaGenerator = (function () {
+            function SchemaGenerator() {
+                var _this = this;
+                this.generateDefaultSchema = function (instance) {
+                    var schema = _this.schemaObject(instance);
+                    console.log("generated default schema: " + JSON.stringify(schema));
+                    return schema;
+                };
+                this.schemaObject = function (instance) {
+                    var properties = _this.properties(instance);
+                    return {
+                        "type": "object",
+                        "properties": properties,
+                        "additionalProperties": _this.allowAdditionalProperties(properties),
+                        "required": _this.keys(_this.requiredProperties(properties))
+                    };
+                };
+                this.properties = function (instance) {
+                    var properties = {};
+                    var generator = _this;
+                    _this.keys(instance).forEach(function (property) {
+                        properties[property] = generator.property(instance[property]);
+                    });
+                    return properties;
+                };
+                this.keys = function (properties) {
+                    return Object.keys(properties);
+                };
+                this.property = function (instance) {
+                    switch (typeof instance) {
+                        case "string":
+                        case "boolean":
+                            return { "type": typeof instance };
+                        case "number":
+                            if (Number(instance) % 1 === 0) {
+                                return { "type": "integer" };
+                            }
+                            else {
+                                return { "type": "number" };
+                            }
+                        case "object":
+                            return _this.schemaObjectOrNullOrArray(instance);
+                        default:
+                            return {};
+                    }
+                };
+                this.schemaObjectOrNullOrArray = function (instance) {
+                    if (_this.isNotNull(instance)) {
+                        if (_this.isArray(instance)) {
+                            return _this.schemaArray(instance);
+                        }
+                        else {
+                            return _this.schemaObject(instance);
+                        }
+                    }
+                    else {
+                        return { "type": "null" };
+                    }
+                };
+                this.schemaArray = function (instance) {
+                    if ((instance).length) {
+                        return {
+                            "type": "array",
+                            "items": _this.property(instance[0])
+                        };
+                    }
+                };
+                this.isArray = function (instance) {
+                    return Object.prototype.toString.call(instance) === '[object Array]';
+                };
+                this.isNotNull = function (instance) {
+                    return (typeof (instance) !== 'undefined') && (instance !== null);
+                };
+                this.requiredProperties = function (properties) {
+                    return properties; // all properties are required by default
+                };
+                this.allowAdditionalProperties = function (properties) {
+                    return false; // restrict to known properties by default
+                };
+            }
+            return SchemaGenerator;
+        })();
+        services.SchemaGenerator = SchemaGenerator;
         var UISchemaGenerator = (function () {
             function UISchemaGenerator() {
                 var _this = this;
                 this.generateDefaultUISchema = function (jsonSchema) {
                     var uiSchemaElements = [];
                     _this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
-                    console.log("generated schema: " + JSON.stringify(uiSchemaElements[0]));
+                    console.log("generated ui schema: " + JSON.stringify(uiSchemaElements[0]));
                     return uiSchemaElements[0];
                 };
                 this.generateUISchema = function (jsonSchema, schemaElements, currentRef, schemaName) {
@@ -727,6 +814,7 @@ angular.module('jsonForms.services', [])
     .service('RecursionHelper', jsonforms.services.RecursionHelper)
     .service('ReferenceResolver', jsonforms.services.ReferenceResolver)
     .service('RenderService', jsonforms.services.RenderService)
+    .service('SchemaGenerator', jsonforms.services.SchemaGenerator)
     .service('UISchemaGenerator', jsonforms.services.UISchemaGenerator);
 
 // Source: temp/templates.js

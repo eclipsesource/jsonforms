@@ -12,5 +12,6 @@ temp/
 js/**/*.js
 **/*.map
 tests/unit-tests/reference_resolver.js
+tests/unit-tests/schema_generator.js
 tests/unit-tests/uischema_generator.js
 tests/e2e-tests/uischema_generator.js

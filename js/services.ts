@@ -42,6 +42,10 @@ module jsonforms.services {
         resolveModelPath(instance:any, path:string): any
     }
 
+    export interface ISchemaGenerator {
+        generateDefaultSchema(instance: Object): Object
+    }
+
     export interface IUISchemaGenerator {
         generateDefaultUISchema(jsonSchema:any): any
     }
@@ -139,12 +143,100 @@ module jsonforms.services {
 
     }
 
+    export class SchemaGenerator {
+
+        public generateDefaultSchema = (instance: Object) : any => {
+            var schema = this.schemaObject(instance);
+            console.log("generated default schema: " + JSON.stringify(schema));
+            return schema;
+        };
+
+        private schemaObject = (instance: Object) : Object => {
+            var properties = this.properties(instance);
+            return {
+                "type": "object",
+                "properties": properties,
+                "additionalProperties": this.allowAdditionalProperties(properties),
+                "required": this.keys(this.requiredProperties(properties))
+            };
+        };
+
+        private properties = (instance: Object) : Object => {
+            var properties = {};
+            var generator = this;
+            this.keys(instance).forEach(function(property) {
+                properties[property] = generator.property(instance[property])
+            });
+            return properties;
+        };
+
+        private keys = (properties: Object) : string[] => {
+            return Object.keys(properties);
+        };
+
+        private property = (instance: any) : Object => {
+            switch (typeof instance) {
+                case "string":
+                case "boolean":
+                    return { "type": typeof instance };
+                case "number":
+                    if (Number(instance) % 1 === 0) {
+                        return { "type": "integer" };
+                    } else {
+                        return { "type": "number" };
+                    }
+                case "object":
+                    return this.schemaObjectOrNullOrArray(instance);
+                default:
+                    return {};
+            }
+        };
+
+        private schemaObjectOrNullOrArray= (instance: Object): Object => {
+            if (this.isNotNull(instance)) {
+                if (this.isArray(instance)) {
+                    return this.schemaArray(<Array<Object>>instance);
+                } else {
+                    return this.schemaObject(instance);
+                }
+            } else {
+                return { "type": "null" };
+            }
+        };
+
+        private schemaArray= (instance: Array<Object>): Object => {
+            if ((instance).length) {
+                return {
+                    "type": "array",
+                    "items": this.property(instance[0])
+                };
+            }
+        };
+
+        private isArray = (instance: any): boolean => {
+            return Object.prototype.toString.call(instance) === '[object Array]';
+        };
+
+        private isNotNull = (instance: any): boolean => {
+            return (typeof(instance) !== 'undefined') && (instance !== null);
+        };
+
+        protected requiredProperties = (properties: Object): Object => {
+            return properties; // all properties are required by default
+        };
+
+        protected allowAdditionalProperties = (properties:Object): boolean => {
+            return false; // restrict to known properties by default
+        }
+
+    }
+
     export class UISchemaGenerator{
         generateDefaultUISchema = (jsonSchema:any):any =>{
             var uiSchemaElements = [];
             this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
 
-            console.log("generated schema: " + JSON.stringify(uiSchemaElements[0]))
+            console.log("generated ui schema: " + JSON.stringify(uiSchemaElements[0]))
 
             return uiSchemaElements[0];
         };
@@ -306,4 +398,5 @@ angular.module('jsonForms.services', [])
     .service('RecursionHelper', jsonforms.services.RecursionHelper)
     .service('ReferenceResolver', jsonforms.services.ReferenceResolver)
     .service('RenderService', jsonforms.services.RenderService)
+    .service('SchemaGenerator', jsonforms.services.SchemaGenerator)
     .service('UISchemaGenerator', jsonforms.services.UISchemaGenerator);
