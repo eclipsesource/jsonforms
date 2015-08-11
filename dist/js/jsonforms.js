@@ -109,7 +109,9 @@ var JsonFormsDiretiveController = (function () {
             return this.$scope.asyncSchema();
         }
         else if (this.$scope.data) {
-            return this.SchemaGenerator.generateDefaultSchema(this.$scope.data);
+            var p = this.$q.defer();
+            p.resolve(this.SchemaGenerator.generateDefaultSchema(this.$scope.data));
+            return p;
         }
         throw new Error("Either the 'schema' or the 'async-schema' attribute must be specified.");
     };
