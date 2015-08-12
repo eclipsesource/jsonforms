@@ -150,11 +150,9 @@ module jsonforms.services {
         };
 
         private generateUISchema = (jsonSchema:any, schemaElements:IUISchemaElement[], currentRef:string, schemaName:string):any =>{
-            if(!jsonSchema.type){
-                throw new Error("No type found for JSON Schema element " + JSON.stringify(jsonSchema));
-            }
+            var type = this.deriveType(jsonSchema);
 
-            switch(jsonSchema.type) {
+            switch(type) {
 
                 case "object":
                     // Add a vertical layout with a label for the element name (if it exists)
@@ -181,11 +179,8 @@ module jsonforms.services {
 
                     var nextRef:string = currentRef + '/' + "properties";
                     for (var property in jsonSchema.properties) {
-                        if(property === "id"){
-                            // could be a string (json-schema-id). Ignore in that case
-                            if(typeof jsonSchema.properties[property] === "string"){
-                                continue;
-                            }
+                        if(this.isIgnoredProperty(property, jsonSchema.properties[property])){
+                            continue;
                         }
                         this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                     }
@@ -193,7 +188,6 @@ module jsonforms.services {
                     break;
 
                 case "array":
-
                     var horizontalLayout:IHorizontalLayout = {
                         type: "HorizontalLayout",
                         elements: []
@@ -208,11 +202,11 @@ module jsonforms.services {
                     }
 
                     //check if items is object or array
-                    if(jsonSchema.items instanceof Array){
-                        for(var i=0; i<jsonSchema.items.length; i++){
-                            this.generateUISchema(jsonSchema.items[i], horizontalLayout.elements, nextRef  + '[' + i + ']', "");
+                    if (jsonSchema.items instanceof Array) {
+                        for (var i = 0; i < jsonSchema.items.length; i++) {
+                            this.generateUISchema(jsonSchema.items[i], horizontalLayout.elements, nextRef + '[' + i + ']', "");
                         }
-                    }else{
+                    } else {
                         this.generateUISchema(jsonSchema.items, horizontalLayout.elements, nextRef, "");
                     }
 
@@ -225,13 +219,41 @@ module jsonforms.services {
                     var controlObject:IControlObject = this.getControlObject(this.beautify(schemaName), currentRef);
                     schemaElements.push(controlObject);
                     break;
-
+                case "null":
+                    //ignore
+                    break;
                 default:
                     throw new Error("Unknown type: " + JSON.stringify(jsonSchema));
             }
 
         };
 
+        /**
+         * Determines if the property should be ignored because it is a meta property
+         */
+        private isIgnoredProperty = (propertyKey: string, propertyValue: any): boolean => {
+            // could be a string (json-schema-id). Ignore in that case
+            return propertyKey === "id" && typeof propertyValue === "string";
+            // TODO ignore all meta keywords
+        }
+
+        /**
+         * Derives the type of the jsonSchema element
+         */
+        private deriveType = (jsonSchema: any): string => {
+            if(jsonSchema.type){
+                return jsonSchema.type;
+            }
+            if(jsonSchema.properties || jsonSchema.additionalProperties){
+                return "object";
+            }
+            // ignore all remaining cases
+            return "null";
+        }
+
+        /**
+         * Creates a IControlObject with the given label referencing the given ref
+         */
         private getControlObject = (label: string, ref: string): IControlObject =>{
             return {
                 type: "Control",
@@ -242,14 +264,17 @@ module jsonforms.services {
             };
         };
 
-        //1. split on uppercase letters
-        //2. transform uppercase letters to lowercase
-        //3. transform first letter uppercase
+        /**
+         * Beautifies by performing the following steps (if applicable)
+         * 1. split on uppercase letters
+         * 2. transform uppercase letters to lowercase
+         * 3. transform first letter uppercase
+         */
         private beautify = (text: string): string => {
             if(text && text.length > 0){
                 var textArray = text.split(/(?=[A-Z])/).map((x)=>{return x.toLowerCase()});
                 textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
-                text = textArray.join(' ');
+                return textArray.join(' ');
             }
             return text;
         };

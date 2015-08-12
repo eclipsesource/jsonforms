@@ -120,8 +120,6 @@ class JsonFormsDiretiveController {
             return this.$scope.asyncUiSchema();
         }
 
-        // throw new Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified.");
-
         // return undefined to indicate that no way of obtaining a ui schema was defined
         // TODO: Maybe return defaultUISchema or generator function?
         var p = this.$q.defer();

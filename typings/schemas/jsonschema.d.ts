@@ -1,17 +1,17 @@
 interface SchemaElement{
-    type: string;
+    type?: string;
 }
 
 interface SchemaObject extends SchemaElement{
     //TODO: specify properties
-    properties: any;
-    additionalProperties?: boolean;
+    properties?: any;
+    additionalProperties?: any;
     required?: StringArray;
 }
 
 interface SchemaArray extends SchemaElement{
     //TODO: specify items
-    items: any;
+    items?: any;
 }
 
 // Array type
