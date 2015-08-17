@@ -158,6 +158,39 @@ describe('SchemaGenerator', () => {
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
     });
 
+    it("generate schema for instance with mixed primitive type array properties", function () {
+        var instance = {
+            "property1": [1, "a", 3],
+            "property2": ["a", 1, "c"]
+        };
+        var schema = {
+            "type": "object",
+            "properties": {
+                "property1": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {"type": "integer"},
+                            {"type": "string"}
+                        ]
+                    }
+                },
+                "property2": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {"type": "string"},
+                            {"type": "integer"}
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true,
+            "required": ["property1", "property2"]
+        };
+        expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
+    });
+
     it("generate schema for instance with object type array properties", function () {
         var instance = {
             "property1": [
@@ -197,6 +230,65 @@ describe('SchemaGenerator', () => {
             },
             "additionalProperties": true,
             "required": ["property1", "property2"]
+        };
+        expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
+    });
+
+    it("generate schema for instance with mixed object type array properties", function () {
+        var instance = {
+            "property1": [
+                {"subproperty1": "value1", "subproperty2": [true, false]},
+                {"subproperty1": "value2", "subproperty3": [1, true]},
+            ]
+        };
+        var schema = {
+            "type": "object",
+            "properties": {
+                "property1": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "subproperty1": {
+                                        "type": "string"
+                                    },
+                                    "subproperty2": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "additionalProperties": true,
+                                "required": ["subproperty1", "subproperty2"]
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "subproperty1": {
+                                        "type": "string"
+                                    },
+                                    "subproperty3": {
+                                        "type": "array",
+                                        "items": {
+                                            "oneOf": [
+                                                {"type": "integer"},
+                                                {"type": "boolean"}
+                                            ]
+                                        }
+                                    }
+                                },
+                                "additionalProperties": true,
+                                "required": ["subproperty1", "subproperty3"]
+                            }
+                        ]
+                    }
+                }
+            },
+            "additionalProperties": true,
+            "required": ["property1"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
     });

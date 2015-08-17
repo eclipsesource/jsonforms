@@ -205,11 +205,26 @@ module jsonforms.services {
         };
 
         private schemaArray= (instance: Array<Object>): Object => {
-            if ((instance).length) {
-                return {
-                    "type": "array",
-                    "items": this.property(instance[0])
-                };
+            if (instance.length) {
+                var generator = this;
+                var allProperties = instance.map(function(object) {
+                    return generator.property(object);
+                });
+                var uniqueProperties = this.distinct(allProperties,
+                    function(object) { return JSON.stringify(object) });
+                if (uniqueProperties.length == 1) {
+                    return {
+                        "type": "array",
+                        "items": uniqueProperties[0]
+                    };
+                } else {
+                    return {
+                        "type": "array",
+                        "items": {
+                            "oneOf": uniqueProperties
+                        }
+                    };
+                }
             }
         };
 
@@ -219,6 +234,19 @@ module jsonforms.services {
 
         private isNotNull = (instance: any): boolean => {
             return (typeof(instance) !== 'undefined') && (instance !== null);
+        };
+
+        private distinct = (array: Array<Object>, key: (item: Object) => any): Array<Object> => {
+            var known = {};
+            return array.filter(function(item) {
+                var keyValue = key(item);
+                if (known.hasOwnProperty(keyValue)) {
+                    return false;
+                } else {
+                    known[keyValue] = true;
+                    return true;
+                }
+            });
         };
 
         protected requiredProperties = (properties: Object): Object => {

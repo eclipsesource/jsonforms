@@ -645,11 +645,26 @@ var jsonforms;
                     }
                 };
                 this.schemaArray = function (instance) {
-                    if ((instance).length) {
-                        return {
-                            "type": "array",
-                            "items": _this.property(instance[0])
-                        };
+                    if (instance.length) {
+                        var generator = _this;
+                        var allProperties = instance.map(function (object) {
+                            return generator.property(object);
+                        });
+                        var uniqueProperties = _this.distinct(allProperties, function (object) { return JSON.stringify(object); });
+                        if (uniqueProperties.length == 1) {
+                            return {
+                                "type": "array",
+                                "items": uniqueProperties[0]
+                            };
+                        }
+                        else {
+                            return {
+                                "type": "array",
+                                "items": {
+                                    "oneOf": uniqueProperties
+                                }
+                            };
+                        }
                     }
                 };
                 this.isArray = function (instance) {
@@ -657,6 +672,19 @@ var jsonforms;
                 };
                 this.isNotNull = function (instance) {
                     return (typeof (instance) !== 'undefined') && (instance !== null);
+                };
+                this.distinct = function (array, key) {
+                    var known = {};
+                    return array.filter(function (item) {
+                        var keyValue = key(item);
+                        if (known.hasOwnProperty(keyValue)) {
+                            return false;
+                        }
+                        else {
+                            known[keyValue] = true;
+                            return true;
+                        }
+                    });
                 };
                 this.requiredProperties = function (properties) {
                     return properties; // all known properties are required by default
