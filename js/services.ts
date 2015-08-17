@@ -222,11 +222,11 @@ module jsonforms.services {
         };
 
         protected requiredProperties = (properties: Object): Object => {
-            return properties; // all properties are required by default
+            return properties; // all known properties are required by default
         };
 
         protected allowAdditionalProperties = (properties:Object): boolean => {
-            return false; // restrict to known properties by default
+            return true; // allow other properties by default
         }
 
     }

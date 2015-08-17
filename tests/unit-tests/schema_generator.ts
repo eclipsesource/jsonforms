@@ -20,7 +20,7 @@ describe('SchemaGenerator', () => {
         var schema = {
             "type": "object",
             "properties": {},
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": []
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -41,7 +41,7 @@ describe('SchemaGenerator', () => {
                     "type": "string"
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -62,7 +62,7 @@ describe('SchemaGenerator', () => {
                     "type": "string"
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -83,7 +83,7 @@ describe('SchemaGenerator', () => {
                     "type": "integer"
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -104,7 +104,7 @@ describe('SchemaGenerator', () => {
                     "type": "string"
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -125,7 +125,7 @@ describe('SchemaGenerator', () => {
                     "type": "null"
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -152,7 +152,7 @@ describe('SchemaGenerator', () => {
                     }
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -184,7 +184,7 @@ describe('SchemaGenerator', () => {
                                 }
                             }
                         },
-                        "additionalProperties": false,
+                        "additionalProperties": true,
                         "required": ["subproperty1", "subproperty2"]
                     }
                 },
@@ -195,7 +195,7 @@ describe('SchemaGenerator', () => {
                     }
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
@@ -226,7 +226,7 @@ describe('SchemaGenerator', () => {
                             "type": "string"
                         }
                     },
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": ["subproperty1", "subproperty2"]
                 },
                 "property2": {
@@ -245,11 +245,11 @@ describe('SchemaGenerator', () => {
                             }
                         }
                     },
-                    "additionalProperties": false,
+                    "additionalProperties": true,
                     "required": ["subproperty1", "subproperty2"]
                 }
             },
-            "additionalProperties": false,
+            "additionalProperties": true,
             "required": ["property1", "property2", "property3"]
         };
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);

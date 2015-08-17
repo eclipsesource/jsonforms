@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-08-11 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.1 - 2015-08-17 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
@@ -127,7 +127,6 @@ var JsonFormsDiretiveController = (function () {
         else if (this.$scope.asyncUiSchema()) {
             return this.$scope.asyncUiSchema();
         }
-        // throw new Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified.");
         // return undefined to indicate that no way of obtaining a ui schema was defined
         // TODO: Maybe return defaultUISchema or generator function?
         var p = this.$q.defer();
@@ -660,10 +659,10 @@ var jsonforms;
                     return (typeof (instance) !== 'undefined') && (instance !== null);
                 };
                 this.requiredProperties = function (properties) {
-                    return properties; // all properties are required by default
+                    return properties; // all known properties are required by default
                 };
                 this.allowAdditionalProperties = function (properties) {
-                    return false; // restrict to known properties by default
+                    return true; // allow other properties by default
                 };
             }
             return SchemaGenerator;
@@ -679,10 +678,8 @@ var jsonforms;
                     return uiSchemaElements[0];
                 };
                 this.generateUISchema = function (jsonSchema, schemaElements, currentRef, schemaName) {
-                    if (!jsonSchema.type) {
-                        throw new Error("No type found for JSON Schema element " + JSON.stringify(jsonSchema));
-                    }
-                    switch (jsonSchema.type) {
+                    var type = _this.deriveType(jsonSchema);
+                    switch (type) {
                         case "object":
                             // Add a vertical layout with a label for the element name (if it exists)
                             var verticalLayout = {
@@ -705,11 +702,8 @@ var jsonforms;
                             }
                             var nextRef = currentRef + '/' + "properties";
                             for (var property in jsonSchema.properties) {
-                                if (property === "id") {
-                                    // could be a string (json-schema-id). Ignore in that case
-                                    if (typeof jsonSchema.properties[property] === "string") {
-                                        continue;
-                                    }
+                                if (_this.isIgnoredProperty(property, jsonSchema.properties[property])) {
+                                    continue;
                                 }
                                 _this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                             }
@@ -742,10 +736,37 @@ var jsonforms;
                             var controlObject = _this.getControlObject(_this.beautify(schemaName), currentRef);
                             schemaElements.push(controlObject);
                             break;
+                        case "null":
+                            //ignore
+                            break;
                         default:
                             throw new Error("Unknown type: " + JSON.stringify(jsonSchema));
                     }
                 };
+                /**
+                 * Determines if the property should be ignored because it is a meta property
+                 */
+                this.isIgnoredProperty = function (propertyKey, propertyValue) {
+                    // could be a string (json-schema-id). Ignore in that case
+                    return propertyKey === "id" && typeof propertyValue === "string";
+                    // TODO ignore all meta keywords
+                };
+                /**
+                 * Derives the type of the jsonSchema element
+                 */
+                this.deriveType = function (jsonSchema) {
+                    if (jsonSchema.type) {
+                        return jsonSchema.type;
+                    }
+                    if (jsonSchema.properties || jsonSchema.additionalProperties) {
+                        return "object";
+                    }
+                    // ignore all remaining cases
+                    return "null";
+                };
+                /**
+                 * Creates a IControlObject with the given label referencing the given ref
+                 */
                 this.getControlObject = function (label, ref) {
                     return {
                         type: "Control",
@@ -755,14 +776,17 @@ var jsonforms;
                         }
                     };
                 };
-                //1. split on uppercase letters
-                //2. transform uppercase letters to lowercase
-                //3. transform first letter uppercase
+                /**
+                 * Beautifies by performing the following steps (if applicable)
+                 * 1. split on uppercase letters
+                 * 2. transform uppercase letters to lowercase
+                 * 3. transform first letter uppercase
+                 */
                 this.beautify = function (text) {
                     if (text && text.length > 0) {
                         var textArray = text.split(/(?=[A-Z])/).map(function (x) { return x.toLowerCase(); });
                         textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
-                        text = textArray.join(' ');
+                        return textArray.join(' ');
                     }
                     return text;
                 };
