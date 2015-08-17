@@ -681,8 +681,7 @@ var jsonforms;
                             return false;
                         }
                         else {
-                            known[keyValue] = true;
-                            return true;
+                            return (known[keyValue] = true);
                         }
                     });
                 };

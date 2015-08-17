@@ -243,8 +243,7 @@ module jsonforms.services {
                 if (known.hasOwnProperty(keyValue)) {
                     return false;
                 } else {
-                    known[keyValue] = true;
-                    return true;
+                    return (known[keyValue] = true);
                 }
             });
         };
