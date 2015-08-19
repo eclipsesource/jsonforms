@@ -23,8 +23,12 @@ angular.module('makeithappen', [
             templateUrl: 'templates/async.html',
             controller: 'AsyncController'
         });
+        $routeProvider.when('/defaultui', {
+            templateUrl: 'templates/defaultui.html',
+            controller: 'DefaultUISchemaController'
+        });
         $routeProvider.otherwise({
             redirectTo: '/local'
-        })
+        });
     }
 ]);

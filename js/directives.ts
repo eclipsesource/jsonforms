@@ -6,26 +6,53 @@ declare var JsonRefs;
 
 class JsonFormsDiretiveController {
 
-    static $inject = ['RenderService', 'ReferenceResolver', '$scope', '$q'];
+    static $inject = ['RenderService', 'ReferenceResolver', 'UISchemaGenerator', '$scope', '$q'];
 
     constructor(
         private RenderService:jsonforms.services.IRenderService,
         private ReferenceResolver:jsonforms.services.IReferenceResolver,
+        private UISchemaGenerator:jsonforms.services.IUISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
         private $q: ng.IQService
     ) {
 
-        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise, this.fetchData()]).then(function(values) {
+        var resolvedSchemaDeferred = $q.defer();
+        var resolvedUISchemaDeferred = $q.defer();
+
+        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then(function(values) {
+            var schema = values[0];
+            var uiSchemaMaybe = values[1];
+
+            var uiSchemaDeferred = $q.defer();
+
+            $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
+                schema['uiSchema'] = uiSchema;
+                ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                    resolvedSchemaDeferred.resolve(resolvedSchema);
+                    resolvedUISchemaDeferred.resolve(resolvedSchema['uiSchema']);
+                });
+            });
+
+            if (uiSchemaMaybe === undefined || uiSchemaMaybe === null || uiSchemaMaybe === "") {
+                // resolve JSON schema, then generate ui Schema
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                    var uiSchema = UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
+                    uiSchemaDeferred.resolve(uiSchema);
+                });
+            } else {
+                // directly resolve ui schema
+                uiSchemaDeferred.resolve(uiSchemaMaybe);
+            }
+        });
+
+
+        $q.all([resolvedSchemaDeferred.promise, resolvedUISchemaDeferred .promise, this.fetchData()]).then(function(values) {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
-            console.log("data is "  + JSON.stringify(data));
-            schema['uiSchema'] = uiSchema;
-            ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
-            JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                var ui = resolvedSchema["uiSchema"];
-                $scope['elements'] = [RenderService.render(ui, schema, data, "#", $scope.asyncDataProvider)];
-            });
+
+            $scope['elements'] = [RenderService.render(uiSchema, schema, data, "#", $scope.asyncDataProvider)];
         });
 
         // TODO
@@ -93,7 +120,11 @@ class JsonFormsDiretiveController {
             return this.$scope.asyncUiSchema();
         }
 
-        throw new Error("Either the 'ui-schema' or the 'async-ui-schema' attribute must be specified.");
+        // return undefined to indicate that no way of obtaining a ui schema was defined
+        // TODO: Maybe return defaultUISchema or generator function?
+        var p = this.$q.defer();
+        p.resolve(undefined);
+        return p;
     }
 
     private fetchData() {
