@@ -32,8 +32,8 @@ class VerticalLayout implements jsonforms.services.IRenderer {
         };
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        return element.type == "VerticalLayout";
+    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {
+        return uiElement.type == "VerticalLayout";
     }
 }
 

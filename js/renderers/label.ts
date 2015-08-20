@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class LabelRenderer implements jsonforms.services.IRenderer {
+class Label implements jsonforms.services.IRenderer {
 
     priority = 1;
 
@@ -10,10 +10,10 @@ class LabelRenderer implements jsonforms.services.IRenderer {
         label["text"] = element['text'];
 
         return {
-            "type": "Label",
+            "type": "Custom",
             "elements": [label],
             // TODO
-            "size": 99
+            "size": 99,
         };
     }
 
@@ -26,5 +26,5 @@ class LabelRenderer implements jsonforms.services.IRenderer {
 var app = angular.module('jsonForms.label', ['jsonForms.services']);
 
 app.run(['RenderService', function(RenderService) {
-    RenderService.register(new LabelRenderer());
+    RenderService.register(new Label());
 }]);

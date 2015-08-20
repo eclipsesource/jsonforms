@@ -7,7 +7,7 @@ class EnumControl implements jsonforms.services.IRenderer {
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
     render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.get(uiPath));
+        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
         var id = path;
         var enums = element['scope'].enum;
         return {
@@ -22,12 +22,13 @@ class EnumControl implements jsonforms.services.IRenderer {
         };
     }
 
-    isApplicable(element: jsonforms.services.UISchemaElement):boolean {
+    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string): boolean {
         // TODO: enum are valid for any instance type, not just strings
-        if (element.hasOwnProperty('scope')) {
-            return element['scope'].hasOwnProperty('enum');
+        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        if (subSchema == undefined) {
+            return false;
         }
-        return false;
+        return uiElement.type == 'Control' && subSchema.hasOwnProperty('enum');
     }
 }
 

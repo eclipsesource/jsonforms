@@ -7,7 +7,7 @@ class DatetimeControl implements jsonforms.services.IRenderer {
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
     render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.get(uiPath));
+        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
         var options = {
             "type": "Control",
             "size": 99,
@@ -26,12 +26,13 @@ class DatetimeControl implements jsonforms.services.IRenderer {
         return options;
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        if (element.hasOwnProperty('scope')) {
-            return element['scope'].type === "string" && element['scope'].format !== undefined
-                && element['scope'].format === "date-time";
+    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string): boolean {
+        var subSchema: SchemaString = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        if (subSchema == undefined) {
+            return false;
         }
-        return false;
+        return uiElement.type == 'Control' && subSchema.type == "string" &&
+            subSchema.format != undefined && subSchema.format == "date-time";
     }
 }
 

@@ -12,8 +12,12 @@ class ArrayControl implements jsonforms.services.IRenderer {
 
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        return element['type'] == 'Control' && element['scope']['type'] == 'array';
+    isApplicable(element: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
+        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        if (subSchema == undefined) {
+            return false;
+        }
+        return element.type == 'Control' && subSchema.type == 'array';
     }
 
     render(resolvedElement: jsonforms.services.UISchemaElement, schema, instanceData, path: string, dataProvider) {
@@ -60,13 +64,13 @@ class ArrayControl implements jsonforms.services.IRenderer {
             schemaType: "array"
         };
 
-        var parentScope = this.refResolver.get(path);
+        var parentScope = this.refResolver.getSchemaRef(path);
 
         var that = this;
         var prefix = this.refResolver.normalize(parentScope);
         var colDefs = element.columns.map(function(col, idx) {
             return {
-                field:  that.refResolver.normalize(that.refResolver.get(path + "/columns/" + idx)).replace(prefix + "/", ''),
+                field:  that.refResolver.normalize(that.refResolver.getSchemaRef(path + "/columns/" + idx)).replace(prefix + "/", ''),
                 displayName: col.label
             }
         });

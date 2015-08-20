@@ -7,7 +7,7 @@ class IntegerControl implements jsonforms.services.IRenderer {
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
     render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.get(uiPath));
+        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
         var id = path;
         var options = {
             "type": "Control",
@@ -35,11 +35,12 @@ class IntegerControl implements jsonforms.services.IRenderer {
         return options;
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        if (element.hasOwnProperty('scope')) {
-            return element['scope'].type === "integer";
+    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
+        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        if (subSchema == undefined) {
+            return false;
         }
-        return false;
+        return uiElement.type == 'Control' && subSchema.type == 'integer';
     }
 }
 

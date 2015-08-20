@@ -41,8 +41,8 @@ class HorizontalLayout implements jsonforms.services.IRenderer {
         };
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        return element.type == "HorizontalLayout";
+    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
+        return uiElement.type == "HorizontalLayout";
     }
 
 }

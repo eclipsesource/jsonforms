@@ -14,6 +14,10 @@ interface SchemaArray extends SchemaElement{
     items?: any;
 }
 
+interface SchemaString extends SchemaElement {
+    format?: string
+}
+
 // Array type
 interface StringArray{
     [index: number]: string;
