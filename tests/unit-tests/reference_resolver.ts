@@ -27,7 +27,7 @@ describe('ReferenceResolver', () => {
             }
         };
 
-        expect(ReferenceResolver.resolve(obj, "#/foo/bar").type).toBe("string");
+        expect(ReferenceResolver.resolveUi(obj, "#/foo/bar").type).toBe("string");
     });
 
 });
