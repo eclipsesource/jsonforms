@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class HorizontalLayoutRenderer implements jsonforms.services.IRenderer {
+class HorizontalLayout implements jsonforms.services.IRenderer {
 
     constructor(private renderServ: jsonforms.services.IRenderService) {
 
@@ -50,6 +50,6 @@ class HorizontalLayoutRenderer implements jsonforms.services.IRenderer {
 var app = angular.module('jsonForms.horizontalLayout', []);
 
 app.run(['RenderService', function(RenderService) {
-    RenderService.register(new HorizontalLayoutRenderer(RenderService));
+    RenderService.register(new HorizontalLayout(RenderService));
 }]);
 

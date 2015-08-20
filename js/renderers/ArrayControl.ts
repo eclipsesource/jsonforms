@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class TableRenderer implements jsonforms.services.IRenderer {
+class ArrayControl implements jsonforms.services.IRenderer {
 
 
     private maxSize = 99;
@@ -42,7 +42,7 @@ class TableRenderer implements jsonforms.services.IRenderer {
             return data;
         } else {
             // relative scope
-            return this.refResolver.resolve(data, uiPath);
+            return this.refResolver.resolveUi(data, uiPath);
         }
     }
 
@@ -153,5 +153,5 @@ class TableRenderer implements jsonforms.services.IRenderer {
 var app = angular.module('jsonForms.table', []);
 
 app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
-    RenderService.register(new TableRenderer(ReferenceResolver, $rootScope));
+    RenderService.register(new ArrayControl(ReferenceResolver, $rootScope));
 }]);

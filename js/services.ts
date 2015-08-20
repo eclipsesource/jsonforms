@@ -4,6 +4,7 @@
 module jsonforms.services {
 
     export class UISchemaElement {
+
         type: string;
         elements: UISchemaElement[];
 
@@ -37,9 +38,11 @@ module jsonforms.services {
 
         normalize(path:string): string
 
-        resolve(instance:any, path:string): any
+        resolveUi(instance:any, uiPath:string): any
 
-        resolveModelPath(instance:any, path:string): any
+        resolveInstance(instance:any, path:string): any
+
+        resolveSchema(schema: any, path: string): any
     }
 
     export interface IUISchemaGenerator {
@@ -49,14 +52,14 @@ module jsonforms.services {
     // TODO: EXPORT
     export class RenderService {
 
-        private renderers: IRenderer[] = []
+        private renderers: IRenderer[] = [];
         static $inject = ["$compile"];
 
         // $compile can then be used as this.$compile
         constructor(private $compile:ng.ICompileService) {
         }
 
-        render = (element:jsonforms.services.UISchemaElement, schema, instance, path, dataProvider) => {
+        render = (element:jsonforms.services.UISchemaElement, schema, instance, uiPath, dataProvider) => {
 
             var foundRenderer;
 
@@ -72,7 +75,7 @@ module jsonforms.services {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            return foundRenderer.render(element, schema, instance, path, dataProvider);
+            return foundRenderer.render(element, schema, instance, uiPath, dataProvider);
         };
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);
@@ -96,7 +99,7 @@ module jsonforms.services {
                 }
             }
         };
-        get= (uiSchemaPath:string):any => {
+        get = (uiSchemaPath:string):any => {
             return this.pathMapping[uiSchemaPath + "/scope/$ref"];
         };
 
@@ -104,15 +107,16 @@ module jsonforms.services {
             return this.filterNonKeywords(this.toPropertyFragments(path)).join("/");
         };
 
-        resolve = (instance:any, path:string):any => {
-            var p = path + "/scope/$ref";
+        resolveUi = (instance:any, uiPath:string):any => {
+            var p = uiPath + "/scope/$ref";
             if (this.pathMapping !== undefined && this.pathMapping.hasOwnProperty(p)) {
                 p = this.pathMapping[p];
             }
-            return this.resolveModelPath(instance, p);
+            return this.resolveInstance(instance, p);
         };
 
-        resolveModelPath = (instance:any, path:string):any => {
+        
+        resolveInstance = (instance:any, path:string):any => {
             var fragments = this.toPropertyFragments(this.normalize(path));
             return fragments.reduce(function (currObj, fragment) {
                 if (currObj instanceof Array) {
@@ -122,6 +126,18 @@ module jsonforms.services {
                 }
                 return currObj[fragment];
             }, instance);
+        };
+
+        resolveSchema = (schema: any, path: string): any => {
+            var fragments = this.toPropertyFragments(this.normalize(path));
+            return fragments.reduce(function (subSchema, fragment) {
+                if (subSchema instanceof Array) {
+                    return subSchema.map(function (item) {
+                        return item[fragment];
+                    });
+                }
+                return subSchema[fragment];
+            }, schema);
         };
 
         private toPropertyFragments = (path:string):string[] => {

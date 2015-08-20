@@ -4,16 +4,21 @@
         {{element.elements[0].text}}
     </div>
 
-    <control ng-if="element.type=='Control'"
-             control="element.elements[0]"
-             bindings="element.elements[0].bindings"
-             top-open-date="topOpenDate"
-             top-validate-number="topValidateNumber"
-             top-validate-integer="topValidateInteger"
-             class="col-sm-{{element.size}}">
-    </control>
+    <div ng-if="element.type=='Control'" class="col-sm-{{element.size}} form-group top-buffer">
+        <label ng-if="element.label" for="element.id">{{element.label}}</label>
+        <alert ng-repeat="alert in element.alerts" type="{{alert.type}}" class="top-buffer-s qb-alert">{{alert.msg}}</alert>
+        <dynamic-widget element="element" />
+    </div>
 
-    <!-- this should be moved to control.html ? -->
+    <!--<control ng-if="element.type=='Control'"-->
+             <!--control="element.elements[0]"-->
+             <!--bindings="element.elements[0].bindings"-->
+             <!--top-open-date="topOpenDate"-->
+             <!--top-validate-number="topValidateNumber"-->
+             <!--top-validate-integer="topValidateInteger"-->
+             <!--class="col-sm-{{element.size}}">-->
+    <!--</control>-->
+
 
     <fieldset ng-if="element.type=='HorizontalLayout'" class="col-sm-{{element.size}}">
         <div class="row">
