@@ -60,7 +60,7 @@ module jsonforms.services {
         constructor(private $compile:ng.ICompileService, private refResovler: IReferenceResolver) {
         }
 
-        render = (element: IUISchemaElement, schema, instance, uiPath, schemaPath, dataProvider) => {
+        render = (element: IUISchemaElement, schema, instance, uiPath, dataProvider) => {
 
             var schemaPath = this.refResovler.getSchemaRef(uiPath);
             var foundRenderer;
@@ -77,7 +77,7 @@ module jsonforms.services {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            return foundRenderer.render(element, schema, instance, uiPath, schemaPath, dataProvider);
+            return foundRenderer.render(element, schema, instance, uiPath, dataProvider);
         };
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);

@@ -26,8 +26,3 @@ interface IControlObject extends IUISchemaElement{
 interface ILabel extends IUISchemaElement{
     text: string;
 }
-
-interface Paths {
-    schema: string
-    ui: string
-}

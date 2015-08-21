@@ -87,7 +87,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                 },
                 "columns": [
                     {
-                        "label": "Napme",
+                        "label": "Name",
                         "scope": {
                             "$ref": "#/items/properties/name"
                         }

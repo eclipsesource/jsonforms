@@ -53,52 +53,11 @@ class JsonFormsDiretiveController {
             var uiSchema = values[1];
             var data = values[2];
 
-            var paths: Paths = {
-              schema: "#",
-              ui: "#"
-            };
-
             $scope['elements'] = [RenderService.render(uiSchema, schema, data,  "#", $scope.asyncDataProvider)];
         });
 
-        // TODO
+        // TODO: check if still in use
         $scope['opened'] = false;
-
-        // TODO: these should be moved to the controls itself, right?
-
-        //$scope['openDate'] = function ($event, element) {
-        //    $event.preventDefault();
-        //    $event.stopPropagation();
-        //    element.isOpen = true;
-        //};
-
-        //$scope['validateNumber'] = function (value, element) {
-        //    if (value !== undefined && value !== null && isNaN(value)) {
-        //        element.alerts = [];
-        //        var alert = {
-        //            type: 'danger',
-        //            msg: 'Must be a valid number!'
-        //        };
-        //        element.alerts.push(alert);
-        //        return false;
-        //    }
-        //    element.alerts = [];
-        //    return true;
-        //};
-
-        //$scope['validateInteger'] = function (value, element) {
-        //    if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
-        //        element.alerts = [];
-        //        var alert = {
-        //            type: 'danger',
-        //            msg: 'Must be a valid integer!'
-        //        };
-        //        element.alerts.push(alert);
-        //        return false;
-        //    }
-        //    element.alerts = [];
-        //    return true;
-        //};
     }
 
     private fetchSchema() {
