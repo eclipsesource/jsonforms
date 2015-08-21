@@ -9,8 +9,13 @@ angular.module('jsonForms', [
     'jsonForms.services',
     'jsonForms.directives',
     'jsonForms.label',
-    'jsonForms.control',
     'jsonForms.verticalLayout',
     'jsonForms.horizontalLayout',
-    'jsonForms.table'
+    'jsonForms.table',
+    'jsonForms.integerControl',
+    'jsonForms.booleanControl',
+    'jsonForms.stringControl',
+    'jsonForms.numberControl',
+    'jsonForms.datetimeControl',
+    'jsonForms.enumControl',
 ]);

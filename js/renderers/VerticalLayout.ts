@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class VerticalLayoutRenderer implements jsonforms.services.IRenderer {
+class VerticalLayout implements jsonforms.services.IRenderer {
 
     constructor(private renderService: jsonforms.services.IRenderService) { }
 
@@ -32,13 +32,13 @@ class VerticalLayoutRenderer implements jsonforms.services.IRenderer {
         };
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        return element.type == "VerticalLayout";
+    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {
+        return uiElement.type == "VerticalLayout";
     }
 }
 
 var app = angular.module('jsonForms.verticalLayout', ['jsonForms.services']);
 
 app.run(['RenderService', function(RenderService) {
-     RenderService.register(new VerticalLayoutRenderer(RenderService));
+     RenderService.register(new VerticalLayout(RenderService));
 }]);

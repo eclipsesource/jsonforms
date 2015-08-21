@@ -1,7 +1,7 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class TableRenderer implements jsonforms.services.IRenderer {
+class ArrayControl implements jsonforms.services.IRenderer {
 
 
     private maxSize = 99;
@@ -12,8 +12,12 @@ class TableRenderer implements jsonforms.services.IRenderer {
 
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
-        return element['type'] == 'Control' && element['scope']['type'] == 'array';
+    isApplicable(element: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
+        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        if (subSchema == undefined) {
+            return false;
+        }
+        return element.type == 'Control' && subSchema.type == 'array';
     }
 
     render(resolvedElement: jsonforms.services.UISchemaElement, schema, instanceData, path: string, dataProvider) {
@@ -42,7 +46,7 @@ class TableRenderer implements jsonforms.services.IRenderer {
             return data;
         } else {
             // relative scope
-            return this.refResolver.resolve(data, uiPath);
+            return this.refResolver.resolveUi(data, uiPath);
         }
     }
 
@@ -60,13 +64,13 @@ class TableRenderer implements jsonforms.services.IRenderer {
             schemaType: "array"
         };
 
-        var parentScope = this.refResolver.get(path);
+        var parentScope = this.refResolver.getSchemaRef(path);
 
         var that = this;
         var prefix = this.refResolver.normalize(parentScope);
         var colDefs = element.columns.map(function(col, idx) {
             return {
-                field:  that.refResolver.normalize(that.refResolver.get(path + "/columns/" + idx)).replace(prefix + "/", ''),
+                field:  that.refResolver.normalize(that.refResolver.getSchemaRef(path + "/columns/" + idx)).replace(prefix + "/", ''),
                 displayName: col.label
             }
         });
@@ -153,5 +157,5 @@ class TableRenderer implements jsonforms.services.IRenderer {
 var app = angular.module('jsonForms.table', []);
 
 app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
-    RenderService.register(new TableRenderer(ReferenceResolver, $rootScope));
+    RenderService.register(new ArrayControl(ReferenceResolver, $rootScope));
 }]);

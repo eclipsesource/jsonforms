@@ -9,6 +9,20 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             },
             "age": {
                 "type": "integer"
+            },
+            "height": {
+                "type": "number"
+            },
+            "vegetarian": {
+                "type": "boolean"
+            },
+            "birthDate": {
+                "type": "string",
+                "format": "date-time"
+            },
+            "nationality": {
+                "type": "string",
+                "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
             }
         }
     };
@@ -27,6 +41,34 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                 "label": "Age",
                 "scope": {
                     "$ref": "#/properties/age"
+                }
+            },
+            {
+                "type": "Control",
+                "label": "Height",
+                "scope": {
+                    "$ref": "#/properties/height"
+                }
+            },
+            {
+                "type": "Control",
+                "label": "Vegetarian",
+                "scope": {
+                    "$ref": "#/properties/vegetarian"
+                }
+            },
+            {
+                "type": "Control",
+                "label": "Birthday",
+                "scope": {
+                    "$ref": "#/properties/birthDate"
+                }
+            },
+            {
+                "type": "Control",
+                "label": "Nationality",
+                "scope": {
+                    "$ref": "#/properties/nationality"
                 }
             }
         ]
@@ -63,7 +105,11 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
 
     $scope.data = {
         name: 'John Doe',
-        age: 36
+        age: 36,
+        height: "1.76",
+        vegetarian: true,
+        birthDate: "02.06.1985",
+        nationality: "US"
     };
     $scope.users = [
         $scope.data,

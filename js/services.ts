@@ -1,9 +1,11 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 /// <reference path="../typings/schemas/uischema.d.ts"/>
+/// <reference path="../typings/schemas/jsonschema.d.ts"/>
 
 module jsonforms.services {
 
     export class UISchemaElement {
+
         type: string;
         elements: UISchemaElement[];
 
@@ -26,20 +28,22 @@ module jsonforms.services {
 
     export interface IRenderer {
         render(element: jsonforms.services.UISchemaElement, schema, instance, path: string, dataProvider): any
-        isApplicable(element: jsonforms.services.UISchemaElement): boolean
+        isApplicable(uiElement: IUISchemaElement, schema: SchemaElement, schemaPath: string): boolean
         priority: number
     }
 
     export interface IReferenceResolver {
-        addToMapping(addition:any): void
+        addUiPathToSchemaRefMapping(addition:any): void
 
-        get(uiSchemaPath:string): any
+        getSchemaRef(uiSchemaPath:string): any
 
         normalize(path:string): string
 
-        resolve(instance:any, path:string): any
+        resolveUi(instance:any, uiPath:string): any
 
-        resolveModelPath(instance:any, path:string): any
+        resolveInstance(instance:any, path:string): any
+
+        resolveSchema(schema: SchemaElement, schemaPath: string): SchemaElement
     }
 
     export interface IUISchemaGenerator {
@@ -49,19 +53,20 @@ module jsonforms.services {
     // TODO: EXPORT
     export class RenderService {
 
-        private renderers: IRenderer[] = []
-        static $inject = ["$compile"];
+        private renderers: IRenderer[] = [];
+        static $inject = ['$compile', 'ReferenceResolver'];
 
         // $compile can then be used as this.$compile
-        constructor(private $compile:ng.ICompileService) {
+        constructor(private $compile:ng.ICompileService, private refResovler: IReferenceResolver) {
         }
 
-        render = (element:jsonforms.services.UISchemaElement, schema, instance, path, dataProvider) => {
+        render = (element: IUISchemaElement, schema, instance, uiPath, dataProvider) => {
 
+            var schemaPath = this.refResovler.getSchemaRef(uiPath);
             var foundRenderer;
 
             for (var i = 0; i < this.renderers.length; i++) {
-                if (this.renderers[i].isApplicable(element)) {
+                if (this.renderers[i].isApplicable(element, schema, schemaPath)) {
                     if (foundRenderer == undefined || this.renderers[i].priority > foundRenderer.priority) {
                         foundRenderer = this.renderers[i];
                     }
@@ -72,7 +77,7 @@ module jsonforms.services {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            return foundRenderer.render(element, schema, instance, path, dataProvider);
+            return foundRenderer.render(element, schema, instance, uiPath, dataProvider);
         };
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);
@@ -89,14 +94,19 @@ module jsonforms.services {
         constructor(private $compile:ng.ICompileService) {
         }
 
-        addToMapping = (addition:any) => {
+        addUiPathToSchemaRefMapping = (addition:any) => {
             for (var ref in addition) {
                 if (addition.hasOwnProperty(ref)) {
                     this.pathMapping[ref] = addition[ref];
                 }
             }
         };
-        get= (uiSchemaPath:string):any => {
+        getSchemaRef = (uiSchemaPath:string):any => {
+
+            if (uiSchemaPath == "#") {
+                return "#";
+            }
+
             return this.pathMapping[uiSchemaPath + "/scope/$ref"];
         };
 
@@ -104,15 +114,16 @@ module jsonforms.services {
             return this.filterNonKeywords(this.toPropertyFragments(path)).join("/");
         };
 
-        resolve = (instance:any, path:string):any => {
-            var p = path + "/scope/$ref";
+        resolveUi = (instance:any, uiPath:string):any => {
+            var p = uiPath + "/scope/$ref";
             if (this.pathMapping !== undefined && this.pathMapping.hasOwnProperty(p)) {
                 p = this.pathMapping[p];
             }
-            return this.resolveModelPath(instance, p);
+            return this.resolveInstance(instance, p);
         };
 
-        resolveModelPath = (instance:any, path:string):any => {
+        
+        resolveInstance = (instance:any, path:string):any => {
             var fragments = this.toPropertyFragments(this.normalize(path));
             return fragments.reduce(function (currObj, fragment) {
                 if (currObj instanceof Array) {
@@ -122,6 +133,21 @@ module jsonforms.services {
                 }
                 return currObj[fragment];
             }, instance);
+        };
+
+        resolveSchema = (schema: any, path: string): any => {
+
+            var fragments = this.toPropertyFragments(path);
+            return fragments.reduce(function (subSchema, fragment) {
+                if (fragment == "#"){
+                    return subSchema
+                } else if (subSchema instanceof Array) {
+                    return subSchema.map(function (item) {
+                        return item[fragment];
+                    });
+                }
+                return subSchema[fragment];
+            }, schema);
         };
 
         private toPropertyFragments = (path:string):string[] => {

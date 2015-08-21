@@ -27,7 +27,8 @@ class JsonFormsDiretiveController {
 
             $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
                 schema['uiSchema'] = uiSchema;
-                ReferenceResolver.addToMapping(JsonRefs.findRefs(uiSchema));
+                // build mapping of ui paths to schema refs
+                ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
                 JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
                     resolvedUISchemaDeferred.resolve(resolvedSchema['uiSchema']);
@@ -52,46 +53,11 @@ class JsonFormsDiretiveController {
             var uiSchema = values[1];
             var data = values[2];
 
-            $scope['elements'] = [RenderService.render(uiSchema, schema, data, "#", $scope.asyncDataProvider)];
+            $scope['elements'] = [RenderService.render(uiSchema, schema, data,  "#", $scope.asyncDataProvider)];
         });
 
-        // TODO
+        // TODO: check if still in use
         $scope['opened'] = false;
-
-        $scope['openDate'] = function ($event, element) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            element.isOpen = true;
-        };
-
-        $scope['validateNumber'] = function (value, element) {
-            if (value !== undefined && value !== null && isNaN(value)) {
-                element.alerts = [];
-                var alert = {
-                    type: 'danger',
-                    msg: 'Must be a valid number!'
-                };
-                element.alerts.push(alert);
-                return false;
-            }
-            element.alerts = [];
-            return true;
-        };
-
-        $scope['validateInteger'] = function (value, element) {
-            if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
-                element.alerts = [];
-                var alert = {
-                    type: 'danger',
-                    msg: 'Must be a valid integer!'
-                };
-                element.alerts.push(alert);
-                return false;
-            }
-            element.alerts = [];
-            return true;
-        };
     }
 
     private fetchSchema() {
@@ -212,4 +178,23 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
     }
 }).directive('recelement', ['RecursionHelper', (recHelper: jsonforms.services.RecursionHelper): ng.IDirective => {
     return new RecElement(recHelper);
+}]).directive('dynamicWidget', ['$compile', function ($compile: ng.ICompileService) {
+    return {
+        restrict: 'E',
+        scope: {
+            element: "="
+        },
+        replace: true,
+        link: function(scope, element) {
+            if (scope.element.templateUrl === undefined) {
+                var template = $compile(scope.element.template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
+                element.replaceWith(template);
+            } else {
+                $.get(scope.element.templateUrl, function(template) {
+                    var compiledTemplate = $compile(template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
+                    element.replaceWith(compiledTemplate);
+                })
+            }
+        }
+    }
 }]);
