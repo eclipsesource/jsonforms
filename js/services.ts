@@ -44,6 +44,9 @@ module jsonforms.services {
 
     export interface ISchemaGenerator {
         generateDefaultSchema(instance: Object): Object
+        generateDefaultSchemaWithOptions(instance: Object,
+                                         allowAdditionalProperties: (properties:Object) => boolean,
+                                         requiredProperties: (properties: string[]) => string[]) : Object
     }
 
     export interface IUISchemaGenerator {
@@ -145,27 +148,36 @@ module jsonforms.services {
 
     export class SchemaGenerator {
 
-        public generateDefaultSchema = (instance: Object) : any => {
-            var schema = this.schemaObject(instance);
-            console.log("generated default schema: " + JSON.stringify(schema));
-            return schema;
+        public generateDefaultSchema = (instance: Object) : Object => {
+            return this.schemaObject(instance, this.allowAdditionalProperties, this.requiredProperties);
         };
 
-        private schemaObject = (instance: Object) : Object => {
-            var properties = this.properties(instance);
+        public generateDefaultSchemaWithOptions = (instance: Object,
+                                                   allowAdditionalProperties: (properties:Object) => boolean,
+                                                   requiredProperties: (properties: string[]) =>  string[]) : Object => {
+            return this.schemaObject(instance, allowAdditionalProperties, requiredProperties);
+        };
+
+        private schemaObject = (instance: Object,
+                                allowAdditionalProperties: (properties:Object) => boolean,
+                                requiredProperties: (properties: string[]) =>  string[]) : Object => {
+            var properties = this.properties(instance, allowAdditionalProperties, requiredProperties);
             return {
                 "type": "object",
                 "properties": properties,
-                "additionalProperties": this.allowAdditionalProperties(properties),
-                "required": this.keys(this.requiredProperties(properties))
+                "additionalProperties": allowAdditionalProperties(properties),
+                "required": requiredProperties(this.keys(properties))
             };
         };
 
-        private properties = (instance: Object) : Object => {
+        private properties = (instance: Object,
+                              allowAdditionalProperties: (properties:Object) => boolean,
+                              requiredProperties: (properties: string[]) =>  string[]) : Object => {
             var properties = {};
             var generator = this;
             this.keys(instance).forEach(function(property) {
-                properties[property] = generator.property(instance[property])
+                properties[property] = generator.property(instance[property],
+                    allowAdditionalProperties, requiredProperties);
             });
             return properties;
         };
@@ -174,7 +186,9 @@ module jsonforms.services {
             return Object.keys(properties);
         };
 
-        private property = (instance: any) : Object => {
+        private property = (instance: Object,
+                            allowAdditionalProperties: (properties:Object) => boolean,
+                            requiredProperties: (properties: string[]) =>  string[]) : Object => {
             switch (typeof instance) {
                 case "string":
                 case "boolean":
@@ -186,29 +200,33 @@ module jsonforms.services {
                         return { "type": "number" };
                     }
                 case "object":
-                    return this.schemaObjectOrNullOrArray(instance);
+                    return this.schemaObjectOrNullOrArray(instance, allowAdditionalProperties, requiredProperties);
                 default:
                     return {};
             }
         };
 
-        private schemaObjectOrNullOrArray= (instance: Object): Object => {
+        private schemaObjectOrNullOrArray= (instance: Object,
+                                            allowAdditionalProperties: (properties:Object) => boolean,
+                                            requiredProperties: (properties: string[]) =>  string[]): Object => {
             if (this.isNotNull(instance)) {
                 if (this.isArray(instance)) {
-                    return this.schemaArray(<Array<Object>>instance);
+                    return this.schemaArray(<Array<Object>>instance, allowAdditionalProperties, requiredProperties);
                 } else {
-                    return this.schemaObject(instance);
+                    return this.schemaObject(instance, allowAdditionalProperties, requiredProperties);
                 }
             } else {
                 return { "type": "null" };
             }
         };
 
-        private schemaArray= (instance: Array<Object>): Object => {
+        private schemaArray= (instance: Array<Object>,
+                              allowAdditionalProperties: (properties:Object) => boolean,
+                              requiredProperties: (properties: string[]) =>  string[]): Object => {
             if (instance.length) {
                 var generator = this;
                 var allProperties = instance.map(function(object) {
-                    return generator.property(object);
+                    return generator.property(object, allowAdditionalProperties, requiredProperties);
                 });
                 var uniqueProperties = this.distinct(allProperties,
                     function(object) { return JSON.stringify(object) });
@@ -236,19 +254,19 @@ module jsonforms.services {
             return (typeof(instance) !== 'undefined') && (instance !== null);
         };
 
-        private distinct = (array: Array<Object>, key: (item: Object) => any): Array<Object> => {
+        private distinct = (array: Array<Object>, discriminator: (item: Object) => any): Array<Object> => {
             var known = {};
             return array.filter(function(item) {
-                var keyValue = key(item);
-                if (known.hasOwnProperty(keyValue)) {
+                var discriminatorValue = discriminator(item);
+                if (known.hasOwnProperty(discriminatorValue)) {
                     return false;
                 } else {
-                    return (known[keyValue] = true);
+                    return (known[discriminatorValue] = true);
                 }
             });
         };
 
-        protected requiredProperties = (properties: Object): Object => {
+        protected requiredProperties = (properties: string[]): string[] => {
             return properties; // all known properties are required by default
         };
 
@@ -262,9 +280,6 @@ module jsonforms.services {
         generateDefaultUISchema = (jsonSchema:any):any =>{
             var uiSchemaElements = [];
             this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
-
-            console.log("generated ui schema: " + JSON.stringify(uiSchemaElements[0]))
-
             return uiSchemaElements[0];
         };
 

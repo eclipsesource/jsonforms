@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-08-17 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.1 - 2015-08-23 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
@@ -589,31 +589,32 @@ var jsonforms;
             function SchemaGenerator() {
                 var _this = this;
                 this.generateDefaultSchema = function (instance) {
-                    var schema = _this.schemaObject(instance);
-                    console.log("generated default schema: " + JSON.stringify(schema));
-                    return schema;
+                    return _this.schemaObject(instance, _this.allowAdditionalProperties, _this.requiredProperties);
                 };
-                this.schemaObject = function (instance) {
-                    var properties = _this.properties(instance);
+                this.generateDefaultSchemaWithOptions = function (instance, allowAdditionalProperties, requiredProperties) {
+                    return _this.schemaObject(instance, allowAdditionalProperties, requiredProperties);
+                };
+                this.schemaObject = function (instance, allowAdditionalProperties, requiredProperties) {
+                    var properties = _this.properties(instance, allowAdditionalProperties, requiredProperties);
                     return {
                         "type": "object",
                         "properties": properties,
-                        "additionalProperties": _this.allowAdditionalProperties(properties),
-                        "required": _this.keys(_this.requiredProperties(properties))
+                        "additionalProperties": allowAdditionalProperties(properties),
+                        "required": requiredProperties(_this.keys(properties))
                     };
                 };
-                this.properties = function (instance) {
+                this.properties = function (instance, allowAdditionalProperties, requiredProperties) {
                     var properties = {};
                     var generator = _this;
                     _this.keys(instance).forEach(function (property) {
-                        properties[property] = generator.property(instance[property]);
+                        properties[property] = generator.property(instance[property], allowAdditionalProperties, requiredProperties);
                     });
                     return properties;
                 };
                 this.keys = function (properties) {
                     return Object.keys(properties);
                 };
-                this.property = function (instance) {
+                this.property = function (instance, allowAdditionalProperties, requiredProperties) {
                     switch (typeof instance) {
                         case "string":
                         case "boolean":
@@ -626,29 +627,29 @@ var jsonforms;
                                 return { "type": "number" };
                             }
                         case "object":
-                            return _this.schemaObjectOrNullOrArray(instance);
+                            return _this.schemaObjectOrNullOrArray(instance, allowAdditionalProperties, requiredProperties);
                         default:
                             return {};
                     }
                 };
-                this.schemaObjectOrNullOrArray = function (instance) {
+                this.schemaObjectOrNullOrArray = function (instance, allowAdditionalProperties, requiredProperties) {
                     if (_this.isNotNull(instance)) {
                         if (_this.isArray(instance)) {
-                            return _this.schemaArray(instance);
+                            return _this.schemaArray(instance, allowAdditionalProperties, requiredProperties);
                         }
                         else {
-                            return _this.schemaObject(instance);
+                            return _this.schemaObject(instance, allowAdditionalProperties, requiredProperties);
                         }
                     }
                     else {
                         return { "type": "null" };
                     }
                 };
-                this.schemaArray = function (instance) {
+                this.schemaArray = function (instance, allowAdditionalProperties, requiredProperties) {
                     if (instance.length) {
                         var generator = _this;
                         var allProperties = instance.map(function (object) {
-                            return generator.property(object);
+                            return generator.property(object, allowAdditionalProperties, requiredProperties);
                         });
                         var uniqueProperties = _this.distinct(allProperties, function (object) { return JSON.stringify(object); });
                         if (uniqueProperties.length == 1) {
@@ -673,15 +674,15 @@ var jsonforms;
                 this.isNotNull = function (instance) {
                     return (typeof (instance) !== 'undefined') && (instance !== null);
                 };
-                this.distinct = function (array, key) {
+                this.distinct = function (array, discriminator) {
                     var known = {};
                     return array.filter(function (item) {
-                        var keyValue = key(item);
-                        if (known.hasOwnProperty(keyValue)) {
+                        var discriminatorValue = discriminator(item);
+                        if (known.hasOwnProperty(discriminatorValue)) {
                             return false;
                         }
                         else {
-                            return (known[keyValue] = true);
+                            return (known[discriminatorValue] = true);
                         }
                     });
                 };
@@ -701,7 +702,6 @@ var jsonforms;
                 this.generateDefaultUISchema = function (jsonSchema) {
                     var uiSchemaElements = [];
                     _this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
-                    console.log("generated ui schema: " + JSON.stringify(uiSchemaElements[0]));
                     return uiSchemaElements[0];
                 };
                 this.generateUISchema = function (jsonSchema, schemaElements, currentRef, schemaName) {

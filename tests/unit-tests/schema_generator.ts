@@ -347,4 +347,32 @@ describe('SchemaGenerator', () => {
         expect(SchemaGenerator.generateDefaultSchema(instance)).toEqual(schema);
     });
 
+    it("generate schema forbidding additional properties and removing a property", function () {
+        var instance = {
+            "property1": "value1",
+            "property2": "value2"
+        };
+        var schema = {
+            "type": "object",
+            "properties": {
+                "property1": {
+                    "type": "string"
+                },
+                "property2": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["property2"]
+        };
+        var allowAdditionalProperties = function(properties:Object): boolean {
+            return false;
+        };
+        var requiredProperties = function(properties: string[]):  string[] {
+            return properties.filter(function(property: string) { return property == 'property2'; });
+        };
+        expect(SchemaGenerator.generateDefaultSchemaWithOptions(instance,
+            allowAdditionalProperties, requiredProperties)).toEqual(schema);
+    });
+
 });
