@@ -29,7 +29,7 @@ class VerticalLayout implements jsonforms.services.IRenderer {
             "elements": renderedElements,
             "size": 99,
             "template":
-                `<fieldset class="col-sm-{{element.size}}">
+                `<fieldset>
                     <recelement ng-repeat="child in element.elements"
                                 element="child"
                                 bindings="bindings"

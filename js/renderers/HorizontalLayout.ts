@@ -38,7 +38,7 @@ class HorizontalLayout implements jsonforms.services.IRenderer {
             "elements": renderedElements,
             "size": maxSize,
             "template":
-                `<fieldset class="col-sm-{{element.size}}">
+                `<fieldset>
                   <div class="row">
                     <recelement ng-repeat="child in element.elements"
                                 element="child"
