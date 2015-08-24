@@ -19,18 +19,22 @@ class ArrayControl implements jsonforms.services.IRenderer {
     render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
 
         var control = this.createTableUIElement(element,dataProvider);
-
-        dataProvider.fetchData().then(data => {
-            control['tableOptions'].gridOptions.data = data;
-        });
+        // init
+        control['tableOptions'].gridOptions.data = dataProvider.data.slice(
+            dataProvider.page * dataProvider.pageSize,
+            dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+        control['tableOptions'].gridOptions['paginationPage'] = dataProvider.page;
+        control['tableOptions'].gridOptions['paginationPageSize'] = dataProvider.pageSize;
 
         return {
             "label": element.label,
             "type": "Control",
-            "tableOptions": control['tableOptions'],
+            "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
-            "template": `<div ui-grid="element['tableOptions']"></div>`
-    };
+            //<div ui-grid="control.tableOptions.gridOptions" ui-grid-auto-resize ui-grid-pagination class="grid"></div>
+
+            "template": `<div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div>`
+        };
     }
 
     //private resolveColumnData(uiPath, data) {
@@ -42,7 +46,7 @@ class ArrayControl implements jsonforms.services.IRenderer {
     //    }
     //}
 
-    private createTableUIElement(element, dataProvider) {
+    private createTableUIElement(element, dataProvider: jsonforms.services.IDataProvider) {
 
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
@@ -52,16 +56,14 @@ class ArrayControl implements jsonforms.services.IRenderer {
             schemaType: "array"
         };
 
-        //var parentScope = this.refResolver.getSchemaRef(path);
-
         var that = this;
         //var prefix = this.refResolver.normalize(parentScope);
-        //var colDefs = element.columns.map(function(col, idx) {
-        //    return {
-        //        field:  that.refResolver.normalize(that.refResolver.getSchemaRef(path + "/columns/" + idx)).replace(prefix + "/", ''),
-        //        displayName: col.label
-        //    }
-        //});
+        var colDefs = element.columns.map(function(col, idx) {
+            return {
+                field:  that.refResolver.normalize(col['scope']['$ref']),
+                displayName: col.label
+            }
+        });
 
         var tableOptions = {
             columns: element.columns,
@@ -71,7 +73,7 @@ class ArrayControl implements jsonforms.services.IRenderer {
                 enableColumnResizing: true,
                 enableAutoResize: true,
                 // TODO: make cell clickable somehow
-                //columnDefs: colDefs,
+                columnDefs: colDefs,
                 data: [],
                 useExternalFiltering: true
             }
@@ -86,6 +88,10 @@ class ArrayControl implements jsonforms.services.IRenderer {
             tableOptions['gridOptions']['paginationPage'] = 1;
         }
 
+        if (dataProvider.totalItems) {
+            tableOptions['gridOptions']['totalItems'] = dataProvider.totalItems;
+        }
+
         // TODO:
         //var firstColumnDef = tableOptions.gridOptions.columnDefs[0];
         //firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", path);
@@ -97,9 +103,7 @@ class ArrayControl implements jsonforms.services.IRenderer {
         uiElement['disablePaginationControls'] = function() {
             tableOptions.gridOptions.enablePaginationControls = false;
         };
-        uiElement['setTotalItems'] = function() {
-            // TODO: determine total items
-        };
+
 
         tableOptions.gridOptions['onRegisterApi'] = function(gridApi) {
             //gridAPI = gridApi;
@@ -107,8 +111,8 @@ class ArrayControl implements jsonforms.services.IRenderer {
                 tableOptions.gridOptions['paginationPage'] = newPage;
                 tableOptions.gridOptions['paginationPageSize'] = pageSize;
                 dataProvider.setPageSize(pageSize);
-                dataProvider.fetchPage(newPage, pageSize).$promise.then(function(newData, headers) {
-                    tableOptions.gridOptions.data = newData; //this.resolveColumnData(path, newData, colDefs);
+                dataProvider.fetchPage(newPage, pageSize).then(newData => {
+                    tableOptions.gridOptions.data = newData;
                 });
             });
         } ;

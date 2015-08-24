@@ -3,8 +3,6 @@ app.run(['RenderService', 'ReferenceResolver', function(RenderService, Reference
 
     function MyControl(refResolver) {
 
-        console.log("myControl triggered");
-
         return {
             priority: 100,
             render: function(element, subSchema, schemaPath, dataProvider) {
