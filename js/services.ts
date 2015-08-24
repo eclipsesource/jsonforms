@@ -16,20 +16,50 @@ module jsonforms.services {
     }
 
     export interface IDataProvider {
-        fetchData()
+        data: any
+        fetchData(): ng.IPromise<any>
         fetchPage(page: number, size: number)
         setPageSize(size: number)
     }
 
+    export class DefaultDataProvider implements  IDataProvider {
+        constructor(private $q: ng.IQService, public data: any) {}
+        fetchData(): ng.IPromise<any> {
+            var p = this.$q.defer();
+            p.resolve(this.data);
+            return p.promise;
+        }
+        setPageSize = () => {
+
+        };
+        fetchPage = (page: number, size: number) => {
+            var p = this.$q.defer();
+            return p.promise;
+        }
+    }
+
+
     export interface IRenderService {
+        registerSchema(schema: SchemaElement): void
         register(renderer: IRenderer): void
-        render(element:jsonforms.services.UISchemaElement, schema, instance, path, dataProvider);
+        render(element:jsonforms.services.UISchemaElement, dataProvider: jsonforms.services.IDataProvider);
     }
 
     export interface IRenderer {
-        render(element: jsonforms.services.UISchemaElement, schema, instance, path: string, dataProvider): any
-        isApplicable(uiElement: IUISchemaElement, schema: SchemaElement, schemaPath: string): boolean
+        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): IResult
+        isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
         priority: number
+    }
+
+    export interface IResult {
+        type: string
+        template?: string
+        templateUrl?: string
+        size: number
+    }
+
+    export interface IContainerResult extends IResult {
+        elements: IResult[]
     }
 
     export interface IReferenceResolver {
@@ -51,22 +81,33 @@ module jsonforms.services {
     }
 
     // TODO: EXPORT
-    export class RenderService {
+    export class RenderService implements  IRenderService {
 
         private renderers: IRenderer[] = [];
-        static $inject = ['$compile', 'ReferenceResolver'];
+        private schema;
+        static $inject = ['ReferenceResolver'];
 
-        // $compile can then be used as this.$compile
-        constructor(private $compile:ng.ICompileService, private refResovler: IReferenceResolver) {
+        constructor(private refResolver: IReferenceResolver) {
         }
 
-        render = (element: IUISchemaElement, schema, instance, uiPath, dataProvider) => {
+        registerSchema = (schema: SchemaElement) => {
+            this.schema = schema
+        };
 
-            var schemaPath = this.refResovler.getSchemaRef(uiPath);
+        render = (element: IUISchemaElement, dataProvider: jsonforms.services.IDataProvider) => {
+
             var foundRenderer;
+            var schemaPath;
+            var subSchema;
+
+            // TODO element must be IControl
+            if (element['scope']) {
+                schemaPath = element['scope']['$ref'];
+                subSchema = this.refResolver.resolveSchema(this.schema, schemaPath);
+            }
 
             for (var i = 0; i < this.renderers.length; i++) {
-                if (this.renderers[i].isApplicable(element, schema, schemaPath)) {
+                if (this.renderers[i].isApplicable(element, subSchema, schemaPath)) {
                     if (foundRenderer == undefined || this.renderers[i].priority > foundRenderer.priority) {
                         foundRenderer = this.renderers[i];
                     }
@@ -77,7 +118,7 @@ module jsonforms.services {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            return foundRenderer.render(element, schema, instance, uiPath, dataProvider);
+            return foundRenderer.render(element, subSchema, schemaPath, dataProvider);
         };
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);

@@ -6,16 +6,16 @@ class DatetimeControl implements jsonforms.services.IRenderer {
 
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+        //var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
         var options = {
             "type": "Control",
             "size": 99,
-            "id": path,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
             "isOpen": false,
+            // TODO: pefix
             "templateUrl": '../templates/datetime.html',
             openDate: function($event) {
                 $event.preventDefault();
@@ -26,13 +26,9 @@ class DatetimeControl implements jsonforms.services.IRenderer {
         return options;
     }
 
-    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string): boolean {
-        var subSchema: SchemaString = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean {
         return uiElement.type == 'Control' && subSchema.type == "string" &&
-            subSchema.format != undefined && subSchema.format == "date-time";
+            subSchema['format'] != undefined && subSchema['format'] == "date-time";
     }
 }
 

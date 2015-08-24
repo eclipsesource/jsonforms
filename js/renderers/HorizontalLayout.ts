@@ -9,7 +9,7 @@ class HorizontalLayout implements jsonforms.services.IRenderer {
 
     priority = 1;
 
-    render = (element:jsonforms.services.UISchemaElement, schema, instance, path:String, dataProvider) => {
+    render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IContainerResult => {
 
         var that = this;
 
@@ -17,9 +17,8 @@ class HorizontalLayout implements jsonforms.services.IRenderer {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
-                var basePath = path + "/elements/";
                 return elements.reduce(function (acc, curr, idx, els) {
-                    acc.push(that.renderServ.render(curr, schema, instance, basePath + idx, dataProvider));
+                    acc.push(that.renderServ.render(curr, dataProvider));
                     return acc;
                 }, []);
             }
@@ -35,11 +34,23 @@ class HorizontalLayout implements jsonforms.services.IRenderer {
         }
 
         return {
-            "type": "HorizontalLayout",
+            "type": "Layout",
             "elements": renderedElements,
-            "size": maxSize
+            "size": maxSize,
+            "template":
+                `<fieldset class="col-sm-{{element.size}}">
+                  <div class="row">
+                    <recelement ng-repeat="child in element.elements"
+                                element="child"
+                                bindings="bindings"
+                                top-open-date="topOpenDate"
+                                top-validate-number="topValidateNumber"
+                                top-validate-integer="topValidateInteger">
+                    </recelement>
+                  </div>
+                </fieldset>`
         };
-    }
+    };
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
         return uiElement.type == "HorizontalLayout";

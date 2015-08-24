@@ -1,5 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/*! jsonforms - v0.0.1 - 2015-08-20 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.1 - 2015-08-24 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
@@ -42,11 +42,12 @@ var JsonFormsDiretiveController = (function () {
             var uiSchemaDeferred = $q.defer();
             $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
                 schema['uiSchema'] = uiSchema;
-                // build mapping of ui paths to schema refs
-                ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
+                //  build mapping of ui paths to schema refs
+                //ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
                 JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
-                    resolvedUISchemaDeferred.resolve(resolvedSchema['uiSchema']);
+                    // TODO: ui schema is now unresolved
+                    resolvedUISchemaDeferred.resolve(uiSchema); //resolvedSchema['uiSchema']);
                 });
             });
             if (uiSchemaMaybe === undefined || uiSchemaMaybe === null || uiSchemaMaybe === "") {
@@ -65,46 +66,18 @@ var JsonFormsDiretiveController = (function () {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
-            var paths = {
-                schema: "#",
-                ui: "#"
-            };
-            $scope['elements'] = [RenderService.render(uiSchema, schema, data, "#", $scope.asyncDataProvider)];
+            var dataProvider;
+            if ($scope.asyncDataProvider) {
+                dataProvider = $scope.asyncDataProvider;
+            }
+            else {
+                dataProvider = new jsonforms.services.DefaultDataProvider($q, data);
+            }
+            RenderService.registerSchema(schema);
+            $scope['elements'] = [RenderService.render(uiSchema, dataProvider)];
         });
-        // TODO
+        // TODO: check if still in use
         $scope['opened'] = false;
-        // TODO: these should be moved to the controls itself, right?
-        //$scope['openDate'] = function ($event, element) {
-        //    $event.preventDefault();
-        //    $event.stopPropagation();
-        //    element.isOpen = true;
-        //};
-        //$scope['validateNumber'] = function (value, element) {
-        //    if (value !== undefined && value !== null && isNaN(value)) {
-        //        element.alerts = [];
-        //        var alert = {
-        //            type: 'danger',
-        //            msg: 'Must be a valid number!'
-        //        };
-        //        element.alerts.push(alert);
-        //        return false;
-        //    }
-        //    element.alerts = [];
-        //    return true;
-        //};
-        //$scope['validateInteger'] = function (value, element) {
-        //    if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
-        //        element.alerts = [];
-        //        var alert = {
-        //            type: 'danger',
-        //            msg: 'Must be a valid integer!'
-        //        };
-        //        element.alerts.push(alert);
-        //        return false;
-        //    }
-        //    element.alerts = [];
-        //    return true;
-        //};
     }
     JsonFormsDiretiveController.prototype.fetchSchema = function () {
         if (this.$scope.schema && this.$scope.asyncSchema()) {
@@ -146,7 +119,7 @@ var JsonFormsDiretiveController = (function () {
         }
         else if (dataProvider) {
             var prom = dataProvider.fetchData();
-            return prom.$promise;
+            return prom;
         }
         else if (this.$scope.data) {
             var p = this.$q.defer();
@@ -217,15 +190,15 @@ jsonFormsDirectives.directive('control', function () {
             },
             replace: true,
             link: function (scope, element) {
-                if (scope.element.templateUrl === undefined) {
-                    var template = $compile(scope.element.template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
-                    element.replaceWith(template);
-                }
-                else {
+                if (scope.element.templateUrl) {
                     $.get(scope.element.templateUrl, function (template) {
                         var compiledTemplate = $compile(template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
                         element.replaceWith(compiledTemplate);
                     });
+                }
+                else {
+                    var template = $compile(scope.element.template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
+                    element.replaceWith(template);
                 }
             }
         };
@@ -241,58 +214,46 @@ var ArrayControl = (function () {
         this.maxSize = 99;
         this.priority = 2;
     }
-    ArrayControl.prototype.isApplicable = function (element, jsonSchema, schemaPath) {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    ArrayControl.prototype.isApplicable = function (element, subSchema, schemaPath) {
         return element.type == 'Control' && subSchema.type == 'array';
     };
-    ArrayControl.prototype.render = function (resolvedElement, schema, instanceData, path, dataProvider) {
-        var control = this.createTableUIElement(resolvedElement, schema, instanceData, path, dataProvider);
-        control['tableOptions'].gridOptions.data = instanceData;
-        control["schemaType"] = "array";
-        control["label"] = resolvedElement['label'];
-        if (dataProvider === undefined) {
-            control["bindings"] = instanceData;
-        }
-        else {
-            control['tableOptions'].gridOptions.data = this.resolveColumnData(path, instanceData);
-        }
+    ArrayControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+        var control = this.createTableUIElement(element, dataProvider);
+        dataProvider.fetchData().then(function (data) {
+            control['tableOptions'].gridOptions.data = data;
+        });
         return {
+            "label": element.label,
             "type": "Control",
-            "elements": [control],
-            "size": this.maxSize
+            "tableOptions": control['tableOptions'],
+            "size": this.maxSize,
+            "template": "<div ui-grid=\"element['tableOptions']\"></div>"
         };
     };
-    ArrayControl.prototype.resolveColumnData = function (uiPath, data) {
-        if (data instanceof Array) {
-            return data;
-        }
-        else {
-            // relative scope
-            return this.refResolver.resolveUi(data, uiPath);
-        }
-    };
-    ArrayControl.prototype.createTableUIElement = function (element, schema, instanceData, path, dataProvider) {
-        if (dataProvider === undefined) {
-            dataProvider = {};
-        }
+    //private resolveColumnData(uiPath, data) {
+    //    if (data instanceof Array) {
+    //        return data;
+    //    } else {
+    //        // relative scope
+    //        return this.refResolver.resolveUi(data, uiPath);
+    //    }
+    //}
+    ArrayControl.prototype.createTableUIElement = function (element, dataProvider) {
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
         var filteringEnabled = false;
         var uiElement = {
             schemaType: "array"
         };
-        var parentScope = this.refResolver.getSchemaRef(path);
+        //var parentScope = this.refResolver.getSchemaRef(path);
         var that = this;
-        var prefix = this.refResolver.normalize(parentScope);
-        var colDefs = element.columns.map(function (col, idx) {
-            return {
-                field: that.refResolver.normalize(that.refResolver.getSchemaRef(path + "/columns/" + idx)).replace(prefix + "/", ''),
-                displayName: col.label
-            };
-        });
+        //var prefix = this.refResolver.normalize(parentScope);
+        //var colDefs = element.columns.map(function(col, idx) {
+        //    return {
+        //        field:  that.refResolver.normalize(that.refResolver.getSchemaRef(path + "/columns/" + idx)).replace(prefix + "/", ''),
+        //        displayName: col.label
+        //    }
+        //});
         var tableOptions = {
             columns: element.columns,
             gridOptions: {
@@ -301,7 +262,7 @@ var ArrayControl = (function () {
                 enableColumnResizing: true,
                 enableAutoResize: true,
                 // TODO: make cell clickable somehow
-                columnDefs: colDefs,
+                //columnDefs: colDefs,
                 data: [],
                 useExternalFiltering: true
             }
@@ -324,15 +285,6 @@ var ArrayControl = (function () {
         uiElement['disablePaginationControls'] = function () {
             tableOptions.gridOptions.enablePaginationControls = false;
         };
-        uiElement['fetchPagedData'] = function (path) {
-            tableOptions.gridOptions.data = this.refResolver.resolve(instanceData, path);
-        };
-        uiElement['fetchFilteredData'] = function (searchTerms) {
-            //var url = EndpointMapping.map(typeName).filter(searchTerms);
-            //$http.get(url).success(function (data) {
-            //    tableOptions.gridOptions.data = data;
-            //});
-        };
         uiElement['setTotalItems'] = function () {
             // TODO: determine total items
         };
@@ -343,7 +295,7 @@ var ArrayControl = (function () {
                 tableOptions.gridOptions['paginationPageSize'] = pageSize;
                 dataProvider.setPageSize(pageSize);
                 dataProvider.fetchPage(newPage, pageSize).$promise.then(function (newData, headers) {
-                    tableOptions.gridOptions.data = this.resolveColumnData(path, newData, colDefs);
+                    tableOptions.gridOptions.data = newData; //this.resolveColumnData(path, newData, colDefs);
                 });
             });
         };
@@ -377,32 +329,24 @@ var BooleanControl = (function () {
         this.refResolver = refResolver;
         this.priority = 2;
     }
-    BooleanControl.prototype.render = function (element, schema, instance, uiPath, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
+    BooleanControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
         return {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            // $$data is brought into scope by the directive by directive
-            "template": "<div class=\"checkbox-inline\">\n            <input type=\"checkbox\" id=\"" + id + "\" class=\"qb-control qb-control-boolean\" data-jsonforms-model/>\n            </div>"
+            path: [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
+            "template": "<div class=\"checkbox-inline\">\n            <input type=\"checkbox\" id=\"" + schemaPath + "\" class=\"qb-control qb-control-boolean\" data-jsonforms-model/>\n            </div>"
         };
     };
-    BooleanControl.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    BooleanControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
         return uiElement.type == 'Control' && subSchema.type == 'boolean';
     };
     return BooleanControl;
 })();
 var app = angular.module('jsonForms.booleanControl', []);
 app.run(['RenderService', 'ReferenceResolver', function (RenderService, ReferenceResolver) {
-        RenderService.register(new BooleanControl((ReferenceResolver)));
+        RenderService.register(new BooleanControl(ReferenceResolver));
     }]);
 
 // Source: js/renderers/DatetimeControl.js
@@ -412,16 +356,16 @@ var DatetimeControl = (function () {
         this.refResolver = refResolver;
         this.priority = 3;
     }
-    DatetimeControl.prototype.render = function (element, schema, instance, uiPath, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
+    DatetimeControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+        //var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
         var options = {
             "type": "Control",
             "size": 99,
-            "id": path,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
             "isOpen": false,
+            // TODO: pefix
             "templateUrl": '../templates/datetime.html',
             openDate: function ($event) {
                 $event.preventDefault();
@@ -431,13 +375,9 @@ var DatetimeControl = (function () {
         };
         return options;
     };
-    DatetimeControl.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    DatetimeControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
         return uiElement.type == 'Control' && subSchema.type == "string" &&
-            subSchema.format != undefined && subSchema.format == "date-time";
+            subSchema['format'] != undefined && subSchema['format'] == "date-time";
     };
     return DatetimeControl;
 })();
@@ -453,27 +393,21 @@ var EnumControl = (function () {
         this.refResolver = refResolver;
         this.priority = 3;
     }
-    EnumControl.prototype.render = function (element, schema, instance, uiPath, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
-        var enums = element['scope'].enum;
-        return {
+    EnumControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+        var enums = subSchema.enum;
+        var result = {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
             "options": enums,
-            "template": "<select ng-options=\"option as option for option in element.options\" id=\"" + id + "\" class=\"form-control qb-control qb-control-enum\" data-jsonforms-model ></select>"
+            "template": "<select ng-options=\"option as option for option in element.options\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-enum\" data-jsonforms-model ></select>"
         };
+        return result;
     };
-    EnumControl.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
+    EnumControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
         // TODO: enum are valid for any instance type, not just strings
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
         return uiElement.type == 'Control' && subSchema.hasOwnProperty('enum');
     };
     return EnumControl;
@@ -491,16 +425,15 @@ var HorizontalLayout = (function () {
         var _this = this;
         this.renderServ = renderServ;
         this.priority = 1;
-        this.render = function (element, schema, instance, path, dataProvider) {
+        this.render = function (element, subSchema, schemaPath, dataProvider) {
             var that = _this;
             var renderElements = function (elements) {
                 if (elements === undefined || elements.length == 0) {
                     return [];
                 }
                 else {
-                    var basePath = path + "/elements/";
                     return elements.reduce(function (acc, curr, idx, els) {
-                        acc.push(that.renderServ.render(curr, schema, instance, basePath + idx, dataProvider));
+                        acc.push(that.renderServ.render(curr, dataProvider));
                         return acc;
                     }, []);
                 }
@@ -514,9 +447,10 @@ var HorizontalLayout = (function () {
                 renderedElements[j].size = individualSize;
             }
             return {
-                "type": "HorizontalLayout",
+                "type": "Layout",
                 "elements": renderedElements,
-                "size": maxSize
+                "size": maxSize,
+                "template": "<fieldset class=\"col-sm-{{element.size}}\">\n                  <div class=\"row\">\n                    <recelement ng-repeat=\"child in element.elements\"\n                                element=\"child\"\n                                bindings=\"bindings\"\n                                top-open-date=\"topOpenDate\"\n                                top-validate-number=\"topValidateNumber\"\n                                top-validate-integer=\"topValidateInteger\">\n                    </recelement>\n                  </div>\n                </fieldset>"
             };
         };
     }
@@ -537,17 +471,16 @@ var IntegerControl = (function () {
         this.refResolver = refResolver;
         this.priority = 2;
     }
-    IntegerControl.prototype.render = function (element, schema, instance, uiPath, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
+    IntegerControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+        //var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
+        //var id = path;
         var options = {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            "template": "<input type=\"text\" id=\"" + id + "\" class=\"form-control qb-control qb-control-integer\" ui-validate=\"'element.validate($value)'\" data-jsonforms-model/>",
+            path: [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
+            "template": "<input type=\"text\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-integer\" ui-validate=\"'element.validate($value)'\" data-jsonforms-model/>",
             "alerts": [],
             validate: function (value) {
                 if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
@@ -563,13 +496,16 @@ var IntegerControl = (function () {
                 return true;
             }
         };
+        dataProvider.fetchData().then(function (data) {
+            options['instance'] = data;
+        });
         return options;
     };
-    IntegerControl.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    IntegerControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
+        //var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        //if (subSchema == undefined) {
+        //    return false;
+        //}
         return uiElement.type == 'Control' && subSchema.type == 'integer';
     };
     return IntegerControl;
@@ -579,51 +515,22 @@ app.run(['RenderService', 'ReferenceResolver', function (RenderService, Referenc
         RenderService.register(new IntegerControl((ReferenceResolver)));
     }]);
 
-// Source: js/renderers/Label.js
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../services.ts"/>
-var Label = (function () {
-    function Label() {
-        this.priority = 1;
-    }
-    Label.prototype.render = function (element, schema, instance, path, dataProvider) {
-        var label = {};
-        label["text"] = element['text'];
-        return {
-            "type": "Custom",
-            "elements": [label],
-            // TODO
-            "size": 99
-        };
-    };
-    Label.prototype.isApplicable = function (element) {
-        return element.type == "Label";
-    };
-    return Label;
-})();
-var app = angular.module('jsonForms.label', ['jsonForms.services']);
-app.run(['RenderService', function (RenderService) {
-        RenderService.register(new Label());
-    }]);
-
 // Source: js/renderers/NumberControl.js
 ///<reference path="..\services.ts"/>
 var NumberControl = (function () {
-    function NumberControl(refResolver) {
+    function NumberControl(refResolver, scope) {
         this.refResolver = refResolver;
+        this.scope = scope;
         this.priority = 2;
     }
-    NumberControl.prototype.render = function (element, schema, instance, uiPath, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
+    NumberControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
         var options = {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            "template": "<input type=\"text\" id=\"" + id + "\" class=\"form-control qb-control qb-control-number\" ui-validate=\"'element.validate($value)'\" data-jsonforms-model/>",
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
+            "template": "<input type=\"text\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-number\" ui-validate=\"'element.validate($value)'\" data-jsonforms-model=\"\"/>",
             alerts: [{ "type": "danger", "msg": "Must be a valid number!" }],
             validate: function (value) {
                 if (value !== undefined && value !== null && isNaN(value)) {
@@ -641,18 +548,14 @@ var NumberControl = (function () {
         };
         return options;
     };
-    NumberControl.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    NumberControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
         return uiElement.type == 'Control' && subSchema.type == 'number';
     };
     return NumberControl;
 })();
 var app = angular.module('jsonForms.numberControl', []);
-app.run(['RenderService', 'ReferenceResolver', function (RenderService, ReferenceResolver) {
-        RenderService.register(new NumberControl((ReferenceResolver)));
+app.run(['RenderService', 'ReferenceResolver', '$rootScope', function (RenderService, ReferenceResolver, scope) {
+        RenderService.register(new NumberControl(ReferenceResolver, scope));
     }]);
 
 // Source: js/renderers/StringControl.js
@@ -662,24 +565,22 @@ var StringControl = (function () {
         this.refResolver = refResolver;
         this.priority = 2;
     }
-    StringControl.prototype.render = function (element, schema, instance, uiPath, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
-        return {
+    StringControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+        var result = {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            "template": "<input type=\"text\" id=\"" + id + "\" class=\"form-control qb-control qb-control-string\" data-jsonforms-model/>"
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
+            "template": "<input type=\"text\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-string\" data-jsonforms-model/>",
+            "alerts": []
         };
+        dataProvider.fetchData().then(function (data) {
+            result['instance'] = data;
+        });
+        return result;
     };
-    StringControl.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    StringControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
         return uiElement.type == 'Control' && subSchema.type == 'string';
     };
     return StringControl;
@@ -697,25 +598,25 @@ var VerticalLayout = (function () {
         this.renderService = renderService;
         this.priority = 1;
     }
-    VerticalLayout.prototype.render = function (element, schema, instance, path, dataProvider) {
+    VerticalLayout.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
         var that = this;
         var renderElements = function (elements) {
             if (elements === undefined || elements.length == 0) {
                 return [];
             }
             else {
-                var basePath = path + "/elements/";
                 return elements.reduce(function (acc, curr, idx, els) {
-                    acc.push(that.renderService.render(curr, schema, instance, basePath + idx, dataProvider));
+                    acc.push(that.renderService.render(curr, dataProvider));
                     return acc;
                 }, []);
             }
         };
         var renderedElements = renderElements(element.elements);
         return {
-            "type": "VerticalLayout",
+            "type": "Layout",
             "elements": renderedElements,
-            "size": 99
+            "size": 99,
+            "template": "<fieldset class=\"col-sm-{{element.size}}\">\n                    <recelement ng-repeat=\"child in element.elements\"\n                                element=\"child\"\n                                bindings=\"bindings\"\n                                top-open-date=\"topOpenDate\"\n                                top-validate-number=\"topValidateNumber\"\n                                top-validate-integer=\"topValidateInteger\">\n                    </recelement>\n                </fieldset>"
         };
     };
     VerticalLayout.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
@@ -726,6 +627,32 @@ var VerticalLayout = (function () {
 var app = angular.module('jsonForms.verticalLayout', ['jsonForms.services']);
 app.run(['RenderService', function (RenderService) {
         RenderService.register(new VerticalLayout(RenderService));
+    }]);
+
+// Source: js/renderers/label.js
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../services.ts"/>
+var Label = (function () {
+    function Label() {
+        this.priority = 1;
+    }
+    Label.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+        var text = element['text'];
+        var size = 99;
+        return {
+            "type": "Widget",
+            "size": size,
+            "template": " <div class=\"qb-label\">{{text}}</div>"
+        };
+    };
+    Label.prototype.isApplicable = function (element) {
+        return element.type == "Label";
+    };
+    return Label;
+})();
+var app = angular.module('jsonForms.label', ['jsonForms.services']);
+app.run(['RenderService', function (RenderService) {
+        RenderService.register(new Label());
     }]);
 
 // Source: js/services.js
@@ -745,19 +672,46 @@ var jsonforms;
             return UISchemaElement;
         })();
         services.UISchemaElement = UISchemaElement;
+        var DefaultDataProvider = (function () {
+            function DefaultDataProvider($q, data) {
+                var _this = this;
+                this.$q = $q;
+                this.data = data;
+                this.setPageSize = function () {
+                };
+                this.fetchPage = function (page, size) {
+                    var p = _this.$q.defer();
+                    return p.promise;
+                };
+            }
+            DefaultDataProvider.prototype.fetchData = function () {
+                var p = this.$q.defer();
+                p.resolve(this.data);
+                return p.promise;
+            };
+            return DefaultDataProvider;
+        })();
+        services.DefaultDataProvider = DefaultDataProvider;
         // TODO: EXPORT
         var RenderService = (function () {
-            // $compile can then be used as this.$compile
-            function RenderService($compile, refResovler) {
+            function RenderService(refResolver) {
                 var _this = this;
-                this.$compile = $compile;
-                this.refResovler = refResovler;
+                this.refResolver = refResolver;
                 this.renderers = [];
-                this.render = function (element, schema, instance, uiPath, schemaPath, dataProvider) {
-                    var schemaPath = _this.refResovler.getSchemaRef(uiPath);
+                this.registerSchema = function (schema) {
+                    _this.schema = schema;
+                };
+                this.render = function (element, dataProvider) {
                     var foundRenderer;
+                    var schemaPath;
+                    var subSchema;
+                    // TODO element must be IControl
+                    if (element['scope']) {
+                        schemaPath = element['scope']['$ref'];
+                        subSchema = _this.refResolver.resolveSchema(_this.schema, schemaPath);
+                    }
                     for (var i = 0; i < _this.renderers.length; i++) {
-                        if (_this.renderers[i].isApplicable(element, schema, schemaPath)) {
+                        if (_this.renderers[i].isApplicable(element, subSchema, schemaPath)) {
                             if (foundRenderer == undefined || _this.renderers[i].priority > foundRenderer.priority) {
                                 foundRenderer = _this.renderers[i];
                             }
@@ -766,13 +720,13 @@ var jsonforms;
                     if (foundRenderer === undefined) {
                         throw new Error("No applicable renderer found for element " + JSON.stringify(element));
                     }
-                    return foundRenderer.render(element, schema, instance, uiPath, schemaPath, dataProvider);
+                    return foundRenderer.render(element, subSchema, schemaPath, dataProvider);
                 };
                 this.register = function (renderer) {
                     _this.renderers.push(renderer);
                 };
             }
-            RenderService.$inject = ['$compile', 'ReferenceResolver'];
+            RenderService.$inject = ['ReferenceResolver'];
             return RenderService;
         })();
         services.RenderService = RenderService;
@@ -1029,7 +983,7 @@ $templateCache.put('templates/datetime.html',
 
 
   $templateCache.put('templates/element.html',
-    "<recursive><div ng-if=\"element.type=='Label'\" class=\"col-sm-{{element.size}} qb-label\">{{element.elements[0].text}}</div><div ng-if=\"element.type=='Control'\" class=\"col-sm-{{element.size}} form-group top-buffer\"><label ng-if=\"element.label\" for=\"element.id\">{{element.label}}</label><alert ng-repeat=\"alert in element.alerts\" type=\"{{alert.type}}\" class=\"top-buffer-s qb-alert\">{{alert.msg}}</alert><dynamic-widget element=\"element\"></div><!--<control ng-if=\"element.type=='Control'\"--><!--control=\"element.elements[0]\"--><!--bindings=\"element.elements[0].bindings\"--><!--top-open-date=\"topOpenDate\"--><!--top-validate-number=\"topValidateNumber\"--><!--top-validate-integer=\"topValidateInteger\"--><!--class=\"col-sm-{{element.size}}\">--><!--</control>--><fieldset ng-if=\"element.type=='HorizontalLayout'\" class=\"col-sm-{{element.size}}\"><div class=\"row\"><recelement ng-repeat=\"child in element.elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\"></recelement></div></fieldset><fieldset ng-if=\"element.type=='VerticalLayout'\" class=\"col-sm-{{element.size}}\"><recelement ng-repeat=\"child in element.elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"topOpenDate\" top-validate-number=\"topValidateNumber\" top-validate-integer=\"topValidateInteger\"></recelement></fieldset></recursive>"
+    "<recursive><div ng-if=\"element.type=='Widget'\" class=\"col-sm-{{element.size}} qb-label\">{{element.elements[0].text}}</div><div ng-if=\"element.type=='Control'\" class=\"col-sm-{{element.size}} form-group top-buffer\"><div class=\"row\"><label ng-if=\"element.label\" for=\"element.id\">{{element.label}}</label></div><div class=\"row\" style=\"padding-right: 1em\"><dynamic-widget element=\"element\"></div><div class=\"row\" style=\"padding-right: 1em\"><alert ng-repeat=\"alert in element.alerts\" type=\"{{alert.type}}\" class=\"top-buffer-s qb-alert\">{{alert.msg}}</alert></div></div><div ng-if=\"element.type=='Layout'\" class=\"col-sm-{{element.size}}\"><dynamic-widget element=\"element\"></div><!--<fieldset ng-if=\"element.type=='HorizontalLayout'\" class=\"col-sm-{{element.size}}\">--><!--<div class=\"row\">--><!--<recelement ng-repeat=\"child in element.elements\"--><!--element=\"child\"--><!--bindings=\"bindings\"--><!--top-open-date=\"topOpenDate\"--><!--top-validate-number=\"topValidateNumber\"--><!--top-validate-integer=\"topValidateInteger\">--><!--</recelement>--><!--</div>--><!--</fieldset>--><!----><!--<fieldset ng-if=\"element.type=='VerticalLayout'\" class=\"col-sm-{{element.size}}\">--><!--<recelement ng-repeat=\"child in element.elements\"--><!--element=\"child\"--><!--bindings=\"bindings\"--><!--top-open-date=\"topOpenDate\"--><!--top-validate-number=\"topValidateNumber\"--><!--top-validate-integer=\"topValidateInteger\">--><!----><!--</recelement>--><!--</fieldset>--></recursive>"
   );
 
 

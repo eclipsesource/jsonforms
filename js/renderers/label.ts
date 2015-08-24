@@ -5,15 +5,14 @@ class Label implements jsonforms.services.IRenderer {
 
     priority = 1;
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, path: string, dataProvider) {
-        var label = {};
-        label["text"] = element['text'];
+    render(element:jsonforms.services.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+        var text = element['text'];
+        var size = 99;
 
         return {
-            "type": "Custom",
-            "elements": [label],
-            // TODO
-            "size": 99,
+            "type": "Widget",
+            "size": size,
+            "template": ` <div class="qb-label">{{text}}</div>`
         };
     }
 

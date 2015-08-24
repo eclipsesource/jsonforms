@@ -1,36 +1,46 @@
 <recursive>
 
-    <div ng-if="element.type=='Label'" class="col-sm-{{element.size}} qb-label">
+    <div ng-if="element.type=='Widget'" class="col-sm-{{element.size}} qb-label">
         {{element.elements[0].text}}
     </div>
 
     <div ng-if="element.type=='Control'" class="col-sm-{{element.size}} form-group top-buffer">
-        <label ng-if="element.label" for="element.id">{{element.label}}</label>
-        <alert ng-repeat="alert in element.alerts" type="{{alert.type}}" class="top-buffer-s qb-alert">{{alert.msg}}</alert>
+        <div class="row">
+            <label ng-if="element.label" for="element.id">{{element.label}}</label>
+        </div>
+        <div class="row" style="padding-right: 1em">
+            <dynamic-widget element="element" />
+        </div>
+        <div class="row" style="padding-right: 1em">
+            <alert ng-repeat="alert in element.alerts" type="{{alert.type}}" class="top-buffer-s qb-alert">{{alert.msg}}</alert>
+        </div>
+    </div>
+
+    <div ng-if="element.type=='Layout'" class="col-sm-{{element.size}}">
         <dynamic-widget element="element" />
     </div>
 
-    <fieldset ng-if="element.type=='HorizontalLayout'" class="col-sm-{{element.size}}">
-    <div class="row">
-        <recelement ng-repeat="child in element.elements"
-                    element="child"
-                    bindings="bindings"
-                    top-open-date="topOpenDate"
-                    top-validate-number="topValidateNumber"
-                    top-validate-integer="topValidateInteger">
-        </recelement>
-    </div>
-</fieldset>
-
-    <fieldset ng-if="element.type=='VerticalLayout'" class="col-sm-{{element.size}}">
-          <recelement ng-repeat="child in element.elements"
-                      element="child"
-                      bindings="bindings"
-                      top-open-date="topOpenDate"
-                      top-validate-number="topValidateNumber"
-                      top-validate-integer="topValidateInteger">
-
-          </recelement>
-    </fieldset>
+    <!--<fieldset ng-if="element.type=='HorizontalLayout'" class="col-sm-{{element.size}}">-->
+    <!--<div class="row">-->
+        <!--<recelement ng-repeat="child in element.elements"-->
+                    <!--element="child"-->
+                    <!--bindings="bindings"-->
+                    <!--top-open-date="topOpenDate"-->
+                    <!--top-validate-number="topValidateNumber"-->
+                    <!--top-validate-integer="topValidateInteger">-->
+        <!--</recelement>-->
+    <!--</div>-->
+<!--</fieldset>-->
+<!---->
+    <!--<fieldset ng-if="element.type=='VerticalLayout'" class="col-sm-{{element.size}}">-->
+          <!--<recelement ng-repeat="child in element.elements"-->
+                      <!--element="child"-->
+                      <!--bindings="bindings"-->
+                      <!--top-open-date="topOpenDate"-->
+                      <!--top-validate-number="topValidateNumber"-->
+                      <!--top-validate-integer="topValidateInteger">-->
+<!---->
+          <!--</recelement>-->
+    <!--</fieldset>-->
     
 </recursive>

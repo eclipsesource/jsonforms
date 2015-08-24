@@ -1,5 +1,6 @@
 interface SchemaElement{
     type?: string;
+    enum?: SchemaElement[]
 }
 
 interface SchemaObject extends SchemaElement{
