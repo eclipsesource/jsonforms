@@ -12,49 +12,41 @@ class ArrayControl implements jsonforms.services.IRenderer {
 
     }
 
-    isApplicable(element: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
         return element.type == 'Control' && subSchema.type == 'array';
     }
 
-    render(resolvedElement: jsonforms.services.UISchemaElement, schema, instanceData, path: string, dataProvider) {
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
 
-        var control = this.createTableUIElement(resolvedElement, schema, instanceData, path, dataProvider);
-
-        control['tableOptions'].gridOptions.data = instanceData;
-        control["schemaType"] = "array";
-        control["label"] = resolvedElement['label'];
-
-        if (dataProvider === undefined) {
-            control["bindings"] = instanceData;
-        } else {
-            control['tableOptions'].gridOptions.data = this.resolveColumnData(path, instanceData);
-        }
+        var control = this.createTableUIElement(element,dataProvider);
+        // init
+        control['tableOptions'].gridOptions.data = dataProvider.data.slice(
+            dataProvider.page * dataProvider.pageSize,
+            dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+        control['tableOptions'].gridOptions['paginationPage'] = dataProvider.page;
+        control['tableOptions'].gridOptions['paginationPageSize'] = dataProvider.pageSize;
 
         return {
+            "label": element.label,
             "type": "Control",
-            "elements": [control],
-            "size": this.maxSize
+            "gridOptions": control['tableOptions']['gridOptions'],
+            "size": this.maxSize,
+            //<div ui-grid="control.tableOptions.gridOptions" ui-grid-auto-resize ui-grid-pagination class="grid"></div>
+
+            "template": `<div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div>`
         };
     }
 
-    private resolveColumnData(uiPath, data) {
-        if (data instanceof Array) {
-            return data;
-        } else {
-            // relative scope
-            return this.refResolver.resolveUi(data, uiPath);
-        }
-    }
+    //private resolveColumnData(uiPath, data) {
+    //    if (data instanceof Array) {
+    //        return data;
+    //    } else {
+    //        // relative scope
+    //        return this.refResolver.resolveUi(data, uiPath);
+    //    }
+    //}
 
-    private createTableUIElement(element, schema, instanceData, path, dataProvider) {
-
-        if (dataProvider === undefined) {
-            dataProvider = {};
-        }
+    private createTableUIElement(element, dataProvider: jsonforms.services.IDataProvider) {
 
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
@@ -64,13 +56,11 @@ class ArrayControl implements jsonforms.services.IRenderer {
             schemaType: "array"
         };
 
-        var parentScope = this.refResolver.getSchemaRef(path);
-
         var that = this;
-        var prefix = this.refResolver.normalize(parentScope);
+        //var prefix = this.refResolver.normalize(parentScope);
         var colDefs = element.columns.map(function(col, idx) {
             return {
-                field:  that.refResolver.normalize(that.refResolver.getSchemaRef(path + "/columns/" + idx)).replace(prefix + "/", ''),
+                field:  that.refResolver.normalize(col['scope']['$ref']),
                 displayName: col.label
             }
         });
@@ -98,6 +88,10 @@ class ArrayControl implements jsonforms.services.IRenderer {
             tableOptions['gridOptions']['paginationPage'] = 1;
         }
 
+        if (dataProvider.totalItems) {
+            tableOptions['gridOptions']['totalItems'] = dataProvider.totalItems;
+        }
+
         // TODO:
         //var firstColumnDef = tableOptions.gridOptions.columnDefs[0];
         //firstColumnDef.cellTemplate = firstColumnDef.cellTemplate.replace("<<TYPE>>", path);
@@ -109,18 +103,7 @@ class ArrayControl implements jsonforms.services.IRenderer {
         uiElement['disablePaginationControls'] = function() {
             tableOptions.gridOptions.enablePaginationControls = false;
         };
-        uiElement['fetchPagedData'] = function(path) {
-            tableOptions.gridOptions.data = this.refResolver.resolve(instanceData, path);
-        };
-        uiElement['fetchFilteredData'] = function(searchTerms) {
-            //var url = EndpointMapping.map(typeName).filter(searchTerms);
-            //$http.get(url).success(function (data) {
-            //    tableOptions.gridOptions.data = data;
-            //});
-        };
-        uiElement['setTotalItems'] = function() {
-            // TODO: determine total items
-        };
+
 
         tableOptions.gridOptions['onRegisterApi'] = function(gridApi) {
             //gridAPI = gridApi;
@@ -128,8 +111,8 @@ class ArrayControl implements jsonforms.services.IRenderer {
                 tableOptions.gridOptions['paginationPage'] = newPage;
                 tableOptions.gridOptions['paginationPageSize'] = pageSize;
                 dataProvider.setPageSize(pageSize);
-                dataProvider.fetchPage(newPage, pageSize).$promise.then(function(newData, headers) {
-                    tableOptions.gridOptions.data = this.resolveColumnData(path, newData, colDefs);
+                dataProvider.fetchPage(newPage, pageSize).then(newData => {
+                    tableOptions.gridOptions.data = newData;
                 });
             });
         } ;

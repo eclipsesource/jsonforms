@@ -6,28 +6,22 @@ class EnumControl implements jsonforms.services.IRenderer {
 
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
-        var enums = element['scope'].enum;
-        return {
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+        var enums = subSchema.enum;
+        var result ={
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
             "options": enums,
-            "template": `<select ng-options="option as option for option in element.options" id="${id}" class="form-control qb-control qb-control-enum" data-jsonforms-model ></select>`
+            "template": `<select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control qb-control qb-control-enum" data-jsonforms-model ></select>`
         };
+        return result;
     }
 
-    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string): boolean {
+    isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean {
         // TODO: enum are valid for any instance type, not just strings
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
         return uiElement.type == 'Control' && subSchema.hasOwnProperty('enum');
     }
 }

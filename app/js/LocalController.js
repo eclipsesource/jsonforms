@@ -79,26 +79,22 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         "items": $scope.schema
     };
     $scope.usersUiSchema = {
-        "elements": [
+        "type": "Control",
+        "scope": {
+            "$ref": "#"
+        },
+        "columns": [
             {
-                "type": "Control",
+                "label": "Name",
                 "scope": {
-                    "$ref": "#/items"
-                },
-                "columns": [
-                    {
-                        "label": "Name",
-                        "scope": {
-                            "$ref": "#/items/properties/name"
-                        }
-                    },
-                    {
-                        "label": "Age",
-                        "scope": {
-                            "$ref": "#/items/properties/age"
-                        }
-                    }
-                ]
+                    "$ref": "#/items/properties/name"
+                }
+            },
+            {
+                "label": "Age",
+                "scope": {
+                    "$ref": "#/items/properties/age"
+                }
             }
         ]
     };
@@ -107,7 +103,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         name: 'John Doe',
         age: 36,
         height: "1.76",
-        vegetarian: true,
+        vegetarian: false,
         birthDate: "02.06.1985",
         nationality: "US"
     };
@@ -120,6 +116,38 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         {
             name: 'Jimmy',
             age: 34
+        },
+        {
+            name: 'Max',
+            age: 35
+        },
+        {
+            name: 'Jonas',
+            age: 34
+        },
+        {
+            name: 'Edgar',
+            age: 30
+        },
+        {
+            name: 'Eugen',
+            age: 28
+        },
+        {
+            name: 'Johannes',
+            age: 26
+        },
+        {
+            name: 'Alex',
+            age: 25
+        },
+        {
+            name: 'Stefan',
+            age: 27
+        },
+        {
+            name: 'Eva',
+            age: 30
         }
     ];
 

@@ -7,7 +7,7 @@ class VerticalLayout implements jsonforms.services.IRenderer {
 
     priority = 1;
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, path: string, dataProvider) {
+    render(element:jsonforms.services.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IContainerResult{
 
         var that = this;
 
@@ -15,9 +15,8 @@ class VerticalLayout implements jsonforms.services.IRenderer {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
-                var basePath = path + "/elements/";
                 return elements.reduce(function (acc, curr, idx, els) {
-                    acc.push(that.renderService.render(curr, schema, instance, basePath + idx, dataProvider));
+                    acc.push(that.renderService.render(curr, dataProvider));
                     return acc;
                 }, []);
             }
@@ -26,9 +25,19 @@ class VerticalLayout implements jsonforms.services.IRenderer {
         var renderedElements = renderElements(element.elements);
 
         return {
-            "type": "VerticalLayout",
+            "type": "Layout",
             "elements": renderedElements,
-            "size": 99
+            "size": 99,
+            "template":
+                `<fieldset>
+                    <recelement ng-repeat="child in element.elements"
+                                element="child"
+                                bindings="bindings"
+                                top-open-date="topOpenDate"
+                                top-validate-number="topValidateNumber"
+                                top-validate-integer="topValidateInteger">
+                    </recelement>
+                </fieldset>`
         };
     }
 

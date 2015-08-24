@@ -6,17 +6,16 @@ class IntegerControl implements jsonforms.services.IRenderer {
 
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
+    render(element:jsonforms.services.UISchemaElement, subSchema, schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
+        //var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
+        //var id = path;
         var options = {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            "template": `<input type="text" id="${id}" class="form-control qb-control qb-control-integer" ui-validate="\'element.validate($value)\'" data-jsonforms-model/>`,
+            path: [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
+            "template": `<input type="text" id="${schemaPath}" class="form-control qb-control qb-control-integer" ui-validate="\'element.validate($value)\'" data-jsonforms-model/>`,
             "alerts": [],
             validate: function (value) {
                 if (value !== undefined && value !== null && (isNaN(value) || (value !== "" && !(/^\d+$/.test(value))))) {
@@ -32,14 +31,17 @@ class IntegerControl implements jsonforms.services.IRenderer {
                 return true;
             }
         };
+        dataProvider.fetchData().then(data => {
+            options['instance'] = data;
+        });
         return options;
     }
 
-    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
+        //var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
+        //if (subSchema == undefined) {
+        //    return false;
+        //}
         return uiElement.type == 'Control' && subSchema.type == 'integer';
     }
 }

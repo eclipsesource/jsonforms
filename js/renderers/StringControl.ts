@@ -6,25 +6,23 @@ class StringControl implements jsonforms.services.IRenderer {
 
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
-        return {
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+        var result = {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            "template": `<input type="text" id="${id}" class="form-control qb-control qb-control-string" data-jsonforms-model/>`
+            "path": [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
+            "template": `<input type="text" id="${schemaPath}" class="form-control qb-control qb-control-string" data-jsonforms-model/>`,
+            "alerts": []
         };
+        dataProvider.fetchData().then(data => {
+           result['instance'] = data;
+        });
+        return result;
     }
 
-    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
         return uiElement.type == 'Control' && subSchema.type == 'string';
     }
 

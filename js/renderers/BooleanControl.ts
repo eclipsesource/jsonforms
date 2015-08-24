@@ -6,28 +6,20 @@ class BooleanControl implements jsonforms.services.IRenderer {
 
     constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
 
-    render(element:jsonforms.services.UISchemaElement, schema, instance, uiPath: string, dataProvider) {
-        var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var id = path;
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
         return {
             "type": "Control",
             "size": 99,
-            "id": id,
-            "path": path,
             "label": element['label'],
-            "instance": instance,
-            // $$data is brought into scope by the directive by directive
+            path: [this.refResolver.normalize(schemaPath)],
+            "instance": dataProvider.data,
             "template": `<div class="checkbox-inline">
-            <input type="checkbox" id="${id}" class="qb-control qb-control-boolean" data-jsonforms-model/>
+            <input type="checkbox" id="${schemaPath}" class="qb-control qb-control-boolean" data-jsonforms-model/>
             </div>`
         };
     }
 
-    isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
-        var subSchema = this.refResolver.resolveSchema(jsonSchema, schemaPath);
-        if (subSchema == undefined) {
-            return false;
-        }
+    isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
         return uiElement.type == 'Control' && subSchema.type == 'boolean';
     }
 }
@@ -35,5 +27,5 @@ class BooleanControl implements jsonforms.services.IRenderer {
 var app = angular.module('jsonForms.booleanControl', []);
 
 app.run(['RenderService', 'ReferenceResolver', function(RenderService, ReferenceResolver) {
-    RenderService.register(new BooleanControl((ReferenceResolver)));
+    RenderService.register(new BooleanControl(ReferenceResolver));
 }]);

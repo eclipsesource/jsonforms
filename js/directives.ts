@@ -27,11 +27,12 @@ class JsonFormsDiretiveController {
 
             $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
                 schema['uiSchema'] = uiSchema;
-                // build mapping of ui paths to schema refs
-                ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
+                //  build mapping of ui paths to schema refs
+                //ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
                 JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
-                    resolvedUISchemaDeferred.resolve(resolvedSchema['uiSchema']);
+                    // TODO: ui schema is now unresolved
+                    resolvedUISchemaDeferred.resolve(uiSchema); //resolvedSchema['uiSchema']);
                 });
             });
 
@@ -53,7 +54,15 @@ class JsonFormsDiretiveController {
             var uiSchema = values[1];
             var data = values[2];
 
-            $scope['elements'] = [RenderService.render(uiSchema, schema, data,  "#", $scope.asyncDataProvider)];
+            var dataProvider: jsonforms.services.IDataProvider;
+            if ($scope.asyncDataProvider) {
+                dataProvider = $scope.asyncDataProvider;
+            } else {
+                dataProvider = new jsonforms.services.DefaultDataProvider($q, data);
+            }
+
+            RenderService.registerSchema(schema);
+            $scope['elements'] = [RenderService.render(uiSchema, dataProvider)];
         });
 
         // TODO: check if still in use
@@ -101,7 +110,7 @@ class JsonFormsDiretiveController {
             throw new Error("You cannot specify both the 'data' and the 'async-data-provider' attribute at the same time.")
         } else if (dataProvider) {
             var prom = dataProvider.fetchData();
-            return prom.$promise;
+            return prom;
         } else if (this.$scope.data) {
             var p = this.$q.defer();
             p.resolve(this.$scope.data);
@@ -186,14 +195,14 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
         },
         replace: true,
         link: function(scope, element) {
-            if (scope.element.templateUrl === undefined) {
-                var template = $compile(scope.element.template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
-                element.replaceWith(template);
-            } else {
+            if (scope.element.templateUrl) {
                 $.get(scope.element.templateUrl, function(template) {
                     var compiledTemplate = $compile(template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
                     element.replaceWith(compiledTemplate);
                 })
+            } else {
+                var template = $compile(scope.element.template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
+                element.replaceWith(template);
             }
         }
     }
