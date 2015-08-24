@@ -31,10 +31,6 @@ angular.module('makeithappen', [
             templateUrl: 'templates/defaultui.html',
             controller: 'DefaultUISchemaController'
         });
-        $routeProvider.when('/demo', {
-            templateUrl: 'templates/demo.html',
-            controller: 'DemoController'
-        });
         $routeProvider.otherwise({
             redirectTo: '/local'
         });    }
