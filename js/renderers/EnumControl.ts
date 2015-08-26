@@ -1,23 +1,15 @@
 ///<reference path="..\services.ts"/>
 
-class EnumControl implements jsonforms.services.IRenderer {
+class EnumControl implements JSONForms.IRenderer {
 
     priority = 3;
 
-    constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
-
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IResult {
         var enums = subSchema.enum;
-        var result ={
-            "type": "Control",
-            "size": 99,
-            "label": element['label'],
-            "path": [this.refResolver.normalize(schemaPath)],
-            "instance": dataProvider.data,
-            "options": enums,
-            "template": `<select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control qb-control qb-control-enum" data-jsonforms-model ></select>`
-        };
-        return result;
+        var control = new JSONForms.ControlResult(dataProvider.data, subSchema, schemaPath);
+        control['template'] = `<select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control qb-control qb-control-enum" data-jsonforms-model ></select>`;
+        control['options'] = enums;
+        return control;
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean {
@@ -28,6 +20,6 @@ class EnumControl implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.enumControl', []);
 
-app.run(['RenderService', 'ReferenceResolver', function(RenderService, ReferenceResolver) {
-    RenderService.register(new EnumControl((ReferenceResolver)));
+app.run(['JSONForms.RenderService', function(RenderService) {
+    RenderService.register(new EnumControl());
 }]);

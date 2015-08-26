@@ -102,7 +102,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
     $scope.data = {
         name: 'John Doe',
         age: 36,
-        height: "1.76",
+        height: 1.76,
         vegetarian: false,
         birthDate: "02.06.1985",
         nationality: "US"

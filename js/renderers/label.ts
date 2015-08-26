@@ -1,11 +1,11 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class Label implements jsonforms.services.IRenderer {
+class Label implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render(element:jsonforms.services.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+    render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IResult {
         var text = element['text'];
         var size = 99;
 
@@ -16,7 +16,7 @@ class Label implements jsonforms.services.IRenderer {
         };
     }
 
-    isApplicable(element:jsonforms.services.UISchemaElement):boolean {
+    isApplicable(element:JSONForms.UISchemaElement):boolean {
         return element.type == "Label";
     }
 
@@ -24,6 +24,6 @@ class Label implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.label', ['jsonForms.services']);
 
-app.run(['RenderService', function(RenderService) {
+app.run(['JSONForms.RenderService', function(RenderService) {
     RenderService.register(new Label());
 }]);

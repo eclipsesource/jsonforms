@@ -1,29 +1,19 @@
 ///<reference path="..\services.ts"/>
 
-class DatetimeControl implements jsonforms.services.IRenderer {
+class DatetimeControl implements JSONForms.IRenderer {
 
     priority = 3;
 
-    constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
-
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
-        //var path = this.refResolver.normalize(this.refResolver.getSchemaRef(uiPath));
-        var options = {
-            "type": "Control",
-            "size": 99,
-            "label": element['label'],
-            "path": [this.refResolver.normalize(schemaPath)],
-            "instance": dataProvider.data,
-            "isOpen": false,
-            // TODO: pefix
-            "templateUrl": '../templates/datetime.html',
-            openDate: function($event) {
-                $event.preventDefault();
-                $event.stopPropagation();
-                options.isOpen = true;
-            }
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IResult {
+        var control = new JSONForms.ControlResult(dataProvider.data, subSchema, schemaPath);
+        control['templateUrl'] = '../templates/datetime.html';
+        control['isOpen'] = false;
+        control['openDate'] = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            control['isOpen'] = true;
         };
-        return options;
+        return control;
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean {
@@ -34,6 +24,6 @@ class DatetimeControl implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.datetimeControl', []);
 
-app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $scope) {
-    RenderService.register(new DatetimeControl((ReferenceResolver)));
+app.run(['JSONForms.RenderService', function(RenderService) {
+    RenderService.register(new DatetimeControl());
 }]);
