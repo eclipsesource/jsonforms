@@ -1,35 +1,13 @@
 ///<reference path="..\services.ts"/>
 
-class NumberControl implements jsonforms.services.IRenderer {
+class NumberControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    constructor(private refResolver: jsonforms.services.IReferenceResolver, private scope: ng.IRootScopeService) { }
-
-    render(element:jsonforms.services.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
-        var options = {
-            "type": "Control",
-            "size": 99,
-            "label": element['label'],
-            "path": [this.refResolver.normalize(schemaPath)],
-            "instance": dataProvider.data,
-            "template": `<input type="text" id="${schemaPath}" class="form-control qb-control qb-control-number" ui-validate="\'element.validate($value)\'" data-jsonforms-model=""/>`,
-            alerts: [{"type":"danger","msg":"Must be a valid number!"}],
-            validate: function (value) {
-                if (value !== undefined && value !== null && isNaN(value)) {
-                    options.alerts = [];
-                    var alert = {
-                        type: 'danger',
-                        msg: 'Must be a valid number!'
-                    };
-                    options.alerts.push(alert);
-                    return false;
-                }
-                options.alerts = [];
-                return true;
-            }
-        };
-        return options;
+    render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
+        control['template'] = `<input type="number" step="0.01" id="${schemaPath}" class="form-control qb-control qb-control-number" data-jsonforms-validation data-jsonforms-model/>`;
+        return control;
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
@@ -39,6 +17,6 @@ class NumberControl implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.numberControl', []);
 
-app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, scope) {
-    RenderService.register(new NumberControl(ReferenceResolver, scope));
+app.run(['JSONForms.RenderService', function(RenderService) {
+    RenderService.register(new NumberControl());
 }]);

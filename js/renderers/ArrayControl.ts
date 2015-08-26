@@ -1,14 +1,14 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class ArrayControl implements jsonforms.services.IRenderer {
+class ArrayControl implements JSONForms.IRenderer {
 
 
     private maxSize = 99;
 
     priority = 2;
 
-    constructor(private refResolver: jsonforms.services.IReferenceResolver, private scope: ng.IScope) {
+    constructor(private refResolver: JSONForms.IReferenceResolver, private scope: ng.IScope) {
 
     }
 
@@ -16,7 +16,7 @@ class ArrayControl implements jsonforms.services.IRenderer {
         return element.type == 'Control' && subSchema.type == 'array';
     }
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IResult {
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
 
         var control = this.createTableUIElement(element,dataProvider);
         // init
@@ -46,7 +46,7 @@ class ArrayControl implements jsonforms.services.IRenderer {
     //    }
     //}
 
-    private createTableUIElement(element, dataProvider: jsonforms.services.IDataProvider) {
+    private createTableUIElement(element, dataProvider: JSONForms.IDataProvider) {
 
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
@@ -139,6 +139,6 @@ class ArrayControl implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
+app.run(['JSONForms.RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
     RenderService.register(new ArrayControl(ReferenceResolver, $rootScope));
 }]);

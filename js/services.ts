@@ -2,7 +2,7 @@
 /// <reference path="../typings/schemas/uischema.d.ts"/>
 /// <reference path="../typings/schemas/jsonschema.d.ts"/>
 
-module jsonforms.services {
+module JSONForms {
 
     export class UISchemaElement {
 
@@ -63,25 +63,68 @@ module jsonforms.services {
 
     export interface IRenderService {
         registerSchema(schema: SchemaElement): void
+        schema: SchemaElement
         register(renderer: IRenderer): void
-        render(element:jsonforms.services.UISchemaElement, dataProvider: jsonforms.services.IDataProvider);
+        render(element:JSONForms.UISchemaElement, dataProvider: JSONForms.IDataProvider);
     }
 
     export interface IRenderer {
-        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): IResult
+        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): IRenderDescription
         isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
         priority: number
     }
 
-    export interface IResult {
+    export interface IRenderDescription {
         type: string
         template?: string
         templateUrl?: string
         size: number
     }
 
-    export interface IContainerResult extends IResult {
-        elements: IResult[]
+    export interface IControlRenderDescription extends IRenderDescription {
+        instance: any
+        path: string
+
+        // Validation related
+        subSchema: SchemaElement
+        alerts: any[]
+        validate(): boolean
+    }
+
+    export class ControlRenderDescription implements IControlRenderDescription {
+
+        type = "Control";
+        size = 99;
+        alerts: any[] = []; // TODO IAlert type missing
+        public label: string;
+        public path: string;
+
+        constructor(public instance: any, public subSchema: SchemaElement, schemaPath: string) {
+            this.path = PathUtil.normalize(schemaPath);
+            this.label = PathUtil.beautifiedLastFragment(schemaPath);
+        }
+
+        validate(): boolean {
+            var value = this.instance[this.path];
+            var result = tv4.validateMultiple(value, this.subSchema);
+            if (!result.valid){
+                this.alerts = [];
+                var alert = {
+                    type: 'danger',
+                    msg: result.errors[0].message
+                };
+                this.alerts.push(alert);
+            } else {
+                this.alerts = [];
+            }
+
+            return result.valid;
+        }
+
+    }
+
+    export interface IContainerRenderDescription extends IRenderDescription {
+        elements: IRenderDescription[]
     }
 
     export interface IReferenceResolver {
@@ -106,7 +149,7 @@ module jsonforms.services {
     export class RenderService implements  IRenderService {
 
         private renderers: IRenderer[] = [];
-        private schema;
+        public schema: SchemaElement;
         static $inject = ['ReferenceResolver'];
 
         constructor(private refResolver: IReferenceResolver) {
@@ -116,7 +159,7 @@ module jsonforms.services {
             this.schema = schema
         };
 
-        render = (element: IUISchemaElement, dataProvider: jsonforms.services.IDataProvider) => {
+        render = (element: IUISchemaElement, dataProvider: JSONForms.IDataProvider) => {
 
             var foundRenderer;
             var schemaPath;
@@ -140,18 +183,66 @@ module jsonforms.services {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            return foundRenderer.render(element, subSchema, schemaPath, dataProvider);
+            var resultObject = foundRenderer.render(element, subSchema, schemaPath, dataProvider);
+            if (resultObject.validate) {
+                resultObject.validate();
+            }
+            return resultObject;
         };
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);
         }
     }
 
+    class PathUtil {
+
+        private static Keywords:string[] = ["items", "properties", "#"];
+
+        static normalize = (path:string):string => {
+            return PathUtil.filterNonKeywords(PathUtil.toPropertyFragments(path)).join("/");
+        };
+
+        static toPropertyFragments = (path:string):string[] => {
+            return path.split('/').filter(function (fragment) {
+                return fragment.length > 0;
+            })
+        };
+
+        static filterNonKeywords = (fragments:string[]):string[] => {
+            return fragments.filter(function (fragment) {
+                return !(PathUtil.Keywords.indexOf(fragment) !== -1);
+            });
+        };
+
+        static beautifiedLastFragment(schemaPath: string): string  {
+            return PathUtil.beautify(PathUtil.capitalizeFirstLetter(schemaPath.substr(schemaPath.lastIndexOf('/') + 1, schemaPath.length)));
+        }
+
+        private static capitalizeFirstLetter(string): string {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+
+        /**
+         * Beautifies by performing the following steps (if applicable)
+         * 1. split on uppercase letters
+         * 2. transform uppercase letters to lowercase
+         * 3. transform first letter uppercase
+         */
+        static beautify = (text: string): string => {
+            if(text && text.length > 0){
+                var textArray = text.split(/(?=[A-Z])/).map((x)=>{return x.toLowerCase()});
+                textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
+                return textArray.join(' ');
+            }
+            return text;
+        };
+
+    }
 
     export class ReferenceResolver {
 
         private pathMapping:{ [id: string]: string; } = {};
-        private Keywords:string[] = ["items", "properties", "#"];
         static $inject = ["$compile"];
         // $compile can then be used as this.$compile
         constructor(private $compile:ng.ICompileService) {
@@ -174,7 +265,7 @@ module jsonforms.services {
         };
 
         normalize = (path:string):string => {
-            return this.filterNonKeywords(this.toPropertyFragments(path)).join("/");
+            return PathUtil.normalize(path);
         };
 
         resolveUi = (instance:any, uiPath:string):any => {
@@ -185,9 +276,9 @@ module jsonforms.services {
             return this.resolveInstance(instance, p);
         };
 
-        
+
         resolveInstance = (instance:any, path:string):any => {
-            var fragments = this.toPropertyFragments(this.normalize(path));
+            var fragments = PathUtil.toPropertyFragments(this.normalize(path));
             return fragments.reduce(function (currObj, fragment) {
                 if (currObj instanceof Array) {
                     return currObj.map(function (item) {
@@ -200,7 +291,7 @@ module jsonforms.services {
 
         resolveSchema = (schema: any, path: string): any => {
 
-            var fragments = this.toPropertyFragments(path);
+            var fragments = PathUtil.toPropertyFragments(path);
             return fragments.reduce(function (subSchema, fragment) {
                 if (fragment == "#"){
                     return subSchema
@@ -213,18 +304,7 @@ module jsonforms.services {
             }, schema);
         };
 
-        private toPropertyFragments = (path:string):string[] => {
-            return path.split('/').filter(function (fragment) {
-                return fragment.length > 0;
-            })
-        };
 
-        private filterNonKeywords = (fragments:string[]):string[] => {
-            var that = this;
-            return fragments.filter(function (fragment) {
-                return !(that.Keywords.indexOf(fragment) !== -1);
-            });
-        };
 
     }
 
@@ -255,7 +335,7 @@ module jsonforms.services {
                         // add label with name
                         var label:ILabel = {
                             type: "Label",
-                            text: this.beautify(schemaName)
+                            text: PathUtil.beautify(schemaName)
                         };
                         verticalLayout.elements.push(label);
                     }
@@ -305,7 +385,7 @@ module jsonforms.services {
                 case "number":
                 case "integer":
                 case "boolean":
-                    var controlObject:IControlObject = this.getControlObject(this.beautify(schemaName), currentRef);
+                    var controlObject:IControlObject = this.getControlObject(PathUtil.beautify(schemaName), currentRef);
                     schemaElements.push(controlObject);
                     break;
                 case "null":
@@ -352,22 +432,6 @@ module jsonforms.services {
                 }
             };
         };
-
-        /**
-         * Beautifies by performing the following steps (if applicable)
-         * 1. split on uppercase letters
-         * 2. transform uppercase letters to lowercase
-         * 3. transform first letter uppercase
-         */
-        private beautify = (text: string): string => {
-            if(text && text.length > 0){
-                var textArray = text.split(/(?=[A-Z])/).map((x)=>{return x.toLowerCase()});
-                textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
-                return textArray.join(' ');
-            }
-            return text;
-        };
-
     }
 
 
@@ -414,10 +478,24 @@ module jsonforms.services {
         }
     }
 
+    export class RenderDescriptionFactory {
+        createControlDescription(data: any, subSchema: SchemaElement, schemaPath: string) {
+            return new ControlRenderDescription(data, subSchema, schemaPath);
+        }
+    }
+
+    declare var tv4;
+    export class ValidationService {
+        validate = (data: any, schema: SchemaElement) => {
+            return tv4.validateMultiple(data, schema);
+        }
+    }
 }
 
 angular.module('jsonForms.services', [])
-    .service('RecursionHelper', jsonforms.services.RecursionHelper)
-    .service('ReferenceResolver', jsonforms.services.ReferenceResolver)
-    .service('RenderService', jsonforms.services.RenderService)
-    .service('UISchemaGenerator', jsonforms.services.UISchemaGenerator);
+    .service('RecursionHelper', JSONForms.RecursionHelper)
+    .service('ReferenceResolver', JSONForms.ReferenceResolver)
+    .service('JSONForms.RenderService', JSONForms.RenderService)
+    .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
+    .service('ValidationService', JSONForms.ValidationService)
+    .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);

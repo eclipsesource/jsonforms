@@ -5,11 +5,11 @@
 
 describe('ReferenceResolver', () => {
 
-    var ReferenceResolver: jsonforms.services.IReferenceResolver;
+    var ReferenceResolver: JSONForms.IReferenceResolver;
 
     beforeEach(module('jsonForms.services'));
     beforeEach(() => {
-        inject(function(_ReferenceResolver_: jsonforms.services.IReferenceResolver) {
+        inject(function(_ReferenceResolver_: JSONForms.IReferenceResolver) {
             ReferenceResolver = _ReferenceResolver_;
         });
     });

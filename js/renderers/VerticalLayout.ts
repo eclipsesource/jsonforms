@@ -1,13 +1,13 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../services.ts"/>
 
-class VerticalLayout implements jsonforms.services.IRenderer {
+class VerticalLayout implements JSONForms.IRenderer {
 
-    constructor(private renderService: jsonforms.services.IRenderService) { }
+    constructor(private renderService: JSONForms.IRenderService) { }
 
     priority = 1;
 
-    render(element:jsonforms.services.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider): jsonforms.services.IContainerResult{
+    render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription{
 
         var that = this;
 
@@ -30,12 +30,7 @@ class VerticalLayout implements jsonforms.services.IRenderer {
             "size": 99,
             "template":
                 `<fieldset>
-                    <recelement ng-repeat="child in element.elements"
-                                element="child"
-                                bindings="bindings"
-                                top-open-date="topOpenDate"
-                                top-validate-number="topValidateNumber"
-                                top-validate-integer="topValidateInteger">
+                    <recelement ng-repeat="child in element.elements" element="child">
                     </recelement>
                 </fieldset>`
         };
@@ -48,6 +43,6 @@ class VerticalLayout implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.verticalLayout', ['jsonForms.services']);
 
-app.run(['RenderService', function(RenderService) {
+app.run(['JSONForms.RenderService', function(RenderService) {
      RenderService.register(new VerticalLayout(RenderService));
 }]);

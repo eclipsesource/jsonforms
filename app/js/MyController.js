@@ -4,14 +4,11 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
         "type": "object",
         "properties": {
             "firstName": {
-                "type": "string"
+                "type": "string",
+                "minLength": 3
             },
-            "lastName": {
-                "type": "string"
-            },
-            "age": {
-                "type": "integer"
-            }
+            "lastName": { "type": "string" },
+            "age": { "type": "integer" }
         }
     };
     $scope.uiSchema = {
@@ -20,23 +17,17 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
             {
                 "type": "Control",
                 "label": "First name",
-                "scope": {
-                    "$ref": "#/properties/firstName"
-                }
+                "scope": { "$ref": "#/properties/firstName" }
             },
             {
                 "type": "Control",
                 "label": "Last name",
-                "scope": {
-                    "$ref": "#/properties/lastName"
-                }
+                "scope": { "$ref": "#/properties/lastName" }
             },
             {
                 "type": "Control",
                 "label": "Age",
-                "scope": {
-                    "$ref": "#/properties/age"
-                }
+                "scope": { "$ref": "#/properties/age" }
             }
         ]
     };

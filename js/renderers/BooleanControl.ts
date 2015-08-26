@@ -1,22 +1,13 @@
 ///<reference path="..\services.ts"/>
 
-class BooleanControl implements jsonforms.services.IRenderer {
+class BooleanControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    constructor(private refResolver: jsonforms.services.IReferenceResolver) { }
-
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
-        return {
-            "type": "Control",
-            "size": 99,
-            "label": element['label'],
-            path: [this.refResolver.normalize(schemaPath)],
-            "instance": dataProvider.data,
-            "template": `<div class="checkbox-inline">
-            <input type="checkbox" id="${schemaPath}" class="qb-control qb-control-boolean" data-jsonforms-model/>
-            </div>`
-        };
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
+        control['template'] = `<input type="checkbox" id="${schemaPath}" class="qb-control qb-control-boolean" ui-validate="\'element.validate($value)\'" data-jsonforms-model/>`;
+        return control;
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
@@ -26,6 +17,6 @@ class BooleanControl implements jsonforms.services.IRenderer {
 
 var app = angular.module('jsonForms.booleanControl', []);
 
-app.run(['RenderService', 'ReferenceResolver', function(RenderService, ReferenceResolver) {
-    RenderService.register(new BooleanControl(ReferenceResolver));
+app.run(['JSONForms.RenderService', function(RenderService) {
+    RenderService.register(new BooleanControl());
 }]);

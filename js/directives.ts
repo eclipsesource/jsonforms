@@ -4,14 +4,14 @@
 var jsonFormsDirectives = angular.module('jsonForms.directives', ['jsonForms.services']);
 declare var JsonRefs;
 
-class JsonFormsDiretiveController {
+class JsonFormsDirectiveController {
 
-    static $inject = ['RenderService', 'ReferenceResolver', 'UISchemaGenerator', '$scope', '$q'];
+    static $inject = ['JSONForms.RenderService', 'ReferenceResolver', 'UISchemaGenerator', '$scope', '$q'];
 
     constructor(
-        private RenderService:jsonforms.services.IRenderService,
-        private ReferenceResolver:jsonforms.services.IReferenceResolver,
-        private UISchemaGenerator:jsonforms.services.IUISchemaGenerator,
+        private RenderService: JSONForms.IRenderService,
+        private ReferenceResolver: JSONForms.IReferenceResolver,
+        private UISchemaGenerator: JSONForms.IUISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
         private $q: ng.IQService
     ) {
@@ -26,7 +26,7 @@ class JsonFormsDiretiveController {
             var uiSchemaDeferred = $q.defer();
 
             $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
-                schema['uiSchema'] = uiSchema;
+                //schema['uiSchema'] = uiSchema;
                 //  build mapping of ui paths to schema refs
                 //ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
                 JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
@@ -54,11 +54,11 @@ class JsonFormsDiretiveController {
             var uiSchema = values[1];
             var data = values[2];
 
-            var dataProvider: jsonforms.services.IDataProvider;
+            var dataProvider: JSONForms.IDataProvider;
             if ($scope.asyncDataProvider) {
                 dataProvider = $scope.asyncDataProvider;
             } else {
-                dataProvider = new jsonforms.services.DefaultDataProvider($q, data);
+                dataProvider = new JSONForms.DefaultDataProvider($q, data);
             }
 
             RenderService.registerSchema(schema);
@@ -103,7 +103,7 @@ class JsonFormsDiretiveController {
     }
 
     private fetchData() {
-        var dataProvider: jsonforms.services.IDataProvider = <jsonforms.services.IDataProvider> this.$scope.asyncDataProvider;
+        var dataProvider: JSONForms.IDataProvider = <JSONForms.IDataProvider> this.$scope.asyncDataProvider;
         var data = this.$scope.data;
 
         if (dataProvider && data) {
@@ -129,23 +129,17 @@ interface JsonFormsDirectiveScope extends ng.IScope {
 
     asyncSchema: () => any;
     asyncUiSchema: () => any;
-    asyncDataProvider: jsonforms.services.IDataProvider;
+    asyncDataProvider: JSONForms.IDataProvider;
 }
 
 class RecElement implements ng.IDirective {
 
-    constructor(private recursionHelper:jsonforms.services.RecursionHelper) {
+    constructor(private recursionHelper:JSONForms.RecursionHelper) {
     }
 
     restrict = "E";
     replace = true;
-    scope = {
-        element: '=',
-        bindings: '=',
-        topOpenDate: '=',
-        topValidateNumber: '=',
-        topValidateInteger: '='
-    };
+    scope = { element: '=' };
     templateUrl = 'templates/element.html';
 
     compile: ng.IDirectiveCompileFn = (element, attr, trans) => {
@@ -159,13 +153,7 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
     return {
         restrict: "E",
         replace: true,
-        scope: {
-            control: '=',
-            bindings: '=',
-            topOpenDate: '=',
-            topValidateNumber: '=',
-            topValidateInteger: '='
-        },
+        scope: { control: '=' },
         templateUrl: 'templates/control.html'
     };
 }).directive('jsonforms', function ():ng.IDirective {
@@ -183,11 +171,16 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
         },
         // TODO: fix template for tests
         templateUrl: 'templates/form.html',
-        controller: JsonFormsDiretiveController
+        controller: JsonFormsDirectiveController
     }
-}).directive('recelement', ['RecursionHelper', (recHelper: jsonforms.services.RecursionHelper): ng.IDirective => {
+}).directive('recelement', ['RecursionHelper', (recHelper: JSONForms.RecursionHelper): ng.IDirective => {
     return new RecElement(recHelper);
 }]).directive('dynamicWidget', ['$compile', function ($compile: ng.ICompileService) {
+    var replaceJSONFormsAttributeInTemplate = (template: string): string => {
+        return template
+            .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
+            .replace("data-jsonforms-validation", `ng-change='element.validate()'`);
+    };
     return {
         restrict: 'E',
         scope: {
@@ -197,11 +190,13 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
         link: function(scope, element) {
             if (scope.element.templateUrl) {
                 $.get(scope.element.templateUrl, function(template) {
-                    var compiledTemplate = $compile(template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
+                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template);
+                    var compiledTemplate = $compile(updatedTemplate)(scope);
                     element.replaceWith(compiledTemplate);
                 })
             } else {
-                var template = $compile(scope.element.template.replace("data-jsonforms-model", "ng-model='element.instance[element.path]'"))(scope);
+                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template);
+                var template = $compile(updatedTemplate)(scope);
                 element.replaceWith(template);
             }
         }

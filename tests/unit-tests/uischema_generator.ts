@@ -6,11 +6,11 @@
 
 describe('UISchemaGenerator', () => {
 
-    var UISchemaGenerator: jsonforms.services.IUISchemaGenerator;
+    var UISchemaGenerator: JSONForms.IUISchemaGenerator;
 
     beforeEach(module('jsonForms.services'));
     beforeEach(() => {
-        inject(function(_UISchemaGenerator_: jsonforms.services.IUISchemaGenerator) {
+        inject(function(_UISchemaGenerator_: JSONForms.IUISchemaGenerator) {
             UISchemaGenerator = _UISchemaGenerator_;
         });
     });
