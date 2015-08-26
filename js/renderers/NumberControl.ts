@@ -5,7 +5,7 @@ class NumberControl implements JSONForms.IRenderer {
     priority = 2;
 
     render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
-        var control = new JSONForms.ControlResult(dataProvider.data, subSchema, schemaPath);
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
         control['template'] = `<input type="number" step="0.01" id="${schemaPath}" class="form-control qb-control qb-control-number" data-jsonforms-validation data-jsonforms-model/>`;
         return control;
     }

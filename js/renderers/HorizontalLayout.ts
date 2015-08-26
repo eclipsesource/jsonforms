@@ -9,7 +9,7 @@ class HorizontalLayout implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerResult => {
+    render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription => {
 
         var that = this;
 

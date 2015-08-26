@@ -4,9 +4,9 @@ class EnumControl implements JSONForms.IRenderer {
 
     priority = 3;
 
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IResult {
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
         var enums = subSchema.enum;
-        var control = new JSONForms.ControlResult(dataProvider.data, subSchema, schemaPath);
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
         control['template'] = `<select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control qb-control qb-control-enum" data-jsonforms-model ></select>`;
         control['options'] = enums;
         return control;

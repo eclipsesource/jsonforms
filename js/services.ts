@@ -69,19 +69,19 @@ module JSONForms {
     }
 
     export interface IRenderer {
-        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): IResult
+        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): IRenderDescription
         isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
         priority: number
     }
 
-    export interface IResult {
+    export interface IRenderDescription {
         type: string
         template?: string
         templateUrl?: string
         size: number
     }
 
-    export interface IControlResult extends IResult {
+    export interface IControlRenderDescription extends IRenderDescription {
         instance: any
         path: string
 
@@ -91,7 +91,7 @@ module JSONForms {
         validate(): boolean
     }
 
-    export class ControlResult implements IControlResult {
+    export class ControlRenderDescription implements IControlRenderDescription {
 
         type = "Control";
         size = 99;
@@ -107,7 +107,6 @@ module JSONForms {
         validate(): boolean {
             var value = this.instance[this.path];
             var result = tv4.validateMultiple(value, this.subSchema);
-            console.log(JSON.stringify(value) + "/" + JSON.stringify(result));
             if (!result.valid){
                 this.alerts = [];
                 var alert = {
@@ -124,8 +123,8 @@ module JSONForms {
 
     }
 
-    export interface IContainerResult extends IResult {
-        elements: IResult[]
+    export interface IContainerRenderDescription extends IRenderDescription {
+        elements: IRenderDescription[]
     }
 
     export interface IReferenceResolver {
@@ -479,9 +478,9 @@ module JSONForms {
         }
     }
 
-    export class ResultFactory {
-        createControl(data: any, subSchema: SchemaElement, schemaPath: string) {
-            return new ControlResult(data, subSchema, schemaPath);
+    export class RenderDescriptionFactory {
+        createControlDescription(data: any, subSchema: SchemaElement, schemaPath: string) {
+            return new ControlRenderDescription(data, subSchema, schemaPath);
         }
     }
 
@@ -499,4 +498,4 @@ angular.module('jsonForms.services', [])
     .service('JSONForms.RenderService', JSONForms.RenderService)
     .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
     .service('ValidationService', JSONForms.ValidationService)
-    .service('JSONForms.Factory', JSONForms.ResultFactory);
+    .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);

@@ -7,7 +7,7 @@ class VerticalLayout implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerResult{
+    render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription{
 
         var that = this;
 
