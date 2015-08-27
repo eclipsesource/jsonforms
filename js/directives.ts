@@ -12,6 +12,7 @@ class JsonFormsDirectiveController {
         private RenderService: JSONForms.IRenderService,
         private ReferenceResolver: JSONForms.IReferenceResolver,
         private UISchemaGenerator: JSONForms.IUISchemaGenerator,
+        private UISchemaGenerator: JSONForms.IUISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
         private $q: ng.IQService
     ) {
@@ -78,6 +79,10 @@ class JsonFormsDirectiveController {
             return p;
         } else if (this.$scope.asyncSchema()) {
             return this.$scope.asyncSchema();
+        } else if (this.$scope.data) {
+            var p: ng.IDeferred<any> = this.$q.defer<any>();
+            p.resolve(this.SchemaGenerator.generateDefaultSchema(this.$scope.data));
+            return p;
         }
 
         throw new Error("Either the 'schema' or the 'async-schema' attribute must be specified.");
