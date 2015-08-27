@@ -6,13 +6,13 @@ declare var JsonRefs;
 
 class JsonFormsDirectiveController {
 
-    static $inject = ['JSONForms.RenderService', 'ReferenceResolver', 'UISchemaGenerator', '$scope', '$q'];
+    static $inject = ['JSONForms.RenderService', 'ReferenceResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
 
     constructor(
         private RenderService: JSONForms.IRenderService,
         private ReferenceResolver: JSONForms.IReferenceResolver,
         private UISchemaGenerator: JSONForms.IUISchemaGenerator,
-        private UISchemaGenerator: JSONForms.IUISchemaGenerator,
+        private SchemaGenerator: JSONForms.ISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
         private $q: ng.IQService
     ) {
