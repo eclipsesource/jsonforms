@@ -630,7 +630,7 @@ angular.module('jsonForms.services', [])
     .service('RecursionHelper', JSONForms.RecursionHelper)
     .service('ReferenceResolver', JSONForms.ReferenceResolver)
     .service('JSONForms.RenderService', JSONForms.RenderService)
-    .service('SchemaGenerator', jsonforms.services.SchemaGenerator)
+    .service('SchemaGenerator', JSONForms.SchemaGenerator)
     .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
     .service('ValidationService', JSONForms.ValidationService)
     .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);

@@ -6,11 +6,11 @@
 
 describe('SchemaGenerator', () => {
 
-    var SchemaGenerator: jsonforms.services.ISchemaGenerator;
+    var SchemaGenerator: JSONForms.ISchemaGenerator;
 
     beforeEach(module('jsonForms.services'));
     beforeEach(() => {
-        inject(function(_SchemaGenerator_: jsonforms.services.ISchemaGenerator) {
+        inject(function(_SchemaGenerator_: JSONForms.ISchemaGenerator) {
             SchemaGenerator = _SchemaGenerator_;
         });
     });
