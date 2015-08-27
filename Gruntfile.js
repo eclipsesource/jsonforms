@@ -202,8 +202,6 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.loadNpmTasks('grunt-browserify');
-
     grunt.loadNpmTasks('grunt-typescript');
 
     // Build distribution
@@ -213,7 +211,6 @@ module.exports = function(grunt) {
         'typescript:dist',
         'ngtemplates:dist',
         'concat:dist',
-        'browserify:dist',
         'uglify:dist'
     ]);
 

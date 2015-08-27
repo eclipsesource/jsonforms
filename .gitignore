@@ -1,5 +1,6 @@
 logs/*
 !.gitkeep
+dist/
 node_modules/
 app/bower_components/
 app/css/jsonforms.css
