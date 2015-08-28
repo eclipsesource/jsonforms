@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.2",
   "description": "Generating forms for JSON schema",
-  "repository": "https://github.com/qb-project/jsonforms",
+  "repository": "https://github.com/eclipsesource/jsonforms",
   "license": "MIT",
   "devDependencies": {
     "bootstrap": "^3.3.4",
