@@ -12,7 +12,7 @@ class Label implements JSONForms.IRenderer {
         return {
             "type": "Widget",
             "size": size,
-            "template": ` <div class="qb-label">{{text}}</div>`
+            "template": ` <div class="jsf-label">{{text}}</div>`
         };
     }
 
