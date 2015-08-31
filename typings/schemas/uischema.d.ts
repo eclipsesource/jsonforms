@@ -1,5 +1,6 @@
 interface IUISchemaElement{
     type: string;
+    label?: string
 }
 
 //Layouts

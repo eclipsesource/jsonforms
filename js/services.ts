@@ -99,12 +99,21 @@ module JSONForms {
         public label: string;
         public path: string;
 
-        constructor(public instance: any, public subSchema: SchemaElement, schemaPath: string) {
+        constructor(public instance: any, public subSchema: SchemaElement, schemaPath: string, label?: string) {
             this.path = PathUtil.normalize(schemaPath);
-            this.label = PathUtil.beautifiedLastFragment(schemaPath);
+            var l;
+            if (label) {
+                l = label
+            } else {
+                l = PathUtil.beautifiedLastFragment(schemaPath)
+            }
+            this.label = l;
         }
 
         validate(): boolean {
+            if (tv4 == undefined) {
+                return true;
+            }
             var value = this.instance[this.path];
             var result = tv4.validateMultiple(value, this.subSchema);
             if (!result.valid){
@@ -613,8 +622,8 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory {
-        createControlDescription(data: any, subSchema: SchemaElement, schemaPath: string) {
-            return new ControlRenderDescription(data, subSchema, schemaPath);
+        createControlDescription(data: any, subSchema: SchemaElement, schemaPath: string, label?: string) {
+            return new ControlRenderDescription(data, subSchema, schemaPath, label);
         }
     }
 
