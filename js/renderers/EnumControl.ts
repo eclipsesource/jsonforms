@@ -7,7 +7,7 @@ class EnumControl implements JSONForms.IRenderer {
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
         var enums = subSchema.enum;
         var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath, element.label);
-        control['template'] = `<select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control qb-control qb-control-enum" data-jsonforms-model ></select>`;
+        control['template'] = `<select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control jsf-control jsf-control-enum" data-jsonforms-model ></select>`;
         control['options'] = enums;
         return control;
     }
