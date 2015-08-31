@@ -28,6 +28,7 @@ module.exports = function(config){
             //'app/bower_components/angular-ui/build/angular-ui.js',
             'app/bower_components/ui-utils/ui-utils.js',
             'app/bower_components/angular-ui-bootstrap-bower/ui-bootstrap.js',
+            'app/bower_components/tv4/tv4.js',
             'dist/js/jsonforms.js',
             'tests/unit-tests/**/*.js',
             //'app/js/*.js',

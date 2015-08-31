@@ -5,7 +5,7 @@ class DatetimeControl implements JSONForms.IRenderer {
     priority = 3;
 
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath, element.label);
         control['templateUrl'] = '../templates/datetime.html';
         control['isOpen'] = false;
         control['openDate'] = function($event) {
