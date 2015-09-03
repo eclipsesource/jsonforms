@@ -1,6 +1,6 @@
 # JSONForms - Customizable AngularJS forms based on JSON Schema
 
-JSONForms extends he AngularJS view model approach by eliminating the need to write HTML templates in order to
+JSONForms extends the AngularJS view model approach by eliminating the need to write HTML templates in order to
 create forms by leveraging the capabilities of JSON and JSON schema.
 
 # First time setup
@@ -10,7 +10,7 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 * Execute "npm install" in root of your cloned repository
 
 # Build
-JSON Forms uses Grunt to build and test.
+JSONForms uses Grunt to build and test.
 
 * Run "grunt" or "grunt dist" to build the distribution
 * Run "grunt app" to build the application
@@ -18,6 +18,9 @@ JSON Forms uses Grunt to build and test.
 * Run "grunt watch" during development to automatically rebuild the distribution and application when any of the development files are touched.
 
 # Travis
-The Json Forms project is build and tested via Travis.
+The JSONForms project is build and tested via Travis.
 
 Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms)
+
+# License
+The JSONForms project is licensed under the MIT License. See the LICENSE file for more information.
