@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>testing dom-prop</title>
+		<script src="../dojo.js" data-dojo-config="isDebug:true"></script>
+		<script>
+			require(["dojo", "doh", "dojo/dom-attr", "dojo/dom", "dojo/domReady!"], function(dojo, doh, domAttr, dom){
+				doh.register([
+					{
+						name: "set / get value attribute",
+						runTest: function(t){
+							var test1 = dom.byId("test1"),
+								test2 = dom.byId("test2"),
+								value1 = domAttr.get(test1, "value"),
+								value2 = domAttr.get(test2, "value");
+
+							doh.is('6', value1);
+							doh.is('bar', value2);
+							
+							domAttr.set(test1, "value", "10");
+							domAttr.set(test2, "value", "foo");
+							
+							value1 = domAttr.get(test1, "value");
+							value2 = domAttr.get(test2, "value");
+							
+							doh.is('10', value1);
+							doh.is('foo', value2);
+							
+						}
+					}
+				]);
+
+				doh.run();
+			});
+		</script>
+	</head>
+	<body>
+		<meter id="test1" min="5" max="10" value="6"></meter>
+		<input id="test2" value="bar" />
+	</body>
+</html>

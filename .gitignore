@@ -45,17 +45,4 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 
-logs/*
-!.gitkeep
-dist/
-node_modules/
-app/bower_components/
-app/css/jsonforms.css
-app/js/jsonforms.js
-app/js/jsonforms.min.js
-temp/
 .DS_Store
-.idea
-*.log
-js/**/*.js
-**/*.map

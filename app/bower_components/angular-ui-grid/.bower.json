@@ -1,0 +1,26 @@
+{
+  "name": "angular-ui-grid",
+  "version": "3.0.0-RC.18",
+  "main": [
+    "./ui-grid.css",
+    "./ui-grid.eot",
+    "./ui-grid.js",
+    "./ui-grid.svg",
+    "./ui-grid.ttf",
+    "./ui-grid.woff"
+  ],
+  "ignore": [],
+  "dependencies": {
+    "angular": "~1.2.16"
+  },
+  "homepage": "http://ui-grid.info",
+  "_release": "3.0.0-RC.18",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.0.0-RC.18",
+    "commit": "9f25e2cae61cdb60c64cadb0d76c2ccbb46b50f2"
+  },
+  "_source": "git://github.com/angular-ui/bower-ui-grid.git",
+  "_target": "3.0.0-RC.18",
+  "_originalSource": "angular-ui-grid"
+}
