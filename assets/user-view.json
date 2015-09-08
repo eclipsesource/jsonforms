@@ -1,0 +1,98 @@
+{
+  "elements": [
+    {
+      "type": "QBHorizontalLayout",
+      "elements": [
+        {
+          "type": "QBVerticalLayout",
+          "elements": [
+            {
+              "type": "Label",
+              "text": "Group Number 1"
+            },
+            {
+              "type": "Control",
+              "path": "firstName",
+              "name": "First Name"
+            },
+            {
+              "type": "Control",
+              "path": "lastName",
+              "name": "Last Name"
+            },
+            {
+              "type": "Label",
+              "text": "MidLabel"
+            },
+            {
+              "type": "Control",
+              "path": "gender",
+              "name": "Gender"
+            },
+            {
+              "type": "Control",
+              "path": "timeOfRegistration",
+              "name": "Time Of Registration"
+            }
+          ]
+        },
+        {
+          "type": "QBVerticalLayout",
+          "elements": [
+            {
+              "type": "Label",
+              "text": "Group Nr. 2"
+            },
+            {
+              "type": "Control",
+              "path": "heigth",
+              "name": "Heigth"
+            },
+            {
+              "type": "QBHorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "path": "dateOfBirth",
+                  "name": "Date Of Birth"
+                },
+                {
+                  "type": "Control",
+                  "path": "weight",
+                  "name": "Weight"
+                },
+                {
+                  "type": "Control",
+                  "path": "nationality",
+                  "name": "Nationality"
+                }
+              ]
+            },
+            {
+              "type": "Control",
+              "path": "active",
+              "name": "Active"
+            },
+            {
+              "type": "Control",
+              "path": "email",
+              "name": "Email"
+            }
+          ]
+        },
+        {
+          "type" : "DerefTable",
+          "path" : "tasks",
+          "idProperty" : "id",
+          "columns" : [ {
+            "type" : "Column",
+            "path" : "name"
+          }, {
+            "type" : "Column",
+            "path" : "description"
+          }]
+        }
+      ]
+    }
+  ]
+}

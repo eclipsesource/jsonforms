@@ -1,0 +1,9 @@
+[submodule "app"]
+	path = app
+	url = https://github.com/dmachi/dojox_application.git
+[submodule "dgauges"]
+	path = dgauges
+	url = https://github.com/dmandrioli/dgauges.git
+[submodule "calendar"]
+	path = calendar
+	url = https://github.com/damiengarbarino/dojo-calendar.git

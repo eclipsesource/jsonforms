@@ -1,0 +1,20 @@
+<html>
+<head>
+<style type="text/css">
+#inner { width: 200px; height: 200px; background-color: #484}
+</style>
+<script type="text/javascript" src="../../dojo.js"></script>
+<script type="text/javascript">
+require(["dojo/dom", "dojo/_base/fx", "dojo/on", "dojo/dom-style", "dojo/domReady!"], function(dom, baseFx, on, domStyle){
+	var box = dom.byId("box");
+	on(box, "click", function(){
+		domStyle.set(box, "opacity", "0");
+		baseFx.fadeIn({node:box, delay:1}).play();
+	});
+});
+</script>
+</head>
+<body>
+<div id="box"><button id="inner">click me</button></div>
+</body>
+</html>
