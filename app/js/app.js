@@ -1,41 +1,92 @@
 'use strict';
 
-angular.module('makeithappen', [
+angular.module('jsonForms', [
     'ngRoute',
-    'ngResource',
-    'jsonForms',
-    'ui.ace'
-]).config(['$routeProvider',
-    function($routeProvider) {
-        $routeProvider.when('/local', {
-            templateUrl: 'templates/local.html',
-            controller: 'LocalController'
+    'ui.bootstrap',
+    'ui.validate',
+    'ui.router',
+    'ui.ace',
+    'ui.grid',
+    'ui.grid.pagination',
+    'ui.grid.autoResize',
+    'jsonForms.services',
+    'jsonForms.data.remote',
+    'jsonForms.data.send',
+    'jsonForms.verticalLayout',
+    'jsonForms.horizontalLayout',
+    'jsonForms.label',
+    'jsonForms.control',
+    'jsonForms.table',
+    'jsonForms.controllers',
+    'jsonForms.utilityServices',
+    'jsonForms.dataServices',
+    'jsonForms.directives'
+]).
+    config(['$routeProvider',
+        function($routeProvider) {
+            $routeProvider.when('/localdemo', {
+                templateUrl: 'demo.html',
+                controller: 'FormCtrlLocal'
+            });
+
+                $routeProvider.when('/rest-demo', {
+                    templateUrl: 'serverform.html',
+                    controller: 'FormCtrl'
+                });
+
+            $routeProvider.when('/support', {
+                templateUrl: 'support.html',
+                controller: 'SupportCtrl'
+            });
+
+            $routeProvider.when('/:type', {
+                templateUrl: 'table.html',
+                controller: 'FormCtrl'
+            });
+
+            $routeProvider.when('/:type/:id', {
+                templateUrl: 'form.html',
+                controller: 'FormCtrl'
+            });
+            $routeProvider.otherwise({
+                redirectTo: '/localdemo'
+            });
+        }
+    ]).run(['EndpointMapping', function(EndpointMapping) {
+        var testUrl = "http://localhost:9000/";
+        console.log(JSON.stringify(EndpointMapping));
+        EndpointMapping.register("user",  {
+            single: "user/",
+            many: "user",
+            "size": testUrl + "user/count",
+            "pagination": {
+                url: testUrl + "user/search",
+                paramNames: {
+                    pageNr: "page",
+                    pageSize: "pageSize"
+                },
+                // TODO: these should be put somewhere else
+                defaultPageSize: 5,
+                defaultPage: 1,
+                defaultPageSizes: [5, 10]
+            },
+            "filtering": {
+                url: testUrl + "user/search" //?userId={{id}}"
+            }
         });
-        $routeProvider.when('/remote', {
-            templateUrl: 'templates/remote.html',
-            controller: 'RemoteController'
+        EndpointMapping.register("task", {
+            "single": "task/",
+            "many": testUrl + "task",
+            "pagination": {
+                url: testUrl + "task/search?userId={{id}}", // TODO: userId
+                paramNames: {
+                    pageNr: "page",
+                    pageSize: "pageSize"
+                },
+                defaultPageSize: 5,
+                defaultPage: 1,
+                defaultPageSizes: [5, 10]
+            }
         });
-        $routeProvider.when('/editor', {
-            templateUrl: 'templates/editor.html',
-            controller: 'EditorController'
-        });
-        $routeProvider.when('/async', {
-            templateUrl: 'templates/async.html',
-            controller: 'AsyncController'
-        });
-        $routeProvider.when('/custom', {
-            templateUrl: 'templates/custom.html',
-            controller: 'MyController'
-        });
-        $routeProvider.when('/defaultui', {
-            templateUrl: 'templates/defaultui.html',
-            controller: 'DefaultUISchemaController'
-        });
-        $routeProvider.when('/defaultschema', {
-            templateUrl: 'templates/default-schema.html',
-            controller: 'DefaultSchemaController'
-        });
-        $routeProvider.otherwise({
-            redirectTo: '/local'
-        });    }
-]);
+    }]);
+

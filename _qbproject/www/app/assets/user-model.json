@@ -1,0 +1,65 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "objectId"
+    },
+    "lastName": {"type": "string"},
+    "email": {"type": "string"},
+    "firstName": {"type": "string"},
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Male",
+        "Female"
+      ]
+    },
+    "active": {"type": "boolean"},
+    "timeOfRegistration": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "weight": {"type": "number"},
+    "heigth": {"type": "integer"},
+    "nationality": {
+      "type": "string",
+      "enum": [
+        "German",
+        "French",
+        "UK",
+        "US",
+        "Spanish",
+        "Italian",
+        "Russian"
+      ]
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "objectId"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "lastName",
+    "email"
+  ]
+}

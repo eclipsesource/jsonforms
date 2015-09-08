@@ -1,0 +1,68 @@
+[
+  {
+    "id": "5448b9ee5c00005c00060483",
+    "lastName": "Dirix",
+    "email": "dirix@mail.de",
+    "firstName": "Stefan",
+    "gender": "Male",
+    "active": true,
+    "timeOfRegistration": "2014-10-09T22:00:00.000Z",
+    "weight": 80.0,
+    "heigth": 78.0,
+    "nationality": "German",
+    "tasks": [{
+      "id": "5348b9ee5c00005c00060483"
+    },{
+      "id": "5348b9ee5c00005c00060482"
+    }]
+  },
+  {
+    "id": "544a37c75f00005d00ea59f7",
+    "lastName": "Test",
+    "email": "sksks@skskd",
+    "firstName": "Testinger",
+    "gender": "Male",
+    "active": true,
+    "timeOfRegistration": "2014-10-09T22:00:00.000Z",
+    "weight": 100.0,
+    "heigth": 100.0,
+    "nationality": "UK"
+  },
+  {
+    "id": "54732dbd5b0000fc0fc5190b",
+    "lastName": "df",
+    "email": "df",
+    "firstName": "sdfdfd",
+    "gender": "Male",
+    "active": true,
+    "timeOfRegistration": "2012-12-11T23:00:00.000Z",
+    "weight": 45.0,
+    "heigth": 53.0,
+    "nationality": "UK"
+  },
+  {
+    "id": "54732f005b00004e12c5190c",
+    "lastName": "df",
+    "email": "df",
+    "firstName": "sdfdfd",
+    "gender": "Male",
+    "active": true,
+    "timeOfRegistration": "2012-12-11T23:00:00.000Z",
+    "weight": 45.0,
+    "heigth": 53.0,
+    "nationality": "UK"
+  },
+  {
+    "id": "54c63acb1803009383463bd0",
+    "lastName": "asas",
+    "email": "sdasd",
+    "firstName": "aasas",
+    "gender": "Male",
+    "active": true,
+    "timeOfRegistration": "2012-12-11T23:00:00.000Z",
+    "weight": 324.0,
+    "heigth": 343.0,
+    "nationality": "UK",
+    "dateOfBirth": "2012-12-11T23:00:00.000Z"
+  }
+]

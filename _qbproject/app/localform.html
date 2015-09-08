@@ -1,0 +1,27 @@
+
+        <form role="form">
+            <div class="row">
+                <div class="form-group col-sm-50">
+                    <label for="localModel">JSON Schema:</label>
+                    <textarea ng-model="localModel" id="localModel" class="form-control">{{localModelDefault}}</textarea>
+                </div>
+                <div class="form-group col-sm-50">
+                    <label for="localView">QB View:</label>
+                    <textarea ng-model="localView" id="localView" class="form-control">{{localViewDefault}}</textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-20 col-sm-offset-40">
+                    <button type="button" class="btn" ng-click="reparse()">Render view</button>
+                </div>
+            </div>
+        </form>
+
+    <div class="row">
+        <form role="form" class="qb-form">
+            <recelement ng-repeat="child in elements" element="child" bindings="bindings" top-open-date="openDate" top-validate-number="validateNumber" top-validate-integer="validateInteger"></recelement>
+        </form>
+    </div>
+
+
+

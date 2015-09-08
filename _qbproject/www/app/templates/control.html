@@ -1,0 +1,35 @@
+<div ng-switch on="control.type" class="form-group top-buffer">
+
+    <label for="control.id" ng-class="control.labelclass">{{control.displayname}}</label>
+
+    <div ng-class="control.inputclass">
+
+        <div ng-switch-when='multi-reference' name="control.displayname">
+            <!--<div class="row">-->
+                <div ui-grid="control.tableOptions.gridOptions" ui-grid-auto-resize ui-grid-paging class="grid"></div>
+            <!--</div>-->
+        </div>
+
+        <input ng-switch-when="string" type="text" ng-model="bindings[control.id]" id="control.id" class="form-control qb-control qb-control-string " name="control.displayname" />
+
+        <input ng-switch-when="number" type="text" ng-model="bindings[control.id]" ui-validate="'topValidateNumber($value, control)'" id="control.id" class="form-control qb-control qb-control-number" name="control.displayname" />
+
+        <input ng-switch-when="integer" type="text" ng-model="bindings[control.id]" ui-validate="'topValidateInteger($value, control)'" id="control.id" class="form-control qb-control qb-control-integer" name="control.displayname" />
+
+        <div ng-switch-when="boolean" class="checkbox-inline" for="control.value">
+            <input type="checkbox" ng-model="bindings[control.id]" name="control.displayname" id="control.id" class="qb-control qb-control-boolean"/>&nbsp;
+        </div>
+
+        <div ng-switch-when="date-time" class="input-group">
+            <input type="text" datepicker-popup="dd.MM.yyyy" ng-model="bindings[control.id]" close-text="Close" is-open="control.isOpen" id="control.id" class="form-control qb-control qb-control-datetime" name="control.displayname" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="topOpenDate($event,control)"><i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+
+        <select ng-switch-when="enum" ng-model="bindings[control.id]" ng-options="option as option for option in control.options" id="control.id" class="form-control qb-control qb-control-enum" name="control.displayname"></select>
+
+        <alert ng-repeat="alert in control.alerts" type="{{alert.type}}" class="top-buffer-s qb-alert">{{alert.msg}}</alert>
+    </div>
+</div>

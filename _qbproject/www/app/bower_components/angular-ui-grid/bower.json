@@ -1,0 +1,17 @@
+{
+  "name": "angular-ui-grid",
+  "version": "3.0.0-RC.18",
+  "main": [
+    "./ui-grid.css",
+    "./ui-grid.eot",
+    "./ui-grid.js",
+    "./ui-grid.svg",
+    "./ui-grid.ttf",
+    "./ui-grid.woff"
+  ],
+  "ignore": [],
+  "dependencies": {
+    "angular": "~1.2.16"
+  },
+  "homepage": "http://ui-grid.info"
+}

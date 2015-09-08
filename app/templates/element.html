@@ -1,0 +1,21 @@
+<recursive>
+
+    <div ng-if="element.type=='Label'" class="col-sm-{{element.size}} qb-label">
+        {{element.elements[0].value}}
+    </div>
+
+    <control ng-if="element.type=='Control'" control="element.elements[0]" bindings="bindings" top-open-date="topOpenDate" top-validate-number="topValidateNumber" top-validate-integer="topValidateInteger" class="col-sm-{{element.size}}"/>
+
+    <!-- this should be moved to control.html ? -->
+
+    <fieldset ng-if="element.type=='HorizontalLayout'" class="col-sm-{{element.size}}">
+        <div class="row">
+            <recelement ng-repeat="child in element.elements" element="child" bindings="bindings" top-open-date="topOpenDate" top-validate-number="topValidateNumber" top-validate-integer="topValidateInteger"></recelement>
+        </div>
+    </fieldset>
+
+    <fieldset ng-if="element.type=='VerticalLayout'" class="col-sm-{{element.size}}">
+          <recelement ng-repeat="child in element.elements" element="child" bindings="bindings" top-open-date="topOpenDate" top-validate-number="topValidateNumber" top-validate-integer="topValidateInteger"></recelement>
+    </fieldset>
+    
+</recursive>

@@ -1,3 +1,47 @@
+@media (min-width: 1200px) {
+    .container {
+        width: 970px;
+    }
+}
+body {
+    background: url('../images/gplaypattern.png');
+}
+.container .jumbotron {
+    border-radius: 0;
+}
+.panel-title {
+    color: #3498db;
+    font-size: 2em;
+    /*background-color: #3a539b;*/
+}
+.panel-primary > .panel-heading {
+    border-color: rgba(255, 255, 255, 0);
+    background-color: rgba(255, 255, 255, 0);
+}
+.panel-body {
+    padding-top: 0;
+    color: black;
+    /*background-color: rgba(44, 62, 80, 0.79);*/
+    font-size: 1.2em;
+}
+.jumbotron {
+    background-color: rgba(255, 255, 255, 0);
+    font-size: 1.3em;
+    padding: 0.5em;
+}
+#demo-body {
+    padding: 1em;
+    border: 1px solid #c1d1d2;
+    border-radius: 4px;
+    background-color: white;
+}
+h1 {
+    font-weight: bold;
+    font-size: 2em;
+}
+ul {
+    list-style: square outside none;
+}
 .top-buffer {
     margin-top:20px;
 }
@@ -39,11 +83,11 @@
      border-radius: 0px;
  }
 
-.jsf .btn {
+.bootstrap-qbwrapper .btn {
     border-radius: 0px;
 }
 
-.jsf-form {
+.qb-form {
     margin-left:20px;
     margin-right:20px;
     margin-top:20px;
@@ -54,38 +98,38 @@
     padding-bottom:10px;
 }
 
-.jsf-label{
+.qb-label{
   padding-left:0px;
   padding-right:0px;
   font-weight: bold;
   font-size: 1.3em;
 }
 
-.jsf .form-control{
+.bootstrap-qbwrapper .form-control{
     border-radius: 0px;
 }
 
-.jsf-control {
+.qb-control {
 
 }
 
-.jsf-control-number {
+.qb-control-number {
 
 }
 
-.jsf-control-integer {
+.qb-control-integer {
 
 }
 
-.jsf-control-string {
+.qb-control-string {
 
 }
 
-.jsf-control-datetime {
+.qb-control-datetime {
 
 }
 
-.jsf-control-enum {
+.qb-control-enum {
 
 }
 

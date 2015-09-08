@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>qb project</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/qbstyle.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/styles/github.css">
+    <script src="assets/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index">
+                <span style="font-size:28px;font-weight:bold;">qb</span>project</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="download">Download</a>
+                </li>
+                <li>
+                    <a href="learn">Getting started</a>
+                </li>
+                <li>
+                    <a href="https://github.com/qb-project/qbproject">Github</a>
+                </li>
+                <li>
+                    <a href="app/embed-index.html">qbForms</a>
+                </li>
+                <li>
+                    <a href="contribute">Support</a>
+                </li>
+            </ul>
+        </div>
+        <!--/.navbar-collapse -->
+    </div>
+</div>
+    
+    <!-- Main jumbotron for a primary marketing message or call to action 
+    <div class="head-prom">
+        <div class="container grid-anchor">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>QBSchema</h1>
+                    <p>a Data DSL for Scala and Play, based on Json Schema</p>
+                    <p>
+                        <a class="btn btn-primary btn-lg btn-warning" role="button" href="/#qbschema">Learn more &raquo;</a>
+                    </p>
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    <div class="grid-bg"></div>
+                    <div class="qb-logo"></div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <h1>angular-ui-ieshiv</h1>
+<h2>Important!</h2>
+<p>If not installed properly, angular WILL throw an exception. </p>
+<pre><code>&quot;No module: ui.directives&quot;</code></pre>
+<p>Which means you have not included the angular-ui library in the file, or the shiv is in the wrong place.</p>
+<p>WHY? Well, angular is throwing the exception and I can&#39;t catch and stop it. If properly setup, you should be good. 
+If not, then you should probably fix it or yank it out. Of course, then you won&#39;t have the shiv for ie. </p>
+<h2>Description</h2>
+<p>This is used in order to support IE versions that do not support custom elements. For example: </p>
+<pre><code> &lt;ng-view&gt;&lt;/ng-view&gt;
+ &lt;ui-currency ng-model=&quot;somenum&quot;&gt;&lt;/ui-currency&gt;</code></pre>
+<p>IE 8 and earlier do not allow custom tag elements into the DOM. It just ignores them. 
+In order to remedy, the trick is to tell browser by calling document.createElement(&#39;my-custom-element&#39;).
+Then you can use, <my-custom-element>...</my-custom-element>, you also may need to define css styles. </p>
+<p>In current version, this will automagically define directives found in the ui.directives module and 
+angular&#39;s ngView, ngInclude, ngPluralize directives.</p>
+<h2>Usage</h2>
+<p>The shiv needs to run after angular has compiled the application.  Best to load angular-ui-ieshiv.js at 
+bottom of <head> section. </p>
+<pre><code>&lt;!--[if lte IE 8]&gt; &lt;script src=&quot;build/angular-ui-ieshiv.js&quot;&gt;&lt;/script&gt;&lt;![endif]--&gt;</code></pre>
+<h3>Options</h3>
+<pre><code>There will be</code></pre>
+<h3>Notes</h3>
+<pre><code>- modules are searched for directives 
+- only IE 8 and earlier will cause shiv to run
+- there will be a slight performance hit (for IE) </code></pre>
+<h3>Todo</h3>
+<pre><code>- provide ability to specify which directives to include/exclude
+- automagically locate all custom directives in current ng-app (this will involve recursion)</code></pre>
+
+    
+    <div class="container">
+        <hr>
+        <footer>
+            <p class="pull-right">&copy; M Cube, EclipseSource and Contributors 2014</p>
+        </footer>
+    </div>
+    <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+</body>
+
+</html>

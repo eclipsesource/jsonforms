@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>qb project</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="assets/css/qbstyle.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/styles/github.css">
+    <script src="assets/js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index">
+                <span style="font-size:28px;font-weight:bold;">qb</span>project</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="download">Download</a>
+                </li>
+                <li>
+                    <a href="learn">Getting started</a>
+                </li>
+                <li>
+                    <a href="https://github.com/qb-project/qbproject">Github</a>
+                </li>
+                <li>
+                    <a href="app/embed-index.html">qbForms</a>
+                </li>
+                <li>
+                    <a href="contribute">Support</a>
+                </li>
+            </ul>
+        </div>
+        <!--/.navbar-collapse -->
+    </div>
+</div>
+    
+    <!-- Main jumbotron for a primary marketing message or call to action 
+    <div class="head-prom">
+        <div class="container grid-anchor">
+            <div class="row">
+                <div class="col-md-6">
+                    <h1>QBSchema</h1>
+                    <p>a Data DSL for Scala and Play, based on Json Schema</p>
+                    <p>
+                        <a class="btn btn-primary btn-lg btn-warning" role="button" href="/#qbschema">Learn more &raquo;</a>
+                    </p>
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    <div class="grid-bg"></div>
+                    <div class="qb-logo"></div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <h1><a href="http://www.youtube.com/watch?v=pl3vxEudif8&amp;t=0m53s">Cha Cha Cha Changes</a></h1>
+<h2>Master</h2>
+<h2>v0.4.0</h2>
+<ul>
+<li><strong>Validate directive</strong> has been upgraded<ul>
+<li><strong>API BREAKING CHANGE!</strong> now takes expressions instead of function references</li>
+<li>You must explicitly specify the $value variable, but you no longer need to create a function</li>
+<li><strong>NEW FEATURE</strong> uiValidateWatch allows you to re-fire a validation rule (or all rules) when a related model changes (confirm_password)</li>
+</ul>
+</li>
+<li><strong>CodeMirror directive</strong> has been updated<ul>
+<li>Now works with v3.02</li>
+<li><strong>NEW FEATURE</strong> uiRefresh lets you specify an expression to watch for changes to refresh codemirror (useful for modals)</li>
+</ul>
+</li>
+<li><strong>Mask directive</strong> has many new fixes</li>
+<li>Fixes for <strong>uiDate</strong><ul>
+<li><strong>DateFormat directive</strong> can now be declared in <strong>uiConfig</strong></li>
+</ul>
+</li>
+<li><strong>uiJq Passthru directive</strong> has upgrades to support a wider variety of directives<ul>
+<li>Now fires asyncronously post-angular-rendering of the view (<strong>uiDefer</strong> option is now always true)</li>
+<li>New <strong>uiRefresh</strong> lets you specify an expression to watch to re-fire the plugin (call $(elm).focus() when a modal opens)</li>
+</ul>
+</li>
+<li><strong>Select2 directive</strong> now adds support for setting the selected item by specifying a simple ID<ul>
+<li>FINALLY have unit-tests for Select2!</li>
+</ul>
+</li>
+<li><strong>IEShiv</strong> has been simplified and stripped of browser-sniffing code (just use conditional comments)</li>
+<li><strong>Calendar directive</strong> now performs better watching of events data<ul>
+<li>Added optional equalsTracker attr (increment to force update from scope)</li>
+</ul>
+</li>
+<li><strong>Sortable directive</strong> now properly supports connectWith option</li>
+<li>New <strong>route directive</strong> that sets a boolean based on a pattern match of the current route (useful for tabs/navigation)</li>
+<li>Refactored <strong>If directive</strong> to be tidier</li>
+<li><strong>API BREAKING CHANGE!</strong> <strong>Modal directive</strong> has been completely removed (if you still need it, grab the files from v0.3.x)</li>
+</ul>
+<h2>v0.3.0</h2>
+<ul>
+<li>New <strong>format</strong> filter</li>
+<li>Lots of cleanup! Consistent indentation, linting</li>
+<li>Custom builds via grunt (soon to be leveraged via builder)</li>
+<li>uiDate now watches options</li>
+<li>Rewrote ui-keypress (API is not backwards-compatible)<ul>
+<li><strong>ui-</strong>keypress has been expanded into <strong>ui-keyup</strong>, <strong>ui-keydown</strong> and <strong>ui-keypress</strong></li>
+<li>The <strong>ui-keypress</strong> can now be used to <code>$event.preventDefault()</code> as expected</li>
+<li>Multiple combinations are separated by spaces, while multi-key combos are separated by dashes: <code>&#39;enter alt-space 13-shift&#39;:&#39;whatever()&#39;</code></li>
+<li>The string-notation (<strong>a and be or c and d</strong>) has been dropped completely</li>
+</ul>
+</li>
+<li>Can now pass (or globally define) the value uiReset resets to</li>
+</ul>
+<h2>v0.2.0</h2>
+<ul>
+<li>Unit tests. Unit tests. Unit tests.</li>
+<li>New <strong>inflector</strong> filter (previously named <strong>prettifier</strong>)<ul>
+<li>Added 2 alternative modes, now contains: humanize, underscore and variable</li>
+</ul>
+</li>
+<li><strong>Passthrough directive</strong> (uiJq) now fixes common ngModel problems due to trigger(change). Can optionally be disabled</li>
+<li>Removed <strong>Length Filter</strong> (you can instead do {{ ( myArray | filter: { gender:&#39;m&#39; } ).length }})</li>
+<li>Added <strong>validate directive</strong>, allows you to pass validation functions</li>
+<li><strong>Sortable directive</strong></li>
+<li>Fixed <strong>unique filter</strong></li>
+<li><strong>Highlight filter</strong> has had bug fixes</li>
+<li><strong>Event directive</strong> has been refactored / improved</li>
+<li><strong>Keypress directive</strong> has been refactored / improved</li>
+<li>New <strong>if-directive</strong> instead of <strong>remove directive</strong> (removed)</li>
+<li>New <strong>google maps directive</strong></li>
+<li>New <strong>animate directive</strong> that transitions the injection of new DOM elements (transitioning the removal of DOM is still not supported yet)</li>
+<li>Improvements to <strong>scrollfix directive</strong></li>
+</ul>
+<h2>v0.1.0</h2>
+<ul>
+<li>New folder structure</li>
+<li>Too many to list</li>
+</ul>
+
+    
+    <div class="container">
+        <hr>
+        <footer>
+            <p class="pull-right">&copy; M Cube, EclipseSource and Contributors 2014</p>
+        </footer>
+    </div>
+    <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+</body>
+
+</html>

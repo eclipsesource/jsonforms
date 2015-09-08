@@ -1,0 +1,15 @@
+{
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "string",
+      "format" : "objectId"
+    },
+    "name" : {
+      "type" : "string",
+      "minLength" : 1
+    }
+  },
+  "additionalProperties" : false,
+  "required" : [ "id", "name" ]
+}
