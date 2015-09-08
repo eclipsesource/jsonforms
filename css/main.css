@@ -6,6 +6,13 @@
 body {
     background: url('../images/gplaypattern.png');
 }
+.container {
+    background-color: #ffffff;
+    padding-left: 5em;
+    padding-right: 5em;
+    border-right: solid #3498db 2px;
+    border-left: solid #3498db 2px;
+}
 .container .jumbotron {
     border-radius: 0;
 }
