@@ -28,21 +28,30 @@ class HorizontalLayout implements JSONForms.IRenderer {
 
         var renderedElements = renderElements(element.elements);
         var size = renderedElements.length;
+        var label = element.label ? element.label : "";
         var individualSize = Math.floor(maxSize / size);
         for (var j = 0; j < renderedElements.length; j++) {
             renderedElements[j].size = individualSize;
         }
 
+        var template = label ?
+                `<fieldset>
+                   <legend>${label}</legend>
+                   <div class="row">
+                     <recelement ng-repeat="child in element.elements" element="child"></recelement>
+                   </div>
+                 </fieldset>` :
+                `<fieldset>
+                   <div class="row">
+                     <recelement ng-repeat="child in element.elements" element="child"></recelement>
+                   </div>
+                 </fieldset>`;
+
         return {
             "type": "Layout",
             "elements": renderedElements,
             "size": maxSize,
-            "template":
-                `<fieldset>
-                  <div class="row">
-                    <recelement ng-repeat="child in element.elements" element="child"></recelement>
-                  </div>
-                </fieldset>`
+            "template": template
         };
     };
 

@@ -7,7 +7,7 @@ class VerticalLayout implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render(element:JSONForms.UISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription{
+    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription{
 
         var that = this;
 
@@ -23,16 +23,23 @@ class VerticalLayout implements JSONForms.IRenderer {
         };
 
         var renderedElements = renderElements(element.elements);
+        var label = element.label ? element.label : "";
+        var template = label ?
+            `<fieldset>
+                    <legend>${label}</legend>
+                    <recelement ng-repeat="child in element.elements" element="child">
+                    </recelement>
+             </fieldset>` :
+            `<fieldset>
+                    <recelement ng-repeat="child in element.elements" element="child">
+                    </recelement>
+            </fieldset>`;
 
         return {
             "type": "Layout",
             "elements": renderedElements,
             "size": 99,
-            "template":
-                `<fieldset>
-                    <recelement ng-repeat="child in element.elements" element="child">
-                    </recelement>
-                </fieldset>`
+            "template": template
         };
     }
 

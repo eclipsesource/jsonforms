@@ -71,7 +71,7 @@ module JSONForms {
     }
 
     export interface IRenderer {
-        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): IRenderDescription
+        render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): IRenderDescription
         isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
         priority: number
     }
