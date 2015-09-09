@@ -18,35 +18,37 @@ class ArrayControl implements JSONForms.IRenderer {
 
     render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
 
-        var control = this.createTableUIElement(element,dataProvider);
-        // init
-        control['tableOptions'].gridOptions.data = dataProvider.data.slice(
-            dataProvider.page * dataProvider.pageSize,
-            dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+        var control = this.createTableUIElement(element, dataProvider, schema, schemaPath);
+
+        var data;
+        if (dataProvider.data instanceof Array) {
+            data = dataProvider.data;
+        } else {
+            data = this.refResolver.resolveInstance(dataProvider.data, this.refResolver.normalize(schemaPath));
+        }
+
+        if (data != undefined) {
+            control['tableOptions'].gridOptions.data = data.slice(
+                dataProvider.page * dataProvider.pageSize,
+                dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+        }
+
         control['tableOptions'].gridOptions['paginationPage'] = dataProvider.page;
         control['tableOptions'].gridOptions['paginationPageSize'] = dataProvider.pageSize;
+        control['tableOptions'].gridOptions.enableHorizontalScrollbar = 0; // TODO uiGridConstants.scrollbars.NEVER;
+        control['tableOptions'].gridOptions.enableVerticalScrollbar = 0; // TODO uiGridConstants.scrollbars.NEVER;
+
 
         return {
             "label": element.label,
             "type": "Control",
             "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
-            //<div ui-grid="control.tableOptions.gridOptions" ui-grid-auto-resize ui-grid-pagination class="grid"></div>
-
             "template": `<div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div>`
         };
     }
 
-    //private resolveColumnData(uiPath, data) {
-    //    if (data instanceof Array) {
-    //        return data;
-    //    } else {
-    //        // relative scope
-    //        return this.refResolver.resolveUi(data, uiPath);
-    //    }
-    //}
-
-    private createTableUIElement(element, dataProvider: JSONForms.IDataProvider) {
+    private createTableUIElement(element, dataProvider: JSONForms.IDataProvider, schema: SchemaElement, schemaPath: string) {
 
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
@@ -57,13 +59,31 @@ class ArrayControl implements JSONForms.IRenderer {
         };
 
         var that = this;
-        //var prefix = this.refResolver.normalize(parentScope);
-        var colDefs = element.columns.map(function(col, idx) {
-            return {
-                field:  that.refResolver.normalize(col['scope']['$ref']),
-                displayName: col.label
+        var colDefs;
+        // TODO: change semantics of the columns attribute to only show selected properties
+        if (element.columns) {
+            colDefs = element.columns.map(function (col, idx) {
+                return {
+                    field: that.refResolver.normalize(col['scope']['$ref']),
+                    displayName: col.label
+                }
+            });
+        } else {
+            var subSchema = that.refResolver.resolveSchema(schema, schemaPath);
+            var items = subSchema['items'];
+            colDefs = [];
+            // TODO: items
+            if (items['type'] == 'object') {
+                for (var prop in items['properties']) {
+                    colDefs.push({
+                        field: prop,
+                        displayName: prop
+                    });
+                }
+            } else {
+                // TODO is this case even possible?
             }
-        });
+        }
 
         var tableOptions = {
             columns: element.columns,

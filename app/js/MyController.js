@@ -19,36 +19,74 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
                         "type": "string"
                     }
                 }
+            },
+            // primitive array, we actually do not have a renderer for this atm
+            "hobbies": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            // complex array
+            "friends": {
+                "type": "array",
+                "items": {
+                            "type": "object",
+                            "properties": {
+                                "nickName": {
+                                    "type": "string"
+                                },
+                                "age": {
+                                    "type": "integer"
+                                }
+                            }
+                }
             }
         },
         "required": ["lastName", "firstName"]
     };
     $scope.uiSchema = {
-        "type": "HorizontalLayout",
+        "type": "VerticalLayout",
         "elements": [
             {
-                "type": "Control",
-                "label": "First name",
-                "scope": { "$ref": "#/properties/firstName" }
+                "type": "HorizontalLayout",
+                "label": "Person Details",
+                "elements": [
+                    {
+                        "type": "Control",
+                        "label": "First name",
+                        "scope": { "$ref": "#/properties/firstName" }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Last name",
+                        "scope": { "$ref": "#/properties/lastName" }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Age",
+                        "scope": { "$ref": "#/properties/age" }
+                    },
+                    {
+                        "type": "Control",
+                        "scope": { "$ref": "#/properties/address/properties/street" }
+                    }
+                ]
             },
             {
                 "type": "Control",
-                "label": "Last name",
-                "scope": { "$ref": "#/properties/lastName" }
-            },
-            {
-                "type": "Control",
-                "label": "Age",
-                "scope": { "$ref": "#/properties/age" }
-            },
-            {
-                "type": "Control",
-                "scope": { "$ref": "#/properties/address/properties/street" }
+                "scope": { "$ref": "#/properties/friends" },
             }
         ]
     };
 
-    $scope.data = {};
+    $scope.data = {
+        "hobbies": ["cooking", "playing video games"],
+        "friends": [{
+            "nickName": "Ottgar",
+            "age": 28
+        }]
+    };
 
     $scope.formattedData = function() {
         return JSON.stringify($scope.data, null, 4);
