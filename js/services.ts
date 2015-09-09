@@ -4,6 +4,8 @@
 
 module JSONForms {
 
+    var currentSchema: SchemaElement
+
     export class UISchemaElement {
 
         type: string;
@@ -30,10 +32,11 @@ module JSONForms {
         private currentPage = 0;
         private currentPageSize = 2;
 
-        constructor(private $q: ng.IQService, public data: any) {}
+        constructor(private $q: ng.IQService,  public data: any) { }
 
         fetchData(): ng.IPromise<any> {
             var p = this.$q.defer();
+            // TODO: validation missing
             p.resolve(this.data);
             return p.promise;
         }
@@ -63,7 +66,6 @@ module JSONForms {
 
     export interface IRenderService {
         registerSchema(schema: SchemaElement): void
-        schema: SchemaElement
         register(renderer: IRenderer): void
         render(element:JSONForms.UISchemaElement, dataProvider: JSONForms.IDataProvider);
     }
@@ -85,8 +87,6 @@ module JSONForms {
         instance: any
         path: string
 
-        // Validation related
-        subSchema: SchemaElement
         alerts: any[]
         validate(): boolean
     }
@@ -99,13 +99,13 @@ module JSONForms {
         public label: string;
         public path: string;
 
-        constructor(public instance: any, public subSchema: SchemaElement, schemaPath: string, label?: string) {
+        constructor(public instance: any, private schemaPath: string, label?: string) {
             this.path = PathUtil.normalize(schemaPath);
             var l;
             if (label) {
-                l = label
+                l = label;
             } else {
-                l = PathUtil.beautifiedLastFragment(schemaPath)
+                l = PathUtil.beautifiedLastFragment(schemaPath);
             }
             this.label = l;
         }
@@ -114,20 +114,42 @@ module JSONForms {
             if (tv4 == undefined) {
                 return true;
             }
-            var value = this.instance[this.path];
-            var result = tv4.validateMultiple(value, this.subSchema);
-            if (!result.valid){
-                this.alerts = [];
-                var alert = {
-                    type: 'danger',
-                    msg: result.errors[0].message
-                };
-                this.alerts.push(alert);
-            } else {
-                this.alerts = [];
+            var normalizedPath = '/' + PathUtil.normalize(this.schemaPath);
+            var results = tv4.validateMultiple(this.instance, currentSchema);
+            var errorMsg = undefined;
+
+            for (var i = 0; i < results['errors'].length; i++) {
+
+                var validationResult = results['errors'][i];
+
+                if (validationResult.schemaPath.indexOf('/required') != -1) {
+                    var propName = validationResult['params']['key'];
+                    if (propName == normalizedPath.substr(normalizedPath.lastIndexOf('/') + 1, normalizedPath.length)) {
+                        errorMsg = "Missing property";
+                        break;
+                    }
+                }
+
+                if (validationResult['dataPath'] == normalizedPath) {
+                    errorMsg = validationResult.message;
+                    break;
+                }
             }
 
-            return result.valid;
+            if (errorMsg == undefined) {
+                // TODO: perform required check
+                this.alerts = [];
+                return true;
+            }
+
+            this.alerts = [];
+            var alert = {
+                type: 'danger',
+                msg: errorMsg
+            };
+            this.alerts.push(alert);
+
+            return false;
         }
 
     }
@@ -165,15 +187,15 @@ module JSONForms {
     export class RenderService implements  IRenderService {
 
         private renderers: IRenderer[] = [];
-        public schema: SchemaElement;
         static $inject = ['ReferenceResolver'];
 
         constructor(private refResolver: IReferenceResolver) {
         }
 
-        registerSchema = (schema: SchemaElement) => {
-            this.schema = schema
-        };
+
+        registerSchema(schema: SchemaElement) {
+            currentSchema = schema;
+        }
 
         render = (element: IUISchemaElement, dataProvider: JSONForms.IDataProvider) => {
 
@@ -184,7 +206,7 @@ module JSONForms {
             // TODO element must be IControl
             if (element['scope']) {
                 schemaPath = element['scope']['$ref'];
-                subSchema = this.refResolver.resolveSchema(this.schema, schemaPath);
+                subSchema = this.refResolver.resolveSchema(currentSchema, schemaPath);
             }
 
             for (var i = 0; i < this.renderers.length; i++) {
@@ -199,7 +221,7 @@ module JSONForms {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            var resultObject = foundRenderer.render(element, subSchema, schemaPath, dataProvider);
+            var resultObject = foundRenderer.render(element, currentSchema, schemaPath, dataProvider);
             if (resultObject.validate) {
                 resultObject.validate();
             }
@@ -547,7 +569,7 @@ module JSONForms {
             // could be a string (json-schema-id). Ignore in that case
             return propertyKey === "id" && typeof propertyValue === "string";
             // TODO ignore all meta keywords
-        }
+        };
 
         /**
          * Derives the type of the jsonSchema element
@@ -561,7 +583,7 @@ module JSONForms {
             }
             // ignore all remaining cases
             return "null";
-        }
+        };
 
         /**
          * Creates a IControlObject with the given label referencing the given ref
@@ -622,17 +644,28 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory {
-        createControlDescription(data: any, subSchema: SchemaElement, schemaPath: string, label?: string) {
-            return new ControlRenderDescription(data, subSchema, schemaPath, label);
+        createControlDescription(data: any, schemaPath: string, label?: string) {
+            return new ControlRenderDescription(data, schemaPath, label);
         }
     }
 
     declare var tv4;
-    export class ValidationService {
-        validate = (data: any, schema: SchemaElement) => {
-            return tv4.validateMultiple(data, schema);
-        }
-    }
+    //export class ValidationService {
+    //    private results;
+    //    private lastValidated;
+    //
+    //    validate = (data: any, schema: SchemaElement): void => {
+    //        if (this.lastValidated == data) {
+    //            return;
+    //        }
+    //        this.results = tv4.validateMultiple(data, schema);
+    //        this.lastValidated = data;
+    //    };
+    //
+    //    validationResult = (path: string) => {
+    //        return this.results[path];
+    //    } ;
+    //}
 }
 
 angular.module('jsonForms.services', [])
@@ -641,5 +674,5 @@ angular.module('jsonForms.services', [])
     .service('JSONForms.RenderService', JSONForms.RenderService)
     .service('SchemaGenerator', JSONForms.SchemaGenerator)
     .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
-    .service('ValidationService', JSONForms.ValidationService)
+    //.service('JSONForms.ValidationService', JSONForms.ValidationService)
     .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);

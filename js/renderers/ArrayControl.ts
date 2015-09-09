@@ -16,7 +16,7 @@ class ArrayControl implements JSONForms.IRenderer {
         return element.type == 'Control' && subSchema.type == 'array';
     }
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
+    render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
 
         var control = this.createTableUIElement(element,dataProvider);
         // init
