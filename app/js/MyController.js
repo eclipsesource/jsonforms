@@ -8,8 +8,20 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
                 "minLength": 3
             },
             "lastName": { "type": "string" },
-            "age": { "type": "integer" }
-        }
+            "age": {
+                "type": "integer",
+                "minimum": 20
+            },
+            "address": {
+                "type": "object",
+                "properties": {
+                    "street": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "required": ["lastName", "firstName"]
     };
     $scope.uiSchema = {
         "type": "HorizontalLayout",
@@ -28,15 +40,15 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
                 "type": "Control",
                 "label": "Age",
                 "scope": { "$ref": "#/properties/age" }
+            },
+            {
+                "type": "Control",
+                "scope": { "$ref": "#/properties/address/properties/street" }
             }
         ]
     };
 
-    $scope.data = {
-        firstName: 'John',
-        lastName: 'Doe',
-        age: 36
-    };
+    $scope.data = {};
 
     $scope.formattedData = function() {
         return JSON.stringify($scope.data, null, 4);

@@ -4,8 +4,8 @@ class NumberControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath, element.label);
+    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
         control['template'] = `<input type="number" step="0.01" id="${schemaPath}" class="form-control jsf-control jsf-control-number" data-jsonforms-validation data-jsonforms-model/>`;
         return control;
     }

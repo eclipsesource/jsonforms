@@ -5,7 +5,7 @@ class IntegerControl implements JSONForms.IRenderer {
     priority = 2;
 
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath, element.label);
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
         control['template'] = `<input type="number" step="1" id="${schemaPath}" class="form-control jsf-control jsf-control-integer" data-jsonforms-validation data-jsonforms-model/>`;
         return control;
     }

@@ -5,8 +5,8 @@ class StringControl implements JSONForms.IRenderer {
     priority = 2;
 
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath, element.label);
-        control['template'] = `<input type="text" id="${schemaPath}" class="form-control jsf-control jsf-control-string" data-jsonforms-model/>`;
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        control['template'] = `<input type="text" id="${schemaPath}" class="form-control jsf-control jsf-control-string" data-jsonforms-model data-jsonforms-validation/>`;
         return control;
     }
 
