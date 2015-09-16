@@ -1,4 +1,4 @@
-/*! jsonforms - v0.0.2 - 2015-08-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.2 - 2015-09-16 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: js/app.js
 /// <reference path="../typings/angularjs/angular.d.ts"/>
@@ -217,30 +217,31 @@ var ArrayControl = (function () {
     ArrayControl.prototype.isApplicable = function (element, subSchema, schemaPath) {
         return element.type == 'Control' && subSchema.type == 'array';
     };
-    ArrayControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
-        var control = this.createTableUIElement(element, dataProvider);
-        // init
-        control['tableOptions'].gridOptions.data = dataProvider.data.slice(dataProvider.page * dataProvider.pageSize, dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+    ArrayControl.prototype.render = function (element, schema, schemaPath, dataProvider) {
+        var control = this.createTableUIElement(element, dataProvider, schema, schemaPath);
+        var data;
+        if (dataProvider.data instanceof Array) {
+            data = dataProvider.data;
+        }
+        else {
+            data = this.refResolver.resolveInstance(dataProvider.data, this.refResolver.normalize(schemaPath));
+        }
+        if (data != undefined) {
+            control['tableOptions'].gridOptions.data = data.slice(dataProvider.page * dataProvider.pageSize, dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+        }
         control['tableOptions'].gridOptions['paginationPage'] = dataProvider.page;
         control['tableOptions'].gridOptions['paginationPageSize'] = dataProvider.pageSize;
+        control['tableOptions'].gridOptions.enableHorizontalScrollbar = 0; // TODO uiGridConstants.scrollbars.NEVER;
+        control['tableOptions'].gridOptions.enableVerticalScrollbar = 0; // TODO uiGridConstants.scrollbars.NEVER;
         return {
             "label": element.label,
             "type": "Control",
             "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
-            //<div ui-grid="control.tableOptions.gridOptions" ui-grid-auto-resize ui-grid-pagination class="grid"></div>
             "template": "<div ui-grid=\"element['gridOptions']\" ui-grid-auto-resize ui-grid-pagination class=\"grid\"></div>"
         };
     };
-    //private resolveColumnData(uiPath, data) {
-    //    if (data instanceof Array) {
-    //        return data;
-    //    } else {
-    //        // relative scope
-    //        return this.refResolver.resolveUi(data, uiPath);
-    //    }
-    //}
-    ArrayControl.prototype.createTableUIElement = function (element, dataProvider) {
+    ArrayControl.prototype.createTableUIElement = function (element, dataProvider, schema, schemaPath) {
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
         var filteringEnabled = false;
@@ -248,13 +249,32 @@ var ArrayControl = (function () {
             schemaType: "array"
         };
         var that = this;
-        //var prefix = this.refResolver.normalize(parentScope);
-        var colDefs = element.columns.map(function (col, idx) {
-            return {
-                field: that.refResolver.normalize(col['scope']['$ref']),
-                displayName: col.label
-            };
-        });
+        var colDefs;
+        // TODO: change semantics of the columns attribute to only show selected properties
+        if (element.columns) {
+            colDefs = element.columns.map(function (col, idx) {
+                return {
+                    field: that.refResolver.normalize(col['scope']['$ref']),
+                    displayName: col.label
+                };
+            });
+        }
+        else {
+            var subSchema = that.refResolver.resolveSchema(schema, schemaPath);
+            var items = subSchema['items'];
+            colDefs = [];
+            // TODO: items
+            if (items['type'] == 'object') {
+                for (var prop in items['properties']) {
+                    colDefs.push({
+                        field: prop,
+                        displayName: JSONForms.PathUtil.beautify(prop)
+                    });
+                }
+            }
+            else {
+            }
+        }
         var tableOptions = {
             columns: element.columns,
             gridOptions: {
@@ -330,8 +350,8 @@ var BooleanControl = (function () {
         this.priority = 2;
     }
     BooleanControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
-        control['template'] = "<input type=\"checkbox\" id=\"" + schemaPath + "\" class=\"qb-control qb-control-boolean\" ui-validate=\"'element.validate($value)'\" data-jsonforms-model/>";
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        control['template'] = "<input type=\"checkbox\" id=\"" + schemaPath + "\" class=\"jsf-control jsf-control-boolean\" ui-validate=\"'element.validate($value)'\" data-jsonforms-model/>";
         return control;
     };
     BooleanControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
@@ -351,7 +371,7 @@ var DatetimeControl = (function () {
         this.priority = 3;
     }
     DatetimeControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
         control['templateUrl'] = '../templates/datetime.html';
         control['isOpen'] = false;
         control['openDate'] = function ($event) {
@@ -380,8 +400,8 @@ var EnumControl = (function () {
     }
     EnumControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
         var enums = subSchema.enum;
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
-        control['template'] = "<select ng-options=\"option as option for option in element.options\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-enum\" data-jsonforms-model ></select>";
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        control['template'] = "<select ng-options=\"option as option for option in element.options\" id=\"" + schemaPath + "\" class=\"form-control jsf-control jsf-control-enum\" data-jsonforms-model ></select>";
         control['options'] = enums;
         return control;
     };
@@ -421,15 +441,19 @@ var HorizontalLayout = (function () {
             var maxSize = 99;
             var renderedElements = renderElements(element.elements);
             var size = renderedElements.length;
+            var label = element.label ? element.label : "";
             var individualSize = Math.floor(maxSize / size);
             for (var j = 0; j < renderedElements.length; j++) {
                 renderedElements[j].size = individualSize;
             }
+            var template = label ?
+                "<fieldset>\n                   <legend>" + label + "</legend>\n                   <div class=\"row\">\n                     <recelement ng-repeat=\"child in element.elements\" element=\"child\"></recelement>\n                   </div>\n                 </fieldset>" :
+                "<fieldset>\n                   <div class=\"row\">\n                     <recelement ng-repeat=\"child in element.elements\" element=\"child\"></recelement>\n                   </div>\n                 </fieldset>";
             return {
                 "type": "Layout",
                 "elements": renderedElements,
                 "size": maxSize,
-                "template": "<fieldset>\n                  <div class=\"row\">\n                    <recelement ng-repeat=\"child in element.elements\" element=\"child\"></recelement>\n                  </div>\n                </fieldset>"
+                "template": template
             };
         };
     }
@@ -450,8 +474,8 @@ var IntegerControl = (function () {
         this.priority = 2;
     }
     IntegerControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
-        control['template'] = "<input type=\"number\" step=\"1\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-integer\" data-jsonforms-validation data-jsonforms-model/>";
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        control['template'] = "<input type=\"number\" step=\"1\" id=\"" + schemaPath + "\" class=\"form-control jsf-control jsf-control-integer\" data-jsonforms-validation data-jsonforms-model/>";
         return control;
     };
     IntegerControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
@@ -470,9 +494,9 @@ var NumberControl = (function () {
     function NumberControl() {
         this.priority = 2;
     }
-    NumberControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
-        control['template'] = "<input type=\"number\" step=\"0.01\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-number\" data-jsonforms-validation data-jsonforms-model/>";
+    NumberControl.prototype.render = function (element, schema, schemaPath, dataProvider) {
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        control['template'] = "<input type=\"number\" step=\"0.01\" id=\"" + schemaPath + "\" class=\"form-control jsf-control jsf-control-number\" data-jsonforms-validation data-jsonforms-model/>";
         return control;
     };
     NumberControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
@@ -492,8 +516,8 @@ var StringControl = (function () {
         this.priority = 2;
     }
     StringControl.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, subSchema, schemaPath);
-        control['template'] = "<input type=\"text\" id=\"" + schemaPath + "\" class=\"form-control qb-control qb-control-string\" data-jsonforms-model/>";
+        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        control['template'] = "<input type=\"text\" id=\"" + schemaPath + "\" class=\"form-control jsf-control jsf-control-string\" data-jsonforms-model data-jsonforms-validation/>";
         return control;
     };
     StringControl.prototype.isApplicable = function (uiElement, subSchema, schemaPath) {
@@ -528,15 +552,19 @@ var VerticalLayout = (function () {
             }
         };
         var renderedElements = renderElements(element.elements);
+        var label = element.label ? element.label : "";
+        var template = label ?
+            "<fieldset>\n                    <legend>" + label + "</legend>\n                    <recelement ng-repeat=\"child in element.elements\" element=\"child\">\n                    </recelement>\n             </fieldset>" :
+            "<fieldset>\n                    <recelement ng-repeat=\"child in element.elements\" element=\"child\">\n                    </recelement>\n            </fieldset>";
         return {
             "type": "Layout",
             "elements": renderedElements,
             "size": 99,
-            "template": "<fieldset>\n                    <recelement ng-repeat=\"child in element.elements\" element=\"child\">\n                    </recelement>\n                </fieldset>"
+            "template": template
         };
     };
     VerticalLayout.prototype.isApplicable = function (uiElement, jsonSchema, schemaPath) {
-        return uiElement.type == "VerticalLayout";
+        return uiElement.type == "VerticalLayout" || uiElement.type == "Group";
     };
     return VerticalLayout;
 })();
@@ -552,13 +580,13 @@ var Label = (function () {
     function Label() {
         this.priority = 1;
     }
-    Label.prototype.render = function (element, subSchema, schemaPath, dataProvider) {
+    Label.prototype.render = function (element, schema, schemaPath, dataProvider) {
         var text = element['text'];
         var size = 99;
         return {
             "type": "Widget",
             "size": size,
-            "template": " <div class=\"qb-label\">{{text}}</div>"
+            "template": " <div class=\"jsf-label\">{{text}}</div>"
         };
     };
     Label.prototype.isApplicable = function (element) {
@@ -577,6 +605,7 @@ app.run(['JSONForms.RenderService', function (RenderService) {
 /// <reference path="../typings/schemas/jsonschema.d.ts"/>
 var JSONForms;
 (function (JSONForms) {
+    var currentSchema;
     var UISchemaElement = (function () {
         function UISchemaElement(json) {
             this.json = json;
@@ -614,6 +643,7 @@ var JSONForms;
         }
         DefaultDataProvider.prototype.fetchData = function () {
             var p = this.$q.defer();
+            // TODO: validation missing
             p.resolve(this.data);
             return p.promise;
         };
@@ -621,30 +651,55 @@ var JSONForms;
     })();
     JSONForms.DefaultDataProvider = DefaultDataProvider;
     var ControlRenderDescription = (function () {
-        function ControlRenderDescription(instance, subSchema, schemaPath) {
+        function ControlRenderDescription(instance, schemaPath, label) {
             this.instance = instance;
-            this.subSchema = subSchema;
+            this.schemaPath = schemaPath;
             this.type = "Control";
             this.size = 99;
             this.alerts = []; // TODO IAlert type missing
             this.path = PathUtil.normalize(schemaPath);
-            this.label = PathUtil.beautifiedLastFragment(schemaPath);
-        }
-        ControlRenderDescription.prototype.validate = function () {
-            var value = this.instance[this.path];
-            var result = tv4.validateMultiple(value, this.subSchema);
-            if (!result.valid) {
-                this.alerts = [];
-                var alert = {
-                    type: 'danger',
-                    msg: result.errors[0].message
-                };
-                this.alerts.push(alert);
+            var l;
+            if (label) {
+                l = label;
             }
             else {
-                this.alerts = [];
+                l = PathUtil.beautifiedLastFragment(schemaPath);
             }
-            return result.valid;
+            this.label = l;
+        }
+        ControlRenderDescription.prototype.validate = function () {
+            if (tv4 == undefined) {
+                return true;
+            }
+            var normalizedPath = '/' + PathUtil.normalize(this.schemaPath);
+            var results = tv4.validateMultiple(this.instance, currentSchema);
+            var errorMsg = undefined;
+            for (var i = 0; i < results['errors'].length; i++) {
+                var validationResult = results['errors'][i];
+                if (validationResult.schemaPath.indexOf('/required') != -1) {
+                    var propName = validationResult['params']['key'];
+                    if (propName == normalizedPath.substr(normalizedPath.lastIndexOf('/') + 1, normalizedPath.length)) {
+                        errorMsg = "Missing property";
+                        break;
+                    }
+                }
+                if (validationResult['dataPath'] == normalizedPath) {
+                    errorMsg = validationResult.message;
+                    break;
+                }
+            }
+            if (errorMsg == undefined) {
+                // TODO: perform required check
+                this.alerts = [];
+                return true;
+            }
+            this.alerts = [];
+            var alert = {
+                type: 'danger',
+                msg: errorMsg
+            };
+            this.alerts.push(alert);
+            return false;
         };
         return ControlRenderDescription;
     })();
@@ -655,9 +710,6 @@ var JSONForms;
             var _this = this;
             this.refResolver = refResolver;
             this.renderers = [];
-            this.registerSchema = function (schema) {
-                _this.schema = schema;
-            };
             this.render = function (element, dataProvider) {
                 var foundRenderer;
                 var schemaPath;
@@ -665,7 +717,7 @@ var JSONForms;
                 // TODO element must be IControl
                 if (element['scope']) {
                     schemaPath = element['scope']['$ref'];
-                    subSchema = _this.refResolver.resolveSchema(_this.schema, schemaPath);
+                    subSchema = _this.refResolver.resolveSchema(currentSchema, schemaPath);
                 }
                 for (var i = 0; i < _this.renderers.length; i++) {
                     if (_this.renderers[i].isApplicable(element, subSchema, schemaPath)) {
@@ -677,7 +729,7 @@ var JSONForms;
                 if (foundRenderer === undefined) {
                     throw new Error("No applicable renderer found for element " + JSON.stringify(element));
                 }
-                var resultObject = foundRenderer.render(element, subSchema, schemaPath, dataProvider);
+                var resultObject = foundRenderer.render(element, currentSchema, schemaPath, dataProvider);
                 if (resultObject.validate) {
                     resultObject.validate();
                 }
@@ -687,6 +739,9 @@ var JSONForms;
                 _this.renderers.push(renderer);
             };
         }
+        RenderService.prototype.registerSchema = function (schema) {
+            currentSchema = schema;
+        };
         RenderService.$inject = ['ReferenceResolver'];
         return RenderService;
     })();
@@ -730,6 +785,7 @@ var JSONForms;
         };
         return PathUtil;
     })();
+    JSONForms.PathUtil = PathUtil;
     var ReferenceResolver = (function () {
         // $compile can then be used as this.$compile
         function ReferenceResolver($compile) {
@@ -1054,21 +1110,12 @@ var JSONForms;
     var RenderDescriptionFactory = (function () {
         function RenderDescriptionFactory() {
         }
-        RenderDescriptionFactory.prototype.createControlDescription = function (data, subSchema, schemaPath) {
-            return new ControlRenderDescription(data, subSchema, schemaPath);
+        RenderDescriptionFactory.prototype.createControlDescription = function (data, schemaPath, label) {
+            return new ControlRenderDescription(data, schemaPath, label);
         };
         return RenderDescriptionFactory;
     })();
     JSONForms.RenderDescriptionFactory = RenderDescriptionFactory;
-    var ValidationService = (function () {
-        function ValidationService() {
-            this.validate = function (data, schema) {
-                return tv4.validateMultiple(data, schema);
-            };
-        }
-        return ValidationService;
-    })();
-    JSONForms.ValidationService = ValidationService;
 })(JSONForms || (JSONForms = {}));
 angular.module('jsonForms.services', [])
     .service('RecursionHelper', JSONForms.RecursionHelper)
@@ -1076,23 +1123,22 @@ angular.module('jsonForms.services', [])
     .service('JSONForms.RenderService', JSONForms.RenderService)
     .service('SchemaGenerator', JSONForms.SchemaGenerator)
     .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
-    .service('ValidationService', JSONForms.ValidationService)
     .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);
 
 // Source: temp/templates.js
 angular.module('jsonForms').run(['$templateCache', function($templateCache) {
 $templateCache.put('templates/datetime.html',
-    "<div class=\"input-group\"><input type=\"text\" datepicker-popup=\"dd.MM.yyyy\" close-text=\"Close\" is-open=\"element.isOpen\" id=\"control.id\" class=\"form-control qb-control qb-control-datetime\" name=\"control.displayname\" data-jsonforms-model> <span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"element.openDate($event)\"><i class=\"glyphicon glyphicon-calendar\"></i></button></span></div>"
+    "<div class=\"input-group\"><input type=\"text\" datepicker-popup=\"dd.MM.yyyy\" close-text=\"Close\" is-open=\"element.isOpen\" id=\"control.id\" class=\"form-control jsf-control jsf-control-datetime\" name=\"control.displayname\" data-jsonforms-model> <span class=\"input-group-btn\"><button type=\"button\" class=\"btn btn-default\" ng-click=\"element.openDate($event)\"><i class=\"glyphicon glyphicon-calendar\"></i></button></span></div>"
   );
 
 
   $templateCache.put('templates/element.html',
-    "<recursive><div ng-if=\"element.type=='Widget'\" class=\"col-sm-{{element.size}} qb-label\">{{element.elements[0].text}}</div><div ng-if=\"element.type=='Control'\" class=\"col-sm-{{element.size}} form-group top-buffer\"><div class=\"row\"><label ng-if=\"element.label\" for=\"element.id\">{{element.label}}</label></div><div class=\"row\" style=\"padding-right: 1em\"><dynamic-widget element=\"element\"></div><div class=\"row\" style=\"padding-right: 1em\"><alert ng-repeat=\"alert in element.alerts\" type=\"{{alert.type}}\" class=\"top-buffer-s qb-alert\">{{alert.msg}}</alert></div></div><div ng-if=\"element.type=='Layout'\" class=\"col-sm-{{element.size}}\"><dynamic-widget element=\"element\"></div></recursive>"
+    "<recursive><div ng-if=\"element.type=='Widget'\" class=\"col-sm-{{element.size}} jsf-label\">{{element.elements[0].text}}</div><div ng-if=\"element.type=='Control'\" class=\"col-sm-{{element.size}} form-group top-buffer\"><div class=\"row\"><label ng-if=\"element.label\" for=\"element.id\">{{element.label}}</label></div><div class=\"row\" style=\"padding-right: 1em\"><dynamic-widget element=\"element\"></div><div class=\"row\" style=\"padding-right: 1em\"><alert ng-repeat=\"alert in element.alerts\" type=\"{{alert.type}}\" class=\"top-buffer-s jsf-alert\">{{alert.msg}}</alert></div></div><div ng-if=\"element.type=='Layout'\" class=\"col-sm-{{element.size}}\"><dynamic-widget element=\"element\"></div></recursive>"
   );
 
 
   $templateCache.put('templates/form.html',
-    "<div><form role=\"form\" class=\"qb-form rounded\"><recelement ng-repeat=\"child in elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"openDate\" top-validate-number=\"validateNumber\" top-validate-integer=\"validateInteger\"></recelement></form></div>"
+    "<div><form role=\"form\" class=\"jsf-form rounded\"><recelement ng-repeat=\"child in elements\" element=\"child\" bindings=\"bindings\" top-open-date=\"openDate\" top-validate-number=\"validateNumber\" top-validate-integer=\"validateInteger\"></recelement></form></div>"
   );
 
 }]);
