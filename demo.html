@@ -5,10 +5,10 @@
     </p>
     <p>
     <ul>
-        <li>Data & UI schema entirely based on JSON and JSON Schema</li>
-        <li>Out-of-the-box working AngularJS-based widgets featuring validation</li>
-        <li>Extensible and customizable UI schema</li>
-        <li>Interoperability usage of JSON & JSON Schema</li>
+        <li>Declarative Data and UI definition with JSON and JSON Schema</li>
+        <li>Widgets with validation based on JSON Schema out-of-the-box</li>
+        <li>Extensible and customizable UI Schema</li>
+        <li>Based on web standards</li>
     </ul>
     </p>
 
@@ -19,7 +19,7 @@
     <div class="col-sm-12 ">
         <div class="panel-primary panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><strong>JSON schema & the UI schema</strong></h3>
+                <h3 class="panel-title"><strong>JSON schema & UI schema</strong></h3>
             </div>
             <div class="panel-body"  style="line-height: 2.0">
                 <ul>
@@ -83,7 +83,7 @@
 
 <div class="row">
     <div class="text-center">
-        <h1>&#9660;</h1>
+        <div style="font-size: 4em">&#x21d3;</div>
     </div>
 </div>
 <div class="row">
@@ -92,8 +92,27 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
-        <img src="images/rendered-form.png" class="img-responsive center-block"/>
+    <div class="col-sm-8 col-sm-offset-2 form-group">
+        <fieldset>
+            <div class="row">
+                <label id="firstName">First name</label>
+            </div>
+            <div class="row">
+                <input type="text"  class="form-control jsf-control jsf-control-string" for="firstName">
+            </div>
+        </fieldset>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2 form-group">
+        <fieldset>
+            <div class="row">
+                <label id="lastName">Last name</label>
+            </div>
+            <div class="row">
+                <input type="text" class="form-control jsf-control jsf-control-string" for="lastName">
+            </div>
+        </fieldset>
     </div>
 </div>
 <br>
@@ -134,7 +153,7 @@
             <div class="panel-body" style="line-height: 2.0">
                 <ul>
                     <li>Wide range of available layouts & widgets</li>
-                    <li>Widgets can be replaced and added easily</li>
+                    <li>Widgets and layouts can be replaced and added easily</li>
                     <li>UI schema allows for technology agnostic approach</li>
                 </ul>
             </div>
@@ -148,17 +167,16 @@
             <div class="panel-body" style="line-height: 2.0">
                 <ul>
                     <li>Customizable REST integration</li>
-                    <li>Compatible with existing frameworks like Twitter Bootstrap or AngularJS</li>
+                    <li>Compatible with existing frameworks like Twitter Bootstrap and AngularJS</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-<br>
-<br>
+
 <div class="row">
     <div class="col-sm-8 col-sm-offset-2" style="font-size: 1.2em; color: #e74c3c">
-        If you like what you see, get in touch with us!
+        If you like what you see, <a href="mailto:info@jsonforms.org">get in touch with us</a>!
         You can participate by contributing enhancements, requesting features or reporting bugs via <a href="https://github.com/eclipsesource/jsonforms/issues">the issue tracker</a>!
         If you want to get in contact with us, <a href="mailto:info@jsonforms.org">drop us a mail at info@jsonforms.org</a>.
     </div>
