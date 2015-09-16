@@ -180,7 +180,7 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
     }
 }).directive('recelement', ['RecursionHelper', (recHelper: JSONForms.RecursionHelper): ng.IDirective => {
     return new RecElement(recHelper);
-}]).directive('dynamicWidget', ['$compile', function ($compile: ng.ICompileService) {
+}]).directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
     var replaceJSONFormsAttributeInTemplate = (template: string): string => {
         return template
             .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
@@ -194,7 +194,7 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
         replace: true,
         link: function(scope, element) {
             if (scope.element.templateUrl) {
-                $.get(scope.element.templateUrl, function(template) {
+                $templateRequest(scope.element.templateUrl).then(function(template) {
                     var updatedTemplate = replaceJSONFormsAttributeInTemplate(template);
                     var compiledTemplate = $compile(updatedTemplate)(scope);
                     element.replaceWith(compiledTemplate);
