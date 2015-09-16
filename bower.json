@@ -15,19 +15,17 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "1.2.x",
-    "angular-route": "1.2.x",
-    "angular-loader": "1.2.x",
-    "angular-mocks": "~1.2.x",
-    "angular-ui": "0.4.0",
+    "angular": "1.3.16",
+    "angular-mocks": "1.3.16",
+    "angular-resource": "1.3.16",
+    "angular-route": "1.3.16",
     "angular-ui-ace": "0.2.3",
-    "angular-ui-grid": "3.0.0-rc.21",
-    "angular-ui-bootstrap-bower": "0.11.2",
+    "angular-ui-bootstrap-bower": "0.2.0",
+    "angular-ui-grid": "3.0.1",
+    "angular-ui-validate": "1.1.1",
+    "ui-utils": "3.0.0"
     "bootstrap": "3.3.4",
-    "ui-utils": "0.1.1",
-    "jquery": "1.11.x",
     "json-refs": "~0.2.0",
-    "angular-resource": "~1.2.x",
-    "tv4": "1.2.3"
+    "tv4": "1.2.3",
   }
 }
