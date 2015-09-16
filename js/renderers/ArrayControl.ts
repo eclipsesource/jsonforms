@@ -77,7 +77,7 @@ class ArrayControl implements JSONForms.IRenderer {
                 for (var prop in items['properties']) {
                     colDefs.push({
                         field: prop,
-                        displayName: prop
+                        displayName: JSONForms.PathUtil.beautify(prop)
                     });
                 }
             } else {
