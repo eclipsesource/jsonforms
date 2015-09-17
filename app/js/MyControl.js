@@ -1,5 +1,5 @@
 var app = angular.module('makeithappen');
-app.run(['JSONForms.RenderService', 'JSONForms.RenderDescriptionFactory', function(RenderService, RenderDescriptionFactory) {
+app.run(['RenderService', 'RenderDescriptionFactory', function(RenderService, RenderDescriptionFactory) {
 
     function MyControl() {
 

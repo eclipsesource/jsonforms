@@ -8,11 +8,11 @@ describe('UISchemaGenerator', () => {
 
     var UISchemaGenerator: JSONForms.IUISchemaGenerator;
 
-    beforeEach(module('jsonForms.services'));
+    beforeEach(module('jsonforms.services'));
     beforeEach(() => {
-        inject(function(_UISchemaGenerator_: JSONForms.IUISchemaGenerator) {
+        inject(['UISchemaGenerator', function(_UISchemaGenerator_: JSONForms.IUISchemaGenerator) {
             UISchemaGenerator = _UISchemaGenerator_;
-        });
+        }]);
     });
 
     it("generate ui schema for schema w/o properties", function () {

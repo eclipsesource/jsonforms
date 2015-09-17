@@ -164,12 +164,12 @@ module JSONForms {
         elements: IRenderDescription[]
     }
 
-    export interface IReferenceResolver {
-        addUiPathToSchemaRefMapping(addition:any): void
+    export interface IPathResolver {
+        //addUiPathToSchemaRefMapping(addition:any): void
 
-        getSchemaRef(uiSchemaPath:string): any
+        //getSchemaRef(uiSchemaPath:string): any
 
-        normalize(path:string): string
+        toInstancePath(path:string): string
 
         resolveUi(instance:any, uiPath:string): any
 
@@ -193,9 +193,9 @@ module JSONForms {
     export class RenderService implements  IRenderService {
 
         private renderers: IRenderer[] = [];
-        static $inject = ['ReferenceResolver'];
+        static $inject = ['PathResolver'];
 
-        constructor(private refResolver: IReferenceResolver) {
+        constructor(private refResolver: IPathResolver) {
         }
 
 
@@ -284,7 +284,7 @@ module JSONForms {
 
     }
 
-    export class ReferenceResolver {
+    export class PathResolver implements IPathResolver {
 
         private pathMapping:{ [id: string]: string; } = {};
         static $inject = ["$compile"];
@@ -308,7 +308,7 @@ module JSONForms {
             return this.pathMapping[uiSchemaPath + "/scope/$ref"];
         };
 
-        normalize = (path:string):string => {
+        toInstancePath = (path:string):string => {
             return PathUtil.normalize(path);
         };
 
@@ -322,7 +322,7 @@ module JSONForms {
 
 
         resolveInstance = (instance:any, path:string):any => {
-            var fragments = PathUtil.toPropertyFragments(this.normalize(path));
+            var fragments = PathUtil.toPropertyFragments(this.toInstancePath(path));
             return fragments.reduce(function (currObj, fragment) {
                 if (currObj instanceof Array) {
                     return currObj.map(function (item) {
@@ -333,6 +333,12 @@ module JSONForms {
             }, instance);
         };
 
+        /**
+         *
+         * @param schema the schema to resolve the path against
+         * @param path a schema path
+         * @returns {T|*|*}
+         */
         resolveSchema = (schema: any, path: string): any => {
 
             var fragments = PathUtil.toPropertyFragments(path);
@@ -650,35 +656,18 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory {
-        createControlDescription(data: any, schemaPath: string, label?: string) {
+        static createControlDescription(data: any, schemaPath: string, label?: string) {
             return new ControlRenderDescription(data, schemaPath, label);
         }
     }
 
     declare var tv4;
-    //export class ValidationService {
-    //    private results;
-    //    private lastValidated;
-    //
-    //    validate = (data: any, schema: SchemaElement): void => {
-    //        if (this.lastValidated == data) {
-    //            return;
-    //        }
-    //        this.results = tv4.validateMultiple(data, schema);
-    //        this.lastValidated = data;
-    //    };
-    //
-    //    validationResult = (path: string) => {
-    //        return this.results[path];
-    //    } ;
-    //}
 }
 
-angular.module('jsonForms.services', [])
+angular.module('jsonforms.services', [])
     .service('RecursionHelper', JSONForms.RecursionHelper)
-    .service('ReferenceResolver', JSONForms.ReferenceResolver)
-    .service('JSONForms.RenderService', JSONForms.RenderService)
+    .service('PathResolver', JSONForms.PathResolver)
+    .service('RenderService', JSONForms.RenderService)
     .service('SchemaGenerator', JSONForms.SchemaGenerator)
     .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
-    //.service('JSONForms.ValidationService', JSONForms.ValidationService)
-    .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);
+    .service('RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);

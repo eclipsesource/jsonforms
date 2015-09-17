@@ -6,10 +6,12 @@
 
 describe('Labels', () => {
 
+    var UISchemaGenerator: JSONForms.IUISchemaGenerator;
+
     // load all necessary modules and templates
-    beforeEach(module('jsonForms.services'));
-    beforeEach(module('jsonForms.directives'));
-    beforeEach(module('jsonForms.stringControl'));
+    beforeEach(module('jsonforms.services'));
+    beforeEach(module('jsonforms.directives'));
+    beforeEach(module('jsonforms.stringControl'));
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/element.html'));
 
@@ -29,7 +31,7 @@ describe('Labels', () => {
         expect(el.html()).toContain("Name");
     }));
 
-    it("should be able to specify custom label attribute", inject(function($rootScope, $compile) {
+    it("should be able to specify custom label attribute", inject(function($rootScope, $compile, UISchemaGenerator) {
         var scope = $rootScope.$new();
         scope.schema = {
             "properties": {

@@ -1,34 +1,15 @@
-'use strict';
+/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
+/// <reference path="../../js/services.ts"/>
 
-describe('jsonforms directive', function() {
+describe('jsonforms directive', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonForms.services'));
-    beforeEach(module('jsonForms.directives'));
+    beforeEach(module('jsonforms.services'));
+    beforeEach(module('jsonforms.directives'));
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/element.html'));
-
-    //it("should render a simple input field", inject(function ($rootScope, $compile) {
-    //    var scope = $rootScope.$new();
-    //    // the jsonforms directive expects functions that return promises
-    //    scope.schema = {
-    //        "type": "object",
-    //        "properties": {
-    //            "name": { "type": "string" }
-    //        }
-    //    };
-    //    scope.data = { name: 'John Doe' };
-    //    scope.uiSchema = {
-    //        "type": "Control",
-    //        "label": "First name",
-    //        "scope": { "$ref": "#/properties/name" }
-    //    };
-    //    var el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')(scope);
-    //    scope.$digest();
-    //    // simple assert, we should test for more complex logic here
-    //    expect(el.html()).toContain("form");
-    //}));
-
 
     it("should throw an error in case the data attribute is missing", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

@@ -8,15 +8,6 @@ module.exports = function(config){
             'templates/*.html': ['ng-html2js']
         },
 
-        ngHtml2JsPreprocessor: {
-            // If your build process changes the path to your templates,
-            // use stripPrefix and prependPrefix to adjust it.
-            //stripPrefix: "..",
-
-            // the name of the Angular module to create
-            //moduleName: "jsonForms.templates"
-        },
-
         files : [
             'app/bower_components/traverse/traverse.js',
             'app/bower_components/json-refs/browser/json-refs.js',

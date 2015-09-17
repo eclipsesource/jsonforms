@@ -15,8 +15,8 @@ class IntegerControl implements JSONForms.IRenderer {
     }
 }
 
-var app = angular.module('jsonForms.integerControl', []);
+var app = angular.module('jsonforms.integerControl', []);
 
-app.run(['JSONForms.RenderService', function(RenderService) {
+app.run(['RenderService', function(RenderService) {
     RenderService.register(new IntegerControl());
 }]);

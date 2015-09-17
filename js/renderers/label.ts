@@ -22,8 +22,8 @@ class Label implements JSONForms.IRenderer {
 
 }
 
-var app = angular.module('jsonForms.label', ['jsonForms.services']);
+var app = angular.module('jsonforms.label', ['jsonforms.services']);
 
-app.run(['JSONForms.RenderService', function(RenderService) {
+app.run(['RenderService', function(RenderService) {
     RenderService.register(new Label());
 }]);

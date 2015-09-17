@@ -59,16 +59,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             },
             {
                 "type": "Control",
-                "label": "Birthday",
+                "label": "Nationality",
                 "scope": {
-                    "$ref": "#/properties/birthDate"
+                    "$ref": "#/properties/nationality"
                 }
             },
             {
                 "type": "Control",
-                "label": "Nationality",
+                "label": "Birthday",
                 "scope": {
-                    "$ref": "#/properties/nationality"
+                    "$ref": "#/properties/birthDate"
                 }
             }
         ]
