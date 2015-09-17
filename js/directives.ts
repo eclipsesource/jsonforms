@@ -1,12 +1,12 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 /// <reference path="./services.ts"/>
 
-var jsonFormsDirectives = angular.module('jsonForms.directives', ['jsonForms.services']);
+var jsonFormsDirectives = angular.module('jsonforms.directives', ['jsonforms.services']);
 declare var JsonRefs;
 
 class JsonFormsDirectiveController {
 
-    static $inject = ['JSONForms.RenderService', 'JSONForms.PathResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
+    static $inject = ['RenderService', 'PathResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
 
     constructor(
         private RenderService: JSONForms.IRenderService,

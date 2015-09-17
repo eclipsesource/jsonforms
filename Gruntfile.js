@@ -56,7 +56,7 @@ module.exports = function(grunt) {
                 dest: 'temp/templates.js',
                 options:    {
                     htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
-                    module: "jsonForms"
+                    module: "jsonforms"
                 }
             }
         },

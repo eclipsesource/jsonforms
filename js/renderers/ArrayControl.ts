@@ -157,8 +157,8 @@ class ArrayControl implements JSONForms.IRenderer {
     }
 }
 
-var app = angular.module('jsonForms.table', []);
+var app = angular.module('jsonforms.arrayControl', []);
 
-app.run(['JSONForms.RenderService', 'JSONForms.PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
+app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
     RenderService.register(new ArrayControl(PathResolver, $rootScope));
 }]);

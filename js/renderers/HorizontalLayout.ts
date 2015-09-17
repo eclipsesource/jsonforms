@@ -61,9 +61,9 @@ class HorizontalLayout implements JSONForms.IRenderer {
 
 }
 
-var app = angular.module('jsonForms.horizontalLayout', []);
+var app = angular.module('jsonforms.horizontalLayout', []);
 
-app.run(['JSONForms.RenderService', function(RenderService) {
+app.run(['RenderService', function(RenderService) {
     RenderService.register(new HorizontalLayout(RenderService));
 }]);
 

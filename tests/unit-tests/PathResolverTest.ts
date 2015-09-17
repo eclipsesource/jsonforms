@@ -7,15 +7,15 @@ describe('PathResolver', () => {
 
     var PathResolver: JSONForms.IPathResolver;
 
-    beforeEach(module('jsonForms.services'));
+    beforeEach(module('jsonforms.services'));
     beforeEach(() => {
-        inject(function(_PathResolver_: JSONForms.IPathResolver) {
+        inject(['PathResolver', function(_PathResolver_: JSONForms.IPathResolver) {
             PathResolver = _PathResolver_;
-        });
+        }]);
     });
 
 
-    it("should resolve properties path on instance", function () {
+    it("should resolve properties path on the UI schema", function () {
 
         var obj = {
             "foo": {

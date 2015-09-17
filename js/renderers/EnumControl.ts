@@ -22,8 +22,8 @@ class EnumControl implements JSONForms.IRenderer {
     }
 }
 
-var app = angular.module('jsonForms.enumControl', []);
+var app = angular.module('jsonforms.enumControl', []);
 
-app.run(['JSONForms.RenderService', 'JSONForms.PathResolver', function(RenderService, PathResolver) {
+app.run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
     RenderService.register(new EnumControl(PathResolver));
 }]);

@@ -2,7 +2,7 @@
 
 angular.module('makeithappen', [
     'ngRoute',
-    'jsonForms'
+    'jsonforms'
 ]).config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/local', {
@@ -13,10 +13,10 @@ angular.module('makeithappen', [
         //    templateUrl: 'templates/remote.html',
         //    controller: 'RemoteController'
         //});
-        $routeProvider.when('/editor', {
-            templateUrl: 'templates/editor.html',
-            controller: 'EditorController'
-        });
+        //$routeProvider.when('/editor', {
+        //    templateUrl: 'templates/editor.html',
+        //    controller: 'EditorController'
+        //});
         //$routeProvider.when('/async', {
         //    templateUrl: 'templates/async.html',
         //    controller: 'AsyncController'

@@ -16,8 +16,8 @@ class StringControl implements JSONForms.IRenderer {
 
 }
 
-var app = angular.module('jsonForms.stringControl', []);
+var app = angular.module('jsonforms.stringControl', []);
 
-app.run(['JSONForms.RenderService', function(RenderService) {
+app.run(['RenderService', function(RenderService) {
     RenderService.register(new StringControl());
 }]);

@@ -193,7 +193,7 @@ module JSONForms {
     export class RenderService implements  IRenderService {
 
         private renderers: IRenderer[] = [];
-        static $inject = ['JSONForms.PathResolver'];
+        static $inject = ['PathResolver'];
 
         constructor(private refResolver: IPathResolver) {
         }
@@ -284,7 +284,7 @@ module JSONForms {
 
     }
 
-    export class PathResolver {
+    export class PathResolver implements IPathResolver {
 
         private pathMapping:{ [id: string]: string; } = {};
         static $inject = ["$compile"];
@@ -656,35 +656,18 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory {
-        createControlDescription(data: any, schemaPath: string, label?: string) {
+        static createControlDescription(data: any, schemaPath: string, label?: string) {
             return new ControlRenderDescription(data, schemaPath, label);
         }
     }
 
     declare var tv4;
-    //export class ValidationService {
-    //    private results;
-    //    private lastValidated;
-    //
-    //    validate = (data: any, schema: SchemaElement): void => {
-    //        if (this.lastValidated == data) {
-    //            return;
-    //        }
-    //        this.results = tv4.validateMultiple(data, schema);
-    //        this.lastValidated = data;
-    //    };
-    //
-    //    validationResult = (path: string) => {
-    //        return this.results[path];
-    //    } ;
-    //}
 }
 
-angular.module('jsonForms.services', [])
+angular.module('jsonforms.services', [])
     .service('RecursionHelper', JSONForms.RecursionHelper)
-    .service('JSONForms.PathResolver', JSONForms.PathResolver)
-    .service('JSONForms.RenderService', JSONForms.RenderService)
+    .service('PathResolver', JSONForms.PathResolver)
+    .service('RenderService', JSONForms.RenderService)
     .service('SchemaGenerator', JSONForms.SchemaGenerator)
     .service('UISchemaGenerator', JSONForms.UISchemaGenerator)
-    //.service('JSONForms.ValidationService', JSONForms.ValidationService)
-    .service('JSONForms.RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);
+    .service('RenderDescriptionFactory', JSONForms.RenderDescriptionFactory);
