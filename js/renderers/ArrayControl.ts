@@ -8,7 +8,7 @@ class ArrayControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    constructor(private refResolver: JSONForms.IReferenceResolver, private scope: ng.IScope) {
+    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope) {
 
     }
 
@@ -24,7 +24,7 @@ class ArrayControl implements JSONForms.IRenderer {
         if (dataProvider.data instanceof Array) {
             data = dataProvider.data;
         } else {
-            data = this.refResolver.resolveInstance(dataProvider.data, this.refResolver.normalize(schemaPath));
+            data = this.pathResolver.resolveInstance(dataProvider.data, this.pathResolver.toInstancePath(schemaPath));
         }
 
         if (data != undefined) {
@@ -64,12 +64,12 @@ class ArrayControl implements JSONForms.IRenderer {
         if (element.columns) {
             colDefs = element.columns.map(function (col, idx) {
                 return {
-                    field: that.refResolver.normalize(col['scope']['$ref']),
+                    field: that.pathResolver.toInstancePath(col['scope']['$ref']),
                     displayName: col.label
                 }
             });
         } else {
-            var subSchema = that.refResolver.resolveSchema(schema, schemaPath);
+            var subSchema = that.pathResolver.resolveSchema(schema, schemaPath);
             var items = subSchema['items'];
             colDefs = [];
             // TODO: items
@@ -159,6 +159,6 @@ class ArrayControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonForms.table', []);
 
-app.run(['JSONForms.RenderService', 'ReferenceResolver', '$rootScope', function(RenderService, ReferenceResolver, $rootScope) {
-    RenderService.register(new ArrayControl(ReferenceResolver, $rootScope));
+app.run(['JSONForms.RenderService', 'JSONForms.PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
+    RenderService.register(new ArrayControl(PathResolver, $rootScope));
 }]);

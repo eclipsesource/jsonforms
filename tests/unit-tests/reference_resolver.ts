@@ -3,14 +3,14 @@
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
 /// <reference path="../../js/services.ts"/>
 
-describe('ReferenceResolver', () => {
+describe('PathResolver', () => {
 
-    var ReferenceResolver: JSONForms.IReferenceResolver;
+    var PathResolver: JSONForms.IPathResolver;
 
     beforeEach(module('jsonForms.services'));
     beforeEach(() => {
-        inject(function(_ReferenceResolver_: JSONForms.IReferenceResolver) {
-            ReferenceResolver = _ReferenceResolver_;
+        inject(function(_PathResolver_: JSONForms.IPathResolver) {
+            PathResolver = _PathResolver_;
         });
     });
 
@@ -27,7 +27,7 @@ describe('ReferenceResolver', () => {
             }
         };
 
-        expect(ReferenceResolver.resolveUi(obj, "#/foo/bar").type).toBe("string");
+        expect(PathResolver.resolveUi(obj, "#/foo/bar").type).toBe("string");
     });
 
 });

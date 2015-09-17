@@ -6,11 +6,11 @@ declare var JsonRefs;
 
 class JsonFormsDirectiveController {
 
-    static $inject = ['JSONForms.RenderService', 'ReferenceResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
+    static $inject = ['JSONForms.RenderService', 'JSONForms.PathResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
 
     constructor(
         private RenderService: JSONForms.IRenderService,
-        private ReferenceResolver: JSONForms.IReferenceResolver,
+        private PathResolver: JSONForms.IPathResolver,
         private UISchemaGenerator: JSONForms.IUISchemaGenerator,
         private SchemaGenerator: JSONForms.ISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
@@ -29,7 +29,6 @@ class JsonFormsDirectiveController {
             $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
                 //schema['uiSchema'] = uiSchema;
                 //  build mapping of ui paths to schema refs
-                //ReferenceResolver.addUiPathToSchemaRefMapping(JsonRefs.findRefs(uiSchema));
                 JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
                     // TODO: ui schema is now unresolved
