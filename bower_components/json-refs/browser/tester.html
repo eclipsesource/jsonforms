@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>JsonRefs Test Page</title>
+  </head>
+  <body>
+    <p>Resolving references in the following:</p>
+    <pre>{
+  $ref: 'https://api.github.com/repos/whitlockjc/json-refs'
+}</pre>
+  </body>
+  <script src="json-refs-standalone.js"></script>
+  <script>
+    JsonRefs.resolveRefs({
+      $ref: 'https://api.github.com/repos/whitlockjc/json-refs'
+    }, function (err, resolved) {
+      if (err) {
+        document.body.innerHTML += '<p><strong>Dereferencing Failed</strong></p><span>' + err.message + '</span>';
+      } else {
+        document.body.innerHTML += '<p><strong>Dereferenced Content</strong></p><pre>' + JSON.stringify(resolved, null, 2) + '</pre>'
+      }
+    });
+  </script>
+</html>

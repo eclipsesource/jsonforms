@@ -15,8 +15,8 @@ bower install angular-ui-grid
 Add `<script>` and `<link>` tags to your `index.html`:
 
 ```html
-<link rel="stylesheet" href="/bower_components/ui-grid/ui-grid.css" />
-<script src="/bower_components/ui-grid/ui-grid.js"></script>
+<link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+<script src="bower_components/angular-ui-grid/ui-grid.js"></script>
 ```
 
 ## Documentation

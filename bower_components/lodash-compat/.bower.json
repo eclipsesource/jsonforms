@@ -1,0 +1,23 @@
+{
+  "name": "lodash-compat",
+  "version": "3.8.0",
+  "main": "lodash.js",
+  "ignore": [
+    ".*",
+    "*.log",
+    "*.md",
+    "component.json",
+    "package.json",
+    "node_modules"
+  ],
+  "homepage": "https://github.com/lodash/lodash-compat",
+  "_release": "3.8.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "3.8.0",
+    "commit": "da4068de4c3cda5caba656bb276d280e8367753a"
+  },
+  "_source": "git://github.com/lodash/lodash-compat.git",
+  "_target": "~3.8.0",
+  "_originalSource": "lodash-compat"
+}

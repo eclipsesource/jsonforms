@@ -1,0 +1,13 @@
+{
+        "name": "jsonforms-website",
+        "description": "The website for JSONForms",
+        "version": "0.0.1",
+        "homepage": "https://github.com/eclipsesource/jsonforms",
+        "license": "MIT",
+        "private": true,
+        "dependencies": {
+            "jsonforms": "latest",
+            "angular-route":"latest",
+            "angular-ui-ace":"latest"
+        }
+}

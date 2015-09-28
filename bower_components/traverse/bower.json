@@ -1,0 +1,31 @@
+{
+  "name": "js-traverse",
+  "version": "0.6.7",
+  "homepage": "https://github.com/davewasmer/js-traverse",
+  "authors": [
+    "James Halliday <mail@substack.net>"
+  ],
+  "description": "Traverse and transform objects by visiting every node on a recursive walk.",
+  "main": "traverse.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "traverse",
+    "deep",
+    "recursion",
+    "recurse",
+    "recursive",
+    "walk"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "lodash-compat",
+  "version": "3.8.0",
+  "main": "lodash.js",
+  "ignore": [
+    ".*",
+    "*.log",
+    "*.md",
+    "component.json",
+    "package.json",
+    "node_modules"
+  ]
+}

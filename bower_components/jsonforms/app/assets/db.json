@@ -1,0 +1,120 @@
+{
+  "users": [
+    {
+      "id": "5448b9ee5c00005c00060483",
+      "firstName": "Ana",
+      "height": 1.73,
+      "nationality": "AR",
+      "albums": [
+        {
+          "name": "El Groove De Tu Coraz�n",
+          "releaseYear": 2011
+        },
+        {
+          "name": "Beating PC",
+          "releaseYear": 2013
+        },
+        {
+          "name": "Don't Hide Be Wild",
+          "releaseYear": 2014
+        }
+      ]
+    },
+    {
+      "id": "54732dbd5b0000fc0fc5190b",
+      "firstName": "Christian ",
+      "height": 1.85,
+      "nationality": "DE",
+      "albums": [
+        {
+          "name": "Pitch Rider Ep",
+          "releaseYear": 2011
+        }
+      ]
+    },
+    {
+      "id": "54732f005b00004e12c5190c",
+      "firstName": "Rebolledo",
+      "height": 1.75,
+      "nationality": "MEX",
+      "albums": [
+        {
+          "name": "Guerrero",
+          "releaseYear": 2009
+        },
+        {
+          "name": "Bo Jack / Pitaya Frenes�",
+          "releaseYear": 2009
+        },
+        {
+          "name": "Desierto",
+          "releaseYear": 2010
+        },
+        {
+          "name": "Surf Smurf",
+          "releaseYear": 2014
+        }
+      ]
+    },
+    {
+      "id": "54c63acb1803009383463bd0",
+      "firstName": "Ms. Kitten",
+      "height": 1.74,
+      "nationality": "FR",
+      "albums": [
+        {
+          "name": "I Com",
+          "releaseYear": 2004
+        },
+        {
+          "name": "Batbox",
+          "releaseYear": 2007
+        },
+        {
+          "name": "Calling From Stars",
+          "releaseYear": 2013
+        },
+        {
+          "name": "Kittin Calling 30' Mix",
+          "releaseYear": 2013
+        },
+        {
+          "name": "Momento Drive",
+          "releaseYear": 2014
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "5348b9ee5c00005c00060483",
+      "name": "Implement qbforms",
+      "description": "Work more",
+      "userId": "5448b9ee5c00005c00060483"
+    },
+    {
+      "id": "5348b9ee5c00005c00060482",
+      "name": "Help Edgar",
+      "description": "Lol, Edgar",
+      "userId": "5448b9ee5c00005c00060483"
+    },
+    {
+      "id": "5348b9ee5c00005c00060483",
+      "name": "Cleaning",
+      "description": "Clean bath & kitchen",
+      "userId": "54c63acb1803009383463bd0"
+    },
+    {
+      "id": "5348b9ee5c00005c00060484",
+      "name": "Do shopping",
+      "description": "",
+      "userId": "54c63acb1803009383463bd0"
+    },
+    {
+      "id": "5348b9ee5c00005c00060484",
+      "name": "Workout",
+      "description": "",
+      "userId": "54c63acb1803009383463bd0"
+    }
+  ]
+}

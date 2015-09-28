@@ -1,0 +1,37 @@
+{
+  "name": "path-loader",
+  "main": "browser/path-loader.js",
+  "version": "0.0.2",
+  "homepage": "https://github.com/whitlockjc/path-loader",
+  "authors": [
+    "Jeremy Whitlock <jwhitlock@apache.org>"
+  ],
+  "description": "Utility that provides a single API for loading the content of a path/URL.",
+  "keywords": [
+    "json"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "browser/*-standalone*.js",
+    "gulpfile.js",
+    "index.js",
+    "package.json",
+    "test"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "^2.1.0"
+  },
+  "_release": "0.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.2",
+    "commit": "31606e961836775b57867246fab02404e5c559a1"
+  },
+  "_source": "git://github.com/whitlockjc/path-loader.git",
+  "_target": "~0.0.2",
+  "_originalSource": "path-loader"
+}
