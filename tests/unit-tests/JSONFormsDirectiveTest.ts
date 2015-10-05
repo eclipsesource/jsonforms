@@ -8,6 +8,17 @@ describe('jsonforms directive', () => {
     // load all necessary modules and templates
     beforeEach(module('jsonforms.services'));
     beforeEach(module('jsonforms.directives'));
+    beforeEach(module('jsonforms.label'));
+    beforeEach(module('jsonforms.verticalLayout'));
+    beforeEach(module('jsonforms.horizontalLayout'));
+    beforeEach(module('jsonforms.arrayControl'));
+    beforeEach(module('jsonforms.integerControl'));
+    beforeEach(module('jsonforms.booleanControl'));
+    beforeEach(module('jsonforms.stringControl'));
+    beforeEach(module('jsonforms.numberControl'));
+    beforeEach(module('jsonforms.datetimeControl'));
+    beforeEach(module('jsonforms.enumControl'));
+
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/element.html'));
     it("should render a labeled select field", inject(function ($rootScope, $compile) {
