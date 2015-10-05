@@ -1,19 +1,32 @@
-logs/*
-!.gitkeep
+# generated files
 dist/
+temp/
+
+# npm
 node_modules/
+
+# all js files in js
+js/**/*.js
+
+# all js files in tests except the configs
+tests/**/*.js
+!tests/e2e-tests/protractor.conf.js
+!tests/unit-tests/karma.conf.js
+
+# typescript mappings
+**/*.map
+
+# logs
+*.log
+
+# test app
 app/bower_components/
 app/css/jsonforms.css
 app/js/jsonforms.js
 app/js/jsonforms.min.js
-temp/
-.DS_Store
+
+# webstorm
 .idea
-*.log
-js/**/*.js
-**/*.map
-tests/unit-tests/reference_resolver.js
-tests/unit-tests/schema_generator.js
-tests/unit-tests/uischema_generator.js
-tests/e2e-tests/uischema_generator.js
-tests/e2e-tests/schema_generator.js
+
+# mac users
+.DS_Store
