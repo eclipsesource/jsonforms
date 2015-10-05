@@ -1,6 +1,8 @@
 JSONForms contributors (sorted alphabetically)
 ==============================================
 
+* **[Dominik Münch](https://github.com/muenchdo)**
+
 * **[Edgar Müller](https://github.com/edgarmueller)**
 
 * **[Maximilian Koegel](https://github.com/koegel)**
