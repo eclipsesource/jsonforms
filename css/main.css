@@ -281,5 +281,19 @@ fieldset.inline2 {
     max-width: 100%;
     min-height: 300px;
 }
-
-
+#title:link {
+    color: #000;
+    text-decoration: none;
+}
+#title:visited {
+    color: #000;
+    text-decoration: none;
+}
+#title:hover {
+    color: #000;
+    text-decoration: none;
+}
+#title:active {
+    color: #000;
+    text-decoration: none;
+}

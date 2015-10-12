@@ -1,0 +1,24 @@
+<div ng-controller="LocalController">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Bound data</h3>
+        </div>
+        <div class="panel-body">
+            {{formattedData()}}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>JSONForms generated Forms</h3>
+        </div>
+        <div class="panel-body">
+            <jsonforms schema="schema" ui-schema="uiSchema" data="data"></jsonforms>
+        </div>
+        <div class="panel-body">
+            <jsonforms schema="usersSchema" ui-schema="usersUiSchema" data="users"></jsonforms>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,3 @@
+.jsf {
+    @import (less) url( 'bootstrap100col.css' );
+}

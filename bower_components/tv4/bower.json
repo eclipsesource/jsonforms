@@ -1,0 +1,41 @@
+{
+  "name": "tv4",
+  "version": "1.2.3",
+  "description": "A public domain JSON Schema validator for JavaScript",
+  "keywords": [
+    "json-schema",
+    "schema",
+    "validator",
+    "tv4"
+  ],
+  "license:": [
+    {
+      "type": "Public Domain",
+      "url": "http://geraintluff.github.io/tv4/LICENSE.txt"
+    },
+    {
+      "type": "MIT",
+      "url": "http://jsonary.com/LICENSE.txt"
+    }
+  ],
+  "main": "tv4.js",
+  "ignore": [
+    "*.html",
+    "*.txt",
+    "*.min.js",
+    "*.js.map",
+    "*.md",
+    "Gruntfile.js",
+    "package.json",
+    "component.json",
+    "bower.json",
+    "node_modules",
+    "test",
+    "try",
+    "build",
+    "dist",
+    "doc",
+    "source",
+    ".*"
+  ]
+}

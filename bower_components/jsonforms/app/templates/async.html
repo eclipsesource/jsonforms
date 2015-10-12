@@ -1,0 +1,23 @@
+<div ng-controller="AsyncController">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Bound data</h3>
+        </div>
+        <div class="panel-body">
+            {{data}}
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>JSONForms asynchronously generated Forms</h3>
+        </div>
+        <div class="panel-body">
+            <jsonforms schema="schema" async-ui-schema="fetchUiSchema()" async-data-provider="UserDataProvider"></jsonforms>
+            <!-- TEST async-schema and async-ui-schema -->
+        </div>
+    </div>
+
+</div>
+

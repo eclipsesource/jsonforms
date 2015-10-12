@@ -1,6 +1,6 @@
 {
   "name": "angular-ui-grid",
-  "version": "3.0.0-RC.18",
+  "description": "A data grid for Angular",
   "main": [
     "./ui-grid.css",
     "./ui-grid.eot",
@@ -11,7 +11,24 @@
   ],
   "ignore": [],
   "dependencies": {
-    "angular": "~1.2.16"
+    "angular": ">=1.2.16 <=1.3.16"
   },
-  "homepage": "http://ui-grid.info"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular-ui/ui-grid.git"
+  },
+  "homepage": "http://ui-grid.info",
+  "keywords": [
+    "angular",
+    "ng-grid",
+    "nggrid",
+    "grid",
+    "angularjs",
+    "slickgrid",
+    "kogrid",
+    "ui-grid",
+    "ui grid",
+    "data grid"
+  ],
+  "license": "MIT"
 }

@@ -16,6 +16,6 @@
     "commit": "36844ff7c0e0d9445bc8e31514d7f0f59cb8b048"
   },
   "_source": "git://github.com/angular-ui/ui-ace.git",
-  "_target": "0.2.3",
+  "_target": "*",
   "_originalSource": "angular-ui-ace"
 }

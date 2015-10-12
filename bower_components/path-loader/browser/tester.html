@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>PathLoader Test Page</title>
+  </head>
+  <body>
+    <p>Loading content from <a href="https://api.github.com/repos/whitlockjc/path-loader">https://api.github.com/repos/whitlockjc/path-loader</a></p>
+  </body>
+  <script src="path-loader-min.js"></script>
+  <script>
+    PathLoader
+      .load('https://api.github.com/repos/whitlockjc/path-loader')
+      .then(JSON.parse)
+      .then(function (json) {
+        document.body.innerHTML += '<p><strong>Loaded Content</strong></p><pre>' + JSON.stringify(json, null, 2) + '</pre>';
+      }, function (err) {
+        document.body.innerHTML += '<p><strong>Load Failed</strong></p><span>' + err.message + '</span>';
+      });
+  </script>
+</html>

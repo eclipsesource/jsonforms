@@ -1,0 +1,41 @@
+{
+  "name": "angular-ui-validate",
+  "version": "1.1.1",
+  "author": "https://github.com/angular-ui/ui-validate/graphs/contributors",
+  "license": "MIT",
+  "homepage": "https://github.com/angular-ui/ui-validate",
+  "dependencies": {},
+  "devDependencies": {
+    "bower": "~1.3",
+    "del": "~0.1.1",
+    "event-stream": "~3.1.0",
+    "gulp": "~3.8.5",
+    "gulp-concat": "~2.1.7",
+    "gulp-header": "~1.0.2",
+    "gulp-footer": "~1.0.5",
+    "gulp-jshint": "1.6.4",
+    "gulp-plumber": "^0.6.3",
+    "gulp-rename": "~0.2.2",
+    "gulp-uglify": "~0.3.1",
+    "jshint-stylish": "~0.3.0",
+    "karma": "^0.12.16",
+    "karma-chrome-launcher": "^0.1.3",
+    "karma-firefox-launcher": "~0.1",
+    "karma-jasmine": "~0.2",
+    "karma-ng-html2js-preprocessor": "^0.1.0",
+    "karma-phantomjs-launcher": "~0.1.4",
+    "karma-coverage": "~0.2"
+  },
+  "scripts": {},
+  "main": "./dist/validate.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/angular-ui/ui-validate.git"
+  },
+  "keywords": [
+    "angular",
+    "angular-ui",
+    "validation",
+    "validate"
+  ]
+}

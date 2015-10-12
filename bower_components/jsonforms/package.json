@@ -1,0 +1,50 @@
+{
+  "name": "jsonforms",
+  "private": true,
+  "version": "0.0.2",
+  "description": "Generating forms for JSON schema",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "license": "MIT",
+  "devDependencies": {
+    "bootstrap": "^3.3.4",
+    "bower": "^1.3.1",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.3",
+    "grunt-angular-templates": "^0.5.7",
+    "grunt-browserify": "^3.8.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-connect": "^0.10.1",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-less": "^1.0.1",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-karma": "0.6.2",
+    "grunt-protractor-runner": "^2.0.0",
+    "grunt-typescript": "^0.6.2",
+    "http-server": "^0.6.1",
+    "karma": "~0.10",
+    "karma-chrome-launcher": "^0.1.2",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-jasmine": "~0.1.3",
+    "karma-ng-html2js-preprocessor": "^0.1.2",
+    "protractor": "^2.0.0"
+  },
+  "scripts": {
+    "postinstall": "bower install && webdriver-manager update",
+    "prestart": "npm install",
+    "start": "http-server -a localhost -p 8000 -c-1",
+    "pretest": "npm install",
+    "test": "karma start karma.conf.js",
+    "test-single-run": "karma start tests/unit-tests/karma.conf.js --single-run",
+    "preupdate-webdriver": "npm install",
+    "update-webdriver": "webdriver-manager update",
+    "preprotractor": "npm run update-webdriver",
+    "protractor": "protractor tests/e2e-tests/protractor.conf.js",
+    "update-index-async": "node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + sed(/sourceMappingURL=angular-loader.min.js.map/,'sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map','app/bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""
+  },
+  "dependencies": {
+    "json-refs": "^0.2.0"
+  }
+}
