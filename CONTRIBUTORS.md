@@ -10,3 +10,5 @@ JSONForms contributors (sorted alphabetically)
 * **[Philip Langer](https://github.com/planger)**
 
 * **[Stefan Dirix](https://github.com/sdirix)**
+
+* **[Eugen Neufeld](https://github.com/eneufeld)**
