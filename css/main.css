@@ -94,50 +94,8 @@ ul {
     border-radius: 0px;
 }
 
-.qb-form {
-    margin-left:20px;
-    margin-right:20px;
-    margin-top:20px;
-    margin-bottom:20px;
-    padding-left:20px;
-    padding-right:20px;
-    padding-top:10px;
-    padding-bottom:10px;
-}
-
-.qb-label{
-  padding-left:0px;
-  padding-right:0px;
-  font-weight: bold;
-  font-size: 1.3em;
-}
-
 .bootstrap-qbwrapper .form-control{
     border-radius: 0px;
-}
-
-.qb-control {
-
-}
-
-.qb-control-number {
-
-}
-
-.qb-control-integer {
-
-}
-
-.qb-control-string {
-
-}
-
-.qb-control-datetime {
-
-}
-
-.qb-control-enum {
-
 }
 
 .radio-inline, .checkbox{

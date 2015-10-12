@@ -113,28 +113,27 @@
             <div class="panel-heading">
                 <h3 class="panel-title"><strong>Demo</strong></h3>
             </div>
-            <div class="panel-body" style="line-height: 2.0">
-                <div id="demo-body" class="bootstrap-qbwrapper">
+            <div style="line-height: 2.0">
+                <div id="demo-body">
                     <form role="form">
                         <div class="row">
-                            <div class="form-group col-sm-50">
+                            <div class="form-group col-sm-6">
                                 <label for="localModelEditor">JSON Schema:</label>
                                 <div ui-ace="{onLoad: aceLoaded}" ng-model="localModel" id="localModelEditor"></div>
                             </div>
-                            <div class="form-group col-sm-50">
+                            <div class="form-group col-sm-6">
                                 <label for="localViewEditor">View:</label>
                                 <div ui-ace="{onLoad: aceLoaded}" ng-model="localView" id="localViewEditor"></div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-20 col-sm-offset-40">
+                            <div class="col-sm-2 col-sm-offset-5">
                                 <button type="button" class="btn" ng-click="reparse()">Render view</button>
                             </div>
                         </div>
-                        <div class="panel-body jsf" style="line-height: 2.0" >
+                        <div class="jsf" style="line-height: 2.0" >
                             <preview refresh="refresh"></preview>
                         </div>
-
                     </form>
                 </div>
             </div>
