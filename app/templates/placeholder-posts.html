@@ -1,0 +1,11 @@
+<h1>Posts</h1>
+<div ng-controller="PlaceholderController">
+    <div ng-if="id">
+    <jsonforms schema="postSchema" async-data-provider="PostDataProvider"></jsonforms>
+    </div>
+    <div ng-if="!id">
+    <jsonforms schema="postsSchema" ui-schema="postsUiSchema" async-data-provider="PostDataProvider"></jsonforms>
+    </div>
+</div>
+
+
