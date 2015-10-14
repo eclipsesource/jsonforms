@@ -23,7 +23,10 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             "nationality": {
                 "type": "string",
                 "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
-            }
+            },
+            "occupation": {
+                "type": "string"
+            },
         }
     };
     $scope.uiSchema = {
@@ -63,6 +66,14 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                 "scope": {
                     "$ref": "#/properties/nationality"
                 }
+            },
+            {
+                "type": "Control",
+                "label": "Occupation",
+                "scope": {
+                    "$ref": "#/properties/occupation"
+                },
+                "suggestion": ["Accountant", "Engineer", "Freelancer", "Journalism", "Physician", "Student", "Teacher", "Other"]
             },
             {
                 "type": "Control",
