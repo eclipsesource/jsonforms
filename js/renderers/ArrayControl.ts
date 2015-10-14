@@ -8,7 +8,7 @@ class ArrayControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope) {
+    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope, private $location: ng.ILocationService) {
 
     }
 
@@ -25,6 +25,14 @@ class ArrayControl implements JSONForms.IRenderer {
             data = dataProvider.data;
         } else {
             data = this.pathResolver.resolveInstance(dataProvider.data, this.pathResolver.toInstancePath(schemaPath));
+        }
+
+        if (data === undefined || data.length == 0) {
+            dataProvider.fetchData().then(function(response) {
+                control['tableOptions'].gridOptions.data = response.slice(
+                    dataProvider.page * dataProvider.pageSize,
+                    dataProvider.page * dataProvider.pageSize + dataProvider.pageSize);
+            });
         }
 
         if (data != undefined) {
@@ -48,41 +56,78 @@ class ArrayControl implements JSONForms.IRenderer {
         };
     }
 
+    private createColDefs(columnDescriptions: any): any {
+        return columnDescriptions.map((col, idx) => {
+            var href = col.href;
+            if (href) {
+                var hrefScope = href.scope;
+                var cellTemplate;
+                if (hrefScope) {
+                    var instancePath = this.pathResolver.toInstancePath(hrefScope.$ref);
+                    cellTemplate = `<div class="ui-grid-cell-contents">
+                      <a href="#${href.url}/{{row.entity.${instancePath}}}">
+                        {{row.entity.${field}}}
+                      </a>
+                    </div>`;
+                } else {
+                    var field = this.pathResolver.toInstancePath(col['scope']['$ref']);
+                    cellTemplate = `<div class="ui-grid-cell-contents">
+                      <a href="#${href.url}/{{row.entity.${field}}}">
+                        {{row.entity.${field}}}
+                      </a>
+                </div>`;
+                }
+
+                return {
+                    cellTemplate: cellTemplate,
+                    field: field,
+                    displayName: col.label
+                }
+            } else {
+                return {
+                    field: this.pathResolver.toInstancePath(col['scope']['$ref']),
+                    displayName: col.label
+                }
+            }
+        });
+    }
+
+    private generateColDefs(schema: SchemaElement, schemaPath: string): any {
+        var colDefs = [];
+        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
+        var items = subSchema['items'];
+        // TODO: items
+        if (items['type'] == 'object') {
+            for (var prop in items['properties']) {
+                if (items['properties'].hasOwnProperty(prop)) {
+                    var colDef = {
+                        field: prop,
+                        displayName: JSONForms.PathUtil.beautify(prop)
+                    };
+                    colDefs.push(colDef);
+                }
+            }
+        } else {
+            // TODO is this case even possible?
+        }
+
+        return colDefs;
+    }
+
     private createTableUIElement(element, dataProvider: JSONForms.IDataProvider, schema: SchemaElement, schemaPath: string) {
 
         // TODO: how to configure paging/filtering
         var paginationEnabled = dataProvider.fetchPage !== undefined;
         var filteringEnabled = false;
 
-        var uiElement = {
-            schemaType: "array"
-        };
+        var uiElement = { schemaType: "array" };
 
-        var that = this;
         var colDefs;
         // TODO: change semantics of the columns attribute to only show selected properties
         if (element.columns) {
-            colDefs = element.columns.map(function (col, idx) {
-                return {
-                    field: that.pathResolver.toInstancePath(col['scope']['$ref']),
-                    displayName: col.label
-                }
-            });
+            colDefs = this.createColDefs(element.columns);
         } else {
-            var subSchema = that.pathResolver.resolveSchema(schema, schemaPath);
-            var items = subSchema['items'];
-            colDefs = [];
-            // TODO: items
-            if (items['type'] == 'object') {
-                for (var prop in items['properties']) {
-                    colDefs.push({
-                        field: prop,
-                        displayName: JSONForms.PathUtil.beautify(prop)
-                    });
-                }
-            } else {
-                // TODO is this case even possible?
-            }
+            colDefs = this.generateColDefs(schema, schemaPath);
         }
 
         var tableOptions = {
@@ -125,9 +170,9 @@ class ArrayControl implements JSONForms.IRenderer {
         };
 
 
-        tableOptions.gridOptions['onRegisterApi'] = function(gridApi) {
+        tableOptions.gridOptions['onRegisterApi'] = (gridApi) => {
             //gridAPI = gridApi;
-            gridApi.pagination.on.paginationChanged(that.scope, function (newPage, pageSize) {
+            gridApi.pagination.on.paginationChanged(this.scope, function (newPage, pageSize) {
                 tableOptions.gridOptions['paginationPage'] = newPage;
                 tableOptions.gridOptions['paginationPageSize'] = pageSize;
                 dataProvider.setPageSize(pageSize);
@@ -159,6 +204,6 @@ class ArrayControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonforms.arrayControl', []);
 
-app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
-    RenderService.register(new ArrayControl(PathResolver, $rootScope));
+app.run(['RenderService', 'PathResolver', '$rootScope', '$location', function(RenderService, PathResolver, $rootScope, $location) {
+    RenderService.register(new ArrayControl(PathResolver, $rootScope, $location));
 }]);

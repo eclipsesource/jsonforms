@@ -2,6 +2,7 @@
 
 angular.module('makeithappen', [
     'ngRoute',
+    'ngResource',
     'jsonforms'
 ]).config(['$routeProvider',
     function($routeProvider) {
@@ -33,7 +34,20 @@ angular.module('makeithappen', [
             templateUrl: 'templates/default-schema.html',
             controller: 'DefaultSchemaController'
         });
+        $routeProvider.when('/placeholder-posts/:id?', {
+            templateUrl: 'templates/placeholder-posts.html',
+            controller: 'PlaceholderController'
+        });
+        $routeProvider.when('/placeholder-users/:id?', {
+            templateUrl: 'templates/placeholder-users.html',
+            controller: 'PlaceholderController'
+        });
+        $routeProvider.when('/placeholder-comments/:id?', {
+            templateUrl: 'templates/placeholder-comments.html',
+            controller: 'PlaceholderController'
+        });
         $routeProvider.otherwise({
             redirectTo: '/local'
-        });    }
+        });
+    }
 ]);
