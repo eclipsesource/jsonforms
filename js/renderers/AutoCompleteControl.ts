@@ -28,11 +28,11 @@ var app = angular.module('jsonforms.autoCompleteControl', []).directive('autoCom
         $(iElement)["autocomplete"]({
             source: scope.element.suggestion,
             select: function() {
-                $timeout(function() {
-                    iElement.trigger('input');
-                }, 0);
-            }
-        });
+            $timeout(function() {
+                $(iElement).trigger('input');
+            }, 0);
+        }
+        }).autocomplete( "widget" ).addClass( "jsf-control-autocomplete" );
     };
 });
 

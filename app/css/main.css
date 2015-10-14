@@ -232,22 +232,17 @@ fieldset.inline2 {
 }
 
 
-/* auto complete style*/
-.ui-autocomplete { position: absolute; cursor: default; background:#e9e9e9 }
-
-/* workarounds */
-html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
-.ui-menu {
+.jsf-control-autocomplete
+{
+    position: absolute; cursor: default; background:#e9e9e9;
     list-style:none;
     padding: 2px;
     margin: 0;
     display:block;
     float: left;
 }
-.ui-menu .ui-menu {
-    margin-top: -3px;
-}
-.ui-menu .ui-menu-item {
+
+.jsf-control-autocomplete li {
     margin:0;
     padding: 0;
     zoom: 1;
@@ -255,17 +250,4 @@ html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% i
     clear: left;
     width: 100%;
 }
-.ui-menu .ui-menu-item a {
-    text-decoration:none;
-    display:block;
-    padding:.2em .4em;
-    line-height:1.5;
-    zoom:1;
-}
-.ui-menu .ui-menu-item a.ui-state-hover,
-.ui-menu .ui-menu-item a.ui-state-active {
-    font-weight: normal;
-    margin: -1px;
-}
-/*end of auto complete style*/
 
