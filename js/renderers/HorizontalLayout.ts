@@ -35,17 +35,17 @@ class HorizontalLayout implements JSONForms.IRenderer {
         }
 
         var template = label ?
-                `<fieldset>
+                `<layout><fieldset>
                    <legend>${label}</legend>
                    <div class="row">
-                     <recelement ng-repeat="child in element.elements" element="child"></recelement>
+                     <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
                    </div>
-                 </fieldset>` :
-                `<fieldset>
+                 </fieldset></layout>` :
+                `<layout><fieldset>
                    <div class="row">
-                     <recelement ng-repeat="child in element.elements" element="child"></recelement>
+                     <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
                    </div>
-                 </fieldset>`;
+                 </fieldset></layout>`;
 
         return {
             "type": "Layout",
@@ -66,4 +66,3 @@ var app = angular.module('jsonforms.horizontalLayout', []);
 app.run(['RenderService', function(RenderService) {
     RenderService.register(new HorizontalLayout(RenderService));
 }]);
-

@@ -25,15 +25,15 @@ class VerticalLayout implements JSONForms.IRenderer {
         var renderedElements = renderElements(element.elements);
         var label = element.label ? element.label : "";
         var template = label ?
-            `<fieldset>
+            `<layout><fieldset>
                     <legend>${label}</legend>
-                    <recelement ng-repeat="child in element.elements" element="child">
-                    </recelement>
-             </fieldset>` :
-            `<fieldset>
-                    <recelement ng-repeat="child in element.elements" element="child">
-                    </recelement>
-            </fieldset>`;
+                    <dynamic-widget ng-repeat="child in element.elements" element="child">
+                    </dynamic-widget>
+             </fieldset></layout>` :
+            `<layout><fieldset>
+                    <dynamic-widget ng-repeat="child in element.elements" element="child">
+                    </dynamic-widget>
+            </fieldset></layout>`;
 
         return {
             "type": "Layout",
