@@ -1,7 +1,7 @@
 <recursive>
 
     <div ng-if="element.type=='Widget'" class="col-sm-{{element.size}} jsf-label">
-        {{element.elements[0].text}}
+        <dynamic-widget element="element" />
     </div>
 
     <div ng-if="element.type=='Control'" class="col-sm-{{element.size}} form-group top-buffer">
