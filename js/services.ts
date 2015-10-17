@@ -72,7 +72,7 @@ module JSONForms {
 
     export interface IRenderer {
         /**
-         * When the RenderService�s render method is called it gets passed the UI Schema element (e.g. a Control)
+         * When the RenderService's render method is called it gets passed the UI Schema element (e.g. a Control)
          * to be rendered and a so called DataProvider that is responsible for maintaining the data.
          * Then every registered renderer is checked whether it is able to render the current UI Schema element.
          * If multiple renderers are applicable, the one with the highest priority is selected and triggered.

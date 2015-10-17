@@ -11,7 +11,6 @@ describe('LabelElement', () => {
     beforeEach(module('jsonforms.directives'));
     beforeEach(module('jsonforms.label'));
     beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/element.html'));
 
     it("should be rendered", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

@@ -192,6 +192,13 @@ jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
         transclude: true,
         templateUrl: 'templates/layout.html'
     }
+}).directive('widget', function ():ng.IDirective {
+    return {
+        restrict: "E",
+        replace: true,
+        transclude: true,
+        template: `<div class="col-sm-{{element.size}} jsf-label ng-transclude"></div>`
+    }
 })
 
 ;
