@@ -44,7 +44,7 @@ class ArrayControl implements JSONForms.IRenderer {
             "type": "Control",
             "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
-            "template": `<div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div>`
+            "template": `<control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div></control>`
         };
     }
 
