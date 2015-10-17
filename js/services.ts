@@ -72,7 +72,7 @@ module JSONForms {
 
     export interface IRenderer {
         /**
-         * When the RenderService’s render method is called it gets passed the UI Schema element (e.g. a Control)
+         * When the RenderServiceï¿½s render method is called it gets passed the UI Schema element (e.g. a Control)
          * to be rendered and a so called DataProvider that is responsible for maintaining the data.
          * Then every registered renderer is checked whether it is able to render the current UI Schema element.
          * If multiple renderers are applicable, the one with the highest priority is selected and triggered.
@@ -611,50 +611,6 @@ module JSONForms {
         };
     }
 
-
-    export class RecursionHelper {
-
-        static $inject = ["$compile"];
-        // $compile can then be used as this.$compile
-        constructor(private $compile:ng.ICompileService) {
-        }
-
-        compile = (element, link) => {
-
-            // Normalize the link parameter
-            if (angular.isFunction(link)) {
-                link = {post: link};
-            }
-
-            // Break the recursion loop by removing the contents
-            var contents = element.contents().remove();
-            var compiledContents;
-            var that = this;
-            return {
-                pre: (link && link.pre) ? link.pre : null,
-                /**
-                 * Compiles and re-adds the contents
-                 */
-                post: function (scope, element) {
-
-                    // Compile the contents
-                    if (!compiledContents) {
-                        compiledContents = that.$compile(contents);
-                    }
-                    // Re-add the compiled contents to the element
-                    compiledContents(scope, function (clone) {
-                        element.append(clone);
-                    });
-
-                    // Call the post-linking function, if any
-                    if (link && link.post) {
-                        link.post.apply(null, arguments);
-                    }
-                }
-            };
-        }
-    }
-
     export class RenderDescriptionFactory {
         static createControlDescription(data: any, schemaPath: string, label?: string) {
             return new ControlRenderDescription(data, schemaPath, label);
@@ -665,7 +621,6 @@ module JSONForms {
 }
 
 angular.module('jsonforms.services', [])
-    .service('RecursionHelper', JSONForms.RecursionHelper)
     .service('PathResolver', JSONForms.PathResolver)
     .service('RenderService', JSONForms.RenderService)
     .service('SchemaGenerator', JSONForms.SchemaGenerator)

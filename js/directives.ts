@@ -136,31 +136,7 @@ interface JsonFormsDirectiveScope extends ng.IScope {
     asyncDataProvider: JSONForms.IDataProvider;
 }
 
-class RecElement implements ng.IDirective {
-
-    constructor(private recursionHelper:JSONForms.RecursionHelper) {
-    }
-
-    restrict = "E";
-    replace = true;
-    scope = { element: '=' };
-    templateUrl = 'templates/element.html';
-
-    compile: ng.IDirectiveCompileFn = (element, attr, trans) => {
-        return <ng.IDirectivePrePost>this.recursionHelper.compile(element, trans);
-    };
-
-}
-
-jsonFormsDirectives.directive('control', function ():ng.IDirective {
-
-    return {
-        restrict: "E",
-        replace: true,
-        scope: { control: '=' },
-        templateUrl: 'templates/control.html'
-    };
-}).directive('jsonforms', function ():ng.IDirective {
+jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
 
     return {
         restrict: "E",
@@ -177,9 +153,8 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
         templateUrl: 'templates/form.html',
         controller: JsonFormsDirectiveController
     }
-}).directive('recelement', ['RecursionHelper', (recHelper: JSONForms.RecursionHelper): ng.IDirective => {
-    return new RecElement(recHelper);
-}]).directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
+})
+.directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
     var replaceJSONFormsAttributeInTemplate = (template: string): string => {
         return template
             .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
@@ -187,9 +162,7 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
     };
     return {
         restrict: 'E',
-        scope: {
-            element: "="
-        },
+        scope: {element: "="},
         replace: true,
         link: function(scope, element) {
             if (scope.element.templateUrl) {
@@ -205,4 +178,20 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
             }
         }
     }
-}]);
+}]).directive('control', function ():ng.IDirective {
+    return {
+        restrict: "E",
+        replace: true,
+        transclude: true,
+        templateUrl: 'templates/control.html'
+    }
+}).directive('layout', function ():ng.IDirective {
+    return {
+        restrict: "E",
+        replace: true,
+        transclude: true,
+        templateUrl: 'templates/layout.html'
+    }
+})
+
+;
