@@ -6,8 +6,6 @@
 
 describe('LabelElement', () => {
 
-    var UISchemaGenerator: JSONForms.IUISchemaGenerator;
-
     // load all necessary modules and templates
     beforeEach(module('jsonforms.services'));
     beforeEach(module('jsonforms.directives'));
