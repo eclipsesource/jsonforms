@@ -40,7 +40,6 @@ class ArrayControl implements JSONForms.IRenderer {
 
 
         return {
-            "label": element.label,
             "type": "Control",
             "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
@@ -124,9 +123,9 @@ class ArrayControl implements JSONForms.IRenderer {
         };
 
 
-        tableOptions.gridOptions['onRegisterApi'] = function(gridApi) {
+        tableOptions.gridOptions['onRegisterApi'] = (gridApi) => {
             //gridAPI = gridApi;
-            gridApi.pagination.on.paginationChanged(this.scope, function (newPage, pageSize) {
+            gridApi.pagination.on.paginationChanged(this.scope, (newPage, pageSize) => {
                 tableOptions.gridOptions['paginationPage'] = newPage;
                 tableOptions.gridOptions['paginationPageSize'] = pageSize;
                 dataProvider.setPageSize(pageSize);
