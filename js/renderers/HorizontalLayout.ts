@@ -11,19 +11,17 @@ class HorizontalLayout implements JSONForms.IRenderer {
 
     render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription => {
 
-        var that = this;
-
         var renderElements = function (elements) {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
-                return elements.reduce(function (acc, curr, idx, els) {
-                    acc.push(that.renderServ.render(curr, dataProvider));
+                return elements.reduce((acc, curr, idx, els) => {
+                    acc.push(this.renderServ.render(curr, dataProvider));
                     return acc;
                 }, []);
             }
         };
-        // TODO
+
         var maxSize = 99;
 
         var renderedElements = renderElements(element.elements);

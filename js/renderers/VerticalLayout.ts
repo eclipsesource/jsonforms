@@ -9,14 +9,12 @@ class VerticalLayout implements JSONForms.IRenderer {
 
     render(element: ILayout, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription{
 
-        var that = this;
-
         var renderElements = (elements) => {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
-                return elements.reduce(function (acc, curr, idx, els) {
-                    acc.push(that.renderService.render(curr, dataProvider));
+                return elements.reduce((acc, curr, idx, els) => {
+                    acc.push(this.renderService.render(curr, dataProvider));
                     return acc;
                 }, []);
             }
