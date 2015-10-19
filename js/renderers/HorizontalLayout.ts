@@ -11,7 +11,7 @@ class HorizontalLayout implements JSONForms.IRenderer {
 
     render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription => {
 
-        var renderElements = function (elements) {
+        var renderElements = (elements) => {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
