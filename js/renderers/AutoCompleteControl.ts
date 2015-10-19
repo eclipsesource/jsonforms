@@ -4,13 +4,9 @@ class AutoCompleteControl implements JSONForms.IRenderer {
 
     priority = 3;
 
-    constructor(private pathResolver: JSONForms.PathResolver) {}
-
     render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
-
         var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
-        control['template'] = `<input type="text" auto-complete id="${schemaPath}" class="form-control jsf-control jsf-control-string" data-jsonforms-model data-jsonforms-validation/>`;
+        control['template'] = `<control><input type="text" auto-complete id="${schemaPath}" class="form-control jsf-control jsf-control-string" data-jsonforms-model data-jsonforms-validation/></control>`;
         control['suggestion'] = element["suggestion"];
 
         return control;
@@ -36,6 +32,6 @@ var app = angular.module('jsonforms.autoCompleteControl', []).directive('autoCom
     };
 });
 
-app.run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
-    RenderService.register(new AutoCompleteControl(PathResolver));
+app.run(['RenderService', function(RenderService) {
+    RenderService.register(new AutoCompleteControl());
 }]);

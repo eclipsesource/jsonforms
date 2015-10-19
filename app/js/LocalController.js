@@ -23,6 +23,9 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             "nationality": {
                 "type": "string",
                 "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
+            },
+            "occupation": {
+                "type": "string"
             }
         }
     };
