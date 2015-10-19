@@ -27,50 +27,100 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         }
     };
     $scope.uiSchema = {
-        "type": "HorizontalLayout",
+        "type": "VerticalLayout",
         "elements": [
             {
-                "type": "Control",
-                "label": "Name",
-                "scope": {
-                    "$ref": "#/properties/name"
-                }
+                "type": "HorizontalLayout",
+                "elements": [
+                    {
+                        "type": "Control",
+                        "label": "Name",
+                        "scope": {
+                            "$ref": "#/properties/name"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Age",
+                        "scope": {
+                            "$ref": "#/properties/age"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Height",
+                        "scope": {
+                            "$ref": "#/properties/height"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Vegetarian",
+                        "scope": {
+                            "$ref": "#/properties/vegetarian"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Nationality",
+                        "scope": {
+                            "$ref": "#/properties/nationality"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Birthday",
+                        "scope": {
+                            "$ref": "#/properties/birthDate"
+                        }
+                    }
+                ]
             },
             {
-                "type": "Control",
-                "label": "Age",
-                "scope": {
-                    "$ref": "#/properties/age"
-                }
+                "type": "Categorization",
+                "elements": [
+                    {
+                        "type": "Category",
+                        "label":"Private",
+                        "elements": [
+                            {
+                                "type": "Control",
+                                "label": "Name",
+                                "scope": {
+                                    "$ref": "#/properties/name"
+                                }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Age",
+                                "scope": {
+                                    "$ref": "#/properties/age"
+                                }
+                            },
+                        ]
+                    },
+                    {
+                        "type": "Category",
+                        "label":"Additional",
+                        "elements": [
+                            {
+                                "type": "Control",
+                                "label": "Height",
+                                "scope": {
+                                    "$ref": "#/properties/height"
+                                }
+                            },
+                            {
+                                "type": "Control",
+                                "label": "Vegetarian",
+                                "scope": {
+                                    "$ref": "#/properties/vegetarian"
+                                }
+                            },
+                        ]
+                    },
+                ]
             },
-            {
-                "type": "Control",
-                "label": "Height",
-                "scope": {
-                    "$ref": "#/properties/height"
-                }
-            },
-            {
-                "type": "Control",
-                "label": "Vegetarian",
-                "scope": {
-                    "$ref": "#/properties/vegetarian"
-                }
-            },
-            {
-                "type": "Control",
-                "label": "Nationality",
-                "scope": {
-                    "$ref": "#/properties/nationality"
-                }
-            },
-            {
-                "type": "Control",
-                "label": "Birthday",
-                "scope": {
-                    "$ref": "#/properties/birthDate"
-                }
-            }
         ]
     };
 
