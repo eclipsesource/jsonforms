@@ -20,7 +20,7 @@ describe('jsonforms directive', () => {
     beforeEach(module('jsonforms.enumControl'));
 
     beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/element.html'));
+    beforeEach(module('templates/control.html'));
     it("should render a labeled select field", inject(function ($rootScope, $compile) {
         var scope = $rootScope.$new();
         scope.schema = {
@@ -44,7 +44,7 @@ describe('jsonforms directive', () => {
         expect(el.find("label").text()).toEqual("Gender");
         expect(el.find("select")).toBeDefined();
     }));
-    
+
     it("should throw an error in case the data attribute is missing", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();
         scope.schema = {};

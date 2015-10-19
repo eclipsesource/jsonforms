@@ -18,5 +18,6 @@ angular.module('jsonforms', [
     'jsonforms.numberControl',
     'jsonforms.datetimeControl',
     'jsonforms.enumControl',
+    'jsonforms.categorization',
     'jsonforms.autoCompleteControl',
 ]);

@@ -44,7 +44,7 @@ class ArrayControl implements JSONForms.IRenderer {
             "type": "Control",
             "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
-            "template": `<div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div>`
+            "template": `<control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div></control>`
         };
     }
 
@@ -58,18 +58,17 @@ class ArrayControl implements JSONForms.IRenderer {
             schemaType: "array"
         };
 
-        var that = this;
         var colDefs;
         // TODO: change semantics of the columns attribute to only show selected properties
         if (element.columns) {
-            colDefs = element.columns.map(function (col, idx) {
+            colDefs = element.columns.map((col, idx) => {
                 return {
-                    field: that.pathResolver.toInstancePath(col['scope']['$ref']),
+                    field: this.pathResolver.toInstancePath(col['scope']['$ref']),
                     displayName: col.label
                 }
             });
         } else {
-            var subSchema = that.pathResolver.resolveSchema(schema, schemaPath);
+            var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
             var items = subSchema['items'];
             colDefs = [];
             // TODO: items
@@ -127,7 +126,7 @@ class ArrayControl implements JSONForms.IRenderer {
 
         tableOptions.gridOptions['onRegisterApi'] = function(gridApi) {
             //gridAPI = gridApi;
-            gridApi.pagination.on.paginationChanged(that.scope, function (newPage, pageSize) {
+            gridApi.pagination.on.paginationChanged(this.scope, function (newPage, pageSize) {
                 tableOptions.gridOptions['paginationPage'] = newPage;
                 tableOptions.gridOptions['paginationPageSize'] = pageSize;
                 dataProvider.setPageSize(pageSize);

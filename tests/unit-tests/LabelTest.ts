@@ -13,7 +13,7 @@ describe('Labels', () => {
     beforeEach(module('jsonforms.directives'));
     beforeEach(module('jsonforms.stringControl'));
     beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/element.html'));
+    beforeEach(module('templates/control.html'));
 
     it("should be generated automatically", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();
