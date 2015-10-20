@@ -41,3 +41,7 @@ class CategorizationRenderer implements JSONForms.IRenderer {
         return uiElement.type == "Categorization";
     }
 }
+
+angular.module('jsonforms.renderers.layouts.categories.categorization').run(['RenderService', function(RenderService) {
+    RenderService.register(new CategorizationRenderer(RenderService));
+}]);

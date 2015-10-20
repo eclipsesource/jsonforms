@@ -46,3 +46,7 @@ class VerticalRenderer implements JSONForms.IRenderer {
         return uiElement.type == "VerticalLayout" || uiElement.type == "Group";
     }
 }
+
+angular.module('jsonforms.renderers.layouts.vertical').run(['RenderService', function(RenderService) {
+    RenderService.register(new VerticalRenderer(RenderService));
+}]);

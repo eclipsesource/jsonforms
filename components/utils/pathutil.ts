@@ -1,6 +1,6 @@
-/// <reference path="../typings/angularjs/angular.d.ts"/>
-/// <reference path="../typings/schemas/uischema.d.ts"/>
-/// <reference path="../typings/schemas/jsonschema.d.ts"/>
+/// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../typings/schemas/uischema.d.ts"/>
+/// <reference path="../../typings/schemas/jsonschema.d.ts"/>
 
 module JSONForms {
 

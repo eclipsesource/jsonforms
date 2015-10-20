@@ -16,3 +16,7 @@ class NumberRenderer implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.type == 'number';
     }
 }
+
+angular.module('jsonforms.renderers.controls.number').run(['RenderService', function(RenderService) {
+    RenderService.register(new NumberRenderer());
+}]);

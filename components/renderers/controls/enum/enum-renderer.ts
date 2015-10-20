@@ -23,3 +23,7 @@ class EnumRenderer implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.hasOwnProperty('enum');
     }
 }
+
+angular.module('jsonforms.renderers.controls.enum').run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
+    RenderService.register(new EnumRenderer(PathResolver));
+}]);

@@ -1,8 +1,6 @@
 ///<reference path="../../../typings/angularjs/angular.d.ts"/>
 ///<reference path="../generators.d.ts"/>
 
-angular.module('jsonforms.generators.schema').service('SchemaGenerator', JSONForms.SchemaGenerator);
-
 module JSONForms {
 
     export class SchemaGenerator implements ISchemaGenerator{
@@ -137,3 +135,5 @@ module JSONForms {
 
     }
 }
+
+angular.module('jsonforms.generators.schema').service('SchemaGenerator', JSONForms.SchemaGenerator);

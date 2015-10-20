@@ -1,8 +1,6 @@
 ///<reference path="../../typings/angularjs/angular.d.ts"/>
-///<reference path="../utils.ts"/>
+///<reference path="../utils/pathutil.ts"/>
 ///<reference path="pathresolver.d.ts"/>
-
-angular.module('jsonforms.pathresolver').service('PathResolver', JSONForms.PathResolver);
 
 module JSONForms {
 
@@ -77,3 +75,5 @@ module JSONForms {
         };
     }
 }
+
+angular.module('jsonforms.pathresolver').service('PathResolver', JSONForms.PathResolver);

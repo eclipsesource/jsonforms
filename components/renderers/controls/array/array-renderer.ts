@@ -1,6 +1,6 @@
 ///<reference path="../../../../typings/schemas/uischema.d.ts"/>
 ///<reference path="../../renderers.d.ts"/>
-///<reference path="../../../utils.ts"/>
+///<reference path="../../../utils/pathutil.ts"/>
 ///<reference path="../../../pathresolver/pathresolver.d.ts"/>
 
 class ArrayRenderer implements JSONForms.IRenderer {
@@ -156,3 +156,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
         return searchTerms;
     }
 }
+
+angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
+    RenderService.register(new ArrayRenderer(PathResolver, $rootScope));
+}]);

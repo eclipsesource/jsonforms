@@ -44,3 +44,7 @@ class CategoryRenderer implements JSONForms.IRenderer {
         return uiElement.type == "Category";
     }
 }
+
+angular.module('jsonforms.renderers.layouts.categories.category').run(['RenderService', function(RenderService) {
+    RenderService.register(new CategoryRenderer(RenderService));
+}]);

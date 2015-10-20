@@ -16,3 +16,7 @@ class BooleanRenderer implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.type == 'boolean';
     }
 }
+
+angular.module('jsonforms.renderers.controls.boolean').run(['RenderService', function(RenderService) {
+    RenderService.register(new BooleanRenderer());
+}]);

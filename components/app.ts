@@ -6,22 +6,20 @@ angular.module('jsonforms', [
     'ui.grid',
     'ui.grid.pagination',
     'ui.grid.autoResize',
-    /*
+    'jsonforms.form',
     'jsonforms.generators',
     'jsonforms.generators.schema',
     'jsonforms.generators.uischema',
-    */
     'jsonforms.pathresolver',
-    /*
     'jsonforms.renderers',
     'jsonforms.renderers.controls',
-    'jsonforms.renderers.controls.arrayControl',
-    'jsonforms.renderers.controls.integerControl',
-    'jsonforms.renderers.controls.booleanControl',
-    'jsonforms.renderers.controls.stringControl',
-    'jsonforms.renderers.controls.numberControl',
-    'jsonforms.renderers.controls.datetimeControl',
-    'jsonforms.renderers.controls.enumControl',
+    'jsonforms.renderers.controls.array',
+    'jsonforms.renderers.controls.integer',
+    'jsonforms.renderers.controls.boolean',
+    'jsonforms.renderers.controls.string',
+    'jsonforms.renderers.controls.number',
+    'jsonforms.renderers.controls.datetime',
+    'jsonforms.renderers.controls.enum',
     'jsonforms.renderers.layouts',
     'jsonforms.renderers.layouts.vertical',
     'jsonforms.renderers.layouts.horizontal',
@@ -29,6 +27,4 @@ angular.module('jsonforms', [
     'jsonforms.renderers.layouts.categories.categorization',
     'jsonforms.renderers.layouts.categories.category',
     'jsonforms.renderers.extras.label',
-    'jsonforms.form',
-    */
 ]);

@@ -1,9 +1,7 @@
 ///<reference path="../../../typings/angularjs/angular.d.ts"/>
 ///<reference path="../../../typings/schemas/uischema.d.ts"/>
 ///<reference path="../generators.d.ts"/>
-///<reference path="../../utils.ts"/>
-
-angular.module('jsonforms.generators.uischema').service('UISchemaGenerator', JSONForms.UISchemaGenerator);
+///<reference path="../../utils/pathutil.ts"/>
 
 module JSONForms{
 
@@ -130,3 +128,5 @@ module JSONForms{
         };
     }
 }
+
+angular.module('jsonforms.generators.uischema').service('UISchemaGenerator', JSONForms.UISchemaGenerator);

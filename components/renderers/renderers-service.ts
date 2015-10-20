@@ -2,13 +2,9 @@
 ///<reference path="../../typings/schemas/jsonschema.d.ts"/>
 ///<reference path="../../typings/schemas/uischema.d.ts"/>
 ///<reference path="../../typings/schemas/uischema.d.ts"/>
-///<reference path="../utils.ts"/>
+///<reference path="../utils/pathutil.ts"/>
 ///<reference path="../renderers/renderers.d.ts"/>
 ///<reference path="../pathresolver/pathresolver.d.ts"/>
-
-
-angular.module('jsonforms.renderers').service('RenderService', JSONForms.RenderService);
-angular.module('jsonforms.renderers').service('RenderDescriptionFactory', JSONForms.RenderDescriptionFactoryService);
 
 module JSONForms {
 
@@ -131,3 +127,6 @@ module JSONForms {
         }
     }
 }
+
+angular.module('jsonforms.renderers').service('RenderService', JSONForms.RenderService);
+angular.module('jsonforms.renderers').service('RenderDescriptionFactory', JSONForms.RenderDescriptionFactoryService);

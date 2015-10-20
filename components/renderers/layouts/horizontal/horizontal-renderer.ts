@@ -59,3 +59,7 @@ class HorizontalRenderer implements JSONForms.IRenderer {
     }
 
 }
+
+angular.module('jsonforms.renderers.layouts.horizontal').run(['RenderService', function(RenderService) {
+    RenderService.register(new HorizontalRenderer(RenderService));
+}]);

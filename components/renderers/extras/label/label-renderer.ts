@@ -21,5 +21,8 @@ class LabelRenderer implements JSONForms.IRenderer {
     isApplicable(element:IUISchemaElement):boolean {
         return element.type == "Label";
     }
-
 }
+
+angular.module('jsonforms.renderers.extras.label').run(['RenderService', function(RenderService) {
+    RenderService.register(new LabelRenderer());
+}]);

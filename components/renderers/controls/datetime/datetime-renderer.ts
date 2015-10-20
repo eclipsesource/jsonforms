@@ -2,7 +2,6 @@
 ///<reference path="../../renderers.d.ts"/>
 ///<reference path="../../renderers-service.ts"/>
 
-
 class DatetimeRenderer implements JSONForms.IRenderer {
 
     priority = 3;
@@ -32,3 +31,7 @@ class DatetimeRenderer implements JSONForms.IRenderer {
             subSchema['format'] != undefined && subSchema['format'] == "date-time";
     }
 }
+
+angular.module('jsonforms.renderers.controls.datetime').run(['RenderService', function(RenderService) {
+    RenderService.register(new DatetimeRenderer());
+}]);

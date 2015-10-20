@@ -21,9 +21,14 @@ module.exports = function(grunt) {
                 '<%= grunt.template.today("yyyy-mm-dd") %> Copyright (c) EclipseSource Muenchen GmbH and others. */ \n' +
                 "'use strict';\n"
             },
+            utils: {
+              src: ['components/utils/**/*.js'],
+              filter: 'isFile',
+              dest: 'temp/utils.js'
+            },
             dist: {
                 // Concat all files from components directory and include the embedded templates
-                src: ['components/**/*.js', '<%= ngtemplates.dist.dest %>'],
+                src: ['temp/utils.js','temp/**/*.js'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
@@ -49,10 +54,21 @@ module.exports = function(grunt) {
             }
         },
 
+        'angular-builder': {
+            options: {
+                mainModule: 'jsonforms',
+                externalModules: ['ui.bootstrap', 'ui.validate', 'ui.grid', 'ui.grid.pagination', 'ui.grid.autoResize']
+            },
+            app: {
+                src:  'components/**/*.js',
+                dest: 'temp/jsonforms.js'
+            }
+        },
+
         //Config for embedding templates in angular module
         ngtemplates:  {
             dist:  {
-                src: 'templates/**/*.html',
+                src: 'components/**/*.html',
                 dest: 'temp/templates.js',
                 options:    {
                     htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
@@ -204,12 +220,17 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-typescript');
 
+    grunt.loadNpmTasks('grunt-angular-builder');
+
     // Build distribution
     grunt.registerTask('dist', [
+        'clean:dist',
         'less:bootstrap',
         'less:jsonforms',
         'typescript:dist',
         'ngtemplates:dist',
+        'angular-builder',
+        'concat:utils',
         'concat:dist',
         'uglify:dist'
     ]);

@@ -16,3 +16,7 @@ class IntegerRenderer implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.type == 'integer';
     }
 }
+
+angular.module('jsonforms.renderers.controls.integer').run(['RenderService', function(RenderService) {
+    RenderService.register(new IntegerRenderer());
+}]);
