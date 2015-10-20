@@ -5,8 +5,8 @@ temp/
 # npm
 node_modules/
 
-# all js files in js
-js/**/*.js
+# all js files in components
+components/**/*.js
 
 # all js files in tests except the configs
 tests/**/*.js

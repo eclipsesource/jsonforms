@@ -22,8 +22,8 @@ module.exports = function(grunt) {
                 "'use strict';\n"
             },
             dist: {
-                // Concat all files from js directory and include the embedded templates
-                src: ['js/**/*.js', '<%= ngtemplates.dist.dest %>'],
+                // Concat all files from components directory and include the embedded templates
+                src: ['components/**/*.js', '<%= ngtemplates.dist.dest %>'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
 
         typescript: {
             dist: {
-                src: ['js/**/*.ts'],
+                src: ['components/**/*.ts'],
                 dest: '',
                 options: {
                     module: 'commonjs',
@@ -86,7 +86,7 @@ module.exports = function(grunt) {
 
         // Config for Jshint Task
         jshint: {
-            beforeconcat: ['js/**'],
+            beforeconcat: ['components/**'],
             afterconcat: ['dist/js/<%= pkg.name %>.js'],
             options: { jshintrc: '.jshintrc' }
         },
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
                     paths: ['temp']
                 },
                 files: {
-                    'dist/css/jsonforms.css': 'css/jsonforms.css'
+                    'dist/css/jsonforms.css': 'css/app.css'
                 }
             }
         },
@@ -140,7 +140,7 @@ module.exports = function(grunt) {
 
         watch: {
             js: {
-                files: 'js/**',
+                files: 'components/**',
                 tasks: ['concat:dist', 'uglify:dist']
             },
             css: {
