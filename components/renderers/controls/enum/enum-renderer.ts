@@ -1,10 +1,13 @@
-///<reference path="..\services.ts"/>
+///<reference path="../../../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../renderers.d.ts"/>
+///<reference path="../../renderers-service.ts"/>
+///<reference path="../../../pathresolver/pathresolver.d.ts"/>
 
-class EnumControl implements JSONForms.IRenderer {
+class EnumRenderer implements JSONForms.IRenderer {
 
     priority = 3;
 
-    constructor(private pathResolver: JSONForms.PathResolver) {}
+    constructor(private pathResolver: JSONForms.IPathResolver) {}
 
     render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
@@ -20,9 +23,3 @@ class EnumControl implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.hasOwnProperty('enum');
     }
 }
-
-var app = angular.module('jsonforms.enumControl', []);
-
-app.run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
-    RenderService.register(new EnumControl(PathResolver));
-}]);

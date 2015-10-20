@@ -1,17 +1,12 @@
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../components/services.ts"/>
 /// <reference path="../../typings/schemas/uischema.d.ts"/>
 
 describe('Labels', () => {
 
-    var UISchemaGenerator: JSONForms.IUISchemaGenerator;
-
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.stringControl'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/control.html'));
 

@@ -1,6 +1,8 @@
-///<reference path="..\services.ts"/>
+///<reference path="../../../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../renderers.d.ts"/>
+///<reference path="../../renderers-service.ts"/>
 
-class StringControl implements JSONForms.IRenderer {
+class StringRenderer implements JSONForms.IRenderer {
 
     priority = 2;
 
@@ -15,9 +17,3 @@ class StringControl implements JSONForms.IRenderer {
     }
 
 }
-
-var app = angular.module('jsonforms.stringControl', []);
-
-app.run(['RenderService', function(RenderService) {
-    RenderService.register(new StringControl());
-}]);

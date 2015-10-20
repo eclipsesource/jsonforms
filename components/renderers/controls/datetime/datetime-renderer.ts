@@ -1,6 +1,9 @@
-///<reference path="..\services.ts"/>
+///<reference path="../../../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../renderers.d.ts"/>
+///<reference path="../../renderers-service.ts"/>
 
-class DatetimeControl implements JSONForms.IRenderer {
+
+class DatetimeRenderer implements JSONForms.IRenderer {
 
     priority = 3;
 
@@ -29,9 +32,3 @@ class DatetimeControl implements JSONForms.IRenderer {
             subSchema['format'] != undefined && subSchema['format'] == "date-time";
     }
 }
-
-var app = angular.module('jsonforms.datetimeControl', []);
-
-app.run(['RenderService', function(RenderService) {
-    RenderService.register(new DatetimeControl());
-}]);

@@ -1,10 +1,16 @@
-/// <reference path="../typings/angularjs/angular.d.ts"/>
-/// <reference path="./services.ts"/>
+///<reference path="../../typings/angularjs/angular.d.ts"/>
+///<reference path="../../typings/schemas/jsonschema.d.ts"/>
+///<reference path="../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../typings/schemas/uischema.d.ts"/>
+///<reference path="../utils.ts"/>
+///<reference path="../renderers/renderers.d.ts"/>
+///<reference path="../pathresolver/pathresolver.d.ts"/>
+///<reference path="../generators/generators.d.ts"/>
+///<reference path="../dataproviders/dataproviders.ts"/>
 
-var jsonFormsDirectives = angular.module('jsonforms.directives', ['jsonforms.services']);
 declare var JsonRefs;
 
-class JsonFormsDirectiveController {
+class FormController {
 
     static $inject = ['RenderService', 'PathResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
 
@@ -135,70 +141,3 @@ interface JsonFormsDirectiveScope extends ng.IScope {
     asyncUiSchema: () => any;
     asyncDataProvider: JSONForms.IDataProvider;
 }
-
-jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
-
-    return {
-        restrict: "E",
-        replace: true,
-        scope: {
-            schema: '=',
-            uiSchema: '=',
-            data: '=',
-            asyncSchema: '&',
-            asyncUiSchema: '&',
-            asyncDataProvider: '='
-        },
-        // TODO: fix template for tests
-        templateUrl: 'templates/form.html',
-        controller: JsonFormsDirectiveController
-    }
-})
-.directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
-    var replaceJSONFormsAttributeInTemplate = (template: string): string => {
-        return template
-            .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
-            .replace("data-jsonforms-validation", `ng-change='element.validate()'`);
-    };
-    return {
-        restrict: 'E',
-        scope: {element: "="},
-        replace: true,
-        link: function(scope, element) {
-            if (scope.element.templateUrl) {
-                $templateRequest(scope.element.templateUrl).then(function(template) {
-                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template);
-                    var compiledTemplate = $compile(updatedTemplate)(scope);
-                    element.replaceWith(compiledTemplate);
-                })
-            } else {
-                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template);
-                var template = $compile(updatedTemplate)(scope);
-                element.replaceWith(template);
-            }
-        }
-    }
-}]).directive('control', function ():ng.IDirective {
-    return {
-        restrict: "E",
-        replace: true,
-        transclude: true,
-        templateUrl: 'templates/control.html'
-    }
-}).directive('layout', function ():ng.IDirective {
-    return {
-        restrict: "E",
-        replace: true,
-        transclude: true,
-        templateUrl: 'templates/layout.html'
-    }
-}).directive('widget', function ():ng.IDirective {
-    return {
-        restrict: "E",
-        replace: true,
-        transclude: true,
-        template: `<div class="col-sm-{{element.size}} jsf-label ng-transclude"></div>`
-    }
-})
-
-;

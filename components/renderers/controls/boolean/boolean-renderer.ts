@@ -1,6 +1,8 @@
-///<reference path="..\services.ts"/>
+///<reference path="../../../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../renderers.d.ts"/>
+///<reference path="../../renderers-service.ts"/>
 
-class BooleanControl implements JSONForms.IRenderer {
+class BooleanRenderer implements JSONForms.IRenderer {
 
     priority = 2;
 
@@ -14,9 +16,3 @@ class BooleanControl implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.type == 'boolean';
     }
 }
-
-var app = angular.module('jsonforms.booleanControl', []);
-
-app.run(['RenderService', function(RenderService) {
-    RenderService.register(new BooleanControl());
-}]);

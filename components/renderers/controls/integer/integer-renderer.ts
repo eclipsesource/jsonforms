@@ -1,6 +1,8 @@
-///<reference path="..\services.ts"/>
+///<reference path="../../../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../renderers.d.ts"/>
+///<reference path="../../renderers-service.ts"/>
 
-class IntegerControl implements JSONForms.IRenderer {
+class IntegerRenderer implements JSONForms.IRenderer {
 
     priority = 2;
 
@@ -14,9 +16,3 @@ class IntegerControl implements JSONForms.IRenderer {
         return uiElement.type == 'Control' && subSchema.type == 'integer';
     }
 }
-
-var app = angular.module('jsonforms.integerControl', []);
-
-app.run(['RenderService', function(RenderService) {
-    RenderService.register(new IntegerControl());
-}]);

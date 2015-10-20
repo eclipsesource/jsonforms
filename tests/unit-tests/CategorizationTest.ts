@@ -1,16 +1,15 @@
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
 /// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../components/services.ts"/>
 /// <reference path="../../typings/schemas/uischema.d.ts"/>
 
 describe('Categorization', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.categorization'));
-    beforeEach(module('jsonforms.stringControl'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.renderers.layouts.categories.categorization'));
+    beforeEach(module('jsonforms.renderers.layouts.categories.category'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
     beforeEach(module('templates/form.html'));
     beforeEach(module('templates/control.html'));
     beforeEach(module('templates/layout.html'));

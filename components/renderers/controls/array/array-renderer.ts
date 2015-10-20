@@ -1,7 +1,9 @@
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../services.ts"/>
+///<reference path="../../../../typings/schemas/uischema.d.ts"/>
+///<reference path="../../renderers.d.ts"/>
+///<reference path="../../../utils.ts"/>
+///<reference path="../../../pathresolver/pathresolver.d.ts"/>
 
-class ArrayControl implements JSONForms.IRenderer {
+class ArrayRenderer implements JSONForms.IRenderer {
 
 
     private maxSize = 99;
@@ -154,9 +156,3 @@ class ArrayControl implements JSONForms.IRenderer {
         return searchTerms;
     }
 }
-
-var app = angular.module('jsonforms.arrayControl', []);
-
-app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
-    RenderService.register(new ArrayControl(PathResolver, $rootScope));
-}]);
