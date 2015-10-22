@@ -5,6 +5,6 @@ angular.module('jsonforms.renderers.controls').directive('control', function ():
         restrict: "E",
         replace: true,
         transclude: true,
-        templateUrl: 'components/renderers/control.html'
+        templateUrl: 'components/renderers/controls/control.html'
     }
 });

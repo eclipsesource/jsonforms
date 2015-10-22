@@ -5,6 +5,6 @@ angular.module('jsonforms.renderers.layouts').directive('layout', function ():ng
         restrict: "E",
         replace: true,
         transclude: true,
-        templateUrl: 'components/renderers/layout.html'
+        templateUrl: 'components/renderers/layouts/layout.html'
     }
 })
