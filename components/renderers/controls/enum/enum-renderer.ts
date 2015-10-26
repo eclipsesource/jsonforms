@@ -1,7 +1,7 @@
 ///<reference path="../../../../typings/schemas/uischema.d.ts"/>
-///<reference path="../../renderers.d.ts"/>
+///<reference path="../../jsonforms-renderers.d.ts"/>
 ///<reference path="../../renderers-service.ts"/>
-///<reference path="../../../pathresolver/pathresolver.d.ts"/>
+///<reference path="../../../pathresolver/jsonforms-pathresolver.d.ts"/>
 
 class EnumRenderer implements JSONForms.IRenderer {
 

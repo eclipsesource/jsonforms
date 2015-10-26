@@ -26,9 +26,14 @@ module.exports = function(grunt) {
               filter: 'isFile',
               dest: 'temp/utils.js'
             },
+            jsonforms_module: {
+                src: ['components/**/jsonforms-*.js'],
+                filter: 'isFile',
+                dest: 'temp/jsonforms-module.js'
+            },
             dist: {
                 // Concat all files from components directory and include the embedded templates
-                src: ['temp/utils.js','temp/**/*.js'],
+                src: ['temp/utils.js', 'temp/jsonforms-module.js', 'temp/**/*.js'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
@@ -231,6 +236,7 @@ module.exports = function(grunt) {
         'ngtemplates:dist',
         'angular-builder',
         'concat:utils',
+        'concat:jsonforms_module',
         'concat:dist',
         'uglify:dist'
     ]);

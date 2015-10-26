@@ -1,5 +1,5 @@
 ///<reference path="../../../../typings/schemas/uischema.d.ts"/>
-///<reference path="../../renderers.d.ts"/>
+///<reference path="../../jsonforms-renderers.d.ts"/>
 ///<reference path="../../renderers-service.ts"/>
 
 class HorizontalRenderer implements JSONForms.IRenderer {
