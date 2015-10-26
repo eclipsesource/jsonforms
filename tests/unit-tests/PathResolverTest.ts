@@ -1,7 +1,4 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../components/pathresolver/jsonforms-pathresolver.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('PathResolver', () => {
 

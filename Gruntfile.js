@@ -51,8 +51,9 @@ module.exports = function(grunt) {
                 }
             },
             test: {
-                src: ['tests/**/*.ts'],
+                src: ['tests/**/*.ts', 'components/references.ts'],
                 dest: '',
+                reference: 'tests/references.ts',
                 options: {
                     target: 'es5',
                     module: 'commonjs'

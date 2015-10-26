@@ -1,5 +1,4 @@
-/// <reference path="../../typings/angular-protractor/angular-protractor.d.ts"/>
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('Test Schema Generator', function() {
 
