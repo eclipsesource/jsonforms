@@ -1,4 +1,4 @@
-/// <reference path="../typings/angularjs/angular.d.ts"/>
+///<reference path="./references.ts"/>
 angular.module('jsonforms', [
     'ui.bootstrap',
     'ui.validate',
@@ -27,3 +27,4 @@ angular.module('jsonforms', [
     'jsonforms.renderers.layouts.categories.category',
     'jsonforms.renderers.extras.label',
 ]);
+//# sourceMappingURL=app.js.map

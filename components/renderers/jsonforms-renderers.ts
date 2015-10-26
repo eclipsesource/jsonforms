@@ -1,7 +1,5 @@
-///<reference path="..\..\typings\schemas\jsonschema.d.ts"/>
-///<reference path="jsonforms-renderers.d.ts"/>
-///<reference path="..\pathresolver\jsonforms-pathresolver.d.ts"/>
-///<reference path="..\utils\pathutil.ts"/>
+///<reference path="../references.ts"/>
+
 module JSONForms {
 
     declare var tv4;

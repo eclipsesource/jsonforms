@@ -1,4 +1,5 @@
-///<reference path="../jsonforms-generators.d.ts"/>
+///<reference path="../../references.ts"/>
+
 module JSONForms {
 
     export class SchemaGenerator implements ISchemaGenerator{

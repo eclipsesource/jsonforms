@@ -1,5 +1,4 @@
-///<reference path="../../typings/angularjs/angular.d.ts"/>
-///<reference path="dataproviders.d.ts"/>
+///<reference path="../references.ts"/>
 
 module JSONForms {
 

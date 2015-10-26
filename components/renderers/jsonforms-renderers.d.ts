@@ -1,7 +1,4 @@
-///<reference path="../../typings/angularjs/angular.d.ts"/>
-///<reference path="../../typings/schemas/jsonschema.d.ts"/>
-///<reference path="../../typings/schemas/uischema.d.ts"/>
-///<reference path="../utils/dataproviders.d.ts"/>
+///<reference path="../references.ts"/>
 
 declare module JSONForms {
     export interface IRenderService {

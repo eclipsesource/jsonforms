@@ -1,4 +1,5 @@
-///<reference path="../../typings/angularjs/angular.d.ts"/>
+///<reference path="../references.ts"/>
+
 declare module JSONForms{
     export interface IDataProvider {
         data: any

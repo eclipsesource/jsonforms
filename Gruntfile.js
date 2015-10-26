@@ -39,13 +39,14 @@ module.exports = function(grunt) {
             }
         },
 
-        typescript: {
+        ts: {
             dist: {
-                src: ['components/**/*.ts'],
+                src: ['components/**/*.ts', ['typings/**/*.ts']],
                 dest: '',
+                reference: 'components/references.ts',
                 options: {
                     module: 'commonjs',
-                    sourcemap: true,
+                    sourceMap: true,
                     declaration: false
                 }
             },
@@ -223,16 +224,16 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.loadNpmTasks('grunt-typescript');
-
     grunt.loadNpmTasks('grunt-angular-builder');
+
+    grunt.loadNpmTasks('grunt-ts');
 
     // Build distribution
     grunt.registerTask('dist', [
         'clean:dist',
         'less:bootstrap',
         'less:jsonforms',
-        'typescript:dist',
+        'ts:dist',
         'ngtemplates:dist',
         'angular-builder',
         'concat:utils',
@@ -250,7 +251,7 @@ module.exports = function(grunt) {
     // Test unit and e2e tests
     grunt.registerTask('test', [
         'app',
-        'typescript:test',
+        'ts:test',
         'karma',
         'connect',
         'protractor'

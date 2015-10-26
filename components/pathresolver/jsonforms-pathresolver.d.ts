@@ -1,4 +1,4 @@
-///<reference path="../../typings/schemas/jsonschema.d.ts"/>
+///<reference path="../references.ts"/>
 
 declare module JSONForms {
     export interface IPathResolver {

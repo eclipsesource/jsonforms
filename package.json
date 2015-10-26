@@ -23,7 +23,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "0.6.2",
     "grunt-protractor-runner": "^2.0.0",
-    "grunt-typescript": "^0.6.2",
+    "grunt-ts": "^5.1.0",
     "http-server": "^0.6.1",
     "karma": "~0.10",
     "karma-chrome-launcher": "^0.1.2",

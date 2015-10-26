@@ -1,11 +1,4 @@
-///<reference path="../../typings/angularjs/angular.d.ts"/>
-///<reference path="../../typings/schemas/jsonschema.d.ts"/>
-///<reference path="../../typings/schemas/uischema.d.ts"/>
-///<reference path="../../typings/schemas/uischema.d.ts"/>
-///<reference path="../utils/pathutil.ts"/>
-///<reference path="../renderers/jsonforms-renderers.d.ts"/>
-///<reference path="../generators/jsonforms-generators.d.ts"/>
-///<reference path="../pathresolver/jsonforms-pathresolver.d.ts"/>
+///<reference path="../references.ts"/>
 
 angular.module('jsonforms.form').directive('jsonforms', function ():ng.IDirective {
 

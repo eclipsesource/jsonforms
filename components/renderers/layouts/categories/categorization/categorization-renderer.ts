@@ -1,6 +1,4 @@
-///<reference path="../../../../../typings/schemas/uischema.d.ts"/>
-///<reference path="../../../jsonforms-renderers.d.ts"/>
-///<reference path="../../../renderers-service.ts"/>
+///<reference path="../../../../references.ts"/>
 
 class CategorizationRenderer implements JSONForms.IRenderer {
 

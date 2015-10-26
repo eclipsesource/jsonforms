@@ -1,3 +1,3 @@
-///<reference path="../../../typings/angularjs/angular.d.ts"/>
+///<reference path="../../references.ts"/>
 
-var app = angular.module('jsonforms.generators.uischema', ['jsonforms.generators']);
+angular.module('jsonforms.generators.uischema', ['jsonforms.generators']);

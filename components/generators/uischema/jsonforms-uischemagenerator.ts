@@ -1,6 +1,5 @@
-///<reference path="../jsonforms-generators.d.ts"/>
-///<reference path="..\..\..\typings\schemas\uischema.d.ts"/>
-///<reference path="..\..\utils\pathutil.ts"/>
+///<reference path="../../references.ts"/>
+
 module JSONForms{
 
     export class UISchemaGenerator implements IUISchemaGenerator{
