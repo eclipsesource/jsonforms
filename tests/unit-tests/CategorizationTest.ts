@@ -7,9 +7,10 @@ describe('Categorization', () => {
     beforeEach(module('jsonforms.renderers.layouts.categories.categorization'));
     beforeEach(module('jsonforms.renderers.layouts.categories.category'));
     beforeEach(module('jsonforms.renderers.controls.string'));
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/control.html'));
-    beforeEach(module('templates/layout.html'));
+
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/layouts/layout.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
 
     it("should be rendered", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

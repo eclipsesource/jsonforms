@@ -3,9 +3,10 @@
 describe('Labels', () => {
 
     // load all necessary modules and templates
+    beforeEach(module('jsonforms.form'));
     beforeEach(module('jsonforms.renderers.controls.string'));
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
 
     it("should be generated automatically", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

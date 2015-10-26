@@ -3,8 +3,9 @@
 describe('LabelElement', () => {
 
     // load all necessary modules and templates
+    beforeEach(module('jsonforms.form'));
     beforeEach(module('jsonforms.renderers.extras.label'));
-    beforeEach(module('templates/form.html'));
+    beforeEach(module('components/form/form.html'));
 
     it("should be rendered", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

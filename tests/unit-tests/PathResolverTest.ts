@@ -4,7 +4,7 @@ describe('PathResolver', () => {
 
     var PathResolver: JSONForms.IPathResolver;
 
-    beforeEach(module('jsonforms.services'));
+    beforeEach(module('jsonforms.pathresolver'));
     beforeEach(() => {
         inject(['PathResolver', function(_PathResolver_: JSONForms.IPathResolver) {
             PathResolver = _PathResolver_;

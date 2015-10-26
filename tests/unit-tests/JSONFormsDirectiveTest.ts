@@ -3,8 +3,8 @@
 describe('jsonforms directive', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.pathresolver'));
     beforeEach(module('jsonforms.renderers.extras.label'));
     beforeEach(module('jsonforms.renderers.layouts.vertical'));
     beforeEach(module('jsonforms.renderers.layouts.horizontal'));
@@ -16,8 +16,9 @@ describe('jsonforms directive', () => {
     beforeEach(module('jsonforms.renderers.controls.datetime'));
     beforeEach(module('jsonforms.renderers.controls.enum'));
 
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
+
     it("should render a labeled select field", inject(function ($rootScope, $compile) {
         var scope = $rootScope.$new();
         scope.schema = {
