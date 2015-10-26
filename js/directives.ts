@@ -1,6 +1,7 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 /// <reference path="./services.ts"/>
 
+
 var jsonFormsDirectives = angular.module('jsonforms.directives', ['jsonforms.services']);
 declare var JsonRefs;
 
@@ -17,8 +18,8 @@ class JsonFormsDirectiveController {
         private $q: ng.IQService
     ) {
 
-        var resolvedSchemaDeferred = $q.defer();
-        var resolvedUISchemaDeferred = $q.defer();
+    var resolvedSchemaDeferred = $q.defer();
+    var resolvedUISchemaDeferred = $q.defer();
 
         $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then(function(values) {
             var schema = values[0];
@@ -29,7 +30,7 @@ class JsonFormsDirectiveController {
             $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
                 //schema['uiSchema'] = uiSchema;
                 //  build mapping of ui paths to schema refs
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
                     // TODO: ui schema is now unresolved
                     resolvedUISchemaDeferred.resolve(uiSchema); //resolvedSchema['uiSchema']);
@@ -54,15 +55,20 @@ class JsonFormsDirectiveController {
             var uiSchema = values[1];
             var data = values[2];
 
+            var services = new JSONForms.Services();
+
+            services.add(new JSONForms.SchemaProvider(schema));
+            services.add(new JSONForms.ValidationService());
+
             var dataProvider: JSONForms.IDataProvider;
             if ($scope.asyncDataProvider) {
                 dataProvider = $scope.asyncDataProvider;
             } else {
                 dataProvider = new JSONForms.DefaultDataProvider($q, data);
             }
+            services.add(dataProvider);
 
-            RenderService.registerSchema(schema);
-            $scope['elements'] = [RenderService.render(uiSchema, dataProvider)];
+            $scope['elements'] = [RenderService.render(uiSchema, services)];
         });
 
         // TODO: check if still in use
@@ -158,7 +164,7 @@ jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
     var replaceJSONFormsAttributeInTemplate = (template: string): string => {
         return template
             .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
-            .replace("data-jsonforms-validation", `ng-change='element.validate()'`);
+            .replace("data-jsonforms-validation", `ng-change='element.modelChanged()'`);
     };
     return {
         restrict: 'E',

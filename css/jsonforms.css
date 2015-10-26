@@ -1,3 +1,11 @@
 .jsf {
     @import (less) url( 'bootstrap100col.css' );
 }
+
+.validCell {
+    background-color: #ffffff !important;
+}
+
+.invalidCell {
+    background-color: #d24d57 !important;
+}

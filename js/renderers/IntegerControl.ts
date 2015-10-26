@@ -4,8 +4,8 @@ class IntegerControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider) {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
         control['template'] = `<control><input type="number" step="1" id="${schemaPath}" class="form-control jsf-control jsf-control-integer" data-jsonforms-validation data-jsonforms-model/></control>`;
         return control;
     }
@@ -17,6 +17,6 @@ class IntegerControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonforms.integerControl', []);
 
-app.run(['RenderService', function(RenderService) {
+app.run(['RenderService', 'RenderDescriptionFactory', (RenderService) => {
     RenderService.register(new IntegerControl());
 }]);

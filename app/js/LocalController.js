@@ -5,7 +5,8 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         "properties": {
             "id": "user.json",
             "name": {
-                "type": "string"
+                "type": "string",
+                "minLength": 3
             },
             "age": {
                 "type": "integer"
@@ -96,7 +97,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                                 "scope": {
                                     "$ref": "#/properties/age"
                                 }
-                            },
+                            }
                         ]
                     },
                     {
@@ -116,11 +117,11 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                                 "scope": {
                                     "$ref": "#/properties/vegetarian"
                                 }
-                            },
+                            }
                         ]
-                    },
+                    }
                 ]
-            },
+            }
         ]
     };
 
@@ -146,7 +147,11 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                     "$ref": "#/items/properties/age"
                 }
             }
-        ]
+        ],
+        "options": {
+            "enableFiltering": true,
+            "paginationPageSizes": [5, 10, 20]
+        }
     };
 
     $scope.data = {

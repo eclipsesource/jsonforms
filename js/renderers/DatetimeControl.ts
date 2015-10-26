@@ -4,8 +4,8 @@ class DatetimeControl implements JSONForms.IRenderer {
 
     priority = 3;
 
-    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
         control['isOpen'] = false;
         control['openDate'] = function($event) {
             $event.preventDefault();
@@ -32,6 +32,6 @@ class DatetimeControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonforms.datetimeControl', []);
 
-app.run(['RenderService', function(RenderService) {
-    RenderService.register(new DatetimeControl());
-}]);
+app.run(['RenderService', 'RenderDescriptionFactory', (RenderService) =>
+    RenderService.register(new DatetimeControl())
+]);

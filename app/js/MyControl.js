@@ -1,13 +1,14 @@
 var app = angular.module('makeithappen');
-app.run(['RenderService', 'RenderDescriptionFactory', function(RenderService, RenderDescriptionFactory) {
+app.run(['RenderService', function(RenderService) {
 
     function MyControl() {
 
         return {
             priority: 100,
-            render: function(element, schema, schemaPath, dataProvider) {
-                var control = RenderDescriptionFactory.createControlDescription(dataProvider.data, schemaPath);
-                control['template'] = '<input type="text" style="background-color: #3278b3; color: #8dd0ff" class="form-control" data-jsonforms-model data-jsonforms-validation />'
+            render: function(element, schema, schemaPath, services) {
+                var control =  JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
+                control['template'] = '<control><input type="text" style="background-color: #3278b3; color: #8dd0ff" class="jsf-control-string jsf-control form-control" data-jsonforms-model data-jsonforms-validation /></control>'
+                console.log(JSON.stringify(control));
                 return control;
             },
 

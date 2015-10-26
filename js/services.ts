@@ -1,10 +1,9 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 /// <reference path="../typings/schemas/uischema.d.ts"/>
 /// <reference path="../typings/schemas/jsonschema.d.ts"/>
+/// <reference path="../typings/ui-grid/ui-grid.d.ts"/>
 
 module JSONForms {
-
-    var currentSchema: SchemaElement
 
     export class UISchemaElement {
 
@@ -17,67 +16,125 @@ module JSONForms {
         }
     }
 
-    export interface IDataProvider {
-        data: any
+    export interface IDataProvider extends IService {
         fetchData(): ng.IPromise<any>
-        fetchPage(page: number, size: number): ng.IPromise<any>
-        setPageSize(size: number)
-        pageSize: number
-        page: number
-        totalItems?: number
+        fetchPage(page:number, size:number): ng.IPromise<any>
+        setPageSize(size:number)
+        getData(): any
+        getPageSize(): number
+        getPage(): number
+        getTotalItems?(): number
+    }
+
+    export class DefaultInternalDataProvider implements IDataProvider {
+
+        private _pageSize:number;
+        private _page:number;
+        private _data:any;
+
+        constructor(data: any) {
+            this._data = data;
+        }
+
+        getId():JSONForms.ServiceId {
+            return ServiceId.DataProvider;
+        }
+
+        getPageSize():number {
+            return this._pageSize;
+        }
+
+        getPage():number {
+            return this._page;
+        }
+
+        getData():any {
+            return this._data;
+        }
+
+        fetchData():angular.IPromise<any> {
+            return undefined;
+        }
+
+        fetchPage(page:number, size:number):angular.IPromise<any> {
+            return undefined;
+        }
+
+        filter():angular.IPromise<any> {
+            return undefined;
+        }
+
+        setPageSize(size:number) {
+        }
+
+        getTotalItems() {
+            return this._data.length;
+        }
     }
 
     export class DefaultDataProvider implements  IDataProvider {
 
-        private currentPage = 0;
-        private currentPageSize = 2;
+        private _page = 0;
+        private _pageSize = 2;
+        private _data:any;
 
-        constructor(private $q: ng.IQService,  public data: any) { }
+        constructor(private $q: ng.IQService, data: any) {
+            this._data = data;
+        }
+
+        getId(): ServiceId {
+            return ServiceId.DataProvider;
+        }
+
+        getData():any {
+            return this._data;
+        }
+
+        getPageSize():number {
+            return this._pageSize;
+        }
+
+        getPage():number {
+            return this._page;
+        }
 
         fetchData(): ng.IPromise<any> {
             var p = this.$q.defer();
             // TODO: validation missing
-            p.resolve(this.data);
+            p.resolve(this._data);
             return p.promise;
         }
 
         setPageSize = (newPageSize: number) => {
-            this.currentPageSize = newPageSize
+            this._pageSize = newPageSize
         };
 
         fetchPage = (page: number, size: number) => {
-            this.currentPage = page;
-            this.currentPageSize = size;
+            this._page = page;
+            this._pageSize = size;
             var p = this.$q.defer();
-            if (this.data instanceof Array) {
+            if (this._data instanceof Array) {
                 p.resolve(
-                    this.data.slice(this.currentPage * this.currentPageSize, this.currentPage * this.currentPageSize + this.currentPageSize));
+                    this._data.slice(this._page * this._pageSize, this._page * this._pageSize + this._pageSize));
             } else {
-                p.resolve(this.data);
+                p.resolve(this._data);
             }
             return p.promise;
         };
 
-        totalItems = this.data.length;
-        pageSize = this.currentPageSize
-        page = this.currentPage
+        totalItems() {
+            return this._data.length;
+        }
     }
 
 
     export interface IRenderService {
-        registerSchema(schema: SchemaElement): void
         register(renderer: IRenderer): void
-        render(element:JSONForms.UISchemaElement, dataProvider: JSONForms.IDataProvider);
+        render(element:JSONForms.UISchemaElement, services: Services);
     }
 
     export interface IRenderer {
-        /**
-         * When the RenderService's render method is called it gets passed the UI Schema element (e.g. a Control)
-         * to be rendered and a so called DataProvider that is responsible for maintaining the data.
-         * Then every registered renderer is checked whether it is able to render the current UI Schema element.
-         * If multiple renderers are applicable, the one with the highest priority is selected and triggered.
-         */
-        render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): IRenderDescription
+        render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: Services): IRenderDescription
         isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
         priority: number
     }
@@ -90,11 +147,18 @@ module JSONForms {
     }
 
     export interface IControlRenderDescription extends IRenderDescription {
-        instance: any
         path: string
 
         alerts: any[]
-        validate(): boolean
+        modelChanged(): void
+    }
+
+    export interface IArrayControlRenderDescription extends JSONForms.IRenderDescription {
+        gridOptions: uiGrid.IGridOptions
+    }
+
+    export interface IArrayControlObject extends IControlObject {
+        options?: uiGrid.IGridOptions
     }
 
     export class ControlRenderDescription implements IControlRenderDescription {
@@ -105,7 +169,14 @@ module JSONForms {
         public label: string;
         public path: string;
 
-        constructor(public instance: any, private schemaPath: string, label?: string) {
+        public instance: any;
+        schema: SchemaElement;
+        private validationService: IValidationService;
+
+        constructor(schemaPath: string, private services: JSONForms.Services, label?: string) {
+            this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
+            this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
+            this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
             this.path = PathUtil.normalize(schemaPath);
             var l;
             if (label) {
@@ -116,48 +187,106 @@ module JSONForms {
             this.label = l;
         }
 
-        validate(): boolean {
-            if (tv4 == undefined) {
-                return true;
+        modelChanged():void {
+            this.validationService.validate(this.instance, this.schema);
+            var result = this.validationService.getResult(this.instance, '/' + this.path);
+            if (result != undefined) {
+                var alert = {
+                    type: 'danger',
+                    msg: result['message']
+                };
+                this.alerts.push(alert);
+            } else {
+                this.alerts = [];
             }
-            var normalizedPath = '/' + PathUtil.normalize(this.schemaPath);
-            var results = tv4.validateMultiple(this.instance, currentSchema);
-            var errorMsg = undefined;
+        }
+    }
+
+    export interface ISchemaProvider extends IService {
+        getSchema(): SchemaElement
+    }
+
+    export class SchemaProvider implements ISchemaProvider {
+        constructor(private schema: SchemaElement) {
+
+        }
+
+        getId():JSONForms.ServiceId {
+            return ServiceId.SchemaProvider;
+        }
+
+        getSchema():SchemaElement {
+            return this.schema;
+        }
+    }
+
+    export interface IValidationService extends IService {
+        getResult(instance: any, dataPath: string): any
+        validate(instance: any, schema: SchemaElement): void
+    }
+
+    export enum ServiceId {
+        Validation,
+        DataProvider,
+        SchemaProvider
+    }
+
+    class HashTable {
+
+        private hashes;
+
+        constructor() {
+            this.hashes = {}
+        }
+
+        put(key, value) {
+            this.hashes[JSON.stringify(key)] = value;
+        }
+
+        get(key) {
+            return this.hashes[JSON.stringify(key)];
+        }
+    }
+
+    export class ValidationService implements IValidationService {
+
+        private validationResults = new HashTable();
+
+        getId(): ServiceId {
+            return ServiceId.Validation;
+        }
+
+        getResult(instance: any, dataPath: string): any {
+            if (this.validationResults.get(instance) == undefined) {
+                return undefined;
+            } else {
+                return this.validationResults.get(instance)[dataPath];
+            }
+        }
+
+        validate(instance: any, schema: SchemaElement): void {
+            if (tv4 == undefined) {
+                return;
+            }
+
+            this.validationResults.put(instance, {});
+            var results = tv4.validateMultiple(instance, schema);
 
             for (var i = 0; i < results['errors'].length; i++) {
 
                 var validationResult = results['errors'][i];
 
-                if (validationResult.schemaPath.indexOf('/required') != -1) {
-                    var propName = validationResult['params']['key'];
-                    if (propName == normalizedPath.substr(normalizedPath.lastIndexOf('/') + 1, normalizedPath.length)) {
-                        errorMsg = "Missing property";
-                        break;
-                    }
-                }
+                //if (validationResult.schemaPath.indexOf('/required') != -1) {
+                //    var propName = validationResult['params']['key'];
+                //    if (propName == normalizedPath.substr(normalizedPath.lastIndexOf('/') + 1, normalizedPath.length)) {
+                //        errorMsg = "Missing property";
+                //        break;
+                //    }
+                //}
 
-                if (validationResult['dataPath'] == normalizedPath) {
-                    errorMsg = validationResult.message;
-                    break;
-                }
+                this.validationResults.get(instance)[validationResult['dataPath']] = validationResult;
             }
-
-            if (errorMsg == undefined) {
-                // TODO: perform required check
-                this.alerts = [];
-                return true;
-            }
-
-            this.alerts = [];
-            var alert = {
-                type: 'danger',
-                msg: errorMsg
-            };
-            this.alerts.push(alert);
-
-            return false;
         }
-
     }
 
     export interface IContainerRenderDescription extends IRenderDescription {
@@ -189,7 +318,24 @@ module JSONForms {
         generateDefaultUISchema(jsonSchema:any): any
     }
 
-    // TODO: EXPORT
+    export interface IService {
+        getId(): ServiceId
+    }
+
+    export class Services {
+
+        private services: any = {};
+
+        add(service: IService): void {
+            this.services[service.getId()] = service;
+        }
+
+        get<T extends IService>(serviceId: ServiceId): T {
+            return this.services[serviceId];
+        }
+
+    }
+
     export class RenderService implements  IRenderService {
 
         private renderers: IRenderer[] = [];
@@ -198,21 +344,17 @@ module JSONForms {
         constructor(private refResolver: IPathResolver) {
         }
 
-
-        registerSchema(schema: SchemaElement) {
-            currentSchema = schema;
-        }
-
-        render = (element: IUISchemaElement, dataProvider: JSONForms.IDataProvider) => {
+        render(element: IUISchemaElement, services: JSONForms.Services) {
 
             var foundRenderer;
             var schemaPath;
             var subSchema;
+            var schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
 
             // TODO element must be IControl
             if (element['scope']) {
                 schemaPath = element['scope']['$ref'];
-                subSchema = this.refResolver.resolveSchema(currentSchema, schemaPath);
+                subSchema = this.refResolver.resolveSchema(schema, schemaPath);
             }
 
             for (var i = 0; i < this.renderers.length; i++) {
@@ -227,12 +369,9 @@ module JSONForms {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            var resultObject = foundRenderer.render(element, currentSchema, schemaPath, dataProvider);
-            if (resultObject.validate) {
-                resultObject.validate();
-            }
-            return resultObject;
-        };
+            return foundRenderer.render(element, schema, schemaPath, services);
+        }
+
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);
         }
@@ -291,22 +430,6 @@ module JSONForms {
         // $compile can then be used as this.$compile
         constructor(private $compile:ng.ICompileService) {
         }
-
-        addUiPathToSchemaRefMapping = (addition:any) => {
-            for (var ref in addition) {
-                if (addition.hasOwnProperty(ref)) {
-                    this.pathMapping[ref] = addition[ref];
-                }
-            }
-        };
-        getSchemaRef = (uiSchemaPath:string):any => {
-
-            if (uiSchemaPath == "#") {
-                return "#";
-            }
-
-            return this.pathMapping[uiSchemaPath + "/scope/$ref"];
-        };
 
         toInstancePath = (path:string):string => {
             return PathUtil.normalize(path);
@@ -612,8 +735,9 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory {
-        static createControlDescription(data: any, schemaPath: string, label?: string) {
-            return new ControlRenderDescription(data, schemaPath, label);
+
+        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string): IRenderDescription {
+            return new ControlRenderDescription(schemaPath, services, label);
         }
     }
 

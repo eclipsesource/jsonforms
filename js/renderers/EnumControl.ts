@@ -6,10 +6,10 @@ class EnumControl implements JSONForms.IRenderer {
 
     constructor(private pathResolver: JSONForms.PathResolver) {}
 
-    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
+    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
         var enums =  subSchema.enum;
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
         control['template'] = `<control><select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control jsf-control jsf-control-enum" data-jsonforms-model ></select></control>`;
         control['options'] = enums;
         return control;
@@ -23,6 +23,6 @@ class EnumControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonforms.enumControl', []);
 
-app.run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
-    RenderService.register(new EnumControl(PathResolver));
-}]);
+app.run(['RenderService', 'PathResolver', 'RenderDescriptionFactory', (RenderService, PathResolver) =>
+    RenderService.register(new EnumControl(PathResolver))
+]);

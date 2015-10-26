@@ -4,8 +4,10 @@ class StringControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+    static inject = ['RenderDescriptionFactory'];
+
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
         control['template'] = `<control><input type="text" id="${schemaPath}" class="form-control jsf-control jsf-control-string" data-jsonforms-model data-jsonforms-validation/></control>`;
         return control;
     }
@@ -18,6 +20,6 @@ class StringControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonforms.stringControl', []);
 
-app.run(['RenderService', function(RenderService) {
-    RenderService.register(new StringControl());
-}]);
+app.run(['RenderService', 'RenderDescriptionFactory', (RenderService) =>
+    RenderService.register(new StringControl())
+]);
