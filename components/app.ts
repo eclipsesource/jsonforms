@@ -13,6 +13,7 @@ angular.module('jsonforms', [
     'jsonforms.pathresolver',
     'jsonforms.renderers',
     'jsonforms.renderers.controls',
+    'jsonforms.renderers.controls.autocomplete',
     'jsonforms.renderers.controls.array',
     'jsonforms.renderers.controls.integer',
     'jsonforms.renderers.controls.boolean',
