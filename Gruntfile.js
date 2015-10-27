@@ -130,7 +130,7 @@ module.exports = function(grunt) {
                     paths: ['temp']
                 },
                 files: {
-                    'dist/css/jsonforms.css': 'css/app.css'
+                    'dist/css/jsonforms.css': ['css/wrapper.css', 'components/**/*.css']
                 }
             }
         },
