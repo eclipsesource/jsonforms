@@ -107,7 +107,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                                 "scope": {
                                     "$ref": "#/properties/age"
                                 }
-                            },
+                            }
                         ]
                     },
                     {
@@ -127,11 +127,11 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                                 "scope": {
                                     "$ref": "#/properties/vegetarian"
                                 }
-                            },
+                            }
                         ]
-                    },
+                    }
                 ]
-            },
+            }
         ]
     };
 
