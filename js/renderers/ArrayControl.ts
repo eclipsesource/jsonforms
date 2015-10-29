@@ -13,7 +13,7 @@ class ArrayControl implements JSONForms.IRenderer {
     }
 
     isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return element.type == 'Control' && subSchema.type == 'array';
+        return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
     }
 
     render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
@@ -48,11 +48,10 @@ class ArrayControl implements JSONForms.IRenderer {
 
 
         return {
-            "label": element.label,
             "type": "Control",
             "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
-            "template": `<div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div>`
+            "template": `<control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div></control>`
         };
     }
 

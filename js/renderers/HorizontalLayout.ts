@@ -11,19 +11,17 @@ class HorizontalLayout implements JSONForms.IRenderer {
 
     render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription => {
 
-        var that = this;
-
-        var renderElements = function (elements) {
+        var renderElements = (elements) => {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
-                return elements.reduce(function (acc, curr, idx, els) {
-                    acc.push(that.renderServ.render(curr, dataProvider));
+                return elements.reduce((acc, curr, idx, els) => {
+                    acc.push(this.renderServ.render(curr, dataProvider));
                     return acc;
                 }, []);
             }
         };
-        // TODO
+
         var maxSize = 99;
 
         var renderedElements = renderElements(element.elements);
@@ -35,17 +33,17 @@ class HorizontalLayout implements JSONForms.IRenderer {
         }
 
         var template = label ?
-                `<fieldset>
+                `<layout><fieldset>
                    <legend>${label}</legend>
                    <div class="row">
-                     <recelement ng-repeat="child in element.elements" element="child"></recelement>
+                     <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
                    </div>
-                 </fieldset>` :
-                `<fieldset>
+                 </fieldset></layout>` :
+                `<layout><fieldset>
                    <div class="row">
-                     <recelement ng-repeat="child in element.elements" element="child"></recelement>
+                     <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
                    </div>
-                 </fieldset>`;
+                 </fieldset></layout>`;
 
         return {
             "type": "Layout",
@@ -66,4 +64,3 @@ var app = angular.module('jsonforms.horizontalLayout', []);
 app.run(['RenderService', function(RenderService) {
     RenderService.register(new HorizontalLayout(RenderService));
 }]);
-
