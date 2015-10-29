@@ -155,7 +155,7 @@ jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
     }
 })
 .directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
-    var replaceJSONFormsAttributeInTemplate = (template, fragments) => {
+    var replaceJSONFormsAttributeInTemplate = (template, fragments): string => {
         var path = [];
         for (var fragment in fragments) {
             path.push("['" + fragments[fragment] + "']");
