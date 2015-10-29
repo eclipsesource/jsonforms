@@ -136,31 +136,7 @@ interface JsonFormsDirectiveScope extends ng.IScope {
     asyncDataProvider: JSONForms.IDataProvider;
 }
 
-class RecElement implements ng.IDirective {
-
-    constructor(private recursionHelper:JSONForms.RecursionHelper) {
-    }
-
-    restrict = "E";
-    replace = true;
-    scope = { element: '=' };
-    templateUrl = 'templates/element.html';
-
-    compile: ng.IDirectiveCompileFn = (element, attr, trans) => {
-        return <ng.IDirectivePrePost>this.recursionHelper.compile(element, trans);
-    };
-
-}
-
-jsonFormsDirectives.directive('control', function ():ng.IDirective {
-
-    return {
-        restrict: "E",
-        replace: true,
-        scope: { control: '=' },
-        templateUrl: 'templates/control.html'
-    };
-}).directive('jsonforms', function ():ng.IDirective {
+jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
 
     return {
         restrict: "E",
@@ -177,32 +153,62 @@ jsonFormsDirectives.directive('control', function ():ng.IDirective {
         templateUrl: 'templates/form.html',
         controller: JsonFormsDirectiveController
     }
-}).directive('recelement', ['RecursionHelper', (recHelper: JSONForms.RecursionHelper): ng.IDirective => {
-    return new RecElement(recHelper);
-}]).directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
-    var replaceJSONFormsAttributeInTemplate = (template: string): string => {
-        return template
-            .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
-            .replace("data-jsonforms-validation", `ng-change='element.validate()'`);
+})
+.directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
+    var replaceJSONFormsAttributeInTemplate = (template, fragments): string => {
+        var path = [];
+        for (var fragment in fragments) {
+            path.push("['" + fragments[fragment] + "']");
+        }
+        var pathBinding = "ng-model=\"element.instance" + path.join('') + "\"";
+        if (fragments.length > 0) {
+            return template
+                .replace("data-jsonforms-model", pathBinding)
+                .replace("data-jsonforms-validation", "ng-change='element.validate()'");
+        } else {
+            return template;
+        }
     };
     return {
         restrict: 'E',
-        scope: {
-            element: "="
-        },
+        scope: {element: "="},
         replace: true,
         link: function(scope, element) {
+            var fragments = scope.element.path !== undefined ? scope.element.path.split('/') : [];
             if (scope.element.templateUrl) {
                 $templateRequest(scope.element.templateUrl).then(function(template) {
-                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template);
+                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template, fragments);
                     var compiledTemplate = $compile(updatedTemplate)(scope);
                     element.replaceWith(compiledTemplate);
                 })
             } else {
-                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template);
+                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template, fragments);
                 var template = $compile(updatedTemplate)(scope);
                 element.replaceWith(template);
             }
         }
     }
-}]);
+}]).directive('control', function ():ng.IDirective {
+    return {
+        restrict: "E",
+        replace: true,
+        transclude: true,
+        templateUrl: 'templates/control.html'
+    }
+}).directive('layout', function ():ng.IDirective {
+    return {
+        restrict: "E",
+        replace: true,
+        transclude: true,
+        templateUrl: 'templates/layout.html'
+    }
+}).directive('widget', function ():ng.IDirective {
+    return {
+        restrict: "E",
+        replace: true,
+        transclude: true,
+        template: `<div class="col-sm-{{element.size}} jsf-label ng-transclude"></div>`
+    }
+})
+
+;
