@@ -11,7 +11,7 @@ class IntegerControl implements JSONForms.IRenderer {
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return uiElement.type == 'Control' && subSchema.type == 'integer';
+        return uiElement.type == 'Control' && subSchema !== undefined && subSchema.type == 'integer';
     }
 }
 

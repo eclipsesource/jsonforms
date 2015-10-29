@@ -155,24 +155,34 @@ jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
     }
 })
 .directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
-    var replaceJSONFormsAttributeInTemplate = (template: string): string => {
-        return template
-            .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
-            .replace("data-jsonforms-validation", `ng-change='element.validate()'`);
+    var replaceJSONFormsAttributeInTemplate = (template, fragments) => {
+        var path = [];
+        for (var fragment in fragments) {
+            path.push("['" + fragments[fragment] + "']");
+        }
+        var pathBinding = "ng-model=\"element.instance" + path.join('') + "\"";
+        if (fragments.length > 0) {
+            return template
+                .replace("data-jsonforms-model", pathBinding)
+                .replace("data-jsonforms-validation", "ng-change='element.validate()'");
+        } else {
+            return template;
+        }
     };
     return {
         restrict: 'E',
         scope: {element: "="},
         replace: true,
         link: function(scope, element) {
+            var fragments = scope.element.path !== undefined ? scope.element.path.split('/') : [];
             if (scope.element.templateUrl) {
                 $templateRequest(scope.element.templateUrl).then(function(template) {
-                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template);
+                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template, fragments);
                     var compiledTemplate = $compile(updatedTemplate)(scope);
                     element.replaceWith(compiledTemplate);
                 })
             } else {
-                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template);
+                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template, fragments);
                 var template = $compile(updatedTemplate)(scope);
                 element.replaceWith(template);
             }
