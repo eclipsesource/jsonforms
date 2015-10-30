@@ -9,7 +9,8 @@ JSONForms contributors (sorted alphabetically)
 
 * **[Maximilian Koegel](https://github.com/koegel)**
 
+* **[Mohammad Mahadi Hasan](https://github.com/mahadihasan)**
+
 * **[Philip Langer](https://github.com/planger)**
 
 * **[Stefan Dirix](https://github.com/sdirix)**
-

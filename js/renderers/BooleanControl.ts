@@ -11,7 +11,7 @@ class BooleanControl implements JSONForms.IRenderer {
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return uiElement.type == 'Control' && subSchema.type == 'boolean';
+        return uiElement.type == 'Control' && subSchema !== undefined && subSchema.type == 'boolean';
     }
 }
 
