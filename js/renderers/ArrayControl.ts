@@ -8,7 +8,7 @@ class ArrayControl implements JSONForms.IRenderer {
 
     priority = 2;
 
-    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope, private $location: ng.ILocationService) {
+    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope) {
 
     }
 
@@ -203,3 +203,6 @@ class ArrayControl implements JSONForms.IRenderer {
 
 var app = angular.module('jsonforms.arrayControl', []);
 
+app.run(['RenderService', 'PathResolver', '$rootScope', (RenderService, PathResolver, $rootScope) => {
+    RenderService.register(new ArrayControl(PathResolver, $rootScope));
+}]);
