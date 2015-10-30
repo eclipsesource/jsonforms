@@ -1,4 +1,5 @@
 /// <reference path="../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../typings/ui-grid/ui-grid.d.ts"/>
 /// <reference path="../services.ts"/>
 
 class ArrayControl implements JSONForms.IRenderer {
@@ -12,19 +13,19 @@ class ArrayControl implements JSONForms.IRenderer {
 
     }
 
-    isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
-    }
+            isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
+                return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
+            }
 
-    render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
+            render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
 
-        var control = this.createTableUIElement(element, dataProvider, schema, schemaPath);
+                var control = this.createTableUIElement(element, dataProvider, schema, schemaPath);
 
-        var data;
-        if (dataProvider.data instanceof Array) {
-            data = dataProvider.data;
-        } else {
-            data = this.pathResolver.resolveInstance(dataProvider.data, this.pathResolver.toInstancePath(schemaPath));
+                var data;
+                if (dataProvider.data instanceof Array) {
+                    data = dataProvider.data;
+                } else {
+                    data = this.pathResolver.resolveInstance(dataProvider.data, this.pathResolver.toInstancePath(schemaPath));
         }
 
         if (data === undefined || data.length == 0) {
@@ -47,20 +48,23 @@ class ArrayControl implements JSONForms.IRenderer {
         control['tableOptions'].gridOptions.enableVerticalScrollbar = 0; // TODO uiGridConstants.scrollbars.NEVER;
 
 
-        return {
+        var o = {
             "type": "Control",
-            "gridOptions": control['tableOptions']['gridOptions'],
             "size": this.maxSize,
             "template": `<control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div></control>`
         };
+                o["gridOptions"] = control['tableOptions']['gridOptions'];
+                return o;
     }
 
-    private createColDefs(columnDescriptions: any): any {
+    private createColDefs(columnDescriptions: any): uiGrid.IColumnDef[] {
         return columnDescriptions.map((col, idx) => {
             var href = col.href;
             if (href) {
                 var hrefScope = href.scope;
                 var cellTemplate;
+                var field = this.pathResolver.toInstancePath(col['scope']['$ref']);
+
                 if (hrefScope) {
                     var instancePath = this.pathResolver.toInstancePath(hrefScope.$ref);
                     cellTemplate = `<div class="ui-grid-cell-contents">
@@ -69,7 +73,6 @@ class ArrayControl implements JSONForms.IRenderer {
                       </a>
                     </div>`;
                 } else {
-                    var field = this.pathResolver.toInstancePath(col['scope']['$ref']);
                     cellTemplate = `<div class="ui-grid-cell-contents">
                       <a href="#${href.url}/{{row.entity.${field}}}">
                         {{row.entity.${field}}}
@@ -77,16 +80,18 @@ class ArrayControl implements JSONForms.IRenderer {
                 </div>`;
                 }
 
-                return {
+                var r: uiGrid.IColumnDef = {
                     cellTemplate: cellTemplate,
                     field: field,
                     displayName: col.label
-                }
+                };
+                return r;
             } else {
-                return {
+                var r: uiGrid.IColumnDef = {
                     field: this.pathResolver.toInstancePath(col['scope']['$ref']),
                     displayName: col.label
-                }
+                };
+                return r;
             }
         });
     }
