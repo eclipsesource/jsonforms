@@ -144,8 +144,8 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                 "scope": { "$ref": "#/properties/postId" },
                 "label": "Navigate to ",
                 "href": {
-                    "url": "/placeholder-users",
-                    "label": "User"
+                    "url": "/placeholder-posts",
+                    "label": "Post"
                 }
             }
         ]

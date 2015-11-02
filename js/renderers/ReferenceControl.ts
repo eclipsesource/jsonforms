@@ -11,13 +11,14 @@ class ReferenceControl implements JSONForms.IRenderer {
         var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
         var normalizedPath = this.pathResolver.toInstancePath(schemaPath);
         var prefix = element.label ? element.label : "Go to ";
-        var linkText = prefix + (element['href']['label'] ? element['href']['label'] : control.label);
-        control['template'] = `<a href="#${element['href']['url']}/${dataProvider.data[normalizedPath]}">${linkText}</a>`;
+        var linkText = element['href']['label'] ? element['href']['label'] : control.label;
+        control['template'] =  `<div>${prefix} <a href="#${element['href']['url']}/${dataProvider.data[normalizedPath]}">${linkText}</a></div>`;
         return control;
     }
 
     isApplicable(uiElement:IUISchemaElement, subSchema:SchemaElement, schemaPath:string):boolean {
         return uiElement.type == "ReferenceControl";
+
     }
 }
 
