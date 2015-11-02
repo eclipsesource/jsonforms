@@ -10,8 +10,9 @@ class ReferenceControl implements JSONForms.IRenderer {
     render(element:IUISchemaElement, schema:SchemaElement, schemaPath:string, dataProvider:JSONForms.IDataProvider) {
         var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
         var normalizedPath = this.pathResolver.toInstancePath(schemaPath);
-        var linkText = element['label'] ? element['label'] : "Go to " + control.label;
-        control['template'] = `<a href="${element['href']}/${dataProvider.data[normalizedPath]}">${linkText}</a>`;
+        var prefix = element.label ? element.label : "Go to ";
+        var linkText = prefix + (element['href']['label'] ? element['href']['label'] : control.label);
+        control['template'] = `<a href="#${element['href']['url']}/${dataProvider.data[normalizedPath]}">${linkText}</a>`;
         return control;
     }
 

@@ -13,19 +13,19 @@ class ArrayControl implements JSONForms.IRenderer {
 
     }
 
-            isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-                return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
-            }
+    isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
+        return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
+    }
 
-            render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
+    render(element: IControlObject, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
 
-                var control = this.createTableUIElement(element, dataProvider, schema, schemaPath);
+        var control = this.createTableUIElement(element, dataProvider, schema, schemaPath);
 
-                var data;
-                if (dataProvider.data instanceof Array) {
-                    data = dataProvider.data;
-                } else {
-                    data = this.pathResolver.resolveInstance(dataProvider.data, this.pathResolver.toInstancePath(schemaPath));
+        var data;
+        if (dataProvider.data instanceof Array) {
+            data = dataProvider.data;
+        } else {
+            data = this.pathResolver.resolveInstance(dataProvider.data, this.pathResolver.toInstancePath(schemaPath));
         }
 
         if (data === undefined || data.length == 0) {
@@ -53,8 +53,8 @@ class ArrayControl implements JSONForms.IRenderer {
             "size": this.maxSize,
             "template": `<control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination class="grid"></div></control>`
         };
-                o["gridOptions"] = control['tableOptions']['gridOptions'];
-                return o;
+        o["gridOptions"] = control['tableOptions']['gridOptions'];
+        return o;
     }
 
     private createColDefs(columnDescriptions: any): uiGrid.IColumnDef[] {

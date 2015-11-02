@@ -142,9 +142,10 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
             {
                 "type": "ReferenceControl",
                 "scope": { "$ref": "#/properties/postId" },
+                "label": "Navigate to ",
                 "href": {
                     "url": "/placeholder-users",
-                    "title": "Go to post"
+                    "label": "Post"
                 }
             }
         ]
@@ -217,6 +218,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                 }).$promise;
             } else {
                 return Users.query({}, function(response) {
+                    console.log(JSON.stringify(response));
                     $scope.UserDataProvider.data = response;
                 }, function(error) {
                     console.log("error occurred: " + JSON.stringify(error));
@@ -227,6 +229,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
             var start = (page - 1) * this.pageSize;
             var end = start + this.pageSize;
             return Users.query({_start: start, _end: end}, function(response) {
+                console.log(JSON.stringify(response));
                 $scope.UserDataProvider.data = response;
             }).$promise;
         },
