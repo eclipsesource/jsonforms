@@ -145,7 +145,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                 "label": "Navigate to ",
                 "href": {
                     "url": "/placeholder-users",
-                    "label": "Post"
+                    "label": "User"
                 }
             }
         ]
@@ -273,6 +273,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
     $scope.CommentDataProvider = {
         page: 0,
         pageSize: 10,
+        data: [],
         fetchData: function() {
             if ($routeParams.id) {
                 return Comments.get({"id": $routeParams['id']}, function(response) {
@@ -294,6 +295,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
             return Comments.query({_start: start, _end: end}, function(response) {
                 $scope.CommentDataProvider.data = response;
             }).$promise;
+        },
+        setPageSize: function(size){
+            this.pageSize = size;
         }
-    };
+    }
 }]);
