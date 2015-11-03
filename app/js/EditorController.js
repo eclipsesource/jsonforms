@@ -10,7 +10,9 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
     $scope.data = {};
 
     $scope.$watch('localView', function(newValue, oldValue) {
-       $scope.uiSchema = JSON.parse(newValue);
+        if (newValue !== undefined) {
+            $scope.uiSchema = JSON.parse(newValue);
+        }
     });
 
     $scope.aceLoaded = function(editor) {

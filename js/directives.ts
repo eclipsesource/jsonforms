@@ -23,7 +23,7 @@ class JsonFormsDirectiveController {
 
         if (this.isInitialized) {
             // remove previously rendered elements
-            var children = angular.element(this.$scope['el'].find('form')).children();
+            var children = angular.element(this.$scope['element'].find('form')).children();
             children.remove();
         }
 
