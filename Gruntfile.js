@@ -205,9 +205,16 @@ module.exports = function(grunt) {
                 options: {
                     reports: {
                         'html': 'coverage/html-report',
-                        'json': 'coverage/mapped-coverage-final.json'
+                        'json': 'coverage/mapped-coverage-final.json',
+                        'lcovonly': 'coverage/mapped-coverage.info'
                     }
                 }
+            }
+        },
+
+        coveralls: {
+            karma_tests: {
+                src: 'coverage/mapped-coverage.info'
             }
         }
     });
