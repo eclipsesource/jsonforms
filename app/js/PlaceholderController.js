@@ -206,98 +206,62 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
     var Users = $resource('http://localhost:3000/users/:id');
     var Comments = $resource('http://localhost:3000/comments/:id');
 
-    $scope.UserDataProvider = {
-        // TODO: code duplication, can be factored out together with _start, _end and the $resource
-        page: 0,
-        pageSize: 5,
-        data: [],
-        fetchData: function() {
-            if ($routeParams.id) {
-                return Users.get({"id": $routeParams.id}, function (response) {
-                    $scope.UserDataProvider.data = response;
-                }).$promise;
-            } else {
-                return Users.query({}, function(response) {
-                    console.log(JSON.stringify(response));
-                    $scope.UserDataProvider.data = response;
-                }, function(error) {
-                    console.log("error occurred: " + JSON.stringify(error));
-                }).$promise;
-            }
-        },
-        fetchPage: function(page, size) {
-            var start = (page - 1) * this.pageSize;
-            var end = start + this.pageSize;
-            return Users.query({_start: start, _end: end}, function(response) {
-                console.log(JSON.stringify(response));
-                $scope.UserDataProvider.data = response;
-            }).$promise;
-        },
-        setPageSize: function(newSize) {
-            this.pageSize = newSize;
-        }
-    };
-
     $scope.id = $routeParams.id;
-    $scope.PostDataProvider = {
-        page: 0,
-        pageSize: 10,
-        data: [],
-        fetchData: function() {
-            if ($routeParams.id){
-                return Posts.get({id: $routeParams.id}, function(response) {
-                    $scope.PostDataProvider.data = response;
-                }, function(error) {
-                    console.log("error occurred: " + JSON.stringify(error));
+
+    var createDataProvider = function(toQuery) {
+        return {
+            page: 0,
+            pageSize: 10,
+            data: [],
+            getData: function () {
+                return this.data;
+            },
+            getPage: function () {
+                return this.page;
+            },
+            getPageSize: function () {
+                return this.pageSize;
+            },
+            setPageSize: function (size) {
+                this.pageSize = size;
+            },
+            getId: function () {
+                return 1;
+            },
+            getTotalItems: function () {
+                return this.data.length;
+            },
+            fetchPage: function (page, size) {
+                var start = (page - 1) * this.pageSize;
+                var end = start + this.pageSize;
+                var that = this;
+                return Comments.query({_start: start, _end: end}, function (response) {
+                    that.data = response;
                 }).$promise;
-            } else {
-                return Posts.query({}, function(response) {
-                    $scope.PostDataProvider.data = response;
-                }, function(error) {
-                    console.log("error occurred: " + JSON.stringify(error));
-                }).$promise;
+            },
+            fetchData: function () {
+                var that = this;
+                if ($routeParams.id) {
+                    return toQuery.get({"id": $routeParams['id']}, function (response) {
+                        that.data = response;
+                    }, function (error) {
+                        console.log("error occurred: " + JSON.stringify(error));
+                    }).$promise;
+                } else {
+                    return toQuery.query({}, function (response) {
+                        that.data = response;
+                    }, function (error) {
+                        console.log("error occurred: " + JSON.stringify(error));
+                    }).$promise;
+                }
             }
-        },
-        fetchPage: function(page, size) {
-            var start = (page - 1) * this.pageSize;
-            var end = start + this.pageSize;
-            return Posts.query({_start: start, _end: end}, function(response) {
-                $scope.PostDataProvider.data = response;
-            }).$promise;
-        },
-        setPageSize: function(newSize) {
-            this.pageSize = newSize;
-        }
+        };
     };
 
-    $scope.CommentDataProvider = {
-        page: 0,
-        pageSize: 10,
-        data: [],
-        fetchData: function() {
-            if ($routeParams.id) {
-                return Comments.get({"id": $routeParams['id']}, function(response) {
-                    $scope.CommentDataProvider.data = response;
-                }, function(error) {
-                    console.log("error occurred: " + JSON.stringify(error));
-                }).$promise;
-            } else {
-                return Comments.query({}, function(response) {
-                    $scope.CommentDataProvider.data = response;
-                }, function(error) {
-                    console.log("error occurred: " + JSON.stringify(error));
-                }).$promise;
-            }
-        },
-        fetchPage: function(page, size) {
-            var start = (page - 1) * this.pageSize;
-            var end = start + this.pageSize;
-            return Comments.query({_start: start, _end: end}, function(response) {
-                $scope.CommentDataProvider.data = response;
-            }).$promise;
-        },
-        setPageSize: function(size){
-            this.pageSize = size;
-        }
-    }
+    $scope.CommentDataProvider = createDataProvider(Comments);
+    $scope.PostsDataProvider = createDataProvider(Posts);
+    $scope.UserDataProvider = createDataProvider(Users);
+    $scope.UserDataProvider.setPageSize(5);
+
 }]);
+
