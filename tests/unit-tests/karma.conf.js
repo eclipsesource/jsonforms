@@ -5,7 +5,8 @@ module.exports = function(config){
 
         // load templates as module
         preprocessors: {
-            'components/**/*.html': ['ng-html2js']
+            'components/**/*.html': ['ng-html2js'],
+            'js/**/*.js': ['coverage']
         },
 
         files : [
@@ -20,13 +21,22 @@ module.exports = function(config){
             'app/bower_components/ui-utils/ui-utils.js',
             'app/bower_components/angular-ui-bootstrap-bower/ui-bootstrap.js',
             'app/bower_components/tv4/tv4.js',
-            'dist/js/jsonforms.js',
+            'js/**/*.js',
             'tests/unit-tests/**/*.js',
             //'app/js/*.js',
             // templates
             // if you wanna load template files in nested directories, you must use this
             'components/**/*.html'
         ],
+
+        reporters: ['progress', 'coverage'],
+
+        // optionally, configure the reporter
+        coverageReporter: {
+            type : 'json',
+            subdir : '.',
+            file : 'coverage-final.json'
+        },
 
         autoWatch : true,
 
@@ -40,7 +50,7 @@ module.exports = function(config){
             'karma-chrome-launcher',
             'karma-firefox-launcher',
             'karma-jasmine',
-            'karma-junit-reporter',
+            'karma-coverage',
             'karma-ng-html2js-preprocessor'
         ],
 

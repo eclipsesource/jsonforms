@@ -192,10 +192,23 @@ module.exports = function(grunt) {
                 // Note: The entire `browserify-shim` config is inside `package.json`.
             }
         },
+
         clean: {
             dist: ["dist/**", "temp/**"],
             app: ["app/js/jsonforms*", "app/css/jsonforms*"],
             all: ["dist", "temp", "app/js/jsonforms*", "app/css/jsonforms*", "node_modules", "app/bower_components"]
+        },
+
+        remapIstanbul: {
+            build: {
+                src: 'coverage/coverage-final.json',
+                options: {
+                    reports: {
+                        'html': 'coverage/html-report',
+                        'json': 'coverage/mapped-coverage-final.json'
+                    }
+                }
+            }
         }
     });
 
@@ -232,6 +245,8 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-ts');
 
+    grunt.loadNpmTasks('remap-istanbul');
+
     // Build distribution
     grunt.registerTask('dist', [
         'clean:dist',
@@ -258,7 +273,8 @@ module.exports = function(grunt) {
         'ts:test',
         'karma',
         'connect',
-        'protractor'
+        'protractor',
+        'remapIstanbul'
     ]);
 
     // Hint task

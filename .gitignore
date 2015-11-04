@@ -1,6 +1,7 @@
 # generated files
 dist/
 temp/
+coverage/
 
 # npm
 node_modules/
