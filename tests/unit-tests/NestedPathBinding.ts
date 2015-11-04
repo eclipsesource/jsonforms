@@ -1,15 +1,11 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../typings/jquery/jquery.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe("Path binding for nested properties", () => {
 
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.stringControl'));
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
 
     it("should created nested objects", inject(($rootScope, $compile) => {
         var scope = $rootScope.$new();

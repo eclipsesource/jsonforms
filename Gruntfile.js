@@ -45,6 +45,7 @@ module.exports = function(grunt) {
                 dest: '',
                 reference: 'components/references.ts',
                 options: {
+                    target: 'es5',
                     module: 'commonjs',
                     sourceMap: true,
                     declaration: false
@@ -56,7 +57,9 @@ module.exports = function(grunt) {
                 reference: 'tests/references.ts',
                 options: {
                     target: 'es5',
-                    module: 'commonjs'
+                    module: 'commonjs',
+                    sourceMap: true,
+                    declaration: false
                 }
             }
         },
@@ -64,7 +67,7 @@ module.exports = function(grunt) {
         'angular-builder': {
             options: {
                 mainModule: 'jsonforms',
-                externalModules: ['ui.bootstrap', 'ui.validate', 'ui.grid', 'ui.grid.pagination', 'ui.grid.autoResize']
+                externalModules: ['ui.bootstrap', 'ui.validate', 'ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ui.grid.autoResize']
             },
             app: {
                 src:  'components/**/*.js',

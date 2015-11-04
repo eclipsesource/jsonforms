@@ -18,6 +18,7 @@ angular.module('jsonforms', [
     'jsonforms.renderers.controls.array',
     'jsonforms.renderers.controls.integer',
     'jsonforms.renderers.controls.boolean',
+    'jsonforms.renderers.controls.reference',
     'jsonforms.renderers.controls.string',
     'jsonforms.renderers.controls.number',
     'jsonforms.renderers.controls.datetime',
