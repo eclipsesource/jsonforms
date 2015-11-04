@@ -1,26 +1,24 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('jsonforms directive', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.label'));
-    beforeEach(module('jsonforms.verticalLayout'));
-    beforeEach(module('jsonforms.horizontalLayout'));
-    beforeEach(module('jsonforms.arrayControl'));
-    beforeEach(module('jsonforms.integerControl'));
-    beforeEach(module('jsonforms.booleanControl'));
-    beforeEach(module('jsonforms.stringControl'));
-    beforeEach(module('jsonforms.numberControl'));
-    beforeEach(module('jsonforms.datetimeControl'));
-    beforeEach(module('jsonforms.enumControl'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.pathresolver'));
+    beforeEach(module('jsonforms.renderers.extras.label'));
+    beforeEach(module('jsonforms.renderers.layouts.vertical'));
+    beforeEach(module('jsonforms.renderers.layouts.horizontal'));
+    beforeEach(module('jsonforms.renderers.controls.array'));
+    beforeEach(module('jsonforms.renderers.controls.integer'));
+    beforeEach(module('jsonforms.renderers.controls.boolean'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
+    beforeEach(module('jsonforms.renderers.controls.number'));
+    beforeEach(module('jsonforms.renderers.controls.datetime'));
+    beforeEach(module('jsonforms.renderers.controls.enum'));
 
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
+
     it("should render a labeled select field", inject(function ($rootScope, $compile) {
         var scope = $rootScope.$new();
         scope.schema = {

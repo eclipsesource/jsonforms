@@ -1,14 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
-/// <reference path="../../typings/schemas/uischema.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('UISchemaGenerator', () => {
 
     var UISchemaGenerator: JSONForms.IUISchemaGenerator;
 
-    beforeEach(module('jsonforms.services'));
+    beforeEach(module('jsonforms.generators.uischema'));
     beforeEach(() => {
         inject(['UISchemaGenerator', function(_UISchemaGenerator_: JSONForms.IUISchemaGenerator) {
             UISchemaGenerator = _UISchemaGenerator_;

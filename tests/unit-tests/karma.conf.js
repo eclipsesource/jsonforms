@@ -5,7 +5,7 @@ module.exports = function(config){
 
         // load templates as module
         preprocessors: {
-            'templates/*.html': ['ng-html2js']
+            'components/**/*.html': ['ng-html2js']
         },
 
         files : [
@@ -25,7 +25,7 @@ module.exports = function(config){
             //'app/js/*.js',
             // templates
             // if you wanna load template files in nested directories, you must use this
-            'templates/*.html'
+            'components/**/*.html'
         ],
 
         autoWatch : true,
