@@ -211,6 +211,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         page: 0,
         pageSize: 5,
         data: [],
+        getData : function() {
+            return this.data;
+        },
         fetchData: function() {
             if ($routeParams.id) {
                 return Users.get({"id": $routeParams.id}, function (response) {
@@ -235,6 +238,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         },
         setPageSize: function(newSize) {
             this.pageSize = newSize;
+        },
+        getId: function() {
+            return 1;
         }
     };
 
@@ -243,6 +249,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         page: 0,
         pageSize: 10,
         data: [],
+        getData : function() {
+            return this.data;
+        },
         fetchData: function() {
             if ($routeParams.id){
                 return Posts.get({id: $routeParams.id}, function(response) {
@@ -267,6 +276,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         },
         setPageSize: function(newSize) {
             this.pageSize = newSize;
+        },
+        getId: function() {
+            return 1;
         }
     };
 
@@ -274,6 +286,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         page: 0,
         pageSize: 10,
         data: [],
+        getData : function() {
+            return this.data;
+        },
         fetchData: function() {
             if ($routeParams.id) {
                 return Comments.get({"id": $routeParams['id']}, function(response) {
@@ -298,6 +313,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         },
         setPageSize: function(size){
             this.pageSize = size;
+        },
+        getId: function() {
+            return 1;
         }
     }
 }]);
