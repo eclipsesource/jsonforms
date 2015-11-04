@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('makeithappen').controller('EditorController', ['RenderService', 'ReferenceResolver', '$scope', function(RenderService, ReferenceResolver, $scope) {
+angular.module('makeithappen').controller('EditorController', ['RenderService', 'PathResolver', '$scope', function(RenderService, PathResolver, $scope) {
 
     $scope.localModelDefault = JSON.stringify($scope.schema, undefined, 2);
     $scope.localViewDefault = JSON.stringify($scope.uiSchema, undefined, 2);
@@ -9,28 +9,11 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
 
     $scope.data = {};
 
-    $scope.reparse = function() {
-
-        $scope.schema = JSON.parse($scope.localModel);
-        $scope.uiSchema = JSON.parse($scope.localView);
-
-        replaceRefLinks($scope.uiSchema);
-
-        // TODO: does 2-way databinding work for provided schema/ui-schema?
-
-        //console.log(JSON.stringify(localModelObject));
-        //console.log(JSON.stringify(localViewObject));
-
-        $scope.schema["uiSchema"] = $scope.uiSchema;
-        ReferenceResolver.addToMapping(JsonRefs.findRefs($scope.uiSchema));
-
-        JsonRefs.resolveRefs($scope.schema, {}, function (err, resolvedSchema, meta) {
-            $scope.elements = [RenderService.render(resolvedSchema['uiSchema'], $scope.schema, $scope.data, "#", undefined)];
-            console.log($scope.elements);
-        });
-
-        $scope.opened = false;
-    };
+    $scope.$watch('localView', function(newValue, oldValue) {
+        if (newValue !== undefined) {
+            $scope.uiSchema = JSON.parse(newValue);
+        }
+    });
 
     $scope.aceLoaded = function(editor) {
         editor.$blockScrolling = Infinity;
