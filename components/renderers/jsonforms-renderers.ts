@@ -2,32 +2,27 @@
 
 module JSONForms {
 
-    declare var tv4;
     var currentSchema: SchemaElement;
 
     export class RenderService implements IRenderService {
 
-        private renderers:IRenderer[] = [];
+        private renderers: IRenderer[] = [];
         static $inject = ['PathResolver'];
 
-        constructor(private refResolver:IPathResolver) {
+        constructor(private refResolver: IPathResolver) {
         }
 
-
-        registerSchema(schema:SchemaElement) {
-            currentSchema = schema;
-        }
-
-        render = (element:IUISchemaElement, dataProvider:JSONForms.IDataProvider) => {
+        render(element: IUISchemaElement, services: JSONForms.Services) {
 
             var foundRenderer;
             var schemaPath;
             var subSchema;
+            var schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
 
             // TODO element must be IControl
             if (element['scope']) {
                 schemaPath = element['scope']['$ref'];
-                subSchema = this.refResolver.resolveSchema(currentSchema, schemaPath);
+                subSchema = this.refResolver.resolveSchema(schema, schemaPath);
             }
 
             for (var i = 0; i < this.renderers.length; i++) {
@@ -42,20 +37,17 @@ module JSONForms {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            var resultObject = foundRenderer.render(element, currentSchema, schemaPath, dataProvider);
-            if (resultObject.validate) {
-                resultObject.validate();
-            }
-            return resultObject;
-        };
+            return foundRenderer.render(element, schema, schemaPath, services);
+        }
+
         register = (renderer:IRenderer) => {
             this.renderers.push(renderer);
         }
     }
 
-    export class RenderDescriptionFactoryService implements IRendererDescriptionFactory {
-        createControlDescription(data: any, schemaPath: string, label?: string) {
-            return new ControlRenderDescription(data, schemaPath, label);
+    export class RenderDescriptionFactory implements IRendererDescriptionFactory {
+        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string): IRenderDescription {
+            return new ControlRenderDescription(schemaPath, services, label);
         }
     }
 
@@ -67,7 +59,14 @@ module JSONForms {
         public label: string;
         public path: string;
 
-        constructor(public instance: any, private schemaPath: string, label?: string) {
+        public instance: any;
+        schema: SchemaElement;
+        private validationService: IValidationService;
+
+        constructor(schemaPath: string, private services: JSONForms.Services, label?: string) {
+            this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
+            this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
+            this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
             this.path = PathUtil.normalize(schemaPath);
             var l;
             if (label) {
@@ -78,46 +77,18 @@ module JSONForms {
             this.label = l;
         }
 
-        validate(): boolean {
-            if (tv4 == undefined) {
-                return true;
-            }
-            var normalizedPath = '/' + PathUtil.normalize(this.schemaPath);
-            var results = tv4.validateMultiple(this.instance, currentSchema);
-            var errorMsg = undefined;
-
-            for (var i = 0; i < results['errors'].length; i++) {
-
-                var validationResult = results['errors'][i];
-
-                if (validationResult.schemaPath.indexOf('/required') != -1) {
-                    var propName = validationResult['params']['key'];
-                    if (propName == normalizedPath.substr(normalizedPath.lastIndexOf('/') + 1, normalizedPath.length)) {
-                        errorMsg = "Missing property";
-                        break;
-                    }
-                }
-
-                if (validationResult['dataPath'] == normalizedPath) {
-                    errorMsg = validationResult.message;
-                    break;
-                }
-            }
-
-            if (errorMsg == undefined) {
-                // TODO: perform required check
+        modelChanged():void {
+            this.validationService.validate(this.instance, this.schema);
+            var result = this.validationService.getResult(this.instance, '/' + this.path);
+            if (result != undefined) {
+                var alert = {
+                    type: 'danger',
+                    msg: result['message']
+                };
+                this.alerts.push(alert);
+            } else {
                 this.alerts = [];
-                return true;
             }
-
-            this.alerts = [];
-            var alert = {
-                type: 'danger',
-                msg: errorMsg
-            };
-            this.alerts.push(alert);
-
-            return false;
         }
     }
 }

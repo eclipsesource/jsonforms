@@ -1,29 +1,12 @@
 ///<reference path="../references.ts"/>
 
-angular.module('jsonforms.form').directive('jsonforms', function ():ng.IDirective {
-
-    return {
-        restrict: "E",
-        replace: true,
-        scope: {
-            schema: '=',
-            uiSchema: '=',
-            data: '=',
-            asyncSchema: '&',
-            asyncUiSchema: '&',
-            asyncDataProvider: '='
-        },
-        // TODO: fix template for tests
-        templateUrl: 'components/form/form.html',
-        controller: FormController
-    }
-});
-
 declare var JsonRefs;
 
 class FormController {
 
     static $inject = ['RenderService', 'PathResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
+
+    private isInitialized = false;
 
     constructor(
         private RenderService: JSONForms.IRenderService,
@@ -32,21 +15,31 @@ class FormController {
         private SchemaGenerator: JSONForms.ISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
         private $q: ng.IQService
-    ) {
+    ) { }
 
-        var resolvedSchemaDeferred = $q.defer();
-        var resolvedUISchemaDeferred = $q.defer();
+    public init() {
 
-        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then(function(values) {
+        if (this.isInitialized) {
+            // remove previously rendered elements
+            var children = angular.element(this.$scope['element'].find('form')).children();
+            children.remove();
+        }
+
+        this.isInitialized = true;
+
+        var resolvedSchemaDeferred = this.$q.defer();
+        var resolvedUISchemaDeferred = this.$q.defer();
+
+        this.$q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then((values) => {
             var schema = values[0];
             var uiSchemaMaybe = values[1];
 
-            var uiSchemaDeferred = $q.defer();
+            var uiSchemaDeferred = this.$q.defer();
 
-            $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
+            this.$q.when(uiSchemaDeferred.promise).then((uiSchema) => {
                 //schema['uiSchema'] = uiSchema;
                 //  build mapping of ui paths to schema refs
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
                     // TODO: ui schema is now unresolved
                     resolvedUISchemaDeferred.resolve(uiSchema); //resolvedSchema['uiSchema']);
@@ -55,8 +48,8 @@ class FormController {
 
             if (uiSchemaMaybe === undefined || uiSchemaMaybe === null || uiSchemaMaybe === "") {
                 // resolve JSON schema, then generate ui Schema
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                    var uiSchema = UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
+                JsonRefs.resolveRefs(schema, {}, (err, resolvedSchema, meta) => {
+                    var uiSchema = this.UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
                     uiSchemaDeferred.resolve(uiSchema);
                 });
             } else {
@@ -66,24 +59,26 @@ class FormController {
         });
 
 
-        $q.all([resolvedSchemaDeferred.promise, resolvedUISchemaDeferred .promise, this.fetchData()]).then(function(values) {
+        this.$q.all([resolvedSchemaDeferred.promise, resolvedUISchemaDeferred .promise, this.fetchData()]).then((values) => {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
 
+            var services = new JSONForms.Services();
+
+            services.add(new JSONForms.SchemaProvider(schema));
+            services.add(new JSONForms.ValidationService());
+
             var dataProvider: JSONForms.IDataProvider;
-            if ($scope.asyncDataProvider) {
-                dataProvider = $scope.asyncDataProvider;
+            if (this.$scope.asyncDataProvider) {
+                dataProvider = this.$scope.asyncDataProvider;
             } else {
-                dataProvider = new JSONForms.DefaultDataProvider($q, data);
+                dataProvider = new JSONForms.DefaultDataProvider(this.$q, data);
             }
+            services.add(dataProvider);
 
-            RenderService.registerSchema(schema);
-            $scope['elements'] = [RenderService.render(uiSchema, dataProvider)];
+            this.$scope['elements'] = [this.RenderService.render(uiSchema, services)];
         });
-
-        // TODO: check if still in use
-        $scope['opened'] = false;
     }
 
     private fetchSchema() {
@@ -130,8 +125,7 @@ class FormController {
         if (dataProvider && data) {
             throw new Error("You cannot specify both the 'data' and the 'async-data-provider' attribute at the same time.")
         } else if (dataProvider) {
-            var prom = dataProvider.fetchData();
-            return prom;
+            return dataProvider.fetchData();
         } else if (this.$scope.data) {
             var p = this.$q.defer();
             p.resolve(this.$scope.data);
@@ -152,3 +146,25 @@ interface JsonFormsDirectiveScope extends ng.IScope {
     asyncUiSchema: () => any;
     asyncDataProvider: JSONForms.IDataProvider;
 }
+
+angular.module('jsonforms.form').directive('jsonforms', ():ng.IDirective => {
+    return {
+        restrict: "E",
+        replace: true,
+        scope: {
+            schema: '=',
+            uiSchema: '=',
+            data: '=',
+            asyncSchema: '&',
+            asyncUiSchema: '&',
+            asyncDataProvider: '='
+        },
+        // TODO: fix template for tests
+        templateUrl: 'components/form/form.html',
+        controller: FormController,
+        link: (scope, el, attrs, ctrl) => {
+            scope['element'] = el;
+            scope.$watch('uiSchema', () => { ctrl.init(); });
+        }
+    }
+});

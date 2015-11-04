@@ -22,11 +22,11 @@ module JSONForms {
             });
         };
 
-        static beautifiedLastFragment(schemaPath:string):string {
+        static beautifiedLastFragment(schemaPath: string): string  {
             return PathUtil.beautify(PathUtil.capitalizeFirstLetter(schemaPath.substr(schemaPath.lastIndexOf('/') + 1, schemaPath.length)));
         }
 
-        private static capitalizeFirstLetter(string):string {
+        private static capitalizeFirstLetter(string): string {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
@@ -37,11 +37,9 @@ module JSONForms {
          * 2. transform uppercase letters to lowercase
          * 3. transform first letter uppercase
          */
-        static beautify = (text:string):string => {
-            if (text && text.length > 0) {
-                var textArray = text.split(/(?=[A-Z])/).map((x)=> {
-                    return x.toLowerCase()
-                });
+        static beautify = (text: string): string => {
+            if(text && text.length > 0){
+                var textArray = text.split(/(?=[A-Z])/).map((x)=>{return x.toLowerCase()});
                 textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
                 return textArray.join(' ');
             }

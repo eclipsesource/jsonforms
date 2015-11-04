@@ -4,7 +4,7 @@ class LabelRenderer implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render(element:IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
+    render(element:IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
         var text = element['text'];
         var size = 99;
 

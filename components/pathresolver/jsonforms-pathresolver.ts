@@ -10,22 +10,6 @@ module JSONForms {
         constructor(private $compile:ng.ICompileService) {
         }
 
-        addUiPathToSchemaRefMapping = (addition:any) => {
-            for (var ref in addition) {
-                if (addition.hasOwnProperty(ref)) {
-                    this.pathMapping[ref] = addition[ref];
-                }
-            }
-        };
-        getSchemaRef = (uiSchemaPath:string):any => {
-
-            if (uiSchemaPath == "#") {
-                return "#";
-            }
-
-            return this.pathMapping[uiSchemaPath + "/scope/$ref"];
-        };
-
         toInstancePath = (path:string):string => {
             return PathUtil.normalize(path);
         };
@@ -39,8 +23,8 @@ module JSONForms {
         };
 
 
-        resolveInstance = (instance:any, path:string):any => {
-            var fragments = PathUtil.toPropertyFragments(this.toInstancePath(path));
+        resolveInstance = (instance:any, schemaPath:string):any => {
+            var fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
             return fragments.reduce(function (currObj, fragment) {
                 if (currObj instanceof Array) {
                     return currObj.map(function (item) {
@@ -57,11 +41,11 @@ module JSONForms {
          * @param path a schema path
          * @returns {T|*|*}
          */
-        resolveSchema = (schema:any, path:string):any => {
+        resolveSchema = (schema: any, path: string): any => {
 
             var fragments = PathUtil.toPropertyFragments(path);
             return fragments.reduce(function (subSchema, fragment) {
-                if (fragment == "#") {
+                if (fragment == "#"){
                     return subSchema
                 } else if (subSchema instanceof Array) {
                     return subSchema.map(function (item) {

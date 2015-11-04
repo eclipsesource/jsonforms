@@ -4,8 +4,8 @@ class DatetimeRenderer implements JSONForms.IRenderer {
 
     priority = 3;
 
-    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
         control['isOpen'] = false;
         control['openDate'] = function($event) {
             $event.preventDefault();
@@ -25,7 +25,7 @@ class DatetimeRenderer implements JSONForms.IRenderer {
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean {
-        return uiElement.type == 'Control' && subSchema.type == "string" &&
+        return uiElement.type == 'Control' && subSchema !== undefined && subSchema.type == "string" &&
             subSchema['format'] != undefined && subSchema['format'] == "date-time";
     }
 }

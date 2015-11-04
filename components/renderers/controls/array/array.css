@@ -1,0 +1,7 @@
+.validCell {
+    backgound-color: #ffffff !important;
+}
+
+.invalidCell {
+    background-color: #d24d57 !important;
+}

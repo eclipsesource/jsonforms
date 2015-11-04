@@ -6,12 +6,12 @@ declare module JSONForms {
 
         //getSchemaRef(uiSchemaPath:string): any
 
-        toInstancePath(path:string): string
+        toInstancePath(schemaPath:string): string
 
         resolveUi(instance:any, uiPath:string): any
 
         resolveInstance(instance:any, path:string): any
 
-        resolveSchema(schema:SchemaElement, schemaPath:string): SchemaElement
+        resolveSchema(schema: SchemaElement, schemaPath: string): SchemaElement
     }
 }

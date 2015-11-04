@@ -8,14 +8,14 @@ class HorizontalRenderer implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, dataProvider: JSONForms.IDataProvider): JSONForms.IContainerRenderDescription => {
+    render = (element: ILayout, subSchema: SchemaElement, schemaPath:String, services: JSONForms.Services): JSONForms.IContainerRenderDescription => {
 
         var renderElements = (elements) => {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
                 return elements.reduce((acc, curr, idx, els) => {
-                    acc.push(this.renderServ.render(curr, dataProvider));
+                    acc.push(this.renderServ.render(curr, services));
                     return acc;
                 }, []);
             }
