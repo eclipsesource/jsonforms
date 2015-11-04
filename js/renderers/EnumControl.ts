@@ -17,7 +17,7 @@ class EnumControl implements JSONForms.IRenderer {
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean {
         // TODO: enum are valid for any instance type, not just strings
-        return uiElement.type == 'Control' && subSchema.hasOwnProperty('enum');
+        return uiElement.type == 'Control' && subSchema !== undefined && subSchema.hasOwnProperty('enum');
     }
 }
 

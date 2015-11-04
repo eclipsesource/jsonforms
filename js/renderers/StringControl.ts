@@ -13,7 +13,7 @@ class StringControl implements JSONForms.IRenderer {
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return uiElement.type == 'Control' && subSchema.type == 'string';
+        return uiElement.type == 'Control' && subSchema !== undefined && subSchema.type == 'string';
     }
 
 }

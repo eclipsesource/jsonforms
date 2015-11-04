@@ -298,7 +298,7 @@ module JSONForms {
 
         //getSchemaRef(uiSchemaPath:string): any
 
-        toInstancePath(path:string): string
+        toInstancePath(schemaPath:string): string
 
         resolveUi(instance:any, uiPath:string): any
 
@@ -444,8 +444,8 @@ module JSONForms {
         };
 
 
-        resolveInstance = (instance:any, path:string):any => {
-            var fragments = PathUtil.toPropertyFragments(this.toInstancePath(path));
+        resolveInstance = (instance:any, schemaPath:string):any => {
+            var fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
             return fragments.reduce(function (currObj, fragment) {
                 if (currObj instanceof Array) {
                     return currObj.map(function (item) {

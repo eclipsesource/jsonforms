@@ -31,7 +31,8 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         }
     };
     $scope.uiSchema = {
-        "type": "VerticalLayout",
+        "type": "Group",
+        "label": "This is a fancy label",
         "elements": [
             {
                 "type": "HorizontalLayout",

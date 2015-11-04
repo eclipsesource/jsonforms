@@ -9,6 +9,8 @@ class JsonFormsDirectiveController {
 
     static $inject = ['RenderService', 'PathResolver', 'UISchemaGenerator', 'SchemaGenerator', '$scope', '$q'];
 
+    private isInitialized = false;
+
     constructor(
         private RenderService: JSONForms.IRenderService,
         private PathResolver: JSONForms.IPathResolver,
@@ -16,18 +18,28 @@ class JsonFormsDirectiveController {
         private SchemaGenerator: JSONForms.ISchemaGenerator,
         private $scope:JsonFormsDirectiveScope,
         private $q: ng.IQService
-    ) {
+    ) { }
 
-    var resolvedSchemaDeferred = $q.defer();
-    var resolvedUISchemaDeferred = $q.defer();
+    public init() {
 
-        $q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then(function(values) {
+        if (this.isInitialized) {
+            // remove previously rendered elements
+            var children = angular.element(this.$scope['element'].find('form')).children();
+            children.remove();
+        }
+
+        this.isInitialized = true;
+
+        var resolvedSchemaDeferred = this.$q.defer();
+        var resolvedUISchemaDeferred = this.$q.defer();
+
+        this.$q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then((values) => {
             var schema = values[0];
             var uiSchemaMaybe = values[1];
 
-            var uiSchemaDeferred = $q.defer();
+            var uiSchemaDeferred = this.$q.defer();
 
-            $q.when(uiSchemaDeferred.promise).then(function (uiSchema) {
+            this.$q.when(uiSchemaDeferred.promise).then((uiSchema) => {
                 //schema['uiSchema'] = uiSchema;
                 //  build mapping of ui paths to schema refs
                 JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema) {
@@ -39,8 +51,8 @@ class JsonFormsDirectiveController {
 
             if (uiSchemaMaybe === undefined || uiSchemaMaybe === null || uiSchemaMaybe === "") {
                 // resolve JSON schema, then generate ui Schema
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
-                    var uiSchema = UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
+                JsonRefs.resolveRefs(schema, {}, (err, resolvedSchema, meta) => {
+                    var uiSchema = this.UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
                     uiSchemaDeferred.resolve(uiSchema);
                 });
             } else {
@@ -50,7 +62,7 @@ class JsonFormsDirectiveController {
         });
 
 
-        $q.all([resolvedSchemaDeferred.promise, resolvedUISchemaDeferred .promise, this.fetchData()]).then(function(values) {
+        this.$q.all([resolvedSchemaDeferred.promise, resolvedUISchemaDeferred .promise, this.fetchData()]).then((values) => {
             var schema = values[0];
             var uiSchema = values[1];
             var data = values[2];
@@ -61,18 +73,15 @@ class JsonFormsDirectiveController {
             services.add(new JSONForms.ValidationService());
 
             var dataProvider: JSONForms.IDataProvider;
-            if ($scope.asyncDataProvider) {
-                dataProvider = $scope.asyncDataProvider;
+            if (this.$scope.asyncDataProvider) {
+                dataProvider = this.$scope.asyncDataProvider;
             } else {
-                dataProvider = new JSONForms.DefaultDataProvider($q, data);
+                dataProvider = new JSONForms.DefaultDataProvider(this.$q, data);
             }
             services.add(dataProvider);
 
-            $scope['elements'] = [RenderService.render(uiSchema, services)];
+            this.$scope['elements'] = [this.RenderService.render(uiSchema, services)];
         });
-
-        // TODO: check if still in use
-        $scope['opened'] = false;
     }
 
     private fetchSchema() {
@@ -119,8 +128,7 @@ class JsonFormsDirectiveController {
         if (dataProvider && data) {
             throw new Error("You cannot specify both the 'data' and the 'async-data-provider' attribute at the same time.")
         } else if (dataProvider) {
-            var prom = dataProvider.fetchData();
-            return prom;
+            return dataProvider.fetchData();
         } else if (this.$scope.data) {
             var p = this.$q.defer();
             p.resolve(this.$scope.data);
@@ -142,49 +150,63 @@ interface JsonFormsDirectiveScope extends ng.IScope {
     asyncDataProvider: JSONForms.IDataProvider;
 }
 
-jsonFormsDirectives.directive('jsonforms', function ():ng.IDirective {
+jsonFormsDirectives.directive('jsonforms', ():ng.IDirective => {
 
-    return {
-        restrict: "E",
-        replace: true,
-        scope: {
-            schema: '=',
-            uiSchema: '=',
-            data: '=',
-            asyncSchema: '&',
-            asyncUiSchema: '&',
-            asyncDataProvider: '='
-        },
-        // TODO: fix template for tests
-        templateUrl: 'templates/form.html',
-        controller: JsonFormsDirectiveController
-    }
-})
-.directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
-    var replaceJSONFormsAttributeInTemplate = (template: string): string => {
-        return template
-            .replace("data-jsonforms-model",      "ng-model='element.instance[element.path]'")
-            .replace("data-jsonforms-validation", `ng-change='element.modelChanged()'`);
-    };
-    return {
-        restrict: 'E',
-        scope: {element: "="},
-        replace: true,
-        link: function(scope, element) {
-            if (scope.element.templateUrl) {
-                $templateRequest(scope.element.templateUrl).then(function(template) {
-                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(template);
-                    var compiledTemplate = $compile(updatedTemplate)(scope);
-                    element.replaceWith(compiledTemplate);
-                })
-            } else {
-                var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template);
-                var template = $compile(updatedTemplate)(scope);
-                element.replaceWith(template);
+        return {
+            restrict: "E",
+            replace: true,
+            scope: {
+                schema: '=',
+                uiSchema: '=',
+                data: '=',
+                asyncSchema: '&',
+                asyncUiSchema: '&',
+                asyncDataProvider: '='
+            },
+            // TODO: fix template for tests
+            templateUrl: 'templates/form.html',
+            controller: JsonFormsDirectiveController,
+            link: (scope, el, attrs, ctrl) => {
+                scope['element'] = el;
+                scope.$watch('uiSchema', () => { ctrl.init(); });
             }
         }
-    }
-}]).directive('control', function ():ng.IDirective {
+    })
+    .directive('dynamicWidget', ['$compile', '$templateRequest', function ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) {
+        var replaceJSONFormsAttributeInTemplate = (template, fragments): string => {
+            var path = [];
+            for (var fragment in fragments) {
+                path.push("['" + fragments[fragment] + "']");
+            }
+            var pathBinding = "ng-model=\"element.instance" + path.join('') + "\"";
+            if (fragments.length > 0) {
+                return template
+                    .replace("data-jsonforms-model", pathBinding)
+                    .replace("data-jsonforms-validation", "ng-change='element.validate()'");
+            } else {
+                return template;
+            }
+        };
+        return {
+            restrict: 'E',
+            scope: {element: "="},
+            replace: true,
+            link: function(scope, element) {
+                var fragments = scope.element.path !== undefined ? scope.element.path.split('/') : [];
+                if (scope.element.templateUrl) {
+                    $templateRequest(scope.element.templateUrl).then(function(template) {
+                        var updatedTemplate = replaceJSONFormsAttributeInTemplate(template, fragments);
+                        var compiledTemplate = $compile(updatedTemplate)(scope);
+                        element.replaceWith(compiledTemplate);
+                    })
+                } else {
+                    var updatedTemplate = replaceJSONFormsAttributeInTemplate(scope.element.template, fragments);
+                    var template = $compile(updatedTemplate)(scope);
+                    element.replaceWith(template);
+                }
+            }
+        }
+    }]).directive('control', function ():ng.IDirective {
     return {
         restrict: "E",
         replace: true,

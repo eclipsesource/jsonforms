@@ -81,7 +81,7 @@ class ArrayControl implements JSONForms.IRenderer {
     priority = 2;
 
     isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return element.type == 'Control' && subSchema.type == 'array';
+        return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
     }
 
     render(element: IArrayControlObject, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IArrayControlRenderDescription {
@@ -105,10 +105,71 @@ class ArrayControl implements JSONForms.IRenderer {
         };
     }
 
+    private createColDefs(columnDescriptions: any): uiGrid.IColumnDef[] {
+        return columnDescriptions.map((col, idx) => {
+            var href = col.href;
+            if (href) {
+                var hrefScope = href.scope;
+                var cellTemplate;
+                var field = this.pathResolver.toInstancePath(col['scope']['$ref']);
+
+                if (hrefScope) {
+                    var instancePath = this.pathResolver.toInstancePath(hrefScope.$ref);
+                    cellTemplate = `<div class="ui-grid-cell-contents">
+                      <a href="#${href.url}/{{row.entity.${instancePath}}}">
+                        {{row.entity.${field}}}
+                      </a>
+                    </div>`;
+                } else {
+                    cellTemplate = `<div class="ui-grid-cell-contents">
+                      <a href="#${href.url}/{{row.entity.${field}}}">
+                        {{row.entity.${field}}}
+                      </a>
+                </div>`;
+                }
+
+                var r: uiGrid.IColumnDef = {
+                    cellTemplate: cellTemplate,
+                    field: field,
+                    displayName: col.label
+                };
+                return r;
+            } else {
+                var r: uiGrid.IColumnDef = {
+                    field: this.pathResolver.toInstancePath(col['scope']['$ref']),
+                    displayName: col.label
+                };
+                return r;
+            }
+        });
+    }
+
+    private generateColDefs(schema: SchemaElement, schemaPath: string): any {
+        var colDefs = [];
+        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
+        var items = subSchema['items'];
+        // TODO: items
+        if (items['type'] == 'object') {
+            for (var prop in items['properties']) {
+                if (items['properties'].hasOwnProperty(prop)) {
+                    var colDef = {
+                        field: prop,
+                        displayName: JSONForms.PathUtil.beautify(prop)
+                    };
+                    colDefs.push(colDef);
+                }
+            }
+        } else {
+            // TODO is this case even possible?
+        }
+
+        return colDefs;
+    }
+
     private createColumnDefs(element: IArrayControlObject, schema: SchemaElement, services: JSONForms.Services): uiGrid.IColumnDef[] {
-        let validationService: JSONForms.IValidationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
+        let validationService:JSONForms.IValidationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
         return element.columns.map((col) => {
-            var subSchema: SchemaElement = this.pathResolver.resolveSchema(schema, col['scope']['$ref']);
+            var subSchema:SchemaElement = this.pathResolver.resolveSchema(schema, col['scope']['$ref']);
             return {
                 field: this.pathResolver.toInstancePath(col['scope']['$ref']),
                 displayName: col.label,
@@ -147,13 +208,13 @@ class ArrayControl implements JSONForms.IRenderer {
 
     private createGridOptions(element: IArrayControlObject, services: JSONForms.Services, schema: SchemaElement, schemaPath: string) {
 
-        var colDefs: uiGrid.IColumnDef[];
+        var columnsDefs: uiGrid.IColumnDef[];
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
 
         if (element.columns) {
-            colDefs = this.createColumnDefs(element, subSchema, services);
+            columnsDefs = this.createColumnDefs(element, subSchema, services);
         } else {
-            colDefs = this.generateColumnDefs(subSchema);
+            columnsDefs = this.generateColumnDefs(subSchema);
         }
 
         var defaultGridOptions: uiGrid.IGridOptions = this.defaultGridOptions(services, schema);
@@ -164,7 +225,7 @@ class ArrayControl implements JSONForms.IRenderer {
             }
         }
 
-        gridOptions.columnDefs = colDefs;
+        gridOptions.columnDefs = columnsDefs;
         return gridOptions;
     }
 

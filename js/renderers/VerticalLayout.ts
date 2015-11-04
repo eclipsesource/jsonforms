@@ -22,16 +22,20 @@ class VerticalLayout implements JSONForms.IRenderer {
 
         var renderedElements = renderElements(element.elements);
         var label = element.label ? element.label : "";
-        var template = label ?
-            `<layout><fieldset>
-                    <legend>${label}</legend>
-                    <dynamic-widget ng-repeat="child in element.elements" element="child">
-                    </dynamic-widget>
-             </fieldset></layout>` :
-            `<layout><fieldset>
-                    <dynamic-widget ng-repeat="child in element.elements" element="child">
-                    </dynamic-widget>
-            </fieldset></layout>`;
+        var template = element.type == "Group" ?
+            `<layout class="jsf-group">
+              <fieldset>
+                <legend>${label}</legend>
+                <dynamic-widget ng-repeat="child in element.elements" element="child">
+                </dynamic-widget>
+               </fieldset>
+             </layout>` :
+            `<layout>
+              <fieldset>
+                <dynamic-widget ng-repeat="child in element.elements" element="child">
+                </dynamic-widget>
+             </fieldset>
+            </layout>`;
 
         return {
             "type": "Layout",
@@ -43,11 +47,11 @@ class VerticalLayout implements JSONForms.IRenderer {
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {
         return uiElement.type == "VerticalLayout" || uiElement.type == "Group";
-    }
+}
 }
 
 var app = angular.module('jsonforms.verticalLayout', ['jsonforms.services']);
 
 app.run(['RenderService', function(RenderService) {
-     RenderService.register(new VerticalLayout(RenderService));
+    RenderService.register(new VerticalLayout(RenderService));
 }]);

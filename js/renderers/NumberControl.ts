@@ -11,7 +11,7 @@ class NumberControl implements JSONForms.IRenderer {
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return uiElement.type == 'Control' && subSchema.type == 'number';
+        return uiElement.type == 'Control' && subSchema !== undefined && subSchema.type == 'number';
     }
 }
 

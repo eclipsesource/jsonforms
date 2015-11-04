@@ -1,0 +1,10 @@
+<h1>Users</h1>
+<div ng-controller="PlaceholderController">
+    <div ng-if="id">
+        <jsonforms schema="userSchema" ui-schema="userUiSchema" async-data-provider="UserDataProvider"></jsonforms>
+    </div>
+    <div ng-if="!id">
+        <jsonforms schema="usersSchema" ui-schema="usersUiSchema" async-data-provider="UserDataProvider"></jsonforms>
+    </div>
+</div>
+
