@@ -1,6 +1,7 @@
 /// <reference path="../typings/angularjs/angular.d.ts"/>
 /// <reference path="./services.ts"/>
 
+
 var jsonFormsDirectives = angular.module('jsonforms.directives', ['jsonforms.services']);
 declare var JsonRefs;
 
@@ -41,7 +42,7 @@ class JsonFormsDirectiveController {
             this.$q.when(uiSchemaDeferred.promise).then((uiSchema) => {
                 //schema['uiSchema'] = uiSchema;
                 //  build mapping of ui paths to schema refs
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema, meta) {
+                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema) {
                     resolvedSchemaDeferred.resolve(resolvedSchema);
                     // TODO: ui schema is now unresolved
                     resolvedUISchemaDeferred.resolve(uiSchema); //resolvedSchema['uiSchema']);
@@ -66,15 +67,20 @@ class JsonFormsDirectiveController {
             var uiSchema = values[1];
             var data = values[2];
 
+            var services = new JSONForms.Services();
+
+            services.add(new JSONForms.SchemaProvider(schema));
+            services.add(new JSONForms.ValidationService());
+
             var dataProvider: JSONForms.IDataProvider;
             if (this.$scope.asyncDataProvider) {
                 dataProvider = this.$scope.asyncDataProvider;
             } else {
                 dataProvider = new JSONForms.DefaultDataProvider(this.$q, data);
             }
+            services.add(dataProvider);
 
-            this.RenderService.registerSchema(schema);
-            this.$scope['elements'] = [this.RenderService.render(uiSchema, dataProvider)];
+            this.$scope['elements'] = [this.RenderService.render(uiSchema, services)];
         });
     }
 

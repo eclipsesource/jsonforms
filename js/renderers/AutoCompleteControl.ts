@@ -4,8 +4,8 @@ class AutoCompleteControl implements JSONForms.IRenderer {
 
     priority = 3;
 
-    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, dataProvider: JSONForms.IDataProvider): JSONForms.IRenderDescription {
-        var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath, element.label);
+    render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+        var control = new JSONForms.ControlRenderDescription(schemaPath, services, element.label);
         control['template'] = `<control><input type="text" auto-complete id="${schemaPath}" class="form-control jsf-control jsf-control-string" data-jsonforms-model data-jsonforms-validation/></control>`;
         control['suggestion'] = element["suggestion"];
 
