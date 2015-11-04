@@ -17,8 +17,6 @@ module.exports = function(config){
             'app/bower_components/angular-mocks/angular-mocks.js',
             'app/bower_components/angular-ui-ace/ui-ace.js',
             'app/bower_components/angular-ui-grid/ui-grid.js',
-            'app/bower_components/ui-utils/ui-utils.js',
-            'app/bower_components/angular-ui-bootstrap-bower/ui-bootstrap.js',
             'app/bower_components/tv4/tv4.js',
             'components/utils/**/*.js',
             'components/**/jsonforms*.js',

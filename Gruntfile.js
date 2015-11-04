@@ -183,20 +183,51 @@ module.exports = function(grunt) {
             }
         },
 
-        browserify: {
-            dist: {
-                //dest: 'dist/js/<%= pkg.name %>.js'
-                src: ['dist/js/<%= pkg.name %>.js'],
-                dest: 'dist/js/<%= pkg.name %>.js'
-                //dest: 'build/target.js'
-                // Note: The entire `browserify-shim` config is inside `package.json`.
-            }
-        },
-
         clean: {
-            dist: ["dist/**", "temp/**"],
-            app: ["app/js/jsonforms*", "app/css/jsonforms*"],
-            all: ["dist", "temp", "app/js/jsonforms*", "app/css/jsonforms*", "node_modules", "app/bower_components"]
+            dist: [
+                'dist/**',
+                'temp/**'
+            ],
+            app: [
+                'app/js/jsonforms*',
+                'app/css/jsonforms*'
+            ],
+            dev: [
+                'components/references.ts',
+                'components/**/*.js',
+                'components/**/*.js.map',
+                'tests/references.ts',
+                'tests/**/*.js',
+                '!tests/**/*.conf.js',
+                'tests/**/*.js.map'
+            ],
+            downloads: [
+                'app/bower_components',
+                'node_modules'
+            ],
+            coverage: [
+                'coverage'
+            ],
+            cache: [
+                '.tscache'
+            ],
+            all: [
+                'dist',
+                'temp',
+                'app/js/jsonforms*',
+                'app/css/jsonforms*',
+                'components/references.ts',
+                'components/**/*.js',
+                'components/**/*.js.map',
+                'tests/references.ts',
+                'tests/**/*.js',
+                '!tests/**/*.conf.js',
+                'tests/**/*.js.map',
+                'app/bower_components',
+                'node_modules',
+                'coverage',
+                '.tscache'
+            ]
         },
 
         remapIstanbul: {
@@ -254,6 +285,8 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('remap-istanbul');
 
+    grunt.loadNpmTasks('grunt-coveralls');
+
     // Build distribution
     grunt.registerTask('dist', [
         'clean:dist',
@@ -276,6 +309,7 @@ module.exports = function(grunt) {
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
+        'clean:coverage',
         'app',
         'ts:test',
         'karma',
