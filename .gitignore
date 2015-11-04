@@ -20,6 +20,9 @@ tests/**/*.js
 # typescript mappings
 **/*.map
 
+# typescript cache files
+.tscache/
+
 # logs
 *.log
 
