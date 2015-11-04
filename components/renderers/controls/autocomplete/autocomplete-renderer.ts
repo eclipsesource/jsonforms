@@ -1,6 +1,6 @@
 ///<reference path="../../../references.ts"/>
 
-class AutoCompleteControl implements JSONForms.IRenderer {
+class AutoCompleteRenderer implements JSONForms.IRenderer {
 
     priority = 3;
 
@@ -19,5 +19,5 @@ class AutoCompleteControl implements JSONForms.IRenderer {
 }
 
 angular.module('jsonforms.renderers.controls.autocomplete').run(['RenderService', function(RenderService) {
-    RenderService.register(new AutoCompleteControl());
+    RenderService.register(new AutoCompleteRenderer());
 }]);
