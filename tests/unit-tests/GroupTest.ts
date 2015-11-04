@@ -1,19 +1,15 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
-/// <reference path="../../typings/schemas/uischema.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('Group', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.verticalLayout'));
-    beforeEach(module('jsonforms.stringControl'));
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/layout.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.renderers.layouts.vertical'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
+
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/layouts/layout.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
 
     it("should support labels", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();
@@ -45,13 +41,13 @@ describe('Group', () => {
 describe('VerticalLayout', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.verticalLayout'));
-    beforeEach(module('jsonforms.stringControl'));
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/layout.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.renderers.layouts.vertical'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
+
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/layouts/layout.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
 
     it("should not support labels", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

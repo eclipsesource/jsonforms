@@ -1,19 +1,12 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
-/// <reference path="../../typings/schemas/uischema.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('Labels', () => {
 
-    var UISchemaGenerator: JSONForms.IUISchemaGenerator;
-
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.stringControl'));
-    beforeEach(module('templates/form.html'));
-    beforeEach(module('templates/control.html'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.renderers.controls.string'));
+    beforeEach(module('components/form/form.html'));
+    beforeEach(module('components/renderers/controls/control.html'));
 
     it("should be generated automatically", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

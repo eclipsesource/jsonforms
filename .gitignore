@@ -5,8 +5,12 @@ temp/
 # npm
 node_modules/
 
-# all js files in js
-js/**/*.js
+# all js files in components
+components/**/*.js
+
+# generated typescript reference file in components and tests
+components/references.ts
+tests/references.ts
 
 # all js files in tests except the configs
 tests/**/*.js
@@ -15,6 +19,9 @@ tests/**/*.js
 
 # typescript mappings
 **/*.map
+
+# typescript cache files
+.tscache/
 
 # logs
 *.log

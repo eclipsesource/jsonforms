@@ -1,13 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('PathResolver', () => {
 
     var PathResolver: JSONForms.IPathResolver;
 
-    beforeEach(module('jsonforms.services'));
+    beforeEach(module('jsonforms.pathresolver'));
     beforeEach(() => {
         inject(['PathResolver', function(_PathResolver_: JSONForms.IPathResolver) {
             PathResolver = _PathResolver_;

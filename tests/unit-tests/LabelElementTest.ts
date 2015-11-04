@@ -1,16 +1,11 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-/// <reference path="../../typings/angularjs/angular-mocks.d.ts"/>
-/// <reference path="../../js/services.ts"/>
-/// <reference path="../../typings/schemas/uischema.d.ts"/>
+/// <reference path="../references.ts"/>
 
 describe('LabelElement', () => {
 
     // load all necessary modules and templates
-    beforeEach(module('jsonforms.services'));
-    beforeEach(module('jsonforms.directives'));
-    beforeEach(module('jsonforms.label'));
-    beforeEach(module('templates/form.html'));
+    beforeEach(module('jsonforms.form'));
+    beforeEach(module('jsonforms.renderers.extras.label'));
+    beforeEach(module('components/form/form.html'));
 
     it("should be rendered", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();

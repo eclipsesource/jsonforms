@@ -21,38 +21,64 @@ module.exports = function(grunt) {
                 '<%= grunt.template.today("yyyy-mm-dd") %> Copyright (c) EclipseSource Muenchen GmbH and others. */ \n' +
                 "'use strict';\n"
             },
+            utils: {
+              src: ['components/utils/**/*.js'],
+              filter: 'isFile',
+              dest: 'temp/utils.js'
+            },
+            jsonforms_module: {
+                src: ['components/**/jsonforms-*.js'],
+                filter: 'isFile',
+                dest: 'temp/jsonforms-module.js'
+            },
             dist: {
-                // Concat all files from js directory and include the embedded templates
-                src: ['js/**/*.js', '<%= ngtemplates.dist.dest %>'],
+                // Concat all files from components directory and include the embedded templates
+                src: ['temp/utils.js', 'temp/jsonforms-module.js', 'temp/**/*.js'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
         },
 
-        typescript: {
+        ts: {
             dist: {
-                src: ['js/**/*.ts'],
+                src: ['components/**/*.ts', ['typings/**/*.ts']],
                 dest: '',
+                reference: 'components/references.ts',
                 options: {
+                    target: 'es5',
                     module: 'commonjs',
-                    sourcemap: true,
+                    sourceMap: true,
                     declaration: false
                 }
             },
             test: {
-                src: ['tests/**/*.ts'],
+                src: ['tests/**/*.ts', 'components/references.ts'],
                 dest: '',
+                reference: 'tests/references.ts',
                 options: {
                     target: 'es5',
-                    module: 'commonjs'
+                    module: 'commonjs',
+                    sourceMap: true,
+                    declaration: false
                 }
+            }
+        },
+
+        'angular-builder': {
+            options: {
+                mainModule: 'jsonforms',
+                externalModules: ['ui.bootstrap', 'ui.validate', 'ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ui.grid.autoResize']
+            },
+            app: {
+                src:  'components/**/*.js',
+                dest: 'temp/jsonforms.js'
             }
         },
 
         //Config for embedding templates in angular module
         ngtemplates:  {
             dist:  {
-                src: 'templates/**/*.html',
+                src: 'components/**/*.html',
                 dest: 'temp/templates.js',
                 options:    {
                     htmlmin:  { collapseWhitespace: true, collapseBooleanAttributes: true },
@@ -86,7 +112,7 @@ module.exports = function(grunt) {
 
         // Config for Jshint Task
         jshint: {
-            beforeconcat: ['js/**'],
+            beforeconcat: ['components/**'],
             afterconcat: ['dist/js/<%= pkg.name %>.js'],
             options: { jshintrc: '.jshintrc' }
         },
@@ -107,7 +133,7 @@ module.exports = function(grunt) {
                     paths: ['temp']
                 },
                 files: {
-                    'dist/css/jsonforms.css': 'css/jsonforms.css'
+                    'dist/css/jsonforms.css': ['css/wrapper.css', 'components/**/*.css']
                 }
             }
         },
@@ -140,7 +166,7 @@ module.exports = function(grunt) {
 
         watch: {
             js: {
-                files: 'js/**',
+                files: 'components/**',
                 tasks: ['concat:dist', 'uglify:dist']
             },
             css: {
@@ -202,14 +228,20 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-angular-builder');
+
+    grunt.loadNpmTasks('grunt-ts');
 
     // Build distribution
     grunt.registerTask('dist', [
+        'clean:dist',
         'less:bootstrap',
         'less:jsonforms',
-        'typescript:dist',
+        'ts:dist',
         'ngtemplates:dist',
+        'angular-builder',
+        'concat:utils',
+        'concat:jsonforms_module',
         'concat:dist',
         'uglify:dist'
     ]);
@@ -223,7 +255,7 @@ module.exports = function(grunt) {
     // Test unit and e2e tests
     grunt.registerTask('test', [
         'app',
-        'typescript:test',
+        'ts:test',
         'karma',
         'connect',
         'protractor'
