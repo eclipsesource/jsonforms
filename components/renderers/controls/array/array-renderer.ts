@@ -102,9 +102,34 @@ class ArrayRenderer implements JSONForms.IRenderer {
         };
     }
 
-    private createColDefs(columnDescriptions: any): uiGrid.IColumnDef[] {
-        return columnDescriptions.map((col, idx) => {
-            var href = col.href;
+
+    private generateColumnDefs(schema: SchemaElement, schemaPath: string): any {
+        var columnsDefs = [];
+        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
+        var items = subSchema['items'];
+        // TODO: items
+        if (items['type'] == 'object') {
+            for (var prop in items['properties']) {
+                if (items['properties'].hasOwnProperty(prop)) {
+                    var colDef = {
+                        field: prop,
+                        displayName: JSONForms.PathUtil.beautify(prop)
+                    };
+                    columnsDefs.push(colDef);
+                }
+            }
+        } else {
+            // TODO is this case even possible (array containing primitive type)?
+        }
+
+        return columnsDefs;
+    }
+
+    private createColumnDefs(element: IArrayControlObject, schema: SchemaElement, services: JSONForms.Services): uiGrid.IColumnDef[] {
+        var validationService:JSONForms.IValidationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
+
+        return element.columns.map((col) => {
+            var href = col['href'];
             if (href) {
                 var hrefScope = href.scope;
                 var cellTemplate;
@@ -125,82 +150,30 @@ class ArrayRenderer implements JSONForms.IRenderer {
                 </div>`;
                 }
 
-                var r: uiGrid.IColumnDef = {
+               return {
                     cellTemplate: cellTemplate,
                     field: field,
-                    displayName: col.label
+                    displayName: col.label,
+                    enableCellEdit: false
                 };
-                return r;
             } else {
-                var r: uiGrid.IColumnDef = {
+                var subSchema:SchemaElement = this.pathResolver.resolveSchema(schema, col['scope']['$ref']);
+                return {
                     field: this.pathResolver.toInstancePath(col['scope']['$ref']),
-                    displayName: col.label
-                };
-                return r;
-            }
-        });
-    }
-
-    private generateColDefs(schema: SchemaElement, schemaPath: string): any {
-        var colDefs = [];
-        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
-        var items = subSchema['items'];
-        // TODO: items
-        if (items['type'] == 'object') {
-            for (var prop in items['properties']) {
-                if (items['properties'].hasOwnProperty(prop)) {
-                    var colDef = {
-                        field: prop,
-                        displayName: JSONForms.PathUtil.beautify(prop)
-                    };
-                    colDefs.push(colDef);
-                }
-            }
-        } else {
-            // TODO is this case even possible?
-        }
-
-        return colDefs;
-    }
-
-    private createColumnDefs(element: IArrayControlObject, schema: SchemaElement, services: JSONForms.Services): uiGrid.IColumnDef[] {
-        var validationService:JSONForms.IValidationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
-        return element.columns.map((col) => {
-            var subSchema:SchemaElement = this.pathResolver.resolveSchema(schema, col['scope']['$ref']);
-            return {
-                field: this.pathResolver.toInstancePath(col['scope']['$ref']),
-                displayName: col.label,
-                enableCellEdit: true,
-                type: subSchema.type,
-                cellClass: (grid, row, col)=> {
-                    var result = validationService.getResult(row.entity, '/' + col.colDef.field);
-                    if (result != undefined) {
-                        return 'invalidCell';
-                    } else {
-                        return 'validCell';
+                    displayName: col.label,
+                    enableCellEdit: true,
+                    type: subSchema.type,
+                    cellClass: (grid, row, col)=> {
+                        var result = validationService.getResult(row.entity, '/' + col.colDef.field);
+                        if (result != undefined) {
+                            return 'invalidCell';
+                        } else {
+                            return 'validCell';
+                        }
                     }
-                }
-            };
-        });
-    }
-
-    private generateColumnDefs(subSchema: SchemaElement): uiGrid.IColumnDef[] {
-        var items = subSchema['items'];
-        var colDefs = [];
-        // TODO: items
-        if (items['type'] == 'object') {
-            for (var prop in items['properties']) {
-                if (items['properties'].hasOwnProperty(prop)) {
-                    colDefs.push({
-                        field: prop,
-                        displayName: JSONForms.PathUtil.beautify(prop),
-                    });
-                }
+                };
             }
-        } else {
-            // TODO: array containing primitive type
-        }
-        return colDefs;
+        });
     }
 
     private createGridOptions(element: IArrayControlObject, services: JSONForms.Services, schema: SchemaElement, schemaPath: string) {
