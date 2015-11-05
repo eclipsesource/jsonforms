@@ -78,16 +78,19 @@ module JSONForms {
         }
 
         modelChanged():void {
+            this.validate();
+        }
+
+        validate() {
             this.validationService.validate(this.instance, this.schema);
             var result = this.validationService.getResult(this.instance, '/' + this.path);
+            this.alerts = [];
             if (result != undefined) {
                 var alert = {
                     type: 'danger',
                     msg: result['message']
                 };
                 this.alerts.push(alert);
-            } else {
-                this.alerts = [];
             }
         }
     }
