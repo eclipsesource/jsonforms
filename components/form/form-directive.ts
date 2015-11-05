@@ -68,6 +68,7 @@ class FormController {
 
             services.add(new JSONForms.SchemaProvider(schema));
             services.add(new JSONForms.ValidationService());
+            services.add(new JSONForms.RuleService(this.PathResolver));
 
             var dataProvider: JSONForms.IDataProvider;
             if (this.$scope.asyncDataProvider) {

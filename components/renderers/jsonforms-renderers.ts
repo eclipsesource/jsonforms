@@ -46,8 +46,8 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string): IRenderDescription {
-            return new ControlRenderDescription(schemaPath, services, label);
+        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string, rule?:IRule): IRenderDescription {
+            return new ControlRenderDescription(schemaPath, services, label, rule);
         }
     }
 
@@ -62,11 +62,13 @@ module JSONForms {
         public instance: any;
         schema: SchemaElement;
         private validationService: IValidationService;
+        private ruleService: IRuleService;
 
-        constructor(schemaPath: string, private services: JSONForms.Services, label?: string) {
+        constructor(private schemaPath: string, private services: JSONForms.Services, label?: string, public rule?:IRule) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
+            this.ruleService = services.get<JSONForms.IRuleService>(ServiceId.RuleService);
             this.path = PathUtil.normalize(schemaPath);
             var l;
             if (label) {
@@ -75,6 +77,8 @@ module JSONForms {
                 l = PathUtil.beautifiedLastFragment(schemaPath);
             }
             this.label = l;
+            this.ruleService.addRuleTrack(this);
+            this.ruleService.revaluateRules(this, this.schemaPath);
         }
 
         modelChanged():void {
@@ -89,6 +93,7 @@ module JSONForms {
             } else {
                 this.alerts = [];
             }
+            this.ruleService.revaluateRules(this, this.schemaPath);
         }
     }
 }
