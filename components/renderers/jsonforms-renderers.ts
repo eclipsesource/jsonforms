@@ -2,8 +2,6 @@
 
 module JSONForms {
 
-    var currentSchema: SchemaElement;
-
     export class RenderService implements IRenderService {
 
         private renderers: IRenderer[] = [];
@@ -46,8 +44,14 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string): IRenderDescription {
+        static createControlDescription(schemaPath:string, services:JSONForms.Services, label?:string):IRenderDescription {
             return new ControlRenderDescription(schemaPath, services, label);
+        }
+
+        static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
+            return elements.map((el) => {
+                return renderService.render(el, services)
+            });
         }
     }
 

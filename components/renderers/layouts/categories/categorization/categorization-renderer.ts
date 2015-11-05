@@ -2,30 +2,19 @@
 
 class CategorizationRenderer implements JSONForms.IRenderer {
 
-    constructor(private renderService: JSONForms.IRenderService) { }
-
     priority = 1;
+
+    constructor(private renderService: JSONForms.IRenderService) {}
 
     render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription{
 
-        var renderElements = (elements) => {
-            if (elements === undefined || elements.length == 0) {
-                return [];
-            } else {
-                return elements.reduce((acc, curr, idx, els) => {
-                    acc.push(this.renderService.render(curr, services));
-                    return acc;
-                }, []);
-            }
-        };
-        var renderedElements = renderElements(element.elements);
-        var template =
-            `<layout>
+        var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
+            element.elements, this.renderService, services);
+        var template = `<layout>
             <tabset>
                 <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
             </tabset>
-        </layout>
-        `;
+        </layout>`;
 
         return {
             "type": "Layout",
