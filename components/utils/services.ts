@@ -109,6 +109,7 @@ module JSONForms{
         DataProvider,
         SchemaProvider,
         ScopeProvider,
+        RuleService,
         PathResolver
     }
 }

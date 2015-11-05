@@ -49,6 +49,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                         "label": "Name",
                         "scope": {
                             "$ref": "#/properties/name"
+                        },
+                        "rule":{
+                            "effect":"HIDE",
+                            "condition":{
+                                "type":"LEAF" ,
+                                "scope": {
+                                    "$ref": "#/properties/age"
+                                },
+                                "value":36
+                            }
                         }
                     },
                     {

@@ -46,8 +46,8 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string): IRenderDescription {
-            return new ControlRenderDescription(schemaPath, services, label);
+        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string, rule?:IRule): IRenderDescription {
+            return new ControlRenderDescription(schemaPath, services, label, rule);
         }
     }
 
@@ -63,17 +63,21 @@ module JSONForms {
         private schema: SchemaElement;
         private validationService: IValidationService;
         private pathResolver: IPathResolver;
+        private ruleService: IRuleService;
         private scope: ng.IScope;
 
-        constructor(schemaPath: string, services: JSONForms.Services, label?: string) {
+        constructor(private schemaPath: string, services: JSONForms.Services, label?: string, public rule?:IRule) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
             this.pathResolver = services.get<JSONForms.IPathResolverService>(ServiceId.PathResolver).getResolver();
+            this.ruleService = services.get<JSONForms.IRuleService>(ServiceId.RuleService);
             this.scope = services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope();
 
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, label);
+            this.ruleService.addRuleTrack(this);
+            this.ruleService.revaluateRules(this, this.schemaPath);
             this.setupModelChangedCallback();
         }
 
@@ -116,6 +120,7 @@ module JSONForms {
         private setupModelChangedCallback():void {
             this.scope.$on('modelChanged', () => {
                 this.validate();
+                this.ruleService.revaluateRules(this, this.schemaPath);
             })
         }
 

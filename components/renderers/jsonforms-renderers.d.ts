@@ -17,6 +17,7 @@ declare module JSONForms {
         template?: string
         templateUrl?: string
         size: number
+        rule?: IRule;
     }
 
     export interface IControlRenderDescription extends IRenderDescription {
