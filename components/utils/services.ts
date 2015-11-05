@@ -87,6 +87,7 @@ module JSONForms{
     export enum ServiceId {
         Validation,
         DataProvider,
-        SchemaProvider
+        SchemaProvider,
+        RuleService
     }
 }

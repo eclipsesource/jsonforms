@@ -1,4 +1,4 @@
-<div class="col-sm-{{element.size}} form-group top-buffer">
+<div class="col-sm-{{element.size}} form-group top-buffer" ng-hide="element.hide" ng-disabled="element.disabled">
     <div class="row">
         <label ng-if="element.label" for="element.id">{{element.label}}</label>
     </div>

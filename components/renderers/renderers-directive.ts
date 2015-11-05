@@ -17,7 +17,7 @@ angular.module('jsonforms.renderers').directive('widget', function ():ng.IDirect
         if (fragments.length > 0) {
             return template
                 .replace("data-jsonforms-model", pathBinding)
-                .replace("data-jsonforms-validation", "ng-change='element.validate()'");
+                .replace("data-jsonforms-validation", "ng-change='element.modelChanged()'");
         } else {
             return template;
         }
@@ -42,7 +42,3 @@ angular.module('jsonforms.renderers').directive('widget', function ():ng.IDirect
         }
     }
 }]);
-
-
-
-
