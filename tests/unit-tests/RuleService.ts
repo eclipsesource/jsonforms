@@ -26,14 +26,14 @@ describe('RuleServiceTest', () => {
                 {
                     "type": "Control",
                     "scope": { "$ref": "#/properties/name" },
-                    "rule":{
-                        "effect":"HIDE",
-                        "condition":{
-                            "type":"LEAF" ,
+                    "rule": {
+                        "effect": "HIDE",
+                        "condition": {
+                            "type": "LEAF",
                             "scope": {
                                 "$ref": "#/properties/age"
                             },
-                            "value":36
+                            "value": 36
                         }
                     }
                 },
@@ -43,7 +43,7 @@ describe('RuleServiceTest', () => {
                 }
             ]
         };
-        scope.data = { "name": "John Doe", "age":36};
+        scope.data = { "name": "John Doe", "age": 36 };
         var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         expect(angular.element(el[0].querySelector("#\\#\\/properties\\/name").parentNode.parentNode).hasClass('ng-hide')).toBe(true);
@@ -67,14 +67,14 @@ describe('RuleServiceTest', () => {
                 {
                     "type": "Control",
                     "scope": { "$ref": "#/properties/name" },
-                    "rule":{
-                        "effect":"SHOW",
-                        "condition":{
-                            "type":"LEAF" ,
+                    "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                            "type": "LEAF",
                             "scope": {
                                 "$ref": "#/properties/age"
                             },
-                            "value":36
+                            "value": 36
                         }
                     }
                 },
@@ -84,13 +84,12 @@ describe('RuleServiceTest', () => {
                 }
             ]
         };
-        scope.data = { "name": "John Doe", "age":37};
+        scope.data = { "name": "John Doe", "age": 37 };
         var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         expect(angular.element(el[0].querySelector("#\\#\\/properties\\/name").parentNode.parentNode).hasClass('ng-hide')).toBe(true);
     }));
 
-/** dynamic not working yet
     it("rule Hide dynamic", inject(function($rootScope, $compile) {
         var scope = $rootScope.$new();
         scope.schema = {
@@ -109,14 +108,14 @@ describe('RuleServiceTest', () => {
                 {
                     "type": "Control",
                     "scope": { "$ref": "#/properties/name" },
-                    "rule":{
-                        "effect":"HIDE",
-                        "condition":{
-                            "type":"LEAF" ,
+                    "rule": {
+                        "effect": "HIDE",
+                        "condition": {
+                            "type": "LEAF",
                             "scope": {
                                 "$ref": "#/properties/age"
                             },
-                            "value":36
+                            "value": 36
                         }
                     }
                 },
@@ -126,13 +125,14 @@ describe('RuleServiceTest', () => {
                 }
             ]
         };
-        scope.data = { "name": "John Doe", "age":36};
+        scope.data = { "name": "John Doe", "age": 36 };
         var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        var input=el[0].querySelector("#\\#\\/properties\\/name");
-        expect(angular.element(input.parentNode.parentNode).hasClass('ng-hide')).toBe(true);
-        angular.element(input).val(37).triggerHandler("input");
-        expect(angular.element(input.parentNode.parentNode).hasClass('ng-hide')).toBe(false);
+        var name = el[0].querySelector("#\\#\\/properties\\/name");
+        var age = el[0].querySelector("#\\#\\/properties\\/age");
+        expect(angular.element(name.parentNode.parentNode).hasClass('ng-hide')).toBe(true);
+        angular.element(age).val(37).triggerHandler("change");
+        expect(angular.element(name.parentNode.parentNode).hasClass('ng-hide')).toBe(false);
     }));
 
     it("rule Show dynamic", inject(function($rootScope, $compile) {
@@ -153,14 +153,14 @@ describe('RuleServiceTest', () => {
                 {
                     "type": "Control",
                     "scope": { "$ref": "#/properties/name" },
-                    "rule":{
-                        "effect":"SHOW",
-                        "condition":{
-                            "type":"LEAF" ,
+                    "rule": {
+                        "effect": "SHOW",
+                        "condition": {
+                            "type": "LEAF",
                             "scope": {
                                 "$ref": "#/properties/age"
                             },
-                            "value":36
+                            "value": 36
                         }
                     }
                 },
@@ -170,13 +170,13 @@ describe('RuleServiceTest', () => {
                 }
             ]
         };
-        scope.data = { "name": "John Doe", "age":37};
+        scope.data = { "name": "John Doe", "age": 37 };
         var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        var input=el[0].querySelector("#\\#\\/properties\\/name");
-        expect(angular.element(input.parentNode.parentNode).hasClass('ng-hide')).toBe(true);
-        angular.element(input).val(36).triggerHandler("change");
-        expect(angular.element(input.parentNode.parentNode).hasClass('ng-hide')).toBe(false);
+        var name = el[0].querySelector("#\\#\\/properties\\/name");
+        var age = el[0].querySelector("#\\#\\/properties\\/age");
+        expect(angular.element(name.parentNode.parentNode).hasClass('ng-hide')).toBe(true);
+        angular.element(age).val(36).triggerHandler("change");
+        expect(angular.element(name.parentNode.parentNode).hasClass('ng-hide')).toBe(false);
     }));
-    **/
 });
