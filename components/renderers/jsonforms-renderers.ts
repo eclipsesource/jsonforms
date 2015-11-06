@@ -2,8 +2,6 @@
 
 module JSONForms {
 
-    var currentSchema: SchemaElement;
-
     export class RenderService implements IRenderService {
 
         private renderers: IRenderer[] = [];
@@ -12,7 +10,7 @@ module JSONForms {
         constructor(private refResolver: IPathResolver) {
         }
 
-        render(element: IUISchemaElement, services: JSONForms.Services) {
+        render(scope: ng.IScope, element: IUISchemaElement, services: JSONForms.Services) {
 
             var foundRenderer;
             var schemaPath;
@@ -37,7 +35,9 @@ module JSONForms {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            return foundRenderer.render(element, schema, schemaPath, services);
+            var rendered= foundRenderer.render(element, schema, schemaPath, services);
+            services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope().$broadcast('modelChanged');
+            return rendered;
         }
 
         register = (renderer:IRenderer) => {
@@ -53,42 +53,88 @@ module JSONForms {
 
     export class ControlRenderDescription implements IControlRenderDescription {
 
-        type = "Control";
-        size = 99;
-        alerts: any[] = []; // TODO IAlert type missing
+        public type = "Control";
+        public size = 99;
+        public alerts: any[] = []; // TODO IAlert type missing
         public label: string;
         public path: string;
-
         public instance: any;
-        schema: SchemaElement;
-        private validationService: IValidationService;
 
-        constructor(schemaPath: string, private services: JSONForms.Services, label?: string) {
+        private schema: SchemaElement;
+        private validationService: IValidationService;
+        private pathResolver: IPathResolver;
+        private scope: ng.IScope;
+
+        constructor(schemaPath: string, services: JSONForms.Services, label?: string) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
+            this.pathResolver = services.get<JSONForms.IPathResolverService>(ServiceId.PathResolver).getResolver();
+            this.scope = services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope();
+
             this.path = PathUtil.normalize(schemaPath);
-            var l;
+            this.label = this.createLabel(schemaPath, label);
+            this.setupModelChangedCallback();
+        }
+
+        private createLabel(schemaPath: string, label?: string): string {
+            var stringBuilder = "";
             if (label) {
-                l = label;
+                stringBuilder += label;
             } else {
-                l = PathUtil.beautifiedLastFragment(schemaPath);
+                // default label
+                stringBuilder += PathUtil.beautifiedLastFragment(schemaPath);
             }
-            this.label = l;
+
+            if (this.isRequired(schemaPath)) {
+                stringBuilder += "*";
+            }
+
+            return stringBuilder;
+        }
+
+        private isRequired(schemaPath: string): boolean {
+            var path = PathUtil.inits(schemaPath);
+            var lastFragment = PathUtil.lastFragment(path);
+
+            // if last fragment points to properties, we need to move one level higher
+            if (lastFragment === "properties") {
+                path = PathUtil.inits(path);
+            }
+
+            // FIXME: we want resolveSchema to actually return an array here
+            var subSchema: any = this.pathResolver.resolveSchema(this.schema, path + "/required");
+            if (subSchema !== undefined) {
+                if (subSchema.indexOf(PathUtil.lastFragment(schemaPath)) != -1) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private setupModelChangedCallback():void {
+            this.scope.$on('modelChanged', () => {
+                this.validate();
+            })
         }
 
         modelChanged():void {
+            this.scope.$broadcast('modelChanged');
+        }
+
+        validate() {
             this.validationService.validate(this.instance, this.schema);
             var result = this.validationService.getResult(this.instance, '/' + this.path);
-            if (result != undefined) {
+            this.alerts = [];
+            if (result !== undefined) {
                 var alert = {
                     type: 'danger',
-                    msg: result['message']
+                    msg: result
                 };
                 this.alerts.push(alert);
-            } else {
-                this.alerts = [];
             }
         }
+
     }
 }

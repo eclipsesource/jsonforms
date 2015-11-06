@@ -18,6 +18,6 @@ class StringRenderer implements JSONForms.IRenderer {
 
 }
 
-angular.module('jsonforms.renderers.controls.string').run(['RenderService', function(RenderService) {
+angular.module('jsonforms.renderers.controls.string').run(['RenderService', (RenderService) => {
     RenderService.register(new StringRenderer());
 }]);
