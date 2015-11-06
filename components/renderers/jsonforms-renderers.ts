@@ -52,7 +52,10 @@ module JSONForms {
 
         static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
             return elements.map((el) => {
-                return renderService.render(el, services)
+                return renderService.render(
+                    services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope(),
+                    el,
+                    services);
             });
         }
     }
