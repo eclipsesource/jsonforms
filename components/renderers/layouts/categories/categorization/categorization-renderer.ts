@@ -6,14 +6,17 @@ class CategorizationRenderer implements JSONForms.IRenderer {
 
     priority = 1;
 
-    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription{
+    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
 
         var renderElements = (elements) => {
             if (elements === undefined || elements.length == 0) {
                 return [];
             } else {
                 return elements.reduce((acc, curr, idx, els) => {
-                    acc.push(this.renderService.render(curr, services));
+                    acc.push(this.renderService.render(
+                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
+                        curr,
+                        services));
                     return acc;
                 }, []);
             }

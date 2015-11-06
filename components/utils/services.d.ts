@@ -4,6 +4,12 @@ declare module JSONForms{
     export interface IService {
         getId(): ServiceId
     }
+    export interface IPathResolverService extends IService{
+        getResolver(): PathResolver
+    }
+    export interface IScopeProvider extends IService {
+        getScope(): ng.IScope
+    }
     export interface ISchemaProvider extends IService {
         getSchema(): SchemaElement
     }
