@@ -16,6 +16,7 @@ var app = angular.module('jsonforms.form', [
     'jsonforms.renderers.controls.enum',
     'jsonforms.renderers.layouts',
     'jsonforms.renderers.layouts.vertical',
+    'jsonforms.renderers.layouts.group',
     'jsonforms.renderers.layouts.horizontal',
     'jsonforms.renderers.layouts.categories',
     'jsonforms.renderers.layouts.categories.categorization',

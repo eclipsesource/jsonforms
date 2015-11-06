@@ -46,8 +46,17 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string): IRenderDescription {
+        static createControlDescription(schemaPath:string, services:JSONForms.Services, label?:string):IRenderDescription {
             return new ControlRenderDescription(schemaPath, services, label);
+        }
+
+        static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
+            return elements.map((el) => {
+                return renderService.render(
+                    services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope(),
+                    el,
+                    services);
+            });
         }
     }
 
