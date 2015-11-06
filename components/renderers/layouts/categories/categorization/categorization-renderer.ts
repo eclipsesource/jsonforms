@@ -6,11 +6,15 @@ class CategorizationRenderer implements JSONForms.IRenderer {
 
     constructor(private renderService: JSONForms.IRenderService) {}
 
-    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription{
+    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
         var template = `<layout>
+                    acc.push(this.renderService.render(
+                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
+                        curr,
+                        services));
             <tabset>
                 <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
             </tabset>

@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                 mainModule: 'jsonforms',
                 externalModules: ['ui.bootstrap', 'ui.validate', 'ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ui.grid.autoResize']
             },
-            app: {
+            examples: {
                 src:  'components/**/*.js',
                 dest: 'temp/jsonforms.js'
             }
@@ -88,10 +88,10 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            app: {
+            examples: {
                 files: [
-                    // dist to app
-                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'app'}
+                    // dist to examples
+                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'examples'}
                 ]
             }
         },
@@ -151,7 +151,7 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     port: 8000,
-                    base: 'app'
+                    base: 'examples'
                 }
             }
         },
@@ -177,25 +177,76 @@ module.exports = function(grunt) {
                 files: 'templates/**',
                 tasks: ['ngtemplates:dist', "concat:dist", 'uglify:dist']
             },
-            app: {
+            examples: {
                 files: ['dist/**'],
-                tasks: ['copy:app']
+                tasks: ['copy:examples']
             }
         },
 
-        browserify: {
-            dist: {
-                //dest: 'dist/js/<%= pkg.name %>.js'
-                src: ['dist/js/<%= pkg.name %>.js'],
-                dest: 'dist/js/<%= pkg.name %>.js'
-                //dest: 'build/target.js'
-                // Note: The entire `browserify-shim` config is inside `package.json`.
+        clean: {
+            dist: [
+                'dist/**',
+                'temp/**'
+            ],
+            examples: [
+                'examples/js/jsonforms*',
+                'examples/css/jsonforms*'
+            ],
+            dev: [
+                'components/references.ts',
+                'components/**/*.js',
+                'components/**/*.js.map',
+                'tests/references.ts',
+                'tests/**/*.js',
+                '!tests/**/*.conf.js',
+                'tests/**/*.js.map'
+            ],
+            downloads: [
+                'examples/bower_components',
+                'node_modules'
+            ],
+            coverage: [
+                'coverage'
+            ],
+            cache: [
+                '.tscache'
+            ],
+            all: [
+                'dist',
+                'temp',
+                'examples/js/jsonforms*',
+                'examples/css/jsonforms*',
+                'components/references.ts',
+                'components/**/*.js',
+                'components/**/*.js.map',
+                'tests/references.ts',
+                'tests/**/*.js',
+                '!tests/**/*.conf.js',
+                'tests/**/*.js.map',
+                'examples/bower_components',
+                'node_modules',
+                'coverage',
+                '.tscache'
+            ]
+        },
+
+        remapIstanbul: {
+            build: {
+                src: 'coverage/coverage-final.json',
+                options: {
+                    reports: {
+                        'html': 'coverage/html-report',
+                        'json': 'coverage/mapped-coverage-final.json',
+                        'lcovonly': 'coverage/mapped-coverage.info'
+                    }
+                }
             }
         },
-        clean: {
-            dist: ["dist/**", "temp/**"],
-            app: ["app/js/jsonforms*", "app/css/jsonforms*"],
-            all: ["dist", "temp", "app/js/jsonforms*", "app/css/jsonforms*", "node_modules", "app/bower_components"]
+
+        coveralls: {
+            karma_tests: {
+                src: 'coverage/mapped-coverage.info'
+            }
         }
     });
 
@@ -232,6 +283,10 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-ts');
 
+    grunt.loadNpmTasks('remap-istanbul');
+
+    grunt.loadNpmTasks('grunt-coveralls');
+
     // Build distribution
     grunt.registerTask('dist', [
         'clean:dist',
@@ -246,19 +301,21 @@ module.exports = function(grunt) {
         'uglify:dist'
     ]);
 
-    // Build example application
-    grunt.registerTask('app', [
+    // Build example applications
+    grunt.registerTask('examples', [
         'dist',
-        'copy:app'
+        'copy:examples'
     ]);
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
-        'app',
+        'clean:coverage',
+        'examples',
         'ts:test',
         'karma',
         'connect',
-        'protractor'
+        'protractor',
+        'remapIstanbul'
     ]);
 
     // Hint task

@@ -2,11 +2,16 @@
 
 class HorizontalRenderer implements JSONForms.IRenderer {
 
+    constructor(private renderService: JSONForms.IRenderService) {
     priority = 1;
 
     constructor(private renderService: JSONForms.IRenderService) { }
 
     render(element: ILayout, subSchema: SchemaElement, schemaPath:String, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
+                    acc.push(this.renderService.render(
+                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
+                        curr,
+                        services));
 
         var maxSize = 99;
 

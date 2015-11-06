@@ -7,6 +7,10 @@ class VerticalRenderer implements JSONForms.IRenderer {
     constructor(private renderService: JSONForms.IRenderService) { }
 
     render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
+                    acc.push(this.renderService.render(
+                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
+                        curr,
+                        services));
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);

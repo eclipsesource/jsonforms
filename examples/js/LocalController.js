@@ -8,11 +8,17 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                 "type": "string",
                 "minLength": 3
             },
-            "age": {
-                "type": "integer"
-            },
-            "height": {
-                "type": "number"
+            "personalData": {
+                "type": "object",
+                "properties": {
+                    "age": {
+                        "type": "integer"
+                    },
+                    "height": {
+                        "type": "number"
+                    }
+                },
+                "required": ["age", "height"]
             },
             "vegetarian": {
                 "type": "boolean"
@@ -28,7 +34,8 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             "occupation": {
                 "type": "string"
             }
-        }
+        },
+        "required": ["occupation"]
     };
     $scope.uiSchema = {
         "type": "Group",
@@ -48,14 +55,14 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                         "type": "Control",
                         "label": "Age",
                         "scope": {
-                            "$ref": "#/properties/age"
+                            "$ref": "#/properties/personalData/properties/age"
                         }
                     },
                     {
                         "type": "Control",
                         "label": "Height",
                         "scope": {
-                            "$ref": "#/properties/height"
+                            "$ref": "#/properties/personalData/properties/height"
                         }
                     },
                     {
@@ -107,7 +114,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                                 "type": "Control",
                                 "label": "Age",
                                 "scope": {
-                                    "$ref": "#/properties/age"
+                                    "$ref": "#/properties/personalData/properties/age"
                                 }
                             }
                         ]
@@ -120,7 +127,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                                 "type": "Control",
                                 "label": "Height",
                                 "scope": {
-                                    "$ref": "#/properties/height"
+                                    "$ref": "#/properties/personalData/properties/height"
                                 }
                             },
                             {
@@ -156,7 +163,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             {
                 "label": "Age",
                 "scope": {
-                    "$ref": "#/items/properties/age"
+                    "$ref": "#/items/properties/personalData/properties/age"
                 }
             }
         ],
@@ -168,8 +175,6 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
 
     $scope.data = {
         name: 'John Doe',
-        age: 36,
-        height: 1.76,
         vegetarian: false,
         birthDate: "02.06.1985",
         nationality: "US"

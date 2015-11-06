@@ -1,6 +1,7 @@
 # generated files
 dist/
 temp/
+coverage/
 
 # npm
 node_modules/
@@ -26,11 +27,11 @@ tests/**/*.js
 # logs
 *.log
 
-# test app
-app/bower_components/
-app/css/jsonforms.css
-app/js/jsonforms.js
-app/js/jsonforms.min.js
+# examples
+examples/bower_components/
+examples/css/jsonforms.css
+examples/js/jsonforms.js
+examples/js/jsonforms.min.js
 
 # webstorm
 .idea

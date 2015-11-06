@@ -10,6 +10,10 @@ class CategoryRenderer implements JSONForms.IRenderer {
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
+                    acc.push(this.renderService.render(
+                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
+                        curr,
+                        services));
         var label = element.label;
         var template = `<tab heading="${label}">
             <layout>

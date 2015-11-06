@@ -3,7 +3,7 @@
 declare module JSONForms {
     export interface IRenderService {
         register(renderer: IRenderer): void
-        render(element: IUISchemaElement, services: Services);
+        render(scope: ng.IScope, element: IUISchemaElement, services: Services);
     }
 
     export interface IRenderer {
