@@ -3,7 +3,6 @@
 module JSONForms {
     export class RuleService implements IRuleService {
         private map = {};
-        static $inject = ['PathResolver'];
 
         constructor(private pathresolver:JSONForms.IPathResolver) { }
 
@@ -20,15 +19,16 @@ module JSONForms {
                 var renderDescription=renderDescriptionArray[i];
                 var conditionValue=this.pathresolver.resolveInstance(renderDescription.instance,schemaPath);
 
-                var hide=false;
-                var disabled=false;
                 var valueMatch=(renderDescription.rule.condition.value===conditionValue);
                 var effect=renderDescription.rule.effect;
+                //hide
+                var hide=false;
                 hide=(effect==="HIDE" && valueMatch) || (effect==="SHOW" && !valueMatch);
-                disabled=(effect==="DISABLE" && valueMatch) || (effect==="ENABLE" && !valueMatch);
-
                 renderDescription.hide=hide;
-                renderDescription.disabled=disabled;
+                //disbale is not supported yet
+                //var disabled=false;
+                //disabled=(effect==="DISABLE" && valueMatch) || (effect==="ENABLE" && !valueMatch);
+                //renderDescription.disabled=disabled;
             }
         };
 

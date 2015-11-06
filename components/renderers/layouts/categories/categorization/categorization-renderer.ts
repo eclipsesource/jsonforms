@@ -29,13 +29,7 @@ class CategorizationRenderer implements JSONForms.IRenderer {
             </tabset>
         </layout>
         `;
-
-        return {
-            "type": "Layout",
-            "elements": renderedElements,
-            "size": 99,
-            "template": template
-        };
+        return JSONForms.RenderDescriptionFactory.createContainerDescription(99,renderedElements,template,services,element.rule);
     }
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {

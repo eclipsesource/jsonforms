@@ -108,6 +108,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             },
             {
                 "type": "Categorization",
+                "rule":{
+                    "effect":"SHOW",
+                    "condition":{
+                        "type":"LEAF" ,
+                        "scope": {
+                            "$ref": "#/properties/age"
+                        },
+                        "value":36
+                    }
+                },
                 "elements": [
                     {
                         "type": "Category",

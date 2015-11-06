@@ -49,6 +49,18 @@ module JSONForms {
         static createControlDescription(schemaPath: string, services: JSONForms.Services, label?: string, rule?:IRule): IRenderDescription {
             return new ControlRenderDescription(schemaPath, services, label, rule);
         }
+        static createContainerDescription(size:number, elements:any, template:string, services: JSONForms.Services, rule?:IRule ){
+            return new ContainerRenderDescription(size,elements, template, services, rule);
+        }
+    }
+
+    export class ContainerRenderDescription implements IContainerRenderDescription {
+        type= "Layout";
+        public instance: any;
+        constructor(public size:number,public elements:any, public template:string, services: JSONForms.Services,public rule?:IRule){
+            services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
+            this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
+        }
     }
 
     export class ControlRenderDescription implements IControlRenderDescription {
