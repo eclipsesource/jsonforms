@@ -11,21 +11,12 @@ class CategorizationRenderer implements JSONForms.IRenderer {
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
         var template = `<layout>
-                    acc.push(this.renderService.render(
-                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
-                        curr,
-                        services));
             <tabset>
                 <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
             </tabset>
         </layout>`;
 
-        return {
-            "type": "Layout",
-            "elements": renderedElements,
-            "size": 99,
-            "template": template
-        };
+        return JSONForms.RenderDescriptionFactory.createContainerDescription(99,renderedElements,template,services,element.rule);
     }
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {

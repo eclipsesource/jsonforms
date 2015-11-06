@@ -49,6 +49,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                         "label": "Name",
                         "scope": {
                             "$ref": "#/properties/name"
+                        },
+                        "rule":{
+                            "effect":"HIDE",
+                            "condition":{
+                                "type":"LEAF" ,
+                                "scope": {
+                                    "$ref": "#/properties/personalData/properties/age"
+                                },
+                                "value":36
+                            }
                         }
                     },
                     {
@@ -98,6 +108,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             },
             {
                 "type": "Categorization",
+                "rule":{
+                    "effect":"SHOW",
+                    "condition":{
+                        "type":"LEAF" ,
+                        "scope": {
+                            "$ref": "#/properties/personalData/properties/age"
+                        },
+                        "value":36
+                    }
+                },
                 "elements": [
                     {
                         "type": "Category",

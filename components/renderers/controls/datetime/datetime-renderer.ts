@@ -5,7 +5,7 @@ class DatetimeRenderer implements JSONForms.IRenderer {
     priority = 3;
 
     render(element: IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label);
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label, element.rule);
         control['isOpen'] = false;
         control['openDate'] = function($event) {
             $event.preventDefault();
