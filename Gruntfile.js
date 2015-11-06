@@ -69,7 +69,7 @@ module.exports = function(grunt) {
                 mainModule: 'jsonforms',
                 externalModules: ['ui.bootstrap', 'ui.validate', 'ui.grid', 'ui.grid.edit', 'ui.grid.pagination', 'ui.grid.autoResize']
             },
-            app: {
+            examples: {
                 src:  'components/**/*.js',
                 dest: 'temp/jsonforms.js'
             }
@@ -88,10 +88,10 @@ module.exports = function(grunt) {
         },
 
         copy: {
-            app: {
+            examples: {
                 files: [
-                    // dist to app
-                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'app'}
+                    // dist to examples
+                    {expand:true, cwd: 'dist/', src: ['**'], dest: 'examples'}
                 ]
             }
         },
@@ -151,7 +151,7 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     port: 8000,
-                    base: 'app'
+                    base: 'examples'
                 }
             }
         },
@@ -177,9 +177,9 @@ module.exports = function(grunt) {
                 files: 'templates/**',
                 tasks: ['ngtemplates:dist', "concat:dist", 'uglify:dist']
             },
-            app: {
+            examples: {
                 files: ['dist/**'],
-                tasks: ['copy:app']
+                tasks: ['copy:examples']
             }
         },
 
@@ -188,9 +188,9 @@ module.exports = function(grunt) {
                 'dist/**',
                 'temp/**'
             ],
-            app: [
-                'app/js/jsonforms*',
-                'app/css/jsonforms*'
+            examples: [
+                'examples/js/jsonforms*',
+                'examples/css/jsonforms*'
             ],
             dev: [
                 'components/references.ts',
@@ -202,7 +202,7 @@ module.exports = function(grunt) {
                 'tests/**/*.js.map'
             ],
             downloads: [
-                'app/bower_components',
+                'examples/bower_components',
                 'node_modules'
             ],
             coverage: [
@@ -214,8 +214,8 @@ module.exports = function(grunt) {
             all: [
                 'dist',
                 'temp',
-                'app/js/jsonforms*',
-                'app/css/jsonforms*',
+                'examples/js/jsonforms*',
+                'examples/css/jsonforms*',
                 'components/references.ts',
                 'components/**/*.js',
                 'components/**/*.js.map',
@@ -223,7 +223,7 @@ module.exports = function(grunt) {
                 'tests/**/*.js',
                 '!tests/**/*.conf.js',
                 'tests/**/*.js.map',
-                'app/bower_components',
+                'examples/bower_components',
                 'node_modules',
                 'coverage',
                 '.tscache'
@@ -301,16 +301,16 @@ module.exports = function(grunt) {
         'uglify:dist'
     ]);
 
-    // Build example application
-    grunt.registerTask('app', [
+    // Build example applications
+    grunt.registerTask('examples', [
         'dist',
-        'copy:app'
+        'copy:examples'
     ]);
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
         'clean:coverage',
-        'app',
+        'examples',
         'ts:test',
         'karma',
         'connect',
