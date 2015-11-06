@@ -68,8 +68,8 @@ module JSONForms {
         type= "Layout";
         public instance: any;
         constructor(public size:number,public elements:any, public template:string, services: JSONForms.Services,public rule?:IRule){
-            services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
+            services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
         }
     }
 
@@ -99,7 +99,6 @@ module JSONForms {
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, label);
             this.ruleService.addRuleTrack(this);
-            this.ruleService.revaluateRules(this, this.schemaPath);
             this.setupModelChangedCallback();
         }
 
@@ -142,7 +141,7 @@ module JSONForms {
         private setupModelChangedCallback():void {
             this.scope.$on('modelChanged', () => {
                 this.validate();
-                this.ruleService.revaluateRules(this, this.schemaPath);
+                this.ruleService.reevaluateRules(this.schemaPath);
             })
         }
 

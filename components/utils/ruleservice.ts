@@ -10,7 +10,7 @@ module JSONForms {
             return ServiceId.RuleService;
         }
 
-        revaluateRules(changedRenderDescription:JSONForms.IControlRenderDescription, schemaPath:string){
+        reevaluateRules(schemaPath:string){
             if (!(schemaPath in this.map)){
                 return;
             }
@@ -24,7 +24,7 @@ module JSONForms {
                 catch(e){
                     //intentionally left empty as this catches errors due to resolving
                 }
-                var valueMatch=(renderDescription.rule.condition.value===conditionValue);
+                var valueMatch=(renderDescription.rule.condition.expectedValue===conditionValue);
                 var effect=renderDescription.rule.effect;
                 //hide
                 var hide=false;
@@ -47,6 +47,7 @@ module JSONForms {
                 this.map[path]=[];
             }
             this.map[path].push(renderDescription);
+            this.reevaluateRules(path);
         }
     }
 }

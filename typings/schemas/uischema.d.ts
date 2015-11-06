@@ -15,7 +15,7 @@ interface ILeafCondition extends ICondition {
     scope: {
         $ref: string;
     }
-    value: any;
+    expectedValue: any;
 }
 
 interface WithLabel {
