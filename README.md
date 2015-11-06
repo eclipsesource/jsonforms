@@ -5,22 +5,23 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 
 # First time setup
 * Install node.js (https://nodejs.org/)
-* Install grunt-cli via the command "npm install -g grunt-cli"
+* Install grunt-cli via the command ```npm install -g grunt-cli```
 * Clone this repository
-* Execute "npm install" in root of your cloned repository
+* Execute ```npm install``` in root of your cloned repository
 
 # Build
-JSONForms uses Grunt to build and test.
+JSONForms uses [Grunt](http://gruntjs.com/) to build and test.
 
-* Run "grunt" or "grunt dist" to build the distribution
-* Run "grunt app" to build the application
-* Run "grunt test" to test the framework and the application
-* Run "grunt watch" during development to automatically rebuild the distribution and application when any of the development files are touched.
+* Run ```grunt``` or ```grunt dist``` to build the distribution
+* Run ```grunt app``` to build the application
+* Run ```grunt test``` to test the framework and the application
+* Run ```grunt watch``` during development to automatically rebuild the distribution and application when any of the development files are touched.
+* Run ```grunt clean:all``` if you want to clean the whole project.
 
-# Travis
-The JSONForms project is build and tested via Travis.
+# Continuous Integration
+The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
-Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms)
+Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
 
 # License
-The JSONForms project is licensed under the MIT License. See the LICENSE file for more information.
+The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
