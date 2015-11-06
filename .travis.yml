@@ -12,6 +12,6 @@ before_script:
   - npm run update-webdriver
 
 script:
-  - grunt app
+  - grunt examples
   - grunt test
   - grunt coveralls:karma_tests
