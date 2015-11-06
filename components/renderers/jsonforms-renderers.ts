@@ -86,6 +86,7 @@ module JSONForms {
             this.ruleService = services.get<JSONForms.IRuleService>(ServiceId.RuleService);
             this.scope = services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope();
 
+
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, label);
             this.ruleService.addRuleTrack(this);

@@ -108,8 +108,8 @@ module JSONForms{
         Validation,
         DataProvider,
         SchemaProvider,
-        ScopeProvider,
         RuleService,
+        ScopeProvider,
         PathResolver
     }
 }
