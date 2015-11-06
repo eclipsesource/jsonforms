@@ -13,8 +13,8 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 JSONForms uses Grunt to build and test.
 
 * Run "grunt" or "grunt dist" to build the distribution
-* Run "grunt app" to build the application
-* Run "grunt test" to test the framework and the application
+* Run "grunt examples" to build the example application
+* Run "grunt test" to test the framework and the examples applications
 * Run "grunt watch" during development to automatically rebuild the distribution and application when any of the development files are touched.
 
 # Travis
