@@ -310,6 +310,7 @@ module.exports = function(grunt) {
     // Test unit and e2e tests
     grunt.registerTask('test', [
         'clean:coverage',
+        'examples',
         'ts:test',
         'karma',
         'connect',
