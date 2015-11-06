@@ -55,7 +55,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                             "condition":{
                                 "type":"LEAF" ,
                                 "scope": {
-                                    "$ref": "#/properties/age"
+                                    "$ref": "#/properties/personalData/properties/age"
                                 },
                                 "value":36
                             }
@@ -113,7 +113,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                     "condition":{
                         "type":"LEAF" ,
                         "scope": {
-                            "$ref": "#/properties/age"
+                            "$ref": "#/properties/personalData/properties/age"
                         },
                         "value":36
                     }

@@ -110,7 +110,7 @@ module JSONForms{
         SchemaProvider,
         RuleService,
         ScopeProvider,
-        RuleService
+        RuleService,
         PathResolver
     }
 }

@@ -17,14 +17,21 @@ module JSONForms {
             var renderDescriptionArray=this.map[schemaPath];
             for(var i=0;i<renderDescriptionArray.length;i++){
                 var renderDescription=renderDescriptionArray[i];
-                var conditionValue=this.pathresolver.resolveInstance(renderDescription.instance,schemaPath);
-
+                var conditionValue=null;
+                try {
+                    conditionValue=this.pathresolver.resolveInstance(renderDescription.instance,schemaPath);
+                }
+                catch(e){
+                    //intentionally left empty as this catches errors due to resolving
+                }
                 var valueMatch=(renderDescription.rule.condition.value===conditionValue);
                 var effect=renderDescription.rule.effect;
                 //hide
                 var hide=false;
                 hide=(effect==="HIDE" && valueMatch) || (effect==="SHOW" && !valueMatch);
                 renderDescription.hide=hide;
+
+
                 //disbale is not supported yet
                 //var disabled=false;
                 //disabled=(effect==="DISABLE" && valueMatch) || (effect==="ENABLE" && !valueMatch);
