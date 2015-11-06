@@ -184,7 +184,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
         if (element.columns) {
             columnsDefs = this.createColumnDefs(element, subSchema, services);
         } else {
-            columnsDefs = this.generateColumnDefs(subSchema);
+            columnsDefs = this.generateColumnDefs(subSchema, schemaPath);
         }
 
         var defaultGridOptions: uiGrid.IGridOptions = this.defaultGridOptions(services, schema);

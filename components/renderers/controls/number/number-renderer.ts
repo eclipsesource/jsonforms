@@ -15,6 +15,6 @@ class NumberRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.number').run(['RenderService', function(RenderService) {
+angular.module('jsonforms.renderers.controls.number').run(['RenderService', (RenderService) => {
     RenderService.register(new NumberRenderer());
 }]);

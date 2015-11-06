@@ -2,7 +2,7 @@
 
 class HorizontalRenderer implements JSONForms.IRenderer {
 
-    constructor(private renderServ: JSONForms.IRenderService) {
+    constructor(private renderService: JSONForms.IRenderService) {
 
     }
 
@@ -15,7 +15,10 @@ class HorizontalRenderer implements JSONForms.IRenderer {
                 return [];
             } else {
                 return elements.reduce((acc, curr, idx, els) => {
-                    acc.push(this.renderServ.render(curr, services));
+                    acc.push(this.renderService.render(
+                        services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope(),
+                        curr,
+                        services));
                     return acc;
                 }, []);
             }

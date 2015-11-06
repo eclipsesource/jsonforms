@@ -1,5 +1,6 @@
 ///<reference path="../references.ts"/>
 
+import PathResolver = JSONForms.PathResolver;
 declare var JsonRefs;
 
 class FormController {
@@ -66,6 +67,8 @@ class FormController {
 
             var services = new JSONForms.Services();
 
+            services.add(new JSONForms.PathResolverService(new PathResolver()));
+            services.add(new JSONForms.ScopeProvider(this.$scope));
             services.add(new JSONForms.SchemaProvider(schema));
             services.add(new JSONForms.ValidationService());
 
@@ -77,7 +80,7 @@ class FormController {
             }
             services.add(dataProvider);
 
-            this.$scope['elements'] = [this.RenderService.render(uiSchema, services)];
+            this.$scope['elements'] = [this.RenderService.render(this.$scope, uiSchema, services)];
         });
     }
 

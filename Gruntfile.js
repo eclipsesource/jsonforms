@@ -183,19 +183,70 @@ module.exports = function(grunt) {
             }
         },
 
-        browserify: {
-            dist: {
-                //dest: 'dist/js/<%= pkg.name %>.js'
-                src: ['dist/js/<%= pkg.name %>.js'],
-                dest: 'dist/js/<%= pkg.name %>.js'
-                //dest: 'build/target.js'
-                // Note: The entire `browserify-shim` config is inside `package.json`.
+        clean: {
+            dist: [
+                'dist/**',
+                'temp/**'
+            ],
+            examples: [
+                'examples/js/jsonforms*',
+                'examples/css/jsonforms*'
+            ],
+            dev: [
+                'components/references.ts',
+                'components/**/*.js',
+                'components/**/*.js.map',
+                'tests/references.ts',
+                'tests/**/*.js',
+                '!tests/**/*.conf.js',
+                'tests/**/*.js.map'
+            ],
+            downloads: [
+                'examples/bower_components',
+                'node_modules'
+            ],
+            coverage: [
+                'coverage'
+            ],
+            cache: [
+                '.tscache'
+            ],
+            all: [
+                'dist',
+                'temp',
+                'examples/js/jsonforms*',
+                'examples/css/jsonforms*',
+                'components/references.ts',
+                'components/**/*.js',
+                'components/**/*.js.map',
+                'tests/references.ts',
+                'tests/**/*.js',
+                '!tests/**/*.conf.js',
+                'tests/**/*.js.map',
+                'examples/bower_components',
+                'node_modules',
+                'coverage',
+                '.tscache'
+            ]
+        },
+
+        remapIstanbul: {
+            build: {
+                src: 'coverage/coverage-final.json',
+                options: {
+                    reports: {
+                        'html': 'coverage/html-report',
+                        'json': 'coverage/mapped-coverage-final.json',
+                        'lcovonly': 'coverage/mapped-coverage.info'
+                    }
+                }
             }
         },
-        clean: {
-            dist: ["dist/**", "temp/**"],
-            examples: ["examples/js/jsonforms*", "examples/css/jsonforms*"],
-            all: ["dist", "temp", "examples/js/jsonforms*", "examples/css/jsonforms*", "node_modules", "examples/bower_components"]
+
+        coveralls: {
+            karma_tests: {
+                src: 'coverage/mapped-coverage.info'
+            }
         }
     });
 
@@ -232,6 +283,10 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-ts');
 
+    grunt.loadNpmTasks('remap-istanbul');
+
+    grunt.loadNpmTasks('grunt-coveralls');
+
     // Build distribution
     grunt.registerTask('dist', [
         'clean:dist',
@@ -254,11 +309,12 @@ module.exports = function(grunt) {
 
     // Test unit and e2e tests
     grunt.registerTask('test', [
-        'examples',
+        'clean:coverage',
         'ts:test',
         'karma',
         'connect',
-        'protractor'
+        'protractor',
+        'remapIstanbul'
     ]);
 
     // Hint task

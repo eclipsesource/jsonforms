@@ -16,6 +16,11 @@ module JSONForms {
             })
         };
 
+        static inits(schemaPath: string): string {
+            var fragments = PathUtil.toPropertyFragments(schemaPath);
+            return '/' + fragments.slice(0, fragments.length - 1).join('/');
+        }
+
         static filterNonKeywords = (fragments:string[]):string[] => {
             return fragments.filter(function (fragment) {
                 return !(PathUtil.Keywords.indexOf(fragment) !== -1);
@@ -23,7 +28,11 @@ module JSONForms {
         };
 
         static beautifiedLastFragment(schemaPath: string): string  {
-            return PathUtil.beautify(PathUtil.capitalizeFirstLetter(schemaPath.substr(schemaPath.lastIndexOf('/') + 1, schemaPath.length)));
+            return PathUtil.beautify(PathUtil.capitalizeFirstLetter(PathUtil.lastFragment(schemaPath)));
+        }
+
+        static lastFragment(schemaPath: string): string {
+            return schemaPath.substr(schemaPath.lastIndexOf('/') + 1, schemaPath.length)
         }
 
         private static capitalizeFirstLetter(string): string {

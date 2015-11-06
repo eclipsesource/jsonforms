@@ -31,6 +31,29 @@ module JSONForms{
         }
 
     }
+    export class ScopeProvider implements IScopeProvider {
+        constructor(private scope: ng.IScope) { }
+
+        getId():JSONForms.ServiceId {
+            return ServiceId.ScopeProvider;
+        }
+
+        getScope(): ng.IScope {
+            return this.scope;
+        }
+    }
+    export class PathResolverService implements IPathResolverService {
+
+        constructor(private resolver: PathResolver) { }
+
+        getId(): JSONForms.ServiceId {
+            return ServiceId.PathResolver;
+        }
+
+        getResolver() {
+            return this.resolver;
+        }
+    }
     export class SchemaProvider implements ISchemaProvider {
         constructor(private schema: SchemaElement) {
 
@@ -61,32 +84,31 @@ module JSONForms{
         }
 
         validate(instance: any, schema: SchemaElement): void {
+
             if (tv4 == undefined) {
                 return;
             }
 
-            this.validationResults.put(instance, {});
+            this.clear(instance);
             var results = tv4.validateMultiple(instance, schema);
 
-            for (var i = 0; i < results['errors'].length; i++) {
+            results['errors'].forEach((error) => {
+                if (error['schemaPath'].indexOf("required") != -1) {
+                    var propName = error['dataPath'] + "/" + error['params']['key'];
+                    this.validationResults.get(instance)[propName] = "Missing property";
+                } else {
+                    this.validationResults.get(instance)[error['dataPath']] = error['message'];
+                }
+            });
+         }
 
-                var validationResult = results['errors'][i];
-
-                //if (validationResult.schemaPath.indexOf('/required') != -1) {
-                //    var propName = validationResult['params']['key'];
-                //    if (propName == normalizedPath.substr(normalizedPath.lastIndexOf('/') + 1, normalizedPath.length)) {
-                //        errorMsg = "Missing property";
-                //        break;
-                //    }
-                //}
-
-                this.validationResults.get(instance)[validationResult['dataPath']] = validationResult;
-            }
-        }
+        private clear(instance: any) { this.validationResults.put(instance, {}); }
     }
     export enum ServiceId {
         Validation,
         DataProvider,
-        SchemaProvider
+        SchemaProvider,
+        ScopeProvider,
+        PathResolver
     }
 }

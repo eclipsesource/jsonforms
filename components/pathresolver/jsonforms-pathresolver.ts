@@ -5,10 +5,7 @@ module JSONForms {
     export class PathResolver implements IPathResolver {
 
         private pathMapping:{ [id: string]: string; } = {};
-        static $inject = ["$compile"];
-        // $compile can then be used as this.$compile
-        constructor(private $compile:ng.ICompileService) {
-        }
+        constructor() { }
 
         toInstancePath = (path:string):string => {
             return PathUtil.normalize(path);
@@ -42,18 +39,21 @@ module JSONForms {
          * @returns {T|*|*}
          */
         resolveSchema = (schema: any, path: string): any => {
-
-            var fragments = PathUtil.toPropertyFragments(path);
-            return fragments.reduce(function (subSchema, fragment) {
-                if (fragment == "#"){
-                    return subSchema
-                } else if (subSchema instanceof Array) {
-                    return subSchema.map(function (item) {
-                        return item[fragment];
-                    });
-                }
-                return subSchema[fragment];
-            }, schema);
+            try {
+                var fragments = PathUtil.toPropertyFragments(path);
+                return fragments.reduce(function (subSchema, fragment) {
+                    if (fragment == "#") {
+                        return subSchema
+                    } else if (subSchema instanceof Array) {
+                        return subSchema.map(function (item) {
+                            return item[fragment];
+                        });
+                    }
+                    return subSchema[fragment];
+                }, schema);
+            } catch(err) {
+                return undefined;
+            }
         };
     }
 }
