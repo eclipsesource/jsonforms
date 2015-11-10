@@ -149,28 +149,10 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         "items": $scope.schema
     };
     $scope.usersUiSchema = {
-        "type": "Control",
+        "type":"MasterDetailLayout",
         "scope": {
             "$ref": "#"
         },
-        "columns": [
-            {
-                "label": "Name",
-                "scope": {
-                    "$ref": "#/items/properties/name"
-                }
-            },
-            {
-                "label": "Age",
-                "scope": {
-                    "$ref": "#/items/properties/personalData/properties/age"
-                }
-            }
-        ],
-        "options": {
-            "enableFiltering": true,
-            "paginationPageSizes": [5, 10, 20]
-        }
     };
 
     $scope.data = {
@@ -183,43 +165,43 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         $scope.data,
         {
             name: 'Todd',
-            age: 33
+            personalData:{age: 33}
         },
         {
             name: 'Jimmy',
-            age: 34
+            personalData:{age: 32}
         },
         {
             name: 'Max',
-            age: 35
+            personalData:{age: 35}
         },
         {
             name: 'Jonas',
-            age: 34
+            personalData:{age: 34}
         },
         {
             name: 'Edgar',
-            age: 30
+            personalData:{age: 30}
         },
         {
             name: 'Eugen',
-            age: 28
+            personalData:{age: 29}
         },
         {
             name: 'Johannes',
-            age: 26
+            personalData:{age: 26}
         },
         {
             name: 'Alex',
-            age: 25
+            personalData:{age: 25}
         },
         {
             name: 'Stefan',
-            age: 27
+            personalData:{age: 27}
         },
         {
             name: 'Eva',
-            age: 30
+            personalData:{age: 30}
         }
     ];
 

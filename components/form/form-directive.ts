@@ -168,6 +168,7 @@ angular.module('jsonforms.form').directive('jsonforms', ():ng.IDirective => {
         link: (scope, el, attrs, ctrl) => {
             scope['element'] = el;
             scope.$watch('uiSchema', () => { ctrl.init(); });
+            scope.$watch('data', () => { ctrl.init(); });
         }
     }
 });
