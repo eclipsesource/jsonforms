@@ -46,8 +46,8 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath:string, services:JSONForms.Services, label?:string):IRenderDescription {
-            return new ControlRenderDescription(schemaPath, services, label);
+        static createControlDescription(schemaPath:string, services:JSONForms.Services, label?:string, rule?:IRule):IRenderDescription {
+            return new ControlRenderDescription(schemaPath, services, label, rule);
         }
 
         static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
@@ -57,6 +57,19 @@ module JSONForms {
                     el,
                     services);
             });
+        }
+
+        static createContainerDescription(size:number, elements:any, template:string, services: JSONForms.Services, rule?:IRule ){
+            return new ContainerRenderDescription(size,elements, template, services, rule);
+        }
+    }
+
+    export class ContainerRenderDescription implements IContainerRenderDescription {
+        type= "Layout";
+        public instance: any;
+        constructor(public size:number,public elements:any, public template:string, services: JSONForms.Services,public rule?:IRule){
+            this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
+            services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
         }
     }
 
@@ -72,17 +85,20 @@ module JSONForms {
         private schema: SchemaElement;
         private validationService: IValidationService;
         private pathResolver: IPathResolver;
+        private ruleService: IRuleService;
         private scope: ng.IScope;
 
-        constructor(schemaPath: string, services: JSONForms.Services, label?: string) {
+        constructor(private schemaPath: string, services: JSONForms.Services, label?: string, public rule?:IRule) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
             this.pathResolver = services.get<JSONForms.IPathResolverService>(ServiceId.PathResolver).getResolver();
+            this.ruleService = services.get<JSONForms.IRuleService>(ServiceId.RuleService);
             this.scope = services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope();
 
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, label);
+            this.ruleService.addRuleTrack(this);
             this.setupModelChangedCallback();
         }
 
@@ -125,6 +141,7 @@ module JSONForms {
         private setupModelChangedCallback():void {
             this.scope.$on('modelChanged', () => {
                 this.validate();
+                this.ruleService.reevaluateRules(this.schemaPath);
             })
         }
 

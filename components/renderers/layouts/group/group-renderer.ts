@@ -18,12 +18,7 @@ class GroupRenderer implements JSONForms.IRenderer {
                </fieldset>
              </layout>`;
 
-        return {
-            "type": "Layout",
-            "elements": renderedElements,
-            "size": 99,
-            "template": template
-        };
+        return JSONForms.RenderDescriptionFactory.createContainerDescription(99,renderedElements,template,services,element.rule);
     }
 
     isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath): boolean {

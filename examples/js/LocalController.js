@@ -42,6 +42,22 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         "label": "This is a fancy label",
         "elements": [
             {
+                "type": "VerticalLayout",
+                "elements": [
+                ],
+                "rule":{
+                    "effect":"HIDE",
+                    "condition":{
+                        "type":"LEAF" ,
+                        "scope": {
+                            "$ref": "#/properties/personalData/properties/age"
+                        },
+                        "expectedValue":36
+                    }
+                }
+            },
+
+            {
                 "type": "HorizontalLayout",
                 "elements": [
                     {
@@ -49,6 +65,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
                         "label": "Name",
                         "scope": {
                             "$ref": "#/properties/name"
+                        },
+                        "rule":{
+                            "effect":"HIDE",
+                            "condition":{
+                                "type":"LEAF" ,
+                                "scope": {
+                                    "$ref": "#/properties/personalData/properties/age"
+                                },
+                                "expectedValue":36
+                            }
                         }
                     },
                     {
@@ -98,6 +124,16 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             },
             {
                 "type": "Categorization",
+                "rule":{
+                    "effect":"SHOW",
+                    "condition":{
+                        "type":"LEAF" ,
+                        "scope": {
+                            "$ref": "#/properties/personalData/properties/age"
+                        },
+                        "expectedValue":36
+                    }
+                },
                 "elements": [
                     {
                         "type": "Category",
