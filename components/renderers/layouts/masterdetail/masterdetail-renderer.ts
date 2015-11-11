@@ -6,27 +6,36 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
 
     constructor(private renderService: JSONForms.IRenderService) { }
 
-    render(element: IUISchemaElement, subSchema: SchemaArray, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
         var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, "");
-
         var template = `
         <div class="row">
-        <!-- Master -->
-        <div class="col-sm-30">
-            <button class="col-sm-99" ng-repeat="child in element.instance" ng-click="element.selectedChild=child">{{child.name}}_{{$index}}</button>
-        </div>
-        <!-- Detail -->
-        <div class="col-sm-70"><jsonforms schema="element.childSchema" data="element.selectedChild"></jsonforms></div>
+            <!-- Master -->
+            <div class="col-sm-30">
+                <masterdetail-collection element="element" collection="element.schema.properties"></masterdetail-collection>
+            </div>
+            <!-- Detail -->
+            <div class="col-sm-70">
+                <jsonforms schema="element.selectedSchema" data="element.selectedChild" ng-if="element.selectedChild"></jsonforms>
+            </div>
         </div>
         `;
         control['template'] = template;
-        control['childSchema']=subSchema.items;
-        control['selectedChild']=control.instance[0];
+        control['schema']=subSchema;
+        control['filter']=(properties) => {
+            var result = {};
+            angular.forEach(properties, function(value, key) {
+                if (value.type=='array' && value.items.type=='object') {
+                    result[key] = value;
+                }
+            });
+            return result;
+        }
         return control;
     }
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath): boolean {
-        return uiElement.type == "MasterDetailLayout" && jsonSchema !== undefined && jsonSchema.type == 'array';
+        return uiElement.type == "MasterDetailLayout" && jsonSchema !== undefined && jsonSchema.type == 'object';
     }
 }
 
