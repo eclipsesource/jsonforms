@@ -29,6 +29,7 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
                     result[key] = value;
                 }
             });
+            return result;
         }
         return control;
     }
