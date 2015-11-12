@@ -11,7 +11,7 @@ describe('MasterDetail', () => {
     beforeEach(module('components/renderers/layouts/layout.html'));
     beforeEach(module('components/renderers/controls/control.html'));
 
-    it("should be rendered", inject(function($rootScope, $compile) {
+    it("should be rendered", inject(($rootScope, $compile) => {
         var scope = $rootScope.$new();
         scope.schema = {
             "type": "object",
@@ -69,12 +69,12 @@ describe('MasterDetail', () => {
         expect(el.html()).toContain('y_2');
 
         var nameInput_empty = el[0].querySelector("#\\#\\/properties\\/name");
-        expect(nameInput_empty).toBe(null);
+        expect(nameInput_empty).toBeNull();
 
         var x1 = el[0].querySelector("accordion accordion accordion-heading span");
         angular.element(x1).triggerHandler("click");
         expect(el.html()).toContain("<label");
         var nameInput = el[0].querySelector("#\\#\\/properties\\/name");
-        expect(nameInput).not.toBe(null);
+        expect(nameInput).not.toBeNull();
     }));
 });

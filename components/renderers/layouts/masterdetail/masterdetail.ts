@@ -2,7 +2,7 @@
 
 angular.module('jsonforms.renderers.layouts.masterdetail', ['jsonforms.renderers.layouts']);
 angular.module('jsonforms.renderers.layouts.masterdetail')
-.directive('masterdetailCollection', function ():ng.IDirective {
+.directive('masterdetailCollection', ():ng.IDirective => {
     return {
         restrict: "E",
         replace: true,
@@ -32,7 +32,7 @@ angular.module('jsonforms.renderers.layouts.masterdetail')
         `
     }
 })
-.directive('masterdetailMember', function ($compile):ng.IDirective {
+.directive('masterdetailMember', ($compile):ng.IDirective => {
     return {
         restrict: "E",
         replace: true,
@@ -40,9 +40,9 @@ angular.module('jsonforms.renderers.layouts.masterdetail')
             member: '=',
             element:'='
         },
-        link: function (scope, element, attrs) {
+        link: (scope, element, attrs) => {
             $compile('<masterdetail-collection collection="member.properties" element="element"></masterdetail-collection>')
-            (scope, function(cloned, scope){
+            (scope, (cloned, scope) => {
                 element.replaceWith(cloned);
             });
         }

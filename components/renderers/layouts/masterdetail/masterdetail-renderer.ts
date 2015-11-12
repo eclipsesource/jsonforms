@@ -24,12 +24,11 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
         control['schema']=subSchema;
         control['filter']=(properties) => {
             var result = {};
-            angular.forEach(properties, function(value, key) {
+            angular.forEach(properties, (value, key) => {
                 if (value.type=='array' && value.items.type=='object') {
                     result[key] = value;
                 }
             });
-            return result;
         }
         return control;
     }
