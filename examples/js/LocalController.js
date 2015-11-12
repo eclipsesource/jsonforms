@@ -33,6 +33,14 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
             },
             "occupation": {
                 "type": "string"
+            },
+            "test_wrong": {
+                "type": "array",
+                "items": {"type":"string"}
+            },
+            "test_correct": {
+                "type": "array",
+                "items": {"type":"object","properties": {"name": {"type": "string"}}}
             }
         },
         "required": ["occupation"]
@@ -181,32 +189,23 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
     };
 
     $scope.usersSchema = {
-        "type": "array",
-        "items": $scope.schema
+        "type": "object",
+        "properties": {
+            "users":{
+                "type": "array",
+                "items": $scope.schema
+            },
+            "enemies":{
+                "type": "array",
+                "items": $scope.schema
+            }
+        }
     };
     $scope.usersUiSchema = {
-        "type": "Control",
+        "type":"MasterDetailLayout",
         "scope": {
             "$ref": "#"
         },
-        "columns": [
-            {
-                "label": "Name",
-                "scope": {
-                    "$ref": "#/items/properties/name"
-                }
-            },
-            {
-                "label": "Age",
-                "scope": {
-                    "$ref": "#/items/properties/personalData/properties/age"
-                }
-            }
-        ],
-        "options": {
-            "enableFiltering": true,
-            "paginationPageSizes": [5, 10, 20]
-        }
     };
 
     $scope.data = {
@@ -215,51 +214,54 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         birthDate: "02.06.1985",
         nationality: "US"
     };
-    $scope.users = [
-        $scope.data,
-        {
-            name: 'Todd',
-            age: 33
-        },
-        {
-            name: 'Jimmy',
-            age: 34
-        },
-        {
-            name: 'Max',
-            age: 35
-        },
-        {
-            name: 'Jonas',
-            age: 34
-        },
-        {
-            name: 'Edgar',
-            age: 30
-        },
-        {
-            name: 'Eugen',
-            age: 28
-        },
-        {
-            name: 'Johannes',
-            age: 26
-        },
-        {
-            name: 'Alex',
-            age: 25
-        },
-        {
-            name: 'Stefan',
-            age: 27
-        },
-        {
-            name: 'Eva',
-            age: 30
-        }
-    ];
+    $scope.users ={
+        "users":
+        [
+            $scope.data,
+            {
+                name: 'Todd',
+                personalData:{age: 33}
+            },
+            {
+                name: 'Jimmy',
+                personalData:{age: 32}
+            },
+            {
+                name: 'Max',
+                personalData:{age: 35}
+            },
+            {
+                name: 'Jonas',
+                personalData:{age: 34}
+            },
+            {
+                name: 'Edgar',
+                personalData:{age: 30}
+            },
+            {
+                name: 'Eugen',
+                personalData:{age: 29}
+            },
+            {
+                name: 'Johannes',
+                personalData:{age: 26}
+            },
+            {
+                name: 'Alex',
+                personalData:{age: 25}
+            },
+            {
+                name: 'Stefan',
+                personalData:{age: 27}
+            },
+            {
+                name: 'Eva',
+                personalData:{age: 30}
+            }
+        ]
+    };
 
     $scope.formattedData = function() {
-        return JSON.stringify($scope.data, null, 4);
+        return JSON.stringify($scope.users, null, 4);
     };
 }]);
