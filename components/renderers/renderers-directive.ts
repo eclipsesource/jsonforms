@@ -42,7 +42,3 @@ angular.module('jsonforms.renderers').directive('widget', function ():ng.IDirect
         }
     }
 }]);
-
-
-
-

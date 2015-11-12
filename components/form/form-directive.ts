@@ -71,6 +71,7 @@ class FormController {
             services.add(new JSONForms.ScopeProvider(this.$scope));
             services.add(new JSONForms.SchemaProvider(schema));
             services.add(new JSONForms.ValidationService());
+            services.add(new JSONForms.RuleService(this.PathResolver));
 
             var dataProvider: JSONForms.IDataProvider;
             if (this.$scope.asyncDataProvider) {
@@ -168,6 +169,7 @@ angular.module('jsonforms.form').directive('jsonforms', ():ng.IDirective => {
         link: (scope, el, attrs, ctrl) => {
             scope['element'] = el;
             scope.$watch('uiSchema', () => { ctrl.init(); });
+            scope.$watch('data', () => { ctrl.init(); });
         }
     }
 });

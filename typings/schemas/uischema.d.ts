@@ -1,11 +1,30 @@
 /// <reference path="../../typings/ui-grid/ui-grid.d.ts"/>
 
+//rule
+interface IRule {
+    effect: RuleEffect;
+    condition:ICondition;
+}
+declare enum RuleEffect {
+    HIDE,SHOW,ENABLE,DISABLE
+}
+interface ICondition {
+    type:string; //nice to have
+}
+interface ILeafCondition extends ICondition {
+    scope: {
+        $ref: string;
+    }
+    expectedValue: any;
+}
+
 interface WithLabel {
     label?: string
 }
 
 interface IUISchemaElement extends WithLabel {
     type: string;
+    rule?: IRule;
 }
 
 //Layouts
