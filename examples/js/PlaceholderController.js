@@ -208,7 +208,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
     // Resources --
     //
 
-    var Posts = $resource('http://localhost:3000/posts/:id?');
+    var Posts = $resource('http://localhost:3000/posts/:id');
     var Users = $resource('http://localhost:3000/users/:id');
     var Comments = $resource('http://localhost:3000/comments/:id');
 

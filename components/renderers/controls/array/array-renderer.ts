@@ -5,7 +5,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
     private maxSize = 99;
     priority = 2;
 
-    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope) {
+    constructor(private pathResolver: JSONForms.IPathResolver) {
 
     }
 
@@ -26,6 +26,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
         var dataProvider = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider);
         var validationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
+        var scope = services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope();
 
         let externalPaginationEnabled = ArrayRenderer.isExternalPagingAvailable(dataProvider, existingOptions);
         let externalFilteringEnabled  = ArrayRenderer.isExternalFilterAvailable(dataProvider, existingOptions);
@@ -46,7 +47,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
         defaultGridOptions.onRegisterApi = (gridApi) => {
             if (externalPaginationEnabled) {
-                gridApi.pagination.on.paginationChanged(this.scope, (newPage, pageSize) => {
+                gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
                     defaultGridOptions.paginationCurrentPage = newPage;
                     defaultGridOptions.paginationPageSize = pageSize;
                     dataProvider.setPageSize(pageSize);
@@ -56,11 +57,13 @@ class ArrayRenderer implements JSONForms.IRenderer {
                 });
             }
             if (externalFilteringEnabled) {
-                gridApi.core.on.filterChanged(this.scope, () => {
+                gridApi.core.on.filterChanged(scope, () => {
                     var columns = gridApi.grid.columns;
                     var terms = columns.reduce((acc, column) => {
                         var value: any = column.filters[0].term;
-                        acc[column.field] = ArrayRenderer.convertColumnValue(column.colDef, value);
+                        if (value !== undefined && value.length > 0) {
+                            acc[column.field] = ArrayRenderer.convertColumnValue(column.colDef, value);
+                        }
                         return acc;
                     }, {});
                     dataProvider.filter(terms).then(newData => {
@@ -68,12 +71,12 @@ class ArrayRenderer implements JSONForms.IRenderer {
                     })
                 });
             }
-            gridApi.edit.on.afterCellEdit(this.scope, (rowEntity, colDef:uiGrid.IColumnDef, newValue, oldValue) => {
+            gridApi.edit.on.afterCellEdit(scope, (rowEntity, colDef:uiGrid.IColumnDef, newValue, oldValue) => {
                 rowEntity[colDef.field] = ArrayRenderer.convertColumnValue(colDef, newValue);
                 validationService.validate(rowEntity, schema['items']);
                 // TODO: use constant
                 gridApi.core.notifyDataChange("column");
-                this.scope.$apply();
+                scope.$apply();
             });
         };
 
@@ -214,6 +217,6 @@ class ArrayRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
-    RenderService.register(new ArrayRenderer(PathResolver, $rootScope));
+angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
+    RenderService.register(new ArrayRenderer(PathResolver));
 }]);

@@ -39,9 +39,8 @@ module JSONForms {
             this._pageSize = newPageSize
         };
 
-        fetchPage = (page: number, size: number) => {
+        fetchPage = (page: number) => {
             this._page = page;
-            this._pageSize = size;
             var p = this.$q.defer();
             if (this._data instanceof Array) {
                 p.resolve(
@@ -52,8 +51,12 @@ module JSONForms {
             return p.promise;
         };
 
-        totalItems() {
+        getTotalItems():number {
             return this._data.length;
+        }
+
+        filter(terms:any):angular.IPromise<any> {
+            return undefined;
         }
     }
 
@@ -87,7 +90,7 @@ module JSONForms {
             return undefined;
         }
 
-        fetchPage(page:number, size:number):angular.IPromise<any> {
+        fetchPage(page:number):angular.IPromise<any> {
             return undefined;
         }
 
