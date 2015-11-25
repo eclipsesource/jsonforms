@@ -6,9 +6,9 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
 
     constructor(private renderService: JSONForms.IRenderService) { }
 
-    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
+    render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
         var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, "");
-        var template = `
+        control['template'] = `
         <div class="row">
             <!-- Master -->
             <div class="col-sm-30">
@@ -20,7 +20,6 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
             </div>
         </div>
         `;
-        control['template'] = template;
         control['schema']=subSchema;
         control['filter']=(properties) => {
             var result = {};
@@ -30,7 +29,7 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
                 }
             });
             return result;
-        }
+        };
         return control;
     }
 

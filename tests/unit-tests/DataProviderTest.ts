@@ -59,7 +59,7 @@ describe('Group', () => {
     it("should resolve properties path on the UI schema", (done) => {
         var provider = new MyDataProvider($q);
         var promise = provider.filter(['baz']);
-        promise.then((filtered) => {
+        promise.then((filtered: any[]) => {
             expect(filtered.length).toBe(1);
         }).finally(done);
         $timeout.flush();
