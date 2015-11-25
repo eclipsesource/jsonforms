@@ -2,80 +2,106 @@
 
 class ArrayRenderer implements JSONForms.IRenderer {
 
-    constructor(private pathResolver: JSONForms.IPathResolver, private scope: ng.IScope) {
+    private maxSize = 99;
+    priority = 2;
 
+    constructor(private pathResolver: JSONForms.IPathResolver) { }
+
+    private static isExternalFilterAvailable(dataProvider: JSONForms.IDataProvider,
+                                             options: uiGrid.IGridOptions): boolean {
+        return dataProvider.filter !== undefined &&
+            options.hasOwnProperty('useExternalFiltering');
     }
 
-    private defaultGridOptions(services: JSONForms.Services, schema: SchemaElement): uiGrid.IGridOptions {
+    private static isExternalPagingAvailable(dataProvider: JSONForms.IDataProvider,
+                                             options: uiGrid.IGridOptions) {
+        return dataProvider.fetchPage !== undefined &&
+                options.hasOwnProperty('useExternalPagination');
+    }
 
-        var paginationEnabled = false;
+    private defaultGridOptions(existingOptions: uiGrid.IGridOptions,
+                               services: JSONForms.Services, schema: SchemaElement): uiGrid.IGridOptions {
+
+        var dataProvider = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider);
+        var validationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
+        var scope = services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope();
+
+        let externalPaginationEnabled = ArrayRenderer.isExternalPagingAvailable(dataProvider, existingOptions);
+        let externalFilteringEnabled  = ArrayRenderer.isExternalFilterAvailable(dataProvider, existingOptions);
+
         var defaultGridOptions:uiGrid.IGridOptions = {};
+        defaultGridOptions.totalItems = dataProvider.getTotalItems();
         defaultGridOptions.enableColumnResizing = true;
         defaultGridOptions.enableHorizontalScrollbar = 0;
         defaultGridOptions.enableVerticalScrollbar = 0;
-        var dataProvider = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider);
-        var validationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
+        defaultGridOptions.paginationPageSizes = [5, 10, 20];
+        defaultGridOptions.paginationPageSize = 5;
+        defaultGridOptions.paginationCurrentPage = 1;
+        defaultGridOptions.enablePaginationControls = true;
 
-        if (dataProvider instanceof JSONForms.DefaultInternalDataProvider) {
-            defaultGridOptions.totalItems = dataProvider.getTotalItems();
-        } else {
-
-            paginationEnabled = dataProvider.fetchPage !== undefined;
-
-            if (paginationEnabled) {
-                // disable internal and enable external pagination
-                defaultGridOptions.enablePagination = false;
-                defaultGridOptions.useExternalPagination = true;
-                defaultGridOptions.paginationPageSizes = [5, 10, 20];
-                defaultGridOptions.paginationPageSize = 5;
-                defaultGridOptions.paginationCurrentPage = 1;
-                defaultGridOptions.enablePaginationControls = true;
-            }
-
-            // TODO: implement filtering and pass grid options accordingly
-            //if (filteringEnabled) {
-            //    defaultGridOptions.enableFiltering = false;
-            //    defaultGridOptions.useExternalPagination = true;
-            //}
+        if (externalPaginationEnabled) {
+            defaultGridOptions.useExternalPagination = true;
         }
 
         defaultGridOptions.onRegisterApi = (gridApi) => {
-            if  (paginationEnabled) {
-                gridApi.pagination.on.paginationChanged(this.scope, (newPage, pageSize) => {
+            if (externalPaginationEnabled) {
+                gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
                     defaultGridOptions.paginationCurrentPage = newPage;
                     defaultGridOptions.paginationPageSize = pageSize;
                     dataProvider.setPageSize(pageSize);
-                    dataProvider.fetchPage(newPage, pageSize).then(newData => {
-                        defaultGridOptions.data = newData;
+                    dataProvider.fetchPage(newPage).then(newData => {
+                        existingOptions.data = newData;
                     });
                 });
             }
-            gridApi.edit.on.afterCellEdit(this.scope, (rowEntity, colDef: uiGrid.IColumnDef, newValue, oldValue) => {
-                var value = newValue;
-
-                // TODO: newValue is a string?
-                if (colDef.type) {
-                    if (colDef.type == "number" || colDef.type == "integer") {
-                        value = Number(newValue);
-                    } else if (colDef.type == "boolean") {
-                        value = Boolean(newValue);
-                    }
-                }
-
-                rowEntity[colDef.field] = value;
+            if (externalFilteringEnabled) {
+                gridApi.core.on.filterChanged(scope, () => {
+                    var columns = gridApi.grid.columns;
+                    var terms = columns.reduce((acc, column) => {
+                        var value: any = column.filters[0].term;
+                        if (value !== undefined && value.length > 0) {
+                            acc[column.field] = ArrayRenderer.convertColumnValue(column.colDef, value);
+                        }
+                        return acc;
+                    }, {});
+                    dataProvider.filter(terms).then(newData => {
+                        existingOptions.data = newData;
+                    })
+                });
+            }
+            gridApi.edit.on.afterCellEdit(scope, (rowEntity, colDef:uiGrid.IColumnDef, newValue, oldValue) => {
+                rowEntity[colDef.field] = ArrayRenderer.convertColumnValue(colDef, newValue);
                 validationService.validate(rowEntity, schema['items']);
                 // TODO: use constant
                 gridApi.core.notifyDataChange("column");
-                this.scope.$apply();
+                scope.$apply();
             });
-
         };
 
-        return defaultGridOptions;
+        return this.mergeOptions(existingOptions, defaultGridOptions);
     }
 
-    private maxSize = 99;
-    priority = 2;
+    private static convertColumnValue(colDef: uiGrid.IColumnDef, value: string): any {
+        if (colDef.type) {
+            if (colDef.type == "number" || colDef.type == "integer") {
+               return Number(value);
+            } else if (colDef.type == "boolean") {
+                return Boolean(value);
+            }
+        }
+
+        return value;
+    }
+
+    private mergeOptions(optionsA: any, optionsB: any): any {
+        return Object.keys(optionsB).reduce((mergedOpts, optionName) => {
+            if (mergedOpts.hasOwnProperty(optionName)) {
+                return mergedOpts
+            }
+            mergedOpts[optionName] = optionsB[optionName];
+            return mergedOpts;
+        }, optionsA);
+    }
 
     isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
         return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
@@ -102,7 +128,6 @@ class ArrayRenderer implements JSONForms.IRenderer {
         };
     }
 
-
     private generateColumnDefs(schema: SchemaElement, schemaPath: string): any {
         var columnsDefs = [];
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
@@ -125,10 +150,10 @@ class ArrayRenderer implements JSONForms.IRenderer {
         return columnsDefs;
     }
 
-    private createColumnDefs(element: IArrayControlObject, schema: SchemaElement, services: JSONForms.Services): uiGrid.IColumnDef[] {
+    private createColumnDefs(columns: IColumnControlObject[], schema: SchemaElement, services: JSONForms.Services): uiGrid.IColumnDef[] {
         var validationService:JSONForms.IValidationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
 
-        return element.columns.map((col) => {
+        return columns.map((col) => {
             var href = col['href'];
             if (href) {
                 var hrefScope = href.scope;
@@ -150,7 +175,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
                 </div>`;
                 }
 
-               return {
+                return {
                     cellTemplate: cellTemplate,
                     field: field,
                     displayName: col.label,
@@ -178,43 +203,18 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
     private createGridOptions(element: IArrayControlObject, services: JSONForms.Services, schema: SchemaElement, schemaPath: string) {
 
-        var columnsDefs: uiGrid.IColumnDef[];
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
 
-        if (element.columns) {
-            columnsDefs = this.createColumnDefs(element, subSchema, services);
-        } else {
-            columnsDefs = this.generateColumnDefs(subSchema, schemaPath);
-        }
+        var columnsDefs: uiGrid.IColumnDef[] = element.columns ?
+            this.createColumnDefs(element.columns, subSchema, services) :
+            this.generateColumnDefs(subSchema, schemaPath);
 
-        var defaultGridOptions: uiGrid.IGridOptions = this.defaultGridOptions(services, schema);
-        var gridOptions: uiGrid.IGridOptions = element.options || {};
-        for (var option in defaultGridOptions) {
-            if (defaultGridOptions.hasOwnProperty(option)) {
-                gridOptions[option] = defaultGridOptions[option];
-            }
-        }
-
+        var gridOptions: uiGrid.IGridOptions = this.defaultGridOptions(element.options || {}, services, schema);
         gridOptions.columnDefs = columnsDefs;
         return gridOptions;
     }
-
-    findSearchTerms(grid) {
-        var searchTerms = [];
-        for (var i = 0; i < grid.columns.length; i++) {
-            var searchTerm = grid.columns[i].filters[0].term;
-            if (searchTerm !== undefined && searchTerm !== null) {
-                searchTerms.push({
-                    column: grid.columns[i].getName,
-                    term: searchTerm
-                });
-            }
-        }
-
-        return searchTerms;
-    }
 }
 
-angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
-    RenderService.register(new ArrayRenderer(PathResolver, $rootScope));
+angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
+    RenderService.register(new ArrayRenderer(PathResolver));
 }]);

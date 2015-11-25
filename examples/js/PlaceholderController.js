@@ -64,7 +64,13 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                     "url": "/placeholder-users"
                 }
             }
-        ]
+        ],
+        "options": {
+            enableFiltering: true,
+            // will cause IDataProvider#filter to be called
+            useExternalFiltering: true,
+            pageSizes: [5,10]
+        }
     };
 
     //
@@ -235,7 +241,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                 var start = (page - 1) * this.pageSize;
                 var end = start + this.pageSize;
                 var that = this;
-                return Comments.query({_start: start, _end: end}, function (response) {
+                return toQuery.query({_start: start, _end: end}, function (response) {
                     that.data = response;
                 }).$promise;
             },
@@ -254,6 +260,14 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                         console.log("error occurred: " + JSON.stringify(error));
                     }).$promise;
                 }
+            },
+            filter: function(terms) {
+                var that = this;
+                return toQuery.query(terms, function(response) {
+                    that.data = response;
+                }, function(error) {
+                    console.log("error occurred: " + JSON.stringify(error));
+                }).$promise;
             }
         };
     };
