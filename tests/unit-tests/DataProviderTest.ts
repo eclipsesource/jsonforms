@@ -1,7 +1,7 @@
 /// <reference path="../references.ts"/>
 
 
-describe('Group', () => {
+describe('DataProvider', () => {
 
     // load all necessary modules and templates
     beforeEach(module('jsonforms.form'));

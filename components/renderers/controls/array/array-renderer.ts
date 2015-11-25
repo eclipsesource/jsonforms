@@ -5,9 +5,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
     private maxSize = 99;
     priority = 2;
 
-    constructor(private pathResolver: JSONForms.IPathResolver) {
-
-    }
+    constructor(private pathResolver: JSONForms.IPathResolver) { }
 
     private static isExternalFilterAvailable(dataProvider: JSONForms.IDataProvider,
                                              options: uiGrid.IGridOptions): boolean {
