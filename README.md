@@ -23,5 +23,18 @@ The JSONForms project is build and tested via [Travis](https://travis-ci.org/). 
 
 Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
 
+# Deployment
+
+Run ```grunt deploy``` to deploy a new version. The following tasks are executed:
+
+* Build the distribution
+* Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json) and [bower.json](https://github.com/eclipsesource/jsonforms/blob/master/bower.json)
+* Commit version bump to the current branch
+* Checkout a new temporary deploy-branch
+* Modify [LICENSE](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) file to include all necessary licenses of redistributed libraries
+* Commit distribution files and [LICENSE](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) file
+* Create a new version tag
+* Push the version tag to 'upstream'
+
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
