@@ -247,6 +247,83 @@ module.exports = function(grunt) {
             karma_tests: {
                 src: 'coverage/mapped-coverage.info'
             }
+        },
+
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json'],
+                updateConfigs: ['pkg'],
+                commit: true,
+                commitMessage: 'Bump version to v%VERSION%',
+                commitFiles: ['package.json', 'bower.json'],
+                createTag: false,
+                push: false,
+                globalReplace: false,
+                prereleaseName: false,
+                metadata: '',
+                regExp: false
+            }
+        },
+
+        file_append: {
+            bootstraplicense: {
+                files: [
+                    {
+                        append:"\n############################################################################\n\nThis software includes a modified version of the Bootstrap framework\n(Copyright (c) 2011-2015 Twitter, Inc) within the dist/css/jsonforms.css file.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.",
+                        input: 'LICENSE',
+                        output: 'LICENSE'
+                    }
+                ]
+            }
+        },
+
+        gitcheckout: {
+            deploy: {
+                options: {
+                    branch: 'deploy-v<%= pkg.version %>',
+                    overwrite: true
+                }
+            }
+        },
+
+        gitadd: {
+            deploy: {
+                options: {
+                    force: true
+                },
+                files: {
+                    src: ['dist', 'dist/**/*', 'LICENSE']
+                }
+            }
+        },
+
+        gitcommit: {
+            deploy: {
+                options: {
+                    message: "Release Version v<%= pkg.version %>"
+                },
+                files: {
+                    src: ['dist', 'dist/**/*', 'LICENSE']
+                }
+            }
+        },
+
+        gittag: {
+            deploy: {
+                options: {
+                    tag: 'v<%= pkg.version %>',
+                    message: 'Release version v%= pkg.version %'
+                }
+            }
+        },
+
+        gitpush: {
+            deploy: {
+                options: {
+                    remote: 'upstream',
+                    tags: true
+                }
+            }
         }
     });
 
@@ -287,6 +364,12 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-coveralls');
 
+    grunt.loadNpmTasks('grunt-git');
+
+    grunt.loadNpmTasks('grunt-bump');
+
+    grunt.loadNpmTasks('grunt-file-append');
+
     // Build distribution
     grunt.registerTask('dist', [
         'clean:dist',
@@ -321,6 +404,18 @@ module.exports = function(grunt) {
     // Hint task
     grunt.registerTask('hint', [
         'jshint'
+    ]);
+
+    grunt.registerTask('deploy', [
+        'dist',
+        'bump-only:patch',
+        'bump-commit',
+        'file_append:bootstraplicense',
+        'gitcheckout:deploy',
+        'gitadd:deploy',
+        'gitcommit:deploy',
+        'gittag:deploy',
+        'gitpush:deploy'
     ]);
 
     // Build distribution as default
