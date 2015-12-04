@@ -18,11 +18,11 @@ class HorizontalRenderer implements JSONForms.IRenderer {
             renderedElements[j].size = individualSize;
         }
 
-        var template =`<layout><fieldset>
+        var template =`<jsonforms-layout><fieldset>
                    <div class="row">
-                     <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
+                     <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child"></jsonforms-dynamic-widget>
                    </div>
-                 </fieldset></layout>`;
+                 </fieldset></jsonforms-layout>`;
 
         return JSONForms.RenderDescriptionFactory.createContainerDescription(maxSize,renderedElements,template,services,element.rule);
     };

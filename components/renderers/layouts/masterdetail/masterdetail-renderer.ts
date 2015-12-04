@@ -4,7 +4,7 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
 
     priority = 1;
 
-    constructor(private renderService: JSONForms.IRenderService) { }
+    constructor() { }
 
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
         var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, "");
@@ -12,7 +12,7 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
         <div class="row">
             <!-- Master -->
             <div class="col-sm-30">
-                <masterdetail-collection element="element" collection="element.schema.properties"></masterdetail-collection>
+                <jsonforms-masterdetail-collection element="element" collection="element.schema.properties"></jsonforms-masterdetail-collection>
             </div>
             <!-- Detail -->
             <div class="col-sm-70">
@@ -39,5 +39,5 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
 }
 
 angular.module('jsonforms.renderers.layouts.masterdetail').run(['RenderService', (RenderService) => {
-    RenderService.register(new MasterDetailRenderer(RenderService));
+    RenderService.register(new MasterDetailRenderer());
 }]);

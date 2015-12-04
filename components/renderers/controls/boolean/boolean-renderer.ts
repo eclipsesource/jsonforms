@@ -6,7 +6,9 @@ class BooleanRenderer implements JSONForms.IRenderer {
 
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services) {
         var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath,  services, element.label, element.rule);
-        control['template'] = `<control><input type="checkbox" id="${schemaPath}" class="jsf-control jsf-control-boolean" data-jsonforms-validation data-jsonforms-model/></control>`;
+        control['template'] = `<jsonforms-control>
+          <input type="checkbox" id="${schemaPath}" class="jsf-control jsf-control-boolean" data-jsonforms-validation data-jsonforms-model/>
+        </jsonforms-control>`;
         return control;
     }
 
@@ -15,6 +17,6 @@ class BooleanRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.boolean').run(['RenderService', function(RenderService) {
+angular.module('jsonforms.renderers.controls.boolean').run(['RenderService', (RenderService) => {
     RenderService.register(new BooleanRenderer());
 }]);

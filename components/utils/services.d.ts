@@ -10,6 +10,9 @@ declare module JSONForms{
     export interface IScopeProvider extends IService {
         getScope(): ng.IScope
     }
+    export interface IUiSchemaProvider extends IService {
+        getUiSchema(): IUISchemaElement
+    }
     export interface ISchemaProvider extends IService {
         getSchema(): SchemaElement
     }

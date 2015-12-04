@@ -18,6 +18,7 @@ module JSONForms {
             var schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
 
             // TODO element must be IControl
+            // TODO use isControl
             if (element['scope']) {
                 schemaPath = element['scope']['$ref'];
                 subSchema = this.refResolver.resolveSchema(schema, schemaPath);

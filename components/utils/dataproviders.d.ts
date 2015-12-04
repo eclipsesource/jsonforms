@@ -1,6 +1,7 @@
 ///<reference path="../references.ts"/>
 
 declare module JSONForms{
+
     export interface IDataProvider extends IService {
 
         /**

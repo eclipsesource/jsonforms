@@ -11,7 +11,7 @@ class LabelRenderer implements JSONForms.IRenderer {
         return {
             "type": "Widget",
             "size": size,
-            "template": ` <widget><div class="jsf-label">${text}</div></widget>`
+            "template": ` <jsonforms-widget><div class="jsf-label">${text}</div></jsonforms-widget>`
         };
     }
 

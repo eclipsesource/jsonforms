@@ -1,8 +1,8 @@
 ///<reference path="../../../references.ts"/>
 
-angular.module('jsonforms.renderers.controls.autocomplete').directive('autocomplete', function($timeout):ng.IDirective {
+angular.module('jsonforms.renderers.controls.autocomplete').directive('jsonformsAutocomplete', ($timeout):ng.IDirective => {
 
-    return function(scope, iElement, iAttrs) {
+    return (scope, iElement) => {
         $(iElement)["autocomplete"]({
             source: scope.element.suggestion,
             select: function() {

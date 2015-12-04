@@ -6,7 +6,7 @@ app.run(['RenderService', function(RenderService) {
         return {
             priority: 100,
             render: function(element, schema, schemaPath, services) {
-                var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath);
+                var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element.label, element.rule);
                 control['template'] = '<control><input type="text" style="background-color: #3278b3; color: #8dd0ff" class="jsf-control-string jsf-control form-control" data-jsonforms-model data-jsonforms-validation /></control>'
                 return control;
             },

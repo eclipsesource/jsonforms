@@ -1,6 +1,8 @@
-angular.module('makeithappen').controller('LocalController', ['$scope', function($scope) {
+'use strict';
 
-    $scope.schema = {
+angular.module('makeithappen').controller('LocalController', function() {
+    var vm = this;
+    vm.schema = {
         "type": "object",
         "properties": {
             "id": "user.json",
@@ -45,7 +47,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         },
         "required": ["occupation"]
     };
-    $scope.uiSchema = {
+    vm.uiSchema = {
         "type": "Group",
         "label": "This is a fancy label",
         "elements": [
@@ -188,36 +190,35 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         ]
     };
 
-    $scope.usersSchema = {
+    vm.usersSchema = {
         "type": "object",
         "properties": {
             "users":{
                 "type": "array",
-                "items": $scope.schema
+                "items": vm.schema
             },
             "enemies":{
                 "type": "array",
-                "items": $scope.schema
+                "items": vm.schema
             }
         }
     };
-    $scope.usersUiSchema = {
+    vm.usersUiSchema = {
         "type":"MasterDetailLayout",
         "scope": {
             "$ref": "#"
-        },
+        }
     };
-
-    $scope.data = {
+    vm.data = {
         name: 'John Doe',
         vegetarian: false,
         birthDate: "02.06.1985",
         nationality: "US"
     };
-    $scope.users ={
+    vm.users ={
         "users":
         [
-            $scope.data,
+            vm.data,
             {
                 name: 'Todd',
                 personalData:{age: 33}
@@ -261,7 +262,7 @@ angular.module('makeithappen').controller('LocalController', ['$scope', function
         ]
     };
 
-    $scope.formattedData = function() {
-        return JSON.stringify($scope.users, null, 4);
+    vm.formattedData = function() {
+        return JSON.stringify(vm.users, null, 4);
     };
-}]);
+});

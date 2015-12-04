@@ -10,11 +10,11 @@ class CategorizationRenderer implements JSONForms.IRenderer {
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
-        var template = `<layout>
+        var template = `<jsonforms-layout>
             <tabset>
-                <dynamic-widget ng-repeat="child in element.elements" element="child"></dynamic-widget>
+                <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child"></jsonforms-dynamic-widget>
             </tabset>
-        </layout>`;
+        </jsonforms-layout>`;
 
         return JSONForms.RenderDescriptionFactory.createContainerDescription(99,renderedElements,template,services,element.rule);
     }
@@ -24,6 +24,6 @@ class CategorizationRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.layouts.categories.categorization').run(['RenderService', function(RenderService) {
+angular.module('jsonforms.renderers.layouts.categories.categorization').run(['RenderService', (RenderService) => {
     RenderService.register(new CategorizationRenderer(RenderService));
 }]);
