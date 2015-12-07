@@ -124,16 +124,16 @@ class ArrayRenderer implements JSONForms.IRenderer {
             "type": "Control",
             "gridOptions": gridOptions,
             "size": this.maxSize,
-            "template": `<control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination ui-grid-edit class="grid"></div></control>`
+            "template": `<jsonforms-control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination ui-grid-edit class="grid"></div></jsonforms-control>`
         };
     }
 
     private generateColumnDefs(schema: SchemaElement, schemaPath: string): any {
         var columnsDefs = [];
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
-        var items = subSchema['items'];
         // TODO: items
-        if (items['type'] == 'object') {
+        if (subSchema !== undefined && subSchema['items'] !== undefined && subSchema['items']['type'] == 'object') {
+            var items = subSchema['items'];
             for (var prop in items['properties']) {
                 if (items['properties'].hasOwnProperty(prop)) {
                     var colDef = {
@@ -215,6 +215,6 @@ class ArrayRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', function(RenderService, PathResolver) {
+angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
     RenderService.register(new ArrayRenderer(PathResolver));
 }]);

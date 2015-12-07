@@ -1,19 +1,8 @@
 'use strict';
 
-angular.module('makeithappen').controller('EditorController', ['RenderService', 'PathResolver', '$scope', function(RenderService, PathResolver, $scope) {
+angular.module('makeithappen').controller('EditorController', function($scope) {
 
-    $scope.localModelDefault = JSON.stringify($scope.schema, undefined, 2);
-    $scope.localViewDefault = JSON.stringify($scope.uiSchema, undefined, 2);
-    $scope.localModel = $scope.localModelDefault;
-    $scope.localView = $scope.localViewDefault;
-
-    $scope.data = {};
-
-    $scope.$watch('localView', function(newValue, oldValue) {
-        if (newValue !== undefined) {
-            $scope.uiSchema = JSON.parse(newValue);
-        }
-    });
+    var vm = this;
 
     $scope.aceLoaded = function(editor) {
         editor.$blockScrolling = Infinity;
@@ -23,6 +12,15 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
         });
+    };
+
+    // TODO: we currently don't $watch the schema
+    $scope.schemaChanged = function(e) {
+        vm.schema = JSON.parse(vm.localModel);
+    };
+
+    $scope.uiSchemaChanged = function(e) {
+        vm.uiSchema = JSON.parse(vm.localView);
     };
 
     function replaceRefLinks(viewModelObject){
@@ -41,7 +39,7 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
         }
     }
 
-    $scope.uiSchema = {
+    vm.uiSchema = {
 
         "type": "HorizontalLayout",
         "elements": [
@@ -141,7 +139,7 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
         ]
     };
 
-    $scope.schema = {
+    vm.schema = {
         "type": "object",
         "properties": {
             "id": {
@@ -201,4 +199,10 @@ angular.module('makeithappen').controller('EditorController', ['RenderService', 
             "email"
         ]
     };
-}]);
+
+    vm.localModelDefault = JSON.stringify(vm.schema, undefined, 2);
+    vm.localViewDefault = JSON.stringify(vm.uiSchema, undefined, 2);
+    vm.localModel = vm.localModelDefault;
+    vm.localView = vm.localViewDefault;
+    vm.data = {};
+});

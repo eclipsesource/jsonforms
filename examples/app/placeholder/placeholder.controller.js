@@ -1,10 +1,12 @@
-angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$resource', '$routeParams', function($scope, $resource, $routeParams) {
+angular.module('makeithappen').controller('PlaceholderController', ['$resource', '$routeParams', function($resource, $routeParams) {
+
+    var vm = this;
 
     //
     // Posts --
     //
 
-    $scope.postsSchema = {
+    vm.postsSchema = {
         "type": "object",
         "definitions": {
             "post": {
@@ -30,7 +32,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         }
     };
 
-    $scope.postsSchema = {
+    vm.postsSchema = {
         "type": "array",
         "items": {
             "type": "object",
@@ -43,9 +45,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         }
     };
 
-    $scope.postSchema = $scope.postsSchema.items;
+    vm.postSchema = vm.postsSchema.items;
 
-    $scope.postsUiSchema = {
+    vm.postsUiSchema = {
         "type": "Control",
         "scope": { "$ref": "#" },
         "columns": [
@@ -77,7 +79,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
     // Users --
     //
 
-    $scope.userUiSchema = {
+    vm.userUiSchema = {
         "type": "VerticalLayout",
         "elements": [{
             "type": "Control",
@@ -85,7 +87,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         }]
     };
 
-    $scope.usersUiSchema = {
+    vm.usersUiSchema = {
         "type": "Control",
         "scope": { "$ref": "#" },
         "columns": [
@@ -116,7 +118,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         ]
     };
 
-    $scope.usersSchema = {
+    vm.usersSchema = {
         "type": "array",
         "items": {
             "type": "object",
@@ -129,12 +131,12 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         }
     };
 
-    $scope.userSchema = $scope.usersSchema.items;
+    vm.userSchema = vm.usersSchema.items;
 
     //
     // Comments --
     //
-    $scope.commentUiSchema = {
+    vm.commentUiSchema = {
         "type": "VerticalLayout",
         "elements": [
             {
@@ -157,7 +159,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         ]
     };
 
-    $scope.commentsUiSchema = {
+    vm.commentsUiSchema = {
         "type": "Control",
         "scope": { "$ref": "#" },
         "columns": [
@@ -188,7 +190,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         ]
     };
 
-    $scope.commentsSchema = {
+    vm.commentsSchema = {
         "type": "array",
         "items": {
             "type": "object",
@@ -202,7 +204,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
         }
     };
 
-    $scope.commentSchema = $scope.commentsSchema.items;
+    vm.commentSchema = vm.commentsSchema.items;
 
     //
     // Resources --
@@ -212,9 +214,9 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
     var Users = $resource('http://localhost:3000/users/:id');
     var Comments = $resource('http://localhost:3000/comments/:id');
 
-    $scope.id = $routeParams.id;
+    vm.id = $routeParams.id;
 
-    var createDataProvider = function(toQuery) {
+    function createDataProvider(toQuery) {
         return {
             page: 0,
             pageSize: 10,
@@ -270,12 +272,12 @@ angular.module('makeithappen').controller('PlaceholderController', ['$scope', '$
                 }).$promise;
             }
         };
-    };
+    }
 
-    $scope.CommentDataProvider = createDataProvider(Comments);
-    $scope.PostsDataProvider = createDataProvider(Posts);
-    $scope.UserDataProvider = createDataProvider(Users);
-    $scope.UserDataProvider.setPageSize(5);
+    vm.CommentDataProvider = createDataProvider(Comments);
+    vm.PostsDataProvider = createDataProvider(Posts);
+    vm.UserDataProvider = createDataProvider(Users);
+    vm.UserDataProvider.setPageSize(5);
 
 }]);
 

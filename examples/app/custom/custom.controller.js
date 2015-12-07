@@ -1,6 +1,8 @@
-angular.module('makeithappen').controller('MyController', ['$scope', function($scope) {
+'use strict';
 
-    $scope.schema = {
+angular.module('makeithappen').controller('CustomController', function() {
+    var vm = this;
+    vm.schema = {
         "type": "object",
         "properties": {
             "firstName": {
@@ -45,7 +47,7 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
         },
         "required": ["lastName", "firstName"]
     };
-    $scope.uiSchema = {
+    vm.uiSchema = {
         "type": "VerticalLayout",
         "elements": [
             {
@@ -75,12 +77,12 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
             },
             {
                 "type": "Control",
-                "scope": { "$ref": "#/properties/friends" },
+                "scope": { "$ref": "#/properties/friends" }
             }
         ]
     };
 
-    $scope.data = {
+    vm.data = {
         "hobbies": ["cooking", "playing video games"],
         "friends": [{
             "nickName": "Ottgar",
@@ -88,8 +90,8 @@ angular.module('makeithappen').controller('MyController', ['$scope', function($s
         }]
     };
 
-    $scope.formattedData = function() {
-        return JSON.stringify($scope.data, null, 4);
+    vm.formattedData = function() {
+        return JSON.stringify(vm.data, null, 4);
     };
-}]);
+});
 

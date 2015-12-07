@@ -1,6 +1,8 @@
 ///<reference path="../../references.ts"/>
 
-angular.module('jsonforms.renderers.layouts').directive('layout', ():ng.IDirective => {
+
+
+angular.module('jsonforms.renderers.layouts').directive('jsonformsLayout', ():ng.IDirective => {
     return {
         restrict: "E",
         replace: true,

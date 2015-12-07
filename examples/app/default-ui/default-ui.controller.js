@@ -1,6 +1,6 @@
-angular.module('makeithappen').controller('DefaultUISchemaController', ['$scope', function($scope) {
-
-    $scope.schema = {
+angular.module('makeithappen').controller('DefaultUISchemaController', function() {
+    var vm = this;
+    vm.schema = {
         "type": "object",
         "properties": {
             "id": "user.json",
@@ -13,14 +13,14 @@ angular.module('makeithappen').controller('DefaultUISchemaController', ['$scope'
         }
     };
 
-    $scope.uiSchema = undefined;
+    vm.uiSchema = undefined;
 
-    $scope.data = {
+    vm.data = {
         name: 'John Doe',
         age: 36
     };
 
-    $scope.formattedData = function() {
-        return JSON.stringify($scope.data, null, 4);
+    vm.formattedData = function() {
+        return JSON.stringify(vm.data, null, 4);
     };
-}]);
+});

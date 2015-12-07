@@ -10,13 +10,13 @@ class GroupRenderer implements JSONForms.IRenderer {
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(element.elements, this.renderService, services);
         var label = element.label ? element.label : "";
-        var template = `<layout class="jsf-group">
+        var template = `<jsonforms-layout class="jsf-group">
               <fieldset>
                 <legend>${label}</legend>
-                <dynamic-widget ng-repeat="child in element.elements" element="child">
-                </dynamic-widget>
+                <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child">
+                </jsonforms-dynamic-widget>
                </fieldset>
-             </layout>`;
+             </jsonforms-layout>`;
 
         return JSONForms.RenderDescriptionFactory.createContainerDescription(99,renderedElements,template,services,element.rule);
     }

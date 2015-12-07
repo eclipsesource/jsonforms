@@ -2,10 +2,6 @@
 
 declare module JSONForms {
     export interface IPathResolver {
-        //addUiPathToSchemaRefMapping(addition:any): void
-
-        //getSchemaRef(uiSchemaPath:string): any
-
         toInstancePath(schemaPath:string): string
 
         resolveUi(instance:any, uiPath:string): any
