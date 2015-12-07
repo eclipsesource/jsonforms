@@ -19,7 +19,7 @@ class CategoryRenderer implements JSONForms.IRenderer {
             </jsonforms-layout>
         </tab>`;
 
-        return JSONForms.RenderDescriptionFactory.createContainerDescription(99,renderedElements,template,services,element.rule);
+        return JSONForms.RenderDescriptionFactory.createContainerDescription(99, renderedElements, template, services, element);
     }
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {

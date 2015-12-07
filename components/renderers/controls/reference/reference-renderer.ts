@@ -7,7 +7,7 @@ class ReferenceRenderer implements JSONForms.IRenderer {
     constructor(private pathResolver: JSONForms.IPathResolver) {}
 
     render(element:IUISchemaElement, schema:SchemaElement, schemaPath:string, services: JSONForms.Services) {
-        var control = new JSONForms.ControlRenderDescription(schemaPath, services, element.label, element.rule);
+        var control = new JSONForms.ControlRenderDescription(schemaPath, services, element);
         var normalizedPath = this.pathResolver.toInstancePath(schemaPath);
         var prefix = element.label ? element.label : "Go to ";
         var linkText = element['href']['label'] ? element['href']['label'] : control.label;
