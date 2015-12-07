@@ -84,8 +84,6 @@ class FormController {
 
             services.add(dataProvider);
 
-console.log("the ui schema is " + JSON.stringify(uiSchema))
-
             this.elements = [this.RenderService.render(this.scope, uiSchema, services)];
         });
     }
@@ -164,7 +162,6 @@ class JsonFormsDirective implements ng.IDirective {
         ctrl.element = el;
         scope.$watchGroup(['data', 'uiSchema'], (newValue) => {
             if (angular.isDefined(newValue)){
-                console.log("data changed");
                 ctrl.init();
             }
         });

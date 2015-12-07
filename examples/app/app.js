@@ -19,7 +19,7 @@ angular.module('makeithappen', [
         });
         $routeProvider.when('/custom', {
             templateUrl: 'app/custom/custom.html',
-            controller: 'MyController',
+            controller: 'CustomController',
             controllerAs: 'vm'
         });
         $routeProvider.when('/defaultui', {

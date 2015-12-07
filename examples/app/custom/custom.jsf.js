@@ -1,7 +1,7 @@
 var app = angular.module('makeithappen');
 app.run(['RenderService', function(RenderService) {
 
-    function MyControl() {
+    function CustomControl() {
 
         return {
             priority: 100,
@@ -17,5 +17,5 @@ app.run(['RenderService', function(RenderService) {
         }
     }
 
-    RenderService.register(new MyControl());
+    RenderService.register(new CustomControl());
 }]);
