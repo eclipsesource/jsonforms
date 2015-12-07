@@ -18,9 +18,7 @@ class FormController {
         private SchemaGenerator: JSONForms.ISchemaGenerator,
         private $q: ng.IQService,
         private scope: JsonFormsDirectiveScope
-    ) {
-
-    }
+    ) { }
 
     public init() {
         if (this.isInitialized) {
@@ -135,11 +133,11 @@ console.log("the ui schema is " + JSON.stringify(uiSchema))
     }
 
     private static isDataProvider(testMe: any): testMe is JSONForms.IDataProvider {
-        return testMe.hasOwnProperty('fetchData');
+        return testMe !== undefined && testMe.hasOwnProperty('fetchData');
     }
 
     private static isUiSchemaProvider(testMe: any): testMe is JSONForms.IUiSchemaProvider {
-        return testMe.hasOwnProperty('fetchUiSchema');
+        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
     }
 }
 
