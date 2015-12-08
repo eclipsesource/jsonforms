@@ -249,7 +249,6 @@ angular.module('makeithappen').controller('PlaceholderController', ['$resource',
                 if ($routeParams.id) {
                     return toQuery.get({"id": $routeParams['id']}, function (response) {
                         that.data = response;
-                        console.log("response is " + JSON.stringify(typeof response["id"]));
                     }, function (error) {
                         console.log("error occurred: " + JSON.stringify(error));
                     }).$promise;
