@@ -47,8 +47,8 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath:string, services:JSONForms.Services, label?:string, rule?:IRule):IRenderDescription {
-            return new ControlRenderDescription(schemaPath, services, label, rule);
+        static createControlDescription(schemaPath:string, services:JSONForms.Services, element: IUISchemaElement):IRenderDescription {
+            return new ControlRenderDescription(schemaPath, services, element);
         }
 
         static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
@@ -60,16 +60,24 @@ module JSONForms {
             });
         }
 
-        static createContainerDescription(size:number, elements:any, template:string, services: JSONForms.Services, rule?:IRule ){
-            return new ContainerRenderDescription(size,elements, template, services, rule);
+        static createContainerDescription(size:number, elements:any, template:string, services: JSONForms.Services, element: IUISchemaElement){
+            return new ContainerRenderDescription(size, elements, template, services, element);
         }
     }
 
     export class ContainerRenderDescription implements IContainerRenderDescription {
         type= "Layout";
         public instance: any;
-        constructor(public size:number,public elements:any, public template:string, services: JSONForms.Services,public rule?:IRule){
+        public size: number;
+        public elements: IControlRenderDescription[];
+        public template: string;
+        public rule: IRule;
+        constructor(size:number, elements: IControlRenderDescription[], template: string, services: JSONForms.Services, element: IUISchemaElement){
+            this.size = size;
+            this.elements = elements;
+            this.template = template;
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
+            this.rule = element.rule;
             services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
         }
     }
@@ -80,6 +88,7 @@ module JSONForms {
         public size = 99;
         public alerts: any[] = []; // TODO IAlert type missing
         public label: string;
+        public rule: IRule;
         public path: string;
         public instance: any;
 
@@ -89,7 +98,7 @@ module JSONForms {
         private ruleService: IRuleService;
         private scope: ng.IScope;
 
-        constructor(private schemaPath: string, services: JSONForms.Services, label?: string, public rule?:IRule) {
+        constructor(private schemaPath: string, services: JSONForms.Services, element: IUISchemaElement) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
@@ -98,7 +107,8 @@ module JSONForms {
             this.scope = services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope();
 
             this.path = PathUtil.normalize(schemaPath);
-            this.label = this.createLabel(schemaPath, label);
+            this.label = this.createLabel(schemaPath, element.label);
+            this.rule  = element.rule;
             this.ruleService.addRuleTrack(this);
             this.setupModelChangedCallback();
         }

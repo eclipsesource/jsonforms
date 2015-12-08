@@ -7,7 +7,7 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
     constructor() { }
 
     render(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, "");
+        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['template'] = `
         <div class="row">
             <!-- Master -->

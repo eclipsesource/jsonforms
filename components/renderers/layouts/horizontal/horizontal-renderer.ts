@@ -24,7 +24,7 @@ class HorizontalRenderer implements JSONForms.IRenderer {
                    </div>
                  </fieldset></jsonforms-layout>`;
 
-        return JSONForms.RenderDescriptionFactory.createContainerDescription(maxSize,renderedElements,template,services,element.rule);
+        return JSONForms.RenderDescriptionFactory.createContainerDescription(maxSize, renderedElements, template, services, element);
     };
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
