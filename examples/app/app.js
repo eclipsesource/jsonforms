@@ -43,7 +43,7 @@ angular.module('makeithappen', [
             controllerAs: 'vm'
         });
         $routeProvider.when('/placeholder-comments/:id?', {
-            templateUrl: 'placeholder/placeholder-comments.html',
+            templateUrl: 'app/placeholder/placeholder-comments.html',
             controller: 'PlaceholderController',
             controllerAs: 'vm'
         });

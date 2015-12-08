@@ -13,7 +13,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$resource',
                 "type": "object",
                 "properties": {
                     "userId": {"type": "number"},
-                    "id": {"type": "string"},
+                    "id":    {"type": "number"},
                     "title": {"type": "string"},
                     "body": {"type": "string"}
                 }
@@ -38,7 +38,7 @@ angular.module('makeithappen').controller('PlaceholderController', ['$resource',
             "type": "object",
             "properties": {
                 "userId": { "type": "number" },
-                "id":     { "type": "string" },
+                "id":     { "type": "number" },
                 "title":  { "type": "string" },
                 "body":   { "type": "string" }
             }
@@ -196,10 +196,10 @@ angular.module('makeithappen').controller('PlaceholderController', ['$resource',
             "type": "object",
             "properties": {
                 "postId": {"type": "number"},
-                "id": {"type": "number"},
-                "name": {"type": "string"},
-                "email": {"type": "string"},
-                "body": {"type": "string"}
+                "id":     {"type": "number"},
+                "name":   {"type": "string"},
+                "email":  {"type": "string"},
+                "body":   {"type": "string"}
             }
         }
     };
@@ -226,9 +226,6 @@ angular.module('makeithappen').controller('PlaceholderController', ['$resource',
             },
             getPage: function () {
                 return this.page;
-            },
-            getPageSize: function () {
-                return this.pageSize;
             },
             setPageSize: function (size) {
                 this.pageSize = size;
