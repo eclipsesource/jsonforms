@@ -292,7 +292,7 @@ module.exports = function(grunt) {
                     force: true
                 },
                 files: {
-                    src: ['dist', 'dist/**/*', 'LICENSE']
+                    src: ['dist', 'dist/**/*', 'LICENSE', 'components/references.ts']
                 }
             }
         },
@@ -303,7 +303,7 @@ module.exports = function(grunt) {
                     message: "Release Version v<%= pkg.version %>"
                 },
                 files: {
-                    src: ['dist', 'dist/**/*', 'LICENSE']
+                    src: ['dist', 'dist/**/*', 'LICENSE', 'components/references.ts']
                 }
             }
         },
