@@ -4,15 +4,15 @@ module JSONForms {
 
 
     export class DataProviders {
-        static canPage(provider: IDataProvider): provider is CanPage {
+        static canPage(provider: IDataProvider): provider is IPagingDataProvider {
             return provider.canPage;
         }
-        static canFilter(provider: IDataProvider): provider is CanFilter {
+        static canFilter(provider: IDataProvider): provider is IFilteringDataProvider {
             return provider.canFilter;
         }
     }
 
-    export class DefaultDataProvider implements IDataProvider, CanPage {
+    export class DefaultDataProvider implements IPagingDataProvider {
         canPage = true;
         canFilter = false;
 

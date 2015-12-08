@@ -18,12 +18,12 @@ declare module JSONForms {
          */
         getData(): any
 
-        canPage: boolean;
+        canPage: boolean
 
         canFilter: boolean
     }
 
-    export interface CanPage extends IDataProvider {
+    export interface IPagingDataProvider extends IDataProvider {
 
         /**
          * Fetches the given page of data.
@@ -50,7 +50,7 @@ declare module JSONForms {
         setPageSize(size:number)
     }
 
-    export interface CanFilter extends IDataProvider {
+    export interface IFilteringDataProvider extends IDataProvider {
         /**
          * Fetches the data filtered accordingly to the given terms.
          *

@@ -1,5 +1,6 @@
 /// <reference path="../references.ts"/>
 
+import DefaultDataProvider = JSONForms.DefaultDataProvider;
 describe('DataProvider', () => {
 
     // load all necessary modules and templates
@@ -12,10 +13,10 @@ describe('DataProvider', () => {
     beforeEach(module('components/renderers/controls/control.html'));
 
     var $q, $timeout;
+    var data = [{ name: "foo" }, { name: "bar" }, { name: "baz" }];
 
-    class MyDataProvider implements JSONForms.IDataProvider {
+    class FilteringDataProvider implements JSONForms.IDataProvider {
 
-        data = [{ name: "foo" }, { name: "bar" }, { name: "baz" }];
 
         constructor(private $q: ng.IQService) {}
 
@@ -24,12 +25,12 @@ describe('DataProvider', () => {
 
         fetchData():angular.IPromise<any> {
             var p = this.$q.defer();
-            p.resolve(this.data);
+            p.resolve(data);
             return p.promise;
         }
 
         getData():any {
-            return this.data;
+            return data;
         }
 
         getId():JSONForms.ServiceId {
@@ -38,11 +39,12 @@ describe('DataProvider', () => {
 
         filter(names: string[]) {
             var p = this.$q.defer();
-            var filtered = this.data.filter((obj) => names.indexOf(obj.name) != -1);
+            var filtered = data.filter((obj) => names.indexOf(obj.name) != -1);
             p.resolve(filtered);
             return p.promise;
         }
     }
+
 
     beforeEach(inject(function(_$q_, _$timeout_) {
         $q = _$q_;
@@ -50,7 +52,7 @@ describe('DataProvider', () => {
     }));
 
     it("should resolve properties path on the UI schema", (done) => {
-        var provider = new MyDataProvider($q);
+        var provider = new FilteringDataProvider($q);
         var promise = provider.filter(['baz']);
         promise.then((filtered: any[]) => {
             expect(filtered.length).toBe(1);
@@ -58,13 +60,23 @@ describe('DataProvider', () => {
         $timeout.flush();
     });
 
+    it("should be able to filter", () => {
+        var provider = new FilteringDataProvider($q);
+        expect(JSONForms.DataProviders.canFilter(provider)).toBe(true);
+    });
+
     it("should not be able to page", () => {
-        var provider = new MyDataProvider($q);
+        let provider = new FilteringDataProvider($q);
         expect(JSONForms.DataProviders.canPage(provider)).toBe(false);
     });
 
-    it("should be able to filter", () => {
-        var provider = new MyDataProvider($q);
-        expect(JSONForms.DataProviders.canFilter(provider)).toBe(true);
+    it("should be able to page", () => {
+        let provider = new DefaultDataProvider($q, data);
+        expect(JSONForms.DataProviders.canPage(provider)).toBe(true);
+    });
+
+    it("should not be able to filter", () => {
+        let provider = new DefaultDataProvider($q, data);
+        expect(JSONForms.DataProviders.canFilter(provider)).toBe(false);
     });
 });
