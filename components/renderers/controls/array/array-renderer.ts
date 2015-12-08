@@ -7,18 +7,6 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
     constructor(private pathResolver: JSONForms.IPathResolver) { }
 
-    private static isExternalFilterAvailable(dataProvider: JSONForms.IDataProvider,
-                                             options: uiGrid.IGridOptions): boolean {
-        return dataProvider.filter !== undefined &&
-            options.hasOwnProperty('useExternalFiltering');
-    }
-
-    private static isExternalPagingAvailable(dataProvider: JSONForms.IDataProvider,
-                                             options: uiGrid.IGridOptions) {
-        return dataProvider.fetchPage !== undefined &&
-                options.hasOwnProperty('useExternalPagination');
-    }
-
     private defaultGridOptions(existingOptions: uiGrid.IGridOptions,
                                services: JSONForms.Services, schema: SchemaElement): uiGrid.IGridOptions {
 
@@ -26,11 +14,10 @@ class ArrayRenderer implements JSONForms.IRenderer {
         var validationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
         var scope = services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope();
 
-        let externalPaginationEnabled = ArrayRenderer.isExternalPagingAvailable(dataProvider, existingOptions);
-        let externalFilteringEnabled  = ArrayRenderer.isExternalFilterAvailable(dataProvider, existingOptions);
+        let externalPaginationEnabled = existingOptions.hasOwnProperty('useExternalPagination');
+        let externalFilteringEnabled  = existingOptions.hasOwnProperty('useExternalFiltering');
 
         var defaultGridOptions:uiGrid.IGridOptions = {};
-        defaultGridOptions.totalItems = dataProvider.getTotalItems();
         defaultGridOptions.enableColumnResizing = true;
         defaultGridOptions.enableHorizontalScrollbar = 0;
         defaultGridOptions.enableVerticalScrollbar = 0;
@@ -43,8 +30,12 @@ class ArrayRenderer implements JSONForms.IRenderer {
             defaultGridOptions.useExternalPagination = true;
         }
 
+        if (JSONForms.DataProviders.canPage(dataProvider)) {
+            defaultGridOptions.totalItems = dataProvider.getTotalItems()
+        }
+
         defaultGridOptions.onRegisterApi = (gridApi) => {
-            if (externalPaginationEnabled) {
+            if (JSONForms.DataProviders.canPage(dataProvider) && externalPaginationEnabled) {
                 gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
                     defaultGridOptions.paginationCurrentPage = newPage;
                     defaultGridOptions.paginationPageSize = pageSize;
@@ -54,7 +45,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
                     });
                 });
             }
-            if (externalFilteringEnabled) {
+            if (JSONForms.DataProviders.canFilter(dataProvider) && externalFilteringEnabled) {
                 gridApi.core.on.filterChanged(scope, () => {
                     var columns = gridApi.grid.columns;
                     var terms = columns.reduce((acc, column) => {

@@ -2,7 +2,19 @@
 
 module JSONForms {
 
-    export class DefaultDataProvider implements IDataProvider {
+
+    export class DataProviders {
+        static canPage(provider: IDataProvider): provider is IPagingDataProvider {
+            return provider.canPage;
+        }
+        static canFilter(provider: IDataProvider): provider is IFilteringDataProvider {
+            return provider.canFilter;
+        }
+    }
+
+    export class DefaultDataProvider implements IPagingDataProvider {
+        canPage = true;
+        canFilter = false;
 
         private _page = 0;
         private _pageSize = 2;
@@ -18,14 +30,6 @@ module JSONForms {
 
         getData():any {
             return this._data;
-        }
-
-        getPageSize():number {
-            return this._pageSize;
-        }
-
-        getPage():number {
-            return this._page;
         }
 
         fetchData(): ng.IPromise<any> {
@@ -54,32 +58,21 @@ module JSONForms {
         getTotalItems():number {
             return this._data.length;
         }
-
-        filter(terms:any):angular.IPromise<any> {
-            return undefined;
-        }
     }
 
     export class DefaultInternalDataProvider implements IDataProvider {
 
-        private _pageSize:number;
-        private _page:number;
         private _data:any;
 
         constructor(data: any) {
             this._data = data;
         }
 
+        get canPage(): boolean { return false };
+        get canFilter(): boolean { return false };
+
         getId():JSONForms.ServiceId {
             return ServiceId.DataProvider;
-        }
-
-        getPageSize():number {
-            return this._pageSize;
-        }
-
-        getPage():number {
-            return this._page;
         }
 
         getData():any {
@@ -90,16 +83,6 @@ module JSONForms {
             return undefined;
         }
 
-        fetchPage(page:number):angular.IPromise<any> {
-            return undefined;
-        }
-
-        filter():angular.IPromise<any> {
-            return undefined;
-        }
-
-        setPageSize(size:number) {
-        }
 
         getTotalItems() {
             return this._data.length;
