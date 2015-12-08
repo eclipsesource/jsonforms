@@ -1,6 +1,6 @@
 ///<reference path="../references.ts"/>
 
-declare module JSONForms{
+declare module JSONForms {
 
     export interface IDataProvider extends IService {
 
@@ -11,7 +11,6 @@ declare module JSONForms{
          */
         fetchData(): ng.IPromise<any>
 
-
         /**
          * Returns the instance.
          *
@@ -19,34 +18,20 @@ declare module JSONForms{
          */
         getData(): any
 
+        canPage: boolean;
+
+        canFilter: boolean
+    }
+
+    export interface CanPage extends IDataProvider {
+
         /**
          * Fetches the given page of data.
          *
          * @param page the page to be fetched
          * @return a promise returning the fetched data
          */
-        fetchPage?(page:number): ng.IPromise<any>
-
-        /**
-         * Returns the currently used page size by the data provider.
-         *
-         * @return {number} the current page size
-         */
-        getPageSize?(): number
-
-        /**
-         * Set the page size to be used by the data provider.
-         *
-         * @param size the page size
-         */
-        setPageSize?(size:number)
-
-        /**
-         * Returns the current page the data provider currently has in scope.
-         *
-         * @return {number} the current page
-         */
-        getPage?(): number
+        fetchPage(page:number): ng.IPromise<any>
 
         /**
          * Returns the overall number of items available.
@@ -55,13 +40,22 @@ declare module JSONForms{
          *
          * @return {number} the overall number of items
          */
-        getTotalItems?(): number
+        getTotalItems(): number
 
+        /**
+         * Set the page size to be used by the data provider.
+         *
+         * @param size the page size
+         */
+        setPageSize(size:number)
+    }
+
+    export interface CanFilter extends IDataProvider {
         /**
          * Fetches the data filtered accordingly to the given terms.
          *
          * @param terms search terms
          */
-        filter?(terms: any): ng.IPromise<any>
+        filter(terms: any): ng.IPromise<any>
     }
 }

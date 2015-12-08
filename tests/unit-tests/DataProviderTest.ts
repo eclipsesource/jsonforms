@@ -1,6 +1,5 @@
 /// <reference path="../references.ts"/>
 
-
 describe('DataProvider', () => {
 
     // load all necessary modules and templates
@@ -15,19 +14,13 @@ describe('DataProvider', () => {
     var $q, $timeout;
 
     class MyDataProvider implements JSONForms.IDataProvider {
-        data = [
-            {
-                name: "foo"
-            },
-            {
-                name: "bar"
-            },
-            {
-                name: "baz"
-            }
-        ];
+
+        data = [{ name: "foo" }, { name: "bar" }, { name: "baz" }];
 
         constructor(private $q: ng.IQService) {}
+
+        get canPage(): boolean { return false; }
+        get canFilter() :boolean { return true; }
 
         fetchData():angular.IPromise<any> {
             var p = this.$q.defer();
@@ -63,5 +56,15 @@ describe('DataProvider', () => {
             expect(filtered.length).toBe(1);
         }).finally(done);
         $timeout.flush();
+    });
+
+    it("should not be able to page", () => {
+        var provider = new MyDataProvider($q);
+        expect(JSONForms.DataProviders.canPage(provider)).toBe(false);
+    });
+
+    it("should be able to filter", () => {
+        var provider = new MyDataProvider($q);
+        expect(JSONForms.DataProviders.canFilter(provider)).toBe(true);
     });
 });
