@@ -151,6 +151,8 @@ module JSONForms {
 
         private setupModelChangedCallback():void {
             this.scope.$on('modelChanged', () => {
+                // TODO: remote references to services
+                // instead try to iterate over all services and call some sort of notifier
                 this.validate();
                 this.ruleService.reevaluateRules(this.schemaPath);
             })
