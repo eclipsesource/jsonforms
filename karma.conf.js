@@ -1,7 +1,7 @@
 module.exports = function(config){
     config.set({
 
-        basePath : '../../',
+        basePath : '',
 
         // load templates as module
         preprocessors: {
@@ -21,7 +21,6 @@ module.exports = function(config){
             'components/utils/**/*.js',
             'components/**/jsonforms*.js',
             'components/**/*.js',
-            'tests/unit-tests/**/*.js',
             'components/**/*.html'
         ],
 

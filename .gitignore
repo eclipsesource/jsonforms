@@ -16,7 +16,7 @@ tests/references.ts
 # all js files in tests except the configs
 tests/**/*.js
 !tests/e2e-tests/protractor.conf.js
-!tests/unit-tests/karma.conf.js
+!karma.conf.js
 
 # typescript mappings
 **/*.map

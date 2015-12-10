@@ -21,10 +21,10 @@ module.exports = function(grunt) {
                 '<%= grunt.template.today("yyyy-mm-dd") %> Copyright (c) EclipseSource Muenchen GmbH and others. */ \n' +
                 "'use strict';\n"
             },
-            utils: {
-              src: ['components/utils/**/*.js'],
+            services: {
+              src: ['components/services/**/*.js', '!components/services/**/*.spec.js'],
               filter: 'isFile',
-              dest: 'temp/utils.js'
+              dest: 'temp/services.js'
             },
             jsonforms_module: {
                 src: ['components/**/jsonforms-*.js'],
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 // Concat all files from components directory and include the embedded templates
-                src: ['temp/utils.js', 'temp/jsonforms-module.js', 'temp/**/*.js'],
+                src: ['temp/services.js', 'temp/jsonforms-module.js', 'temp/**/*.js'],
                 filter: 'isFile',
                 dest: 'dist/js/<%= pkg.name %>.js'
             }
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
         ts: {
             dist: {
-                src: ['components/**/*.ts', ['typings/**/*.ts']],
+                src: ['components/**/*.ts', ['!components/**/*.spec.ts', 'typings/**/*.ts']],
                 dest: '',
                 reference: 'components/references.ts',
                 options: {
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                 }
             },
             test: {
-                src: ['tests/**/*.ts', 'components/references.ts'],
+                src: ['tests/**/*.ts', 'components/references.ts', 'components/**/*.spec.ts'],
                 dest: '',
                 reference: 'tests/references.ts',
                 options: {
@@ -141,7 +141,7 @@ module.exports = function(grunt) {
         // Config for Karma (Unit Test) Task
         karma: {
             unit: {
-                configFile: 'tests/unit-tests/karma.conf.js',
+                configFile: 'karma.conf.js',
                 singleRun: true
             }
         },
@@ -198,7 +198,7 @@ module.exports = function(grunt) {
                 'components/**/*.js.map',
                 'tests/references.ts',
                 'tests/**/*.js',
-                '!tests/**/*.conf.js',
+                '!**/*.conf.js',
                 'tests/**/*.js.map'
             ],
             downloads: [
@@ -221,7 +221,7 @@ module.exports = function(grunt) {
                 'components/**/*.js.map',
                 'tests/references.ts',
                 'tests/**/*.js',
-                '!tests/**/*.conf.js',
+                '!**/*.conf.js',
                 'tests/**/*.js.map',
                 'examples/bower_components',
                 'node_modules',
@@ -378,7 +378,7 @@ module.exports = function(grunt) {
         'ts:dist',
         'ngtemplates:dist',
         'angular-builder',
-        'concat:utils',
+        'concat:services',
         'concat:jsonforms_module',
         'concat:dist',
         'uglify:dist'
