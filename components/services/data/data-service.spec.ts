@@ -1,6 +1,5 @@
-/// <reference path="../references.ts"/>
+/// <reference path="../../references.ts"/>
 
-import DefaultDataProvider = JSONForms.DefaultDataProvider;
 describe('DataProvider', () => {
 
     // load all necessary modules and templates
@@ -71,12 +70,12 @@ describe('DataProvider', () => {
     });
 
     it("should be able to page", () => {
-        let provider = new DefaultDataProvider($q, data);
+        let provider = new JSONForms.DefaultDataProvider($q, data);
         expect(JSONForms.DataProviders.canPage(provider)).toBe(true);
     });
 
     it("should not be able to filter", () => {
-        let provider = new DefaultDataProvider($q, data);
+        let provider = new JSONForms.DefaultDataProvider($q, data);
         expect(JSONForms.DataProviders.canFilter(provider)).toBe(false);
     });
 });

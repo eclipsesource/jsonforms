@@ -52,4 +52,32 @@ describe('jsonforms directive', () => {
             scope.$digest();
         }).toThrow(Error("Either the 'data' or the 'async-data-provider' attribute must be specified."))
     }));
+
+    it("should created nested objects", inject(($rootScope, $compile) => {
+        var scope = $rootScope.$new();
+        scope.schema = {
+            "properties": {
+                "personalData": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        };
+        scope.uiSchema = {
+            "type": "Control",
+            "scope": {
+                "$ref": "#/properties/personalData/properties/name"
+            }
+        };
+        scope.data = { }; // empty data
+        var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        var input = el.find('input');
+        input.val('John Doe').triggerHandler('input');
+        expect(scope.data.personalData).toBeDefined();
+    }));
 });

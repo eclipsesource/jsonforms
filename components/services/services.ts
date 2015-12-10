@@ -86,9 +86,9 @@ module JSONForms{
         private convertAllDates(instance): void {
             for(var prop in instance) {
                 if(instance.hasOwnProperty(prop)){
-                    if (prop instanceof Date) {
+                    if (instance[prop] instanceof Date) {
                         instance[prop] = instance[prop].toString();
-                    } else if (prop instanceof Object){
+                    } else if (instance[prop] instanceof Object){
                         this.convertAllDates(instance[prop]);
                     }
                 }
@@ -102,7 +102,8 @@ module JSONForms{
             }
 
             this.clear(instance);
-            var results = tv4.validateMultiple(this.convertAllDates(instance), schema);
+            this.convertAllDates(instance);
+            var results = tv4.validateMultiple(instance, schema);
 
             results['errors'].forEach((error) => {
                 if (error['schemaPath'].indexOf("required") != -1) {
