@@ -31,6 +31,6 @@
     "angular-resource": "1.3.16",
     "angular-ui-ace": "0.2.3",
     "polymer": "Polymer/polymer#^1.2.0",
-    "polymer": "PolymerElements/paper-elements"
+    "paper-input": "PolymerElements/paper-input#^1.0.0"
   }
 }
