@@ -1,7 +1,7 @@
 {
   "name": "jsonforms",
   "description": "JSONForms is an AngularJS-based framework to simplify the creation of forms for data entry and edit in web applications. It allows to declaratively define data and layout of a form and to embed the form into your HTML with one simple <jsonforms> tag.",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "homepage": "https://github.com/eclipsesource/jsonforms",
   "license": "MIT",
   "main": [
@@ -29,6 +29,8 @@
   "devDependencies": {
     "angular-mocks": "1.3.16",
     "angular-resource": "1.3.16",
-    "angular-ui-ace": "0.2.3"
+    "angular-ui-ace": "0.2.3",
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-input": "PolymerElements/paper-input#^1.0.0"
   }
 }
