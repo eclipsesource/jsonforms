@@ -11,7 +11,7 @@ class EnumRenderer implements JSONForms.IRenderer {
         var enums =  subSchema.enum;
         var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['template'] = `<jsonforms-control>
-        <select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control jsf-control jsf-control-enum" data-jsonforms-model ></select>
+        <select ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control jsf-control jsf-control-enum" data-jsonforms-model data-jsonforms-validation></select>
         </jsonforms-control>`;
         control['options'] = enums;
         return control;

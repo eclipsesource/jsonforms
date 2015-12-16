@@ -27,8 +27,10 @@
     "tv4": "1.2.3"
   },
   "devDependencies": {
-      "angular-mocks": "1.4.8",
-      "angular-resource": "1.4.8",
-      "angular-ui-ace": "0.2.3"
+    "angular-mocks": "1.4.8",
+    "angular-resource": "1.4.8",
+    "angular-ui-ace": "0.2.3",
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-input": "PolymerElements/paper-input#^1.0.0"
   }
 }

@@ -45,7 +45,7 @@ angular.module('makeithappen').controller('LocalController', function() {
                 "items": {"type":"object","properties": {"name": {"type": "string"}}}
             }
         },
-        "required": ["occupation"]
+        "required": ["occupation", "nationality"]
     };
     vm.uiSchema = {
         "type": "Group",
@@ -212,8 +212,7 @@ angular.module('makeithappen').controller('LocalController', function() {
     vm.data = {
         name: 'John Doe',
         vegetarian: false,
-        birthDate: "02.06.1985",
-        nationality: "US"
+        birthDate: "02.06.1985"
     };
     vm.users ={
         "users":
