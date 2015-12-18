@@ -20,12 +20,12 @@ module JSONForms {
         };
 
         /**
-         * Creates a string for accessing a property based on path fragments
+         * Creates a string with single quotes on properties for accessing a property based on path fragments
          * @param propertyPathFragments the
          */
 
         static toPropertyAccessString = (propertyPath: string):string => {
-            if (propertyPath === undefined) {
+            if (propertyPath === undefined || propertyPath === null) {
                 throw new Error("property path is not defined!");
             }
             var fragments = PathUtil.toPropertyFragments(propertyPath);
