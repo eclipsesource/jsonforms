@@ -47,6 +47,11 @@ angular.module('makeithappen', [
             controller: 'PlaceholderController',
             controllerAs: 'vm'
         });
+        $routeProvider.when('/polymer', {
+            templateUrl: 'app/polymer/polymer.html',
+            controller: 'PolymerController',
+            controllerAs: 'vm'
+        });
         $routeProvider.otherwise({
             redirectTo: '/local'
         });
