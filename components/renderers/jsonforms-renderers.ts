@@ -160,6 +160,7 @@ module JSONForms {
 
         modelChanged():void {
             this.scope.$broadcast('modelChanged');
+            this.scope.$emit('modelChanged');
         }
 
         validate() {
