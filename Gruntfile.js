@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
         ts: {
             dist: {
-                src: ['components/**/*.ts', ['!components/**/*.spec.ts', 'typings/**/*.ts']],
+                src: ['components/**/*.ts', '!components/**/*.spec.ts', 'typings/**/*.ts'],
                 dest: '',
                 reference: 'components/references.ts',
                 options: {
