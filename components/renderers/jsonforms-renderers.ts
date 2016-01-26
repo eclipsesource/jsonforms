@@ -47,7 +47,7 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath:string, services:JSONForms.Services, element: IUISchemaElement):IRenderDescription {
+        static createControlDescription(schemaPath:string, services:JSONForms.Services, element: IControlObject):IRenderDescription {
             return new ControlRenderDescription(schemaPath, services, element);
         }
 
@@ -89,6 +89,7 @@ module JSONForms {
         public alerts: any[] = []; // TODO IAlert type missing
         public label: string;
         public rule: IRule;
+        public readOnly: boolean;
         public path: string;
         public instance: any;
 
@@ -98,7 +99,7 @@ module JSONForms {
         private ruleService: IRuleService;
         private scope: ng.IScope;
 
-        constructor(private schemaPath: string, services: JSONForms.Services, element: IUISchemaElement) {
+        constructor(private schemaPath: string, services: JSONForms.Services, element: IControlObject) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
@@ -108,6 +109,7 @@ module JSONForms {
 
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, element.label);
+            this.readOnly = element.readOnly;
             this.rule  = element.rule;
             this.ruleService.addRuleTrack(this);
             this.setupModelChangedCallback();
