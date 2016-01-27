@@ -44,6 +44,7 @@ interface IControlObject extends IUISchemaElement {
     scope: {
         $ref: string;
     }
+    readOnly?: boolean
 }
 
 // Array

@@ -114,7 +114,7 @@ module JSONForms{
         /**
          * Creates a IControlObject with the given label referencing the given ref
          */
-        private getControlObject = (label: string, ref: string): IControlObject =>{
+        private getControlObject = (label: string, ref: string): IControlObject => {
             return {
                 type: "Control",
                 label: label,
