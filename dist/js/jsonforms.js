@@ -1,7 +1,7 @@
-/*! jsonforms - v0.0.13 - 2016-01-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.14 - 2016-01-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 'use strict';
 // Source: temp/services.js
-/*! jsonforms - v0.0.13 - 2016-01-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.14 - 2016-01-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 // Source: components/services/data/data-service.js
 ///<reference path="../../references.ts"/>
 //# sourceMappingURL=data-service.js.map
@@ -373,7 +373,7 @@ var JSONForms;
 })(JSONForms || (JSONForms = {}));
 //# sourceMappingURL=services.js.map
 // Source: temp/jsonforms-module.js
-/*! jsonforms - v0.0.13 - 2016-01-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
+/*! jsonforms - v0.0.14 - 2016-01-28 Copyright (c) EclipseSource Muenchen GmbH and others. */ 
 // Source: components/generators/schema/jsonforms-schemagenerator.js
 ///<reference path="../../references.ts"/>
 var JSONForms;
