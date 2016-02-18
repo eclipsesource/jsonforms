@@ -19,7 +19,6 @@ class WidgetBRenderer implements JSONForms.IRenderer {
         var auxUISchemaElements = [];
         var subSchema = this.pathResolver.resolveSchema(subSchema, schemaPath) as SchemaArray;
         var items = subSchema.items;
-        var i = 0;
         for (var d in data) {
             var auxUISchemaElement = {
                 "type": "Group",
@@ -31,13 +30,12 @@ class WidgetBRenderer implements JSONForms.IRenderer {
                         "type": "Control",
                         "label": JSONForms.PathUtil.beautify(prop),
                         "scope": {
-                            "$ref": schemaPath + "/items/" + i + "/properties/" + prop
+                            "$ref": schemaPath + "/items/" + d + "/properties/" + prop
                         }
                     });
                 }
             }
             auxUISchemaElements.push(auxUISchemaElement);
-            i++;
         }
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(auxUISchemaElements, this.renderService, services);
