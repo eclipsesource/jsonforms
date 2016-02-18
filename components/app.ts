@@ -30,4 +30,6 @@ angular.module('jsonforms', [
     'jsonforms.renderers.layouts.categories.category',
     'jsonforms.renderers.extras.label',
     'jsonforms.renderers.layouts.masterdetail',
+    'jsonforms.renderers.widgets.widgeta',
+    'jsonforms.renderers.widgets.widgetb'
 ]);

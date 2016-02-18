@@ -21,6 +21,12 @@ module JSONForms {
             return '/' + fragments.slice(0, fragments.length - 1).join('/');
         }
 
+        static filterIndexes(path:string):string {
+            return PathUtil.toPropertyFragments(path).filter(function (fragment, index, fragments) {
+                return !(fragment.match("^[0-9]+$") && fragments[index - 1] == "items");
+            }).join("/");
+        }
+
         static filterNonKeywords = (fragments:string[]):string[] => {
             return fragments.filter(function (fragment) {
                 return !(PathUtil.Keywords.indexOf(fragment) !== -1);
