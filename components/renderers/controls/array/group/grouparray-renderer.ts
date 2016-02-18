@@ -1,6 +1,6 @@
-///<reference path="../../../references.ts"/>
+///<reference path="../../../../references.ts"/>
 
-class WidgetBRenderer implements JSONForms.IRenderer {
+class GroupArrayRenderer implements JSONForms.IRenderer {
 
     private maxSize = 99;
     priority = 99;
@@ -57,6 +57,6 @@ class WidgetBRenderer implements JSONForms.IRenderer {
 
 }
 
-angular.module('jsonforms.renderers.widgets.widgetb').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
-    RenderService.register(new WidgetBRenderer(RenderService, PathResolver));
+angular.module('jsonforms.renderers.controls.grouparray').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
+    RenderService.register(new GroupArrayRenderer(RenderService, PathResolver));
 }]);

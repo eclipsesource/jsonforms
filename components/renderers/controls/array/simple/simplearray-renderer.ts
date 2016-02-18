@@ -1,6 +1,6 @@
-///<reference path="../../../references.ts"/>
+///<reference path="../../../../references.ts"/>
 
-class WidgetARenderer implements JSONForms.IRenderer {
+class SimpleArrayRenderer implements JSONForms.IRenderer {
 
     private maxSize = 99;
     priority = 98;
@@ -33,8 +33,8 @@ class WidgetARenderer implements JSONForms.IRenderer {
               <fieldset>
                 <legend>${label}</legend>
                 <div ng-repeat='d in ${dataString}'>
-                    <div ng-repeat='prop in ${propertiesString}'>{{prop}}: {{d[prop]}}</div>
-                    <div>-----</div>
+                    <div ng-repeat='prop in ${propertiesString}'><strong>{{prop.charAt(0).toUpperCase() + prop.substring(1)}}:</strong> {{d[prop]}}</div>
+                    <hr ng-show="!$last">
                 </div>
                </fieldset>
              </jsonforms-layout>`;
@@ -52,6 +52,6 @@ class WidgetARenderer implements JSONForms.IRenderer {
 
 }
 
-angular.module('jsonforms.renderers.widgets.widgeta').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
-    RenderService.register(new WidgetARenderer(PathResolver));
+angular.module('jsonforms.renderers.controls.simplearray').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
+    RenderService.register(new SimpleArrayRenderer(PathResolver));
 }]);
