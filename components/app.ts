@@ -15,6 +15,8 @@ angular.module('jsonforms', [
     'jsonforms.renderers',
     'jsonforms.renderers.controls',
     'jsonforms.renderers.controls.array',
+    'jsonforms.renderers.controls.simplearray',
+    'jsonforms.renderers.controls.grouparray',
     'jsonforms.renderers.controls.integer',
     'jsonforms.renderers.controls.boolean',
     'jsonforms.renderers.controls.reference',
@@ -29,5 +31,5 @@ angular.module('jsonforms', [
     'jsonforms.renderers.layouts.categories.categorization',
     'jsonforms.renderers.layouts.categories.category',
     'jsonforms.renderers.extras.label',
-    'jsonforms.renderers.layouts.masterdetail',
+    'jsonforms.renderers.layouts.masterdetail'
 ]);
