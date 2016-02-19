@@ -12,7 +12,7 @@ class GroupRenderer implements JSONForms.IRenderer {
         var label = element.label ? element.label : "";
         var template = `<jsonforms-layout class="jsf-group">
               <fieldset>
-                <legend>${label}</legend>
+                <legend ng-if="${label}">${label}</legend>
                 <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child">
                 </jsonforms-dynamic-widget>
                </fieldset>

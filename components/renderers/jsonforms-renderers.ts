@@ -13,6 +13,7 @@ module JSONForms {
         render(scope: ng.IScope, element: IUISchemaElement, services: JSONForms.Services) {
 
             var foundRenderer;
+            var indexedSchemaPath;
             var schemaPath;
             var subSchema;
             var schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
@@ -20,7 +21,8 @@ module JSONForms {
             // TODO element must be IControl
             // TODO use isControl
             if (element['scope']) {
-                schemaPath = element['scope']['$ref'];
+                indexedSchemaPath = element['scope']['$ref'];
+                schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
                 subSchema = this.refResolver.resolveSchema(schema, schemaPath);
             }
 
@@ -36,7 +38,7 @@ module JSONForms {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            var rendered= foundRenderer.render(element, schema, schemaPath, services);
+            var rendered= foundRenderer.render(element, schema, indexedSchemaPath, services);
             services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope().$broadcast('modelChanged');
             return rendered;
         }

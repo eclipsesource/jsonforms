@@ -51,6 +51,7 @@ interface IControlObject extends IUISchemaElement {
 interface IArrayControlObject extends IUISchemaElement {
     columns: IColumnControlObject[]
     options: uiGrid.IGridOptions
+
 }
 
 interface IColumnControlObject extends IControlObject {
