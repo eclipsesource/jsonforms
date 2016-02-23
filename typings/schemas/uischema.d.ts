@@ -48,6 +48,7 @@ interface IControlObject extends IUISchemaElement {
 interface IArrayControlObject extends IControlObject {
     columns?: IColumnControlObject[]
     options?: any
+
 }
 
 interface IColumnControlObject extends IControlObject {
