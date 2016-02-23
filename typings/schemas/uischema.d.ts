@@ -32,24 +32,22 @@ interface ILayout extends IUISchemaElement{
     type: string;
     elements: IUISchemaElement[];
 }
-interface IVerticalLayout extends ILayout {
-
-}
-interface IHorizontalLayout extends ILayout {
-
-}
+interface IVerticalLayout extends ILayout { }
+interface IHorizontalLayout extends ILayout { }
+interface IGroup extends ILayout { }
 
 //Control
 interface IControlObject extends IUISchemaElement {
     scope: {
         $ref: string;
     }
+    readOnly?: boolean
 }
 
 // Array
-interface IArrayControlObject extends IUISchemaElement {
-    columns: IColumnControlObject[]
-    options: uiGrid.IGridOptions
+interface IArrayControlObject extends IControlObject {
+    columns?: IColumnControlObject[]
+    options?: any
 }
 
 interface IColumnControlObject extends IControlObject {

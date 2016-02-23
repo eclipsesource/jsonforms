@@ -13,6 +13,7 @@ module JSONForms {
         render(scope: ng.IScope, element: IUISchemaElement, services: JSONForms.Services) {
 
             var foundRenderer;
+            var indexedSchemaPath;
             var schemaPath;
             var subSchema;
             var schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
@@ -20,7 +21,8 @@ module JSONForms {
             // TODO element must be IControl
             // TODO use isControl
             if (element['scope']) {
-                schemaPath = element['scope']['$ref'];
+                indexedSchemaPath = element['scope']['$ref'];
+                schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
                 subSchema = this.refResolver.resolveSchema(schema, schemaPath);
             }
 
@@ -36,7 +38,7 @@ module JSONForms {
                 throw new Error("No applicable renderer found for element " + JSON.stringify(element));
             }
 
-            var rendered= foundRenderer.render(element, schema, schemaPath, services);
+            var rendered= foundRenderer.render(element, schema, indexedSchemaPath, services);
             services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope().$broadcast('modelChanged');
             return rendered;
         }
@@ -47,10 +49,12 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
-        static createControlDescription(schemaPath:string, services:JSONForms.Services, element: IUISchemaElement):IRenderDescription {
+        // TODO: schemapath might be obsolete, re-check 
+        static createControlDescription(schemaPath:string, services:JSONForms.Services, element: IControlObject):IRenderDescription {
             return new ControlRenderDescription(schemaPath, services, element);
         }
 
+        // TODO doc
         static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
             return elements.map((el) => {
                 return renderService.render(
@@ -69,15 +73,17 @@ module JSONForms {
         type= "Layout";
         public instance: any;
         public size: number;
-        public elements: IControlRenderDescription[];
+        public elements: IRenderDescription[];
         public template: string;
         public rule: IRule;
+        public path: string;
         constructor(size:number, elements: IControlRenderDescription[], template: string, services: JSONForms.Services, element: IUISchemaElement){
             this.size = size;
             this.elements = elements;
             this.template = template;
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.rule = element.rule;
+            this.path = PathUtil.normalize(element['scope'] ? element['scope']['$ref'] : "");
             services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
         }
     }
@@ -89,6 +95,7 @@ module JSONForms {
         public alerts: any[] = []; // TODO IAlert type missing
         public label: string;
         public rule: IRule;
+        public readOnly: boolean;
         public path: string;
         public instance: any;
 
@@ -98,7 +105,7 @@ module JSONForms {
         private ruleService: IRuleService;
         private scope: ng.IScope;
 
-        constructor(private schemaPath: string, services: JSONForms.Services, element: IUISchemaElement) {
+        constructor(private schemaPath: string, services: JSONForms.Services, element: IControlObject) {
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.schema = services.get<JSONForms.ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
             this.validationService = services.get<JSONForms.IValidationService>(ServiceId.Validation);
@@ -108,6 +115,7 @@ module JSONForms {
 
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, element.label);
+            this.readOnly = element.readOnly;
             this.rule  = element.rule;
             this.ruleService.addRuleTrack(this);
             this.setupModelChangedCallback();
@@ -160,6 +168,7 @@ module JSONForms {
 
         modelChanged():void {
             this.scope.$broadcast('modelChanged');
+            this.scope.$emit('modelChanged');
         }
 
         validate() {

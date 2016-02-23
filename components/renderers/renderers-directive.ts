@@ -15,30 +15,25 @@ class DynamicWidget implements ng.IDirective {
     scope = {element: "="};
     replace = true;
     link = (scope, element) => {
-        var fragments = scope.element.path !== undefined ? scope.element.path.split('/') : [];
         if (scope.element.templateUrl) {
             this.$templateRequest(scope.element.templateUrl).then((template) => {
-                var updatedTemplate = this.replaceJSONFormsAttributeInTemplate(template, fragments);
+                var updatedTemplate = this.replaceJSONFormsAttributeInTemplate(template, scope.element.path);
                 var compiledTemplate = this.$compile(updatedTemplate)(scope);
                 element.replaceWith(compiledTemplate);
             })
         } else {
-            var updatedTemplate = this.replaceJSONFormsAttributeInTemplate(scope.element.template, fragments);
+            var updatedTemplate = this.replaceJSONFormsAttributeInTemplate(scope.element.template, scope.element.path);
             var template = this.$compile(updatedTemplate)(scope);
             element.replaceWith(template);
         }
     };
 
-    replaceJSONFormsAttributeInTemplate(template, fragments): string {
-        var path = [];
-        for (var fragment in fragments) {
-            path.push("['" + fragments[fragment] + "']");
-        }
-        var pathBinding = "ng-model=\"element.instance" + path.join('') + "\"";
-        if (fragments.length > 0) {
+    replaceJSONFormsAttributeInTemplate(template: string, propertyPath:string): string {
+        if (propertyPath !== undefined && propertyPath.length > 0) {
+            var path = `ng-model="element.instance${JSONForms.PathUtil.toPropertyAccessString(propertyPath)}"`;
             return template
-                .replace("data-jsonforms-model", pathBinding)
-                .replace("data-jsonforms-validation", "ng-change='element.modelChanged()'");
+                .replace(new RegExp("data-jsonforms-model", "g"), path)
+                .replace(new RegExp("data-jsonforms-validation", "g"), "ng-change='element.modelChanged()'");
         } else {
             return template;
         }

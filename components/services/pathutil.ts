@@ -11,14 +11,38 @@ module JSONForms {
         };
 
         static toPropertyFragments = (path:string):string[] => {
+            if (path === undefined) {
+                return [];
+            }
             return path.split('/').filter(function (fragment) {
                 return fragment.length > 0;
             })
         };
 
+        /**
+         * Creates a string with single quotes on properties for accessing a property based on path fragments
+         * @param propertyPathFragments the
+         */
+
+        static toPropertyAccessString = (propertyPath: string):string => {
+            if (propertyPath === undefined || propertyPath === null) {
+                throw new Error("property path is not defined!");
+            }
+            var fragments = PathUtil.toPropertyFragments(propertyPath);
+            return fragments.reduce((propertyAccessString, fragment)=>{
+               return `${propertyAccessString}['${fragment}']`;
+            },"");
+        };
+
         static inits(schemaPath: string): string {
             var fragments = PathUtil.toPropertyFragments(schemaPath);
             return '/' + fragments.slice(0, fragments.length - 1).join('/');
+        };
+
+        static filterIndexes(path:string):string {
+            return PathUtil.toPropertyFragments(path).filter(function (fragment, index, fragments) {
+                return !(fragment.match("^[0-9]+$") && fragments[index - 1] == "items");
+            }).join("/");
         }
 
         static filterNonKeywords = (fragments:string[]):string[] => {
