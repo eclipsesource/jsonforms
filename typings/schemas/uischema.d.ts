@@ -1,5 +1,3 @@
-/// <reference path="../../typings/ui-grid/ui-grid.d.ts"/>
-
 //rule
 interface IRule {
     effect: RuleEffect;

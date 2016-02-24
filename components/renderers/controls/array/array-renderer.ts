@@ -57,11 +57,11 @@ class ArrayRenderer implements JSONForms.IRenderer {
         let renderDescriptions = JSONForms.RenderDescriptionFactory.renderElements(controlGroups, this.renderService, services);
 
         return renderDescriptions.reduce((descriptions, renderDescription) => {
-                let foundRenderDesc = _.find(currentDescriptions, el => _.isEqual(renderDescription, el));
+                let foundRenderDesc = _.find(descriptions, desc => _.isEqual(renderDescription, desc));
                 if (foundRenderDesc === undefined) {
-                    currentDescriptions.push(renderDescription);
+                    descriptions.push(renderDescription);
                 }
-                return currentDescriptions;
+                return descriptions;
             }, currentDescriptions);
     }
 
@@ -74,7 +74,8 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
         let resolvedSubSchema = this.pathResolver.resolveSchema(subSchema, schemaPath) as SchemaArray;
         let items = resolvedSubSchema.items;
-        let label = element.label ? element.label : "";
+        // TODO: generate label form schema path if not present
+        let label = element.label ? element.label : JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
 
         // TODO: think about how to access options in an uniform fashion
         if (element.options != undefined && element.options['simple']) {
@@ -116,9 +117,11 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
             let containeeDescriptions = JSONForms.RenderDescriptionFactory.renderElements(generatedGroups, this.renderService, services);
             let containerDescription = JSONForms.RenderDescriptionFactory.createContainerDescription(this.maxSize, containeeDescriptions, template, services, element);
-            containerDescription['submitElement'] = submitElement;
-            containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
-            containerDescription['submitCallback'] = () => data.push(_.clone(submitElement));
+            if (supportsSubmit) {
+                containerDescription['submitElement'] = submitElement;
+                containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
+                containerDescription['submitCallback'] = () => data.push(_.clone(submitElement));
+            }
             containerDescription['generateControlDescriptions'] = (data) =>
                 this.generateControlDescriptions(items, schemaPath, containerDescription['elements'], data.length, services);
             return containerDescription;

@@ -50,7 +50,7 @@ angular.module('makeithappen').controller('ArraysController', function() {
                     "$ref": "#/properties/comments"
                 },
                 options: {
-                    "submit": true
+                     "submit": true
                 }
             },
             {
@@ -58,6 +58,7 @@ angular.module('makeithappen').controller('ArraysController', function() {
                 "scope": {
                     "$ref": "#/properties/comments"
                 },
+                "label": "Some more comments",
                 options: {
                     "simple": true,
                     "submit": true // has no effect
