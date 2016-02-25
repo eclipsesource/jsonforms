@@ -49,10 +49,12 @@ module JSONForms {
     }
 
     export class RenderDescriptionFactory implements IRendererDescriptionFactory {
+        // TODO: schemapath might be obsolete, re-check 
         static createControlDescription(schemaPath:string, services:JSONForms.Services, element: IControlObject):IRenderDescription {
             return new ControlRenderDescription(schemaPath, services, element);
         }
 
+        // TODO doc
         static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
             return elements.map((el) => {
                 return renderService.render(
@@ -71,15 +73,17 @@ module JSONForms {
         type= "Layout";
         public instance: any;
         public size: number;
-        public elements: IControlRenderDescription[];
+        public elements: IRenderDescription[];
         public template: string;
         public rule: IRule;
+        public path: string;
         constructor(size:number, elements: IControlRenderDescription[], template: string, services: JSONForms.Services, element: IUISchemaElement){
             this.size = size;
             this.elements = elements;
             this.template = template;
             this.instance = services.get<JSONForms.IDataProvider>(ServiceId.DataProvider).getData();
             this.rule = element.rule;
+            this.path = PathUtil.normalize(element['scope'] ? element['scope']['$ref'] : "");
             services.get<JSONForms.IRuleService>(ServiceId.RuleService).addRuleTrack(this);
         }
     }

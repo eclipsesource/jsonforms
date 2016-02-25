@@ -1,5 +1,3 @@
-/// <reference path="../../typings/ui-grid/ui-grid.d.ts"/>
-
 //rule
 interface IRule {
     effect: RuleEffect;
@@ -32,12 +30,9 @@ interface ILayout extends IUISchemaElement{
     type: string;
     elements: IUISchemaElement[];
 }
-interface IVerticalLayout extends ILayout {
-
-}
-interface IHorizontalLayout extends ILayout {
-
-}
+interface IVerticalLayout extends ILayout { }
+interface IHorizontalLayout extends ILayout { }
+interface IGroup extends ILayout { }
 
 //Control
 interface IControlObject extends IUISchemaElement {
@@ -48,9 +43,9 @@ interface IControlObject extends IUISchemaElement {
 }
 
 // Array
-interface IArrayControlObject extends IUISchemaElement {
-    columns: IColumnControlObject[]
-    options: uiGrid.IGridOptions
+interface IArrayControlObject extends IControlObject {
+    columns?: IColumnControlObject[]
+    options?: any
 
 }
 

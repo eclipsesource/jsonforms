@@ -2,210 +2,137 @@
 
 class ArrayRenderer implements JSONForms.IRenderer {
 
-    private maxSize = 99;
-    priority = 2;
+    protected maxSize = 99;
+    priority = 99;
 
-    constructor(private pathResolver: JSONForms.IPathResolver) { }
+    constructor(private renderService: JSONForms.IRenderService, private pathResolver: JSONForms.IPathResolver) { }
 
-    private defaultGridOptions(existingOptions: uiGrid.IGridOptions,
-                               services: JSONForms.Services, schema: SchemaElement): uiGrid.IGridOptions {
-
-        var dataProvider = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider);
-        var validationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
-        var scope = services.get<JSONForms.IScopeProvider>(JSONForms.ServiceId.ScopeProvider).getScope();
-
-        let externalPaginationEnabled = existingOptions.hasOwnProperty('useExternalPagination');
-        let externalFilteringEnabled  = existingOptions.hasOwnProperty('useExternalFiltering');
-
-        var defaultGridOptions:uiGrid.IGridOptions = {};
-        defaultGridOptions.enableColumnResizing = true;
-        defaultGridOptions.enableHorizontalScrollbar = 0;
-        defaultGridOptions.enableVerticalScrollbar = 0;
-        defaultGridOptions.paginationPageSizes = [5, 10, 20];
-        defaultGridOptions.paginationPageSize = 5;
-        defaultGridOptions.paginationCurrentPage = 1;
-        defaultGridOptions.enablePaginationControls = true;
-
-        if (externalPaginationEnabled) {
-            defaultGridOptions.useExternalPagination = true;
-        }
-
-        if (JSONForms.DataProviders.canPage(dataProvider)) {
-            defaultGridOptions.totalItems = dataProvider.getTotalItems()
-        }
-
-        defaultGridOptions.onRegisterApi = (gridApi) => {
-            if (JSONForms.DataProviders.canPage(dataProvider) && externalPaginationEnabled) {
-                gridApi.pagination.on.paginationChanged(scope, (newPage, pageSize) => {
-                    defaultGridOptions.paginationCurrentPage = newPage;
-                    defaultGridOptions.paginationPageSize = pageSize;
-                    dataProvider.setPageSize(pageSize);
-                    dataProvider.fetchPage(newPage).then(newData => {
-                        existingOptions.data = newData;
-                    });
-                });
-            }
-            if (JSONForms.DataProviders.canFilter(dataProvider) && externalFilteringEnabled) {
-                gridApi.core.on.filterChanged(scope, () => {
-                    var columns = gridApi.grid.columns;
-                    var terms = columns.reduce((acc, column) => {
-                        var value: any = column.filters[0].term;
-                        if (value !== undefined && value.length > 0) {
-                            acc[column.field] = ArrayRenderer.convertColumnValue(column.colDef, value);
-                        }
-                        return acc;
-                    }, {});
-                    dataProvider.filter(terms).then(newData => {
-                        existingOptions.data = newData;
-                    })
-                });
-            }
-            gridApi.edit.on.afterCellEdit(scope, (rowEntity, colDef:uiGrid.IColumnDef, newValue, oldValue) => {
-                rowEntity[colDef.field] = ArrayRenderer.convertColumnValue(colDef, newValue);
-                validationService.validate(rowEntity, schema['items']);
-                // TODO: use constant
-                gridApi.core.notifyDataChange("column");
-                scope.$apply();
-            });
+    protected static createGroup(elements: IUISchemaElement[]): IGroup {
+        return {
+            "type": "Group",
+            "elements": elements
         };
-
-        return this.mergeOptions(existingOptions, defaultGridOptions);
     }
 
-    private static convertColumnValue(colDef: uiGrid.IColumnDef, value: string): any {
-        if (colDef.type) {
-            if (colDef.type == "number" || colDef.type == "integer") {
-               return Number(value);
-            } else if (colDef.type == "boolean") {
-                return Boolean(value);
+    protected static createControl(schemaPath: string, prop: string): IControlObject {
+        return {
+            "type": "Control",
+            "label": JSONForms.PathUtil.beautify(prop),
+            "scope": {
+                "$ref": schemaPath
             }
         }
-
-        return value;
     }
 
-    private mergeOptions(optionsA: any, optionsB: any): any {
-        return Object.keys(optionsB).reduce((mergedOpts, optionName) => {
-            if (mergedOpts.hasOwnProperty(optionName)) {
-                return mergedOpts
-            }
-            mergedOpts[optionName] = optionsB[optionName];
-            return mergedOpts;
-        }, optionsA);
+    protected createControlGroupPerItem(schemaPath: string, items: any, dataLength: number): IGroup[] {
+        return _.range(0, dataLength).map(index => {
+            let elements = _.keys(items['properties']).map(key =>
+                // path does not actually exists
+                ArrayRenderer.createControl(`${schemaPath}/items/${index}/properties/${key}`, key)
+            );
+            return ArrayRenderer.createGroup(elements);
+        });
     }
 
-    isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
-        return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
+    protected createControlsForSubmit(items: any, schemaPath: string, submitElement: any, services: JSONForms.Services) {
+        let unboundControls = _.keys(items['properties']).map(prop =>
+            ArrayRenderer.createControl(`${schemaPath}/items/properties/${prop}`, prop)
+        );
+        let renderDescriptionsForSubmit = JSONForms.RenderDescriptionFactory.renderElements(unboundControls, this.renderService, services);
+        return renderDescriptionsForSubmit.map(renderDescription => {
+            renderDescription['instance'] = submitElement;
+            renderDescription['path'] = JSONForms.PathUtil.lastFragment(renderDescription['path']);
+            return renderDescription;
+        });
     }
 
-    render(element: IArrayControlObject, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IArrayControlRenderDescription {
+    protected generateControlDescriptions(items: any, schemaPath: string, currentDescriptions: JSONForms.IRenderDescription[], dataSize: number, services: JSONForms.Services) {
+        // TODO: this won't work for replace
+        // is there a better way to accomplish this?
+        if (currentDescriptions.length === dataSize) {
+            return currentDescriptions;
+        }
+        currentDescriptions.splice(0, currentDescriptions.length);
+        let controlGroups = this.createControlGroupPerItem(schemaPath, items, dataSize);
+        let renderDescriptions = JSONForms.RenderDescriptionFactory.renderElements(controlGroups, this.renderService, services);
 
-        var gridOptions: uiGrid.IGridOptions = this.createGridOptions(element, services, schema, schemaPath);
-        var data = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider).getData();
+        return renderDescriptions.reduce((descriptions, renderDescription) => {
+                let foundRenderDesc = _.find(descriptions, desc => _.isEqual(renderDescription, desc));
+                if (foundRenderDesc === undefined) {
+                    descriptions.push(renderDescription);
+                }
+                return descriptions;
+            }, currentDescriptions);
+    }
+
+    render(element: IArrayControlObject, subSchema: SchemaArray, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+        let data = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider).getData();
 
         if (!Array.isArray(data)) {
             data = this.pathResolver.resolveInstance(data, schemaPath);
         }
 
-        if (data != undefined) {
-            gridOptions.data = data
-        }
+        let resolvedSubSchema = this.pathResolver.resolveSchema(subSchema, schemaPath) as SchemaArray;
+        let items = resolvedSubSchema.items;
+        // TODO: generate label form schema path if not present
+        let label = element.label ? element.label : JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
 
-        return {
-            "type": "Control",
-            "gridOptions": gridOptions,
-            "size": this.maxSize,
-            "template": `<jsonforms-control><div ui-grid="element['gridOptions']" ui-grid-auto-resize ui-grid-pagination ui-grid-edit class="grid"></div></jsonforms-control>`
-        };
-    }
-
-    private generateColumnDefs(schema: SchemaElement, schemaPath: string): any {
-        var columnsDefs = [];
-        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
-        // TODO: items
-        if (subSchema !== undefined && subSchema['items'] !== undefined && subSchema['items']['type'] == 'object') {
-            var items = subSchema['items'];
-            for (var prop in items['properties']) {
-                if (items['properties'].hasOwnProperty(prop)) {
-                    var colDef = {
-                        field: prop,
-                        displayName: JSONForms.PathUtil.beautify(prop)
-                    };
-                    columnsDefs.push(colDef);
-                }
-            }
+        // TODO: think about how to access options in an uniform fashion
+        if (element.options != undefined && element.options['simple']) {
+            let controlDescription = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+            let properties = _.keys(items['properties']);
+            let propertiesString = JSON.stringify(properties);
+            controlDescription.template = `<jsonforms-layout class="jsf-group">
+              <fieldset>
+                <legend>${label}</legend>
+                <div ng-repeat='d in element.instance[element.path]'>
+                    <div ng-repeat='prop in ${propertiesString}'>
+                    <strong>{{prop | capitalize}}:</strong> {{d[prop]}}
+                    </div>
+                    <hr ng-show="!$last">
+                </div>
+               </fieldset>
+             </jsonforms-layout>`;
+            return controlDescription;
         } else {
-            // TODO is this case even possible (array containing primitive type)?
-        }
+            let submitElement = {};
+            let supportsSubmit = element.options != undefined && element.options['submit'];
+            let generatedGroups = this.createControlGroupPerItem(schemaPath, items, data.length);
+            let buttonText = JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
 
-        return columnsDefs;
-    }
+            let template = `
+            <jsonforms-layout class="jsf-group">
+              <fieldset>
+                <legend>${label}</legend>
+                <div ng-repeat="renderDescription in element.generateControlDescriptions(element.instance[element.path]) ">
+                  <jsonforms-dynamic-widget element="renderDescription">
+                  </jsonforms-dynamic-widget>
+                </div>
+                  <jsonforms-dynamic-widget ng-repeat="submitRenderDescription in element.submitControls" element="submitRenderDescription">
+                  </jsonforms-dynamic-widget>
+               </fieldset>
+               <input ng-show="${supportsSubmit}" type="button" value="Add to ${buttonText}" ng-click="element.submitCallback()" ng-model="element.submitElement">
+               </input>
+             </jsonforms-layout>`;
 
-    private createColumnDefs(columns: IColumnControlObject[], schema: SchemaElement, services: JSONForms.Services): uiGrid.IColumnDef[] {
-        var validationService:JSONForms.IValidationService = services.get<JSONForms.IValidationService>(JSONForms.ServiceId.Validation);
-
-        return columns.map((col) => {
-            var href = col['href'];
-            if (href) {
-                var hrefScope = href.scope;
-                var cellTemplate;
-                var field = this.pathResolver.toInstancePath(col['scope']['$ref']);
-
-                if (hrefScope) {
-                    var instancePath = this.pathResolver.toInstancePath(hrefScope.$ref);
-                    cellTemplate = `<div class="ui-grid-cell-contents">
-                      <a href="#${href.url}/{{row.entity.${instancePath}}}">
-                        {{row.entity.${field}}}
-                      </a>
-                    </div>`;
-                } else {
-                    cellTemplate = `<div class="ui-grid-cell-contents">
-                      <a href="#${href.url}/{{row.entity.${field}}}">
-                        {{row.entity.${field}}}
-                      </a>
-                </div>`;
-                }
-
-                return {
-                    cellTemplate: cellTemplate,
-                    field: field,
-                    displayName: col.label,
-                    enableCellEdit: false
-                };
-            } else {
-                var subSchema:SchemaElement = this.pathResolver.resolveSchema(schema, col['scope']['$ref']);
-                return {
-                    field: this.pathResolver.toInstancePath(col['scope']['$ref']),
-                    displayName: col.label,
-                    enableCellEdit: true,
-                    type: subSchema.type,
-                    cellClass: (grid, row, col)=> {
-                        var result = validationService.getResult(row.entity, '/' + col.colDef.field);
-                        if (result != undefined) {
-                            return 'invalidCell';
-                        } else {
-                            return 'validCell';
-                        }
-                    }
-                };
+            let containeeDescriptions = JSONForms.RenderDescriptionFactory.renderElements(generatedGroups, this.renderService, services);
+            let containerDescription = JSONForms.RenderDescriptionFactory.createContainerDescription(this.maxSize, containeeDescriptions, template, services, element);
+            if (supportsSubmit) {
+                containerDescription['submitElement'] = submitElement;
+                containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
+                containerDescription['submitCallback'] = () => data.push(_.clone(submitElement));
             }
-        });
+            containerDescription['generateControlDescriptions'] = (data) =>
+                this.generateControlDescriptions(items, schemaPath, containerDescription['elements'], data.length, services);
+            return containerDescription;
+        }
     }
 
-    private createGridOptions(element: IArrayControlObject, services: JSONForms.Services, schema: SchemaElement, schemaPath: string) {
-
-        var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
-
-        var columnsDefs: uiGrid.IColumnDef[] = element.columns ?
-            this.createColumnDefs(element.columns, subSchema, services) :
-            this.generateColumnDefs(subSchema, schemaPath);
-
-        var gridOptions: uiGrid.IGridOptions = this.defaultGridOptions(element.options || {}, services, schema);
-        gridOptions.columnDefs = columnsDefs;
-        return gridOptions;
+    isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
+        return element.type == 'Control' && subSchema !== undefined && subSchema.type == 'array';
     }
 }
 
 angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
-    RenderService.register(new ArrayRenderer(PathResolver));
+    RenderService.register(new ArrayRenderer(RenderService, PathResolver));
 }]);

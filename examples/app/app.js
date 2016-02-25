@@ -52,6 +52,11 @@ angular.module('makeithappen', [
             controller: 'PolymerController',
             controllerAs: 'vm'
         });
+        $routeProvider.when('/arrays', {
+            templateUrl: 'app/arrays/arrays.html',
+            controller: 'ArraysController',
+            controllerAs: 'vm'
+        });
         $routeProvider.otherwise({
             redirectTo: '/local'
         });
