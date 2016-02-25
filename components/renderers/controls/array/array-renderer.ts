@@ -97,7 +97,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
         } else {
             let submitElement = {};
             let supportsSubmit = element.options != undefined && element.options['submit'];
-            let generatedGroups = this.createControlGroupPerItem(schemaPath, items, data.length);
+            let generatedGroups = this.createControlGroupPerItem(schemaPath, items, data == undefined ? 0 : data.length);
             let buttonText = JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
 
             let template = `
@@ -120,10 +120,14 @@ class ArrayRenderer implements JSONForms.IRenderer {
             if (supportsSubmit) {
                 containerDescription['submitElement'] = submitElement;
                 containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
+                if (data == undefined) {
+                    containerDescription["instance"][containerDescription['path']] = [];
+                    data = containerDescription["instance"][containerDescription['path']];
+                }
                 containerDescription['submitCallback'] = () => data.push(_.clone(submitElement));
             }
             containerDescription['generateControlDescriptions'] = (data) =>
-                this.generateControlDescriptions(items, schemaPath, containerDescription['elements'], data.length, services);
+                this.generateControlDescriptions(items, schemaPath, containerDescription['elements'],  data.length, services);
             return containerDescription;
         }
     }
