@@ -1,7 +1,7 @@
 {
   "name": "jsonforms",
   "private": true,
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Generating forms for JSON schema",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "license": "MIT",
