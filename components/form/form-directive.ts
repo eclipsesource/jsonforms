@@ -32,7 +32,7 @@ class FormController {
         var resolvedSchemaDeferred = this.$q.defer();
         var resolvedUISchemaDeferred = this.$q.defer();
 
-        this.$q.all([this.fetchSchema().promise, this.fetchUiSchema().promise]).then((values) => {
+        this.$q.all([this.fetchSchema(), this.fetchUiSchema()]).then((values) => {
             var schema = values[0];
             var uiSchemaMaybe = values[1];
 
@@ -90,15 +90,11 @@ class FormController {
 
     private fetchSchema() {
         if (typeof this.scope.schema === "object") {
-            var p: ng.IDeferred<any> = this.$q.defer<any>();
-            p.resolve(this.scope.schema);
-            return p;
+            return this.$q.when(this.scope.schema);
         } else if (this.scope.schema !== undefined) {
             return this.scope.schema();
         } else {
-            var p: ng.IDeferred<any> = this.$q.defer<any>();
-            p.resolve(this.SchemaGenerator.generateDefaultSchema(this.scope.data));
-            return p;
+            return this.$q.when(this.SchemaGenerator.generateDefaultSchema(this.scope.data));
         }
     }
 
@@ -107,27 +103,21 @@ class FormController {
         if (FormController.isUiSchemaProvider(this.scope.uiSchema)) {
             return this.scope.uiSchema.getUiSchema();
         } else if (typeof this.scope.uiSchema === "object") {
-            let p = this.$q.defer();
-            p.resolve(this.scope.uiSchema);
-            return p;
+            return this.$q.when(this.scope.uiSchema);
         }
 
         // if we return undefined the caller will generate a default UI schema
-        let p: ng.IDeferred<any> = this.$q.defer<any>();
-        p.resolve(undefined);
-        return p;
+        return this.$q.when(undefined);
     }
 
     private fetchData() {
         if (FormController.isDataProvider(this.scope.data)) {
             return this.scope.data.fetchData();
         } else if (typeof this.scope.data === "object") {
-            var p = this.$q.defer();
-            p.resolve(this.scope.data);
-            return p.promise;
+            return this.$q.when(this.scope.data);
         }
 
-        throw new Error("Either the 'data' or the 'async-data-provider' attribute must be specified.")
+        throw new Error("The 'data' attribute must be specified.")
     }
 
     private static isDataProvider(testMe: any): testMe is JSONForms.IDataProvider {

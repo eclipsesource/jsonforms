@@ -50,7 +50,7 @@ describe('jsonforms directive', () => {
         expect(function() {
             $compile('<jsonforms schema="schema" ui-schema="uiSchema"/>')(scope);
             scope.$digest();
-        }).toThrow(Error("Either the 'data' or the 'async-data-provider' attribute must be specified."))
+        }).toThrow(Error("The 'data' attribute must be specified."))
     }));
 
     it("should created nested objects", inject(($rootScope, $compile) => {
