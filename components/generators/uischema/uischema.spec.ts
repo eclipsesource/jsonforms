@@ -251,6 +251,35 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
+    it("generate named array control", function () {
+        var schema = {
+            "type": "object",
+            "properties": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "msg": {"type": "string"}
+                        }
+                    }
+                }
+            }
+        };
+        var uiSchema = {
+            "type": "VerticalLayout",
+            "elements": [
+                {
+                    "type": "Control",
+                    "label": "Comments",
+                    "scope": {
+                        "$ref": "#/properties/comments"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
+
 
 
 });
