@@ -3,13 +3,12 @@
 module JSONForms{
 
     export class UISchemaGenerator implements IUISchemaGenerator{
-        generateDefaultUISchema = (jsonSchema:any):any =>{
-            var uiSchemaElements = [];
-            this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
-            return uiSchemaElements[0];
+        generateDefaultUISchema = (jsonSchema:any): IUISchemaElement => {
+            var uiSchema = this.generateUISchema(jsonSchema, [], "#", "");
+            return this.wrapInLayoutIfNecessary(uiSchema);
         };
 
-        private generateUISchema = (jsonSchema:any, schemaElements:IUISchemaElement[], currentRef:string, schemaName:string):any =>{
+        private generateUISchema = (jsonSchema:any, schemaElements:IUISchemaElement[], currentRef:string, schemaName:string): IUISchemaElement => {
             var type = this.deriveType(jsonSchema);
 
             switch(type) {
@@ -20,20 +19,18 @@ module JSONForms{
 
                     this.addLabel(verticalLayout, schemaName);
 
-                    if (!jsonSchema.properties) {
-                        return;
-                    }
-
-                    // traverse properties
-                    var nextRef:string = currentRef + '/' + "properties";
-                    for (var property in jsonSchema.properties) {
-                        if(this.isIgnoredProperty(property, jsonSchema.properties[property])){
-                            continue;
+                    if (jsonSchema.properties) {
+                        // traverse properties
+                        var nextRef:string = currentRef + '/' + "properties";
+                        for (var property in jsonSchema.properties) {
+                            if(this.isIgnoredProperty(property, jsonSchema.properties[property])){
+                                continue;
+                            }
+                            this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                         }
-                        this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                     }
 
-                    break;
+                    return verticalLayout;
 
                 case "array": // array items will be handled by the array control itself
                 case "string":
@@ -42,10 +39,9 @@ module JSONForms{
                 case "boolean":
                     var controlObject:IControlObject = this.getControlObject(PathUtil.beautify(schemaName), currentRef);
                     schemaElements.push(controlObject);
-                    break;
+                    return controlObject;
                 case "null":
-                    //ignore
-                    break;
+                    return null;
                 default:
                     throw new Error("Unknown type: " + JSON.stringify(jsonSchema));
             }
@@ -107,14 +103,31 @@ module JSONForms{
         /**
          * Creates a IControlObject with the given label referencing the given ref
          */
-        private getControlObject = (label: string, ref: string): IControlObject => {
-            return {
+        private getControlObject = (label:string, ref:string):IControlObject => {
+            var control:IControlObject = {
                 type: "Control",
-                label: label,
                 scope: {
                     $ref: ref
                 }
             };
+            if (label) {
+                control.label = label;
+            }
+            return control;
+        };
+
+        /**
+         * Wraps the given {@code uiSchema} in a VerticalLayout if there is none already.
+         * @param uiSchema The ui schema to wrap in a vertical layout.
+         * @returns the wrapped uiSchema.
+         */
+        private wrapInLayoutIfNecessary = (uiSchema:IUISchemaElement):ILayout => {
+            if (uiSchema.type !== "VerticalLayout") {
+                var verticalLayout:IVerticalLayout = this.createVerticalLayout();
+                verticalLayout.elements.push(uiSchema);
+                return verticalLayout;
+            }
+            return <ILayout>uiSchema;
         };
     }
 }
