@@ -30,4 +30,31 @@ describe('Array renderer', () => {
         scope.$digest();
         expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(3);
     }));
+
+    it("should render an empty array", inject(($rootScope, $compile) => {
+        let scope = $rootScope.$new();
+        scope.schema = {
+            "properties": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "msg": {"type": "string"}
+                        }
+                    }
+                }
+            }
+        };
+        scope.uiSchema = {
+            "type": "Control",
+            "scope": { "$ref": "#/properties/comments" },
+            "options": {
+                "submit": true
+            }
+        };
+        scope.data = {};
+        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(1);
+    }));
 });
