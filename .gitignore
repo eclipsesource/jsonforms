@@ -32,6 +32,7 @@ examples/bower_components/
 examples/css/jsonforms.css
 examples/js/jsonforms.js
 examples/js/jsonforms.min.js
+examples/fonts
 
 # webstorm
 .idea

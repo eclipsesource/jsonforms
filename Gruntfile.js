@@ -88,6 +88,12 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            bootstrapfonts: {
+               files: [
+                   // bootstrap fonts to dist
+                   {expand:true, cwd: 'node_modules/bootstrap/fonts', src: ['**'], dest: 'dist/fonts'}
+               ]
+            },
             examples: {
                 files: [
                     // dist to examples
@@ -375,6 +381,7 @@ module.exports = function(grunt) {
         'clean:dist',
         'less:bootstrap',
         'less:jsonforms',
+        'copy:bootstrapfonts',
         'ts:dist',
         'ngtemplates:dist',
         'angular-builder',
