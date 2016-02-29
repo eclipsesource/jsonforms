@@ -122,7 +122,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
                 containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
                 if (data == undefined) {
                     containerDescription["instance"][containerDescription['path']] = [];
-                    data = containerDescription["instance"][containerDescription['path']];
+                    data = [];
                 }
                 containerDescription['submitCallback'] = () => data.push(_.clone(submitElement));
             }
