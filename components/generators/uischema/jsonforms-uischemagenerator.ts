@@ -3,89 +3,78 @@
 module JSONForms{
 
     export class UISchemaGenerator implements IUISchemaGenerator{
-        generateDefaultUISchema = (jsonSchema:any):any =>{
-            var uiSchemaElements = [];
-            this.generateUISchema(jsonSchema, uiSchemaElements, "#", "");
-            return uiSchemaElements[0];
+        generateDefaultUISchema = (jsonSchema:any): IUISchemaElement => {
+            var uiSchema = this.generateUISchema(jsonSchema, [], "#", "");
+            return this.wrapInLayoutIfNecessary(uiSchema);
         };
 
-        private generateUISchema = (jsonSchema:any, schemaElements:IUISchemaElement[], currentRef:string, schemaName:string):any =>{
+        private generateUISchema = (jsonSchema:any, schemaElements:IUISchemaElement[], currentRef:string, schemaName:string): IUISchemaElement => {
             var type = this.deriveType(jsonSchema);
 
             switch(type) {
 
                 case "object":
-                    // Add a vertical layout with a label for the element name (if it exists)
-                    var verticalLayout:IVerticalLayout = {
-                        type: "VerticalLayout",
-                        elements: []
-                    };
+                    var verticalLayout: IVerticalLayout = this.createVerticalLayout();
                     schemaElements.push(verticalLayout);
 
-                    if (schemaName && schemaName !== "") {
-                        // add label with name
-                        var label:ILabel = {
-                            type: "Label",
-                            text: PathUtil.beautify(schemaName)
-                        };
-                        verticalLayout.elements.push(label);
-                    }
+                    this.addLabel(verticalLayout, schemaName);
 
-                    // traverse properties
-                    if (!jsonSchema.properties) {
-                        // If there are no properties return
-                        return;
-                    }
-
-                    var nextRef:string = currentRef + '/' + "properties";
-                    for (var property in jsonSchema.properties) {
-                        if(this.isIgnoredProperty(property, jsonSchema.properties[property])){
-                            continue;
+                    if (jsonSchema.properties) {
+                        // traverse properties
+                        var nextRef:string = currentRef + '/' + "properties";
+                        for (var property in jsonSchema.properties) {
+                            if(this.isIgnoredProperty(property, jsonSchema.properties[property])){
+                                continue;
+                            }
+                            this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                         }
-                        this.generateUISchema(jsonSchema.properties[property], verticalLayout.elements, nextRef + "/" + property, property);
                     }
 
-                    break;
+                    return verticalLayout;
 
-                case "array":
-                    var horizontalLayout:IHorizontalLayout = {
-                        type: "HorizontalLayout",
-                        elements: []
-                    };
-                    schemaElements.push(horizontalLayout);
-
-                    var nextRef:string = currentRef + '/' + "items";
-
-                    if (!jsonSchema.items) {
-                        // If there are no items ignore the element
-                        return;
-                    }
-
-                    //check if items is object or array
-                    if (jsonSchema.items instanceof Array) {
-                        for (var i = 0; i < jsonSchema.items.length; i++) {
-                            this.generateUISchema(jsonSchema.items[i], horizontalLayout.elements, nextRef + '[' + i + ']', "");
-                        }
-                    } else {
-                        this.generateUISchema(jsonSchema.items, horizontalLayout.elements, nextRef, "");
-                    }
-
-                    break;
-
+                case "array": // array items will be handled by the array control itself
                 case "string":
                 case "number":
                 case "integer":
                 case "boolean":
                     var controlObject:IControlObject = this.getControlObject(PathUtil.beautify(schemaName), currentRef);
                     schemaElements.push(controlObject);
-                    break;
+                    return controlObject;
                 case "null":
-                    //ignore
-                    break;
+                    return null;
                 default:
                     throw new Error("Unknown type: " + JSON.stringify(jsonSchema));
             }
 
+        };
+
+        /**
+         * Adds the given {@code labelName} to the {@code layout} if it exists
+         * @param layout
+         *      The layout which is to receive the label
+         * @param labelName
+         *      The name of the schema
+         */
+        private addLabel = (layout: ILayout, labelName: string) => {
+            if (labelName && labelName != "") {
+                // add label with name
+                var label:ILabel = {
+                    type: "Label",
+                    text: PathUtil.beautify(labelName)
+                };
+                layout.elements.push(label);
+            }
+        };
+
+        /**
+         * Creates a new VerticalLayout
+         * @returns the new IVerticalLayout
+         */
+        private createVerticalLayout = (): IVerticalLayout => {
+            return {
+                type: "VerticalLayout",
+                elements: []
+            };
         };
 
         /**
@@ -114,14 +103,31 @@ module JSONForms{
         /**
          * Creates a IControlObject with the given label referencing the given ref
          */
-        private getControlObject = (label: string, ref: string): IControlObject => {
-            return {
+        private getControlObject = (label:string, ref:string):IControlObject => {
+            var control:IControlObject = {
                 type: "Control",
-                label: label,
                 scope: {
                     $ref: ref
                 }
             };
+            if (label) {
+                control.label = label;
+            }
+            return control;
+        };
+
+        /**
+         * Wraps the given {@code uiSchema} in a VerticalLayout if there is none already.
+         * @param uiSchema The ui schema to wrap in a vertical layout.
+         * @returns the wrapped uiSchema.
+         */
+        private wrapInLayoutIfNecessary = (uiSchema:IUISchemaElement):ILayout => {
+            if (uiSchema.type !== "VerticalLayout") {
+                var verticalLayout:IVerticalLayout = this.createVerticalLayout();
+                verticalLayout.elements.push(uiSchema);
+                return verticalLayout;
+            }
+            return <ILayout>uiSchema;
         };
     }
 }

@@ -46,6 +46,47 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
+    it("generate ui schema for schema without object root", function () {
+        var schema = {
+            type: "string"
+        };
+        var uiSchema = {
+            type: "VerticalLayout",
+            elements: [
+                {
+                    type: "Control",
+                    scope: {
+                        $ref: "#"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
+
+    it("generate ui schema for schema with unspecified object root", function () {
+        var schema = {
+            properties: {
+                age: {
+                    type: "integer"
+                }
+            }
+        };
+        var uiSchema = {
+            type: "VerticalLayout",
+            elements: [
+                {
+                    type: "Control",
+                    label: "Age",
+                    scope: {
+                        $ref: "#/properties/age"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
+
     it("ignore json-schema id attributes", function () {
         var schema = {
             type: "object",
@@ -251,6 +292,56 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
+    it("generate named array control", function () {
+        var schema = {
+            "type": "object",
+            "properties": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "msg": {"type": "string"}
+                        }
+                    }
+                }
+            }
+        };
+        var uiSchema = {
+            "type": "VerticalLayout",
+            "elements": [
+                {
+                    "type": "Control",
+                    "label": "Comments",
+                    "scope": {
+                        "$ref": "#/properties/comments"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
 
+    it("generate unnamed array control", function () {
+        var schema = {
+            "type": "array",
+            "items": {
+                "properties": {
+                    "msg": {"type": "string"}
+                }
+            }
+        };
+        var uiSchema = {
+            "type": "VerticalLayout",
+            "elements": [
+                {
+                    "type": "Control",
+                    "scope": {
+                        "$ref": "#"
+                    }
+                }
+            ]
+        };
+        expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
+    });
 
 });
