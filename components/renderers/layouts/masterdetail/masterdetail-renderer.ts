@@ -11,8 +11,8 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
         control['template'] = `
         <div class="row">
             <!-- Master -->
-            <div class="col-sm-30">
-                <jsonforms-masterdetail-collection element="element" collection="element.schema.properties"></jsonforms-masterdetail-collection>
+            <div class="col-sm-30 jsf-masterdetail">
+                <jsonforms-masterdetail-collection element="element" properties="element.schema.properties" instance="element.instance"></jsonforms-masterdetail-collection>
             </div>
             <!-- Detail -->
             <div class="col-sm-70">
