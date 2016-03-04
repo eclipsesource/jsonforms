@@ -2,7 +2,7 @@
 
 class ArrayRenderer implements JSONForms.IRenderer {
 
-    protected maxSize = 99;
+    protected maxSize = 100;
     priority = 99;
 
     constructor(private renderService: JSONForms.IRenderService, private pathResolver: JSONForms.IPathResolver) { }
@@ -96,7 +96,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
             return controlDescription;
         } else {
             let submitElement = {};
-            let supportsSubmit = element.options != undefined && element.options['submit'];
+            let supportsSubmit = !(element.options != undefined && element.options['submit'] == false);
             let generatedGroups = this.createControlGroupPerItem(schemaPath, items, data == undefined ? 0 : data.length);
             let buttonText = JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
 
@@ -111,7 +111,8 @@ class ArrayRenderer implements JSONForms.IRenderer {
                   <jsonforms-dynamic-widget ng-repeat="submitRenderDescription in element.submitControls" element="submitRenderDescription">
                   </jsonforms-dynamic-widget>
                </fieldset>
-               <input ng-show="${supportsSubmit}" type="button" value="Add to ${buttonText}" ng-click="element.submitCallback()" ng-model="element.submitElement">
+               <input class="btn btn-primary"
+                      ng-show="${supportsSubmit}" type="button" value="Add to ${buttonText}" ng-click="element.submitCallback()" ng-model="element.submitElement">
                </input>
              </jsonforms-layout>`;
 
@@ -122,7 +123,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
                 containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
                 if (data == undefined) {
                     containerDescription["instance"][containerDescription['path']] = [];
-                    data = [];
+                    data = containerDescription["instance"][containerDescription['path']];
                 }
                 containerDescription['submitCallback'] = () => data.push(_.clone(submitElement));
             }
