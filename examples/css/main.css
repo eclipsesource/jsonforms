@@ -1,0 +1,136 @@
+h1 {
+    color: white;
+}
+
+body {
+    background-image: url('../assets/images/bg.jpg');
+    font-family: 'Open Sans', sans-serif;
+}
+
+.panel > .panel-heading {
+    background: #CEDB50 none;
+    color: black;
+}
+
+
+.jsf .panel-default > .panel-heading {
+    background: #337AB7 none;
+    color: white;
+}
+
+.panel > .panel-body {
+    background: #0C2339 none;
+}
+
+* {
+    border-radius: 0 !important;
+}
+
+.jsf-vertical-layout > [class*="col-"] {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.jsf-group > [class*="col-"] {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+
+.jsf-group {
+    /*background-color: #161716;*/
+    color: white;
+    border: 0 solid #337AB7;
+    padding: 0;
+    background-color: #0C2339;
+}
+
+.jsf .row  {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.jsf-control {
+}
+
+.jsf .alert {
+    padding: 5px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: white;
+    background-color: #FF263F;
+}
+
+
+.jsf .panel {
+    border: 1px solid #337AB7;
+}
+
+.jsf-vertical-layout {
+    background-color: #0C2339;
+    color: white;
+    border: 1px solid #337AB7;
+    padding-top: 5px;
+}
+
+.jsf-label {
+    font-size: 1.25em;
+    /*background-color: #6AAED8;*/
+}
+
+.accordion-group {
+    background: #99B2B7 none;
+    color: white;
+}
+
+.accordion-heading {
+    background: #99B2B7 none;
+    color: white;
+}
+
+.accordion {
+    background: #99B2B7 none;
+    color: white;
+}
+
+.jsf legend {
+    color: white;
+}
+
+.footer {
+    color: white;
+}
+
+.jsf-masterdetail{
+
+}
+
+.jsf .jsf-masterdetail .panel-body {
+    padding-bottom: 0;
+}
+.jsf .jsf-masterdetail .panel-group {
+    margin-bottom: 5px;
+}
+
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-body {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-heading + .panel-collapse .panel-body {
+    border-width: 0;
+}
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-group {
+    margin-bottom: 0;
+    border-width: 0;
+}
+.jsf-masterdetail-selected {
+    font-weight: bold;
+    color: #CEDB50;
+}
+.jsf-masterdetail-property {
+    font-style: italic;
+    color: white;
+}
+.jsf-masterdetail-header {
+    text-decoration: none;
+}
