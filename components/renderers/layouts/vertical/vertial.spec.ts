@@ -12,7 +12,7 @@ describe('VerticalLayout', () => {
     beforeEach(module('components/renderers/controls/control.html'));
 
     it("should not support labels", inject(($rootScope, $compile) => {
-        var scope = $rootScope.$new();
+        let scope = $rootScope.$new();
         scope.schema = {
             "properties": {
                 "foo": { "type": "string" }
@@ -30,9 +30,11 @@ describe('VerticalLayout', () => {
             ]
         };
         scope.data = { "name": "John Doe "};
-        var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        var div = el.find('div');
-        expect(div.hasClass('jsf-vertical-layout')).toBeTruthy();
+        let div = el.find('div');
+        console.log(div.children());
+        let layout = angular.element(div.children()[0]);
+        expect(layout.hasClass('jsf-vertical-layout')).toBeTruthy();
     }));
 });

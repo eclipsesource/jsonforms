@@ -13,7 +13,7 @@ class DatetimeRenderer implements JSONForms.IRenderer {
         control['template'] =
             `<jsonforms-control>
             <div class="input-group">
-              <input type="text" ${element.readOnly ? 'readonly' : ''} datepicker-popup="dd.MM.yyyy" close-text="Close" is-open="element.isOpen" id="${schemaPath}" class="form-control jsf-control jsf-control-datetime" data-jsonforms-model  data-jsonforms-validation/>
+              <input type="text" ${element.readOnly ? 'readonly' : ''} datepicker-popup="dd.MM.yyyy" close-text="Close" is-open="element.isOpen" id="${schemaPath}" class="form-control jsf-control-datetime" data-jsonforms-model  data-jsonforms-validation/>
                  <span class="input-group-btn">
                    <button type="button" class="btn btn-default" ng-click="element.openDate($event)">
                      <i class="glyphicon glyphicon-calendar"></i>
