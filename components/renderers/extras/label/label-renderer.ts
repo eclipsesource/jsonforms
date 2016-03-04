@@ -6,12 +6,12 @@ class LabelRenderer implements JSONForms.IRenderer {
 
     render(element:IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
         var text = element['text'];
-        var size = 99;
+        var size = 100;
 
         return {
             "type": "Widget",
             "size": size,
-            "template": ` <jsonforms-widget><div class="jsf-label">${text}</div></jsonforms-widget>`
+            "template": ` <jsonforms-widget class="jsf-label">${text}<hr></jsonforms-widget>`
         };
     }
 

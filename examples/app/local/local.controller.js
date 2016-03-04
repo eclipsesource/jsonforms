@@ -36,11 +36,12 @@ angular.module('makeithappen').controller('LocalController', function() {
             "occupation": {
                 "type": "string"
             },
-            "test_wrong": {
+            /* FIXME: disabling arrays for primitive types */
+            /*"test_wrong": {
                 "type": "array",
                 "items": {"type":"string"}
-            },
-            "test_correct": {
+            },*/
+            "hobbies": {
                 "type": "array",
                 "items": {"type":"object","properties": {"name": {"type": "string"}}}
             }
@@ -48,8 +49,7 @@ angular.module('makeithappen').controller('LocalController', function() {
         "required": ["occupation", "nationality"]
     };
     vm.uiSchema = {
-        "type": "Group",
-        "label": "This is a fancy label",
+        "type": "VerticalLayout",
         "elements": [
             {
                 "type": "VerticalLayout",
@@ -225,38 +225,6 @@ angular.module('makeithappen').controller('LocalController', function() {
             {
                 name: 'Jimmy',
                 personalData:{age: 32}
-            },
-            {
-                name: 'Max',
-                personalData:{age: 35}
-            },
-            {
-                name: 'Jonas',
-                personalData:{age: 34}
-            },
-            {
-                name: 'Edgar',
-                personalData:{age: 30}
-            },
-            {
-                name: 'Eugen',
-                personalData:{age: 29}
-            },
-            {
-                name: 'Johannes',
-                personalData:{age: 26}
-            },
-            {
-                name: 'Alex',
-                personalData:{age: 25}
-            },
-            {
-                name: 'Stefan',
-                personalData:{age: 27}
-            },
-            {
-                name: 'Eva',
-                personalData:{age: 30}
             }
         ]
     };

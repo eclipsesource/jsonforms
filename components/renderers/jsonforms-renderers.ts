@@ -91,7 +91,7 @@ module JSONForms {
     export class ControlRenderDescription implements IControlRenderDescription {
 
         public type = "Control";
-        public size = 99;
+        public size = 100;
         public alerts: any[] = []; // TODO IAlert type missing
         public label: string;
         public rule: IRule;

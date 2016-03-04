@@ -37,7 +37,7 @@ describe('DateTimeTest', () => {
         scope.data = { "birthDate": "1985-06-02 20:15:36" };
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        let input = angular.element(el[0].getElementsByClassName('jsf-control'));
+        let input = angular.element(el[0].getElementsByClassName('jsf-control-datetime'));
         expect(input.attr("readonly")).toBeDefined();
     }));
     // TODO: add test cases to check whether validation works

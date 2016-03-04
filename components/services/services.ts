@@ -108,7 +108,7 @@ module JSONForms{
             results['errors'].forEach((error) => {
                 if (error['schemaPath'].indexOf("required") != -1) {
                     var propName = error['dataPath'] + "/" + error['params']['key'];
-                    this.validationResults.get(instance)[propName] = "Missing property";
+                    this.validationResults.get(instance)[propName] = "Required";
                 } else {
                     this.validationResults.get(instance)[error['dataPath']] = error['message'];
                 }

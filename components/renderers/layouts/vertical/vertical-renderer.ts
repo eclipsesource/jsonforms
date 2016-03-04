@@ -9,14 +9,14 @@ class VerticalRenderer implements JSONForms.IRenderer {
     render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
-        var template = `<jsonforms-layout class="jsf-vertical-layout">
-              <fieldset>
+        var template = `<div ng-show='element.elements.length'>
+          <jsonforms-layout class="jsf-vertical-layout">
                 <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child">
                 </jsonforms-dynamic-widget>
-             </fieldset>
-            </jsonforms-layout>`;
+          </jsonforms-layout>
+        </div>`;
 
-        return JSONForms.RenderDescriptionFactory.createContainerDescription(99, renderedElements, template, services, element);
+        return JSONForms.RenderDescriptionFactory.createContainerDescription(100, renderedElements, template, services, element);
     }
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {

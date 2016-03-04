@@ -8,7 +8,7 @@ class HorizontalRenderer implements JSONForms.IRenderer {
 
     render(element: ILayout, subSchema: SchemaElement, schemaPath:String, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
 
-        var maxSize = 99;
+        var maxSize = 100;
 
         var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
@@ -18,11 +18,12 @@ class HorizontalRenderer implements JSONForms.IRenderer {
             renderedElements[j].size = individualSize;
         }
 
-        var template =`<jsonforms-layout><fieldset>
-                   <div class="row">
-                     <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child"></jsonforms-dynamic-widget>
-                   </div>
-                 </fieldset></jsonforms-layout>`;
+        var template =`<jsonforms-layout class="jsf-horizontal-layout">
+          <fieldset>
+            <div class="row">
+              <jsonforms-dynamic-widget ng-repeat="child in element.elements" element="child"></jsonforms-dynamic-widget>
+            </div>
+          </fieldset></jsonforms-layout>`;
 
         return JSONForms.RenderDescriptionFactory.createContainerDescription(maxSize, renderedElements, template, services, element);
     };

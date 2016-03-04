@@ -22,7 +22,7 @@ describe('String renderer', () => {
         scope.data = { "vegetarian": true };
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        let input = angular.element(el[0].getElementsByClassName('jsf-control'));
+        let input = angular.element(el[0].getElementsByClassName('jsf-control-string'));
         expect(input.attr("readonly")).toBeDefined();
     }));
 });
