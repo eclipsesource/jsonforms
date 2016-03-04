@@ -2,6 +2,14 @@ h1 {
     color: white;
 }
 
+.jsf h2 {
+    color: white;
+}
+
+.jsf label {
+    color: white;
+}
+
 body {
     background-image: url('../assets/images/bg.jpg');
     font-family: 'Open Sans', sans-serif;
