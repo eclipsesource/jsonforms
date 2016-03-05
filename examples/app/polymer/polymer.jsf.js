@@ -9,10 +9,12 @@ app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, 
         // set-up event binding
         document.addEventListener('WebComponentsReady', function() {
             var input = document.querySelector('paper-input');
-            input.addEventListener('keyup', function() {
-               instance[path] = input.value;
-                $rootScope.$digest();
-            });
+            if (input) {
+                input.addEventListener('keyup', function () {
+                    instance[path] = input.value;
+                    $rootScope.$digest();
+                });
+            }
         });
 
         return {
