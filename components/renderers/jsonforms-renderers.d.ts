@@ -34,8 +34,4 @@ declare module JSONForms {
     export interface IContainerRenderDescription extends IRenderDescription {
         elements: IRenderDescription[]
     }
-
-    export interface IArrayControlRenderDescription extends JSONForms.IRenderDescription {
-        gridOptions: uiGrid.IGridOptions
-    }
 }
