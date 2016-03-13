@@ -1,7 +1,6 @@
 ///<reference path="../references.ts"/>
 
 import PathResolver = JSONForms.PathResolver;
-declare var JsonRefs;
 
 class FormController {
 
@@ -34,30 +33,15 @@ class FormController {
 
         this.$q.all([this.fetchSchema(), this.fetchUiSchema()]).then((values) => {
             var schema = values[0];
-            var uiSchemaMaybe = values[1];
+            var uiSchema = values[1];
 
-            var uiSchemaDeferred = this.$q.defer();
-
-            this.$q.when(uiSchemaDeferred.promise).then((uiSchema) => {
-                //schema['uiSchema'] = uiSchema;
-                //  build mapping of ui paths to schema refs
-                JsonRefs.resolveRefs(schema, {}, function (err, resolvedSchema) {
-                    resolvedSchemaDeferred.resolve(resolvedSchema);
-                    // TODO: ui schema is now unresolved
-                    resolvedUISchemaDeferred.resolve(uiSchema); //resolvedSchema['uiSchema']);
-                });
-            });
-
-            if (uiSchemaMaybe === undefined || uiSchemaMaybe === null || uiSchemaMaybe === "") {
+            if (_.isEmpty(uiSchema)) {
                 // resolve JSON schema, then generate ui Schema
-                JsonRefs.resolveRefs(schema, {}, (err, resolvedSchema) => {
-                    var uiSchema = this.UISchemaGenerator.generateDefaultUISchema(resolvedSchema);
-                    uiSchemaDeferred.resolve(uiSchema);
-                });
-            } else {
-                // directly resolve ui schema
-                uiSchemaDeferred.resolve(uiSchemaMaybe);
+                uiSchema = this.UISchemaGenerator.generateDefaultUISchema(schema);
             }
+
+            resolvedSchemaDeferred.resolve(schema);
+            resolvedUISchemaDeferred.resolve(uiSchema);
         });
 
 
