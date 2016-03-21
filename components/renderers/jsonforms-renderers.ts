@@ -121,13 +121,13 @@ module JSONForms {
             this.setupModelChangedCallback();
         }
 
-        private createLabel(schemaPath: string, label?: string): string {
+        private createLabel(schemaPath:string, label?:IWithLabel):string {
             var stringBuilder = "";
-            if (label) {
-                stringBuilder += label;
-            } else {
-                // default label
-                stringBuilder += PathUtil.beautifiedLastFragment(schemaPath);
+
+            var labelObject = LabelObjectUtil.getElementLabelObject(label, schemaPath);
+
+            if (labelObject.show) {
+                stringBuilder += labelObject.text;
             }
 
             if (this.isRequired(schemaPath)) {
@@ -135,6 +135,10 @@ module JSONForms {
             }
 
             return stringBuilder;
+        }
+
+        private displayLabel(labelAlignment:string):boolean {
+            return labelAlignment === "NONE";
         }
 
         private isRequired(schemaPath: string): boolean {
@@ -184,5 +188,35 @@ module JSONForms {
             }
         }
 
+    }
+
+    export class LabelObjectUtil {
+        public static getElementLabelObject(labelProperty:IWithLabel, schemaPath:string):ILabelObject {
+            if (typeof labelProperty === "boolean") {
+                if (labelProperty) {
+                    return new LabelObject(PathUtil.beautifiedLastFragment(schemaPath), <boolean>labelProperty);
+                } else {
+                    return new LabelObject(undefined, <boolean>labelProperty);
+                }
+            } else if (typeof labelProperty === "string") {
+                return new LabelObject(<string>labelProperty, true);
+            } else if (typeof labelProperty === "object") {
+                var show = labelProperty.hasOwnProperty("show") ? (<ILabelObject>labelProperty).show : true;
+                var label = labelProperty.hasOwnProperty("text") ? (<ILabelObject>labelProperty).text : PathUtil.beautifiedLastFragment(schemaPath);
+                return new LabelObject(label, show);
+            } else {
+                return new LabelObject(PathUtil.beautifiedLastFragment(schemaPath), true);
+            }
+        }
+    }
+
+    export class LabelObject implements ILabelObject {
+        public text:string;
+        public show:boolean;
+
+        constructor(text:string, show:boolean) {
+            this.text = text;
+            this.show = show;
+        }
     }
 }

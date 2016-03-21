@@ -27,7 +27,7 @@ module.exports = function(grunt) {
               dest: 'temp/services.js'
             },
             jsonforms_module: {
-                src: ['components/**/jsonforms-*.js'],
+                src: ['components/**/jsonforms-*.js', '!components/**/*.spec.js'],
                 filter: 'isFile',
                 dest: 'temp/jsonforms-module.js'
             },
