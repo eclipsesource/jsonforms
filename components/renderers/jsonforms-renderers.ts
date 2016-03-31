@@ -2,6 +2,8 @@
 
 module JSONForms {
 
+    declare var JsonRefs;
+
     export class RenderService implements IRenderService {
 
         private renderers: IRenderer[] = [];
@@ -16,7 +18,11 @@ module JSONForms {
             var indexedSchemaPath;
             var schemaPath;
             var subSchema;
-            var schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
+            var schema;
+
+            JsonRefs.resolveRefs(services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema(), {}, (err, resolvedSchema) => {
+                schema =  resolvedSchema;
+            });
 
             // TODO element must be IControl
             // TODO use isControl

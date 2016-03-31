@@ -33,7 +33,6 @@ describe('VerticalLayout', () => {
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         let div = el.find('div');
-        console.log(div.children());
         let layout = angular.element(div.children()[0]);
         expect(layout.hasClass('jsf-vertical-layout')).toBeTruthy();
     }));
