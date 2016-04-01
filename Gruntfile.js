@@ -318,7 +318,7 @@ module.exports = function(grunt) {
             deploy: {
                 options: {
                     tag: 'v<%= pkg.version %>',
-                    message: 'Release version v%= pkg.version %'
+                    message: 'Release version v<%= pkg.version %>'
                 }
             }
         },
