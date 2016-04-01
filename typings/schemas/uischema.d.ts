@@ -16,11 +16,16 @@ interface ILeafCondition extends ICondition {
     expectedValue: any;
 }
 
-interface WithLabel {
-    label?: string
+interface IWithLabel {
+    label?: string | boolean | ILabelObject
 }
 
-interface IUISchemaElement extends WithLabel {
+interface ILabelObject {
+    text?: string
+    show?: boolean
+}
+
+interface IUISchemaElement extends IWithLabel {
     type: string;
     rule?: IRule;
 }
@@ -51,9 +56,4 @@ interface IArrayControlObject extends IControlObject {
 
 interface IColumnControlObject extends IControlObject {
 
-}
-
-//Label
-interface ILabel extends IUISchemaElement {
-    text: string;
 }
