@@ -25,4 +25,28 @@ describe('String renderer', () => {
         let input = angular.element(el[0].getElementsByClassName('jsf-control-string'));
         expect(input.attr("readonly")).toBeDefined();
     }));
+
+    it("should support text-areas if multi option is set", inject(($rootScope, $compile) => {
+        let scope = $rootScope.$new();
+        scope.schema = {
+            "properties": {
+                "name": {
+                    "type": "string",
+                },
+            }
+        };
+        scope.uiSchema = {
+            "type": "Control",
+            "readOnly": true,
+            "scope": { "$ref": "#/properties/name" },
+            "options": {
+                "multi": true
+            }
+        };
+        scope.data = { "vegetarian": true };
+        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let input = angular.element(el[0].getElementsByClassName('jsf-control-string'));
+        expect(input.prop('tagName')).toBe("TEXTAREA");
+    }));
 });
