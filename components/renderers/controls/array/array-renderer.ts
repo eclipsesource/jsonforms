@@ -102,7 +102,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
 
             let template = `
             <jsonforms-layout class="jsf-group">
-              <fieldset>
+              <fieldset ${element.readOnly ? 'disabled' : ''}>
                 <legend>${label}</legend>
                 <div ng-repeat="renderDescription in element.generateControlDescriptions(element.instance[element.path]) ">
                   <jsonforms-dynamic-widget element="renderDescription">
