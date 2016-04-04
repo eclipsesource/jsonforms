@@ -11,53 +11,43 @@ angular.module('makeithappen', [
             templateUrl: 'app/local/local.html',
             controller: 'LocalController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/editor', {
+        }).when('/editor', {
             templateUrl: 'app/editor/editor.html',
             controller: 'EditorController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/custom', {
+        }).when('/custom', {
             templateUrl: 'app/custom/custom.html',
             controller: 'CustomController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/defaultui', {
+        }).when('/defaultui', {
             templateUrl: 'app/default-ui/defaultui.html',
             controller: 'DefaultUISchemaController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/defaultschema', {
+        }).when('/defaultschema', {
             templateUrl: 'app/default/default-schema.html',
             controller: 'DefaultSchemaController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/placeholder-posts/:id?', {
+        }).when('/placeholder-posts/:id?', {
             templateUrl: 'app/placeholder/placeholder-posts.html',
             controller: 'PlaceholderController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/placeholder-users/:id?', {
+        }).when('/placeholder-users/:id?', {
             templateUrl: 'app/placeholder/placeholder-users.html',
             controller: 'PlaceholderController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/placeholder-comments/:id?', {
+        }).when('/placeholder-comments/:id?', {
             templateUrl: 'app/placeholder/placeholder-comments.html',
             controller: 'PlaceholderController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/polymer', {
+        }).when('/polymer', {
             templateUrl: 'app/polymer/polymer.html',
             controller: 'PolymerController',
             controllerAs: 'vm'
-        });
-        $routeProvider.when('/arrays', {
+        }).when('/arrays', {
             templateUrl: 'app/arrays/arrays.html',
             controller: 'ArraysController',
             controllerAs: 'vm'
-        });
-        $routeProvider.otherwise({
+        }).otherwise({
             redirectTo: '/local'
         });
     }

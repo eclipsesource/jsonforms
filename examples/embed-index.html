@@ -15,13 +15,17 @@
     </script>
     <link rel="import" href="bower_components/paper-input/paper-input.html"/>
 
-    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="css/jsonforms.css"/>
     <link rel="stylesheet" href="css/main.css"/>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-    <script src="bower_components/tv4/tv4.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"
+            type="text/javascript"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"
+            type="text/javascript"></script>
+    <script src="bower_components/tv4/tv4.js"
+            type="text/javascript"></script>
     <script src="bower_components/ace-builds/src-min-noconflict/ace.js"
             type="text/javascript"></script>
     <script src="bower_components/angular/angular.js"
@@ -53,6 +57,7 @@
     <script src="js/jsonforms.js" type="text/javascript"></script>
 
     <script src="app/app.js" type="text/javascript"></script>
+    <script src="app/index/index.controller.js" type="text/javascript"></script>
     <script src="app/editor/editor.controller.js" type="text/javascript"></script>
     <script src="app/local/local.controller.js" type="text/javascript"></script>
     <script src="app/default-ui/default-ui.controller.js" type="text/javascript"></script>
@@ -67,11 +72,37 @@
 
 </head>
 <body>
-<div class="container">
+<div class="container"  ng-controller="IndexController as index">
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#/local">JSON Forms Demo</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a ng-href="{{index.getPath()}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select example<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li ng-class="index.isActive('/local')"><a href="#/local">Person example</a></li>
+                            <li ng-class="index.isActive('/arrays')"><a href="#/arrays">Array controls</a></li>
+                            <li ng-class="index.isActive('/editor')"><a href="#/editor">Live edit</a></li>
+                            <li ng-class="index.isActive('/defaultui')"><a href="#/defaultui">Generated UI</a></li>
+                            <li ng-class="index.isActive('/defaultschema')"><a href="#/defaultschema">Generated schema</a></li>
+                            <li ng-class="index.isActive('/polymer')"><a href="#/polymer">Polymer example</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
     <div class="row" id="demo">
         <div class="col-md-12">
-            <h1 style="margin-bottom: 1em"><strong>JSON Forms Demo</strong></h1>
-            <div id="demo-body" ng-view class="jsf"></div>
+            <div id="demo-body" ng-view  class="jsf"></div>
         </div>
     </div>
 
