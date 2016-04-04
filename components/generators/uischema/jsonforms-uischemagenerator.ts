@@ -58,7 +58,7 @@ module JSONForms{
         private addLabel = (layout: ILayout, labelName: string) => {
             if (labelName && labelName != "") {
                 // add label with name
-                var label:ILabel = {
+                var label = {
                     type: "Label",
                     text: PathUtil.beautify(labelName)
                 };

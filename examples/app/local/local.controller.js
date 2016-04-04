@@ -72,7 +72,10 @@ angular.module('makeithappen').controller('LocalController', function() {
                 "elements": [
                     {
                         "type": "Control",
-                        "label": "Name",
+                        "label": {
+                            "text": "Name",
+                            "show": true
+                        },
                         "scope": {
                             "$ref": "#/properties/name"
                         },
@@ -89,7 +92,9 @@ angular.module('makeithappen').controller('LocalController', function() {
                     },
                     {
                         "type": "Control",
-                        "label": "Age",
+                        "label": {
+                            "text": "Age"
+                        },
                         "scope": {
                             "$ref": "#/properties/personalData/properties/age"
                         }
