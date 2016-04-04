@@ -57,4 +57,34 @@ describe('Array renderer', () => {
         scope.$digest();
         expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(1);
     }));
+
+    it("should be capable of rendering an array as read-only", inject(($rootScope, $compile) => {
+        let scope = $rootScope.$new();
+        scope.schema = {
+            "properties": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "msg": {"type": "string"}
+                        }
+                    }
+                }
+            }
+        };
+        scope.uiSchema = {
+            "type": "Control",
+            "scope": { "$ref": "#/properties/comments" },
+            "readOnly": true,
+            "options": {
+                "submit": true
+            }
+        };
+        scope.data = {};
+        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let fieldSet = angular.element(el[0].getElementsByTagName("fieldset"));
+        console.log(fieldSet);
+        expect(fieldSet.attr("disabled")).toBeDefined();
+    }));
 });
