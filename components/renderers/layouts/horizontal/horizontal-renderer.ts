@@ -10,7 +10,7 @@ class HorizontalRenderer implements JSONForms.IRenderer {
 
         var maxSize = 100;
 
-        var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
+        var renderedElements = JSONForms.RenderDescriptionFactory.renderElementsHorizontally(
             element.elements, this.renderService, services);
         var size = renderedElements.length;
         var individualSize = Math.floor(maxSize / size);
