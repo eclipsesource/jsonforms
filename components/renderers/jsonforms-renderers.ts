@@ -60,12 +60,46 @@ module JSONForms {
             return new ControlRenderDescription(schemaPath, services, element);
         }
 
-        // TODO doc
+        /**
+         * This is a helper method typically used by layouts that render their contained children in a horizontal
+         * fashion. In contrast to {@link renderElements} this function also takes into account whether labels
+         * of controls should be rendered at all, which might be the case if the UI schema declaration states that
+         * the label for each control is not to be shown.
+         *
+         * @param elements the UI schema children elements to be rendered
+         * @param renderService the RenderService that is used to render the UI schema elements
+         * @param services the service registry
+         * @returns {*[]} an array of RenderDescription objects that describe the UI schema elements to be rendered
+         */
+        static renderElementsHorizontally(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
+
+            let labelExists = elements.reduce((atLeastOneLabel, element) => {
+                return atLeastOneLabel ||  LabelObjectUtil.shouldShowLabel(element.label);
+            }, false);
+
+            return elements.map(element => {
+                let renderDesc = renderService.render(
+                    services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope(),
+                    element,
+                    services);
+                renderDesc.showLabel = labelExists;
+                return renderDesc;
+            });
+        }
+
+        /**
+         * This is a helper method typically used by layouts to render their contained children.
+         *
+         * @param elements the UI schema children elements to be rendered
+         * @param renderService the RenderService that is used to render the UI schema elements
+         * @param services the service registry
+         * @returns {*[]} an array of RenderDescription objects that describe the UI schema elements to be rendered
+         */
         static renderElements(elements:IUISchemaElement[], renderService: JSONForms.IRenderService, services:JSONForms.Services):JSONForms.IRenderDescription[] {
-            return elements.map((el) => {
+            return elements.map(element => {
                 return renderService.render(
                     services.get<JSONForms.IScopeProvider>(ServiceId.ScopeProvider).getScope(),
-                    el,
+                    element,
                     services);
             });
         }
@@ -100,11 +134,11 @@ module JSONForms {
         public size = 100;
         public alerts: any[] = []; // TODO IAlert type missing
         public label: string;
+        public showLabel: boolean;
         public rule: IRule;
         public readOnly: boolean;
         public path: string;
         public instance: any;
-
         private schema: SchemaElement;
         private validationService: IValidationService;
         private pathResolver: IPathResolver;
@@ -121,20 +155,18 @@ module JSONForms {
 
             this.path = PathUtil.normalize(schemaPath);
             this.label = this.createLabel(schemaPath, element.label);
+            // by default labels are shown
+            this.showLabel = LabelObjectUtil.shouldShowLabel(element.label);
             this.readOnly = element.readOnly;
             this.rule  = element.rule;
             this.ruleService.addRuleTrack(this);
             this.setupModelChangedCallback();
         }
 
-        private createLabel(schemaPath:string, label?:IWithLabel):string {
-            var stringBuilder = "";
+        private createLabel(schemaPath:string, label: IWithLabel):string {
 
-            var labelObject = LabelObjectUtil.getElementLabelObject(label, schemaPath);
-
-            if (labelObject.show) {
-                stringBuilder += labelObject.text;
-            }
+            let labelObject = LabelObjectUtil.getElementLabelObject(label, schemaPath);
+            let stringBuilder = labelObject.text;
 
             if (this.isRequired(schemaPath)) {
                 stringBuilder += "*";
@@ -197,6 +229,20 @@ module JSONForms {
     }
 
     export class LabelObjectUtil {
+
+        public static shouldShowLabel(label: IWithLabel): boolean {
+            if (label === undefined ) {
+                return true;
+            } else if (typeof label === 'boolean') {
+                return <boolean> label;
+            } else if (typeof label === 'string') {
+                return (<string> label) != "";
+            } else {
+                let labelObj = <ILabelObject> label;
+                return labelObj.hasOwnProperty("show") ? labelObj.show : true;
+            }
+        }
+
         public static getElementLabelObject(labelProperty:IWithLabel, schemaPath:string):ILabelObject {
             if (typeof labelProperty === "boolean") {
                 if (labelProperty) {

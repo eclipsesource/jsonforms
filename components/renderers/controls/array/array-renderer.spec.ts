@@ -84,7 +84,6 @@ describe('Array renderer', () => {
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         let fieldSet = angular.element(el[0].getElementsByTagName("fieldset"));
-        console.log(fieldSet);
         expect(fieldSet.attr("disabled")).toBeDefined();
     }));
 });

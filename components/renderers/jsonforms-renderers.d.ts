@@ -14,10 +14,11 @@ declare module JSONForms {
 
     export interface IRenderDescription {
         type: string
+        size: number
         template?: string
         templateUrl?: string
-        size: number
         rule?: IRule;
+        showLabel?: boolean
     }
 
     export interface IControlRenderDescription extends IRenderDescription {
