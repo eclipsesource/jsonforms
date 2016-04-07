@@ -40,7 +40,10 @@ describe('HorizontalLayout', () => {
         scope.$digest();
         let labelElements = el.find('label');
         expect(labelElements).toBeDefined();
-        expect(labelElements.length).toEqual(1);
+        // one label is empty
+        expect(labelElements.length).toEqual(2);
+        expect(angular.element(labelElements[0]).text()).toEqual("Foo");
+        expect(angular.element(labelElements[1]).text()).toEqual("");
     }));
 
     it("should take into account if all labels are hidden", inject(($rootScope, $compile) => {
