@@ -1,11 +1,14 @@
-///<reference path="../../../references.ts"/>
 
-class NumberRenderer implements JSONForms.IRenderer {
+import {Services} from "../../../services/services";
+import {IRenderer} from "../../jsonforms-renderers";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+
+class NumberRenderer implements IRenderer {
 
     priority = 2;
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services) {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: Services) {
+        var control = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['template'] = `<jsonforms-control>
           <input type="number" step="0.01" id="${schemaPath}" class="form-control jsf-control-number" ${element.readOnly ? 'readonly' : ''} data-jsonforms-validation data-jsonforms-model/>
         </jsonforms-control>`;
@@ -17,6 +20,8 @@ class NumberRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.number').run(['RenderService', (RenderService) => {
-    RenderService.register(new NumberRenderer());
-}]);
+export default angular
+    .module('jsonforms.renderers.controls.number', ['jsonforms.renderers.controls'])
+    .run(['RenderService', (RenderService) =>
+        RenderService.register(new NumberRenderer())
+    ]).name;

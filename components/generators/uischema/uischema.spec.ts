@@ -1,8 +1,7 @@
-/// <reference path="../../references.ts"/>
 
 describe('UISchemaGenerator', () => {
 
-    var UISchemaGenerator: JSONForms.IUISchemaGenerator;
+    let UISchemaGenerator: JSONForms.IUISchemaGenerator;
 
     beforeEach(module('jsonforms.generators.uischema'));
     beforeEach(() => {
@@ -25,7 +24,7 @@ describe('UISchemaGenerator', () => {
     it("generate ui schema for schema with one property", function () {
         var schema = {
             type: "object",
-            properties: {
+            propeprties: {
                 name: {
                     type: "string"
                 }

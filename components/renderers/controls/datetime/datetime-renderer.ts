@@ -1,11 +1,16 @@
 ///<reference path="../../../references.ts"/>
 
-class DatetimeRenderer implements JSONForms.IRenderer {
+import {IRenderer} from "../../jsonforms-renderers";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+import {Services} from "../../../services/services";
+import {IRenderDescription} from "../../jsonforms-renderers";
+
+class DatetimeRenderer implements IRenderer {
 
     priority = 3;
 
-    render(element: IControlObject, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+    render(element: IControlObject, schema: SchemaElement, schemaPath: string, services: Services): IRenderDescription {
+        var control = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['isOpen'] = false;
         control['openDate'] = function($event) {
             control['isOpen'] = true;

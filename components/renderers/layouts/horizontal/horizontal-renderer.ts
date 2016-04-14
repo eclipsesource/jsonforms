@@ -1,16 +1,22 @@
 ///<reference path="../../../references.ts"/>
 
-class HorizontalRenderer implements JSONForms.IRenderer {
+import {Services} from "../../../services/services";
+import {IRenderer} from "../../jsonforms-renderers";
+import {IContainerRenderDescription} from "../../jsonforms-renderers";
+import {IRenderService} from "../../jsonforms-renderers";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+
+class HorizontalRenderer implements IRenderer {
 
     priority = 1;
 
-    constructor(private renderService: JSONForms.IRenderService) { }
+    constructor(private renderService: IRenderService) { }
 
-    render(element: ILayout, subSchema: SchemaElement, schemaPath:String, services: JSONForms.Services): JSONForms.IContainerRenderDescription {
+    render(element: ILayout, subSchema: SchemaElement, schemaPath:String, services: Services): IContainerRenderDescription {
 
         var maxSize = 100;
 
-        var renderedElements = JSONForms.RenderDescriptionFactory.renderElementsHorizontally(
+        var renderedElements = RenderDescriptionFactory.renderElementsHorizontally(
             element.elements, this.renderService, services);
         var size = renderedElements.length;
         var individualSize = Math.floor(maxSize / size);
@@ -25,7 +31,7 @@ class HorizontalRenderer implements JSONForms.IRenderer {
             </div>
           </fieldset></jsonforms-layout>`;
 
-        return JSONForms.RenderDescriptionFactory.createContainerDescription(maxSize, renderedElements, template, services, element);
+        return RenderDescriptionFactory.createContainerDescription(maxSize, renderedElements, template, services, element);
     };
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath: string):boolean {
@@ -34,6 +40,8 @@ class HorizontalRenderer implements JSONForms.IRenderer {
 
 }
 
-angular.module('jsonforms.renderers.layouts.horizontal').run(['RenderService', (RenderService) => {
-    RenderService.register(new HorizontalRenderer(RenderService));
-}]);
+export default angular
+    .module('jsonforms.renderers.layouts.horizontal', ['jsonforms.renderers.layouts'])
+    .run(['RenderService', RenderService =>
+        RenderService.register(new HorizontalRenderer(RenderService))
+    ]).name;

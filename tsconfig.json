@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true
+  },
+  "files": [
+    "components/app.ts",
+    "components/form/form-directive.ts",
+    "components/form/form.ts",
+    "components/generators/generators.ts",
+    "components/generators/schema/jsonforms-schemagenerator.ts",
+    "components/generators/uischema/jsonforms-uischemagenerator.ts",
+    "components/generators/uischema/uischema-service.ts",
+    "components/ng-services/capitalize/capitalize.filter.ts",
+    "components/ng-services/pathresolver/pathresolver-service.ts",
+    "components/renderers/controls/array/array-renderer.ts",
+    "components/renderers/controls/boolean/boolean-renderer.ts",
+    "components/renderers/controls/controls-directive.ts",
+    "components/renderers/controls/datetime/datetime-renderer.ts",
+    "components/renderers/controls/enum/enum-renderer.ts",
+    "components/renderers/controls/integer/integer-renderer.ts",
+    "components/renderers/controls/number/number-renderer.ts",
+    "components/renderers/controls/reference/reference-renderer.ts",
+    "components/renderers/controls/string/string-renderer.ts",
+    "components/renderers/extras/label/label-renderer.ts",
+    "components/renderers/jsonforms-renderers.ts",
+    "components/renderers/layouts/categories/categories.ts",
+    "components/renderers/layouts/categories/categorization/categorization-renderer.ts",
+    "components/renderers/layouts/categories/category/category-renderer.ts",
+    "components/renderers/layouts/group/GroupTest.ts",
+    "components/renderers/layouts/group/group-renderer.ts",
+    "components/renderers/layouts/horizontal/horizontal-renderer.ts",
+    "components/renderers/layouts/masterdetail/masterdetail-directives.ts",
+    "components/renderers/layouts/masterdetail/masterdetail-renderer.ts",
+    "components/renderers/layouts/vertical/vertical-renderer.ts",
+    "components/renderers/renderers-directive.ts",
+    "components/services/data/data-services.ts",
+    "components/services/pathresolver/jsonforms-pathresolver.ts",
+    "components/services/pathutil.ts",
+    "components/services/rule/rule-service.ts",
+    "components/services/services.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

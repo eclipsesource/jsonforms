@@ -1,91 +1,93 @@
 ///<reference path="../../references.ts"/>
 
-module JSONForms {
 
+import {ServiceId} from "../services";
+import {IDataProvider} from './data-service'
+import {IPagingDataProvider} from './data-service'
+import {IFilteringDataProvider} from './data-service'
 
-    export class DataProviders {
-        static canPage(provider: IDataProvider): provider is IPagingDataProvider {
-            return provider.canPage;
-        }
-        static canFilter(provider: IDataProvider): provider is IFilteringDataProvider {
-            return provider.canFilter;
-        }
+export class DataProviders {
+    static canPage(provider: IDataProvider): provider is IPagingDataProvider {
+        return provider.canPage;
+    }
+    static canFilter(provider: IDataProvider): provider is IFilteringDataProvider {
+        return provider.canFilter;
+    }
+}
+
+export class DefaultDataProvider implements IPagingDataProvider {
+    canPage = true;
+    canFilter = false;
+
+    private _page = 0;
+    private _pageSize = 2;
+    private _data:any;
+
+    constructor(private $q: ng.IQService, data: any) {
+        this._data = data;
     }
 
-    export class DefaultDataProvider implements IPagingDataProvider {
-        canPage = true;
-        canFilter = false;
+    getId(): ServiceId {
+        return ServiceId.DataProvider;
+    }
 
-        private _page = 0;
-        private _pageSize = 2;
-        private _data:any;
+    getData():any {
+        return this._data;
+    }
 
-        constructor(private $q: ng.IQService, data: any) {
-            this._data = data;
-        }
+    fetchData(): ng.IPromise<any> {
+        var p = this.$q.defer();
+        // TODO: validation missing
+        p.resolve(this._data);
+        return p.promise;
+    }
 
-        getId(): ServiceId {
-            return ServiceId.DataProvider;
-        }
+    setPageSize = (newPageSize: number) => {
+        this._pageSize = newPageSize
+    };
 
-        getData():any {
-            return this._data;
-        }
-
-        fetchData(): ng.IPromise<any> {
-            var p = this.$q.defer();
-            // TODO: validation missing
+    fetchPage = (page: number) => {
+        this._page = page;
+        var p = this.$q.defer();
+        if (this._data instanceof Array) {
+            p.resolve(
+                this._data.slice(this._page * this._pageSize, this._page * this._pageSize + this._pageSize));
+        } else {
             p.resolve(this._data);
-            return p.promise;
         }
+        return p.promise;
+    };
 
-        setPageSize = (newPageSize: number) => {
-            this._pageSize = newPageSize
-        };
+    getTotalItems():number {
+        return this._data.length;
+    }
+}
 
-        fetchPage = (page: number) => {
-            this._page = page;
-            var p = this.$q.defer();
-            if (this._data instanceof Array) {
-                p.resolve(
-                    this._data.slice(this._page * this._pageSize, this._page * this._pageSize + this._pageSize));
-            } else {
-                p.resolve(this._data);
-            }
-            return p.promise;
-        };
+export class DefaultInternalDataProvider implements IDataProvider {
 
-        getTotalItems():number {
-            return this._data.length;
-        }
+    private _data:any;
+
+    constructor(data: any) {
+        this._data = data;
     }
 
-    export class DefaultInternalDataProvider implements IDataProvider {
+    get canPage(): boolean { return false };
+    get canFilter(): boolean { return false };
 
-        private _data:any;
+    getId(): ServiceId {
+        return ServiceId.DataProvider;
+    }
 
-        constructor(data: any) {
-            this._data = data;
-        }
+    getData():any {
+        return this._data;
+    }
 
-        get canPage(): boolean { return false };
-        get canFilter(): boolean { return false };
-
-        getId():JSONForms.ServiceId {
-            return ServiceId.DataProvider;
-        }
-
-        getData():any {
-            return this._data;
-        }
-
-        fetchData():angular.IPromise<any> {
-            return undefined;
-        }
+    fetchData():angular.IPromise<any> {
+        return undefined;
+    }
 
 
-        getTotalItems() {
-            return this._data.length;
-        }
+    getTotalItems() {
+        return this._data.length;
     }
 }

@@ -1,6 +1,17 @@
-///<reference path="../../../references.ts"/>
+
+// TODO
+declare var require: {
+    <T>(path: string): T;
+    (paths: string[], callback: (...modules: any[]) => void): void;
+    ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
+};
 
 class MasterDetailCollectionDirective implements ng.IDirective {
+
+    constructor() {
+        require('./masterdetail.css');
+    }
+
     restrict = "E";
     replace = true;
     scope = {
@@ -43,6 +54,7 @@ class MasterDetailCollectionDirective implements ng.IDirective {
 class MasterDetailMember implements ng.IDirective {
 
     constructor(private $compile:ng.ICompileService) {
+        require('./masterdetail.css');
     }
 
     restrict = "E";
@@ -62,6 +74,8 @@ class MasterDetailMember implements ng.IDirective {
     }
 }
 
-angular.module('jsonforms.renderers.layouts.masterdetail')
+export default angular
+    .module('jsonforms.renderers.layouts.masterdetail')
     .directive('jsonformsMasterdetailCollection', () => new MasterDetailCollectionDirective)
-    .directive('jsonformsMasterdetailMember', ($compile) => new MasterDetailMember($compile));
+    .directive('jsonformsMasterdetailMember', ($compile) => new MasterDetailMember($compile))
+    .name;

@@ -1,13 +1,18 @@
 ///<reference path="../../../references.ts"/>
 
-class StringRenderer implements JSONForms.IRenderer {
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+import {IRenderer} from "../../jsonforms-renderers";
+import {Services} from "../../../services/services";
+import {IRenderDescription} from "../../jsonforms-renderers";
+
+class StringRenderer implements IRenderer {
 
     priority = 2;
 
     static inject = ['RenderDescriptionFactory'];
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        let control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: Services): IRenderDescription {
+        let control = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
 
         if (element['options'] != null && element['options']['multi']) {
             control.template = `<jsonforms-control>
@@ -27,6 +32,9 @@ class StringRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.string').run(['RenderService', (RenderService) => {
-    RenderService.register(new StringRenderer());
-}]);
+export default angular
+    .module('jsonforms.renderers.controls.string', ['jsonforms.renderers.controls'])
+    .run(['RenderService', RenderService => {
+        console.log("String renderer registered");
+        RenderService.register(new StringRenderer())
+    }]).name;

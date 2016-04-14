@@ -1,14 +1,20 @@
 ///<reference path="../../../../references.ts"/>
 
-class CategoryRenderer implements JSONForms.IRenderer {
+import {IContainerRenderDescription} from "../../../jsonforms-renderers";
+import {RenderDescriptionFactory} from "../../../jsonforms-renderers";
+import {IRenderService} from "../../../jsonforms-renderers";
+import {IRenderer} from "../../../jsonforms-renderers";
+import {Services} from "../../../../services/services";
+
+class CategoryRenderer implements IRenderer {
 
     priority = 1;
 
-    constructor(private renderService: JSONForms.IRenderService){ }
+    constructor(private renderService: IRenderService){ }
 
-    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IContainerRenderDescription{
+    render(element: ILayout, subSchema: SchemaElement, schemaPath: string, services: Services): IContainerRenderDescription{
 
-        var renderedElements = JSONForms.RenderDescriptionFactory.renderElements(
+        var renderedElements = RenderDescriptionFactory.renderElements(
             element.elements, this.renderService, services);
         var label = element.label;
         var template = `<tab heading="${label}">
@@ -19,7 +25,7 @@ class CategoryRenderer implements JSONForms.IRenderer {
             </jsonforms-layout>
         </tab>`;
 
-        return JSONForms.RenderDescriptionFactory.createContainerDescription(99, renderedElements, template, services, element);
+        return RenderDescriptionFactory.createContainerDescription(99, renderedElements, template, services, element);
     }
 
     isApplicable(uiElement: IUISchemaElement, jsonSchema: SchemaElement, schemaPath) :boolean {
@@ -27,6 +33,8 @@ class CategoryRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.layouts.categories.category').run(['RenderService', (RenderService) => {
-    RenderService.register(new CategoryRenderer(RenderService));
-}]);
+export default angular
+    .module('jsonforms.renderers.layouts.categories.category', ['jsonforms.renderers.layouts.categories'])
+    .run(['RenderService', (RenderService) =>
+        RenderService.register(new CategoryRenderer(RenderService))
+    ]).name;

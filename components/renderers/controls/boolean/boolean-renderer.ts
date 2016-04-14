@@ -1,11 +1,14 @@
 ///<reference path="../../../references.ts"/>
 
-class BooleanRenderer implements JSONForms.IRenderer {
+import {Services} from "../../../services/services";
+import {IRenderer} from "../../jsonforms-renderers";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+class BooleanRenderer implements IRenderer {
 
     priority = 2;
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services) {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath,  services, element);
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: Services) {
+        var control = RenderDescriptionFactory.createControlDescription(schemaPath,  services, element);
         control['template'] = `<jsonforms-control>
           <input type="checkbox" id="${schemaPath}" class="jsf-control-boolean" ${element.readOnly ? 'disabled="disabled"' : ''} data-jsonforms-validation data-jsonforms-model/>
         </jsonforms-control>`;
@@ -17,6 +20,8 @@ class BooleanRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.boolean').run(['RenderService', (RenderService) => {
-    RenderService.register(new BooleanRenderer());
-}]);
+export default angular
+    .module('jsonforms.renderers.controls.boolean', ['jsonforms.renderers.controls'])
+    .run(['RenderService', (RenderService) =>
+        RenderService.register(new BooleanRenderer())
+    ]).name;

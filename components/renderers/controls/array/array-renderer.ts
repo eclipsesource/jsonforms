@@ -1,11 +1,21 @@
 ///<reference path="../../../references.ts"/>
 
-class ArrayRenderer implements JSONForms.IRenderer {
+import {IPathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
+import {IRenderer} from "../../jsonforms-renderers";
+import {IRenderService} from "../../jsonforms-renderers";
+import {PathUtil} from "../../../services/pathutil";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+import {Services} from "../../../services/services";
+import {IRenderDescription} from "../../jsonforms-renderers";
+import {ServiceId} from "../../../services/services";
+import {IDataProvider} from '../../../services/data/data-service'
+
+class ArrayRenderer implements IRenderer {
 
     protected maxSize = 100;
     priority = 99;
 
-    constructor(private renderService: JSONForms.IRenderService, private pathResolver: JSONForms.IPathResolver) { }
+    constructor(private renderService: IRenderService, private pathResolver: IPathResolver) { }
 
     protected static createGroup(elements: IUISchemaElement[]): IGroup {
         return {
@@ -17,7 +27,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
     protected static createControl(schemaPath: string, prop: string): IControlObject {
         return {
             "type": "Control",
-            "label": JSONForms.PathUtil.beautify(prop),
+            "label": PathUtil.beautify(prop),
             "scope": {
                 "$ref": schemaPath
             }
@@ -34,19 +44,19 @@ class ArrayRenderer implements JSONForms.IRenderer {
         });
     }
 
-    protected createControlsForSubmit(items: any, schemaPath: string, submitElement: any, services: JSONForms.Services) {
+    protected createControlsForSubmit(items: any, schemaPath: string, submitElement: any, services: Services) {
         let unboundControls = _.keys(items['properties']).map(prop =>
             ArrayRenderer.createControl(`${schemaPath}/items/properties/${prop}`, prop)
         );
-        let renderDescriptionsForSubmit = JSONForms.RenderDescriptionFactory.renderElements(unboundControls, this.renderService, services);
+        let renderDescriptionsForSubmit = RenderDescriptionFactory.renderElements(unboundControls, this.renderService, services);
         return renderDescriptionsForSubmit.map(renderDescription => {
             renderDescription['instance'] = submitElement;
-            renderDescription['path'] = JSONForms.PathUtil.lastFragment(renderDescription['path']);
+            renderDescription['path'] = PathUtil.lastFragment(renderDescription['path']);
             return renderDescription;
         });
     }
 
-    protected generateControlDescriptions(items: any, schemaPath: string, currentDescriptions: JSONForms.IRenderDescription[], dataSize: number, services: JSONForms.Services) {
+    protected generateControlDescriptions(items: any, schemaPath: string, currentDescriptions: IRenderDescription[], dataSize: number, services: Services) {
         // TODO: this won't work for replace
         // is there a better way to accomplish this?
         if (currentDescriptions.length === dataSize) {
@@ -54,7 +64,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
         }
         currentDescriptions.splice(0, currentDescriptions.length);
         let controlGroups = this.createControlGroupPerItem(schemaPath, items, dataSize);
-        let renderDescriptions = JSONForms.RenderDescriptionFactory.renderElements(controlGroups, this.renderService, services);
+        let renderDescriptions = RenderDescriptionFactory.renderElements(controlGroups, this.renderService, services);
 
         return renderDescriptions.reduce((descriptions, renderDescription) => {
                 let foundRenderDesc = _.find(descriptions, desc => _.isEqual(renderDescription, desc));
@@ -65,8 +75,8 @@ class ArrayRenderer implements JSONForms.IRenderer {
             }, currentDescriptions);
     }
 
-    render(element: IArrayControlObject, subSchema: SchemaArray, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        let data = services.get<JSONForms.IDataProvider>(JSONForms.ServiceId.DataProvider).getData();
+    render(element: IArrayControlObject, subSchema: SchemaArray, schemaPath: string, services: Services): IRenderDescription {
+        let data = services.get<IDataProvider>(ServiceId.DataProvider).getData();
 
         if (!Array.isArray(data)) {
             data = this.pathResolver.resolveInstance(data, schemaPath);
@@ -75,11 +85,11 @@ class ArrayRenderer implements JSONForms.IRenderer {
         let resolvedSubSchema = this.pathResolver.resolveSchema(subSchema, schemaPath) as SchemaArray;
         let items = resolvedSubSchema.items;
         // TODO: generate label form schema path if not present
-        let label = element.label ? element.label : JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
+        let label = element.label ? element.label : PathUtil.beautifiedLastFragment(schemaPath);
 
         // TODO: think about how to access options in an uniform fashion
         if (element.options != undefined && element.options['simple']) {
-            let controlDescription = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+            let controlDescription = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
             let properties = _.keys(items['properties']);
             let propertiesString = JSON.stringify(properties);
             controlDescription.template = `<jsonforms-layout class="jsf-group">
@@ -98,7 +108,7 @@ class ArrayRenderer implements JSONForms.IRenderer {
             let submitElement = {};
             let supportsSubmit = !(element.options != undefined && element.options['submit'] == false);
             let generatedGroups = this.createControlGroupPerItem(schemaPath, items, data == undefined ? 0 : data.length);
-            let buttonText = JSONForms.PathUtil.beautifiedLastFragment(schemaPath);
+            let buttonText = PathUtil.beautifiedLastFragment(schemaPath);
 
             let template = `
             <jsonforms-layout class="jsf-group">
@@ -116,8 +126,8 @@ class ArrayRenderer implements JSONForms.IRenderer {
                </input>
              </jsonforms-layout>`;
 
-            let containeeDescriptions = JSONForms.RenderDescriptionFactory.renderElements(generatedGroups, this.renderService, services);
-            let containerDescription = JSONForms.RenderDescriptionFactory.createContainerDescription(this.maxSize, containeeDescriptions, template, services, element);
+            let containeeDescriptions = RenderDescriptionFactory.renderElements(generatedGroups, this.renderService, services);
+            let containerDescription = RenderDescriptionFactory.createContainerDescription(this.maxSize, containeeDescriptions, template, services, element);
             if (supportsSubmit) {
                 containerDescription['submitElement'] = submitElement;
                 containerDescription['submitControls'] = this.createControlsForSubmit(items, schemaPath, submitElement, services);
@@ -138,6 +148,8 @@ class ArrayRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.array').run(['RenderService', 'PathResolver', (RenderService, PathResolver) => {
-    RenderService.register(new ArrayRenderer(RenderService, PathResolver));
-}]);
+export default angular
+    .module('jsonforms.renderers.controls.array', ['jsonforms.renderers.controls'])
+    .run(['RenderService', 'PathResolver', (RenderService, PathResolver) =>
+        RenderService.register(new ArrayRenderer(RenderService, PathResolver))
+    ]).name;

@@ -1,11 +1,18 @@
 ///<reference path="../../../references.ts"/>
 
-class IntegerRenderer implements JSONForms.IRenderer {
+//import * as angular from 'angular'
+
+import {Services} from "../../../services/services";
+import {IRenderer} from "../../jsonforms-renderers";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+import {IRenderDescription} from "../../jsonforms-renderers";
+
+class IntegerRenderer implements IRenderer {
 
     priority = 2;
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: Services): IRenderDescription {
+        var control = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['template'] = `<jsonforms-control>
           <input type="number" step="1" id="${schemaPath}" class="form-control jsf-control-integer" ${element.readOnly ? 'readonly' : ''} data-jsonforms-validation data-jsonforms-model/>
         </jsonforms-control>`;
@@ -17,6 +24,7 @@ class IntegerRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.controls.integer').run(['RenderService', (RenderService) => {
+export default angular.module('jsonforms.renderers.controls.integer', []).run(['RenderService', (RenderService) => {
+    console.log("Int renderer registered!")
     RenderService.register(new IntegerRenderer());
-}]);
+}]).name;

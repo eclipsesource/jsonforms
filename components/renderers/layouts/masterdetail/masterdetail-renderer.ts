@@ -1,13 +1,17 @@
-///<reference path="../../../references.ts"/>
 
-class MasterDetailRenderer implements JSONForms.IRenderer {
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+import {IRenderDescription} from "../../jsonforms-renderers";
+import {Services} from "../../../services/services";
+import {IRenderer} from "../../jsonforms-renderers";
+
+class MasterDetailRenderer implements IRenderer {
 
     priority = 1;
 
     constructor() { }
 
-    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+    render(element: IControlObject, subSchema: SchemaElement, schemaPath: string, services: Services): IRenderDescription {
+        var control = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['template'] = `
         <div class="row">
             <!-- Master -->
@@ -38,6 +42,9 @@ class MasterDetailRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.layouts.masterdetail').run(['RenderService', (RenderService) => {
-    RenderService.register(new MasterDetailRenderer());
-}]);
+export default angular
+    .module('jsonforms.renderers.layouts.masterdetail')
+    .run(['RenderService', (RenderService) =>
+        RenderService.register(new MasterDetailRenderer())
+    ])
+    .name;

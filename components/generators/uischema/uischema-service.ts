@@ -1,3 +1,7 @@
 ///<reference path="../../references.ts"/>
 
-angular.module('jsonforms.generators.uischema').service('UISchemaGenerator', JSONForms.UISchemaGenerator);
+import {UISchemaGenerator} from "./jsonforms-uischemagenerator";
+
+export default angular
+    .module('jsonforms.generators.uischema', ['jsonforms.generators'])
+    .service('UISchemaGenerator', UISchemaGenerator).name;

@@ -1,6 +1,28 @@
-///<reference path="../references.ts"/>
 
-import PathResolver = JSONForms.PathResolver;
+
+
+import * as angular from 'angular'
+
+import {IRenderService} from "../renderers/jsonforms-renderers";
+import {IPathResolver} from "../services/pathresolver/jsonforms-pathresolver";
+import {IUISchemaGenerator} from "../generators/generators";
+import {ISchemaGenerator} from "../generators/generators";
+import {PathResolver} from "../services/pathresolver/jsonforms-pathresolver";
+import {IUiSchemaProvider} from "../services/services";
+import {ValidationService} from "../services/services";
+import {SchemaProvider} from "../services/services";
+import {ScopeProvider} from "../services/services";
+import {PathResolverService} from "../services/services";
+import {Services} from "../services/services";
+import {IDataProvider} from '../services/data/data-service';
+import {RuleService} from "../services/rule/rule-service";
+import {DefaultDataProvider} from "../services/data/data-services";
+
+declare var require: {
+    <T>(path: string): T;
+    (paths: string[], callback: (...modules: any[]) => void): void;
+    ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
+};
 
 class FormController {
 
@@ -11,10 +33,10 @@ class FormController {
     public elements: IUISchemaElement[];
 
     constructor(
-        private RenderService: JSONForms.IRenderService,
-        private PathResolver: JSONForms.IPathResolver,
-        private UISchemaGenerator: JSONForms.IUISchemaGenerator,
-        private SchemaGenerator: JSONForms.ISchemaGenerator,
+        private RenderService: IRenderService,
+        private PathResolver: IPathResolver,
+        private UISchemaGenerator: IUISchemaGenerator,
+        private SchemaGenerator: ISchemaGenerator,
         private $q: ng.IQService,
         private scope: JsonFormsDirectiveScope
     ) { }
@@ -50,20 +72,20 @@ class FormController {
             var uiSchema = values[1];
             var data = values[2];
 
-            var services = new JSONForms.Services();
+            var services = new Services();
 
-            services.add(new JSONForms.PathResolverService(new PathResolver()));
-            services.add(new JSONForms.ScopeProvider(this.scope));
-            services.add(new JSONForms.SchemaProvider(schema));
-            services.add(new JSONForms.ValidationService());
-            services.add(new JSONForms.RuleService(this.PathResolver));
+            services.add(new PathResolverService(new PathResolver()));
+            services.add(new ScopeProvider(this.scope));
+            services.add(new SchemaProvider(schema));
+            services.add(new ValidationService());
+            services.add(new RuleService(this.PathResolver));
 
-            var dataProvider: JSONForms.IDataProvider;
+            var dataProvider: IDataProvider;
 
             if (FormController.isDataProvider(this.scope.data)) {
                 dataProvider = this.scope.data;
             } else {
-                dataProvider = new JSONForms.DefaultDataProvider(this.$q, data);
+                dataProvider = new DefaultDataProvider(this.$q, data);
             }
 
             services.add(dataProvider);
@@ -104,11 +126,11 @@ class FormController {
         throw new Error("The 'data' attribute must be specified.")
     }
 
-    private static isDataProvider(testMe: any): testMe is JSONForms.IDataProvider {
+    private static isDataProvider(testMe: any): testMe is IDataProvider {
         return testMe !== undefined && testMe.hasOwnProperty('fetchData');
     }
 
-    private static isUiSchemaProvider(testMe: any): testMe is JSONForms.IUiSchemaProvider {
+    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
         return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
     }
 }
@@ -120,10 +142,11 @@ interface JsonFormsDirectiveScope extends ng.IScope {
 }
 
 
-class JsonFormsDirective implements ng.IDirective {
+export class JsonFormsDirective implements ng.IDirective {
     restrict = "E";
     replace = true;
-    templateUrl = 'components/form/form.html';
+    //templateUrl = formTemplate;
+    template = require('./form.html');
     controller = FormController;
     controllerAs = 'vm';
     // we can't use bindToController because we want watchers
@@ -141,5 +164,3 @@ class JsonFormsDirective implements ng.IDirective {
         });
     }
 }
-
-angular.module('jsonforms.form').directive('jsonforms', () => new JsonFormsDirective());

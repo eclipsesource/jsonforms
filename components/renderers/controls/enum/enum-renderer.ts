@@ -1,15 +1,21 @@
 ///<reference path="../../../references.ts"/>
 
-class EnumRenderer implements JSONForms.IRenderer {
+import {IRenderer} from "../../jsonforms-renderers";
+import {IRenderDescription} from "../../jsonforms-renderers";
+import {Services} from "../../../services/services";
+import {IPathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
+import {RenderDescriptionFactory} from "../../jsonforms-renderers";
+
+class EnumRenderer implements IRenderer {
 
     priority = 3;
 
-    constructor(private pathResolver: JSONForms.IPathResolver) {}
+    constructor(private pathResolver: IPathResolver) {}
 
-    render(element: IControlObject, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+    render(element: IControlObject, schema: SchemaElement, schemaPath: string, services: Services): IRenderDescription {
         var subSchema = this.pathResolver.resolveSchema(schema, schemaPath);
         var enums =  subSchema.enum;
-        var control = JSONForms.RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
+        var control = RenderDescriptionFactory.createControlDescription(schemaPath, services, element);
         control['template'] = `<jsonforms-control>
           <select  ng-options="option as option for option in element.options" id="${schemaPath}" class="form-control jsf-control jsf-control-enum" ${element.readOnly ? 'disabled' : ''} data-jsonforms-model data-jsonforms-validation></select>
         </jsonforms-control>`;

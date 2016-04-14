@@ -1,3 +1,13 @@
-///<reference path="../references.ts"/>
+export interface ISchemaGenerator {
+    generateDefaultSchema(instance:Object): Object
+    generateDefaultSchemaWithOptions(instance:Object,
+                                     allowAdditionalProperties:(properties:Object) => boolean,
+                                     requiredProperties:(properties:string[]) => string[]) : Object
+}
 
-angular.module('jsonforms.generators', []);
+export interface IUISchemaGenerator {
+    generateDefaultUISchema(jsonSchema:any): any
+}
+
+
+export default angular.module('jsonforms.generators', []).name;

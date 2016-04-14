@@ -1,10 +1,14 @@
 ///<reference path="../../../references.ts"/>
 
-class LabelRenderer implements JSONForms.IRenderer {
+import {IRenderDescription} from "../../jsonforms-renderers";
+import {Services} from "../../../services/services";
+import {IRenderer} from "../../jsonforms-renderers";
+
+class LabelRenderer implements IRenderer {
 
     priority = 1;
 
-    render(element:IUISchemaElement, schema: SchemaElement, schemaPath: string, services: JSONForms.Services): JSONForms.IRenderDescription {
+    render(element:IUISchemaElement, schema: SchemaElement, schemaPath: string, services: Services): IRenderDescription {
         var text = element['text'];
         var size = 100;
 
@@ -20,6 +24,9 @@ class LabelRenderer implements JSONForms.IRenderer {
     }
 }
 
-angular.module('jsonforms.renderers.extras.label').run(['RenderService', function(RenderService) {
-    RenderService.register(new LabelRenderer());
-}]);
+export default angular
+    .module('jsonforms.renderers.extras.label', ['jsonforms.renderers'])
+    .run(['RenderService', RenderService =>
+        RenderService.register(new LabelRenderer())
+    ]).name;
+

@@ -1,65 +1,65 @@
-module.exports = function(config){
+'use strict';
+
+//var webpackConfig = require('./webpack/webpack.test.js');
+//require('phantomjs-polyfill');
+//require('webpack');
+//webpackConfig.entry = {};
+
+module.exports = function (config) {
     config.set({
-
-        basePath : '',
-
-        // load templates as module
+        basePath: '',
+        frameworks: ['jasmine'],
+        port: 9876,
+        colors: true,
+        logLevel: config.LOG_INFO,
+        autoWatch: false,
+        browsers: ['PhantomJS'],
+        singleRun: true,
+        autoWatchBatchDelay: 300,
+        files: [
+            './node_modules/phantomjs-polyfill/bind-polyfill.js',
+            './components/**/*.spec.ts'
+        ],
+        babelPreprocessor: {
+            options: {
+                presets: ['es2015']
+            }
+        },
         preprocessors: {
-            'components/**/*.html': ['ng-html2js'],
-            'components/**/*.js': ['coverage']
+            'src/test.ts': ['webpack'],
+            'src/**/!(*.spec)+(.js)': ['coverage']
         },
-
-        files : [
-            'examples/bower_components/traverse/traverse.js',
-            'examples/bower_components/json-refs/browser/json-refs.js',
-            'examples/bower_components/angular/angular.js',
-            'examples/bower_components/angular-route/angular-route.js',
-            'examples/bower_components/angular-mocks/angular-mocks.js',
-            'examples/bower_components/lodash-compat/lodash.min.js',
-            'examples/bower_components/tv4/tv4.js',
-            'components/utils/**/*.js',
-            'components/**/jsonforms*.js',
-            'components/**/*.js',
-            'components/**/*.html'
+        webpackMiddleware: {
+            stats: {
+                chunkModules: false,
+                colors: true
+            }
+        },
+        webpack: webpackConfig,
+        reporters: [
+            'dots',
+            'spec',
+            'coverage'
         ],
+        plugins: [
 
-        reporters: ['progress', 'coverage'],
-
-        // optionally, configure the reporter
+        ],
         coverageReporter: {
-            type : 'json',
-            subdir : '.',
-            file : 'coverage-final.json'
-        },
-
-        autoWatch : true,
-
-        captureConsole: true,
-
-        frameworks: ['jasmine', 'angular-filesort'],
-
-        browsers : ['Firefox'],
-
-        plugins : [
-            'karma-chrome-launcher',
-            'karma-firefox-launcher',
-            'karma-jasmine',
-            'karma-angular-filesort',
-            'karma-coverage',
-            'karma-ng-html2js-preprocessor'
-        ],
-
-
-        angularFilesort: {
-            whitelist: [
-                'components/**/*.js'
+            reporters: [
+                {
+                    dir: 'reports/coverage/',
+                    subdir: '.',
+                    type: 'html'
+                },{
+                    dir: 'reports/coverage/',
+                    subdir: '.',
+                    type: 'cobertura'
+                }, {
+                    dir: 'reports/coverage/',
+                    subdir: '.',
+                    type: 'json'
+                }
             ]
-        },
-
-        junitReporter : {
-            outputFile: 'test_out/unit.xml',
-            suite: 'unit'
         }
-
     });
 };

@@ -1,5 +1,6 @@
 ///<reference path="../references.ts"/>
 
+import {PathUtil} from "../services/pathutil";
 class Widget implements ng.IDirective {
     restrict   = "E";
     replace    = true;
@@ -30,7 +31,7 @@ class DynamicWidget implements ng.IDirective {
 
     replaceJSONFormsAttributeInTemplate(template: string, propertyPath:string): string {
         if (propertyPath !== undefined && propertyPath.length > 0) {
-            var path = `ng-model="element.instance${JSONForms.PathUtil.toPropertyAccessString(propertyPath)}"`;
+            var path = `ng-model="element.instance${PathUtil.toPropertyAccessString(propertyPath)}"`;
             return template
                 .replace(new RegExp("data-jsonforms-model", "g"), path)
                 .replace(new RegExp("data-jsonforms-validation", "g"), "ng-change='element.modelChanged()'");
@@ -41,9 +42,9 @@ class DynamicWidget implements ng.IDirective {
 }
 
 // TODO (?) http://stackoverflow.com/questions/23535994/implementing-angularjs-directives-as-classes-in-typescript
-angular.module('jsonforms.renderers')
+export default angular.module('jsonforms.renderers')
     .directive('jsonformsWidget', () => new Widget())
     .directive('jsonformsDynamicWidget', ['$compile', '$templateRequest',
         ($compile: ng.ICompileService, $templateRequest: ng.ITemplateRequestService) =>
             new DynamicWidget($compile, $templateRequest)
-    ]);
+    ]).name;

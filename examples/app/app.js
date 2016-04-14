@@ -2,8 +2,8 @@
 
 angular.module('makeithappen', [
     'ngRoute',
-    'ngResource',
-    'ui.ace',
+    //'ngResource',
+    //'ui.ace',
     'jsonforms'
 ]).config(['$routeProvider',
     function($routeProvider) {
