@@ -1,9 +1,8 @@
 'use strict';
 
-//var webpackConfig = require('./webpack/webpack.test.js');
-//require('phantomjs-polyfill');
-//require('webpack');
-//webpackConfig.entry = {};
+var webpackConfig = require('./webpack/webpack.test.js');
+require('phantomjs-polyfill')
+webpackConfig.entry = {};
 
 module.exports = function (config) {
     config.set({
@@ -18,7 +17,7 @@ module.exports = function (config) {
         autoWatchBatchDelay: 300,
         files: [
             './node_modules/phantomjs-polyfill/bind-polyfill.js',
-            './components/**/*.spec.ts'
+            './src/test.ts'
         ],
         babelPreprocessor: {
             options: {
@@ -40,9 +39,6 @@ module.exports = function (config) {
             'dots',
             'spec',
             'coverage'
-        ],
-        plugins: [
-
         ],
         coverageReporter: {
             reporters: [

@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['./components/app.ts'],
+    entry: ['./src/index.ts'],
     output: {
         filename: 'jsonforms.js',
         path: 'dist/js'

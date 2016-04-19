@@ -2,7 +2,7 @@ var loaders = require("./loaders");
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['./components/app.ts'],
+    entry: ['./src/index.ts'],
     output: {
         filename: 'build.js',
         path: 'tmp'
@@ -34,3 +34,4 @@ module.exports = {
         ]
     }
 };
+

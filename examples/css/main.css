@@ -59,8 +59,8 @@ body {
 }
 
 .jsf .row  {
-    margin-right: 0;
-    margin-left: 0;
+    margin-right: -10px;
+    margin-left: -10px;
 }
 
 .jsf-control {

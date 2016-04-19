@@ -1,15 +1,15 @@
-
 var loaders = require("./loaders");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
+
 
 module.exports = {
     entry: [
         "bootstrap-webpack!./bootstrap.config.js",
-        'app.ts'
+        './src/index.ts'
     ],
     output: {
-        filename: 'dist/js/jsonforms.js'
+        filename: 'build.js',
+        path: 'dist/js'
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin(
@@ -19,11 +19,6 @@ module.exports = {
                 comments: false
             }
         ),
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-            inject: 'body',
-            hash: true
-        }),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
