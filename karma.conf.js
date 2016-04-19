@@ -1,7 +1,7 @@
 'use strict';
 
 var webpackConfig = require('./webpack/webpack.test.js');
-require('phantomjs-polyfill')
+require('phantomjs-polyfill');
 webpackConfig.entry = {};
 
 module.exports = function (config) {
@@ -12,7 +12,14 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: false,
-        browsers: ['PhantomJS'],
+        browsers: ["PhantomJS2"],
+        plugins: [
+            'karma-jasmine',
+            'karma-coverage',
+            'karma-spec-reporter',
+            'karma-webpack',
+            'karma-phantomjs2-launcher'
+        ],
         singleRun: true,
         autoWatchBatchDelay: 300,
         files: [
