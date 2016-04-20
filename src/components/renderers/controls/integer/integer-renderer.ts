@@ -22,7 +22,7 @@ class IntegerRenderer implements IRenderer {
 }
 
 export default angular
-    .module('jsonforms.renderers.controls.integer', [])
+    .module('jsonforms.renderers.controls.integer', ['jsonforms.renderers.controls'])
     .run(['RenderService', (RenderService) =>
         RenderService.register(new IntegerRenderer())
     ])

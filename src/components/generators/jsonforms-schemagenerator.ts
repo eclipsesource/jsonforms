@@ -1,5 +1,5 @@
 
-import {ISchemaGenerator} from "../generators";
+import {ISchemaGenerator} from "./generators";
 
 export class SchemaGenerator implements ISchemaGenerator {
 
@@ -128,5 +128,9 @@ export class SchemaGenerator implements ISchemaGenerator {
     protected allowAdditionalProperties = (properties:Object): boolean => {
         return true; // allow other properties by default
     }
-
 }
+
+export default angular
+    .module('jsonforms.generators.schema', ['jsonforms.generators'])
+    .service('SchemaGenerator', SchemaGenerator).name;
+

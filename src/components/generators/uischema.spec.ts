@@ -1,8 +1,8 @@
 import "angular"
 import "angular-mocks"
-import "../../../index"
+import "../../index"
 
-import {IUISchemaGenerator} from "../generators";
+import {IUISchemaGenerator} from "./generators";
 
 describe('UISchemaGenerator', () => {
 

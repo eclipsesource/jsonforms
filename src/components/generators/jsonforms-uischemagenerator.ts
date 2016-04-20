@@ -1,8 +1,9 @@
 
-import {IUISchemaGenerator} from "../generators";
-import {PathUtil} from "../../services/pathutil";
 
-export class UISchemaGenerator implements IUISchemaGenerator{
+import {IUISchemaGenerator} from "./generators";
+import {PathUtil} from "../services/pathutil";
+
+export class UISchemaGenerator implements IUISchemaGenerator {
     generateDefaultUISchema = (jsonSchema:any): IUISchemaElement => {
         var uiSchema = this.generateUISchema(jsonSchema, [], "#", "");
         return this.wrapInLayoutIfNecessary(uiSchema);
@@ -130,4 +131,8 @@ export class UISchemaGenerator implements IUISchemaGenerator{
         return <ILayout>uiSchema;
     };
 }
+
+export default angular
+    .module('jsonforms.generators.uischema', ['jsonforms.generators'])
+    .service('UISchemaGenerator', UISchemaGenerator).name;
 
