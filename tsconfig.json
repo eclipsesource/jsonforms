@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "outDir": "out"
+  },
+  "exclude": [
+    "out",
+    "node_modules",
+    "dist",
+    "dev",
+    "typings/browser.d.ts",
+    "typings/browser",
+    "reports",
+    "examples/bower_components"
+  ],
+  "version": "1.7.5"
+}

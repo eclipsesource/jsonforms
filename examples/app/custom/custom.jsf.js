@@ -12,7 +12,7 @@ app.run(['RenderService', function(RenderService) {
             },
 
             isApplicable: function (element, subSchema, schemaPath) {
-                return element.type == "Control" && schemaPath.endsWith("firstName");
+                return element.type == "Control" && schemaPath != undefined && schemaPath.endsWith("firstName");
             }
         }
     }

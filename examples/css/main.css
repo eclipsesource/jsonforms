@@ -1,5 +1,7 @@
 .ace_editor { height: 200px; }
 
+.jsf .array-submit-btn {
+}
 
 h1 {
     color: white;
@@ -57,8 +59,8 @@ body {
 }
 
 .jsf .row  {
-    margin-right: 0;
-    margin-left: 0;
+    margin-right: -10px;
+    margin-left: -10px;
 }
 
 .jsf-control {

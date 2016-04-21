@@ -32,7 +32,7 @@ app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, 
             },
 
             isApplicable: function (element, subSchema, schemaPath) {
-                return element.type == "Control" && schemaPath.endsWith("lastName");
+                return element.type == "Control" && schemaPath != undefined && schemaPath.endsWith("lastName");
             }
         }
     }

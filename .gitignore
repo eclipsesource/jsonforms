@@ -7,14 +7,14 @@ coverage/
 node_modules/
 
 # all js files in components
-components/**/*.js
-
-# generated typescript reference file in components and tests
-components/references.ts
-tests/references.ts
+src/components/**/*.js
 
 # all js files in tests except the configs
 tests/**/*.js
+/typings/browser.d.ts
+/typings/main.d.ts
+/typings/main
+/typings/browser
 !tests/e2e-tests/protractor.conf.js
 !karma.conf.js
 
