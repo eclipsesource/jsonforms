@@ -1,10 +1,10 @@
-<div class="col-sm-{{element.size}} jsf-control form-group top-buffer" ng-hide="element.hide">
+<div class="col-sm-{{vm.size}} jsf-control form-group top-buffer" ng-hide="vm.hide">
     <div class="row">
-        <label ng-if="element.showLabel" for="{{element.id}}">{{element.label}}</label>
+        <label ng-if="vm.showLabel" for="{{vm.id}}">{{vm.label}}</label>
     </div>
     <div class="row" ng-transclude>
     </div>
     <div class="row">
-        <alert ng-repeat="alert in element.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>
+        <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>
     </div>
 </div>

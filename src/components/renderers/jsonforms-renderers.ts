@@ -8,7 +8,7 @@ import {IScopeProvider} from "../services/services";
 import {IValidationService} from "../services/services";
 import {IPathResolverService} from "../services/services";
 import {IDataProvider} from "../services/data/data-service";
-import {IRuleService} from "../services/rule/rule-service";
+import {IRuleService,IRuleServiceCallBack} from "../services/rule/rule-service";
 
 let JsonRefs = require("json-refs/index.js");
 
@@ -119,7 +119,7 @@ export class RenderDescriptionFactory implements IRendererDescriptionFactory {
     }
 }
 
-export class ContainerRenderDescription implements IContainerRenderDescription {
+export class ContainerRenderDescription implements IContainerRenderDescription,IRuleServiceCallBack {
     type= "Layout";
     public instance: any;
     public size: number;
@@ -127,6 +127,7 @@ export class ContainerRenderDescription implements IContainerRenderDescription {
     public template: string;
     public rule: IRule;
     public path: string;
+    public hide=false;
     constructor(size:number, elements: IControlRenderDescription[], template: string, services: Services, element: IUISchemaElement){
         this.size = size;
         this.elements = elements;
@@ -138,7 +139,7 @@ export class ContainerRenderDescription implements IContainerRenderDescription {
     }
 }
 
-export class ControlRenderDescription implements IControlRenderDescription {
+export class ControlRenderDescription implements IControlRenderDescription,IRuleServiceCallBack {
 
     public type = "Control";
     public size = 100;
@@ -154,6 +155,7 @@ export class ControlRenderDescription implements IControlRenderDescription {
     private pathResolver: IPathResolver;
     private ruleService: IRuleService;
     private scope: ng.IScope;
+    public hide=false;
 
     constructor(private schemaPath: string, services: Services, element: IControlObject) {
         this.instance = services.get<IDataProvider>(ServiceId.DataProvider).getData();
@@ -285,7 +287,7 @@ export class LabelObject implements ILabelObject {
 
 export interface IRenderService {
     register(renderer: IRenderer): void
-    render(scope: ng.IScope, element: IUISchemaElement, services: Services);
+    render(scope: ng.IScope, element: IUISchemaElement, services: Services):IRenderDescription;
 }
 
 export interface IRenderer {
@@ -317,5 +319,3 @@ export interface IRendererDescriptionFactory {
 export interface IContainerRenderDescription extends IRenderDescription {
     elements: IRenderDescription[]
 }
-
-

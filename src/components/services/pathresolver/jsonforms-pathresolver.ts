@@ -31,11 +31,16 @@ export class PathResolver implements IPathResolver {
 
     resolveInstance = (instance:any, schemaPath:string):any => {
         var fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
-        return fragments.reduce(function (currObj, fragment) {
+        return fragments.reduce(function (currObj, fragment,curIndex) {
+            if(currObj==undefined)
+                return undefined;
             if (currObj instanceof Array) {
                 return currObj.map(function (item) {
                     return item[fragment];
                 });
+            }
+            if(!currObj.hasOwnProperty(fragment) && curIndex<fragments.length-1){
+              currObj[fragment]={};
             }
             return currObj[fragment];
         }, instance);
@@ -65,4 +70,3 @@ export class PathResolver implements IPathResolver {
         }
     };
 }
-

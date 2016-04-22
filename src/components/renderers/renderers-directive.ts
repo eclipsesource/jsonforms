@@ -5,7 +5,7 @@ class Widget implements ng.IDirective {
     restrict   = "E";
     replace    = true;
     transclude = true;
-    template   = `<div class="col-sm-{{element.size}} jsf-label ng-transclude"></div>`
+    template   = `<div class="col-sm-{{vm.size}} jsf-label ng-transclude"></div>`
 }
 
 class DynamicWidget implements ng.IDirective {
