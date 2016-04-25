@@ -6,7 +6,7 @@ class IntegerDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-control>
-      <input type="number" step="1" id="{{vm.id}}" class="form-control jsf-control-integer" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()'/>
+      <input type="number" step="1" id="{{vm.id}}" class="form-control jsf-control-integer" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()' ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = IntegerController;
     controllerAs = 'vm';
@@ -22,7 +22,7 @@ class IntegerController extends AbstractControl {
 var IntegerControlRendererTester: RendererTester = ControlRendererTester('integer',1);
 
 export default angular
-    .module('jsonforms.renderers.controls.integer')
+    .module('jsonforms.renderers.controls.integer',['jsonforms.renderers.controls'])
     .directive('integerControl', () => new IntegerDirective())
     .run(['RendererService', RendererService =>
         {

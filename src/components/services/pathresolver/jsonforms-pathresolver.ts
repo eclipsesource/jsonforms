@@ -9,6 +9,10 @@ export interface IPathResolver {
     resolveInstance(instance:any, path:string): any
 
     resolveSchema(schema: SchemaElement, schemaPath: string): SchemaElement
+
+    lastFragment(path:string):string
+
+    resolveToLastModel(instance:any, path:string):any;
 }
 
 export class PathResolver implements IPathResolver {
@@ -69,4 +73,15 @@ export class PathResolver implements IPathResolver {
             return undefined;
         }
     };
+
+    lastFragment=(path:string):string =>{
+        let fragments:Array<string> = PathUtil.filterNonKeywords(PathUtil.toPropertyFragments(path));
+        return fragments[fragments.length-1];
+    }
+
+    resolveToLastModel=(instance:any, path:string):any =>{
+        let fragments:Array<string> = PathUtil.filterNonKeywords(PathUtil.toPropertyFragments(path));
+        var fragmentsToObject:Array<string> =fragments.slice(0,fragments.length-1);
+        return this.resolveInstance(instance,fragmentsToObject.join("/"));
+    }
 }

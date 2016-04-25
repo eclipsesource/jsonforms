@@ -1,6 +1,6 @@
 import "angular"
 import "angular-mocks"
-import "../../../../../index.ts"
+import "../../../../index.ts"
 
 describe('Categorization', () => {
 

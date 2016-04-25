@@ -1,6 +1,5 @@
 
 import {ServiceId} from "../services";
-import {IRenderDescription} from "../../renderers/jsonforms-renderers";
 import {IService} from "../services";
 import {IPathResolver} from "../pathresolver/jsonforms-pathresolver";
 

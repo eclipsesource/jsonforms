@@ -24,6 +24,9 @@ class GroupController  extends AbstractLayout{
     private get size(){
         return 100;
     }
+    private get label(){
+        return this.uiSchema.label ? this.uiSchema.label : "";
+    }
 }
 var GroupLayoutRendererTester: RendererTester = function (element:IUISchemaElement, dataSchema:any, dataObject:any,pathResolver:IPathResolver ){
     if(element.type!='Group')
@@ -32,7 +35,7 @@ var GroupLayoutRendererTester: RendererTester = function (element:IUISchemaEleme
 }
 
 export default angular
-    .module('jsonforms.renderers.layouts.group')
+    .module('jsonforms.renderers.layouts.group', ['jsonforms.renderers.layouts'])
     .directive('grouplayout', () => new GroupDirective())
     .run(['RendererService', RendererService =>
         RendererService.register("grouplayout",GroupLayoutRendererTester)

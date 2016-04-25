@@ -27,7 +27,7 @@ var LabelControlRendererTester: RendererTester = function (element:IUISchemaElem
 }
 
 export default angular
-    .module('jsonforms.renderers.extras.label')
+    .module('jsonforms.renderers.extras.label', ['jsonforms.renderers'])
     .directive('labelControl', () => new LabelDirective())
     .run(['RendererService', RendererService =>
         {

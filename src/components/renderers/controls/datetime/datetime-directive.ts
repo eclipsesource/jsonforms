@@ -7,7 +7,7 @@ class DateTimeDirective implements ng.IDirective {
     template = `
     <jsonforms-control>
         <div class="input-group">
-          <input type="text" datepicker-popup="dd.MM.yyyy" close-text="Close" is-open="vm.isOpen" id="{{vm.id}}" class="form-control jsf-control-datetime" ng-change='vm.modelChanged()'  ng-model="vm.modelValue[vm.fragment]"/>
+          <input type="text" datepicker-popup="dd.MM.yyyy" close-text="Close" is-open="vm.isOpen" id="{{vm.id}}" class="form-control jsf-control-datetime" ng-change='vm.modelChanged()'  ng-model="vm.modelValue[vm.fragment]" ng-readonly="vm.uiSchema.readOnly"/>
              <span class="input-group-btn">
                <button type="button" class="btn btn-default" ng-click="vm.openDate($event)">
                  <i class="glyphicon glyphicon-calendar"></i>
@@ -41,7 +41,7 @@ var DateTimeControlRendererTester: RendererTester = function (element:IUISchemaE
 }
 
 export default angular
-    .module('jsonforms.renderers.controls.datetime')
+    .module('jsonforms.renderers.controls.datetime',['jsonforms.renderers.controls'])
     .directive('datetimeControl', () => new DateTimeDirective())
     .run(['RendererService', RendererService =>
         {

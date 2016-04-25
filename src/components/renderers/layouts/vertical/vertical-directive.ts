@@ -31,7 +31,7 @@ var VerticalLayoutRendererTester: RendererTester = function (element:IUISchemaEl
 }
 
 export default angular
-    .module('jsonforms.renderers.layouts.vertical')
+    .module('jsonforms.renderers.layouts.vertical', ['jsonforms.renderers.layouts'])
     .directive('verticallayout', () => new VerticalDirective())
     .run(['RendererService', RendererService =>
         RendererService.register("verticallayout",VerticalLayoutRendererTester)

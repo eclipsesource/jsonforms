@@ -6,7 +6,7 @@ class StringDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-control>
-       <input type="text" id="{{vm.id}}" class="form-control jsf-control-string" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()'/>
+       <input type="text" id="{{vm.id}}" class="form-control jsf-control-string" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()' ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = StringController;
     controllerAs = 'vm';
@@ -16,7 +16,7 @@ class StringAreaDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-control>
-       <textarea id="{{vm.id}}" class="form-control jsf-control-string" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()'/>
+       <textarea id="{{vm.id}}" class="form-control jsf-control-string" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()' ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = StringController;
     controllerAs = 'vm';
@@ -40,7 +40,7 @@ let StringAreaControlRendererTester: RendererTester = function (element:IUISchem
 }
 
 export default angular
-    .module('jsonforms.renderers.controls.string')
+    .module('jsonforms.renderers.controls.string',['jsonforms.renderers.controls'])
     .directive('stringControl', () => new StringDirective())
     .directive('stringAreaControl', () => new StringAreaDirective())
     .run(['RendererService', RendererService =>

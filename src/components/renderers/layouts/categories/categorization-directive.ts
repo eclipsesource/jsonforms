@@ -1,6 +1,6 @@
-import {RendererTester,RendererService,NOT_FITTING} from '../../../renderer-service';
-import {IPathResolver} from '../../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractLayout} from '../../abstract-layout';
+import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service';
+import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
+import {AbstractLayout} from '../abstract-layout';
 class CategorizationDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;
@@ -35,9 +35,8 @@ var CategorizationLayoutRendererTester: RendererTester = function (element:IUISc
         return NOT_FITTING;
     return 2;
 }
-
-export default angular
-    .module('jsonforms.renderers.layouts.categories.categorization')
+export  default angular
+    .module('jsonforms.renderers.layouts.categories', ['jsonforms.renderers.layouts'])
     .directive('categorization', () => new CategorizationDirective())
     .run(['RendererService', RendererService =>
         RendererService.register("categorization",CategorizationLayoutRendererTester)

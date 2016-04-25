@@ -33,7 +33,7 @@ var ReferenceControlRendererTester: RendererTester = function (element:IUISchema
 }
 
 export default angular
-    .module('jsonforms.renderers.controls.reference')
+    .module('jsonforms.renderers.controls.reference',['jsonforms.renderers.controls'])
     .directive('referenceControl', () => new ReferenceDirective())
     .run(['RendererService', RendererService =>
         {

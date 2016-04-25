@@ -1,6 +1,5 @@
 import 'angular'
 
-import {IRenderService} from "../renderers/jsonforms-renderers";
 import {IPathResolver} from "../services/pathresolver/jsonforms-pathresolver";
 import {IUISchemaGenerator} from "../generators/generators";
 import {ISchemaGenerator} from "../generators/generators";
@@ -14,22 +13,19 @@ import {Services,ServiceId} from "../services/services";
 import {IDataProvider} from '../services/data/data-service';
 import {RuleService} from "../services/rule/rule-service";
 import {DefaultDataProvider} from "../services/data/data-services";
-import {IRenderDescription} from '../renderers/jsonforms-renderers';
 import {RendererService} from '../renderers/renderer-service';
 
 class FormController {
 
-    static $inject = ['RendererService','RenderService', 'PathResolver', 'UISchemaGenerator', 'SchemaGenerator','$compile', '$q', '$scope'];
+    static $inject = ['RendererService', 'PathResolver', 'UISchemaGenerator', 'SchemaGenerator','$compile', '$q', '$scope'];
 
     private isInitialized = false;
     public element: any;
-    public elements: IRenderDescription[];
     public uiSchema: IUISchemaElement;
     private childScope:ng.IScope;
 
     constructor(
         private rendererService: RendererService,
-        private RenderService: IRenderService,
         private PathResolver: IPathResolver,
         private UISchemaGenerator: IUISchemaGenerator,
         private SchemaGenerator: ISchemaGenerator,
@@ -93,7 +89,6 @@ class FormController {
             this.childScope = this.scope.$new();
             this.childScope['services']=services;
             this.childScope['uiSchema']=this.uiSchema;
-            //this.elements = [this.RenderService.render(this.scope, this.uiSchema, services)];
             let template=this.rendererService.getBestComponent(this.uiSchema,schema,dataProvider.getData());
             let compiledTemplate =this.$compile(template)(this.childScope);
             angular.element(this.element.find('form')).append(compiledTemplate);

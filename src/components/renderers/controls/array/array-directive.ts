@@ -26,7 +26,7 @@ class ArrayDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-layout class="jsf-group">
-      <fieldset>
+      <fieldset ng-disabled="vm.uiSchema.readOnly">
         <legend>{{vm.label}}</legend>
         <div ng-repeat="d in vm.modelValue[vm.fragment]">
             <jsonforms schema="vm.arraySchema" data="d"></jsonforms>
@@ -75,7 +75,7 @@ let ArrayReadOnlyControlRendererTester: RendererTester = function (element:IUISc
 let ArrayControlRendererTester: RendererTester = ControlRendererTester('array',1);
 
 export default angular
-    .module('jsonforms.renderers.controls.array')
+    .module('jsonforms.renderers.controls.array',['jsonforms.renderers.controls'])
     .directive('arrayReadonlyControl', () => new ArrayReadOnlyDirective())
     .directive('arrayControl', () => new ArrayDirective())
     .run(['RendererService', RendererService =>

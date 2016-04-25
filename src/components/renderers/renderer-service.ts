@@ -11,7 +11,7 @@ interface RendererDefinition {
     tester: RendererTester;
 }
 export const NOT_FITTING:number=-1;
-export class RendererServiceImpl implements RendererService {
+class RendererServiceImpl implements RendererService {
     static $inject = ['PathResolver'];
     constructor(private refResolver: IPathResolver) {
     }
@@ -33,3 +33,7 @@ export class RendererServiceImpl implements RendererService {
         return "<"+bestDirective+"></"+bestDirective+">";
     }
 }
+export default angular
+    .module('jsonforms.renderers', [])
+    .service('RendererService', RendererServiceImpl)
+    .name;

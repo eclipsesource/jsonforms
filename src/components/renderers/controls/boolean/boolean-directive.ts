@@ -6,7 +6,7 @@ class BooleanDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-control>
-      <input type="checkbox" id="{{vm.id}}" class="jsf-control-boolean" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()'/>
+      <input type="checkbox" id="{{vm.id}}" class="jsf-control-boolean" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()' ng-disabled="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = BooleanController;
     controllerAs = 'vm';
@@ -22,7 +22,7 @@ class BooleanController extends AbstractControl {
 var BooleanControlRendererTester: RendererTester = ControlRendererTester('boolean',1);
 
 export default angular
-    .module('jsonforms.renderers.controls.boolean')
+    .module('jsonforms.renderers.controls.boolean',['jsonforms.renderers.controls'])
     .directive('booleanControl', () => new BooleanDirective())
     .run(['RendererService', RendererService =>
         {

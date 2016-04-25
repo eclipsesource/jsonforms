@@ -40,7 +40,7 @@ var HorizontalLayoutRendererTester: RendererTester = function (element:IUISchema
 }
 
 export default angular
-    .module('jsonforms.renderers.layouts.horizontal')
+    .module('jsonforms.renderers.layouts.horizontal', ['jsonforms.renderers.layouts'])
     .directive('horizontallayout', () => new HorizontalDirective())
     .run(['RendererService', RendererService =>
         RendererService.register("horizontallayout",HorizontalLayoutRendererTester)
