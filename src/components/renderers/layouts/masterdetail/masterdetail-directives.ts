@@ -3,6 +3,7 @@ require('./masterdetail.css');
 import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl, ControlRendererTester} from '../../controls/abstract-control';
+import {IUISchemaElement} from '../../../../jsonforms';
 class MasterDetailDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;

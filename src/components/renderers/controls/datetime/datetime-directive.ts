@@ -1,6 +1,7 @@
 import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl, ControlRendererTester} from '../abstract-control';
+import {IUISchemaElement} from '../../../../jsonforms';
 class DateTimeDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;
