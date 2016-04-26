@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="makeithappen" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="makeithappen" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="makeithappen" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="makeithappen" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JSONForms</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- web components -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
+    </script>
+    <link rel="import" href="bower_components/paper-input/paper-input.html"/>
+
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/jsonforms.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <script src="bower_components/tv4/tv4.js"></script>
+    <script src="bower_components/ace-builds/src-min-noconflict/ace.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular/angular.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-loader/angular-loader.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-route/angular-route.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-ui-validate/dist/validate.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"
+            type="text/javascript"></script>
+    <script src="bower_components/traverse/traverse.js"
+            type="text/javascript"></script>
+    <script src="bower_components/json-refs/browser/json-refs.js"
+            type="text/javascript"></script>
+    <script src="bower_components/angular-ui-ace/ui-ace.js"
+            type="text/javascript"></script>
+    <script src="bower_components/ace-builds/src-min-noconflict/ext-language_tools.js"
+            type="text/javascript"></script>
+
+
+    <script src="js/jsonforms.js" type="text/javascript"></script>
+
+    <script src="app/app.js" type="text/javascript"></script>
+    <script src="app/editor/editor.controller.js" type="text/javascript"></script>
+    <script src="app/local/local.controller.js" type="text/javascript"></script>
+    <script src="app/default-ui/default-ui.controller.js" type="text/javascript"></script>
+    <script src="app/default/default-schema.controller.js" type="text/javascript"></script>
+    <script src="app/placeholder/placeholder.controller.js" type="text/javascript"></script>
+
+    <script src="app/custom/custom.controller.js" type="text/javascript"></script>
+    <script src="app/custom/custom.jsf.js" type="text/javascript"></script>
+    <script src="app/polymer/polymer.controller.js" type="text/javascript"></script>
+    <script src="app/polymer/polymer.jsf.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="row" id="demo">
+        <div class="col-sm-12">
+            <div class="panel-primary panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Demo</strong></h3>
+                </div>
+                <div class="panel-body" style="line-height: 2.0">
+                    <div id="demo-body" ng-view class="jsf"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class ="row">
+        <br>
+        <footer class="footer col-sm-12">
+            <p>&copy; EclipseSource 2015</p>
+        </footer>
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>

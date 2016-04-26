@@ -7,7 +7,10 @@
         "private": true,
         "dependencies": {
             "jsonforms": "latest",
+            "jsonforms-material": "latest",
             "angular-route":"latest",
-            "angular-ui-ace":"latest"
+            "angular-ui-ace":"latest",
+            "angular-marked":"latest",
+            "angular-material":"latest"
         }
 }

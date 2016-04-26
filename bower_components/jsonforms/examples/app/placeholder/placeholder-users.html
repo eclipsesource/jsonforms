@@ -1,0 +1,9 @@
+<h1>Users</h1>
+    <div ng-if="vm.id">
+        <jsonforms schema="vm.userSchema" ui-schema="vm.userUiSchema" data="vm.UserDataProvider"></jsonforms>
+    </div>
+    <div ng-if="!vm.id">
+        <jsonforms schema="vm.usersSchema" ui-schema="vm.usersUiSchema" data="vm.UserDataProvider"></jsonforms>
+    </div>
+
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+   <url>
+      <loc>http://github.eclipsesource.com/jsonforms/</loc>
+   </url>
+
+   <url>
+      <loc>http://github.eclipsesource.com/jsonforms/demo/localdemo.html</loc>
+   </url>
+
+   <url>
+      <loc>http://github.eclipsesource.com/jsonforms/support/support.html</loc>
+   </url>
+
+   <url>
+      <loc>http://github.eclipsesource.com/jsonforms/docs/quickstart.html</loc>
+   </url>
+
+   <url>
+      <loc>http://github.eclipsesource.com/jsonforms/docs/tutorial.html</loc>
+   </url>
+
+   <url>
+      <loc>http://github.eclipsesource.com/jsonforms/docs/tutorial_emfforms.html</loc>
+   </url>
+
+</urlset>

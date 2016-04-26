@@ -15,6 +15,10 @@ describe('uiValidate', function () {
     return valueToValidate;
   };
 
+  var undefinedValidator = function () {
+    return undefined;
+  };
+
   beforeEach(module('ui.validate'));
   beforeEach(inject(function ($rootScope, $compile) {
 
@@ -36,7 +40,7 @@ describe('uiValidate', function () {
 
       scope.validate = trueValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validate($value)\'">', scope);
-      expect(scope.form.input.$valid).toBeTruthy();
+      expect(scope.form.input.$valid).toBe(true);
       expect(scope.form.input.$error).toEqual({});
     }));
 
@@ -44,9 +48,19 @@ describe('uiValidate', function () {
 
       scope.validate = falseValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validate($value)\'">', scope);
-      expect(scope.form.input.$valid).toBeFalsy();
+      expect(scope.form.input.$valid).toBe(false);
       expect(scope.form.input.$error).toEqual({ validator: true });
     }));
+
+    it('should not corrupt the NgModelController and the FormController if the validator returns undefined', inject(function () {
+
+      scope.validate = undefinedValidator;
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validate($value)\'">', scope);
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.$valid).toBe(false);
+      expect(scope.form.input.$error).toEqual({ validator: true });
+    }));
+    
   });
 
   describe('validation on model change', function () {
@@ -56,10 +70,10 @@ describe('uiValidate', function () {
       scope.value = false;
       scope.validate = passedValueValidator;
       compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validate($value)\'">', scope);
-      expect(scope.form.input.$valid).toBeFalsy();
+      expect(scope.form.input.$valid).toBe(false);
 
       scope.$apply('value = true');
-      expect(scope.form.input.$valid).toBeTruthy();
+      expect(scope.form.input.$valid).toBe(true);
     }));
   });
 
@@ -75,12 +89,12 @@ describe('uiValidate', function () {
       scope.value = false;
       scope.validate = passedValueValidator;
       var inputElm = compileAndDigest('<input name="input" ng-model="value" ui-validate="\'validate($value)\'">', scope);
-      expect(scope.form.input.$valid).toBeFalsy();
+      expect(scope.form.input.$valid).toBe(false);
 
       inputElm.val('true');
       inputElm.trigger((sniffer.hasEvent('input') ? 'input' : 'change'));
 
-      expect(scope.form.input.$valid).toBeTruthy();
+      expect(scope.form.input.$valid).toBe(true);
     });
   });
 
@@ -92,9 +106,9 @@ describe('uiValidate', function () {
       scope.validate2 = falseValidator;
 
       compileAndDigest('<input name="input" ng-model="value" ui-validate="{key1 : \'validate1($value)\', key2 : \'validate2($value)\'}">', scope);
-      expect(scope.form.input.$valid).toBeFalsy();
-      expect(scope.form.input.$error.key1).toBeFalsy();
-      expect(scope.form.input.$error.key2).toBeTruthy();
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.key1).toBeUndefined();
+      expect(scope.form.input.$error.key2).toBe(true);
     });
   });
 
@@ -112,6 +126,26 @@ describe('uiValidate', function () {
       expect(scope.form.input.$valid).toBe(false);
       expect(scope.form.input.$error.validator).toBe(true);
       scope.$apply('watchMe=true');
+      expect(scope.form.input.$valid).toBe(true);
+      expect(scope.form.input.$error.validator).toBeUndefined();
+    });
+
+    it('should watch the object deeply and refire the single validator', function () {
+      scope.watchMe = { test: false };
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'watchMe.test==true\'" ui-validate-watch="\'watchMe\'" ui-validate-watch-object-equality="true">', scope);
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.validator).toBe(true);
+      scope.$apply('watchMe.test=true');
+      expect(scope.form.input.$valid).toBe(true);
+      expect(scope.form.input.$error.validator).toBeUndefined();
+    });
+
+    it('should watch the array and refire the single validator', function () {
+      scope.watchMe = [];
+      compileAndDigest('<input name="input" ng-model="value" ui-validate="\'watchMe.length > 0\'" ui-validate-watch-collection="\'watchMe\'">', scope);
+      expect(scope.form.input.$valid).toBe(false);
+      expect(scope.form.input.$error.validator).toBe(true);
+      scope.$apply('watchMe.push(1)');
       expect(scope.form.input.$valid).toBe(true);
       expect(scope.form.input.$error.validator).toBeUndefined();
     });

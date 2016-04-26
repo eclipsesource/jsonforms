@@ -58,7 +58,7 @@ define("ace/keyboard/vim",["require","exports","module","ace/range","ace/lib/eve
   CodeMirror.commands = {
     redo: function(cm) { cm.ace.redo(); },
     undo: function(cm) { cm.ace.undo(); },
-    newlineAndIndent: function(cm) { cm.ace.insert("\n"); },
+    newlineAndIndent: function(cm) { cm.ace.insert("\n"); }
   };
   CodeMirror.keyMap = {};
   CodeMirror.addClass = CodeMirror.rmClass =
@@ -1037,10 +1037,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
       if (key.charAt(0) == '\'') {
         return key.charAt(1);
       }
-      var pieces = key.split('-');
-      if (/-$/.test(key)) {
-        pieces.splice(-2, 2, '-');
-      }
+      var pieces = key.split(/-(?!$)/);
       var lastPiece = pieces[pieces.length - 1];
       if (pieces.length == 1 && pieces[0].length == 1) {
         return false;
@@ -1464,7 +1461,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
         }
 
         function handleKeyNonInsertMode() {
-          if (handleMacroRecording() || handleEsc()) { return true; };
+          if (handleMacroRecording() || handleEsc()) { return true; }
 
           var keys = vim.inputState.keyBuffer = vim.inputState.keyBuffer + key;
           if (/^[1-9]\d*$/.test(keys)) { return true; }
@@ -1491,7 +1488,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
         if (command === false) {
           return undefined;
         } else if (command === true) {
-          return function() {};
+          return function() { return true; };
         } else {
           return function() {
             if ((command.operator || command.isEdit) && cm.getOption('readOnly'))
@@ -2024,7 +2021,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
             return;
           }
           if (motionArgs.toJumplist) {
-            if (!operator)
+            if (!operator && cm.ace.curOp != null)
               cm.ace.curOp.command.scrollIntoView = "center-animate"; // ace_patch
             var jumpList = vimGlobalState.jumpList;
             var cachedCursor = jumpList.cachedCursor;
@@ -2276,12 +2273,14 @@ dom.importCssString(".normal-mode .ace_cursor{\
             (line > last && cur.line == last)) {
           return;
         }
-        var fold = cm.ace.session.getFoldAt(line, endCh);
+        var fold = cm.ace.session.getFoldLine(line);
         if (fold) {
-          if (motionArgs.forward)
-            line = fold.end.row + 1;
-          else
-            line = fold.start.row - 1;
+          if (motionArgs.forward) {
+            if (line > fold.start.row)
+              line = fold.end.row + 1;
+          } else {
+            line = fold.start.row;
+          }
         }
         if (motionArgs.toFirstChar){
           endCh=findFirstNonWhiteSpaceCharacter(cm.getLine(line));
@@ -2513,11 +2512,19 @@ dom.importCssString(".normal-mode .ace_cursor{\
               text = text.slice(0, - match[0].length);
             }
           }
-          var wasLastLine = head.line - 1 == cm.lastLine();
-          cm.replaceRange('', anchor, head);
-          if (args.linewise && !wasLastLine) {
-            CodeMirror.commands.newlineAndIndent(cm);
-            anchor.ch = null;
+          var prevLineEnd = new Pos(anchor.line - 1, Number.MAX_VALUE);
+          var wasLastLine = cm.firstLine() == cm.lastLine();
+          if (head.line > cm.lastLine() && args.linewise && !wasLastLine) {
+            cm.replaceRange('', prevLineEnd, head);
+          } else {
+            cm.replaceRange('', anchor, head);
+          }
+          if (args.linewise) {
+            if (!wasLastLine) {
+              cm.setCursor(prevLineEnd);
+              CodeMirror.commands.newlineAndIndent(cm);
+            }
+            anchor.ch = Number.MAX_VALUE;
           }
           finalHead = anchor;
         } else {
@@ -3815,8 +3822,17 @@ dom.importCssString(".normal-mode .ace_cursor{\
         if (any) { return isEmpty(i) != isEmpty(i + dir); }
         return !isEmpty(i) && isEmpty(i + dir);
       }
+      function skipFold(i) {
+          dir = dir > 0 ? 1 : -1;
+          var foldLine = cm.ace.session.getFoldLine(i);
+          if (foldLine) {
+              if (i + dir > foldLine.start.row && i + dir < foldLine.end.row)
+                  dir = (dir > 0 ? foldLine.end.row : foldLine.start.row) - i;
+          }
+      }
       if (dir) {
         while (min <= i && i <= max && repeat > 0) {
+          skipFold(i);
           if (isBoundary(i, dir)) { repeat--; }
           i += dir;
         }
@@ -4604,7 +4620,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
               if (decimal + hex + octal > 1) { return 'Invalid arguments'; }
               number = decimal && 'decimal' || hex && 'hex' || octal && 'octal';
             }
-            if (args.eatSpace() && args.match(/\/.*\//)) { 'patterns not supported'; }
+            if (args.match(/\/.*\//)) { return 'patterns not supported'; }
           }
         }
         var err = parseArgs();
@@ -4920,7 +4936,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
       }
       if (!confirm) {
         replaceAll();
-        if (callback) { callback(); };
+        if (callback) { callback(); }
         return;
       }
       showPrompt(cm, {
@@ -5042,7 +5058,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
             exitInsertMode(cm);
           }
         }
-      };
+      }
       macroModeState.isPlaying = false;
     }
 
@@ -5191,7 +5207,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
         exitInsertMode(cm);
       }
       macroModeState.isPlaying = false;
-    };
+    }
 
     function repeatInsertModeChanges(cm, changes, repeat) {
       function keyHandler(binding) {
@@ -5520,7 +5536,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
   defaultKeymap.push(
     { keys: 'zc', type: 'action', action: 'fold', actionArgs: { open: false } },
     { keys: 'zC', type: 'action', action: 'fold', actionArgs: { open: false, all: true } },
-    { keys: 'zo', type: 'action', action: 'fold', actionArgs: { open: true, } },
+    { keys: 'zo', type: 'action', action: 'fold', actionArgs: { open: true } },
     { keys: 'zO', type: 'action', action: 'fold', actionArgs: { open: true, all: true } },
     { keys: 'za', type: 'action', action: 'fold', actionArgs: { toggle: true } },
     { keys: 'zA', type: 'action', action: 'fold', actionArgs: { toggle: true, all: true } },
@@ -5554,7 +5570,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
   actions.fold = function(cm, actionArgs, vim) {
     cm.ace.execCommand(['toggleFoldWidget', 'toggleFoldWidget', 'foldOther', 'unfoldall'
       ][(actionArgs.all ? 2 : 0) + (actionArgs.open ? 1 : 0)]);
-  },
+  };
 
   exports.handler.defaultKeymap = defaultKeymap;
   exports.handler.actions = actions;

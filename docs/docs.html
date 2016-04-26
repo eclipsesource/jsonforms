@@ -1,0 +1,55 @@
+<div layout="row" flex="grow">
+    <!--move out to directive -->
+    <nav class="docs-nav l-pinned-left l-offset-nav">
+        <header class="docs-nav-header">
+            <md-button ng-click="toggleDocsMenu($event)" class="docs-nav-button">
+                Docs Menu
+                <span class="icon icon-arrow-drop-down"></span>
+            </md-button>
+        </header>
+        <ul class="docs-menu" layout="column" ng-class="showDocsNav? 'is-visible':''">
+            <!-- icons -->
+            <!--<li class="docs-menu-link is-selected"><a href="docs">Docs Home</a></li>-->
+            <li class="docs-menu-link"><a href="docs/quickstart">Quickstart (5 Minute)</a></li>
+            <li class="docs-menu-link"><a href="docs/tutorial">Tutorial Plain</a></li>
+            <li class="docs-menu-link"><a href="docs/tutorial_emfforms">Tutorial EMFForms</a></li>
+            <!-- Remove when content is moved -->
+            <li class="docs-menu-link"><a href="https://github.com/eclipsesource/jsonforms/wiki" target="_blank">Wiki Home</a></li>
+            <li class="docs-menu-link"><a href="https://github.com/eclipsesource/jsonforms/wiki/Getting%20Started" target="_blank">Getting Started</a></li>
+        </ul>
+    </nav>
+    <!-- actual site -->
+    <!-- margins -->
+    <div layout="column" flex="grow" class="l-offset-docs-nav" layout-fill>
+        <div layout-padding layout-margin layout-align="space-around top" layout-gt-sm="row" >
+            <div flex layout="column" layout-align="start center">
+                <h3>Design</h3>
+                    <ul class="card-content">
+                        <li>Efficiency</li>
+                        <li>generation</li>
+                        <li>tooling</li>
+                        <li>Declarative</li>
+                    </ul>
+            </div>
+            <div flex layout="column" layout-align="start center">
+                <h3>Run / Use</h3>
+                    <ul class="card-content">
+                        <li>creates a form</li>
+                        <li>validation</li>
+                        <li>professional ui</li>
+                        <li>out of the box</li>
+                    </ul>
+            </div>
+            <div flex layout="column" layout-align="start center">
+                <h3>Customize</h3>
+                    <ul class="card-content">
+                        <li>back end</li>
+                        <li>front end</li>
+                        <li>controls</li>
+                        <li>css</li>
+                        <li>Adaptability/Extensibility/</li>
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>

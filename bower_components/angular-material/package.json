@@ -1,0 +1,46 @@
+{
+  "name": "angular-material",
+  "version": "1.0.5",
+  "main": "index",
+  "format": "cjs",
+  "registry": "github",
+  "peerDependencies": {
+    "angular": "^1.4.7",
+    "angular-animate": "^1.4.7",
+    "angular-aria": "^1.4.7"
+  },
+  "jspm": {
+    "dependencies": {
+      "angular": "github:angular/bower-angular@^1.4.7",
+      "angular-animate": "github:angular/bower-angular-animate@^1.4.7",
+      "angular-aria": "github:angular/bower-angular-aria@^1.4.7",
+      "css": "systemjs/plugin-css@^0.1.9"
+    },
+    "shim": {
+      "angular-material": {
+        "deps": []
+      }
+    },
+    "peerDependencies": {}
+  },
+  "homepage": "https://material.angularjs.org",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/angular/material.git"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/angular/material/blob/master/LICENSE"
+    }
+  ],
+  "keywords": [
+    "angular",
+    "material",
+    "browser",
+    "client-side"
+  ],
+  "bugs": {
+    "url": "https://github.com/angular/material/issues"
+  }
+}

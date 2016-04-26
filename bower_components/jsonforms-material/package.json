@@ -1,0 +1,49 @@
+{
+  "name": "jsonforms-material",
+  "private": true,
+  "version": "0.0.2",
+  "description": "Material-Design renderer set for JSONForms",
+  "repository": "https://github.com/eclipsesource/jsonforms-material",
+  "license": "MIT",
+  "devDependencies": {
+      "bower": "^1.7.0",
+      "grunt": "^0.4.5",
+      "grunt-angular-builder": "^1.0.0-beta3",
+      "grunt-angular-templates": "^0.5.9",
+      "grunt-bump": "^0.7.0",
+      "grunt-cli": "^0.1.13",
+      "grunt-contrib-clean": "^0.7.0",
+      "grunt-contrib-concat": "^0.5.1",
+      "grunt-contrib-copy": "^0.8.2",
+      "grunt-contrib-less": "^1.1.0",
+      "grunt-contrib-uglify": "^0.11.0",
+      "grunt-contrib-watch": "^0.6.1",
+      "grunt-coveralls": "^1.0.0",
+      "grunt-git": "^0.3.7",
+      "grunt-karma": "^0.12.1",
+	  "grunt-protractor-runner": "^3.0.0",
+      "grunt-ts": "^5.2.0",
+      "karma": "^0.13.15",
+      "karma-angular-filesort": "^1.0.1",
+      "karma-chrome-launcher": "^0.2.2",
+      "karma-coverage": "^0.5.3",
+      "karma-firefox-launcher": "^0.1.7",
+      "karma-jasmine": "^0.3.6",
+      "karma-ng-html2js-preprocessor": "^0.2.0",
+	  "protractor": "^3.0.0",
+      "remap-istanbul": "^0.5.1"
+  },
+  "scripts": {
+    "postinstall": "bower install",
+    "prestart": "npm install -dev",
+    "start": "http-server -a localhost -p 8000 -c-1",
+    "pretest": "npm install",
+    "test": "karma start karma.conf.js",
+    "test-single-run": "karma start tests/unit-tests/karma.conf.js --single-run",
+    "preupdate-webdriver": "npm install",
+    "update-webdriver": "webdriver-manager update"
+  },
+  "dependencies": {
+    "json-refs": "^0.2.0"
+  }
+}

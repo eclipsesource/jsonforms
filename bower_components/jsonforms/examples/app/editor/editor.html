@@ -1,0 +1,19 @@
+<form role="form">
+    <div class="row">
+        <div class="form-group col-sm-50">
+            <label for="localModelEditor">JSON Schema:</label>
+            <div ui-ace="{onLoad: aceLoaded}" id="localModelEditor" ng-model="vm.localModel" ></div>
+        </div>
+        <div class="form-group col-sm-50">
+            <label for="localViewEditor">View:</label>
+            <div ui-ace="{onLoad: aceLoaded, onChange: uiSchemaChanged}" id="localViewEditor" ng-model="vm.localView" ></div>
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <form role="form" class="jsf-form">
+        <jsonforms id="editor" schema="vm.schema" ui-schema="vm.uiSchema" data="vm.data"></jsonforms>
+    </form>
+</div>
+

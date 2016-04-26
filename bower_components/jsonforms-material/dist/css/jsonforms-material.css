@@ -1,0 +1,47 @@
+/**
+the css class is a temporary fix for https://github.com/angular/material/issues/1268
+**/
+md-input-container md-checkbox {
+  margin-top: 10px;
+}
+
+/**
+the css class is a temporary fix for https://github.com/angular/material/issues/4233
+**/
+.material-jsf-input-container {
+  display: inline-block;
+  position: relative;
+  padding: 2px;
+  margin: 18px 0;
+  vertical-align: middle;
+}
+.material-jsf-input-container:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.material-jsf-input-container .material-jsf-label {
+  transform: translate3d(0, 6px, 0) scale(0.75);
+}
+.material-jsf-input-container label {
+  -webkit-order: 1;
+  -ms-flex-order: 1;
+  order: 1;
+  pointer-events: none;
+  -webkit-font-smoothing: antialiased;
+  padding-left: 80px;
+  padding-right: 0;
+  z-index: 1;
+  -webkit-transform: translate3d(0, 28px, 0) scale(1);
+  transform: translate3d(0, 28px, 0) scale(1);
+  transition: -webkit-transform cubic-bezier(0.25, 0.8, 0.25, 1) 0.25s;
+  transition: transform cubic-bezier(0.25, 0.8, 0.25, 1) 0.25s;
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: auto;
+  -webkit-transform: translate3d(0, 6px, 0) scale(0.75);
+  transform: translate3d(0, 6px, 0) scale(0.75);
+}

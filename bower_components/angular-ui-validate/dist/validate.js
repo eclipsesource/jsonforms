@@ -1,7 +1,7 @@
 /*!
  * angular-ui-validate
  * https://github.com/angular-ui/ui-validate
- * Version: 1.1.0 - 2015-07-14T09:04:12.726Z
+ * Version: 1.2.2 - 2015-11-28T04:00:20.151Z
  * License: MIT
  */
 
@@ -14,7 +14,7 @@
  * an arbitrary validation function requires creation of custom directives for interact with angular's validation mechanism.
  * The ui-validate directive makes it easy to use any function(s) defined in scope as a validator function(s).
  * A validator function will trigger validation on both model and input changes.
- * 
+ *
  * This utility bring 'ui-validate' directives to handle regular validations and 'ui-validate-async' for asynchronous validations.
  *
  * @example <input ui-validate=" 'myValidatorFunction($value)' ">
@@ -28,17 +28,17 @@
  * If an object literal is passed a key denotes a validation error key while a value should be a validator function.
  * In both cases validator function should take a value to validate as its argument and should return true/false indicating a validation result.
  * It is possible for a validator function to return a promise, however promises are better handled by ui-validate-async.
- * 
+ *
  * @param ui-validate-async {string|object literal} If strings is passed it should be a scope's function to be used as a validator.
  * If an object literal is passed a key denotes a validation error key while a value should be a validator function.
- * Async validator function should take a value to validate as its argument and should return a promise that resolves if valid and reject if not, 
- * indicating a validation result. 
+ * Async validator function should take a value to validate as its argument and should return a promise that resolves if valid and reject if not,
+ * indicating a validation result.
  * ui-validate-async supports non asyncronous validators. They are wrapped into a promise. Although is recomented to use ui-validate instead, since
  * all validations declared in ui-validate-async are registered un ngModel.$asyncValidators that runs after ngModel.$validators if and only if
  * all validators in ngModel.$validators reports as valid.
  */
 angular.module('ui.validate',[])
-.directive('uiValidate', ['$$uiValidateApplyWatch', function($$uiValidateApplyWatch) {
+  .directive('uiValidate', ['$$uiValidateApplyWatch', '$$uiValidateApplyWatchCollection', function ($$uiValidateApplyWatch, $$uiValidateApplyWatchCollection) {
 
   return {
     restrict: 'A',
@@ -75,7 +75,7 @@ angular.module('ui.validate',[])
             // Return as valid for now. Validity is updated when promise resolves.
             return true;
           } else {
-            return expression;
+            return !!expression; // Transform 'undefined' to false (to avoid corrupting the NgModelController and the FormController)
           }
         };
         ctrl.$validators[key] = validateFn;
@@ -83,12 +83,15 @@ angular.module('ui.validate',[])
 
       // Support for ui-validate-watch
       if (attrs.uiValidateWatch) {
-        $$uiValidateApplyWatch(scope, ctrl, scope.$eval(attrs.uiValidateWatch));
+        $$uiValidateApplyWatch(scope, ctrl, scope.$eval(attrs.uiValidateWatch), attrs.uiValidateWatchObjectEquality);
+      }
+      if (attrs.uiValidateWatchCollection) {
+        $$uiValidateApplyWatchCollection(scope, ctrl, scope.$eval(attrs.uiValidateWatchCollection));
       }
     }
   };
 }])
-.directive('uiValidateAsync', ['$$uiValidateApplyWatch', '$timeout', '$q', function ($$uiValidateApplyWatch, $timeout, $q) {
+  .directive('uiValidateAsync', ['$$uiValidateApplyWatch', '$$uiValidateApplyWatchCollection', '$timeout', '$q', function ($$uiValidateApplyWatch, $$uiValidateApplyWatchCollection, $timeout, $q) {
 
   return {
     restrict: 'A',
@@ -132,45 +135,75 @@ angular.module('ui.validate',[])
 
       // Support for ui-validate-watch
       if (attrs.uiValidateWatch){
-          $$uiValidateApplyWatch( scope, ctrl, scope.$eval(attrs.uiValidateWatch) );
+          $$uiValidateApplyWatch( scope, ctrl, scope.$eval(attrs.uiValidateWatch), attrs.uiValidateWatchObjectEquality);
+      }
+      if (attrs.uiValidateWatchCollection) {
+        $$uiValidateApplyWatchCollection(scope, ctrl, scope.$eval(attrs.uiValidateWatchCollection));
       }
     }
   };
 }])
-.service('$$uiValidateApplyWatch', function() {
-    return function(scope, ctrl, watch) {
-    
-    //string - update all validators on expression change
-    if (angular.isString(watch)) {
-      scope.$watch(watch, function() {
+  .service('$$uiValidateApplyWatch', function () {
+    return function (scope, ctrl, watch, objectEquality) {
+      var watchCallback = function () {
         ctrl.$validate();
-      });
-      //array - update all validators on change of any expression
-    } else if (angular.isArray(watch)) {
-      angular.forEach(watch, function(expression) {
-        scope.$watch(expression, function() {
-          ctrl.$validate();
+      };
+
+      //string - update all validators on expression change
+      if (angular.isString(watch)) {
+        scope.$watch(watch, watchCallback, objectEquality);
+        //array - update all validators on change of any expression
+      } else if (angular.isArray(watch)) {
+        angular.forEach(watch, function (expression) {
+          scope.$watch(expression, watchCallback, objectEquality);
         });
-      });
-      //object - update appropriate validator
-    } else if (angular.isObject(watch)) {
-      angular.forEach(watch, function(expression/*, validatorKey*/) {
-        //value is string - look after one expression
-        if (angular.isString(expression)) {
-          scope.$watch(expression, function() {
-            ctrl.$validate();
-          });
-        }
-        //value is array - look after all expressions in array
-        if (angular.isArray(expression)) {
-          angular.forEach(expression, function(intExpression) {
-            scope.$watch(intExpression, function() {
-              ctrl.$validate();
+        //object - update appropriate validator
+      } else if (angular.isObject(watch)) {
+        angular.forEach(watch, function (expression/*, validatorKey*/) {
+          //value is string - look after one expression
+          if (angular.isString(expression)) {
+            scope.$watch(expression, watchCallback, objectEquality);
+          }
+          //value is array - look after all expressions in array
+          if (angular.isArray(expression)) {
+            angular.forEach(expression, function (intExpression) {
+              scope.$watch(intExpression, watchCallback, objectEquality);
             });
-          });
-        }
-      });
-    }};
-});
+          }
+        });
+      }
+    };
+  })
+  .service('$$uiValidateApplyWatchCollection', function () {
+    return function (scope, ctrl, watch) {
+      var watchCallback = function () {
+        ctrl.$validate();
+      };
+
+      //string - update all validators on expression change
+      if (angular.isString(watch)) {
+        scope.$watchCollection(watch, watchCallback);
+        //array - update all validators on change of any expression
+      } else if (angular.isArray(watch)) {
+        angular.forEach(watch, function (expression) {
+          scope.$watchCollection(expression, watchCallback);
+        });
+        //object - update appropriate validator
+      } else if (angular.isObject(watch)) {
+        angular.forEach(watch, function (expression/*, validatorKey*/) {
+          //value is string - look after one expression
+          if (angular.isString(expression)) {
+            scope.$watchCollection(expression, watchCallback);
+          }
+          //value is array - look after all expressions in array
+          if (angular.isArray(expression)) {
+            angular.forEach(expression, function (intExpression) {
+              scope.$watchCollection(intExpression, watchCallback);
+            });
+          }
+        });
+      }
+    };
+  });
 
 }());
