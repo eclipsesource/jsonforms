@@ -1,0 +1,11 @@
+/*!
+ * Angular Material Design
+ * https://github.com/angular/material
+ * @license MIT
+ * v1.0.5
+ */
+md-divider.md-THEME_NAME-theme {
+  border-top-color: '{{foreground-4}}'; }
+
+.layout-row > md-divider.md-THEME_NAME-theme {
+  border-right-color: '{{foreground-4}}'; }

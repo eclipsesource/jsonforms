@@ -1,0 +1,15 @@
+<!--move out to directive -->
+<nav class="docs-nav l-pinned-left l-offset-nav">
+    <header class="docs-nav-header">
+        <md-button ng-click="toggleDocsMenu($event)" class="docs-nav-button">
+            Documentation Menu
+            <span class="icon icon-arrow-drop-down"></span>
+        </md-button>
+    </header>
+    <ul class="docs-menu" layout="column" ng-class="showDocsNav? 'is-visible':''">
+        <!--<li class="docs-menu-link"><a href="docs">Docs Home</a></li>-->
+        <li class="docs-menu-link" ng-class="isSelected('/docs/quickstart.html')?'is-selected':''"><a href="./docs/quickstart.html">Quickstart (5 Minute)</a></li>
+        <li class="docs-menu-link" ng-class="isSelected('/docs/tutorial.html')?'is-selected':''"><a href="./docs/tutorial.html">Tutorial Plain</a></li>
+        <li class="docs-menu-link" ng-class="isSelected('/docs/tutorial_emfforms.html')?'is-selected':''"><a href="./docs/tutorial_emfforms.html">Tutorial EMFForms</a></li>
+    </ul>
+</nav>

@@ -4,8 +4,8 @@
     <head>
         <meta charset="utf-8">
         <title>AngularJS ui-validate</title>
-        <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.js"></script>
-        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.1/angular.js"></script>
+        <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css"/>
 
         <!-- ui-validate files -->
         <script src="../dist/validate.js"></script>
@@ -85,21 +85,21 @@
                         <code>true</code>the input is valid, the rule name will be
                         <code>validator</code> by default.</p>
                     <pre class="prettyprint">ui-validate=" 'validateFoo($value)' " Input is valid: {{!!myForm.myInput.$error.validator}}</pre>
-                    <p>
-                        <strong>Or</strong> define multiple rules by creating an object where the key is the rule name and the value is the expression string.</p>
-                    <pre
-                    class="prettyprint">ui-validate="{foo:'valFoo($value)', bar:'$value == someVar'}" Foo rule passes: {{!!myForm.myInput.$error.foo}} Bar rule
+                    <p><strong>Or</strong> define multiple rules by creating an object where the key is the rule name and the value is the expression string.</p>
+                    <pre class="prettyprint">ui-validate="{foo:'valFoo($value)', bar:'$value == someVar'}" Foo rule passes: {{!!myForm.myInput.$error.foo}} Bar rule
                         passes: {{!!myForm.myInput.$error.bar}}</pre>
+                    <p>Use ui-validate-watch or ui-validate-watch-collection to watch expressions. With ui-validate-watch-object-equality you can enable deep watching:</p>
+                    <pre class="prettyprint">ui-validate-watch="'myValue'"</pre>
+                    <pre class="prettyprint">ui-validate-watch-collection="'myArrayOrObject'"</pre>
+                    <pre class="prettyprint">ui-validate-watch="'myDeepNestedObject'" ui-validate-watch-object-equality="true"</pre>
                     <h4>ui-validate-async</h4>
                     <p>Create an expression inside a string. Expresion must return a promise. The rule name will be
                         <code>validatorAsync</code> by default. Until promise is fulfilled, rule is placed on $pending list.
                         if promise is rejected, validation fail.
                         </p>
                     <pre class="prettyprint">ui-validate-async=" 'validateAsyncFoo($value)' " Input is valid: {{!!myForm.myInput.$error.validatorAsync}}</pre>
-                    <p>
-                        <strong>Or</strong> define multiple rules by creating an object where the key is the rule name and the value is the expression string.</p>
-                    <pre
-                    class="prettyprint">ui-validate-async="{fooAsync:'valAsyncFoo($value)'}" fooAsync rule passes: {{!!myForm.myInput.$error.fooAsync}} </pre>
+                    <p><strong>Or</strong> define multiple rules by creating an object where the key is the rule name and the value is the expression string.</p>
+                    <pre class="prettyprint">ui-validate-async="{fooAsync:'valAsyncFoo($value)'}" fooAsync rule passes: {{!!myForm.myInput.$error.fooAsync}} </pre>
                 </div>
             </div>
         </section>

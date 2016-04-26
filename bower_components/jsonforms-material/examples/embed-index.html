@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="makeithappen" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="makeithappen" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="makeithappen" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="makeithappen" class="no-js">
+<!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JSONForms Material Example</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--
+    <link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+-->
+
+    <link rel="stylesheet" href="../bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="css/jsonforms-material.css"/>
+
+    <script src="../bower_components/tv4/tv4.js"></script>
+    <script src="../bower_components/angular/angular.js" type="text/javascript"></script>
+
+    <script src="../bower_components/angular-loader/angular-loader.js" type="text/javascript"></script>
+    <script src="../bower_components/angular-material/angular-material.js" type="text/javascript"></script>
+    <script src="../bower_components/angular-animate/angular-animate.js" type="text/javascript"></script>
+    <script src="../bower_components/angular-aria/angular-aria.js" type="text/javascript"></script>
+
+    <script src="../bower_components/angular-ui-validate/dist/validate.js" type="text/javascript"></script>
+    <script src="../bower_components/angular-resource/angular-resource.js" type="text/javascript"></script>
+    <script src="../bower_components/traverse/traverse.js" type="text/javascript"></script>
+    <script src="../bower_components/json-refs/browser/json-refs.js" type="text/javascript"></script>
+    <script src="../bower_components/jsonforms/dist/js/jsonforms.js" type="text/javascript"></script>
+
+    <!--eval stuff -->
+    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="text/javascript"></script>
+    <script src="../bower_components/angular-ui-grid/ui-grid.js" type="text/javascript"></script>
+
+    <!--local-->
+    <script src="js/app.js" type="text/javascript"></script>
+    <script src="js/LocalController.js" type="text/javascript"></script>
+
+    <script src="js/jsonforms-material.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+    <div><!--  md-theme="docs-dark"-->
+        <md-toolbar>
+            <h1 class="md-toolbar-tools,md-display-3">
+                <span>Demo</span>
+            </h1>
+        </md-toolbar>
+        <div id="demo-body" ng-controller="LocalController" layout-padding>
+            <div >
+                <md-toolbar >
+                    <h3 class="md-toolbar-tools,md-display-2">
+                        <span>Bound data</span>
+                    </h3>
+                </md-toolbar>
+                <div class="panel-body">
+                    <pre>{{formattedData()}}</pre>
+                </div>
+            </div>
+            <div >
+                <md-toolbar style="margin-top:5px">
+                    <h3 class="md-toolbar-tools,md-display-2">
+                        <span>JSONForms generated Forms</span>
+                    </h3>
+                </md-toolbar>
+                <div >
+                    <jsonforms data="data" schema="schema" ui-schema="uiSchema"></jsonforms>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <br>
+            <footer class="footer col-sm-12">
+                <p>&copy; EclipseSource 2015</p>
+            </footer>
+        </div>
+    </div>
+</body>
+
+</html>

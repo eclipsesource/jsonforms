@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="jsonforms-website"" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="jsonforms-website"" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="jsonforms-website"" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="jsonforms-website" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>JSONForms Tutorial</title>
+    <base href="/jsonforms-website/">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="images/jsonforms-logo.png">
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:700,400' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+
+    <!-- Needed by website -->
+    <script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="bower_components/angular/angular.js" type="text/javascript"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js" type="text/javascript"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js" type="text/javascript"></script>
+    <script src="bower_components/angular-material/angular-material.min.js" type="text/javascript"></script>
+    <script src="bower_components/angular-route/angular-route.min.js" type="text/javascript"></script>
+
+    <script src="bower_components/ace-builds/src-min-noconflict/ace.js" type="text/javascript"></script>
+    <script src="bower_components/ace-builds/src-min-noconflict/ext-language_tools.js" type="text/javascript"></script>
+    <script src="bower_components/angular-ui-ace/ui-ace.js" type="text/javascript"></script>
+
+    <!-- dependencies of jsonforms -->
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="text/javascript"></script>
+    <script src="bower_components/angular-ui-validate/dist/validate.js" type="text/javascript"></script>
+    <script src="bower_components/angular-ui-grid/ui-grid.min.js" type="text/javascript"></script>
+    <!-- needed? -->
+    <script src="bower_components/lodash-compat/lodash.min.js" type="text/javascript"></script>
+    <script src="bower_components/path-loader/browser/path-loader-min.js" type="text/javascript"></script>
+    <!-- END needed? -->
+    <script src="bower_components/traverse/traverse.js" type="text/javascript"></script>
+    <script src="bower_components/json-refs/browser/json-refs-min.js" type="text/javascript"></script>
+    <script src="bower_components/tv4/tv4.js" type="text/javascript"></script>
+
+    <!-- our libs -->
+    <script src="bower_components/jsonforms/dist/js/jsonforms.js" type="text/javascript"></script>
+    <script src="bower_components/jsonforms-material/dist/js/jsonforms-material.js" type="text/javascript"></script>
+    <script src="js/app.js" type="text/javascript"></script>
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-61092266-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+<body layout="column" ng-controller="AppCtrl as appCtrl" class="l-offset-nav">
+    <main-menu></main-menu>
+    <article flex="noshrink">
+        <div layout="row" flex="grow">
+            <docs-menu></docs-menu>
+            <!-- actual site -->
+            <div layout="column" flex="grow" class="l-offset-docs-nav docs-content" layout-fill layout-margin>
+                <h1>Render architecture</h1>
+        <p>
+        <i>Disclaimer</i>: This is only a draft version of the article, it's likely things change. Nevertheless it should give readers a good starting point.
+        </p>
+        <p>
+        This article introduces the basic architecture of the rendering components within JSON Forms. We'll first take a look at how a single renderer works. Then, we'll describe the <code>RenderService</code>, which acts as a registry for renderers and as the entry point for any JSON Forms based application.
+        </p>
+        <h2>Renderer</h2>
+        <p>
+        Simply said, a renderer is responsible for displaying a single UI schema element and also maintaining its possible state, if it has any (e.g. validation markers and the like). A renderer hence needs to conform to the following (preliminary) interface (TypeScript):
+
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:140px">
+interface IRenderer {
+  isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
+
+  render(element: IUISchemaElement, schema: SchemaElement,
+         schemaPath: string, dataProvider: IDataProvider): IRenderDescription
+
+  priority: number
+}
+        </div>
+        </p>
+        <p>
+        The <code>isApplicable</code> method determines whether a renderer is capable of rendering the current UI schema element. The current UI schema element hereby refers to the currently visited part of the UI schema since the whole UI schema is traversed in a depth-first fashion.
+        If the UI schema element is a Control, i.e. whether it refers to a specific sub part of the schema via the control's <code>scope</code> property, the <code>isApplicable</code> method is also passed that specific sub part of the schema together with the according schema path. This means, for all UI schema element which are not controls, the passed <code>subSchema</code> and <code>schemaPath</code> are possibly <code>undefined</code>.
+        </p>
+        <p>
+        It is possible that multiple renderers are capable of rendering a UI schema element. This is why each renderer needs to specify a <code>priority</code> of type <code>number</code>. The renderer with the highest priority will be picked. In genereal, the more specific renderers get, the higher will be their <code>priority</code>.
+        </p>
+        <p>
+        Here’s an exemplary implementation of the <code>isApplicable</code> method taken from the default implementation of the <code>IntegerControl</code>:
+
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:90px">
+isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
+  // note that subSchema and schemaPath are potentially undefined
+  return uiElement.type == 'Control' && subSchema != undefined && subSchema.type == 'integer';
+}
+        </div>
+        </p>
+        <p>
+        Finally, the <code>render</code> method of the <code>IRenderer</code> interface, which will be called, whenever a renderer has been selected, is responsible for actually creating a object we call <code>RenderDescription</code>. This object contains all relevant information to render a UI schema element, which are the following:
+        <ul>
+        <li><code>type</code>: determines the type, which currently can be either <code>Control</code> or <code>Layout</code></li>
+        <li><code>size</code>: a value ranging from 0 - 99 that determines how much horizontal space this widget should occupy, where <code>99</code> determines all available space</li>
+        <li><code>template</code> or <code>templateUrl</code>: the actual template HTML string to be rendered or a relative path to the file containing it. Templates are just regular <code>HTML</code>, but need to be wrapped in a <code>&lt;control&gt;</code> or <code>&lt;layout&gt;</code> element, depending on the type of the rendered element.</li>
+        </ul>
+        </p>
+        <p>
+        For controls (type <code>Control</code>), you need to set some more properties:
+        <ul>
+        <li><code>instance</code>: the instance to be rendered</li>
+        <li><code>schemaPath</code>: the schema path to the property which should be rendered. This will hence point to a specific property of the <code>instance</code>.</li>
+        <li><code>schema</code>: the overall schema</li>
+        </ul>
+        </p>
+        <p>
+        Because it seems likely to forget one of these properties when creating a control, JSON Forms also provides helper classes which do most of the initialization themselfes. Below is an example that is taken from the implementation of the <code>IntegerControl</code>. Note also, that the <code>render</code> method is passed the complete schema and not the sub schema as it is the case with <code>isApplicable</code>. Also, it features a parameter of type <code>IDataProvider</code>. We'll won't go into detail about data provider in this article, so it's enough to know for now that it provides the current instance via its <code>data</code> property.
+        </p>
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:210px">
+render(element:jsonforms.services.UISchemaElement, schema: SchemaElement,
+       schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
+
+       var control =  new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath);
+       control['template'] =
+       `&lt;control&gt;
+          &lt;input type="number" step="1" id="${schemaPath}"
+                 class="form-control jsf-control jsf-control-integer"
+                 data-jsonforms-validation
+                 data-jsonforms-model/&gt;
+       &lt;/control&gt;`;
+       return control;
+}
+        </div>
+        <p>
+        As you can see you only need to set the <code>template</code> property and you are good to go. The rest will be handled by the instantiated <code>ControlRenderDescription</code>.
+        </p>
+        <p>
+        While reading through the template you might have noticed the <code>data-jsonforms-validation</code> and <code>data-jsonforms-model</code> attributes which you’ll need to add if you want validation support and databinding to work ouf-of-the-box. Basically these are just shortcuts to set up databinding and the validation change listener that is triggered whenever the model is changed.
+        </p>
+        <h2>RenderService</h2>
+        <p>
+        The <code>RenderService</code> is a registry for all available renderers within JSON Forms. Hence, when you provide a custom renderer, you'll also need register it with the RenderService. Furthermore it also acts as the entry point for any <code>render</code> calls within the framework itself. This is of interest in case you want to provide your own layout, since you'd then need to utilize the <code>RenderService</code> in order to retrieve <code>IRenderDescription</code> for all contained children of the layout.
+        </p>
+        <h2>Creating a custom renderer</h2>
+        <p>
+        Armed with this knowledge let’s now move on and implement our own custom control render in Javascript. Clone the seed project in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies:
+        </p>
+        <div ui-ace="appCtrl.configAce('sh')" readonly flex="noshrink" style="height:70px">
+git clone https://github.com/eclipsesource/jsonforms-seed.git custom-control-tutorial
+cd custom-control-tutorial
+bower install
+        </div>
+        <p>
+        The seed project comes pre-configured with two <code>schema.js</code> and a <code>ui-schema.js</code> Javascript files that contain the JSON schema and the UI schema respectively.
+        </p>
+        <p>
+        The schema describes a User entity and features three basic data types and also contains a validation constraint <code>minLength`, which requires the <code>name</code> property to be at least three characters long.
+        The UI schema only consists of a <code>HorizontalLayout</code> with three Controls and is therefore left out here. In case you are interested nevertheless, have a look at the <code>js/ui-schema.js</code> file.
+        </p>
+        <p>
+        Let’s now create a custom control for the <code>name</code> property of a user. First we’ll need to execute <code>run</code> in order to register our control at the <code>RenderService</code> while the application is bootstrapping:
+        </p>
+        <div ui-ace="appCtrl.configAce('javascript')" readonly flex="noshrink" style="height:70px">
+app.run(['RenderService', function(RenderService) {
+  // TODO
+}]);
+        </div>
+        <p>
+        We inject the <code>RenderService</code> which we'll need to register our control. Next we define the outline of the control and register it at the RenderService:
+        </p>
+        <div ui-ace="appCtrl.configAce('javascript')" readonly flex="noshrink" style="height:200px">
+app.run(['RenderService', function(RenderService) {
+
+    function MyControl() {
+      return {
+        priority: 100,
+        render: function(element, schema, schemaPath, dataProvider) { ... },
+        isApplicable: function(element, subSchema, schemaPath) { ... }
+      }
+    }
+
+    RenderService.register(new MyControl());
+}]);
+        </div>
+        <p>
+        Since multiple controls will be applicable (the <code>StringControl</code> will also come in question), we need to set a higher priority than default control. User-defined controls should have set a priority >= 100, since 0 - 99 are reserved for the framework itself.
+        </p>
+        <p>
+        Let’s implement the last missing bits:
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:200px">
+isApplicable: function (element, subSchema, schemaPath) {
+  // check whether the schema path contains name
+  return element.type == "Control" && schemaPath != undefined && schemaPath.indexOf("name") > -1;
+}
+
+render: function(element, schema, schemaPath, dataProvider) {
+  var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath);
+  control['template'] =
+    '&lt;control&gt;&lt;input type="text" style="background-color: #3278b3; color: #8dd0ff"' +
+           'class="form-control" data-jsonforms-model data-jsonforms-validation /&gt;&lt;/control&gt;';
+  return control;
+}
+        </div>
+        </p>
+        <p>
+        The <code>isApplicable</code> method checks whether the UI schema element is of type <code>Control</code> and whether the <code>schemaPath</code> contains <code>"name"</code>  as a fragment. If it does we know that the control is responsible for display a user's name.
+        </p>
+        <p>
+        The <code>render</code> method is pretty standard and is actually based on the default <code>StringControl</code> The only aspect that differs from the default implementation are additional style attributes that set a background and foreground color.
+        </p>
+        <p>
+        That's basically it. Open the <code>index.html</code> of the jsonforms-seed project and you should see your custom control in action.
+        </p>
+            </div>
+        </div>
+    </article>
+    <footer layout="row" layout-align="end center" flex="none">
+        <a href="https://github.com/eclipsesource/jsonforms" id="github" target="_blank"><span>GitHub</span></a>
+        <a href="https://twitter.com/jsonforms" id="twitter" target="_blank"><span>Twitter</span></a>
+        <span>&copy; EclipseSource 2016</span>
+    </footer>
+</body>
+</html>

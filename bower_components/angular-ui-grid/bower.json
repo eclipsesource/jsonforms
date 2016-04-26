@@ -2,6 +2,7 @@
   "name": "angular-ui-grid",
   "description": "A data grid for Angular",
   "main": [
+    "./less",
     "./ui-grid.css",
     "./ui-grid.eot",
     "./ui-grid.js",
@@ -11,13 +12,16 @@
   ],
   "ignore": [],
   "dependencies": {
-    "angular": ">=1.2.16 <=1.3.16"
+    "angular": ">=1.2.16 1.4.x"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/angular-ui/ui-grid.git"
   },
   "homepage": "http://ui-grid.info",
+  "bugs": {
+    "url": "https://github.com/angular-ui/ui-grid/issues"
+  },
   "keywords": [
     "angular",
     "ng-grid",

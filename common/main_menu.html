@@ -1,0 +1,16 @@
+<md-toolbar class="l-pinned-top">
+    <nav class="main-nav" layout="row" layout-align="space-between center">
+        <a id="logo_img" href="./index.html" class="logo" layout="row" layout-align="start center">
+            <span class="innerlogo"><strong>JSON</strong>Forms</span>
+        </a>
+        <md-button ng-click="toggleMainMenu($event)" class="main-nav-button">
+            Site Menu
+            <span class="icon icon-arrow-drop-down"></span>
+        </md-button>
+        <ul class="primary-menu" layout="row" ng-class="showMainNav? 'is-visible':''">
+            <li class="primary-menu-link"><a href="./demo/localdemo.html">Demo</a></li>
+            <li class="primary-menu-link"><a href="./docs/quickstart.html">Documentation</a></li>
+            <li class="primary-menu-link"><a href="./support/support.html">Support</a></li>
+        </ul>
+    </nav>
+</md-toolbar>

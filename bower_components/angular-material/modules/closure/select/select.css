@@ -1,0 +1,213 @@
+/*!
+ * Angular Material Design
+ * https://github.com/angular/material
+ * @license MIT
+ * v1.0.5
+ */
+.md-select-menu-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 90;
+  opacity: 0;
+  display: none; }
+  .md-select-menu-container:not(.md-clickable) {
+    pointer-events: none; }
+  .md-select-menu-container md-progress-circular {
+    display: table;
+    margin: 24px auto !important; }
+  .md-select-menu-container.md-active {
+    display: block;
+    opacity: 1; }
+    .md-select-menu-container.md-active md-select-menu {
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transition-duration: 150ms; }
+      .md-select-menu-container.md-active md-select-menu > * {
+        opacity: 1;
+        transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+        transition-duration: 150ms;
+        transition-delay: 100ms; }
+  .md-select-menu-container.md-leave {
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2);
+    transition-duration: 250ms; }
+
+md-input-container > md-select {
+  margin: 0;
+  -webkit-order: 2;
+      -ms-flex-order: 2;
+          order: 2; }
+
+md-select {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 20px 0 26px 0; }
+  md-select[disabled] .md-select-value {
+    background-position: 0 bottom;
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+    margin-bottom: -1px; }
+  md-select:focus {
+    outline: none; }
+  md-select[disabled]:hover {
+    cursor: default; }
+  md-select:not([disabled]):hover {
+    cursor: pointer; }
+  md-select:not([disabled]).ng-invalid.ng-dirty .md-select-value {
+    border-bottom: 2px solid;
+    padding-bottom: 0; }
+  md-select:not([disabled]):focus .md-select-value {
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    padding-bottom: 0; }
+
+.md-select-value {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 2px 2px 1px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  background-color: transparent;
+  position: relative;
+  box-sizing: content-box;
+  min-width: 64px;
+  min-height: 26px;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1; }
+  .md-select-value .md-text {
+    display: inline; }
+  .md-select-value *:first-child {
+    -webkit-flex: 1 0 auto;
+        -ms-flex: 1 0 auto;
+            flex: 1 0 auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-transform: translate3d(0, 2px, 0);
+            transform: translate3d(0, 2px, 0); }
+  .md-select-value .md-select-icon {
+    display: block;
+    -webkit-align-items: flex-end;
+        -ms-flex-align: end;
+            align-items: flex-end;
+    text-align: end;
+    width: 24px;
+    margin: 0 4px;
+    -webkit-transform: translate3d(0, 1px, 0);
+            transform: translate3d(0, 1px, 0); }
+  .md-select-value .md-select-icon:after {
+    display: block;
+    content: '\25BC';
+    position: relative;
+    top: 2px;
+    speak: none;
+    -webkit-transform: scaleY(0.6) scaleX(1);
+            transform: scaleY(0.6) scaleX(1); }
+  .md-select-value.md-select-placeholder {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-order: 1;
+        -ms-flex-order: 1;
+            order: 1;
+    pointer-events: none;
+    -webkit-font-smoothing: antialiased;
+    padding-left: 2px;
+    z-index: 1; }
+
+md-select-menu {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  max-height: 256px;
+  min-height: 48px;
+  overflow-y: hidden;
+  -webkit-transform-origin: left top;
+          transform-origin: left top;
+  -webkit-transform: scale(1);
+          transform: scale(1); }
+  md-select-menu.md-reverse {
+    -webkit-flex-direction: column-reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse; }
+  md-select-menu:not(.md-overflow) md-content {
+    padding-top: 8px;
+    padding-bottom: 8px; }
+  html[dir=rtl] md-select-menu {
+    -webkit-transform-origin: right top;
+            transform-origin: right top;
+    unicode-bidi: embed; }
+  body[dir=rtl] md-select-menu {
+    -webkit-transform-origin: right top;
+            transform-origin: right top;
+    unicode-bidi: embed; }
+  md-select-menu bdo[dir=rtl] {
+    direction: rtl;
+    unicode-bidi: bidi-override; }
+  md-select-menu bdo[dir=ltr] {
+    direction: ltr;
+    unicode-bidi: bidi-override; }
+  md-select-menu md-content {
+    min-width: 136px;
+    min-height: 48px;
+    max-height: 256px;
+    overflow-y: auto; }
+  md-select-menu > * {
+    opacity: 0; }
+
+md-option {
+  cursor: pointer;
+  position: relative;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: auto;
+  padding: 0 16px 0 16px;
+  height: 48px; }
+  md-option[disabled] {
+    cursor: default; }
+  md-option:focus {
+    outline: none; }
+  md-option .md-text {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px; }
+
+md-optgroup {
+  display: block; }
+  md-optgroup label {
+    display: block;
+    font-size: 14px;
+    text-transform: uppercase;
+    padding: 16px;
+    font-weight: 500; }
+  md-optgroup md-option {
+    padding-left: 32px;
+    padding-right: 32px; }
+
+@media screen and (-ms-high-contrast: active) {
+  .md-select-backdrop {
+    background-color: transparent; }
+  md-select-menu {
+    border: 1px solid #fff; } }

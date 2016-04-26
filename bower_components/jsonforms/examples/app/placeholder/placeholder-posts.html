@@ -1,0 +1,9 @@
+<h1>Posts</h1>
+    <div ng-if="vm.id">
+    <jsonforms schema="vm.postSchema" data="vm.PostsDataProvider"></jsonforms>
+    </div>
+    <div ng-if="!vm.id">
+    <jsonforms schema="vm.postsSchema" ui-schema="vm.postsUiSchema" data="vm.PostsDataProvider"></jsonforms>
+    </div>
+
+

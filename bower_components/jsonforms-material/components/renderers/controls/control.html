@@ -1,0 +1,11 @@
+<md-input-container flex>
+    <label ng-if="element.label" for="{{element.id}}">{{element.label}}</label>
+    <ng-transclude></ng-transclude>
+
+    <div ng-messages="{{element.label}}.$error" role="alert">
+        <div ng-repeat="errorMessage in element.alerts">
+          <!-- use ng-message-exp for a message whose key is given by an expression -->
+          <div ng-message-exp="errorMessage.type">{{ errorMessage.msg }}</div>
+        </div>
+    </div>
+</md-input-container>
