@@ -108,7 +108,8 @@ export abstract class AbstractControl implements IRuleServiceCallBack{
         return false;
     }
 }
-class LabelObjectUtil {
+//TODO extract to util
+export class LabelObjectUtil {
 
     public static shouldShowLabel(label: IWithLabel): boolean {
         if (label === undefined ) {

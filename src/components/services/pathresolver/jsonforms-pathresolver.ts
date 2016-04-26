@@ -34,22 +34,25 @@ export class PathResolver implements IPathResolver {
 
 
     resolveInstance = (instance:any, schemaPath:string):any => {
+        return this.innerResolveInstance(instance, schemaPath, false);
+    };
+    private innerResolveInstance = (instance:any, schemaPath:string, createMissing:boolean ):any => {
         var fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
         return fragments.reduce(function (currObj, fragment,curIndex) {
-            if(currObj==undefined)
+            if(currObj==undefined){
                 return undefined;
+            }
             if (currObj instanceof Array) {
                 return currObj.map(function (item) {
                     return item[fragment];
                 });
             }
-            if(!currObj.hasOwnProperty(fragment) && curIndex<fragments.length-1){
-              currObj[fragment]={};
+            if(!currObj.hasOwnProperty(fragment)&&createMissing){
+                currObj[fragment]={};
             }
             return currObj[fragment];
         }, instance);
     };
-
     /**
      *
      * @param schema the schema to resolve the path against
@@ -82,6 +85,6 @@ export class PathResolver implements IPathResolver {
     resolveToLastModel=(instance:any, path:string):any =>{
         let fragments:Array<string> = PathUtil.filterNonKeywords(PathUtil.toPropertyFragments(path));
         var fragmentsToObject:Array<string> =fragments.slice(0,fragments.length-1);
-        return this.resolveInstance(instance,fragmentsToObject.join("/"));
+        return this.innerResolveInstance(instance, fragmentsToObject.join("/"), true);
     }
 }

@@ -1,6 +1,7 @@
 import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
+import {LabelObjectUtil} from '../../controls/abstract-control';
 class HorizontalDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;
@@ -25,12 +26,24 @@ class HorizontalController  extends AbstractLayout {
 
     constructor(scope: HorizontalControllerScope) {
         super(scope);
+        this.updateChildrenLabel(this.uiSchema.elements);
     }
     private get size(){
         return 100;
     }
     private get childSize(){
         return Math.floor(this.size / this.uiSchema.elements.length);
+    }
+    private updateChildrenLabel(elements:IUISchemaElement[]):void{
+        let labelExists = elements.reduce((atLeastOneLabel, element) => {
+            return atLeastOneLabel ||  LabelObjectUtil.shouldShowLabel(element.label);
+        }, false);
+        if(labelExists)
+        elements.forEach(element => {
+            let showElementLabel=LabelObjectUtil.shouldShowLabel(element.label);
+            if(!showElementLabel)
+                element.label={show:true,text:""};
+        });
     }
 }
 var HorizontalLayoutRendererTester: RendererTester = function (element:IUISchemaElement, dataSchema:any, dataObject:any,pathResolver:IPathResolver ){

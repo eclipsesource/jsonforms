@@ -29,7 +29,7 @@ class ArrayDirective implements ng.IDirective {
       <fieldset ng-disabled="vm.uiSchema.readOnly">
         <legend>{{vm.label}}</legend>
         <div ng-repeat="d in vm.modelValue[vm.fragment]">
-            <jsonforms schema="vm.arraySchema" data="d"></jsonforms>
+            <jsonforms schema="vm.arraySchema" data="d" ui-schema="vm.arrayUiSchema"></jsonforms>
         </div>
           <jsonforms schema="vm.arraySchema" data="vm.submitElement"></jsonforms>
        </fieldset>
@@ -46,6 +46,7 @@ class ArrayController extends AbstractControl {
     private properties:string[];
     private submitElement = {};
     private arraySchema:any;
+    private arrayUiSchema:IGroup;
     static $inject = ['$scope','PathResolver'];
     constructor(scope:ArrayControllerScope,refResolver: IPathResolver) {
         super(scope,refResolver);
@@ -53,6 +54,7 @@ class ArrayController extends AbstractControl {
         let items = resolvedSubSchema.items;
         this.arraySchema=items;
         this.properties = _.keys(items['properties']);
+        this.arrayUiSchema=this.createControlGroupPerItem();
     }
     private get supportsSubmit(){
         return !(this.uiSchema['options'] != undefined && this.uiSchema['options']['submit'] == false);
@@ -62,6 +64,32 @@ class ArrayController extends AbstractControl {
     }
     private submitCallback(){
          this.modelValue[this.fragment].push(_.clone(this.submitElement));
+    }
+
+    //Code should be in the ui schema generator ... 
+    private static createGroup(elements: IUISchemaElement[]): IGroup {
+        return {
+            "type": "Group",
+            "elements": elements
+        };
+    }
+
+    private static createControl(schemaPath: string, prop: string): IControlObject {
+        return {
+            "type": "Control",
+            "label": PathUtil.beautify(prop),
+            "scope": {
+                "$ref": schemaPath
+            }
+        }
+    }
+
+    private createControlGroupPerItem(): IGroup {
+        let elements = _.keys(this.arraySchema['properties']).map(key =>
+            // path does not actually exists
+            ArrayController.createControl(`#/properties/${key}`, key)
+        );
+        return ArrayController.createGroup(elements);
     }
 }
 let ArrayReadOnlyControlRendererTester: RendererTester = function (element:IUISchemaElement, dataSchema:any, dataObject:any,pathResolver:IPathResolver ){
