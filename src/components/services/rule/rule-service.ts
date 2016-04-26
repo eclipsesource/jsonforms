@@ -40,7 +40,8 @@ export class RuleService implements IRuleService {
             var effect=renderDescription.rule.effect;
             //hide
             var hide=false;
-            hide=(effect===RuleEffect.HIDE && valueMatch) || (effect===RuleEffect.SHOW && !valueMatch);
+            //TODO hack for issue#226
+            hide=(effect+''==='HIDE' && valueMatch) || (effect+''==='SHOW' && !valueMatch);
             renderDescription.hide=hide;
 
 
