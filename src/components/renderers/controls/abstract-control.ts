@@ -27,11 +27,7 @@ export abstract class AbstractControl implements IRuleServiceCallBack{
         this.data = this.services.get<IDataProvider>(ServiceId.DataProvider).getData();
         let indexedSchemaPath = this.uiSchema['scope']['$ref'];
         this.schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
-        //let fragments:Array<string> = PathUtil.filterNonKeywords(PathUtil.toPropertyFragments(this.uiSchema.scope.$ref));
-        //this.fragment=fragments[fragments.length-1];
         this.fragment=pathResolver.lastFragment(this.uiSchema.scope.$ref);
-        //var fragmentsToObject:Array<string> =fragments.slice(0,fragments.length-1);
-        //this.modelValue=pathResolver.resolveInstance(this.data,fragmentsToObject.join("/"));
         this.modelValue=pathResolver.resolveToLastModel(this.data,this.uiSchema.scope.$ref);
         this.scope.$on('modelChanged', () => {
             // TODO: remote references to services

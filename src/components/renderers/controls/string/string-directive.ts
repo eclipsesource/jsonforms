@@ -42,11 +42,11 @@ let StringAreaControlRendererTester: RendererTester = function (element:IUISchem
 export default angular
     .module('jsonforms.renderers.controls.string',['jsonforms.renderers.controls'])
     .directive('stringControl', () => new StringDirective())
-    .directive('stringAreaControl', () => new StringAreaDirective())
+    .directive('textAreaControl', () => new StringAreaDirective())
     .run(['RendererService', RendererService =>
         {
             RendererService.register("string-control",StringControlRendererTester);
-            RendererService.register("string-area-control",StringAreaControlRendererTester);
+            RendererService.register("text-area-control",StringAreaControlRendererTester);
         }
     ])
     .name;
