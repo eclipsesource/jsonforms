@@ -1,17 +1,20 @@
 
 import {ServiceId} from "../services";
-import {IRenderDescription} from "../../renderers/jsonforms-renderers";
 import {IService} from "../services";
 import {IPathResolver} from "../pathresolver/jsonforms-pathresolver";
 
 export interface IRuleService extends IService {
-    addRuleTrack(renderDescription:IRenderDescription): void;
+    addRuleTrack(ruleServiceCallback:IRuleServiceCallBack): void;
     reevaluateRules(schemaPath:string): void;
 }
-
+export interface IRuleServiceCallBack {
+    instance:any;
+    rule: IRule;
+    hide:boolean;
+}
 
 export class RuleService implements IRuleService {
-    private map = {};
+    private map :{[key:string]:IRuleServiceCallBack[]}= {};
 
     constructor(private pathresolver: IPathResolver) { }
 
@@ -33,11 +36,12 @@ export class RuleService implements IRuleService {
             catch(e){
                 //intentionally left empty as this catches errors due to resolving
             }
-            var valueMatch=(renderDescription.rule.condition.expectedValue===conditionValue);
+            var valueMatch=((<ILeafCondition>renderDescription.rule.condition).expectedValue===conditionValue);
             var effect=renderDescription.rule.effect;
             //hide
             var hide=false;
-            hide=(effect==="HIDE" && valueMatch) || (effect==="SHOW" && !valueMatch);
+            //TODO hack for issue#226
+            hide=(effect+''==='HIDE' && valueMatch) || (effect+''==='SHOW' && !valueMatch);
             renderDescription.hide=hide;
 
 
@@ -48,7 +52,7 @@ export class RuleService implements IRuleService {
         }
     };
 
-    addRuleTrack(renderDescription: IRenderDescription){
+    addRuleTrack(renderDescription: IRuleServiceCallBack){
         if (renderDescription.rule==undefined)
             return;
         var path=renderDescription.rule.condition['scope'].$ref;
