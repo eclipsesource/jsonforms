@@ -19,9 +19,9 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="css/main.css"/>
 
+    <script src="lib/build.js" type="text/javascript"></script>
     <!-- Needed by website -->
     <script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
-    <script src="bower_components/angular/angular.js" type="text/javascript"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js" type="text/javascript"></script>
     <script src="bower_components/angular-aria/angular-aria.min.js" type="text/javascript"></script>
     <script src="bower_components/angular-material/angular-material.min.js" type="text/javascript"></script>
@@ -31,20 +31,7 @@
     <script src="bower_components/ace-builds/src-min-noconflict/ext-language_tools.js" type="text/javascript"></script>
     <script src="bower_components/angular-ui-ace/ui-ace.js" type="text/javascript"></script>
 
-    <!-- dependencies of jsonforms -->
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="text/javascript"></script>
-    <script src="bower_components/angular-ui-validate/dist/validate.js" type="text/javascript"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.min.js" type="text/javascript"></script>
-    <!-- needed? -->
-    <script src="bower_components/lodash-compat/lodash.min.js" type="text/javascript"></script>
-    <script src="bower_components/path-loader/browser/path-loader-min.js" type="text/javascript"></script>
-    <!-- END needed? -->
-    <script src="bower_components/traverse/traverse.js" type="text/javascript"></script>
-    <script src="bower_components/json-refs/browser/json-refs-min.js" type="text/javascript"></script>
-    <script src="bower_components/tv4/tv4.js" type="text/javascript"></script>
-
     <!-- our libs -->
-    <script src="lib/build.js" type="text/javascript"></script>
     <script src="js/app.js" type="text/javascript"></script>
 
     <script>
@@ -75,7 +62,7 @@
             <div layout="row" flex layout-align="center center">
                 <md-button class="md-raised md-primary" ng-click="appCtrl.reparseDynamic()">Render view</button>
             </div>
-            <div layout="row" flex="grow" layout-align="center center" class="jsf">
+            <div layout="column" layout-align="center stretch" class="jsf">
                 <jsonforms schema="appCtrl.localDynamicModelObject" ui-schema="appCtrl.localDynamicViewObject" data="appCtrl.dynamicDataProvider.data"/>
             </div>
         </div>

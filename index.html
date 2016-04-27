@@ -19,9 +19,9 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="css/main.css"/>
 
+    <script src="lib/build.js" type="text/javascript"></script>
     <!-- Needed by website -->
     <script src="bower_components/jquery/dist/jquery.js" type="text/javascript"></script>
-    <script src="bower_components/angular/angular.js" type="text/javascript"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js" type="text/javascript"></script>
     <script src="bower_components/angular-aria/angular-aria.min.js" type="text/javascript"></script>
     <script src="bower_components/angular-material/angular-material.min.js" type="text/javascript"></script>
@@ -31,20 +31,7 @@
     <script src="bower_components/ace-builds/src-min-noconflict/ext-language_tools.js" type="text/javascript"></script>
     <script src="bower_components/angular-ui-ace/ui-ace.js" type="text/javascript"></script>
 
-    <!-- dependencies of jsonforms -->
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js" type="text/javascript"></script>
-    <script src="bower_components/angular-ui-validate/dist/validate.js" type="text/javascript"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.min.js" type="text/javascript"></script>
-    <!-- needed? -->
-    <script src="bower_components/lodash-compat/lodash.min.js" type="text/javascript"></script>
-    <script src="bower_components/path-loader/browser/path-loader-min.js" type="text/javascript"></script>
-    <!-- END needed? -->
-    <script src="bower_components/traverse/traverse.js" type="text/javascript"></script>
-    <script src="bower_components/json-refs/browser/json-refs-min.js" type="text/javascript"></script>
-    <script src="bower_components/tv4/tv4.js" type="text/javascript"></script>
-
     <!-- our libs -->
-    <script src="lib/build.js" type="text/javascript"></script>
     <script src="js/app.js" type="text/javascript"></script>
 
     <script>
@@ -66,7 +53,7 @@
                 <div class="mainLogo">More Forms. Less Code.</div>
                 <div><md-button class="md-raised md-primary" href="./docs/quickstart.html">Get Started</md-button><md-button class="md-raised md-primary" ng-href="#demo">Demo</md-button></div>
             </div>
-            <div layout="column" flex="noshrink" style="max-width:1200px" layout-fill>
+            <div layout="column" flex="noshrink" style="max-width:1200px;" layout-fill>
                 <div layout-padding layout-margin layout-align="space-around top" layout-gt-sm="row">
                     <div flex layout="row" class="card">
                         <div layout="column" layout-align="start center" flex="grow">
@@ -96,7 +83,7 @@
                         <md-icon md-svg-icon="screwdriver" class="lg-media"></md-icon><!--eg schraubenzieher und schraubenschlüssel  / werkzeug -->
                     </div>
                 </div>
-                <div layout="column" layout-align="start stretch" class="md-padding" layout-fill>
+                <div layout="column" layout-align="start stretch" class="md-padding">
                     <h2 id="demo" style="text-align:center">Live Example</h2>
                     <div layout="row">
                         <div layout="column" flex layout-margin>
@@ -109,17 +96,17 @@
                         </div>
                     </div>
 
-                    <div layout="column" layout-align="center center" layout-fill>
+                    <div layout="column" layout-align="center center">
                         <div class="text-center">
                             <md-button class="md-raised md-primary" ng-click="appCtrl.reparseStatic()">Render view</button>
                         </div>
                     </div>
-                    <div layout="column" layout-align="center center" layout-fill>
+                    <div layout="column" layout-align="center stretch">
                         <div class="panel-body jsf" style="line-height: 1.0">
                           <jsonforms schema="appCtrl.localStaticModelObject" ui-schema="appCtrl.localStaticViewObject" data="appCtrl.staticDataProvider.data"/>
                         </div>
                     </div>
-                    <div layout="column" layout-align="center center" layout-fill>
+                    <div layout="column" layout-align="center center">
                         <md-button class="md-raised md-primary" href="./demo/localdemo.html">Try it out now!</md-button>
                     </div>
                 </div>
