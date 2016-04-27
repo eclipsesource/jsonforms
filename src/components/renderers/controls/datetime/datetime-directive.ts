@@ -26,7 +26,10 @@ class DateTimeController extends AbstractControl {
     constructor(scope: DateTimeControllerScope,refResolver: IPathResolver) {
         super(scope,refResolver);
     }
-    private openDate = function($event) {
+    private openDate($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
         this.isOpen = true;
     };
 }
