@@ -21,7 +21,7 @@ class ReferenceController extends AbstractControl {
         return "#"+this.uiSchema['href']['url']+"/"+this.data[normalizedPath];
     };
     private get linkText(){
-        return this.uiSchema['href']['label'] ? this.uiSchema['href']['label'] : this.label;;
+        return this.uiSchema['href']['label'] ? this.uiSchema['href']['label'] : this.label;
     }
     private get prefix(){
         return this.uiSchema.label ? this.uiSchema.label : "Go to ";

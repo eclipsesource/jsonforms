@@ -224,7 +224,7 @@ describe('UISchemaGenerator', () => {
                 },
                 {
                     "type": "Control",
-                    "label": "Last name",
+                    "label": "Last Name",
                     "scope": {
                         "$ref": "#/properties/lastName"
                     }
@@ -238,7 +238,7 @@ describe('UISchemaGenerator', () => {
                 },
                 {
                     "type": "Control",
-                    "label": "First name",
+                    "label": "First Name",
                     "scope": {
                         "$ref": "#/properties/firstName"
                     }
@@ -259,7 +259,7 @@ describe('UISchemaGenerator', () => {
                 },
                 {
                     "type": "Control",
-                    "label": "Registration time",
+                    "label": "Registration Time",
                     "scope": {
                         "$ref": "#/properties/registrationTime"
                     }
@@ -287,7 +287,7 @@ describe('UISchemaGenerator', () => {
                 },
                 {
                     "type": "Control",
-                    "label": "Birth date",
+                    "label": "Birth Date",
                     "scope": {
                         "$ref": "#/properties/birthDate"
                     }

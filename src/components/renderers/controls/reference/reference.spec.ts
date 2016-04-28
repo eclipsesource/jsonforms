@@ -31,7 +31,7 @@ describe('Reference control', () => {
         scope.$digest();
         let a = el.find('a');
         expect(a.attr('href')).toBe('#/fake/3');
-        expect(a.text()).toBe('Some id');
+        expect(a.text()).toBe('Some Id');
     }));
 
     it("should support customizable via a label properties",
