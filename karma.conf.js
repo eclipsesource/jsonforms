@@ -53,14 +53,10 @@ module.exports = function (config) {
                     dir: 'reports/coverage/',
                     subdir: '.',
                     type: 'html'
-                },{
-                    dir: 'reports/coverage/',
-                    subdir: '.',
-                    type: 'cobertura'
                 }, {
                     dir: 'reports/coverage/',
                     subdir: '.',
-                    type: 'json'
+                    type: 'lcov'
                 }
             ]
         }
