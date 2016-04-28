@@ -65,7 +65,9 @@ class ArrayController extends AbstractControl {
         return PathUtil.beautifiedLastFragment(this.schemaPath);
     }
     private submitCallback(){
-         this.modelValue[this.fragment].push(_.clone(this.submitElement));
+        if(this.modelValue[this.fragment]==undefined)
+            this.modelValue[this.fragment]=[];
+        this.modelValue[this.fragment].push(_.clone(this.submitElement));
     }
 
     //Code should be in the ui schema generator ...
