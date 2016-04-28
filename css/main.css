@@ -280,6 +280,10 @@ pre {
     }
 }
 .ace_editor { height: 400px;min-height: 400px; }
+.jsf {
+    line-height: 1.0;
+    max-width:800px;
+}
 /*
 
 .logo{
