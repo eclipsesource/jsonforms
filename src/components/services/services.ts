@@ -105,8 +105,8 @@ export class ValidationService implements IValidationService {
             return;
         }
 
-        this.clear(instance);
         this.convertAllDates(instance);
+        this.clear(instance);
         // TODO
         let results = tv4.validateMultiple(instance, schema);
 
@@ -151,4 +151,3 @@ export interface IValidationService extends IService {
     getResult(instance: any, dataPath: string): any
     validate(instance: any, schema: SchemaElement): void
 }
-
