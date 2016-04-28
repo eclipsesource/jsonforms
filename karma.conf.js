@@ -50,11 +50,11 @@ module.exports = function (config) {
         coverageReporter: {
             reporters: [
                 {
-                    dir: 'reports/coverage/',
+                    dir: 'reports/coverage/html-report',
                     subdir: '.',
                     type: 'html'
                 }, {
-                    dir: 'reports/coverage/',
+                    dir: 'reports/coverage/lcov-report',
                     subdir: '.',
                     type: 'lcov'
                 }
