@@ -122,7 +122,7 @@ describe('RuleServiceTest', () => {
     }));
 
     it("rule Show evaluated on startup",
-        
+
         angular.mock.inject(($rootScope: IRootScopeService, $compile: ICompileService) => {
         let scope = $rootScope.$new();
         scope['schema'] = {

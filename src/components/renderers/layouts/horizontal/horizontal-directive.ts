@@ -2,6 +2,7 @@ import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
 import {LabelObjectUtil} from '../../controls/abstract-control';
+import {IUISchemaElement} from '../../../../jsonforms';
 class HorizontalDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;

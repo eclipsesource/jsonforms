@@ -1,7 +1,7 @@
-
 import {ServiceId} from "../services";
 import {IService} from "../services";
 import {IPathResolver} from "../pathresolver/jsonforms-pathresolver";
+import {IRule,ILeafCondition,RuleEffect} from '../../../jsonforms';
 
 export interface IRuleService extends IService {
     addRuleTrack(ruleServiceCallback:IRuleServiceCallBack): void;
@@ -40,10 +40,8 @@ export class RuleService implements IRuleService {
             var effect=renderDescription.rule.effect;
             //hide
             var hide=false;
-            //TODO hack for issue#226
-            hide=(effect+''==='HIDE' && valueMatch) || (effect+''==='SHOW' && !valueMatch);
+            hide=(effect===RuleEffect.HIDE && valueMatch) || (effect===RuleEffect.SHOW && !valueMatch);
             renderDescription.hide=hide;
-
 
             //disbale is not supported yet
             //var disabled=false;

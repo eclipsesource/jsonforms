@@ -3,6 +3,8 @@ import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {PathUtil} from "../../../services/pathutil";
 import {AbstractControl, ControlRendererTester} from '../abstract-control';
+import {IUISchemaElement,IGroup,IControlObject} from '../../../../jsonforms';
+
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;
@@ -66,7 +68,7 @@ class ArrayController extends AbstractControl {
          this.modelValue[this.fragment].push(_.clone(this.submitElement));
     }
 
-    //Code should be in the ui schema generator ... 
+    //Code should be in the ui schema generator ...
     private static createGroup(elements: IUISchemaElement[]): IGroup {
         return {
             "type": "Group",

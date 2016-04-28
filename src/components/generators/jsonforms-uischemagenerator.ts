@@ -2,6 +2,7 @@
 
 import {IUISchemaGenerator} from "./generators";
 import {PathUtil} from "../services/pathutil";
+import {IUISchemaElement,IVerticalLayout,IControlObject,ILayout} from '../../jsonforms';
 
 export class UISchemaGenerator implements IUISchemaGenerator {
     generateDefaultUISchema = (jsonSchema:any): IUISchemaElement => {
@@ -135,4 +136,3 @@ export class UISchemaGenerator implements IUISchemaGenerator {
 export default angular
     .module('jsonforms.generators.uischema', ['jsonforms.generators'])
     .service('UISchemaGenerator', UISchemaGenerator).name;
-

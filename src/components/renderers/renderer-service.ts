@@ -1,4 +1,5 @@
 import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
+import {IUISchemaElement} from '../../jsonforms';
 export interface RendererService {
     register(directiveName: string, tester: RendererTester): void;
     getBestComponent(element: IUISchemaElement, dataSchema: any, dataObject: any): string;

@@ -6,7 +6,7 @@
     "sourceMap": true,
     "module": "commonjs",
     "experimentalDecorators": true,
-    "outDir": "out"
+    "outDir": "dist/src"
   },
   "exclude": [
     "out",
@@ -18,5 +18,6 @@
     "reports",
     "examples/bower_components"
   ],
+  "compileOnSave":false,
   "version": "1.7.5"
 }
