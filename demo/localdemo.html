@@ -62,8 +62,10 @@
             <div layout="row" flex layout-align="center center">
                 <md-button class="md-raised md-primary" ng-click="appCtrl.reparseDynamic()">Render view</button>
             </div>
-            <div layout="column" layout-align="center stretch" class="jsf">
-                <jsonforms schema="appCtrl.localDynamicModelObject" ui-schema="appCtrl.localDynamicViewObject" data="appCtrl.dynamicDataProvider.data"/>
+            <div layout="column" layout-align="center center">
+                <div class="panel-body jsf">
+                    <jsonforms schema="appCtrl.localDynamicModelObject" ui-schema="appCtrl.localDynamicViewObject" data="appCtrl.dynamicDataProvider.data"/>
+                </div>
             </div>
         </div>
     </article>
