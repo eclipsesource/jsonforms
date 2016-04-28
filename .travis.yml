@@ -7,4 +7,4 @@ install:
   - npm install
 
 script:
-  - npm run test
+  - npm run test && cat ./reports/coverage/lcov-report/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
