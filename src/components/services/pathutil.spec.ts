@@ -14,6 +14,10 @@ describe("PathUtil", () => {
         expect(PathUtil.toPropertyFragments(undefined)).toEqual([]);
     });
 
+    it("should convert a string to start case when beautifying it", () => {
+        expect(PathUtil.beautify("first name")).toBe("First Name");
+    });
+
     it("should return the last fragment", () => {
         expect(PathUtil.lastFragment("foo/bar")).toBe("bar")
     });

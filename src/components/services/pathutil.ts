@@ -87,7 +87,7 @@ export class PathUtil {
      * @returns {any} the last fragment in a beautified manner
      */
     static beautifiedLastFragment(schemaPath: string): string  {
-        return _.flow(PathUtil.lastFragment, _.upperFirst, PathUtil.beautify)(schemaPath);
+        return _.flow(PathUtil.lastFragment, PathUtil.beautify)(schemaPath);
     }
 
     /**
