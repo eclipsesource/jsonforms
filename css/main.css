@@ -1,5 +1,5 @@
 .tutorial-image{
-    max-width: 100vw;
+    max-width: 800px;
 }
 .lg-media {
     min-width: 128px;
@@ -238,7 +238,7 @@ button.docs-nav-button{
 	display: none;
 }
 .docs-content{
-    max-width: 1450px;
+    max-width: 1050px;
     margin-right:20px;
     line-height: 1.45;
 }
