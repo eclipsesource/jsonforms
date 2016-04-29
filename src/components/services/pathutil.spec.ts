@@ -10,6 +10,10 @@ describe("PathUtil", () => {
       expect(() => PathUtil.toPropertyAccessString(null)).toThrowError();
    });
 
+    it("should return an empty array when converting a path to fragments", () => {
+        expect(PathUtil.toPropertyFragments(undefined)).toEqual([]);
+    });
+
     it("should return the last fragment", () => {
         expect(PathUtil.lastFragment("foo/bar")).toBe("bar")
     });
