@@ -4,19 +4,15 @@ JSONForms extends the AngularJS view model approach by eliminating the need to w
 create forms by leveraging the capabilities of JSON and JSON schema.
 
 # First time setup
-* Install node.js (https://nodejs.org/)
-* Install grunt-cli via the command ```npm install -g grunt-cli```
+* Install [node.js](https://nodejs.org/)(version > 4.x.x)
+* Install [typings](https://github.com/typings/typings): `npm install -g typings` 
+* Install [webpack](https://github.com/webpack/webpack): `npm install -g webpack`
 * Clone this repository
-* Execute ```npm install``` in root of your cloned repository
+* Install dependencies: `npm install`
 
-# Build
-JSONForms uses [Grunt](http://gruntjs.com/) to build and test.
-
-* Run ```grunt``` or ```grunt dist``` to build the distribution
-* Run ```grunt examples``` to build the application
-* Run ```grunt test``` to test the framework and the application
-* Run ```grunt watch``` during development to automatically rebuild the distribution and application when any of the development files are touched.
-* Run ```grunt clean:all``` if you want to clean the whole project.
+# Build & Testing
+* Build: `npm run build`
+* Test: `npm run test`
 
 # Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
@@ -25,7 +21,7 @@ Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.s
 
 # Deployment
 
-Run ```grunt deploy``` to deploy a new version. The following tasks are executed:
+TODO: deploy tasks needs to ported
 
 * Build the distribution
 * Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json) and [bower.json](https://github.com/eclipsesource/jsonforms/blob/master/bower.json)
