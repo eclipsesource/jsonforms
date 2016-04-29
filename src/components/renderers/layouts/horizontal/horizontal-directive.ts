@@ -8,13 +8,11 @@ class HorizontalDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-layout class="jsf-horizontal-layout">
-      <fieldset>
-        <div class="row">
+        <fieldset class="row">
             <div ng-repeat="child in vm.uiSchema.elements" class="col-sm-{{vm.childSize}}">
                 <jsonforms-inner ui-schema="child"></jsonforms-inner>
             </div>
-        </div>
-      </fieldset>
+        </fieldset>
     </jsonforms-layout>
     `;
     controller = HorizontalController;

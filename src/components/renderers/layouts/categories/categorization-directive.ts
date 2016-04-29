@@ -7,15 +7,17 @@ class CategorizationDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-layout>
-        <tabset>
-            <tab heading="{{category.label}}" ng-repeat="category in vm.uiSchema.elements">
-                <jsonforms-layout>
-                    <fieldset>
-                        <jsonforms-inner ng-repeat="child in category.elements" ui-schema="child"></jsonforms-inner>
-                    </fieldset>
-                </jsonforms-layout>
-            </tab>
-        </tabset>
+        <div class="row">
+            <div class="col-sm-100">
+                <tabset>
+                    <tab heading="{{category.label}}" ng-repeat="category in vm.uiSchema.elements">
+                        <fieldset>
+                            <jsonforms-inner ng-repeat="child in category.elements" ui-schema="child" ></jsonforms-inner>
+                        </fieldset>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
     </jsonforms-layout>`;
     controller = CategorizationController;
     controllerAs = 'vm';
@@ -26,9 +28,6 @@ class CategorizationController  extends AbstractLayout{
     static $inject = ['$scope'];
     constructor(scope: CategorizationControllerScope) {
         super(scope);
-    }
-    private get size(){
-        return 100;
     }
 }
 var CategorizationLayoutRendererTester: RendererTester = function (element:IUISchemaElement, dataSchema:any, dataObject:any,pathResolver:IPathResolver ){

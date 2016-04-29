@@ -8,7 +8,7 @@ class MasterDetailDirective implements ng.IDirective {
     restrict = "E";
     //replace= true;
     template = `
-    <div class="row col-sm-100">
+    <div class="row">
         <!-- Master -->
         <div class="col-sm-30 jsf-masterdetail">
             <jsonforms-masterdetail-collection properties="vm.subSchema.properties" instance="vm.data" select="vm.select(child,childSchema)"></jsonforms-masterdetail-collection>
