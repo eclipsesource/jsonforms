@@ -62,7 +62,7 @@
         <p>
         Simply said, a renderer is responsible for displaying a single UI schema element and also maintaining its possible state, if it has any (e.g. validation markers and the like). A renderer hence needs to conform to the following (preliminary) interface (TypeScript):
 
-        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:140px">
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:160px">
 interface IRenderer {
   isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
 
@@ -83,7 +83,7 @@ interface IRenderer {
         <p>
         Here’s an exemplary implementation of the <code>isApplicable</code> method taken from the default implementation of the <code>IntegerControl</code>:
 
-        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:90px">
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:100px">
 isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
   // note that subSchema and schemaPath are potentially undefined
   return uiElement.type == 'Control' && subSchema != undefined && subSchema.type == 'integer';
@@ -109,7 +109,7 @@ isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: 
         <p>
         Because it seems likely to forget one of these properties when creating a control, JSON Forms also provides helper classes which do most of the initialization themselfes. Below is an example that is taken from the implementation of the <code>IntegerControl</code>. Note also, that the <code>render</code> method is passed the complete schema and not the sub schema as it is the case with <code>isApplicable</code>. Also, it features a parameter of type <code>IDataProvider</code>. We'll won't go into detail about data provider in this article, so it's enough to know for now that it provides the current instance via its <code>data</code> property.
         </p>
-        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:210px">
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:240px">
 render(element:jsonforms.services.UISchemaElement, schema: SchemaElement,
        schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
 
@@ -138,7 +138,7 @@ render(element:jsonforms.services.UISchemaElement, schema: SchemaElement,
         <p>
         Armed with this knowledge let’s now move on and implement our own custom control render in Javascript. Clone the seed project in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies:
         </p>
-        <div ui-ace="appCtrl.configAce('sh')" readonly flex="noshrink" style="height:70px">
+        <div ui-ace="appCtrl.configAce('sh')" readonly flex="none" style="height:90px">
 git clone https://github.com/eclipsesource/jsonforms-seed.git custom-control-tutorial
 cd custom-control-tutorial
 bower install
@@ -147,13 +147,13 @@ bower install
         The seed project comes pre-configured with two <code>schema.js</code> and a <code>ui-schema.js</code> Javascript files that contain the JSON schema and the UI schema respectively.
         </p>
         <p>
-        The schema describes a User entity and features three basic data types and also contains a validation constraint <code>minLength`, which requires the <code>name</code> property to be at least three characters long.
+        The schema describes a User entity and features three basic data types and also contains a validation constraint <code>minLength</code>, which requires the <code>name</code> property to be at least three characters long.
         The UI schema only consists of a <code>HorizontalLayout</code> with three Controls and is therefore left out here. In case you are interested nevertheless, have a look at the <code>js/ui-schema.js</code> file.
         </p>
         <p>
         Let’s now create a custom control for the <code>name</code> property of a user. First we’ll need to execute <code>run</code> in order to register our control at the <code>RenderService</code> while the application is bootstrapping:
         </p>
-        <div ui-ace="appCtrl.configAce('javascript')" readonly flex="noshrink" style="height:70px">
+        <div ui-ace="appCtrl.configAce('javascript')" readonly flex="none" style="height:80px">
 app.run(['RenderService', function(RenderService) {
   // TODO
 }]);
@@ -161,7 +161,7 @@ app.run(['RenderService', function(RenderService) {
         <p>
         We inject the <code>RenderService</code> which we'll need to register our control. Next we define the outline of the control and register it at the RenderService:
         </p>
-        <div ui-ace="appCtrl.configAce('javascript')" readonly flex="noshrink" style="height:200px">
+        <div ui-ace="appCtrl.configAce('javascript')" readonly flex="none" style="height:230px">
 app.run(['RenderService', function(RenderService) {
 
     function MyControl() {
@@ -180,7 +180,7 @@ app.run(['RenderService', function(RenderService) {
         </p>
         <p>
         Let’s implement the last missing bits:
-        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="noshrink" style="height:200px">
+        <div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:230px">
 isApplicable: function (element, subSchema, schemaPath) {
   // check whether the schema path contains name
   return element.type == "Control" && schemaPath != undefined && schemaPath.indexOf("name") > -1;
