@@ -60,6 +60,36 @@ describe('Array renderer', () => {
         expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(1);
     }));
 
+    it("should create an array if it is undefined", angular.mock.inject(($rootScope: IRootScopeService, $compile: ICompileService) => {
+        let scope = $rootScope.$new();
+        scope['schema'] = {
+            "properties": {
+                "comments": {
+                    "type": "array",
+                    "items": {
+                        "properties": {
+                            "msg": {"type": "string"}
+                        }
+                    }
+                }
+            }
+        };
+        scope['uiSchema'] = {
+            "type": "Control",
+            "scope": { "$ref": "#/properties/comments" },
+            "options": {
+                "submit": true
+            }
+        };
+        scope['data'] = {};
+        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        expect(scope['data']['comments']).toBeUndefined();
+        let button = el.find('input.btn');
+        button.triggerHandler("click");
+        expect(scope['data']['comments']).toBeDefined();
+    }));
+
     it("should be capable of rendering an array as read-only",
         angular.mock.inject(($rootScope: IRootScopeService, $compile: ICompileService) => {
 
