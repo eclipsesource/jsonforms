@@ -30,8 +30,7 @@ describe('VerticalLayout', () => {
         scope.data = { "name": "John Doe "};
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        let div = el.find('div');
-        let layout = angular.element(div.children()[0]);
+        let layout = el.find('div');
         expect(layout.hasClass('jsf-vertical-layout')).toBeTruthy();
     }));
 });

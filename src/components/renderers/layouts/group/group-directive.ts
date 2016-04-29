@@ -8,9 +8,9 @@ class GroupDirective implements ng.IDirective {
     //replace= true;
     template = `
     <jsonforms-layout class="jsf-group">
-        <fieldset>
+        <fieldset class="row">
             <legend ng-if="vm.label">{{vm.label}}</legend>
-            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" ui-schema="child"></jsonforms-inner>
+            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" ui-schema="child" class="col-sm-100"></jsonforms-inner>
         </fieldset>
     </jsonforms-layout>`;
     controller = GroupController;
@@ -22,9 +22,6 @@ class GroupController  extends AbstractLayout{
     static $inject = ['$scope'];
     constructor(scope: GroupControllerScope) {
         super(scope);
-    }
-    private get size(){
-        return 100;
     }
     private get label(){
         return this.uiSchema.label ? this.uiSchema.label : "";

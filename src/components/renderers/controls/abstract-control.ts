@@ -62,10 +62,6 @@ export abstract class AbstractControl implements IRuleServiceCallBack{
         return stringBuilder;
     }
 
-    protected get size() {
-        return 100;
-    }
-
     protected modelChanged(){
         this.scope.$root.$broadcast('modelChanged');
         //this.scope.$emit('modelChanged');
