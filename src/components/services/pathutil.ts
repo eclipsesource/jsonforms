@@ -1,80 +1,110 @@
+import "lodash"
 
 export class PathUtil {
 
     private static Keywords:string[] = ["items", "properties", "#"];
 
-    static normalize = (path:string):string => {
-        return PathUtil.filterNonKeywords(PathUtil.toPropertyFragments(path)).join("/");
-    };
+    private static joinWithSlash: (string) => string = _.partialRight(_.join, "/");
+    private static numberRegex = /^\d+$/;
 
-    static toPropertyFragments = (path:string):string[] => {
+    /**
+     * Converts a given schema path to its instance representation
+     *
+     * @param schemaPath a schema path
+     * @returns {string} the instance path
+     */
+    static normalize(schemaPath: string):string {
+        return _.flow(PathUtil.toPropertyFragments, PathUtil.filterNonKeywords, PathUtil.joinWithSlash)(schemaPath);
+    }
+
+    /**
+     * Splits the given path, which is expected to be separated by slashes.
+     *
+     * @param path the path to be splitted
+     * @returns {string[]} an array of fragments
+     */
+    static toPropertyFragments(path:string): string[] {
         if (path === undefined) {
             return [];
         }
-        return path.split('/').filter(function (fragment) {
-            return fragment.length > 0;
-        })
-    };
+        return  path.split('/').filter(fragment => fragment.length > 0);
+    }
 
     /**
-     * Creates a string with single quotes on properties for accessing a property based on path fragments
-     * @param propertyPathFragments the
+     * Creates a string with single quotes on properties for accessing a property based on path fragments.
+     *
+     * @param propertyPath the path to
+     * @return {string} the property access path
      */
-
-    static toPropertyAccessString = (propertyPath: string):string => {
-        if (propertyPath === undefined || propertyPath === null) {
-            throw new Error("property path is not defined!");
+    static toPropertyAccessString(propertyPath: string):string {
+        if (propertyPath === null || propertyPath === undefined) {
+            throw new Error("Property path must not be undefined.")
         }
-        var fragments = PathUtil.toPropertyFragments(propertyPath);
-        return fragments.reduce((propertyAccessString, fragment)=>{
-            return `${propertyAccessString}['${fragment}']`;
-        },"");
-    };
+        let fragments = PathUtil.toPropertyFragments(propertyPath);
+        return fragments.reduce((propertyAccessString, fragment) =>
+            `${propertyAccessString}['${fragment}']`
+            , "");
+    }
 
-    static inits(schemaPath: string): string {
-        var fragments = PathUtil.toPropertyFragments(schemaPath);
-        return '/' + fragments.slice(0, fragments.length - 1).join('/');
-    };
 
+    /**
+     * Gets all but the last fragments of the given path as a string.
+     *
+     * @param schemaPath the path from which to retrieve all but the last fragment
+     * @returns {string} the path without the last fragment
+     */
+    static init(schemaPath: string): string {
+        return '/' + _.flow(PathUtil.toPropertyFragments, _.initial, PathUtil.joinWithSlash)(schemaPath);
+    }
+
+    /**
+     * Removes all array indices from an instance path
+     *
+     * @param path the instance path from which to remove indices
+     * @returns {string} the filtered path without indices
+     */
     static filterIndexes(path:string):string {
-        return PathUtil.toPropertyFragments(path).filter(function (fragment, index, fragments) {
-            return !(fragment.match("^[0-9]+$") && fragments[index - 1] == "items");
-        }).join("/");
+        return PathUtil.toPropertyFragments(path)
+            .filter((fragment, index, fragments) =>
+                !(fragment.match(PathUtil.numberRegex) && fragments[index - 1] == "items")
+            ).join("/");
     }
-
-    static filterNonKeywords = (fragments:string[]):string[] => {
-        return fragments.filter(function (fragment) {
-            return !(PathUtil.Keywords.indexOf(fragment) !== -1);
-        });
-    };
-
-    static beautifiedLastFragment(schemaPath: string): string  {
-        return PathUtil.beautify(PathUtil.capitalizeFirstLetter(PathUtil.lastFragment(schemaPath)));
-    }
-
-    static lastFragment(schemaPath: string): string {
-        return schemaPath.substr(schemaPath.lastIndexOf('/') + 1, schemaPath.length)
-    }
-
-    private static capitalizeFirstLetter(string): string {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
 
     /**
-     * Beautifies by performing the following steps (if applicable)
-     * 1. split on uppercase letters
-     * 2. transform uppercase letters to lowercase
-     * 3. transform first letter uppercase
+     * Removes all schema-specific fragments from the given path.
+     *
+     * @param fragments the path from which to filter out the schema specific fragment
+     * @returns {string[]} a path without schema specific fragments
      */
-    static beautify = (text: string): string => {
-        if(text && text.length > 0){
-            var textArray = text.split(/(?=[A-Z])/).map((x)=>{return x.toLowerCase()});
-            textArray[0] = textArray[0].charAt(0).toUpperCase() + textArray[0].slice(1);
-            return textArray.join(' ');
-        }
-        return text;
-    };
+    static filterNonKeywords(fragments:string[]):string[] {
+        return fragments.filter(fragment => !_.includes(PathUtil.Keywords, fragment))
+    }
 
+    /**
+     * Returns the last fragment of the given path in a beautified manner.
+     *
+     * @param schemaPath the path from which to extract the beautified fragment
+     * @returns {any} the last fragment in a beautified manner
+     */
+    static beautifiedLastFragment(schemaPath: string): string  {
+        return _.flow(PathUtil.lastFragment, PathUtil.beautify)(schemaPath);
+    }
+
+    /**
+     * Returns the last fragment of the given path which is expected to be separated
+     * by slashes.
+     *
+     * @param path the slash separated path
+     * @returns {string} the last fragment of the path
+     */
+    static lastFragment(path: string): string {
+        return path.substr(path.lastIndexOf('/') + 1)
+    }
+
+    /**
+     * Beautifies given string by performing conversion to start case.
+     * @param text the text to be beautified
+     */
+    static beautify(text: string): string { return _.startCase(text) };
 }
 

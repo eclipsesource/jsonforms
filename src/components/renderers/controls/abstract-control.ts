@@ -13,7 +13,7 @@ export abstract class AbstractControl implements IRuleServiceCallBack{
     protected fragment:string;
     protected uiSchema:IControlObject;
     protected schema:SchemaElement;
-    protected data:any
+    protected data:any;
     private services:Services;
     private alerts=[];
     //IRuleServiceCallBack
@@ -35,7 +35,7 @@ export abstract class AbstractControl implements IRuleServiceCallBack{
             // instead try to iterate over all services and call some sort of notifier
             this.validate();
             this.services.get<IRuleService>(ServiceId.RuleService).reevaluateRules(this.schemaPath);
-        })
+        });
 
         //IRuleServiceCallBack
         this.instance=this.data;
@@ -86,12 +86,12 @@ export abstract class AbstractControl implements IRuleServiceCallBack{
     }
 
     private isRequired(schemaPath: string): boolean {
-        var path = PathUtil.inits(schemaPath);
+        var path = PathUtil.init(schemaPath);
         var lastFragment = PathUtil.lastFragment(path);
 
         // if last fragment points to properties, we need to move one level higher
         if (lastFragment === "properties") {
-            path = PathUtil.inits(path);
+            path = PathUtil.init(path);
         }
 
         // FIXME: we want resolveSchema to actually return an array here
