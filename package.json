@@ -13,19 +13,16 @@
   },
   "dependencies": {
     "angular": "1.5.0",
-    "angular-route": "1.5.0",
-    "bootstrap": "3.3.6",
-    "font-awesome": "4.5.0",
+    "angular-bootstrap": "^0.12.2",
+    "angular-ui-validate": "^1.2.2",
     "jquery": "2.2.0",
     "json-refs": "~0.2.0",
     "lodash": "4.0.1",
     "tv4": "^1.2.7"
   },
   "devDependencies": {
-    "angular-bootstrap": "^0.12.2",
     "angular-mocks": "1.5.0",
     "angular-route": "^1.5.0",
-    "angular-ui-validate": "^1.2.2",
     "babel-core": "6.4.5",
     "babel-istanbul": "0.6.0",
     "bootstrap": "^3.3.6",
