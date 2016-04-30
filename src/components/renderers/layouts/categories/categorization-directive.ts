@@ -9,15 +9,15 @@ class CategorizationDirective implements ng.IDirective {
     <jsonforms-layout>
         <div class="row">
             <div class="col-sm-100">
-                <tabset>
-                    <tab heading="{{category.label}}" ng-repeat="category in vm.uiSchema.elements">
-                        <fieldset>
-                            <jsonforms-inner ng-repeat="child in category.elements" 
-                                             ui-schema="child" >                            
+                <uib-tabset>
+                    <uib-tab heading="{{category.label}}" ng-repeat="category in vm.uiSchema.elements" select="vm.changeSelectedCategory(category)">
+                        <fieldset ng-if="vm.selectedCategory===category">
+                            <jsonforms-inner ng-repeat="child in category.elements"
+                                             ui-schema="child" >
                             </jsonforms-inner>
                         </fieldset>
-                    </tab>
-                </tabset>
+                    </uib-tab>
+                </uib-tabset>
             </div>
         </div>
     </jsonforms-layout>`;
@@ -28,8 +28,12 @@ interface CategorizationControllerScope extends ng.IScope {
 }
 class CategorizationController  extends AbstractLayout {
     static $inject = ['$scope'];
+    private selectedCategory;
     constructor(scope: CategorizationControllerScope) {
         super(scope);
+    }
+    private changeSelectedCategory(category){
+        this.selectedCategory=category;
     }
 }
 const CategorizationLayoutRendererTester: RendererTester = function(element: IUISchemaElement,
