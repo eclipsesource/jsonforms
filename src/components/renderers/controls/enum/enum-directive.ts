@@ -43,7 +43,7 @@ const EnumControlRendererTester: RendererTester = function(element: IUISchemaEle
         return NOT_FITTING;
     }
     let currentDataSchema = pathResolver.resolveSchema(dataSchema, element['scope']['$ref']);
-    if (currentDataSchema === undefined || !currentDataSchema.hasOwnProperty('enum')) {
+    if (!_.has(currentDataSchema, 'enum')) {
         return NOT_FITTING;
     }
     return 5;

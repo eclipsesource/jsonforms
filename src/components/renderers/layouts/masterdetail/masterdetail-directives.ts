@@ -124,7 +124,7 @@ class MasterDetailCollectionDirective implements ng.IDirective {
             scope.select({child: scope.selectedChild, childSchema: scope.selectedSchema});
         };
         scope.hasKeys = (schemaToCheck) =>
-            Object.keys(scope.filter(schemaToCheck.properties)).length !== 0;
+            _.keys(scope.filter(schemaToCheck.properties)).length > 0;
         scope.isEmptyInstance = (key) =>
             scope.instance[key] === undefined || scope.instance[key].length === 0;
     };
