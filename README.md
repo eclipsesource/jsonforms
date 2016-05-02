@@ -6,12 +6,13 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 # First time setup
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
 * Install [typings](https://github.com/typings/typings): `npm install -g typings` 
+* Install [tslint](https://palantir.github.io/tslint/): `npm install -g tslint`
 * Install [webpack](https://github.com/webpack/webpack): `npm install -g webpack`
 * Clone this repository
 * Install dependencies: `npm install`
 
 # Build & Testing
-* Build: `npm run build`
+* Build: `npm run build` (runs `tslint` as well)
 * Test: `npm run test`
 
 # Continuous Integration
