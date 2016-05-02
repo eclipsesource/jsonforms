@@ -1,8 +1,8 @@
 
-import {PathResolver} from "./pathresolver/jsonforms-pathresolver";
+import {PathResolver} from './pathresolver/jsonforms-pathresolver';
 import {IUISchemaElement} from '../../jsonforms';
 // TODO: replace
-let tv4 = require("tv4");
+let tv4 = require('tv4');
 
 // TODO: remove
 class HashTable {
@@ -10,7 +10,7 @@ class HashTable {
     private hashes;
 
     constructor() {
-        this.hashes = {}
+        this.hashes = {};
     }
 
     put(key, value) {
@@ -67,7 +67,7 @@ export class SchemaProvider implements ISchemaProvider {
         return ServiceId.SchemaProvider;
     }
 
-    getSchema():SchemaElement {
+    getSchema(): SchemaElement {
         return this.schema;
     }
 }
@@ -80,28 +80,16 @@ export class ValidationService implements IValidationService {
     }
 
     getResult(instance: any, dataPath: string): any {
-        if (this.validationResults.get(instance) == undefined) {
+        if (this.validationResults.get(instance) === undefined) {
             return undefined;
         } else {
             return this.validationResults.get(instance)[dataPath];
         }
     }
 
-    private convertAllDates(instance): void {
-        for(var prop in instance) {
-            if(instance.hasOwnProperty(prop)){
-                if (instance[prop] instanceof Date) {
-                    instance[prop] = instance[prop].toString();
-                } else if (instance[prop] instanceof Object){
-                    this.convertAllDates(instance[prop]);
-                }
-            }
-        }
-    }
-
     validate(instance: any, schema: SchemaElement): void {
 
-        if (tv4 == undefined) {
+        if (tv4 === undefined) {
             return;
         }
 
@@ -111,11 +99,21 @@ export class ValidationService implements IValidationService {
         let results = tv4.validateMultiple(instance, schema);
 
         results['errors'].forEach((error) => {
-            if (error['schemaPath'].indexOf("required") != -1) {
-                var propName = error['dataPath'] + "/" + error['params']['key'];
-                this.validationResults.get(instance)[propName] = "Required";
+            if (error['schemaPath'].indexOf('required') !== -1) {
+                let propName = error['dataPath'] + '/' + error['params']['key'];
+                this.validationResults.get(instance)[propName] = 'Required';
             } else {
                 this.validationResults.get(instance)[error['dataPath']] = error['message'];
+            }
+        });
+    }
+
+    private convertAllDates(instance): void {
+        _.forOwn(instance, (value, key) => {
+            if (value instanceof Date) {
+                instance[key] = value.toString();
+            } else if (value instanceof Object) {
+                this.convertAllDates(value);
             }
         });
     }
@@ -133,21 +131,21 @@ export enum ServiceId {
 }
 
 export interface IService {
-    getId(): ServiceId
+    getId(): ServiceId;
 }
-export interface IPathResolverService extends IService{
-    getResolver(): PathResolver
+export interface IPathResolverService extends IService {
+    getResolver(): PathResolver;
 }
 export interface IScopeProvider extends IService {
-    getScope(): ng.IScope
+    getScope(): ng.IScope;
 }
 export interface IUiSchemaProvider extends IService {
-    getUiSchema(): IUISchemaElement
+    getUiSchema(): IUISchemaElement;
 }
 export interface ISchemaProvider extends IService {
-    getSchema(): SchemaElement
+    getSchema(): SchemaElement;
 }
 export interface IValidationService extends IService {
-    getResult(instance: any, dataPath: string): any
-    validate(instance: any, schema: SchemaElement): void
+    getResult(instance: any, dataPath: string): any;
+    validate(instance: any, schema: SchemaElement): void;
 }

@@ -4,7 +4,7 @@
     </div>
     <div ng-transclude>
     </div>
-    <div>
+    <div popover="Hello foo" popover-is-open="vm.alerts">
         <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>
     </div>
 </div>

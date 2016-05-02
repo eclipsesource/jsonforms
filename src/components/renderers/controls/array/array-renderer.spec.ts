@@ -4,6 +4,7 @@ import "../../../../index.ts"
 
 import IRootScopeService = angular.IRootScopeService;
 import ICompileService = angular.ICompileService;
+import {JsonFormsScope} from "../../../../jsonforms";
 
 describe('Array renderer', () => {
 
@@ -13,8 +14,8 @@ describe('Array renderer', () => {
     it("should render elements",
         angular.mock.inject(($rootScope: IRootScopeService, $compile: ICompileService) => {
 
-        let scope = $rootScope.$new();
-        scope['schema'] = {
+        let scope: JsonFormsScope = <JsonFormsScope> $rootScope.$new();
+        scope.schema = {
             "properties": {
                 "comments": {
                     "type": "array",
@@ -26,8 +27,8 @@ describe('Array renderer', () => {
                 }
             }
         };
-        scope['uiSchema'] = { "type": "Control", "scope": { "$ref": "#/properties/comments" } };
-        scope['data'] = {"comments": [{"msg": "Some message"}, {"msg": "Another message"}]};
+        scope.uiSchema = { "type": "Control", "scope": { "$ref": "#/properties/comments" } };
+        scope.data = {"comments": [{"msg": "Some message"}, {"msg": "Another message"}]};
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(3);

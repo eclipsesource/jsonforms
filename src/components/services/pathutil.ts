@@ -1,20 +1,29 @@
-import "lodash"
+import 'lodash';
 
 export class PathUtil {
 
-    private static Keywords:string[] = ["items", "properties", "#"];
-
-    private static joinWithSlash: (string) => string = _.partialRight(_.join, "/");
+    private static Keywords: string[] = ['items', 'properties', '#'];
+    private static joinWithSlash: (string) => string = _.partialRight(_.join, '/');
     private static numberRegex = /^\d+$/;
+
+    /**
+     * Converts a given schema path to its instance representation.
+     *
+     * @param schemaPath a schema path
+     * @returns {string} the instance path
+     */
+    static normalize(schemaPath: string): string {
+        return _.flow(PathUtil.normalizeFragments, PathUtil.joinWithSlash)(schemaPath);
+    }
 
     /**
      * Converts a given schema path to its instance representation
      *
      * @param schemaPath a schema path
-     * @returns {string} the instance path
+     * @returns {string[]} the instance path fragments array
      */
-    static normalize(schemaPath: string):string {
-        return _.flow(PathUtil.toPropertyFragments, PathUtil.filterNonKeywords, PathUtil.joinWithSlash)(schemaPath);
+    static normalizeFragments(schemaPath: string): string[] {
+        return _.flow(PathUtil.toPropertyFragments, PathUtil.filterNonKeywords)(schemaPath);
     }
 
     /**
@@ -23,7 +32,7 @@ export class PathUtil {
      * @param path the path to be splitted
      * @returns {string[]} an array of fragments
      */
-    static toPropertyFragments(path:string): string[] {
+    static toPropertyFragments(path: string): string[] {
         if (path === undefined) {
             return [];
         }
@@ -31,19 +40,20 @@ export class PathUtil {
     }
 
     /**
-     * Creates a string with single quotes on properties for accessing a property based on path fragments.
+     * Creates a string with single quotes on properties for accessing a property based on
+     * path fragments.
      *
      * @param propertyPath the path to
      * @return {string} the property access path
      */
-    static toPropertyAccessString(propertyPath: string):string {
+    static toPropertyAccessString(propertyPath: string): string {
         if (propertyPath === null || propertyPath === undefined) {
-            throw new Error("Property path must not be undefined.")
+            throw new Error('Property path must not be undefined.');
         }
         let fragments = PathUtil.toPropertyFragments(propertyPath);
         return fragments.reduce((propertyAccessString, fragment) =>
             `${propertyAccessString}['${fragment}']`
-            , "");
+            , '');
     }
 
 
@@ -54,7 +64,10 @@ export class PathUtil {
      * @returns {string} the path without the last fragment
      */
     static init(schemaPath: string): string {
-        return '/' + _.flow(PathUtil.toPropertyFragments, _.initial, PathUtil.joinWithSlash)(schemaPath);
+        return '/' + _.flow(
+                PathUtil.toPropertyFragments,
+                _.initial,
+                PathUtil.joinWithSlash)(schemaPath);
     }
 
     /**
@@ -63,11 +76,11 @@ export class PathUtil {
      * @param path the instance path from which to remove indices
      * @returns {string} the filtered path without indices
      */
-    static filterIndexes(path:string):string {
+    static filterIndexes(path: string): string {
         return PathUtil.toPropertyFragments(path)
             .filter((fragment, index, fragments) =>
-                !(fragment.match(PathUtil.numberRegex) && fragments[index - 1] == "items")
-            ).join("/");
+                !(fragment.match(PathUtil.numberRegex) && fragments[index - 1] === 'items')
+            ).join('/');
     }
 
     /**
@@ -76,8 +89,8 @@ export class PathUtil {
      * @param fragments the path from which to filter out the schema specific fragment
      * @returns {string[]} a path without schema specific fragments
      */
-    static filterNonKeywords(fragments:string[]):string[] {
-        return fragments.filter(fragment => !_.includes(PathUtil.Keywords, fragment))
+    static filterNonKeywords(fragments: string[]): string[] {
+        return fragments.filter(fragment => !_.includes(PathUtil.Keywords, fragment));
     }
 
     /**
@@ -98,13 +111,13 @@ export class PathUtil {
      * @returns {string} the last fragment of the path
      */
     static lastFragment(path: string): string {
-        return path.substr(path.lastIndexOf('/') + 1)
+        return path.substr(path.lastIndexOf('/') + 1);
     }
 
     /**
      * Beautifies given string by performing conversion to start case.
      * @param text the text to be beautified
      */
-    static beautify(text: string): string { return _.startCase(text) };
+    static beautify(text: string): string { return _.startCase(text); };
 }
 
