@@ -79,9 +79,10 @@ class MasterDetailCollectionDirective implements ng.IDirective {
 
                     <uib-accordion close-others="false"
                                ng-show="!isEmptyInstance(key)">
-                        <uib-accordion-group is-open="status_object.open"
-                                         ng-repeat="child in instance[key]"
-                                         class="{{!hasKeys(value.items)?'jsf-masterdetail-empty':''}}">
+                        <uib-accordion-group
+                            is-open="status_object.open"
+                            ng-repeat="child in instance[key]"
+                            class="{{!hasKeys(value.items)?'jsf-masterdetail-empty':''}}">
                             <uib-accordion-heading>
                                 <span ng-click="selectElement(child,value)"
                                       ng-class="{

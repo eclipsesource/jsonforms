@@ -10,7 +10,10 @@ class CategorizationDirective implements ng.IDirective {
         <div class="row">
             <div class="col-sm-100">
                 <uib-tabset>
-                    <uib-tab heading="{{category.label}}" ng-repeat="category in vm.uiSchema.elements" select="vm.changeSelectedCategory(category)">
+                    <uib-tab
+                        heading="{{category.label}}"
+                        ng-repeat="category in vm.uiSchema.elements"
+                        select="vm.changeSelectedCategory(category)">
                         <fieldset ng-if="vm.selectedCategory===category">
                             <jsonforms-inner ng-repeat="child in category.elements"
                                              ui-schema="child" >
@@ -32,8 +35,8 @@ class CategorizationController  extends AbstractLayout {
     constructor(scope: CategorizationControllerScope) {
         super(scope);
     }
-    private changeSelectedCategory(category){
-        this.selectedCategory=category;
+    public changeSelectedCategory(category) {
+        this.selectedCategory = category;
     }
 }
 const CategorizationLayoutRendererTester: RendererTester = function(element: IUISchemaElement,

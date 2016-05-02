@@ -33,21 +33,24 @@ interface DateTimeControllerScope extends ng.IScope {
 class DateTimeController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
     private isOpen: boolean = false;
-    private dt:Date;
+    private dt: Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
-        let value=this.modelValue[this.fragment];
-        if (value)
-            this.dt=new Date(value);
+        let value = this.modelValue[this.fragment];
+        if (value) {
+            this.dt = new Date(value);
+        }
     }
     public openDate() {
         this.isOpen = true;
     }
     protected modelChanged() {
-        if (this.dt != null)
-            this.modelValue[this.fragment]=this.dt.toISOString().substr(0,10); //returns a string in the form 'yyyy-mm-dd'
-        else
-            this.modelValue[this.fragment]=null;
+        if (this.dt != null) {
+            // returns a string in the form 'yyyy-mm-dd'
+            this.modelValue[this.fragment] = this.dt.toISOString().substr(0, 10);
+        } else {
+            this.modelValue[this.fragment] = null;
+        }
         super.modelChanged();
     }
 }
