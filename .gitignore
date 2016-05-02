@@ -2,6 +2,7 @@
 dist/
 temp/
 coverage/
+reports/
 
 # npm
 node_modules/

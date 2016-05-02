@@ -217,7 +217,7 @@ angular.module('makeithappen').controller('LocalController', function() {
     vm.data = {
         name: 'John Doe',
         vegetarian: false,
-        birthDate: "02.06.1985"
+        birthDate: "1985-06-02"
     };
     vm.users ={
         "users":

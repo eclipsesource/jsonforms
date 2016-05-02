@@ -69,7 +69,7 @@ describe('MasterDetail', () => {
         let nameInput_empty = el[0].querySelector("#\\#\\/properties\\/name");
         expect(nameInput_empty).toBeNull();
 
-        let x1 = el[0].querySelector("accordion accordion accordion-heading span");
+        let x1 = el[0].querySelector("uib-accordion uib-accordion uib-accordion-heading span");
         angular.element(x1).triggerHandler("click");
         expect(el.html()).toContain("<label");
         let nameInput = el[0].querySelector("#\\#\\/properties\\/name");
