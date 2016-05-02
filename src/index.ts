@@ -7,6 +7,7 @@ import pathResolver from './components/ng-services/pathresolver/pathresolver-ser
 import '../jsf-bootstrap.css';
 
 require('angular-ui-bootstrap');
+require('angular-ui-bootstrap/dist/ui-bootstrap-csp.css');
 require('angular-ui-validate');
 
 angular.module('jsonforms', [

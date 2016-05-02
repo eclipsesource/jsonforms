@@ -8,17 +8,18 @@ class DateTimeDirective implements ng.IDirective {
     template = `
     <jsonforms-control>
         <div class="input-group">
-          <input type="text" 
-                 datepicker-popup="dd.MM.yyyy" 
-                 close-text="Close" 
-                 is-open="vm.isOpen" 
-                 id="{{vm.id}}" 
-                 class="form-control jsf-control-datetime" 
-                 ng-change='vm.modelChanged()'  
-                 ng-model="vm.modelValue[vm.fragment]" 
+          <input type="text"
+                 uib-datepicker-popup="dd.MM.yyyy"
+                 close-text="Close"
+                 is-open="vm.isOpen"
+                 id="{{vm.id}}"
+                 class="form-control jsf-control-datetime"
+                 ng-change='vm.modelChanged()'
+                 ng-model="vm.dt"
+                 ng-model-options="{timezone:'UTC'}"
                  ng-readonly="vm.uiSchema.readOnly"/>
              <span class="input-group-btn">
-               <button type="button" class="btn btn-default" ng-click="vm.openDate($event)">
+               <button type="button" class="btn btn-default" ng-click="vm.openDate()">
                  <i class="glyphicon glyphicon-calendar"></i>
                </button>
              </span>
@@ -32,13 +33,22 @@ interface DateTimeControllerScope extends ng.IScope {
 class DateTimeController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
     private isOpen: boolean = false;
+    private dt:Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
+        let value=this.modelValue[this.fragment];
+        if (value)
+            this.dt=new Date(value);
     }
-    public openDate($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
+    public openDate() {
         this.isOpen = true;
+    }
+    protected modelChanged() {
+        if (this.dt != null)
+            this.modelValue[this.fragment]=this.dt.toISOString().substr(0,10); //returns a string in the form 'yyyy-mm-dd'
+        else
+            this.modelValue[this.fragment]=null;
+        super.modelChanged();
     }
 }
 const DateTimeControlRendererTester: RendererTester = function(element: IUISchemaElement,
