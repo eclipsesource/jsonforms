@@ -1,32 +1,34 @@
-import {RendererTester,RendererService,NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl, ControlRendererTester} from '../abstract-control';
+
 class BooleanDirective implements ng.IDirective {
-    restrict = "E";
-    //replace= true;
+    restrict = 'E';
     template = `
     <jsonforms-control>
-      <input type="checkbox" id="{{vm.id}}" class="jsf-control-boolean" ng-model="vm.modelValue[vm.fragment]" ng-change='vm.modelChanged()' ng-disabled="vm.uiSchema.readOnly"/>
+      <input type="checkbox" 
+             id="{{vm.id}}" 
+             class="jsf-control-boolean" 
+             ng-model="vm.modelValue[vm.fragment]" 
+             ng-change='vm.modelChanged()' 
+             ng-disabled="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = BooleanController;
     controllerAs = 'vm';
 }
 interface BooleanControllerScope extends ng.IScope {
 }
+
 class BooleanController extends AbstractControl {
-    static $inject = ['$scope','PathResolver'];
-    constructor(scope: BooleanControllerScope,refResolver: IPathResolver) {
-        super(scope,refResolver);
+    static $inject = ['$scope', 'PathResolver'];
+    constructor(scope: BooleanControllerScope, pathResolver: IPathResolver) {
+        super(scope, pathResolver);
     }
 }
-var BooleanControlRendererTester: RendererTester = ControlRendererTester('boolean',1);
 
 export default angular
-    .module('jsonforms.renderers.controls.boolean',['jsonforms.renderers.controls'])
+    .module('jsonforms.renderers.controls.boolean', ['jsonforms.renderers.controls'])
     .directive('booleanControl', () => new BooleanDirective())
     .run(['RendererService', RendererService =>
-        {
-            RendererService.register("boolean-control",BooleanControlRendererTester);
-        }
+        RendererService.register('boolean-control', ControlRendererTester('boolean', 1))
     ])
     .name;

@@ -19,11 +19,11 @@ describe('DateTimeTest', () => {
     it("should be rendered",
         angular.mock.inject(($rootScope, $compile) => {
 
-        var scope = $rootScope.$new();
+        let scope = $rootScope.$new();
         scope.schema = schema;
         scope.uiSchema = { "type": "Control", "scope": { "$ref": "#/properties/birthDate" } };
         scope.data = { "birthDate": new Date() };
-        var el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         expect(el.html()).toContain("datepicker-popup");
     }));
@@ -40,5 +40,6 @@ describe('DateTimeTest', () => {
         let input = angular.element(el[0].getElementsByClassName('jsf-control-datetime'));
         expect(input.attr("readonly")).toBeDefined();
     }));
+
     // TODO: add test cases to check whether validation works
 });

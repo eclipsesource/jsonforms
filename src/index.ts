@@ -1,10 +1,10 @@
 
 import 'angular';
-import form from './components/form/form'
-import capitalize from './components/ng-services/capitalize/capitalize.filter'
-import pathResolver from './components/ng-services/pathresolver/pathresolver-service'
+import form from './components/form/form';
+import capitalize from './components/ng-services/capitalize/capitalize.filter';
+import pathResolver from './components/ng-services/pathresolver/pathresolver-service';
 
-import '../jsf-bootstrap.css'
+import '../jsf-bootstrap.css';
 
 require('angular-ui-bootstrap');
 require('angular-ui-validate');
