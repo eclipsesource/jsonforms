@@ -1,6 +1,7 @@
 
 import * as angular from 'angular';
 import rendererService from '../renderers/renderer-service';
+import templateService from '../renderers/template-service';
 import pathResolver from '../ng-services/pathresolver/pathresolver-service';
 import generators from '../generators/generators';
 import uiSchemaGenerator from '../generators/jsonforms-uischemagenerator';
@@ -32,6 +33,7 @@ import {JsonFormsDirective, JsonFormsInnerDirective} from './form-directive';
 export default angular
     .module('jsonforms.form', [
         rendererService,
+        templateService,
         pathResolver,
         generators,
         uiSchemaGenerator,
