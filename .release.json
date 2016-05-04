@@ -1,0 +1,11 @@
+{
+  "dist": {
+    "repo": "https://github.com/eclipsesource/jsonforms#release",
+    "stageDir": ".stage",
+    "baseDir": "dist",
+    "files": ["**/*"],
+    "pkgFiles": ["jsonforms.js", "LICENSE"],
+    "beforeStageCommand": "git add --force dist/jsonforms.js",
+    "afterReleaseCommand": ""
+  }
+}

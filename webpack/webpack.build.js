@@ -8,8 +8,8 @@ module.exports = {
         './src/index.ts'
     ],
     output: {
-        filename: 'build.js',
-        path: 'dist/js'
+        filename: 'jsonforms.js',
+        path: 'dist'
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin(

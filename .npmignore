@@ -1,5 +1,6 @@
 .github
 .travis.yml
+.release.json
 CLA.md
 CONTRIBUTING.md
 
