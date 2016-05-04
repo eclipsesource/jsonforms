@@ -6,16 +6,7 @@ import {IUISchemaElement} from '../../../../jsonforms';
 
 class HorizontalDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-layout>
-        <div class="jsf-horizontal-layout">
-            <fieldset class="row">
-                <div ng-repeat="child in vm.uiSchema.elements" class="col-sm-{{vm.childSize}}">
-                    <jsonforms-inner ui-schema="child"></jsonforms-inner>
-                </div>
-        </fieldset>
-        </div>
-    </jsonforms-layout>`;
+    templateUrl = 'horizontal.html';
     controller = HorizontalController;
     controllerAs = 'vm';
 }
@@ -64,4 +55,7 @@ export default angular
     .run(['RendererService', RendererService =>
         RendererService.register('horizontallayout', HorizontalLayoutRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('horizontal.html', require('./horizontal.html'));
+    }])
     .name;
