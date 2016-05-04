@@ -4,7 +4,8 @@ CLA.md
 CONTRIBUTING.md
 
 # ignore dist except the build
-dist
+dist/
+dist/**/*.*
 !dist/jsonforms.js
 
 ###########################################
