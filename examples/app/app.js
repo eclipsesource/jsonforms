@@ -7,9 +7,9 @@ angular.module('makeithappen', [
     'jsonforms'
 ]).config(['$routeProvider',
     function($routeProvider) {
-        $routeProvider.when('/local', {
-            templateUrl: 'app/local/local.html',
-            controller: 'LocalController',
+        $routeProvider.when('/person', {
+            templateUrl: 'app/person/person.html',
+            controller: 'PersonController',
             controllerAs: 'vm'
         }).when('/editor', {
             templateUrl: 'app/editor/editor.html',
@@ -48,7 +48,7 @@ angular.module('makeithappen', [
             controller: 'ArraysController',
             controllerAs: 'vm'
         }).otherwise({
-            redirectTo: '/local'
+            redirectTo: '/person'
         });
     }
 ]);
