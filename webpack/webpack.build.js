@@ -4,7 +4,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: [
-        "bootstrap-webpack!./bootstrap.config.js",
+        // "bootstrap-webpack!./bootstrap.config.js",
         './src/index.ts'
     ],
     output: {
@@ -12,13 +12,13 @@ module.exports = {
         path: 'dist'
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin(
-            {
-                warning: false,
-                mangle: true,
-                comments: false
-            }
-        ),
+        // new webpack.optimize.UglifyJsPlugin(
+        //     {
+        //         warning: false,
+        //         mangle: true,
+        //         comments: false
+        //     }
+        // ),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',

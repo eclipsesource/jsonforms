@@ -19,12 +19,6 @@ class HorizontalController  extends AbstractLayout {
         super(scope);
         this.updateChildrenLabel(this.uiSchema.elements);
     }
-    private get size(){
-        return 100;
-    }
-    private get childSize(){
-        return Math.floor(this.size / this.uiSchema.elements.length);
-    }
     private updateChildrenLabel(elements: IUISchemaElement[]): void {
         let labelExists = elements.reduce((atLeastOneLabel, element) => {
             return atLeastOneLabel ||  LabelObjectUtil.shouldShowLabel(element.label);

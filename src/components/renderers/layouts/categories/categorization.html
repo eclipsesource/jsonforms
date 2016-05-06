@@ -1,0 +1,41 @@
+<jsonforms-layout>
+    <div class="jsf-categorization">
+        <fieldset class="jsf-categorization-master">
+            <ul>
+                <li ng-repeat="category in vm.uiSchema.elements" ng-click="vm.changeSelectedCategory(category)">
+                    <span class="jsf-category-entry" ng-class="{'selected': category===vm.selectedCategory}">{{category.label}}</span>
+                </li>
+            </ul>
+        </fieldset>
+        <fieldset class="jsf-categorization-detail">
+            <jsonforms-inner ng-if="vm.selectedCategory" ng-repeat="child in vm.selectedCategory.elements" ui-schema="child"></jsonforms-inner>
+        </fieldset>
+    </div>
+    <style>
+        .jsf-categorization ul {
+            list-style-type: none;
+        }
+        .jsf-categorization .jsf-categorization-master .jsf-category-entry{
+            display: block;
+        }
+        .jsf-categorization .jsf-categorization-master .jsf-category-entry:hover,
+        .jsf-categorization .jsf-categorization-master .jsf-category-entry.selected{
+            background-color: lightgrey;
+        }
+        .jsf-categorization {
+            display: flex;
+        }
+        .jsf-categorization>fieldset{
+            margin:0 0.25em;
+            min-width: 2em;
+        }
+        .jsf-categorization>.jsf-categorization-master{
+            flex:3 1 0.3vw;
+            margin-left: 0;
+        }
+        .jsf-categorization>.jsf-categorization-detail{
+            flex:7 1 0.7vw;
+            margin-right: 0;
+        }
+    </style>
+</jsonforms-layout>

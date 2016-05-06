@@ -1,13 +1,15 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl} from '../abstract-control';
-import {IUISchemaElement} from '../../../../jsonforms';
+import {RendererTester, NOT_FITTING} from '../../../components/renderers/renderer-service';
+import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
+import {AbstractControl} from '../../../components/renderers/controls/abstract-control';
+import {IUISchemaElement} from '../../../jsonforms';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
     template = `
     <jsonforms-control>
-          <input type="date"
+        <div class="input-group">
+          <input type="text"
+                 uib-datepicker-popup="dd.MM.yyyy"
                  close-text="Close"
                  is-open="vm.isOpen"
                  id="{{vm.id}}"
@@ -16,6 +18,12 @@ class DateTimeDirective implements ng.IDirective {
                  ng-model="vm.dt"
                  ng-model-options="{timezone:'UTC'}"
                  ng-readonly="vm.uiSchema.readOnly"/>
+             <span class="input-group-btn">
+               <button type="button" class="btn btn-default" ng-click="vm.openDate()">
+                 <i class="glyphicon glyphicon-calendar"></i>
+               </button>
+             </span>
+        </div>
     </jsonforms-control>`;
     controller = DateTimeController;
     controllerAs = 'vm';
@@ -24,6 +32,7 @@ interface DateTimeControllerScope extends ng.IScope {
 }
 class DateTimeController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
+    private isOpen: boolean = false;
     private dt: Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
@@ -31,7 +40,9 @@ class DateTimeController extends AbstractControl {
         if (value) {
             this.dt = new Date(value);
         }
-        scope.$watch('vm.modelValue[vm.fragment]', (newValue) => {this.updateDateObject(); });
+    }
+    public openDate() {
+        this.isOpen = true;
     }
     protected modelChanged() {
         if (this.dt != null) {
@@ -41,9 +52,6 @@ class DateTimeController extends AbstractControl {
             this.modelValue[this.fragment] = null;
         }
         super.modelChanged();
-    }
-    private updateDateObject() {
-        this.dt = new Date(this.modelValue[this.fragment]);
     }
 }
 const DateTimeControlRendererTester: RendererTester = function(element: IUISchemaElement,

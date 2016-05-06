@@ -52,6 +52,8 @@ describe('Categorization', () => {
         scope.data = { "name": "John Doe "};
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
+        expect(el.html()).toContain("</uib-tabset>"); //this is not resolved completly
+        expect(el.html()).toContain("</uib-tab>"); //this is not resolved completly
         expect(el.html()).toContain('heading="Tab1"');
         expect(el.html()).toContain('heading="MyTab2"');
     }));

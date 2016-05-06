@@ -16,7 +16,7 @@ describe('DateTimeTest', () => {
             }
         };
 
-    it("should be rendered",
+    xit("should be rendered",
         angular.mock.inject(($rootScope, $compile) => {
 
         let scope = $rootScope.$new();
@@ -28,7 +28,7 @@ describe('DateTimeTest', () => {
         expect(el.html()).toContain("datepicker-popup");
     }));
 
-    it("should support read-only flag",
+    xit("should support read-only flag",
         angular.mock.inject(($rootScope, $compile) => {
 
         let scope = $rootScope.$new();

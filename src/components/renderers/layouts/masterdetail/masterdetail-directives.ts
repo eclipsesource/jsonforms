@@ -1,26 +1,10 @@
-require('./masterdetail.css');
-
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl} from '../../controls/abstract-control';
 import {IUISchemaElement} from '../../../../jsonforms';
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
-    template = `<div class="row">
-        <!-- Master -->
-        <div class="col-sm-30 jsf-masterdetail">
-            <jsonforms-masterdetail-collection properties="vm.subSchema.properties"
-                                               instance="vm.data"
-                                               select="vm.select(child,childSchema)">
-            </jsonforms-masterdetail-collection>
-        </div>
-        <!-- Detail -->
-        <div class="col-sm-70">
-            <jsonforms schema="vm.selectedSchema"
-                       data="vm.selectedChild"
-                       ng-if="vm.selectedChild"></jsonforms>
-        </div>
-    </div>`;
+    templateUrl = 'masterdetail.html';
     controller = MasterDetailController;
     controllerAs = 'vm';
 }
@@ -60,52 +44,7 @@ class MasterDetailCollectionDirective implements ng.IDirective {
         instance: '=',
         select: '&'
     };
-    template = `<div>
-            <uib-accordion close-others="false">
-                <uib-accordion-group is-open="status_attribute.open"
-                                 ng-repeat="(key, value) in filter(properties)"
-                                 class="{{isEmptyInstance(key)?'jsf-masterdetail-empty':''}}">
-                    <uib-accordion-heading class="jsf-masterdetail-header">
-                        <span class="jsf-masterdetail-property">{{key}}</span>
-                        <i class="pull-right glyphicon"
-                           ng-class="{
-                              'glyphicon-chevron-down': status_attribute.open,
-                              'glyphicon-chevron-right': !status_attribute.open
-                           }"
-                           ng-show="!isEmptyInstance(key)">
-                        </i>
-                    </uib-accordion-heading>
-
-                    <uib-accordion close-others="false"
-                               ng-show="!isEmptyInstance(key)">
-                        <uib-accordion-group
-                            is-open="status_object.open"
-                            ng-repeat="child in instance[key]"
-                            class="{{!hasKeys(value.items)?'jsf-masterdetail-empty':''}}">
-                            <uib-accordion-heading>
-                                <span ng-click="selectElement(child,value)"
-                                      ng-class="{
-                                         'jsf-masterdetail-selected':selectedChild==child
-                                      }">
-                                      {{child.name!=undefined?child.name:child}}
-                                </span>
-                                <i class="pull-right glyphicon"
-                                   ng-class="{
-                                      'glyphicon-chevron-down': status_object.open,
-                                      'glyphicon-chevron-right': !status_object.open
-                                   }"
-                                   ng-if="hasKeys(value.items)"></i>
-                            </uib-accordion-heading>
-                            <jsonforms-masterdetail-member filter='filter'
-                                                           select='select'
-                                                           child-schema="value.items"
-                                                           child-data="child">
-                            </jsonforms-masterdetail-member>
-                        </uib-accordion-group>
-                    </uib-accordion>
-                </uib-accordion-group>
-            </uib-accordion>
-        </div>`;
+    templateUrl = 'masterdetail-collection.html';
     link = (scope) => {
         scope.filter = (properties) => {
             let result = {};
@@ -161,6 +100,13 @@ export default angular
     .run(['RendererService', RendererService =>
         RendererService.register('master-detail', MasterDetailControlRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('masterdetail.html', require('./masterdetail.html'));
+    }])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('masterdetail-collection.html',
+            require('./masterdetail-collection.html'));
+    }])
     .directive('jsonformsMasterdetailCollection', () => new MasterDetailCollectionDirective())
     .directive('jsonformsMasterdetailMember', ['$compile', ($compile) =>
         new MasterDetailMember($compile)]

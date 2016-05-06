@@ -5,12 +5,13 @@ class BooleanDirective implements ng.IDirective {
     restrict = 'E';
     template = `
     <jsonforms-control>
-      <input type="checkbox" 
-             id="{{vm.id}}" 
-             class="jsf-control-boolean" 
-             ng-model="vm.modelValue[vm.fragment]" 
-             ng-change='vm.modelChanged()' 
-             ng-disabled="vm.uiSchema.readOnly"/>
+      <input type="checkbox"
+             id="{{vm.id}}"
+             class="form-control jsf-control-boolean"
+             ng-model="vm.modelValue[vm.fragment]"
+             ng-change='vm.modelChanged()'
+             ng-disabled="vm.uiSchema.readOnly"
+             style="flex:0"/>
     </jsonforms-control>`;
     controller = BooleanController;
     controllerAs = 'vm';

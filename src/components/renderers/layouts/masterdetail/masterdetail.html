@@ -1,0 +1,30 @@
+<div class="jsf-masterDetail">
+    <!-- Master -->
+    <div class="jsf-masterdetail-master">
+        <jsonforms-masterdetail-collection properties="vm.subSchema.properties"
+                                           instance="vm.data"
+                                           select="vm.select(child,childSchema)">
+        </jsonforms-masterdetail-collection>
+    </div>
+    <!-- Detail -->
+    <div class="jsf-masterdetail-detail">
+        <jsonforms schema="vm.selectedSchema" data="vm.selectedChild" ng-if="vm.selectedChild"></jsonforms>
+    </div>
+    <style>
+        .jsf-masterdetail {
+            display: flex;
+        }
+        .jsf-masterdetail>div{
+            margin:0 0.25em;
+            min-width: 2em;
+        }
+        .jsf-masterdetail>.jsf-categorization-master{
+            flex:3 1 0.3vw;
+            margin-left: 0;
+        }
+        .jsf-masterdetail>.jsf-categorization-detail{
+            flex:7 1 0.7vw;
+            margin-right: 0;
+        }
+    </style>
+</div>
