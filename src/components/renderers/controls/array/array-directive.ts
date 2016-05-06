@@ -35,10 +35,10 @@ class ArrayDirective implements ng.IDirective {
           <jsonforms schema="vm.arraySchema" data="vm.submitElement"></jsonforms>
        </fieldset>
        <input class="btn btn-primary"
-              ng-show="vm.supportsSubmit" 
+              ng-show="vm.supportsSubmit"
               type="button" 
-              value="Add to {{buttonText}}" 
-              ng-click="vm.submitCallback()" 
+              value="Add to {{vm.buttonText}}"
+              ng-click="vm.submitCallback()"
               ng-model="vm.submitElement">
        </input>
      </jsonforms-layout>`;
