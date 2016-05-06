@@ -147,3 +147,15 @@ body {
 .jsf-masterdetail-header {
     text-decoration: none;
 }
+
+.jsf .popover-title {
+    color: black;
+    background-color: lemonchiffon;
+}
+
+.jsf .popover-content {
+    color: black;
+    font-style: italic;
+
+}
+

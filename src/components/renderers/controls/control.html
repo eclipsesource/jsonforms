@@ -2,9 +2,12 @@
     <div>
         <label ng-if="vm.showLabel" for="{{vm.id}}">{{vm.label}}</label>
     </div>
-    <div ng-transclude>
+    <div ng-transclude uib-popover-template="'validation.html'" popover-enable="vm.alerts.length>0" popover-trigger="mouseenter" popover-title="Invalid value" popover-placement="bottom-left">
     </div>
-    <div>
-        <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>
-    </div>
+    <script id="validation.html" type="text/ng-template">
+        <div>
+            <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}">{{alert.msg}}</alert>
+        </div>
+    </script>
 </div>
+
