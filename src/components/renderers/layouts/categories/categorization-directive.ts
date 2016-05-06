@@ -7,20 +7,22 @@ class CategorizationDirective implements ng.IDirective {
     restrict = 'E';
     template = `
     <jsonforms-layout>
-        <div class="row">
-            <div class="col-sm-100">
-                <uib-tabset>
-                    <uib-tab
-                        heading="{{category.label}}"
-                        ng-repeat="category in vm.uiSchema.elements"
-                        select="vm.changeSelectedCategory(category)">
-                        <fieldset ng-if="vm.selectedCategory===category">
-                            <jsonforms-inner ng-repeat="child in category.elements"
-                                             ui-schema="child" >
-                            </jsonforms-inner>
-                        </fieldset>
-                    </uib-tab>
-                </uib-tabset>
+        <div class="jsf-categorization">
+            <div class="row">
+                <div class="col-sm-100">
+                    <uib-tabset>
+                        <uib-tab
+                            heading="{{category.label}}"
+                            ng-repeat="category in vm.uiSchema.elements"
+                            select="vm.changeSelectedCategory(category)">
+                            <fieldset ng-if="vm.selectedCategory===category">
+                                <jsonforms-inner ng-repeat="child in category.elements"
+                                                 ui-schema="child" >
+                                </jsonforms-inner>
+                            </fieldset>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
             </div>
         </div>
     </jsonforms-layout>`;
