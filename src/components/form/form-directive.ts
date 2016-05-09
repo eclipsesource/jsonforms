@@ -16,7 +16,7 @@ import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
 import {IUISchemaElement} from '../../jsonforms';
 
-class FormController {
+export class FormController {
 
     static $inject = ['RendererService', 'PathResolver', 'UISchemaGenerator',
         'SchemaGenerator', '$compile', '$q', '$scope'];
@@ -144,7 +144,7 @@ class FormController {
     }
 }
 
-interface JsonFormsDirectiveScope extends ng.IScope {
+export interface JsonFormsDirectiveScope extends ng.IScope {
     schema: any;
     uiSchema: any;
     data: any;
@@ -175,7 +175,7 @@ export class JsonFormsDirective implements ng.IDirective {
 }
 
 
-class InnerFormController {
+export class InnerFormController {
     static $inject = ['RendererService', '$compile', '$scope'];
     public element: any;
     private uiSchema: IUISchemaElement;
@@ -196,7 +196,7 @@ class InnerFormController {
         this.scope.$root.$broadcast('modelChanged');
     }
 }
-interface JsonFormsInnerDirectiveScope extends ng.IScope {
+export interface JsonFormsInnerDirectiveScope extends ng.IScope {
     uiSchema: any;
 }
 
