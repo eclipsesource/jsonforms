@@ -5,7 +5,7 @@ export default angular
         return {
             restrict: 'E',
             transclude: true,
-            template: require('./layout.html'),
+            template: require('./layout.html')
         };
     })
     .name;

@@ -62,6 +62,6 @@ export default angular
     .module('jsonforms.renderers.layouts.horizontal', ['jsonforms.renderers.layouts'])
     .directive('horizontallayout', () => new HorizontalDirective())
     .run(['RendererService', RendererService =>
-        RendererService.register('horizontalLayout', HorizontalLayoutRendererTester)
+        RendererService.register('horizontallayout', HorizontalLayoutRendererTester)
     ])
     .name;

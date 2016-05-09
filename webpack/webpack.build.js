@@ -34,8 +34,7 @@ module.exports = {
     resolveLoader: {
         modulesDirectories: ["node_modules"]
     },
-    module:
-    {
+    module: {
         preLoaders: [
             {
                 test: /\.ts$/,
