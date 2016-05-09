@@ -15,6 +15,21 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 * Build: `npm run build` (runs `tslint` as well)
 * Test: `npm run test`
 
+# Usage
+1. Install JSON Forms via `npm install jsonforms` and require it via `require('jsonforms')`
+2. Annotate the element, where you want to place a form, with a `jsf` class attribute.
+3. Render a form with the `jsonforms` element:
+
+The simplest example looks like this, where `schema`, `uiSchema` and `data` are 
+properties of a aliased controller named `vm`:
+ 
+```html 
+  <div class="jsf">
+    <jsonforms schema="vm.schema" ui-schema="vm.uiSchema" data="vm.data"/
+  </div>
+```
+
+
 # Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
