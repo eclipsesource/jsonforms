@@ -6,11 +6,10 @@ import {IUISchemaElement} from '../../../../jsonforms';
 class CategorizationDirective implements ng.IDirective {
     restrict = 'E';
     template = `
-    <jsonforms-layout>
-        <div class="jsf-categorization">
-            <div class="row">
-                <div class="col-sm-100">
-                    <uib-tabset>
+    <jsonforms-layout>        
+         <div class="row jsf-categorization">
+              <div class="col-sm-100">
+                   <uib-tabset>
                         <uib-tab
                             heading="{{category.label}}"
                             ng-repeat="category in vm.uiSchema.elements"
@@ -21,10 +20,9 @@ class CategorizationDirective implements ng.IDirective {
                                 </jsonforms-inner>
                             </fieldset>
                         </uib-tab>
-                    </uib-tabset>
-                </div>
-            </div>
-        </div>
+                   </uib-tabset>
+               </div>
+         </div>
     </jsonforms-layout>`;
     controller = CategorizationController;
     controllerAs = 'vm';
