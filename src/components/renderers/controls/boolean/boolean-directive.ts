@@ -3,16 +3,7 @@ import {AbstractControl, ControlRendererTester} from '../abstract-control';
 
 class BooleanDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-control>
-      <input type="checkbox"
-             id="{{vm.id}}"
-             class="form-control jsf-control-boolean"
-             ng-model="vm.modelValue[vm.fragment]"
-             ng-change='vm.modelChanged()'
-             ng-disabled="vm.uiSchema.readOnly"
-             style="flex:0"/>
-    </jsonforms-control>`;
+    templateUrl = 'boolean.html';
     controller = BooleanController;
     controllerAs = 'vm';
 }
@@ -32,4 +23,7 @@ export default angular
     .run(['RendererService', RendererService =>
         RendererService.register('boolean-control', ControlRendererTester('boolean', 1))
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('boolean.html', require('./boolean.html'));
+    }])
     .name;

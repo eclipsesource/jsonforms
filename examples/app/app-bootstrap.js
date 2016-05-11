@@ -4,12 +4,12 @@ angular.module('makeithappen', [
     'ngRoute',
     //'ngResource',
     //'ui.ace',
-    'jsonforms'
+    'jsonforms-bootstrap'
 ]).config(['$routeProvider',
     function($routeProvider) {
-        $routeProvider.when('/person', {
-            templateUrl: 'app/person/person.html',
-            controller: 'PersonController',
+        $routeProvider.when('/local', {
+            templateUrl: 'app/local/local.html',
+            controller: 'LocalController',
             controllerAs: 'vm'
         }).when('/editor', {
             templateUrl: 'app/editor/editor.html',
@@ -48,7 +48,7 @@ angular.module('makeithappen', [
             controller: 'ArraysController',
             controllerAs: 'vm'
         }).otherwise({
-            redirectTo: '/person'
+            redirectTo: '/local'
         });
     }
 ]);

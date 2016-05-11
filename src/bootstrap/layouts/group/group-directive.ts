@@ -1,7 +1,7 @@
 export default angular
-    .module('jsonforms-bootstrap.renderers.layouts.categories',
+    .module('jsonforms-bootstrap.renderers.layouts.group',
         ['jsonforms.renderers.layouts', 'jsonforms-bootstrap'])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('categorization.html', require('./categorization.html'));
+        $templateCache.put('group.html', require('./group.html'));
     }])
     .name;

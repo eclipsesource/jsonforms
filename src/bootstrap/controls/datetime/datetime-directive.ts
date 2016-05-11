@@ -64,15 +64,16 @@ const DateTimeControlRendererTester: RendererTester = function(element: IUISchem
     let currentDataSchema = pathResolver.resolveSchema(dataSchema, element['scope']['$ref']);
     if (currentDataSchema !== undefined && currentDataSchema.type === 'string' &&
         currentDataSchema['format'] !== undefined && currentDataSchema['format'] === 'date-time') {
-        return 5;
+        return 10;
     }
     return NOT_FITTING;
 };
 
 export default angular
-    .module('jsonforms.renderers.controls.datetime', ['jsonforms.renderers.controls'])
-    .directive('datetimeControl', () => new DateTimeDirective())
+    .module('jsonforms-bootstrap.renderers.controls.datetime',
+        ['jsonforms-bootstrap.renderers.controls'])
+    .directive('datetimeBootstrapControl', () => new DateTimeDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('datetime-control', DateTimeControlRendererTester)
+            RendererService.register('datetime-bootstrap-control', DateTimeControlRendererTester)
     ])
     .name;

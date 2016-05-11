@@ -2,12 +2,3 @@
     display: block;
     min-height: 20px;
 }
-.form-control {
-    flex: 1;
-    min-width: 2em;
-    min-height: 1.5em;
-    padding: 2px 0;
-    border: 1px solid;
-    border-color: rgb(169, 169, 169);
-    box-sizing: content-box;
-}
