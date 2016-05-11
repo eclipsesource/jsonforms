@@ -55,7 +55,6 @@ const MasterDetailControlRendererTester: RendererTester = function(element: IUIS
 class MasterDetailCollectionDirective implements ng.IDirective {
 
     restrict = 'E';
-    replace = true;
     scope = {
         properties: '=',
         instance: '=',
@@ -136,7 +135,6 @@ class MasterDetailMember implements angular.IDirective {
     }
 
     restrict = 'E';
-    replace = true;
     scope = {
         childSchema: '=',
         childData: '=',

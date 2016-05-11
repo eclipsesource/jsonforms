@@ -5,13 +5,15 @@ import {IUISchemaElement} from '../../../../jsonforms';
 
 class VerticalDirective implements ng.IDirective {
     restrict = 'E';
-    template = `<jsonforms-layout class="jsf-vertical-layout">
-        <fieldset class="row">
-            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" 
-                             ui-schema="child" 
-                             class="col-sm-100">
-            </jsonforms-inner>
-        </fieldset>
+    template = `<jsonforms-layout>
+        <div class="jsf-vertical-layout">
+            <fieldset class="row">
+                <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" 
+                                 ui-schema="child" 
+                                 class="col-sm-100">
+                </jsonforms-inner>
+            </fieldset>
+        </div>    
     </jsonforms-layout>`;
     controller = VerticalController;
     controllerAs = 'vm';

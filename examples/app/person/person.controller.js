@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('makeithappen').controller('LocalController', function() {
+angular.module('makeithappen').controller('PersonController', function() {
     var vm = this;
     vm.schema = {
         "type": "object",

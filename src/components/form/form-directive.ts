@@ -154,7 +154,6 @@ export interface JsonFormsDirectiveScope extends ng.IScope {
 export class JsonFormsDirective implements ng.IDirective {
 
     restrict = 'E';
-    replace = true;
     template = require('./form.html');
     controller = FormController;
     controllerAs = 'vm';
@@ -204,11 +203,9 @@ export interface JsonFormsInnerDirectiveScope extends ng.IScope {
 export class JsonFormsInnerDirective implements ng.IDirective {
 
     restrict = 'E';
-    replace = true;
     template = require('./form.html');
     controller = InnerFormController;
     controllerAs = 'vm';
-    // we can't use bindToController because we want watchers
     bindToController = {
         uiSchema: '='
     };

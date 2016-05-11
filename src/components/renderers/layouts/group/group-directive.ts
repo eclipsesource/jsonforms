@@ -6,14 +6,16 @@ import {IUISchemaElement} from '../../../../jsonforms';
 class GroupDirective implements ng.IDirective {
     restrict = 'E';
     template = `
-    <jsonforms-layout class="jsf-group">
-        <fieldset class="row">
-            <legend ng-if="vm.label">{{vm.label}}</legend>
-            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" 
-                             ui-schema="child" 
-                             class="col-sm-100">                             
-            </jsonforms-inner>
-        </fieldset>
+    <jsonforms-layout>
+        <div class="jsf-group">
+            <fieldset class="row">
+                <legend ng-if="vm.label">{{vm.label}}</legend>
+                <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" 
+                                 ui-schema="child" 
+                                 class="col-sm-100">                             
+                </jsonforms-inner>
+             </fieldset>
+        </div>
     </jsonforms-layout>`;
     controller = GroupController;
     controllerAs = 'vm';
