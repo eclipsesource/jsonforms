@@ -10,7 +10,7 @@ class HorizontalDirective implements ng.IDirective {
     controller = HorizontalController;
     controllerAs = 'vm';
 }
-interface HorizontalControllerScope extends ng.IScope {
+export interface HorizontalControllerScope extends ng.IScope {
 }
 export class HorizontalController  extends AbstractLayout {
     static $inject = ['$scope'];

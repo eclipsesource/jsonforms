@@ -7,9 +7,9 @@ angular.module('makeithappen', [
     'jsonforms-bootstrap'
 ]).config(['$routeProvider',
     function($routeProvider) {
-        $routeProvider.when('/local', {
-            templateUrl: 'app/local/local.html',
-            controller: 'LocalController',
+        $routeProvider.when('/person', {
+            templateUrl: 'app/person/person.html',
+            controller: 'PersonController',
             controllerAs: 'vm'
         }).when('/editor', {
             templateUrl: 'app/editor/editor.html',

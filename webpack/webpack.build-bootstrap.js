@@ -8,7 +8,7 @@ module.exports = {
         './src/bootstrap/jsonforms_bootstrap.ts'
     ],
     output: {
-        filename: 'build-bootstrap.js',
+        filename: 'jsonforms-bootstrap.js',
         path: 'dist/js'
     },
     plugins: [

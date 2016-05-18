@@ -17,11 +17,13 @@ class MasterDetailController extends AbstractControl {
     private selectedSchema: SchemaElement;
     constructor(scope: MasterDetailControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
+        this.scope['select'] = (child, schema) => this.select(child, schema);
         this.subSchema = this.pathResolver.resolveSchema(this.schema, this.schemaPath);
     }
     public select(selectedChild: any, selectedSchema: SchemaElement) {
         this.selectedChild = selectedChild;
         this.selectedSchema = selectedSchema;
+        this.scope['selectedChild'] = selectedChild;
     }
 }
 const MasterDetailControlRendererTester: RendererTester = function(element: IUISchemaElement,
@@ -36,61 +38,82 @@ const MasterDetailControlRendererTester: RendererTester = function(element: IUIS
     return NOT_FITTING;
 };
 
-class MasterDetailCollectionDirective implements ng.IDirective {
-
-    restrict = 'E';
-    scope = {
-        properties: '=',
-        instance: '=',
-        select: '&'
-    };
-    templateUrl = 'masterdetail-collection.html';
-    link = (scope) => {
-        scope.filter = (properties) => {
-            let result = {};
-            angular.forEach(properties, (value, key) => {
-                if (value.type === 'array' && value.items.type === 'object') {
-                    result[key] = value;
-                }
-            });
-            return result;
-        };
-        scope.selectElement = (child, value) => {
-            scope.selectedChild = child;
-            scope.selectedSchema = value.items;
-            scope.select({child: scope.selectedChild, childSchema: scope.selectedSchema});
-        };
-        scope.hasKeys = (schemaToCheck) =>
-            _.keys(scope.filter(schemaToCheck.properties)).length > 0;
-        scope.isEmptyInstance = (key) =>
-            scope.instance[key] === undefined || scope.instance[key].length === 0;
-    };
+class MasterDetailCollectionController {
+    static $inject = ['$scope'];
+    public instance: any;
+    public properties: any;
+    constructor(private scope) {
+        this.scope['filter'] = this.filter;
+    }
+    public filter(properties) {
+        let result = {};
+        angular.forEach(properties, (value, key) => {
+            if (value.type === 'array' && value.items.type === 'object') {
+                result[key] = value;
+            }
+        });
+        return result;
+    }
+    public get selectedChild() {
+        return this.scope.selectedChild;
+    }
+    public selectElement (child, value) {
+        this.scope.select(child, value.items);
+    }
+    public hasKeys (schemaToCheck) {
+        return _.keys(this.filter(schemaToCheck.properties)).length > 0;
+    }
+    public isEmptyInstance (object, key) {
+        return object[key] === undefined || object[key].length === 0;
+    }
 }
+class MasterDetailCollectionDirective implements ng.IDirective {
+    restrict = 'E';
+    controller = MasterDetailCollectionController;
+    controllerAs = 'vm';
+    bindToController = {
+        properties: '=',
+        instance: '='
+    };
+    scope = true;
+    templateUrl = 'masterdetail-collection.html';
+}
+class MasterDetailMemberController {
+    static $inject = ['$compile', '$scope'];
+    public childSchema: any;
+    public childData: any;
+    public element: any;
+    constructor(
+        private $compile: ng.ICompileService,
+        private scope: any
+    ) { }
+    init() {
+        if (_.keys(this.scope.filter(this.childSchema.properties)).length !== 0) {
+            this.$compile(
+                `<jsonforms-masterdetail-collection
+                            properties="vm.childSchema.properties"
+                            instance="vm.childData">
+                </jsonforms-masterdetail-collection>`
+            )
+            (this.scope, (cloned) => this.element.replaceWith(cloned));
+        }
+    }
+}
+
 
 class MasterDetailMember implements angular.IDirective {
 
-    constructor(private $compile: ng.ICompileService) {
-
-    }
-
     restrict = 'E';
-    scope = {
+    controller = MasterDetailMemberController;
+    controllerAs = 'vm';
+    bindToController = {
         childSchema: '=',
-        childData: '=',
-        select: '&',
-        filter: '&'
+        childData: '='
     };
-    link = (scope, element) => {
-        if (Object.keys(scope.filter(scope.childSchema.properties)).length !== 0) {
-            this.$compile(
-                `<jsonforms-masterdetail-collection
-                            select="select"
-                            properties="childSchema.properties"
-                            instance="childData">
-                </jsonforms-masterdetail-collection>`
-            )
-            (scope, (cloned) => element.replaceWith(cloned));
-        }
+    scope = true;
+    link = (scope, el, attrs, ctrl) => {
+        ctrl.element = el;
+        ctrl.init();
     }
 }
 
@@ -108,7 +131,5 @@ export default angular
             require('./masterdetail-collection.html'));
     }])
     .directive('jsonformsMasterdetailCollection', () => new MasterDetailCollectionDirective())
-    .directive('jsonformsMasterdetailMember', ['$compile', ($compile) =>
-        new MasterDetailMember($compile)]
-    )
+    .directive('jsonformsMasterdetailMember', () => new MasterDetailMember())
     .name;

@@ -1,9 +1,11 @@
 <jsonforms-layout class="jsf-group">
-    <fieldset class="row">
-        <legend ng-if="vm.label">{{vm.label}}</legend>
-        <jsonforms-inner ng-repeat="child in vm.uiSchema.elements"
-                         ui-schema="child"
-                         class="col-sm-100">
-        </jsonforms-inner>
-    </fieldset>
+    <div class="jsf-group">
+        <fieldset class="row">
+            <legend ng-if="vm.label">{{vm.label}}</legend>
+            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements"
+                             ui-schema="child"
+                             class="col-sm-100">
+            </jsonforms-inner>
+        </fieldset>
+    </div>
 </jsonforms-layout>

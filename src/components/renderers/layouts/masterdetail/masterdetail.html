@@ -2,8 +2,7 @@
     <!-- Master -->
     <div class="jsf-masterdetail-master">
         <jsonforms-masterdetail-collection properties="vm.subSchema.properties"
-                                           instance="vm.data"
-                                           select="vm.select(child,childSchema)">
+                                           instance="vm.data">
         </jsonforms-masterdetail-collection>
     </div>
     <!-- Detail -->
@@ -13,18 +12,61 @@
     <style>
     .jsf-masterdetail {
         display: flex;
+        border: 1px solid;
     }
     .jsf-masterdetail>div{
-        margin:0 0.25em;
+        margin:0.25em;
         min-width: 2em;
+        border: 1px solid;
     }
     .jsf-masterdetail>.jsf-masterdetail-master{
         flex:3 1 0.3vw;
-        margin-left: 0;
     }
     .jsf-masterdetail>.jsf-masterdetail-detail{
         flex:7 1 0.7vw;
-        margin-right: 0;
+        padding: 0.5em;
+    }
+    .jsf-masterdetail ul {
+        list-style-type: none;
+        cursor: default;
+        padding: 0.5em;
+        margin: 0;
+    }
+    .jsf-masterdetail .jsf-masterdetail-properties {
+    }
+    .jsf-masterdetail .jsf-masterdetail-properties > li{
+        border: 1px solid;
+        margin-top: 0.25em;
+    }
+    .jsf-masterdetail .jsf-masterdetail-properties > li:first-child{
+        margin-top: 0;
+    }
+    .jsf-masterdetail .jsf-masterdetail-properties .jsf-masterdetail-empty {
+        display: none;
+    }
+    .jsf-masterdetail .jsf-masterdetail-entries {
+    }
+    .jsf-masterdetail .jsf-masterdetail-entries > li{
+        border: 1px solid;
+        margin-top: 0.25em;
+    }
+    .jsf-masterdetail .jsf-masterdetail-entries > li:first-child{
+        margin-top: 0;
+    }
+    .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry,
+    .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-property{
+        display: inline-block;
+        padding: 0.25em;
+    }
+    .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover,
+    .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry-selected{
+        background-color: lightgrey;
+    }
+    .jsf-masterdetail .jsf-masterdetail-master .glyphicon-chevron-right:after{
+          content:"\2003 \25B6"
+    }
+    .jsf-masterdetail .jsf-masterdetail-master .glyphicon-chevron-down:after{
+          content:"\2003 \25BC"
     }
     </style>
 </div>
