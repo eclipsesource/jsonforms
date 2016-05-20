@@ -1,0 +1,11 @@
+<jsonforms-control>
+      <input type="date"
+             close-text="Close"
+             is-open="vm.isOpen"
+             id="{{vm.id}}"
+             class="form-control jsf-control-datetime"
+             ng-change='vm.modelChanged()'
+             ng-model="vm.dt"
+             ng-model-options="{timezone:'UTC'}"
+             ng-readonly="vm.uiSchema.readOnly"/>
+</jsonforms-control>

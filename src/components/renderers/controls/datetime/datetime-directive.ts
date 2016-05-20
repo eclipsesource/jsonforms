@@ -5,24 +5,13 @@ import {IUISchemaElement} from '../../../../jsonforms';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-control>
-          <input type="date"
-                 close-text="Close"
-                 is-open="vm.isOpen"
-                 id="{{vm.id}}"
-                 class="form-control jsf-control-datetime"
-                 ng-change='vm.modelChanged()'
-                 ng-model="vm.dt"
-                 ng-model-options="{timezone:'UTC'}"
-                 ng-readonly="vm.uiSchema.readOnly"/>
-    </jsonforms-control>`;
+    templateUrl = 'datetime.html';
     controller = DateTimeController;
     controllerAs = 'vm';
 }
-interface DateTimeControllerScope extends ng.IScope {
+export interface DateTimeControllerScope extends ng.IScope {
 }
-class DateTimeController extends AbstractControl {
+export class DateTimeController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
     private dt: Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
@@ -67,4 +56,7 @@ export default angular
     .run(['RendererService', RendererService =>
             RendererService.register('datetime-control', DateTimeControlRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('datetime.html', require('./datetime.html'));
+    }])
     .name;

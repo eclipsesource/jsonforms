@@ -1,60 +1,26 @@
 import {RendererTester, NOT_FITTING} from '../../../components/renderers/renderer-service';
-import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl} from '../../../components/renderers/controls/abstract-control';
 import {IUISchemaElement} from '../../../jsonforms';
+import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
+import {DateTimeController, DateTimeControllerScope} from
+    '../../../components/renderers/controls/datetime/datetime-directive';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-control>
-        <div class="input-group">
-          <input type="text"
-                 uib-datepicker-popup="dd.MM.yyyy"
-                 close-text="Close"
-                 is-open="vm.isOpen"
-                 id="{{vm.id}}"
-                 class="form-control jsf-control-datetime"
-                 ng-change='vm.modelChanged()'
-                 ng-model="vm.dt"
-                 ng-model-options="{timezone:'UTC'}"
-                 ng-readonly="vm.uiSchema.readOnly"/>
-             <span class="input-group-btn">
-               <button type="button" class="btn btn-default" ng-click="vm.openDate()">
-                 <i class="glyphicon glyphicon-calendar"></i>
-               </button>
-             </span>
-        </div>
-    </jsonforms-control>`;
-    controller = DateTimeController;
+    templateUrl = 'datetimeBootstrap.html';
+    controller = DateTimeBootstrapController;
     controllerAs = 'vm';
 }
-interface DateTimeControllerScope extends ng.IScope {
-}
-class DateTimeController extends AbstractControl {
+class DateTimeBootstrapController extends DateTimeController {
     static $inject = ['$scope', 'PathResolver'];
     private isOpen: boolean = false;
-    private dt: Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
-        let value = this.modelValue[this.fragment];
-        if (value) {
-            this.dt = new Date(value);
-        }
     }
     public openDate() {
         this.isOpen = true;
     }
-    protected modelChanged() {
-        if (this.dt != null) {
-            // returns a string in the form 'yyyy-mm-dd'
-            this.modelValue[this.fragment] = this.dt.toISOString().substr(0, 10);
-        } else {
-            this.modelValue[this.fragment] = null;
-        }
-        super.modelChanged();
-    }
 }
-const DateTimeControlRendererTester: RendererTester = function(element: IUISchemaElement,
+const DateTimeControlBootstrapRendererTester: RendererTester = function(element: IUISchemaElement,
                                                              dataSchema: any,
                                                              dataObject: any,
                                                              pathResolver: IPathResolver) {
@@ -68,12 +34,15 @@ const DateTimeControlRendererTester: RendererTester = function(element: IUISchem
     }
     return NOT_FITTING;
 };
-
 export default angular
     .module('jsonforms-bootstrap.renderers.controls.datetime',
         ['jsonforms-bootstrap.renderers.controls'])
     .directive('datetimeBootstrapControl', () => new DateTimeDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('datetime-bootstrap-control', DateTimeControlRendererTester)
+            RendererService.register('datetime-bootstrap-control',
+                DateTimeControlBootstrapRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('datetimeBootstrap.html', require('./datetimeBootstrap.html'));
+    }])
     .name;
