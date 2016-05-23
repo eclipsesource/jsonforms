@@ -8,7 +8,7 @@
   "license": "MIT",
   "main": "/",
   "scripts": {
-    "start": "webpack --config webpack/webpack.dev.js --watch --NODE_ENV=dev",
+    "dev": "webpack --config webpack/webpack.dev.js; webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "test": "karma start --NODE_ENV=test",
     "build": "webpack --config webpack/webpack.build.js --NODE_ENV=production --display-error-details",
     "postinstall": "typings install",
@@ -72,6 +72,7 @@
     "typings": "0.6.5",
     "url-loader": "0.5.7",
     "wallaby-webpack": "0.0.11",
-    "webpack": "1.12.12"
+    "webpack": "1.12.12",
+    "webpack-dev-server": "^1.14.1"
   }
 }

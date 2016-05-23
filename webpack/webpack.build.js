@@ -3,6 +3,7 @@ var webpack = require('webpack');
 
 
 module.exports = {
+    devtool: 'source-map',
     entry: [
         "bootstrap-webpack!./bootstrap.config.js",
         './src/index.ts'
@@ -26,7 +27,6 @@ module.exports = {
             'window.jquery': 'jquery'
         })
     ],
-    devtool: 'source-map',
     resolve: {
         root: __dirname,
         extensions: ['', '.ts', '.js', '.json']

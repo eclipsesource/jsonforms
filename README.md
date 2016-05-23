@@ -14,6 +14,7 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 # Build & Testing
 * Build: `npm run build` (runs `tslint` as well)
 * Test: `npm run test`
+* Watch: `npm run dev`, point your browser to `http://localhost:8080/webpack-dev-server/`
 
 # Usage
 1. Install JSON Forms via `npm install jsonforms` and require it via `require('jsonforms')`

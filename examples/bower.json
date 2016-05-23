@@ -1,0 +1,20 @@
+{
+  "name": "examples",
+  "homepage": "https://github.com/edgarmueller/jsonforms",
+  "authors": [
+    "Edgar Mueller <edgar.m.mueller@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-route": "^1.5.5"
+  }
+}

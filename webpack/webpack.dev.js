@@ -1,14 +1,17 @@
-
 var loaders = require("./loaders");
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 
 module.exports = {
-    entry: ['./src/index.ts'],
+    devtool: 'cheap-eval-source-map',
+    entry: [
+        'webpack-dev-server/client?http://localhost:8080',
+        'webpack/hot/dev-server',
+        './src/index.ts'
+    ],
     output: {
         filename: 'jsonforms.js',
-        path: 'dist/js'
+        path: 'dist',
+        publicPath: '/assets/'
     },
     resolve: {
         root: __dirname,
@@ -17,23 +20,12 @@ module.exports = {
     resolveLoader: {
         modulesDirectories: ["node_modules"]
     },
-    devtool: "source-map",
+    devServer: {
+        contentBase: './examples',
+    },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './src/index.html',
-            inject: 'body',
-            hash: true
-        }),
-        new BrowserSyncPlugin({
-            host: 'localhost',
-            port: 8080,
-            server: {
-                baseDir: 'dist'
-            },
-            ui: false,
-            online: false,
-            notify: false
-        }),
+        new webpack.HotModuleReplacementPlugin(),
+        // TODO
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
