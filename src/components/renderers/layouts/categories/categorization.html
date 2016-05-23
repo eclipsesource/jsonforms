@@ -11,35 +11,4 @@
             <jsonforms-inner ng-if="vm.selectedCategory" ng-repeat="child in vm.selectedCategory.elements" ui-schema="child"></jsonforms-inner>
         </fieldset>
     </div>
-    <style>
-        .jsf-categorization ul {
-            list-style-type: none;
-            cursor: default;
-            padding: 0;
-            margin: 0;
-        }
-        .jsf-categorization .jsf-categorization-master .jsf-category-entry{
-            display: block;
-        }
-        .jsf-categorization .jsf-categorization-master .jsf-category-entry:hover,
-        .jsf-categorization .jsf-categorization-master .jsf-category-entry.selected{
-            background-color: lightgrey;
-        }
-        .jsf-categorization {
-            display: flex;
-            border: 1px solid;
-        }
-        .jsf-categorization>div, .jsf-categorization>fieldset{
-            margin:0.25em;
-            min-width: 2em;
-            border: 1px solid;
-            padding: 0.5em;
-        }
-        .jsf-categorization>.jsf-categorization-master{
-            flex:3 1 0.3vw;
-        }
-        .jsf-categorization>.jsf-categorization-detail{
-            flex:7 1 0.7vw;
-        }
-    </style>
 </jsonforms-layout>

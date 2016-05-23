@@ -1,7 +1,9 @@
 <jsonforms-layout>
     <div class="jsf-vertical-layout">
-        <fieldset>
-            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" ui-schema="child"></jsonforms-inner>
+        <fieldset class="jsf-vertical-layout-container">
+            <div ng-repeat="child in vm.uiSchema.elements">
+                <jsonforms-inner ui-schema="child"></jsonforms-inner>
+            </div>
         </fieldset>
     </div>
 </jsonforms-layout>

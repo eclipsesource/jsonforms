@@ -1,5 +1,3 @@
-require('./masterdetail.css');
-
 export default angular
     .module('jsonforms-bootstrap.renderers.layouts.masterdetail',
         ['jsonforms.renderers.layouts', 'jsonforms-bootstrap'])

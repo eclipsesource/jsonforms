@@ -1,4 +1,3 @@
-require('./group.css');
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
