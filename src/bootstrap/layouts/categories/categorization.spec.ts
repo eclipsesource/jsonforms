@@ -1,13 +1,13 @@
 import "angular"
 import "angular-mocks"
-import "../../../../index.ts"
+import "../../jsonforms_bootstrap.ts"
 
-describe('Categorization', () => {
+describe('CategorizationBootstrap', () => {
 
     // load all necessary modules and templates
     beforeEach(angular.mock.module('jsonforms.form'));
 
-    it("should be rendered",
+    xit("should be rendered",
         angular.mock.inject(($rootScope, $compile) => {
 
         let scope = $rootScope.$new();

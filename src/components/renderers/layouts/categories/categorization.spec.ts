@@ -52,7 +52,7 @@ describe('Categorization', () => {
         scope.data = { "name": "John Doe "};
         let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        expect(el.html()).toContain('heading="Tab1"');
-        expect(el.html()).toContain('heading="MyTab2"');
+        expect(el.html()).toContain('>Tab1</span>');
+        expect(el.html()).toContain('>MyTab2</span>');
     }));
 });
