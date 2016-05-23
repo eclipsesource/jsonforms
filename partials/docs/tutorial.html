@@ -1,0 +1,155 @@
+
+<!-- actual site -->
+<h1 class="red-text">RENDERER TUTORIAL</h1>
+<p>
+    <i>Disclaimer</i>: This is only a draft version of the article, it's likely things change. Nevertheless it should give readers a good starting point.
+</p>
+<p>
+    This article introduces the basic architecture of the rendering components within JSON Forms. We'll first take a look at how a single renderer works. Then, we'll describe the <code>RenderService</code>, which acts as a registry for renderers and as the entry point for any JSON Forms based application.
+</p>
+<h2>Renderer</h2>
+<p>
+    Simply said, a renderer is responsible for displaying a single UI schema element and also maintaining its possible state, if it has any (e.g. validation markers and the like). A renderer hence needs to conform to the following (preliminary) interface (TypeScript):
+
+<div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:160px">
+    interface IRenderer {
+    isApplicable(element: IUISchemaElement, subSchema: SchemaElement, schemaPath: string): boolean
+
+    render(element: IUISchemaElement, schema: SchemaElement,
+    schemaPath: string, dataProvider: IDataProvider): IRenderDescription
+
+    priority: number
+    }
+</div>
+</p>
+<p>
+    The <code>isApplicable</code> method determines whether a renderer is capable of rendering the current UI schema element. The current UI schema element hereby refers to the currently visited part of the UI schema since the whole UI schema is traversed in a depth-first fashion.
+    If the UI schema element is a Control, i.e. whether it refers to a specific sub part of the schema via the control's <code>scope</code> property, the <code>isApplicable</code> method is also passed that specific sub part of the schema together with the according schema path. This means, for all UI schema element which are not controls, the passed <code>subSchema</code> and <code>schemaPath</code> are possibly <code>undefined</code>.
+</p>
+<p>
+    It is possible that multiple renderers are capable of rendering a UI schema element. This is why each renderer needs to specify a <code>priority</code> of type <code>number</code>. The renderer with the highest priority will be picked. In genereal, the more specific renderers get, the higher will be their <code>priority</code>.
+</p>
+<p>
+    Here’s an exemplary implementation of the <code>isApplicable</code> method taken from the default implementation of the <code>IntegerControl</code>:
+
+<div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:100px">
+    isApplicable(uiElement: IUISchemaElement, subSchema: SchemaElement, schemaPath: string):boolean {
+    // note that subSchema and schemaPath are potentially undefined
+    return uiElement.type == 'Control' && subSchema != undefined && subSchema.type == 'integer';
+    }
+</div>
+</p>
+<p>
+    Finally, the <code>render</code> method of the <code>IRenderer</code> interface, which will be called, whenever a renderer has been selected, is responsible for actually creating a object we call <code>RenderDescription</code>. This object contains all relevant information to render a UI schema element, which are the following:
+<ul>
+    <li><code>type</code>: determines the type, which currently can be either <code>Control</code> or <code>Layout</code></li>
+    <li><code>size</code>: a value ranging from 0 - 99 that determines how much horizontal space this widget should occupy, where <code>99</code> determines all available space</li>
+    <li><code>template</code> or <code>templateUrl</code>: the actual template HTML string to be rendered or a relative path to the file containing it. Templates are just regular <code>HTML</code>, but need to be wrapped in a <code>&lt;control&gt;</code> or <code>&lt;layout&gt;</code> element, depending on the type of the rendered element.</li>
+</ul>
+</p>
+<p>
+    For controls (type <code>Control</code>), you need to set some more properties:
+<ul>
+    <li><code>instance</code>: the instance to be rendered</li>
+    <li><code>schemaPath</code>: the schema path to the property which should be rendered. This will hence point to a specific property of the <code>instance</code>.</li>
+    <li><code>schema</code>: the overall schema</li>
+</ul>
+</p>
+<p>
+    Because it seems likely to forget one of these properties when creating a control, JSON Forms also provides helper classes which do most of the initialization themselfes. Below is an example that is taken from the implementation of the <code>IntegerControl</code>. Note also, that the <code>render</code> method is passed the complete schema and not the sub schema as it is the case with <code>isApplicable</code>. Also, it features a parameter of type <code>IDataProvider</code>. We'll won't go into detail about data provider in this article, so it's enough to know for now that it provides the current instance via its <code>data</code> property.
+</p>
+<div ui-ace="appCtrl.configAce('typescript')" readonly flex="none" style="height:240px">
+    render(element:jsonforms.services.UISchemaElement, schema: SchemaElement,
+    schemaPath: string, dataProvider: jsonforms.services.IDataProvider) {
+
+    var control =  new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath);
+    control['template'] =
+    `&lt;control&gt;
+    &lt;input type="number" step="1" id="${schemaPath}"
+    class="form-control jsf-control jsf-control-integer"
+    data-jsonforms-validation
+    data-jsonforms-model/&gt;
+    &lt;/control&gt;`;
+    return control;
+    }
+</div>
+<p>
+    As you can see you only need to set the <code>template</code> property and you are good to go. The rest will be handled by the instantiated <code>ControlRenderDescription</code>.
+</p>
+<p>
+    While reading through the template you might have noticed the <code>data-jsonforms-validation</code> and <code>data-jsonforms-model</code> attributes which you’ll need to add if you want validation support and databinding to work ouf-of-the-box. Basically these are just shortcuts to set up databinding and the validation change listener that is triggered whenever the model is changed.
+</p>
+<h2>RenderService</h2>
+<p>
+    The <code>RenderService</code> is a registry for all available renderers within JSON Forms. Hence, when you provide a custom renderer, you'll also need register it with the RenderService. Furthermore it also acts as the entry point for any <code>render</code> calls within the framework itself. This is of interest in case you want to provide your own layout, since you'd then need to utilize the <code>RenderService</code> in order to retrieve <code>IRenderDescription</code> for all contained children of the layout.
+</p>
+<h2>Creating a custom renderer</h2>
+<p>
+    Armed with this knowledge let’s now move on and implement our own custom control render in Javascript. Clone the seed project in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies:
+</p>
+<div ui-ace="appCtrl.configAce('sh')" readonly flex="none" style="height:90px">
+    git clone https://github.com/eclipsesource/jsonforms-seed.git custom-control-tutorial
+    cd custom-control-tutorial
+    bower install
+</div>
+<p>
+    The seed project comes pre-configured with two <code>schema.js</code> and a <code>ui-schema.js</code> Javascript files that contain the JSON schema and the UI schema respectively.
+</p>
+<p>
+    The schema describes a User entity and features three basic data types and also contains a validation constraint <code>minLength</code>, which requires the <code>name</code> property to be at least three characters long.
+    The UI schema only consists of a <code>HorizontalLayout</code> with three Controls and is therefore left out here. In case you are interested nevertheless, have a look at the <code>js/ui-schema.js</code> file.
+</p>
+<p>
+    Let’s now create a custom control for the <code>name</code> property of a user. First we’ll need to execute <code>run</code> in order to register our control at the <code>RenderService</code> while the application is bootstrapping:
+</p>
+<div ui-ace="appCtrl.configAce('javascript')" readonly flex="none" style="height:80px">
+    app.run(['RenderService', function(RenderService) {
+    // TODO
+    }]);
+</div>
+<p>
+    We inject the <code>RenderService</code> which we'll need to register our control. Next we define the outline of the control and register it at the RenderService:
+</p>
+<div ui-ace="appCtrl.configAce('javascript')" readonly flex="none" style="height:230px">
+    app.run(['RenderService', function(RenderService) {
+
+    function MyControl() {
+    return {
+    priority: 100,
+    render: function(element, schema, schemaPath, dataProvider) { ... },
+    isApplicable: function(element, subSchema, schemaPath) { ... }
+    }
+    }
+
+    RenderService.register(new MyControl());
+    }]);
+</div>
+<p>
+    Since multiple controls will be applicable (the <code>StringControl</code> will also come in question), we need to set a higher priority than default control. User-defined controls should have set a priority >= 100, since 0 - 99 are reserved for the framework itself.
+</p>
+<p>
+    Let’s implement the last missing bits:
+<div ui-ace="{theme: 'solarized_dark'}" readonly flex="none" style="height:230px">
+    isApplicable: function (element, subSchema, schemaPath) {
+    // check whether the schema path contains name
+    return element.type == "Control" && schemaPath != undefined && schemaPath.indexOf("name") > -1;
+    }
+
+    render: function(element, schema, schemaPath, dataProvider) {
+    var control = new JSONForms.ControlRenderDescription(dataProvider.data, schemaPath);
+    control['template'] =
+    '&lt;control&gt;&lt;input type="text" style="background-color: #3278b3; color: #8dd0ff"' +
+    'class="form-control" data-jsonforms-model data-jsonforms-validation /&gt;&lt;/control&gt;';
+    return control;
+    }
+</div>
+</p>
+<p>
+    The <code>isApplicable</code> method checks whether the UI schema element is of type <code>Control</code> and whether the <code>schemaPath</code> contains <code>"name"</code>  as a fragment. If it does we know that the control is responsible for display a user's name.
+</p>
+<p>
+    The <code>render</code> method is pretty standard and is actually based on the default <code>StringControl</code> The only aspect that differs from the default implementation are additional style attributes that set a background and foreground color.
+</p>
+<p>
+    That's basically it. Open the <code>index.html</code> of the jsonforms-seed project and you should see your custom control in action.
+</p>

@@ -1,0 +1,26 @@
+<article flex="noshrink">
+    <div layout="column" flex="grow">
+        <h1 class="text-center grey-text"><strong>EXAMPLES</strong></h1>
+        <div layout="row" flex="grow" class="md-padding editor-demo">
+            <div layout="column" flex="grow" class="md-padding">
+                <label class="editor-label text-center" for="localDynamicModelEditor">JSON SCHEMA</label>
+                <div ui-ace="vm.configAce('json')" ng-model="vm.localDynamicModel" id="localDynamicModelEditor" flex="none"></div>
+            </div>
+            <div layout="column" flex="grow" class="md-padding">
+                <label class="editor-label text-center" for="localDynamicViewEditor">UI SCHEMA</label>
+                <div ui-ace="vm.configAce('json')" ng-model="vm.localDynamicView" id="localDynamicViewEditor" flex="none"></div>
+            </div>
+        </div>
+        <div layout="row" flex layout-align="center center">
+            <md-button class="md-raised md-primary" ng-click="vm.reparseDynamic()">Render view</md-button>
+        </div>
+        <div layout="column" layout-align="center center">
+            <div class="panel-body jsf">
+                <jsonforms schema="vm.localDynamicModelObject"
+                           ui-schema="vm.localDynamicViewObject"
+                           data="vm.dynamicDataProvider.data">
+                </jsonforms>
+            </div>
+        </div>
+    </div>
+</article>

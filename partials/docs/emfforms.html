@@ -1,0 +1,53 @@
+<h1 class="red-text"><a id="EMF_Forms_Integration_Guide_0"></a>EMF FORMS INTEGRATION</h1>
+<p>Make sure to read both <a href="http://eclipsesource.com/blogs/tutorials/getting-started-with-EMF-Forms/">EMF Forms</a> and <a href="https://github.com/eclipsesource/jsonforms/wiki/Getting-Started">JSONForms</a> “Getting started” tutorials to understand the following topic and setup for both frameworks.</p>
+<p>Both frameworks fulfill the same requirement based on two different technology stacks: Efficiently creating an User Interface based on a given Data Schema. In both frameworks, instead of manually coding the UI, it is described by an UI Schema. The name for this artefact is “UI Schema” in JSON Forms and “View Model” in EMF Forms. Both formats are compatible to each other, so it is possible to reuse it. Currently we offer an automatic transformation from a EMF Forms View Model to a JSON Forms UI Schema. Also we provide a transformation from an Ecore data model definition (used by EMF Forms) to a JSON Schema (used by JSON Forms). This allows to use the powerful Eclipse-based tooling for EMF Forms and EMF to create UI Schemas and JSON Schemas for JSON Forms.</p>
+<p>To use the integration, you need set up the Eclipse development environment, first.</p>
+<h2><a id="Preparations_8"></a>Preparations</h2>
+<h3><a id="Installing_Eclipse_10"></a>Installing Eclipse</h3>
+<p>First, you need to download Eclipse and install the Integration Tooling. For this purpose, use the latest <a href="https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/marsr">Eclipse Mars Modeling Edition</a>. Extract the archive and start Eclipse. When started, go to</p>
+<pre><code>Help &gt; Install New Software</code></pre>
+<p><img src="https://github.com/eclipsesource/jsonforms/wiki/images/install-new-software.png" alt="Menu for installing new software" class="tutorial-image"></p>
+<p>Add this <a href="http://download.eclipse.org/ecp/releases/releases_target_18">Update Site URL</a> and make sure to select ‘Group items by category’. You should see the EMFForms2JSONForms category, which you can activate. If you do not have EMF Forms and EMF Client Platform in version 1.8.x installed, also select the feature “ECP SDK 3.x” in the category &quot;All SDKs (install one of these). Press <em>Next</em>. Accept the EPL and click <em>Finish</em>. If prompted with a warning, that unsigned content is installed, press <em>OK</em> (Milestone builds are not signed). When the installation is finished, Eclipse will ask to restart. Please confirm to do so.</p>
+<h3><a id="Cloning_the_JSONForms_seed_project_20"></a>Cloning the JSONForms seed project</h3>
+<p>The <a href="https://github.com/eclipsesource/jsonforms-seed">JSONForms seed project</a> serves as a starting point for a JSONForms-based project. It includes everything you need to get started. Of course, you can also use your own JSON application.</p>
+<p>In order to use the JSON Forms seed project, first clone the project:</p>
+<p><code>git clone https://github.com/eclipsesource/jsonforms-seed.git</code></p>
+<p>When finished, switch to the directory and execute <code>bower install</code> (if you don’t have bower installed, please <a href="http://bower.io/#install-bower">see here</a> for detailed instructions how to do so) and your are done. You can open the <code>index.html</code> to see a very basic rendered form in action. The schema and UI schema which this template is based on, can be found in the <code>js/</code> sub directoy of the project (<code>schema.js</code> and <code>ui-schema.js</code> files respectively). Please see the <a href="https://github.com/eclipsesource/jsonforms/wiki/Getting%20Started">JSON Forms Getting Started</a> for more information about the JSON Forms seed project.</p>
+<h2><a id="Howto_30"></a>How-to</h2>
+<p>You’ll now need a EMF Forms View Model which can be exported. We’ll use the EMF Forms ‘Make it happen’ example model here. To create the example project, go to</p>
+<pre><code>New &gt; Examples &gt; EMF Forms &gt; Make it happen: view model</code></pre>
+<p>and follow the wizard. When finished, you’ll have three additional projects in your workspace. In the <code>org.eclipse.emf.ecp.makeithappen.viewmodel</code> project, open the context menu of your <code>viewmodels/User.view</code> model (right-click) and select</p>
+<pre><code>EMF Forms &gt; Export to JSONForms.</code></pre>
+<p><img src="https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-context-menu.png" alt="JSONForms export entry" class="tutorial-image"></p>
+<p>To understand what happens behind the scenes remember that each view has a “Root EClass”. The exporter generates a JSON Schema for that EClass as well as  a JSONForms UI Schema for the selected view.</p>
+<p>The JSON Schema Generator traverses all EStructuralFeatures of the corresponding EClass and generates a property for each one of them. Since JSONSchema uses a simpler set of attributes (number, integer, string and boolean) the Ecore datatypes are mapped to these types. To simplify the generated schemas we chose to embed referenced EClasses into the JSON Schema directly. Since this leads to a problem with circular references, all references which are pointing back to the original EClass are removed.</p>
+<p>The JSONForms UI Schema Generator traverses all elements of the given view generating each control with a reference to the corresponding datatype in the JSON Schema.</p>
+<p>But enough of the theory, let’s continue the example. After you selected the Export to JSONForms action from above, an exporter wizard shows up.</p>
+<p><img src="https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-wizard.png" alt="EMF Forms to JSONForms Wizard" class="tutorial-image"></p>
+<ol>
+    <li>
+        <p>The type of the generated model. The type is of the form <a href="http://EClass.name">EClass.name</a> + Model/View</p>
+    </li>
+    <li>
+        <p>The location where this generated schema will be saved to. By selecting <em>Browse</em> you can choose a workspace or filesystem location. Please overwrite the <code>schema.js</code> and the <code>ui-schema.js</code> in the <code>js</code> subdirectory of the seed project respectively when prompted for a location where to put the schema/UI schema.</p>
+    </li>
+    <li>
+        <p>By checking this option, the generated JSON data will be wrapped in JavaScript files according to the JSONForms seed project</p>
+    </li>
+    <li>
+        <p>The generated JSON Schema. If you want to change or edit the generated file just edit the conent of this textbox.</p>
+    </li>
+</ol>
+<p>For this example please check the optional “Wrap in JavaScript example” to wrap the generated schemas for the JSONForms seed project. For “UserModel” select the location of the “schema.js” file and for “UserView” select the location of the “ui-schema.js” of the JSONForms seed project.</p>
+<p>Now let’s startup the JSONForms application and let’s look at the result. You can do so by navigating to the jsonforms-seed folder and open the <code>index.html</code> file.</p>
+<p><img src="https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-rendered-form.png" alt="Rendered form" class="tutorial-image"></p>
+<p>You are encouraged to play around with the View model and re-export it as often as you want. If you have any questions or problems you can either <a href="https://github.com/eclipsesource/jsonforms/issues/new">open an issue</a> or drop us a mail at <code>info@jsonforms.org</code>.</p>
+<h2><a id="Current_limitations_68"></a>Current limitations</h2>
+<p>The current implementation of the JSONForms has some limitations which will be fixed soon. Currently these limitations are:</p>
+<ul>
+    <li>per type only a single reference is considered during the export, i.e. when there are multiple references with the same type only one will be considered during the export</li>
+    <li>certain layouts and widgets like Categorizations or custom controls are not yet supported</li>
+    <li>no support for rules yet</li>
+</ul>
+<p>If you find anything that is missing or broken please do not hesitate to <a href="https://github.com/eclipsesource/jsonforms/issues/new">open an issue</a>.</p>
+
