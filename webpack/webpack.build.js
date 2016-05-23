@@ -12,13 +12,13 @@ module.exports = {
         path: 'dist'
     },
     plugins: [
-        // new webpack.optimize.UglifyJsPlugin(
-        //     {
-        //         warning: false,
-        //         mangle: true,
-        //         comments: false
-        //     }
-        // ),
+        new webpack.optimize.UglifyJsPlugin(
+            {
+                warning: false,
+                mangle: true,
+                comments: false
+            }
+        ),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
