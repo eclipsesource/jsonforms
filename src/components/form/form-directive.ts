@@ -1,4 +1,5 @@
 import 'angular';
+let JsonRefs = require('json-refs');
 
 import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {IUISchemaGenerator} from '../generators/generators';
@@ -6,7 +7,7 @@ import {ISchemaGenerator} from '../generators/generators';
 import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {IUiSchemaProvider} from '../services/services';
 import {ValidationService} from '../services/services';
-import {SchemaProvider} from '../services/services';
+import {ISchemaProvider, SchemaProvider} from '../services/services';
 import {ScopeProvider} from '../services/services';
 import {PathResolverService} from '../services/services';
 import {Services, ServiceId} from '../services/services';
@@ -82,33 +83,49 @@ export class FormController {
             let schema = values[0];
             this.uiSchema = <IUISchemaElement> values[1];
             let data = values[2];
-
-            let dataProvider: IDataProvider;
-            let services = new Services();
-
-            services.add(new PathResolverService(new PathResolver()));
-            services.add(new ScopeProvider(this.scope));
-            services.add(new SchemaProvider(schema));
-            services.add(new ValidationService());
-            services.add(new RuleService(this.PathResolver));
-
-            if (FormController.isDataProvider(this.scope.data)) {
-                dataProvider = this.scope.data;
+            // this.render(schema, data);
+            let unresolvedRefs = JsonRefs.findRefs(schema);
+            if (unresolvedRefs === undefined || Object.keys(unresolvedRefs).length === 0) {
+                this.render(schema, data);
             } else {
-                dataProvider = new DefaultDataProvider(this.$q, data);
+                JsonRefs.resolveRefs(schema).then(
+                    res => {
+                        this.render(res.resolved, data);
+                        // Eugen: don't understand why this is needed in the remote case
+                        this.scope.$digest();
+                    },
+                    err => {
+                        console.log(err.stack);
+                    }
+                );
             }
-
-            services.add(dataProvider);
-
-            this.childScope = this.scope.$new();
-            this.childScope['services'] = services;
-            this.childScope['uiSchema'] = this.uiSchema;
-            let template = this.rendererService.getBestComponent(
-                this.uiSchema, schema, dataProvider.getData());
-            let compiledTemplate = this.$compile(template)(this.childScope);
-            angular.element(this.element.find('form')).append(compiledTemplate);
-            this.scope.$root.$broadcast('modelChanged');
         });
+    }
+    private render(schema: SchemaElement, data: any) {
+        let dataProvider: IDataProvider;
+        let services = new Services();
+        services.add(new PathResolverService(new PathResolver()));
+        services.add(new ScopeProvider(this.scope));
+        services.add(new SchemaProvider(schema));
+        services.add(new ValidationService());
+        services.add(new RuleService(this.PathResolver));
+
+        if (FormController.isDataProvider(this.scope.data)) {
+            dataProvider = this.scope.data;
+        } else {
+            dataProvider = new DefaultDataProvider(this.$q, data);
+        }
+
+        services.add(dataProvider);
+
+        this.childScope = this.scope.$new();
+        this.childScope['services'] = services;
+        this.childScope['uiSchema'] = this.uiSchema;
+        let template = this.rendererService.getBestComponent(
+            this.uiSchema, schema, dataProvider.getData());
+        let compiledTemplate = this.$compile(template)(this.childScope);
+        angular.element(this.element.find('form')).append(compiledTemplate);
+        this.scope.$root.$broadcast('modelChanged');
     }
 
     private fetchSchema() {
@@ -186,8 +203,8 @@ export class InnerFormController {
     init() {
         let services: Services = this.scope['services'];
         let data = services.get<IDataProvider>(ServiceId.DataProvider).getData();
-        let template = this.rendererService.getBestComponent(this.uiSchema,
-            this.scope['schema'], data);
+        let schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
+        let template = this.rendererService.getBestComponent(this.uiSchema, schema, data);
         this.scope['uiSchema'] = this.uiSchema;
         let compiledTemplate = this.$compile(template)(this.scope);
 
