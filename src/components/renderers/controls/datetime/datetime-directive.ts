@@ -40,6 +40,7 @@ class DateTimeController extends AbstractControl {
         if (value) {
             this.dt = new Date(value);
         }
+        scope.$watch('vm.modelValue[vm.fragment]', (newValue) => {this.updateDateObject(); });
     }
     public openDate() {
         this.isOpen = true;
@@ -52,6 +53,9 @@ class DateTimeController extends AbstractControl {
             this.modelValue[this.fragment] = null;
         }
         super.modelChanged();
+    }
+    private updateDateObject() {
+        this.dt = new Date(this.modelValue[this.fragment]);
     }
 }
 const DateTimeControlRendererTester: RendererTester = function(element: IUISchemaElement,
