@@ -1,10 +1,9 @@
 var loaders = require("./loaders");
 var webpack = require('webpack');
-
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: [
-        // "bootstrap-webpack!./bootstrap.config.js",
         './src/index.ts'
     ],
     output: {
@@ -24,7 +23,10 @@ module.exports = {
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
             'window.jquery': 'jquery'
-        })
+        }),
+        new CopyWebpackPlugin([
+            { from: 'src/jsonforms.css' }
+        ])
     ],
     devtool: 'source-map',
     resolve: {

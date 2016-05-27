@@ -26,7 +26,7 @@ export class DateTimeController extends AbstractControl {
         if (this.dt != null) {
             // returns a string in the form 'yyyy-mm-dd'
             this.modelValue[this.fragment] = this.dt.toISOString().substr(0, 10);
-        }else {
+        } else {
             this.modelValue[this.fragment] = null;
         }
         super.modelChanged();

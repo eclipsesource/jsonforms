@@ -1,6 +1,3 @@
-
-import './control.css';
-
 class ControlDirective implements ng.IDirective {
     restrict    = 'E';
     transclude  = true;

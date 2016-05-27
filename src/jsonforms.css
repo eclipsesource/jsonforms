@@ -7,6 +7,17 @@
     border-color: rgb(169, 169, 169);
     box-sizing: content-box;
 }
+.jsf label {
+    display: block;
+    min-height: 20px;
+}
+.jsf .jsf-control alert {
+    background-color: #FF263F;
+    display: flex;
+    border: 1px solid #ebccd1;
+    margin-top: 0.5em;
+    padding: 0.25em;
+}
 .jsf-control-boolean {
     align-self: center;
     min-height: 1.5em;
