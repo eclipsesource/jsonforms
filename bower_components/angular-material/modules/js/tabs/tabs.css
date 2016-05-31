@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.1.0-rc4-master-c26842a
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 @-webkit-keyframes md-tab-content-hide {
   0% {
     opacity: 1; }
@@ -70,7 +75,9 @@ md-tabs {
 
 md-tabs-wrapper {
   display: block;
-  position: relative; }
+  position: relative;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0); }
   md-tabs-wrapper md-prev-button, md-tabs-wrapper md-next-button {
     height: 100%;
     width: 32px;
@@ -100,9 +107,19 @@ md-tabs-wrapper {
   md-tabs-wrapper md-prev-button {
     left: 0;
     background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg=="); }
+    [dir=rtl] md-tabs-wrapper md-prev-button {
+      left: 0;
+      left: auto;
+      left: initial;
+      right: 0; }
   md-tabs-wrapper md-next-button {
     right: 0;
     background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K"); }
+    [dir=rtl] md-tabs-wrapper md-next-button {
+      right: 0;
+      right: auto;
+      right: initial;
+      left: 0; }
     md-tabs-wrapper md-next-button md-icon {
       -webkit-transform: translate3d(-50%, -50%, 0) rotate(180deg);
               transform: translate3d(-50%, -50%, 0) rotate(180deg); }
@@ -132,6 +149,11 @@ md-tabs-canvas {
     position: absolute;
     top: 0;
     left: 0; }
+    [dir=rtl] md-tabs-canvas .md-dummy-wrapper {
+      left: 0;
+      left: auto;
+      left: initial;
+      right: 0; }
   md-tabs-canvas.md-paginated {
     margin: 0 32px; }
   md-tabs-canvas.md-center-tabs {
@@ -160,6 +182,11 @@ md-pagination-wrapper {
     content: '';
     display: table;
     clear: both; }
+  [dir=rtl] md-pagination-wrapper {
+    left: 0;
+    left: auto;
+    left: initial;
+    right: 0; }
   md-pagination-wrapper.md-center-tabs {
     position: relative;
     width: initial;
@@ -183,7 +210,9 @@ md-tab-content {
   bottom: 0;
   transition: -webkit-transform 0.5s cubic-bezier(0.35, 0, 0.25, 1);
   transition: transform 0.5s cubic-bezier(0.35, 0, 0.25, 1);
-  overflow: auto; }
+  overflow: auto;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0); }
   md-tab-content.md-no-scroll {
     bottom: auto;
     overflow: hidden; }
@@ -195,6 +224,9 @@ md-tab-content {
     -webkit-animation: 1s md-tab-content-hide;
             animation: 1s md-tab-content-hide;
     opacity: 0; }
+    [dir=rtl] md-tab-content.md-left:not(.md-active) {
+      -webkit-transform: translateX(100%);
+              transform: translateX(100%); }
     md-tab-content.md-left:not(.md-active) * {
       transition: visibility 0s linear;
       transition-delay: 0.5s;
@@ -205,6 +237,9 @@ md-tab-content {
     -webkit-animation: 1s md-tab-content-hide;
             animation: 1s md-tab-content-hide;
     opacity: 0; }
+    [dir=rtl] md-tab-content.md-right:not(.md-active) {
+      -webkit-transform: translateX(-100%);
+              transform: translateX(-100%); }
     md-tab-content.md-right:not(.md-active) * {
       transition: visibility 0s linear;
       transition-delay: 0.5s;
@@ -244,6 +279,8 @@ md-tab {
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis; }
+  [dir=rtl] .md-tab {
+    float: right; }
   .md-tab.md-focused {
     box-shadow: none;
     outline: none; }

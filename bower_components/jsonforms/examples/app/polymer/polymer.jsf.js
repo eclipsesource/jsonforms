@@ -1,4 +1,48 @@
+function polymerDirective(){
+    return {
+        restrict : "E",
+        //replace= true;
+        template :
+        '<div class="panel panel-default">' +
+           '<paper-input type="text" value="{{vm.modelValue[vm.fragment]}}" data-jsonforms-model label="Last name goes here"></paper-input>' +
+        '</div>',
+        controller : polymerController,
+        controllerAs : 'vm',
+        // set-up event binding
+        document.addEventListener('WebComponentsReady', function() {
+            var input = document.querySelector('paper-input');
+            if (input) {
+                input.addEventListener('keyup', function () {
+                    vm.modelValue[vm.fragment] = input.value;
+                    $rootScope.$digest();
+                });
+            }
+        });
+    };
+}
+function polymerControlRendererTester (element, dataSchema, dataObject,pathResolver ){
+    if(element.type!='Control')
+        return -1;
+    let schemaPath=element['scope']['$ref'];
+    if(schemaPath != undefined && schemaPath.endsWith("lastName"))
+        return 100;
+    return -1;
+}
+let polymerController=['$scope','PathResolver','$rootScope', function ($scope,refResolver,$rootScope) {
+    var vm = this;
+    vm.fragment=refResolver.lastFragment($scope.uiSchema.scope.$ref);
+    vm.modelValue=refResolver.resolveToLastModel($scope.data,$scope.uiSchema.scope.$ref);
+
+
+}];
+
 var app = angular.module('makeithappen');
+app.directive('polymerControl', polymerDirective)
+app.run(['RendererService', function(RendererService) {
+    RendererService.register("polymer-control",polymerControlRendererTester);
+}]);
+
+/*
 app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, PathResolver, $rootScope) {
 
     function PolymerControl() {
@@ -9,10 +53,12 @@ app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, 
         // set-up event binding
         document.addEventListener('WebComponentsReady', function() {
             var input = document.querySelector('paper-input');
-            input.addEventListener('keyup', function() {
-               instance[path] = input.value;
-                $rootScope.$digest();
-            });
+            if (input) {
+                input.addEventListener('keyup', function () {
+                    instance[path] = input.value;
+                    $rootScope.$digest();
+                });
+            }
         });
 
         return {
@@ -30,10 +76,11 @@ app.run(['RenderService', 'PathResolver', '$rootScope', function(RenderService, 
             },
 
             isApplicable: function (element, subSchema, schemaPath) {
-                return element.type == "Control" && schemaPath.endsWith("lastName");
+                return element.type == "Control" && schemaPath != undefined && schemaPath.endsWith("lastName");
             }
         }
     }
 
     RenderService.register(new PolymerControl());
 }]);
+*/

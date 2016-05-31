@@ -9,7 +9,7 @@ module.exports = function (config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-    preprocessors: { '*/.html': [] },
+    preprocessors: {'*/.html': []},
 
     // list of files / patterns to load in the browser
     files: [

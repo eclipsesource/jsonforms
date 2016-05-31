@@ -1,0 +1,14 @@
+{
+  "ambientDependencies": {
+    "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
+    "angular-mocks": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-mocks.d.ts#5d0f2126c8dac8fce0ff020218aea06607213b0d",
+    "angular-route": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-route.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
+    "bootstrap": "github:DefinitelyTyped/DefinitelyTyped/bootstrap/bootstrap.d.ts#5ea7d92bb39c7a26f49dc3de2c566d5ae325e19e",
+    "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#5d0f2126c8dac8fce0ff020218aea06607213b0d",
+    "jquery": "github:DefinitelyTyped/DefinitelyTyped/jquery/jquery.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
+    "jwt-decode": "github:DefinitelyTyped/DefinitelyTyped/jwt-decode/jwt-decode.d.ts#e2e1e881bb57431fbbe9289ac4da1fea928dc84c",
+    "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts#5ea7d92bb39c7a26f49dc3de2c566d5ae325e19e",
+    "source-map": "github:DefinitelyTyped/DefinitelyTyped/source-map/source-map.d.ts#5d0f2126c8dac8fce0ff020218aea06607213b0d",
+    "uglify-js": "github:DefinitelyTyped/DefinitelyTyped/uglify-js/uglify-js.d.ts#5d0f2126c8dac8fce0ff020218aea06607213b0d"
+  }
+}

@@ -2,5 +2,5 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.4-master-a6f3676
- */md-content{display:block;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}md-content[md-scroll-y]{overflow-y:auto;overflow-x:hidden}md-content[md-scroll-x]{overflow-x:auto;overflow-y:hidden}md-content.autoScroll{-webkit-overflow-scrolling:auto}@media print{md-content{overflow:visible!important}}
+ * v1.1.0-rc4-master-c26842a
+ */body.md-THEME_NAME-theme,html.md-THEME_NAME-theme{color:'{{foreground-1}}';background-color:'{{background-color}}'}md-content{display:block;position:relative;overflow:auto;-webkit-overflow-scrolling:touch}md-content[md-scroll-y]{overflow-y:auto;overflow-x:hidden}md-content[md-scroll-x]{overflow-x:auto;overflow-y:hidden}md-content.md-no-momentum{-webkit-overflow-scrolling:auto}@media print{md-content{overflow:visible!important}}

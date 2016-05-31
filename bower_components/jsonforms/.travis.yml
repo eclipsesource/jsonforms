@@ -1,0 +1,10 @@
+language: node_js
+
+node_js:
+  - "4.2.3"
+
+install:
+  - npm install
+
+script:
+  - npm run test && cat ./reports/coverage/lcov-report/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

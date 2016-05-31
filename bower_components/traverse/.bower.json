@@ -34,7 +34,7 @@
     "tag": "0.6.7",
     "commit": "73b4b3e1c6c06b184735ed2f1600082f9ab03c8e"
   },
-  "_source": "git://github.com/davewasmer/js-traverse.git",
+  "_source": "https://github.com/davewasmer/js-traverse.git",
   "_target": "~0.6.7",
   "_originalSource": "traverse"
 }

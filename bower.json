@@ -8,9 +8,10 @@
         "dependencies": {
             "jsonforms": "latest",
             "jsonforms-material": "latest",
-            "angular-route":"latest",
+            "angular-route":"1.4.11",
             "angular-ui-ace":"latest",
-            "angular-marked":"latest",
-            "angular-material":"latest"
+            "angular-ui-router":"1.0.0-alpha.3",
+            "angular-marked":"1.2.0",
+            "angular-material":"1.0.9"
         }
 }

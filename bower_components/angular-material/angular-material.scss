@@ -108,6 +108,14 @@ $swift-linear-duration: 0.08s !default;
 $swift-linear-timing-function: linear !default;
 $swift-linear: all $swift-linear-duration $swift-linear-timing-function !default;
 
+$material-enter-duration: 0.3s;
+$material-enter-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+$material-enter: all $material-enter-duration $material-enter-timing-function;
+
+$material-leave-duration: 0.3s;
+$material-leave-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+$material-leave: all $material-leave-duration $material-leave-timing-function;
+
 // Fab Buttons (shared between buttons.scss and fab*.scss)
 // -------------------------------------------
 $button-fab-width: rem(5.600) !default;
@@ -260,6 +268,124 @@ $button-fab-padding: rem(1.60) !default;
   @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
   @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
   @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+}
+
+// This mixin allows a user to use the md-checkbox css outside of the
+// md-checkbox directive.
+// See src/components/select/select.scss for an example.
+@mixin checkbox-container(
+  $checkedSelector: '.md-checked',
+  $width: $checkbox-width,
+  $height: $checkbox-height,
+  $border-width: $checkbox-border-width,
+  $border-radius: $checkbox-border-radius) {
+  .md-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    box-sizing: border-box;
+    display: inline-block;
+
+    width: $width;
+    height: $height;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
+
+    &:before {
+      box-sizing: border-box;
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
+
+    &:after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+
+    .md-ripple-container {
+      position: absolute;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
+    }
+  }
+
+  // unchecked
+  .md-icon {
+    box-sizing: border-box;
+    transition: 240ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $width;
+    height: $height;
+    border-width: $border-width;
+    border-style: solid;
+    border-radius: $border-radius;
+  }
+
+  &#{$checkedSelector} .md-icon {
+    border: none;
+
+    &:after {
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      position: absolute;
+      left: $width / 3;
+      top: $width / 9;
+      display: table;
+      width: $width / 3;
+      height: $width * 2 / 3;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    cursor: default;
+  }
+
+  &.md-indeterminate .md-icon {
+    &:after {
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: table;
+      width: $width * 0.6;
+      height: $border-width;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
 }
 
 html, body {
@@ -529,549 +655,6 @@ input {
   font-size: 100%;
 }
 
-/*
-*
-*  Responsive attributes
-*
-*  References:
-*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
-*  2) https://css-tricks.com/almanac/properties/f/flex/
-*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
-*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
-*  5) http://godban.com.ua/projects/flexgrid
-*
-*
-*/
-
-@-moz-document url-prefix() {
-  .layout-fill {
-    margin: 0;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-  }
-}
-
-
-@mixin flex-order-for-name($sizes:null) {
-  @if $sizes == null {
-    $sizes : '';
-
-    .flex-order {
-     order : 0;
-    }
-  }
-
-  @for $i from -20 through 20 {
-    $order : '';
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' { $suffix : '#{$s}-#{$i}'; }
-      @else        { $suffix : '#{$i}';       }
-
-      $order : '.flex-order-#{$suffix}';
-    }
-
-    #{$order} {
-      order: #{$i};
-    }
-  }
-}
-
-@mixin offset-for-name($sizes:null) {
-  @if $sizes == null { $sizes : ''; }
-
-  @for $i from 0 through 19 {
-    $offsets : '';
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' { $suffix : '#{$s}-#{$i * 5}'; }
-      @else        { $suffix : '#{$i * 5}';       }
-
-      $offsets : '.offset-#{$suffix}, .flex-offset-#{$suffix}';
-    }
-
-    #{$offsets} {
-      margin-left: #{$i * 5 + '%'};
-    }
-  }
-
-  @each $i in 33 {
-    $offsets : '';
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
-      @else        {  $suffix : '#{$i}';         }
-
-      $offsets : '.offset-#{$suffix}, .flex-offset-#{$suffix} ';
-    }
-
-    #{$offsets} {
-      margin-left: calc(100% / 3);
-    }
-  }
-
-  @each $i in 66 {
-    $offsets : '';
-    $suffix : '';
-
-    @each $s in $sizes {
-      @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
-      @else        {  $suffix : '#{$i}';         }
-
-      $offsets : '.offset-#{$suffix}, .flex-offset-#{$suffix} ';
-    }
-
-    #{$offsets} {
-      margin-left: calc(200% / 3);
-    }
-  }
-}
-
-@mixin layout-for-name($name: null) {
-  @if $name == null { $name : '';          }
-  @if $name != ''   { $name : '-#{$name}'; }
-
-  .layout#{$name}, .layout#{$name}-column, .layout#{$name}-row {
-    box-sizing: border-box;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-  }
-  .layout#{$name}-column {  flex-direction: column;     }
-  .layout#{$name}-row    {  flex-direction: row;        }
-}
-
-@mixin flex-properties-for-name($name: null) {
-  $flexName: 'flex';
-  @if $name != null {
-    $flexName: 'flex-#{$name}';
-    $name : '-#{$name}';
-  } @else {
-    $name : '';
-  }
-
-  .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
-
-  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
-  // Details:
-  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
-  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
-  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
-  @media screen\0 {
-      .#{$flexName} {
-        flex: 1 1 0%;
-      }
-  }
-
-
-  .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
-  .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
-  .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
-  .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
-  .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
-  .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
-
-  // (1-20) * 5 = 0-100%
-  @for $i from 0 through 20 {
-    $value : #{$i * 5 + '%'};
-
-    .#{$flexName}-#{$i * 5} {
-      flex: 1 1 #{$value};
-      max-width: #{$value};
-      max-height: 100%;
-      box-sizing: border-box;
-    }
-
-    .layout-row > .#{$flexName}-#{$i * 5},
-    .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
-      flex: 1 1 #{$value};
-      max-width: #{$value};
-      max-height: 100%;
-      box-sizing: border-box;
-
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i == 0 {  min-width: 0;  }
-    }
-
-    .layout-column > .#{$flexName}-#{$i * 5},
-    .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
-      flex: 1 1 #{$value};
-      max-width: 100%;
-      max-height: #{$value};
-      box-sizing: border-box;
-
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i == 0 {  min-height: 0;  }
-    }
-
-
-  }
-
-  .layout-row, .layout#{$name}-row {
-    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
-
-    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-    > .flex                                       { min-width: 0;   }
-  }
-  .layout-column, .layout#{$name}-column {
-    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
-    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
-
-    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-    > .flex                                       { min-height: 0;  }
-  }
-
-}
-
-@mixin layout-align-for-name($suffix: null) {
-
-  // Alignment attributes for layout containers' children
-  // Arrange on the Main Axis
-  // center, start, end, space-between, space-around
-  // flex-start is the default for justify-content
-  // ------------------------------
-
-  $name: 'layout-align';
-  @if $suffix != null {
-    $name: 'layout-align-#{$suffix}';
-  }
-
-  .#{$name},
-  .#{$name}-start-stretch // defaults
-  {
-    justify-content : flex-start;
-    align-content : stretch;
-    align-items: stretch;
-  }
-
-  // Main Axis Center
-  .#{$name}-start,
-  .#{$name}-start-start,
-  .#{$name}-start-center,
-  .#{$name}-start-end,
-  .#{$name}-start-stretch
-  {
-    justify-content: flex-start;
-  }
-
-  // Main Axis Center
-  .#{$name}-center,           //stretch
-  .#{$name}-center-start,
-  .#{$name}-center-center,
-  .#{$name}-center-end,
-  .#{$name}-center-stretch
-  {
-    justify-content: center;
-  }
-
-  // Main Axis End
-  .#{$name}-end, //stretch
-  .#{$name}-end-start,
-  .#{$name}-end-center,
-  .#{$name}-end-end,
-  .#{$name}-end-stretch
-  {
-    justify-content: flex-end;
-  }
-
-  // Main Axis Space Around
-  .#{$name}-space-around, //stretch
-  .#{$name}-space-around-center,
-  .#{$name}-space-around-start,
-  .#{$name}-space-around-end,
-  .#{$name}-space-around-stretch
-  {
-    justify-content: space-around;
-  }
-
-  // Main Axis Space Between
-  .#{$name}-space-between, //stretch
-  .#{$name}-space-between-center,
-  .#{$name}-space-between-start,
-  .#{$name}-space-between-end,
-  .#{$name}-space-between-stretch
-  {
-    justify-content: space-between;
-  }
-
-
-  // Arrange on the Cross Axis
-  // center, start, end
-  // stretch is the default for align-items
-  // ------------------------------
-
-  // Cross Axis Start
-  .#{$name}-start-start,
-  .#{$name}-center-start,
-  .#{$name}-end-start,
-  .#{$name}-space-between-start,
-  .#{$name}-space-around-start
-  {
-    align-items: flex-start;
-    align-content: flex-start;
-  }
-
-  // Cross Axis Center
-  .#{$name}-start-center,
-  .#{$name}-center-center,
-  .#{$name}-end-center,
-  .#{$name}-space-between-center,
-  .#{$name}-space-around-center
-  {
-    align-items: center;
-    align-content: center;
-    max-width: 100%;
-  }
-
-  // Cross Axis Center IE overflow fix
-  .#{$name}-start-center > *,
-  .#{$name}-center-center > *,
-  .#{$name}-end-center > *,
-  .#{$name}-space-between-center > *,
-  .#{$name}-space-around-center > *
-  {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  // Cross Axis End
-  .#{$name}-start-end,
-  .#{$name}-center-end,
-  .#{$name}-end-end,
-  .#{$name}-space-between-end,
-  .#{$name}-space-around-end
-  {
-    align-items: flex-end;
-    align-content: flex-end;
-  }
-
-  // Cross Axis Start
-  .#{$name}-start-stretch,
-  .#{$name}-center-stretch,
-  .#{$name}-end-stretch,
-  .#{$name}-space-between-stretch,
-  .#{$name}-space-around-stretch
-  {
-    align-items: stretch;
-    align-content: stretch;
-  }
-}
-
-@mixin layout-padding-margin() {
-
-  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-padding-sm > *,
-  .layout-padding    > .flex-sm
-  {
-    padding: $layout-gutter-width / 4;
-  }
-
-  .layout-padding,
-  .layout-padding-gt-sm,
-  .layout-padding-md,
-
-  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-padding        > *,
-  .layout-padding-gt-sm  > *,
-  .layout-padding-md     > *,
-
-  .layout-padding        > .flex,
-  .layout-padding        > .flex-gt-sm,
-  .layout-padding        > .flex-md
-  {
-    padding: $layout-gutter-width / 2;
-  }
-
-  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-padding-gt-md  > *,
-  .layout-padding-lg     > *,
-  .layout-padding-gt-lg  > *,
-
-  .layout-padding        > .flex-gt-md,
-  .layout-padding        > .flex-lg,
-  .layout-padding        > .flex-lg,
-  .layout-padding        > .flex-gt-lg
-  {
-    padding: $layout-gutter-width / 1;
-  }
-
-  // Margin enhancements
-
-  .layout-margin-sm      > *,
-  .layout-margin         > .flex-sm
-  {
-    margin: $layout-gutter-width / 4;
-  }
-
-  .layout-margin,
-  .layout-margin-gt-sm,
-  .layout-margin-md,
-
-  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-margin         > *,
-  .layout-margin-gt-sm   > *,
-  .layout-margin-md      > *,
-
-  .layout-margin         > .flex,
-  .layout-margin         > .flex-gt-sm,
-  .layout-margin         > .flex-md
-  {
-    margin: $layout-gutter-width / 2;
-  }
-
-  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
-  .layout-margin-gt-md  > *,
-  .layout-margin-lg     > *,
-  .layout-margin-gt-lg  > *,
-
-  .layout-margin        > .flex-gt-md,
-  .layout-margin        > .flex-lg,
-  .layout-margin        > .flex-gt-lg
-  {
-    margin: $layout-gutter-width / 1;
-  }
-
-  .layout-wrap {
-    flex-wrap: wrap;
-  }
-
-  .layout-nowrap {
-      flex-wrap: nowrap;
-  }
-
-  .layout-fill {
-    margin: 0;
-    width: 100%;
-    min-height: 100%;
-    height: 100%;
-  }
-}
-
-@mixin layouts_for_breakpoint($name:null) {
-    @include flex-order-for-name($name);
-    @include offset-for-name($name);
-    @include layout-align-for-name($name);
-
-    @include flex-properties-for-name($name);
-    @include layout-for-name($name);
-}
-
-/*
- *  Apply Mixins to create Layout/Flexbox styles
- *
- */
-
-
-@include layouts_for_breakpoint();
-@include layout-padding-margin();
-
-
-
-/**
- * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
- * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
- * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
- *
- *  hide means hide everywhere
- *  Sizes:
- *         $layout-breakpoint-xs:     600px !default;
- *         $layout-breakpoint-sm:     960px !default;
- *         $layout-breakpoint-md:     1280px !default;
- *         $layout-breakpoint-lg:     1920px !default;
- */
-
-
-@media (max-width: $layout-breakpoint-xs - 1) {
-  // Xtra-SMALL  SCREEN
-  .hide-xs, .hide {
-    &:not(.show-xs):not(.show) {
-      display: none;
-    }
-  }
-  @include layouts_for_breakpoint(xs);
-}
-
-@media (min-width: $layout-breakpoint-xs) {
-  // BIGGER THAN Xtra-SMALL SCREEN
-  @include layouts_for_breakpoint(gt-xs);
-
-}
-
-@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
-  .hide, .hide-gt-xs {
-    &:not(.show-gt-xs):not(.show-sm):not(.show) {
-      display: none;
-    }
-  }
-  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {
-    display: none;
-  }
-
-  @include layouts_for_breakpoint(sm);
-}
-
-@media (min-width: $layout-breakpoint-sm) {
-  // BIGGER THAN SMALL SCREEN
-  @include layouts_for_breakpoint(gt-sm);
-
-}
-
-@media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
-  // MEDIUM SCREEN
-  .hide, .hide-gt-xs, .hide-gt-sm {
-    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {
-      display: none;
-    }
-  }
-  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
-    display: none;
-  }
-  @include layouts_for_breakpoint(md);
-}
-
-@media (min-width: $layout-breakpoint-md) {
-  // BIGGER THAN MEDIUM SCREEN
-  @include layouts_for_breakpoint(gt-md);
-}
-
-@media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
-  // LARGE SCREEN
-  .hide,.hide-gt-xs, .hide-gt-sm, .hide-gt-md {
-    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
-      display: none;
-    }
-  }
-  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
-    display: none;
-  }
-
-  @include layouts_for_breakpoint(lg);
-}
-
-@media (min-width: $layout-breakpoint-lg) {
-  @include layouts_for_breakpoint(gt-lg);
-  @include layouts_for_breakpoint(xl);
-
-  // BIGGER THAN LARGE SCREEN
-  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
-    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
-      display: none;
-    }
-  }
-  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
-    display: none;
-  }
-
-}
-
-
 $autocomplete-option-height: 48px;
 $input-container-padding: 2px !default;
 $input-error-height: 24px !default;
@@ -1314,7 +897,7 @@ md-autocomplete {
 }
 
 // !!Important - Theme-based Background-color can be configured in backdrop-theme.scss
-//             - Animate background-color opacityy only for `.md-opaque` styles
+//             - Animate background-color opacity only for `.md-opaque` styles
 
 md-backdrop {
   transition: opacity 450ms;
@@ -2032,12 +1615,12 @@ md-checkbox {
   position: relative;
   min-width: $checkbox-width;
   min-height: $checkbox-width;
-  @include rtl(margin-left, inherit, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, inherit);
+  @include rtl(margin-left, 0, $checkbox-margin);
+  @include rtl(margin-right, $checkbox-margin, 0);
 
   &:last-of-type {
-    @include rtl(margin-left, inherit, 0);
-    @include rtl(margin-right, 0, inherit);
+    margin-left: 0;
+    margin-right: 0;
   }
 
   &.md-focused:not([disabled]) {
@@ -2055,100 +1638,11 @@ md-checkbox {
     }
   }
 
-  .md-container {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-
-    box-sizing: border-box;
-    display: inline-block;
-
-    width: $checkbox-width;
-    height: $checkbox-height;
-    @include rtl(left, 0, auto);
-    @include rtl(right, auto, 0);
-
-    &:before {
-      box-sizing: border-box;
-      background-color: transparent;
-      border-radius: 50%;
-      content: '';
-      position: absolute;
-      display: block;
-      height: auto;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      transition: all 0.5s;
-      width: auto;
-    }
-
-    &:after {
-      box-sizing: border-box;
-      content: '';
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      bottom: -10px;
-      left: -10px;
-    }
-
-    .md-ripple-container {
-      position: absolute;
-      display: block;
-      width: auto;
-      height: auto;
-      left: -15px;
-      top: -15px;
-      right: -15px;
-      bottom: -15px;
-    }
-  }
-
   &.md-align-top-left > div.md-container {
     top: $checkbox-top;
   }
 
-  // unchecked
-  .md-icon {
-    box-sizing: border-box;
-    transition: 240ms;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: $checkbox-width;
-    height: $checkbox-height;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-radius: $checkbox-border-radius;
-  }
-
-  &.md-checked .md-icon {
-    border: none;
-  }
-
-  // disabled
-  &[disabled] {
-    cursor: default;
-  }
-
-
-  &.md-checked .md-icon:after {
-    box-sizing: border-box;
-    transform: rotate(45deg);
-    position: absolute;
-    left: $checkbox-width / 3;
-    top: $checkbox-width / 9;
-    display: table;
-    width: $checkbox-width / 3;
-    height: $checkbox-width * 2 / 3;
-    border-width: $checkbox-border-width;
-    border-style: solid;
-    border-top: 0;
-    border-left: 0;
-    content: '';
-  }
+  @include checkbox-container;
 
   .md-label {
     box-sizing: border-box;
@@ -2547,10 +2041,10 @@ md-calendar {
 }
 
 /** Styles for mdDatepicker. */
-$md-datepicker-button-gap: 12px;  // Space between the text input and the calendar-icon button.
-$md-datepicker-border-bottom-gap: 5px;  // Space between input and the grey underline.
-$md-datepicker-open-animation-duration: 0.2s;
-$md-datepicker-triangle-button-width: 36px;
+$md-datepicker-button-gap: 12px !default;  // Space between the text input and the calendar-icon button.
+$md-datepicker-border-bottom-gap: 5px !default;  // Space between input and the grey underline.
+$md-datepicker-open-animation-duration: 0.2s !default;
+$md-datepicker-triangle-button-width: 36px !default;
 
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
@@ -3396,6 +2890,16 @@ md-input-container {
     @include rtl(right, auto, 0);
   }
 
+  // icon offset should have higher priority as normal label
+  &.md-has-icon {
+    @include rtl(padding-left, $icon-offset, 0);
+    @include rtl(padding-right, 0, $icon-offset);
+    > label {
+      @include rtl(left, $icon-offset, auto);
+      @include rtl(right, auto, $icon-offset);
+    }
+  }
+
   label:not(.md-no-float):not(.md-container-ignore),
   .md-placeholder {
     order: 1;
@@ -3594,58 +3098,45 @@ md-input-container {
       margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
     }
   }
+}
 
-  &.md-icon-float {
+md-input-container.md-icon-float {
 
-    transition: margin-top 0.5s $swift-ease-out-timing-function;
+  transition: margin-top 0.5s $swift-ease-out-timing-function;
 
-    > label {
-      pointer-events: none;
-      position: absolute;
-    }
-
-    > md-icon {
-      top: 2px;
-      @include rtl(left, 2px, auto);
-      @include rtl(right, auto, 2px);
-    }
-
-    &.md-input-focused,
-    &.md-input-has-value {
-
-      label {
-        transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
-        transition: transform $swift-ease-out-timing-function 0.5s;
-      }
-    }
-
+  > label {
+    pointer-events: none;
+    position: absolute;
   }
 
-  // icon offset should have higher priority as normal label
-  &.md-icon-left {
-    @include rtl(padding-left, $icon-offset, 0);
-    @include rtl(padding-right, 0, $icon-offset);
-    > label {
-      @include rtl(left, $icon-offset, auto);
-      @include rtl(right, auto, $icon-offset);
+  > md-icon {
+    top: 2px;
+    @include rtl(left, 2px, auto);
+    @include rtl(right, auto, 2px);
+  }
+
+  &.md-input-focused,
+  &.md-input-has-value {
+
+    label {
+      transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
+      transition: transform $swift-ease-out-timing-function 0.5s;
     }
   }
 
-  &.md-icon-right {
-    @include rtl(padding-left, 0, $icon-offset);
-    @include rtl(padding-right, $icon-offset, 0);
+}
 
-    > md-icon:last-of-type {
+md-input-container.md-icon-right {
+  @include rtl(padding-right, $icon-offset, $icon-offset);
+  @include rtl(padding-left, $icon-offset, $icon-offset);
+
+  .md-errors-spacer {
+    + md-icon {
       margin: 0;
 
       @include rtl(right, 2px, auto);
       @include rtl(left, auto, 2px);
     }
-  }
-
-  &.md-icon-left.md-icon-right {
-    padding-left: $icon-offset;
-    padding-right: $icon-offset;
   }
 }
 
@@ -4176,6 +3667,75 @@ md-menu-content.md-menu-bar-menu.md-dense {
   }
 }
 
+.md-panel-outer-wrapper {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+._md-panel-hidden {
+  display: none;
+}
+
+._md-panel-fullscreen {
+  border-radius: 0;
+  left: 0;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  top: 0;
+}
+
+// Only used when no animations are present.
+._md-panel-shown .md-panel {
+  opacity: 1;
+  transition: none;
+}
+
+.md-panel {
+  opacity: 0;
+  position: fixed;
+
+  &._md-panel-shown {
+    // Only used when custom animations are present.
+    // Overridden by the default animations.
+    opacity: 1;
+    transition: none;
+  }
+
+  &._md-panel-animate-enter {
+    opacity: 1;
+    transition: $material-enter;
+  }
+
+  &._md-panel-animate-leave {
+    opacity: 1;
+    transition: $material-leave;
+  }
+
+  &._md-panel-animate-scale-out,
+  &._md-panel-animate-fade-out {
+    opacity: 0;
+  }
+
+  &._md-panel-backdrop {
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+
+  &._md-opaque-enter {
+    opacity: .48;
+    transition: opacity $material-enter-duration $material-enter-timing-function;
+  }
+
+  &._md-opaque-leave {
+    transition: opacity $material-leave-duration $material-leave-timing-function;
+  }
+}
+
 $progress-circular-ease-in-out : cubic-bezier(0.35, 0, 0.25, 1) !default;
 $progress-circular-duration : 5.25s !default;
 $progress-circular-circle-duration : $progress-circular-duration * 0.25 !default;
@@ -4675,12 +4235,12 @@ md-radio-group {
     md-radio-button {
       margin-top: 0;
       margin-bottom: 0;
-      @include rtl(margin-left, inherit, $radio-margin);
-      @include rtl(margin-right, $radio-margin, inherit);
+      @include rtl(margin-left, 0, $radio-margin);
+      @include rtl(margin-right, $radio-margin, 0);
 
       &:last-of-type {
-        @include rtl(margin-left, inherit, 0);
-        @include rtl(margin-right, 0, inherit);
+        margin-left: 0;
+        margin-right: 0;
       }
     }
   }
@@ -4717,6 +4277,9 @@ md-radio-group {
   }
 }
 
+$select-checkbox-border-radius: 2px !default;
+$select-checkbox-border-width: 2px !default;
+$select-checkbox-width: rem(1.4) !default;
 $select-option-height: 48px;
 $select-option-padding: 16px;
 $select-container-padding: 16px;
@@ -4828,7 +4391,7 @@ md-select {
   }
 
   *:first-child {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -4948,6 +4511,20 @@ md-optgroup {
   }
 }
 
+md-select-menu[multiple] {
+  md-option.md-checkbox-enabled {
+    @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
+    @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
+
+    @include checkbox-container('[selected]');
+
+    .md-container {
+      @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
+      @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
+    }
+  }
+}
+
 $sidenav-mobile-width: 320px !default;
 $sidenav-desktop-width: 400px !default;
 $sidenav-min-space: 56px !default;
@@ -4962,6 +4539,7 @@ md-sidenav {
   max-width: $sidenav-mobile-width;
   bottom: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   ul {
     list-style: none;
@@ -5610,291 +5188,6 @@ md-switch {
   }
 }
 
-$tabs-paginator-width: $baseline-grid * 4 !default;
-$tabs-tab-width: $baseline-grid * 12 !default;
-$tabs-header-height: 48px !default;
-
-@keyframes md-tab-content-hide {
-  0% { opacity: 1; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-md-tab-data {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  opacity: 0;
-}
-
-md-tabs {
-  display: block;
-  margin: 0;
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-  &:not(.md-no-tab-content):not(.md-dynamic-height) {
-    min-height: 200 + $tabs-header-height;
-  }
-  &[md-align-tabs="bottom"] {
-    padding-bottom: $tabs-header-height;
-    md-tabs-wrapper {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: $tabs-header-height;
-      z-index: 2;
-    }
-    md-tabs-content-wrapper {
-      top: 0;
-      bottom: $tabs-header-height;
-    }
-  }
-  &.md-dynamic-height {
-    md-tabs-content-wrapper {
-      min-height: 0;
-      position: relative;
-      top: auto;
-      left: auto;
-      right: auto;
-      bottom: auto;
-      overflow: visible;
-    }
-    md-tab-content {
-      &.md-active {
-        position: relative;
-      }
-    }
-  }
-  &[md-border-bottom] {
-    md-tabs-wrapper {
-      border-width: 0 0 1px;
-      border-style: solid;
-    }
-    &:not(.md-dynamic-height) {
-      md-tabs-content-wrapper {
-        top: $tabs-header-height + 1;
-      }
-    }
-  }
-}
-
-md-tabs-wrapper {
-  display: block;
-  position: relative;
-  md-prev-button, md-next-button {
-    height: 100%;
-    width: $tabs-paginator-width;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    line-height: 1em;
-    z-index: 2;
-    cursor: pointer;
-    font-size: 16px;
-    background: transparent no-repeat center center;
-    transition: $swift-ease-in-out;
-    &:focus {
-      outline: none;
-    }
-    &.md-disabled {
-      opacity: 0.25;
-      cursor: default;
-    }
-    &.ng-leave {
-      transition: none;
-    }
-    md-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate3d(-50%, -50%, 0);
-    }
-  }
-  md-prev-button {
-    left: 0;
-    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg==');
-  }
-  md-next-button {
-    right: 0;
-    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K');
-    md-icon {
-      transform: translate3d(-50%, -50%, 0) rotate(180deg);
-    }
-  }
-  &.md-stretch-tabs {
-    md-pagination-wrapper {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      md-tab-item {
-        flex-grow: 1;
-      }
-    }
-  }
-}
-
-md-tabs-canvas {
-  @include pie-clearfix;
-  position: relative;
-  overflow: hidden;
-  display: block;
-  height: $tabs-header-height;
-  .md-dummy-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  &.md-paginated {
-    margin: 0 $tabs-paginator-width;
-  }
-  &.md-center-tabs {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    .md-tab {
-      float: none;
-      display: inline-block;
-    }
-  }
-}
-
-md-pagination-wrapper {
-  @include pie-clearfix;
-  height: $tabs-header-height;
-  display: block;
-  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
-  position: absolute;
-  width: 999999px;
-  left: 0;
-  transform: translate3d(0, 0, 0);
-  &.md-center-tabs {
-    position: relative;
-    width: initial;
-    margin: 0 auto;
-  }
-}
-
-md-tabs-content-wrapper {
-  display: block;
-  position: absolute;
-  top: $tabs-header-height;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-}
-
-md-tab-content {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
-  overflow: auto;
-  &.md-no-scroll {
-    bottom: auto;
-    overflow: hidden;
-  }
-  &.ng-leave, &.md-no-transition {
-    transition: none;
-  }
-  &.md-left:not(.md-active) {
-    transform: translateX(-100%);
-    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
-    * {
-      transition: visibility 0s linear;
-      transition-delay: $swift-ease-in-out-duration;
-      visibility: hidden;
-    }
-  }
-  &.md-right:not(.md-active) {
-    transform: translateX(100%);
-    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
-    * {
-      transition: visibility 0s linear;
-      transition-delay: $swift-ease-in-out-duration;
-      visibility: hidden;
-    }
-  }
-  > div.ng-leave {
-    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-  }
-}
-
-md-ink-bar {
-  $duration: $swift-ease-in-out-duration * 0.5;
-  $multiplier: 0.5;
-  position: absolute;
-  left: auto;
-  right: auto;
-  bottom: 0;
-  height: 2px;
-  &.md-left {
-    transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
-        right $duration $swift-ease-in-out-timing-function;
-  }
-  &.md-right {
-    transition: left $duration $swift-ease-in-out-timing-function,
-        right ($duration * $multiplier) $swift-ease-in-out-timing-function;
-  }
-}
-
-md-tab {
-  position: absolute;
-  z-index: -1;
-  left: -9999px;
-}
-
-.md-tab {
-  font-size: 14px;
-  text-align: center;
-  line-height: $tabs-header-height - 24;
-  padding: 12px 24px;
-  transition: background-color 0.35s $swift-ease-in-out-timing-function;
-  cursor: pointer;
-  white-space: nowrap;
-  position: relative;
-  text-transform: uppercase;
-  float: left;
-  font-weight: 500;
-  box-sizing: border-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  &.md-focused {
-    box-shadow: none;
-    outline: none;
-  }
-  &.md-active {
-    cursor: default;
-  }
-  &.md-disabled {
-    pointer-events: none;
-    touch-action: pan-y;
-    user-select: none;
-    -webkit-user-drag: none;
-    opacity: 0.5;
-    cursor: default;
-  }
-  &.ng-leave {
-    transition: none;
-  }
-}
-
-md-toolbar + md-tabs {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
 // See height set globally, depended on by buttons
 
 md-toast {
@@ -6094,6 +5387,295 @@ md-toast {
 // While animating, set the toast parent's overflow to hidden so scrollbars do not appear
 .md-toast-animating {
   overflow: hidden !important;
+}
+
+$tabs-paginator-width: $baseline-grid * 4 !default;
+$tabs-tab-width: $baseline-grid * 12 !default;
+$tabs-header-height: 48px !default;
+
+@keyframes md-tab-content-hide {
+  0% { opacity: 1; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+md-tab-data {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  opacity: 0;
+}
+
+md-tabs {
+  display: block;
+  margin: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  &:not(.md-no-tab-content):not(.md-dynamic-height) {
+    min-height: 200 + $tabs-header-height;
+  }
+  &[md-align-tabs="bottom"] {
+    padding-bottom: $tabs-header-height;
+    md-tabs-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: $tabs-header-height;
+      z-index: 2;
+    }
+    md-tabs-content-wrapper {
+      top: 0;
+      bottom: $tabs-header-height;
+    }
+  }
+  &.md-dynamic-height {
+    md-tabs-content-wrapper {
+      min-height: 0;
+      position: relative;
+      top: auto;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      overflow: visible;
+    }
+    md-tab-content {
+      &.md-active {
+        position: relative;
+      }
+    }
+  }
+  &[md-border-bottom] {
+    md-tabs-wrapper {
+      border-width: 0 0 1px;
+      border-style: solid;
+    }
+    &:not(.md-dynamic-height) {
+      md-tabs-content-wrapper {
+        top: $tabs-header-height + 1;
+      }
+    }
+  }
+}
+
+md-tabs-wrapper {
+  display: block;
+  position: relative;
+  // transform is needed for iOS Safari to prevent content from disappearing on scroll
+  transform: translate3d(0, 0, 0);
+  md-prev-button, md-next-button {
+    height: 100%;
+    width: $tabs-paginator-width;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1em;
+    z-index: 2;
+    cursor: pointer;
+    font-size: 16px;
+    background: transparent no-repeat center center;
+    transition: $swift-ease-in-out;
+    &:focus {
+      outline: none;
+    }
+    &.md-disabled {
+      opacity: 0.25;
+      cursor: default;
+    }
+    &.ng-leave {
+      transition: none;
+    }
+    md-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+  }
+  md-prev-button {
+    left: 0;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg==');
+  }
+  md-next-button {
+    right: 0;
+    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K');
+    md-icon {
+      transform: translate3d(-50%, -50%, 0) rotate(180deg);
+    }
+  }
+  &.md-stretch-tabs {
+    md-pagination-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      md-tab-item {
+        flex-grow: 1;
+      }
+    }
+  }
+}
+
+md-tabs-canvas {
+  @include pie-clearfix;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  height: $tabs-header-height;
+  .md-dummy-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  &.md-paginated {
+    margin: 0 $tabs-paginator-width;
+  }
+  &.md-center-tabs {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    .md-tab {
+      float: none;
+      display: inline-block;
+    }
+  }
+}
+
+md-pagination-wrapper {
+  @include pie-clearfix;
+  height: $tabs-header-height;
+  display: block;
+  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  position: absolute;
+  width: 999999px;
+  left: 0;
+  transform: translate3d(0, 0, 0);
+  &.md-center-tabs {
+    position: relative;
+    width: initial;
+    margin: 0 auto;
+  }
+}
+
+md-tabs-content-wrapper {
+  display: block;
+  position: absolute;
+  top: $tabs-header-height;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+md-tab-content {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
+  overflow: auto;
+  // transform is needed for iOS Safari to prevent content from disappearing on scroll
+  transform: translate3d(0, 0, 0);
+  &.md-no-scroll {
+    bottom: auto;
+    overflow: hidden;
+  }
+  &.ng-leave, &.md-no-transition {
+    transition: none;
+  }
+  &.md-left:not(.md-active) {
+    transform: translateX(-100%);
+    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+    opacity: 0;
+    * {
+      transition: visibility 0s linear;
+      transition-delay: $swift-ease-in-out-duration;
+      visibility: hidden;
+    }
+  }
+  &.md-right:not(.md-active) {
+    transform: translateX(100%);
+    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+    opacity: 0;
+    * {
+      transition: visibility 0s linear;
+      transition-delay: $swift-ease-in-out-duration;
+      visibility: hidden;
+    }
+  }
+  > div.ng-leave {
+    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+  }
+}
+
+md-ink-bar {
+  $duration: $swift-ease-in-out-duration * 0.5;
+  $multiplier: 0.5;
+  position: absolute;
+  left: auto;
+  right: auto;
+  bottom: 0;
+  height: 2px;
+  &.md-left {
+    transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
+        right $duration $swift-ease-in-out-timing-function;
+  }
+  &.md-right {
+    transition: left $duration $swift-ease-in-out-timing-function,
+        right ($duration * $multiplier) $swift-ease-in-out-timing-function;
+  }
+}
+
+md-tab {
+  position: absolute;
+  z-index: -1;
+  left: -9999px;
+}
+
+.md-tab {
+  font-size: 14px;
+  text-align: center;
+  line-height: $tabs-header-height - 24;
+  padding: 12px 24px;
+  transition: background-color 0.35s $swift-ease-in-out-timing-function;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  text-transform: uppercase;
+  float: left;
+  font-weight: 500;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &.md-focused {
+    box-shadow: none;
+    outline: none;
+  }
+  &.md-active {
+    cursor: default;
+  }
+  &.md-disabled {
+    pointer-events: none;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-drag: none;
+    opacity: 0.5;
+    cursor: default;
+  }
+  &.ng-leave {
+    transition: none;
+  }
+}
+
+md-toolbar + md-tabs {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 // Standard/Desktop Heights
@@ -6323,7 +5905,6 @@ md-tooltip {
   &.md-show {
     transition: $swift-ease-out;
     pointer-events: auto;
-    will-change: opacity, height, width;
   }
 }
 
@@ -6460,5 +6041,1051 @@ $virtual-repeat-scrollbar-width: 16px;
 @media screen and (-ms-high-contrast: active) {
   md-whiteframe {
     border: 1px solid #fff;
+  }
+}
+
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
+*/
+
+// Layout
+// ------------------------------
+
+$baseline-grid:            8px !default;
+$layout-gutter-width:      ($baseline-grid * 2) !default;
+
+$layout-breakpoint-xs:     600px !default;
+$layout-breakpoint-sm:     960px !default;
+$layout-breakpoint-md:     1280px !default;
+$layout-breakpoint-lg:     1920px !default;
+
+@-moz-document url-prefix() {
+  [layout-fill] {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+
+@mixin flex-order-for-name($sizes:null) {
+  @if $sizes == null {
+    $sizes : '';
+
+    [flex-order] {
+     order : 0;
+    }
+  }
+
+  @for $i from -20 through 20 {
+    $order : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' { $suffix : '-#{$s}="#{$i}"'; }
+      @else        { $suffix : '="#{$i}"';       }
+
+      $order : '[flex-order#{$suffix}]';
+    }
+
+    #{$order} {
+      order: #{$i};
+    }
+  }
+}
+@mixin offset-for-name($sizes:null) {
+  @if $sizes == null { $sizes : ''; }
+
+  @for $i from 0 through 19 {
+    $offsets : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' { $suffix : '-#{$s}="#{$i * 5}"'; }
+      @else        { $suffix : '="#{$i * 5}"';       }
+
+      $offsets : $offsets + '[flex-offset#{$suffix}], ';
+    }
+
+    #{$offsets} {
+      margin-left: #{$i * 5 + '%'};
+    }
+  }
+
+  @each $i in 33 {
+    $offsets : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' {  $suffix : '-#{$s}="#{$i}"';   }
+      @else        {  $suffix : '="#{$i}"';         }
+
+      $offsets : '[flex-offset#{$suffix}], ';
+    }
+
+    #{$offsets} {
+      margin-left: calc(100% / 3);
+    }
+  }
+
+  @each $i in 66  {
+    $offsets : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' {  $suffix : '-#{$s}="#{$i}"';   }
+      @else        {  $suffix : '="#{$i}"';         }
+
+      $offsets : '[flex-offset#{$suffix}]';
+    }
+
+    #{$offsets} {
+      margin-left: calc(200% / 3);
+    }
+  }
+}
+
+@mixin layout-for-name($name: null) {
+  @if $name == null { $name : '';          }
+  @if $name != ''   { $name : '-#{$name}'; }
+
+  [layout#{$name}], [layout#{$name}="column"], [layout#{$name}="row"] {
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  [layout#{$name}="column"] {  flex-direction: column;  }
+  [layout#{$name}="row"]    {  flex-direction: row;     }
+}
+
+@mixin flex-properties-for-name($name: null) {
+  $flexName: 'flex';
+  @if $name != null {
+    $flexName: 'flex-#{$name}';
+    $name : '-#{$name}';
+  } @else {
+    $name : '';
+  }
+
+  [#{$flexName}]             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+
+  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+  // Details:
+  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
+  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
+  @media screen\0 {
+      [#{$flexName}] {
+        flex: 1 1 0%;
+      }
+  }
+
+  [#{$flexName}-grow]        { flex: 1 1 100%;  box-sizing: border-box; }
+  [#{$flexName}-initial]     { flex: 0 1 auto;  box-sizing: border-box; }
+  [#{$flexName}-auto]        { flex: 1 1 auto;  box-sizing: border-box; }
+  [#{$flexName}-none]        { flex: 0 0 auto;  box-sizing: border-box; }
+
+  // (1-20) * 5 = 0-100%
+  @for $i from 0 through 20 {
+    $value : #{$i * 5 + '%'};
+
+    [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    [layout="row"] > [#{$flexName}="#{$i * 5}"],
+    [layout#{$name}="row"] > [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    [layout="column"] > [#{$flexName}="#{$i * 5}"],
+    [layout#{$name}="column"] > [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: 100%;
+      max-height: #{$value};
+      box-sizing: border-box;
+    }
+  }
+
+  [layout="row"], [layout#{$name}="row"] {
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+  }
+  [layout="column"], [layout#{$name}="column"] {
+    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+  }
+
+}
+@mixin layout-align-for-name($suffix: null) {
+
+  // Alignment attributes for layout containers' children
+  // Arrange on the Main Axis
+  // center, start, end, space-between, space-around
+  // flex-start is the default for justify-content
+  // ------------------------------
+
+  $name: 'layout-align';
+  @if $suffix != null {
+    $name: 'layout-align-#{$suffix}';
+  }
+  
+  [#{$name}],
+  [#{$name}="start stretch"] // defaults
+  {
+    justify-content :flex-start;
+    align-content : stretch;
+    align-items: stretch;
+  }
+  // Main Axis Center
+  [#{$name}="start"],
+  [#{$name}="start start"],
+  [#{$name}="start center"],
+  [#{$name}="start end"],
+  [#{$name}="start stretch"]
+  {
+    justify-content: flex-start;
+  }
+
+  // Main Axis Center
+  [#{$name}="center"],
+  [#{$name}="center start"],
+  [#{$name}="center center"],
+  [#{$name}="center end"],
+  [#{$name}="center stretch"]
+  {
+    justify-content: center;
+  }
+
+  // Main Axis End
+  [#{$name}="end"], //stretch
+  [#{$name}="end center"],
+  [#{$name}="end start"],
+  [#{$name}="end end"],
+  [#{$name}="end stretch"]
+  {
+    justify-content: flex-end;
+  }
+
+  // Main Axis Space Around
+  [#{$name}="space-around"], //stretch
+  [#{$name}="space-around center"],
+  [#{$name}="space-around start"],
+  [#{$name}="space-around end"],
+    [#{$name}="space-around stretch"]
+  {
+    justify-content: space-around;
+  }
+
+  // Main Axis Space Between
+  [#{$name}="space-between"], //stretch
+  [#{$name}="space-between center"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-between end"],
+    [#{$name}="space-between stretch"]
+  {
+    justify-content: space-between;
+  }
+
+
+  // Arrange on the Cross Axis
+  // center, start, end
+  // stretch is the default for align-items
+  // ------------------------------
+
+  // Cross Axis Start
+  [#{$name}="start start"],
+  [#{$name}="center start"],
+  [#{$name}="end start"],
+  [#{$name}="space-between start"],
+  [#{$name}="space-around start"]
+  {
+    align-items: flex-start;
+    align-content: flex-start;
+  }
+
+  // Cross Axis Center
+  [#{$name}="start center"],
+  [#{$name}="center center"],
+  [#{$name}="end center"],
+  [#{$name}="space-between center"],
+  [#{$name}="space-around center"]
+  {
+    align-items: center;
+    align-content: center;
+    max-width: 100%;
+  }
+
+  // Cross Axis Center IE overflow fix
+  [#{$name}="start center"] > *,
+  [#{$name}="center center"] > *,
+  [#{$name}="end center"] > *,
+  [#{$name}="space-between center"] > *,
+  [#{$name}="space-around center"] > *
+  {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  // Cross Axis End
+  [#{$name}="start end"],
+  [#{$name}="center end"],
+  [#{$name}="end end"],
+  [#{$name}="space-between end"],
+  [#{$name}="space-around end"]
+  {
+    align-items: flex-end;
+    align-content: flex-end;
+  }
+
+  // Cross Axis  stretch
+  [#{$name}="start stretch"],
+  [#{$name}="center stretch"],
+  [#{$name}="end stretch"],
+  [#{$name}="space-between stretch"],
+  [#{$name}="space-around stretch"]
+  {
+    align-items: stretch;
+    align-content: stretch;
+  }
+}
+@mixin layout-padding-margin() {
+
+  [layout-padding] > [flex-sm],   [layout-padding] > [flex-lt-md] {
+    padding: $layout-gutter-width / 4;
+  }
+  [layout-padding],
+  [layout-padding] > [flex],
+  [layout-padding] > [flex-gt-sm],
+  [layout-padding] > [flex-md],
+  [layout-padding] > [flex-lt-lg]
+  {
+    padding: $layout-gutter-width / 2;
+  }
+  [layout-padding] > [flex-gt-md],
+  [layout-padding] > [flex-lg]
+  {
+    padding: $layout-gutter-width / 1;
+  }
+
+  [layout-margin] > [flex-sm],
+  [layout-margin] > [flex-lt-md]
+  {
+    margin: $layout-gutter-width / 4;
+  }
+
+  [layout-margin],
+  [layout-margin]  > [flex],
+  [layout-margin]  > [flex-gt-sm],
+  [layout-margin]  > [flex-md],
+  [layout-margin]  > [flex-lt-lg]
+  {
+    margin: $layout-gutter-width / 2;
+  }
+
+  [layout-margin]  > [flex-gt-md],
+  [layout-margin]  > [flex-lg]
+  {
+    margin: $layout-gutter-width / 1;
+  }
+
+  [layout-wrap] {
+    flex-wrap: wrap;
+  }
+
+  [layout-nowrap] {
+      flex-wrap: nowrap;
+  }
+
+  [layout-fill] {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+@mixin layouts_for_breakpoint($name:null) {
+    @include flex-order-for-name($name);
+    @include offset-for-name($name);
+    @include layout-align-for-name($name);
+
+    @include flex-properties-for-name($name);
+    @include layout-for-name($name);
+}
+
+/*
+ *  Apply Mixins to create Layout/Flexbox styles
+ *
+ */
+
+
+@include layouts_for_breakpoint();
+@include layout-padding-margin();
+
+
+/**
+ * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
+ * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
+ * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ *
+ *  hide means hide everywhere
+ *  Sizes:
+ *         $layout-breakpoint-xs:     600px !default;
+ *         $layout-breakpoint-sm:     960px !default;
+ *         $layout-breakpoint-md:     1280px !default;
+ *         $layout-breakpoint-lg:     1920px !default;
+ */
+
+
+@media (max-width: $layout-breakpoint-xs - 1) {
+  // Xtra-SMALL  SCREEN
+  [hide-xs], [hide] {
+    &:not([show-xs]):not([show]) {
+      display: none;
+    }
+  }
+  @include layouts_for_breakpoint(xs);
+}
+
+@media (min-width: $layout-breakpoint-xs) {
+  // BIGGER THAN Xtra-SMALL SCREEN
+  @include layouts_for_breakpoint(gt-xs);
+
+}
+
+@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+  // SMALL SCREEN
+  [hide-sm], [hide-gt-xs] {
+    &:not([show-gt-xs]):not([show-sm]):not([show]) {
+      display: none;
+    }
+  }
+  [hide-sm]:not([show-sm]):not([show]) {
+    display: none;
+  }
+  @include layouts_for_breakpoint(sm);
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  // BIGGER THAN SMALL SCREEN
+  @include layouts_for_breakpoint(gt-sm);
+
+}
+
+@media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+  // MEDIUM SCREEN
+  [hide], [hide-gt-xs], [hide-gt-sm] {
+      &:not([show-gt-xs]):not([show-gt-sm]):not([show-md]):not([show]) {
+        display: none;
+      }
+    }
+    [hide-md]:not([show-md]):not([show]) {
+      display: none;
+    }
+  @include layouts_for_breakpoint(md);
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  // BIGGER THAN MEDIUM SCREEN
+  @include layouts_for_breakpoint(gt-md);
+}
+
+@media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+  // LARGE SCREEN
+  [hide],[hide-gt-xs], [hide-gt-sm], [hide-gt-md] {
+      &:not([show-gt-xs]):not([show-gt-sm]):not([show-gt-md]):not([show-lg]):not([show]) {
+        display: none;
+      }
+    }
+    [hide-lg]:not([show-lg]):not([show]) {
+      display: none;
+    }
+
+  @include layouts_for_breakpoint(lg);
+}
+
+@media (min-width: $layout-breakpoint-lg) {
+  // BIGGER THAN LARGE SCREEN
+  @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
+
+  // BIGGER THAN LARGE SCREEN
+  [hide], [hide-gt-xs], [hide-gt-sm], [hide-gt-md], [hide-gt-lg] {
+    &:not([show-gt-xs]):not([show-gt-sm]):not([show-gt-md]):not([show-gt-lg]):not([show-xl]):not([show]) {
+      display: none;
+    }
+  }
+  [hide-xl]:not([show-xl]):not([show-gt-lg]):not([show]) {
+    display: none;
+  }
+}
+
+
+
+/*
+*
+*  Responsive attributes
+*
+*  References:
+*  1) https://scotch.io/tutorials/a-visual-guide-to-css3-flexbox-properties#flex
+*  2) https://css-tricks.com/almanac/properties/f/flex/
+*  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+*  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
+*  5) http://godban.com.ua/projects/flexgrid
+*
+*
+*/
+
+@-moz-document url-prefix() {
+  .layout-fill {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+
+@mixin flex-order-for-name($sizes:null) {
+  @if $sizes == null {
+    $sizes : '';
+
+    .flex-order {
+     order : 0;
+    }
+  }
+
+  @for $i from -20 through 20 {
+    $order : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' { $suffix : '#{$s}-#{$i}'; }
+      @else        { $suffix : '#{$i}';       }
+
+      $order : '.flex-order-#{$suffix}';
+    }
+
+    #{$order} {
+      order: #{$i};
+    }
+  }
+}
+
+@mixin offset-for-name($sizes:null) {
+  @if $sizes == null { $sizes : ''; }
+
+  @for $i from 0 through 19 {
+    $offsets : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' { $suffix : '#{$s}-#{$i * 5}'; }
+      @else        { $suffix : '#{$i * 5}';       }
+
+      $offsets : '.offset-#{$suffix}, .flex-offset-#{$suffix}';
+    }
+
+    #{$offsets} {
+      margin-left: #{$i * 5 + '%'};
+    }
+  }
+
+  @each $i in 33 {
+    $offsets : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
+      @else        {  $suffix : '#{$i}';         }
+
+      $offsets : '.offset-#{$suffix}, .flex-offset-#{$suffix} ';
+    }
+
+    #{$offsets} {
+      margin-left: calc(100% / 3);
+    }
+  }
+
+  @each $i in 66 {
+    $offsets : '';
+    $suffix : '';
+
+    @each $s in $sizes {
+      @if $s != '' {  $suffix : '#{$s}-#{$i}';   }
+      @else        {  $suffix : '#{$i}';         }
+
+      $offsets : '.offset-#{$suffix}, .flex-offset-#{$suffix} ';
+    }
+
+    #{$offsets} {
+      margin-left: calc(200% / 3);
+    }
+  }
+}
+
+@mixin layout-for-name($name: null) {
+  @if $name == null { $name : '';          }
+  @if $name != ''   { $name : '-#{$name}'; }
+
+  .layout#{$name}, .layout#{$name}-column, .layout#{$name}-row {
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .layout#{$name}-column {  flex-direction: column;     }
+  .layout#{$name}-row    {  flex-direction: row;        }
+}
+
+@mixin flex-properties-for-name($name: null) {
+  $flexName: 'flex';
+  @if $name != null {
+    $flexName: 'flex-#{$name}';
+    $name : '-#{$name}';
+  } @else {
+    $name : '';
+  }
+
+  .#{$flexName}             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
+
+  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
+  // Details:
+  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
+  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
+  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
+  @media screen\0 {
+      .#{$flexName} {
+        flex: 1 1 0%;
+      }
+  }
+
+
+  .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
+  .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
+  .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
+  .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
+  .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
+
+  // (1-20) * 5 = 0-100%
+  @for $i from 0 through 20 {
+    $value : #{$i * 5 + '%'};
+
+    .#{$flexName}-#{$i * 5} {
+      flex: 1 1 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    .layout-row > .#{$flexName}-#{$i * 5},
+    .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
+      flex: 1 1 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+
+      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      @if $i == 0 {  min-width: 0;  }
+    }
+
+    .layout-column > .#{$flexName}-#{$i * 5},
+    .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
+      flex: 1 1 #{$value};
+      max-width: 100%;
+      max-height: #{$value};
+      box-sizing: border-box;
+
+      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      @if $i == 0 {  min-height: 0;  }
+
+    }
+  }
+
+  .layout-row, .layout#{$name}-row {
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+
+    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    > .flex                                       { min-width: 0;   }
+  }
+  .layout-column, .layout#{$name}-column {
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+
+    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    > .flex                                       { min-height: 0;   }
+  }
+}
+
+@mixin layout-align-for-name($suffix: null) {
+
+  // Alignment attributes for layout containers' children
+  // Arrange on the Main Axis
+  // center, start, end, space-between, space-around
+  // flex-start is the default for justify-content
+  // ------------------------------
+
+  $name: 'layout-align';
+  @if $suffix != null {
+    $name: 'layout-align-#{$suffix}';
+  }
+
+  .#{$name},
+  .#{$name}-start-stretch // defaults
+  {
+    justify-content : flex-start;
+    align-content : stretch;
+    align-items: stretch;
+  }
+
+  // Main Axis Center
+  .#{$name}-start,
+  .#{$name}-start-start,
+  .#{$name}-start-center,
+  .#{$name}-start-end,
+  .#{$name}-start-stretch
+  {
+    justify-content: flex-start;
+  }
+
+  // Main Axis Center
+  .#{$name}-center,           //stretch
+  .#{$name}-center-start,
+  .#{$name}-center-center,
+  .#{$name}-center-end,
+  .#{$name}-center-stretch
+  {
+    justify-content: center;
+  }
+
+  // Main Axis End
+  .#{$name}-end, //stretch
+  .#{$name}-end-start,
+  .#{$name}-end-center,
+  .#{$name}-end-end,
+  .#{$name}-end-stretch
+  {
+    justify-content: flex-end;
+  }
+
+  // Main Axis Space Around
+  .#{$name}-space-around, //stretch
+  .#{$name}-space-around-center,
+  .#{$name}-space-around-start,
+  .#{$name}-space-around-end,
+  .#{$name}-space-around-stretch
+  {
+    justify-content: space-around;
+  }
+
+  // Main Axis Space Between
+  .#{$name}-space-between, //stretch
+  .#{$name}-space-between-center,
+  .#{$name}-space-between-start,
+  .#{$name}-space-between-end,
+  .#{$name}-space-between-stretch
+  {
+    justify-content: space-between;
+  }
+
+
+  // Arrange on the Cross Axis
+  // center, start, end
+  // stretch is the default for align-items
+  // ------------------------------
+
+  // Cross Axis Start
+  .#{$name}-start-start,
+  .#{$name}-center-start,
+  .#{$name}-end-start,
+  .#{$name}-space-between-start,
+  .#{$name}-space-around-start
+  {
+    align-items: flex-start;
+    align-content: flex-start;
+  }
+
+  // Cross Axis Center
+  .#{$name}-start-center,
+  .#{$name}-center-center,
+  .#{$name}-end-center,
+  .#{$name}-space-between-center,
+  .#{$name}-space-around-center
+  {
+    align-items: center;
+    align-content: center;
+    max-width: 100%;
+  }
+
+  // Cross Axis Center IE overflow fix
+  .#{$name}-start-center > *,
+  .#{$name}-center-center > *,
+  .#{$name}-end-center > *,
+  .#{$name}-space-between-center > *,
+  .#{$name}-space-around-center > *
+  {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  // Cross Axis End
+  .#{$name}-start-end,
+  .#{$name}-center-end,
+  .#{$name}-end-end,
+  .#{$name}-space-between-end,
+  .#{$name}-space-around-end
+  {
+    align-items: flex-end;
+    align-content: flex-end;
+  }
+
+  // Cross Axis Start
+  .#{$name}-start-stretch,
+  .#{$name}-center-stretch,
+  .#{$name}-end-stretch,
+  .#{$name}-space-between-stretch,
+  .#{$name}-space-around-stretch
+  {
+    align-items: stretch;
+    align-content: stretch;
+  }
+}
+
+@mixin layout-padding-margin() {
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-padding-sm > *,
+  .layout-padding    > .flex-sm
+  {
+    padding: $layout-gutter-width / 4;
+  }
+
+  .layout-padding,
+  .layout-padding-gt-sm,
+  .layout-padding-md,
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-padding        > *,
+  .layout-padding-gt-sm  > *,
+  .layout-padding-md     > *,
+
+  .layout-padding        > .flex,
+  .layout-padding        > .flex-gt-sm,
+  .layout-padding        > .flex-md
+  {
+    padding: $layout-gutter-width / 2;
+  }
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-padding-gt-md  > *,
+  .layout-padding-lg     > *,
+  .layout-padding-gt-lg  > *,
+
+  .layout-padding        > .flex-gt-md,
+  .layout-padding        > .flex-lg,
+  .layout-padding        > .flex-lg,
+  .layout-padding        > .flex-gt-lg
+  {
+    padding: $layout-gutter-width / 1;
+  }
+
+  // Margin enhancements
+
+  .layout-margin-sm      > *,
+  .layout-margin         > .flex-sm
+  {
+    margin: $layout-gutter-width / 4;
+  }
+
+  .layout-margin,
+  .layout-margin-gt-sm,
+  .layout-margin-md,
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-margin         > *,
+  .layout-margin-gt-sm   > *,
+  .layout-margin-md      > *,
+
+  .layout-margin         > .flex,
+  .layout-margin         > .flex-gt-sm,
+  .layout-margin         > .flex-md
+  {
+    margin: $layout-gutter-width / 2;
+  }
+
+  // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
+  .layout-margin-gt-md  > *,
+  .layout-margin-lg     > *,
+  .layout-margin-gt-lg  > *,
+
+  .layout-margin        > .flex-gt-md,
+  .layout-margin        > .flex-lg,
+  .layout-margin        > .flex-gt-lg
+  {
+    margin: $layout-gutter-width / 1;
+  }
+
+  .layout-wrap {
+    flex-wrap: wrap;
+  }
+
+  .layout-nowrap {
+      flex-wrap: nowrap;
+  }
+
+  .layout-fill {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+  }
+}
+
+@mixin layouts_for_breakpoint($name:null) {
+    @include flex-order-for-name($name);
+    @include offset-for-name($name);
+    @include layout-align-for-name($name);
+
+    @include flex-properties-for-name($name);
+    @include layout-for-name($name);
+}
+
+/*
+ *  Apply Mixins to create Layout/Flexbox styles
+ *
+ */
+
+
+@include layouts_for_breakpoint();
+@include layout-padding-margin();
+
+
+
+/**
+ * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
+ * `show-md hide-gt-sm` should show from 0px to 960px and hide at >960px
+ * `hide-gt-md show-gt-sm` should show everywhere (show overrides hide)`
+ *
+ *  hide means hide everywhere
+ *  Sizes:
+ *         $layout-breakpoint-xs:     600px !default;
+ *         $layout-breakpoint-sm:     960px !default;
+ *         $layout-breakpoint-md:     1280px !default;
+ *         $layout-breakpoint-lg:     1920px !default;
+ */
+
+
+@media (max-width: $layout-breakpoint-xs - 1) {
+  // Xtra-SMALL  SCREEN
+  .hide-xs, .hide {
+    &:not(.show-xs):not(.show) {
+      display: none;
+    }
+  }
+  @include layouts_for_breakpoint(xs);
+}
+
+@media (min-width: $layout-breakpoint-xs) {
+  // BIGGER THAN Xtra-SMALL SCREEN
+  @include layouts_for_breakpoint(gt-xs);
+
+}
+
+@media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+  .hide, .hide-gt-xs {
+    &:not(.show-gt-xs):not(.show-sm):not(.show) {
+      display: none;
+    }
+  }
+  .hide-sm:not(.show-gt-xs):not(.show-sm):not(.show) {
+    display: none;
+  }
+
+  @include layouts_for_breakpoint(sm);
+}
+
+@media (min-width: $layout-breakpoint-sm) {
+  // BIGGER THAN SMALL SCREEN
+  @include layouts_for_breakpoint(gt-sm);
+
+}
+
+@media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+  // MEDIUM SCREEN
+  .hide, .hide-gt-xs, .hide-gt-sm {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-md):not(.show) {
+      display: none;
+    }
+  }
+  .hide-md:not(.show-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
+  @include layouts_for_breakpoint(md);
+}
+
+@media (min-width: $layout-breakpoint-md) {
+  // BIGGER THAN MEDIUM SCREEN
+  @include layouts_for_breakpoint(gt-md);
+}
+
+@media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+  // LARGE SCREEN
+  .hide,.hide-gt-xs, .hide-gt-sm, .hide-gt-md {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-lg):not(.show) {
+      display: none;
+    }
+  }
+  .hide-lg:not(.show-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
+
+  @include layouts_for_breakpoint(lg);
+}
+
+@media (min-width: $layout-breakpoint-lg) {
+  @include layouts_for_breakpoint(gt-lg);
+  @include layouts_for_breakpoint(xl);
+
+  // BIGGER THAN LARGE SCREEN
+  .hide, .hide-gt-xs, .hide-gt-sm, .hide-gt-md, .hide-gt-lg {
+    &:not(.show-gt-xs):not(.show-gt-sm):not(.show-gt-md):not(.show-gt-lg):not(.show-xl):not(.show) {
+      display: none;
+    }
+  }
+  .hide-xl:not(.show-xl):not(.show-gt-lg):not(.show-gt-md):not(.show-gt-sm):not(.show-gt-xs):not(.show) {
+    display: none;
+  }
+
+}
+
+// General printing Rules
+@media print {
+
+  .hide-print:not(.show-print):not(.show) {
+    display: none !important;
   }
 }

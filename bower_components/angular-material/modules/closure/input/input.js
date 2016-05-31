@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.0.9
  */
 goog.provide('ng.material.components.input');
 goog.require('ng.material.core');
@@ -42,6 +42,11 @@ angular.module('material.components.input', [
  * Input and textarea elements will not behave properly unless the md-input-container
  * parent is provided.
  *
+ * A single `<md-input-container>` should contain only one `<input>` element, otherwise it will throw an error.
+ *
+ * <b>Exception:</b> Hidden inputs (`<input type="hidden" />`) are ignored and will not throw an error, so
+ * you may combine these with other inputs.
+ *
  * @param md-is-error {expression=} When the given expression evaluates to true, the input container
  *   will go into error state. Defaults to erroring if the input has been touched and is invalid.
  * @param md-no-float {boolean=} When present, `placeholder` attributes on the input will not be converted to floating
@@ -79,24 +84,9 @@ function mdInputContainerDirective($mdTheming, $parse) {
     controller: ContainerCtrl
   };
 
-  function postLink(scope, element) {
+  function postLink(scope, element, attr) {
     $mdTheming(element);
-
-    var iconElements = element.find('md-icon');
-    var icons = iconElements.length ? iconElements : element[0].getElementsByClassName('md-icon');
-
-    // Incase there's one icon we want to identify where the icon is (right or left) and apply the related class
-    if (icons.length == 1) {
-      var next = icons[0].nextElementSibling;
-      var previous = icons[0].previousElementSibling;
-
-      element.addClass(next && next.tagName === 'INPUT' ? 'md-icon-left' :
-                       previous && previous.tagName === 'INPUT' ? 'md-icon-right' : '');
-    }
-    // In case there are two icons we apply both icon classes
-    else if (icons.length == 2) {
-      element.addClass('md-icon-left md-icon-right');
-    }
+    if (element.find('md-icon').length) element.addClass('md-has-icon');
   }
 
   function ContainerCtrl($scope, $element, $attrs, $animate) {
@@ -272,15 +262,17 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     var isReadonly = angular.isDefined(attr.readonly);
 
     if (!containerCtrl) return;
-    if (containerCtrl.input) {
+    if (attr.type === 'hidden') {
+      element.attr('aria-hidden', 'true');
+      return;
+    } else if (containerCtrl.input) {
       throw new Error("<md-input-container> can only have *one* <input>, <textarea> or <md-select> child element!");
     }
     containerCtrl.input = element;
 
     // Add an error spacer div after our input to provide space for the char counter and any ng-messages
     var errorsSpacer = angular.element('<div class="md-errors-spacer">');
-    // element.after appending the div before the icon (if exist) which cause a problem with calculating which class to apply
-    element.parent().append(errorsSpacer);
+    element.after(errorsSpacer);
 
     if (!containerCtrl.label) {
       $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
@@ -323,13 +315,16 @@ function inputTextareaDirective($mdUtil, $window, $mdAria) {
     if (!isReadonly) {
       element
         .on('focus', function(ev) {
-          containerCtrl.setFocused(true);
+          $mdUtil.nextTick(function() {
+            containerCtrl.setFocused(true);
+          });
         })
         .on('blur', function(ev) {
-          containerCtrl.setFocused(false);
-          inputCheckValue();
+          $mdUtil.nextTick(function() {
+            containerCtrl.setFocused(false);
+            inputCheckValue();
+          });
         });
-
     }
 
     //ngModelCtrl.$setTouched();
@@ -577,6 +572,39 @@ function placeholderDirective($log) {
 }
 placeholderDirective.$inject = ["$log"];
 
+/**
+ * @ngdoc directive
+ * @name mdSelectOnFocus
+ * @module material.components.input
+ *
+ * @restrict A
+ *
+ * @description
+ * The `md-select-on-focus` directive allows you to automatically select the element's input text on focus.
+ *
+ * <h3>Notes</h3>
+ * - The use of `md-select-on-focus` is restricted to `<input>` and `<textarea>` elements.
+ *
+ * @usage
+ * <h3>Using with an Input</h3>
+ * <hljs lang="html">
+ *
+ * <md-input-container>
+ *   <label>Auto Select</label>
+ *   <input type="text" md-select-on-focus>
+ * </md-input-container>
+ * </hljs>
+ *
+ * <h3>Using with a Textarea</h3>
+ * <hljs lang="html">
+ *
+ * <md-input-container>
+ *   <label>Auto Select</label>
+ *   <textarea md-select-on-focus>This text will be selected on focus.</textarea>
+ * </md-input-container>
+ *
+ * </hljs>
+ */
 function mdSelectOnFocusDirective() {
 
   return {

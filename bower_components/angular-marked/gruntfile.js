@@ -2,7 +2,7 @@ module.exports = function (grunt) {
   'use strict';
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('bower.json'),
+    'pkg': grunt.file.readJSON('bower.json'),
 
     'gh-pages': {
       options: {
@@ -11,7 +11,7 @@ module.exports = function (grunt) {
       src: ['**']
     },
 
-    ngdocs: {
+    'ngdocs': {
       options: {
         html5Mode: false,
         titleLink: '#/api',

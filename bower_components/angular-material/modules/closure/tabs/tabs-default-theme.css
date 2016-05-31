@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.1.0-rc4-master-c26842a
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 md-tabs.md-THEME_NAME-theme md-tabs-wrapper {
   background-color: transparent;
   border-color: '{{foreground-4}}'; }
@@ -24,12 +29,12 @@ md-tabs.md-THEME_NAME-theme .md-tab {
   md-tabs.md-THEME_NAME-theme .md-tab.md-focused {
     background: '{{primary-color-0.1}}'; }
   md-tabs.md-THEME_NAME-theme .md-tab .md-ripple-container {
-    color: '{{accent-100}}'; }
+    color: '{{accent-A100}}'; }
 
 md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper {
   background-color: '{{accent-color}}'; }
   md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {
-    color: '{{accent-100}}'; }
+    color: '{{accent-A100}}'; }
     md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {
       color: '{{accent-contrast}}'; }
     md-tabs.md-THEME_NAME-theme.md-accent > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {
@@ -68,7 +73,7 @@ md-toolbar > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {
 md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper {
   background-color: '{{accent-color}}'; }
   md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]) {
-    color: '{{accent-100}}'; }
+    color: '{{accent-A100}}'; }
     md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-active md-icon, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused, md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused md-icon {
       color: '{{accent-contrast}}'; }
     md-toolbar.md-accent > md-tabs.md-THEME_NAME-theme > md-tabs-wrapper > md-tabs-canvas > md-pagination-wrapper > md-tab-item:not([disabled]).md-focused {

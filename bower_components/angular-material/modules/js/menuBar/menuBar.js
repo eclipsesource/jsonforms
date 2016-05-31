@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.0.9
  */
 (function( window, angular, undefined ){
 "use strict";
@@ -207,7 +207,7 @@ MenuBarController.prototype.focusMenu = function(direction) {
 
   var changed = false;
 
-  if (focusedIndex == -1) { focusedIndex = 0; }
+  if (focusedIndex == -1) { focusedIndex = 0; changed = true; }
   else if (
     direction < 0 && focusedIndex > 0 ||
     direction > 0 && focusedIndex < menus.length - direction
@@ -359,10 +359,7 @@ angular
   .module('material.components.menuBar')
   .directive('mdMenuBar', MenuBarDirective);
 
-/**
- *
- * @ngInjdect
- */
+/* ngInject */
 function MenuBarDirective($mdUtil, $mdTheming) {
   return {
     restrict: 'E',
@@ -528,10 +525,7 @@ angular
   .module('material.components.menuBar')
   .directive('mdMenuItem', MenuItemDirective);
 
- /**
-  *
-  * @ngInjdect
-  */
+ /* ngInject */
 function MenuItemDirective() {
   return {
     require: ['mdMenuItem', '?ngModel'],

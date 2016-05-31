@@ -1,0 +1,55 @@
+.github
+.travis.yml
+CLA.md
+CONTRIBUTING.md
+
+# ignore dist except the build
+dist/
+dist/**/*.*
+!dist/jsonforms.js
+!dist/LICENSE
+
+###########################################
+# Copied from .gitgnore
+###########################################
+
+temp/
+coverage/
+reports/
+
+# npm
+node_modules/
+
+# all js files in components
+src/components/**/*.js
+
+# all js files in tests except the configs
+tests/**/*.js
+/typings/browser.d.ts
+/typings/main.d.ts
+/typings/main
+/typings/browser
+!tests/e2e-tests/protractor.conf.js
+!karma.conf.js
+
+# typescript mappings
+**/*.map
+
+# typescript cache files
+.tscache/
+
+# logs
+*.log
+
+# examples
+examples/bower_components/
+examples/css/jsonforms.css
+examples/js/jsonforms.js
+examples/js/jsonforms.min.js
+examples/fonts
+
+# webstorm
+.idea
+
+# mac users
+.DS_Store

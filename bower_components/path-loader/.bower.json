@@ -31,7 +31,7 @@
     "tag": "v0.0.2",
     "commit": "31606e961836775b57867246fab02404e5c559a1"
   },
-  "_source": "git://github.com/whitlockjc/path-loader.git",
+  "_source": "https://github.com/whitlockjc/path-loader.git",
   "_target": "~0.0.2",
   "_originalSource": "path-loader"
 }

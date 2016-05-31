@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.1.0-rc4-master-c26842a
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 @-webkit-keyframes subheaderStickyHoverIn {
   0% {
     box-shadow: 0 0 0 0 transparent; }
@@ -28,15 +33,15 @@
   100% {
     box-shadow: 0 0 0 0 transparent; } }
 
-.md-subheader-wrapper:not(.md-sticky-no-effect) {
+._md-subheader-wrapper:not(.md-sticky-no-effect) {
   transition: 0.2s ease-out margin; }
-  .md-subheader-wrapper:not(.md-sticky-no-effect) .md-subheader {
+  ._md-subheader-wrapper:not(.md-sticky-no-effect) .md-subheader {
     margin: 0; }
-  .md-subheader-wrapper:not(.md-sticky-no-effect).md-sticky-clone {
+  ._md-subheader-wrapper:not(.md-sticky-no-effect).md-sticky-clone {
     z-index: 2; }
-  .md-subheader-wrapper:not(.md-sticky-no-effect)[sticky-state="active"] {
+  ._md-subheader-wrapper:not(.md-sticky-no-effect)[sticky-state="active"] {
     margin-top: -2px; }
-  .md-subheader-wrapper:not(.md-sticky-no-effect):not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {
+  ._md-subheader-wrapper:not(.md-sticky-no-effect):not(.md-sticky-clone)[sticky-prev-state="active"] ._md-subheader-inner:after {
     -webkit-animation: subheaderStickyHoverOut 0.3s ease-out both;
             animation: subheaderStickyHoverOut 0.3s ease-out both; }
 
@@ -47,10 +52,10 @@
   line-height: 1em;
   margin: 0 0 0 0;
   position: relative; }
-  .md-subheader .md-subheader-inner {
+  .md-subheader ._md-subheader-inner {
     display: block;
     padding: 16px; }
-  .md-subheader .md-subheader-content {
+  .md-subheader ._md-subheader-content {
     display: block;
     z-index: 1;
     position: relative; }

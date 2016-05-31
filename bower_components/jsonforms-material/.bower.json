@@ -37,7 +37,7 @@
     "tag": "v0.0.2",
     "commit": "910841239aae4e15e428bb387f5c181dcccbc190"
   },
-  "_source": "git://github.com/eclipsesource/jsonforms-material.git",
+  "_source": "https://github.com/eclipsesource/jsonforms-material.git",
   "_target": "*",
   "_originalSource": "jsonforms-material"
 }

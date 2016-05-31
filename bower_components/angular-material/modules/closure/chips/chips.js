@@ -2,7 +2,7 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.0.9
  */
 goog.provide('ng.material.components.chips');
 goog.require('ng.material.components.autocomplete');
@@ -73,7 +73,8 @@ function MdChip($mdTheming, $mdUtil) {
 
       if (ctrl) angular.element(element[0].querySelector('.md-chip-content'))
           .on('blur', function () {
-            ctrl.selectedChip = -1;
+            ctrl.resetSelectedChip();
+            ctrl.$scope.$applyAsync();
           });
     };
   }
@@ -174,9 +175,10 @@ angular
  * @param $mdConstant
  * @param $log
  * @param $element
+ * @param $mdUtil
  * @constructor
  */
-function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
+function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
 
@@ -213,6 +215,8 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
   /** @type {boolean} */
   this.hasAutocomplete = false;
 
+  /** @type {string} */
+  this.enableChipEdit = $mdUtil.parseAttributeBoolean(this.mdEnableChipEdit);
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
@@ -268,7 +272,7 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
    */
   this.useOnSelect = false;
 }
-MdChipsCtrl.$inject = ["$scope", "$mdConstant", "$log", "$element", "$timeout"];
+MdChipsCtrl.$inject = ["$scope", "$mdConstant", "$log", "$element", "$timeout", "$mdUtil"];
 
 /**
  * Handles the keydown event on the input element: by default <enter> appends
@@ -301,10 +305,37 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
   if (this.separatorKeys.indexOf(event.keyCode) !== -1) {
     if ((this.hasAutocomplete && this.requireMatch) || !chipBuffer) return;
     event.preventDefault();
-    this.appendChip(chipBuffer);
+
+    // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
+    if (this.hasMaxChipsReached()) return;
+
+    this.appendChip(chipBuffer.trim());
     this.resetChipBuffer();
   }
 };
+
+
+/**
+ * Updates the content of the chip at given index
+ * @param chipIndex
+ * @param chipContents
+ */
+MdChipsCtrl.prototype.updateChipContents = function(chipIndex, chipContents){
+  if(chipIndex >= 0 && chipIndex < this.items.length) {
+    this.items[chipIndex] = chipContents;
+    this.ngModelCtrl.$setDirty();
+  }
+};
+
+
+/**
+ * Returns true if a chip is currently being edited. False otherwise.
+ * @return {boolean}
+ */
+MdChipsCtrl.prototype.isEditingChip = function(){
+  return !!this.$element[0].getElementsByClassName('md-chip-editing').length;
+};
+
 
 /**
  * Handles the keydown event on the chip elements: backspace removes the selected chip, arrow
@@ -313,6 +344,8 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
  */
 MdChipsCtrl.prototype.chipKeydown = function (event) {
   if (this.getChipBuffer()) return;
+  if (this.isEditingChip()) return;
+  
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.BACKSPACE:
     case this.$mdConstant.KEY_CODE.DELETE:
@@ -406,7 +439,7 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
     var identical = this.items.some(function(item){
       return angular.equals(newChip, item);
     });
-    if(identical) return;
+    if (identical) return;
   }
 
   // Check for a null (but not undefined), or existing chip and cancel appending
@@ -414,6 +447,10 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
 
   // Append the new chip onto our list
   var index = this.items.push(newChip);
+
+  // Update model validation
+  this.ngModelCtrl.$setDirty();
+  this.validateModel();
 
   // If they provide the md-on-add attribute, notify them of the chip addition
   if (this.useOnAdd && this.onAdd) {
@@ -514,12 +551,29 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
   }
 };
 
+MdChipsCtrl.prototype.hasMaxChipsReached = function() {
+  if (angular.isString(this.maxChips)) this.maxChips = parseInt(this.maxChips, 10) || 0;
+
+  return this.maxChips > 0 && this.items.length >= this.maxChips;
+};
+
+/**
+ * Updates the validity properties for the ngModel.
+ */
+MdChipsCtrl.prototype.validateModel = function() {
+  this.ngModelCtrl.$setValidity('md-max-chips', !this.hasMaxChipsReached());
+};
+
 /**
  * Removes the chip at the given index.
  * @param index
  */
 MdChipsCtrl.prototype.removeChip = function(index) {
   var removed = this.items.splice(index, 1);
+
+  // Update model validation
+  this.ngModelCtrl.$setDirty();
+  this.validateModel();
 
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
     this.onRemove({ '$chip': removed[0], '$index': index });
@@ -643,10 +697,14 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
-  if ( ctrl ){
+  if ( ctrl ) {
     this.hasAutocomplete = true;
+
     ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
       if (item) {
+        // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
+        if (this.hasMaxChipsReached()) return;
+
         this.appendChip(item);
         this.resetChipBuffer();
       }
@@ -728,9 +786,12 @@ MdChipsCtrl.prototype.hasFocus = function () {
    * @param {string=|object=} ng-model A model to bind the list of items to
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
-   *    displayed when there is at least on item in the list
+   *    displayed when there is at least one item in the list
    * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding
    *    the input and delete buttons
+   * @param {number=} md-max-chips The maximum number of chips allowed to add through user input.
+   *    <br/><br/>The validation property `md-max-chips` can be used when the max chips
+   *    amount is reached.
    * @param {expression} md-transform-chip An expression of form `myFunction($chip)` that when called
    *    expects one of the following return values:
    *    - an object representing the `$chip` input string
@@ -758,6 +819,23 @@ MdChipsCtrl.prototype.hasFocus = function () {
    *   </md-chips>
    * </hljs>
    *
+   * <h3>Validation</h3>
+   * When using [ngMessages](https://docs.angularjs.org/api/ngMessages), you can show errors based
+   * on our custom validators.
+   * <hljs lang="html">
+   *   <form name="userForm">
+   *     <md-chips
+   *       name="fruits"
+   *       ng-model="myItems"
+   *       placeholder="Add an item"
+   *       md-max-chips="5">
+   *     </md-chips>
+   *     <div ng-messages="userForm.fruits.$error" ng-if="userForm.$dirty">
+   *       <div ng-message="md-max-chips">You reached the maximum amount of chips</div>
+   *    </div>
+   *   </form>
+   * </hljs>
+   *
    */
 
 
@@ -773,6 +851,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
           <div class="md-chip-content"\
               tabindex="-1"\
               aria-hidden="true"\
+              ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.focusChip($index)"\
               ng-focus="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
           <div ng-if="!$mdChipsCtrl.readonly"\
@@ -794,6 +873,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
             ng-model="$mdChipsCtrl.chipBuffer"\
             ng-focus="$mdChipsCtrl.onInputFocus()"\
             ng-blur="$mdChipsCtrl.onInputBlur()"\
+            ng-trim="false"\
             ng-keydown="$mdChipsCtrl.inputKeydown($event)">';
 
   var CHIP_DEFAULT_TEMPLATE = '\
@@ -839,6 +919,7 @@ MdChipsCtrl.prototype.hasFocus = function () {
         readonly: '=readonly',
         placeholder: '@',
         secondaryPlaceholder: '@',
+        maxChips: '@mdMaxChips',
         transformChip: '&mdTransformChip',
         onAppend: '&mdOnAppend',
         onAdd: '&mdOnAdd',
@@ -1051,7 +1132,8 @@ angular
  * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
  *    displayed when there is at least on item in the list
  * @param {expression} md-contacts An expression expected to return contacts matching the search
- *    test, `$query`.
+ *    test, `$query`. If this expression involves a promise, a loading bar is displayed while
+ *    waiting for it to resolve.
  * @param {string} md-contact-name The field name of the contact object representing the
  *    contact's name.
  * @param {string} md-contact-email The field name of the contact object representing the
@@ -1060,9 +1142,8 @@ angular
  *    contact's image.
  *
  *
- * // The following attribute has been removed but may come back.
  * @param {expression=} filter-selected Whether to filter selected contacts from the list of
- *    suggestions shown in the autocomplete.
+ *    suggestions shown in the autocomplete. This attribute has been removed but may come back.
  *
  *
  *

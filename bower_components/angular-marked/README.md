@@ -124,6 +124,31 @@ Or a template (great for md that includes code blocks):
 <!-- Uses markdown content from tpl.md -->
 ```
 
+Use ```compile``` attribute to support AngularJS directives inside markdown.
+
+```html
+<script type="text/ng-template" id="tpl.md">
+  ## Markdown
+
+  **This will go through $compile and will be effective**
+
+  <button ng-click="doClick()"></button>
+
+</script>
+
+<div ng-controller="ClickHandler">
+    <div marked src="'tpl.md'" compile="true"></div>
+</div>
+```
+
+```javascript
+.controller('ClickHandler', function() {
+  this.doClick = function() {
+    ...
+  };
+})
+```
+
 ### As a service
 
 ```js

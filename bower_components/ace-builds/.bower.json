@@ -8,7 +8,7 @@
     "tag": "v1.2.3",
     "commit": "e94cb3c7ffccfb2e565cc857f07a988c0989e527"
   },
-  "_source": "git://github.com/ajaxorg/ace-builds.git",
+  "_source": "https://github.com/ajaxorg/ace-builds.git",
   "_target": "^1",
   "_originalSource": "ace-builds"
 }

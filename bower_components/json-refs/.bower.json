@@ -35,7 +35,7 @@
     "tag": "v0.2.0",
     "commit": "8ebc2c693282ed74542ca311da34c43c4b0a081a"
   },
-  "_source": "git://github.com/whitlockjc/json-refs.git",
+  "_source": "https://github.com/whitlockjc/json-refs.git",
   "_target": "~0.2.0",
   "_originalSource": "json-refs"
 }

@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.1.0-rc4-master-c26842a
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 md-tooltip {
   position: absolute;
   z-index: 100;
@@ -12,10 +17,10 @@ md-tooltip {
   border-radius: 4px;
   font-weight: 500;
   font-size: 14px; }
-  @media screen and (min-width: 960px) {
+  @media (min-width: 960px) {
     md-tooltip {
       font-size: 10px; } }
-  md-tooltip .md-content {
+  md-tooltip ._md-content {
     position: relative;
     white-space: nowrap;
     overflow: hidden;
@@ -29,34 +34,33 @@ md-tooltip {
     line-height: 32px;
     padding-left: 16px;
     padding-right: 16px; }
-    @media screen and (min-width: 960px) {
-      md-tooltip .md-content {
+    @media (min-width: 960px) {
+      md-tooltip ._md-content {
         height: 22px;
         line-height: 22px;
         padding-left: 8px;
         padding-right: 8px; } }
-    md-tooltip .md-content.md-show-add {
+    md-tooltip ._md-content._md-show-add {
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       transition-duration: .2s;
       -webkit-transform: scale(0);
               transform: scale(0);
       opacity: 0; }
-    md-tooltip .md-content.md-show, md-tooltip .md-content.md-show-add-active {
+    md-tooltip ._md-content._md-show, md-tooltip ._md-content._md-show-add-active {
       -webkit-transform: scale(1);
               transform: scale(1);
       opacity: 1;
       -webkit-transform-origin: center top;
               transform-origin: center top; }
-    md-tooltip .md-content.md-show-remove {
+    md-tooltip ._md-content._md-show-remove {
       transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       transition-duration: .2s; }
-      md-tooltip .md-content.md-show-remove.md-show-remove-active {
+      md-tooltip ._md-content._md-show-remove._md-show-remove-active {
         -webkit-transform: scale(0);
                 transform: scale(0);
         opacity: 0; }
-  md-tooltip.md-hide {
+  md-tooltip._md-hide {
     transition: all 0.3s cubic-bezier(0.55, 0, 0.55, 0.2); }
-  md-tooltip.md-show {
+  md-tooltip._md-show {
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    pointer-events: auto;
-    will-change: opacity, height, width; }
+    pointer-events: auto; }

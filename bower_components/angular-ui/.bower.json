@@ -8,7 +8,7 @@
     "tag": "v0.4.0",
     "commit": "94f90431b3544039b0850c3d0d3cbc80b93a7891"
   },
-  "_source": "git://github.com/angular-ui/angular-ui.git",
+  "_source": "https://github.com/angular-ui/angular-ui.git",
   "_target": "0.4.0",
   "_originalSource": "angular-ui"
 }

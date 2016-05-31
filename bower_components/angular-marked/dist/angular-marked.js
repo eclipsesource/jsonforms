@@ -202,21 +202,36 @@ angular.module('hc.marked', [])
       return;
     }
 
+    var r = new m.Renderer();
+
     // override rendered markdown html
     // with custom definitions if defined
     if (self.renderer) {
-      var r = new m.Renderer();
       var o = Object.keys(self.renderer);
       var l = o.length;
 
       while (l--) {
         r[o[l]] = self.renderer[o[l]];
       }
-
-      // add the new renderer to the options if need be
-      self.defaults = self.defaults || {};
-      self.defaults.renderer = r;
     }
+
+    // Customize code and codespan rendering to wrap default or overriden output in a ng-non-bindable span
+    function wrapNonBindable(string) {
+      return "<span ng-non-bindable>" + string + "</span>";
+    }
+
+    var renderCode = r.code.bind(r);
+    r.code = function (code, lang, escaped) {
+      return wrapNonBindable(renderCode(code, lang, escaped));
+    };
+    var renderCodespan = r.codespan.bind(r);
+    r.codespan = function (code) {
+      return wrapNonBindable(renderCodespan(code));
+    };
+
+    // add the new renderer to the options if need be
+    self.defaults = self.defaults || {};
+    self.defaults.renderer = r;
 
     m.setOptions(self.defaults);
 
@@ -224,7 +239,7 @@ angular.module('hc.marked', [])
   }];
 })
 
-  // TODO: filter and tests */
+  // xTODO: filter and tests */
   // app.filter('marked', ['marked', function(marked) {
   //   return marked;
   // }]);
@@ -240,8 +255,9 @@ angular.module('hc.marked', [])
    *
    * @param {expression=} marked The source text to be compiled.  If blank uses content as the source.
    * @param {expression=} opts Hash of options that override defaults.
+   * @param {boolean=} compile Set to true to to support AngularJS directives inside markdown.
    * @param {string=} src Expression evaluating to URL. If the source is a string constant,
- *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialTemplate.html'"`.
+   *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialTemplate.html'"`.
    *
    * @example
 
@@ -291,13 +307,14 @@ angular.module('hc.marked', [])
        </example>
    */
 
-.directive('marked', ['marked', '$templateRequest', function (marked, $templateRequest) {
+.directive('marked', ['marked', '$templateRequest', '$compile', function (marked, $templateRequest, $compile) {
   return {
     restrict: 'AE',
     replace: true,
     scope: {
       opts: '=',
       marked: '=',
+      compile: '@',
       src: '='
     },
     link: function (scope, element, attrs) {
@@ -311,12 +328,17 @@ angular.module('hc.marked', [])
         scope.$watch('src', function (src) {
           $templateRequest(src, true).then(function (response) {
             set(response);
+          }, function () {
+            set('');
+            scope.$emit('$markedIncludeError', attrs.src);
           });
         });
       }
 
-      function unindent (text) {
-        if (!text) return text;
+      function unindent(text) {
+        if (!text) {
+          return text;
+        }
 
         var lines = text
           .replace(/\t/g, '  ')
@@ -324,12 +346,14 @@ angular.module('hc.marked', [])
 
         var min = null;
         var len = lines.length;
+        var i;
 
-        var l, line;
-        for (var i = 0; i < len; i++) {
-          line = lines[i];
-          l = line.match(/^(\s*)/)[0].length;
-          if (l === line.length) { continue; }
+        for (i = 0; i < len; i++) {
+          var line = lines[i];
+          var l = line.match(/^(\s*)/)[0].length;
+          if (l === line.length) {
+            continue;
+          }
           min = (l < min || min === null) ? l : min;
         }
 
@@ -341,9 +365,12 @@ angular.module('hc.marked', [])
         return lines.join('\n');
       }
 
-      function set (text) {
+      function set(text) {
         text = unindent(text || '');
         element.html(marked(text, scope.opts || null));
+        if (scope.$eval(attrs.compile)) {
+          $compile(element.contents())(scope.$parent);
+        }
       }
     }
   };

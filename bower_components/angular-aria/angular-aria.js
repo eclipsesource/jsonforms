@@ -1,9 +1,9 @@
 /**
- * @license AngularJS v1.5.0
+ * @license AngularJS v1.5.6
  * (c) 2010-2016 Google, Inc. http://angularjs.org
  * License: MIT
  */
-(function(window, angular, undefined) {'use strict';
+(function(window, angular) {'use strict';
 
 /**
  * @ngdoc module
@@ -21,7 +21,7 @@
  *
  * For ngAria to do its magic, simply include the module `ngAria` as a dependency. The following
  * directives are supported:
- * `ngModel`, `ngChecked`, `ngRequired`, `ngValue`, `ngDisabled`, `ngShow`, `ngHide`, `ngClick`,
+ * `ngModel`, `ngChecked`, `ngReadonly`, `ngRequired`, `ngValue`, `ngDisabled`, `ngShow`, `ngHide`, `ngClick`,
  * `ngDblClick`, and `ngMessages`.
  *
  * Below is a more detailed breakdown of the attributes handled by ngAria:
@@ -30,8 +30,9 @@
  * |---------------------------------------------|----------------------------------------------------------------------------------------|
  * | {@link ng.directive:ngModel ngModel}        | aria-checked, aria-valuemin, aria-valuemax, aria-valuenow, aria-invalid, aria-required, input roles |
  * | {@link ng.directive:ngDisabled ngDisabled}  | aria-disabled                                                                          |
- * | {@link ng.directive:ngRequired ngRequired}  | aria-required                                                                          |
- * | {@link ng.directive:ngChecked ngChecked}    | aria-checked                                                                           |
+ * | {@link ng.directive:ngRequired ngRequired}  | aria-required
+ * | {@link ng.directive:ngChecked ngChecked}    | aria-checked
+ * | {@link ng.directive:ngReadonly ngReadonly}  | aria-readonly                                                                          |
  * | {@link ng.directive:ngValue ngValue}        | aria-checked                                                                           |
  * | {@link ng.directive:ngShow ngShow}          | aria-hidden                                                                            |
  * | {@link ng.directive:ngHide ngHide}          | aria-hidden                                                                            |
@@ -42,7 +43,7 @@
  * Find out more information about each directive by reading the
  * {@link guide/accessibility ngAria Developer Guide}.
  *
- * ##Example
+ * ## Example
  * Using ngDisabled with ngAria:
  * ```html
  * <md-checkbox ng-disabled="disabled">
@@ -52,7 +53,7 @@
  * <md-checkbox ng-disabled="disabled" aria-disabled="true">
  * ```
  *
- * ##Disabling Attributes
+ * ## Disabling Attributes
  * It's possible to disable individual attributes added by ngAria with the
  * {@link ngAria.$ariaProvider#config config} method. For more details, see the
  * {@link guide/accessibility Developer Guide}.
@@ -96,6 +97,7 @@ function $AriaProvider() {
   var config = {
     ariaHidden: true,
     ariaChecked: true,
+    ariaReadonly: true,
     ariaDisabled: true,
     ariaRequired: true,
     ariaInvalid: true,
@@ -113,6 +115,7 @@ function $AriaProvider() {
    *
    *  - **ariaHidden** – `{boolean}` – Enables/disables aria-hidden tags
    *  - **ariaChecked** – `{boolean}` – Enables/disables aria-checked tags
+   *  - **ariaReadonly** – `{boolean}` – Enables/disables aria-readonly tags
    *  - **ariaDisabled** – `{boolean}` – Enables/disables aria-disabled tags
    *  - **ariaRequired** – `{boolean}` – Enables/disables aria-required tags
    *  - **ariaInvalid** – `{boolean}` – Enables/disables aria-invalid tags
@@ -175,6 +178,7 @@ function $AriaProvider() {
    * The full list of directives that interface with ngAria:
    * * **ngModel**
    * * **ngChecked**
+   * * **ngReadonly**
    * * **ngRequired**
    * * **ngDisabled**
    * * **ngValue**
@@ -213,6 +217,9 @@ ngAriaModule.directive('ngShow', ['$aria', function($aria) {
 }])
 .directive('ngChecked', ['$aria', function($aria) {
   return $aria.$$watchExpr('ngChecked', 'aria-checked', nodeBlackList, false);
+}])
+.directive('ngReadonly', ['$aria', function($aria) {
+  return $aria.$$watchExpr('ngReadonly', 'aria-readonly', nodeBlackList, false);
 }])
 .directive('ngRequired', ['$aria', function($aria) {
   return $aria.$$watchExpr('ngRequired', 'aria-required', nodeBlackList, false);

@@ -45,7 +45,7 @@
     "tag": "v1.2.3",
     "commit": "1d5b5e2fc89ee568b992e61bdef4031d326fd787"
   },
-  "_source": "git://github.com/geraintluff/tv4.git",
+  "_source": "https://github.com/geraintluff/tv4.git",
   "_target": "1.2.3",
   "_originalSource": "tv4"
 }

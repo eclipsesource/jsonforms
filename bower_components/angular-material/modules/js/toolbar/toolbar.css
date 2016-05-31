@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.1.0-rc4-master-c26842a
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 md-toolbar {
   box-sizing: border-box;
   display: -webkit-flex;
@@ -16,7 +21,10 @@ md-toolbar {
   z-index: 2;
   font-size: 20px;
   min-height: 64px;
-  width: 100%; }
+  width: 100%;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+  transition-property: background-color, fill, color; }
   md-toolbar.md-whiteframe-z1-add, md-toolbar.md-whiteframe-z1-remove {
     transition: box-shadow 0.5s linear; }
   md-toolbar md-toolbar-filler {
@@ -25,6 +33,8 @@ md-toolbar {
   md-toolbar *:before,
   md-toolbar *:after {
     box-sizing: border-box; }
+  md-toolbar.ng-animate {
+    transition: none; }
   md-toolbar.md-tall {
     height: 128px;
     min-height: 128px;
@@ -39,6 +49,11 @@ md-toolbar {
       max-height: 48px; }
   md-toolbar > .md-indent {
     margin-left: 64px; }
+    [dir=rtl] md-toolbar > .md-indent {
+      margin-left: 0;
+      margin-left: auto;
+      margin-left: initial;
+      margin-right: 64px; }
   md-toolbar ~ md-content > md-list {
     padding: 0; }
     md-toolbar ~ md-content > md-list md-list-item:last-child md-divider {
@@ -80,26 +95,52 @@ md-toolbar {
   .md-toolbar-tools .md-button {
     margin-top: 0;
     margin-bottom: 0; }
+    .md-toolbar-tools .md-button, .md-toolbar-tools .md-button.md-icon-button md-icon {
+      transition-duration: 0.5s;
+      transition-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+      transition-property: background-color, fill, color; }
+      .md-toolbar-tools .md-button.ng-animate, .md-toolbar-tools .md-button.md-icon-button md-icon.ng-animate {
+        transition: none; }
   .md-toolbar-tools > .md-button:first-child {
     margin-left: -8px; }
+    [dir=rtl] .md-toolbar-tools > .md-button:first-child {
+      margin-left: 0;
+      margin-left: auto;
+      margin-left: initial;
+      margin-right: -8px; }
   .md-toolbar-tools > .md-button:last-child {
     margin-right: -8px; }
+    [dir=rtl] .md-toolbar-tools > .md-button:last-child {
+      margin-right: 0;
+      margin-right: auto;
+      margin-right: initial;
+      margin-left: -8px; }
   .md-toolbar-tools > md-menu:last-child {
     margin-right: -8px; }
+    [dir=rtl] .md-toolbar-tools > md-menu:last-child {
+      margin-right: 0;
+      margin-right: auto;
+      margin-right: initial;
+      margin-left: -8px; }
     .md-toolbar-tools > md-menu:last-child > .md-button {
       margin-right: 0; }
+      [dir=rtl] .md-toolbar-tools > md-menu:last-child > .md-button {
+        margin-right: 0;
+        margin-right: auto;
+        margin-right: initial;
+        margin-left: 0; }
   @media screen and (-ms-high-contrast: active) {
     .md-toolbar-tools {
       border-bottom: 1px solid #fff; } }
 
-@media only screen and (min-width: 0) and (max-width: 959px) and (orientation: portrait) {
+@media (min-width: 0) and (max-width: 959px) and (orientation: portrait) {
   md-toolbar {
     min-height: 56px; }
   .md-toolbar-tools {
     height: 56px;
     max-height: 56px; } }
 
-@media only screen and (min-width: 0) and (max-width: 959px) and (orientation: landscape) {
+@media (min-width: 0) and (max-width: 959px) and (orientation: landscape) {
   md-toolbar {
     min-height: 48px; }
   .md-toolbar-tools {

@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.0.9
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 md-radio-button {
   box-sizing: border-box;
   display: block;
@@ -145,7 +150,7 @@ md-radio-group md-radio-button:not(:first-child) {
 md-radio-group.layout-row md-radio-button {
   margin-top: 0;
   margin-bottom: 0;
-  margin-left: inherit;
+  margin-left: 0;
   margin-right: 16px; }
   html[dir=rtl] md-radio-group.layout-row md-radio-button {
     margin-left: 16px;
@@ -160,10 +165,10 @@ md-radio-group.layout-row md-radio-button {
     direction: ltr;
     unicode-bidi: bidi-override; }
   html[dir=rtl] md-radio-group.layout-row md-radio-button {
-    margin-right: inherit;
+    margin-right: 0;
     unicode-bidi: embed; }
   body[dir=rtl] md-radio-group.layout-row md-radio-button {
-    margin-right: inherit;
+    margin-right: 0;
     unicode-bidi: embed; }
   md-radio-group.layout-row md-radio-button bdo[dir=rtl] {
     direction: rtl;
@@ -172,32 +177,8 @@ md-radio-group.layout-row md-radio-button {
     direction: ltr;
     unicode-bidi: bidi-override; }
   md-radio-group.layout-row md-radio-button:last-of-type {
-    margin-left: inherit;
+    margin-left: 0;
     margin-right: 0; }
-    html[dir=rtl] md-radio-group.layout-row md-radio-button:last-of-type {
-      margin-left: 0;
-      unicode-bidi: embed; }
-    body[dir=rtl] md-radio-group.layout-row md-radio-button:last-of-type {
-      margin-left: 0;
-      unicode-bidi: embed; }
-    md-radio-group.layout-row md-radio-button:last-of-type bdo[dir=rtl] {
-      direction: rtl;
-      unicode-bidi: bidi-override; }
-    md-radio-group.layout-row md-radio-button:last-of-type bdo[dir=ltr] {
-      direction: ltr;
-      unicode-bidi: bidi-override; }
-    html[dir=rtl] md-radio-group.layout-row md-radio-button:last-of-type {
-      margin-right: inherit;
-      unicode-bidi: embed; }
-    body[dir=rtl] md-radio-group.layout-row md-radio-button:last-of-type {
-      margin-right: inherit;
-      unicode-bidi: embed; }
-    md-radio-group.layout-row md-radio-button:last-of-type bdo[dir=rtl] {
-      direction: rtl;
-      unicode-bidi: bidi-override; }
-    md-radio-group.layout-row md-radio-button:last-of-type bdo[dir=ltr] {
-      direction: ltr;
-      unicode-bidi: bidi-override; }
 
 md-radio-group:focus {
   outline: none; }

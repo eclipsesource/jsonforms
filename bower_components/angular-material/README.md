@@ -1,10 +1,22 @@
-This repo is for distribution on `npm` and `bower`. The source for this module is in the
-[main Angular Material repo](https://github.com/angular/material).
-Please file issues and pull requests against that repo.
+This repository is used only for Angular Material v1.x library deployments and localized installs using `npm` and `bower`. The actual component source-code for this library is in the
+[main Angular Material repository](https://github.com/angular/material).
+
+> Please file issues and pull requests against that `angular/material` repository only. Do not file issues here on the deployment repository.
+
+## Layouts and SCSS
+
+Included in this repository are the:
+
+* **[SCSS files](https://github.com/angular/bower-material/tree/master/modules/scss)** which are used to build the *.css files
+* **[Layout files](https://github.com/angular/bower-material/tree/master/modules/layouts)** which are used with the Angular Material (Flexbox) Layout API. 
+
+> Note these are already included in the `angular-material.css` files. These copies are for direct developer access and contain IE flexbox fixes; as needed.
 
 ## Installing Angular Material
 
-You can install this package locally either with `npm`, `jspm`, or `bower`. 
+You can install this package locally either with `npm`, `jspm`, or `bower` (deprecated). 
+
+> Please note that Angular Material requires **Angular 1.3.x** or higher. 
 
 ### npm
 
@@ -17,6 +29,15 @@ npm install angular-material --save
 
 # To install from HEAD of master
 npm install http://github.com/angular/bower-material/tarball/master
+
+# or use alternate syntax to install HEAD from master
+npm install http://github.com/angular/bower-material#master --save
+# note: ^^ creates the following package.json dependency
+#      "angular-material": "git+ssh://git@github.com/angular/bower-material.git#master"
+
+
+# To install a v1.1.0-rc2 version 
+npm install http://github.com/angular/bower-material/tarball/v1.1.0-rc2 --save
 
 # To view all installed package 
 npm list;
@@ -44,7 +65,7 @@ Now you can use `require('angular-material')` when installing with **npm** or **
 bower install angular-material
 
 # To get the most recent, last committed-to-master version use:
-bower install angular-material#master
+bower install 'angular-material#master'
 
 # To save the bower settings for future use:
 bower install angular-material --save
@@ -52,9 +73,6 @@ bower install angular-material --save
 # Later, you can use easily update with:
 bower update
 ```
-
-> Please note that Angular Material requires **Angular 1.3.x** or higher.
-
 
 ## Using the Angular Material Library
 
@@ -140,18 +158,18 @@ This is especially useful when using online tools such as CodePen, Plunkr, or js
   <head>
 
     <!-- Angular Material CSS now available via Google CDN; version 0.9.4 used here -->
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
 
   </head>
   <body>
   
     <!-- Angular Material Dependencies -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
     
     <!-- Angular Material Javascript now available via Google CDN; version 0.9.4 used here -->
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
     
   </body>
 ```
@@ -159,7 +177,7 @@ This is especially useful when using online tools such as CodePen, Plunkr, or js
 > Note that the above sample references the 0.9.4 CDN release. Your version will change 
 based on the latest stable release version.
 
-## Jasmine Testing with Angular Material
+## Unit Testing with Angular Material
 
 <br/>
 If you are using Angular Material and will be using Jasmine to test your own custom application code, you will need to also load two (2) Angular mock files:

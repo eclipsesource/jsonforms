@@ -2,8 +2,13 @@
  * Angular Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.0.5
+ * v1.1.0-rc4-master-c26842a
  */
+/*  Only used with Theme processes */
+html.md-THEME_NAME-theme, body.md-THEME_NAME-theme {
+  color: '{{foreground-1}}';
+  background-color: '{{background-color}}'; }
+
 .md-inline-form md-switch {
   margin-top: 18px;
   margin-bottom: 19px; }
@@ -27,62 +32,22 @@ md-switch {
   display: flex;
   margin-left: inherit;
   margin-right: 16px; }
-  html[dir=rtl] md-switch {
-    margin-left: 16px;
-    unicode-bidi: embed; }
-  body[dir=rtl] md-switch {
-    margin-left: 16px;
-    unicode-bidi: embed; }
-  md-switch bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override; }
-  md-switch bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override; }
-  html[dir=rtl] md-switch {
-    margin-right: inherit;
-    unicode-bidi: embed; }
-  body[dir=rtl] md-switch {
-    margin-right: inherit;
-    unicode-bidi: embed; }
-  md-switch bdo[dir=rtl] {
-    direction: rtl;
-    unicode-bidi: bidi-override; }
-  md-switch bdo[dir=ltr] {
-    direction: ltr;
-    unicode-bidi: bidi-override; }
+  [dir=rtl] md-switch {
+    margin-left: 16px; }
+  [dir=rtl] md-switch {
+    margin-right: inherit; }
   md-switch:last-of-type {
     margin-left: inherit;
     margin-right: 0; }
-    html[dir=rtl] md-switch:last-of-type {
-      margin-left: 0;
-      unicode-bidi: embed; }
-    body[dir=rtl] md-switch:last-of-type {
-      margin-left: 0;
-      unicode-bidi: embed; }
-    md-switch:last-of-type bdo[dir=rtl] {
-      direction: rtl;
-      unicode-bidi: bidi-override; }
-    md-switch:last-of-type bdo[dir=ltr] {
-      direction: ltr;
-      unicode-bidi: bidi-override; }
-    html[dir=rtl] md-switch:last-of-type {
-      margin-right: inherit;
-      unicode-bidi: embed; }
-    body[dir=rtl] md-switch:last-of-type {
-      margin-right: inherit;
-      unicode-bidi: embed; }
-    md-switch:last-of-type bdo[dir=rtl] {
-      direction: rtl;
-      unicode-bidi: bidi-override; }
-    md-switch:last-of-type bdo[dir=ltr] {
-      direction: ltr;
-      unicode-bidi: bidi-override; }
+    [dir=rtl] md-switch:last-of-type {
+      margin-left: 0; }
+    [dir=rtl] md-switch:last-of-type {
+      margin-right: inherit; }
   md-switch[disabled] {
     cursor: default; }
-    md-switch[disabled] .md-container {
+    md-switch[disabled] ._md-container {
       cursor: default; }
-  md-switch .md-container {
+  md-switch ._md-container {
     cursor: -webkit-grab;
     cursor: grab;
     width: 36px;
@@ -94,29 +59,34 @@ md-switch {
             user-select: none;
     margin-right: 8px;
     float: left; }
-  md-switch:not([disabled]) .md-dragging,
-  md-switch:not([disabled]).md-dragging .md-container {
+    [dir=rtl] md-switch ._md-container {
+      margin-right: 0;
+      margin-right: auto;
+      margin-right: initial;
+      margin-left: 8px; }
+  md-switch:not([disabled]) ._md-dragging,
+  md-switch:not([disabled])._md-dragging ._md-container {
     cursor: -webkit-grabbing;
     cursor: grabbing; }
-  md-switch.md-focused:not([disabled]) .md-thumb:before {
+  md-switch.md-focused:not([disabled]) ._md-thumb:before {
     left: -8px;
     top: -8px;
     right: -8px;
     bottom: -8px; }
-  md-switch.md-focused:not([disabled]):not(.md-checked) .md-thumb:before {
+  md-switch.md-focused:not([disabled]):not(.md-checked) ._md-thumb:before {
     background-color: rgba(0, 0, 0, 0.12); }
-  md-switch .md-label {
+  md-switch ._md-label {
     border-color: transparent;
     border-width: 0;
     float: left; }
-  md-switch .md-bar {
+  md-switch ._md-bar {
     left: 1px;
     width: 34px;
     top: 5px;
     height: 14px;
     border-radius: 8px;
     position: absolute; }
-  md-switch .md-thumb-container {
+  md-switch ._md-thumb-container {
     top: 2px;
     left: 0;
     width: 16px;
@@ -124,10 +94,10 @@ md-switch {
     -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
     z-index: 1; }
-  md-switch.md-checked .md-thumb-container {
+  md-switch.md-checked ._md-thumb-container {
     -webkit-transform: translate3d(100%, 0, 0);
             transform: translate3d(100%, 0, 0); }
-  md-switch .md-thumb {
+  md-switch ._md-thumb {
     position: absolute;
     margin: 0;
     left: 0;
@@ -137,7 +107,7 @@ md-switch {
     width: 20px;
     border-radius: 50%;
     box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12); }
-    md-switch .md-thumb:before {
+    md-switch ._md-thumb:before {
       background-color: transparent;
       border-radius: 50%;
       content: '';
@@ -150,7 +120,7 @@ md-switch {
       bottom: 0;
       transition: all 0.5s;
       width: auto; }
-    md-switch .md-thumb .md-ripple-container {
+    md-switch ._md-thumb .md-ripple-container {
       position: absolute;
       display: block;
       width: auto;
@@ -159,20 +129,20 @@ md-switch {
       top: -20px;
       right: -20px;
       bottom: -20px; }
-  md-switch:not(.md-dragging) .md-bar,
-  md-switch:not(.md-dragging) .md-thumb-container,
-  md-switch:not(.md-dragging) .md-thumb {
+  md-switch:not(._md-dragging) ._md-bar,
+  md-switch:not(._md-dragging) ._md-thumb-container,
+  md-switch:not(._md-dragging) ._md-thumb {
     transition: all 0.08s linear;
     transition-property: -webkit-transform, background-color;
     transition-property: transform, background-color; }
-  md-switch:not(.md-dragging) .md-bar,
-  md-switch:not(.md-dragging) .md-thumb {
+  md-switch:not(._md-dragging) ._md-bar,
+  md-switch:not(._md-dragging) ._md-thumb {
     transition-delay: 0.05s; }
 
 @media screen and (-ms-high-contrast: active) {
-  md-switch.md-default-theme .md-bar {
+  md-switch.md-default-theme ._md-bar {
     background-color: #666; }
-  md-switch.md-default-theme.md-checked .md-bar {
+  md-switch.md-default-theme.md-checked ._md-bar {
     background-color: #9E9E9E; }
-  md-switch.md-default-theme .md-thumb {
+  md-switch.md-default-theme ._md-thumb {
     background-color: #fff; } }
