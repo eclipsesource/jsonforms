@@ -83,15 +83,14 @@ export class FormController {
             let schema = values[0];
             this.uiSchema = <IUISchemaElement> values[1];
             let data = values[2];
-            // this.render(schema, data);
             let unresolvedRefs = JsonRefs.findRefs(schema);
-            if (unresolvedRefs === undefined || Object.keys(unresolvedRefs).length === 0) {
+            if (_.size(unresolvedRefs) === 0) {
                 this.render(schema, data);
             } else {
                 JsonRefs.resolveRefs(schema).then(
                     res => {
                         this.render(res.resolved, data);
-                        // Eugen: don't understand why this is needed in the remote case
+                        // needed for remote cases
                         this.scope.$digest();
                     },
                     err => {
