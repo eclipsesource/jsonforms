@@ -1,6 +1,6 @@
 {
   "name": "jsonforms",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Generating forms for JSON schema",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -11,6 +11,7 @@
     "dev": "webpack --config webpack/webpack.dev.js; webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "test": "karma start --NODE_ENV=test",
     "build": "webpack --config webpack/webpack.build.js --NODE_ENV=production --display-error-details",
+    "build-bootstrap": "webpack --config webpack/webpack.build-bootstrap.js --NODE_ENV=production --display-error-details",
     "postinstall": "typings install",
     "publish-patch": "npm -no-git-tag-version version patch && npm run commit-local && npm run push-tag && npm publish",
     "publish-minor": "npm -no-git-tag-version version minor && npm run commit-local && npm run push-tag && npm publish",
@@ -37,6 +38,7 @@
     "browser-sync": "2.11.1",
     "browser-sync-webpack-plugin": "1.0.1",
     "compression-webpack-plugin": "0.3.0",
+    "copy-webpack-plugin": "3.0.0",
     "coveralls": "^2.11.9",
     "css-loader": "^0.23.1",
     "exports-loader": "^0.6.3",

@@ -1,0 +1,12 @@
+<div class="jsf-masterdetail">
+    <!-- Master -->
+    <div class="jsf-masterdetail-master">
+        <jsonforms-masterdetail-collection properties="vm.subSchema.properties"
+                                           instance="vm.data">
+        </jsonforms-masterdetail-collection>
+    </div>
+    <!-- Detail -->
+    <div class="jsf-masterdetail-detail">
+        <jsonforms schema="vm.selectedSchema" data="vm.selectedChild" ng-if="vm.selectedChild"></jsonforms>
+    </div>
+</div>

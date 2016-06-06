@@ -5,7 +5,10 @@ export default angular
         return {
             restrict: 'E',
             transclude: true,
-            template: require('./layout.html')
+            templateUrl: 'layout.html'
         };
     })
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('layout.html', require('./layout.html'));
+    }])
     .name;

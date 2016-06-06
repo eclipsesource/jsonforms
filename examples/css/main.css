@@ -2,22 +2,90 @@
 
 .jsf .array-submit-btn {
 }
+.container{
+    max-width: 1200px;
+    margin: auto;
+}
+.container-fluid{
+    display: flex;
+    justify-content: space-between;
+}
+.navbar{
+    margin-bottom: 1.5em;
+}
+.navbar-inverse{
+    background-color: #222;
+}
+.navbar-header {
+    display: flex;
+}
+.navbar-inverse .navbar-brand {
+    color: #9d9d9d;
+    padding: 15px;
+    font-size: 18px;
+    line-height: 20px;
+    text-decoration: none;
+}
+.dropdown-menu{
+    display: none;
+    position: absolute;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.navbar-collapse ul {
+    list-style-type: none;
+    background-color: #222;
+    padding: 0 1em;
+}
+.navbar-collapse li {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.navbar-collapse li a.dropdown-toggle{
+    align-self: center;
+}
+.navbar-collapse li a{
+    color: white;
+    text-decoration: none;
+}
+.navbar-collapse li a:hover{
+    color: lightgrey;
+}
 
 h1 {
-    color: white;
 }
 
 .jsf h2 {
     color: white;
 }
+.jsf h3 {
+    font-size: 24px;
+    font-weight: 500;
+}
 
 .jsf label {
     color: white;
 }
-
+.jsf pre {
+    background-color: #f5f5f5;
+    padding: 0.5em;
+}
+.jsf .panel {
+    margin-bottom: 1.5em;
+}
+.jsf .panel-body {
+    padding: 0.5em;
+}
+.jsf .panel-heading {
+    padding: 0.5em;
+    display: flex;
+}
 body {
     background-image: url('../assets/images/bg.jpg');
     font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
 }
 
 .panel > .panel-heading {
@@ -115,7 +183,7 @@ body {
 }
 
 .jsf-masterdetail{
-
+    color: white;
 }
 
 .jsf .jsf-masterdetail .panel-body {
@@ -142,7 +210,6 @@ body {
 }
 .jsf-masterdetail-property {
     font-style: italic;
-    color: white;
 }
 .jsf-masterdetail-header {
     text-decoration: none;

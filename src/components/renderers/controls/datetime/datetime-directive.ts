@@ -5,34 +5,14 @@ import {IUISchemaElement} from '../../../../jsonforms';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-control>
-        <div class="input-group">
-          <input type="text"
-                 uib-datepicker-popup="dd.MM.yyyy"
-                 close-text="Close"
-                 is-open="vm.isOpen"
-                 id="{{vm.id}}"
-                 class="form-control jsf-control-datetime"
-                 ng-change='vm.modelChanged()'
-                 ng-model="vm.dt"
-                 ng-model-options="{timezone:'UTC'}"
-                 ng-readonly="vm.uiSchema.readOnly"/>
-             <span class="input-group-btn">
-               <button type="button" class="btn btn-default" ng-click="vm.openDate()">
-                 <i class="glyphicon glyphicon-calendar"></i>
-               </button>
-             </span>
-        </div>
-    </jsonforms-control>`;
+    templateUrl = 'datetime.html';
     controller = DateTimeController;
     controllerAs = 'vm';
 }
-interface DateTimeControllerScope extends ng.IScope {
+export interface DateTimeControllerScope extends ng.IScope {
 }
-class DateTimeController extends AbstractControl {
+export class DateTimeController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
-    private isOpen: boolean = false;
     private dt: Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
@@ -40,9 +20,7 @@ class DateTimeController extends AbstractControl {
         if (value) {
             this.dt = new Date(value);
         }
-    }
-    public openDate() {
-        this.isOpen = true;
+        scope.$watch('vm.modelValue[vm.fragment]', (newValue) => {this.updateDateObject(); });
     }
     protected modelChanged() {
         if (this.dt != null) {
@@ -52,6 +30,9 @@ class DateTimeController extends AbstractControl {
             this.modelValue[this.fragment] = null;
         }
         super.modelChanged();
+    }
+    private updateDateObject() {
+        this.dt = new Date(this.modelValue[this.fragment]);
     }
 }
 const DateTimeControlRendererTester: RendererTester = function(element: IUISchemaElement,
@@ -75,4 +56,7 @@ export default angular
     .run(['RendererService', RendererService =>
             RendererService.register('datetime-control', DateTimeControlRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('datetime.html', require('./datetime.html'));
+    }])
     .name;
