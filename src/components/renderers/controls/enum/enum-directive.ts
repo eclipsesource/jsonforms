@@ -6,12 +6,12 @@ import {IUISchemaElement} from '../../../../jsonforms';
 class EnumDirective implements ng.IDirective {
     restrict = 'E';
     template = `<jsonforms-control>
-      <select ng-options="option as option for option in vm.options" 
-              id="{{vm.id}}" 
-              class="form-control jsf-control jsf-control-enum" 
-              ng-change='vm.modelChanged()' 
-              ng-model="vm.modelValue[vm.fragment]" 
-              ng-readonly="vm.uiSchema.readOnly">             
+      <select ng-options="option as option for option in vm.options"
+              id="{{vm.id}}"
+              class="form-control jsf-control-enum" 
+              ng-change='vm.modelChanged()'
+              ng-model="vm.modelValue[vm.fragment]"
+              ng-readonly="vm.uiSchema.readOnly">
       </select>
     </jsonforms-control>`;
     controller = EnumController;

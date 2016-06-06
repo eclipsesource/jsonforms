@@ -1,13 +1,13 @@
 import "angular"
 import "angular-mocks"
-import "../../../../index"
+import "../../jsonforms_bootstrap.ts"
 
-describe('MasterDetail', () => {
+describe('MasterDetailBootstrap', () => {
 
     // load all necessary modules and templates
     beforeEach(angular.mock.module('jsonforms.form'));
 
-    it("should be rendered",
+    xit("should be rendered",
         angular.mock.inject(($rootScope, $compile) => {
 
         let scope = $rootScope.$new();
@@ -69,7 +69,7 @@ describe('MasterDetail', () => {
         let nameInput_empty = el[0].querySelector("#\\#\\/properties\\/name");
         expect(nameInput_empty).toBeNull();
 
-        let x1 = el[0].querySelector("span.jsf-masterdetail-entry");
+        let x1 = el[0].querySelector("uib-accordion uib-accordion uib-accordion-heading span");
         angular.element(x1).triggerHandler("click");
         expect(el.html()).toContain("<label");
         let nameInput = el[0].querySelector("#\\#\\/properties\\/name");

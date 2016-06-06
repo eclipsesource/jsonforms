@@ -1,0 +1,19 @@
+<jsonforms-control>
+    <div class="input-group">
+      <input type="text"
+             uib-datepicker-popup="dd.MM.yyyy"
+             close-text="Close"
+             is-open="vm.isOpen"
+             id="{{vm.id}}"
+             class="form-control jsf-control-datetime"
+             ng-change='vm.modelChanged()'
+             ng-model="vm.dt"
+             ng-model-options="{timezone:'UTC'}"
+             ng-readonly="vm.uiSchema.readOnly"/>
+         <span class="input-group-btn">
+           <button type="button" class="btn btn-default" ng-click="vm.openDate()">
+             <i class="glyphicon glyphicon-calendar"></i>
+           </button>
+         </span>
+    </div>
+</jsonforms-control>

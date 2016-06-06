@@ -6,33 +6,18 @@ import {IUISchemaElement} from '../../../../jsonforms';
 
 class HorizontalDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-layout>
-        <div class="jsf-horizontal-layout">
-            <fieldset class="row">
-                <div ng-repeat="child in vm.uiSchema.elements" class="col-sm-{{vm.childSize}}">
-                    <jsonforms-inner ui-schema="child"></jsonforms-inner>
-                </div>
-        </fieldset>
-        </div>
-    </jsonforms-layout>`;
+    templateUrl = 'horizontal.html';
     controller = HorizontalController;
     controllerAs = 'vm';
 }
-interface HorizontalControllerScope extends ng.IScope {
+export interface HorizontalControllerScope extends ng.IScope {
 }
-class HorizontalController  extends AbstractLayout {
+export class HorizontalController  extends AbstractLayout {
     static $inject = ['$scope'];
 
     constructor(scope: HorizontalControllerScope) {
         super(scope);
         this.updateChildrenLabel(this.uiSchema.elements);
-    }
-    private get size(){
-        return 100;
-    }
-    private get childSize(){
-        return Math.floor(this.size / this.uiSchema.elements.length);
     }
     private updateChildrenLabel(elements: IUISchemaElement[]): void {
         let labelExists = elements.reduce((atLeastOneLabel, element) => {
@@ -64,4 +49,7 @@ export default angular
     .run(['RendererService', RendererService =>
         RendererService.register('horizontallayout', HorizontalLayoutRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('horizontal.html', require('./horizontal.html'));
+    }])
     .name;

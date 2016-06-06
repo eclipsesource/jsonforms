@@ -4,10 +4,11 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: [
-        './src/index.ts'
+        "bootstrap-webpack!./bootstrap.config.js",
+        './src/bootstrap/jsonforms_bootstrap.ts'
     ],
     output: {
-        filename: 'jsonforms.js',
+        filename: 'jsonforms-bootstrap.js',
         path: 'dist'
     },
     plugins: [
@@ -25,7 +26,7 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
-            { from: 'src/jsonforms.css' }
+            { from: 'src/bootstrap/jsonforms-bootstrap.css' }
         ])
     ],
     devtool: 'source-map',

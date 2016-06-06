@@ -5,16 +5,7 @@ import {IUISchemaElement} from '../../../../jsonforms';
 
 class VerticalDirective implements ng.IDirective {
     restrict = 'E';
-    template = `<jsonforms-layout>
-        <div class="jsf-vertical-layout">
-            <fieldset class="row">
-                <jsonforms-inner ng-repeat="child in vm.uiSchema.elements" 
-                                 ui-schema="child" 
-                                 class="col-sm-100">
-                </jsonforms-inner>
-            </fieldset>
-        </div>    
-    </jsonforms-layout>`;
+    templateUrl = 'vertical.html';
     controller = VerticalController;
     controllerAs = 'vm';
 }
@@ -42,4 +33,7 @@ export default angular
     .run(['RendererService', RendererService =>
         RendererService.register('verticallayout', VerticalLayoutRendererTester)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('vertical.html', require('./vertical.html'));
+    }])
     .name;

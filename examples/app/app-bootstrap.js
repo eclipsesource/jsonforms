@@ -4,5 +4,5 @@ angular.module('makeithappen', [
     'ngRoute',
     //'ngResource',
     //'ui.ace',
-    'jsonforms'
+    'jsonforms-bootstrap'
 ]);
