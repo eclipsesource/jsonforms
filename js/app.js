@@ -352,6 +352,17 @@ angular.module('jsonforms-website', [
             return false;
         };
 
+        vm.openEditorInNewTab = function () {
+            vm.reparseStatic();
+            var tab = window.open('http://jsonformseditor.herokuapp.com/#/demo');
+            setTimeout(function() {
+                tab.postMessage({
+                    dataSchema: vm.localStaticModelObject,
+                    uiSchema: vm.localStaticViewObject
+                }, '*');
+            }, 14000); // heroku needs 12 secs. aprox. to build the editor
+        };
+
         vm.staticDataProvider = StaticData;
         vm.dynamicDataProvider = DynamicData;
 
