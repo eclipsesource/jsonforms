@@ -1,10 +1,7 @@
 {
-  "name": "examples",
-  "homepage": "https://github.com/edgarmueller/jsonforms",
-  "authors": [
-    "Edgar Mueller <edgar.m.mueller@gmail.com>"
-  ],
-  "description": "",
+  "name": "JSON Forms examples",
+  "homepage": "https://github.com/eclipsesource/jsonforms",
+  "description": "JSON Forms examples",
   "main": "",
   "license": "MIT",
   "ignore": [

@@ -21,7 +21,7 @@ module.exports = {
         modulesDirectories: ["node_modules"]
     },
     devServer: {
-        contentBase: './examples',
+        contentBase: './examples'
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
@@ -31,7 +31,10 @@ module.exports = {
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
             'window.jquery': 'jquery'
-        })
+        }),
+        new CopyWebpackPlugin([
+            { from: 'src/jsonforms.css' }
+        ])
     ],
     module:{
         loaders: loaders
