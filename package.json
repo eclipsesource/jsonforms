@@ -17,7 +17,7 @@
     "publish-minor": "npm -no-git-tag-version version minor && npm run commit-local && npm run push-tag && npm publish",
     "publish-major": "npm -no-git-tag-version version major && npm run commit-local && npm run push-tag && npm publish",
     "commit-local": "git add package.json && git commit -m \"Bump version number to $npm_package_version\"",
-    "push-tag": "git checkout -b auto-git-publish-$npm_package_version && git add -f dist/jsonforms.js && git commit -m \"Release $npm_package_version\" && git tag -a $npm_package_version -m \"Release $npm_package_version\" && git push upstream $npm_package_version"
+    "push-tag": "git checkout -b auto-git-publish-$npm_package_version && git add -f dist/jsonforms.js dist/jsonforms.css dist/jsonforms-bootstrap.js dist/jsonforms-bootstrap.css && git commit -m \"Release $npm_package_version\" && git tag -a $npm_package_version -m \"Release $npm_package_version\" && git push upstream $npm_package_version"
   },
   "dependencies": {
     "angular": "1.5.0",
