@@ -73,6 +73,11 @@ export class SchemaProvider implements ISchemaProvider {
 }
 export class ValidationService implements IValidationService {
 
+    /*
+        this are keys that must be ignored as otherwise we end up in a stack overflow.
+        - $promise and $$state are keys of ngresource
+    */
+    private static IgnoreKeys: string[] = ['$promise', '$$state'];
     private validationResults = new HashTable();
 
     getId(): ServiceId {
@@ -110,6 +115,9 @@ export class ValidationService implements IValidationService {
 
     private convertAllDates(instance): void {
         _.forOwn(instance, (value, key) => {
+            if (_.includes(ValidationService.IgnoreKeys, key)) {
+                return;
+            }
             if (value instanceof Date) {
                 instance[key] = value.toString();
             } else if (value instanceof Object) {
