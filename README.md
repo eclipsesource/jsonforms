@@ -12,7 +12,8 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 * Install dependencies: `npm install`
 
 # Build & Testing
-* Build: `npm run build` (runs `tslint` as well)
+* Normal Build: `npm run build` (runs `tslint` as well)
+* Bootstrap Build: `npm run build-bootstrap`
 * Test: `npm run test`
 
 # Usage
