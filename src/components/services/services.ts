@@ -73,12 +73,8 @@ export class SchemaProvider implements ISchemaProvider {
 }
 export class ValidationService implements IValidationService {
 
-    /*
-        this are keys that must be ignored as otherwise we end up in a stack overflow.
-        - $promise and $$state are keys of ngresource
-    */
-    private static IgnoreKeys: string[] = ['$promise', '$$state'];
     private validationResults = new HashTable();
+    private checkObjects : Array<Object> = [];
 
     getId(): ServiceId {
         return ServiceId.Validation;
@@ -99,6 +95,7 @@ export class ValidationService implements IValidationService {
         }
 
         this.convertAllDates(instance);
+        this.checkObjects = [];
         this.clear(instance);
         // TODO
         let results = tv4.validateMultiple(instance, schema);
@@ -115,9 +112,10 @@ export class ValidationService implements IValidationService {
 
     private convertAllDates(instance): void {
         _.forOwn(instance, (value, key) => {
-            if (_.includes(ValidationService.IgnoreKeys, key)) {
+            if (_.includes(this.checkObjects, value)) {
                 return;
             }
+            this.checkObjects.push(value);
             if (value instanceof Date) {
                 instance[key] = value.toString();
             } else if (value instanceof Object) {
