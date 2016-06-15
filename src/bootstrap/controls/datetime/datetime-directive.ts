@@ -18,6 +18,18 @@ class DateTimeBootstrapController extends DateTimeController {
     }
     public openDate() {
         this.isOpen = true;
+        if (this.dt == null) {
+            this.dt = new Date();
+            this.modelChanged();
+        }
+    }
+    protected updateDateObject() {
+        let value = this.modelValue[this.fragment];
+        if (value) {
+            this.dt = new Date(value);
+        } else {
+            this.dt = null;
+        }
     }
 }
 const DateTimeControlBootstrapRendererTester: RendererTester = function(element: IUISchemaElement,
