@@ -5,6 +5,10 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/person/person.html',
             controller: 'PersonController',
             controllerAs: 'vm'
+        }).when('/resolve', {
+            templateUrl: 'app/resolve/resolve.html',
+            controller: 'ResolveController',
+            controllerAs: 'vm'
         }).when('/editor', {
             templateUrl: 'app/editor/editor.html',
             controller: 'EditorController',
