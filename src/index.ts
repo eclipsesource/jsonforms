@@ -5,9 +5,9 @@ import pathResolver from './components/ng-services/pathresolver/pathresolver-ser
 
 require('angular-ui-validate');
 
-angular.module('jsonforms', [
+export default angular.module('jsonforms', [
     'ui.validate',
     form,
     capitalize,
     pathResolver
-]);
+]).name;

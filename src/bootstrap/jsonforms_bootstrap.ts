@@ -1,5 +1,7 @@
 import 'angular';
 
+import core from '../index'
+
 import '../../jsf-bootstrap.css';
 import datetimeControlDirective from './controls/datetime/datetime-directive';
 import booleanControlDirective from './controls/boolean/boolean-directive';
@@ -10,20 +12,12 @@ import horizontalLayoutDirective from './layouts/horizontal/horizontal-directive
 import masterDetailDirectives from './layouts/masterdetail/masterdetail-directives';
 import groupLayoutDirective from './layouts/group/group-directive';
 
-import form from '../components/form/form';
-import capitalize from '../components/ng-services/capitalize/capitalize.filter';
-import pathResolver from '../components/ng-services/pathresolver/pathresolver-service';
-
 require('angular-ui-bootstrap');
 require('angular-ui-bootstrap/dist/ui-bootstrap-csp.css');
-require('angular-ui-validate');
 
 angular.module('jsonforms-bootstrap', [
-    'ui.validate',
+    core,
     'ui.bootstrap',
-    form,
-    capitalize,
-    pathResolver,
     datetimeControlDirective,
     booleanControlDirective,
     controlDirective,
