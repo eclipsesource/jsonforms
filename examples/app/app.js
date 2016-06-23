@@ -2,6 +2,7 @@
 
 var app = angular.module('makeithappen', [
     'ngRoute',
+    'jsonforms'
 ]);
 
 try {

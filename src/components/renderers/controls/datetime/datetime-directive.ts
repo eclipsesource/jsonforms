@@ -13,7 +13,7 @@ export interface DateTimeControllerScope extends ng.IScope {
 }
 export class DateTimeController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
-    private dt: Date;
+    protected dt: Date;
     constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
         super(scope, pathResolver);
         let value = this.modelValue[this.fragment];
@@ -31,7 +31,7 @@ export class DateTimeController extends AbstractControl {
         }
         super.modelChanged();
     }
-    private updateDateObject() {
+    protected updateDateObject() {
         this.dt = new Date(this.modelValue[this.fragment]);
     }
 }
