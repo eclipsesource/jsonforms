@@ -1,19 +1,19 @@
-import "angular"
-import "angular-mocks"
-import "../../../index"
+import 'angular';
+import 'angular-mocks';
+import '../../../index';
 
-import {DataProviders, DefaultDataProvider} from "./data-services";
-import {IDataProvider} from "./data-service";
-import {ServiceId} from "../services";
+import {DataProviders, DefaultDataProvider} from './data-services';
+import {IDataProvider} from './data-service';
+import {ServiceId} from '../services';
 
 
 describe('DataProvider', () => {
 
     // load all necessary modules and templates
     beforeEach(angular.mock.module('jsonforms.form'));
-  
+
     let $q, $timeout;
-    let data = [{ name: "foo" }, { name: "bar" }, { name: "baz" }];
+    let data = [{ name: 'foo' }, { name: 'bar' }, { name: 'baz' }];
 
     class FilteringDataProvider implements IDataProvider {
 
@@ -21,15 +21,15 @@ describe('DataProvider', () => {
         constructor(private $q: ng.IQService) {}
 
         get canPage(): boolean { return false; }
-        get canFilter() :boolean { return true; }
+        get canFilter(): boolean { return true; }
 
-        fetchData():angular.IPromise<any> {
+        fetchData(): angular.IPromise<any> {
             let p = this.$q.defer();
             p.resolve(data);
             return p.promise;
         }
 
-        getData():any {
+        getData(): any {
             return data;
         }
 
@@ -39,7 +39,7 @@ describe('DataProvider', () => {
 
         filter(names: string[]) {
             let p = this.$q.defer();
-            let filtered = data.filter((obj) => names.indexOf(obj.name) != -1);
+            let filtered = data.filter((obj) => names.indexOf(obj.name) !== -1);
             p.resolve(filtered);
             return p.promise;
         }
@@ -51,7 +51,7 @@ describe('DataProvider', () => {
         $timeout = _$timeout_;
     }));
 
-    it("should resolve properties path on the UI schema", (done) => {
+    it('should resolve properties path on the UI schema', (done) => {
         let provider = new FilteringDataProvider($q);
         let promise = provider.filter(['baz']);
         promise.then((filtered: any[]) => {
@@ -60,22 +60,22 @@ describe('DataProvider', () => {
         $timeout.flush();
     });
 
-    it("should be able to filter", () => {
+    it('should be able to filter', () => {
         let provider = new FilteringDataProvider($q);
         expect(DataProviders.canFilter(provider)).toBe(true);
     });
 
-    it("should not be able to page", () => {
+    it('should not be able to page', () => {
         let provider = new FilteringDataProvider($q);
         expect(DataProviders.canPage(provider)).toBe(false);
     });
 
-    it("should be able to page", () => {
+    it('should be able to page', () => {
         let provider = new DefaultDataProvider($q, data);
         expect(DataProviders.canPage(provider)).toBe(true);
     });
 
-    it("should not be able to filter", () => {
+    it('should not be able to filter', () => {
         let provider = new DefaultDataProvider($q, data);
         expect(DataProviders.canFilter(provider)).toBe(false);
     });

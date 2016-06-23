@@ -13,7 +13,7 @@ class LabelController {
     static $inject = ['$scope'];
     private text: string;
     constructor(private scope: LabelControllerScope) {
-        this.text = scope['uiSchema']['text'];
+        this.text = scope['uischema']['text'];
     }
     private get size(){
         return 100;

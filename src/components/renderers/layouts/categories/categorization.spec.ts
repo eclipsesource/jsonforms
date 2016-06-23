@@ -1,56 +1,56 @@
-import "angular"
-import "angular-mocks"
-import "../../../../index.ts"
+import 'angular';
+import 'angular-mocks';
+import '../../../../index.ts';
 
 describe('Categorization', () => {
 
     // load all necessary modules and templates
     beforeEach(angular.mock.module('jsonforms.form'));
 
-    it("should be rendered",
+    it('should be rendered',
         angular.mock.inject(($rootScope, $compile) => {
 
         let scope = $rootScope.$new();
         scope.schema = {
-            "properties": {
-                "name": {
-                    "type": "string"
+            'properties': {
+                'name': {
+                    'type': 'string'
                 }
             }
         };
         scope.uiSchema = {
-            "type": "Categorization",
-            "elements": [
+            'type': 'Categorization',
+            'elements': [
                 {
-                    "type": "Category",
-                    "label":"Tab1",
-                    "elements": [
+                    'type': 'Category',
+                    'label': 'Tab1',
+                    'elements': [
                         {
-                            "type": "Control",
-                            "label": "Name",
-                            "scope": {
-                                "$ref": "#/properties/name"
+                            'type': 'Control',
+                            'label': 'Name',
+                            'scope': {
+                                '$ref': '#/properties/name'
                             }
                         },
                     ]
                 },
                 {
-                    "type": "Category",
-                    "label":"MyTab2",
-                    "elements": [
+                    'type': 'Category',
+                    'label': 'MyTab2',
+                    'elements': [
                         {
-                            "type": "Control",
-                            "label": "Name",
-                            "scope": {
-                                "$ref": "#/properties/name"
+                            'type': 'Control',
+                            'label': 'Name',
+                            'scope': {
+                                '$ref': '#/properties/name'
                             }
                         },
                     ]
                 },
             ]
         };
-        scope.data = { "name": "John Doe "};
-        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        scope.data = { 'name': 'John Doe '};
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         expect(el.html()).toContain('>Tab1</span>');
         expect(el.html()).toContain('>MyTab2</span>');

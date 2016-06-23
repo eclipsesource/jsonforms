@@ -39,7 +39,7 @@ describe('jsonforms directive', () => {
                     '$ref': '#/properties/address/properties/street'
                 }
             };
-            let el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')
+            let el = $compile('<jsonforms schema="schema" data="data" uischema="uiSchema">')
                 (scope);
             scope.$digest();
             setTimeout(() => {
@@ -65,7 +65,7 @@ describe('jsonforms directive', () => {
                     '$ref': '#/properties/coord/properties/longitude'
                 }
             };
-            let el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')
+            let el = $compile('<jsonforms schema="schema" data="data" uischema="uiSchema">')
                 (scope);
             scope.$digest();
             // debugger;
@@ -93,7 +93,7 @@ describe('jsonforms directive', () => {
             'label': 'Gender',
             'scope': { '$ref': '#/properties/gender' }
         };
-        let el = $compile('<jsonforms schema="schema" data="data" ui-schema="uiSchema">')(scope);
+        let el = $compile('<jsonforms schema="schema" data="data" uischema="uiSchema">')(scope);
         scope.$digest();
         // should test for more complex logic here
         expect(el.find('label').text()).toEqual('Gender');
@@ -106,7 +106,7 @@ describe('jsonforms directive', () => {
         scope.schema = {};
         scope.uiSchema = {};
         expect(function() {
-            $compile('<jsonforms schema="schema" ui-schema="uiSchema"/>')(scope);
+            $compile('<jsonforms schema="schema" uischema="uiSchema"/>')(scope);
             scope.$digest();
         }).toThrow(Error(`The 'data' attribute must be specified.`));
     }));
@@ -132,7 +132,7 @@ describe('jsonforms directive', () => {
             }
         };
         scope.data = { }; // empty data
-        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         let input = el.find('input');
         input.val('John Doe').triggerHandler('input');

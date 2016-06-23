@@ -8,7 +8,7 @@
                         select="vm.changeSelectedCategory(category)">
                         <fieldset ng-if="vm.selectedCategory===category">
                             <jsonforms-inner ng-repeat="child in category.elements"
-                                             ui-schema="child" >
+                                             uischema="child" >
                             </jsonforms-inner>
                         </fieldset>
                     </uib-tab>

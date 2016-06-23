@@ -27,7 +27,7 @@ properties of a aliased controller named `vm`:
  
 ```html 
   <div class="jsf">
-    <jsonforms schema="vm.schema" ui-schema="vm.uiSchema" data="vm.data"/
+    <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"/
   </div>
 ```
 
