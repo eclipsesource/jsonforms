@@ -2,10 +2,12 @@
 
 var app = angular.module('makeithappen', [
     'ngRoute',
-    'jsonforms'
 ]);
 
-angular.forEach(['jsonforms-bootstrap'], function(dep) {
-   app.requires.push(dep);
-});
-
+try {
+  // check whether jsonforms-bootstrap is available
+  angular.module('jsonforms-bootstrap')
+  app.requires.push('jsonforms-bootstrap');
+} catch(ignored) {
+  app.requires.push('jsonforms');
+}

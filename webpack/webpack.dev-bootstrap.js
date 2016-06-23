@@ -11,7 +11,6 @@ module.exports = {
     ],
     output: {
         filename: 'jsonforms.js',
-        path: 'dist',
         publicPath: '/assets/'
     },
     resolve: {
@@ -36,7 +35,7 @@ module.exports = {
         new CopyWebpackPlugin([
             {
                 from: 'src/bootstrap/jsonforms-bootstrap.css',
-                to: 'jsonforms.css'
+                to:   'examples/assets/jsonforms.css'
             }
         ])
     ],

@@ -4,12 +4,13 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
-    entry: [
-        './src/index.ts'
-    ],
+    entry: {
+        'dist/jsonforms': './src/index.ts',
+        'examples/assets/jsonforms': './src/index.ts'
+    },
     output: {
-        filename: 'jsonforms.js',
-        path: 'dist'
+        filename: '[name].js',
+        path: './'
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin(
@@ -26,7 +27,14 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
-            { from: 'src/jsonforms.css' }
+            { 
+                from: 'src/jsonforms.css',
+                to:   'dist/jsonforms.css'
+            },
+            { 
+                from: 'src/jsonforms.css',
+                to:   'examples/assets/jsonforms.css'
+            },
         ])
     ],
     resolve: {
