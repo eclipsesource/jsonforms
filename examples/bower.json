@@ -1,0 +1,17 @@
+{
+  "name": "JSON Forms examples",
+  "homepage": "https://github.com/eclipsesource/jsonforms",
+  "description": "JSON Forms examples",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-route": "^1.5.5"
+  }
+}

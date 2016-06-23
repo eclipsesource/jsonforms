@@ -3,11 +3,11 @@ var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    devtool: 'cheap-eval-source-map',
+    devtool: 'source-map',
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
-        './src/index.ts'
+        './src/bootstrap/jsonforms_bootstrap.ts'
     ],
     output: {
         filename: 'jsonforms.js',
@@ -33,8 +33,8 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
-            { 
-                from: 'src/jsonforms.css',
+            {
+                from: 'src/bootstrap/jsonforms-bootstrap.css',
                 to:   'examples/assets/jsonforms.css'
             }
         ])

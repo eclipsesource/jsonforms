@@ -3,13 +3,21 @@ var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    entry: [
-        "bootstrap-webpack!./bootstrap.config.js",
-        './src/bootstrap/jsonforms_bootstrap.ts'
-    ],
+    devtool: 'source-map',
+    entry: {
+        'dist/jsonforms': './src/bootstrap/jsonforms_bootstrap.ts',
+        'examples/assets/jsonforms': './src/bootstrap/jsonforms_bootstrap.ts'
+    },
     output: {
-        filename: 'jsonforms-bootstrap.js',
-        path: 'dist'
+        filename: '[name].js',
+        path: './'
+    },
+    resolve: {
+        root: __dirname,
+        extensions: ['', '.ts', '.js', '.json']
+    },
+    resolveLoader: {
+        modulesDirectories: ["node_modules"]
     },
     plugins: [
         new webpack.optimize.UglifyJsPlugin(
@@ -26,17 +34,16 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
-            { from: 'src/bootstrap/jsonforms-bootstrap.css' }
+            { 
+                from: 'src/bootstrap/jsonforms-bootstrap.css',
+                to:   'dist/jsonforms.css'
+            },
+            { 
+                from: 'src/bootstrap/jsonforms-bootstrap.css',
+                to:   'examples/assets/jsonforms.css'
+            },
         ])
     ],
-    devtool: 'source-map',
-    resolve: {
-        root: __dirname,
-        extensions: ['', '.ts', '.js', '.json']
-    },
-    resolveLoader: {
-        modulesDirectories: ["node_modules"]
-    },
     module: {
         preLoaders: [
             {
