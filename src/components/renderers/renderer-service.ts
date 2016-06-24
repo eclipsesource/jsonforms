@@ -17,12 +17,16 @@ interface RendererDefinition {
 }
 
 export const NOT_FITTING: number = -1;
-
+const NoRendererTester: RendererTester = function(
+        element: IUISchemaElement, dataSchema: any, dataObject: any, pathResolver: IPathResolver ){
+    return 0;
+};
 class RendererServiceImpl implements RendererService {
     static $inject = ['PathResolver'];
     private renderer: Array<RendererDefinition> = [];
 
     constructor(private pathResolver: IPathResolver) {
+        this.renderer.push({directiveName: 'norenderer', tester: NoRendererTester});
     }
 
     register(directiveName: string, tester: RendererTester): void {
