@@ -33,8 +33,10 @@ class RendererServiceImpl implements RendererService {
         this.renderer.push({directiveName: directiveName, tester: tester});
     }
     getBestComponent(element: IUISchemaElement, dataSchema: any, dataObject: any): string {
-        let bestRenderer = _.maxBy(this.renderer,
-            renderer => renderer.tester(element, dataSchema, dataObject, this.pathResolver));
+        let bestRenderer = _.maxBy(this.renderer, renderer =>
+            renderer.tester(element, dataSchema, dataObject, this.pathResolver)
+        );
+
         let bestDirective = bestRenderer.directiveName;
         return `<${bestDirective}></${bestDirective}>`;
     }
