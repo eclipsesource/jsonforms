@@ -27,6 +27,8 @@ import referenceControlDirective from '../renderers/controls/reference/reference
 import datetimeControlDirective from '../renderers/controls/datetime/datetime-directive';
 import enumControlDirective from '../renderers/controls/enum/enum-directive';
 
+import norendererDirective from '../renderers/norenderer-directive';
+
 import {JsonFormsDirective, JsonFormsInnerDirective} from './form-directive';
 
 export default angular
@@ -39,7 +41,7 @@ export default angular
 
         controlDirective,
         layoutDirective,
-
+        norendererDirective,
         arrayControlDirective,
         stringControlDirective,
         integerControlDirective,

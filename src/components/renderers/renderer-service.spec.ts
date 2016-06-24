@@ -41,8 +41,8 @@ describe('Renderer service', () => {
             }
         };
         scope['data'] = { 'latitude': 42 };
-        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        expect(el.html()).toContain('<!-- No Renderer for UNKNOWN_CONTROL. -->');
+        expect(el.html()).toContain('No Renderer for UNKNOWN_CONTROL.');
     }));
 });
