@@ -1,8 +1,8 @@
-import "angular"
-import "angular-mocks"
-import "../../index"
+import 'angular';
+import 'angular-mocks';
+import '../../index';
 
-import {IUISchemaGenerator} from "./generators";
+import {IUISchemaGenerator} from './generators';
 
 describe('UISchemaGenerator', () => {
 
@@ -16,34 +16,34 @@ describe('UISchemaGenerator', () => {
         ]);
     });
 
-    it("generate ui schema for schema w/o properties", () => {
+    it('generate ui schema for schema w/o properties', () => {
         let schema = {
-            type: "object"
+            type: 'object'
         };
         let uiSchema = {
-            type: "VerticalLayout",
+            type: 'VerticalLayout',
             elements: []
         };
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("generate ui schema for schema with one property", () => {
+    it('generate ui schema for schema with one property', () => {
         let schema = {
-            type: "object",
+            type: 'object',
             properties: {
                 name: {
-                    type: "string"
+                    type: 'string'
                 }
             }
         };
         let uiSchema = {
-            type: "VerticalLayout",
+            type: 'VerticalLayout',
             elements: [
                 {
-                    type: "Control",
-                    label: "Name",
+                    type: 'Control',
+                    label: 'Name',
                     scope: {
-                        $ref: "#/properties/name"
+                        $ref: '#/properties/name'
                     }
                 }
             ]
@@ -51,17 +51,17 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("generate ui schema for schema without object root", () => {
+    it('generate ui schema for schema without object root', () => {
         let schema = {
-            type: "string"
+            type: 'string'
         };
         let uiSchema = {
-            type: "VerticalLayout",
+            type: 'VerticalLayout',
             elements: [
                 {
-                    type: "Control",
+                    type: 'Control',
                     scope: {
-                        $ref: "#"
+                        $ref: '#'
                     }
                 }
             ]
@@ -69,22 +69,22 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("generate ui schema for schema with unspecified object root", () => {
+    it('generate ui schema for schema with unspecified object root', () => {
         let schema = {
             properties: {
                 age: {
-                    type: "integer"
+                    type: 'integer'
                 }
             }
         };
         let uiSchema = {
-            type: "VerticalLayout",
+            type: 'VerticalLayout',
             elements: [
                 {
-                    type: "Control",
-                    label: "Age",
+                    type: 'Control',
+                    label: 'Age',
                     scope: {
-                        $ref: "#/properties/age"
+                        $ref: '#/properties/age'
                     }
                 }
             ]
@@ -92,24 +92,24 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("ignore json-schema id attributes", () => {
+    it('ignore json-schema id attributes', () => {
         let schema = {
-            type: "object",
+            type: 'object',
             properties: {
-                id: "ignore me",
+                id: 'ignore me',
                 name: {
-                    type: "string"
+                    type: 'string'
                 }
             }
         };
         let uiSchema = {
-            type: "VerticalLayout",
+            type: 'VerticalLayout',
             elements: [
                 {
-                    type: "Control",
-                    label: "Name",
+                    type: 'Control',
+                    label: 'Name',
                     scope: {
-                        $ref: "#/properties/name"
+                        $ref: '#/properties/name'
                     }
                 }
             ]
@@ -117,33 +117,33 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("don't ignore non-json-schema id attributes", () => {
+    it('dont ignore non-json-schema id attributes', () => {
         let schema = {
-            type: "object",
+            type: 'object',
             properties: {
                 id: {
-                    type: "string"
+                    type: 'string'
                 },
                 name: {
-                    type: "string"
+                    type: 'string'
                 }
             }
         };
         let uiSchema = {
-            type: "VerticalLayout",
+            type: 'VerticalLayout',
             elements: [
                 {
-                    type: "Control",
-                    label: "Id",
+                    type: 'Control',
+                    label: 'Id',
                     scope: {
-                        $ref: "#/properties/id"
+                        $ref: '#/properties/id'
                     }
                 },
                 {
-                    type: "Control",
-                    label: "Name",
+                    type: 'Control',
+                    label: 'Name',
                     scope: {
-                        $ref: "#/properties/name"
+                        $ref: '#/properties/name'
                     }
                 }
             ]
@@ -151,145 +151,145 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("generate ui schema for schema with multiple properties", () => {
+    it('generate ui schema for schema with multiple properties', () => {
         let schema = {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "format": "objectId"
+            'type': 'object',
+            'properties': {
+                'id': {
+                    'type': 'string',
+                    'format': 'objectId'
                 },
-                "lastName": {
-                    "type": "string"
+                'lastName': {
+                    'type': 'string'
                 },
-                "email": {
-                    "type": "string"
+                'email': {
+                    'type': 'string'
                 },
-                "firstName": {
-                    "type": "string"
+                'firstName': {
+                    'type': 'string'
                 },
-                "gender": {
-                    "type": "string",
-                    "enum": [
-                        "Male",
-                        "Female"
+                'gender': {
+                    'type': 'string',
+                    'enum': [
+                        'Male',
+                        'Female'
                     ]
                 },
-                "active": {
-                    "type": "boolean"
+                'active': {
+                    'type': 'boolean'
                 },
-                "registrationTime": {
-                    "type": "string",
-                    "format": "date-time"
+                'registrationTime': {
+                    'type': 'string',
+                    'format': 'date-time'
                 },
-                "weight": {
-                    "type": "number"
+                'weight': {
+                    'type': 'number'
                 },
-                "height": {
-                    "type": "integer"
+                'height': {
+                    'type': 'integer'
                 },
-                "nationality": {
-                    "type": "string",
-                    "enum": [
-                        "German",
-                        "French",
-                        "UK",
-                        "US",
-                        "Spanish",
-                        "Italian",
-                        "Russian"
+                'nationality': {
+                    'type': 'string',
+                    'enum': [
+                        'German',
+                        'French',
+                        'UK',
+                        'US',
+                        'Spanish',
+                        'Italian',
+                        'Russian'
                     ]
                 },
-                "birthDate": {
-                    "type": "string",
-                    "format": "date-time"
+                'birthDate': {
+                    'type': 'string',
+                    'format': 'date-time'
                 }
             },
-            "additionalProperties": false,
-            "required": [
-                "id",
-                "lastName",
-                "email"
+            'additionalProperties': false,
+            'required': [
+                'id',
+                'lastName',
+                'email'
             ]
         };
         let uiSchema = {
-            "type": "VerticalLayout",
-            "elements": [
+            'type': 'VerticalLayout',
+            'elements': [
                 {
-                    "type": "Control",
-                    "label": "Id",
-                    "scope": {
-                        "$ref": "#/properties/id"
+                    'type': 'Control',
+                    'label': 'Id',
+                    'scope': {
+                        '$ref': '#/properties/id'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Last Name",
-                    "scope": {
-                        "$ref": "#/properties/lastName"
+                    'type': 'Control',
+                    'label': 'Last Name',
+                    'scope': {
+                        '$ref': '#/properties/lastName'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Email",
-                    "scope": {
-                        "$ref": "#/properties/email"
+                    'type': 'Control',
+                    'label': 'Email',
+                    'scope': {
+                        '$ref': '#/properties/email'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "First Name",
-                    "scope": {
-                        "$ref": "#/properties/firstName"
+                    'type': 'Control',
+                    'label': 'First Name',
+                    'scope': {
+                        '$ref': '#/properties/firstName'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Gender",
-                    "scope": {
-                        "$ref": "#/properties/gender"
+                    'type': 'Control',
+                    'label': 'Gender',
+                    'scope': {
+                        '$ref': '#/properties/gender'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Active",
-                    "scope": {
-                        "$ref": "#/properties/active"
+                    'type': 'Control',
+                    'label': 'Active',
+                    'scope': {
+                        '$ref': '#/properties/active'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Registration Time",
-                    "scope": {
-                        "$ref": "#/properties/registrationTime"
+                    'type': 'Control',
+                    'label': 'Registration Time',
+                    'scope': {
+                        '$ref': '#/properties/registrationTime'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Weight",
-                    "scope": {
-                        "$ref": "#/properties/weight"
+                    'type': 'Control',
+                    'label': 'Weight',
+                    'scope': {
+                        '$ref': '#/properties/weight'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Height",
-                    "scope": {
-                        "$ref": "#/properties/height"
+                    'type': 'Control',
+                    'label': 'Height',
+                    'scope': {
+                        '$ref': '#/properties/height'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Nationality",
-                    "scope": {
-                        "$ref": "#/properties/nationality"
+                    'type': 'Control',
+                    'label': 'Nationality',
+                    'scope': {
+                        '$ref': '#/properties/nationality'
                     }
                 },
                 {
-                    "type": "Control",
-                    "label": "Birth Date",
-                    "scope": {
-                        "$ref": "#/properties/birthDate"
+                    'type': 'Control',
+                    'label': 'Birth Date',
+                    'scope': {
+                        '$ref': '#/properties/birthDate'
                     }
                 },
             ]
@@ -297,28 +297,28 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("generate named array control", () => {
+    it('generate named array control', () => {
         let schema = {
-            "type": "object",
-            "properties": {
-                "comments": {
-                    "type": "array",
-                    "items": {
-                        "properties": {
-                            "msg": {"type": "string"}
+            'type': 'object',
+            'properties': {
+                'comments': {
+                    'type': 'array',
+                    'items': {
+                        'properties': {
+                            'msg': {'type': 'string'}
                         }
                     }
                 }
             }
         };
         let uiSchema = {
-            "type": "VerticalLayout",
-            "elements": [
+            'type': 'VerticalLayout',
+            'elements': [
                 {
-                    "type": "Control",
-                    "label": "Comments",
-                    "scope": {
-                        "$ref": "#/properties/comments"
+                    'type': 'Control',
+                    'label': 'Comments',
+                    'scope': {
+                        '$ref': '#/properties/comments'
                     }
                 }
             ]
@@ -326,22 +326,22 @@ describe('UISchemaGenerator', () => {
         expect(UISchemaGenerator.generateDefaultUISchema(schema)).toEqual(uiSchema);
     });
 
-    it("generate unnamed array control", () => {
+    it('generate unnamed array control', () => {
         let schema = {
-            "type": "array",
-            "items": {
-                "properties": {
-                    "msg": {"type": "string"}
+            'type': 'array',
+            'items': {
+                'properties': {
+                    'msg': {'type': 'string'}
                 }
             }
         };
         let uiSchema = {
-            "type": "VerticalLayout",
-            "elements": [
+            'type': 'VerticalLayout',
+            'elements': [
                 {
-                    "type": "Control",
-                    "scope": {
-                        "$ref": "#"
+                    'type': 'Control',
+                    'scope': {
+                        '$ref': '#'
                     }
                 }
             ]

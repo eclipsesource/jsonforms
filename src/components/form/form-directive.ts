@@ -119,7 +119,7 @@ export class FormController {
 
         this.childScope = this.scope.$new();
         this.childScope['services'] = services;
-        this.childScope['uiSchema'] = this.uiSchema;
+        this.childScope['uischema'] = this.uiSchema;
         let template = this.rendererService.getBestComponent(
             this.uiSchema, schema, dataProvider.getData());
         let compiledTemplate = this.$compile(template)(this.childScope);
@@ -139,10 +139,10 @@ export class FormController {
 
     private fetchUiSchema() {
 
-        if (FormController.isUiSchemaProvider(this.scope.uiSchema)) {
-            return this.scope.uiSchema.getUiSchema();
-        } else if (typeof this.scope.uiSchema === 'object') {
-            return this.$q.when(this.scope.uiSchema);
+        if (FormController.isUiSchemaProvider(this.scope.uischema)) {
+            return this.scope.uischema.getUiSchema();
+        } else if (typeof this.scope.uischema === 'object') {
+            return this.$q.when(this.scope.uischema);
         }
 
         // if we return undefined the caller will generate a default UI schema
@@ -162,7 +162,7 @@ export class FormController {
 
 export interface JsonFormsDirectiveScope extends ng.IScope {
     schema: any;
-    uiSchema: any;
+    uischema: any;
     data: any;
 }
 
@@ -176,12 +176,12 @@ export class JsonFormsDirective implements ng.IDirective {
     // we can't use bindToController because we want watchers
     scope = {
         schema: '=',
-        uiSchema: '=',
+        uischema: '=',
         data: '='
     };
     link = (scope, el, attrs, ctrl) => {
         ctrl.element = el;
-        scope.$watchGroup(['data', 'uiSchema'], (newValue) => {
+        scope.$watchGroup(['data', 'uischema'], (newValue) => {
             if (angular.isDefined(newValue)) {
                 ctrl.init();
             }
@@ -193,7 +193,7 @@ export class JsonFormsDirective implements ng.IDirective {
 export class InnerFormController {
     static $inject = ['RendererService', '$compile', '$scope'];
     public element: any;
-    private uiSchema: IUISchemaElement;
+    private uischema: IUISchemaElement;
     constructor(
         private rendererService: RendererService,
         private $compile: ng.ICompileService,
@@ -203,8 +203,8 @@ export class InnerFormController {
         let services: Services = this.scope['services'];
         let data = services.get<IDataProvider>(ServiceId.DataProvider).getData();
         let schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
-        let template = this.rendererService.getBestComponent(this.uiSchema, schema, data);
-        this.scope['uiSchema'] = this.uiSchema;
+        let template = this.rendererService.getBestComponent(this.uischema, schema, data);
+        this.scope['uischema'] = this.uischema;
         let compiledTemplate = this.$compile(template)(this.scope);
 
         angular.element(this.element.find('form')).append(compiledTemplate);
@@ -212,7 +212,7 @@ export class InnerFormController {
     }
 }
 export interface JsonFormsInnerDirectiveScope extends ng.IScope {
-    uiSchema: any;
+    uischema: any;
 }
 
 
@@ -223,7 +223,7 @@ export class JsonFormsInnerDirective implements ng.IDirective {
     controller = InnerFormController;
     controllerAs = 'vm';
     bindToController = {
-        uiSchema: '='
+        uischema: '='
     };
     scope = true;
     link = (scope, el, attrs, ctrl) => {

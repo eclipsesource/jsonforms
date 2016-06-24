@@ -13,7 +13,7 @@ export abstract class AbstractLayout implements IRuleServiceCallBack {
 
     constructor(protected scope: ng.IScope) {
         let services: Services = scope['services'];
-        this.uiSchema = scope['uiSchema'];
+        this.uiSchema = scope['uischema'];
 
         // IRuleServiceCallBack
         this.instance = services.get<IDataProvider>(ServiceId.DataProvider).getData();

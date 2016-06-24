@@ -23,7 +23,7 @@ describe('DateTimeTest', () => {
         scope.schema = schema;
         scope.uiSchema = { 'type': 'Control', 'scope': { '$ref': '#/properties/birthDate' } };
         scope.data = { 'birthDate': new Date() };
-        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         expect(el.html()).toContain('input type="date"');
     }));
@@ -39,7 +39,7 @@ describe('DateTimeTest', () => {
             'scope': { '$ref': '#/properties/birthDate' }
         };
         scope.data = { 'birthDate': '1985-06-02 20:15:36' };
-        let el = $compile('<jsonforms schema="schema" ui-schema="uiSchema" data="data"/>')(scope);
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
         let input = angular.element(el[0].getElementsByClassName('jsf-control-datetime'));
         expect(input.attr('readonly')).toBeDefined();

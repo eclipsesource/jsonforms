@@ -24,7 +24,7 @@ export abstract class AbstractControl implements IRuleServiceCallBack {
 
     constructor(protected scope: ng.IScope, protected pathResolver: IPathResolver) {
         this.services = scope['services'];
-        this.uiSchema = scope['uiSchema'];
+        this.uiSchema = scope['uischema'];
         this.schema = this.services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
         this.data = this.services.get<IDataProvider>(ServiceId.DataProvider).getData();
         let indexedSchemaPath = this.uiSchema['scope']['$ref'];
