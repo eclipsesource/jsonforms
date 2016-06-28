@@ -1,73 +1,70 @@
 <h1 class="red-text">QUICKSTART</h1>
 <p>
-    In this tutorial we'll demonstrate how JSONForms can be integrated into an existing AngularJS application and how it eases the development process of web forms. We’ll create a simple form for a user based on a JSON schema and a custom UI schema. The rendered result will be bound to the underlying model by making use of Angular’s two-way-databinding. At the end we’ll change the UI schema to demonstrate the benefits of the declarative approach.
-</p>
-<p>
-    So, let’s get started. First of all, please clone this github repository:
+    First of all, please clone this github repository:
 
     <a href="https://github.com/eclipsesource/jsonforms-seed.git">https://github.com/eclipsesource/jsonforms-seed.git</a>
 </p>
 
 <p>
-    This repository contains a basic JSONForms project template to get you started. It contains an index.html as well as an app.js file containing the application logic. The index.html specifies all relevant dependencies as well as some boilerplate HTML. To retrieve all dependencies we’ll use Bower. If you don’t have Bower yet installed (or never heard of it) please <a href="http://bower.io/#install-bower">follow these instructions</a>. Then, navigate to the cloned repository and execute the following command from with your shell:
+    This repository contains a basic JSONForms project template to get you started. It contains an index.html as well as an app.js file containing the application logic. The index.html specifies all relevant dependencies as well as some boilerplate HTML. To retrieve all dependencies we’ll use NodeJS. If you don’t have 'npm' yet installed (or never heard of it) please <a href="https://docs.npmjs.com/getting-started/installing-node">follow these instructions</a>. Then, navigate to the cloned repository and execute the following command within your shell:
 </p>
 <div ui-ace="{theme: 'solarized_dark', showGutter: false}"
      readonly
      flex="none"
-     style="height: 1.4em">bower install</div>
+     style="height: 1.4em">npm start</div>
 <p>
-This will install all relevant dependencies.
+This will install all relevant dependencies and start a local webserver.
 </p>
 <p>
     Now open the js/app.js file. You’ll see that the file already contains a predefined controller called MyController. The controller gets injected the SchemaService and the UISchemaService which provide the JSON Schema and the UI Schema respectively. In this example we’ll use a stripped-down version of the schema we outlined last time, where a user has only four properties: name, age, gender and birth date.
     We also provide a ready-to-use UI Schema, which consists of three controls ordered in a horizontal fashion. Let’s change this layout to feature an additional control and layout the controls side-by-side. Below is given the complete code to do so.
 </p>
 <div ui-ace="{theme: 'solarized_dark', mode: 'javascript'}" readonly flex="noshrink">
-    app.service('UISchemaService', function () {
+app.service('UISchemaService', function () {
     this.uiSchema = {
-    "type": "HorizontalLayout",
-    "elements": [
-    {
-    "type": "VerticalLayout",
-    "elements": [
-    {
-    "type": "Control",
-    "label": "Name",
-    "scope": {
-    "$ref": "#/properties/name"
-    }
-    },
-    {
-    "type": "Control",
-    "label": "Age",
-    "scope": {
-    "$ref": "#/properties/age"
-    }
-    }
-    ]
-    },
-    {
-    "type": "VerticalLayout",
-    "elements": [
-    {
-    "type": "Control",
-    "label": "Height",
-    "scope": {
-    "$ref": "#/properties/height"
-    }
-    },
-    {
-    "type": "Control",
-    "label": "Gender",
-    "scope": {
-    "$ref": "#/properties/gender"
-    }
-    }
-    ]
-    }
-    ]
+        "type": "HorizontalLayout",
+        "elements": [
+            {
+                "type": "VerticalLayout",
+                "elements": [
+                    {
+                        "type": "Control",
+                        "label": "Name",
+                        "scope": {
+                            "$ref": "#/properties/name"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Age",
+                        "scope": {
+                            "$ref": "#/properties/age"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "VerticalLayout",
+                "elements": [
+                    {
+                        "type": "Control",
+                        "label": "Height",
+                        "scope": {
+                            "$ref": "#/properties/height"
+                        }
+                    },
+                    {
+                        "type": "Control",
+                        "label": "Gender",
+                        "scope": {
+                            "$ref": "#/properties/gender"
+                        }
+                    }
+                ]
+            }
+        ]
     };
-    });
+});
 </div>
 <p>
     Writing schemas by hand shouldn’t happen very often, since we will provide tooling for creating UI schemas, but it is beneficial to know that the UI schemas are just regular JSON.
@@ -105,7 +102,3 @@ This will install all relevant dependencies.
 <p>
     You are encouraged to play around with the UI schema and move elements around. We would be happy to receive any feedback.
 </p>
-<p>
-    In the next blog post, we’ll have a look at how JSONForms can be integrated with REST services.
-</p>
-
