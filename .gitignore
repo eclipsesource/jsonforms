@@ -1,5 +1,10 @@
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion
+# Jekyll
+_site
+.sass-cache
+.jekyll-metadata
+Gemfile.lock
 
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion
 *.iml
 
 ## Directory-based project format:
