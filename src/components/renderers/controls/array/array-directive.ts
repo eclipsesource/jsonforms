@@ -2,8 +2,9 @@ import 'lodash';
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {PathUtil} from '../../../services/pathutil';
+import {IUISchemaGenerator} from '../../../generators/generators';
 import {AbstractControl, ControlRendererTester} from '../abstract-control';
-import {IUISchemaElement, IGroup, IControlObject} from '../../../../jsonforms';
+import {IUISchemaElement, IGroup} from '../../../../jsonforms';
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';
@@ -27,21 +28,24 @@ class ArrayDirective implements ng.IDirective {
     restrict = 'E';
     template = `
     <jsonforms-layout class="jsf-group">
-      <fieldset ng-disabled="vm.uiSchema.readOnly">
-        <legend>{{vm.label}}</legend>
-        <div ng-repeat="d in vm.modelValue[vm.fragment]">
-            <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
-        </div>
-          <jsonforms schema="vm.arraySchema" data="vm.submitElement"></jsonforms>
-       </fieldset>
-       <input class="btn btn-primary"
-              ng-show="vm.supportsSubmit"
-              type="button" 
-              value="Add to {{vm.buttonText}}"
-              ng-click="vm.submitCallback()"
-              ng-model="vm.submitElement">
-       </input>
-     </jsonforms-layout>`;
+        <fieldset ng-disabled="vm.uiSchema.readOnly">
+            <legend>{{vm.label}}</legend>
+            <div ng-repeat="d in vm.modelValue[vm.fragment]">
+                <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+            </div>
+            <fieldset>
+                <legend>Add New Entry</legend>
+                <jsonforms schema="vm.arraySchema" data="vm.submitElement"></jsonforms>
+                <input class="btn btn-primary"
+                      ng-show="vm.supportsSubmit"
+                      type="button"
+                      value="Add to {{vm.buttonText}}"
+                      ng-click="vm.submitCallback()"
+                      ng-model="vm.submitElement">
+                </input>
+            </fieldset>
+        </fieldset>
+    </jsonforms-layout>`;
     controller = ArrayController;
     controllerAs = 'vm';
 }
@@ -50,36 +54,22 @@ interface ArrayControllerScope extends ng.IScope {
 }
 
 class ArrayController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
+    static $inject = ['$scope', 'PathResolver', 'UISchemaGenerator'];
     private properties: string[];
     private submitElement = {};
     private arraySchema: any;
     private arrayUiSchema: IGroup;
-    constructor(scope: ArrayControllerScope, pathResolver: IPathResolver) {
+    constructor(scope: ArrayControllerScope,
+        pathResolver: IPathResolver, uiGenerator: IUISchemaGenerator) {
         super(scope, pathResolver);
         let resolvedSubSchema = this.pathResolver.resolveSchema(
             this.schema, this.schemaPath) as SchemaArray;
         let items = resolvedSubSchema.items;
         this.arraySchema = items;
         this.properties = _.keys(items['properties']);
-        this.arrayUiSchema = this.createControlGroupPerItem();
+        this.arrayUiSchema = uiGenerator.generateDefaultUISchema(items, 'Group');
     }
-    // Code should be in the ui schema generator ...
-    private static createGroup(elements: IUISchemaElement[]): IGroup {
-        return {
-            'type': 'Group',
-            'elements': elements
-        };
-    }
-    private static createControl(schemaPath: string, prop: string): IControlObject {
-        return {
-            'type': 'Control',
-            'label': PathUtil.beautify(prop),
-            'scope': {
-                '$ref': schemaPath
-            }
-        };
-    }
+
     public get buttonText(){
         return PathUtil.beautifiedLastFragment(this.schemaPath);
     }
@@ -88,20 +78,13 @@ class ArrayController extends AbstractControl {
             this.modelValue[this.fragment] = [];
         }
         this.modelValue[this.fragment].push(_.clone(this.submitElement));
+        this.submitElement = {};
     }
     public get supportsSubmit(){
         let options = this.uiSchema['options'];
         return !(options !== undefined && options['submit'] === false);
     }
 
-
-    private createControlGroupPerItem(): IGroup {
-        let elements = _.keys(this.arraySchema['properties']).map(key =>
-            // path does not actually exists
-            ArrayController.createControl(`#/properties/${key}`, key)
-        );
-        return ArrayController.createGroup(elements);
-    }
 }
 let ArrayReadOnlyControlRendererTester: RendererTester = function (element: IUISchemaElement,
                                                                    dataSchema: any,

@@ -7,7 +7,7 @@ export interface ISchemaGenerator {
 }
 
 export interface IUISchemaGenerator {
-    generateDefaultUISchema(jsonSchema: any): any;
+    generateDefaultUISchema(jsonSchema: any, layoutType?: string): any;
 }
 
 
