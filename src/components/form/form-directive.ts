@@ -2,7 +2,7 @@ import 'angular';
 let JsonRefs = require('json-refs');
 
 import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
-import {IUISchemaGenerator} from '../generators/generators';
+import {UiSchemaRegistry} from '../ng-services/uischemaregistry/uischemaregistry-service';
 import {ISchemaGenerator} from '../generators/generators';
 import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {IUiSchemaProvider} from '../services/services';
@@ -19,7 +19,7 @@ import {IUISchemaElement} from '../../jsonforms';
 
 export class FormController {
 
-    static $inject = ['RendererService', 'PathResolver', 'UISchemaGenerator',
+    static $inject = ['RendererService', 'PathResolver', 'UiSchemaRegistry',
         'SchemaGenerator', '$compile', '$q', '$scope'];
 
     public element: any;
@@ -30,7 +30,7 @@ export class FormController {
     constructor(
         private rendererService: RendererService,
         private PathResolver: IPathResolver,
-        private UISchemaGenerator: IUISchemaGenerator,
+        private UISchemaRegistry: UiSchemaRegistry,
         private SchemaGenerator: ISchemaGenerator,
         private $compile: ng.ICompileService,
         private $q: ng.IQService,
@@ -66,7 +66,7 @@ export class FormController {
 
             if (this.uiSchema === undefined) {
                 // resolve JSON schema, then generate ui Schema
-                this.uiSchema = this.UISchemaGenerator.generateDefaultUISchema(schema);
+                this.uiSchema = this.UISchemaRegistry.getBestUiSchema(schema);
             }
 
             resolvedSchemaDeferred.resolve(schema);
