@@ -58,8 +58,9 @@ export class UISchemaGenerator implements IUISchemaGenerator {
     }
 
     /**
-     * Wraps the given {@code uiSchema} in a VerticalLayout if there is none already.
-     * @param uiSchema The ui schema to wrap in a vertical layout.
+     * Wraps the given {@code uiSchema} in a Layout if there is none already.
+     * @param uiSchema The ui schema to wrap in a layout.
+     * @param layoutType The type of the layout to create.
      * @returns the wrapped uiSchema.
      */
     private static wrapInLayoutIfNecessary
@@ -72,10 +73,7 @@ export class UISchemaGenerator implements IUISchemaGenerator {
         return <ILayout>uiSchema;
     }
 
-    generateDefaultUISchema(jsonSchema: any, layoutType?: string): IUISchemaElement {
-        if (layoutType === undefined) {
-            layoutType = 'VerticalLayout';
-        }
+    generateDefaultUISchema(jsonSchema: any, layoutType = 'VerticalLayout'): IUISchemaElement {
         let uiSchema = this.generateUISchema(jsonSchema, [], '#', '', layoutType);
         return UISchemaGenerator.wrapInLayoutIfNecessary(uiSchema, layoutType);
     };
