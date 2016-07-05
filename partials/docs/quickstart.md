@@ -72,11 +72,11 @@ With the UI schema, all there is left to do is to wire things up. This happens v
 <jsonforms schema="schema" ui-schema="uiSchema" data="data"/>
 {% endhighlight %}
 
-![Generated form](http://eclipsesource.com/blogs/wp-content/uploads/2015/07/image03.png){:.tutorial-image}
+![Generated form](http://eclipsesource.com/blogs/wp-content/uploads/2015/07/image03.png){:.img-responsive}
 
 If we now want to rearrange the form, for example to align all elements vertically, we can do so by changing a single line in the UI schema. Change the type property of the top-level element from ```HorizontalLayout``` to ```VerticalLayout``` and you’ll see the form pictured beneath.
 
-![Generated form with different layout](http://eclipsesource.com/blogs/wp-content/uploads/2015/07/image01.png){:.tutorial-image}
+![Generated form with different layout](http://eclipsesource.com/blogs/wp-content/uploads/2015/07/image01.png){:.img-responsive}
 
 This should give you a good impression of why one would like to use JSONForms: Changes to the UI are easy to be made and HTML templates don’t have to be touched. Also, once tooling support for creating UI schemas is available, writing complex forms will be a lot less time-consuming.
 

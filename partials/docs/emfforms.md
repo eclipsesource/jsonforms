@@ -17,7 +17,7 @@ Preparations
 First, you need to download Eclipse and install the Integration Tooling. For this purpose, use the latest [Eclipse Neon Modeling Edition](https://www.eclipse.org/downloads/packages/eclipse-modeling-tools/neonr). Extract the archive and start Eclipse. When started, go to
 ```Help > Install New Software```
 
-![Menu for installing new software](https://github.com/eclipsesource/jsonforms/wiki/images/install-new-software.png){:.tutorial-image}
+![Menu for installing new software](https://github.com/eclipsesource/jsonforms/wiki/images/install-new-software.png){:.img-responsive}
 
 Add this [Update Site URL](http://download.eclipse.org/ecp/releases/releases_target_19) and make sure to select ‘Group items by category’. You should see the EMFForms2JSONForms category, which you can activate. If you do not have EMF Forms and EMF Client Platform in version 1.9.x installed, also select the feature ‘ECP SDK 3.x‘ in the category ‘All SDKs (install one of these)‘. Press _Next_. Accept the EPL and click _Finish_. If prompted with a warning, that unsigned content is installed, press _OK_ (Milestone builds are not signed). When the installation is finished, Eclipse will ask to restart. Please confirm to do so.
 
@@ -39,7 +39,7 @@ and follow the wizard. When finished, you’ll have three additional projects in
 
 ```EMF Forms > Export to JSONForms```
 
-![JSONForms export entry](https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-context-menu.png){:.tutorial-image}
+![JSONForms export entry](https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-context-menu.png){:.img-responsive}
 
 To understand what happens behind the scenes remember that each view has a “Root EClass”. The exporter generates a JSON Schema for that EClass as well as  a JSONForms UI Schema for the selected view.
 
@@ -49,10 +49,10 @@ The JSONForms UI Schema Generator traverses all elements of the given view gener
 
 But enough of the theory, let’s continue the example. After you selected the Export to JSONForms action from above, an exporter wizard shows up.
 
-[!EMF Forms to JSONForms Wizard](https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-wizard.png){:.tutorial-image}
+![EMF Forms to JSONForms Wizard](https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-wizard.png){:.img-responsive}
 
- 1. The type of the generated model. The type is of the form <a href="http://EClass.name">EClass.name</a> + Model/View
- 2. The location where this generated schema will be saved to. By selecting <em>Browse</em> you can choose a workspace or filesystem location. Please overwrite the <code>schema.js</code> and the <code>ui-schema.js</code> in the <code>js</code> subdirectory of the seed project respectively when prompted for a location where to put the schema/UI schema.
+ 1. The type of the generated model. The type is of the form EClass.name + Model/View
+ 2. The location where this generated schema will be saved to. By selecting _Browse_ you can choose a workspace or filesystem location. Please overwrite the ```schema.js``` and the ```ui-schema.js``` in the ```js``` subdirectory of the seed project respectively when prompted for a location where to put the schema/UI schema.
  3. By checking this option, the generated JSON data will be wrapped in JavaScript files according to the JSONForms seed project
  4. The generated JSON Schema. If you want to change or edit the generated file just edit the conent of this textbox.
 
@@ -60,13 +60,14 @@ For this example please check the optional “Wrap in JavaScript example” to w
 
 Now let’s startup the JSONForms application and let’s look at the result. You can do so by navigating to the jsonforms-seed folder and open the ```index.html``` file.
 
-![Rendered form](https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-rendered-form.png){:.tutorial-image}
+![Rendered form](https://github.com/eclipsesource/jsonforms/wiki/images/emf2web-rendered-form.png){:.img-responsive}
 
-You are encouraged to play around with the View model and re-export it as often as you want. If you have any questions or problems you can either [open an issue](https://github.com/eclipsesource/jsonforms/issues/new) or drop us a mail at ```info@jsonforms.org```.
+You are encouraged to play around with the View model and re-export it as often as you want. If you have any questions or problems you can either [open an issue](https://github.com/eclipsesource/jsonforms/issues/new) or drop us a mail at [info@jsonforms.org](mailto:info@jsonforms.org).
 
 Current limitations
 -------------------
 The current implementation of the JSONForms has some limitations which will be fixed soon. Currently these limitations are:
+
  * per type only a single reference is considered during the export, i.e. when there are multiple references with the same type only one will be considered during the export
  * certain layouts and widgets like Categorizations or custom controls are not yet supported
  * no support for rules yet

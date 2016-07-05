@@ -176,11 +176,9 @@ button.main-nav-button{
     width: 74px;
     height: 80px;
 }
-/*
 #twitter:hover{
     background-image: url("../images/extern/TwitterLogo.png");
 }
-*/
 #twitter>span{
     display: block;
     height: 0;
