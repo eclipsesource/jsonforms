@@ -2,6 +2,7 @@
 import * as angular from 'angular';
 import rendererService from '../renderers/renderer-service';
 import pathResolver from '../ng-services/pathresolver/pathresolver-service';
+import uiSchemaRegistry from '../ng-services/uischemaregistry/uischemaregistry-service';
 import generators from '../generators/generators';
 import uiSchemaGenerator from '../generators/jsonforms-uischemagenerator';
 import schemaGenerator from '../generators/jsonforms-schemagenerator';
@@ -35,6 +36,7 @@ export default angular
     .module('jsonforms.form', [
         rendererService,
         pathResolver,
+        uiSchemaRegistry,
         generators,
         uiSchemaGenerator,
         schemaGenerator,
