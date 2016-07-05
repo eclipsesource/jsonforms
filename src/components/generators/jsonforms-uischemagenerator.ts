@@ -2,17 +2,18 @@
 
 import {IUISchemaGenerator} from './generators';
 import {PathUtil} from '../services/pathutil';
-import {IUISchemaElement, IVerticalLayout, IControlObject, ILayout} from '../../jsonforms';
+import {IUISchemaElement, IControlObject, ILayout} from '../../jsonforms';
 
 export class UISchemaGenerator implements IUISchemaGenerator {
 
     /**
-     * Creates a new VerticalLayout.
-     * @returns the new IVerticalLayout
+     * Creates a new ILayout.
+     * @param layoutType The type of the laoyut
+     * @returns the new ILayout
      */
-    private static createVerticalLayout(): IVerticalLayout {
+    private static createLayout(layoutType: string): ILayout {
         return {
-            type: 'VerticalLayout',
+            type: layoutType,
             elements: []
         };
     }
@@ -57,48 +58,50 @@ export class UISchemaGenerator implements IUISchemaGenerator {
     }
 
     /**
-     * Wraps the given {@code uiSchema} in a VerticalLayout if there is none already.
-     * @param uiSchema The ui schema to wrap in a vertical layout.
+     * Wraps the given {@code uiSchema} in a Layout if there is none already.
+     * @param uiSchema The ui schema to wrap in a layout.
+     * @param layoutType The type of the layout to create.
      * @returns the wrapped uiSchema.
      */
-    private static wrapInLayoutIfNecessary(uiSchema: IUISchemaElement): ILayout {
-        if (uiSchema.type !== 'VerticalLayout') {
-            let verticalLayout: IVerticalLayout = UISchemaGenerator.createVerticalLayout();
+    private static wrapInLayoutIfNecessary
+        (uiSchema: IUISchemaElement, layoutType: string): ILayout {
+        if (uiSchema['elements'] === undefined) {
+            let verticalLayout: ILayout = UISchemaGenerator.createLayout(layoutType);
             verticalLayout.elements.push(uiSchema);
             return verticalLayout;
         }
         return <ILayout>uiSchema;
     }
 
-    generateDefaultUISchema(jsonSchema: any): IUISchemaElement {
-        let uiSchema = this.generateUISchema(jsonSchema, [], '#', '');
-        return UISchemaGenerator.wrapInLayoutIfNecessary(uiSchema);
+    generateDefaultUISchema(jsonSchema: any, layoutType = 'VerticalLayout'): IUISchemaElement {
+        let uiSchema = this.generateUISchema(jsonSchema, [], '#', '', layoutType);
+        return UISchemaGenerator.wrapInLayoutIfNecessary(uiSchema, layoutType);
     };
 
     private generateUISchema(jsonSchema: any, schemaElements: IUISchemaElement[],
-                                currentRef: string, schemaName: string): IUISchemaElement {
+        currentRef: string, schemaName: string, layoutType: string): IUISchemaElement {
 
         let type = UISchemaGenerator.deriveType(jsonSchema);
 
         switch (type) {
             case 'object':
-                let verticalLayout: IVerticalLayout = UISchemaGenerator.createVerticalLayout();
-                schemaElements.push(verticalLayout);
+                let layout: ILayout = UISchemaGenerator.createLayout(layoutType);
+                schemaElements.push(layout);
 
-                this.addLabel(verticalLayout, schemaName);
+                this.addLabel(layout, schemaName);
 
                 if (jsonSchema.properties) {
                     // traverse properties
                     let nextRef: string = currentRef + '/properties';
                     _.forOwn(jsonSchema.properties, (value, key) => {
                         if (!UISchemaGenerator.isIgnoredProperty(key, value)) {
-                            this.generateUISchema(value, verticalLayout.elements,
-                                `${nextRef}/${key}`, key);
+                            this.generateUISchema(value, layout.elements,
+                                `${nextRef}/${key}`, key, layoutType);
                         }
                     });
                 }
 
-                return verticalLayout;
+                return layout;
 
             case 'array': // array items will be handled by the array control itself
             /* falls through */
