@@ -35,6 +35,8 @@ examples/css/jsonforms.css
 examples/js/jsonforms.js
 examples/js/jsonforms.min.js
 examples/fonts
+examples/assets/jsonforms.css
+examples/assets/jsonforms.js
 
 # webstorm
 .idea
