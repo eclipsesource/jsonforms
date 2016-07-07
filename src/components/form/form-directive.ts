@@ -15,7 +15,7 @@ import {IDataProvider} from '../services/data/data-service';
 import {RuleService} from '../services/rule/rule-service';
 import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
-import {IUISchemaElement} from '../../jsonforms';
+import {IUISchemaElement, SchemaElement} from '../../jsonforms';
 
 export class FormController {
 

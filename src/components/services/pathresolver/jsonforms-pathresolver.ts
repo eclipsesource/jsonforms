@@ -1,5 +1,6 @@
 
 import {PathUtil} from '../pathutil';
+import {SchemaElement} from "../../../jsonforms";
 
 export interface IPathResolver {
     toInstancePath(schemaPath: string): string;
