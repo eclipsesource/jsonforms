@@ -1,4 +1,5 @@
-import {IUISchemaElement} from '../../jsonforms';
+import {IUISchemaElement} from "../../uischema";
+
 class NoRendererDirective implements ng.IDirective {
     restrict = 'E';
     template = `

@@ -2,7 +2,8 @@ import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
 import {LabelObjectUtil} from '../../controls/abstract-control';
-import {IUISchemaElement} from '../../../../jsonforms';
+import {IUISchemaElement} from "../../../../uischema";
+
 
 class HorizontalDirective implements ng.IDirective {
     restrict = 'E';

@@ -1,7 +1,9 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl} from '../../controls/abstract-control';
-import {IUISchemaElement, SchemaElement} from '../../../../jsonforms';
+import {SchemaElement} from "../../../../jsonschema";
+import {IUISchemaElement} from "../../../../uischema";
+
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
     templateUrl = 'masterdetail.html';

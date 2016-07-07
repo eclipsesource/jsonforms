@@ -1,6 +1,8 @@
 
 import {PathResolver} from './pathresolver/jsonforms-pathresolver';
-import {IUISchemaElement, SchemaElement} from '../../jsonforms';
+import {SchemaElement} from "../../jsonschema";
+import {IUISchemaElement} from "../../uischema";
+
 // TODO: replace
 let tv4 = require('tv4');
 

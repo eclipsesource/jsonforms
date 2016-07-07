@@ -15,7 +15,8 @@ import {IDataProvider} from '../services/data/data-service';
 import {RuleService} from '../services/rule/rule-service';
 import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
-import {IUISchemaElement, SchemaElement} from '../../jsonforms';
+import {IUISchemaElement} from '../../uischema';
+import {SchemaElement} from '../../jsonschema';
 
 export class FormController {
 
@@ -173,10 +174,6 @@ const formTemplate = `
 
 
 export class JsonFormsDirective implements ng.IDirective {
-    static $inject = ['$templateCache'];
-    constructor($templateCache: ng.ITemplateCacheService) {
-        $templateCache.put('form.html', formTemplate);
-    }
     restrict = 'E';
     templateUrl = 'form.html';
     controller = FormController;
@@ -239,3 +236,11 @@ export class JsonFormsInnerDirective implements ng.IDirective {
         ctrl.init();
     }
 }
+
+export default angular.module("jsonforms.form.directives", ["jsonforms.form"])
+    .directive('jsonforms', () => new JsonFormsDirective())
+    .directive('jsonformsInner', () => new JsonFormsInnerDirective())
+    .run(['$templateCache', ($templateCache: ng.ITemplateCacheService) =>
+        $templateCache.put('form.html', formTemplate)]
+    )
+    .name;

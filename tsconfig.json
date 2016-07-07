@@ -10,7 +10,7 @@
     "outDir": "."
   },
   "files": [
-    "./src/jsonforms.ts",
+    "./src/index.ts",
     "./typings/main.d.ts",
     "./src/declarations.d.ts"
   ],
