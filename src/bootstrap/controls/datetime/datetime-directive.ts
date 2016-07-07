@@ -46,6 +46,27 @@ const DateTimeControlBootstrapRendererTester: RendererTester = function(element:
     }
     return NOT_FITTING;
 };
+
+const datetimeTemplate = `<jsonforms-control>
+    <div class="input-group">
+      <input type="text"
+             uib-datepicker-popup="dd.MM.yyyy"
+             close-text="Close"
+             is-open="vm.isOpen"
+             id="{{vm.id}}"
+             class="form-control jsf-control-datetime"
+             ng-change='vm.modelChanged()'
+             ng-model="vm.dt"
+             ng-model-options="{timezone:'UTC'}"
+             ng-readonly="vm.uiSchema.readOnly"/>
+         <span class="input-group-btn">
+           <button type="button" class="btn btn-default" ng-click="vm.openDate()">
+             <i class="glyphicon glyphicon-calendar"></i>
+           </button>
+         </span>
+    </div>
+</jsonforms-control>`;
+
 export default angular
     .module('jsonforms-bootstrap.renderers.controls.datetime',
         ['jsonforms-bootstrap.renderers.controls'])
@@ -55,6 +76,6 @@ export default angular
                 DateTimeControlBootstrapRendererTester)
     ])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('datetimeBootstrap.html', require('./datetimeBootstrap.html'));
+        $templateCache.put('datetimeBootstrap.html', datetimeTemplate);
     }])
     .name;

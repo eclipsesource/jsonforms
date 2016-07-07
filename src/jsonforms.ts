@@ -1,4 +1,20 @@
 
+import 'angular';
+import form from './components/form/form';
+import capitalize from './components/ng-services/capitalize/capitalize.filter';
+import pathResolver from './components/ng-services/pathresolver/pathresolver-service';
+
+require('angular-ui-validate');
+
+export default angular.module('jsonforms', [
+    'ui.validate',
+    form,
+    capitalize,
+    pathResolver
+]).name;
+
+
+
 import IScope = angular.IScope;
 export interface IRule {
     effect: RuleEffect;
@@ -93,3 +109,4 @@ export interface StringArray{
     [index: number]: string;
 }
 export {AbstractControl, ControlRendererTester} from './components/renderers/controls/abstract-control'
+export {IPathResolver} from './components/services/pathresolver/jsonforms-pathresolver';

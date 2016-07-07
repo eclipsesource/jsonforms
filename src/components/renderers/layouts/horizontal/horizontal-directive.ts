@@ -43,6 +43,18 @@ const HorizontalLayoutRendererTester: RendererTester = function(element: IUISche
     return 2;
 };
 
+const horizontalTemplate = `<jsonforms-layout>
+    <div class="jsf-horizontal-layout">
+        <fieldset>
+            <div class="jsf-horizontal-layout-container">
+                <div ng-repeat="child in vm.uiSchema.elements">
+                    <jsonforms-inner uischema="child"></jsonforms-inner>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</jsonforms-layout>`;
+
 export default angular
     .module('jsonforms.renderers.layouts.horizontal', ['jsonforms.renderers.layouts'])
     .directive('horizontallayout', () => new HorizontalDirective())
@@ -50,6 +62,6 @@ export default angular
         RendererService.register('horizontallayout', HorizontalLayoutRendererTester)
     ])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('horizontal.html', require('./horizontal.html'));
+        $templateCache.put('horizontal.html', horizontalTemplate);
     }])
     .name;

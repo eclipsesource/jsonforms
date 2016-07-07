@@ -62,6 +62,6 @@ export default angular
         masterDetailDirectives,
 
     ])
-    .directive('jsonforms', () => new JsonFormsDirective())
+    .directive('jsonforms', ['$templateCache', ($templateCache) => new JsonFormsDirective($templateCache)])
     .directive('jsonformsInner', () => new JsonFormsInnerDirective())
     .name;

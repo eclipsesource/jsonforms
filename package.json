@@ -6,8 +6,10 @@
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://github.eclipsesource.com/jsonforms/",
   "license": "MIT",
-  "main": "/",
+  "main":    "jsonforms.js",
+  "typings": "jsonforms.d.ts",
   "scripts": {
+    "tsc": "tsc",
     "dev":           "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "dev-bootstrap": "webpack --config webpack/webpack.dev-bootstrap.js && webpack-dev-server --config webpack/webpack.dev-bootstrap.js --NODE_ENV=dev --inline",
     "test": "karma start --NODE_ENV=test",

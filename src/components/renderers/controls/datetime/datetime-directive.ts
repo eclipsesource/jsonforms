@@ -50,6 +50,18 @@ const DateTimeControlRendererTester: RendererTester = function(element: IUISchem
     return NOT_FITTING;
 };
 
+const datetimeTemplate = `<jsonforms-control>
+      <input type="date"
+             close-text="Close"
+             is-open="vm.isOpen"
+             id="{{vm.id}}"
+             class="form-control jsf-control-datetime"
+             ng-change='vm.modelChanged()'
+             ng-model="vm.dt"
+             ng-model-options="{timezone:'UTC'}"
+             ng-readonly="vm.uiSchema.readOnly"/>
+</jsonforms-control>`;
+
 export default angular
     .module('jsonforms.renderers.controls.datetime', ['jsonforms.renderers.controls'])
     .directive('datetimeControl', () => new DateTimeDirective())
@@ -57,6 +69,6 @@ export default angular
             RendererService.register('datetime-control', DateTimeControlRendererTester)
     ])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('datetime.html', require('./datetime.html'));
+        $templateCache.put('datetime.html', datetimeTemplate);
     }])
     .name;

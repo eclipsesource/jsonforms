@@ -21,7 +21,7 @@ export class FormController {
 
     static $inject = ['RendererService', 'PathResolver', 'UiSchemaRegistry',
         'SchemaGenerator', '$compile', '$q', '$scope'];
-
+    
     public element: any;
     public uiSchema: IUISchemaElement;
     private isInitialized = false;
@@ -166,11 +166,19 @@ export interface JsonFormsDirectiveScope extends ng.IScope {
     data: any;
 }
 
+const formTemplate = `
+<div>
+    <form role='form' class='jsf-form rounded'></form>
+</div>`;
+
 
 export class JsonFormsDirective implements ng.IDirective {
-
+    static $inject = ['$templateCache'];
+    constructor($templateCache: ng.ITemplateCacheService) {
+        $templateCache.put('form.html', formTemplate);
+    }
     restrict = 'E';
-    template = require('./form.html');
+    templateUrl = 'form.html';
     controller = FormController;
     controllerAs = 'vm';
     // we can't use bindToController because we want watchers
@@ -219,7 +227,7 @@ export interface JsonFormsInnerDirectiveScope extends ng.IScope {
 export class JsonFormsInnerDirective implements ng.IDirective {
 
     restrict = 'E';
-    template = require('./form.html');
+    templateUrl = 'form.html';
     controller = InnerFormController;
     controllerAs = 'vm';
     bindToController = {

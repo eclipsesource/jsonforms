@@ -17,6 +17,15 @@ class BooleanController extends AbstractControl {
     }
 }
 
+const booleanTemplate = `<jsonforms-control>
+  <input type="checkbox"
+         id="{{vm.id}}"
+         class="jsf-control-boolean"
+         ng-model="vm.modelValue[vm.fragment]"
+         ng-change='vm.modelChanged()'
+         ng-disabled="vm.uiSchema.readOnly"/>
+</jsonforms-control>`;
+
 export default angular
     .module('jsonforms.renderers.controls.boolean', ['jsonforms.renderers.controls'])
     .directive('booleanControl', () => new BooleanDirective())
@@ -24,6 +33,6 @@ export default angular
         RendererService.register('boolean-control', ControlRendererTester('boolean', 1))
     ])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('boolean.html', require('./boolean.html'));
+        $templateCache.put('boolean.html', booleanTemplate);
     }])
     .name;

@@ -1,7 +1,19 @@
+const groupTemplate = `<jsonforms-layout class="jsf-group">
+    <div class="jsf-group">
+        <fieldset class="row">
+            <legend ng-if="vm.label">{{vm.label}}</legend>
+            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements"
+                             uischema="child"
+                             class="col-sm-100">
+            </jsonforms-inner>
+        </fieldset>
+    </div>
+</jsonforms-layout>`;
+
 export default angular
     .module('jsonforms-bootstrap.renderers.layouts.group',
         ['jsonforms.renderers.layouts', 'jsonforms-bootstrap'])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('group.html', require('./group.html'));
+        $templateCache.put('group.html', groupTemplate);
     }])
     .name;

@@ -7,10 +7,14 @@
     "declaration":true,
     "module": "commonjs",
     "experimentalDecorators": true,
-    "outDir": "dist"
+    "outDir": "."
   },
+  "files": [
+    "./src/jsonforms.ts",
+    "./typings/main.d.ts",
+    "./src/declarations.d.ts"
+  ],
   "exclude": [
-    "out",
     "node_modules",
     "dist",
     "dev",
