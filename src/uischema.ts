@@ -1,18 +1,19 @@
-
-import IScope = angular.IScope;
 export interface IRule {
     effect: RuleEffect;
     condition: ICondition;
 }
+
 export enum RuleEffect {
     HIDE = <any>'HIDE',
     SHOW = <any>'SHOW',
     ENABLE = <any>'ENABLE',
     DISABLE = <any>'DISABLE'
 }
+
 export interface ICondition {
     type: string; // nice to have
 }
+
 export interface ILeafCondition extends ICondition {
     scope: {
         $ref: string;
@@ -60,9 +61,4 @@ export interface IArrayControlObject extends IControlObject {
 
 export interface IColumnControlObject extends IControlObject {
 
-}
-export interface JsonFormsScope extends IScope {
-    data: any;
-    schema: any;
-    uiSchema: any;
 }

@@ -1,3 +1,5 @@
+const layoutTemplate = `<div ng-hide="vm.hide || vm.uiSchema.elements.length==0" ng-transclude>
+</div>`;
 
 export default angular
     .module('jsonforms.renderers.layouts', ['jsonforms.renderers'])
@@ -9,6 +11,6 @@ export default angular
         };
     })
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('layout.html', require('./layout.html'));
+        $templateCache.put('layout.html', layoutTemplate);
     }])
     .name;

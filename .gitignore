@@ -1,6 +1,9 @@
 # generated files
 dist/
 !dist/LICENSE
+components/
+jsonforms.d.ts
+jsonforms.js
 temp/
 coverage/
 reports/

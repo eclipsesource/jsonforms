@@ -1,7 +1,7 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl} from '../abstract-control';
-import {IUISchemaElement} from '../../../../jsonforms';
+import {IUISchemaElement} from '../../../../uischema';
 
 class ReferenceDirective implements ng.IDirective {
     restrict = 'E';

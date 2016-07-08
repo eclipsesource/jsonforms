@@ -1,6 +1,7 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {IUISchemaElement} from '../../../../jsonforms';
+import {IUISchemaElement} from '../../../../uischema';
+
 class LabelDirective implements ng.IDirective {
     restrict = 'E';
     template = `<jsonforms-widget class="jsf-label">{{vm.text}}<hr></jsonforms-widget>`;

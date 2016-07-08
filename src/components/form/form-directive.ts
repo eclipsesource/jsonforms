@@ -15,17 +15,25 @@ import {IDataProvider} from '../services/data/data-service';
 import {RuleService} from '../services/rule/rule-service';
 import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
-import {IUISchemaElement} from '../../jsonforms';
+import {IUISchemaElement} from '../../uischema';
+import {SchemaElement} from '../../jsonschema';
 
 export class FormController {
 
     static $inject = ['RendererService', 'PathResolver', 'UiSchemaRegistry',
         'SchemaGenerator', '$compile', '$q', '$scope'];
-
     public element: any;
     public uiSchema: IUISchemaElement;
     private isInitialized = false;
     private childScope: ng.IScope;
+
+    private static isDataProvider(testMe: any): testMe is IDataProvider {
+        return testMe !== undefined && testMe.hasOwnProperty('fetchData');
+    }
+
+    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
+        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
+    }
 
     constructor(
         private rendererService: RendererService,
@@ -37,13 +45,6 @@ export class FormController {
         private scope: JsonFormsDirectiveScope
     ) { }
 
-    private static isDataProvider(testMe: any): testMe is IDataProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchData');
-    }
-
-    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
-    }
 
     public init() {
         if (this.isInitialized) {
@@ -166,11 +167,15 @@ export interface JsonFormsDirectiveScope extends ng.IScope {
     data: any;
 }
 
+const formTemplate = `
+<div>
+    <form role='form' class='jsf-form rounded'></form>
+</div>`;
+
 
 export class JsonFormsDirective implements ng.IDirective {
-
     restrict = 'E';
-    template = require('./form.html');
+    templateUrl = 'form.html';
     controller = FormController;
     controllerAs = 'vm';
     // we can't use bindToController because we want watchers
@@ -219,7 +224,7 @@ export interface JsonFormsInnerDirectiveScope extends ng.IScope {
 export class JsonFormsInnerDirective implements ng.IDirective {
 
     restrict = 'E';
-    template = require('./form.html');
+    templateUrl = 'form.html';
     controller = InnerFormController;
     controllerAs = 'vm';
     bindToController = {
@@ -231,3 +236,11 @@ export class JsonFormsInnerDirective implements ng.IDirective {
         ctrl.init();
     }
 }
+
+export default angular.module('jsonforms.form.directives', ['jsonforms.form'])
+    .directive('jsonforms', () => new JsonFormsDirective())
+    .directive('jsonformsInner', () => new JsonFormsInnerDirective())
+    .run(['$templateCache', ($templateCache: ng.ITemplateCacheService) =>
+        $templateCache.put('form.html', formTemplate)]
+    )
+    .name;

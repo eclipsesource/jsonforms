@@ -1,7 +1,8 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl} from '../abstract-control';
-import {IUISchemaElement} from '../../../../jsonforms';
+import {SchemaElement} from '../../../../jsonschema';
+import {IUISchemaElement} from '../../../../uischema';
 
 class EnumDirective implements ng.IDirective {
     restrict = 'E';

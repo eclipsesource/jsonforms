@@ -1,4 +1,4 @@
-import {IUISchemaElement} from '../../../jsonforms';
+import {IUISchemaElement} from '../../../uischema';
 import {IUISchemaGenerator} from '../../generators/generators';
 
 export interface UiSchemaRegistry {

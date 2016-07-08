@@ -34,6 +34,17 @@ const BootstrapHorizontalLayoutRendererTester: RendererTester = function(element
     }
     return 3;
 };
+
+const horizontalTemplate = `<jsonforms-layout class="jsf-horizontal-layout">
+    <div class="jsf-horizontal-layout">
+        <fieldset class="row">
+            <div ng-repeat="child in vm.uiSchema.elements" class="col-sm-{{vm.childSize}}">
+                <jsonforms-inner uischema="child"></jsonforms-inner>
+            </div>
+        </fieldset>
+    </div>
+</jsonforms-layout>`;
+
 export default angular
     .module('jsonforms-bootstrap.renderers.layouts.horizontal',
         ['jsonforms.renderers.layouts', 'jsonforms-bootstrap'])
@@ -43,6 +54,6 @@ export default angular
             BootstrapHorizontalLayoutRendererTester)
     ])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('horizontal.html', require('./horizontal.html'));
+        $templateCache.put('horizontal.html', horizontalTemplate);
     }])
     .name;

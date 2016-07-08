@@ -1,5 +1,5 @@
 import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
-import {IUISchemaElement} from '../../jsonforms';
+import {IUISchemaElement} from '../../uischema';
 
 export interface RendererService {
     register(directiveName: string, tester: RendererTester): void;

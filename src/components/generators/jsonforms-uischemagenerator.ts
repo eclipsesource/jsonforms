@@ -2,7 +2,7 @@
 
 import {IUISchemaGenerator} from './generators';
 import {PathUtil} from '../services/pathutil';
-import {IUISchemaElement, IControlObject, ILayout} from '../../jsonforms';
+import {IUISchemaElement, IControlObject, ILayout} from '../../uischema';
 
 export class UISchemaGenerator implements IUISchemaGenerator {
 

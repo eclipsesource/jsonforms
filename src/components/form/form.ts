@@ -27,10 +27,9 @@ import arrayControlDirective from '../renderers/controls/array/array-directive';
 import referenceControlDirective from '../renderers/controls/reference/reference-directive';
 import datetimeControlDirective from '../renderers/controls/datetime/datetime-directive';
 import enumControlDirective from '../renderers/controls/enum/enum-directive';
+import formsDirective from '../form/form-directive';
 
 import norendererDirective from '../renderers/norenderer-directive';
-
-import {JsonFormsDirective, JsonFormsInnerDirective} from './form-directive';
 
 export default angular
     .module('jsonforms.form', [
@@ -40,6 +39,8 @@ export default angular
         generators,
         uiSchemaGenerator,
         schemaGenerator,
+
+        formsDirective,
 
         controlDirective,
         layoutDirective,
@@ -62,6 +63,4 @@ export default angular
         masterDetailDirectives,
 
     ])
-    .directive('jsonforms', () => new JsonFormsDirective())
-    .directive('jsonformsInner', () => new JsonFormsInnerDirective())
     .name;

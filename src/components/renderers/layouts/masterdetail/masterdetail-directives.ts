@@ -1,7 +1,9 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl} from '../../controls/abstract-control';
-import {IUISchemaElement} from '../../../../jsonforms';
+import {SchemaElement} from '../../../../jsonschema';
+import {IUISchemaElement} from '../../../../uischema';
+
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
     templateUrl = 'masterdetail.html';
@@ -117,6 +119,69 @@ class MasterDetailMember implements angular.IDirective {
     }
 }
 
+const masterDetailTemplate = `
+<div class="jsf-masterdetail">
+    <!-- Master -->
+    <div class="jsf-masterdetail-master">
+        <jsonforms-masterdetail-collection properties="vm.subSchema.properties"
+                                           instance="vm.data">
+        </jsonforms-masterdetail-collection>
+    </div>
+    <!-- Detail -->
+    <div class="jsf-masterdetail-detail">
+        <jsonforms schema="vm.selectedSchema" 
+                   data="vm.selectedChild" 
+                   ng-if="vm.selectedChild"></jsonforms>
+    </div>
+</div>`;
+
+const masterDetailCollectionTemplate = `
+<div>
+    <ul class="jsf-masterdetail-properties">
+        <li ng-repeat="(key, value) in vm.filter(vm.properties)">
+            <div>
+                <span class="jsf-masterdetail-property">{{key}}</span>
+                <i
+                   ng-class="{
+                     'chevron-down': vm.attribute_open[$index],
+                     'chevron-right': !vm.attribute_open[$index]
+                   }"
+                   ng-show="!vm.isEmptyInstance(vm.instance,key)" 
+                   ng-click="vm.attribute_open[$index]=!vm.attribute_open[$index]">
+                </i>
+            </div>
+            <ul ng-if="!vm.isEmptyInstance(vm.instance,key)" 
+                class="jsf-masterdetail-entries" 
+                ng-show="vm.attribute_open[$index]">
+                <li ng-repeat="child in vm.instance[key]" 
+                    class="{{vm.isEmptyInstance(vm.instance,key)?'jsf-masterdetail-empty':''}}">
+                    <div>
+                        <span ng-click="vm.selectElement(child,value)" 
+                              class="jsf-masterdetail-entry" 
+                              ng-class="{
+                                'jsf-masterdetail-entry-selected':vm.selectedChild === child
+                              }">
+                              {{child.name!=undefined?child.name:child}}
+                        </span>
+                        <i
+                           ng-class="{
+                             'chevron-down': vm.object_open[$index],
+                             'chevron-right': !vm.object_open[$index]
+                           }"
+                           ng-if="vm.hasKeys(value.items)" 
+                           ng-click="vm.object_open[$index]=!vm.object_open[$index]"></i>
+                    </div>
+                    <div ng-show="vm.object_open[$index]" ng-if="vm.hasKeys(value.items)" >
+                        <jsonforms-masterdetail-member child-schema="value.items" 
+                                                       child-data="child">
+                        </jsonforms-masterdetail-member>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>`;
+
 export default angular
     .module('jsonforms.renderers.layouts.masterdetail', ['jsonforms.renderers.layouts'])
     .directive('masterDetail', () => new MasterDetailDirective())
@@ -124,11 +189,10 @@ export default angular
         RendererService.register('master-detail', MasterDetailControlRendererTester)
     ])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('masterdetail.html', require('./masterdetail.html'));
+        $templateCache.put('masterdetail.html', masterDetailTemplate);
     }])
     .run(['$templateCache', $templateCache => {
-        $templateCache.put('masterdetail-collection.html',
-            require('./masterdetail-collection.html'));
+        $templateCache.put('masterdetail-collection.html', masterDetailCollectionTemplate);
     }])
     .directive('jsonformsMasterdetailCollection', () => new MasterDetailCollectionDirective())
     .directive('jsonformsMasterdetailMember', () => new MasterDetailMember())

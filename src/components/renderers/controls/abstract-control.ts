@@ -4,8 +4,8 @@ import {RendererTester, NOT_FITTING} from '../renderer-service';
 import {Services, ServiceId, IValidationService, ISchemaProvider} from '../../services/services';
 import {IRuleService, IRuleServiceCallBack} from '../../services/rule/rule-service';
 import {IDataProvider} from '../../services/data/data-service';
-import {IControlObject, IRule, IWithLabel, ILabelObject, IUISchemaElement}
-    from '../../../jsonforms';
+import {IRule, IControlObject, IWithLabel, ILabelObject, IUISchemaElement} from '../../../uischema';
+import {SchemaElement} from '../../../jsonschema';
 
 export abstract class AbstractControl implements IRuleServiceCallBack {
 
