@@ -5,7 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     devtool: 'source-map',
     entry: {
-        'dist/jsonforms': './src/bootstrap/jsonforms_bootstrap.ts',
+        'dist/jsonforms-bootstrap': './src/bootstrap/jsonforms_bootstrap.ts',
         'examples/assets/jsonforms': './src/bootstrap/jsonforms_bootstrap.ts'
     },
     output: {
@@ -36,12 +36,12 @@ module.exports = {
         new CopyWebpackPlugin([
             { 
                 from: 'src/bootstrap/jsonforms-bootstrap.css',
-                to:   'dist/jsonforms.css'
+                to:   'dist/jsonforms-bootstrap.css'
             },
             { 
                 from: 'src/bootstrap/jsonforms-bootstrap.css',
                 to:   'examples/assets/jsonforms.css'
-            },
+            }
         ])
     ],
     module: {
