@@ -5,7 +5,7 @@ import {PathUtil} from '../../../services/pathutil';
 import {IUISchemaGenerator} from '../../../generators/generators';
 import {AbstractControl, ControlRendererTester} from '../abstract-control';
 import {IUISchemaElement, IGroup} from '../../../../uischema';
-import {SchemaArray} from "../../../../jsonschema";
+import {SchemaArray} from '../../../../jsonschema';
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';

@@ -1,4 +1,5 @@
-const layoutTemplate = `<div ng-hide="vm.hide || vm.uiSchema.elements.length==0" ng-transclude></div>`;
+const layoutTemplate = `<div ng-hide="vm.hide || vm.uiSchema.elements.length==0" ng-transclude>
+</div>`;
 
 export default angular
     .module('jsonforms.renderers.layouts', ['jsonforms.renderers'])

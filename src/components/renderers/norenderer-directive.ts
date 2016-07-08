@@ -1,4 +1,4 @@
-import {IUISchemaElement} from "../../uischema";
+import {IUISchemaElement} from '../../uischema';
 
 class NoRendererDirective implements ng.IDirective {
     restrict = 'E';

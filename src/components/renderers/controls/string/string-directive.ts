@@ -1,7 +1,7 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl, ControlRendererTester} from '../abstract-control';
-import {IUISchemaElement} from "../../../../uischema";
+import {IUISchemaElement} from '../../../../uischema';
 
 
 class StringDirective implements ng.IDirective {

@@ -1,7 +1,7 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
-import {IUISchemaElement} from "../../../../uischema";
+import {IUISchemaElement} from '../../../../uischema';
 
 class GroupDirective implements ng.IDirective {
     restrict = 'E';

@@ -1,8 +1,8 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractControl} from '../../controls/abstract-control';
-import {SchemaElement} from "../../../../jsonschema";
-import {IUISchemaElement} from "../../../../uischema";
+import {SchemaElement} from '../../../../jsonschema';
+import {IUISchemaElement} from '../../../../uischema';
 
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
@@ -129,33 +129,52 @@ const masterDetailTemplate = `
     </div>
     <!-- Detail -->
     <div class="jsf-masterdetail-detail">
-        <jsonforms schema="vm.selectedSchema" data="vm.selectedChild" ng-if="vm.selectedChild"></jsonforms>
+        <jsonforms schema="vm.selectedSchema" 
+                   data="vm.selectedChild" 
+                   ng-if="vm.selectedChild"></jsonforms>
     </div>
 </div>`;
 
 const masterDetailCollectionTemplate = `
 <div>
     <ul class="jsf-masterdetail-properties">
-        <li ng-repeat="(key, value) in vm.filter(vm.properties)">  <!-- ng-class="{'jsf-masterdetail-empty':isEmptyInstance(instance,key)}"-->
+        <li ng-repeat="(key, value) in vm.filter(vm.properties)">
             <div>
                 <span class="jsf-masterdetail-property">{{key}}</span>
                 <i
-                   ng-class="{'chevron-down': vm.attribute_open[$index],'chevron-right': !vm.attribute_open[$index]}"
-                   ng-show="!vm.isEmptyInstance(vm.instance,key)" ng-click="vm.attribute_open[$index]=!vm.attribute_open[$index]">
+                   ng-class="{
+                     'chevron-down': vm.attribute_open[$index],
+                     'chevron-right': !vm.attribute_open[$index]
+                   }"
+                   ng-show="!vm.isEmptyInstance(vm.instance,key)" 
+                   ng-click="vm.attribute_open[$index]=!vm.attribute_open[$index]">
                 </i>
             </div>
-            <ul ng-if="!vm.isEmptyInstance(vm.instance,key)" class="jsf-masterdetail-entries" ng-show="vm.attribute_open[$index]">
-                <li ng-repeat="child in vm.instance[key]" class="{{vm.isEmptyInstance(vm.instance,key)?'jsf-masterdetail-empty':''}}">
+            <ul ng-if="!vm.isEmptyInstance(vm.instance,key)" 
+                class="jsf-masterdetail-entries" 
+                ng-show="vm.attribute_open[$index]">
+                <li ng-repeat="child in vm.instance[key]" 
+                    class="{{vm.isEmptyInstance(vm.instance,key)?'jsf-masterdetail-empty':''}}">
                     <div>
-                        <span ng-click="vm.selectElement(child,value)" class="jsf-masterdetail-entry" ng-class="{'jsf-masterdetail-entry-selected':vm.selectedChild===child}">
+                        <span ng-click="vm.selectElement(child,value)" 
+                              class="jsf-masterdetail-entry" 
+                              ng-class="{
+                                'jsf-masterdetail-entry-selected':vm.selectedChild === child
+                              }">
                               {{child.name!=undefined?child.name:child}}
                         </span>
                         <i
-                           ng-class="{'chevron-down': vm.object_open[$index],'chevron-right': !vm.object_open[$index]}"
-                           ng-if="vm.hasKeys(value.items)" ng-click="vm.object_open[$index]=!vm.object_open[$index]"></i>
+                           ng-class="{
+                             'chevron-down': vm.object_open[$index],
+                             'chevron-right': !vm.object_open[$index]
+                           }"
+                           ng-if="vm.hasKeys(value.items)" 
+                           ng-click="vm.object_open[$index]=!vm.object_open[$index]"></i>
                     </div>
-                    <div ng-show="vm.object_open[$index]"  ng-if="vm.hasKeys(value.items)" > <!--ng-include="'masterdetail-master-template.html'"-->
-                        <jsonforms-masterdetail-member child-schema="value.items" child-data="child"></jsonforms-masterdetail-member>
+                    <div ng-show="vm.object_open[$index]" ng-if="vm.hasKeys(value.items)" >
+                        <jsonforms-masterdetail-member child-schema="value.items" 
+                                                       child-data="child">
+                        </jsonforms-masterdetail-member>
                     </div>
                 </li>
             </ul>

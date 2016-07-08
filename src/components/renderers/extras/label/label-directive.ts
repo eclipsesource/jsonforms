@@ -1,6 +1,6 @@
 import {RendererTester, NOT_FITTING} from '../../renderer-service';
 import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {IUISchemaElement} from "../../../../uischema";
+import {IUISchemaElement} from '../../../../uischema';
 
 class LabelDirective implements ng.IDirective {
     restrict = 'E';

@@ -22,11 +22,18 @@ export class FormController {
 
     static $inject = ['RendererService', 'PathResolver', 'UiSchemaRegistry',
         'SchemaGenerator', '$compile', '$q', '$scope'];
-    
     public element: any;
     public uiSchema: IUISchemaElement;
     private isInitialized = false;
     private childScope: ng.IScope;
+
+    private static isDataProvider(testMe: any): testMe is IDataProvider {
+        return testMe !== undefined && testMe.hasOwnProperty('fetchData');
+    }
+
+    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
+        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
+    }
 
     constructor(
         private rendererService: RendererService,
@@ -38,13 +45,6 @@ export class FormController {
         private scope: JsonFormsDirectiveScope
     ) { }
 
-    private static isDataProvider(testMe: any): testMe is IDataProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchData');
-    }
-
-    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
-    }
 
     public init() {
         if (this.isInitialized) {
@@ -237,7 +237,7 @@ export class JsonFormsInnerDirective implements ng.IDirective {
     }
 }
 
-export default angular.module("jsonforms.form.directives", ["jsonforms.form"])
+export default angular.module('jsonforms.form.directives', ['jsonforms.form'])
     .directive('jsonforms', () => new JsonFormsDirective())
     .directive('jsonformsInner', () => new JsonFormsInnerDirective())
     .run(['$templateCache', ($templateCache: ng.ITemplateCacheService) =>

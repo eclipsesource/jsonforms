@@ -1,25 +1,25 @@
-export interface SchemaElement{
+export interface SchemaElement {
     type?: string;
-    enum?: SchemaElement[]
+    enum?: SchemaElement[];
 }
 
-export interface SchemaObject extends SchemaElement{
-    //TODO: specify properties
+export interface SchemaObject extends SchemaElement {
+    // TODO: specify properties
     properties?: any;
     additionalProperties?: any;
     required?: StringArray;
 }
 
-export interface SchemaArray extends SchemaElement{
-    //TODO: specify items
+export interface SchemaArray extends SchemaElement {
+    // TODO: specify items
     items?: any;
 }
 
 export interface SchemaString extends SchemaElement {
-    format?: string
+    format?: string;
 }
 
 // Array type
-export interface StringArray{
+export interface StringArray {
     [index: number]: string;
 }
