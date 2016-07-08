@@ -1,6 +1,6 @@
 import 'angular';
 
-import core from '../index'
+import core from '../index';
 
 import '../../jsf-bootstrap.css';
 import datetimeControlDirective from './controls/datetime/datetime-directive';

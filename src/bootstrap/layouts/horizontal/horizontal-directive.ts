@@ -2,7 +2,7 @@ import {RendererTester, NOT_FITTING} from '../../../components/renderers/rendere
 import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
 import {HorizontalController} from
     '../../../components/renderers/layouts/horizontal/horizontal-directive';
-import {IUISchemaElement} from '../../../jsonforms';
+import {IUISchemaElement} from '../../../uischema';
 
 class BootstrapHorizontalDirective implements ng.IDirective {
     restrict = 'E';

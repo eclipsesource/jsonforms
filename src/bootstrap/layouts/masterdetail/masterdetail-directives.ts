@@ -18,16 +18,21 @@ const masterDetailCollectionTemplate = `
 <div>
     <uib-accordion close-others="false">
         <uib-accordion-group is-open="vm.attribute_open[$index]"
-                         ng-repeat="(key, value) in vm.filter(vm.properties)"> <!--class="{{isEmptyInstance(key)?'jsf-masterdetail-empty':''}}"-->
+                         ng-repeat="(key, value) in vm.filter(vm.properties)"> 
             <uib-accordion-heading class="jsf-masterdetail-header">
                 <span class="jsf-masterdetail-property">{{key}}</span>
                 <i
-                   ng-class="{'glyphicon glyphicon-chevron-down': vm.attribute_open[$index],'glyphicon glyphicon-chevron-right': !vm.attribute_open[$index]}"
-                   ng-show="!vm.isEmptyInstance(vm.instance,key)" > <!--ng-click="vm.attribute_open[$index]=!vm.attribute_open[$index]"-->
+                   ng-class="{
+                     'glyphicon glyphicon-chevron-down': vm.attribute_open[$index],
+                     'glyphicon glyphicon-chevron-right': !vm.attribute_open[$index]
+                   }"
+                   ng-show="!vm.isEmptyInstance(vm.instance,key)" >
                 </i>
             </uib-accordion-heading>
 
-            <uib-accordion close-others="false" ng-if="!vm.isEmptyInstance(vm.instance,key)" ng-show="vm.attribute_open[$index]">
+            <uib-accordion close-others="false" 
+                           ng-if="!vm.isEmptyInstance(vm.instance,key)" 
+                           ng-show="vm.attribute_open[$index]">
                 <uib-accordion-group
                     is-open="vm.object_open[$index]"
                     ng-repeat="child in vm.instance[key]"
@@ -40,11 +45,18 @@ const masterDetailCollectionTemplate = `
                               {{child.name!=undefined?child.name:child}}
                         </span>
                         <i
-                           ng-class="{'glyphicon glyphicon-chevron-down': vm.object_open[$index],'glyphicon glyphicon-chevron-right': !vm.object_open[$index]}"
-                           ng-if="vm.hasKeys(value.items)"></i> <!--ng-click="vm.object_open[$index]=!vm.object_open[$index]"-->
+                           ng-class="{
+                             'glyphicon glyphicon-chevron-down': vm.object_open[$index],
+                             'glyphicon glyphicon-chevron-right': !vm.object_open[$index]
+                           }"
+                           ng-if="vm.hasKeys(value.items)">
+                        </i>
                     </uib-accordion-heading>
-                    <div ng-show="vm.object_open[$index]"  ng-if="vm.hasKeys(value.items)" > <!--ng-include="'masterdetail-master-template.html'"-->
-                        <jsonforms-masterdetail-member child-schema="value.items" child-data="child"></jsonforms-masterdetail-member>
+                    <div ng-show="vm.object_open[$index]"  
+                         ng-if="vm.hasKeys(value.items)" > 
+                        <jsonforms-masterdetail-member child-schema="value.items" 
+                                                       child-data="child">
+                        </jsonforms-masterdetail-member>
                     </div>
                 </uib-accordion-group>
             </uib-accordion>
