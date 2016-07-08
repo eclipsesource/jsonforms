@@ -34,13 +34,21 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
+            {
+                from: 'src/jsonforms.css',
+                to:   'dist/jsonforms.css'
+            },
             { 
                 from: 'src/bootstrap/jsonforms-bootstrap.css',
                 to:   'dist/jsonforms-bootstrap.css'
             },
+            {
+                from: 'src/jsonforms.css',
+                to:   'examples/assets/jsonforms.css'
+            },
             { 
                 from: 'src/bootstrap/jsonforms-bootstrap.css',
-                to:   'examples/assets/jsonforms.css'
+                to:   'examples/assets/jsonforms-bootstrap.css'
             }
         ])
     ],
