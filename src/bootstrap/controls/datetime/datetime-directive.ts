@@ -2,7 +2,7 @@ import {RendererTester, NOT_FITTING} from '../../../components/renderers/rendere
 import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
 import {DateTimeController, DateTimeControllerScope} from
     '../../../components/renderers/controls/datetime/datetime-directive';
-import {IUISchemaElement} from "../../../../uischema";
+import {IUISchemaElement} from '../../../uischema';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
