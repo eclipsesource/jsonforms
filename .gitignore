@@ -4,6 +4,12 @@ dist/
 components/
 jsonforms.d.ts
 jsonforms.js
+index.d.ts
+index.js
+jsonschema.d.ts
+jsonschema.js
+uischema.d.ts
+uischema.js
 temp/
 coverage/
 reports/
