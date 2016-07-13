@@ -3,6 +3,12 @@
 JSONForms extends the AngularJS view model approach by eliminating the need to write HTML templates in order to
 create forms by leveraging the capabilities of JSON and JSON schema.
 
+# 1.0 Release!
+
+After more than one and a half years of development with over 500 commits we are proud to announce the v1.0 release of JSONForms on **22nd July of 2016**. The release will include among other things a lot of bugfixes, a stable API and the switch to [semantic versioning](http://semver.org/).
+
+Stay tuned for more news regarding the future of JSONForms.
+
 # First time setup
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
 * Install [typings](https://github.com/typings/typings): `npm install -g typings` 
