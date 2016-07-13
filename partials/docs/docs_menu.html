@@ -1,0 +1,16 @@
+<nav class="docs-nav l-pinned-left l-offset-nav">
+    <header class="docs-nav-header">
+        <md-button ng-click="toggleDocsMenu($event)" class="docs-nav-button">
+            Docs Menu
+            <span class="icon icon-arrow-drop-down"></span>
+        </md-button>
+    </header>
+    <ul class="docs-menu" layout="column" ng-class="showDocsNav? 'is-visible':''">
+        <!-- icons -->
+        <li class="docs-menu-link"><a ui-sref="docs.quickstart" ng-click="hideDocsMenu($event)">Quickstart (5 Minute)</a></li>
+        <li class="docs-menu-link"><a ui-sref="docs.tutorial" ng-click="hideDocsMenu($event)">Customization Tutorial</a></li>
+        <li class="docs-menu-link"><a ui-sref="docs.emfforms-integration" ng-click="hideDocsMenu($event)">EMF Forms Integration</a></li>
+    </ul>
+</nav>
+
+

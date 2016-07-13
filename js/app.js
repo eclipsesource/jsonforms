@@ -320,6 +320,9 @@ angular.module('jsonforms-website', [
                 scope.toggleMainMenu = function () {
                     scope.showMainNav = !scope.showMainNav;
                 };
+                scope.hideMainMenu = function() {
+                    scope.showMainNav = false;
+                };
             }
         };
     })
@@ -342,10 +345,6 @@ angular.module('jsonforms-website', [
         vm.scrollTo = function(id) {
             $location.hash(id);
             $anchorScroll();
-        };
-        vm.showDocsNav = false;
-        vm.toggleDocsMenu = function () {
-            vm.showDocsNav = !vm.showDocsNav;
         };
         vm.isSelected = function(selected) {
             //return selected==$location.path();
@@ -381,12 +380,14 @@ angular.module('jsonforms-website', [
     .directive('docsMenu', ['$location', function($location) {
         return {
             restrict: 'E',
-            templateUrl: 'docs/docs_menu.html',
+            templateUrl: 'partials/docs/docs_menu.html',
             link: function (scope) {
-                console.log("docsMenu link");
                 scope.showDocsNav = false;
                 scope.toggleDocsMenu = function () {
                     scope.showDocsNav = !scope.showDocsNav;
+                };
+                scope.hideDocsMenu = function () {
+                    scope.showDocsNav = false;
                 };
                 scope.isSelected=function(selected) {
                     return $location.absUrl().endsWith(selected);
