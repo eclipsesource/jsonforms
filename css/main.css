@@ -216,7 +216,7 @@ button.main-nav-button{
 .mainLogo{
     /*color: #d9534f;*/
     width:640px;
-    padding-top: 150px;
+    padding-top: 250px;
     margin: 10px auto;
     text-align: center;
     position: relative;
@@ -225,11 +225,11 @@ button.main-nav-button{
     font-family: 'Roboto',sans-serif;
 }
 .mainLogo:after{
-    background-image: url("../images/jsonforms-logo-white.svg");
+    background-image: url("../images/jsonforms-logo-white-release.svg");
     background-position: top center;
     background-repeat: no-repeat;
     content: '';
-    height: 150px;
+    height: 250px;
     position: absolute;
     left: 0;
     top: 0;
