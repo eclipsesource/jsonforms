@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    devtool: 'cheap-eval-source-map',
+    devtool: 'source-map',
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
