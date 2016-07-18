@@ -1,7 +1,5 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
-import {IUISchemaElement} from '../../../../uischema';
+import {uiTypeIs} from "../../controls/abstract-control";
 
 class VerticalDirective implements ng.IDirective {
     restrict = 'E';
@@ -17,20 +15,12 @@ class VerticalController extends AbstractLayout {
         super(scope);
     }
 }
-const VerticalLayoutRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                            dataSchema: any,
-                                                            dataObject: any,
-                                                            pathResolver: IPathResolver ){
-    if (element.type !== 'VerticalLayout') {
-        return NOT_FITTING;
-    }
-    return 2;
-};
 
 const verticalTemplate = `
 <jsonforms-layout>
     <div class="jsf-vertical-layout">
         <fieldset class="jsf-vertical-layout-container">
+        
             <div ng-repeat="child in vm.uiSchema.elements">
                 <jsonforms-inner uischema="child"></jsonforms-inner>
             </div>
@@ -42,7 +32,7 @@ export default angular
     .module('jsonforms.renderers.layouts.vertical', ['jsonforms.renderers.layouts'])
     .directive('verticallayout', () => new VerticalDirective())
     .run(['RendererService', RendererService =>
-        RendererService.register('verticallayout', VerticalLayoutRendererTester)
+        RendererService.register('verticallayout', uiTypeIs('VerticalLayout'), 2)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('vertical.html', verticalTemplate);

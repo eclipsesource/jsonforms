@@ -1,6 +1,4 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {IUISchemaElement} from '../../../../uischema';
+import {uiTypeIs} from "../../controls/abstract-control";
 
 class LabelDirective implements ng.IDirective {
     restrict = 'E';
@@ -20,20 +18,11 @@ class LabelController {
         return 100;
     }
 }
-const LabelControlRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                          dataSchema: any,
-                                                          dataObject: any,
-                                                          pathResolver: IPathResolver ){
-    if (element.type !== 'Label') {
-        return NOT_FITTING;
-    }
-    return 2;
-};
 
 export default angular
     .module('jsonforms.renderers.extras.label', ['jsonforms.renderers'])
     .directive('labelControl', () => new LabelDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('label-control', LabelControlRendererTester)
+            RendererService.register('label-control', uiTypeIs('Label'), 2)
     ])
     .name;

@@ -1,13 +1,13 @@
 import {PathUtil} from '../../services/pathutil';
-import {IPathResolver} from '../../services/pathresolver/jsonforms-pathresolver';
-import {RendererTester, NOT_FITTING} from '../renderer-service';
+import {PathResolver} from '../../services/pathresolver/jsonforms-pathresolver';
+import {NOT_FITTING} from '../renderer-service';
 import {Services, ServiceId, IValidationService, ISchemaProvider} from '../../services/services';
 import {IRuleService, IRuleServiceCallBack} from '../../services/rule/rule-service';
 import {IDataProvider} from '../../services/data/data-service';
 import {IRule, IControlObject, IWithLabel, ILabelObject, IUISchemaElement} from '../../../uischema';
-import {SchemaElement} from '../../../jsonschema';
+import {SchemaElement} from "../../../jsonschema";
 
-export abstract class AbstractControl implements IRuleServiceCallBack {
+export class AbstractControl implements IRuleServiceCallBack {
 
     // IRuleServiceCallBack
     public instance: any;
@@ -21,16 +21,17 @@ export abstract class AbstractControl implements IRuleServiceCallBack {
     protected data: any;
     private services: Services;
     private alerts = [];
+    protected pathResolver = new PathResolver();
 
-    constructor(protected scope: ng.IScope, protected pathResolver: IPathResolver) {
+    constructor(protected scope: ng.IScope) {
         this.services = scope['services'];
         this.uiSchema = scope['uischema'];
         this.schema = this.services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
         this.data = this.services.get<IDataProvider>(ServiceId.DataProvider).getData();
         let indexedSchemaPath = this.uiSchema['scope']['$ref'];
         this.schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
-        this.fragment = pathResolver.lastFragment(this.uiSchema.scope.$ref);
-        this.modelValue = pathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
+        this.fragment = this.pathResolver.lastFragment(this.uiSchema.scope.$ref);
+        this.modelValue = this.pathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
 
         this.scope.$on('modelChanged', () => {
             // TODO: remote references to services
@@ -105,6 +106,7 @@ export abstract class AbstractControl implements IRuleServiceCallBack {
         return false;
     }
 }
+
 // TODO extract to util
 export class LabelObjectUtil {
 
@@ -155,17 +157,84 @@ class LabelObject implements ILabelObject {
     }
 }
 
-export const ControlRendererTester = function(type: string, specificity: number): RendererTester {
-    return function (element: IUISchemaElement,
-                     dataSchema: any, dataObject: any, pathResolver: IPathResolver ) {
+export function schemaTypeIs(expected: string) {
+    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+        let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
+        // TODO ugly
+        let currentDataSchema: SchemaElement = new PathResolver().resolveSchema(schema, schemaPath);
+        return currentDataSchema.type == expected;
+    }
+}
 
-        if (element.type !== 'Control') {
+export function uiTypeIs(expected: string) {
+    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+        return uiSchema.type == expected;
+    }
+}
+
+
+export function optionIs(optionName: string, expected:any) {
+    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+        let options = uiSchema['options'];
+        if (options == undefined) {
+            return false;
+        }
+        return options[optionName] == expected;
+    }
+}
+
+export function schemaTypeMatches(check: (SchemaElement) => boolean) {
+    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+        let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
+        // TODO ugly
+        let currentDataSchema: SchemaElement = new PathResolver().resolveSchema(schema, schemaPath);
+        return check(currentDataSchema);
+    }
+}
+
+
+export function schemaPathEndsWith(expected: string) {
+    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+        if (expected === undefined || uiSchema['scope'] === undefined) {
+            return false;
+        }
+        return _.endsWith(uiSchema['scope']['$ref'], expected);
+    }
+}
+
+export class RendererTesterBuilder {
+
+
+    and(...testers: Array<(uiSchema: IUISchemaElement, schema: SchemaElement, data:any) => boolean>) {
+        return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any) =>
+            testers.reduce((acc, tester) => acc && tester(uiSchema, schema, data), true);
+    }
+
+
+    create(test: (uiSchema: IUISchemaElement, schema: SchemaElement, data:any) => boolean, spec: number): (uiSchema: IUISchemaElement, schema: SchemaElement, data:any) => number {
+        return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): number => {
+            if (test(uiSchema, schema, data)) {
+                return spec;
+            }
             return NOT_FITTING;
         }
-        let currentDataSchema = pathResolver.resolveSchema(dataSchema, element['scope']['$ref']);
-        if (currentDataSchema === undefined || currentDataSchema.type !== type) {
-            return NOT_FITTING;
-        }
-        return specificity;
+    }
+
+
+    none(uiSchema: IUISchemaElement, schema: SchemaElement, data:any): number {
+        return NOT_FITTING;
     };
-};
+}
+
+export const Testers = new RendererTesterBuilder();
+
+export default angular.module('jsonforms.control.base', ['jsonforms.renderers.controls'])
+    .controller('BaseController', AbstractControl)
+    .service('JSONFormsTesters', function() {
+        return {
+            schemaPathEndsWith: schemaPathEndsWith,
+            and: Testers.and,
+            uiTypeIs: uiTypeIs
+        }
+    })
+    .name

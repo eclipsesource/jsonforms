@@ -1,4 +1,5 @@
 import {IUISchemaElement} from '../../uischema';
+import {Testers} from "./controls/abstract-control";
 
 class NoRendererDirective implements ng.IDirective {
     restrict = 'E';
@@ -20,5 +21,5 @@ class NoRendererController {
 }
 export default angular
     .module('jsonforms.renderers.norenderer', [])
-    .directive('norenderer', () => new NoRendererDirective())
+    .directive('norenderer', Testers.none)
     .name;

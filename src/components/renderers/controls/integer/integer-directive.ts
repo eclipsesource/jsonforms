@@ -1,6 +1,5 @@
-import {RendererTester} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl, ControlRendererTester} from '../abstract-control';
+import {AbstractControl, Testers, schemaTypeIs, uiTypeIs} from '../abstract-control';
+import {RendererService} from "../../renderer-service";
 
 class IntegerDirective implements ng.IDirective {
     template = `
@@ -19,17 +18,20 @@ class IntegerDirective implements ng.IDirective {
 interface IntegerControllerScope extends ng.IScope {
 }
 class IntegerController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
-    constructor(scope: IntegerControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    static $inject = ['$scope'];
+    constructor(scope: IntegerControllerScope) {
+        super(scope);
     }
 }
-const IntegerControlRendererTester: RendererTester = ControlRendererTester('integer', 1);
 
 export default angular
     .module('jsonforms.renderers.controls.integer', ['jsonforms.renderers.controls'])
     .directive('integerControl', () => new IntegerDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('integer-control', IntegerControlRendererTester)
+        RendererService.register('integer-control',
+                Testers.and(
+                    schemaTypeIs('integer'),
+                    uiTypeIs('Control')
+                ), 1)
     ])
     .name;

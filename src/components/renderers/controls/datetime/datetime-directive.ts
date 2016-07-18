@@ -1,7 +1,4 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl} from '../abstract-control';
-import {IUISchemaElement} from '../../../../uischema';
+import {AbstractControl, Testers, schemaTypeMatches, schemaTypeIs} from '../abstract-control';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
@@ -12,10 +9,10 @@ class DateTimeDirective implements ng.IDirective {
 export interface DateTimeControllerScope extends ng.IScope {
 }
 export class DateTimeController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
+    static $inject = ['$scope'];
     protected dt: Date;
-    constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    constructor(scope: DateTimeControllerScope) {
+        super(scope);
         let value = this.modelValue[this.fragment];
         if (value) {
             this.dt = new Date(value);
@@ -35,20 +32,6 @@ export class DateTimeController extends AbstractControl {
         this.dt = new Date(this.modelValue[this.fragment]);
     }
 }
-const DateTimeControlRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                             dataSchema: any,
-                                                             dataObject: any,
-                                                             pathResolver: IPathResolver) {
-    if (element.type !== 'Control') {
-        return NOT_FITTING;
-    }
-    let currentDataSchema = pathResolver.resolveSchema(dataSchema, element['scope']['$ref']);
-    if (currentDataSchema !== undefined && currentDataSchema.type === 'string' &&
-        currentDataSchema['format'] !== undefined && currentDataSchema['format'] === 'date-time') {
-        return 5;
-    }
-    return NOT_FITTING;
-};
 
 const datetimeTemplate = `<jsonforms-control>
       <input type="date"
@@ -66,7 +49,11 @@ export default angular
     .module('jsonforms.renderers.controls.datetime', ['jsonforms.renderers.controls'])
     .directive('datetimeControl', () => new DateTimeDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('datetime-control', DateTimeControlRendererTester)
+            RendererService.register('datetime-control',
+                Testers.and(
+                    schemaTypeIs('string'),
+                    schemaTypeMatches(el => _.has(el, 'format') && el['format'] == 'date-time')
+                ), 10)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('datetime.html', datetimeTemplate);
