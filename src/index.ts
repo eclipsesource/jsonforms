@@ -22,6 +22,5 @@ export interface JsonFormsScope extends angular.IScope {
 export * from './uischema';
 export * from './jsonschema';
 
-export {AbstractControl, ControlRendererTester}
-    from './components/renderers/controls/abstract-control'
-export {IPathResolver} from './components/services/pathresolver/jsonforms-pathresolver';
+export {AbstractControl} from './components/renderers/controls/abstract-control'
+export {IPathResolver, PathResolver} from './components/services/pathresolver/jsonforms-pathresolver';

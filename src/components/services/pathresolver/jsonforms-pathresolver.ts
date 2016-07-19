@@ -17,7 +17,7 @@ export interface IPathResolver {
 }
 
 export class PathResolver implements IPathResolver {
-
+    
     private pathMapping: { [id: string]: string; } = {};
 
     toInstancePath(path: string): string {

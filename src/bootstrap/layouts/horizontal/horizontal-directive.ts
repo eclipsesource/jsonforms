@@ -1,8 +1,9 @@
-import {RendererTester, NOT_FITTING} from '../../../components/renderers/renderer-service';
+import {NOT_FITTING} from '../../../components/renderers/renderer-service';
 import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
 import {HorizontalController} from
     '../../../components/renderers/layouts/horizontal/horizontal-directive';
 import {IUISchemaElement} from '../../../uischema';
+import {uiTypeIs} from "../../../components/renderers/controls/abstract-control";
 
 class BootstrapHorizontalDirective implements ng.IDirective {
     restrict = 'E';
@@ -25,15 +26,6 @@ class BootstrapHorizontalController extends HorizontalController {
         return Math.floor(this.size / this.uiSchema.elements.length);
     }
 }
-const BootstrapHorizontalLayoutRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                                dataSchema: any,
-                                                                dataObject: any,
-                                                                pathResolver: IPathResolver ) {
-    if (element.type !== 'HorizontalLayout') {
-        return NOT_FITTING;
-    }
-    return 3;
-};
 
 const horizontalTemplate = `<jsonforms-layout class="jsf-horizontal-layout">
     <div class="jsf-horizontal-layout">
@@ -50,8 +42,7 @@ export default angular
         ['jsonforms.renderers.layouts', 'jsonforms-bootstrap'])
     .directive('horizontalBootstrapLayout', () => new BootstrapHorizontalDirective())
     .run(['RendererService', RendererService =>
-        RendererService.register('horizontal-bootstrap-layout',
-            BootstrapHorizontalLayoutRendererTester)
+        RendererService.register('horizontal-bootstrap-layout', uiTypeIs('HorizontalLayout'), 3)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('horizontal.html', horizontalTemplate);

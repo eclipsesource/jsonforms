@@ -12,8 +12,8 @@ class DateTimeDirective implements ng.IDirective {
 class DateTimeBootstrapController extends DateTimeController {
     static $inject = ['$scope', 'PathResolver'];
     private isOpen: boolean = false;
-    constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    constructor(scope: DateTimeControllerScope) {
+        super(scope);
     }
     public openDate() {
         this.isOpen = true;

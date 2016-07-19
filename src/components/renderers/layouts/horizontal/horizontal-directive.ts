@@ -1,7 +1,5 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
-import {LabelObjectUtil} from '../../controls/abstract-control';
+import {LabelObjectUtil, Testers, uiTypeIs} from '../../controls/abstract-control';
 import {IUISchemaElement} from '../../../../uischema';
 
 
@@ -34,15 +32,6 @@ export class HorizontalController  extends AbstractLayout {
         }
     }
 }
-const HorizontalLayoutRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                                dataSchema: any,
-                                                                dataObject: any,
-                                                                pathResolver: IPathResolver ) {
-    if (element.type !== 'HorizontalLayout') {
-        return NOT_FITTING;
-    }
-    return 2;
-};
 
 const horizontalTemplate = `<jsonforms-layout>
     <div class="jsf-horizontal-layout">
@@ -60,7 +49,7 @@ export default angular
     .module('jsonforms.renderers.layouts.horizontal', ['jsonforms.renderers.layouts'])
     .directive('horizontallayout', () => new HorizontalDirective())
     .run(['RendererService', RendererService =>
-        RendererService.register('horizontallayout', HorizontalLayoutRendererTester)
+        RendererService.register('horizontallayout', uiTypeIs('HorizontalLayout'), 2)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('horizontal.html', horizontalTemplate);
