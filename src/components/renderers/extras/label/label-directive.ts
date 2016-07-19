@@ -1,4 +1,4 @@
-import {uiTypeIs} from "../../controls/abstract-control";
+import {uiTypeIs} from '../../controls/abstract-control';
 
 class LabelDirective implements ng.IDirective {
     restrict = 'E';

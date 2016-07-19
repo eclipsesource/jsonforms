@@ -1,5 +1,5 @@
 import {AbstractLayout} from '../abstract-layout';
-import {uiTypeIs} from "../../controls/abstract-control";
+import {uiTypeIs} from '../../controls/abstract-control';
 
 class VerticalDirective implements ng.IDirective {
     restrict = 'E';

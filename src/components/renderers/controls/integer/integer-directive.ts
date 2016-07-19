@@ -1,5 +1,4 @@
 import {AbstractControl, Testers, schemaTypeIs, uiTypeIs} from '../abstract-control';
-import {RendererService} from "../../renderer-service";
 
 class IntegerDirective implements ng.IDirective {
     template = `

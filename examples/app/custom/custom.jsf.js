@@ -14,5 +14,9 @@ function customDirective() {
 var app = angular.module('makeithappen');
 app.directive('customControl', customDirective)
     .run(['RendererService', 'JSONFormsTesters', function(RendererService, testers) {
-        RendererService.register("custom-control", testers.and(testers.uiTypeIs('Control'), testers.schemaPathEndsWith('firstName')), 3);
+        RendererService.register("custom-control",
+            testers.and(
+                testers.uiTypeIs('Control'),
+                testers.schemaPropertyName('firstName')
+            ), 3);
     }]);

@@ -60,7 +60,7 @@ export default angular
             RendererService.register('datetime-bootstrap-control',
                 Testers.and(
                     schemaTypeIs('string'),
-                    schemaTypeMatches(el => _.has(el, 'format') && el['format'] == 'date-time')
+                    schemaTypeMatches(el => _.has(el, 'format') && el['format'] === 'date-time')
                 ), 10)
     ])
     .run(['$templateCache', $templateCache => {

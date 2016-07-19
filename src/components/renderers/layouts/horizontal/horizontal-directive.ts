@@ -1,5 +1,5 @@
 import {AbstractLayout} from '../abstract-layout';
-import {LabelObjectUtil, Testers, uiTypeIs} from '../../controls/abstract-control';
+import {LabelObjectUtil, uiTypeIs} from '../../controls/abstract-control';
 import {IUISchemaElement} from '../../../../uischema';
 
 

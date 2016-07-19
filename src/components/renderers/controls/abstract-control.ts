@@ -5,11 +5,10 @@ import {Services, ServiceId, IValidationService, ISchemaProvider} from '../../se
 import {IRuleService, IRuleServiceCallBack} from '../../services/rule/rule-service';
 import {IDataProvider} from '../../services/data/data-service';
 import {IRule, IControlObject, IWithLabel, ILabelObject, IUISchemaElement} from '../../../uischema';
-import {SchemaElement} from "../../../jsonschema";
+import {SchemaElement} from '../../../jsonschema';
 
 export class AbstractControl implements IRuleServiceCallBack {
 
-    // IRuleServiceCallBack
     public instance: any;
     public rule: IRule;
     public hide: boolean;
@@ -19,9 +18,9 @@ export class AbstractControl implements IRuleServiceCallBack {
     protected uiSchema: IControlObject;
     protected schema: SchemaElement;
     protected data: any;
+    protected pathResolver = new PathResolver();
     private services: Services;
     private alerts = [];
-    protected pathResolver = new PathResolver();
 
     constructor(protected scope: ng.IScope) {
         this.services = scope['services'];
@@ -158,70 +157,81 @@ class LabelObject implements ILabelObject {
 }
 
 export function schemaTypeIs(expected: string) {
-    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+    return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
         // TODO ugly
         let currentDataSchema: SchemaElement = new PathResolver().resolveSchema(schema, schemaPath);
-        return currentDataSchema.type == expected;
-    }
+        return currentDataSchema.type === expected;
+    };
 }
 
 export function uiTypeIs(expected: string) {
-    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
-        return uiSchema.type == expected;
-    }
+    return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
+        return uiSchema.type === expected;
+    };
 }
 
 
-export function optionIs(optionName: string, expected:any) {
-    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+export function optionIs(optionName: string, expected: any) {
+    return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         let options = uiSchema['options'];
-        if (options == undefined) {
+        if (options === undefined) {
             return false;
         }
-        return options[optionName] == expected;
-    }
+        return options[optionName] === expected;
+    };
 }
 
 export function schemaTypeMatches(check: (SchemaElement) => boolean) {
-    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+    return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
         // TODO ugly
         let currentDataSchema: SchemaElement = new PathResolver().resolveSchema(schema, schemaPath);
         return check(currentDataSchema);
-    }
+    };
 }
 
 
 export function schemaPathEndsWith(expected: string) {
-    return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any):boolean => {
+    return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         if (expected === undefined || uiSchema['scope'] === undefined) {
             return false;
         }
         return _.endsWith(uiSchema['scope']['$ref'], expected);
-    }
+    };
+}
+
+export function schemaPropertyName(expected: string) {
+    return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
+        if (expected === undefined || uiSchema['scope'] === undefined) {
+            return false;
+        }
+        let schemaPath = uiSchema['scope']['$ref'];
+        return _.last(schemaPath.split("/")) === expected;
+    };
 }
 
 export class RendererTesterBuilder {
 
-
-    and(...testers: Array<(uiSchema: IUISchemaElement, schema: SchemaElement, data:any) => boolean>) {
-        return (uiSchema:IUISchemaElement, schema:SchemaElement, data:any) =>
+    and(...testers:
+            Array<(uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => boolean>)  {
+        return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) =>
             testers.reduce((acc, tester) => acc && tester(uiSchema, schema, data), true);
     }
 
 
-    create(test: (uiSchema: IUISchemaElement, schema: SchemaElement, data:any) => boolean, spec: number): (uiSchema: IUISchemaElement, schema: SchemaElement, data:any) => number {
+    create(test: (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => boolean,
+           spec: number): (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => number {
         return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): number => {
             if (test(uiSchema, schema, data)) {
                 return spec;
             }
             return NOT_FITTING;
-        }
+        };
     }
 
 
-    none(uiSchema: IUISchemaElement, schema: SchemaElement, data:any): number {
+    none(uiSchema: IUISchemaElement, schema: SchemaElement, data: any): number {
         return NOT_FITTING;
     };
 }
@@ -233,8 +243,12 @@ export default angular.module('jsonforms.control.base', ['jsonforms.renderers.co
     .service('JSONFormsTesters', function() {
         return {
             schemaPathEndsWith: schemaPathEndsWith,
-            and: Testers.and,
-            uiTypeIs: uiTypeIs
-        }
+            schemaPropertyName: schemaPropertyName,
+            schemaTypeMatches:  schemaTypeMatches,
+            uiTypeIs: uiTypeIs,
+            schemaTypeIs: schemaTypeIs,
+            optionIs: optionIs,
+            and: Testers.and
+        };
     })
-    .name
+    .name;

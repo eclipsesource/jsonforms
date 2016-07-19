@@ -1,8 +1,5 @@
-import {NOT_FITTING} from '../../../components/renderers/renderer-service';
-import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
 import {HorizontalController} from
     '../../../components/renderers/layouts/horizontal/horizontal-directive';
-import {IUISchemaElement} from '../../../uischema';
 import {uiTypeIs} from "../../../components/renderers/controls/abstract-control";
 
 class BootstrapHorizontalDirective implements ng.IDirective {

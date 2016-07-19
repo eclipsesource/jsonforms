@@ -17,19 +17,13 @@ export interface IPathResolver {
 }
 
 export class PathResolver implements IPathResolver {
-    
-    private pathMapping: { [id: string]: string; } = {};
 
     toInstancePath(path: string): string {
         return PathUtil.normalize(path);
     }
 
     resolveUi(instance: any, uiPath: string): any {
-        let p = uiPath + '/scope/$ref';
-        if (this.pathMapping !== undefined && this.pathMapping.hasOwnProperty(p)) {
-            p = this.pathMapping[p];
-        }
-        return this.resolveInstance(instance, p);
+        return this.resolveInstance(instance, uiPath + '/scope/$ref');
     }
 
     resolveInstance(instance: any, schemaPath: string): any {
