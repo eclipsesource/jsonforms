@@ -21,5 +21,5 @@ class NoRendererController {
 }
 export default angular
     .module('jsonforms.renderers.norenderer', [])
-    .directive('norenderer', Testers.none)
+    .directive('norenderer', () => new NoRendererDirective())
     .name;

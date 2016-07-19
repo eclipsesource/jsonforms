@@ -1,7 +1,6 @@
 import 'angular';
 let JsonRefs = require('json-refs');
 
-import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {UiSchemaRegistry} from '../ng-services/uischemaregistry/uischemaregistry-service';
 import {ISchemaGenerator} from '../generators/generators';
 import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
@@ -9,7 +8,6 @@ import {IUiSchemaProvider} from '../services/services';
 import {ValidationService} from '../services/services';
 import {ISchemaProvider, SchemaProvider} from '../services/services';
 import {ScopeProvider} from '../services/services';
-import {PathResolverService} from '../services/services';
 import {Services, ServiceId} from '../services/services';
 import {IDataProvider} from '../services/data/data-service';
 import {RuleService} from '../services/rule/rule-service';
@@ -20,7 +18,7 @@ import {SchemaElement} from '../../jsonschema';
 
 export class FormController {
 
-    static $inject = ['RendererService', 'PathResolver', 'UiSchemaRegistry',
+    static $inject = ['RendererService', 'UiSchemaRegistry',
         'SchemaGenerator', '$compile', '$q', '$scope'];
     public element: any;
     public uiSchema: IUISchemaElement;
@@ -37,7 +35,6 @@ export class FormController {
 
     constructor(
         private rendererService: RendererService,
-        private PathResolver: IPathResolver,
         private UISchemaRegistry: UiSchemaRegistry,
         private SchemaGenerator: ISchemaGenerator,
         private $compile: ng.ICompileService,
@@ -104,11 +101,10 @@ export class FormController {
     private render(schema: SchemaElement, data: any) {
         let dataProvider: IDataProvider;
         let services = new Services();
-        services.add(new PathResolverService(new PathResolver()));
         services.add(new ScopeProvider(this.scope));
         services.add(new SchemaProvider(schema));
         services.add(new ValidationService());
-        services.add(new RuleService(this.PathResolver));
+        services.add(new RuleService());
 
         if (FormController.isDataProvider(this.scope.data)) {
             dataProvider = this.scope.data;

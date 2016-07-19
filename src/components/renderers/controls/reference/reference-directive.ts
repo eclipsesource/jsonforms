@@ -1,4 +1,5 @@
 import {AbstractControl, uiTypeIs} from '../abstract-control';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class ReferenceDirective implements ng.IDirective {
     restrict = 'E';
@@ -14,7 +15,7 @@ class ReferenceController extends AbstractControl {
         super(scope);
     }
     public get link(){
-        let normalizedPath = this.pathResolver.toInstancePath(this.schemaPath);
+        let normalizedPath = PathResolver.toInstancePath(this.schemaPath);
         return '#' + this.uiSchema['href']['url'] + '/' + this.data[normalizedPath];
     };
     public get linkText(){

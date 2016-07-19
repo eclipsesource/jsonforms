@@ -16,11 +16,11 @@ class NumberDirective implements ng.IDirective {
     controller = NumberController;
     controllerAs = 'vm';
 }
-interface NumberControllerScopepe extends ng.IScope {
+interface NumberControllerScope extends ng.IScope {
 }
 class NumberController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
-    constructor(scope: NumberControllerScopepe) {
+    static $inject = ['$scope'];
+    constructor(scope: NumberControllerScope) {
         super(scope);
     }
 }

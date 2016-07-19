@@ -18,7 +18,6 @@ export class AbstractControl implements IRuleServiceCallBack {
     protected uiSchema: IControlObject;
     protected schema: SchemaElement;
     protected data: any;
-    protected pathResolver = new PathResolver();
     private services: Services;
     private alerts = [];
 
@@ -29,8 +28,8 @@ export class AbstractControl implements IRuleServiceCallBack {
         this.data = this.services.get<IDataProvider>(ServiceId.DataProvider).getData();
         let indexedSchemaPath = this.uiSchema['scope']['$ref'];
         this.schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
-        this.fragment = this.pathResolver.lastFragment(this.uiSchema.scope.$ref);
-        this.modelValue = this.pathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
+        this.fragment = PathResolver.lastFragment(this.uiSchema.scope.$ref);
+        this.modelValue = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
 
         this.scope.$on('modelChanged', () => {
             // TODO: remote references to services
@@ -95,7 +94,7 @@ export class AbstractControl implements IRuleServiceCallBack {
         }
 
         // FIXME: we want resolveSchema to actually return an array here
-        let subSchema: any = this.pathResolver.resolveSchema(this.schema, path + '/required');
+        let subSchema: any = PathResolver.resolveSchema(this.schema, path + '/required');
         if (subSchema !== undefined) {
             if (subSchema.indexOf(PathUtil.lastFragment(schemaPath)) !== -1) {
                 return true;
@@ -159,8 +158,13 @@ class LabelObject implements ILabelObject {
 export function schemaTypeIs(expected: string) {
     return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
-        // TODO ugly
-        let currentDataSchema: SchemaElement = new PathResolver().resolveSchema(schema, schemaPath);
+        if (schemaPath === undefined) {
+            return false;
+        }
+        let currentDataSchema: SchemaElement = PathResolver.resolveSchema(schema, schemaPath);
+        if (currentDataSchema === undefined) {
+            return false;
+        }
         return currentDataSchema.type === expected;
     };
 }
@@ -186,7 +190,7 @@ export function schemaTypeMatches(check: (SchemaElement) => boolean) {
     return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
         // TODO ugly
-        let currentDataSchema: SchemaElement = new PathResolver().resolveSchema(schema, schemaPath);
+        let currentDataSchema: SchemaElement = PathResolver.resolveSchema(schema, schemaPath);
         return check(currentDataSchema);
     };
 }
@@ -211,12 +215,17 @@ export function schemaPropertyName(expected: string) {
     };
 }
 
+export function always(uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean {
+    return true;
+}
+
 export class RendererTesterBuilder {
 
     and(...testers:
             Array<(uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => boolean>)  {
-        return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) =>
+        return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => 
             testers.reduce((acc, tester) => acc && tester(uiSchema, schema, data), true);
+        
     }
 
 
@@ -230,10 +239,6 @@ export class RendererTesterBuilder {
         };
     }
 
-
-    none(uiSchema: IUISchemaElement, schema: SchemaElement, data: any): number {
-        return NOT_FITTING;
-    };
 }
 
 export const Testers = new RendererTesterBuilder();

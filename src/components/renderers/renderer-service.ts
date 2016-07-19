@@ -1,6 +1,5 @@
-import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {IUISchemaElement} from '../../uischema';
-import {Testers} from './controls/abstract-control';
+import {Testers, always} from './controls/abstract-control';
 import {SchemaElement} from '../../jsonschema';
 
 export interface RendererService {
@@ -28,8 +27,8 @@ class RendererServiceImpl implements RendererService {
         this.renderer.push({directiveName: directiveName, tester: Testers.create(tester, spec)});
     }
 
-    constructor(private pathResolver: IPathResolver) {
-        this.renderer.push({directiveName: 'norenderer', tester: Testers.none});
+    constructor() {
+        this.register('norenderer', always, 0);
     }
 
     getBestComponent(element: IUISchemaElement, dataSchema: any, dataObject: any): string {

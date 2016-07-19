@@ -4,6 +4,7 @@ import {IUISchemaGenerator} from '../../../generators/generators';
 import {AbstractControl, Testers, schemaTypeIs, optionIs} from '../abstract-control';
 import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';
@@ -60,7 +61,7 @@ class ArrayController extends AbstractControl {
     private arrayUiSchema: IGroup;
     constructor(scope: ArrayControllerScope, uiGenerator: IUISchemaGenerator) {
         super(scope);
-        let resolvedSubSchema = this.pathResolver.resolveSchema(
+        let resolvedSubSchema = PathResolver.resolveSchema(
             this.schema, this.schemaPath) as SchemaArray;
         let items = resolvedSubSchema.items;
         this.arraySchema = items;

@@ -1,5 +1,6 @@
 import {AbstractControl, uiTypeIs} from '../../controls/abstract-control';
 import {SchemaElement} from '../../../../jsonschema';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
@@ -17,7 +18,7 @@ class MasterDetailController extends AbstractControl {
     constructor(scope: MasterDetailControllerScope) {
         super(scope);
         this.scope['select'] = (child, schema) => this.select(child, schema);
-        this.subSchema = this.pathResolver.resolveSchema(this.schema, this.schemaPath);
+        this.subSchema = PathResolver.resolveSchema(this.schema, this.schemaPath);
     }
     public select(selectedChild: any, selectedSchema: SchemaElement) {
         this.selectedChild = selectedChild;

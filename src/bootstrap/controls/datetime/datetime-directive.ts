@@ -1,4 +1,3 @@
-import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
 import {DateTimeController, DateTimeControllerScope} from
     '../../../components/renderers/controls/datetime/datetime-directive';
 import {schemaTypeMatches, schemaTypeIs, Testers} from "../../../components/renderers/controls/abstract-control";

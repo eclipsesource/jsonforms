@@ -4,7 +4,7 @@ import '../../../../index';
 
 import IRootScopeService = angular.IRootScopeService;
 import ICompileService = angular.ICompileService;
-import {JsonFormsScope} from '../../../../jsonforms';
+import {JsonFormsScope} from "../../../../index";
 
 describe('Boolean renderer', () => {
 
