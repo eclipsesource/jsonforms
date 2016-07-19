@@ -20,7 +20,7 @@ class DateTimeBootstrapController extends DateTimeController {
         this.isOpen = true;
         if (this.dt == null) {
             this.dt = new Date();
-            this.modelChanged();
+            this.propagateChanges();
         }
     }
     protected updateDateObject() {
@@ -55,7 +55,7 @@ const datetimeTemplate = `<jsonforms-control>
              is-open="vm.isOpen"
              id="{{vm.id}}"
              class="form-control jsf-control-datetime"
-             ng-change='vm.modelChanged()'
+             ng-change='vm.propagateChanges()'
              ng-model="vm.dt"
              ng-model-options="{timezone:'UTC'}"
              ng-readonly="vm.uiSchema.readOnly"/>

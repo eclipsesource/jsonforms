@@ -3,7 +3,7 @@ const booleanTemplate = `<jsonforms-control>
          id="{{vm.id}}"
          class="jsf-control-boolean"
          ng-model="vm.modelValue[vm.fragment]"
-         ng-change='vm.modelChanged()'
+         ng-change='vm.propagateChanges()'
          ng-disabled="vm.uiSchema.readOnly"/>
 </jsonforms-control>`;
 

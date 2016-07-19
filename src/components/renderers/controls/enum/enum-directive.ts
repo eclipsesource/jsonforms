@@ -10,7 +10,7 @@ class EnumDirective implements ng.IDirective {
       <select ng-options="option as option for option in vm.options"
               id="{{vm.id}}"
               class="form-control jsf-control-enum" 
-              ng-change='vm.modelChanged()'
+              ng-change='vm.propagateChanges()'
               ng-model="vm.modelValue[vm.fragment]"
               ng-readonly="vm.uiSchema.readOnly">
       </select>

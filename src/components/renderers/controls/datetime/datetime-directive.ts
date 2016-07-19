@@ -22,14 +22,14 @@ export class DateTimeController extends AbstractControl {
         }
         scope.$watch('vm.modelValue[vm.fragment]', (newValue) => {this.updateDateObject(); });
     }
-    protected modelChanged() {
+    protected propagateChanges() {
         if (this.dt != null) {
             // returns a string in the form 'yyyy-mm-dd'
             this.modelValue[this.fragment] = this.dt.toISOString().substr(0, 10);
         } else {
             this.modelValue[this.fragment] = null;
         }
-        super.modelChanged();
+        super.propagateChanges();
     }
     protected updateDateObject() {
         this.dt = new Date(this.modelValue[this.fragment]);
@@ -56,7 +56,7 @@ const datetimeTemplate = `<jsonforms-control>
              is-open="vm.isOpen"
              id="{{vm.id}}"
              class="form-control jsf-control-datetime"
-             ng-change='vm.modelChanged()'
+             ng-change='vm.propagateChanges()'
              ng-model="vm.dt"
              ng-model-options="{timezone:'UTC'}"
              ng-readonly="vm.uiSchema.readOnly"/>
