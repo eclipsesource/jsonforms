@@ -49,7 +49,7 @@ export class ScopeProvider implements IScopeProvider {
 }
 export class PathResolverService implements IPathResolverService {
 
-    constructor(private resolver: PathResolver) { }
+    private resolver: PathResolver = new PathResolver();
 
     getId(): ServiceId {
         return ServiceId.PathResolver;

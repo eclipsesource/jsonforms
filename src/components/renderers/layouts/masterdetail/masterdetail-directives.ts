@@ -1,8 +1,6 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl} from '../../controls/abstract-control';
+import {AbstractControl, uiTypeIs} from '../../controls/abstract-control';
 import {SchemaElement} from '../../../../jsonschema';
-import {IUISchemaElement} from '../../../../uischema';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
@@ -17,10 +15,10 @@ class MasterDetailController extends AbstractControl {
     private subSchema: SchemaElement;
     private selectedChild: any;
     private selectedSchema: SchemaElement;
-    constructor(scope: MasterDetailControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    constructor(scope: MasterDetailControllerScope) {
+        super(scope);
         this.scope['select'] = (child, schema) => this.select(child, schema);
-        this.subSchema = this.pathResolver.resolveSchema(this.schema, this.schemaPath);
+        this.subSchema = PathResolver.resolveSchema(this.schema, this.schemaPath);
     }
     public select(selectedChild: any, selectedSchema: SchemaElement) {
         this.selectedChild = selectedChild;
@@ -28,17 +26,6 @@ class MasterDetailController extends AbstractControl {
         this.scope['selectedChild'] = selectedChild;
     }
 }
-const MasterDetailControlRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                                   dataSchema: any,
-                                                                   dataObject: any,
-                                                                   pathResolver: IPathResolver) {
-    if (element.type === 'MasterDetailLayout'
-        && dataSchema !== undefined
-        && dataSchema.type === 'object') {
-        return 2;
-    }
-    return NOT_FITTING;
-};
 
 class MasterDetailCollectionController {
     static $inject = ['$scope'];
@@ -186,7 +173,7 @@ export default angular
     .module('jsonforms.renderers.layouts.masterdetail', ['jsonforms.renderers.layouts'])
     .directive('masterDetail', () => new MasterDetailDirective())
     .run(['RendererService', RendererService =>
-        RendererService.register('master-detail', MasterDetailControlRendererTester)
+        RendererService.register('master-detail', uiTypeIs('MasterDetailLayout'), 2)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('masterdetail.html', masterDetailTemplate);

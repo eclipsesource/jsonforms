@@ -1,8 +1,6 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl} from '../abstract-control';
+import {AbstractControl, Testers, uiTypeIs, schemaTypeMatches} from '../abstract-control';
 import {SchemaElement} from '../../../../jsonschema';
-import {IUISchemaElement} from '../../../../uischema';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class EnumDirective implements ng.IDirective {
     restrict = 'E';
@@ -25,9 +23,9 @@ interface EnumControllerScope extends ng.IScope {
 class EnumController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
     private subSchema: SchemaElement;
-    constructor(scope: EnumControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
-        this.subSchema = this.pathResolver.resolveSchema(this.schema,
+    constructor(scope: EnumControllerScope) {
+        super(scope);
+        this.subSchema = PathResolver.resolveSchema(this.schema,
             this.uiSchema['scope']['$ref']);
     }
 
@@ -36,24 +34,14 @@ class EnumController extends AbstractControl {
     }
 }
 
-const EnumControlRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                         dataSchema: any,
-                                                         dataObject: any,
-                                                         pathResolver: IPathResolver ){
-    if (element.type !== 'Control') {
-        return NOT_FITTING;
-    }
-    let currentDataSchema = pathResolver.resolveSchema(dataSchema, element['scope']['$ref']);
-    if (!_.has(currentDataSchema, 'enum')) {
-        return NOT_FITTING;
-    }
-    return 5;
-};
-
 export default angular
     .module('jsonforms.renderers.controls.enum', ['jsonforms.renderers.controls'])
     .directive('enumControl', () => new EnumDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('enum-control', EnumControlRendererTester)
+            RendererService.register('enum-control',
+                Testers.and(
+                    uiTypeIs('Control'),
+                    schemaTypeMatches(el => _.has(el, 'enum'))
+                ), 5)
     ])
     .name;

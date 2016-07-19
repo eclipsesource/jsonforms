@@ -1,7 +1,7 @@
 import {ServiceId} from '../services';
 import {IService} from '../services';
-import {IPathResolver} from '../pathresolver/jsonforms-pathresolver';
 import {IRule, ILeafCondition, RuleEffect} from '../../../uischema';
+import {PathResolver} from "../pathresolver/jsonforms-pathresolver";
 
 
 export interface IRuleService extends IService {
@@ -17,7 +17,7 @@ export interface IRuleServiceCallBack {
 export class RuleService implements IRuleService {
     private map: { [key: string]: IRuleServiceCallBack[] } = {};
 
-    constructor(private pathresolver: IPathResolver) { }
+    constructor() { }
 
     getId(): ServiceId {
         return ServiceId.RuleService;
@@ -32,7 +32,7 @@ export class RuleService implements IRuleService {
             let renderDescription = renderDescriptionArray[i];
             let conditionValue = null;
             try {
-                conditionValue = this.pathresolver.resolveInstance(
+                conditionValue = PathResolver.resolveInstance(
                     renderDescription.instance,
                     schemaPath);
             } catch (e) {

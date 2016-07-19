@@ -1,11 +1,10 @@
 import 'lodash';
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {PathUtil} from '../../../services/pathutil';
 import {IUISchemaGenerator} from '../../../generators/generators';
-import {AbstractControl, ControlRendererTester} from '../abstract-control';
-import {IUISchemaElement, IGroup} from '../../../../uischema';
+import {AbstractControl, Testers, schemaTypeIs, optionIs} from '../abstract-control';
+import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';
@@ -55,15 +54,14 @@ interface ArrayControllerScope extends ng.IScope {
 }
 
 class ArrayController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver', 'UISchemaGenerator'];
+    static $inject = ['$scope', 'UISchemaGenerator'];
     private properties: string[];
     private submitElement = {};
     private arraySchema: any;
     private arrayUiSchema: IGroup;
-    constructor(scope: ArrayControllerScope,
-        pathResolver: IPathResolver, uiGenerator: IUISchemaGenerator) {
-        super(scope, pathResolver);
-        let resolvedSubSchema = this.pathResolver.resolveSchema(
+    constructor(scope: ArrayControllerScope, uiGenerator: IUISchemaGenerator) {
+        super(scope);
+        let resolvedSubSchema = PathResolver.resolveSchema(
             this.schema, this.schemaPath) as SchemaArray;
         let items = resolvedSubSchema.items;
         this.arraySchema = items;
@@ -87,30 +85,18 @@ class ArrayController extends AbstractControl {
     }
 
 }
-let ArrayReadOnlyControlRendererTester: RendererTester = function (element: IUISchemaElement,
-                                                                   dataSchema: any,
-                                                                   dataObject: any,
-                                                                   pathResolver: IPathResolver ){
-    let specificity = ControlRendererTester('array', 1)(element,
-        dataSchema, dataObject, pathResolver);
-
-    if (specificity === NOT_FITTING) {
-        return NOT_FITTING;
-    }
-    if (element['options'] !== undefined && element['options']['simple']) {
-        return 1;
-    }
-    return NOT_FITTING;
-};
-let ArrayControlRendererTester: RendererTester = ControlRendererTester('array', 1);
 
 export default angular
     .module('jsonforms.renderers.controls.array', ['jsonforms.renderers.controls'])
     .directive('arrayReadonlyControl', () => new ArrayReadOnlyDirective())
     .directive('arrayControl', () => new ArrayDirective())
     .run(['RendererService', RendererService => {
-            RendererService.register('array-readonly-control', ArrayReadOnlyControlRendererTester);
-            RendererService.register('array-control', ArrayControlRendererTester);
-        }
+        RendererService.register('array-readonly-control',
+            Testers.and(
+                schemaTypeIs('array'),
+                optionIs('simple', true)
+            ), 1);
+        RendererService.register('array-control', schemaTypeIs('array'), 1);
+    }
     ])
     .name;

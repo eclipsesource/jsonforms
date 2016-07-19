@@ -1,8 +1,6 @@
-import {RendererTester, NOT_FITTING} from '../../../components/renderers/renderer-service';
-import {IPathResolver} from '../../../components/services/pathresolver/jsonforms-pathresolver';
 import {DateTimeController, DateTimeControllerScope} from
     '../../../components/renderers/controls/datetime/datetime-directive';
-import {IUISchemaElement} from '../../../uischema';
+import {schemaTypeMatches, schemaTypeIs, Testers} from "../../../components/renderers/controls/abstract-control";
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';
@@ -13,8 +11,8 @@ class DateTimeDirective implements ng.IDirective {
 class DateTimeBootstrapController extends DateTimeController {
     static $inject = ['$scope', 'PathResolver'];
     private isOpen: boolean = false;
-    constructor(scope: DateTimeControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    constructor(scope: DateTimeControllerScope) {
+        super(scope);
     }
     public openDate() {
         this.isOpen = true;
@@ -32,20 +30,6 @@ class DateTimeBootstrapController extends DateTimeController {
         }
     }
 }
-const DateTimeControlBootstrapRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                             dataSchema: any,
-                                                             dataObject: any,
-                                                             pathResolver: IPathResolver) {
-    if (element.type !== 'Control') {
-        return NOT_FITTING;
-    }
-    let currentDataSchema = pathResolver.resolveSchema(dataSchema, element['scope']['$ref']);
-    if (currentDataSchema !== undefined && currentDataSchema.type === 'string' &&
-        currentDataSchema['format'] !== undefined && currentDataSchema['format'] === 'date-time') {
-        return 10;
-    }
-    return NOT_FITTING;
-};
 
 const datetimeTemplate = `<jsonforms-control>
     <div class="input-group">
@@ -73,7 +57,10 @@ export default angular
     .directive('datetimeBootstrapControl', () => new DateTimeDirective())
     .run(['RendererService', RendererService =>
             RendererService.register('datetime-bootstrap-control',
-                DateTimeControlBootstrapRendererTester)
+                Testers.and(
+                    schemaTypeIs('string'),
+                    schemaTypeMatches(el => _.has(el, 'format') && el['format'] === 'date-time')
+                ), 10)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('datetimeBootstrap.html', datetimeTemplate);
