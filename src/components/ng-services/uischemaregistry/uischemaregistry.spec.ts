@@ -27,7 +27,7 @@ describe('UiSchemaRegistry', () => {
             }
         };
         let expectedGeneratedUiSchema = new UISchemaGenerator().generateDefaultUISchema(dataSchema);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toEqual(expectedGeneratedUiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toEqual(expectedGeneratedUiSchema);
     });
 
     it('should return registered fitting uischema', function () {
@@ -52,7 +52,7 @@ describe('UiSchemaRegistry', () => {
             return NOT_FITTING;
         };
         uischemaRegistry.register(uiSchema, testFunction);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toBe(uiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toBe(uiSchema);
     });
 
     it('should return genetared uischema if registered is not fitting', function () {
@@ -78,7 +78,7 @@ describe('UiSchemaRegistry', () => {
         };
         uischemaRegistry.register(uiSchema, testFunction);
         let expectedGeneratedUiSchema = new UISchemaGenerator().generateDefaultUISchema(dataSchema);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toEqual(expectedGeneratedUiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toEqual(expectedGeneratedUiSchema);
     });
 
     it('should return higher tester registered uischema', function () {
@@ -116,6 +116,6 @@ describe('UiSchemaRegistry', () => {
         };
         uischemaRegistry.register(uiSchema1, testFunction1);
         uischemaRegistry.register(uiSchema2, testFunction2);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toBe(uiSchema2);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toBe(uiSchema2);
     });
 });
