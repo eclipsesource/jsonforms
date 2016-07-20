@@ -22,6 +22,16 @@ export interface JsonFormsScope extends angular.IScope {
 export * from './uischema';
 export * from './jsonschema';
 
-export {AbstractControl} from './components/renderers/controls/abstract-control'
+export {AbstractControl,
+    Testers,
+    schemaTypeIs,
+    schemaTypeMatches,
+    schemaPropertyName,
+    schemaPathEndsWith,
+    uiTypeIs,
+    optionIs,
+    always
+} from './components/renderers/controls/abstract-control'
 export {PathResolver}
     from './components/services/pathresolver/jsonforms-pathresolver';
+
