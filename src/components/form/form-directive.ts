@@ -1,50 +1,38 @@
 import 'angular';
+import {IUISchemaElement} from "../../uischema";
+import {IUiSchemaProvider} from "../../../components/services/services";
+import {UiSchemaProvider} from "../services/services";
 let JsonRefs = require('json-refs');
 
-import {IPathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {UiSchemaRegistry} from '../ng-services/uischemaregistry/uischemaregistry-service';
 import {ISchemaGenerator} from '../generators/generators';
 import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
-import {IUiSchemaProvider} from '../services/services';
 import {ValidationService} from '../services/services';
 import {ISchemaProvider, SchemaProvider} from '../services/services';
 import {ScopeProvider} from '../services/services';
-import {PathResolverService} from '../services/services';
 import {Services, ServiceId} from '../services/services';
 import {IDataProvider} from '../services/data/data-service';
 import {RuleService} from '../services/rule/rule-service';
 import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
-import {IUISchemaElement} from '../../uischema';
 import {SchemaElement} from '../../jsonschema';
 
 export class FormController {
 
-    static $inject = ['RendererService', 'PathResolver', 'UiSchemaRegistry',
+    static $inject = ['RendererService', 'UiSchemaRegistry',
         'SchemaGenerator', '$compile', '$q', '$scope'];
     public element: any;
-    public uiSchema: IUISchemaElement;
     private isInitialized = false;
     private childScope: ng.IScope;
 
-    private static isDataProvider(testMe: any): testMe is IDataProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchData');
-    }
-
-    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
-    }
-
     constructor(
         private rendererService: RendererService,
-        private PathResolver: IPathResolver,
         private UISchemaRegistry: UiSchemaRegistry,
         private SchemaGenerator: ISchemaGenerator,
         private $compile: ng.ICompileService,
         private $q: ng.IQService,
         private scope: JsonFormsDirectiveScope
     ) { }
-
 
     public init() {
         if (this.isInitialized) {
@@ -58,39 +46,26 @@ export class FormController {
 
         this.isInitialized = true;
 
-        let resolvedSchemaDeferred = this.$q.defer();
-        let resolvedUISchemaDeferred = this.$q.defer();
+        let schema;
+        let uiSchema;
+        let data;
 
-        this.$q.all([this.fetchSchema(), this.fetchUiSchema()]).then((values) => {
-            let schema = values[0];
-            this.uiSchema = <IUISchemaElement>values[1];
-
-            if (this.uiSchema === undefined) {
-                // resolve JSON schema, then generate ui Schema
-                this.uiSchema = this.UISchemaRegistry.getBestUiSchema(schema);
-            }
-
-            resolvedSchemaDeferred.resolve(schema);
-            resolvedUISchemaDeferred.resolve(this.uiSchema);
-        });
-
-
-        this.$q.all([
-            resolvedSchemaDeferred.promise,
-            resolvedUISchemaDeferred.promise,
-            this.fetchData()]
-        ).then(values => {
-
-            let schema = values[0];
-            this.uiSchema = <IUISchemaElement> values[1];
-            let data = values[2];
+        this.fetchData(this.scope.data).then((d)=>{
+            data = d;
+            return this.fetchSchema(this.scope.schema, data);
+        }).then((s)=>{
+            schema = s;
+            return this.fetchUiSchema(this.scope.uischema, data, schema);
+        }).then((uis)=>{
+            uiSchema = uis;
+        }).then(()=>{
             let unresolvedRefs = JsonRefs.findRefs(schema);
             if (_.size(unresolvedRefs) === 0) {
-                this.render(schema, data);
+                this.render(schema, uiSchema, data);
             } else {
                 JsonRefs.resolveRefs(schema).then(
                     res => {
-                        this.render(res.resolved, data);
+                        this.render(res.resolved, uiSchema, data);
                         // needed for remote cases
                         this.scope.$digest();
                     },
@@ -101,63 +76,61 @@ export class FormController {
             }
         });
     }
-    private render(schema: SchemaElement, data: any) {
-        let dataProvider: IDataProvider;
+    private render(schema: SchemaElement, uiSchema: IUISchemaElement, data: any) {
+        debugger;
         let services = new Services();
-        services.add(new PathResolverService(new PathResolver()));
-        services.add(new ScopeProvider(this.scope));
+
         services.add(new SchemaProvider(schema));
+        services.add(new UiSchemaProvider(uiSchema));
+        services.add(new DefaultDataProvider(this.$q, data));
+
+        services.add(new ScopeProvider(this.scope));
         services.add(new ValidationService());
-        services.add(new RuleService(this.PathResolver));
-
-        if (FormController.isDataProvider(this.scope.data)) {
-            dataProvider = this.scope.data;
-        } else {
-            dataProvider = new DefaultDataProvider(this.$q, data);
-        }
-
-        services.add(dataProvider);
+        services.add(new RuleService());
 
         this.childScope = this.scope.$new();
         this.childScope['services'] = services;
-        this.childScope['uischema'] = this.uiSchema;
+        this.childScope['uischema'] = uiSchema;
         let template = this.rendererService.getBestComponent(
-            this.uiSchema, schema, dataProvider.getData());
+            uiSchema, schema, data);
+
         let compiledTemplate = this.$compile(template)(this.childScope);
         angular.element(this.element.find('form')).append(compiledTemplate);
-        this.scope.$root.$broadcast('jsfPropagateChanges');
+        this.scope.$root.$broadcast('modelChanged');
     }
 
-    private fetchSchema() {
-        if (typeof this.scope.schema === 'object') {
-            return this.$q.when(this.scope.schema);
-        } else if (this.scope.schema !== undefined) {
-            return this.scope.schema();
-        } else {
-            return this.$q.when(this.SchemaGenerator.generateDefaultSchema(this.scope.data));
+    private fetchSchema(schema, data) {
+        debugger;
+        if(schema === undefined){
+            return this.$q.when(this.SchemaGenerator.generateDefaultSchema(data));
+        }else if(typeof schema === 'function'){
+            return this.$q.when(schema());
+        }else {
+            return this.$q.when(schema);
         }
     }
 
-    private fetchUiSchema() {
-
-        if (FormController.isUiSchemaProvider(this.scope.uischema)) {
-            return this.scope.uischema.getUiSchema();
-        } else if (typeof this.scope.uischema === 'object') {
-            return this.$q.when(this.scope.uischema);
+    private fetchUiSchema(uischema, data, schema) {
+        debugger;
+        if(uischema === undefined){
+            return this.$q.when(this.UISchemaRegistry.getBestUiSchema(schema, data));
+        }else if(typeof uischema === 'function'){
+            return this.$q.when(uischema());
+        }else {
+            return this.$q.when(uischema);
         }
 
-        // if we return undefined the caller will generate a default UI schema
-        return this.$q.when(undefined);
     }
 
-    private fetchData() {
-        if (FormController.isDataProvider(this.scope.data)) {
-            return this.scope.data.fetchData();
-        } else if (typeof this.scope.data === 'object') {
-            return this.$q.when(this.scope.data);
+    private fetchData(data) {
+        debugger;
+        if(data === undefined){
+            throw new Error(`The 'data' attribute must be specified.`);
+        }else if(typeof data === 'function'){
+            return this.$q.when(data());
+        }else {
+            return this.$q.when(data);
         }
-
-        throw new Error(`The 'data' attribute must be specified.`);
     }
 }
 
@@ -203,17 +176,21 @@ export class InnerFormController {
         private rendererService: RendererService,
         private $compile: ng.ICompileService,
         private scope: JsonFormsInnerDirectiveScope
-    ) { }
+    ) {}
     init() {
+
         let services: Services = this.scope['services'];
         let data = services.get<IDataProvider>(ServiceId.DataProvider).getData();
         let schema = services.get<ISchemaProvider>(ServiceId.SchemaProvider).getSchema();
+
         let template = this.rendererService.getBestComponent(this.uischema, schema, data);
+
         this.scope['uischema'] = this.uischema;
+
         let compiledTemplate = this.$compile(template)(this.scope);
 
         angular.element(this.element.find('form')).append(compiledTemplate);
-        this.scope.$root.$broadcast('jsfPropagateChanges');
+        this.scope.$root.$broadcast('modelChanged');
     }
 }
 export interface JsonFormsInnerDirectiveScope extends ng.IScope {
