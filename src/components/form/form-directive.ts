@@ -184,8 +184,7 @@ export class JsonFormsDirective implements ng.IDirective {
     };
     link = (scope, el, attrs, ctrl) => {
         let parent = el.parent();
-        let parentCtrl = parent.controller('jsonforms');
-        if (parentCtrl === undefined) {
+        if (parent !== undefined && parent.controller('jsonforms') !== undefined) {
             RootDataService.unset();
         }
         ctrl.element = el;
