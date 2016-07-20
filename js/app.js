@@ -284,7 +284,7 @@ angular.module('jsonforms-website', [
                 })
                 .state('docs.landing', {
                     url: '/landing',
-                    templateUrl: "partials/docs/introduction.html"
+                    templateUrl: "partials/docs/landing.html"
                 })
                 .state('docs.introduction', {
                     url: '/introduction',
