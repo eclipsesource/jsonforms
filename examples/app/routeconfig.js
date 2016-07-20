@@ -45,6 +45,10 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/arrays/arrays.html',
             controller: 'ArraysController',
             controllerAs: 'vm'
+        }).when('/async', {
+            templateUrl: 'app/async/async.html',
+            controller: 'AsyncController',
+            controllerAs: 'vm'
         }).otherwise({
             redirectTo: '/person'
         });

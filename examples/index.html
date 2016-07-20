@@ -30,6 +30,9 @@
     <script src="app/editor/editor.controller.js" type="text/javascript"></script>
     <script src="app/resolve/resolve.controller.js" type="text/javascript"></script>
     <script src="app/person/person.controller.js" type="text/javascript"></script>
+
+    <script src="app/async/async.controller.js" type="text/javascript"></script>
+
     <script src="app/default-ui/default-ui.controller.js" type="text/javascript"></script>
     <script src="app/default/default-schema.controller.js" type="text/javascript"></script>
     <script src="app/placeholder/placeholder.controller.js" type="text/javascript"></script>
@@ -58,6 +61,7 @@
                         <a ng-href="{{index.getPath()}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select example<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li ng-class="index.isActive('/person')"><a href="#/person">Person example</a></li>
+                            <li ng-class="index.isActive('/async')"><a href="#/async">Asynchronous example</a></li>
                             <li ng-class="index.isActive('/resolve')"><a href="#/resolve">Resolve example</a></li>
                             <li ng-class="index.isActive('/arrays')"><a href="#/arrays">Array controls</a></li>
                             <li ng-class="index.isActive('/editor')"><a href="#/editor">Live edit</a></li>
