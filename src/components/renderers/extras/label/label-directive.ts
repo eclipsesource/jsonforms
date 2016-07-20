@@ -14,7 +14,7 @@ class LabelController {
     constructor(private scope: LabelControllerScope) {
         this.text = scope['uischema']['text'];
     }
-    private get size(){
+    private get size() {
         return 100;
     }
 }

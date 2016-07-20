@@ -3,7 +3,6 @@ let JsonRefs = require('json-refs');
 
 import {UiSchemaRegistry} from '../ng-services/uischemaregistry/uischemaregistry-service';
 import {ISchemaGenerator} from '../generators/generators';
-import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
 import {IUiSchemaProvider} from '../services/services';
 import {ValidationService} from '../services/services';
 import {ISchemaProvider, SchemaProvider} from '../services/services';
@@ -15,10 +14,11 @@ import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
 import {IUISchemaElement} from '../../uischema';
 import {SchemaElement} from '../../jsonschema';
+import {RootDataService} from "../ng-services/data/data-service";
 
 export class FormController {
 
-    static $inject = ['RendererService', 'UiSchemaRegistry',
+    static $inject = ['RendererService', 'UiSchemaRegistry', 'RootDataService',
         'SchemaGenerator', '$compile', '$q', '$scope'];
     public element: any;
     public uiSchema: IUISchemaElement;
@@ -36,11 +36,11 @@ export class FormController {
     constructor(
         private rendererService: RendererService,
         private UISchemaRegistry: UiSchemaRegistry,
+        private RootDataService: RootDataService,
         private SchemaGenerator: ISchemaGenerator,
         private $compile: ng.ICompileService,
         private $q: ng.IQService,
-        private scope: JsonFormsDirectiveScope
-    ) { }
+        private scope: JsonFormsDirectiveScope) { }
 
 
     public init() {
@@ -75,6 +75,8 @@ export class FormController {
             let schema = values[0];
             this.uiSchema = <IUISchemaElement> values[1];
             let data = values[2];
+
+            this.RootDataService.setData(data);
 
             if (this.uiSchema === undefined) {
                 // resolve JSON schema, then generate ui Schema
@@ -181,13 +183,19 @@ export class JsonFormsDirective implements ng.IDirective {
         data: '='
     };
     link = (scope, el, attrs, ctrl) => {
+        let parent = el.parent();
+        let parentCtrl = parent.controller('jsonforms');
+        if (parentCtrl === undefined) {
+            RootDataService.unset();
+        }
         ctrl.element = el;
         scope.$watchGroup(['data', 'uischema'], (newValue) => {
             if (angular.isDefined(newValue)) {
                 ctrl.init();
             }
         });
-    }
+    };
+    constructor(private RootDataService: RootDataService) { }
 }
 
 
@@ -234,7 +242,7 @@ export class JsonFormsInnerDirective implements ng.IDirective {
 }
 
 export default angular.module('jsonforms.form.directives', ['jsonforms.form'])
-    .directive('jsonforms', () => new JsonFormsDirective())
+    .directive('jsonforms', ['RootDataService', (RootDataService) => new JsonFormsDirective(RootDataService)])
     .directive('jsonformsInner', () => new JsonFormsInnerDirective())
     .run(['$templateCache', ($templateCache: ng.ITemplateCacheService) =>
         $templateCache.put('form.html', formTemplate)]
