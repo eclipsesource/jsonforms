@@ -9,8 +9,8 @@ class NumberDirective implements ng.IDirective {
              step="0.01" 
              id="{{vm.id}}" 
              class="form-control jsf-control-number" 
-             ng-model="vm.modelValue[vm.fragment]" 
-             ng-change='vm.modelChanged()' 
+             ng-model="vm.resolvedData[vm.fragment]" 
+             ng-change='vm.triggerChangeEvent()' 
              ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = NumberController;

@@ -13,7 +13,7 @@ export class AbstractControl implements IRuleServiceCallBack {
     public rule: IRule;
     public hide: boolean;
     protected schemaPath: string;
-    protected modelValue: any;
+    protected resolvedData: any;
     protected fragment: string;
     protected uiSchema: IControlObject;
     protected schema: SchemaElement;
@@ -29,9 +29,9 @@ export class AbstractControl implements IRuleServiceCallBack {
         let indexedSchemaPath = this.uiSchema['scope']['$ref'];
         this.schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
         this.fragment = PathResolver.lastFragment(this.uiSchema.scope.$ref);
-        this.modelValue = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
+        this.resolvedData = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
 
-        this.scope.$on('modelChanged', () => {
+        this.scope.$on('jsonforms:change', () => {
             // TODO: remote references to services
             // instead try to iterate over all services and call some sort of notifier
             this.validate();
@@ -64,9 +64,8 @@ export class AbstractControl implements IRuleServiceCallBack {
         return stringBuilder;
     }
 
-    protected modelChanged() {
-        this.scope.$root.$broadcast('modelChanged');
-        // this.scope.$emit('modelChanged');
+    protected triggerChangeEvent() {
+        this.scope.$root.$broadcast('jsonforms:change');
     }
 
     private validate() {

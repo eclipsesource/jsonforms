@@ -1,6 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import '../../../../index';
+import {RootDataService} from "../../../ng-services/data/data-service";
 
 describe('MasterDetail', () => {
 
@@ -8,7 +9,7 @@ describe('MasterDetail', () => {
     beforeEach(angular.mock.module('jsonforms.form'));
 
     it('should be rendered',
-        angular.mock.inject(($rootScope, $compile) => {
+        angular.mock.inject(($rootScope, $compile, RootDataService: RootDataService) => {
 
         let scope = $rootScope.$new();
         scope.schema = {
@@ -73,5 +74,7 @@ describe('MasterDetail', () => {
         expect(el.html()).toContain('<label');
         let nameInput = el[0].querySelector('#\\#\\/properties\\/name');
         expect(nameInput).not.toBeNull();
+
+        expect(RootDataService.getRootData()).toBe(scope.data);
     }));
 });
