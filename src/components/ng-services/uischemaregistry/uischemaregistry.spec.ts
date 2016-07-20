@@ -75,7 +75,7 @@ describe('UiSchemaRegistry', () => {
         };
         let anotherUiSchema = {
             'type': 'Control',
-            'label' 'My label',
+            'label': 'My label',
             'scope': {
                 '$ref': '#/properties/name'
             }
