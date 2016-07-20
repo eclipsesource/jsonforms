@@ -123,7 +123,7 @@ export class FormController {
             this.uiSchema, schema, dataProvider.getData());
         let compiledTemplate = this.$compile(template)(this.childScope);
         angular.element(this.element.find('form')).append(compiledTemplate);
-        this.scope.$root.$broadcast('modelChanged');
+        this.scope.$root.$broadcast('jsonforms:change');
     }
 
     private fetchSchema() {
@@ -184,8 +184,9 @@ export class JsonFormsDirective implements ng.IDirective {
     };
     link = (scope, el, attrs, ctrl) => {
         let parent = el.parent();
-        if (parent !== undefined && parent.controller('jsonforms') !== undefined) {
-            RootDataService.unset();
+        if (parent === undefined && parent.controller('jsonforms') === undefined) {
+            // unset, if this is the root directive
+            this.RootDataService.unset();
         }
         ctrl.element = el;
         scope.$watchGroup(['data', 'uischema'], (newValue) => {
@@ -216,7 +217,7 @@ export class InnerFormController {
         let compiledTemplate = this.$compile(template)(this.scope);
 
         angular.element(this.element.find('form')).append(compiledTemplate);
-        this.scope.$root.$broadcast('modelChanged');
+        this.scope.$root.$broadcast('jsonforms:change');
     }
 }
 export interface JsonFormsInnerDirectiveScope extends ng.IScope {

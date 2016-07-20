@@ -12,7 +12,7 @@ class ArrayReadOnlyDirective implements ng.IDirective {
     <jsonforms-layout class="jsf-group">
       <fieldset>
         <legend>{{vm.label}}</legend>
-        <div ng-repeat='data in vm.modelValue[vm.fragment]'>
+        <div ng-repeat='data in vm.resolvedData[vm.fragment]'>
             <div ng-repeat='prop in vm.properties'>
             <strong>{{prop | capitalize}}:</strong> {{data[prop]}}
             </div>
@@ -30,7 +30,7 @@ class ArrayDirective implements ng.IDirective {
     <jsonforms-layout class="jsf-group">
         <fieldset ng-disabled="vm.uiSchema.readOnly">
             <legend>{{vm.label}}</legend>
-            <div ng-repeat="d in vm.modelValue[vm.fragment]">
+            <div ng-repeat="d in vm.resolvedData[vm.fragment]">
                 <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
             </div>
             <fieldset>
@@ -73,10 +73,10 @@ class ArrayController extends AbstractControl {
         return PathUtil.beautifiedLastFragment(this.schemaPath);
     }
     public submitCallback() {
-        if (this.modelValue[this.fragment] === undefined) {
-            this.modelValue[this.fragment] = [];
+        if (this.resolvedData[this.fragment] === undefined) {
+            this.resolvedData[this.fragment] = [];
         }
-        this.modelValue[this.fragment].push(_.clone(this.submitElement));
+        this.resolvedData[this.fragment].push(_.clone(this.submitElement));
         this.submitElement = {};
     }
     public get supportsSubmit(){

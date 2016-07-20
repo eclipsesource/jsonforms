@@ -18,11 +18,11 @@ class DateTimeBootstrapController extends DateTimeController {
         this.isOpen = true;
         if (this.dt == null) {
             this.dt = new Date();
-            this.modelChanged();
+            this.triggerChangeEvent();
         }
     }
     protected updateDateObject() {
-        let value = this.modelValue[this.fragment];
+        let value = this.resolvedData[this.fragment];
         if (value) {
             this.dt = new Date(value);
         } else {
@@ -39,7 +39,7 @@ const datetimeTemplate = `<jsonforms-control>
              is-open="vm.isOpen"
              id="{{vm.id}}"
              class="form-control jsf-control-datetime"
-             ng-change='vm.modelChanged()'
+             ng-change='vm.triggerChangeEvent()'
              ng-model="vm.dt"
              ng-model-options="{timezone:'UTC'}"
              ng-readonly="vm.uiSchema.readOnly"/>

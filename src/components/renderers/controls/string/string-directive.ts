@@ -7,8 +7,8 @@ class StringDirective implements ng.IDirective {
        <input type="text" 
               id="{{vm.id}}" 
               class="form-control jsf-control-string" 
-              ng-model="vm.modelValue[vm.fragment]" 
-              ng-change='vm.modelChanged()' 
+              ng-model="vm.resolvedData[vm.fragment]" 
+              ng-change='vm.triggerChangeEvent()' 
               ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = StringController;
@@ -21,8 +21,8 @@ class StringAreaDirective implements ng.IDirective {
     <jsonforms-control>
        <textarea id="{{vm.id}}" 
                  class="form-control jsf-control-string" 
-                 ng-model="vm.modelValue[vm.fragment]" 
-                 ng-change='vm.modelChanged()' 
+                 ng-model="vm.resolvedData[vm.fragment]" 
+                 ng-change='vm.triggerChangeEvent()' 
                  ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = StringController;
