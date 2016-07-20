@@ -2,6 +2,7 @@
 dist/
 !dist/LICENSE
 /components/
+/bootstrap/
 jsonforms.d.ts
 jsonforms.js
 index.d.ts
