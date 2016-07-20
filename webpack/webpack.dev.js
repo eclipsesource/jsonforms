@@ -3,14 +3,17 @@ var webpack = require('webpack');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    devtool: 'cheap-eval-source-map',
-    entry: [
-        'webpack-dev-server/client?http://localhost:8080',
-        'webpack/hot/dev-server',
-        './src/index.ts'
-    ],
+    devtool: 'source-map',
+    entry: {
+        jsonforms: [
+            'webpack-dev-server/client?http://localhost:8080',
+            'webpack/hot/dev-server',
+            './src/index.ts'
+        ],
+        examples: './examples/app/app.js'
+    },
     output: {
-        filename: 'jsonforms.js',
+        filename: '[name].js',
         publicPath: '/assets/'
     },
     resolve: {

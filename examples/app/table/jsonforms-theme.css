@@ -1,0 +1,24 @@
+
+.jsf-control-integer, .jsf-control-string, .jsf-control-enum {
+    padding: 5px;
+    margin: 5px;
+    width: 100%;
+    line-height: 20px;
+    border: 1px solid #79bf36;
+    background-color: white;
+}
+
+.jsf-control-enum:focus {
+    outline: none;
+    border: 1px solid green;
+    background: #79bf36;
+    color: white;
+}
+
+.jsf-control-string:focus, .jsf-control-integer:focus {
+    outline: none;
+    background: #79bf36;
+    border: 1px solid green;
+    color: white;
+}
+

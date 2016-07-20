@@ -1,5 +1,9 @@
 module.exports = [
     {
+        test: /\.js$/,
+        loader: 'babel'
+    },
+    {
         test: /\.ts(x?)$/,
         loader: 'ts-loader'
     },
