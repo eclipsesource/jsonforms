@@ -1,12 +1,13 @@
 import {IUISchemaElement} from '../../../uischema';
 import {IUISchemaGenerator} from '../../generators/generators';
+import {SchemaElement} from "../../../jsonschema";
 
 export interface UiSchemaRegistry {
     register(uiSchema: IUISchemaElement, tester: UiSchemaTester): void;
-    getBestUiSchema(dataSchema: any): IUISchemaElement;
+    getBestUiSchema(schema: SchemaElement, data: any): IUISchemaElement;
 }
 export interface UiSchemaTester {
-    (dataSchema: any): number;
+    (schema: SchemaElement, data: any): number;
 }
 interface UiSchemaDefinition {
     uiSchema: IUISchemaElement;
@@ -24,12 +25,12 @@ export class UiSchemaRegistryImpl implements UiSchemaRegistry {
     register(uiSchema: IUISchemaElement, tester: UiSchemaTester): void {
         this.registry.push({uiSchema: uiSchema, tester: tester});
     }
-    getBestUiSchema(dataSchema: any): IUISchemaElement {
+    getBestUiSchema(schema: SchemaElement, data: any): IUISchemaElement {
         let bestSchema = _.maxBy(this.registry, renderer =>
-            renderer.tester(dataSchema)
+            renderer.tester(schema, data)
         );
         if (bestSchema === NO_UISCHEMA_DEFINITION) {
-            return this.uiSchemaGenerator.generateDefaultUISchema(dataSchema);
+            return this.uiSchemaGenerator.generateDefaultUISchema(schema);
         }
         return bestSchema.uiSchema;
     }

@@ -61,12 +61,6 @@ export class FormController {
         this.$q.all([this.fetchSchema(), this.fetchUiSchema()]).then((values) => {
             let schema = values[0];
             this.uiSchema = <IUISchemaElement>values[1];
-
-            if (this.uiSchema === undefined) {
-                // resolve JSON schema, then generate ui Schema
-                this.uiSchema = this.UISchemaRegistry.getBestUiSchema(schema);
-            }
-
             resolvedSchemaDeferred.resolve(schema);
             resolvedUISchemaDeferred.resolve(this.uiSchema);
         });
@@ -81,6 +75,12 @@ export class FormController {
             let schema = values[0];
             this.uiSchema = <IUISchemaElement> values[1];
             let data = values[2];
+
+            if (this.uiSchema === undefined) {
+                // resolve JSON schema, then generate ui Schema
+                this.uiSchema = this.UISchemaRegistry.getBestUiSchema(schema, data);
+            }
+
             let unresolvedRefs = JsonRefs.findRefs(schema);
             if (_.size(unresolvedRefs) === 0) {
                 this.render(schema, data);
