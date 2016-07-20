@@ -243,7 +243,7 @@ export class RendererTesterBuilder {
 export const Testers = new RendererTesterBuilder();
 
 export default angular.module('jsonforms.control.base', ['jsonforms.renderers.controls'])
-    .controller('BaseController', AbstractControl)
+    .factory('BaseController', () => AbstractControl)
     .service('JSONFormsTesters', function() {
         return {
             schemaPathEndsWith: schemaPathEndsWith,
