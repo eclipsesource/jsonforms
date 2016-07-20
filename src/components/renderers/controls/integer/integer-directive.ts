@@ -3,12 +3,12 @@ import {AbstractControl, Testers, schemaTypeIs, uiTypeIs} from '../abstract-cont
 class IntegerDirective implements ng.IDirective {
     template = `
     <jsonforms-control>
-      <input type="number" 
-             step="1" 
-             id="{{vm.id}}" 
-             class="form-control jsf-control-integer" 
-             ng-model="vm.modelValue[vm.fragment]" 
-             ng-change='vm.modelChanged()' 
+      <input type="number"
+             step="1"
+             id="{{vm.id}}"
+             class="form-control jsf-control-integer"
+             ng-model="vm.modelValue[vm.fragment]"
+             ng-change='vm.modelChanged()'
              ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = IntegerController;
@@ -28,9 +28,9 @@ export default angular
     .directive('integerControl', () => new IntegerDirective())
     .run(['RendererService', RendererService =>
         RendererService.register('integer-control',
-                Testers.and(
-                    schemaTypeIs('integer'),
-                    uiTypeIs('Control')
-                ), 1)
+            Testers.and(
+                schemaTypeIs('integer'),
+                uiTypeIs('Control')
+            ), 1)
     ])
     .name;

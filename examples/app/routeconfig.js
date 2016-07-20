@@ -45,6 +45,10 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/arrays/arrays.html',
             controller: 'ArraysController',
             controllerAs: 'vm'
+        }).when('/table', {
+            templateUrl: 'app/table/table.html',
+            controller: 'MyTableController',
+            controllerAs: 'vm'
         }).otherwise({
             redirectTo: '/person'
         });

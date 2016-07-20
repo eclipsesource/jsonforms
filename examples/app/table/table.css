@@ -1,0 +1,62 @@
+
+.table-control .jsf-control-integer, .table-control .jsf-control-string, .table-control .jsf-control-enum {
+    padding: 5px;
+    margin: 5px;
+    width: 100%;
+    line-height: 20px;
+    border: 1px solid #79bf36;
+    background-color: white;
+}
+
+.table-control .jsf-control-enum:focus {
+    outline: none;
+    border: 1px solid green;
+    background: #79bf36;
+    color: white;
+}
+
+.table-control .jsf-control-string:focus, .table-control .jsf-control-integer:focus {
+    outline: none;
+    background: #79bf36;
+    border: 1px solid green;
+    color: white;
+}
+
+.jsf-control-table {
+    border-collapse: collapse;
+    border: 1px solid green;
+    width: 100%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.jsf-control-table th, .jsf-control-table td {
+    border: 1px solid green;
+    padding: 5px;
+}
+
+.jsf-control-table th {
+    background-color: green;
+    color: white;
+}
+
+.jsf-control-table tr:hover {
+    background-color: #79bf36;
+    color: white;
+}
+
+.jsf-control-table-detail {
+    width: 100%;
+}
+
+.jsf-control-table-detail i {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 100px;
+    background-color: #79bf36;
+    color: white;
+    margin: 4px;
+
+}
