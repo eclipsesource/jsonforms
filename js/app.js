@@ -286,17 +286,29 @@ angular.module('jsonforms-website', [
                     url: '/landing',
                     templateUrl: "partials/docs/landing.html"
                 })
-                .state('docs.quickstart', {
-                    url: '/quickstart',
-                    templateUrl: 'partials/docs/quickstart.html'
+                .state('docs.introduction', {
+                    url: '/introduction',
+                    templateUrl: 'partials/docs/introduction.html'
                 })
-                .state('docs.tutorial', {
-                    url: '/tutorial',
-                    templateUrl: 'partials/docs/tutorial.html'
+                .state('docs.jsonformseditor', {
+                    url: '/jsonformseditor',
+                    templateUrl: 'partials/docs/jsonformseditor.html'
                 })
-                .state('docs.emfforms-integration', {
-                    url: '/emfforms',
-                    templateUrl: 'partials/docs/emfforms.html'
+                .state('docs.setup', {
+                    url: '/setup',
+                    templateUrl: 'partials/docs/setup.html'
+                })
+                .state('docs.firstform', {
+                    url: '/firstform',
+                    templateUrl: 'partials/docs/firstform.html'
+                })
+                .state('docs.customrenderer', {
+                    url: '/customrenderer',
+                    templateUrl: 'partials/docs/customrenderer.html'
+                })
+                .state('docs.customrenderer-ts', {
+                    url: '/customrenderer-ts',
+                    templateUrl: 'partials/docs/customrenderer-ts.html'
                 })
                 .state('support', {
                     url: '/support',
@@ -395,4 +407,3 @@ angular.module('jsonforms-website', [
             }
         };
     }]);
-
