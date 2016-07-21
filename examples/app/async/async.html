@@ -1,0 +1,20 @@
+<div class="panel">
+    <div class="panel-heading">
+        <h3>Asynchronous Form</h3>
+    </div>
+    <h2>Load via promises</h2>
+    Click 'Load Data' and 'Load Schema' to load the JSON schema and the UI schema asynchronously.
+    Then click 'Load UI' to finally load the rendered form.
+    <div class="panel-body">
+        <button ng-click="vm.loadData()">Load Data</button>
+        <button ng-click="vm.loadSchema()">Load Schema</button>
+        <button ng-click="vm.loadUI()">Load UI</button>
+        <jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
+    </div>
+    <h2>Load via functions</h2>
+    Resolving via functions also works.
+    <div class="panel-body">
+        <jsonforms data="vm.loadDataFunc" uischema="vm.loadUIFunc" schema="vm.loadSchemaFunc"></jsonforms>
+    </div>
+
+</div>

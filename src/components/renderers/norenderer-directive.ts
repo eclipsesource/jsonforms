@@ -1,4 +1,5 @@
 import {IUISchemaElement} from '../../uischema';
+import {Testers} from './controls/abstract-control';
 
 class NoRendererDirective implements ng.IDirective {
     restrict = 'E';

@@ -4,6 +4,7 @@ import '../../../index';
 
 import {UiSchemaRegistry, UiSchemaTester, NOT_FITTING} from './uischemaregistry-service';
 import {UISchemaGenerator} from '../../generators/jsonforms-uischemagenerator';
+import {SchemaElement} from "../../../jsonschema";
 
 describe('UiSchemaRegistry', () => {
 
@@ -27,8 +28,9 @@ describe('UiSchemaRegistry', () => {
             }
         };
         let expectedGeneratedUiSchema = new UISchemaGenerator().generateDefaultUISchema(dataSchema);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toEqual(expectedGeneratedUiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toEqual(expectedGeneratedUiSchema);
     });
+
 
     it('should return registered fitting uischema', function () {
         let dataSchema = {
@@ -52,7 +54,48 @@ describe('UiSchemaRegistry', () => {
             return NOT_FITTING;
         };
         uischemaRegistry.register(uiSchema, testFunction);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toBe(uiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toBe(uiSchema);
+    });
+
+
+    it('should return registered fitting uischema and data', function () {
+        let dataSchema = {
+            'type' : 'object',
+            'properties': {
+                'name': {
+                    'type': 'string'
+                }
+            }
+        };
+        let uiSchema = {
+            'type': 'Control',
+            'scope': {
+                '$ref': '#/properties/name'
+            }
+        };
+        let anotherUiSchema = {
+            'type': 'Control',
+            'label': 'My label',
+            'scope': {
+                '$ref': '#/properties/name'
+            }
+        };
+        let testFunction: UiSchemaTester = (schema: SchemaElement, data: any) : number => {
+            if (data.name === 'Foo') {
+                return 1;
+            }
+            return NOT_FITTING;
+        };
+        let anotherTestFunction: UiSchemaTester = (schema: SchemaElement, data: any) : number => {
+            if (data.name === 'Bar') {
+                return 1;
+            }
+            return NOT_FITTING;
+        };
+        uischemaRegistry.register(uiSchema, testFunction);
+        uischemaRegistry.register(anotherUiSchema, anotherTestFunction);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {'name': 'Foo'})).toBe(uiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {'name': 'Bar'})).toBe(anotherUiSchema);
     });
 
     it('should return genetared uischema if registered is not fitting', function () {
@@ -78,7 +121,7 @@ describe('UiSchemaRegistry', () => {
         };
         uischemaRegistry.register(uiSchema, testFunction);
         let expectedGeneratedUiSchema = new UISchemaGenerator().generateDefaultUISchema(dataSchema);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toEqual(expectedGeneratedUiSchema);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toEqual(expectedGeneratedUiSchema);
     });
 
     it('should return higher tester registered uischema', function () {
@@ -116,6 +159,6 @@ describe('UiSchemaRegistry', () => {
         };
         uischemaRegistry.register(uiSchema1, testFunction1);
         uischemaRegistry.register(uiSchema2, testFunction2);
-        expect(uischemaRegistry.getBestUiSchema(dataSchema)).toBe(uiSchema2);
+        expect(uischemaRegistry.getBestUiSchema(dataSchema, {})).toBe(uiSchema2);
     });
 });

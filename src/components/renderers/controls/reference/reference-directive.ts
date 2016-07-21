@@ -1,7 +1,5 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl} from '../abstract-control';
-import {IUISchemaElement} from '../../../../uischema';
+import {AbstractControl, uiTypeIs} from '../abstract-control';
+import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
 
 class ReferenceDirective implements ng.IDirective {
     restrict = 'E';
@@ -12,12 +10,12 @@ class ReferenceDirective implements ng.IDirective {
 interface ReferenceControllerScope extends ng.IScope {
 }
 class ReferenceController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
-    constructor(scope: ReferenceControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    static $inject = ['$scope'];
+    constructor(scope: ReferenceControllerScope) {
+        super(scope);
     }
     public get link(){
-        let normalizedPath = this.pathResolver.toInstancePath(this.schemaPath);
+        let normalizedPath = PathResolver.toInstancePath(this.schemaPath);
         return '#' + this.uiSchema['href']['url'] + '/' + this.data[normalizedPath];
     };
     public get linkText(){
@@ -27,20 +25,11 @@ class ReferenceController extends AbstractControl {
         return this.uiSchema.label ? this.uiSchema.label : 'Go to';
     }
 }
-const ReferenceControlRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                                dataSchema: any,
-                                                                dataObject: any,
-                                                                pathResolver: IPathResolver ){
-    if (element.type !== 'ReferenceControl') {
-        return NOT_FITTING;
-    }
-    return 2;
-};
 
 export default angular
     .module('jsonforms.renderers.controls.reference', ['jsonforms.renderers.controls'])
     .directive('referenceControl', () => new ReferenceDirective())
     .run(['RendererService', RendererService =>
-            RendererService.register('reference-control', ReferenceControlRendererTester)
+            RendererService.register('reference-control', uiTypeIs('ReferenceControl'), 2)
     ])
     .name;

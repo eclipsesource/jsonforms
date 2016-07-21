@@ -1,7 +1,8 @@
 # generated files
 dist/
 !dist/LICENSE
-components/
+/components/
+/bootstrap/
 jsonforms.d.ts
 jsonforms.js
 index.d.ts
