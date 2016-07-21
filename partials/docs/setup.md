@@ -24,9 +24,9 @@ Once you have started one of the two states of the example app, you can see the 
 If everything is setup correctly, you should see the following in your browser:
 
 #### Initial State
-![Initial State](../../images/docs/setup.initialform.png){:.img-responsive}
+![Initial State](images/docs/setup.initialform.png){:.img-responsive}
 
 #### Final State
-![Final State](../../images/docs/setup.finalform.png){:.img-responsive}
+![Final State](images/docs/setup.finalform.png){:.img-responsive}
 
 Once you have completed the initial setup, we recommend you to continue with the section [Define your first form](#/docs/firstform), which explains the initial state in more detail.
