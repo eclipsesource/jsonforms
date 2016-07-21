@@ -13,7 +13,7 @@ export class AbstractControl implements IRuleServiceCallBack {
     public rule: IRule;
     public hide: boolean;
     protected schemaPath: string;
-    protected modelValue: any;
+    protected resolvedData: any;
     protected fragment: string;
     protected uiSchema: IControlObject;
     protected schema: SchemaElement;
@@ -29,9 +29,9 @@ export class AbstractControl implements IRuleServiceCallBack {
         let indexedSchemaPath = this.uiSchema['scope']['$ref'];
         this.schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
         this.fragment = PathResolver.lastFragment(this.uiSchema.scope.$ref);
-        this.modelValue = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
+        this.resolvedData = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
 
-        this.scope.$on('jsfPropagateChanges', () => {
+        this.scope.$on('jsonforms:change', () => {
             // TODO: remote references to services
             // instead try to iterate over all services and call some sort of notifier
             this.validate();
@@ -64,8 +64,8 @@ export class AbstractControl implements IRuleServiceCallBack {
         return stringBuilder;
     }
 
-    protected propagateChanges() {
-        this.scope.$root.$broadcast('jsfPropagateChanges');
+    protected triggerChangeEvent() {
+        this.scope.$root.$broadcast('jsonforms:change');
     }
 
     private validate() {
@@ -243,7 +243,7 @@ export class RendererTesterBuilder {
 export const Testers = new RendererTesterBuilder();
 
 export default angular.module('jsonforms.control.base', ['jsonforms.renderers.controls'])
-    .controller('BaseController', AbstractControl)
+    .factory('BaseController', () => AbstractControl)
     .service('JSONFormsTesters', function() {
         return {
             schemaPathEndsWith: schemaPathEndsWith,

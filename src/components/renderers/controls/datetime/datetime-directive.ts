@@ -13,23 +13,23 @@ export class DateTimeController extends AbstractControl {
     protected dt: Date;
     constructor(scope: DateTimeControllerScope) {
         super(scope);
-        let value = this.modelValue[this.fragment];
+        let value = this.resolvedData[this.fragment];
         if (value) {
             this.dt = new Date(value);
         }
-        scope.$watch('vm.modelValue[vm.fragment]', (newValue) => {this.updateDateObject(); });
+        scope.$watch('vm.resolvedData[vm.fragment]', (newValue) => {this.updateDateObject(); });
     }
-    protected propagateChanges() {
+    protected triggerChangeEvent() {
         if (this.dt != null) {
             // returns a string in the form 'yyyy-mm-dd'
-            this.modelValue[this.fragment] = this.dt.toISOString().substr(0, 10);
+            this.resolvedData[this.fragment] = this.dt.toISOString().substr(0, 10);
         } else {
-            this.modelValue[this.fragment] = null;
+            this.resolvedData[this.fragment] = null;
         }
-        super.propagateChanges();
+        super.triggerChangeEvent();
     }
     protected updateDateObject() {
-        this.dt = new Date(this.modelValue[this.fragment]);
+        this.dt = new Date(this.resolvedData[this.fragment]);
     }
 }
 
@@ -39,7 +39,7 @@ const datetimeTemplate = `<jsonforms-control>
              is-open="vm.isOpen"
              id="{{vm.id}}"
              class="form-control jsf-control-datetime"
-             ng-change='vm.propagateChanges()'
+             ng-change='vm.triggerChangeEvent()'
              ng-model="vm.dt"
              ng-model-options="{timezone:'UTC'}"
              ng-readonly="vm.uiSchema.readOnly"/>

@@ -7,8 +7,8 @@ class IntegerDirective implements ng.IDirective {
              step="1" 
              id="{{vm.id}}" 
              class="form-control jsf-control-integer" 
-             ng-model="vm.modelValue[vm.fragment]" 
-             ng-change='vm.propagateChanges()'
+             ng-model="vm.resolvedData[vm.fragment]" 
+             ng-change='vm.triggerChangeEvent()' 
              ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
     controller = IntegerController;

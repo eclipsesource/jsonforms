@@ -10,7 +10,7 @@ module.exports = {
         './src/index.ts'
     ],
     output: {
-        filename: '[name].js',
+        filename: 'jsonforms.js',
         publicPath: '/assets/'
     },
     resolve: {
@@ -33,7 +33,7 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
-            { 
+            {
                 from: 'src/jsonforms.css',
                 to:   'examples/assets/jsonforms.css'
             }

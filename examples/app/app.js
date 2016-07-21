@@ -1,6 +1,4 @@
-import angular from 'angular';
-
-var app = angular.module('makeithappen', [
+angular.module('makeithappen', [
     'ngRoute',
     'jsonforms'
 ]);
