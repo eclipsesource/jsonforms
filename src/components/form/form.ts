@@ -18,6 +18,7 @@ import masterDetailDirectives from '../renderers/layouts/masterdetail/masterdeta
 import groupLayoutDirective from '../renderers/layouts/group/group-directive';
 
 import labelDirective from '../renderers/extras/label/label-directive';
+import tabbedTextDirective from '../renderers/extras/tabbed-text/tabbed-text';
 
 import stringControlDirective from '../renderers/controls/string/string-directive';
 import integerControlDirective from '../renderers/controls/integer/integer-directive';
@@ -57,6 +58,7 @@ export default angular
         datetimeControlDirective,
 
         labelDirective,
+        tabbedTextDirective,
 
         groupLayoutDirective,
         verticalLayoutDirective,

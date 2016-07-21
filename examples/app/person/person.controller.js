@@ -128,9 +128,9 @@ angular.module('makeithappen').controller('PersonController', function() {
             },
             /* FIXME: disabling arrays for primitive types */
             /*"test_wrong": {
-                "type": "array",
-                "items": {"type":"string"}
-            },*/
+             "type": "array",
+             "items": {"type":"string"}
+             },*/
             "hobbies": {
                 "type": "array",
                 "items": {"type":"object","properties": {"name": {"type": "string"}}}
@@ -311,17 +311,17 @@ angular.module('makeithappen').controller('PersonController', function() {
     };
     vm.users ={
         "users":
-        [
-            vm.data,
-            {
-                name: 'Todd',
-                personalData:{age: 33}
-            },
-            {
-                name: 'Jimmy',
-                personalData:{age: 32}
-            }
-        ]
+            [
+                vm.data,
+                {
+                    name: 'Todd',
+                    personalData:{age: 33}
+                },
+                {
+                    name: 'Jimmy',
+                    personalData:{age: 32}
+                }
+            ]
     };
 
     vm.formattedData = function() {

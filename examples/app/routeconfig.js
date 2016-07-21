@@ -45,6 +45,10 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/arrays/arrays.html',
             controller: 'ArraysController',
             controllerAs: 'vm'
+        }).when('/code', {
+            templateUrl: 'app/code/code.html',
+            controller: 'CodeController',
+            controllerAs: 'vm'
         }).otherwise({
             redirectTo: '/person'
         });

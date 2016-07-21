@@ -1,0 +1,26 @@
+.jsf-control-tabbed-text {
+    width: 100%;
+}
+
+.jsf-control-tabbed-text .header-container {
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: stretch;
+    width: 100%;
+}
+
+.jsf-control-tabbed-text .header-container > * {
+    margin-left: 4px;
+    margin-right: 4px;
+    background-color: #27458E;
+    color: white;
+    text-align: center;
+    flex: 100;
+}
+
+.jsf-control-tabbed-text .header-container > *:hover {
+    background-color: white;
+    color: #27458E;
+}
