@@ -1,8 +1,4 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {AbstractControl, ControlRendererTester} from '../abstract-control';
-import {IUISchemaElement} from '../../../../uischema';
-
+import {AbstractControl, Testers, schemaTypeIs, optionIs} from '../abstract-control';
 
 class StringDirective implements ng.IDirective {
     restrict = 'E';
@@ -37,34 +33,22 @@ interface StringControllerScope extends ng.IScope { }
 
 class StringController extends AbstractControl {
     static $inject = ['$scope', 'PathResolver'];
-    constructor(scope: StringControllerScope, pathResolver: IPathResolver) {
-        super(scope, pathResolver);
+    constructor(scope: StringControllerScope) {
+        super(scope);
     }
 }
-
-let StringControlRendererTester: RendererTester = ControlRendererTester('string', 1);
-let StringAreaControlRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                               dataSchema: any,
-                                                               dataObject: any,
-                                                               pathResolver: IPathResolver ) {
-    let specificity = ControlRendererTester('string', 1)(element,
-        dataSchema, dataObject, pathResolver);
-    if (specificity === NOT_FITTING) {
-        return NOT_FITTING;
-    }
-    if (element['options'] != null && element['options']['multi']) {
-        return 2;
-    }
-    return NOT_FITTING;
-};
 
 export default angular
     .module('jsonforms.renderers.controls.string', ['jsonforms.renderers.controls'])
     .directive('stringControl', () => new StringDirective())
     .directive('textAreaControl', () => new StringAreaDirective())
     .run(['RendererService', RendererService => {
-            RendererService.register('string-control', StringControlRendererTester);
-            RendererService.register('text-area-control', StringAreaControlRendererTester);
-        }
+        RendererService.register('string-control', schemaTypeIs('string'), 1);
+        RendererService.register('text-area-control',
+                Testers.and(
+                    schemaTypeIs('string'),
+                    optionIs('multi', true)
+                ), 2);
+    }
     ])
     .name;

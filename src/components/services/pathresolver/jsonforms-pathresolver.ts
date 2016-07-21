@@ -1,38 +1,17 @@
 
 import {PathUtil} from '../pathutil';
-import {SchemaElement} from '../../../jsonschema';
 
-export interface IPathResolver {
-    toInstancePath(schemaPath: string): string;
+export class PathResolver  {
 
-    resolveUi(instance: any, uiPath: string): any;
-
-    resolveInstance(instance: any, path: string): any;
-
-    resolveSchema(schema: SchemaElement, schemaPath: string): SchemaElement;
-
-    lastFragment(path: string): string;
-
-    resolveToLastModel(instance: any, path: string): any;
-}
-
-export class PathResolver implements IPathResolver {
-
-    private pathMapping: { [id: string]: string; } = {};
-
-    toInstancePath(path: string): string {
+    static toInstancePath(path: string): string {
         return PathUtil.normalize(path);
     }
 
-    resolveUi(instance: any, uiPath: string): any {
-        let p = uiPath + '/scope/$ref';
-        if (this.pathMapping !== undefined && this.pathMapping.hasOwnProperty(p)) {
-            p = this.pathMapping[p];
-        }
-        return this.resolveInstance(instance, p);
+    static resolveUi(instance: any, uiPath: string): any {
+        return this.resolveInstance(instance, uiPath + '/scope/$ref');
     }
 
-    resolveInstance(instance: any, schemaPath: string): any {
+    static resolveInstance(instance: any, schemaPath: string): any {
         return this.innerResolveInstance(instance, schemaPath, false);
     };
 
@@ -42,7 +21,7 @@ export class PathResolver implements IPathResolver {
      * @param path a schema path
      * @returns {T|*|*}
      */
-    resolveSchema(schema: any, path: string): any {
+    static resolveSchema(schema: any, path: string): any {
         try {
             let fragments = PathUtil.toPropertyFragments(path);
             return fragments.reduce(function (subSchema, fragment) {
@@ -60,18 +39,18 @@ export class PathResolver implements IPathResolver {
         }
     };
 
-    lastFragment(schemaPath: string): string {
+    static lastFragment(schemaPath: string): string {
         let fragments: string[] = PathUtil.normalizeFragments(schemaPath);
         return fragments[fragments.length - 1];
     }
 
-    resolveToLastModel(instance: any, schemaPath: string): any {
+    static resolveToLastModel(instance: any, schemaPath: string): any {
         let fragments: string[] = PathUtil.normalizeFragments(schemaPath);
         let fragmentsToObject: string[] = fragments.slice(0, fragments.length - 1);
         return this.innerResolveInstance(instance, fragmentsToObject.join('/'), true);
     }
 
-    private innerResolveInstance(instance: any, schemaPath: string, createMissing: boolean): any {
+    private static innerResolveInstance(instance: any, schemaPath: string, createMissing: boolean): any {
         let fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
         return fragments.reduce((currObj, fragment) => {
             if (currObj === undefined) {

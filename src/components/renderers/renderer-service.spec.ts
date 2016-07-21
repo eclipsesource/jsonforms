@@ -1,16 +1,15 @@
 import 'angular';
 import 'angular-mocks';
 import '../../index';
-import IRootScopeService = angular.IRootScopeService;
-import ICompileService = angular.ICompileService;
 
 describe('Renderer service', () => {
 
 
     beforeEach(angular.mock.module('jsonforms.form'));
 
+
     it('should support remote references',
-        angular.mock.inject(($rootScope: IRootScopeService, $compile: ICompileService) => {
+        angular.mock.inject(($rootScope: ng.IRootScopeService, $compile: ng.ICompileService) => {
 
         let scope = $rootScope.$new();
         // empty schema
@@ -29,7 +28,7 @@ describe('Renderer service', () => {
     }));
 
     it('should add comment to dom on unknown renderer',
-        angular.mock.inject(($rootScope: IRootScopeService, $compile: ICompileService) => {
+        angular.mock.inject(($rootScope: ng.IRootScopeService, $compile: ng.ICompileService) => {
 
         let scope = $rootScope.$new();
         // empty schema

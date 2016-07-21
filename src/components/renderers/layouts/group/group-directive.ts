@@ -1,7 +1,5 @@
-import {RendererTester, NOT_FITTING} from '../../renderer-service';
-import {IPathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {AbstractLayout} from '../abstract-layout';
-import {IUISchemaElement} from '../../../../uischema';
+import {uiTypeIs} from '../../controls/abstract-control';
 
 class GroupDirective implements ng.IDirective {
     restrict = 'E';
@@ -20,15 +18,6 @@ class GroupController  extends AbstractLayout {
         return this.uiSchema.label ? this.uiSchema.label : '';
     }
 }
-const GroupLayoutRendererTester: RendererTester = function(element: IUISchemaElement,
-                                                         dataSchema: any,
-                                                         dataObject: any,
-                                                         pathResolver: IPathResolver ){
-    if (element.type !== 'Group') {
-        return NOT_FITTING;
-    }
-    return 2;
-};
 
 const groupTemplate = `<jsonforms-layout>
     <div class="jsf-group">
@@ -45,7 +34,7 @@ export default angular
     .module('jsonforms.renderers.layouts.group', ['jsonforms.renderers.layouts'])
     .directive('grouplayout', () => new GroupDirective())
     .run(['RendererService', RendererService =>
-        RendererService.register('grouplayout', GroupLayoutRendererTester)
+        RendererService.register('grouplayout', uiTypeIs('Group'), 2)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('group.html', groupTemplate);

@@ -4,14 +4,11 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
-    entry: {
-        jsonforms: [
-            'webpack-dev-server/client?http://localhost:8080',
-            'webpack/hot/dev-server',
-            './src/index.ts'
-        ],
-        examples: './examples/app/app.js'
-    },
+    entry: [
+        'webpack-dev-server/client?http://localhost:8080',
+        'webpack/hot/dev-server',
+        './src/index.ts'
+    ],
     output: {
         filename: '[name].js',
         publicPath: '/assets/'

@@ -29,6 +29,8 @@ import datetimeControlDirective from '../renderers/controls/datetime/datetime-di
 import enumControlDirective from '../renderers/controls/enum/enum-directive';
 import formsDirective from '../form/form-directive';
 
+import baseControl from '../renderers/controls/abstract-control';
+
 import norendererDirective from '../renderers/norenderer-directive';
 
 export default angular
@@ -61,6 +63,8 @@ export default angular
         horizontalLayoutDirective,
         categorizationDirective,
         masterDetailDirectives,
+
+        baseControl
 
     ])
     .name;

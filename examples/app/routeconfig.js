@@ -2,14 +2,14 @@
 angular.module('makeithappen').config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/person', {
-            template: require('./person/person.html'),
+            templateUrl: 'app/person/person.html',
             controller: 'PersonController',
             controllerAs: 'vm'
         }).when('/resolve', {
-            template: require('./resolve/resolve.html'),
+            templateUrl: 'app/resolve/resolve.html',
             controller: 'ResolveController',
             controllerAs: 'vm'
-        })/*.when('/editor', {
+        }).when('/editor', {
             templateUrl: 'app/editor/editor.html',
             controller: 'EditorController',
             controllerAs: 'vm'
@@ -45,11 +45,11 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/arrays/arrays.html',
             controller: 'ArraysController',
             controllerAs: 'vm'
-        }).when('/table', {
-            templateUrl: 'app/table/index.html',
-            controller: 'MyTableController',
+        }).when('/async', {
+            templateUrl: 'app/async/async.html',
+            controller: 'AsyncController',
             controllerAs: 'vm'
-        })*/.otherwise({
+        }).otherwise({
             redirectTo: '/person'
         });
     }

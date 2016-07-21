@@ -49,7 +49,7 @@ export class ScopeProvider implements IScopeProvider {
 }
 export class PathResolverService implements IPathResolverService {
 
-    constructor(private resolver: PathResolver) { }
+    private resolver: PathResolver = new PathResolver();
 
     getId(): ServiceId {
         return ServiceId.PathResolver;
@@ -69,6 +69,19 @@ export class SchemaProvider implements ISchemaProvider {
     }
 
     getSchema(): SchemaElement {
+        return this.schema;
+    }
+}
+
+export class UiSchemaProvider implements IUiSchemaProvider {
+    constructor(private schema: IUISchemaElement){
+    }
+
+    getId(): ServiceId {
+        return ServiceId.UiSchemaProvider;
+    }
+
+    getUiSchema(): IUISchemaElement {
         return this.schema;
     }
 }
@@ -134,7 +147,8 @@ export enum ServiceId {
     SchemaProvider,
     ScopeProvider,
     RuleService,
-    PathResolver
+    PathResolver,
+    UiSchemaProvider
 }
 
 export interface IService {
