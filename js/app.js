@@ -306,6 +306,10 @@ angular.module('jsonforms-website', [
                     url: '/customrenderer',
                     templateUrl: 'partials/docs/customrenderer.html'
                 })
+                .state('docs.customrenderer-es5', {
+                    url: '/customrenderer-es5',
+                    templateUrl: 'partials/docs/customrenderer-es5.html'
+                })
                 .state('docs.customrenderer-ts', {
                     url: '/customrenderer-ts',
                     templateUrl: 'partials/docs/customrenderer-ts.html'
