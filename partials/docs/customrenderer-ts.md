@@ -29,66 +29,127 @@ Once the dependencies are installed and the local server started, you should see
 
 The most important files in this project seed are the following:
 
-* `src/index.html` is the main HTML file and contains the JSONForms directive to render a form. The data as well as the data schema is obtained from a `RatingController`.
-* `src/index.ts` contains the `RatingController`, which provides a simple data object and a data schema.
+* `src/index.html` is the main HTML file and contains the JSONForms directive to render a form. The data as well as the data schema is obtained from `MyController`.
+* `src/schema.ts` contains the data schema.
+* `src/ui-schema.ts` contains the UI schema.
+* `src/app.ts` contains the implementation of `MyController`, which imports the data and UI schema in order to provide them to the JSON Forms directive in `src/index.html`. Moreover, this controller provides a simple data object.
 
-If you look at `src/index.ts`, you will see that the data schema in this application specifies an object with two properties, `rating` of type `integer` and `comment` of type `string`. Moreover, it defines an instance of this data schema, which only contains the value `2` for the property `rating`.
+Having a closer look at `src/index.html`, we see that `MyController` to provide the input to the JSON Forms directive in order to render a form for the data object and the data schema.
 
-```Typescript
-class RatingController {
-  data = {
-    'rating': 2
-  };
-  schema = {
-    "type": "object",
-    "properties": {
-      "rating": {
-        "type": "integer",
-        "maximum": 5
-      },
-      "comment": {
-        "type": "string",
-        "minLength": 3
-      }
+The data schema in `src/schema.ts` defines three properties: `name` and `description` of type `string`, as well as `done` of type `boolean`.
+
+```
+export const Schema = {
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "done": {
+      "type": "boolean"
     }
-  };
+  },
+  "required": ["name"]
 }
 ```
 
-The `RatingController` is used in `src/index.html` to provide the input to the JSON Forms directive in order to render a form for the data object and the data schema.
+The UI schema in `src/ui-schema.ts` specifies a control for each of those three properties and puts them into a vertical layout.
+
+```
+export const UISchema = {
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Name",
+      "scope": {
+        "$ref": "#/properties/name"
+      }
+    },
+    {
+      "type": "Control",
+      "label": "Description",
+      "scope": {
+        "$ref": "#/properties/description"
+      },
+      "options": {
+        "multi": true
+      }
+    },
+    {
+      "type": "Control",
+      "label": "Done?",
+      "scope": {
+        "$ref": "#/properties/done"
+      }
+    }
+  ]
+}
+```
+
+Finally, `src/app.ts` imports the schemata and introduces a data object, which are provided as fields `schema`, `uischema`, and `data`.
+
+```Typescript
+import {Schema} from  "./schema.ts";
+import {UISchema} from "./ui-schema";
+
+class MyController {
+  schema = Schema;
+  uischema = UISchema;
+  data = {
+    "name": "Send email to Adriana",
+    "description": "Confirm if you have passed the subject",
+    "done": true
+  };
+}
+
+angular.module('app', ['jsonforms'])
+  .controller('MyController', MyController);
+```
+
+Finally, these fields are used in the JSON Forms directive in `src/index.html` to render the form.
 
 ```HTML
-<body ng-controller="RatingController as vm">
-  <jsonforms data="vm.data" schema="vm.schema"></jsonforms>
+<body ng-app="app" ng-controller="MyController as my">
+  <jsonforms schema="my.schema" uischema="my.uischema" data="my.data"></jsonforms>
 </body>
 ```
 
-Preparing the rating control
-----------------------------
+Preparations for creating the custom rating control
+---------------------------------------------------
 
 To implement the rating control like below
 ![Custom Rating Control](../../images/docs/customrenderer.ts.preview.png){:.img-responsive}
-we use `ui-bootstrap`. Therefore, we first add the project dependency `"angular-ui-bootstrap": "1.3.3"` in `package.json` and import it in `index.ts` as follows
+we use `ui-bootstrap`. Therefore, we first add the project dependency `"angular-ui-bootstrap": "1.3.3"` in `package.json` and import it in `src/index.ts` as follows:
 
 ```
-import "bootstrap/dist/css/bootstrap.css";
 import "angular-ui-bootstrap";
 import 'angular-ui-bootstrap/src/rating';
 ```
 
-Now, we can add the rating control to the `index.html` in order to test that we have all dependencies. Let us put the following tag into `index.html`:
+Moreover, we have to import module `ui.bootstrap` in `src/app.ts` as shown below:
 
 ```
-<body ng-controller="RatingController as vm">
-  <jsonforms data="vm.data" schema="vm.schema"></jsonforms>
+angular.module('app', ['jsonforms', 'ui.bootstrap'])
+  .controller('MyController', MyController);
+```
+
+Now, we can add the rating control to the `src/index.html` in order to test that we have all dependencies. Let us put the following tag into `index.html`:
+
+```
+<body ng-app="app" ng-controller="MyController as my">
+  <jsonforms schema="my.schema" uischema="my.uischema" data="my.data"></jsonforms>
   <uib-rating ng-model="2" max="5"></uib-rating>
 </body>
 ```
 
-When we refresh the browser, we should now see the following:
+When we run `npm install` and `npm start` again, we should now see the following:
 ![Default form with rating control](../../images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive}
 
-As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `index.html`, as we just added it there to test `ui-bootstrap`.
+As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `src/index.html`, as we just added it there to test `ui-bootstrap`.
 
 Defining your custom renderer
 -----------------------------
