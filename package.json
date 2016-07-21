@@ -15,7 +15,7 @@
     "test": "karma start --NODE_ENV=test",
     "build": "webpack --config webpack/webpack.build.js --NODE_ENV=production --display-error-details",
     "build-bootstrap": "webpack --config webpack/webpack.build-bootstrap.js --NODE_ENV=production --display-error-details",
-    "postinstall": "typings install",
+    "postinstall": "node_modules/.bin/typings install",
     "publish-patch": "npm -no-git-tag-version version patch && npm run commit-local && npm run push-tag && npm publish",
     "publish-minor": "npm -no-git-tag-version version minor && npm run commit-local && npm run push-tag && npm publish",
     "publish-major": "npm -no-git-tag-version version major && npm run commit-local && npm run push-tag && npm publish",
