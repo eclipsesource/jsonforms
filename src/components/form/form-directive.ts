@@ -3,7 +3,6 @@ let JsonRefs = require('json-refs');
 
 import {UiSchemaRegistry} from '../ng-services/uischemaregistry/uischemaregistry-service';
 import {ISchemaGenerator} from '../generators/generators';
-import {IUiSchemaProvider} from '../services/services';
 import {ValidationService} from '../services/services';
 import {ISchemaProvider, SchemaProvider} from '../services/services';
 import {ScopeProvider} from '../services/services';
@@ -29,10 +28,6 @@ export class FormController {
         return testMe !== undefined && testMe.hasOwnProperty('fetchData');
     }
 
-    private static isUiSchemaProvider(testMe: any): testMe is IUiSchemaProvider {
-        return testMe !== undefined && testMe.hasOwnProperty('fetchUiSchema');
-    }
-
     constructor(
         private rendererService: RendererService,
         private UISchemaRegistry: UiSchemaRegistry,
@@ -55,56 +50,56 @@ export class FormController {
 
         this.isInitialized = true;
 
-        let resolvedSchemaDeferred = this.$q.defer();
-        let resolvedUISchemaDeferred = this.$q.defer();
 
-        this.$q.all([this.fetchSchema(), this.fetchUiSchema()]).then((values) => {
-            let schema = values[0];
-            this.uiSchema = <IUISchemaElement>values[1];
-            resolvedSchemaDeferred.resolve(schema);
-            resolvedUISchemaDeferred.resolve(this.uiSchema);
-        });
+        // this.fetchData(this.scope.data)
+        //     .then(this.fetchSchema)
 
 
         this.$q.all([
-            resolvedSchemaDeferred.promise,
-            resolvedUISchemaDeferred.promise,
-            this.fetchData()]
-        ).then(values => {
+            this.fetchData(this.scope.data),
+            this.fetchSchema(this.scope.schema),
+            this.fetchUiSchema(this.scope.uischema)])
+            .then(values => {
 
-            let schema = values[0];
-            this.uiSchema = <IUISchemaElement> values[1];
-            let data = values[2];
+                let data     = values[0];
+                let schema   = values[1];
+                let uischema = <IUISchemaElement>values[2];
 
-            this.RootDataService.setData(data);
+                if (data == undefined) {
+                    throw new Error(`The 'data' attribute must be specified.`);
+                }
+                this.RootDataService.setData(data);
 
-            if (this.uiSchema === undefined) {
-                // resolve JSON schema, then generate ui Schema
-                this.uiSchema = this.UISchemaRegistry.getBestUiSchema(schema, data);
-            }
+                let s = schema === undefined ?
+                    this.SchemaGenerator.generateDefaultSchema(data) :
+                    schema;
 
-            let unresolvedRefs = JsonRefs.findRefs(schema);
-            if (_.size(unresolvedRefs) === 0) {
-                this.render(schema, data);
-            } else {
-                JsonRefs.resolveRefs(schema).then(
-                    res => {
-                        this.render(res.resolved, data);
-                        // needed for remote cases
-                        this.scope.$digest();
-                    },
-                    err => {
-                        console.log(err.stack);
-                    }
-                );
-            }
-        });
+                let u: IUISchemaElement = uischema === undefined ?
+                    this.UISchemaRegistry.getBestUiSchema(s, data) :
+                    uischema;
+
+                let unresolvedRefs = JsonRefs.findRefs(s);
+                if (_.size(unresolvedRefs) === 0) {
+                    this.render(s, data, u);
+                } else {
+                    JsonRefs.resolveRefs(s).then(
+                        res => {
+                            this.render(res.resolved, data, u);
+                            // needed for remote cases
+                            this.scope.$digest();
+                        },
+                        err => console.error(err.stack)
+                    );
+                }
+            });
     }
-    private render(schema: SchemaElement, data: any) {
+    private render(schema: SchemaElement, data: any, uischema: IUISchemaElement) {
         let dataProvider: IDataProvider;
         let services = new Services();
-        services.add(new ScopeProvider(this.scope));
+
         services.add(new SchemaProvider(schema));
+        services.add(new DefaultDataProvider(this.$q, data));
+        services.add(new ScopeProvider(this.scope));
         services.add(new ValidationService());
         services.add(new RuleService());
 
@@ -118,44 +113,46 @@ export class FormController {
 
         this.childScope = this.scope.$new();
         this.childScope['services'] = services;
-        this.childScope['uischema'] = this.uiSchema;
+        this.childScope['uischema'] = uischema;
         let template = this.rendererService.getBestComponent(
-            this.uiSchema, schema, dataProvider.getData());
+            uischema, schema, dataProvider.getData());
         let compiledTemplate = this.$compile(template)(this.childScope);
         angular.element(this.element.find('form')).append(compiledTemplate);
         this.scope.$root.$broadcast('jsonforms:change');
     }
 
-    private fetchSchema() {
-        if (typeof this.scope.schema === 'object') {
-            return this.$q.when(this.scope.schema);
-        } else if (this.scope.schema !== undefined) {
-            return this.scope.schema();
+    private fetchSchema(schema) {
+        // if (schema === undefined){
+        //     return this.$q.when(this.SchemaGenerator.generateDefaultSchema(data));
+        // } else
+        if(typeof schema === 'function'){
+            return this.$q.when(schema());
         } else {
-            return this.$q.when(this.SchemaGenerator.generateDefaultSchema(this.scope.data));
+            return this.$q.when(schema);
         }
     }
 
-    private fetchUiSchema() {
-
-        if (FormController.isUiSchemaProvider(this.scope.uischema)) {
-            return this.scope.uischema.getUiSchema();
-        } else if (typeof this.scope.uischema === 'object') {
-            return this.$q.when(this.scope.uischema);
+    private fetchUiSchema(uischema) {
+        // if (uischema === undefined){
+        //     return this.$q.when(this.UISchemaRegistry.getBestUiSchema(schema, data));
+        // } else
+        if (typeof uischema === 'function'){
+            return this.$q.when(uischema());
+        } else {
+            return this.$q.when(uischema);
         }
 
-        // if we return undefined the caller will generate a default UI schema
-        return this.$q.when(undefined);
     }
 
-    private fetchData() {
-        if (FormController.isDataProvider(this.scope.data)) {
-            return this.scope.data.fetchData();
-        } else if (typeof this.scope.data === 'object') {
-            return this.$q.when(this.scope.data);
+    private fetchData(data) {
+        // if (data === undefined){
+        //     throw new Error(`The 'data' attribute must be specified.`);
+        // } else
+        if (typeof data === 'function'){
+            return this.$q.when(data());
+        } else {
+            return this.$q.when(data);
         }
-
-        throw new Error(`The 'data' attribute must be specified.`);
     }
 }
 

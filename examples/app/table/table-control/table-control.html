@@ -1,0 +1,14 @@
+<jsonforms-control>
+    <table class="jsf-control-table" ng-show="vm.selectedElement === null">
+        <tr>
+            <th ng-repeat="prop in vm.shownProperties">{{prop}}</th>
+        </tr>
+        <tr ng-repeat="row in vm.itemsData" ng-click="vm.moreInfo(row)">
+            <td ng-repeat="prop in vm.shownProperties">{{row[prop]}}</td>
+        </tr>
+    </table>
+    <div class="jsf-control-table-detail" ng-if="vm.selectedElement !== null">
+        <i class="fa fa-arrow-left" ng-click="vm.backToTable()"></i>
+        <jsonforms schema="vm.itemSchema" data="vm.selectedElement" />
+    </div>
+</jsonforms-control>

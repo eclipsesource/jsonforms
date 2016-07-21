@@ -72,6 +72,19 @@ export class SchemaProvider implements ISchemaProvider {
         return this.schema;
     }
 }
+
+export class UiSchemaProvider implements IUiSchemaProvider {
+    constructor(private schema: IUISchemaElement){
+    }
+
+    getId(): ServiceId {
+        return ServiceId.UiSchemaProvider;
+    }
+
+    getUiSchema(): IUISchemaElement {
+        return this.schema;
+    }
+}
 export class ValidationService implements IValidationService {
 
     private validationResults = new HashTable();
@@ -134,7 +147,8 @@ export enum ServiceId {
     SchemaProvider,
     ScopeProvider,
     RuleService,
-    PathResolver
+    PathResolver,
+    UiSchemaProvider
 }
 
 export interface IService {

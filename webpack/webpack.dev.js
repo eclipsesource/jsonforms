@@ -33,7 +33,7 @@ module.exports = {
             'window.jquery': 'jquery'
         }),
         new CopyWebpackPlugin([
-            { 
+            {
                 from: 'src/jsonforms.css',
                 to:   'examples/assets/jsonforms.css'
             }

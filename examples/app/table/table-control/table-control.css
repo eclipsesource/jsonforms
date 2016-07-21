@@ -1,0 +1,38 @@
+.jsf-control-table {
+    border-collapse: collapse;
+    border: 1px solid green;
+    width: 100%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.jsf-control-table th, .jsf-control-table td {
+    border: 1px solid green;
+    padding: 5px;
+}
+
+.jsf-control-table th {
+    background-color: green;
+    color: white;
+}
+
+.jsf-control-table tr:hover {
+    background-color: #79bf36;
+    color: white;
+}
+
+.jsf-control-table-detail {
+    width: 100%;
+}
+
+.jsf-control-table-detail i {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 100px;
+    background-color: #79bf36;
+    color: white;
+    margin: 4px;
+
+}
