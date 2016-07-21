@@ -4,10 +4,10 @@ layout: doc
 CUSTOM RENDERER (TYPESCRIPT)
 ============================
 
-Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain places.
-This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *Typescript*. Please note that there is a separate guide that explains [how to create a custom renderer in an application that uses Javascript](#/docs/customrenderer).
+Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain situations.
+This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *Typescript*. Please note that there are separate guides for [ES5](#/docs/customrenderer) and ES6.
 
-In this guide, we will replace the default renderer for integer values
+In this guide, we will replace the default renderer for integer values (see schreenshot below)
 
 ![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive}
 
@@ -18,7 +18,7 @@ so that it will use a *rating control* as shown below instead.
 Running the Typescript seed project
 -----------------------------------
 
-To get started quickly, JSON Forms provides project seeds. In this guide, we will use this project seed for Typescript applications. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
+To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this Typescript seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-typescript-seed.git`
 * `npm start`
@@ -29,7 +29,7 @@ Once the dependencies are installed and the local server started, you should see
 
 The most important files in this project seed are the following:
 
-* `src/index.html` is the main HTML file and contains the JSONForms directive to render a form. The data as well as the data schema is obtained from `MyController`.
+* `src/index.html` is the main HTML file and contains the JSON Forms directive to render a form. The data as well as the data schema is obtained from `MyController`.
 * `src/schema.ts` contains the data schema.
 * `src/ui-schema.ts` contains the UI schema.
 * `src/app.ts` contains the implementation of `MyController`, which imports the data and UI schema in order to provide them to the JSON Forms directive in `src/index.html`. Moreover, this controller provides a simple data object.
@@ -150,7 +150,7 @@ Now, we can add the rating control to the `src/index.html` in order to test that
 When we run `npm install` and `npm start` again, we should now see the following:
 ![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive}
 
-As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `src/index.html`, as we just added it there to test `ui-bootstrap`.
+As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON Forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `src/index.html`, as we just added it there to test `ui-bootstrap`.
 
 Let us now add a new property to the data schema and add a new control for it in the UI schema. Therefore, we add the property `rating` of type `integer` with a maximum value of `5` to `src/schema.ts`.
 
@@ -253,7 +253,7 @@ class RatingControlDirective implements ng.IDirective {
       <uib-rating
         id="{{vm.id}}"
         readonly="vm.uiSchema.readOnly"
-        ng-model="vm.modelValue[vm.fragment]"
+        ng-model="vm.resolvedData[vm.fragment]"
         max="vm.max()"></uib-rating>
       </uib-rating>
     </jsonforms-control>`;
@@ -262,7 +262,7 @@ class RatingControlDirective implements ng.IDirective {
 }
 ```
 
-As you can see above, we created a new Angular directive, which provides a template and a controller. The template introduces the tag `jsonforms-control`, which contains the `uib-rating` tag from ui-bootstrap. As parameters of this tag, we use values provided from a controller `RatingControl`, which we still need to implement, but we can already see that we set the `readonly` flag as specified in the respective UI schema and bind the value of this control to a specific model value. Moreover, we configure the parameter `max`, which indicates the maximum number of stars a user may give in the control, to a value that is computed in a function of `RatingControl`.
+As you can see above, we created a new Angular directive, which provides a template and a controller. The template introduces the tag `jsonforms-control`, which contains the `uib-rating` tag from ui-bootstrap. As parameters of this tag, we use values provided from a controller `RatingControl`, which we still need to implement, but we can already see that we set the `readonly` flag as specified in the respective UI schema and bind the value of this control to a specific data value. Moreover, we configure the parameter `max`, which indicates the maximum number of stars a user may give in the control, to a value that is computed in a function of `RatingControl`.
 
 ### Provide a controller for the directive
 
@@ -301,7 +301,7 @@ Therefore, we first resolve the data schema element for which this renderer shou
 var schemaElement = PathResolver.resolveSchema(this.schema, this.schemaPath);
 ```
 
-Now, we can check whether `schemaElement` has a property `maximum`. If yes, we will return its value; otherwise, we return a default maximum value of `5`.
+Now, we can check whether `schemaElement` has a property `maximum`. If so, we will return its value; otherwise, we return a default maximum value of `5`.
 
 ### Register a new renderer that uses the created directive
 
@@ -320,7 +320,7 @@ export default angular
 ]).name;
 ```
 
-With this code, we tell Angular about our new directive `ratingControl` and register it at the `RendererService`. Therefore, we specify its name `rating-control` and define when it should be activated. For defining when the renderer should be activated, JSON Forms provides `Testers`. These testers checks whether the schema element is of type `integer` and the property name is `rating`. Thus, our new renderer will only be activated for one particular property.
+With this code, we tell Angular about our new directive `ratingControl` and register it at the `RendererService`. Therefore, we specify its name `rating-control`, which should correspond to the name in the template of the directive declaration, and define when our renderer should be activated. For defining when the renderer should be activated, JSON Forms provides `Testers`. These testers check whether the schema element is of type `integer` and the property name is `rating`. Thus, our new renderer will only be activated for one particular property.
 
 After we registered the new renderer, we can refresh the browser and should see our new renderer in action.
 
