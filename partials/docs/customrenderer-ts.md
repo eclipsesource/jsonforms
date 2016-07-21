@@ -126,6 +126,7 @@ To implement the rating control like below
 we use `ui-bootstrap`. Therefore, we first add the project dependency `"angular-ui-bootstrap": "1.3.3"` in `package.json` and import it in `src/index.ts` as follows:
 
 ```
+import "bootstrap/dist/css/bootstrap.css";
 import "angular-ui-bootstrap";
 import 'angular-ui-bootstrap/src/rating';
 ```
@@ -151,6 +152,82 @@ When we run `npm install` and `npm start` again, we should now see the following
 
 As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `src/index.html`, as we just added it there to test `ui-bootstrap`.
 
+Let us now add a new property to the data schema and add a new control for it in the UI schema. Therefore, we add the property `rating` of type `integer` with a maximum value of `5` to `src/schema.ts`.
+
+```
+export const Schema = {
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "integer",
+      "maximum": 5
+    },
+    "done": {
+      "type": "boolean"
+    }
+  },
+  "required": ["name"]
+}
+```
+
+In `src/ui-schema.ts`, we only have to add a new control for the property `rating` to the form.
+
+```
+export const UISchema = {
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "Name",
+      "scope": {
+        "$ref": "#/properties/name"
+      }
+    },
+    {
+      "type": "Control",
+      "label": "Description",
+      "scope": {
+        "$ref": "#/properties/description"
+      },
+      "options": {
+        "multi": true
+      }
+    },
+    {
+      "type": "Control",
+      "label": "Rating",
+      "scope": {
+        "$ref": "#/properties/rating"
+      },
+      "options": {
+        "multi": true
+      }
+    },
+    {
+      "type": "Control",
+      "label": "Done?",
+      "scope": {
+        "$ref": "#/properties/done"
+      }
+    }
+  ]
+}
+```
+
+The default renderer will now show an integer text field for the property `rating`.
+
+![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive}
+
+In the next section, we will add a custom renderer to change this text field with a more appropriate control for assigning a rating.
+
+![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
+
 Defining your custom renderer
 -----------------------------
 
@@ -160,7 +237,7 @@ To create a custom renderer, we have to do three steps.
 2. Provide a controller for the directive
 3. Register a new renderer that uses the created directive
 
-Let us create the new Typescript file `src/rating-control.ts` that will contain those three things mentioned above and import it in `src/index.ts` by adding `import "./rating-control.ts"`.
+Let us create the new Typescript file `src/rating-control.ts` that will contain those three things mentioned above and import it in `src/index.ts` by adding `import "./rating-control.ts";`.
 
 ### Create an Angular directive
 
@@ -232,7 +309,7 @@ Finally, the only thing that is left to do is to register the created directive 
 
 ```
 export default angular
-  .module('my', ['jsonforms.renderers.controls'])
+  .module('app')
   .directive('ratingControl', () => new RatingControlDirective())
   .run(['RendererService', RendererService =>
   RendererService.register('rating-control',
@@ -248,3 +325,5 @@ With this code, we tell Angular about our new directive `ratingControl` and regi
 After we registered the new renderer, we can refresh the browser and should see our new renderer in action.
 
 ![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive}
+
+You can checkout the final state of the code of this tutorial at [https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control](https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control).
