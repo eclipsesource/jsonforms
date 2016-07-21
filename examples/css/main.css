@@ -101,6 +101,11 @@ body {
 
 .panel > .panel-body {
     background: #0C2339 none;
+    color: white;
+}
+
+.panel > .panel-body button {
+    color: black;
 }
 
 * {
@@ -150,7 +155,6 @@ body {
 .jsf-vertical-layout {
     background-color: #0C2339;
     color: white;
-    border: 1px solid #337AB7;
     padding-top: 5px;
 }
 
