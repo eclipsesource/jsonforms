@@ -225,7 +225,7 @@ button.main-nav-button{
     font-family: 'Roboto',sans-serif;
 }
 .mainLogo:after{
-    background-image: url("../images/jsonforms-logo-white-release.svg");
+    background-image: url("../images/jsonforms-logo-white.svg");
     background-position: top center;
     background-repeat: no-repeat;
     content: '';
