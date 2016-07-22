@@ -21,6 +21,7 @@ Running the Typescript seed project
 To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this Typescript seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-typescript-seed.git`
+* `npm install` 
 * `npm start`
 
 Once the dependencies are installed and the local server started, you should see the following web page at [localhost:8080](http://localhost:8080).
@@ -34,7 +35,7 @@ The most important files in this project seed are the following:
 * `src/ui-schema.ts` contains the UI schema.
 * `src/app.ts` contains the implementation of `MyController`, which imports the data and UI schema in order to provide them to the JSON Forms directive in `src/index.html`. Moreover, this controller provides a simple data object.
 
-Having a closer look at `src/index.html`, we see that `MyController` to provide the input to the JSON Forms directive in order to render a form for the data object and the data schema.
+Having a closer look at `src/index.html`, we see that `MyController` provides the input to the JSON Forms directive in order to render a form for the data object and the data schema.
 
 The data schema in `src/schema.ts` defines three properties: `name` and `description` of type `string`, as well as `done` of type `boolean`.
 
@@ -204,9 +205,6 @@ export const UISchema = {
       "label": "Rating",
       "scope": {
         "$ref": "#/properties/rating"
-      },
-      "options": {
-        "multi": true
       }
     },
     {
@@ -239,12 +237,17 @@ To create a custom renderer, we have to do three steps.
 
 Let us create the new Typescript file `src/rating-control.ts` that will contain those three things mentioned above and import it in `src/index.ts` by adding `import "./rating-control.ts";`.
 
+```
+import './app';
+import "./rating-control";
+
+```
+
 ### Create an Angular directive
 
 In order to create an Angular directive, we add the code below to `src/rating-control.ts`.
 
 ```
-import "jsonforms";
 import {AbstractControl, Testers, schemaTypeIs, schemaPropertyName, PathResolver} from "jsonforms";
 
 class RatingControlDirective implements ng.IDirective {
@@ -276,9 +279,8 @@ class RatingControl extends AbstractControl {
   }
 
   max(): number {
-    var schemaElement = PathResolver.resolveSchema(this.schema, this.schemaPath);
-    if (schemaElement['maximum'] !== undefined) {
-      return <number>schemaElement['maximum'];
+    if (resolvedSchema['maximum'] !== undefined) {
+      return <number>resolvedSchema['maximum'];
     } else {
       return 5;
     }
@@ -295,20 +297,17 @@ The `RatingControl` subclasses `AbstractControl`, a class in JSON Forms providin
 }
 ```
 
-Therefore, we first resolve the data schema element for which this renderer should render a UI control. As we subclassed `AbstractControl`, we may access the current schema using `this.schema` and the path to the current element in this schema using `this.schemaPath`. To resolve the actual schema element, we use the `PathResolver`, a helper class of JSON Forms, to resolve the actual schema element from the current schema.
 
-```
-var schemaElement = PathResolver.resolveSchema(this.schema, this.schemaPath);
-```
+ As we subclassed `AbstractControl`, we can retrieved the respective schema element with the `resolvedSchema` property. 
 
-Now, we can check whether `schemaElement` has a property `maximum`. If so, we will return its value; otherwise, we return a default maximum value of `5`.
+We then check whether the `resolvedSchema` has a property `maximum`. If so, we will return its value; otherwise, we return a default maximum value of `5`.
 
 ### Register a new renderer that uses the created directive
 
 Finally, the only thing that is left to do is to register the created directive and specify when we want to use our custom renderer. Therefore, we add the following code to `src/rating-control.ts`.
 
 ```
-export default angular
+angular
   .module('app')
   .directive('ratingControl', () => new RatingControlDirective())
   .run(['RendererService', RendererService =>
@@ -317,7 +316,7 @@ export default angular
       schemaTypeIs('integer'),
       schemaPropertyName('rating')
       ), 101)
-]).name;
+]);
 ```
 
 With this code, we tell Angular about our new directive `ratingControl` and register it at the `RendererService`. Therefore, we specify its name `rating-control`, which should correspond to the name in the template of the directive declaration, and define when our renderer should be activated. For defining when the renderer should be activated, JSON Forms provides `Testers`. These testers check whether the schema element is of type `integer` and the property name is `rating`. Thus, our new renderer will only be activated for one particular property.
