@@ -125,24 +125,7 @@ Preparations for creating the custom rating control
 
 To implement the rating control like below
 ![Custom Rating Control](./images/docs/customrenderer.ts.preview.png){:.img-responsive}
-we use `ui-bootstrap`. Therefore, we need to execute the following command and import the library into the file `src/app.js` as shown below:
-
-* `npm install --save angular-ui-bootstrap file-loader`
-
-```
-import "bootstrap/dist/css/bootstrap.css";
-import "angular-ui-bootstrap";
-import 'angular-ui-bootstrap/src/rating';
-```
-
-Moreover, we have to import the module `ui.bootstrap` in `src/init.js`:
-
-```
-import angular from 'angular';
-angular.module('jsonforms-seed', ['jsonforms', 'ui.bootstrap']);
-```
-
-Now, we can add the rating control to the `src/index.html` in order to test that we have all dependencies. Let us put the following tag into `index.html`:
+we use `ui-bootstrap`. We can add the rating control to the `src/index.html` in order to test that we have all dependencies. Let us put the following tag into `index.html`:
 
 ```
 <body ng-controller="MyController">
@@ -151,7 +134,7 @@ Now, we can add the rating control to the `src/index.html` in order to test that
 </body>
 ```
 
-When we run `npm install` and `npm start` again, we should now see the following:
+We should now see the following:
 ![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive}
 
 As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON Forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `src/index.html`, as we just added it there to test `ui-bootstrap`.
