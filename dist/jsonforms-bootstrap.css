@@ -1,0 +1,31 @@
+.jsf-masterdetail{}
+.jsf .jsf-masterdetail .panel-body {
+  padding-bottom: 0;
+}
+.jsf .jsf-masterdetail .panel-group {
+  margin-bottom: 5px;
+}
+
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-body {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-heading + .panel-collapse .panel-body {
+    border-width: 0;
+}
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-group {
+  margin-bottom: 0;
+  border-width: 0;
+}
+.jsf-masterdetail-selected {
+    font-weight: bold;
+}
+
+.jsf-masterdetail-property {
+    font-style: italic;
+    color:#888888;
+}
+
+.jsf-masterdetail-header {
+    text-decoration: none;
+}
