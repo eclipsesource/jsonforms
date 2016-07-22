@@ -55,7 +55,7 @@ a {
     padding-top: 80px;
 }
 .l-offset-docs-nav {
-    padding-left: 260px;
+    padding-left: 350px;
 }
 .l-pinned-left {
     position: fixed;
@@ -301,7 +301,7 @@ footer a:hover{
 }
 .docs-nav {
     background-color: #4E9AD9;
-    width: 200px;
+    width: 320px;
     /*box-shadow: 1px 1px 4px 3px darkgrey;*/
 }
 .docs-nav-header {
@@ -346,6 +346,48 @@ button.docs-nav-button {
     right: 8px;
 	display: none;
 }
+.docs-support-panel {
+    background-color: #4E9AD9;
+    width: 320px;
+    height: 100%;
+}
+.docs-support-panel h1 {
+  text-align: center;
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 1.7em;
+  color: #fff;
+  font-weight: bold;
+}
+.docs-support-panel p {
+  text-align: center;
+  padding: 0.5em 0.5em 1em 1em;
+  font-size: 1.3em;
+  color: #fff;
+}
+.docs-support-panel p a {
+  font-weight: bold;
+  color: #fff;
+}
+.docs-support-panel p a:hover {
+  font-weight: bold;
+  color: #004D91;
+}
+.docs-support-panel div.docs-support-text {
+  position: fixed;
+}
+.docs-support-panel div.docs-support-text .docs-support-icon {
+  margin-left: 3.5em;
+  margin-right: 3em;
+  margin-top: 0.1em;
+  padding: 0em;
+  margin-bottom: 0;
+}
+.docs-support-panel div.docs-support-text .docs-support-icon a {
+  color: #fff;
+  font-size: 400%;
+  font-weight: bolder;
+}
 .text-content {
     margin-right: 4em;
     line-height: 1.7;
@@ -389,6 +431,9 @@ pre {
         display: block;
     }
     .docs-menu {
+        display: none;
+    }
+    .docs-support-panel{
         display: none;
     }
 }

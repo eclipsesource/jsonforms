@@ -418,4 +418,10 @@ angular.module('jsonforms-website', [
                 };
             }
         };
-    }]);
+    }])
+    .directive('supportPanel', function() {
+        return {
+            restrict: 'E',
+            templateUrl: 'partials/docs/support_panel.html'
+        };
+    });
