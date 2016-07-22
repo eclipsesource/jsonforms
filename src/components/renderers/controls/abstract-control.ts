@@ -14,6 +14,7 @@ export class AbstractControl implements IRuleServiceCallBack {
     public hide: boolean;
     protected schemaPath: string;
     protected resolvedData: any;
+    protected resolvedSchema: SchemaElement;
     protected fragment: string;
     protected uiSchema: IControlObject;
     protected schema: SchemaElement;
@@ -30,6 +31,7 @@ export class AbstractControl implements IRuleServiceCallBack {
         this.schemaPath = PathUtil.filterIndexes(indexedSchemaPath);
         this.fragment = PathResolver.lastFragment(this.uiSchema.scope.$ref);
         this.resolvedData = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
+        this.resolvedSchema = PathResolver.resolveSchema(this.schema, this.schemaPath);
 
         this.scope.$on('jsonforms:change', () => {
             // TODO: remote references to services
