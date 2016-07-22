@@ -87,7 +87,8 @@ A `enum` property within a JSON schema will be rendered with a dropdown
 
 ```
 
-
+The rendered form looks as follows:
+![Rendered enum control](./images/docs/uischema.control.enum.png){:.img-responsive}
 
 
 ## Array controls
