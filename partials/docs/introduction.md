@@ -24,6 +24,10 @@ For the declarative description of a form, JSON forms uses a simple JSON format,
 
 ![JSON Forms Editor](images/docs/introduction.jsonformseditor.png){:.img-responsive}
 
-JSON Forms provides default renderers for all data types, however, you can change the way things are rendered by providing [custom renderers](#/docs/customrenderer). In the following example, the attribute "done" is rendered with a custom renderer, which is plugged into the framework. As you can see, the boolean value is not displayed as a checkbox anymore, but rather, using radio buttons. By plugging in custom renderers, you can adapt the UI created by JSON Forms to your requirements and also support domain specific data types and visualizations.
+JSON Forms provides default renderers for all data types, however, you can change the way things are rendered by providing [custom renderers](#/docs/customrenderer). Consider, for instance, you want to add a new property called "rating" of type integer with a maximum value of 5 to the data schema of our example above and also add a control for it below the description control in the UI schema. The default renderer will produce a form that looks as follows:
 
-![JSON Forms](images/docs/introduction.jsonforms.png){:.img-responsive}
+![JSON Forms with Default Renderer](images/docs/introduction.jsonforms.png){:.img-responsive}
+
+A plain text box for entering a rating may not be ideal for all scenarios. Therefore JSON Forms allows you to create a custom renderer, which can be plugged into the framework. With such a custom renderer, the integer value is not displayed as a text box anymore, but rather, using a more appealing control that allows users to set the rating by selecting the number of stars they want to assign (see screenshot below). By plugging in custom renderers, you can adapt the UI created by JSON Forms to your requirements and also support domain specific data types and visualizations.
+
+![JSON Forms with Custom Renderer](images/docs/introduction.jsonformscustom.png){:.img-responsive}
