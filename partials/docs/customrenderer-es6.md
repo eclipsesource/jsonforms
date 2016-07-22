@@ -23,6 +23,7 @@ Running the ES6 seed project
 To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this ES6 seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-es6-seed.git`
+* `cd jsonforms-es6-seed`
 * `npm install`
 * `npm start`
 
