@@ -67,6 +67,29 @@ only available for certain renderers. Those options should be put
 into a `options` property. We'll describe all available `options` in
 the following section. 
 
+## Enum controls
+A `enum` property within a JSON schema will be rendered with a dropdown
+ menu by default. Here's an example schema and UI schema:
+
+```
+   var schema = {
+         'properties': {
+             'some': {
+                 'type': 'string',
+                 'enum': ['foo', 'bar']
+             }
+         }
+   };
+   var uischema = {
+         'type': 'Control', 
+         'scope': {'$ref': '#/properties/some'}
+   };
+
+```
+
+
+
+
 ## Array controls
 Controls binding to arrays support different types of rendering modes.
 We'll use the following schema an UI schema to demonstrate the different modes:
@@ -130,3 +153,4 @@ data = {
 ```
 
 ![Array control with simple option set](./images/docs/uischema.control.array.simple.png){:.img-responsive}
+
