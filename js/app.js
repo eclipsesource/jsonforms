@@ -318,6 +318,10 @@ angular.module('jsonforms-website', [
                     url: '/customrenderer-ts',
                     templateUrl: 'partials/docs/customrenderer-ts.html'
                 })
+                .state('docs.uischema', {
+                    url: '/uischema',
+                    templateUrl: 'partials/docs/uischema.html'
+                })
                 .state('support', {
                     url: '/support',
                     templateUrl: 'partials/support.html'
