@@ -1,14 +1,13 @@
 ---
 layout: doc
 ---
-CUSTOM RENDERER (ES 5)
-============================
+CUSTOM RENDERER TUTORIAL (ES 5)
+===============================
 
 Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain places.
 This can be done by registering a custom renderer that produces a different UI control.
 On this page, you will learn how to create and register a custom renderer in an application that uses *Javascript (ES 5)*.
-Please note that there are a separate guides that explains how to create custom renderers in either
-[Javascript ES 6](#/docs/customrenderer-es6) and [Typescript](#/docs.customrenderer-ts).
+Please note that there are separate guides for [Javascript ES5](#/docs/customrenderer-es6) and [Typescript](#/docs/customrenderer-ts).
 
 In this guide, we will replace the default renderer for integer values
 

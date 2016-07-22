@@ -1,11 +1,11 @@
 ---
 layout: doc
 ---
-CUSTOM RENDERER (TYPESCRIPT)
-============================
+CUSTOM RENDERER TUTORIAL (TYPESCRIPT)
+=====================================
 
 Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain situations.
-This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *Typescript*. Please note that there are separate guides for [ES5](#/docs/customrenderer) and ES6.
+This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *Typescript*. Please note that there are separate guides for Javascript [ES5](#/docs/customrenderer-es5) and [ES6](#/docs/customrenderer-es6).
 
 In this guide, we will replace the default renderer for integer values (see schreenshot below)
 
@@ -21,7 +21,7 @@ Running the Typescript seed project
 To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this Typescript seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-typescript-seed.git`
-* `npm install` 
+* `npm install`
 * `npm start`
 
 Once the dependencies are installed and the local server started, you should see the following web page at [localhost:8080](http://localhost:8080).
@@ -298,7 +298,7 @@ The `RatingControl` subclasses `AbstractControl`, a class in JSON Forms providin
 ```
 
 
- As we subclassed `AbstractControl`, we can retrieved the respective schema element with the `resolvedSchema` property. 
+ As we subclassed `AbstractControl`, we can retrieved the respective schema element with the `resolvedSchema` property.
 
 We then check whether the `resolvedSchema` has a property `maximum`. If so, we will return its value; otherwise, we return a default maximum value of `5`.
 
