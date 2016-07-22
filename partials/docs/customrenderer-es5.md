@@ -17,7 +17,7 @@ so that it will use a *rating control* as shown below instead.
 
 ![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
 
-This tutorial is based on the "Make it happen" application. Please refer to the [tutorial setup guide](#/docs.setup), to learn how to set it up.
+This tutorial is based on the "Make it happen" application. Please refer to the [tutorial setup guide](#/docs/setup), to learn how to set it up.
 In the "Make it happen" example, we provide two states, the *initial* and the *final* state, which are located in the repository in `app/initial` and `app/final`, respectively. Thus, when we refer to files, such as `index.html`, we actually refer to `app/initial/index.html`.
 
 Preparations for creating the custom rating control
