@@ -15,7 +15,7 @@ UI schema elements.
 The most important UI schema element is `Control`. A `Control` is
 specified with the `Control` value.
 
-#### Scope
+### Scope
 Furthermore, it must specify a `scope` property, which tells the
 `Control` to which property of the JSON schema it should bind.
 
@@ -45,7 +45,7 @@ You can read more about `$refs` [here](https://spacetelescope.github.io/understa
 In the example above, we want the control to bind against the single `name`
 property. Below is an example of a rendered control.
 
-![Basic control](./images/docs/uischema.control.png){:.img-responsive}
+![Basic control](./images/docs/uischema.control.png){:.img-responsive .docimg}
 
 ### Read-only
 
@@ -59,7 +59,7 @@ var uiSchema = {
 };
 ```
 
-![Control with Read-only enabled](./images/docs/uischema.control-readonly.png){:.img-responsive}
+![Control with Read-only enabled](./images/docs/uischema.control-readonly.png){:.img-responsive .docimg}
 
 
 ### Options
@@ -89,7 +89,7 @@ A `enum` property within a JSON schema will be rendered with a dropdown
 ```
 
 The rendered form looks as follows:
-![Rendered enum control](./images/docs/uischema.control.enum.png){:.img-responsive}
+![Rendered enum control](./images/docs/uischema.control.enum.png){:.img-responsive .docimg}
 
 
 ## Array controls
@@ -117,7 +117,7 @@ var uischema = {
 ```
 
 The rendered result is displayed below:
-![Rendered array control](./images/docs/uischema.control.array.png){:.img-responsive}
+![Rendered array control](./images/docs/uischema.control.array.png){:.img-responsive .docimg}
 
 The default renderer supports a couple of `options`. The `submit` property
 disables adding new entries to an array.
@@ -133,7 +133,7 @@ var uischema = {
 
 ```
 
-![Array control without submit option](./images/docs/uischema.control.array.nosubmit.png){:.img-responsive}
+![Array control without submit option](./images/docs/uischema.control.array.nosubmit.png){:.img-responsive .docimg}
 
 The `simple` option can be used to display a very simple view of all entries
 which does not allow submitting additional entries (so the `submit `option has no
@@ -152,4 +152,4 @@ data = {
   }
 ```
 
-![Array control with simple option set](./images/docs/uischema.control.array.simple.png){:.img-responsive}
+![Array control with simple option set](./images/docs/uischema.control.array.simple.png){:.img-responsive .docimg}

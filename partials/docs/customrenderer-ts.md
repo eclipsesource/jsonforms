@@ -9,11 +9,11 @@ This can be done by registering a custom renderer that produces a different UI c
 
 In this guide, we will replace the default renderer for integer values (see schreenshot below)
 
-![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive}
+![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive .docimg}
 
 so that it will use a *rating control* as shown below instead.
 
-![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
+![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive .docimg}
 
 Running the Typescript seed project
 -----------------------------------
@@ -27,7 +27,7 @@ To get started quickly, JSON Forms provides project seeds of different flavors. 
 
 Once the dependencies are installed and the local server started, you should see the following web page at [localhost:8080](http://localhost:8080).
 
-![Initial form](images/docs/customrenderer.ts.initialform.png){:.img-responsive}
+![Initial form](images/docs/customrenderer.ts.initialform.png){:.img-responsive .docimg}
 
 The most important files in this project seed are the following:
 
@@ -125,7 +125,7 @@ Preparations for creating the custom rating control
 
 
 To implement the rating control like below
-![Custom Rating Control](./images/docs/customrenderer.ts.preview.png){:.img-responsive}
+![Custom Rating Control](./images/docs/customrenderer.ts.preview.png){:.img-responsive .docimg}
 we use `ui-bootstrap`. We can add the rating control to the `src/index.html` in order to test that we have all dependencies. Let us put the following tag into `index.html`:
 
 ```
@@ -136,7 +136,7 @@ we use `ui-bootstrap`. We can add the rating control to the `src/index.html` in 
 ```
 
 Now we should now see the following:
-![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive}
+![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive .docimg}
 
 As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON Forms renderer. But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `src/index.html`, as we just added it there to test `ui-bootstrap`.
 
@@ -207,11 +207,11 @@ export const UISchema = {
 
 The default renderer will now show an integer text field for the property `rating`.
 
-![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive}
+![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive .docimg}
 
 In the next section, we will add a custom renderer to change this text field with a more appropriate control for assigning a rating.
 
-![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
+![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive .docimg}
 
 Defining your custom renderer
 -----------------------------
@@ -310,6 +310,6 @@ With this code, we tell Angular about our new directive `ratingControl` and regi
 
 After we registered the new renderer, we can refresh the browser and should see our new renderer in action.
 
-![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive}
+![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive .docimg}
 
 You can checkout the final state of the code of this tutorial at [https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control](https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control).

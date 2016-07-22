@@ -11,11 +11,11 @@ Please note that there are separate guides for [Javascript ES6](#/docs/customren
 
 In this guide, we will replace the default renderer for integer values
 
-![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive}
+![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive .docimg}
 
 so that it will use a *rating control* as shown below instead.
 
-![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
+![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive .docimg}
 
 This tutorial is based on the "Make it happen" application. Please refer to the [tutorial setup guide](#/docs/setup), to learn how to set it up.
 In the "Make it happen" example, we provide two states, the *initial* and the *final* state, which are located in the repository in `app/initial` and `app/final`, respectively. Thus, when we refer to files, such as `index.html`, we actually refer to `app/initial/index.html`.
@@ -24,7 +24,7 @@ Preparations for creating the custom rating control
 ---------------------------------------------------
 
 To implement the rating control like below
-![Custom Rating Control](./images/docs/customrenderer.ts.preview.png){:.img-responsive}
+![Custom Rating Control](./images/docs/customrenderer.ts.preview.png){:.img-responsive .docimg}
 we use `ui-bootstrap`. Therefore, we first add the project dependency `"angular-ui-bootstrap": "1.3.3"` in `package.json` and add it in `index.html` as follows:
 
 ```
@@ -48,7 +48,7 @@ Now, we can add the rating control to the `index.html` in order to test that we 
 ```
 
 When we run `npm install` and `npm start initial` again, we should now see the following:
-![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive}
+![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive .docimg}
 
 As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON forms renderer.
 But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `index.html`, as we just added it there to test `ui-bootstrap`.
@@ -123,11 +123,11 @@ angular.module('MiHexample').value("UISchema", {
 
 The default renderer will now show an integer text field for the property `rating`.
 
-![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive}
+![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive .docimg}
 
 In the next section, we will add a custom renderer to change this text field with a more appropriate control for assigning a rating.
 
-![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
+![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive .docimg}
 
 Defining your custom renderer
 -----------------------------
@@ -244,7 +244,7 @@ These testers checks whether the schema element is of type `integer` and the pro
 
 After we registered the new renderer, we can refresh the browser and should see our new renderer in action.
 
-![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive}
+![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive .docimg}
 
 For reference, here is the complete listing for the `rating.controller.js` file:
 

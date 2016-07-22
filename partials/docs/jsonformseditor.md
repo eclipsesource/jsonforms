@@ -18,11 +18,11 @@ When you open the editor, you can select where to get the data schema from.
 - **GitHub**: Retrieve an existing data and UI schema from a GitHub repository
 - **URL**: Retrieve an existing data schema from a URL
 
-![Dialog for new data schema](images/docs/jsonformseditor.newschema.png){:.img-responsive}
+![Dialog for new data schema](images/docs/jsonformseditor.newschema.png){:.img-responsive .docimg}
 
 Once you have selected a data schema to start with, you will see the main page of the JSON Forms Editor as shown in the following screenshot. If you have selected to start with an empty schema, there will be no properties in the “controls” section. Please see below for a detailed description of the areas in the JSON Forms user interface.
 
-![Dialog for new data schema](images/docs/jsonformseditor.editoroverview.png){:.img-responsive}
+![Dialog for new data schema](images/docs/jsonformseditor.editoroverview.png){:.img-responsive .docimg}
 
 *1.* Controls Toolbox
 ---------------------
@@ -54,7 +54,7 @@ By selecting an element in the UI schema, you can modify its details in the prop
 
 The UI schema shows a structural overview of the current form under design. If you want to see how the current form would be rendered by the default renderers, click "Preview". The preview shows a fully functional form. Thus, it behaves just like the form that you will embed into your application, including visibility rules and validation (see following screenshot). By using the "detach" action at the lower right-hand side area, you can create a dedicated preview window to be used in parallel to the editor (e.g. on a second screen).
 
-![Preview of a UI Schema](images/docs/jsonformseditor.preview.png){:.img-responsive}
+![Preview of a UI Schema](images/docs/jsonformseditor.preview.png){:.img-responsive .docimg}
 
 *5.* Export
 -----------

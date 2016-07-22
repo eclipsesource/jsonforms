@@ -402,3 +402,9 @@ pre {
     line-height: 1.0;
     max-width:800px;
 }
+
+.docimg {
+  outline: 1px solid #4e9ad9;
+  padding: 1em 1em 1em 1em;
+  box-shadow: 0 0 10px #4e9ad9;
+}
