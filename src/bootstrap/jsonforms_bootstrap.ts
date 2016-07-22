@@ -1,8 +1,6 @@
 import 'angular';
 
-import core from '../index';
-
-import '../../jsf-bootstrap.css';
+import './jsf-bootstrap.css';
 import datetimeControlDirective from './controls/datetime/datetime-directive';
 import booleanControlDirective from './controls/boolean/boolean-directive';
 import controlDirective from './controls/bootstrap-controls-directive';
@@ -15,8 +13,7 @@ import groupLayoutDirective from './layouts/group/group-directive';
 require('angular-ui-bootstrap');
 require('angular-ui-bootstrap/dist/ui-bootstrap-csp.css');
 
-angular.module('jsonforms-bootstrap', [
-    core,
+export default angular.module('jsonforms-bootstrap', [
     'ui.bootstrap',
     datetimeControlDirective,
     booleanControlDirective,
@@ -26,4 +23,4 @@ angular.module('jsonforms-bootstrap', [
     horizontalLayoutDirective,
     groupLayoutDirective,
     masterDetailDirectives
-]);
+]).name;

@@ -1,6 +1,4 @@
 import {AbstractControl, Testers, uiTypeIs, schemaTypeMatches} from '../abstract-control';
-import {SchemaElement} from '../../../../jsonschema';
-import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 
 class EnumDirective implements ng.IDirective {
     restrict = 'E';
@@ -21,16 +19,13 @@ interface EnumControllerScope extends ng.IScope {
 }
 
 class EnumController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
-    private subSchema: SchemaElement;
+    static $inject = ['$scope'];
     constructor(scope: EnumControllerScope) {
         super(scope);
-        this.subSchema = PathResolver.resolveSchema(this.schema,
-            this.uiSchema['scope']['$ref']);
     }
 
     private get options(){
-        return this.subSchema.enum;
+        return this.resolvedSchema.enum;
     }
 }
 
