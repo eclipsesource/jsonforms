@@ -1,6 +1,4 @@
 
-import * as angular from 'angular';
-
 import {PathResolver} from '../../services/pathresolver/jsonforms-pathresolver';
 
 export default angular
