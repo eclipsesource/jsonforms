@@ -94,7 +94,7 @@ export const UISchema = {
 }
 ```
 
-Finally, `src/app.js` imports the schemata and introduces a data object, which are provided as fields `schema`, `uischema`, and `data`.
+Finally, `src/app.js` imports the schemata and introduces a data object, which are provided as fields `schema`, `uiSchema`, and `data`.
 
 ```Javascript
 import './init';
@@ -211,9 +211,6 @@ export default {
       "label": "Rating",
       "scope": {
         "$ref": "#/properties/rating"
-      },
-      "options": {
-        "multi": true
       }
     },
     {
@@ -244,7 +241,7 @@ To create a custom renderer, we have to do three steps.
 2. Provide a controller for the directive
 3. Register a new renderer that uses the created directive
 
-Let us create the new Typescript file `src/rating-control.js` that will contain those three things mentioned above and import it in `src/app.js` by adding `import "./rating-control.js";`.
+Let us create the new Javascript file `src/rating-control.js` that will contain those three things mentioned above and import it in `src/app.js` by adding `import "./rating-control.js";`.
 
 ### Create an Angular directive
 
