@@ -6,7 +6,7 @@ THE JSON FORMS EDITOR
 
 To make using JSON Forms even simpler, JSON Forms provides an online editor for easily creating data schemata and UI schemata. Instead of writing those schemata manually in a text editor, the JSON Forms Editor allows you to define data schemata and UI schemata in a simple user interface and export the JSON representation of the schemata, ready to be used in a JSON Forms application. Of course, you can also import existing schemata from their JSON representation and modify them using the JSON Forms Editor. Thus, you can also use existing data schemata, import them into the editor, and only create a UI schema for an existing data schema.
 
-We provide running [online test instance of the JSON Forms editor](https://jsonforms-editor.herokuapp.com). If you are interested in custom hosting, please contact us.
+We provide a running [online test instance of the JSON Forms editor](https://jsonforms-editor.herokuapp.com). If you are interested in custom hosting, please contact us.
 
 Overview
 --------

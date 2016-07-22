@@ -4,7 +4,7 @@ layout: doc
 DEFINE YOUR FIRST FORM
 ======================
 
-In this first part of the tutorial, we describe how to create a simple form from scratch using JSON Forms. For the tutorial, we use the [JSON Forms Editor](#/docs/jsonformseditor) for creating the data schema and the UI schema. Note that this could also be done by manually writing the underlying JSON files. Therefore, we always show both representations in the course of this tutorial. This section describes how to create the initial state of our example application. If you haven’t set up your environment and obtained the example code yet, please refer to the [tutorial setup guide](#/docs/setup).
+In this first part of the tutorial, we describe how to create a simple form from scratch using JSON Forms. For the tutorial, we use the [JSON Forms Editor](https://jsonforms-editor.herokuapp.com) for creating the data schema and the UI schema. Please confer the [JSON Forms Editor documentation](#/docs/jsonformseditor) for more information. Note that this could also be done by manually writing the underlying JSON files. Therefore, we always show both representations in the course of this tutorial. This section describes how to create the initial state of our example application. If you haven’t set up your environment and obtained the example code yet, please refer to the [tutorial setup guide](#/docs/setup).
 
 The example used along this tutorial is called "Make It Happen" and creates a simple task tracker. The first goal is to create a form for entering "Tasks". This form contains three input fields as shown in the following screenshot. As you can see, the form has one simple String control called "Name", a multi-line String control called "Description" and a Boolean checkbox control indicating whether the task is done.
 
@@ -164,3 +164,5 @@ angular.module('MiHexample', ['jsonforms-bootstrap'])
     </body>
 </html>
 ```
+
+Now you are able to create forms and integrate them into your web application. We recommend you to continue with the section [Custom Renderer](#/docs/customrenderer), which explains how you can customize and extend the default look and feel of your forms.

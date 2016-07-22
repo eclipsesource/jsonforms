@@ -17,7 +17,7 @@ To run one of the two states, first execute `npm install` in the root directory,
 After that, execute one of the following commands to run the initial state or the final state, respectively.
 
 * `npm run initial` to run the initial state of the example application
-* `npm run final` to run the initial state of the example application
+* `npm run final` to run the final state of the example application
 
 Once you have started one of the two states of the example app, you can see the result in your browser using at [http://localhost:8123/](http://localhost:8123/).
 

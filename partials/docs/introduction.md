@@ -20,7 +20,7 @@ Based on those two schemata, the rendering component of JSON Forms produces the 
 
 Please follow the section [Define your first form](#/docs/firstform) to learn the simple steps necessary for producing such as form.
 
-For the declarative description of a form, JSON forms uses a simple JSON format, which can be created using any editor of choice. However, JSON Forms also provides advanced tooling for creating and modifying UI schemata including a tree-based editor and a live preview. Please see this section to learn more about the editor.
+For the declarative description of a form, JSON forms uses a simple JSON format, which can be created using any editor of choice. However, JSON Forms also provides advanced tooling for creating and modifying UI schemata including a tree-based editor and a live preview. Please confer to the [JSON Forms Editor documentation](#/docs/jsonformseditor) to learn more about the editor.
 
 ![JSON Forms Editor](images/docs/introduction.jsonformseditor.png){:.img-responsive .docimg}
 
