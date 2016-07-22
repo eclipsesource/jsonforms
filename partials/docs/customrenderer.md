@@ -111,4 +111,4 @@ In the example ```integerControl``` [is the same as](https://docs.angularjs.org/
 This is all we need to know for the integer renderer.
 You can see all the snippets in action [the integer directive in JSON Forms](https://github.com/eclipsesource/jsonforms/blob/master/src/components/renderers/controls/integer/integer-directive.ts).
 
-Being equipped with the general knowledge on the architecture of renderers in JSON Forms, a great next step is to look at the tutorials on [implementing a custom renderer in Typescript](#/docs.customrenderer-ts), [in Javascript ES5](#/docs/customrenderer-es5), or [in Javascript ES6](#/docs/customrenderer-es6).
+Being equipped with the general knowledge on the architecture of renderers in JSON Forms, a great next step is to look at the tutorials on [implementing a custom renderer in Typescript](#/docs/customrenderer-ts), [in Javascript ES5](#/docs/customrenderer-es5), or [in Javascript ES6](#/docs/customrenderer-es6).
