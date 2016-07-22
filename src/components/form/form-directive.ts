@@ -13,7 +13,7 @@ import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
 import {IUISchemaElement} from '../../uischema';
 import {SchemaElement} from '../../jsonschema';
-import {RootDataService} from "../ng-services/data/data-service";
+import {RootDataService} from '../ng-services/data/data-service';
 
 export class FormController {
 
@@ -50,11 +50,6 @@ export class FormController {
 
         this.isInitialized = true;
 
-
-        // this.fetchData(this.scope.data)
-        //     .then(this.fetchSchema)
-
-
         this.$q.all([
             this.fetchData(this.scope.data),
             this.fetchSchema(this.scope.schema),
@@ -65,7 +60,7 @@ export class FormController {
                 let schema   = values[1];
                 let uischema = <IUISchemaElement>values[2];
 
-                if (data == undefined) {
+                if (data === undefined) {
                     throw new Error(`The 'data' attribute must be specified.`);
                 }
                 this.RootDataService.setData(data);
@@ -122,10 +117,7 @@ export class FormController {
     }
 
     private fetchSchema(schema) {
-        // if (schema === undefined){
-        //     return this.$q.when(this.SchemaGenerator.generateDefaultSchema(data));
-        // } else
-        if(typeof schema === 'function'){
+        if (typeof schema === 'function') {
             return this.$q.when(schema());
         } else {
             return this.$q.when(schema);
@@ -133,10 +125,7 @@ export class FormController {
     }
 
     private fetchUiSchema(uischema) {
-        // if (uischema === undefined){
-        //     return this.$q.when(this.UISchemaRegistry.getBestUiSchema(schema, data));
-        // } else
-        if (typeof uischema === 'function'){
+        if (typeof uischema === 'function') {
             return this.$q.when(uischema());
         } else {
             return this.$q.when(uischema);
@@ -145,10 +134,7 @@ export class FormController {
     }
 
     private fetchData(data) {
-        // if (data === undefined){
-        //     throw new Error(`The 'data' attribute must be specified.`);
-        // } else
-        if (typeof data === 'function'){
+        if (typeof data === 'function') {
             return this.$q.when(data());
         } else {
             return this.$q.when(data);
@@ -239,7 +225,9 @@ export class JsonFormsInnerDirective implements ng.IDirective {
 }
 
 export default angular.module('jsonforms.form.directives', ['jsonforms.form'])
-    .directive('jsonforms', ['RootDataService', (RootDataService) => new JsonFormsDirective(RootDataService)])
+    .directive('jsonforms', ['RootDataService', (RootDataService) =>
+        new JsonFormsDirective(RootDataService)]
+    )
     .directive('jsonformsInner', () => new JsonFormsInnerDirective())
     .run(['$templateCache', ($templateCache: ng.ITemplateCacheService) =>
         $templateCache.put('form.html', formTemplate)]

@@ -4,7 +4,7 @@ import {IUISchemaGenerator} from '../../../generators/generators';
 import {AbstractControl, Testers, schemaTypeIs, optionIs} from '../abstract-control';
 import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
-import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
+import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';

@@ -1,6 +1,6 @@
 import {AbstractControl, uiTypeIs} from '../../controls/abstract-control';
 import {SchemaElement} from '../../../../jsonschema';
-import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
+import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 
 class MasterDetailDirective implements ng.IDirective {
     restrict = 'E';
