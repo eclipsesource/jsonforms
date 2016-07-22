@@ -21,6 +21,7 @@ Running the Typescript seed project
 To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this Typescript seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-typescript-seed.git`
+* `cd jsonforms-typescript-seed`
 * `npm install`
 * `npm start`
 

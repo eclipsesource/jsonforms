@@ -7,7 +7,7 @@ CUSTOM RENDERER TUTORIAL (ES 5)
 Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain situations.
 This can be done by registering a custom renderer that produces a different UI control.
 On this page, you will learn how to create and register a custom renderer in an application that uses *Javascript (ES 5)*.
-Please note that there are separate guides for [Javascript ES5](#/docs/customrenderer-es6) and [Typescript](#/docs/customrenderer-ts).
+Please note that there are separate guides for [Javascript ES6](#/docs/customrenderer-es6) and [Typescript](#/docs/customrenderer-ts).
 
 In this guide, we will replace the default renderer for integer values
 
@@ -17,7 +17,7 @@ so that it will use a *rating control* as shown below instead.
 
 ![Custom Rating Control](images/docs/customrenderer.ts.preview.png){:.img-responsive}
 
-This tutorial is based on the "Make it happen" application. Please refer to the [tutorial setup guide](#/docs.setup), to learn how to set it up.
+This tutorial is based on the "Make it happen" application. Please refer to the [tutorial setup guide](#/docs/setup), to learn how to set it up.
 In the "Make it happen" example, we provide two states, the *initial* and the *final* state, which are located in the repository in `app/initial` and `app/final`, respectively. Thus, when we refer to files, such as `index.html`, we actually refer to `app/initial/index.html`.
 
 Preparations for creating the custom rating control
