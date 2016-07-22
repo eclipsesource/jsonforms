@@ -12,14 +12,15 @@ The example used along this tutorial is called "Make It Happen" and creates a si
 
 The first step to create such a form is to define the underlying data schema. This schema defines the data object underneath a form. Technically, the underlying data is a JSON object, which is bound to the form during runtime. JSON Forms partially derives the UI from this data schema, so defining the data is typically already most of the work.
 
-Data schemata are defined using JSON Schema. In the following, we define a [JSON Schema](http://spacetelescope.github.io/understanding-json-schema), which contains three attributes for the example entity "Task": "name" (String), "description" (String) and "done" (boolean). The following screenshot shows the data schema in the JSON Forms Editor.
+Data schemata are defined using JSON Schema. In the following, we define a [JSON Schema](http://spacetelescope.github.io/understanding-json-schema), which contains three attributes for the example entity "Task": "name" (String), "description" (String) and "done" (boolean). The following screenshot shows the data schema in the JSON Forms Editor and the corresponding data schema in the underlzing JSON representation.
 
-![Data schema](images/docs/firstform.dataschema.png){:.img-responsive}
-
-This data schema corresponds to the following schema in the underlying JSON Schema representation.
-
-{% highlight js %}
-{
+<div class="row">
+<div class="col-sm-2">
+<img src="./images/docs/firstform.dataschema.png" alt="Data schema" class="img-responsive">
+</div>
+<div class="col-sm-10">
+<pre class="highlight">
+<code>{
   "type": "object",
   "properties": {
     "name": {
@@ -33,21 +34,24 @@ This data schema corresponds to the following schema in the underlying JSON Sche
       }
     }
   }
-}
-{% endhighlight %}
+}</code>
+</pre>
+</div>
+</div>
 
 Based on the data schema, you can now define a UI schema showing all of the defined properties. In this simple example, we do not consider any advanced features, such as layout or visibility rules yet, but rather just show all three attributes in a vertical layout.
 
 Therefore, a UI schema needs to be created. It describes which properties of the data schema are to be rendered as controls. Every visible property of the data schema is represented as an element “control” in the UI schema. Controls directly reference the data schema, so that the specification of data properties, such as their data type, does not have to be replicated. The UI schema describes only UI relevant properties, such as the order of attributes, the label of controls, or whether a field is multi-line or not.
 
-As before, there are two ways of creating and modifying a UI schema, the JSON Forms Editor and directly writing the underlying JSON file. When using the JSON Forms Editor, you can drag and drop properties from the data schema into the UI schema to create controls. So creating a simple form with controls is basically just one drag-and-drop operation. The following screenshot shows the UI schema for the example containing three controls.
+As before, there are two ways of creating and modifying a UI schema, the JSON Forms Editor and directly writing the underlying JSON file. When using the JSON Forms Editor, you can drag and drop properties from the data schema into the UI schema to create controls. So creating a simple form with controls is basically just one drag-and-drop operation. The following screenshot shows the UI schema for the example containing three controls on the left and the corresponding UI schema in the JSON representation.
 
-![UI schema](images/docs/firstform.uischema.png){:.img-responsive}
-
- The UI schema above corresponds to the following UI schema in the underlying JSON representation.
-
- {% highlight js %}
- {
+<div class="row">
+<div class="col-sm-2">
+<img src="./images/docs/firstform.uischema.png" alt="UI schema" class="img-responsive">
+</div>
+<div class="col-sm-10">
+<pre class="highlight">
+<code>{
      "type": "VerticalLayout",
      "elements": [
          {
@@ -73,8 +77,10 @@ As before, there are two ways of creating and modifying a UI schema, the JSON Fo
              "readOnly": false
          }
      ]
- }
- {% endhighlight %}
+ }</code>
+</pre>
+</div>
+</div>
 
  Once controls have been created, their properties can optionally be modified. In the simple example above, we have set the "description" control to be multi-line and changed the label of the "done" control to "done?". Please note that you only need to specify properties, which cannot directly be derived from the data schema and hence only concern pure UI aspects.
 
