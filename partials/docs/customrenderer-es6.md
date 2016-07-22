@@ -1,11 +1,13 @@
 ---
 layout: doc
 ---
-CUSTOM RENDERER (ES6)
-============================
+CUSTOM RENDERER TUTORIAL (ES 6)
+===============================
 
 Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain situations.
-This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *ES6*. Please note that there are separate guides for [ES5](#/docs/customrenderer) and [Typescript](#/docs/customrenderer-ts).
+This can be done by registering a custom renderer that produces a different UI control.
+On this page, you will learn how to create and register a custom renderer in an application that uses *Javascript (ES 6)*.
+Please note that there are separate guides for [ES5](#/docs/customrenderer-es5) and [Typescript](#/docs/customrenderer-ts).
 
 In this guide, we will replace the default renderer for integer values (see schreenshot below)
 
@@ -21,6 +23,7 @@ Running the ES6 seed project
 To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this ES6 seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-es6-seed.git`
+* `cd jsonforms-es6-seed`
 * `npm install`
 * `npm start`
 
