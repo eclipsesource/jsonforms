@@ -1,32 +1,35 @@
-# UI schema
+---
+layout: doc
+---
+# UI SCHEMA
 
 The UI schema, which is passed into the `jsonforms` directive describes
 the general layout of a form and is just a regular JSON object.
-It describes the form by means of different elements, which can be 
+It describes the form by means of different elements, which can be
 categorized into `Control`s and `Layout`s. The type of an element
  can be specified via the `type` property.
 In this section, we provide a detailed look about the currently available
 UI schema elements.
 
-# Controls
-The most important UI schema element is `Control`. A `Control` is 
-specified with the `Control` value. 
+## Controls
+The most important UI schema element is `Control`. A `Control` is
+specified with the `Control` value.
 
-### Scope
-Furthermore, it must specify a `scope` property, which tells the 
+#### Scope
+Furthermore, it must specify a `scope` property, which tells the
 `Control` to which property of the JSON schema it should bind.
 
 For instance, if we have a minimal JSON schema like this:
 
 ```
 var schema = {
-  'properties': { 
+  'properties': {
     'name': {  'type': 'string' }
    }
 };
 ```
 
-the most basic UI schema would be the following:
+The most basic UI schema would be the following:
 
 ```
 var uiSchema = {
@@ -36,7 +39,7 @@ var uiSchema = {
 ```
 
 The format of the `scope` property must be an object with a single
-property `$ref`, which must be a [JSON Pointer](https://tools.ietf.org/html/rfc6901). 
+property `$ref`, which must be a [JSON Pointer](https://tools.ietf.org/html/rfc6901).
 You can read more about `$refs` [here](https://spacetelescope.github.io/understanding-json-schema/structuring.html).
 
 In the example above, we want the control to bind against the single `name`
@@ -45,27 +48,25 @@ property. Below is an example of a rendered control.
 ![Basic control](./images/docs/uischema.control.png){:.img-responsive}
 
 ### Read-only
- 
- Controls support a read-only state, which can be enabled with the `readOnly` 
- property within the UI schema. The value of the `readOnly` property
-  is a boolean.
- 
- ```
- var uiSchema = {
-   'type': 'Control',
-   'readOnly': true,
-   'scope': { '$ref': '#/properties/name' }
- };
- ```
- 
+
+Controls support a read-only state, which can be enabled with the `readOnly` property within the UI schema. The value of the `readOnly` property is a boolean.
+
+```
+var uiSchema = {
+  'type': 'Control',
+  'readOnly': true,
+  'scope': { '$ref': '#/properties/name' }
+};
+```
+
 ![Control with Read-only enabled](./images/docs/uischema.control-readonly.png){:.img-responsive}
 
 
 ### Options
-Certain renderers support additional configuration options which are 
-only available for certain renderers. Those options should be put 
+Certain renderers support additional configuration options which are
+only available for certain renderers. Those options should be put
 into a `options` property. We'll describe all available `options` in
-the following section. 
+the following section.
 
 ## Enum controls
 A `enum` property within a JSON schema will be rendered with a dropdown
@@ -81,7 +82,7 @@ A `enum` property within a JSON schema will be rendered with a dropdown
          }
    };
    var uischema = {
-         'type': 'Control', 
+         'type': 'Control',
          'scope': {'$ref': '#/properties/some'}
    };
 
@@ -108,9 +109,9 @@ var schema = {
                 }
             }
         }
-var uischema = { 
-  'type': 'Control', 
-  'scope': { '$ref': '#/properties/comments' } 
+var uischema = {
+  'type': 'Control',
+  'scope': { '$ref': '#/properties/comments' }
 };
 
 ```
@@ -119,13 +120,13 @@ The rendered result is displayed below:
 ![Rendered array control](./images/docs/uischema.control.array.png){:.img-responsive}
 
 The default renderer supports a couple of `options`. The `submit` property
-disables adding new entries to an array. 
+disables adding new entries to an array.
 
 ```
-var uischema = { 
-  'type': 'Control', 
+var uischema = {
+  'type': 'Control',
   'scope': { '$ref': '#/properties/comments' },
-  'options': { 
+  'options': {
     'submit': false
   }
 };
@@ -140,8 +141,6 @@ effect if combined with `simple`).
 
 With the data displayed belows the rendered form looks like this:
 
-
-
 ```
 data = {
     "comments": [
@@ -154,4 +153,3 @@ data = {
 ```
 
 ![Array control with simple option set](./images/docs/uischema.control.array.simple.png){:.img-responsive}
-
