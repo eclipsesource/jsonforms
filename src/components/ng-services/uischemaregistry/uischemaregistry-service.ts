@@ -1,6 +1,6 @@
 import {IUISchemaElement} from '../../../uischema';
 import {IUISchemaGenerator} from '../../generators/generators';
-import {SchemaElement} from "../../../jsonschema";
+import {SchemaElement} from '../../../jsonschema';
 
 export interface UiSchemaRegistry {
     register(uiSchema: IUISchemaElement, tester: UiSchemaTester): void;

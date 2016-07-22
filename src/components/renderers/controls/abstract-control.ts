@@ -212,7 +212,7 @@ export function schemaPropertyName(expected: string) {
             return false;
         }
         let schemaPath = uiSchema['scope']['$ref'];
-        return _.last(schemaPath.split("/")) === expected;
+        return _.last(schemaPath.split('/')) === expected;
     };
 }
 
@@ -224,11 +224,9 @@ export class RendererTesterBuilder {
 
     and(...testers:
             Array<(uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => boolean>)  {
-        return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => 
+        return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) =>
             testers.reduce((acc, tester) => acc && tester(uiSchema, schema, data), true);
-        
     }
-
 
     create(test: (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => boolean,
            spec: number): (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => number {

@@ -14,7 +14,7 @@ describe('String renderer', () => {
         scope.schema = {
             'properties': {
                 'name': {
-                    'type': 'string',
+                    'type': 'string'
                 }
             }
         };

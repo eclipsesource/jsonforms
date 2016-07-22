@@ -50,7 +50,8 @@ export class PathResolver  {
         return this.innerResolveInstance(instance, fragmentsToObject.join('/'), true);
     }
 
-    private static innerResolveInstance(instance: any, schemaPath: string, createMissing: boolean): any {
+    private static innerResolveInstance(instance: any, schemaPath: string,
+                                        createMissing: boolean): any {
         let fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
         return fragments.reduce((currObj, fragment) => {
             if (currObj === undefined) {

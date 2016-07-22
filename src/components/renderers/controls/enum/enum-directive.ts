@@ -1,6 +1,6 @@
 import {AbstractControl, Testers, uiTypeIs, schemaTypeMatches} from '../abstract-control';
 import {SchemaElement} from '../../../../jsonschema';
-import {PathResolver} from "../../../services/pathresolver/jsonforms-pathresolver";
+import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 
 class EnumDirective implements ng.IDirective {
     restrict = 'E';

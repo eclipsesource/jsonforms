@@ -74,7 +74,7 @@ export class SchemaProvider implements ISchemaProvider {
 }
 
 export class UiSchemaProvider implements IUiSchemaProvider {
-    constructor(private schema: IUISchemaElement){
+    constructor(private schema: IUISchemaElement) {
     }
 
     getId(): ServiceId {
