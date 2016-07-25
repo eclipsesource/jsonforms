@@ -51,9 +51,9 @@ export class FormController {
         this.isInitialized = true;
 
         this.$q.all([
-            this.fetchData(this.scope.data),
-            this.fetchSchema(this.scope.schema),
-            this.fetchUiSchema(this.scope.uischema)])
+            this.fetch(this.scope.data),
+            this.fetch(this.scope.schema),
+            this.fetch(this.scope.uischema)])
             .then(values => {
 
                 let data     = values[0];
@@ -116,29 +116,21 @@ export class FormController {
         this.scope.$root.$broadcast('jsonforms:change');
     }
 
-    private fetchSchema(schema) {
-        if (typeof schema === 'function') {
-            return this.$q.when(schema());
+    private fetch(any) {
+        if (_.isFunction(any)) {
+            let ret = any();
+            if (this.isPromise(ret)) {
+                return ret;
+            } else {
+                return this.$q.when(ret);
+            }
         } else {
-            return this.$q.when(schema);
+            return this.$q.when(any);
         }
     }
 
-    private fetchUiSchema(uischema) {
-        if (typeof uischema === 'function') {
-            return this.$q.when(uischema());
-        } else {
-            return this.$q.when(uischema);
-        }
-
-    }
-
-    private fetchData(data) {
-        if (typeof data === 'function') {
-            return this.$q.when(data());
-        } else {
-            return this.$q.when(data);
-        }
+    private isPromise(data: any): boolean {
+        return _.isFunction(data['then']);
     }
 }
 
