@@ -375,6 +375,35 @@ angular.module('jsonforms-website', [
             return false;
         };
 
+        vm.openEditorInNewTab = function () {
+            vm.reparseStatic();
+
+            var tab = window.open('http://jsonformseditor.herokuapp.com/#/demo');
+            var data = {
+                dataSchema: vm.localStaticModelObject,
+                uiSchema: vm.localStaticViewObject
+            };
+            var passedByReference = { ackReceived: false };
+
+            window.addEventListener('message', function(event) {
+                if (event.data == 'ACK') {
+                    window.removeEventListener('message', function() {}, false);
+                    passedByReference.ackReceived = true;
+                }
+            }, false);
+
+            vm.postMessagetoTab(tab, data, passedByReference);
+        };
+
+        vm.postMessagetoTab = function(tab, data, passedByReference) {
+            setTimeout(function () {
+                tab.postMessage(data, '*');
+                if (!passedByReference.ackReceived) {
+                    vm.postMessagetoTab(tab, data, passedByReference);
+                }
+            }, 1000);
+        };
+
         vm.staticDataProvider = StaticData;
         vm.dynamicDataProvider = DynamicData;
 
