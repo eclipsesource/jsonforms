@@ -9,7 +9,7 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "tsc": "tsc",
+    "compile": "tsc && cp src/bootstrap/jsf-bootstrap.css bootstrap/",
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "dev-bootstrap": "webpack --config webpack/webpack.dev-bootstrap.js && webpack-dev-server --config webpack/webpack.dev-bootstrap.js --NODE_ENV=dev --inline",
     "test": "karma start --NODE_ENV=test",
