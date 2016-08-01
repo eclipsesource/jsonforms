@@ -1,4 +1,5 @@
-import {AbstractControl, Testers, schemaTypeIs, optionIs} from '../abstract-control';
+import {AbstractControl} from '../abstract-control';
+import {schemaTypeIs, Testers, optionIs} from "../../testers";
 
 class StringDirective implements ng.IDirective {
     restrict = 'E';

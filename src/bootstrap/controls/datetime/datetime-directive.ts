@@ -1,6 +1,6 @@
 import {DateTimeController, DateTimeControllerScope} from
     '../../../components/renderers/controls/datetime/datetime-directive';
-import {schemaTypeMatches, schemaTypeIs, Testers} from "../../../components/renderers/controls/abstract-control";
+import {Testers, schemaTypeIs, schemaTypeMatches} from "../../../components/renderers/testers";
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';

@@ -1,4 +1,5 @@
-import {AbstractControl, Testers, uiTypeIs, schemaTypeMatches} from '../abstract-control';
+import {AbstractControl} from '../abstract-control';
+import {Testers, uiTypeIs, schemaTypeMatches} from "../../testers";
 
 class EnumDirective implements ng.IDirective {
     restrict = 'E';

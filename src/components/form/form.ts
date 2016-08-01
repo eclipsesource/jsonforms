@@ -32,6 +32,8 @@ import formsDirective from '../form/form-directive';
 
 import baseControl from '../renderers/controls/abstract-control';
 
+import testers from '../renderers/testers';
+
 import norendererDirective from '../renderers/norenderer-directive';
 
 export default angular
@@ -66,7 +68,7 @@ export default angular
         categorizationDirective,
         masterDetailDirectives,
 
-        baseControl
-
+        baseControl,
+        testers
     ])
     .name;

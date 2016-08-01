@@ -1,6 +1,7 @@
 import {AbstractLayout} from '../abstract-layout';
-import {LabelObjectUtil, uiTypeIs} from '../../controls/abstract-control';
 import {IUISchemaElement} from '../../../../uischema';
+import {uiTypeIs} from "../../testers";
+import {LabelObjectUtil} from "../../Labels";
 
 
 class HorizontalDirective implements ng.IDirective {
