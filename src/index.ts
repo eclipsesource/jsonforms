@@ -11,8 +11,7 @@ export default angular.module('jsonforms', [
     'ui.validate',
     form,
     capitalize,
-    pathResolver,
-    jsonformsBootstrap
+    pathResolver
 ]).name;
 
 export interface JsonFormsScope extends angular.IScope {
