@@ -137,6 +137,8 @@ body {
 }
 
 .jsf-control {
+    margin: auto;
+    max-width: 30em;
 }
 
 .jsf .alert {
