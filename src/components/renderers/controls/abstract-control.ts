@@ -3,9 +3,9 @@ import {PathResolver} from '../../services/pathresolver/jsonforms-pathresolver';
 import {Services, ServiceId, IValidationService, ISchemaProvider} from '../../services/services';
 import {IRuleService, IRuleServiceCallBack} from '../../services/rule/rule-service';
 import {IDataProvider} from '../../services/data/data-service';
-import {IRule, IControlObject, IWithLabel, ILabelObject, IUISchemaElement} from '../../../uischema';
+import {IRule, IControlObject} from '../../../uischema';
 import {SchemaElement} from '../../../jsonschema';
-import {LabelObjectUtil} from "../Labels";
+import {LabelObjectUtil} from '../Labels';
 
 export class AbstractControl implements IRuleServiceCallBack {
 
@@ -51,11 +51,11 @@ export class AbstractControl implements IRuleServiceCallBack {
     }
 
     protected get showLabel() {
-        return LabelObjectUtil.shouldShowLabel(this.uiSchema.label);
+        return LabelObjectUtil.shouldShowLabel(this.uiSchema);
     }
 
     protected get label() {
-        let labelObject = LabelObjectUtil.getElementLabelObject(this.uiSchema.label,
+        let labelObject = LabelObjectUtil.getElementLabelObject(this.uiSchema,
             this.schemaPath);
         let stringBuilder = labelObject.text;
 

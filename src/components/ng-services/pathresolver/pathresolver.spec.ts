@@ -1,10 +1,14 @@
 import 'angular';
 import 'angular-mocks';
-import {PathResolver} from "../../services/pathresolver/jsonforms-pathresolver";
+import '../../../index'
+import {PointerResolver} from "../../services/pathresolver/jsonforms-pathresolver";
 
 describe('PathResolver', () => {
-    
-    it('should resolve properties path on the UI schema', function () {
+
+    beforeEach(angular.mock.module('jsonforms.services'));
+
+    it('should resolve properties path on the UI schema',
+        angular.mock.inject(['PathResolver', (pointerResolver: PointerResolver) => {
 
         let obj = {
             'foo': {
@@ -16,7 +20,6 @@ describe('PathResolver', () => {
             }
         };
 
-        expect(PathResolver.resolveUi(obj, '#/foo/bar').type).toBe('string');
-    });
-
+        expect(pointerResolver.resolveUi(obj, '#/foo/bar').type).toBe('string');
+    }]));
 });

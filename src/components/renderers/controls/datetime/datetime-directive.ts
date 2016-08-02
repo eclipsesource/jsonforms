@@ -1,5 +1,5 @@
 import {AbstractControl} from '../abstract-control';
-import {Testers, schemaTypeIs, schemaTypeMatches} from "../../testers";
+import {Testers, schemaTypeIs, schemaTypeMatches} from '../../testers';
 
 class DateTimeDirective implements ng.IDirective {
     restrict = 'E';

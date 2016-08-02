@@ -1,6 +1,6 @@
 import {IUISchemaElement} from '../../uischema';
 import {SchemaElement} from '../../jsonschema';
-import {Testers, always} from "./testers";
+import {Testers, always} from './testers';
 
 export interface RendererService {
     register(directiveName: string,

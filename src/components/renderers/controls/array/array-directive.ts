@@ -5,7 +5,7 @@ import {AbstractControl} from '../abstract-control';
 import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
 import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
-import {Testers, schemaTypeIs, optionIs} from "../../testers";
+import {Testers, schemaTypeIs, optionIs} from '../../testers';
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';

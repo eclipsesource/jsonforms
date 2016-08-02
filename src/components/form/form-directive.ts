@@ -13,11 +13,11 @@ import {DefaultDataProvider} from '../services/data/data-services';
 import {RendererService} from '../renderers/renderer-service';
 import {IUISchemaElement} from '../../uischema';
 import {SchemaElement} from '../../jsonschema';
-import {RootDataService} from '../ng-services/data/data-service';
+import {DataService} from '../ng-services/data/data-service';
 
 export class FormController {
 
-    static $inject = ['RendererService', 'UiSchemaRegistry', 'RootDataService',
+    static $inject = ['RendererService', 'UiSchemaRegistry', 'DataService',
         'SchemaGenerator', '$compile', '$q', '$scope'];
     public element: any;
     public uiSchema: IUISchemaElement;
@@ -31,7 +31,7 @@ export class FormController {
     constructor(
         private rendererService: RendererService,
         private UISchemaRegistry: UiSchemaRegistry,
-        private RootDataService: RootDataService,
+        private dataService: DataService,
         private SchemaGenerator: ISchemaGenerator,
         private $compile: ng.ICompileService,
         private $q: ng.IQService,
@@ -63,7 +63,7 @@ export class FormController {
                 if (data === undefined) {
                     throw new Error(`The 'data' attribute must be specified.`);
                 }
-                this.RootDataService.setData(data);
+                this.dataService.setRoot(data);
 
                 let s = schema === undefined ?
                     this.SchemaGenerator.generateDefaultSchema(data) :
@@ -161,7 +161,7 @@ export class JsonFormsDirective implements ng.IDirective {
         let parent = el.parent();
         if (parent === undefined && parent.controller('jsonforms') === undefined) {
             // unset, if this is the root directive
-            this.RootDataService.unset();
+            this.DataService.unset();
         }
         ctrl.element = el;
         scope.$watchGroup(['data', 'uischema'], (newValue) => {
@@ -170,7 +170,7 @@ export class JsonFormsDirective implements ng.IDirective {
             }
         });
     };
-    constructor(private RootDataService: RootDataService) { }
+    constructor(private DataService: DataService) { }
 }
 
 
@@ -217,8 +217,8 @@ export class JsonFormsInnerDirective implements ng.IDirective {
 }
 
 export default angular.module('jsonforms.form.directives', ['jsonforms.form'])
-    .directive('jsonforms', ['RootDataService', (RootDataService) =>
-        new JsonFormsDirective(RootDataService)]
+    .directive('jsonforms', ['DataService', (DataService) =>
+        new JsonFormsDirective(DataService)]
     )
     .directive('jsonformsInner', () => new JsonFormsInnerDirective())
     .run(['$templateCache', ($templateCache: ng.ITemplateCacheService) =>

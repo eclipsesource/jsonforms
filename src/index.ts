@@ -1,17 +1,17 @@
 
 import 'angular';
 import form from './components/form/form';
-import capitalize from './components/ng-services/capitalize/capitalize.filter';
-import pathResolver from './components/ng-services/pathresolver/pathresolver-service';
+import ngServices from './components/ng-services/ng-services';
+/* tslint:disable */
 import jsonformsBootstrap from './bootstrap/jsonforms_bootstrap';
+/* tslint:enable */
 
 require('angular-ui-validate');
 
 export default angular.module('jsonforms', [
     'ui.validate',
     form,
-    capitalize,
-    pathResolver
+    ngServices
 ]).name;
 
 export interface JsonFormsScope extends angular.IScope {

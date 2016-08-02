@@ -1,4 +1,3 @@
-import {PathResolver} from './pathresolver/jsonforms-pathresolver';
 import {SchemaElement} from '../../jsonschema';
 import {IUISchemaElement} from '../../uischema';
 
@@ -45,18 +44,6 @@ export class ScopeProvider implements IScopeProvider {
 
     getScope(): ng.IScope {
         return this.scope;
-    }
-}
-export class PathResolverService implements IPathResolverService {
-
-    private resolver: PathResolver = new PathResolver();
-
-    getId(): ServiceId {
-        return ServiceId.PathResolver;
-    }
-
-    getResolver() {
-        return this.resolver;
     }
 }
 export class SchemaProvider implements ISchemaProvider {
@@ -153,9 +140,6 @@ export enum ServiceId {
 
 export interface IService {
     getId(): ServiceId;
-}
-export interface IPathResolverService extends IService {
-    getResolver(): PathResolver;
 }
 export interface IScopeProvider extends IService {
     getScope(): ng.IScope;

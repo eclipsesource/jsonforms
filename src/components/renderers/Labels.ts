@@ -1,11 +1,11 @@
 
-// TODO extract to util
-import {PathUtil} from "../services/pathutil";
-import {ILabelObject, IWithLabel} from "../../uischema";
+import {PathUtil} from '../services/pathutil';
+import {ILabelObject, IWithLabel} from '../../uischema';
 
-export class LabelObjectUtil {
+export class Labels {
 
-    public static shouldShowLabel(label: IWithLabel): boolean {
+    public shouldShowLabel(withLabel: IWithLabel): boolean {
+        let label = withLabel.label;
         if (label === undefined ) {
             return true;
         } else if (_.isBoolean(label)) {
@@ -14,14 +14,14 @@ export class LabelObjectUtil {
             return (<string> label) !== '';
         } else {
             let labelObj = <ILabelObject> label;
-            return labelObj.hasOwnProperty('show') ? labelObj.show : true;
+            return _.has(labelObj, 'show') ? labelObj.show : true;
         }
     }
-    
-    public static getElementLabelObject(labelProperty: IWithLabel,
-                                        schemaPath: string): ILabelObject {
 
-        if (typeof labelProperty === 'boolean') {
+    public getElementLabelObject(withLabel: IWithLabel,
+                                        schemaPath: string): ILabelObject {
+        let labelProperty = withLabel.label;
+        if (_.isBoolean(labelProperty)) {
             if (labelProperty) {
                 return new LabelObject(
                     PathUtil.beautifiedLastFragment(schemaPath),
@@ -29,9 +29,9 @@ export class LabelObjectUtil {
             } else {
                 return new LabelObject(undefined, <boolean>labelProperty);
             }
-        } else if (typeof labelProperty === 'string') {
+        } else if (_.isString(labelProperty)) {
             return new LabelObject(<string>labelProperty, true);
-        } else if (typeof labelProperty === 'object') {
+        } else if (_.isObject(labelProperty)) {
             let show = _.has(labelProperty, 'show') ?
                 (<ILabelObject>labelProperty).show : true;
             let label = _.has(labelProperty, 'text') ?
@@ -42,6 +42,7 @@ export class LabelObjectUtil {
         }
     }
 }
+export const LabelObjectUtil = new Labels();
 
 class LabelObject implements ILabelObject {
     public text: string;

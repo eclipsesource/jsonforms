@@ -1,6 +1,6 @@
 import * as angular from 'angular';
 
-export class RootDataService {
+export class DataService {
 
     private root: any;
 
@@ -8,19 +8,19 @@ export class RootDataService {
         this.root = undefined;
     }
 
-    public setData(newRootData: any) {
+    public setRoot(newRootData: any) {
         if (this.root === undefined) {
             this.root = newRootData;
         }
     }
 
-    public getRootData(): any {
+    public getRoot(): any {
         return this.root;
     }
 }
 
 
 export default angular
-    .module('jsonforms.data.root', [])
-    .service('RootDataService', RootDataService)
+    .module('jsonforms.service.data', [])
+    .service('DataService', DataService)
     .name;

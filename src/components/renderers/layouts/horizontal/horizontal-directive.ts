@@ -1,7 +1,7 @@
 import {AbstractLayout} from '../abstract-layout';
 import {IUISchemaElement} from '../../../../uischema';
-import {uiTypeIs} from "../../testers";
-import {LabelObjectUtil} from "../../Labels";
+import {uiTypeIs} from '../../testers';
+import {LabelObjectUtil} from '../../Labels';
 
 
 class HorizontalDirective implements ng.IDirective {
@@ -21,11 +21,11 @@ export class HorizontalController  extends AbstractLayout {
     }
     private updateChildrenLabel(elements: IUISchemaElement[]): void {
         let labelExists = elements.reduce((atLeastOneLabel, element) => {
-            return atLeastOneLabel ||  LabelObjectUtil.shouldShowLabel(element.label);
+            return atLeastOneLabel ||  LabelObjectUtil.shouldShowLabel(element);
         }, false);
         if (labelExists) {
             elements.forEach(element => {
-                let showElementLabel = LabelObjectUtil.shouldShowLabel(element.label);
+                let showElementLabel = LabelObjectUtil.shouldShowLabel(element);
                 if (!showElementLabel) {
                     element.label = {show: true, text: ''};
                 }

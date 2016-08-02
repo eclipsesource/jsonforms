@@ -1,5 +1,5 @@
 import {AbstractControl} from '../abstract-control';
-import {schemaTypeIs} from "../../testers";
+import {schemaTypeIs} from '../../testers';
 
 class BooleanDirective implements ng.IDirective {
     restrict = 'E';

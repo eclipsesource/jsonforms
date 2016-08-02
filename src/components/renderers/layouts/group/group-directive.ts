@@ -1,5 +1,5 @@
 import {AbstractLayout} from '../abstract-layout';
-import {uiTypeIs} from "../../testers";
+import {uiTypeIs} from '../../testers';
 
 class GroupDirective implements ng.IDirective {
     restrict = 'E';

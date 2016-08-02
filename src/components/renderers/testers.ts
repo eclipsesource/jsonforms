@@ -1,8 +1,8 @@
 
-import {SchemaElement} from "../../jsonschema";
-import {IUISchemaElement} from "../../uischema";
-import {PathResolver} from "../services/pathresolver/jsonforms-pathresolver";
-import {NOT_FITTING} from "./renderer-service";
+import {SchemaElement} from '../../jsonschema';
+import {IUISchemaElement} from '../../uischema';
+import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
+import {NOT_FITTING} from './renderer-service';
 
 export function schemaTypeIs(expected: string) {
     return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
@@ -20,8 +20,8 @@ export function schemaTypeIs(expected: string) {
 
 export function hasDataPropertyValue(propName: string, expected: any) {
     return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
-        return _.has(data, propName) && data[propName] == expected
-    }
+        return _.has(data, propName) && data[propName] === expected;
+    };
 }
 
 export function uiTypeIs(expected: string) {
@@ -110,5 +110,4 @@ export default angular.module('jsonforms.testers', [])
             optionIs: optionIs,
             and: Testers.and
         };
-    })
-    .name;
+    }).name;
