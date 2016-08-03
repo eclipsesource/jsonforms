@@ -1,14 +1,14 @@
 import 'angular';
 import 'angular-mocks';
 import '../../../index'
-import {PointerResolver} from "../../services/pathresolver/jsonforms-pathresolver";
+import {RefResolver} from "../../services/pathresolver/jsonforms-pathresolver";
 
 describe('PathResolver', () => {
 
     beforeEach(angular.mock.module('jsonforms.services'));
 
     it('should resolve properties path on the UI schema',
-        angular.mock.inject(['PathResolver', (pointerResolver: PointerResolver) => {
+        angular.mock.inject(['PathResolver', (pointerResolver: RefResolver) => {
 
         let obj = {
             'foo': {

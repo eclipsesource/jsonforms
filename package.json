@@ -9,7 +9,7 @@
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "compile": "tsc && cp src/bootstrap/jsf-bootstrap.css bootstrap/",
+    "compile": "tsc && ncp src/bootstrap/jsf-bootstrap.css bootstrap/",
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "dev-bootstrap": "webpack --config webpack/webpack.dev-bootstrap.js && webpack-dev-server --config webpack/webpack.dev-bootstrap.js --NODE_ENV=dev --inline",
     "test": "karma start --NODE_ENV=test",
@@ -63,6 +63,7 @@
     "less-loader": "^2.2.3",
     "mock-promises": "0.6.0",
     "namespace-css-loader": "0.0.2",
+    "ncp": "^2.0.0",
     "node-sass": "3.4.2",
     "phantomjs-polyfill": "0.0.1",
     "raw-loader": "0.5.1",

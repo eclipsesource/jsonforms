@@ -1,7 +1,7 @@
 
 import {PathUtil} from '../pathutil';
 
-export class PointerResolver  {
+export class RefResolver  {
 
     toInstancePath(path: string): string {
         return PathUtil.normalize(path);
@@ -67,4 +67,4 @@ export class PointerResolver  {
         }, instance);
     };
 }
-export const PathResolver = new PointerResolver();
+export const PathResolver = new RefResolver();
