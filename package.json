@@ -72,6 +72,7 @@
     "style-loader": "^0.13.0",
     "ts-loader": "0.8.0",
     "tsd": "0.6.5",
+    "tslint": "^3.14.0",
     "tslint-loader": "^2.1.4",
     "typescript": "1.7.5",
     "typings": "0.6.5",
