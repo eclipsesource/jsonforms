@@ -41,7 +41,7 @@ export function optionIs(optionName: string, expected: any) {
     };
 }
 
-export function schemaTypeMatches(check: (SchemaElement) => boolean) {
+export function schemaTypeMatches(check: (schema: SchemaElement) => boolean) {
     return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {
         let schemaPath =  uiSchema['scope'] === undefined ? undefined : uiSchema['scope']['$ref'];
         // TODO ugly
