@@ -1,6 +1,6 @@
 import {HorizontalController} from
     '../../../components/renderers/layouts/horizontal/horizontal-directive';
-import {uiTypeIs} from "../../../components/renderers/testers";
+import {uiTypeIs} from '../../../components/renderers/testers';
 
 class BootstrapHorizontalDirective implements ng.IDirective {
     restrict = 'E';
