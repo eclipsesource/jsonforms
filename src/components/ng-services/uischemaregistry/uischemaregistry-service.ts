@@ -37,6 +37,6 @@ export class UiSchemaRegistryImpl implements UiSchemaRegistry {
 }
 
 export default angular
-    .module('jsonforms.uischemaregistry', [])
+    .module('jsonforms.service.uischema-registry', [])
     .service('UiSchemaRegistry', UiSchemaRegistryImpl)
     .name;

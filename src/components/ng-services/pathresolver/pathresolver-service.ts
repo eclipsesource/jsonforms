@@ -1,7 +1,7 @@
 
-import {PathResolver} from '../../services/pathresolver/jsonforms-pathresolver';
+import {RefResolver} from '../../services/pathresolver/jsonforms-pathresolver';
 
 export default angular
-    .module('jsonforms.pathresolver', [])
-    .service('PathResolver', PathResolver)
+    .module('jsonforms.service.path-resolver', [])
+    .service('PathResolver', RefResolver)
     .name;

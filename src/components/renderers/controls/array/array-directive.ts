@@ -1,10 +1,11 @@
 import 'lodash';
 import {PathUtil} from '../../../services/pathutil';
 import {IUISchemaGenerator} from '../../../generators/generators';
-import {AbstractControl, Testers, schemaTypeIs, optionIs} from '../abstract-control';
+import {AbstractControl} from '../abstract-control';
 import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
 import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
+import {Testers, schemaTypeIs, optionIs} from '../../testers';
 
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';

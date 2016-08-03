@@ -1,5 +1,5 @@
-import {uiTypeIs} from '../../controls/abstract-control';
 
+import {uiTypeIs} from '../../testers';
 class LabelDirective implements ng.IDirective {
     restrict = 'E';
     template = `<jsonforms-widget class="jsf-label">{{vm.text}}<hr></jsonforms-widget>`;

@@ -1,17 +1,17 @@
 
 import {PathUtil} from '../pathutil';
 
-export class PathResolver  {
+export class RefResolver  {
 
-    static toInstancePath(path: string): string {
+    toInstancePath(path: string): string {
         return PathUtil.normalize(path);
     }
 
-    static resolveUi(instance: any, uiPath: string): any {
+    resolveUi(instance: any, uiPath: string): any {
         return this.resolveInstance(instance, uiPath + '/scope/$ref');
     }
 
-    static resolveInstance(instance: any, schemaPath: string): any {
+    resolveInstance(instance: any, schemaPath: string): any {
         return this.innerResolveInstance(instance, schemaPath, false);
     };
 
@@ -21,7 +21,7 @@ export class PathResolver  {
      * @param path a schema path
      * @returns {T|*|*}
      */
-    static resolveSchema(schema: any, path: string): any {
+    resolveSchema(schema: any, path: string): any {
         try {
             let fragments = PathUtil.toPropertyFragments(path);
             return fragments.reduce(function (subSchema, fragment) {
@@ -39,18 +39,18 @@ export class PathResolver  {
         }
     };
 
-    static lastFragment(schemaPath: string): string {
+    lastFragment(schemaPath: string): string {
         let fragments: string[] = PathUtil.normalizeFragments(schemaPath);
         return fragments[fragments.length - 1];
     }
 
-    static resolveToLastModel(instance: any, schemaPath: string): any {
+     resolveToLastModel(instance: any, schemaPath: string): any {
         let fragments: string[] = PathUtil.normalizeFragments(schemaPath);
         let fragmentsToObject: string[] = fragments.slice(0, fragments.length - 1);
         return this.innerResolveInstance(instance, fragmentsToObject.join('/'), true);
     }
 
-    private static innerResolveInstance(instance: any, schemaPath: string,
+    private innerResolveInstance(instance: any, schemaPath: string,
                                         createMissing: boolean): any {
         let fragments = PathUtil.toPropertyFragments(this.toInstancePath(schemaPath));
         return fragments.reduce((currObj, fragment) => {
@@ -67,3 +67,4 @@ export class PathResolver  {
         }, instance);
     };
 }
+export const PathResolver = new RefResolver();

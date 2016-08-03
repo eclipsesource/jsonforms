@@ -14,6 +14,22 @@ angular.module('makeithappen').controller('AsyncController', function($q) {
     vm.UIAsync = UIDefer.promise;
     vm.schemaAsync = schemaDefer.promise;
 
+    vm.data = data;
+    vm.uischema = uischema;
+    vm.schema = schema;
+
+    vm.loadDataAsyncFun = function () {
+        return $q.when(vm.data);
+    };
+
+    vm.loadSchemaAsyncFun = function () {
+        return $q.when(vm.schema);
+    };
+
+    vm.loadUiSchemaAsyncFun = function () {
+        return $q.when(vm.uischema);
+    };
+
     vm.loadData = function(){
         dataDefer.resolve(data);
     };
@@ -25,10 +41,6 @@ angular.module('makeithappen').controller('AsyncController', function($q) {
     vm.loadSchema = function(){
         schemaDefer.resolve(schema);
     };
-
-    vm.data = data;
-    vm.uischema = uischema;
-    vm.schema = schema;
 
     vm.formattedData = function() {
         return JSON.stringify(vm.users, null, 4);
