@@ -315,7 +315,12 @@ angular.module('makeithappen').controller('PersonController', function() {
             vm.data,
             {
                 name: 'Todd',
-                personalData:{age: 33}
+                personalData:{age: 33},
+                hobbies: [{
+                    name:'Fahrradfahren'},
+                    {
+                    name:'Schwimmen'
+                }]
             },
             {
                 name: 'Jimmy',
