@@ -133,7 +133,7 @@ angular.module('makeithappen').controller('PersonController', function() {
             },*/
             "hobbies": {
                 "type": "array",
-                "items": {"type":"object","properties": {"name": {"type": "string"}}}
+                "items": {"type":"object","properties": {"name": {"type": "string"},"id": "hobbies"}}
             }
         },
         "required": ["occupation", "nationality"]
@@ -302,6 +302,10 @@ angular.module('makeithappen').controller('PersonController', function() {
         "type":"MasterDetailLayout",
         "scope": {
             "$ref": "#"
+        },
+        "options":{
+            "labelProvider":{"user.json":"name","hobbies":"name"},
+            "imageProvider":{"user.json":"app/icons/user.png"}
         }
     };
     vm.data = {

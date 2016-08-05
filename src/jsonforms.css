@@ -114,6 +114,11 @@
     flex-grow: 0;
     flex-shrink: 0;
 }
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry-icon{
+    flex-basis: 1.25em;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
 .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry{
     display: inline-block;
     padding: 0em;
