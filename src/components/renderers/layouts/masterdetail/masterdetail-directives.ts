@@ -85,7 +85,7 @@ class MasterDetailCollectionController {
         }
         return null;
     }
-    public addElement(data, dataSchema) {
+    public addElement(data, dataSchema, event: ng.IAngularEvent) {
         let possibleKeySchemas = this.getArraySubSchemas(dataSchema.items);
         let possibleAddPoints =  _.keys(possibleKeySchemas);
         let selectedAddPoint =  possibleAddPoints[0];
@@ -95,7 +95,7 @@ class MasterDetailCollectionController {
         let newElement = {};
         data[selectedAddPoint].push(newElement);
         this.selectElement(newElement, possibleKeySchemas[selectedAddPoint]);
-        //TODO cancel angular events
+        event.stopPropagation();
     }
     public removeElement(data, key, parentData) {
         let children : Array<any> = parentData[key];
@@ -147,7 +147,7 @@ const masterDetailCollectionTemplate = `
           ng-class="{'jsf-masterdetail-entry-selected':vm.selectedChild === child}">
           {{vm.getLabel(child,schema)}}
           <span class="jsf-masterdetail-entry-add"
-            ng-click="vm.addElement(child,schema);vm.updateHasContents($parent);
+            ng-click="vm.addElement(child,schema,$event);vm.updateHasContents($parent);
                 $parent.object_open=true;"
             ng-if="vm.canHaveChildren(schema)">+</span>
           <span class="jsf-masterdetail-entry-remove"
