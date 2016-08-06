@@ -125,6 +125,16 @@
     flex: 1;
     padding-left: 0.25em;
 }
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry .jsf-masterdetail-entry-add,
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry .jsf-masterdetail-entry-remove {
+    display: none;
+    width:1em;
+    text-align: center;
+}
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-add,
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-remove {
+    display: inline-block;
+}
 .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover,
 .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry-selected{
     background-color: lightgrey;
