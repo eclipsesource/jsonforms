@@ -18,15 +18,24 @@ class MasterDetailController extends AbstractControl {
     static $inject = ['$scope'];
     private selectedChild: any;
     private selectedSchema: SchemaElement;
-    private labelProvider: LabelProvider;
-    private imageProvider: ImageProvider;
+    private labelProvider: LabelProvider = {};
+    private imageProvider: ImageProvider = {};
     private treeSchema: SchemaArray;
     private treeData: Array<any>;
     constructor(scope: ng.IScope) {
         super(scope);
         this.scope['select'] = (child, schema) => this.select(child, schema);
-        this.labelProvider = this.uiSchema['options']['labelProvider'];
-        this.imageProvider = this.uiSchema['options']['imageProvider'];
+        let options = this.uiSchema['options'];
+        if (options) {
+            let definedLabelProvider = options['labelProvider'];
+            if (definedLabelProvider) {
+                this.labelProvider = definedLabelProvider;
+            }
+            let definedImageProvider = options['imageProvider'];
+            if (definedImageProvider) {
+                this.imageProvider = definedImageProvider;
+            }
+        }
         if (this.resolvedSchema.type === 'object') {
             let innerSchema = this.resolvedSchema;
             this.treeSchema = {'type': 'array', 'items': innerSchema};
@@ -86,7 +95,7 @@ class MasterDetailCollectionController {
         if (labelProperty !== undefined) {
             return data[labelProperty];
         }
-        return JSON.stringify(data);
+        return data.name || data.id || JSON.stringify(data);
     }
     public getImage(dataSchema): string {
         let imageUrl = this.imageprovider[dataSchema.items.properties.id];
