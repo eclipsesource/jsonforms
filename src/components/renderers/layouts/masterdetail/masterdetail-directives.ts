@@ -1,5 +1,5 @@
 import {AbstractControl} from '../../controls/abstract-control';
-import {SchemaElement} from '../../../../jsonschema';
+import {SchemaElement, SchemaArray} from '../../../../jsonschema';
 import {uiTypeIs} from '../../testers';
 
 class MasterDetailDirective implements ng.IDirective {
@@ -20,11 +20,21 @@ class MasterDetailController extends AbstractControl {
     private selectedSchema: SchemaElement;
     private labelProvider: LabelProvider;
     private imageProvider: ImageProvider;
+    private treeSchema: SchemaArray;
+    private treeData: Array<any>;
     constructor(scope: ng.IScope) {
         super(scope);
         this.scope['select'] = (child, schema) => this.select(child, schema);
         this.labelProvider = this.uiSchema['options']['labelProvider'];
         this.imageProvider = this.uiSchema['options']['imageProvider'];
+        if (this.resolvedSchema.type === 'object') {
+            let innerSchema = this.resolvedSchema;
+            this.treeSchema = {'type': 'array', 'items': innerSchema};
+            this.treeData = [this.resolvedData];
+        } else {
+            this.treeSchema = this.resolvedSchema;
+            this.treeData = this.resolvedData;
+        }
     }
     public select(selectedChild: any, selectedSchema: SchemaElement) {
         this.selectedChild = selectedChild;
@@ -121,7 +131,7 @@ const masterDetailTemplate = `
 <div class="jsf-masterdetail">
     <!-- Master -->
     <div class="jsf-masterdetail-master">
-        <jsonforms-masterdetail-collection schema="vm.resolvedSchema" instance="vm.resolvedData"
+        <jsonforms-masterdetail-collection schema="vm.treeSchema" instance="vm.treeData"
             labelprovider="vm.labelProvider" imageprovider="vm.imageProvider">
         </jsonforms-masterdetail-collection>
     </div>
@@ -156,28 +166,22 @@ const masterDetailCollectionTemplate = `
                 parentItemContext.object_open=
                     parentItemContext.object_open&&parentItemContext.hasContents;
                     vm.selectElement(parentItemContext.child,parentItemContext.schema)"
-            ng-if="$parent.$parent.hasContents">-</span>
+            ng-if="parentItemContext.hasContents">-</span>
         </span>
     </div>
-    <div ng-show="object_open" ng-if="hasContents" >
-        <ul class="jsf-masterdetail-entries"
-            ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(schema.items)">
-            <li ng-repeat="child in child[schemaKey]"
-                ng-init="vm.updateHasContents(this);
-                    parentItemContext = this.$parent.$parent.$parent"
-                class="{{!hasContents?'jsf-masterdetail-empty':''}}"
-                ng-include="'masterDetailTreeEntry'">
-            </li>
-        </ul>
-    </div>
+    <ul class="jsf-masterdetail-entries" ng-show="object_open" ng-if="hasContents"
+        ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(schema.items)">
+        <li ng-repeat="child in child[schemaKey]"
+            ng-init="vm.updateHasContents(this);object_open=false;
+                parentItemContext = this.$parent.$parent.$parent"
+            class="{{!hasContents?'jsf-masterdetail-empty':''}}"
+            ng-include="'masterDetailTreeEntry'">
+        </li>
+    </ul>
 </script>
-<ul class="jsf-masterdetail-entries"
-    ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(vm.schema)">
-    <li ng-repeat="child in vm.instance[schemaKey]"
-        ng-init="vm.updateHasContents(this);parentItemContext = this.$parent.$parent.$parent"
-        class="{{!hasContents?'jsf-masterdetail-empty':''}}"
-        ng-include="'masterDetailTreeEntry'">
-    </li>
+<ul class="jsf-masterdetail-entries" ng-repeat="child in vm.instance"
+    ng-init="schema=vm.schema;vm.updateHasContents(this);parentItemContext=this;object_open=false">
+    <li ng-include="'masterDetailTreeEntry'"></li>
 </ul>
 `;
 

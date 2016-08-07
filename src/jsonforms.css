@@ -94,6 +94,9 @@
 .jsf-masterdetail>.jsf-masterdetail-master jsonforms-masterdetail-collection {
     flex: 1;
 }
+.jsf-masterdetail .jsf-masterdetail-master jsonforms-masterdetail-collection > ul {
+    margin-left: 0;
+}
 .jsf-masterdetail ul {
     list-style-type: none;
     cursor: default;

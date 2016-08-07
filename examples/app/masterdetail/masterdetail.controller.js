@@ -58,31 +58,38 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
                     }
                 },
                 "required": ["name"]
+            },
+            "drive": {
+                "type": "object",
+                "properties": {
+                    "id": "drive",
+                    "name": {
+                        "type": "string",
+                        "minLength": 3
+                    },
+                    "folders": {
+                        "type":"array",
+                        "items":
+                        {
+                            "$ref": "#/definitions/folder"
+                        }
+                    },
+                    "files": {
+                        "type":"array",
+                        "items":
+                        {
+                            "$ref": "#/definitions/file"
+                        }
+                    }
+                },
+                "required": ["name"]
             }
         },
-        "type": "object",
-        "properties": {
-            "id": "disk",
-            "name": {
-                "type": "string",
-                "minLength": 3
-            },
-            "folders": {
-                "type":"array",
-                "items":
-                {
-                    "$ref": "#/definitions/folder"
-                }
-            },
-            "files": {
-                "type":"array",
-                "items":
-                {
-                    "$ref": "#/definitions/file"
-                }
-            }
-        },
-        "required": ["occupation", "nationality"]
+        "type":"array",
+        "items":
+        {
+            "$ref": "#/definitions/drive"
+        }
     };
     vm.uiSchema = {
         "type":"MasterDetailLayout",
@@ -90,12 +97,12 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             "$ref": "#"
         },
         "options":{
-            "labelProvider":{"disk":"name","folder":"name","file":"name"},
-            "imageProvider":{"folder":"app/masterdetail/icons/folder.png","file":"app/masterdetail/icons/page.png"}
+            "labelProvider":{"drive":"name","folder":"name","file":"name"},
+            "imageProvider":{"folder":"app/masterdetail/icons/folder.png","file":"app/masterdetail/icons/page.png","drive":"app/masterdetail/icons/drive.png"}
         }
     };
 
-    vm.data ={
+    vm.data =[{
         "name":"c",
         "folders":
         [
@@ -119,7 +126,33 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
                 name: 'y',
             }
         ]
-    };
+    },
+    {
+        "name":"d",
+        "folders":
+        [
+            {
+                name: 'o',
+                folders:[
+                    {name: 'oo'},
+                    {name: 'op'}
+                ]
+            },
+            {
+                name: 'p'
+            }
+        ],
+        "files":
+        [
+            {
+                name: 'i',
+            },
+            {
+                name: 'k',
+            }
+        ]
+    }
+];
 
     vm.formattedData = function() {
         return JSON.stringify(vm.data, null, 4);
