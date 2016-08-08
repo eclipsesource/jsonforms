@@ -1,15 +1,21 @@
-<div class="panel">
+<div class="panel panel-default">
     <div class="panel-heading">
-        <h3>JSONForms generated default schema and default forms</h3>
+        <strong>JSONForms generated default schema and default forms</strong>
     </div>
     <div class="panel-body">
+        <p>
+            JSON Forms is capable of inferring a UI schema as well as a JSON schema, if given a
+            JSON instance.
+            By default, it will generate a vertical layout for each property of the data instance.
+        </p>
+
         <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
     </div>
 </div>
 
-<div class="panel">
+<div class="panel panel-default">
     <div class="panel-heading">
-        <h3>Bound data</h3>
+        <strong>Bound data</strong>
     </div>
     <div class="panel-body">
         <pre>{{vm.formattedData()}}</pre>

@@ -17,6 +17,26 @@
 .navbar-header {
     display: flex;
 }
+
+.logo {
+    padding-left: 55px;
+    position: relative;
+    font-family: 'Roboto',sans-serif;
+}
+
+.logo:after{
+    background-image: url("../assets/images/jsonforms-logo-white.svg");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 30px 20px;
+    content: '';
+    height: 20px;
+    position: absolute;
+    left: 15px;
+    top: 0;
+    right: 0;
+}
+
 .navbar-inverse .navbar-brand {
     color: #9d9d9d;
     padding: 15px;

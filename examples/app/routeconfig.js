@@ -17,11 +17,11 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/custom/custom.html',
             controller: 'CustomController',
             controllerAs: 'vm'
-        }).when('/defaultui', {
-            templateUrl: 'app/default-ui/defaultui.html',
+        }).when('/default-ui', {
+            templateUrl: 'app/default-ui/default-ui.html',
             controller: 'DefaultUISchemaController',
             controllerAs: 'vm'
-        }).when('/defaultschema', {
+        }).when('/default-schema', {
             templateUrl: 'app/default/default-schema.html',
             controller: 'DefaultSchemaController',
             controllerAs: 'vm'

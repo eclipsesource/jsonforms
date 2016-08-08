@@ -9,6 +9,12 @@ angular.module('makeithappen').controller('DefaultUISchemaController', function(
             },
             "age": {
                 "type": "integer"
+            },
+            "height": {
+                "type": "number"
+            },
+            "vegetarian": {
+                "type": "boolean"
             }
         }
     };
@@ -17,7 +23,9 @@ angular.module('makeithappen').controller('DefaultUISchemaController', function(
 
     vm.data = {
         name: 'John Doe',
-        age: 36
+        age: 36,
+        height: 1.76,
+        vegetarian: true
     };
 
     vm.formattedData = function() {

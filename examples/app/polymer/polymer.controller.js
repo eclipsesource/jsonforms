@@ -55,7 +55,7 @@ angular.module('makeithappen').controller('PolymerController', function() {
         }
     };
     vm.data = {
-        name: 'John Doe',
+        firstName: 'John',
         vegetarian: false,
         birthDate: "02.06.1985",
         nationality: "US"
