@@ -2,10 +2,14 @@ function customDirective() {
     return {
         restrict : "E",
         template : '<jsonforms-control>' +
-          '<input type="text" style="background-color: #3278b3; color: #8dd0ff" class="jsf-control-string jsf-control form-control" ng-change="vm.propagateChanges()" ng-model="vm.modelValue[vm.fragment]" />' +
+          '<input type="text" style="background-color: #3278b3; color: #8dd0ff" class="jsf-control-string jsf-control form-control" ng-change="vm.triggerChangeEvent()" ng-model="vm.resolvedData[vm.fragment]" />' +
         '</jsonforms-control>',
         controller : ['BaseController', '$scope', function(BaseController, $scope) {
-            BaseController.call( this, $scope );
+            var vm = this;
+            BaseController.call( vm, $scope );
+            console.log(vm);
+            console.log(vm.schemaPath);
+            console.log(vm.showLabel);
         }],
         controllerAs : 'vm'
     };
@@ -17,6 +21,7 @@ app.directive('customControl', customDirective)
         RendererService.register("custom-control",
             testers.and(
                 testers.uiTypeIs('Control'),
-                testers.schemaPropertyName('firstName')
+                testers.schemaPropertyName('firstName'),
+                testers.optionIs('useCustom', true)
             ), 3);
     }]);

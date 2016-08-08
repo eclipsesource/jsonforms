@@ -1,5 +1,7 @@
 angular.module('makeithappen', [
     'ngRoute',
-    'jsonforms'
+    'jsonforms',
+    'ui.ace',
+    'ui.validate'
 ]);
 

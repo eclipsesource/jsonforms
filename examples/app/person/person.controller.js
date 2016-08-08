@@ -156,16 +156,18 @@ angular.module('makeithappen').controller('PersonController', function() {
                     }
                 }
             },
-
             {
-                "type": "HorizontalLayout",
-                "elements": [
-                    {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                    "type": "HorizontalLayout",
+                    "elements": [
+                      {
                         "type": "Control",
                         "label": {
                             "text": "Name",
                             "show": true
-                        },
+                          },
                         "scope": {
                             "$ref": "#/properties/name"
                         },
@@ -179,7 +181,7 @@ angular.module('makeithappen').controller('PersonController', function() {
                                 "expectedValue":36
                             }
                         }
-                    },
+                      },
                     {
                         "type": "Control",
                         "label": {
@@ -196,13 +198,11 @@ angular.module('makeithappen').controller('PersonController', function() {
                             "$ref": "#/properties/personalData/properties/height"
                         }
                     },
-                    {
-                        "type": "Control",
-                        "label": "Vegetarian",
-                        "scope": {
-                            "$ref": "#/properties/vegetarian"
-                        }
-                    },
+                  ]
+                  },
+                {
+                  "type": "HorizontalLayout",
+                  "elements": [
                     {
                         "type": "Control",
                         "label": "Nationality",
@@ -225,7 +225,9 @@ angular.module('makeithappen').controller('PersonController', function() {
                             "$ref": "#/properties/birthDate"
                         }
                     }
-                ]
+                  ]
+                }
+              ]
             },
             {
                 "type": "Categorization",

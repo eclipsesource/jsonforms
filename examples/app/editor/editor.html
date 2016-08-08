@@ -13,7 +13,7 @@
 
 <div class="row">
     <form role="form" class="jsf-form">
-        <jsonforms id="editor" schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
+        <jsonforms ng-if="vm.schema" id="editor" schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
     </form>
 </div>
 

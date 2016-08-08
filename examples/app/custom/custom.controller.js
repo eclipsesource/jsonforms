@@ -51,13 +51,16 @@ angular.module('makeithappen').controller('CustomController', function() {
         "type": "VerticalLayout",
         "elements": [
             {
-                "type": "HorizontalLayout",
+                "type": "Group",
                 "label": "Person Details",
                 "elements": [
                     {
                         "type": "Control",
                         "label": "First name",
-                        "scope": { "$ref": "#/properties/firstName" }
+                        "scope": { "$ref": "#/properties/firstName" },
+                        "options": {
+                            "useCustom": true
+                        }
                     },
                     {
                         "type": "Control",
@@ -83,6 +86,8 @@ angular.module('makeithappen').controller('CustomController', function() {
     };
 
     vm.data = {
+        "firstName": "Gustav",
+        "lastName": "Gans",
         "hobbies": ["cooking", "playing video games"],
         "friends": [{
             "nickName": "Ottgar",
