@@ -6,6 +6,7 @@ import {IDataProvider} from '../../services/data/data-service';
 import {IRule, IControlObject} from '../../../uischema';
 import {SchemaElement} from '../../../jsonschema';
 import {LabelObjectUtil} from '../Labels';
+import {IUISchemaElement} from "../../../../uischema";
 
 export class AbstractControl implements IRuleServiceCallBack {
 
@@ -21,6 +22,8 @@ export class AbstractControl implements IRuleServiceCallBack {
     protected data: any;
     private services: Services;
     private alerts = [];
+    private showLabel: boolean;
+    protected label: string;
 
     constructor(protected scope: ng.IScope) {
         this.services = scope['services'];
@@ -32,11 +35,15 @@ export class AbstractControl implements IRuleServiceCallBack {
         this.fragment = PathResolver.lastFragment(this.uiSchema.scope.$ref);
         this.resolvedData = PathResolver.resolveToLastModel(this.data, this.uiSchema.scope.$ref);
         this.resolvedSchema = PathResolver.resolveSchema(this.schema, this.schemaPath);
+        this.showLabel = LabelObjectUtil.shouldShowLabel(this.uiSchema);
+        this.label = AbstractControl.createLabel(this.uiSchema, this.schemaPath, AbstractControl.isRequired(this.schema, this.schemaPath));
 
         this.scope.$on('jsonforms:change', () => {
             // TODO: remote references to services
             // instead try to iterate over all services and call some sort of notifier
-            this.validate();
+            if (this.validate) {
+                this.validate();
+            }
             this.services.get<IRuleService>(ServiceId.RuleService).reevaluateRules(this.schemaPath);
         });
 
@@ -50,16 +57,11 @@ export class AbstractControl implements IRuleServiceCallBack {
         return this.schemaPath;
     }
 
-    protected get showLabel() {
-        return LabelObjectUtil.shouldShowLabel(this.uiSchema);
-    }
-
-    protected get label() {
-        let labelObject = LabelObjectUtil.getElementLabelObject(this.uiSchema,
-            this.schemaPath);
+    private static createLabel(uischema: IControlObject, schemaPath: string, isRequiredProperty: boolean): string {
+        let labelObject = LabelObjectUtil.getElementLabelObject(uischema, schemaPath);
         let stringBuilder = labelObject.text;
 
-        if (this.isRequired(this.schemaPath)) {
+        if (isRequiredProperty) {
             stringBuilder += '*';
         }
 
@@ -85,7 +87,7 @@ export class AbstractControl implements IRuleServiceCallBack {
         }
     }
 
-    private isRequired(schemaPath: string): boolean {
+    private static isRequired(schema: SchemaElement, schemaPath: string): boolean {
         let path = PathUtil.init(schemaPath);
         let lastFragment = PathUtil.lastFragment(path);
 
@@ -95,7 +97,7 @@ export class AbstractControl implements IRuleServiceCallBack {
         }
 
         // FIXME: we want resolveSchema to actually return an array here
-        let subSchema: any = PathResolver.resolveSchema(this.schema, path + '/required');
+        let subSchema: any = PathResolver.resolveSchema(schema, path + '/required');
         if (subSchema !== undefined) {
             if (subSchema.indexOf(PathUtil.lastFragment(schemaPath)) !== -1) {
                 return true;

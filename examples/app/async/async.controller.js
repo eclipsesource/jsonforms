@@ -181,21 +181,6 @@ var uischema = {
                 },
                 {
                     "type": "Control",
-                    "label": "Nationality",
-                    "scope": {
-                        "$ref": "#/properties/nationality"
-                    }
-                },
-                {
-                    "type": "Control",
-                    "label": "Occupation",
-                    "scope": {
-                        "$ref": "#/properties/occupation"
-                    },
-                    "suggestion": ["Accountant", "Engineer", "Freelancer", "Journalism", "Physician", "Student", "Teacher", "Other"]
-                },
-                {
-                    "type": "Control",
                     "label": "Birthday",
                     "scope": {
                         "$ref": "#/properties/birthDate"

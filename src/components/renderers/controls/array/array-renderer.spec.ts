@@ -31,7 +31,7 @@ describe('Array renderer', () => {
         scope.data = {'comments': [{'msg': 'Some message'}, {'msg': 'Another message'}]};
         let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(3);
+        expect(angular.element(el[0].getElementsByTagName('jsonforms-layout').length)[0]).toBe(3);
     }));
 
     it('should render an empty array',
@@ -59,7 +59,7 @@ describe('Array renderer', () => {
         scope['data'] = {};
         let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
         scope.$digest();
-        expect(angular.element(el[0].getElementsByClassName('jsf-group').length)[0]).toBe(1);
+        expect(angular.element(el[0].getElementsByTagName('jsonforms-layout').length)[0]).toBe(1);
     }));
 
     it('should create an array if it is undefined',

@@ -16,13 +16,18 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet" href="assets/jsonforms.css"/>
-    <link rel="stylesheet" href="assets/jsonforms-bootstrap.css"/>
+
     <link rel="stylesheet" href="css/main.css"/>
 
     <!-- public path is set to assets in webpack.dev.js -->
+    <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
     <script src="assets/jsonforms.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="assets/jsonforms.css"/>
+    <link rel="stylesheet" href="assets/jsonforms-bootstrap.css"/>
+
+    <script src="bower_components/angular-ui-validate/dist/validate.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui-ace/ui-ace.min.js"></script>
 
     <script src="app/app.js" type="text/javascript"></script>
     <script src="app/routeconfig.js" type="text/javascript"></script>
@@ -51,7 +56,9 @@
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="#/local">JSON Forms Demo</a>
+                <a class="navbar-brand" href="#/local">
+                    <span class="logo"><strong>JSON</strong>Forms Demo</span>
+                </a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -65,10 +72,10 @@
                             <li ng-class="index.isActive('/resolve')"><a href="#/resolve">Resolve example</a></li>
                             <li ng-class="index.isActive('/arrays')"><a href="#/arrays">Array controls</a></li>
                             <li ng-class="index.isActive('/editor')"><a href="#/editor">Live edit</a></li>
-                            <li ng-class="index.isActive('/defaultui')"><a href="#/defaultui">Generated UI</a></li>
-                            <li ng-class="index.isActive('/defaultschema')"><a href="#/defaultschema">Generated schema</a></li>
+                            <li ng-class="index.isActive('/default-ui')"><a href="#/default-ui">Generated UI</a></li>
+                            <li ng-class="index.isActive('/default-schema')"><a href="#/default-schema">Generated schema</a></li>
                             <li ng-class="index.isActive('/polymer')"><a href="#/polymer">Polymer example</a></li>
-                            <li ng-class="index.isActive('/table')"><a href="#/table">Table example</a></li>
+                            <!--<li ng-class="index.isActive('/table')"><a href="#/table">Table example</a></li>-->
                             <li ng-class="index.isActive('/custom')"><a href="#/custom">Custom example</a></li>
                         </ul>
                     </li>

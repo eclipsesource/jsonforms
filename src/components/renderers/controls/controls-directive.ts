@@ -1,12 +1,7 @@
-const controlTemplate = `<div class="jsf-control" ng-hide="vm.hide">
-    <div>
-        <label ng-if="vm.showLabel" for="{{vm.id}}">{{vm.label}}</label>
-    </div>
-    <div style="display:flex;" ng-transclude>
-    </div>
-    <div>
-        <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>
-    </div>
+const controlTemplate = `<div class="jsf-control form-group" ng-class="vm.alerts.length > 0 ? 'has-error' : ''"" ng-hide="vm.hide">
+    <label ng-if="vm.showLabel" for="{{vm.id}}" class="control-label">{{vm.label}}</label>
+    <div style="display:flex;" ng-transclude></div>
+    <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>
 </div>`;
 
 class ControlDirective implements ng.IDirective {

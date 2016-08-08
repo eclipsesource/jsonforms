@@ -56,13 +56,8 @@ angular.module('makeithappen').controller('ArraysController', function() {
             {
                 "type": "Control",
                 "scope": {
-                    "$ref": "#/properties/comments"
-                },
-                "label": "Some more comments",
-                options: {
-                    "simple": true,
-                    "submit": true // has no effect
-                }
+                    "$ref": "#/properties/birthDate"
+              }
             }
         ]
     };

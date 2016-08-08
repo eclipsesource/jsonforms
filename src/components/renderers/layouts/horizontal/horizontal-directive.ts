@@ -36,13 +36,11 @@ export class HorizontalController  extends AbstractLayout {
 
 const horizontalTemplate = `<jsonforms-layout>
     <div class="jsf-horizontal-layout">
-        <fieldset>
-            <div class="jsf-horizontal-layout-container">
-                <div ng-repeat="child in vm.uiSchema.elements">
-                    <jsonforms-inner uischema="child"></jsonforms-inner>
-                </div>
-            </div>
-        </fieldset>
+         <div class="jsf-horizontal-layout-container">
+              <div ng-repeat="child in vm.uiSchema.elements">
+                   <jsonforms-inner uischema="child"></jsonforms-inner>
+              </div>
+         </div>
     </div>
 </jsonforms-layout>`;
 

@@ -6,19 +6,10 @@ angular.module('makeithappen').controller('DefaultSchemaController', function() 
     vm.uiSchema = undefined;
     vm.data = {
         name: 'John Doe',
-        age: 36
+        age: 36,
+        height: 1.76,
+        vegetarian: true
     };
-    vm.users = [
-        vm.data,
-        {
-            name: 'Todd',
-            age: 33
-        },
-        {
-            name: 'Jimmy',
-            age: 34
-        }
-    ];
 
     vm.formattedData = function() {
         return JSON.stringify(vm.data, null, 4);
