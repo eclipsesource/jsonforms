@@ -73,7 +73,7 @@ describe('MasterDetail', () => {
         let nameInput = el[0].querySelector('#\\#\\/properties\\/name');
         expect(nameInput).not.toBeNull();
 
-        expect(RootDataService.getRootData()).toBe(scope.data);
+        expect(DataService.getRoot()).toBe(scope.data);
     }));
 
     it('array should be rendered',
@@ -118,8 +118,8 @@ describe('MasterDetail', () => {
                 '$ref': '#'
             },
             'options' : {
-                'labelProvider': {'a': 'custom', 'c': 'custom'};
-                'imageProvider': {'a': 'myImageAUrl', 'c': 'myImageBUrl'};
+                'labelProvider': {'a': 'custom', 'c': 'custom'},
+                'imageProvider': {'a': 'myImageAUrl', 'c': 'myImageBUrl'}
             }
         };
         scope.data = [
