@@ -10,7 +10,7 @@ import {Testers, schemaTypeIs, optionIs} from '../../testers';
 class ArrayReadOnlyDirective implements ng.IDirective {
     restrict = 'E';
     template = `
-    <jsonforms-layout class="jsf-group">
+    <jsonforms-layout>
       <fieldset>
         <legend>{{vm.label}}</legend>
         <div ng-repeat='data in vm.resolvedData[vm.fragment]'>
@@ -28,23 +28,21 @@ class ArrayReadOnlyDirective implements ng.IDirective {
 class ArrayDirective implements ng.IDirective {
     restrict = 'E';
     template = `
-    <jsonforms-layout class="jsf-group">
+    <jsonforms-layout>
         <fieldset ng-disabled="vm.uiSchema.readOnly">
-            <legend>{{vm.label}}</legend>
-            <div ng-repeat="d in vm.resolvedData[vm.fragment]">
+          <legend>{{vm.label}}</legend>
+          <div  class="jsf-array">
+            <div ng-repeat="d in vm.resolvedData[vm.fragment]" class="well">
                 <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
             </div>
-            <fieldset>
-                <legend>Add New Entry</legend>
-                <jsonforms schema="vm.arraySchema" data="vm.submitElement"></jsonforms>
-                <input class="btn btn-primary"
-                      ng-show="vm.supportsSubmit"
-                      type="button"
-                      value="Add to {{vm.buttonText}}"
-                      ng-click="vm.submitCallback()"
-                      ng-model="vm.submitElement">
-                </input>
-            </fieldset>
+            <input class="btn btn-primary"
+                   ng-show="vm.supportsSubmit"
+                   type="button"
+                   value="Create {{vm.buttonText}}"
+                   ng-click="vm.submitCallback()"
+                   ng-model="vm.submitElement">
+            </input>
+            </div>
         </fieldset>
     </jsonforms-layout>`;
     controller = ArrayController;
@@ -67,7 +65,7 @@ class ArrayController extends AbstractControl {
         let items = resolvedSubSchema.items;
         this.arraySchema = items;
         this.properties = _.keys(items['properties']);
-        this.arrayUiSchema = uiGenerator.generateDefaultUISchema(items, 'Group');
+        this.arrayUiSchema = uiGenerator.generateDefaultUISchema(items);
     }
 
     public get buttonText(){

@@ -26,11 +26,11 @@ class BootstrapHorizontalController extends HorizontalController {
 
 const horizontalTemplate = `<jsonforms-layout class="jsf-horizontal-layout">
     <div class="jsf-horizontal-layout">
-        <fieldset class="row">
+        <div class="row">
             <div ng-repeat="child in vm.uiSchema.elements" class="col-sm-{{vm.childSize}}">
                 <jsonforms-inner uischema="child"></jsonforms-inner>
             </div>
-        </fieldset>
+        </div>
     </div>
 </jsonforms-layout>`;
 

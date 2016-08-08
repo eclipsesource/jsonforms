@@ -1,12 +1,14 @@
-const groupTemplate = `<jsonforms-layout class="jsf-group">
+const groupTemplate = `<jsonforms-layout>
     <div class="jsf-group">
-        <fieldset class="row">
-            <legend ng-if="vm.label">{{vm.label}}</legend>
-            <jsonforms-inner ng-repeat="child in vm.uiSchema.elements"
+        
+          <fieldset>
+              <legend ng-if="vm.label">{{vm.label}}</legend>
+              <jsonforms-inner ng-repeat="child in vm.uiSchema.elements"
                              uischema="child"
                              class="col-sm-100">
-            </jsonforms-inner>
-        </fieldset>
+              </jsonforms-inner>
+          </fieldset>      
+        
     </div>
 </jsonforms-layout>`;
 
