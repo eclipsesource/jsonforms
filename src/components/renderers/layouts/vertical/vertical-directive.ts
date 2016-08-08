@@ -19,12 +19,11 @@ class VerticalController extends AbstractLayout {
 const verticalTemplate = `
 <jsonforms-layout>
     <div class="jsf-vertical-layout">
-        <fieldset class="jsf-vertical-layout-container">
-        
+        <div class="jsf-vertical-layout-container">        
             <div ng-repeat="child in vm.uiSchema.elements">
                 <jsonforms-inner uischema="child"></jsonforms-inner>
             </div>
-        </fieldset>
+        </div>
     </div>
 </jsonforms-layout>`;
 

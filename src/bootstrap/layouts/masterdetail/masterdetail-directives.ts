@@ -39,6 +39,7 @@ const masterDetailCollectionTemplate = `
                     class="{{vm.isEmptyInstance(vm.instance,key)?'jsf-masterdetail-empty':''}}">
                     <uib-accordion-heading>
                         <span ng-click="vm.selectElement(child,value)"
+                              class="jsf-masterdetail-entry" 
                               ng-class="{
                                  'jsf-masterdetail-selected':selectedChild==child
                               }">

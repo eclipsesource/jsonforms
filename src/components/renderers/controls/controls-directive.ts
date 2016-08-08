@@ -1,4 +1,4 @@
-const controlTemplate = `<div class="jsf-control form-group has-error" ng-hide="vm.hide">
+const controlTemplate = `<div class="jsf-control form-group" ng-class="vm.alerts.length > 0 ? 'has-error' : ''"" ng-hide="vm.hide">
     <label ng-if="vm.showLabel" for="{{vm.id}}" class="control-label">{{vm.label}}</label>
     <div style="display:flex;" ng-transclude></div>
     <alert ng-repeat="alert in vm.alerts" type="{{alert.type}}" >{{alert.msg}}</alert>

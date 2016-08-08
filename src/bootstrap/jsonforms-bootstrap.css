@@ -1,6 +1,6 @@
 .jsf-masterdetail{}
 .jsf .jsf-masterdetail .panel-body {
-  padding-bottom: 0;
+  /*padding-bottom: 0;*/
 }
 .jsf .jsf-masterdetail .panel-group {
   margin-bottom: 5px;
@@ -18,11 +18,14 @@
   border-width: 0;
 }
 .jsf-masterdetail-selected {
-    font-weight: bold;
+    /*font-weight: bold;*/
+    font-size: 0.9em;
+    color:#000;
 }
 
 .jsf-masterdetail-property {
-    font-style: italic;
+    /*font-style: italic;*/
+    font-size: 0.9em;
     color:#888888;
 }
 
