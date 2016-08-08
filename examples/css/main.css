@@ -71,7 +71,6 @@ h1 {
 .jsf pre {
     background-color: #f5f5f5;
     padding: 0.5em;
-    color: black;
 }
 .jsf .panel {
     margin-bottom: 1.5em;
@@ -220,12 +219,4 @@ body {
 }
 .jsf-masterdetail-header {
     text-decoration: none;
-}
-.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover,
-.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry-selected{
-    background-color: #2A4257;
-}
-.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-add:hover,
-.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-remove:hover {
-    background-color: #4A6277;
 }
