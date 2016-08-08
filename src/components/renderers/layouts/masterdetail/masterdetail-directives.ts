@@ -1,5 +1,5 @@
 import {AbstractControl} from '../../controls/abstract-control';
-import {SchemaElement, SchemaArray} from '../../../../jsonschema';
+import { SchemaElement, SchemaArray } from '../../../../jsonschema';
 import {uiTypeIs} from '../../testers';
 
 class MasterDetailDirective implements ng.IDirective {
@@ -22,6 +22,7 @@ class MasterDetailController extends AbstractControl {
     private imageProvider: ImageProvider = {};
     private treeSchema: SchemaArray;
     private treeData: Array<any>;
+    private deletableRoot = true;
     constructor(scope: ng.IScope) {
         super(scope);
         this.scope['select'] = (child, schema) => this.select(child, schema);
@@ -38,8 +39,9 @@ class MasterDetailController extends AbstractControl {
         }
         if (this.resolvedSchema.type === 'object') {
             let innerSchema = this.resolvedSchema;
-            this.treeSchema = {'type': 'array', 'items': innerSchema};
+            this.treeSchema = { 'type': 'array', 'items': innerSchema };
             this.treeData = [this.resolvedData];
+            this.deletableRoot = false;
         } else {
             this.treeSchema = this.resolvedSchema;
             this.treeData = this.resolvedData;
@@ -58,6 +60,11 @@ class MasterDetailCollectionController {
     public schema: any;
     public labelprovider: LabelProvider;
     public imageprovider: ImageProvider;
+    public deletableroot: boolean;
+    public selectedSchemaForAdd;
+    public selectedElementForAdd;
+    public selectedScopeForAdd;
+    public showSelectKeyDialog: boolean = false;
     constructor(private scope) {
     }
     public getArraySubSchemas(schema) {
@@ -72,14 +79,18 @@ class MasterDetailCollectionController {
     public get selectedChild() {
         return this.scope.selectedChild;
     }
-    public selectElement (child, schema) {
+    public selectElement(child, schema) {
         this.scope.select(child, schema.items);
     }
-    public updateHasContents (scope) : void {
+    public updateHasContents(scope): void {
+        if (scope.child === this.instance) {
+            scope.hasContents = true;
+            return;
+        }
         let child = scope.child;
         let schemaToCheck = scope.schema.items;
         let keys = _.keys(this.getArraySubSchemas(schemaToCheck));
-        for (let key of keys){
+        for (let key of keys) {
             if (child[key] !== undefined && child[key].length !== 0) {
                 scope.hasContents = true;
                 return;
@@ -104,20 +115,28 @@ class MasterDetailCollectionController {
         }
         return null;
     }
-    public addElement(data, dataSchema, event: ng.IAngularEvent) {
-        let possibleKeySchemas = this.getArraySubSchemas(dataSchema.items);
-        let possibleAddPoints =  _.keys(possibleKeySchemas);
-        let selectedAddPoint =  possibleAddPoints[0];
-        if (data[selectedAddPoint] === undefined) {
-            data[selectedAddPoint] = [];
+    public addElement(schemaKeyForAdd, schemaOfNewElement, event: ng.IAngularEvent) {
+        if (this.selectedElementForAdd[schemaKeyForAdd] === undefined) {
+            this.selectedElementForAdd[schemaKeyForAdd] = [];
         }
         let newElement = {};
-        data[selectedAddPoint].push(newElement);
-        this.selectElement(newElement, possibleKeySchemas[selectedAddPoint]);
+        this.selectedElementForAdd[schemaKeyForAdd].push(newElement);
+        this.selectElement(newElement, schemaOfNewElement);
         event.stopPropagation();
+        this.updateHasContents(this.selectedScopeForAdd);
+        this.selectedScopeForAdd.object_open = true;
+        this.showSelectKeyDialog = false;
+        this.selectedScopeForAdd = undefined;
+        this.selectedElementForAdd = undefined;
+        this.selectedSchemaForAdd = undefined;
     }
     public removeElement(data, key, parentData) {
-        let children : Array<any> = parentData[key];
+        let children: Array<any>;
+        if (parentData === this.instance) {
+            children = this.instance;
+        } else {
+            children = parentData[key];
+        }
         let index = children.indexOf(data);
         children.splice(index, 1);
     }
@@ -130,7 +149,8 @@ class MasterDetailCollectionDirective implements ng.IDirective {
         schema: '=',
         instance: '=',
         labelprovider: '=',
-        imageprovider: '='
+        imageprovider: '=',
+        deletableroot: '='
     };
     scope = true;
     templateUrl = 'masterdetail-collection.html';
@@ -141,7 +161,8 @@ const masterDetailTemplate = `
     <!-- Master -->
     <div class="jsf-masterdetail-master">
         <jsonforms-masterdetail-collection schema="vm.treeSchema" instance="vm.treeData"
-            labelprovider="vm.labelProvider" imageprovider="vm.imageProvider">
+            labelprovider="vm.labelProvider" imageprovider="vm.imageProvider"
+            deletableroot="vm.deletableRoot">
         </jsonforms-masterdetail-collection>
     </div>
     <!-- Detail -->
@@ -153,45 +174,64 @@ const masterDetailTemplate = `
 
 const masterDetailCollectionTemplate = `
 <script type="text/ng-template" id="masterDetailTreeEntry">
-    <div>
-        <i ng-class="{
-             'chevron-down': object_open && hasContents,
-             'chevron-right': !object_open && hasContents,
-             'chevron-placeholder': !hasContents
-           }"
-           ng-click="object_open=!object_open"></i>
-        <span class="jsf-masterdetail-entry-icon"><img ng-src="{{vm.getImage(schema)}}"/></span>
-        <span ng-click="vm.selectElement(child,schema)"
-          class="jsf-masterdetail-entry"
-          ng-class="{'jsf-masterdetail-entry-selected':vm.selectedChild === child}">
-          {{vm.getLabel(child,schema)}}
-          <span class="jsf-masterdetail-entry-add"
-            ng-click="vm.addElement(child,schema,$event);vm.updateHasContents($parent);
-                $parent.object_open=true;"
-            ng-if="vm.canHaveChildren(schema)">+</span>
-          <span class="jsf-masterdetail-entry-remove"
-            ng-click="vm.removeElement(child,schemaKey,parentItemContext.child);
-                vm.updateHasContents(parentItemContext);
-                parentItemContext.object_open=
-                    parentItemContext.object_open&&parentItemContext.hasContents;
-                    vm.selectElement(parentItemContext.child,parentItemContext.schema)"
-            ng-if="parentItemContext.hasContents">-</span>
-        </span>
-    </div>
-    <ul class="jsf-masterdetail-entries" ng-show="object_open" ng-if="hasContents"
-        ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(schema.items)">
-        <li ng-repeat="child in child[schemaKey]"
-            ng-init="vm.updateHasContents(this);object_open=false;
-                parentItemContext = this.$parent.$parent.$parent"
-            class="{{!hasContents?'jsf-masterdetail-empty':''}}"
-            ng-include="'masterDetailTreeEntry'">
-        </li>
-    </ul>
+  <div>
+    <i ng-class="{
+       'chevron-down': object_open && hasContents,
+       'chevron-right': !object_open && hasContents,
+       'chevron-placeholder': !hasContents
+     }"
+     ng-click="object_open=!object_open"></i>
+    <span class="jsf-masterdetail-entry-icon"><img ng-src="{{vm.getImage(schema)}}"/></span>
+    <span ng-click="vm.selectElement(child,schema)"
+      class="jsf-masterdetail-entry"
+      ng-class="{'jsf-masterdetail-entry-selected':vm.selectedChild === child}">
+      {{vm.getLabel(child,schema)}}
+      <span class="jsf-masterdetail-entry-add"
+        ng-click="vm.selectedScopeForAdd=$parent;vm.selectedSchemaForAdd=schema;
+          vm.selectedElementForAdd=child;vm.showSelectKeyDialog=true;
+          vm.addClickPositionX=$event.pageX;vm.addClickPositionY=$event.pageY"
+        ng-if="vm.canHaveChildren(schema)">+</span>
+      <span class="jsf-masterdetail-entry-remove"
+        ng-click="vm.removeElement(child,schemaKey,parentItemContext.child);
+          vm.updateHasContents(parentItemContext);
+          parentItemContext.object_open=
+            parentItemContext.object_open&&parentItemContext.hasContents;
+            vm.selectElement(parentItemContext.child,parentItemContext.schema)"
+        ng-if="parentItemContext.hasContents">-</span>
+    </span>
+  </div>
+  <ul class="jsf-masterdetail-entries" ng-show="object_open" ng-if="hasContents"
+    ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(schema.items)">
+    <li ng-repeat="child in child[schemaKey]"
+      ng-init="vm.updateHasContents(this);object_open=false;
+        parentItemContext = this.$parent.$parent.$parent"
+      class="{{!hasContents?'jsf-masterdetail-empty':''}}"
+      ng-include="'masterDetailTreeEntry'">
+    </li>
+  </ul>
 </script>
-<ul class="jsf-masterdetail-entries" ng-repeat="child in vm.instance"
-    ng-init="schema=vm.schema;vm.updateHasContents(this);parentItemContext=this;object_open=false">
-    <li ng-include="'masterDetailTreeEntry'"></li>
-</ul>
+<div ng-init="hasContents=vm.deletableroot;parentItemContext=this;
+    child=vm.instance;schema=vm.schema;">
+    <div ng-if="vm.deletableroot" ng-click="vm.instance.push({})">Add Root Item</div>
+    <ul class="jsf-masterdetail-entries" ng-repeat="child in vm.instance"
+      ng-init="object_open=false;vm.updateHasContents(this);">
+      <li ng-include="'masterDetailTreeEntry'"></li>
+    </ul>
+</div>
+<div class="selectKeyForAdd" ng-if="vm.showSelectKeyDialog" ng-click="vm.showSelectKeyDialog=false">
+  <div ng-style="{'left':vm.addClickPositionX,'top':vm.addClickPositionY}">
+    <ul>
+      <li ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(vm.selectedSchemaForAdd.items)"
+        ng-click="vm.addElement(schemaKey,schema,$event);">
+        <span class="jsf-masterdetail-selectkey-icon">
+          <img ng-src="{{vm.getImage(schema)}}"/>
+        </span>
+        <span class="jsf-masterdetail-selectkey-label">{{schemaKey}}</span>
+      </li>
+    </ul>
+    <span ng-click="vm.showSelectKeyDialog=false">Cancel</span>
+  </div>
+</div>
 `;
 
 export default angular

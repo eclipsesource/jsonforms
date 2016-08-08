@@ -94,7 +94,7 @@
 .jsf-masterdetail>.jsf-masterdetail-master jsonforms-masterdetail-collection {
     flex: 1;
 }
-.jsf-masterdetail .jsf-masterdetail-master jsonforms-masterdetail-collection > ul {
+.jsf-masterdetail .jsf-masterdetail-master jsonforms-masterdetail-collection > div > ul {
     margin-left: 0;
 }
 .jsf-masterdetail ul {
@@ -150,4 +150,32 @@
 }
 .jsf-masterdetail .jsf-masterdetail-master .chevron-placeholder:after{
      content:"\2003"
+}
+.jsf-masterdetail .selectKeyForAdd {
+    position:fixed;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,0.6);
+    z-index:5;
+    width:100%;
+    height:100%;
+}
+.jsf-masterdetail .selectKeyForAdd>div{
+    background-color: white;
+    color: black;
+    z-index:10;
+    position: absolute;
+    border : 1px solid;
+    padding: 0.25em;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+}
+.jsf-masterdetail .selectKeyForAdd ul {
+    margin: 0;
+}
+.jsf-masterdetail .selectKeyForAdd li:hover,
+.jsf-masterdetail .selectKeyForAdd >div>span:hover {
+    background-color: lightgray;
 }

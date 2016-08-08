@@ -20,7 +20,7 @@ app.run(['UiSchemaRegistry', function(UiSchemaRegistry) {
 }]);
 angular.module('makeithappen').controller('MasterDetailController', function() {
     var vm = this;
-    vm.schema = {
+    vm.schemaArray = {
         "definitions": {
             "folder": {
               "type": "object",
@@ -102,7 +102,60 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
         }
     };
 
-    vm.data =[{
+    vm.dataArray =[
+        {
+            "name":"c",
+            "folders":
+            [
+                {
+                    name: 'a',
+                    folders:[
+                        {name: 'aa'},
+                        {name: 'ab'}
+                    ]
+                },
+                {
+                    name: 'b'
+                }
+            ],
+            "files":
+            [
+                {
+                    name: 'x',
+                },
+                {
+                    name: 'y',
+                }
+            ]
+        },
+        {
+            "name":"d",
+            "folders":
+            [
+                {
+                    name: 'o',
+                    folders:[
+                        {name: 'oo'},
+                        {name: 'op'}
+                    ]
+                },
+                {
+                    name: 'p'
+                }
+            ],
+            "files":
+            [
+                {
+                    name: 'i',
+                },
+                {
+                    name: 'k',
+                }
+            ]
+        }
+    ];
+
+    vm.dataObject = {
         "name":"c",
         "folders":
         [
@@ -126,35 +179,74 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
                 name: 'y',
             }
         ]
-    },
-    {
-        "name":"d",
-        "folders":
-        [
-            {
-                name: 'o',
-                folders:[
-                    {name: 'oo'},
-                    {name: 'op'}
-                ]
-            },
-            {
-                name: 'p'
-            }
-        ],
-        "files":
-        [
-            {
-                name: 'i',
-            },
-            {
-                name: 'k',
-            }
-        ]
-    }
-];
+    };
 
-    vm.formattedData = function() {
-        return JSON.stringify(vm.data, null, 4);
+    vm.schemaObject = {
+        "definitions": {
+            "folder": {
+              "type": "object",
+              "properties": {
+                  "id": "folder",
+                  "name": {
+                      "type": "string",
+                      "minLength": 3
+                  },
+                  "folders": {
+                      "type":"array",
+                      "items":
+                      {
+                          //TODO make recursive
+                          "$ref": "#/definitions/file"
+                      }
+                  },
+                  "files": {
+                      "type":"array",
+                      "items":
+                      {
+                          "$ref": "#/definitions/file"
+                      }
+                  }
+              },
+              "required": ["name"]
+            },
+            "file": {
+                "type": "object",
+                "properties": {
+                    "id": "file",
+                    "name": {
+                        "type": "string",
+                        "minLength": 3
+                    }
+                },
+                "required": ["name"]
+            }
+        },
+        "type": "object",
+        "properties": {
+            "id": "drive",
+            "name": {
+                "type": "string",
+                "minLength": 3
+            },
+            "folders": {
+                "type":"array",
+                "items":
+                {
+                    "$ref": "#/definitions/folder"
+                }
+            },
+            "files": {
+                "type":"array",
+                "items":
+                {
+                    "$ref": "#/definitions/file"
+                }
+            }
+        },
+        "required": ["name"]
+    };
+
+    vm.formattedData = function(data) {
+        return JSON.stringify(data, null, 4);
     };
 });
