@@ -6,10 +6,7 @@ function customDirective() {
         '</jsonforms-control>',
         controller : ['BaseController', '$scope', function(BaseController, $scope) {
             var vm = this;
-            BaseController.call( vm, $scope );
-            console.log(vm);
-            console.log(vm.schemaPath);
-            console.log(vm.showLabel);
+            BaseController.call(vm, $scope);
         }],
         controllerAs : 'vm'
     };
