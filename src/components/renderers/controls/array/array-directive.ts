@@ -31,7 +31,7 @@ class ArrayDirective implements ng.IDirective {
     <jsonforms-layout>
         <fieldset ng-disabled="vm.uiSchema.readOnly">
           <legend>{{vm.label}}</legend>
-          <div  class="jsf-array">
+          <div>
             <div ng-repeat="d in vm.resolvedData[vm.fragment]" class="well">
                 <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
             </div>
