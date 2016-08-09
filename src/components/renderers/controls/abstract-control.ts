@@ -6,7 +6,6 @@ import {IDataProvider} from '../../services/data/data-service';
 import {IRule, IControlObject} from '../../../uischema';
 import {SchemaElement} from '../../../jsonschema';
 import {LabelObjectUtil} from '../Labels';
-import {IUISchemaElement} from "../../../../uischema";
 
 export class AbstractControl implements IRuleServiceCallBack {
 

@@ -1,5 +1,5 @@
 {
-  "ambientDependencies": {
+  "globalDependencies": {
     "angular": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
     "angular-mocks": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-mocks.d.ts#5d0f2126c8dac8fce0ff020218aea06607213b0d",
     "angular-route": "github:DefinitelyTyped/DefinitelyTyped/angularjs/angular-route.d.ts#717a5fdb079f8dd7c19f1b22f7f656dd990f0ccf",
