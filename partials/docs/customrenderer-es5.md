@@ -43,12 +43,14 @@ Now, we can add the rating control to the `index.html` in order to test that we 
 ```
 ...
 <jsonforms schema="my.schema" uischema="my.uischema" data="my.data"></jsonforms>
-<uib-rating ng-model="2" max="5"></uib-rating>
 ...
 ```
 
 When we run `npm install` and `npm start initial` again, we should now see the following:
-![Default form with rating control](./images/docs/customrenderer.ts.formwithuibrating.png){:.img-responsive .docimg}
+<div ng-controller="CustomRendererController as vm" class='example'>
+  <jsonforms schema="vm.schema" uischema="vm.uischema" data="vm.data"></jsonforms>
+  <uib-rating ng-model="vm.exampleRating" max="5"></uib-rating>
+</div>
 
 As you can see, we are able to use the ui-bootstrap control in our HTML code. So it is time now to use it in a custom JSON forms renderer.
 But let us remove the tag `<uib-rating ng-model="2" max="5"></uib-rating>` from `index.html`, as we just added it there to test `ui-bootstrap`.
@@ -118,7 +120,7 @@ angular.module('MiHexample').value("UISchema", {
       }
     }
   ]
-}
+});
 ```
 
 The default renderer will now show an integer text field for the property `rating`.
@@ -138,16 +140,16 @@ To create a custom renderer, we have to do three steps.
 2. Provide a controller for the directive
 3. Register a new renderer that uses the created directive
 
-Let us create the new Javascript file `rating.controller.js` that will contain those three things mentioned. Also add `rating.controller.js` to
+Let us create the new Javascript file `rating.control.js` that will contain those three things mentioned. Also add `rating.controll.js` to
 the `index.html`:
 
 ```
-<script src="rating.controller.js"></script>
+<script src="rating.control.js"></script>
 ```
 
 ### Create an Angular directive
 
-In order to create an Angular directive, we add the code below to `rating.controller.js`.
+In order to create an Angular directive, we add the code below to `rating.control.js`.
 
 ```
 angular.module('MiHexample')
@@ -165,7 +167,6 @@ angular.module('MiHexample')
             Testers.schemaTypeIs('integer')
         ), 10);
     }]);
-
 ```
 
 As you can see above, we created a new Angular directive, which provides a template and a controller.
@@ -177,7 +178,7 @@ We'll look at the controller in a second, but let us first create the template i
             id="{{vm.id}}"
             readonly="vm.uiSchema.readOnly"
             ng-model="vm.resolvedData[vm.fragment]"
-            max="vm.max()"></uib-rating>
+            max="vm.max()">
     </uib-rating>
 </jsonforms-control>
 ```
@@ -189,7 +190,7 @@ Moreover, we configure the parameter `max`, which indicates the maximum number o
 
 ### Provide a controller for the directive
 
-Let us now implement the `controller` property for the `RatingControl` in `rating.controller.js`:
+Let us now implement the `controller` property for the `RatingControl` in `rating.control.js`:
 
 ```
  controller: ['BaseController', '$scope', function(BaseController, $scope) {
@@ -244,9 +245,11 @@ These testers checks whether the schema element is of type `integer` and the pro
 
 After we registered the new renderer, we can refresh the browser and should see our new renderer in action.
 
-![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive .docimg}
+<div ng-controller="CustomRendererController as my" class='example'>
+  <listing-control schema="my.schema" uischema="my.uischema" data="my.data"></listing-control>
+</div>
 
-For reference, here is the complete listing for the `rating.controller.js` file:
+For reference, here is the complete listing for the `rating.control.js` file:
 
 ```
 angular.module('MiHexample')

@@ -216,11 +216,13 @@ angular.module('jsonforms-website', [
     'ngMaterial',
     // 'ngRoute',
     'ui.router',
+    'ui.router.default',
     'ui.ace',
-    // 'ui.bootstrap',
+    'ui.bootstrap',
     //'ui.validate',
     //'ui.grid',
-    'jsonforms'
+    'jsonforms',
+    'listing'
     //'jsonforms-material'
 ])
     .config(function($mdIconProvider) {
@@ -308,7 +310,8 @@ angular.module('jsonforms-website', [
                 })
                 .state('docs.customrenderer-es5', {
                     url: '/customrenderer-es5',
-                    templateUrl: 'partials/docs/customrenderer-es5.html'
+                    templateUrl: 'partials/docs/customrenderer-es5.html',
+                    // abstract: true
                 })
                 .state('docs.customrenderer-es6', {
                     url: '/customrenderer-es6',

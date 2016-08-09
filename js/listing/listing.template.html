@@ -1,0 +1,23 @@
+<ul class="nav nav-tabs" id="myTab-{{vm.nth}}">
+    <li ng-click="vm.selectForm()">
+        <a data-target="#form-{{vm.nth}}">Form</a>
+    </li>
+    <li ng-click="vm.selectSchema()">
+        <a data-target="#schema-{{vm.nth}}">Schema</a>
+    </li>
+    <li ng-click="vm.selectUiSchema()">
+        <a data-target="#uischema-{{vm.nth}}">UI Schema</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="form-{{vm.nth}}">
+        <jsonforms schema="vm.schema" uischema="vm.uischema" data="vm.getData"></jsonforms>
+    </div>
+    <div class="tab-pane" id="schema-{{vm.nth}}">
+        <pre nag-prism source="{{vm.schema | json}}" class="language-css"></pre>
+    </div>
+    <div class="tab-pane" id="uischema-{{vm.nth}}">
+        <pre nag-prism source="{{vm.uischema | json}}" class="language-css"></pre>
+    </div>
+</div>

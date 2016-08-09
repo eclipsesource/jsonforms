@@ -1,4 +1,11 @@
 
+.example {
+    /*border: 2px solid #3498db;*/
+    outline: 0px solid #004D91;
+    box-shadow: 0 0 18px #004D91;
+    padding: 1em;
+}
+
 .tutorial-image{
     max-width: 800px;
 }
@@ -74,7 +81,7 @@ fieldset{
     border-style:none;
 }
 body {
-    font-family: 'Merriweather', serif;
+    font-family: 'Roboto', serif;
 }
 
 .main-nav{
@@ -266,6 +273,20 @@ button.main-nav-button{
     font-weight: bold;
 }
 
+.support-circle {
+    margin: auto;
+    background-color: #004D91;
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+}
+
+.support-text {
+    font-size: 1em;
+    color: #004D91;
+    font-weight: bold;
+}
+
 .green-circle {
     background-color: #5cb85c;
     height: 150px;
@@ -389,6 +410,8 @@ button.docs-nav-button {
   font-weight: bolder;
 }
 .text-content {
+    /*max-width: 800px;*/
+    /*margin: auto;*/
     margin-right: 4em;
     line-height: 1.7;
     font-size: 1.15em;
