@@ -1,3 +1,7 @@
+.jsf-alert {
+  color: #a94442;
+}
+
 .jsf legend {
   margin-bottom: 0.15em;
   width: inherit;

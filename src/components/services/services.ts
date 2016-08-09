@@ -1,5 +1,6 @@
 import {SchemaElement} from '../../jsonschema';
 import {IUISchemaElement} from '../../uischema';
+import {PathUtil} from "./pathutil";
 
 // TODO: replace
 let tv4 = require('tv4');
@@ -104,7 +105,7 @@ export class ValidationService implements IValidationService {
         results['errors'].forEach((error) => {
             if (error['schemaPath'].indexOf('required') !== -1) {
                 let propName = error['dataPath'] + '/' + error['params']['key'];
-                this.validationResults.get(instance)[propName] = 'Required';
+                this.validationResults.get(instance)[propName] = `${PathUtil.beautifiedLastFragment(error['params']['key'])} is a required field`;
             } else {
                 this.validationResults.get(instance)[error['dataPath']] = error['message'];
             }

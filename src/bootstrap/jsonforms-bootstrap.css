@@ -32,3 +32,13 @@
 .jsf-masterdetail-header {
     text-decoration: none;
 }
+
+.jsf .popover-title {
+    color: #fff;
+    background-color: #a94442;
+}
+
+.jsf .popover-content {
+    color: black;
+    font-style: italic;
+}
