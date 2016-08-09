@@ -49,6 +49,8 @@ Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.s
  * Run either ```npm run publish-patch```,```npm run publish-minor``` or ```npm run publish-major```.
 
 The script does the following:
+* Build all JSONForms alternatives
+* Execute tests
 * Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json)
 * Commit version bump to the current branch
 * Checkout a new temporary deploy-branch
