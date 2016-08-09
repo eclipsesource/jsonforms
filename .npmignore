@@ -3,15 +3,6 @@
 CLA.md
 CONTRIBUTING.md
 
-# ignore dist except the build
-dist/
-dist/**/*.*
-!dist/jsonforms.js
-!dist/jsonforms.css
-!dist/jsonforms-bootstrap.js
-!dist/jsonforms-bootstrap.css
-!dist/LICENSE
-
 ###########################################
 # Copied from .gitgnore
 ###########################################

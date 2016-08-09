@@ -7,7 +7,7 @@
     "declaration":true,
     "module": "commonjs",
     "experimentalDecorators": true,
-    "outDir": "."
+    "outDir": "dist/ts-build"
   },
   "files": [
     "./src/index.ts",
