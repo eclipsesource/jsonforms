@@ -1,0 +1,22 @@
+{
+  "name": "JSON Forms examples",
+  "homepage": "https://github.com/eclipsesource/jsonforms",
+  "description": "JSON Forms examples",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-route": "^1.5.5",
+    "bootstrap": "3.3.6"
+  },
+  "dependencies": {
+    "angular-ui-ace": "bower",
+    "angular-ui-validate": "^1.2.2"
+  }
+}

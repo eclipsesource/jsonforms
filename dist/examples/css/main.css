@@ -1,0 +1,71 @@
+.ace_editor { height: 200px; }
+
+.container{
+    max-width: 1200px;
+    margin: auto;
+}
+.container-fluid{
+    display: flex;
+    justify-content: space-between;
+}
+.navbar{
+    margin-bottom: 1.5em;
+}
+.navbar-inverse{
+    background-color: #222;
+}
+.navbar-header {
+    display: flex;
+}
+
+.logo {
+    padding-left: 55px;
+    position: relative;
+    font-family: 'Roboto',sans-serif;
+}
+
+.logo:after{
+    background-image: url("../assets/images/jsonforms-logo-white.svg");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 30px 20px;
+    content: '';
+    height: 20px;
+    position: absolute;
+    left: 15px;
+    top: 0;
+    right: 0;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #9d9d9d;
+    padding: 15px;
+    font-size: 18px;
+    line-height: 20px;
+    text-decoration: none;
+}
+.dropdown-menu{
+    display: none;
+    position: absolute;
+}
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+.navbar-collapse ul {
+    list-style-type: none;
+    background-color: #222;
+    padding: 0 1em;
+}
+.navbar-collapse li {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.navbar-collapse li a.dropdown-toggle{
+    align-self: center;
+}
+.navbar-collapse li a{
+    color: white;
+    text-decoration: none;
+}
+

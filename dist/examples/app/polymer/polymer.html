@@ -1,0 +1,21 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Polymer Example</strong>
+    </div>
+    <div class="panel-body">
+        <p>
+            This somewhat boring example shows that JSON Forms can be integrated with Web Components.
+            The textfield below is bound to the `lastName` property of a person instance.
+        </p>
+        <jsonforms data="vm.data" uischema="vm.uiSchema" schema="vm.schema"></jsonforms>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>

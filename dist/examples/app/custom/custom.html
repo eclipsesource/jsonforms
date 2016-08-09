@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>JSONForms generated Forms</strong>
+    </div>
+    <div class="panel-body">
+        <p>
+            JSON Forms can be customized. This example shows how we replaced the default control for the
+            <code>firstName</code> property of the JSON person instance. In this case we only change
+            the CSS styling of the control.
+        </p>
+        <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>
+

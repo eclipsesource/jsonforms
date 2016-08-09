@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+- '0.12'
+git:
+  depth: 10
+before_install:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- npm install -qg bower gulp-cli
+- npm install -q
+- bower install --force
+- bower install --force
+script: gulp
+deploy:
+  provider: npm
+  email: adrien.crivelli@gmail.com
+  api_key:
+    secure: q/YJCOEJu08ASgTXau/k6m6tAx6kx4Gm1xgjkdCmQINYIA0yQKjolDgN7nqZsuMvEXuL3XoUslWG5LB+Y8dqthA171pscp8mcnaf3Ji3hW0NjTQkKRkXftJArfPzCMhVGWGYp6M+IBETDnqg52HkPBgo3W9i/MKiwndi9ciXDbp/u9XTFn6BTnX7dV3J9xuSxEm18TiI6BCgqAKneuHgAc8jMsNfD2yfhO6HGjiAEQtjM/bECqFOqaY1KEHZxy944nMLLjJvlLjBxhFfVNajKRCLX6Er6MopwMS2HYq+4TsQSlsOIZHJmTL34ACTANADUiAMnrrZsU7JHU53Veams82pr5M2qlINqg4hUWvvElp5j0rFQ9H1VeYi+iBC+ujV3I9zEruCd3g72uAZFKxIE56mxRcRI3uXg3ql5/sn557g9FV5riHr0ZEPE5gAz+cvf/OWqtM34DH/cxazfPk7QIlFm7ZQxgqkPwlxYk1JetC7IGigSdWQSOc1EFtQKpJq8/ph8eixm1uQVG/j2sf/cvxTuOj1785tSr18J0car9C4LGkHEycG0DGS49luoq4mnNMx/5tTjRhsCX48DQ7l96WMAbMdKv/LiOkeWxiAcmCqPNboaHrrGgdyv0OCd8+n8t0Cc7l4oxT80UsqwYaA3yJ0+0on0O8pUVp4vFAkdzE=
+  on:
+    tags: true
+    repo: angular-ui/ui-validate

@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Live Editing</strong>
+    </div>
+    <div class="panel-body">
+        <form role="form">
+            <div class="row">
+                <div class="form-group col-sm-50">
+                    <label for="localModelEditor">JSON Schema:</label>
+                    <div ui-ace="{onLoad: aceLoaded, onChange: schemaChanged}" id="localModelEditor" ng-model="vm.localModel" ></div>
+                </div>
+                <div class="form-group col-sm-50">
+                    <label for="localViewEditor">View:</label>
+                    <div ui-ace="{onLoad: aceLoaded, onChange: uiSchemaChanged}" id="localViewEditor" ng-model="vm.localView" ></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Rendered Form</strong>
+    </div>
+    <div class="panel-body">
+        <!--<div class="row">-->
+            <!--<form role="form" class="jsf-form">-->
+                <jsonforms ng-if="vm.schema" id="editor" schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
+            <!--</form>-->
+        <!--</div>-->
+    </div>
+</div>
