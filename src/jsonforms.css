@@ -148,3 +148,14 @@ array-control fieldset > div > div {
 .jsf-masterdetail .jsf-masterdetail-master .chevron-down:after{
   content:"\2003 \25BC"
 }
+.jsf-masterdetail .jsf-masterdetail-addRoot {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid;
+}
+}
+.jsf-masterdetail .jsf-masterdetail-addRoot:hover {
+  background-color: lightgray;
+}
+.jsf-masterdetail span {
+  cursor: pointer;

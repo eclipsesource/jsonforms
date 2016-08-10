@@ -1,7 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import '../../../../index';
-import {DataService} from "../../../ng-services/data/data.service";
+import {DataService} from '../../../ng-services/data/data-service';
 
 describe('MasterDetail', () => {
 
@@ -65,6 +65,7 @@ describe('MasterDetail', () => {
         expect(el.html()).toContain('c');
         expect(el.html()).toContain('y_1');
         expect(el.html()).toContain('y_2');
+        expect(el.html()).not.toContain('Add Root Item');
 
         let nameInput_empty = el[0].querySelector('#\\#\\/properties\\/name');
         expect(nameInput_empty).toBeNull();
@@ -77,4 +78,6 @@ describe('MasterDetail', () => {
 
         expect(DataService.getRoot()).toBe(scope.data);
     }));
+
+        expect(el.html()).toContain('Add Root Item');
 });
