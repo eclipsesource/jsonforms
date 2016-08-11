@@ -1,3 +1,4 @@
+import {PathUtil} from '../../../services/pathutil';
 import {AbstractControl} from '../../controls/abstract-control';
 import {SchemaElement, SchemaArray} from '../../../../jsonschema';
 import {uiTypeIs} from '../../testers';
@@ -160,6 +161,10 @@ class MasterDetailCollectionController {
     public get pageWidth() {
       return document.activeElement['scrollWidth'];
     }
+
+    public getBeautifulKeyName(key: string): string {
+      return PathUtil.beautify(key);
+    }
 }
 class MasterDetailCollectionDirective implements ng.IDirective {
     restrict = 'E';
@@ -249,7 +254,7 @@ const masterDetailCollectionTemplate = `
         <span class="jsf-masterdetail-selectkey-icon">
           <img ng-src="{{vm.getImage(schema)}}"/>
         </span>
-        <span class="jsf-masterdetail-selectkey-label">{{schemaKey}}</span>
+        <span class="jsf-masterdetail-selectkey-label">{{vm.getBeautifulKeyName(schemaKey)}}</span>
       </li>
     </ul>
     <span ng-click="vm.showSelectKeyDialog=false">Cancel</span>
