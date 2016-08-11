@@ -44,6 +44,7 @@ describe('MasterDetail', () => {
             'scope': {
                 '$ref': '#'
             },
+            'options':{}
         };
         scope.data = {
             'a': [
@@ -80,4 +81,173 @@ describe('MasterDetail', () => {
     }));
 
         expect(el.html()).toContain('Add Root Item');
+    }));
+
+    it('array should allow to add root',
+        angular.mock.inject(($rootScope, $compile, DataService: DataService) => {
+
+        let scope = $rootScope.$new();
+        scope.schema = {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                  'name': {
+                      'type': 'string'
+                  }
+                }
+            }
+        };
+        scope.uiSchema = {
+            'type': 'MasterDetailLayout',
+            'scope': {
+                '$ref': '#'
+            }
+        };
+        scope.data = [{'name': 'x'}];
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let addToRoot = el[0].querySelector('span.jsf-masterdetail-addRoot');
+        angular.element(addToRoot).triggerHandler('click');
+
+        expect(scope.data.length).toBe(2);
+    }));
+
+    it('array should allow to remove root',
+        angular.mock.inject(($rootScope, $compile, DataService: DataService) => {
+
+        let scope = $rootScope.$new();
+        scope.schema = {
+            'type': 'array',
+            'items': {
+                'type': 'object',
+                'properties': {
+                  'name': {
+                      'type': 'string'
+                  }
+                }
+            }
+        };
+        scope.uiSchema = {
+            'type': 'MasterDetailLayout',
+            'scope': {
+                '$ref': '#'
+            }
+        };
+        scope.data = [{'name': 'x'}];
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let addToRoot = el[0].querySelector('span.jsf-masterdetail-entry-remove');
+        angular.element(addToRoot).triggerHandler('click');
+
+        expect(scope.data.length).toBe(0);
+    }));
+
+    it('should allow to add to undefined',
+        angular.mock.inject(($rootScope, $compile, DataService: DataService) => {
+
+        let scope = $rootScope.$new();
+        scope.schema = {
+          'type': 'object',
+          'properties': {
+            'a': {
+              'type': 'array',
+              'items': {
+                'type': 'object',
+                'properties': {
+                  'name': {
+                    'type': 'string'
+                  }
+                }
+              }
+            }
+          }
+        };
+        scope.uiSchema = {
+            'type': 'MasterDetailLayout',
+            'scope': {
+                '$ref': '#'
+            },
+        };
+        scope.data = {};
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let addTo = el[0].querySelector('span.jsf-masterdetail-entry-add');
+        angular.element(addTo).triggerHandler('click');
+        let selectKey = el[0].querySelector('.selectKeyForAdd li');
+        angular.element(selectKey).triggerHandler('click');
+
+        expect(scope.data['a'].length).toBe(1);
+    }));
+
+    it('should allow to add additional',
+        angular.mock.inject(($rootScope, $compile, DataService: DataService) => {
+
+        let scope = $rootScope.$new();
+        scope.schema = {
+          'type': 'object',
+          'properties': {
+            'a': {
+              'type': 'array',
+              'items': {
+                'type': 'object',
+                'properties': {
+                  'name': {
+                    'type': 'string'
+                  }
+                }
+              }
+            }
+          }
+        };
+        scope.uiSchema = {
+            'type': 'MasterDetailLayout',
+            'scope': {
+                '$ref': '#'
+            },
+        };
+        scope.data = {'a': [{'name': 'x'}]};
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let addTo = el[0].querySelector('span.jsf-masterdetail-entry-add');
+        angular.element(addTo).triggerHandler('click');
+        let selectKey = el[0].querySelector('.selectKeyForAdd li');
+        angular.element(selectKey).triggerHandler('click');
+
+        expect(scope.data['a'].length).toBe(2);
+    }));
+
+    it('should allow to remove',
+        angular.mock.inject(($rootScope, $compile, DataService: DataService) => {
+
+        let scope = $rootScope.$new();
+        scope.schema = {
+          'type': 'object',
+          'properties': {
+            'a': {
+              'type': 'array',
+              'items': {
+                'type': 'object',
+                'properties': {
+                  'name': {
+                    'type': 'string'
+                  }
+                }
+              }
+            }
+          }
+        };
+        scope.uiSchema = {
+            'type': 'MasterDetailLayout',
+            'scope': {
+                '$ref': '#'
+            },
+        };
+        scope.data = {'a': [{'name': 'x'}]};
+        let el = $compile('<jsonforms schema="schema" uischema="uiSchema" data="data"/>')(scope);
+        scope.$digest();
+        let remove = el[0].querySelector('span.jsf-masterdetail-entry-remove');
+        angular.element(remove).triggerHandler('click');
+
+        expect(scope.data['a'].length).toBe(0);
 });
