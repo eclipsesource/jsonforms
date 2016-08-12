@@ -155,6 +155,12 @@ class MasterDetailCollectionController {
           this.selectElement(parentData, parentSchema);
         }
     }
+    public deactivateScroll () {
+      (<HTMLElement>document.activeElement).style.overflow = 'hidden';
+    }
+    public activateScroll () {
+      (<HTMLElement>document.activeElement).style.overflow = 'auto';
+    }
     public get pageHeight() {
       return document.activeElement['scrollHeight'];
     }
@@ -216,7 +222,7 @@ const masterDetailCollectionTemplate = `
       <span class="jsf-masterdetail-entry-add"
         ng-click="vm.selectedScopeForAdd=$parent;vm.selectedSchemaForAdd=schema;
           vm.selectedElementForAdd=child;vm.showSelectKeyDialog=true;
-          vm.addClickPositionX=$event.pageX;vm.addClickPositionY=$event.pageY"
+          vm.addClickPositionX=$event.pageX;vm.addClickPositionY=$event.pageY;vm.deactivateScroll()"
         ng-if="vm.canHaveChildren(schema)">+</span>
       <span class="jsf-masterdetail-entry-remove"
         ng-click="vm.updateHasContents(parentItemContext);
@@ -245,19 +251,20 @@ const masterDetailCollectionTemplate = `
       <li ng-include="'masterDetailTreeEntry'"></li>
     </ul>
 </div>
-<div class="selectKeyForAdd" ng-if="vm.showSelectKeyDialog" ng-click="vm.showSelectKeyDialog=false"
+<div class="selectKeyForAdd" ng-if="vm.showSelectKeyDialog"
+  ng-click="vm.showSelectKeyDialog=false;vm.activateScroll();"
   ng-style="{'height':vm.pageHeight,'width':vm.pageWidth}">
   <div ng-style="{'left':vm.addClickPositionX,'top':vm.addClickPositionY}">
     <ul>
       <li ng-repeat="(schemaKey, schema) in vm.getArraySubSchemas(vm.selectedSchemaForAdd.items)"
-        ng-click="vm.addElement(schemaKey,schema,$event);">
+        ng-click="vm.addElement(schemaKey,schema,$event);vm.activateScroll();">
         <span class="jsf-masterdetail-selectkey-icon">
           <img ng-src="{{vm.getImage(schema)}}"/>
         </span>
         <span class="jsf-masterdetail-selectkey-label">{{vm.getBeautifulKeyName(schemaKey)}}</span>
       </li>
     </ul>
-    <span ng-click="vm.showSelectKeyDialog=false">Cancel</span>
+    <span ng-click="vm.showSelectKeyDialog=false;vm.activateScroll();">Cancel</span>
   </div>
 </div>
 `;
