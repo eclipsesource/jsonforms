@@ -1,17 +1,19 @@
 import {AbstractControl} from '../abstract-control';
 import {Testers, uiTypeIs, schemaTypeMatches} from '../../testers';
 
-class EnumDirective implements ng.IDirective {
-    restrict = 'E';
-    template = `<jsonforms-control>
+const enumTemplate = `<jsonforms-control>
       <select ng-options="option as option for option in vm.options"
               id="{{vm.id}}"
               class="form-control jsf-control-enum" 
               ng-change='vm.triggerChangeEvent()'
               ng-model="vm.resolvedData[vm.fragment]"
               ng-readonly="vm.uiSchema.readOnly">
-      </select>
-    </jsonforms-control>`;
+      </select>  
+</jsonforms-control>`;
+
+class EnumDirective implements ng.IDirective {
+    restrict = 'E';
+    templateUrl = 'enum.html';
     controller = EnumController;
     controllerAs = 'vm';
 }
@@ -40,4 +42,7 @@ export default angular
                     schemaTypeMatches(el => _.has(el, 'enum'))
                 ), 5)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('enum.html', enumTemplate);
+    }])
     .name;

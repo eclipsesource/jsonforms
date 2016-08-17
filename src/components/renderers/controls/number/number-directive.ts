@@ -1,10 +1,7 @@
 import {AbstractControl} from '../abstract-control';
 import {schemaTypeIs} from '../../testers';
 
-class NumberDirective implements ng.IDirective {
-    restrict = 'E';
-    template = `
-    <jsonforms-control>
+const numberTemplate = `<jsonforms-control>
       <input type="number" 
              step="0.01" 
              id="{{vm.id}}" 
@@ -12,7 +9,11 @@ class NumberDirective implements ng.IDirective {
              ng-model="vm.resolvedData[vm.fragment]" 
              ng-change='vm.triggerChangeEvent()' 
              ng-readonly="vm.uiSchema.readOnly"/>
-    </jsonforms-control>`;
+    </jsonforms-control>`
+
+class NumberDirective implements ng.IDirective {
+    restrict = 'E';
+    templateUrl = 'number.html';
     controller = NumberController;
     controllerAs = 'vm';
 }
@@ -31,4 +32,7 @@ export default angular
     .run(['RendererService', RendererService =>
             RendererService.register('number-control', schemaTypeIs('number'), 1)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('number.html', numberTemplate);
+    }])
     .name;

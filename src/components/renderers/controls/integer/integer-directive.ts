@@ -1,9 +1,7 @@
 import {AbstractControl} from '../abstract-control';
 import {Testers, schemaTypeIs, uiTypeIs} from '../../testers';
 
-class IntegerDirective implements ng.IDirective {
-    template = `
-    <jsonforms-control>
+const integerTemplate = `<jsonforms-control>
       <input type="number" 
              step="1" 
              id="{{vm.id}}" 
@@ -12,6 +10,9 @@ class IntegerDirective implements ng.IDirective {
              ng-change='vm.triggerChangeEvent()' 
              ng-readonly="vm.uiSchema.readOnly"/>
     </jsonforms-control>`;
+
+class IntegerDirective implements ng.IDirective {
+    templateUrl = 'integer.html';
     controller = IntegerController;
     controllerAs = 'vm';
 }
@@ -34,4 +35,7 @@ export default angular
                     uiTypeIs('Control')
                 ), 1)
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('integer.html', integerTemplate);
+    }])
     .name;

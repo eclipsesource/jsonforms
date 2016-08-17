@@ -7,9 +7,7 @@ import {SchemaArray} from '../../../../jsonschema';
 import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
 import {Testers, schemaTypeIs, optionIs} from '../../testers';
 
-class ArrayReadOnlyDirective implements ng.IDirective {
-    restrict = 'E';
-    template = `
+const readOnlyArrayTemplate = `
     <jsonforms-layout>
       <fieldset>
         <legend>{{vm.label}}</legend>
@@ -21,13 +19,15 @@ class ArrayReadOnlyDirective implements ng.IDirective {
         </div>
        </fieldset>
      </jsonforms-layout>`;
+
+class ArrayReadOnlyDirective implements ng.IDirective {
+    restrict = 'E';
+    templateUrl = 'read-only-array.html';
     controller = ArrayController;
     controllerAs = 'vm';
 }
 
-class ArrayDirective implements ng.IDirective {
-    restrict = 'E';
-    template = `
+const arrayTemplate = `
     <jsonforms-layout>
         <fieldset ng-disabled="vm.uiSchema.readOnly">
           <legend>{{vm.label}}</legend>
@@ -45,6 +45,10 @@ class ArrayDirective implements ng.IDirective {
             </div>
         </fieldset>
     </jsonforms-layout>`;
+
+class ArrayDirective implements ng.IDirective {
+    restrict = 'E';
+    templateUrl = 'array.html';
     controller = ArrayController;
     controllerAs = 'vm';
 }
@@ -96,6 +100,9 @@ export default angular
                 optionIs('simple', true)
             ), 1);
         RendererService.register('array-control', schemaTypeIs('array'), 1);
-    }
-    ])
+    }])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('read-only-array.html', readOnlyArrayTemplate);
+        $templateCache.put('array.html', arrayTemplate);
+    }])
     .name;
