@@ -135,17 +135,56 @@ angular.module('makeithappen').controller('PersonController', function() {
             },
             {
                 "type": "Categorization",
-                "rule":{
-                    "effect":"SHOW",
-                    "condition":{
-                        "type":"LEAF" ,
-                        "scope": {
-                            "$ref": "#/properties/personalData/properties/age"
-                        },
-                        "expectedValue":36
-                    }
-                },
+                // "rule":{
+                //     "effect":"SHOW",
+                //     "condition":{
+                //         "type":"LEAF" ,
+                //         "scope": {
+                //             "$ref": "#/properties/personalData/properties/age"
+                //         },
+                //         "expectedValue":36
+                //     }
+                // },
                 "elements": [
+                  {
+                    "type": "Categorization",
+                    "label":"Sub",
+                    "elements": [
+                      {
+                      "type": "Category",
+                      "label":"SubPrivate",
+                      "elements": [
+                          {
+                              "type": "Control",
+                              "label": "Name",
+                              "scope": {
+                                  "$ref": "#/properties/name"
+                              }
+                          }
+                        ]
+                      },
+                      {
+                          "type": "Category",
+                          "label":"Additional",
+                          "elements": [
+                              {
+                                  "type": "Control",
+                                  "label": "Height",
+                                  "scope": {
+                                      "$ref": "#/properties/personalData/properties/height"
+                                  }
+                              },
+                              {
+                                  "type": "Control",
+                                  "label": "Vegetarian",
+                                  "scope": {
+                                      "$ref": "#/properties/vegetarian"
+                                  }
+                              }
+                          ]
+                      }
+                    ]
+                  },
                     {
                         "type": "Category",
                         "label":"Private",
