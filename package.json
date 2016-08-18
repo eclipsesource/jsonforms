@@ -12,6 +12,7 @@
     "tsc": "tsc && ncp src/bootstrap/jsf-bootstrap.css dist/ts-build/bootstrap/jsf-bootstrap.css && ncp src/jsonforms.css dist/ts-build/jsonforms.css",
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "dev-bootstrap": "webpack --config webpack/webpack.dev-bootstrap.js && webpack-dev-server --config webpack/webpack.dev-bootstrap.js --NODE_ENV=dev --inline",
+    "dev-material": "webpack --config webpack/webpack.dev-material.js && webpack-dev-server --config webpack/webpack.dev-material.js --inline",
     "test": "karma start --NODE_ENV=test",
     "build": "webpack --config webpack/webpack.build.js --NODE_ENV=production --display-error-details",
     "build-bootstrap": "webpack --config webpack/webpack.build-bootstrap.js --NODE_ENV=production --display-error-details",
@@ -25,6 +26,9 @@
   },
   "dependencies": {
     "angular": "1.5.0",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-material": "^1.1.0",
     "angular-ui-bootstrap": "1.3.2",
     "angular-ui-validate": "^1.2.2",
     "jquery": "2.2.0",
