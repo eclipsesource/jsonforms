@@ -1,31 +1,33 @@
 import {AbstractControl} from '../abstract-control';
 import {schemaTypeIs, Testers, optionIs} from '../../testers';
 
+const stringTemplate = `<jsonforms-control>
+  <input type="text"
+         id="{{vm.id}}"
+         class="form-control jsf-control-string"
+         ng-model="vm.resolvedData[vm.fragment]"
+         ng-change='vm.triggerChangeEvent()'
+         ng-readonly="vm.uiSchema.readOnly"/>
+</jsonforms-control>`;
+
 class StringDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-control>
-       <input type="text" 
-              id="{{vm.id}}" 
-              class="form-control jsf-control-string" 
-              ng-model="vm.resolvedData[vm.fragment]" 
-              ng-change='vm.triggerChangeEvent()' 
-              ng-readonly="vm.uiSchema.readOnly"/>
-    </jsonforms-control>`;
+    templateUrl = 'string.html';
     controller = StringController;
     controllerAs = 'vm';
 }
 
+const textAreaTemplate = `<jsonforms-control>
+  <textarea id="{{vm.id}}"
+            class="form-control jsf-control-string"
+            ng-model="vm.resolvedData[vm.fragment]"
+            ng-change='vm.triggerChangeEvent()'
+            ng-readonly="vm.uiSchema.readOnly"/>
+</jsonforms-control>`;
+
 class StringAreaDirective implements ng.IDirective {
     restrict = 'E';
-    template = `
-    <jsonforms-control>
-       <textarea id="{{vm.id}}" 
-                 class="form-control jsf-control-string" 
-                 ng-model="vm.resolvedData[vm.fragment]" 
-                 ng-change='vm.triggerChangeEvent()' 
-                 ng-readonly="vm.uiSchema.readOnly"/>
-    </jsonforms-control>`;
+    templateUrl = 'text-area.html';
     controller = StringController;
     controllerAs = 'vm';
 }
@@ -52,4 +54,9 @@ export default angular
                 ), 2);
     }
     ])
+    .run(['$templateCache', $templateCache => {
+        $templateCache.put('string.html', stringTemplate);
+        $templateCache.put('text-area.html', textAreaTemplate);
+    }])
+
     .name;

@@ -46,7 +46,7 @@ var userDetailSchema = {
         },
         {
             "type": "Group",
-            "label": "Additional",
+            "label": "Detailed info",
             "elements": [
                 {
                     "type": "Control",

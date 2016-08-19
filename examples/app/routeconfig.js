@@ -25,17 +25,9 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/default/default-schema.html',
             controller: 'DefaultSchemaController',
             controllerAs: 'vm'
-        }).when('/placeholder-posts/:id?', {
-            templateUrl: 'app/placeholder/placeholder-posts.html',
-            controller: 'PlaceholderController',
-            controllerAs: 'vm'
         }).when('/placeholder-users/:id?', {
             templateUrl: 'app/placeholder/placeholder-users.html',
-            controller: 'PlaceholderController',
-            controllerAs: 'vm'
-        }).when('/placeholder-comments/:id?', {
-            templateUrl: 'app/placeholder/placeholder-comments.html',
-            controller: 'PlaceholderController',
+            controller: 'PlaceholderUserController',
             controllerAs: 'vm'
         }).when('/polymer', {
             templateUrl: 'app/polymer/polymer.html',

@@ -15,18 +15,16 @@
     <script src="https://use.fontawesome.com/ea0f28b364.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
-
-    <link rel="stylesheet" href="css/main.css"/>
-
     <!-- public path is set to assets in webpack.dev.js -->
     <script src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
     <script src="assets/jsonforms.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="assets/jsonforms.css"/>
-    <link rel="stylesheet" href="assets/jsonforms-bootstrap.css"/>
+
+    <link rel="stylesheet" href="css/main.css"/>
+
 
     <script src="bower_components/angular-ui-validate/dist/validate.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
     <script src="bower_components/angular-ui-ace/ui-ace.min.js"></script>
 
     <script src="app/app.js" type="text/javascript"></script>
@@ -40,7 +38,7 @@
 
     <script src="app/default-ui/default-ui.controller.js" type="text/javascript"></script>
     <script src="app/default/default-schema.controller.js" type="text/javascript"></script>
-    <script src="app/placeholder/placeholder.controller.js" type="text/javascript"></script>
+    <script src="app/placeholder/placeholder.user.controller.js" type="text/javascript"></script>
     <script src="app/arrays/arrays.controller.js" type="text/javascript"></script>
 
     <script src="app/custom/custom.controller.js" type="text/javascript"></script>
@@ -77,6 +75,7 @@
                             <li ng-class="index.isActive('/polymer')"><a href="#/polymer">Polymer example</a></li>
                             <!--<li ng-class="index.isActive('/table')"><a href="#/table">Table example</a></li>-->
                             <li ng-class="index.isActive('/custom')"><a href="#/custom">Custom example</a></li>
+                            <li ng-class="index.isActive('/placeholder-users')"><a href="#/placeholder-users">Placeholder Users</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -93,11 +92,8 @@
 
     <div class ="row">
         <br>
-        <footer class="footer col
-        -sm-12">
-            <p>&copy; EclipseSource 2015<br>
-            Background image by <a href="http://dakoder.deviantart.com/art/MinFlat-Android-L-Wallpaper-Moonshine-4K-475314187" style="color:#337ab7;text-decoration:none;">dakoder</a>
-            </p>
+        <footer class="footer col-sm-12">
+            <p>&copy; EclipseSource 2016<br></p>
         </footer>
     </div>
 

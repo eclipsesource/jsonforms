@@ -1,9 +1,50 @@
-<h1>Users</h1>
-    <div ng-if="vm.id">
-        <jsonforms schema="vm.userSchema" uischema="vm.userUiSchema" data="vm.UserDataProvider"></jsonforms>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>User</strong>
     </div>
-    <div ng-if="!vm.id">
-        <jsonforms schema="vm.usersSchema" uischema="vm.usersUiSchema" data="vm.UserDataProvider"></jsonforms>
+    <div class="panel-body">
+        This example shows how JSONForms can be integrated with a RESTful API. It is based on Angular $resource.
+        <div ng-if="vm.id">
+            <jsonforms schema="vm.userSchema" uischema="vm.userUiSchema" data="vm.data"></jsonforms>
+            <button type="submit"
+                    class="btn btn-primary"
+                    ng-click="vm.updateUser()">
+                Update user
+            </button>
+            <div ng-if="vm.alert.type" class="alert" ng-class="vm.alert.type" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{vm.alert.msg}}
+            </div>
+        </div>
+
+        <!-- array of users -->
+        <div ng-if="!vm.id">
+            <jsonforms schema="vm.usersSchema" uischema="vm.usersUiSchema" data="vm.data"></jsonforms>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Create new user</strong>
+                </div>
+                <div class="panel-body">
+                    <div ng-if="vm.alert.type" class="alert" ng-class="vm.alert.type" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{vm.alert.msg}}
+                    </div>
+                    <jsonforms schema="vm.userSchema" data="vm.submitElement" uischema="vm.userUiSchema"></jsonforms>
+                    <input class="btn btn-primary"
+                           type="button"
+                           value="Create new user"
+                           ng-click="vm.createUser()"
+                           ng-model="vm.submitElement">
+                    </input>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+
+
 
 

@@ -11,7 +11,7 @@ interface BooleanControllerScope extends ng.IScope {
 }
 
 class BooleanController extends AbstractControl {
-    static $inject = ['$scope', 'PathResolver'];
+    static $inject = ['$scope'];
     constructor(scope: BooleanControllerScope) {
         super(scope);
     }
