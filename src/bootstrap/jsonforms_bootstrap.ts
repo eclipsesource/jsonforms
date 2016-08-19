@@ -2,6 +2,7 @@ import 'angular';
 
 import datetimeControlDirective from './controls/datetime/datetime-directive';
 import booleanControlDirective from './controls/boolean/boolean-directive';
+import arrayControlDirective from './controls/array/array-directive';
 import controlDirective from './controls/bootstrap-controls-directive';
 import categorizationDirective from './layouts/categories/categorization-directive';
 import verticalLayoutDirective from './layouts/vertical/vertical-directive';
@@ -21,6 +22,7 @@ export default angular.module('jsonforms-bootstrap', [
     'ui.bootstrap',
     datetimeControlDirective,
     booleanControlDirective,
+    arrayControlDirective,
     controlDirective,
     categorizationDirective,
     verticalLayoutDirective,

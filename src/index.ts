@@ -2,11 +2,9 @@
 import 'angular';
 import form from './components/form/form';
 import ngServices from './components/ng-services/ng-services';
-/* tslint:disable */
-import jsonformsBootstrap from './bootstrap/jsonforms_bootstrap';
-/* tslint:enable */
 
 require('angular-ui-validate');
+require('./jsonforms.css');
 
 export default angular.module('jsonforms', [
     'ui.validate',
