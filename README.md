@@ -39,7 +39,7 @@ properties of a aliased controller named `vm`:
 * Watch: `npm run dev`, point your browser to `http://localhost:8080/webpack-dev-server/`
 
 ## How to run the examples 
-JSONForms ships with a couple of examples which dependencies are managed
+JSONForms ships with a couple of examples. The examples' dependencies are managed
 via bower, hence you'll first need to run the following commands from
 the project root directory:
 
@@ -47,6 +47,8 @@ the project root directory:
 cd examples
 bower install
 ```
+
+Also make sure that you have [followed the instructions](https://github.com/eclipsesource/jsonforms#first-time-setup) for the first time setup in case you haven't done so already.
  
 Now you start the example by running `npm run dev` and then pointing 
 your browser to `http://localhost:8080`.
@@ -58,7 +60,6 @@ a fake REST API. You can do so via
 ```
 npm run start-placeholder
 ```
-
 
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
