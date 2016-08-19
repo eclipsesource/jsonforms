@@ -51,7 +51,7 @@ bower install
 Now you start the example by running `npm run dev` and then pointing 
 your browser to `http://localhost:8080`.
 
-Note that running the `placeholder` example you'll first need to start
+Note that for running the `placeholder` example you'll first need to start
 [jsonplaceholder](https://jsonplaceholder.typicode.com/) which provides 
 a fake REST API. You can do so via
 
