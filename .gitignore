@@ -37,9 +37,11 @@ examples/js/jsonforms.min.js
 examples/fonts
 examples/assets/jsonforms.css
 examples/assets/jsonforms.js
+examples/assets/jsonforms-bootstrap.css
 
 # webstorm
 .idea
 
 # mac users
 .DS_Store
+/jsonforms.js

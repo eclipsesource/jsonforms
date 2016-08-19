@@ -32,7 +32,10 @@ const arrayTemplate = `
         <fieldset ng-disabled="vm.uiSchema.readOnly">
           <legend>{{vm.label}}</legend>
           <div>
-            <div ng-repeat="d in vm.resolvedData[vm.fragment]" class="well">
+            <div ng-repeat="d in vm.resolvedData" ng-if="vm.fragment === undefined" class="well well-sm">
+                <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+            </div>
+            <div ng-repeat="d in vm.resolvedData[vm.fragment]" ng-if="vm.fragment !== undefined" class="well well-sm">
                 <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
             </div>
             <input class="btn btn-primary"
@@ -42,7 +45,6 @@ const arrayTemplate = `
                    ng-click="vm.submitCallback()"
                    ng-model="vm.submitElement">
             </input>
-            </div>
         </fieldset>
     </jsonforms-layout>`;
 
@@ -67,9 +69,11 @@ class ArrayController extends AbstractControl {
         let resolvedSubSchema = PathResolver.resolveSchema(
             this.schema, this.schemaPath) as SchemaArray;
         let items = resolvedSubSchema.items;
+        console.log('items are ' + JSON.stringify(items));
         this.arraySchema = items;
         this.properties = _.keys(items['properties']);
-        this.arrayUiSchema = uiGenerator.generateDefaultUISchema(items);
+        this.arrayUiSchema = uiGenerator.generateDefaultUISchema(items, 'HorizontalLayout');
+        console.log('array ui schema is ' + JSON.stringify(this.arrayUiSchema));
     }
 
     public get buttonText(){
