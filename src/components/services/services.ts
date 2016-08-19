@@ -133,10 +133,10 @@ export enum ServiceId {
     Validation,
     DataProvider,
     SchemaProvider,
+    UiSchemaProvider,
     ScopeProvider,
     RuleService,
-    PathResolver,
-    UiSchemaProvider
+    PathResolver
 }
 
 export interface IService {
