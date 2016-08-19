@@ -52,12 +52,6 @@ angular.module('makeithappen').controller('ArraysController', function() {
                 options: {
                      "submit": true
                 }
-            },
-            {
-                "type": "Control",
-                "scope": {
-                    "$ref": "#/properties/birthDate"
-              }
             }
         ]
     };

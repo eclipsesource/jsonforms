@@ -4,7 +4,7 @@ angular.module('makeithappen').controller('IndexController', function($scope, $l
 
     var vm = this;
     vm.isActive = function(fragment) {
-        if (fragment == $location.path()) {
+        if ($location.path().indexOf(fragment) > -1) {
             return 'active';
         } else {
             return 'inactive';
