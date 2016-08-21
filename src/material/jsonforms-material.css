@@ -1,0 +1,25 @@
+md-input-container {
+    width: 100%;
+    padding-right: 5em;
+}
+
+md-input-container ng-transclude > md-select {
+    margin: 0;
+    order: 2;
+    -webkit-box-ordinal-group: 3;
+    -webkit-order: 2;
+}
+
+
+md-datepicker {
+    position: relative;
+    left: -32px;
+}
+
+md-datepicker .md-datepicker-input-container{
+    margin-left: 0;
+}
+
+md-datepicker .md-datepicker-button.md-icon-button {
+    margin-right: 0;
+}

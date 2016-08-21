@@ -1,0 +1,6 @@
+/**
+the css class is a temporary fix for https://github.com/angular/material/issues/1268
+**/
+md-input-container md-checkbox {
+    margin-top: 10px;
+}
