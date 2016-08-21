@@ -54,12 +54,12 @@ const categorizationTemplate = `
         <div class="jsf-categorization-master" ng-include="'category.html'"
           ng-init="categorization=vm.uiSchema">
         </div>
-        <fieldset class="jsf-categorization-detail">
+        <div class="jsf-categorization-detail">
             <jsonforms-inner ng-if="vm.selectedCategory"
                              ng-repeat="child in vm.selectedCategory.elements"
                              uischema="child">
              </jsonforms-inner>
-        </fieldset>
+        </div>
     </div>
 </jsonforms-layout>`;
 

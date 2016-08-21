@@ -38,7 +38,7 @@ array-control fieldset > div > div {
   display: flex;
   border: 1px solid;
 }
-.jsf-categorization>div, .jsf-categorization>fieldset{
+.jsf-categorization>div {
   margin:0.25em;
   min-width: 2em;
   border: 1px solid;
@@ -56,6 +56,7 @@ array-control fieldset > div > div {
   padding: 0;
   margin: 0;
 }
+.jsf-categorization .jsf-categorization-master li.closed,
 .jsf-categorization .jsf-categorization-master li.expanded {
   border: 1px solid #ddd;
 }
@@ -75,14 +76,11 @@ array-control fieldset > div > div {
   flex-grow: 0;
   flex-shrink: 0;
 }
-.jsf-categorization .jsf-categorization-master li.closed > .jsf-category-entry > .jsf-category-expand::after{
+.jsf-categorization .jsf-categorization-master li.closed > .jsf-category-entry > .jsf-category-label::after{
   content: "+"
 }
-.jsf-categorization .jsf-categorization-master li.expanded > .jsf-category-entry > .jsf-category-expand::after{
+.jsf-categorization .jsf-categorization-master li.expanded > .jsf-category-entry > .jsf-category-label::after{
   content: "-"
-}
-.jsf-categorization .jsf-categorization-master li.none > .jsf-category-entry > .jsf-category-expand::after{
-  content: "\00A0"
 }
 .jsf-categorization .jsf-categorization-master li > .jsf-category-entry > .jsf-category-label{
   flex:1;
