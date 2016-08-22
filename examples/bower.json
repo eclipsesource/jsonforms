@@ -12,7 +12,7 @@
     "tests"
   ],
   "devDependencies": {
-    "angular-route": "^1.5.5",
+    "angular-route": "^1.5.8",
     "bootstrap": "3.3.6"
   },
   "dependencies": {

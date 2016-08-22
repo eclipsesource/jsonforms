@@ -18,7 +18,7 @@ import {DataService} from '../ng-services/data/data-service';
 export class FormController {
 
     static $inject = ['RendererService', 'UiSchemaRegistry', 'DataService',
-        'SchemaGenerator', '$compile', '$q', '$scope'];
+        'SchemaGenerator', '$compile', '$q', '$scope', '$timeout'];
     public element: any;
     public uiSchema: IUISchemaElement;
     private isInitialized = false;
@@ -35,7 +35,8 @@ export class FormController {
         private SchemaGenerator: ISchemaGenerator,
         private $compile: ng.ICompileService,
         private $q: ng.IQService,
-        private scope: JsonFormsDirectiveScope) { }
+        private scope: JsonFormsDirectiveScope,
+        private timeout: ng.ITimeoutService) { }
 
 
     public init() {
@@ -113,7 +114,7 @@ export class FormController {
             uischema, schema, dataProvider.getData());
         let compiledTemplate = this.$compile(template)(this.childScope);
         angular.element(this.element.find('form')).append(compiledTemplate);
-        this.scope.$root.$broadcast('jsonforms:change');
+        this.timeout(() => this.scope.$root.$broadcast('jsonforms:change'), 0);
     }
 
     private fetch(any) {

@@ -5,8 +5,10 @@ require('angular-material/angular-material.css');
 // require('angular-aria');
 // require('angular-animate');
 
+require('../jsonforms.css');
 require('./jsonforms-material.css');
 
+import arrayControlDirective from './controls/array/array-directive';
 import booleanControlDirective from './controls/boolean/boolean-renderer';
 import datetimeControlDirective from './controls/datetime/datetime-renderer';
 import enumControlDirective from './controls/enum/enum-renderer';
@@ -24,6 +26,7 @@ import layoutDirective from './layouts/layouts-directive';
 export default angular.module('jsonforms-material', [
     'ngMaterial',
     'ngAnimate',
+    arrayControlDirective,
     booleanControlDirective,
     datetimeControlDirective,
     enumControlDirective,

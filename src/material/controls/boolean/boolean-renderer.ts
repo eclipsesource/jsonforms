@@ -1,5 +1,5 @@
-const booleanTemplate = `<md-input-container flex>     
-    <md-checkbox class="md-primary" 
+const booleanTemplate = `<md-input-container flex>
+    <md-checkbox class="md-primary"
                  aria-label="{{vm.label}}"
                  ng-model="vm.resolvedData[vm.fragment]"
                  ng-change='vm.triggerChangeEvent()'
@@ -7,10 +7,10 @@ const booleanTemplate = `<md-input-container flex>
                  {{vm.label}}
     </md-checkbox>
     <div ng-messages="{{vm.label}}.$error" role="alert">
-    <div ng-repeat="errorMessage in vm.alerts">
-      <!-- use ng-message-exp for a message whose key is given by an expression -->
-      <div ng-message-exp="errorMessage.type">{{errorMessage.msg}}</div>
-    </div>
+      <div ng-repeat="errorMessage in vm.alerts">
+        <!-- use ng-message-exp for a message whose key is given by an expression -->
+        <div>{{errorMessage.msg}}</div>
+      </div>
   </div>
 </md-input-container>`;
 
