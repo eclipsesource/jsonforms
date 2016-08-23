@@ -1,6 +1,6 @@
 import 'angular';
 import 'angular-mocks';
-import '../../jsonforms_bootstrap.ts';
+import '../../jsonforms-bootstrap.ts';
 
 describe('MasterDetailBootstrap', () => {
 
