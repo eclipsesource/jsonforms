@@ -1,6 +1,6 @@
 {
   "name": "jsonforms",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Generating forms for JSON schema",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
