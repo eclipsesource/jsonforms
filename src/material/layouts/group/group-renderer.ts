@@ -1,5 +1,5 @@
 const groupTemplate = `<jsonforms-layout>
-    <div  layout-padding layout="column" class="jsf-group">
+    <div layout-padding layout="column" class="jsf-group">
         <fieldset>
             <legend ng-if="vm.label">{{vm.label}}</legend>
             <jsonforms-inner ng-repeat="child in vm.uiSchema.elements"
