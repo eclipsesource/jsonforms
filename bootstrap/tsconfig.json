@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "declaration": true,
+    "module": "commonjs",
+    "experimentalDecorators": true
+  },
+  "files": [
+    "./jsonforms-bootstrap.ts",
+    "../typings/index.d.ts",
+    "../src/declarations.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "dev",
+    "reports",
+    "examples/bower_components"
+  ],
+  "compileOnSave":false,
+  "version": "1.8.0"
+}

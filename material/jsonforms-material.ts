@@ -3,7 +3,7 @@ import 'angular';
 require('angular-material');
 require('angular-material/angular-material.css');
 
-require('../jsonforms.css');
+require('../src/jsonforms.css');
 require('./jsonforms-material.css');
 
 import arrayControlDirective from './controls/array/array-directive';
