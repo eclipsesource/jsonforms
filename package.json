@@ -9,7 +9,7 @@
   "main": "dist/ts-build/index.js",
   "typings": "dist/ts-build/index.d.ts",
   "scripts": {
-    "tsc": "tsc && ncp src/bootstrap/jsf-bootstrap.css dist/ts-build/bootstrap/jsf-bootstrap.css && ncp src/jsonforms.css dist/ts-build/jsonforms.css",
+    "tsc": "tsc && ncp bootstrap/jsf-bootstrap.css dist/ts-build/bootstrap/jsf-bootstrap.css && ncp src/jsonforms.css dist/ts-build/jsonforms.css && ncp bootstrap/jsonforms-bootstrap.css dist/ts-build/bootstrap/jsonforms-bootstrap.css && ncp material/jsonforms-material.css dist/ts-build/material/jsonforms-material.css",
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --NODE_ENV=dev --inline",
     "dev-bootstrap": "webpack --config webpack/webpack.dev-bootstrap.js && webpack-dev-server --config webpack/webpack.dev-bootstrap.js --NODE_ENV=dev --inline",
     "dev-material": "webpack --config webpack/webpack.dev-material.js && webpack-dev-server --config webpack/webpack.dev-material.js --inline",

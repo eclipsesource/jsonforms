@@ -11,7 +11,8 @@
   },
   "files": [
     "./src/index.ts",
-    "./src/bootstrap/jsonforms-bootstrap.ts",
+    "./bootstrap/jsonforms-bootstrap.ts",
+    "./material/jsonforms-material.ts",
     "./typings/index.d.ts",
     "./src/declarations.d.ts"
   ],
