@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="jsonforms-website"" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="jsonforms-website"" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="jsonforms-website"" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="jsonforms-website" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>JSONForms</title>
+  <base href="/jsonforms/">
+  <!-- local dev -->
+  <!--<base href="/">-->
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="images/jsonforms-logo.png">
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+  <!-- async loading of analytics -->
+  <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-61092266-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  <!-- End Google Analytics -->
+</head>
+<body layout="column" class="l-offset-nav">
+<main-menu></main-menu>
+<div ui-view autoscroll="false"></div>
+
+<footer layout="row" layout-align="end center" flex="none">
+  <!--<a href="https://github.com/eclipsesource/jsonforms" id="github" target="_blank"><span>GitHub</span></a>-->
+  <a href="https://twitter.com/jsonforms" id="twitter" target="_blank"><span>Twitter</span></a>
+  <span>&copy; EclipseSource 2016</span>
+</footer>
+<script type="text/javascript" src="build.js?2494524c7dbb7984b516"></script></body>
+</html>
