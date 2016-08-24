@@ -1,26 +1,13 @@
-<article flex="noshrink">
-    <div layout="column" flex="grow">
-        <h1 class="text-center grey-text"><strong>EXAMPLES</strong></h1>
-        <div layout="row" flex="grow" class="md-padding editor-demo">
-            <div layout="column" flex="grow" class="md-padding">
-                <label class="editor-label text-center" for="localDynamicModelEditor">JSON SCHEMA</label>
-                <div ui-ace="vm.configAce('json')" ng-model="vm.localDynamicModel" id="localDynamicModelEditor" flex="none"></div>
-            </div>
-            <div layout="column" flex="grow" class="md-padding">
-                <label class="editor-label text-center" for="localDynamicViewEditor">UI SCHEMA</label>
-                <div ui-ace="vm.configAce('json')" ng-model="vm.localDynamicView" id="localDynamicViewEditor" flex="none"></div>
-            </div>
+<article flex="noshrink" class="article">
+
+    <div layout="row" flex="grow">
+        <examples-menu></examples-menu>
+
+        <!-- actual site -->
+        <div layout="column" flex="grow" class="l-offset-docs-nav text-content" layout-fill>
+            <div ui-view class="jsf" style="padding-top: 1em"></div>
         </div>
-        <div layout="row" flex layout-align="center center">
-            <md-button class="md-raised md-primary" ng-click="vm.reparseDynamic()">Render view</md-button>
-        </div>
-        <div layout="column" layout-align="center center">
-            <div class="panel-body jsf">
-                <jsonforms schema="vm.localDynamicModelObject"
-                           ui-schema="vm.localDynamicViewObject"
-                           data="vm.dynamicDataProvider.data">
-                </jsonforms>
-            </div>
-        </div>
+        <!-- right panel for support -->
+        <support-panel></support-panel>
     </div>
 </article>

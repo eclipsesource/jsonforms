@@ -1,7 +1,8 @@
 ---
 layout: doc
 ---
-# UI SCHEMA
+UI SCHEMA
+========= 
 
 The UI schema, which is passed into the `jsonforms` directive, describes
 the general layout of a form and is just a regular JSON object.
@@ -49,8 +50,11 @@ You can read more about `$refs` [here](https://spacetelescope.github.io/understa
 In the example above, we want the control to bind against the single `name`
 property. Below is an example of a rendered control.
 
-<div ng-controller='UiSchemaController as vm' class='example'>
-  <listing-control schema='vm.example1.schema' uischema='vm.example1.uischema' data='vm.example1.data'></listing-control>
+<div ng-controller='UiSchemaController as vm' class='example' >
+  <listing-control schema='vm.example1.schema' 
+                   uischema='vm.example1.uischema' 
+                   data='vm.example1.data'>
+  </listing-control>
 </div>
 
 ### Read-only
@@ -98,48 +102,31 @@ array.
 The default renderer supports a couple of `options`. The `submit` property
 disables adding new entries to an array.
 
-```
-var uischema = {
-  'type': 'Control',
-  'scope': { '$ref': '#/properties/comments' },
-  'options': {
-    'submit': false
-  }
-};
-
-```
-
-![Array control without submit option](./images/docs/uischema.control.array.nosubmit.png){:.img-responsive .docimg}
+<div ng-controller='UiSchemaController as vm' class='example'>
+  <listing-control schema='vm.example4.schema' 
+                   uischema='vm.example4.uischema' 
+                   data='vm.example4.data'>
+  </listing-control>
+</div>
 
 The `simple` option can be used to display a very simple view of all entries
 which does not allow submitting additional entries (so the `submit `option has no
 effect if combined with `simple`).
 
-With the data displayed belows the rendered form looks like this:
-
-
-
-```
-data = {
-    "comments": [
-      { "message": "Say Hello"          },
-      { "message": "Put your hands up " },
-      { "message": "In the air"         },
-      { "message": "My dog likes cats"  },
-    ]
-  }
-```
-
-![Array control with simple option set](./images/docs/uischema.control.array.simple.png){:.img-responsive}
-
+<div ng-controller='UiSchemaController as vm' class='example'>
+  <listing-control schema='vm.example5.schema' 
+                   uischema='vm.example5.uischema' 
+                   data='vm.example5.data'>
+  </listing-control>
+</div>
 
 # Layouts
-Layouts specify how multiple controls are arranged within the UI. Therefore,
-Layouts have an `elements` property that contains the different UI schema 
- element that ought to be layout. Of course, Layouts can again contain 
- other Layouts.
+Layouts specify how multiple controls are arranged within a container
+element. Therefore, layouts have an `elements` property that contains 
+the different UI schema element that ought to be layout. 
+Of course, Layouts can again contain other Layouts.
  
-# Horizontal 
+# Horizontal Layout 
  
 A `HorizontalLayout` orders its children in a horizontal fashion, where
 each child occupies the same amount of space, i.e. for *n* children
@@ -147,127 +134,56 @@ a child occupies *1/n* space.
  
 A simple example for a `HorizontalLayout` with two children 
 is given below:
-```
-schema = {
-            'properties': {
-                'foo': { 'type': 'string' },
-                'bar': { 'type': 'string' }
-            }
-        };        
-var uiSchema = {
-            'type': 'HorizontalLayout',
-            'elements': [
-                {
-                    'type': 'Control',
-                    'label': true,
-                    'scope': { '$ref': '#/properties/foo' }
-                },
-                {
-                    'type': 'Control',
-                    'label': false,
-                    'scope': { '$ref': '#/properties/bar' }
-                }
-            ]
-        };
-```
+
+<div ng-controller='UiSchemaController as vm' class='example'>
+  <listing-control schema='vm.example6.schema' 
+                   uischema='vm.example6.uischema' 
+                   data='vm.example6.data'>
+  </listing-control>
+</div>
  
 # Vertical
 The `VerticalLayout` behaves analogously to th e`HorizontalLayout` but 
 orders its children vertically, i.e. the elements will be placed beneath
 each other, instead of side-by-side.
 
-An example for a `VerticalLayout` looks as follows
-```
-var uiSchema = {
-            'type': 'VerticalLayout',
-            'elements': [
-                {
-                    'type': 'Control',
-                    'label': true,
-                    'scope': { '$ref': '#/properties/foo' }
-                },
-                {
-                    'type': 'Control',
-                    'label': false,
-                    'scope': { '$ref': '#/properties/bar' }
-                }
-            ]
-        };
-```
+An example for a `VerticalLayout` is given below
+ 
+<div ng-controller='UiSchemaController as vm' class='example'>
+   <listing-control schema='vm.example7.schema' 
+                    uischema='vm.example7.uischema' 
+                    data='vm.example7.data'>
+   </listing-control>
+</div>
  
 # Group
 A `Group` behaves exactly like a `VerticalLayout`, i.e. its `elements`
 will be lay out in a vertical fashion. The difference is, that the 
-`Group` also features a `label`` property that display an label above
-the `elements`.
+`Group` also features a `label` property that displays an label above
+the elements contained by the Group.
 
 A simple example of a `Group` featuring a `label` can be seen in the 
-example below:
+example below.
 
-```
-var uiSchema = {
-            'type': 'Group',
-            'label': 'Some title'
-            'elements': [
-                {
-                    'type': 'Control',
-                    'label': true,
-                    'scope': { '$ref': '#/properties/foo' }
-                },
-                {
-                    'type': 'Control',
-                    'label': false,
-                    'scope': { '$ref': '#/properties/bar' }
-                }
-            ]
-        };
-```
+<div ng-controller='UiSchemaController as vm' class='example'>
+  <listing-control schema='vm.example8.schema' 
+                   uischema='vm.example8.uischema' 
+                   data='vm.example8.data'>
+  </listing-control>
+</div>
  
- # Categorization
+# Categorization
 The `Categorization` layout contains elements where each on of them 
 specifies a category with the `type` property. A category itself again 
 acts as a container, hence it also has an `elements` property. A simple 
-example for a Categorization might look as follows:
-  
-```
-var uiSchema = {
-            'type': 'Categorization',
-            'elements': [
-                {
-                    'type': 'Category',
-                    'label': 'Pets',
-                    'elements': [
-                        {
-                            'type': 'Control',
-                            'scope': {
-                                '$ref': '#/properties/pets'
-                            }
-                        },
-                    ]
-                },
-                {
-                    'type': 'Category',
-                    'label': 'Cars',
-                    'elements': [
-                        {
-                            'type': 'Control',
-                            'scope': {
-                                '$ref': '#/properties/cars'
-                            }
-                        },
-                    ]
-                },
-            ]
-        };
-  
-```
+example for a Categorization might look as follows.
+
+<div ng-controller='UiSchemaController as vm' class='example'>
+  <listing-control schema='vm.example9.schema' 
+                   uischema='vm.example9.uischema' 
+                   data='vm.example9.data'>
+  </listing-control>
+</div>
 
 In this example we have two categories, one named 'Pets', the other one 
 named 'Cars'. Both contain a single `Control`.
-
-The default renderer renders categories as tabs. but other implementations
-might be based on a tree.
-
-
-
-

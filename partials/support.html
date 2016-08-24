@@ -1,60 +1,98 @@
 
-<article flex="noshrink" class="text-content">
+<article flex="shrink" class="text-content" style="max-width: 1200px; margin-left: auto; margin-right: auto; margin-top: 1em">
+    <p class="text-center support-text-big">
+        Professional Support for JSON Forms is brought to you by
+    </p>
+    <p class="text-center">
+        <img ng-src='{{vm.esLogo}}' alt="EclipseSource Logo"/>
+    </p>
+    <p class="text-center support-text-big">
+        including
+    </p>
     <div layout="row" layout-align="center">
-        <div layout="column">
-            <div class="support-circle">
-                <md-icon md-svg-icon="puzzle" class="lg-media"></md-icon>
-            </div>
+
+        <div flex="33" layout="column">
             <p class="support-text">
-                Declare your forms as JSON with great tooling.
+                Evaluation
+            </p>
+            <div class="support-circle" style="background-color: #4c968a">
+                <md-icon md-svg-icon="binoculars" class="md-media"></md-icon>
+            </div>
+            <p class="text-center">
+                Let us help to decide, whether JSON Forms is the right choice for you.
+                We will evaluate your requirements, assess if and how they can be matched with JSON Forms
+                and help you estimate the integration effort
             </p>
         </div>
 
-        <div layout="column">
-            <div class="support-circle">
-                <md-icon md-svg-icon="puzzle" class="lg-media"></md-icon>
-            </div>
+        <div flex="33" layout="column">
             <p class="support-text">
-                Declare your forms as JSON with great tooling.
+                Prototyping
+            </p>
+            <div class="support-circle" style="background-color: #5b6596">
+                <md-icon md-svg-icon="{{vm.mdiFlask}}" class="md-media"></md-icon>
+            </div>
+            <p class="text-center">
+                Let us provide you with a prototype demonstrating how JSON Forms will work in your domain
             </p>
         </div>
 
-        <div layout="column" >
-            <div class="support-circle">
-                <md-icon md-svg-icon="puzzle" class="lg-media"></md-icon>
-            </div>
+        <div flex="33"  layout="column">
             <p class="support-text">
-                Declare your forms as JSON with great tooling.
+                Training
+            </p>
+            <div class="support-circle" style="background-color: #decf84">
+                <md-icon md-svg-icon="projector-screen" class="md-media"></md-icon>
+            </div>
+            <p class="text-center">
+                Let us teach you, how to apply JSON Forms most efficient in your project,
+                including related technologies such as AngularJS or JSON Schema.
             </p>
         </div>
     </div>
 
     <div layout="row" layout-align="center">
-        <div layout="column">
-            <div class="support-circle">
-                <md-icon md-svg-icon="puzzle" class="lg-media"></md-icon>
-            </div>
+        <div flex="33" layout="column">
             <p class="support-text">
-                Declare your forms as JSON with great tooling.
+                Integration
+            </p>
+            <div class="support-circle" style="background-color: #a869b0">
+                <md-icon md-svg-icon="puzzle" class="md-media"></md-icon>
+            </div>
+            <p class="text-center">
+                Let us help you to integrate JSON Forms into your existing application as efficiently as possible
             </p>
         </div>
 
-        <div layout="column">
-            <div class="support-circle">
-                <md-icon md-svg-icon="puzzle" class="lg-media"></md-icon>
-            </div>
+        <div flex="33" layout="column">
             <p class="support-text">
-                Declare your forms as JSON with great tooling.
+                Support
+            </p>
+            <div class="support-circle" style="background-color: #ff6c64">
+                <md-icon md-svg-icon="{{vm.mdiPhoneClassic}}" class="md-media"></md-icon>
+            </div>
+            <p class="text-center">
+                Let us assist your team when solving day-to-day issues, such as technical problems or architecture decision
             </p>
         </div>
 
-        <div layout="column" >
-            <div class="support-circle">
-                <md-icon md-svg-icon="puzzle" class="lg-media"></md-icon>
+        <div flex="33" layout="column">
+            <p class="support-text text-center">
+                Sponsored Development and Maintenance
+            </p>
+            <div class="support-circle" style="background-color: #9dc371">
+                <md-icon md-svg-icon="puzzle" class="md-media"></md-icon>
             </div>
-            <p class="support-text">
-                Declare your forms as JSON with great tooling.
+            <p class="text-center">
+                Let us adapt and enhance the framework based on your specific requirements
             </p>
         </div>
     </div>
+    <p class="text-center support-text-big">
+        <md-button class="md-raised md-primary">
+            <md-icon md-svg-icon="contact-mail"></md-icon>
+            Contact us
+        </md-button>
+        for more details!
+    </p>
 </article>
