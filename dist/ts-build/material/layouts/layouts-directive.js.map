@@ -1,0 +1,1 @@
+{"version":3,"file":"layouts-directive.js","sourceRoot":"","sources":["../../../../material/layouts/layouts-directive.ts"],"names":[],"mappings":"AAAA,IAAM,cAAc,GAAG,sFAAoF,CAAC;AAE5G;kBAAe,OAAO;KACjB,MAAM,CAAC,sCAAsC,EAAE,EAAE,CAAC;KAClD,GAAG,CAAC,CAAC,gBAAgB,EAAE,UAAA,cAAc;QAClC,cAAc,CAAC,GAAG,CAAC,aAAa,EAAE,cAAc,CAAC,CAAC;IACtD,CAAC,CAAC,CAAC;KACF,IAAI,CAAC"}

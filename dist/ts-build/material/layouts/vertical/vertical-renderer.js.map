@@ -1,0 +1,1 @@
+{"version":3,"file":"vertical-renderer.js","sourceRoot":"","sources":["../../../../../material/layouts/vertical/vertical-renderer.ts"],"names":[],"mappings":"AAAA,IAAM,gBAAgB,GAAG,2UASL,CAAC;AAErB;kBAAe,OAAO;KACjB,MAAM,CAAC,+CAA+C,EAAE,EAAE,CAAC;KAC3D,GAAG,CAAC,CAAC,gBAAgB,EAAE,UAAA,cAAc;QAClC,cAAc,CAAC,GAAG,CAAC,eAAe,EAAE,gBAAgB,CAAC,CAAC;IAC1D,CAAC,CAAC,CAAC;KACF,IAAI,CAAC"}
