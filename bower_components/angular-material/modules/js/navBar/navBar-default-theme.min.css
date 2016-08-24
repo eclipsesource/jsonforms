@@ -1,6 +1,0 @@
-/*!
- * Angular Material Design
- * https://github.com/angular/material
- * @license MIT
- * v1.1.0-rc4-master-c26842a
- */body.md-THEME_NAME-theme,html.md-THEME_NAME-theme{color:'{{foreground-1}}';background-color:'{{background-color}}'}md-nav-bar.md-THEME_NAME-theme .md-nav-bar{background-color:transparent;border-color:'{{foreground-4}}'}md-nav-bar.md-THEME_NAME-theme .md-button._md-nav-button.md-unselected{color:'{{foreground-2}}'}md-nav-bar.md-THEME_NAME-theme md-nav-ink-bar{color:'{{accent-color}}';background:0 0}
