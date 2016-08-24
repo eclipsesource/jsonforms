@@ -1,10 +1,30 @@
+.toolbar-title {
+    padding: 16px;
+}
 
+/* Used to mark listing directives */
 .example {
     /*border: 2px solid #3498db;*/
     outline: 0px solid #004D91;
     box-shadow: 0 0 18px #004D91;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    line-height: normal;
+    font-size: 1em;
+}
+
+
+
+.example jsonforms {
     padding: 1em;
 }
+
+.examples-title {
+    color: #4E9AD9
+}
+
 
 .tutorial-image{
     max-width: 800px;
@@ -12,11 +32,19 @@
 .text-center {
     text-align: center;
 }
+
 .lg-media {
     min-width: 60px;
     min-height: 60px;
     color: #fff;
     margin: 45px;
+}
+
+.md-media {
+    min-width: 50px;
+    min-height: 50px;
+    color: #fff;
+    margin: 25px;
 }
 
 .docs-media {
@@ -221,9 +249,8 @@ button.main-nav-button{
 }
 
 .mainLogo{
-    /*color: #d9534f;*/
     width:640px;
-    padding-top: 250px;
+    padding-top: 150px;
     margin: 10px auto;
     text-align: center;
     position: relative;
@@ -236,7 +263,7 @@ button.main-nav-button{
     background-position: top center;
     background-repeat: no-repeat;
     content: '';
-    height: 250px;
+    height: 150px;
     position: absolute;
     left: 0;
     top: 0;
@@ -274,17 +301,29 @@ button.main-nav-button{
 }
 
 .support-circle {
-    margin: auto;
-    background-color: #004D91;
-    height: 150px;
-    width: 150px;
-    border-radius: 75px;
+    background-color: #9f9eab;
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+/* Styles for the support page */
+.support-text-big {
+    font-size: 1.25em;
+    color: rgba(47, 47, 47, 0.67);
 }
 
 .support-text {
     font-size: 1em;
     color: #004D91;
     font-weight: bold;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    word-wrap: break-word;
 }
 
 .green-circle {
@@ -370,7 +409,7 @@ button.docs-nav-button {
 .docs-support-panel {
     background-color: #4E9AD9;
     width: 320px;
-    height: 100%;
+    min-height: 100%;
 }
 .docs-support-panel h1 {
   text-align: center;
@@ -466,11 +505,11 @@ pre {
     /*width: 40%;*/
 }
 
-.jsf {
-    line-height: 1.0;
-    max-width:800px;
-}
-
+/*.jsf {*/
+    /*line-height: 1.0;*/
+    /*max-width:800px;*/
+/*}*/
+/**/
 .docimg {
   outline: 1px solid #4e9ad9;
   padding: 1em 1em 1em 1em;
