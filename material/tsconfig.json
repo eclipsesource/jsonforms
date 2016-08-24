@@ -6,13 +6,12 @@
     "sourceMap": true,
     "declaration": true,
     "module": "commonjs",
-    "experimentalDecorators": true,
-    "outDir": "dist/ts-build"
+    "experimentalDecorators": true
   },
   "files": [
-    "./src/index.ts",
-    "./typings/index.d.ts",
-    "./src/declarations.d.ts"
+    "./jsonforms-material.ts",
+    "../typings/index.d.ts",
+    "../src/declarations.d.ts"
   ],
   "exclude": [
     "node_modules",
@@ -22,5 +21,5 @@
     "examples/bower_components"
   ],
   "compileOnSave":false,
-  "version": "1.7.5"
+  "version": "1.8.0"
 }
