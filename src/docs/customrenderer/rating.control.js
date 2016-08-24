@@ -14,12 +14,13 @@ angular.module('jsonforms-website')
                 };
             }],
             controllerAs: 'vm',
-            templateUrl: 'js/docs/customrenderer/rating.control.html'
+            template: require('./rating.control.html')
         };
     })
     .run(['RendererService', 'JSONFormsTesters', function(RendererService, Testers) {
         RendererService.register('rating-control', Testers.and(
             Testers.uiTypeIs('Control'),
-            Testers.schemaTypeIs('integer')
+            Testers.schemaTypeIs('integer'),
+            Testers.schemaPathEndsWith('rating')
         ), 10);
     }]);
