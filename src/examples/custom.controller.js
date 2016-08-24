@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('makeithappen').controller('CustomController', function() {
+angular.module('jsonforms-website').controller('CustomControlController', function() {
     var vm = this;
     vm.schema = {
         "type": "object",
@@ -57,7 +57,10 @@ angular.module('makeithappen').controller('CustomController', function() {
                     {
                         "type": "Control",
                         "label": "First name",
-                        "scope": { "$ref": "#/properties/firstName" }
+                        "scope": { "$ref": "#/properties/firstName" },
+                        "options": {
+                            "useCustom": true
+                        }
                     },
                     {
                         "type": "Control",

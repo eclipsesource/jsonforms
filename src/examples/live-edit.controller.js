@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('makeithappen').controller('EditorController', function($scope) {
+angular.module('jsonforms-website')
+    .controller('LiveEditController', function($scope) {
 
     var vm = this;
 
