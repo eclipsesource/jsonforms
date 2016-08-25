@@ -423,11 +423,11 @@ angular.module('jsonforms-website', [
             });
         $urlRouterProvider.otherwise('/');
     }
-]).config(function($mdIconProvider) {
+]).config(['$mdIconProvider', function($mdIconProvider) {
     // require('mdi/fonts/materialdesignicons-webfont.eot');
     $mdIconProvider.defaultIconSet(require('../css/mdi.svg'));
     $mdIconProvider.defaultViewBoxSize([152]);
-}).config(function($mdThemingProvider) {
+}]).config(['$mdThemingProvider', function($mdThemingProvider) {
     $mdThemingProvider.definePalette('esPalette', {
         '50': '#ffffff',
         '100': '#e9f3fa',
@@ -465,7 +465,7 @@ angular.module('jsonforms-website', [
         'contrastDarkColors': '50 100 A100 A200'
     });
     $mdThemingProvider.theme('default').primaryPalette('esPaletteDark')
-}).controller('IndexController', function($anchorScroll, $location)  {
+}]).controller('IndexController', ['$anchorScroll', '$location', function($anchorScroll, $location)  {
     var vm = this;
     vm.configAce = function(mode) {
         return {
@@ -512,7 +512,7 @@ angular.module('jsonforms-website', [
         vm.localDynamicModelObject = JSON.parse(vm.localDynamicModel);
         vm.localDynamicViewObject = JSON.parse(vm.localDynamicView);
     };
-});
+}]);
 
 // Our code
 require('./listing/listing.controller');

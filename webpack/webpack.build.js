@@ -1,4 +1,5 @@
 var loaders = require("./loaders");
+
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var webpack = require('webpack');
@@ -39,7 +40,7 @@ module.exports = {
         new CopyWebpackPlugin([
             {
                 from: 'images',
-                to:   'dist/images'
+                to:   'images'
             }
         ])
     ],

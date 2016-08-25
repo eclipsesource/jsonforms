@@ -3,7 +3,9 @@
 
     But the values do not necessarily need to present when rendering is triggered. It is also possible
     to pass promises or functions returning promises to the directive.
+</p>
 
+</p>
     In the following this is demonstrated:  Click 'Load Data' and 'Load Schema' to load the JSON schema and
     the UI schema asynchronously. Then click 'Load UI' to finally load the rendered form.
 </p>
@@ -12,5 +14,8 @@
 <md-button class="md-raised" ng-click="vm.loadSchema()">Load Schema</md-button>
 <md-button class="md-raised" ng-click="vm.loadUI()">Load UI</md-button>
 
-<jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
+<div class="example">
+    <div ng-hide="vm.loaded()" class="md-body-2">Here goes our placeholder for the yet to be loaded form!</div>
+    <jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
+</div>
 

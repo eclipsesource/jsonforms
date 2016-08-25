@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('jsonforms-website')
-    .controller('LiveEditController', function($scope) {
+    .controller('LiveEditController', ['$scope', function($scope) {
 
     var vm = this;
 
@@ -206,4 +206,4 @@ angular.module('jsonforms-website')
     vm.localModel = vm.localModelDefault;
     vm.localView = vm.localViewDefault;
     vm.data = {};
-});
+}]);

@@ -1,61 +1,74 @@
 'use strict';
 
-angular.module('jsonforms-website').controller('AsyncController', function($q) {
-    var vm = this;
+angular.module('jsonforms-website')
+    .controller('AsyncController', ['$q', function($q) {
 
-    var dataDefer = $q.defer();
-    var UIDefer = $q.defer();
-    var schemaDefer = $q.defer();
+        var vm = this;
 
-    vm.dataAsync = dataDefer.promise;
-    vm.UIAsync = UIDefer.promise;
-    vm.schemaAsync = schemaDefer.promise;
+        var dataDefer = $q.defer();
+        var uiSchemaDefer = $q.defer();
+        var schemaDefer = $q.defer();
 
-    vm.data = data;
-    vm.uischema = uischema;
-    vm.schema = schema;
+        vm.dataAsync = dataDefer.promise;
+        vm.UIAsync = uiSchemaDefer.promise;
+        vm.schemaAsync = schemaDefer.promise;
 
-    vm.loadDataAsyncFun = function () {
-        return $q.when(vm.data);
-    };
+        vm.dataLoaded= false;
+        vm.schemaLoaded= false;
+        vm.uiSchemaLoaded= false;
 
-    vm.loadSchemaAsyncFun = function () {
-        return $q.when(vm.schema);
-    };
+        vm.data = data;
+        vm.uischema = uischema;
+        vm.schema = schema;
 
-    vm.loadUiSchemaAsyncFun = function () {
-        return $q.when(vm.uischema);
-    };
+        vm.loaded = function() {
+            return vm.dataLoaded && vm.schemaLoaded && vm.uiSchemaLoaded;
+        };
 
-    vm.loadData = function(){
-        dataDefer.resolve(data);
-    };
+        vm.loadDataAsyncFun = function () {
+            return $q.when(vm.data);
+        };
 
-    vm.loadUI = function(){
-        UIDefer.resolve(uischema);
-    };
+        vm.loadSchemaAsyncFun = function () {
+            return $q.when(vm.schema);
+        };
 
-    vm.loadSchema = function(){
-        schemaDefer.resolve(schema);
-    };
+        vm.loadUiSchemaAsyncFun = function () {
+            return $q.when(vm.uischema);
+        };
 
-    vm.formattedData = function() {
-        return JSON.stringify(vm.users, null, 4);
-    };
+        vm.loadData = function(){
+            vm.dataLoaded = true;
+            dataDefer.resolve(data);
+        };
 
-    vm.loadDataFunc = function(){
-        return data;
-    };
+        vm.loadUI = function(){
+            vm.uiSchemaLoaded = true;
+            uiSchemaDefer.resolve(uischema);
+        };
 
-    vm.loadUIFunc = function(){
-        return uischema;
-    };
+        vm.loadSchema = function(){
+            vm.schemaLoaded = true;
+            schemaDefer.resolve(schema);
+        };
 
-    vm.loadSchemaFunc = function(){
-        return schema;
-    };
+        vm.formattedData = function() {
+            return JSON.stringify(vm.users, null, 4);
+        };
 
-});
+        vm.loadDataFunc = function(){
+            return data;
+        };
+
+        vm.loadUIFunc = function(){
+            return uischema;
+        };
+
+        vm.loadSchemaFunc = function(){
+            return schema;
+        };
+
+    }]);
 
 
 var data = {
