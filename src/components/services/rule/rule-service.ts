@@ -1,7 +1,7 @@
 import {ServiceId} from '../services';
 import {IService} from '../services';
 import {IRule, ILeafCondition, RuleEffect} from '../../../uischema';
-import {PathResolver} from '../pathresolver/jsonforms-pathresolver';
+import {PathResolver} from '../path-resolver/path-resolver';
 
 export interface IRuleService extends IService {
     addRuleTrack(ruleServiceCallback: IRuleServiceCallBack): void;

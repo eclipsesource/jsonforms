@@ -1,7 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import '../../../index'
-import {RefResolver} from "../../services/pathresolver/jsonforms-pathresolver";
+import {RefResolver} from "../../services/path-resolver/path-resolver";
 
 describe('PathResolver', () => {
 

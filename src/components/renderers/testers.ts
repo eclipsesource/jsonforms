@@ -1,8 +1,8 @@
 
 import {SchemaElement} from '../../jsonschema';
 import {IUISchemaElement} from '../../uischema';
-import {PathResolver} from '../services/pathresolver/jsonforms-pathresolver';
-import {NOT_FITTING} from './renderer-service';
+import {PathResolver} from '../services/path-resolver/path-resolver';
+import {NOT_FITTING} from './renderer.service';
 
 export function schemaTypeIs(expected: string) {
     return (uiSchema: IUISchemaElement, schema: SchemaElement, data: any): boolean => {

@@ -36,5 +36,5 @@ export {
 } from './components/renderers/testers';
 
 export {PathResolver}
-    from './components/services/pathresolver/jsonforms-pathresolver';
+    from './components/services/path-resolver/path-resolver';
 

@@ -1,8 +1,8 @@
 import {PathUtil} from '../../services/pathutil';
-import {PathResolver} from '../../services/pathresolver/jsonforms-pathresolver';
+import {PathResolver} from '../../services/path-resolver/path-resolver';
 import {Services, ServiceId, IValidationService, ISchemaProvider} from '../../services/services';
 import {IRuleService, IRuleServiceCallBack} from '../../services/rule/rule-service';
-import {IDataProvider} from '../../services/data/data-service';
+import {IDataProvider} from '../../services/data/data-providers';
 import {IRule, IControlObject} from '../../../uischema';
 import {SchemaElement} from '../../../jsonschema';
 import {LabelObjectUtil} from '../Labels';

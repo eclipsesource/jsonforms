@@ -1,5 +1,5 @@
 import {AbstractControl} from '../abstract-control';
-import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
+import {PathResolver} from '../../../services/path-resolver/path-resolver';
 import {uiTypeIs} from '../../testers';
 
 class ReferenceDirective implements ng.IDirective {

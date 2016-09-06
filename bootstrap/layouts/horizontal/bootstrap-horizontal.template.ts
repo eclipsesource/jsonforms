@@ -1,5 +1,5 @@
 import {HorizontalController} from
-    '../../../src/components/renderers/layouts/horizontal/horizontal-directive';
+    '../../../src/components/renderers/layouts/horizontal/horizontal.directive';
 import {uiTypeIs} from '../../../src/components/renderers/testers';
 
 class BootstrapHorizontalDirective implements ng.IDirective {

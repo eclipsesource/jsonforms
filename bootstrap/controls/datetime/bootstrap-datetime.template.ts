@@ -1,5 +1,5 @@
 import {DateTimeController, DateTimeControllerScope} from
-    '../../../src/components/renderers/controls/datetime/datetime-directive';
+    '../../../src/components/renderers/controls/datetime/datetime.directive';
 import {Testers, schemaTypeIs, schemaTypeMatches} from '../../../src/components/renderers/testers';
 
 class DateTimeDirective implements ng.IDirective {

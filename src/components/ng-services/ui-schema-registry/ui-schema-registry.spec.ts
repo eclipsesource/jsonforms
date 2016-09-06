@@ -2,8 +2,8 @@ import 'angular';
 import 'angular-mocks';
 import '../../../index';
 
-import {UiSchemaRegistry, UiSchemaTester, NOT_FITTING} from './uischemaregistry-service';
-import {UISchemaGenerator} from '../../generators/jsonforms-uischemagenerator';
+import {UiSchemaRegistry, UiSchemaTester, NOT_FITTING} from './ui-schema-registry.service';
+import {UISchemaGenerator} from '../../generators/ui-schema-gen.service';
 import {SchemaElement} from "../../../jsonschema";
 
 describe('UiSchemaRegistry', () => {

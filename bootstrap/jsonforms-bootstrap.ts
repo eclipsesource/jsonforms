@@ -1,14 +1,14 @@
 import 'angular';
 
-import datetimeControlDirective from './controls/datetime/datetime-directive';
-import booleanControlDirective from './controls/boolean/boolean-directive';
-import arrayControlDirective from './controls/array/array-directive';
-import controlDirective from './controls/bootstrap-controls-directive';
-import categorizationDirective from './layouts/categories/categorization-directive';
-import verticalLayoutDirective from './layouts/vertical/vertical-directive';
-import horizontalLayoutDirective from './layouts/horizontal/horizontal-directive';
-import masterDetailDirectives from './layouts/masterdetail/masterdetail-directives';
-import groupLayoutDirective from './layouts/group/group-directive';
+import datetimeControlDirective from './controls/datetime/bootstrap-datetime.template';
+import booleanControlDirective from './controls/boolean/bootstrap-boolean.template';
+import arrayControlDirective from './controls/array/bootstrap-array.template';
+import controlDirective from './controls/bootstrap-control.template';
+import categorizationDirective from './layouts/categories/bootstrap-categorization.template';
+import verticalLayoutDirective from './layouts/vertical/bootstrap-vertical.template';
+import horizontalLayoutDirective from './layouts/horizontal/bootstrap-horizontal.template';
+import masterDetailDirectives from './layouts/masterdetail/bootstrap-masterdetail.template';
+import groupLayoutDirective from './layouts/group/bootstrap-group.template';
 
 // FIXME: include default bootstrap for glpyhicons etc as well
 require('bootstrap/dist/css/bootstrap.min.css');
