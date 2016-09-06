@@ -304,7 +304,7 @@ angular.module('jsonforms-website', [
 }]).directive('supportPanel', function() {
     return {
         restrict: 'E',
-        template: require('../partials/docs/generated/support_panel.html')
+        template: require('../partials/docs/support_panel.html')
     };
 }).config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
@@ -341,23 +341,23 @@ angular.module('jsonforms-website', [
             })
             .state('docs.customrenderer', {
                 url: '/customrenderer',
-                template: require('../partials/docs/generated/customrenderer.html')
+                template: require('../_site/partials/docs/customrenderer.html')
             })
             .state('docs.customrenderer-es5', {
                 url: '/customrenderer-es5',
-                template: require('../partials/docs/generated/customrenderer-es5.html')
+                template: require('../_site/partials/docs/customrenderer-es5.html')
             })
             .state('docs.customrenderer-es6', {
                 url: '/customrenderer-es6',
-                template: require('../partials/docs/generated/customrenderer-es6.html')
+                template: require('../_site/partials/docs/customrenderer-es6.html')
             })
             .state('docs.customrenderer-ts', {
                 url: '/customrenderer-ts',
-                template: require('../partials/docs/generated/customrenderer-ts.html')
+                template: require('../_site/partials/docs/customrenderer-ts.html')
             })
             .state('docs.uischema', {
                 url: '/uischema',
-                template: require('../partials/docs/generated/uischema.html')
+                template: require('../_site/partials/docs/uischema.html')
             })
             .state('support', {
                 url: '/support',

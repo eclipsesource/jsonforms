@@ -1,15 +1,15 @@
 ---
 layout: doc
 ---
-CUSTOM RENDERER TUTORIAL (ES 6)
-===============================
+Custom renderers with Javascript ES6
+====================================
 
 Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain situations.
 This can be done by registering a custom renderer that produces a different UI control.
 On this page, you will learn how to create and register a custom renderer in an application that uses *Javascript (ES 6)*.
-Please note that there are separate guides for [ES5](#/docs/customrenderer-es5) and [Typescript](#/docs/customrenderer-ts).
+Please note that there are separate articles for [ES5](#/docs/customrenderer-es5) and [Typescript](#/docs/customrenderer-ts).
 
-In this guide, we will replace the default renderer for integer values (see schreenshot below)
+In this article, we will replace the default renderer for integer values (see schreenshot below)
 
 ![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive .docimg}
 
@@ -20,7 +20,7 @@ so that it will use a *rating control* as shown below instead.
 Running the ES6 seed project
 -----------------------------------
 
-To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this ES6 seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
+To get started quickly, JSON Forms provides project seeds of different flavors. In this article, we'll use this ES6 seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-es6-seed.git`
 * `cd jsonforms-es6-seed`
@@ -319,4 +319,4 @@ After we registered the new renderer, we can refresh the browser and should see 
 
 ![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive .docimg}
 
-You can checkout the final state of the code of this tutorial at [https://github.com/eclipsesource/jsonforms-es6-seed/tree/custom-control](https://github.com/eclipsesource/jsonforms-es6-seed/tree/custom-control).
+You can checkout the final state of the code of this article at [https://github.com/eclipsesource/jsonforms-es6-seed/tree/custom-control](https://github.com/eclipsesource/jsonforms-es6-seed/tree/custom-control).

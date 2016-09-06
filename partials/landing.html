@@ -5,7 +5,7 @@
             <div class="mainLogo">More Forms. Less Code.</div>
             <h4 class="tag-line">Complex AngularJS Forms in the blink of an eye</h4>
             <md-button class="md-raised md-primary"
-                       ng-click="vm.scrollTo('demo')">Get Started</md-button>
+                       ng-click="vm.scrollTo('demo')">Live example</md-button>
         </div>
     </div>
 
@@ -75,10 +75,19 @@
                 </jsonforms>
             </div>
         </div>
-        <div layout="column" layout-align="center center">
+        <div layout="row" layout-align="center center">
+            <div layout="column">
             <md-button style="background-color: #d9534f"
                        class="md-raised md-primary"
-                       ui-sref="examples.person">More examples</md-button>
+                       ui-sref="docs.firstform">Get started</md-button></div>
+            <div layout="column">
+            <md-button style="background-color: #d9534f"
+                       class="md-raised md-primary"
+                       ui-sref="examples.person">More examples</md-button></div>
+            <div layout="column">
+            <md-button style="background-color: #d9534f"
+                       class="md-raised md-primary"
+                       ui-sref="docs.landing">Documentation</md-button></div>
         </div>
     </div>
 </article>

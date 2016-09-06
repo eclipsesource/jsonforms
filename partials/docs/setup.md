@@ -1,12 +1,12 @@
 ---
 layout: doc
 ---
-TUTORIAL SETUP
-==============
+Setting up a sample application
+===============================
 
-To ease the initial setup and to provide a template for working through the following tutorials, we provide the "Make it happen" application as an example and encourage you to use it as well. This example application contains a simple form, which we will extend incrementally in this tutorial. The initial state of the example application is the outcome of the first part: [Define your first form](#/docs/firstform). We also provide the final state including all adaptations described in the remaining parts of the tutorial, which can be used as a template solution.
+To ease the initial setup and to provide a template for working through the following a, we provide the "Make it happen" application as an example and encourage you to use it as well. This example application contains a simple form, which we will extend incrementally in this tutorial. The initial state of the example application is the outcome of the first part: [Define your first form](#/docs/firstform). We also provide the final state including all adaptations described in the remaining parts of the tutorial, which can be used as a template solution.
 
-Both example states can be found at [github.com/eclipsesource/make-it-happen-jsonforms.git](https://github.com/eclipsesource/make-it-happen-jsonforms.git).
+Both example states can be found at [github.com/eclipsesource/make-it-happen-jsonforms.git](https://github.com/eclipsesource/make-it-happen-jsonforms.git). Clone this repository with git clone onto your local machine.
 
 This git repository contains the following directories:
 

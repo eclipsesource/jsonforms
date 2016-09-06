@@ -1,13 +1,13 @@
 ---
 layout: doc
 ---
-CUSTOM RENDERER TUTORIAL (TYPESCRIPT)
-=====================================
+Custom renderers with Typescript
+================================
 
 Even if the default controls that are created by the default renderers of JSON Forms are probably a good fit for several scenarios, you may still want to customize the rendered forms in certain situations.
-This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *Typescript*. Please note that there are separate guides for Javascript [ES5](#/docs/customrenderer-es5) and [ES6](#/docs/customrenderer-es6).
+This can be done by registering a custom renderer that produces a different UI control. On this page, you will learn how to create and register a custom renderer in an application that uses *Typescript*. Please note that there are separate articles for Javascript [ES5](#/docs/customrenderer-es5) and [ES6](#/docs/customrenderer-es6).
 
-In this guide, we will replace the default renderer for integer values (see schreenshot below)
+In this article, we will replace the default renderer for integer values (see schreenshot below)
 
 ![Default Integer Control](images/docs/customrenderer.ts.previewbefore.png){:.img-responsive .docimg}
 
@@ -18,7 +18,7 @@ so that it will use a *rating control* as shown below instead.
 Running the Typescript seed project
 -----------------------------------
 
-To get started quickly, JSON Forms provides project seeds of different flavors. In this guide, we'll use this Typescript seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
+To get started quickly, JSON Forms provides project seeds of different flavors. In this article, we'll use this Typescript seed. Clone this project seed in order to have a ready-to-use AngularJS application that uses JSON Forms and install all relevant dependencies using the following command:
 
 * `git clone https://github.com/eclipsesource/jsonforms-typescript-seed.git`
 * `cd jsonforms-typescript-seed`
@@ -312,4 +312,4 @@ After we registered the new renderer, we can refresh the browser and should see 
 
 ![Final form with custom rating control](images/docs/customrenderer.ts.finalform.png){:.img-responsive .docimg}
 
-You can checkout the final state of the code of this tutorial at [https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control](https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control).
+You can checkout the final state of the code of this article at [https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control](https://github.com/eclipsesource/jsonforms-typescript-seed/tree/custom-control).

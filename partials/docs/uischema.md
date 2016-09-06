@@ -1,16 +1,16 @@
 ---
 layout: doc
 ---
-UI SCHEMA
-========= 
+Exploring the core UI schema elements
+=====================================
 
 The UI schema, which is passed into the `jsonforms` directive, describes
 the general layout of a form and is just a regular JSON object.
-It describes the form by means of different elements, which can be 
+It describes the form by means of different UI schema elements, which can be 
 categorized into `Control`s and `Layout`s. The type of an element
  can be specified via the `type` property.
-In this section, we provide a detailed overview about the currently 
-available UI schema elements.
+In this article, we provide a detailed overview about the currently 
+available core UI schema elements.
 
 ## Controls
 

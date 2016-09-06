@@ -1,18 +1,18 @@
 ---
 layout: doc
 ---
-DEFINE YOUR FIRST FORM
-======================
+Getting started with your first form
+====================================
 
-In this first part of the tutorial, we describe how to create a simple form from scratch using JSON Forms. For the tutorial, we use the [JSON Forms Editor](https://jsonforms-editor.herokuapp.com) for creating the data schema and the UI schema. Please confer the [JSON Forms Editor documentation](#/docs/jsonformseditor) for more information. Note that this could also be done by manually writing the underlying JSON files. Therefore, we always show both representations in the course of this tutorial. This section describes how to create the initial state of our example application. If you haven’t set up your environment and obtained the example code yet, please refer to the [tutorial setup guide](#/docs/setup).
+In this article, we describe how to create a simple form from scratch using JSON Forms. We use the [JSON Forms Editor](https://jsonforms-editor.herokuapp.com) for creating the data schema and the UI schema. Please refer to the [JSON Forms Editor article](#/docs/jsonformseditor) for more information. Note that this could also be done by manually writing the underlying JSON files. Therefore, we always show both representations in the course of our articles. This article describes how to create the initial state of our example application. If you haven’t set up your environment and obtained the example code yet, please refer to the [sample application article](#/docs/setup).
 
-The example used along this tutorial is called "Make It Happen" and creates a simple task tracker. The first goal is to create a form for entering "Tasks". This form contains three input fields as shown in the following screenshot. As you can see, the form has one simple String control called "Name", a multi-line String control called "Description" and a Boolean checkbox control indicating whether the task is done.
+The example used along most articles is called "Make It Happen" and creates a simple task tracker. The first goal is to create a form for entering "Tasks". This form contains three input fields as shown in the following screenshot. As you can see, the form has one simple String control called "Name", a multi-line String control called "Description" and a Boolean checkbox control indicating whether the task is done.
 
 ![Example form](images/docs/firstform.form.png){:.img-responsive .docimg}
 
 The first step to create such a form is to define the underlying data schema. This schema defines the data object underneath a form. Technically, the underlying data is a JSON object, which is bound to the form during runtime. JSON Forms partially derives the UI from this data schema, so defining the data is typically already most of the work.
 
-Data schemata are defined using JSON Schema. In the following, we define a [JSON Schema](http://spacetelescope.github.io/understanding-json-schema), which contains three attributes for the example entity "Task": "name" (String), "description" (String) and "done" (boolean). The following screenshot shows the data schema in the JSON Forms Editor on the left-hand side and the corresponding data schema in the underlzing JSON representation on the right-hand side.
+Data schemata are defined using [JSON Schema](http://json-schema.org). In the following, we define a [JSON Schema](http://spacetelescope.github.io/understanding-json-schema), which contains three attributes for the example entity "Task": "name" (String), "description" (String) and "done" (boolean). The following screenshot shows the data schema in the JSON Forms Editor on the left-hand side and the corresponding data schema in the underlzing JSON representation on the right-hand side.
 
 <div class="row">
 <div class="col-sm-2">
@@ -165,4 +165,4 @@ angular.module('MiHexample', ['jsonforms-bootstrap'])
 </html>
 ```
 
-Now you are able to create forms and integrate them into your web application. We recommend you to continue with the section [Custom Renderer](#/docs/customrenderer), which explains how you can customize and extend the default look and feel of your forms.
+Now you are able to create forms and integrate them into your web application. We recommend you to take a look at the all available core UI schema elements as outlined in [our UI schema elements article](#/docs/uischema). Furthermore it is probably useful to take a look at the [custom renderers article](#/docs/customrenderer), which explains how you can customize and extend the default look and feel of your forms.
