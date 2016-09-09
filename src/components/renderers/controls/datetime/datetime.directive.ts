@@ -54,7 +54,7 @@ export default angular
                 Testers.and(
                     schemaTypeIs('string'),
                     schemaTypeMatches(el => _.has(el, 'format') && el['format'] === 'date-time')
-                ), 10)
+                ), 2)
     ])
     .run(['$templateCache', $templateCache => {
         $templateCache.put('datetime.html', datetimeTemplate);
