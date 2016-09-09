@@ -42,6 +42,9 @@
     color: black;
     font-style: italic;
 }
+.jsf .control-error {
+  margin-right: 34px;
+}
 
 .jsf .readonly-array-empty {
   font-style: italic;
