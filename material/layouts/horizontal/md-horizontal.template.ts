@@ -1,5 +1,5 @@
 const horizontalTemplate = `<jsonforms-layout>
-    <div layout-padding layout="row" layout-sm="column" class="jsf-horizontal-layout-container">
+    <div layout="row" layout-sm="column" class="jsf-horizontal-layout-container">
         <div flex ng-repeat="child in vm.uiSchema.elements">
              <jsonforms-inner uischema="child"></jsonforms-inner>
         </div>

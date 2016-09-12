@@ -18,6 +18,9 @@ md-datepicker .md-datepicker-input-container{
 md-datepicker .md-datepicker-input {
   max-width: 100%;
 }
+.md-select-value .md-select-icon {
+  margin: 0;
+}
 /* workaround for https://github.com/angular/material/issues/6214 */
 -.md-errors-spacer:empty {
   display: none;
