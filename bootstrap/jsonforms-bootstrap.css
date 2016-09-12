@@ -42,3 +42,8 @@
     color: black;
     font-style: italic;
 }
+
+.jsf .readonly-array-empty {
+  font-style: italic;
+  margin-bottom: 0.5em;
+}

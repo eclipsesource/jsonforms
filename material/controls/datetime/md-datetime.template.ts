@@ -7,12 +7,7 @@ const datetimeTemplate = `
                  ng-change="vm.triggerChangeEvent()"
                  ng-disabled="vm.uiSchema.readOnly">
   </md-datepicker>
-  <div ng-messages="{{vm.label}}.$error" role="alert">
-    <div ng-repeat="errorMessage in vm.alerts">
-      <!-- use ng-message-exp for a message whose key is given by an expression -->
-      <div>{{errorMessage.msg}}</div>
-    </div>
-  </div>
+  
 </md-input-container>`;
 
 export default angular
