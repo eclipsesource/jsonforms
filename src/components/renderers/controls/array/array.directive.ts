@@ -7,6 +7,8 @@ import {SchemaArray} from '../../../../jsonschema';
 import {PathResolver} from '../../../services/path-resolver/path-resolver';
 import {Testers, schemaTypeIs, optionIs} from '../../testers';
 
+let pluralize = require('pluralize');
+
 const readOnlyArrayTemplate = `
     <jsonforms-layout>
       <fieldset>
@@ -41,7 +43,7 @@ const arrayTemplate = `
             <input class="btn btn-primary"
                    ng-show="vm.supportsSubmit"
                    type="button"
-                   value="Create {{vm.buttonText}}"
+                   value="Add {{vm.buttonText}}"
                    ng-click="vm.submitCallback()"
                    ng-model="vm.submitElement">
             </input>
@@ -75,7 +77,7 @@ class ArrayController extends AbstractControl {
     }
 
     public get buttonText(){
-        return PathUtil.beautifiedLastFragment(this.schemaPath);
+        return pluralize(PathUtil.beautifiedLastFragment(this.schemaPath), 1);
     }
     public submitCallback() {
         if (this.resolvedData[this.fragment] === undefined) {

@@ -11,7 +11,7 @@ const arrayTemplate = `
             </div>
             <md-button class="md-raised md-primary"
                    ng-show="vm.supportsSubmit"
-                   ng-click="vm.submitCallback()">Create {{vm.buttonText}}
+                   ng-click="vm.submitCallback()">Add {{vm.buttonText}}
             </md-button>
         </fieldset>
     </jsonforms-layout>`;
