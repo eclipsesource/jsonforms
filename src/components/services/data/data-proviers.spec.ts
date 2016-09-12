@@ -2,8 +2,8 @@ import 'angular';
 import 'angular-mocks';
 import '../../../index';
 
-import {DataProviders, DefaultDataProvider} from './data-services';
-import {IDataProvider} from './data-service';
+import {DataProviders, DefaultDataProvider} from './default-data-providers';
+import {IDataProvider} from './data-providers';
 import {ServiceId} from '../services';
 
 

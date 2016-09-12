@@ -1,6 +1,6 @@
 import {Services, ServiceId} from '../../services/services';
 import {IRuleService, IRuleServiceCallBack} from '../../services/rule/rule-service';
-import {IDataProvider} from '../../services/data/data-service';
+import {IDataProvider} from '../../services/data/data-providers';
 import {ILayout, IRule} from '../../../uischema';
 
 export abstract class AbstractLayout implements IRuleServiceCallBack {

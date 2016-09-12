@@ -1,19 +1,19 @@
 import 'angular';
 let JsonRefs = require('json-refs');
 
-import {UiSchemaRegistry} from '../ng-services/uischemaregistry/uischemaregistry-service';
+import {UiSchemaRegistry} from '../ng-services/ui-schema-registry/ui-schema-registry.service';
 import {ISchemaGenerator} from '../generators/generators';
 import {ValidationService} from '../services/services';
 import {ISchemaProvider, SchemaProvider} from '../services/services';
 import {ScopeProvider} from '../services/services';
 import {Services, ServiceId} from '../services/services';
-import {IDataProvider} from '../services/data/data-service';
+import {IDataProvider} from '../services/data/data-providers';
 import {RuleService} from '../services/rule/rule-service';
-import {DefaultDataProvider} from '../services/data/data-services';
-import {RendererService} from '../renderers/renderer-service';
+import {DefaultDataProvider} from '../services/data/default-data-providers';
+import {RendererService} from '../renderers/renderer.service';
 import {IUISchemaElement} from '../../uischema';
 import {SchemaElement} from '../../jsonschema';
-import {DataService} from '../ng-services/data/data-service';
+import {DataService} from '../ng-services/data/data.service';
 
 export class FormController {
 

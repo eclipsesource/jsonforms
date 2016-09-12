@@ -1,7 +1,7 @@
 
-import uiSchemaRegistry from './uischemaregistry/uischemaregistry-service';
-import pathResolver from './pathresolver/pathresolver-service';
-import labelService from './label/label-service';
+import uiSchemaRegistry from './ui-schema-registry/ui-schema-registry.service';
+import pathResolver from './path-resolver/path-resolver.service';
+import labelService from './label/label.service';
 import capitalizeFilter from './capitalize/capitalize.filter';
 import {ServiceId} from "../services/services";
 

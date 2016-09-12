@@ -4,7 +4,7 @@ import {IUISchemaGenerator} from '../../../generators/generators';
 import {AbstractControl} from '../abstract-control';
 import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
-import {PathResolver} from '../../../services/pathresolver/jsonforms-pathresolver';
+import {PathResolver} from '../../../services/path-resolver/path-resolver';
 import {Testers, schemaTypeIs, optionIs} from '../../testers';
 
 const readOnlyArrayTemplate = `

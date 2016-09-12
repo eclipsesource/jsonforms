@@ -1,6 +1,6 @@
 
 import {ServiceId} from '../services';
-import {IDataProvider, IPagingDataProvider, IFilteringDataProvider} from './data-service';
+import {IDataProvider, IPagingDataProvider, IFilteringDataProvider} from './data-providers';
 
 export class DataProviders {
     static canPage(provider: IDataProvider): provider is IPagingDataProvider {
