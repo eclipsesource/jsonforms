@@ -151,7 +151,8 @@ angular.module('jsonforms-website')
                 "type": "string"
             },
             "email": {
-                "type": "string"
+                "type": "string",
+                "format": "email"
             },
             "firstName": {
                 "type": "string"
