@@ -117,7 +117,7 @@ angular.module('makeithappen').controller('PersonController', function() {
             },
             "birthDate": {
                 "type": "string",
-                "format": "date-time"
+                "format": "date"
             },
             "nationality": {
                 "type": "string",

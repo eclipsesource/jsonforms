@@ -4,7 +4,14 @@ import {PathUtil} from "./pathutil";
 
 // TODO: replace
 let tv4 = require('tv4');
-
+let formats = require('tv4-formats');
+let validator;
+if(tv4!=null){
+  validator = tv4.freshApi();
+  if(formats!=null){
+    validator.addFormat(formats);
+  }
+}
 // TODO: remove
 class HashTable {
 
@@ -92,7 +99,7 @@ export class ValidationService implements IValidationService {
 
     validate(instance: any, schema: SchemaElement): void {
 
-        if (tv4 === undefined) {
+        if (validator === undefined) {
             return;
         }
 
@@ -100,7 +107,7 @@ export class ValidationService implements IValidationService {
         this.checkObjects = [];
         this.clear(instance);
         // TODO
-        let results = tv4.validateMultiple(instance, schema);
+        let results = validator.validateMultiple(instance, schema);
 
         results['errors'].forEach((error) => {
             if (error['schemaPath'].indexOf('required') !== -1) {
