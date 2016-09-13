@@ -367,7 +367,7 @@ angular.module('jsonforms-website', [
             })
             //
             // Example states --
-            // 
+            //
             .state('examples', {
                 url: '/examples',
                 template: require('../partials/examples.html'),
@@ -395,6 +395,12 @@ angular.module('jsonforms-website', [
                 url: '/arrays',
                 template: require('../partials/examples/arrays.html'),
                 controller: 'ArraysController',
+                controllerAs: 'vm'
+            })
+            .state('examples.categories', {
+                url: '/categories',
+                template: require('../partials/examples/categories.html'),
+                controller: 'CategoriesController',
                 controllerAs: 'vm'
             })
             .state('examples.live-edit', {
@@ -526,6 +532,7 @@ require('./examples/person.controller');
 require('./examples/async.controller');
 require('./examples/remote-ref.controller');
 require('./examples/arrays.controller');
+require('./examples/categories.controller');
 require('./examples/live-edit.controller');
 require('./examples/generate-ui.controller');
 require('./examples/generate-schema.controller');
