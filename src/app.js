@@ -403,6 +403,12 @@ angular.module('jsonforms-website', [
                 controller: 'CategoriesController',
                 controllerAs: 'vm'
             })
+            .state('examples.masterdetail', {
+                url: '/masterdetail',
+                template: require('../partials/examples/masterdetail.html'),
+                controller: 'MasterDetailController',
+                controllerAs: 'vm'
+            })
             .state('examples.live-edit', {
                 url: '/live-edit',
                 template: require('../partials/examples/live-edit.html'),
@@ -533,6 +539,7 @@ require('./examples/async.controller');
 require('./examples/remote-ref.controller');
 require('./examples/arrays.controller');
 require('./examples/categories.controller');
+require('./examples/masterdetail.controller');
 require('./examples/live-edit.controller');
 require('./examples/generate-ui.controller');
 require('./examples/generate-schema.controller');
