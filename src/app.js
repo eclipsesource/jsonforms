@@ -409,6 +409,12 @@ angular.module('jsonforms-website', [
                 controller: 'MasterDetailController',
                 controllerAs: 'vm'
             })
+            .state('examples.rule', {
+                url: '/rule',
+                template: require('../partials/examples/rule.html'),
+                controller: 'RuleController',
+                controllerAs: 'vm'
+            })
             .state('examples.live-edit', {
                 url: '/live-edit',
                 template: require('../partials/examples/live-edit.html'),
@@ -540,6 +546,7 @@ require('./examples/remote-ref.controller');
 require('./examples/arrays.controller');
 require('./examples/categories.controller');
 require('./examples/masterdetail.controller');
+require('./examples/rule.controller');
 require('./examples/live-edit.controller');
 require('./examples/generate-ui.controller');
 require('./examples/generate-schema.controller');
