@@ -1,14 +1,14 @@
 import {SchemaElement} from '../../jsonschema';
 import {IUISchemaElement} from '../../uischema';
-import {PathUtil} from "./pathutil";
+import {PathUtil} from './pathutil';
 
 // TODO: replace
 let tv4 = require('tv4');
 let formats = require('tv4-formats');
 let validator;
-if(tv4!=null){
+if (tv4 != null) {
   validator = tv4.freshApi();
-  if(formats!=null){
+  if (formats != null) {
     validator.addFormat(formats);
   }
 }
