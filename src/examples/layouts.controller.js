@@ -74,6 +74,55 @@ angular.module('jsonforms-website')
             }
           ]
         };
+        vm.uiSchemaComplex = {
+          "type": "Group",
+          "label": "My Group",
+          "elements": [
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "VerticalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "label": "Name",
+                      "scope": {
+                          "$ref": "#/properties/name"
+                      }
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Birth Date",
+                      "scope": {
+                          "$ref": "#/properties/birthDate"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "VerticalLayout",
+                  "elements": [
+                    {
+                      "type": "Control",
+                      "label": "Name",
+                      "scope": {
+                          "$ref": "#/properties/name"
+                      }
+                    },
+                    {
+                      "type": "Control",
+                      "label": "Birth Date",
+                      "scope": {
+                          "$ref": "#/properties/birthDate"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        };
 
         vm.data = {
             name: 'John Doe',
