@@ -59,9 +59,9 @@ class MasterDetailCollectionController {
     static $inject = ['$scope'];
     public instance: any;
     public schema: any;
-    public labelprovider: LabelProvider;
-    public imageprovider: ImageProvider;
-    public deletableroot: boolean;
+    public labelProvider: LabelProvider;
+    public imageProvider: ImageProvider;
+    public deletableRoot: boolean;
     public selectedSchemaForAdd;
     public selectedElementForAdd;
     public selectedScopeForAdd;
@@ -95,26 +95,21 @@ class MasterDetailCollectionController {
         let child = scope.child;
         let schemaToCheck = scope.schema.items;
         let keys = _.keys(this.getArraySubSchemas(schemaToCheck));
-        for (let key of keys) {
-            if (child[key] !== undefined && child[key].length !== 0) {
-                scope.hasContents = true;
-                return;
-            }
-        }
-        scope.hasContents = false;
+        scope.hasContents = _.some(keys,
+          key => child[key] !== undefined && child[key].length !== 0);
     }
     public canHaveChildren(dataSchema): boolean {
         return _.keys(this.getArraySubSchemas(dataSchema.items)).length !== 0;
     }
     public getLabel(data, dataSchema): string {
-        let labelProperty = this.labelprovider[dataSchema.items.properties.id];
+        let labelProperty = this.labelProvider[dataSchema.items.properties.id];
         if (labelProperty !== undefined) {
             return data[labelProperty];
         }
         return data.name || data.id || JSON.stringify(data);
     }
     public getImage(dataSchema): string {
-        let imageUrl = this.imageprovider[dataSchema.items.properties.id];
+        let imageUrl = this.imageProvider[dataSchema.items.properties.id];
         if (imageUrl !== undefined) {
             return imageUrl;
         }
