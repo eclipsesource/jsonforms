@@ -12,7 +12,7 @@ const arrayTemplate =  `
     <input class="btn btn-primary"
            ng-show="vm.supportsSubmit"
            type="button"
-           value="Create {{vm.buttonText}}"
+           value="Add {{vm.buttonText}}"
            ng-click="vm.submitCallback()"
            ng-model="vm.submitElement">
     </input>
