@@ -1,3 +1,7 @@
+html.md-default-theme, html, body.md-default-theme, body {
+    background-color: #fff;
+}
+
 .toolbar-title {
     padding: 16px;
 }
@@ -203,23 +207,6 @@ button.main-nav-button{
     width: 0;
 	overflow: hidden;
 }
-#twitter{
-    background-image: url("../images/extern/TwitterLogo_white.png");
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: 64px 64px;
-    width: 74px;
-    height: 80px;
-}
-#twitter:hover{
-    background-image: url("../images/extern/TwitterLogo.png");
-}
-#twitter>span{
-    display: block;
-    height: 0;
-    width: 0;
-	overflow: hidden;
-}
 .editor-label {
     font-size: 1.25em;
     color: slategrey;
@@ -352,7 +339,7 @@ footer {
     background-color: #004D91;
     color: #fff;
     padding-right: 20px;
-    height:80px;
+    height:40px;
     font-size: 15px;
 }
 footer a:hover{
@@ -407,34 +394,32 @@ button.docs-nav-button {
 	display: none;
 }
 .docs-support-panel {
-    background-color: #4E9AD9;
     width: 320px;
-    min-height: 100%;
 }
 .docs-support-panel h1 {
   text-align: center;
   margin-top: 0;
   padding-top: 0;
   font-size: 1.7em;
-  color: #fff;
+  color: #4E9AD9;
   font-weight: bold;
 }
 .docs-support-panel p {
-  text-align: center;
-  padding: 0.5em 0.5em 1em 1em;
-  font-size: 1.3em;
-  color: #fff;
+    text-align: center;
+    padding: 0.5em 0.5em 1em 1em;
+    font-size: 1.3em;
+    color: #4E9AD9;
 }
 .docs-support-panel p a {
-  font-weight: bold;
-  color: #fff;
+    font-weight: bold;
+    color: #4E9AD9;
 }
 .docs-support-panel p a:hover {
   font-weight: bold;
   color: #004D91;
 }
 .docs-support-panel div.docs-support-text {
-  position: fixed;
+    position: fixed;
 }
 .docs-support-panel div.docs-support-text .docs-support-icon {
   margin-left: 3.5em;
@@ -444,9 +429,9 @@ button.docs-nav-button {
   margin-bottom: 0;
 }
 .docs-support-panel div.docs-support-text .docs-support-icon a {
-  color: #fff;
-  font-size: 400%;
-  font-weight: bolder;
+    color: #4E9AD9;
+    font-size: 400%;
+    font-weight: bolder;
 }
 .text-content {
     /*max-width: 800px;*/
@@ -514,4 +499,14 @@ pre {
   outline: 1px solid #4e9ad9;
   padding: 1em 1em 1em 1em;
   box-shadow: 0 0 10px #4e9ad9;
+}
+
+.site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column
+}
+
+.site-content {
+    flex: 1;
 }
