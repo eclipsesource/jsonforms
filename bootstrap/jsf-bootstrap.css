@@ -196,6 +196,7 @@
 
 .jsf fieldset {
   border: 1px solid #c0c0c0;
+  border-radius: 4px;
   margin: 0 2px;
   padding: 0.35em 0.625em 0.75em;
 }
@@ -9575,22 +9576,21 @@
 }
 
 .jsf fieldset {
-  padding: 0;
+  padding: 0.5 1em;
   margin: 0;
-  border: 0;
   min-width: 0;
 }
 
 .jsf legend {
   display: block;
-  width: 100%;
-  padding: 0;
-  margin-bottom: 20px;
+  width: auto;
+  padding: 0 0.5em;
   font-size: 21px;
   line-height: inherit;
   color: #333333;
   border: 0;
-  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 0;
+  /*border-bottom: 1px solid #e5e5e5;*/
 }
 
 .jsf label {

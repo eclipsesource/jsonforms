@@ -9,6 +9,7 @@ const arrayTemplate = `
             <div ng-repeat="d in vm.resolvedData[vm.fragment]" ng-if="vm.fragment !== undefined">
                 <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
             </div>
+            <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
             <md-button class="md-raised md-primary"
                    ng-show="vm.supportsSubmit"
                    ng-click="vm.submitCallback()">Add {{vm.buttonText}}

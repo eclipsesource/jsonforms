@@ -19,6 +19,7 @@ const readOnlyArrayTemplate = `
             </div>
             <hr ng-show="!$last">
         </div>
+        <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
        </fieldset>
      </jsonforms-layout>`;
 
@@ -40,6 +41,7 @@ const arrayTemplate = `
             <div ng-repeat="d in vm.resolvedData[vm.fragment]" ng-if="vm.fragment !== undefined">
                 <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
             </div>
+            <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
             <input class="btn btn-primary"
                    ng-show="vm.supportsSubmit"
                    type="button"
@@ -91,6 +93,14 @@ class ArrayController extends AbstractControl {
         return !(options !== undefined && options['submit'] === false);
     }
 
+    public get isEmpty(): boolean {
+      let value = this.resolvedData[this.fragment];
+      return value === null || value.length === 0;
+    }
+
+    public get emptyMsg(): string {
+      return 'No ' + PathUtil.beautifiedLastFragment(this.schemaPath) + ' yet.';
+    }
 }
 
 export default angular

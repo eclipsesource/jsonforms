@@ -5,14 +5,15 @@
 .jsf legend {
   margin-bottom: 0.15em;
   width: inherit;
-  padding: 0 10px;
+  padding: 0 0.5em;
   border-bottom:none;
 }
 
 .jsf fieldset {
   border: 1px solid #ccc !important;
   border-radius: 4px;
-  padding: 0 1.4em 1.4em 1.4em !important;
+  /*padding: 0 1.4em 1.4em 1.4em !important;*/
+  padding: 0 1em;
   margin: 0 0 1.5em 0 !important;
 }
 .jsf-control .form-control {
@@ -147,4 +148,8 @@ array-control fieldset > div > div {
 }
 .jsf-masterdetail .jsf-masterdetail-master .chevron-down:after{
   content:"\2003 \25BC"
+}
+.jsf .readonly-array-empty {
+  font-style: italic;
+  margin-bottom: 0.5em;
 }
