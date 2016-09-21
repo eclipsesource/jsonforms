@@ -9918,10 +9918,6 @@
   position: relative;
 }
 
-.jsf .has-feedback .form-control {
-  padding-right: 42.5px;
-}
-
 .jsf .form-control-feedback {
   position: absolute;
   top: 0;
