@@ -1,6 +1,6 @@
 {
   "name": "jsonforms",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Generating forms for JSON schema",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -40,7 +40,7 @@
     "lodash": "4.0.1",
     "pluralize": "3.0.0",
     "tv4": "^1.2.7",
-    "tv4-formats":"2.2.0"
+    "tv4-formats": "2.2.0"
   },
   "devDependencies": {
     "angular-mocks": "1.5.0",
