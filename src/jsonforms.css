@@ -84,8 +84,6 @@ array-control fieldset > div > div {
 }
 .jsf-masterdetail {
   display: flex;
-  /*border: 1px solid #ccc;*/
-  /*border-radius: 4px;*/
 }
 .jsf-masterdetail>div{
   margin:0.25em;
@@ -100,54 +98,107 @@ array-control fieldset > div > div {
   flex:7 1 0.7vw;
   padding: 0.5em;
 }
+.jsf-masterdetail>.jsf-masterdetail-master jsonforms-masterdetail-collection {
+    flex: 1;
+}
+.jsf-masterdetail .jsf-masterdetail-master jsonforms-masterdetail-collection > div > ul {
+    margin-left: 0;
+}
 .jsf-masterdetail ul {
-  list-style-type: none;
-  cursor: default;
-  padding: 0.5em;
-  margin: 0;
+    list-style-type: none;
+    cursor: default;
+    padding: 0;
+    margin: 0;
+    margin-left: 1em;
+    flex: 1;
 }
-.jsf-masterdetail .jsf-masterdetail-properties {
+.jsf-masterdetail .jsf-masterdetail-entries > li {
+    line-height: 1em;
+    padding-top:0.1em;
 }
-.jsf-masterdetail .jsf-masterdetail-properties > li{
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 0.25em;
+.jsf-masterdetail .jsf-masterdetail-entries > li > div{
+    display: flex;
 }
-.jsf-masterdetail .jsf-masterdetail-properties > li:first-child{
-  margin-top: 0;
+.jsf-masterdetail .jsf-masterdetail-entries > li > div > i{
+    flex-basis: 1em;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
-.jsf-masterdetail .jsf-masterdetail-properties .jsf-masterdetail-empty {
-  display: none;
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry-icon{
+    flex-basis: 1.25em;
+    flex-grow: 0;
+    flex-shrink: 0;
 }
-.jsf-masterdetail .jsf-masterdetail-entries {
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry{
+    display: inline-block;
+    padding: 0em;
+    flex: 1;
+    padding-left: 0.25em;
 }
-.jsf-masterdetail .jsf-masterdetail-entries > li{
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 0.25em;
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry .jsf-masterdetail-entry-add,
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry .jsf-masterdetail-entry-remove {
+    display: none;
+    width:1em;
+    text-align: center;
 }
-.jsf-masterdetail .jsf-masterdetail-entries > li:first-child{
-  margin-top: 0;
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-add,
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-remove {
+    display: inline-block;
 }
-.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry,
-.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-property{
-  display: inline-block;
-  padding: 0.25em;
-}
-
-.jsf-masterdetail-entry {
-  font-size: 0.9em;
-}
-
 .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover,
 .jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry-selected{
-  background-color: lightgrey;
+    background-color: lightgrey;
+}
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-add:hover,
+.jsf-masterdetail .jsf-masterdetail-master .jsf-masterdetail-entry:hover .jsf-masterdetail-entry-remove:hover,
+.jsf-masterdetail .jsf-masterdetail-addRoot:hover {
+  background-color: grey;
 }
 .jsf-masterdetail .jsf-masterdetail-master .chevron-right:after{
-  content:"\2003 \25B6"
+  content:"\25B6"
 }
 .jsf-masterdetail .jsf-masterdetail-master .chevron-down:after{
-  content:"\2003 \25BC"
+  content:"\25BC"
+}
+.jsf-masterdetail .jsf-masterdetail-master .chevron-placeholder:after{
+  content:"\00A0"
+}
+.jsf-masterdetail .jsf-masterdetail-addRoot {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid;
+}
+.jsf-masterdetail .selectKeyForAdd {
+    position:fixed;
+    top:0;
+    left:0;
+    background:rgba(0,0,0,0.6);
+    z-index:5;
+}
+.jsf-masterdetail .selectKeyForAdd>div{
+    background-color: white;
+    color: black;
+    z-index:10;
+    position: absolute;
+    border : 1px solid;
+    padding: 0.25em;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+}
+.jsf-masterdetail .selectKeyForAdd ul {
+    margin: 0;
+}
+.jsf-masterdetail .selectKeyForAdd li:hover,
+.jsf-masterdetail .selectKeyForAdd >div>span:hover {
+    background-color: lightgray;
+}
+.jsf-masterdetail .jsf-masterdetail-addRoot:hover {
+  background-color: lightgray;
+}
+.jsf-masterdetail span {
+  cursor: pointer;
 }
 .jsf .readonly-array-empty {
   font-style: italic;

@@ -5,6 +5,14 @@ temp/
 coverage/
 reports/
 
+# build results
+/bootstrap/
+/components/
+index.d.ts
+jsonforms.js
+jsonschema.d.ts
+uischema.d.ts
+
 # npm
 node_modules/
 
@@ -36,6 +44,7 @@ examples/js/jsonforms.js
 examples/js/jsonforms.min.js
 examples/fonts
 examples/assets/jsonforms.css
+examples/assets/jsonforms-bootstrap.css
 examples/assets/jsonforms.js
 examples/assets/jsonforms-bootstrap.css
 
@@ -45,3 +54,5 @@ examples/assets/jsonforms-bootstrap.css
 # mac users
 .DS_Store
 /jsonforms.js
+# windows
+**/Thumbs.db
