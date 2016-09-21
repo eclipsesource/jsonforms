@@ -174,9 +174,9 @@ class MasterDetailCollectionDirective implements ng.IDirective {
     bindToController = {
         schema: '=',
         instance: '=',
-        labelprovider: '=',
-        imageprovider: '=',
-        deletableroot: '='
+        labelProvider: '=',
+        imageProvider: '=',
+        deletableRoot: '='
     };
     scope = true;
     templateUrl = 'masterdetail-collection.html';
@@ -187,8 +187,8 @@ const masterDetailTemplate = `
     <!-- Master -->
     <div class="jsf-masterdetail-master">
         <jsonforms-masterdetail-collection schema="vm.treeSchema" instance="vm.treeData"
-            labelprovider="vm.labelProvider" imageprovider="vm.imageProvider"
-            deletableroot="vm.deletableRoot">
+            label-provider="vm.labelProvider" image-provider="vm.imageProvider"
+            deletable-root="vm.deletableRoot">
         </jsonforms-masterdetail-collection>
     </div>
     <!-- Detail -->
@@ -222,7 +222,7 @@ const masterDetailCollectionTemplate = `
       <span class="jsf-masterdetail-entry-remove"
         ng-click="vm.updateHasContents(parentItemContext);
           parentItemContext.object_open=
-            parentItemContext.object_open&&parentItemContext.hasContents;
+            parentItemContext.object_open && parentItemContext.hasContents;
             vm.removeElement(child,schemaKey,parentItemContext.child,parentItemContext.schema);"
         ng-if="parentItemContext.hasContents">-</span>
     </span>
@@ -237,9 +237,9 @@ const masterDetailCollectionTemplate = `
     </li>
   </ul>
 </script>
-<div ng-init="hasContents=vm.deletableroot;parentItemContext=this;
+<div ng-init="hasContents=vm.deletableRoot;parentItemContext=this;
     child=vm.instance;schema=vm.schema;">
-    <span ng-if="vm.deletableroot" ng-click="vm.addToRoot()"
+    <span ng-if="vm.deletableRoot" ng-click="vm.addToRoot()"
       class="jsf-masterdetail-addRoot">Add Root Item</span>
     <ul class="jsf-masterdetail-entries" ng-repeat="child in vm.instance"
       ng-init="object_open=false;vm.updateHasContents(this);">
