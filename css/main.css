@@ -19,7 +19,17 @@ html.md-default-theme, html, body.md-default-theme, body {
     font-size: 1em;
 }
 
+.example.complex .jsf-group {
+  border: 1px solid green;
+}
 
+.example.complex .jsf-horizontal-layout-container {
+  border: 1px solid red;
+}
+
+.example.complex .jsf-vertical-layout  {
+  border: 1px solid blue;
+}
 
 .example jsonforms {
     padding: 1em;
