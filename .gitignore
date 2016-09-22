@@ -6,7 +6,6 @@ coverage/
 reports/
 
 # build results
-/bootstrap/
 /components/
 index.d.ts
 jsonforms.js
