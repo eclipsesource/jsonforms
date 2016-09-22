@@ -6,7 +6,6 @@ import {IGroup} from '../../../../uischema';
 import {SchemaArray} from '../../../../jsonschema';
 import {PathResolver} from '../../../services/path-resolver/path-resolver';
 import {Testers, schemaTypeIs, optionIs} from '../../testers';
-
 let pluralize = require('pluralize');
 
 const readOnlyArrayTemplate = `
@@ -94,8 +93,9 @@ class ArrayController extends AbstractControl {
     }
 
     public get isEmpty(): boolean {
-      let value = this.resolvedData[this.fragment];
-      return value === null || value.length === 0;
+        return _.isEmpty(this.resolvedData)
+            || this.resolvedData[this.fragment] === null
+            || this.resolvedData[this.fragment].length === 0;
     }
 
     public get emptyMsg(): string {

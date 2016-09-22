@@ -1,7 +1,7 @@
 import 'angular';
 import 'angular-mocks';
 import '../../../../index';
-import {DataService} from '../../../ng-services/data/data-service';
+import {DataService} from '../../../ng-services/data/data.service';
 
 describe('MasterDetail', () => {
 
