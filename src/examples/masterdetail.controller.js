@@ -7,6 +7,7 @@ angular.module('jsonforms-website')
         vm.personSchema = {
             "type": "object",
             "properties": {
+                "id":"person",
                 "name": {
                     "type": "string"
                 },
@@ -19,6 +20,10 @@ angular.module('jsonforms-website')
         vm.schema = {
           "type": "object",
           "properties": {
+            "id":"persons",
+            "name": {
+                "type": "string"
+            },
             "friends":{
                 "type": "array",
                 "items": vm.personSchema
@@ -30,6 +35,7 @@ angular.module('jsonforms-website')
           }
         };
         vm.data ={
+          "name":"Known Persons",
           "friends":
           [
             {
@@ -53,6 +59,10 @@ angular.module('jsonforms-website')
           "type":"MasterDetailLayout",
           "scope": {
               "$ref": "#"
+          },
+          "options":{
+            "labelProvider":{"persons":"name","person":"name"}
+            // "imageProvider":{"person":"images/examples/person.png"}
           }
         };
 
