@@ -30,7 +30,7 @@ angular.module('makeithappen').controller('PersonController', function() {
             },
             "birthDate": {
                 "type": "string",
-                "format": "date"
+                "format": "date-time"
             },
             "nationality": {
                 "type": "string",
