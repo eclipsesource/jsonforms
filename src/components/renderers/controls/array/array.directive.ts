@@ -93,9 +93,7 @@ class ArrayController extends AbstractControl {
     }
 
     public get isEmpty(): boolean {
-        return _.isEmpty(this.resolvedData)
-            || this.resolvedData[this.fragment] === null
-            || this.resolvedData[this.fragment].length === 0;
+        return _.isEmpty(this.resolvedData) || _.isEmpty(this.resolvedData[this.fragment]);
     }
 
     public get emptyMsg(): string {
