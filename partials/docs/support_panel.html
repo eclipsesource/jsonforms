@@ -2,13 +2,19 @@
   <div class="docs-support-text">
     <h1 class="docs-support-icon">
       <a ui-sref="support" ng-click="hideMainMenu($event)">
-        +
+        <div class="support-panel-circle">
+          <md-icon md-svg-icon="help" class="support-panel-icon"></md-icon>
+        </div>
       </a>
     </h1>
-    <h1>Need help?</h1>
+    <h1>Feeling lost?</h1>
     <p>Find out more about<br/>
       <a ui-sref="support" ng-click="hideMainMenu($event)">professional support and training</a><br/>
-      or <a href="mailto:munich@eclipsesource.com">contact us</a>.
+      or<br>
+      <md-button class="md-raised md-primary">
+        <md-icon md-svg-icon="contact-mail"></md-icon>
+        <a href="mailto:munich@eclipsesource.com">contact us</a>
+      </md-button>
     </p>
   </div>
 </nav>
