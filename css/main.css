@@ -101,7 +101,7 @@ a {
     z-index: 100;
 }
 .l-offset-nav {
-    padding-top: 80px;
+    padding-top: 64px;
 }
 .l-offset-docs-nav {
     padding-left: 350px;
@@ -127,7 +127,7 @@ body {
 }
 
 .main-nav{
-    line-height: 80px;
+    line-height: 64px;
     padding-left: 10px;
     padding-right: 10px;
     background-color: #004D91;
@@ -139,7 +139,7 @@ button.main-nav-button{
 .logo {
     font-size: 30px;
     text-decoration: none;
-    height: 80px;
+    height: 64px;
     padding-left: 10px;
     color: #fff;
 }
@@ -154,7 +154,7 @@ button.main-nav-button{
 }
 
 .inner-logo {
-    padding-left: 110px;
+    padding-left: 80px;
     position: relative;
     font-family: 'Roboto',sans-serif;
 }
@@ -162,9 +162,9 @@ button.main-nav-button{
     background-image: url("../images/jsonforms-logo-white.svg");
     background-position: left center;
     background-repeat: no-repeat;
-    background-size: 90px 60px;
+    background-size: 70px 40px;
     content: '';
-    height: 80px;
+    height: 64px;
     position: absolute;
     left: 0;
     top: 0;
@@ -224,7 +224,7 @@ button.main-nav-button{
     background-repeat: no-repeat;
     background-size: 64px 64px;
     width: 74px;
-    height: 80px;
+    height: 64px;
 }
 /*
 #github:hover{
@@ -477,7 +477,7 @@ pre {
 
 @media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 800px){
 	.main-nav ul {
-		top:80px;
+		top:64px;
 		position: absolute;
 		right: 0;
 	    left: 0;
