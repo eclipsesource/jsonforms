@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack --config webpack/webpack.dev.js --watch",
-    "build": "webpack --config webpack/webpack.build.js"
+    "build": "webpack --config webpack/webpack.build.js",
+    "gen-md": "bundle exec jekyll build --source partials/docs --destination _site/partials/docs/"
   },
   "repository": {
     "type": "git",
