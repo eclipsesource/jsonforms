@@ -178,6 +178,26 @@ button.main-nav-button{
 }
 .primary-menu-link {
 }
+
+.imprint-link a {
+    display: flex;
+    align-items: center;
+    /*justify-content:center;*/
+    text-decoration:none;
+    margin-left: 0.5em;
+    color: #fff;
+}
+.imprint-link a:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.imprint-link a:visited {
+    color: #fff;
+}
+.imprint-link a:visited:hover {
+    color: #fff;
+}
+
 .primary-menu-link a {
     display: flex;
     align-items: center;
@@ -352,10 +372,7 @@ footer {
     height:40px;
     font-size: 15px;
 }
-footer a:hover{
-    color: #004D91;
-    background-color: #fff;
-}
+
 .docs-nav {
     background-color: #4E9AD9;
     width: 320px;

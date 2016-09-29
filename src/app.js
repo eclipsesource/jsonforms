@@ -365,6 +365,10 @@ angular.module('jsonforms-website', [
                 controller: 'SupportController',
                 controllerAs: 'vm'
             })
+            .state('imprint', {
+                url: '/imprint',
+                template: require('../partials/imprint.html')
+            })
             //
             // Example states --
             //
