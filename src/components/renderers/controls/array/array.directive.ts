@@ -12,13 +12,15 @@ const readOnlyArrayTemplate = `
     <jsonforms-layout>
       <fieldset>
         <legend>{{vm.label}}</legend>
-        <div ng-repeat='data in vm.resolvedData[vm.fragment]'>
-            <div ng-repeat='prop in vm.properties'>
-            <strong>{{prop | capitalize}}:</strong> {{data[prop]}}
+        <div class="jsf-control-array-container">
+            <div ng-repeat='data in vm.resolvedData[vm.fragment]' class="jsf-control-array-element">
+                <div ng-repeat='prop in vm.properties'>
+                <strong>{{prop | capitalize}}:</strong> {{data[prop]}}
+                </div>
+                <hr ng-show="!$last">
             </div>
-            <hr ng-show="!$last">
+            <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
         </div>
-        <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
        </fieldset>
      </jsonforms-layout>`;
 
@@ -33,12 +35,31 @@ const arrayTemplate = `
     <jsonforms-layout>
         <fieldset ng-disabled="vm.uiSchema.readOnly">
           <legend>{{vm.label}}</legend>
-          <div>
-            <div ng-repeat="d in vm.resolvedData" ng-if="vm.fragment === undefined">
-                <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+            <div ng-repeat="d in vm.resolvedData" ng-if="vm.fragment === undefined" class="jsf-control-array-container">
+                <div class="jsf-control-array-element">
+                    <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+                </div>
+                <div class="jsf-control-array-element-delete">
+                    <input class="btn btn-primary"
+                           ng-show="vm.supportsDelete"
+                           type="button"
+                           value="X"
+                           ng-click="vm.deleteCallback(d)">
+                    </input>
+                </div>
             </div>
-            <div ng-repeat="d in vm.resolvedData[vm.fragment]" ng-if="vm.fragment !== undefined">
-                <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+            <div ng-repeat="d in vm.resolvedData[vm.fragment]" ng-if="vm.fragment !== undefined" class="jsf-control-array-container">
+                <div class="jsf-control-array-element">
+                    <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+                </div>
+                <div class="jsf-control-array-element-delete">
+                    <input class="btn btn-primary"
+                           ng-show="vm.supportsDelete"
+                           type="button"
+                           value="X"
+                           ng-click="vm.deleteCallback(d)">
+                    </input>
+                </div>
             </div>
             <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
             <input class="btn btn-primary"
@@ -87,9 +108,21 @@ class ArrayController extends AbstractControl {
         this.resolvedData[this.fragment].push(_.clone(this.submitElement));
         this.submitElement = {};
     }
+    public deleteCallback(element: any) {
+        var index = this.resolvedData[this.fragment].indexOf(element);
+        if(index !== -1){
+            this.resolvedData[this.fragment].splice(index, 1);
+        }
+    }
     public get supportsSubmit(){
+        return this.supports("submit");
+    }
+    public get supportsDelete(){
+        return this.supports("delete");
+    }
+    private supports(keyword: string){
         let options = this.uiSchema['options'];
-        return !(options !== undefined && options['submit'] === false);
+        return !(options !== undefined && options[keyword] === false);
     }
 
     public get isEmpty(): boolean {
