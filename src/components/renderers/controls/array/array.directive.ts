@@ -19,7 +19,7 @@ const readOnlyArrayTemplate = `
                 </div>
                 <hr ng-show="!$last">
             </div>
-            <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
+            <div ng-if="vm.isEmpty" class="array-empty">{{vm.emptyMsg}}</div>
         </div>
        </fieldset>
      </jsonforms-layout>`;
@@ -61,7 +61,7 @@ const arrayTemplate = `
                     </input>
                 </div>
             </div>
-            <div ng-if="vm.isEmpty" class="readonly-array-empty">{{vm.emptyMsg}}</div>
+            <div ng-if="vm.isEmpty" class="array-empty">{{vm.emptyMsg}}</div>
             <input class="btn btn-primary"
                    ng-show="vm.supportsSubmit"
                    type="button"
