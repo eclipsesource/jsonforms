@@ -46,7 +46,15 @@
   margin-right: 34px;
 }
 
-.jsf .readonly-array-empty {
+.jsf .array-empty {
   font-style: italic;
   margin-bottom: 0.5em;
+}
+
+.jsf-control-array-container {
+}
+.jsf-control-array-element {
+}
+.jsf-control-array-element-delete {
+    padding-top: 1.75em;
 }
