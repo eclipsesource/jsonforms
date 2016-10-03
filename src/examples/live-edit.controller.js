@@ -7,7 +7,7 @@ angular.module('jsonforms-website')
 
     $scope.aceLoaded = function(editor) {
         editor.$blockScrolling = Infinity;
-        editor.getSession().setMode("ace/mode/javascript");
+        editor.getSession().setMode("ace/mode/json");
         editor.setOptions({
             enableSnippets: true,
             enableBasicAutocompletion: true,
