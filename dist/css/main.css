@@ -1,0 +1,563 @@
+html.md-default-theme, html, body.md-default-theme, body {
+    background-color: #fff;
+}
+
+.toolbar-title {
+    padding: 16px;
+}
+
+/* Used to mark listing directives */
+.example {
+    /*border: 2px solid #3498db;*/
+    outline: 0px solid #004D91;
+    box-shadow: 0 0 18px #004D91;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    line-height: normal;
+    font-size: 1em;
+}
+
+.example.complex .jsf-group {
+  border: 1px solid green;
+}
+
+.example.complex .jsf-horizontal-layout-container {
+  border: 1px solid red;
+}
+
+.example.complex .jsf-vertical-layout  {
+  border: 1px solid blue;
+}
+
+.example jsonforms {
+    padding: 1em;
+}
+
+.examples-title {
+    color: #4E9AD9
+}
+
+
+.tutorial-image{
+    max-width: 800px;
+}
+.text-center {
+    text-align: center;
+}
+
+.lg-media {
+    min-width: 60px;
+    min-height: 60px;
+    color: #fff;
+    margin: 45px;
+}
+
+.md-media {
+    min-width: 50px;
+    min-height: 50px;
+    color: #fff;
+    margin: 25px;
+}
+
+.docs-media {
+    min-width: 9em;
+    min-height: 9em;
+    color: #d9534f;
+    margin-top: 2em;
+    margin-bottom: 3em;
+}
+
+.docs-section {
+    font-size: 1.25em;
+    margin-bottom: 1em;
+}
+
+a {
+    text-decoration: none !important;
+}
+.card {
+    border-width: 3px ;
+    border-style: solid;
+    border-color: #0b3e6f;
+    color: darkslategray;
+    /*background-color: #00b3ee;*/
+    border-radius: 10px;
+    /*border-image: linear-gradient(to bottom, #e9f3fa, #004d91);*/
+    /*border-image-slice: 1;*/
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    text-align: center;
+}
+.is-visible {
+    display: block!important;
+}
+.l-pinned-top {
+    background-color: #d9534f;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+.l-offset-nav {
+    padding-top: 64px;
+}
+.l-offset-docs-nav {
+    padding-left: 350px;
+}
+.l-pinned-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+.article {
+    /*background-color: #2c4359;*/
+}
+.icon-arrow-drop-down:before {
+	content: "\25bc";
+}
+
+fieldset{
+    border-style:none;
+}
+body {
+    font-family: 'Roboto', serif;
+}
+
+.main-nav{
+    line-height: 64px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #004D91;
+}
+
+button.main-nav-button{
+	display: none;
+}
+.logo {
+    font-size: 30px;
+    text-decoration: none;
+    height: 64px;
+    padding-left: 10px;
+    color: #fff;
+}
+.logo:hover {
+    /*background-color: #4E9AD9;*/
+    color: #fff;
+    text-decoration: none;
+}
+
+.logo:visited {
+    color: #fff
+}
+
+.inner-logo {
+    padding-left: 80px;
+    position: relative;
+    font-family: 'Roboto',sans-serif;
+}
+.inner-logo:after{
+    background-image: url("../images/jsonforms-logo-white.svg");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 70px 40px;
+    content: '';
+    height: 64px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+}
+.primary-menu{
+    list-style:none;
+    margin: 0;
+    padding-right: 1em;
+    padding-left: 1em;
+}
+.primary-menu-link {
+}
+
+.imprint-link a {
+    display: flex;
+    align-items: center;
+    /*justify-content:center;*/
+    text-decoration:none;
+    margin-left: 0.5em;
+    color: #fff;
+}
+.imprint-link a:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.imprint-link a:visited {
+    color: #fff;
+}
+.imprint-link a:visited:hover {
+    color: #fff;
+}
+
+.primary-menu-link a {
+    display: flex;
+    align-items: center;
+    /*justify-content:center;*/
+    text-decoration:none;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    color: #fff;
+}
+.primary-menu-link a:hover {
+    background-color: #fff;
+    text-decoration: none;
+    color: #004D91;
+}
+.primary-menu-link a:visited {
+    color: #fff;
+}
+.primary-menu-link a:visited:hover {
+    color: #004D91;
+}
+#github{
+    background-image: url("../images/extern/GitHub-Mark-Light-64px.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 64px 64px;
+    width: 74px;
+    height: 64px;
+}
+/*
+#github:hover{
+    background-image: url("../images/extern/GitHub-Mark-64px.png");
+}
+*/
+#github>span{
+    display: block;
+    height: 0;
+    width: 0;
+	overflow: hidden;
+}
+.editor-label {
+    font-size: 1.25em;
+    color: slategrey;
+}
+.editor-demo {
+    /*background-color: white;*/
+    padding-left: 5em;
+    padding-right: 5em;
+}
+.jsonforms-background {
+    /*background: url("../images/gplaypattern.png");*/
+    position: relative;
+    margin-bottom: 2em;
+}
+
+.jsonforms {
+    padding-top: 2em;
+    background-color: #4E9AD9;
+    width: 100%;
+}
+.jsonforms .md-button {
+    font-weight: 700;
+}
+
+.tag-line {
+    color: white;
+}
+
+.mainLogo{
+    width:640px;
+    padding-top: 150px;
+    margin: 10px auto;
+    text-align: center;
+    position: relative;
+    font-size: 30px;
+    font-weight: bold;
+    font-family: 'Roboto',sans-serif;
+}
+.mainLogo:after{
+    background-image: url("../images/jsonforms-logo-white.svg");
+    background-position: top center;
+    background-repeat: no-repeat;
+    content: '';
+    height: 150px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+}
+.card-title{
+    font-weight: bold;
+    color:#3498db;
+}
+.red-circle {
+    background-color: #d9534f;
+    /*background-color: #cc0256;*/
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+}
+
+.red-text {
+    color: #d9534f;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.blue-circle {
+    background-color: #004D91;
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+}
+
+.blue-text {
+    font-size: 1.5em;
+    color: #004D91;
+    font-weight: bold;
+}
+
+.support-circle {
+    background-color: #9f9eab;
+    height: 100px;
+    width: 100px;
+    border-radius: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.5em;
+}
+
+/* Styles for the support page */
+.support-text-big {
+    font-size: 1.25em;
+    color: rgba(47, 47, 47, 0.67);
+}
+
+.support-text {
+    font-size: 1em;
+    color: #004D91;
+    font-weight: bold;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    word-wrap: break-word;
+}
+
+.green-circle {
+    background-color: #5cb85c;
+    height: 150px;
+    width: 150px;
+    border-radius: 75px;
+}
+
+.green-text {
+    font-size: 1.5em;
+    color: #5cb85c;
+    font-weight: bold;
+}
+
+.card-content{
+    font-size: 20px;
+}
+.additional{
+    font-size: 20px;
+}
+a:active {
+    color: red;
+}
+footer {
+    background-color: #004D91;
+    color: #fff;
+    padding-right: 20px;
+    height:40px;
+    font-size: 15px;
+}
+
+.docs-nav {
+    background-color: #4E9AD9;
+    width: 320px;
+    /*box-shadow: 1px 1px 4px 3px darkgrey;*/
+}
+.docs-nav-header {
+    background-color: #b6c0c8;
+    position: relative;
+    height:48px;
+    display: none;
+    border-bottom: #a8b3bd 1px solid;
+}
+.docs-menu {
+    list-style:none;
+    margin: 0;
+    padding: 0;
+}
+.docs-menu-link {
+    border-bottom: #b6c0c8 1px solid;
+}
+.docs-menu-link a{
+    display: flex;
+    align-items: center;
+    justify-content:flex-start;
+    text-decoration:none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 10px;
+    font-size: 1.15em;
+    color:#fff;
+
+}
+.docs-menu .is-selected a{
+    /*color: #004d91;*/
+}
+.docs-menu-link a:hover{
+    background-color: #fff;
+    color: #4E9AD9;
+    text-decoration: none;
+}
+button.docs-nav-button {
+    color: #fff;
+    position: absolute;
+    right: 8px;
+	display: none;
+}
+
+.support-panel-circle {
+    height: 150px;
+    width: 150px;
+    border: 5px solid rgb(255,64,129);
+    border-radius: 75px;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+}
+
+.support-panel-icon {
+    min-width: 60px;
+    min-height: 60px;
+    color: rgb(255,64,129);
+    margin: 40px;
+}
+
+.md-button a {
+    color: white;
+}
+
+.docs-support-panel {
+    width: 320px;
+}
+
+.docs-support-panel h1 {
+  text-align: center;
+  margin-top: 0;
+  padding-top: 0;
+  font-size: 1.7em;
+  color: #4E9AD9;
+  font-weight: bold;
+}
+
+.docs-support-panel p {
+    text-align: center;
+    padding: 0.5em 0.5em 1em 1em;
+    font-size: 1.3em;
+    color: #4E9AD9;
+}
+
+.docs-support-panel p a:hover {
+  font-weight: bold;
+  color: rgb(255,64,129);
+}
+
+.docs-support-panel div.docs-support-text {
+    position: fixed;
+}
+
+.docs-support-panel div.docs-support-text .docs-support-icon {
+  margin-left: 3.5em;
+  margin-right: 3em;
+  margin-top: 0.1em;
+  padding: 0em;
+  margin-bottom: 0;
+}
+
+.docs-support-panel div.docs-support-text .docs-support-icon a {
+    color: #4E9AD9;
+    font-size: 400%;
+    font-weight: bolder;
+}
+
+.text-content {
+    /*max-width: 800px;*/
+    /*margin: auto;*/
+    margin-right: 4em;
+    line-height: 1.7;
+    font-size: 1.15em;
+    color: slategrey;
+}
+.grey-text {
+    color: slategrey;
+}
+pre {
+    /*background-color: #F5F6F7;*/
+}
+
+@media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 800px){
+	.main-nav ul {
+		top:64px;
+		position: absolute;
+		right: 0;
+	    left: 0;
+		display: none;
+		background: #003d72;
+		padding: 0 40px;
+	}
+	button.main-nav-button{
+		display: inline-block;
+	}
+    button.docs-nav-button{
+		display: inline-block;
+	}
+    .l-offset-docs-nav{
+        padding-top: 48px;
+        padding-left: 0px;
+    }
+    .docs-nav {
+        width: auto;
+        left: 0;
+        right: 0;
+        bottom: auto;
+    }
+    .docs-nav-header{
+        display: block;
+    }
+    .docs-menu {
+        display: none;
+    }
+    .docs-support-panel{
+        display: none;
+    }
+}
+.ace_editor {
+    height: 250px;
+    /*width: 200px;*/
+    /*width: 40%;*/
+}
+
+/*.jsf {*/
+    /*line-height: 1.0;*/
+    /*max-width:800px;*/
+/*}*/
+/**/
+.docimg {
+  outline: 1px solid #4e9ad9;
+  padding: 1em 1em 1em 1em;
+  box-shadow: 0 0 10px #4e9ad9;
+}
+
+.site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column
+}
+
+.site-content {
+    flex: 1;
+}
