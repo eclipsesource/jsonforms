@@ -215,20 +215,15 @@ DynamicData.uiSchema = {
 
 // CSS
 require('angular-material/angular-material.min.css');
-require('bootstrap/dist/css/bootstrap.min.css');
-// require('bootstrap/dist/css/bootstrap-theme.min.css');
 require('prismjs/themes/prism.css');
-// require('jsonforms/dist/bootstrap/jsf-bootstrap.css');
-// require('jsonforms/dist/jsonforms.css');
-// require('jsonforms/dist/jsonforms-bootstrap.css');
 require('../css/main.css');
 require('../css/syntax.css');
 
 // Libs
-require('bootstrap/');
+
+require('bootstrap');
 require('jsonforms');
 require('jsonforms/material/jsonforms-material');
-require('ace-builds/src-min-noconflict/ace');
 require('angular-animate');
 require('angular-aria');
 require('angular-material');
@@ -237,12 +232,6 @@ require('angular-ui-router');
 require('angular-ui-ace');
 require('prismjs');
 require('prismjs/components/prism-typescript');
-require('ace-builds/src-min-noconflict/ext-language_tools');
-require('ace-builds/src-min-noconflict/mode-javascript');
-require('ace-builds/src-min-noconflict/snippets/javascript');
-// TODO
-// require('./material-renderer/boolean-renderer');
-
 angular.module('jsonforms-website', [
     'ngAnimate',
     'ngAria',
@@ -498,14 +487,15 @@ angular.module('jsonforms-website', [
     vm.configAce = function(mode) {
         return {
             onLoad: function (editor) {
+                editor.getSession().setMode("ace/mode/json");
                 editor.$blockScrolling = Infinity;
-                editor.getSession().setMode("ace/mode/"+mode);
-                editor.setTheme("ace/theme/solarized_dark");
+                editor.getSession().setUseWorker(false);
                 editor.setOptions({
-                    enableSnippets: true,
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true
-                });
+                                        enableSnippets: false,
+                                        enableBasicAutocompletion: true,
+                                        enableLiveAutocompletion: true
+                                        });
+
             }
         }
     };
@@ -540,7 +530,7 @@ angular.module('jsonforms-website', [
         vm.localDynamicModelObject = JSON.parse(vm.localDynamicModel);
         vm.localDynamicViewObject = JSON.parse(vm.localDynamicView);
     };
-}]);
+}])
 
 // Our code
 require('./listing/listing.controller');
@@ -564,3 +554,4 @@ require('./examples/generate-schema.controller');
 require('./examples/custom.controller');
 require('./examples/custom.jsf');
 require('./support/support.controller');
+

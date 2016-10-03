@@ -24,12 +24,6 @@ module.exports = {
             inject: 'body',
             hash: true
         }),
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-            'window.jquery': 'jquery'
-        }),
         new webpack.optimize.UglifyJsPlugin(
             {
                 warning: false,
@@ -37,10 +31,24 @@ module.exports = {
                 comments: false
             }
         ),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            'window.jquery': 'jquery'
+        }),
         new CopyWebpackPlugin([
             {
                 from: 'images',
                 to:   'images'
+            },
+            {
+                from: 'lib',
+                to:   'lib'
+            },
+            {
+                from: 'css',
+                to:   'css'
             }
         ])
     ],

@@ -44,6 +44,10 @@ module.exports = {
             {
                 from: 'images',
                 to:   'images'
+            },
+            {
+                from: 'lib',
+                to:   'lib'
             }
         ])
     ],
