@@ -1,16 +1,19 @@
-    <md-tabs md-dynamic-height md-border-bottom>
-        <md-tab label="Rendered Form" id="form-{{vm.nth}}">
-          <md-content class="md-padding">
+<md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="Rendered Form" id="form-{{vm.nth}}">
+        <md-content class="md-padding">
             <jsonforms schema="vm.schema" uischema="vm.uischema" data="vm.getData"></jsonforms>
-          </md-content>
-        </md-tab>
-        <md-tab  label="Schema" id="schema-{{vm.nth}}">
-            <pre nag-prism source="{{vm.schema | json}}" class="language-css"></pre>    </md-tab>
-        <md-tab label="UI Schema" id="uischema-{{vm.nth}}">
-            <pre nag-prism source="{{vm.uischema | json}}" class="language-css"></pre>
+        </md-content>
+    </md-tab>
+    <md-tab  label="Schema" id="schema-{{vm.nth}}">
+        <pre nag-prism source="{{vm.schema | json}}" class="language-css"></pre>    </md-tab>
+    <md-tab label="UI Schema" id="uischema-{{vm.nth}}">
+        <pre nag-prism source="{{vm.uischema | json}}" class="language-css"></pre>
 
-        </md-tab>
-        <md-tab label="Data" id="data-{{vm.nth}}">
-            <pre nag-prism class="language-json" source="{{vm.data | json}}"></pre>
-        </md-tab>
-    </md-tabs>
+    </md-tab>
+    <md-tab label="Data" id="data-{{vm.nth}}">
+        <pre nag-prism class="language-json" source="{{vm.data | json}}"></pre>
+    </md-tab>
+    <md-tab label="HTML" id="data-{{vm.nth}}">
+        <pre nag-prism class="language-html" source="<jsonforms schema='vm.schema' uischema='vm.uischema' data='vm.getData'></jsonforms>"></pre>
+    </md-tab>
+</md-tabs>
