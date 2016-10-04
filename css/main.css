@@ -333,6 +333,11 @@ button.main-nav-button{
     color: rgba(47, 47, 47, 0.67);
 }
 
+.support-p {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
 .support-text {
     font-size: 1em;
     color: #004D91;
