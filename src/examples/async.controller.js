@@ -39,16 +39,19 @@ angular.module('jsonforms-website')
 
         vm.loadData = function(){
             vm.dataLoaded = true;
+            vm.dataForTemplate = data;
             dataDefer.resolve(data);
         };
 
         vm.loadUI = function(){
             vm.uiSchemaLoaded = true;
+            vm.uiSchemaForTemplate = uischema;
             uiSchemaDefer.resolve(uischema);
         };
 
         vm.loadSchema = function(){
             vm.schemaLoaded = true;
+            vm.schemaForTemplate = schema;
             schemaDefer.resolve(schema);
         };
 

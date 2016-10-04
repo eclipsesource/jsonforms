@@ -5,15 +5,27 @@
     to pass promises or functions returning promises to the directive.
 </p>
 
-</p>
-    In the following this is demonstrated:  Click 'Load Data' and 'Load Schema' to load the JSON schema and
-    the UI schema asynchronously. Then click 'Load UI' to finally load the rendered form.
+<p>
+    In the following this is demonstrated:  You can load data, schema and UI in an arbitrary order, as soon as
+    everything is available the UI gets rendered.
 </p>
 
-<md-button class="md-raised" ng-click="vm.loadData()">Load Data</md-button>
-<md-button class="md-raised" ng-click="vm.loadSchema()">Load Schema</md-button>
-<md-button class="md-raised" ng-click="vm.loadUI()">Load UI</md-button>
+<p>
+    <md-button class="md-raised" ng-click="vm.loadData()">Load Data</md-button>
+    <md-button class="md-raised" ng-click="vm.loadSchema()">Load Schema</md-button>
+    <md-button class="md-raised" ng-click="vm.loadUI()">Load UI</md-button>
+</p>
 
+Current Data
+<pre nag-prism class="language-json" source="{{vm.dataForTemplate}}"></pre>
+
+Current JSON Schema
+<pre show-if="vmschemaLoaded" nag-prism class="language-json" source="{{vm.schemaForTemplate}}"></pre>
+
+Current UI Schema
+<pre nag-prism class="language-json" source="{{vm.uiSchemaForTemplate}}"></pre>
+
+Rendered Form
 <div class="example">
     <div ng-hide="vm.loaded()" class="md-body-2">Here goes our placeholder for the yet to be loaded form!</div>
     <jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
