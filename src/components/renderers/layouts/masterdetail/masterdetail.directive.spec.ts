@@ -92,8 +92,8 @@ describe('MasterDetail', () => {
                         'type': 'array',
                         'items': {
                             'type': 'object',
+                            'id': 'a',
                             'properties': {
-                                'id': 'a',
                                 'custom': {
                                     'type': 'string'
                                 },
@@ -104,8 +104,8 @@ describe('MasterDetail', () => {
                         'type': 'array',
                         'items': {
                             'type': 'object',
+                            'id': 'c',
                             'properties': {
-                                'id': 'c',
                                 'custom': {
                                     'type': 'string'
                                 },
