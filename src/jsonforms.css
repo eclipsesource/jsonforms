@@ -22,7 +22,7 @@
   padding: 1px 0px;
 }
 .jsf-control select.form-control {
-  box-sizing: content-box;
+  box-sizing: border-box;
   padding: 2px 0px;
 }
 .jsf-control-boolean {
