@@ -11,7 +11,7 @@ describe('DateTimeTest', () => {
             'properties': {
                 'birthDate': {
                     'type': 'string',
-                    'format': 'date-time'
+                    'format': 'date'
                 }
             }
         };

@@ -24,8 +24,8 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
         "definitions": {
             "folder": {
               "type": "object",
+              "id": "#folder_array",
               "properties": {
-                  "id": "folder",
                   "name": {
                       "type": "string",
                       "minLength": 3
@@ -50,8 +50,8 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             },
             "file": {
                 "type": "object",
+                "id": "#file_array",
                 "properties": {
-                    "id": "file",
                     "name": {
                         "type": "string",
                         "minLength": 3
@@ -61,8 +61,8 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             },
             "drive": {
                 "type": "object",
+                "id": "#drive_array",
                 "properties": {
-                    "id": "drive",
                     "name": {
                         "type": "string",
                         "minLength": 3
@@ -86,6 +86,7 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             }
         },
         "type":"array",
+        "id": "drives#",
         "items":
         {
             "$ref": "#/definitions/drive"
@@ -97,8 +98,22 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             "$ref": "#"
         },
         "options":{
-            "labelProvider":{"drive":"name","folder":"name","file":"name"},
-            "imageProvider":{"folder":"app/masterdetail/icons/folder.png","file":"app/masterdetail/icons/page.png","drive":"app/masterdetail/icons/drive.png"}
+            "labelProvider":{
+              "#drive_array":"name",
+              "#folder_array":"name",
+              "#file_array":"name",
+              "#drive_object":"name",
+              "#folder_object":"name",
+              "#file_object":"name"
+              },
+            "imageProvider":{
+              "#folder_array":"app/masterdetail/icons/folder.png",
+              "#file_array":"app/masterdetail/icons/page.png",
+              "#drive_array":"app/masterdetail/icons/drive.png",
+              "#folder_object":"app/masterdetail/icons/folder.png",
+              "#file_object":"app/masterdetail/icons/page.png",
+              "#drive_object":"app/masterdetail/icons/drive.png"
+            }
         }
     };
 
@@ -185,8 +200,8 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
         "definitions": {
             "folder": {
               "type": "object",
+              "id": "#folder_object",
               "properties": {
-                  "id": "folder",
                   "name": {
                       "type": "string",
                       "minLength": 3
@@ -211,8 +226,8 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             },
             "file": {
                 "type": "object",
+                "id": "#file_object",
                 "properties": {
-                    "id": "file",
                     "name": {
                         "type": "string",
                         "minLength": 3
@@ -222,8 +237,8 @@ angular.module('makeithappen').controller('MasterDetailController', function() {
             }
         },
         "type": "object",
+        "id": "drive_object#",
         "properties": {
-            "id": "drive",
             "name": {
                 "type": "string",
                 "minLength": 3

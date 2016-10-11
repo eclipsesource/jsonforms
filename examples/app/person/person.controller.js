@@ -7,8 +7,8 @@ angular.module('makeithappen').controller('PersonController', function() {
     var vm = this;
     vm.schema = {
         "type": "object",
+        "id": "user.json",
         "properties": {
-            "id": "user.json",
             "name": {
                 "type": "string",
                 "minLength": 3
@@ -30,7 +30,7 @@ angular.module('makeithappen').controller('PersonController', function() {
             },
             "birthDate": {
                 "type": "string",
-                "format": "date-time"
+                "format": "date"
             },
             "nationality": {
                 "type": "string",
