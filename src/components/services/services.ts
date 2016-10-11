@@ -109,7 +109,6 @@ export class ValidationService implements IValidationService {
             if (error['schemaPath'].indexOf('required') !== -1) {
                 let propName = error['dataPath'] + '/' + error['params']['missingProperty'];
                 this.validationResults.get(instance)[propName] = error['message'];
-    //`${PathUtil.beautifiedLastFragment(error['params']['missingProperty'])} is a required field`;
             } else {
                 this.validationResults.get(instance)[error['dataPath']] = error['message'];
             }
