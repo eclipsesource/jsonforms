@@ -102,14 +102,14 @@ class MasterDetailCollectionController {
         return _.keys(this.getArraySubSchemas(dataSchema.items)).length !== 0;
     }
     public getLabel(data, dataSchema): string {
-        let labelProperty = this.labelProvider[dataSchema.items.properties.id];
+        let labelProperty = this.labelProvider[dataSchema.items.id];
         if (labelProperty !== undefined) {
             return data[labelProperty];
         }
         return data.name || data.id || JSON.stringify(data);
     }
     public getImage(dataSchema): string {
-        let imageUrl = this.imageProvider[dataSchema.items.properties.id];
+        let imageUrl = this.imageProvider[dataSchema.items.id];
         if (imageUrl !== undefined) {
             return imageUrl;
         }
