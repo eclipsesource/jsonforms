@@ -3,15 +3,8 @@ import {IUISchemaElement} from '../../uischema';
 import {PathUtil} from './pathutil';
 
 // TODO: replace
-let tv4 = require('tv4');
-let formats = require('tv4-formats');
-let validator;
-if (tv4 != null) {
-  validator = tv4.freshApi();
-  if (formats != null) {
-    validator.addFormat(formats);
-  }
-}
+let Ajv = require('ajv');
+let ajv = new Ajv({allErrors: true, jsonPointers: true});
 // TODO: remove
 class HashTable {
 
@@ -99,7 +92,7 @@ export class ValidationService implements IValidationService {
 
     validate(instance: any, schema: SchemaElement): void {
 
-        if (validator === undefined) {
+        if (ajv === undefined) {
             return;
         }
 
@@ -107,12 +100,15 @@ export class ValidationService implements IValidationService {
         this.checkObjects = [];
         this.clear(instance);
         // TODO
-        let results = validator.validateMultiple(instance, schema);
-
-        results['errors'].forEach((error) => {
+        let valid = ajv.validate(schema, instance);
+        if (valid) {
+          this.validationResults.put(instance, undefined);
+          return;
+        }
+        ajv['errors'].forEach((error) => {
             if (error['schemaPath'].indexOf('required') !== -1) {
-                let propName = error['dataPath'] + '/' + error['params']['key'];
-                this.validationResults.get(instance)[propName] = `${PathUtil.beautifiedLastFragment(error['params']['key'])} is a required field`;
+                let propName = error['dataPath'] + '/' + error['params']['missingProperty'];
+                this.validationResults.get(instance)[propName] = error['message'];
             } else {
                 this.validationResults.get(instance)[error['dataPath']] = error['message'];
             }

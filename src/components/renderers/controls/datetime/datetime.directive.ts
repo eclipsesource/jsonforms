@@ -42,7 +42,6 @@ const datetimeTemplate = `<jsonforms-control>
              class="form-control jsf-control-datetime"
              ng-change='vm.triggerChangeEvent()'
              ng-model="vm.dt"
-             ng-model-options="{timezone:'UTC'}"
              ng-readonly="vm.uiSchema.readOnly"/>
 </jsonforms-control>`;
 
@@ -53,7 +52,7 @@ export default angular
             RendererService.register('datetime-control',
                 Testers.and(
                     schemaTypeIs('string'),
-                    schemaTypeMatches(el => _.has(el, 'format') && el['format'] === 'date-time')
+                    schemaTypeMatches(el => _.has(el, 'format') && el['format'] === 'date')
                 ), 2)
     ])
     .run(['$templateCache', $templateCache => {
