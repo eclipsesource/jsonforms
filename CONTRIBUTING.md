@@ -14,7 +14,7 @@ See LICENSE file for more information
 * You understand and agree that the JSONForms project and your contributions are public, and that a record of the contribution (including all personal information you submit with it, including your sign-off) is maintained indefinitely and may be redistributed consistent with the license(s) involved.
 
 You need to accept our <a href="https://github.com/eclipsesource/jsonforms/blob/eea6e222ac9754ca85d6764a7d5c5cd396fe340a/CLA.md">CLA (Contributor License Agreement)</a> before we can accept your contribution.
-* Accept by CLAHub: <a href="https://www.clahub.com/agreements/eclipsesource/jsonforms">https://www.clahub.com/agreements/eclipsesource/jsonforms</a>.
+* Accept by CLA Assistant: <a href="https://cla-assistant.io/eclipsesource/JSONForms">https://cla-assistant.io/eclipsesource/JSONForms</a>.
 * or accept via email. Please send the email at the bottom of this page to jsonforms-cla@eclipsesource.com. Replace the blocks marked with '[]' with your personal information.
 
 Once accepted you will be added to the CONTRIBUTORS.md list.
