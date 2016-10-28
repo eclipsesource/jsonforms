@@ -28,7 +28,7 @@
     "angular-ui-bootstrap": "^2.0.1",
     "angular-ui-router": "^0.3.1",
     "bootstrap": "^3.3.7",
-    "jsonforms": "1.0.10",
+    "jsonforms": "1.0.12",
     "mdi": "^1.6.50",
     "prismjs": "^1.5.1"
   },
