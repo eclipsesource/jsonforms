@@ -1,4 +1,5 @@
-# JSONForms - Customizable AngularJS forms based on JSON Schema
+# JSONForms - More Forms. Less Code
+### Complex AngularJS Forms in the blink of an eye
 
 JSONForms extends the AngularJS view model approach by eliminating the need to write HTML templates in order to
 create forms by leveraging the capabilities of JSON and JSON schema.
@@ -20,7 +21,8 @@ properties of a aliased controller named `vm`:
     <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
   </div>
 ```
-
+# Documentation and more information
+For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
 
 # Developers Documentation
 
