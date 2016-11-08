@@ -7,12 +7,10 @@ class CategorizationDirective implements ng.IDirective {
     controller = CategorizationController;
     controllerAs = 'vm';
 }
-interface CategorizationControllerScope extends ng.IScope {
-}
-class CategorizationController  extends AbstractLayout {
+export class CategorizationController  extends AbstractLayout {
     static $inject = ['$scope'];
     private selectedCategory;
-    constructor(scope: CategorizationControllerScope) {
+    constructor(scope: ng.IScope) {
         super(scope);
     }
     public changeSelectedCategory(category, clickScope) {
