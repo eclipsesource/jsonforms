@@ -218,6 +218,9 @@ button.main-nav-button{
 .primary-menu-link a:visited:hover {
     color: #004D91;
 }
+.primary-menu-link.active  a {
+  background-color: #0067c1;
+}
 #github{
     background-image: url("../images/extern/GitHub-Mark-Light-64px.png");
     background-position: center center;
@@ -418,6 +421,9 @@ footer {
     background-color: #fff;
     color: #4E9AD9;
     text-decoration: none;
+}
+.docs-menu-link.active  a {
+  background-color: #3c83bf;
 }
 button.docs-nav-button {
     color: #fff;

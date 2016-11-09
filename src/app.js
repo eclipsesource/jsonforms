@@ -297,6 +297,8 @@ angular.module('jsonforms-website', [
     };
 }).config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.when("/docs", "/docs/landing");
+      $urlRouterProvider.when("/examples", "/examples/person");
         $stateProvider
             .state('/', {
                 url: '/',
@@ -583,4 +585,3 @@ require('./examples/generate-schema.controller');
 require('./examples/custom.controller');
 require('./examples/custom.jsf');
 require('./support/support.controller');
-
