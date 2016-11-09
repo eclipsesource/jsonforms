@@ -15,30 +15,51 @@ class CategorizationController  extends AbstractLayout {
     constructor(scope: CategorizationControllerScope) {
         super(scope);
     }
-    public changeSelectedCategory(category) {
+    public changeSelectedCategory(category, clickScope) {
+      if (category.type === 'Category') {
         this.selectedCategory = category;
+      } else {
+        clickScope.expanded = !clickScope.expanded;
+        if (!clickScope.expanded) {
+          this.selectedCategory = null;
+        }
+      }
     }
 }
 
-const categorizationTemplate = `<jsonforms-layout>
+const categorizationTemplate = `
+<script type="text/ng-template" id="category.html">
+  <ul>
+      <li ng-repeat="category in categorization.elements" ng-init="expanded=false"
+        ng-class="{
+          'closed': !expanded && category.type==='Categorization',
+          'expanded': expanded && category.type==='Categorization',
+          'none': category.type==='Category'
+        }">
+          <div class="jsf-category-entry">
+            <span class="jsf-category-label"
+                  ng-class="{'selected': category===vm.selectedCategory}"
+                  ng-click="vm.changeSelectedCategory(category,this)">
+                  {{category.label}}
+            </span>
+          </div>
+          <div class="jsf-category-subcategories" ng-init="categorization=category"
+           ng-if="category.type==='Categorization'" ng-show="expanded" ng-include="'category.html'">
+          </div>
+      </li>
+  </ul>
+</script>
+<jsonforms-layout>
     <div class="jsf-categorization">
-        <div class="jsf-categorization-master">
-            <ul>
-                <li ng-repeat="category in vm.uiSchema.elements" 
-                    ng-click="vm.changeSelectedCategory(category)">
-                    <span class="jsf-category-entry" 
-                          ng-class="{'selected': category===vm.selectedCategory}">
-                          {{category.label}}
-                    </span>
-                </li>
-            </ul>
+        <div class="jsf-categorization-master" ng-include="'category.html'"
+          ng-init="categorization=vm.uiSchema">
         </div>
-        <fieldset class="jsf-categorization-detail">
-            <jsonforms-inner ng-if="vm.selectedCategory" 
-                             ng-repeat="child in vm.selectedCategory.elements" 
+        <div class="jsf-categorization-detail">
+            <jsonforms-inner ng-if="vm.selectedCategory"
+                             ng-repeat="child in vm.selectedCategory.elements"
                              uischema="child">
              </jsonforms-inner>
-        </fieldset>
+        </div>
     </div>
 </jsonforms-layout>`;
 
