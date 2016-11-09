@@ -13,7 +13,7 @@ class CategorizationExpandbarDirective implements ng.IDirective {
                         ng-repeat="categorization in vm.uiSchema.elements">
                         <div ng-repeat="category in categorization.elements"
                             ng-click="vm.changeSelectedCategory(category)">
-                            <span ng-bind="category.label"></span>
+                            <span ng-bind="category.label" style="cursor:pointer"></span>
                         </div>
                     </uib-accordion-group>
                 </uib-accordion>

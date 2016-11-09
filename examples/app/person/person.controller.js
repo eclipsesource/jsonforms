@@ -226,6 +226,78 @@ angular.module('makeithappen').controller('PersonController', function() {
                         ]
                     }
                 ]
+            },
+            {
+                "type": "Categorization",
+                "options":{
+                  "expandbar":true
+                },
+                "elements": [
+                  {
+                    "type": "Categorization",
+                    "label":"A",
+                    "elements": [
+                      {
+                      "type": "Category",
+                      "label":"Private A",
+                      "elements": [
+                          {
+                              "type": "Control",
+                              "label": "Name",
+                              "scope": {
+                                  "$ref": "#/properties/name"
+                              }
+                          }
+                        ]
+                      },
+                      {
+                          "type": "Category",
+                          "label":"Additional A",
+                          "elements": [
+                              {
+                                  "type": "Control",
+                                  "label": "Height",
+                                  "scope": {
+                                      "$ref": "#/properties/personalData/properties/height"
+                                  }
+                              }
+                          ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "Categorization",
+                    "label":"B",
+                    "elements": [
+                    {
+                        "type": "Category",
+                        "label":"Private B",
+                        "elements": [
+                            {
+                                "type": "Control",
+                                "label": "Age",
+                                "scope": {
+                                    "$ref": "#/properties/personalData/properties/age"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "Category",
+                        "label":"Additional B",
+                        "elements": [
+                            {
+                                "type": "Control",
+                                "label": "Vegetarian",
+                                "scope": {
+                                    "$ref": "#/properties/vegetarian"
+                                }
+                            }
+                        ]
+                    }
+                  ]
+                }
+              ]
             }
         ]
     };
