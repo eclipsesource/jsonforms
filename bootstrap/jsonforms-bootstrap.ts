@@ -5,6 +5,8 @@ import booleanControlDirective from './controls/boolean/bootstrap-boolean.templa
 import arrayControlDirective from './controls/array/bootstrap-array.template';
 import controlDirective from './controls/bootstrap-control.template';
 import categorizationDirective from './layouts/categories/bootstrap-categorization.template';
+import categorizationExpandbarDirective
+  from './layouts/categories/categorization-expandbar.directive';
 import verticalLayoutDirective from './layouts/vertical/bootstrap-vertical.template';
 import horizontalLayoutDirective from './layouts/horizontal/bootstrap-horizontal.template';
 import masterDetailDirectives from './layouts/masterdetail/bootstrap-masterdetail.template';
@@ -25,6 +27,7 @@ export default angular.module('jsonforms-bootstrap', [
     arrayControlDirective,
     controlDirective,
     categorizationDirective,
+    categorizationExpandbarDirective,
     verticalLayoutDirective,
     horizontalLayoutDirective,
     groupLayoutDirective,
