@@ -4,7 +4,6 @@ import form from './components/form/form';
 import ngServices from './components/ng-services/ng-services';
 
 require('angular-ui-validate');
-require('./jsonforms.css');
 
 export default angular.module('jsonforms', [
     'ui.validate',
@@ -37,4 +36,3 @@ export {
 
 export {PathResolver}
     from './components/services/path-resolver/path-resolver';
-
