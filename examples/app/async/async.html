@@ -9,6 +9,16 @@
         <button ng-click="vm.loadData()">Load Data</button>
         <button ng-click="vm.loadSchema()">Load Schema</button>
         <button ng-click="vm.loadUI()">Load UI</button>
+        <div>
+          Current Data
+          <pre>{{vm.dataForTemplate}}</pre>
+
+          Current JSON Schema
+          <pre>{{vm.schemaForTemplate}}</pre>
+
+          Current UI Schema
+          <pre>{{vm.uiSchemaForTemplate}}</pre>
+        </div>
         <jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
     </div>
 </div>
