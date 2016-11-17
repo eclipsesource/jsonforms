@@ -15,7 +15,6 @@ import groupLayoutDirective from './layouts/group/bootstrap-group.template';
 // FIXME: include default bootstrap for glpyhicons etc as well
 require('bootstrap/dist/css/bootstrap.min.css');
 require('./jsf-bootstrap.css');
-require('./jsonforms-bootstrap.css');
 require('bootstrap/dist/fonts/glyphicons-halflings-regular.ttf');
 require('angular-ui-bootstrap');
 require('angular-ui-bootstrap/dist/ui-bootstrap-csp.css');

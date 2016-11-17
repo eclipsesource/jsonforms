@@ -3,9 +3,6 @@ import 'angular';
 require('angular-material');
 require('angular-material/angular-material.css');
 
-require('../src/jsonforms.css');
-require('./jsonforms-material.css');
-
 import arrayControlDirective from './controls/array/md-array.template';
 import booleanControlDirective from './controls/boolean/md-boolean.template';
 import datetimeControlDirective from './controls/datetime/md-datetime.template';
