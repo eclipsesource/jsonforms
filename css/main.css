@@ -387,9 +387,10 @@ footer {
     /*box-shadow: 1px 1px 4px 3px darkgrey;*/
 }
 .docs-nav-header {
-    background-color: #b6c0c8;
+    background-color: #3c83bf;
     position: relative;
-    height:48px;
+    height:64px;
+    padding-top: 8px;
     display: none;
     border-bottom: #a8b3bd 1px solid;
 }
@@ -397,9 +398,10 @@ footer {
     list-style:none;
     margin: 0;
     padding: 0;
+    background-color: #4E9AD9;
 }
 .docs-menu-link {
-    border-bottom: #b6c0c8 1px solid;
+    border-bottom: #3c83bf 1px solid;
 }
 .docs-menu-link a{
     display: flex;
@@ -509,43 +511,6 @@ button.docs-nav-button {
 pre {
     /*background-color: #F5F6F7;*/
 }
-
-@media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 800px){
-	.main-nav ul {
-		top:64px;
-		position: absolute;
-		right: 0;
-	    left: 0;
-		display: none;
-		background: #003d72;
-		padding: 0 40px;
-	}
-	button.main-nav-button{
-		display: inline-block;
-	}
-    button.docs-nav-button{
-		display: inline-block;
-	}
-    .l-offset-docs-nav{
-        padding-top: 48px;
-        padding-left: 0px;
-    }
-    .docs-nav {
-        width: auto;
-        left: 0;
-        right: 0;
-        bottom: auto;
-    }
-    .docs-nav-header{
-        display: block;
-    }
-    .docs-menu {
-        display: none;
-    }
-    .docs-support-panel{
-        display: none;
-    }
-}
 .ace_editor {
     height: 250px;
     /*width: 200px;*/
@@ -571,4 +536,62 @@ pre {
 
 .site-content {
     flex: 1;
+}
+@media handheld and (max-width: 480px), screen and (max-device-width: 480px), screen and (max-width: 800px){
+	.main-nav ul {
+		top:64px;
+		position: absolute;
+		right: 0;
+    left: 0;
+		display: none;
+		background: #003d72;
+		padding: 0 40px;
+	}
+	button.main-nav-button{
+		display: inline-block;
+	}
+    button.docs-nav-button{
+		display: inline-block;
+	}
+  .l-offset-docs-nav{
+    padding-left: 0px;
+  }
+  .docs-nav {
+    width: auto;
+    left: 0;
+    right: 0;
+    bottom: auto;
+  }
+  .docs-nav ul{
+    top:128px;
+		position: absolute;
+		right: 0;
+    left: 0;
+		display: none;
+		padding: 0;
+  }
+  .docs-nav-header{
+      display: block;
+  }
+  .docs-support-panel{
+      display: none;
+  }
+  .docimg {
+    outline: none;
+    padding: 0;
+    box-shadow: none;
+    max-width: 100vw;
+  }
+  pre > code {
+    font-size: x-small;
+  }
+  pre {
+    overflow-x: hidden;
+  }
+  a {
+    word-wrap: break-word;
+  }
+  code {
+    overflow-wrap: break-word;
+  }
 }
