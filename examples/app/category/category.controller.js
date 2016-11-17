@@ -1,11 +1,12 @@
 'use strict';
 
-angular.module('makeithappen').controller('CustomController',
-['custom.schema','custom.uischema','custom.data', function(Schema,UISchema,Data) {
+
+var app = angular.module('makeithappen');
+
+angular.module('makeithappen').controller('CategoryController',['category.schema','category.uischema','category.data', function(Schema,UISchema,Data) {
     var vm = this;
     vm.schema = Schema;
     vm.uiSchema = UISchema;
-
     vm.data = Data;
 
     vm.formattedData = function() {
