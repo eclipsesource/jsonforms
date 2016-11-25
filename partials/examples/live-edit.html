@@ -1,21 +1,28 @@
 <article flex="shrink">
 
     <p layout="row">
-        This example demonstrates that both - the schema and the UI schema - are data-bound and may be changed at runtime.
+        This example demonstrates that both the schema and the UI schema are data-bound and may be changed at runtime.
     </p>
 
     <div layout="row" layout-xs="column"  layout-align="center">
         <div flex-gt-xs="50" layout="column">
-            <label class="text-center" for="localModelEditor">JSON SCHEMA</label>
+            <label class="text-center" for="localModelEditor"><h4>JSON SCHEMA</h4></label>
             <div ui-ace="{onLoad: aceLoaded, onChange: schemaChanged}" id="localModelEditor" ng-model="vm.localModel" ></div>
         </div>
         <div flex-gt-xs="50" layout="column">
-            <label class="text-center" for="localViewEditor">VIEW</label>
+            <label class="text-center" for="localViewEditor"><h4>UI SCHEMA</h4></label>
             <div ui-ace="{onLoad: aceLoaded, onChange: uiSchemaChanged}" id="localViewEditor" ng-model="vm.localView" ></div>
         </div>
     </div>
 
+    <div layout="row" layout-align="center" style="margin-top: 1em">
+        <h4>RENDERED RESULT</h4>
+    </div>
     <div layout="row" layout-align="center">
         <jsonforms id="editor" schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
     </div>
 </article>
+
+
+
+

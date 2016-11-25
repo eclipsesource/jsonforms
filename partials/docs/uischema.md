@@ -7,12 +7,26 @@ Exploring the core UI schema elements
 The UI schema, which is passed into the `jsonforms` directive, describes
 the general layout of a form and is just a regular JSON object.
 It describes the form by means of different UI schema elements, which can be 
-categorized into `Control`s and `Layout`s. The type of an element
- can be specified via the `type` property.
+categorized into `Control`s or `Layout`s. The type of an element
+can be specified via the `type` property.
 In this article, we provide a detailed overview about the currently 
 available core UI schema elements.
 
-## Controls
+<strong>Overview</strong>
+
+ * Controls
+   - Attributes
+   - Enum
+   - Arrays
+ * Container elements
+   - Horizontal Layout
+   - Vertical Layout
+   - Group
+   - Categorization
+
+# Controls
+
+## Control attributes
 
 ### Type
 The most important UI schema element is Control. A Control is 
@@ -74,7 +88,7 @@ is a boolean.
 Certain renderers support additional configuration options. 
 Those options should be put into a `options` property. 
 We'll describe the most important `options` when looking at renderers
-that support certain options.
+that only support certain options.
 
 ## Enum controls
 A `enum` property within a JSON schema will be rendered with a dropdown
@@ -88,9 +102,8 @@ A `enum` property within a JSON schema will be rendered with a dropdown
 </div>  
 
 ## Array controls
-Controls binding to arrays support different types of rendering modes.
-The default render mode is to render form fields for each item within
-array.
+Controls which bind to an array within the schema allow for different types of rendering modes.
+The default render mode is to render form fields for each item within the array.
 
 <div ng-controller='UiSchemaController as vm' class='example'>
   <listing-control schema='vm.example4.schema' 
@@ -109,8 +122,8 @@ disables adding new entries to an array.
   </listing-control>
 </div>
 
-The `simple` option can be used to display a very simple view of all entries
-which does not allow submitting additional entries (so the `submit `option has no
+The `simple` option can be used to display a very simple view of all entries, 
+and does not allow submitting additional entries (so the `submit `option has no
 effect if combined with `simple`).
 
 <div ng-controller='UiSchemaController as vm' class='example'>
@@ -120,13 +133,13 @@ effect if combined with `simple`).
   </listing-control>
 </div>
 
-# Layouts
+# <a name="layouts"></a> Layouts
 Layouts specify how multiple controls are arranged within a container
 element. Therefore, layouts have an `elements` property that contains 
-the different UI schema element that ought to be layout. 
+the different UI schema element that ought to be laid out. 
 Of course, Layouts can again contain other Layouts.
- 
-# Horizontal Layout 
+
+# <a name="horizontal-layout"></a> Horizontal Layout 
  
 A `HorizontalLayout` orders its children in a horizontal fashion, where
 each child occupies the same amount of space, i.e. for *n* children
@@ -142,8 +155,9 @@ is given below:
   </listing-control>
 </div>
  
-# Vertical
-The `VerticalLayout` behaves analogously to th e`HorizontalLayout` but 
+
+# <a name="vertical-layout"></a> Vertical Layout
+The `VerticalLayout` behaves analogously to the `HorizontalLayout` but 
 orders its children vertically, i.e. the elements will be placed beneath
 each other, instead of side-by-side.
 
@@ -156,10 +170,10 @@ An example for a `VerticalLayout` is given below
    </listing-control>
 </div>
  
-# Group
+# <a name="group"></a> Group
 A `Group` behaves exactly like a `VerticalLayout`, i.e. its `elements`
 will be lay out in a vertical fashion. The difference is, that the 
-`Group` also features a `label` property that displays an label above
+`Group` also features a `label` property that displays a label above
 the elements contained by the Group.
 
 A simple example of a `Group` featuring a `label` can be seen in the 
@@ -172,8 +186,9 @@ example below.
   </listing-control>
 </div>
  
+ <a name="categorization"></a>
 # Categorization
-The `Categorization` layout contains elements where each on of them 
+The `Categorization` layout contains elements where each of them 
 specifies a category with the `type` property. A category itself again 
 acts as a container, hence it also has an `elements` property. A simple 
 example for a Categorization might look as follows.

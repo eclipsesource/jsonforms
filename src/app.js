@@ -215,6 +215,8 @@ DynamicData.uiSchema = {
 
 // CSS
 require('angular-material/angular-material.min.css');
+require('jsonforms/dist/jsonforms.css');
+require('jsonforms/dist/jsonforms-material.css');
 require('prismjs/themes/prism.css');
 require('../css/main.css');
 require('../css/syntax.css');

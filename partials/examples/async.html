@@ -1,13 +1,13 @@
-<p>The <code>uischema</code>, <code>schema</code> and <code>data</code> attributes of the <code>jsonforms</code>
-    expect values that represent the UI schema, the JSON schema and the actual data to be rendered, respectively.
+<p>The <code>uischema</code>, <code>schema</code>, and <code>data</code> attributes of the <code>jsonforms</code>
+    expect values that represent the UI schema, the JSON schema, and the actual data to be rendered, respectively.
 
-    But the values do not necessarily need to present when rendering is triggered. It is also possible
+    But the values do not necessarily need to be present when rendering is triggered. It is also possible
     to pass promises or functions returning promises to the directive.
 </p>
 
 <p>
-    In the following this is demonstrated:  You can load data, schema and UI in an arbitrary order, as soon as
-    everything is available the UI gets rendered.
+    This is demonstrated in the following way:  You can load data, schema and UI in an arbitrary order, as soon as
+    everything is available the UI is rendered.
 </p>
 
 <p>
@@ -16,18 +16,24 @@
     <md-button class="md-raised" ng-click="vm.loadUI()">Load UI</md-button>
 </p>
 
-Current Data
-<pre nag-prism class="language-json" source="{{vm.dataForTemplate}}"></pre>
+<h4>Current Data</h4>
+<pre ng-show="vm.dataLoaded" nag-prism class="language-json" source="{{vm.dataForTemplate | json}}"></pre>
+<p ng-hide="vm.dataLoaded">Data has not yet been loaded</p>
 
-Current JSON Schema
-<pre show-if="vmschemaLoaded" nag-prism class="language-json" source="{{vm.schemaForTemplate}}"></pre>
 
-Current UI Schema
-<pre nag-prism class="language-json" source="{{vm.uiSchemaForTemplate}}"></pre>
+<h4>Current JSON Schema</h4>
+<pre ng-show="vm.schemaLoaded" nag-prism class="language-json" source="{{vm.schemaForTemplate | json}}"></pre>
+<p ng-hide="vm.schemaLoaded">JSON schema has not yet been loaded</p>
 
-Rendered Form
+<h4>Current UI Schema</h4>
+<pre ng-show="vm.uiSchemaLoaded"
+     nag-prism class="language-json"
+     source="{{vm.uiSchemaForTemplate | json}}"></pre>
+<p ng-hide="vm.uiSchemaLoaded">UI schema not yet been loaded</p>
+
+<h4>Rendered Form</h4>
 <div class="example">
-    <div ng-hide="vm.loaded()" class="md-body-2">Here goes our placeholder for the yet to be loaded form!</div>
+    <div ng-hide="vm.loaded()" >Here goes our placeholder for the yet to be loaded form!</div>
     <jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
 </div>
 
