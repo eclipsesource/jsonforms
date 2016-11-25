@@ -4,9 +4,13 @@ layout: doc
 Custom renderers overview
 =========================
 
-This article introduces the basic architecture of the rendering components within JSON Forms. We'll first take a look at how a single renderer works. Then, we'll describe the ```RendererService```, which acts as a registry for renderers and as the entry point for any JSON Forms based application.
+This article introduces the basic architecture of the rendering components within JSON Forms. 
+We'll first take a look at how a single renderer works. Then, we'll describe the `RendererService`, 
+which acts as a registry for renderers and as the entry point for any JSON Forms based application.
 
-After this architecture overview, we suggest to have a look at the dedicated articles on [implementing a custom renderer in Typescript](#/docs/customrenderer-ts), [in Javascript ES5](#/docs/customrenderer-es5), and [in Javascript ES6](#/docs/customrenderer-es6).
+After this architecture overview, we suggest you have a look at the dedicated articles 
+on [implementing a custom renderer in Typescript](#/docs/customrenderer-ts), 
+[in Javascript ES5](#/docs/customrenderer-es5), and [in Javascript ES6](#/docs/customrenderer-es6).
 
 Renderer
 --------
@@ -35,10 +39,13 @@ class IntegerDirective implements ng.IDirective {
 }
 {% endhighlight %}
 
-The renderer directive is just a regular [Angular directive](https://docs.angularjs.org/guide/directive). The ```IntegerController``` is a subclass of ```AbstractControl``` as described
-which already provides all the functionality needed for the integer input element. If you want to leverage this functionality then the root element of the
+The renderer directive is just a regular [Angular directive](https://docs.angularjs.org/guide/directive). 
+The ```IntegerController``` is a subclass of ```AbstractControl```,
+which already provides all the functionality needed for the integer input element. 
+If you want to leverage this functionality then the root element of the
 template needs to be ```jsonforms-control```. Within the ```jsonforms-control``` you are free to do as you wish.
-Note: Is is recommended to define new css classes for each control to allow further styling without the need of overwriting the renderer.
+Note: It is recommended to define new css classes for each control to allow further 
+styling without the need of overwriting the renderer.
 
 ### Renderer Controller ###
 
@@ -59,19 +66,19 @@ This service can be simply injected.
 
 It is possible that multiple renderers are capable of rendering the same UI schema element.
 This is why each renderer needs to be registered via a tester function
-which allows to solve ambiguous situations where multiple renderers can render the
+which allows it to solve ambiguous situations in which multiple renderers can render the
 current element. A tester is just a regular function, which returns a boolean.
 Upon registering a Renderer, the registration process also needs to specify
-a number which is used alongside with the tester function
+a number which is used alongside with the tester function.
 
-In general, the more specific renderers get, the higher will be their priority. The interface
+In general, the more specific renderers become, the higher their priority. The interface
 looks like follows:
 
 {% highlight coffee %}
 (uiSchema: IUISchemaElement, schema: SchemaElement, data: any) => boolean
 {% endhighlight %}
 
-There already exist a couple of pre-defined testers which are described
+There already exists a couple of pre-defined testers which are described
 in a latter section of this article.
 
 ### Registration ###
@@ -109,6 +116,6 @@ Therefore make sure that the directive you register to Angular has the same name
 In the example ```integerControl``` [is the same as](https://docs.angularjs.org/guide/directive#normalization) ```integer-control```.
 
 This is all we need to know for the integer renderer.
-You can see all the snippets in action [the integer directive in JSON Forms](https://github.com/eclipsesource/jsonforms/blob/master/src/components/renderers/controls/integer/integer-directive.ts).
+You can see all the snippets in action in [the integer directive in JSON Forms](https://github.com/eclipsesource/jsonforms/blob/master/src/components/renderers/controls/integer/integer-directive.ts).
 
 Being equipped with the general knowledge on the architecture of renderers in JSON Forms, a great next step is to look at the articles on [implementing a custom renderer in Typescript](#/docs/customrenderer-ts), [in Javascript ES5](#/docs/customrenderer-es5), or [in Javascript ES6](#/docs/customrenderer-es6).
