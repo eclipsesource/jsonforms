@@ -8,19 +8,26 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 1. Install JSON Forms via `npm install jsonforms` and require it via `require('jsonforms')`
 2. Annotate the element, where you want to place a form, with a `jsf` class attribute.
 3. Add `jsonforms` as a dependency to your AngularJS app:
-```
-var myApp = angular.module('myApp', ['jsonforms', ...])
-```
-4. Render a form with the `jsonforms` element:
-
-The simplest example looks like this, where `schema`, `uiSchema` and `data` are 
-properties of a aliased controller named `vm`:
- 
-```html 
+  
+  ```
+  var myApp = angular.module('myApp', ['jsonforms', ...])
+  ```
+4. Load `jsonforms.css` in the head section:
+  
+  ```html 
+  <link rel="stylesheet" type="text/css" href="node_modules/jsonforms/dist/jsonforms.css">
+  ```
+5. Render a form with the `jsonforms` element:
+  
+  The simplest example looks like this, where `schema`, `uiSchema` and `data` are 
+  properties of a aliased controller named `vm`:
+  
+  ```html 
   <div class="jsf">
     <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
   </div>
-```
+  ```
+
 # Documentation and more information
 For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
 
