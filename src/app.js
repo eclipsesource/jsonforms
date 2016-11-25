@@ -256,7 +256,7 @@ angular.module('jsonforms-website', [
             };
         }
     };
-}).directive('docsMenu', ['$location', function($location) {
+}).directive('docsMenu', function() {
     return {
         restrict: 'E',
         template: require('../partials/docs/docs_menu.html'),
@@ -268,12 +268,9 @@ angular.module('jsonforms-website', [
             scope.hideDocsMenu = function () {
                 scope.showDocsNav = false;
             };
-            scope.isSelected=function(selected) {
-                return $location.absUrl().endsWith(selected);
-            };
         }
     };
-}]).directive('examplesMenu', ['$location', function($location) {
+}).directive('examplesMenu', function() {
     return {
         restrict: 'E',
         template: require('../partials/examples/examples_menu.html'),
@@ -285,12 +282,9 @@ angular.module('jsonforms-website', [
             scope.hideDocsMenu = function () {
                 scope.showDocsNav = false;
             };
-            scope.isSelected=function(selected) {
-                return $location.absUrl().endsWith(selected);
-            };
         }
     };
-}]).directive('supportPanel', function() {
+}).directive('supportPanel', function() {
     return {
         restrict: 'E',
         template: require('../partials/docs/support_panel.html')

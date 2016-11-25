@@ -1,10 +1,11 @@
 <article flex="noshrink" class="article">
 
-    <div layout="row" flex="grow">
+    <div layout="row" layout-xs="column" flex="grow">
         <docs-menu></docs-menu>
+
         <!-- actual site -->
         <div layout="column" flex="grow" class="l-offset-docs-nav text-content" layout-fill>
-            <div ui-view class="container-fluid"></div>
+            <div ui-view class="container-fluid docs-content"></div>
         </div>
         <!-- right panel for support -->
         <support-panel></support-panel>
