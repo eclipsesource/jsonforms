@@ -30,7 +30,8 @@
     "bootstrap": "^3.3.7",
     "jsonforms": "1.0.12",
     "mdi": "^1.6.50",
-    "prismjs": "^1.5.1"
+    "prismjs": "^1.5.1",
+    "validator-js": "^0.2.1"
   },
   "devDependencies": {
     "browser-sync": "^2.14.0",
