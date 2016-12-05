@@ -13,23 +13,8 @@
 <p>
     <md-button class="md-raised" ng-click="vm.loadData()">Load Data</md-button>
     <md-button class="md-raised" ng-click="vm.loadSchema()">Load Schema</md-button>
-    <md-button class="md-raised" ng-click="vm.loadUI()">Load UI</md-button>
+    <md-button class="md-raised" ng-click="vm.loadUI()">Load UI Schema</md-button>
 </p>
-
-<h4>Current Data</h4>
-<pre ng-show="vm.dataLoaded" nag-prism class="language-json" source="{{vm.dataForTemplate | json}}"></pre>
-<p ng-hide="vm.dataLoaded">Data has not yet been loaded</p>
-
-
-<h4>Current JSON Schema</h4>
-<pre ng-show="vm.schemaLoaded" nag-prism class="language-json" source="{{vm.schemaForTemplate | json}}"></pre>
-<p ng-hide="vm.schemaLoaded">JSON schema has not yet been loaded</p>
-
-<h4>Current UI Schema</h4>
-<pre ng-show="vm.uiSchemaLoaded"
-     nag-prism class="language-json"
-     source="{{vm.uiSchemaForTemplate | json}}"></pre>
-<p ng-hide="vm.uiSchemaLoaded">UI schema not yet been loaded</p>
 
 <h4>Rendered Form</h4>
 <div class="example">
@@ -37,3 +22,17 @@
     <jsonforms schema="vm.schemaAsync" uischema="vm.UIAsync" data="vm.dataAsync"></jsonforms>
 </div>
 
+<h4>Current Data</h4>
+<pre ng-show="vm.dataLoaded" nag-prism class="language-javascript" source="{{vm.dataForTemplate | json}}"></pre>
+<p ng-hide="vm.dataLoaded">Data has not yet been loaded</p>
+
+
+<h4>Current JSON Schema</h4>
+<pre ng-show="vm.schemaLoaded" nag-prism class="language-javascript" source="{{vm.schemaForTemplate | json}}"></pre>
+<p ng-hide="vm.schemaLoaded">JSON schema has not yet been loaded</p>
+
+<h4>Current UI Schema</h4>
+<pre ng-show="vm.uiSchemaLoaded"
+     nag-prism class="language-javascript"
+     source="{{vm.uiSchemaForTemplate | json}}"></pre>
+<p ng-hide="vm.uiSchemaLoaded">UI schema not yet been loaded</p>
