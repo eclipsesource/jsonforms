@@ -20,7 +20,7 @@ You must have node.js and its package manager (npm) installed. You can get them 
 
 ### Example
 Both example states can be found at 
-[github.com/eclipsesource/make-it-happen-jsonforms.git](https://github.com/eclipsesource/make-it-happen-jsonforms.git). 
+[https://github.com/eclipsesource/make-it-happen-jsonforms.git](https://github.com/eclipsesource/make-it-happen-jsonforms.git). 
 Clone this repository with git clone onto your local machine.
 
 This git repository contains the following directories:
