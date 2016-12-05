@@ -117,7 +117,7 @@ in its JSON representation is on the right-hand side.
       "type": "Control",
       "label": "Done?",
       "scope": {
-        "$ref": "#/properties/done?"
+        "$ref": "#/properties/done"
       },
       "readOnly": false
     }
@@ -134,7 +134,7 @@ in its JSON representation is on the right-hand side.
 
 Once controls have been created, their properties can optionally be modified. 
 In the simple example above, we have set the "description" control to be multiline and changed the label of the 
-"done" control to "done?". Please note that you only need to specify properties, which cannot directly be derived 
+"done" control to "Done?". Please note that you only need to specify properties, which cannot directly be derived 
 from the data schema and hence only concern pure UI aspects.
 
 With this simple data and UI schema, JSON Forms can already render a fully functional form, which allows you 
@@ -152,17 +152,18 @@ Therefore, existing data can be simply loaded into the form and the data entered
 Second, it validates the data against the defined data schema. So for example, we could specify a minimum length 
 constraint for the property “name” in the data schema as follows.
 
-```javascript
+<pre nag-prism class="language-javascript" source="
 {
-  "type": "object",
-    "properties": {
-      "name": {
-        "type": "string",
-        "minLength": 3 // <- new constraint
+  'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string',
+        'minLength': 3 // <- new constraint
       },
-      // …
-}
-```
+      // ...
+}  
+"/>
+
 
 If now a user does not enter a value with a minimum length of three characters for that property in a JSON form UI, 
 the UI will report a validation error.
@@ -194,7 +195,7 @@ The complete sources are listed below and you can also find them in the [example
 
 ```javascript
 angular.module('MiHexample', ['jsonforms-bootstrap'])
-.controller('TasksController',['Schema','UISchema','Task', function(Schema,UISchema,Task) {
+  .controller('TasksController',['Schema','UISchema','Task', function(Schema,UISchema,Task) {
     var vm = this;
     vm.taskSchema = Schema;
     vm.taskUISchema = UISchema;
@@ -248,7 +249,7 @@ angular.module('MiHexample', ['jsonforms-bootstrap'])
 ```
 
 Now you are able to create forms and integrate them into your web application. 
-We recommend you to take a look at the all available core UI schema elements as outlined in 
+We recommend you to take a look at all the available core UI schema elements as outlined in 
 [our UI schema elements article](#/docs/uischema). Furthermore it is probably useful to take a look at 
 the [custom renderers article](#/docs/customrenderer), which explains how you can customize and extend 
 the default look and feel of your forms.
