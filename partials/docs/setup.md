@@ -6,7 +6,7 @@ Setting up a sample application
 
 To ease the initial setup as well as provide a template for working through the following tutorial, 
 we provide the "Make it happen" application as an example and encourage you to use it as well. 
-This example application contains a simple form, which we will extend incrementally in this tutorial. 
+This example application contains a simple form, which we will also extend incrementally follow-up tutorials. 
 The initial state of the example application is the outcome of the first part: 
 [Define your first form](#/docs/firstform). 
 We also provide the final state including all adaptations described in the remaining parts of the tutorial, 
@@ -52,5 +52,5 @@ If everything is setup correctly, you should see the following in your browser:
    description="The final state of the application" 
 %}
 
-Once you have completed the initial setup, we recommend you continue with the section 
-[Define your first form](#/docs/firstform), which explains the initial state in more detail.
+Once you have completed the initial setup, we recommend you to continue with the section 
+['Getting started with your first form'](#/docs/firstform), which explains the initial state in more detail.
