@@ -107,7 +107,7 @@ Finally, `src/app.ts` imports the schemata and introduces a data object,
 all of which are provided as fields `schema`, `uischema`, and `data`.
 
 <pre nag-prism class="language-typescript" source="
-import {Schema} from  './schema.ts';
+import {Schema} from  './schema';
 import {UISchema} from './ui-schema';
 
 class MyController {
@@ -298,8 +298,8 @@ class RatingControl extends AbstractControl {
   }
 
   max(): number {
-    if (resolvedSchema['maximum'] !== undefined) {
-      return <number>resolvedSchema['maximum'];
+    if (this.resolvedSchema['maximum'] !== undefined) {
+      return <number> this.resolvedSchema['maximum'];
     } else {
       return 5;
     }
@@ -308,7 +308,7 @@ class RatingControl extends AbstractControl {
 
 The `RatingControl` subclasses `AbstractControl`, a class in JSON Forms providing the base functionality for controls. Besides the constructor, which only forwards the `$scope` to the superclass, this class provides the function `max()`, which we already used when defining the directive to specify the maximum number of stars we would like to see in the control. In the function `max()`, we want to obtain the maximum value as specified in the data schema.
 
-```Javascript
+```JSON
 "rating": {
   "type": "integer",
   "maximum": 5 // <- this is the value we want to obtain
