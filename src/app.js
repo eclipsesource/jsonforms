@@ -258,7 +258,7 @@ angular.module('jsonforms-website', [
             };
         }
     };
-}).directive('docsMenu', function() {
+}).directive('docsMenu', ['$anchorScroll', function($anchorScroll) {
     return {
         restrict: 'E',
         template: require('../partials/docs/docs_menu.html'),
@@ -269,10 +269,11 @@ angular.module('jsonforms-website', [
             };
             scope.hideDocsMenu = function () {
                 scope.showDocsNav = false;
+                $anchorScroll();
             };
         }
     };
-}).directive('examplesMenu', function() {
+}]).directive('examplesMenu', ['$anchorScroll', function($anchorScroll) {
     return {
         restrict: 'E',
         template: require('../partials/examples/examples_menu.html'),
@@ -281,12 +282,14 @@ angular.module('jsonforms-website', [
             scope.toggleDocsMenu = function () {
                 scope.showDocsNav = !scope.showDocsNav;
             };
+            // TODO: rename
             scope.hideDocsMenu = function () {
                 scope.showDocsNav = false;
+                $anchorScroll()
             };
         }
     };
-}).directive('supportPanel', function() {
+}]).directive('supportPanel', function() {
     return {
         restrict: 'E',
         template: require('../partials/docs/support_panel.html')
