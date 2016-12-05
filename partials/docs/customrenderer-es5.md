@@ -58,19 +58,20 @@ Now, we can add the rating control to the `index.html` in order to test that we 
 Let us put the following tag into `index.html`:
 
 <pre nag-prism class="language-html" source="
-...
-<jsonforms schema='my.schema' uischema='my.uischema' data='my.data'></jsonforms>
-...
+  <div class='panel-body jsf'>
+     <jsonforms schema='tc.taskSchema' uischema='tc.taskUISchema' data='tc.taskData'></jsonforms>
+     <!-- we added this line -->
+     <uib-rating ng-model='2' max='5'></uib-rating>
+  </div>
 "/>
 
 When we run `npm install` and `npm start initial` again, we should see the following:
 
-<pre nag-prism class="language-html" source="
-<div ng-controller='CustomRendererController as vm' class='example'>
-  <jsonforms schema='vm.schema' uischema='vm.uischema' data='vm.data'></jsonforms>
-  <uib-rating ng-model='vm.exampleRating' max='5'></uib-rating>
-</div>
-"/>
+
+{% 
+   include image.html url="images/docs/customrenderer.ts.formwithuibrating.png" 
+   description="The rendered form together with the additional UI Bootstrap control" 
+%}
 
 As you can see, we are able to use the ui-bootstrap control in our HTML code. 
 So it is now time to use it in a custom JSON forms renderer.
