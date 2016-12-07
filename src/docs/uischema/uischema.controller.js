@@ -50,8 +50,34 @@ angular.module('jsonforms-website')
             }
         };
 
-        // 
+        //
         vm.example4 = {
+            schema: {
+                'properties': {
+                    'comments': {
+                        'type': 'array',
+                        'items': {
+                            'properties': {
+                                'message': {'type': 'string'}
+                            }
+                        }
+                    }
+                }
+            },
+            uischema: {
+                'type': 'Control',
+                'scope': {'$ref': '#/properties/comments'}
+            },
+            data: {
+                comments: [{
+                    message: 'Hello there'
+                },{
+                    message: 'Some more text'
+                }]
+            }
+        };
+
+        vm.example4b = {
             schema: {
                 'properties': {
                     'comments': {
@@ -217,4 +243,3 @@ angular.module('jsonforms-website')
             }
         }
     });
-
