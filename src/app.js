@@ -317,6 +317,10 @@ angular.module('jsonforms-website', [
                 url: '/introduction',
                 template: require('../_site/partials/docs/introduction.html')
             })
+            .state('docs.first-steps', {
+                url: '/first-steps',
+                template: require('../_site/partials/docs/first-steps.html')
+            })
             .state('docs.jsonformseditor', {
                 url: '/jsonformseditor',
                 template: require('../_site/partials/docs/jsonformseditor.html')
