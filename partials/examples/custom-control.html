@@ -5,3 +5,39 @@
 <div class="example">
     <listing-control schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></listing-control>
 </div>
+<p>
+    The code for the custom control looks as follows. As you see, the control ist just a regular angular directive:
+</p>
+<pre nag-prism class="language-javascript" source='
+function customDirective() {
+    return {
+        restrict: "E",
+        template: "<jsonforms-control><input type=\&quot;text\&quot;" +
+                                           " style=\&quot;border-color: #2ecc71\&quot;" +
+                                           " ng-change=\&quot;vm.triggerChangeEvent()\&quot;" +
+                                           " ng-model=\&quot;vm.resolvedData[vm.fragment]\&quot;/>" +
+                  "</jsonforms-control>",
+        controller:  ["BaseController", "$scope", function(BaseController, $scope) {
+           var vm = this;
+           BaseController.call(vm, $scope);
+        }],
+        controllerAs: "vm"
+    }
+}'></pre>
+<p>
+    The registration of this control (i.e. when it will be used) is given in the following listing.
+    Note how we want to use the control whenever the schema path ends with 'firstName' and the respective
+    type within the UI schema is of type 'Control'.
+</p>
+<pre nag-prism class="language-javascript" source='
+app.run([&quot;RendererService&quot;, &quot;JSONFormsTesters&quot;, function(RendererService, JSONFormsTesters) {
+    RendererService.register(
+        &quot;custom-control&quot;,
+        JSONFormsTesters.and(
+             JSONFormsTesters.schemaPathEndsWith(&quot;firstName&quot;),
+             JSONFormsTesters.uiTypeIs(&quot;Control&quot;)
+        ),
+        100
+    );
+}]);
+'/>
