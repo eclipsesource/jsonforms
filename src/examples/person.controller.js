@@ -95,7 +95,6 @@ angular.module('jsonforms-website').controller('PersonController', function() {
     vm.schema = {
         "type": "object",
         "properties": {
-            "id": "user.json",
             "name": {
                 "type": "string",
                 "minLength": 3
