@@ -10,13 +10,12 @@ angular.module('jsonforms-website')
                 "name": {
                     "type": "string"
                 },
-                "birthDate": {
-                    "type": "string",
-                    "format": "date-time"
+                "alive": {
+                    "type": "boolean"
                 },
-                "nationality": {
+                "kindOfDead": {
                     "type": "string",
-                    "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
+                    "enum": ["Zombie", "Vampire", "Ghoul"]
                 }
             }
         };
@@ -28,40 +27,30 @@ angular.module('jsonforms-website')
               "label": "Name",
               "scope": {
                   "$ref": "#/properties/name"
-              },
-              "rule":{
-                "effect":"HIDE",
-                "condition":{
-                  "type":"LEAF" ,
-                  "scope": {
-                      "$ref": "#/properties/nationality"
-                  },
-                  "expectedValue":"DE"
-                }
               }
             },
             {
               "type": "Control",
-              "label": "Birth Date",
+              "label": "Is Alive?",
               "scope": {
-                  "$ref": "#/properties/birthDate"
+                  "$ref": "#/properties/alive"
+              }
+            },
+            {
+              "type": "Control",
+              "label": "Kind of dead",
+              "scope": {
+                  "$ref": "#/properties/kindOfDead"
               },
               "rule":{
                 "effect":"SHOW",
                 "condition":{
                   "type":"LEAF" ,
                   "scope": {
-                      "$ref": "#/properties/nationality"
+                      "$ref": "#/properties/alive"
                   },
-                  "expectedValue":"DE"
+                  "expectedValue": false
                 }
-              }
-            },
-            {
-              "type": "Control",
-              "label": "Nationality",
-              "scope": {
-                  "$ref": "#/properties/nationality"
               }
             }
           ]
@@ -69,8 +58,8 @@ angular.module('jsonforms-website')
 
         vm.data = {
             name: 'John Doe',
-            vegetarian: false,
-            birthDate: "1985-06-02"
+            alive: true,
+            kindOfDead: 'Zombie'
         };
 
         vm.formattedData = function() {
