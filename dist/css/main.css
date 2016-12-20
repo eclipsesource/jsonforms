@@ -218,6 +218,9 @@ button.main-nav-button{
 .primary-menu-link a:visited:hover {
     color: #004D91;
 }
+.primary-menu-link.active  a {
+  background-color: #0067c1;
+}
 #github{
     background-image: url("../images/extern/GitHub-Mark-Light-64px.png");
     background-position: center center;
@@ -384,9 +387,10 @@ footer {
     /*box-shadow: 1px 1px 4px 3px darkgrey;*/
 }
 .docs-nav-header {
-    background-color: #b6c0c8;
+    background-color: #3c83bf;
     position: relative;
-    height:48px;
+    height:64px;
+    padding-top: 8px;
     display: none;
     border-bottom: #a8b3bd 1px solid;
 }
@@ -396,7 +400,7 @@ footer {
     padding: 0;
 }
 .docs-menu-link {
-    border-bottom: #b6c0c8 1px solid;
+    border-bottom: #3c83bf 1px solid;
 }
 .docs-menu-link a{
     display: flex;
@@ -418,6 +422,9 @@ footer {
     background-color: #fff;
     color: #4E9AD9;
     text-decoration: none;
+}
+.docs-menu-link.active  a {
+  background-color: #3c83bf;
 }
 button.docs-nav-button {
     color: #fff;

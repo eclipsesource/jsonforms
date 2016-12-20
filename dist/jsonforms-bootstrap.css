@@ -1,0 +1,52 @@
+.jsf-masterdetail{}
+.jsf .jsf-masterdetail .panel-body {
+  /*padding-bottom: 0;*/
+}
+.jsf .jsf-masterdetail .panel-group {
+  margin-bottom: 5px;
+}
+
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-body {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-heading + .panel-collapse .panel-body {
+    border-width: 0;
+}
+.jsf .jsf-masterdetail .jsf-masterdetail-empty .panel-group {
+  margin-bottom: 0;
+  border-width: 0;
+}
+.jsf-masterdetail-selected {
+    /*font-weight: bold;*/
+    font-size: 0.9em;
+    color:#000;
+}
+
+.jsf-masterdetail-property {
+    /*font-style: italic;*/
+    font-size: 0.9em;
+    color:#888888;
+}
+
+.jsf-masterdetail-header {
+    text-decoration: none;
+}
+
+.jsf .popover-title {
+    color: #fff;
+    background-color: #a94442;
+}
+
+.jsf .popover-content {
+    color: black;
+    font-style: italic;
+}
+.jsf .control-error {
+  margin-right: 34px;
+}
+
+.jsf .readonly-array-empty {
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
