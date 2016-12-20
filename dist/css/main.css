@@ -573,3 +573,7 @@ pre {
 .site-content {
     flex: 1;
 }
+
+.jsf fieldset {
+    padding: 1em;
+}
