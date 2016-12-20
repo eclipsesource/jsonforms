@@ -165,7 +165,7 @@ export class JsonFormsDirective implements ng.IDirective {
             this.DataService.unset();
         }
         ctrl.element = el;
-        scope.$watchGroup(['data', 'uischema'], (newValue) => {
+        scope.$watchGroup(['data', 'uischema', 'schema'], (newValue) => {
             if (angular.isDefined(newValue)) {
                 ctrl.init();
             }
