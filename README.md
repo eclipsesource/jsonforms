@@ -35,17 +35,16 @@ For documentation, examples and more information, please see [jsonforms.org](htt
 
 ## First time setup
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
-* Install [typings](https://github.com/typings/typings): `npm install -g typings` 
-* Install [tslint](https://palantir.github.io/tslint/): `npm install -g tslint`
-* Install [webpack](https://github.com/webpack/webpack): `npm install -g webpack`
 * Clone this repository
 * Install dependencies: `npm install`
+* Generate typings: `npm run typings-install`
 
 ## Build & Testing
 * Normal Build: `npm run build` (runs `tslint` as well)
 * Bootstrap Build: `npm run build-bootstrap`
+* Material Build: `npm run build-material`
 * Test: `npm run test`
-* Watch: `npm run dev`, point your browser to `http://localhost:8080/webpack-dev-server/`
+* Watch: `npm run dev` (or `dev-bootstrap`, `dev-material`), point your browser to `http://localhost:8080/webpack-dev-server/`
 
 ## How to run the examples 
 JSONForms ships with a couple of examples. The examples' dependencies are managed
