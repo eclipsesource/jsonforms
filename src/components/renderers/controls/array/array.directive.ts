@@ -35,9 +35,14 @@ const arrayTemplate = `
     <jsonforms-layout>
         <fieldset ng-disabled="vm.uiSchema.readOnly">
           <legend>{{vm.label}}</legend>
-            <div ng-repeat="d in vm.resolvedData" ng-if="vm.fragment === undefined" class="jsf-control-array-container">
+            <div ng-repeat="d in vm.resolvedData" 
+                 ng-if="vm.fragment === undefined"
+                 class="jsf-control-array-container">
                 <div class="jsf-control-array-element">
-                    <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+                    <jsonforms schema="vm.arraySchema" 
+                               data="d"
+                               uischema="vm.arrayUiSchema">
+                    </jsonforms>
                 </div>
                 <div class="jsf-control-array-element-delete">
                     <input class="btn btn-primary"
@@ -48,9 +53,14 @@ const arrayTemplate = `
                     </input>
                 </div>
             </div>
-            <div ng-repeat="d in vm.resolvedData[vm.fragment]" ng-if="vm.fragment !== undefined" class="jsf-control-array-container">
+            <div ng-repeat="d in vm.resolvedData[vm.fragment]"
+                 ng-if="vm.fragment !== undefined" 
+                 class="jsf-control-array-container">
                 <div class="jsf-control-array-element">
-                    <jsonforms schema="vm.arraySchema" data="d" uischema="vm.arrayUiSchema"></jsonforms>
+                    <jsonforms schema="vm.arraySchema" 
+                               data="d" 
+                               uischema="vm.arrayUiSchema">                               
+                    </jsonforms>
                 </div>
                 <div class="jsf-control-array-element-delete">
                     <input class="btn btn-primary"
@@ -109,18 +119,18 @@ class ArrayController extends AbstractControl {
         this.submitElement = {};
     }
     public deleteCallback(element: any) {
-        var index = this.resolvedData[this.fragment].indexOf(element);
-        if(index !== -1){
+        let index = this.resolvedData[this.fragment].indexOf(element);
+        if (index !== -1) {
             this.resolvedData[this.fragment].splice(index, 1);
         }
     }
     public get supportsSubmit(){
-        return this.supports("submit");
+        return this.supports('submit');
     }
     public get supportsDelete(){
-        return this.supports("delete");
+        return this.supports('delete');
     }
-    private supports(keyword: string){
+    private supports(keyword: string) {
         let options = this.uiSchema['options'];
         return !(options !== undefined && options[keyword] === false);
     }
