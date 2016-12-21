@@ -46,20 +46,22 @@
     <div layout="column" layout-align="center" class="md-padding editor-demo">
         <h2 id="demo" style="text-align:center" class="editor-label">LIVE EXAMPLE</h2>
         <div layout="row">
-            <div layout="column" flex layout-margin>
+            <div layout="column" flex layout-margin></div>
+            <div layout="column" flex="40"  layout-margin>
                 <h3 class="text-center editor-label" style="font-size: 20px; font-weight:bold">JSON Schema</h3>
                 <div ui-ace="vm.configAce('json')"
                      ng-model="vm.localStaticModel"
                      id="localStaticModelEditor"
                      flex="none"></div>
             </div>
-            <div layout="column" flex layout-margin>
+            <div layout="column" flex="40"  layout-margin>
                 <h3 class="text-center editor-label" style="font-size: 20px; font-weight:bold">UI Schema</h3>
                 <div ui-ace="vm.configAce('json')"
                      ng-model="vm.localStaticView"
                      id="localStaticViewEditor"
                      flex="none"></div>
             </div>
+            <div layout="column" flex layout-margin></div>
         </div>
 
         <div layout="column" layout-align="center center">
@@ -79,18 +81,15 @@
             <div layout="column">
             <md-button style="background-color: #d9534f"
                        class="md-raised md-primary"
-                       ui-sref="docs.firstform">Get started</md-button></div>
-            <div layout="column">
-            <md-button style="background-color: #d9534f"
-                       class="md-raised md-primary"
                        ui-sref="examples.person">More examples</md-button></div>
             <div layout="column">
             <md-button style="background-color: #d9534f"
                        class="md-raised md-primary"
-                       ui-sref="docs.landing">Documentation</md-button></div>
+                       ui-sref="docs.first-steps"><strong>Get started</strong></md-button></div>
+            <div layout="column">
             <md-button style="background-color: #d9534f"
                        class="md-raised md-primary"
-                       ng-click="vm.openEditorInNewTab()">Try in the Editor</md-button>
+                       ui-sref="docs.landing">Documentation</md-button></div>
         </div>
     </div>
 </article>
