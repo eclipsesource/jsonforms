@@ -21,14 +21,19 @@ html.md-default-theme, html, body.md-default-theme, body {
 
 .example.complex .jsf-group {
   border: 1px solid green;
+  padding: 5px;
 }
 
 .example.complex .jsf-horizontal-layout-container {
   border: 1px solid red;
+  padding: 5px;
 }
 
 .example.complex .jsf-vertical-layout  {
   border: 1px solid blue;
+  padding: 5px;
+  margin-right: 2px;
+  margin-left: 2px;
 }
 
 .example jsonforms {
