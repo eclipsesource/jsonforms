@@ -7,7 +7,8 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
-        './bootstrap/bootstrap-index.ts'
+        './bootstrap/bootstrap-index.ts',
+        './examples/data/jsonforms-examples.ts'
     ],
     output: {
         filename: 'jsonforms.js',
@@ -34,12 +35,8 @@ module.exports = {
         }),
         new CopyWebpackPlugin([
             {
-                from: 'src/jsonforms.css',
-                to:   'examples/assets/jsonforms.css'
-            },
-            {
-                from: 'src/bootstrap/jsonforms-bootstrap.css',
-                to:   'examples/assets/jsonforms-bootstrap.css'
+                from: 'bootstrap/jsonforms-bootstrap.css',
+                to: 'examples/assets/jsonforms.css'
             }
         ])
     ],

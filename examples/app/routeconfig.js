@@ -45,6 +45,18 @@ angular.module('makeithappen').config(['$routeProvider',
             templateUrl: 'app/async/async.html',
             controller: 'AsyncController',
             controllerAs: 'vm'
+        }).when('/category', {
+            templateUrl: 'app/category/category.html',
+            controller: 'CategoryController',
+            controllerAs: 'vm'
+        }).when('/layouts', {
+            templateUrl: 'app/layouts/layouts.html',
+            controller: 'LayoutsController',
+            controllerAs: 'vm'
+        }).when('/rule', {
+            templateUrl: 'app/rule/rule.html',
+            controller: 'RuleController',
+            controllerAs: 'vm'
         }).otherwise({
             redirectTo: '/person'
         });

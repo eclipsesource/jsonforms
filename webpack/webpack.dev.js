@@ -7,7 +7,8 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
-        './src/index.ts'
+        './src/index.ts',
+        './examples/data/jsonforms-examples.ts'
     ],
     output: {
         filename: 'jsonforms.js',

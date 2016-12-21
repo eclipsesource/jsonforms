@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>VerticalLayout</strong>
+    </div>
+    <div class="panel-body">
+        <jsonforms schema="vm.schema" uischema="vm.uiSchemaVertical" data="vm.data"></jsonforms>
+    </div>
+    <div class="panel-heading">
+        <strong>HorizontalLayout</strong>
+    </div>
+    <div class="panel-body">
+        <jsonforms schema="vm.schema" uischema="vm.uiSchemaHorizontal" data="vm.data"></jsonforms>
+    </div>
+    <div class="panel-heading">
+        <strong>Group</strong>
+    </div>
+    <div class="panel-body">
+        <jsonforms schema="vm.schema" uischema="vm.uiSchemaGroup" data="vm.data"></jsonforms>
+    </div>
+    <div class="panel-heading">
+        <strong>Complex example</strong>
+    </div>
+    <div class="panel-body">
+        <jsonforms schema="vm.schema" uischema="vm.uiSchemaComplex" data="vm.data"></jsonforms>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>

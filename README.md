@@ -1,4 +1,5 @@
-# JSONForms - Customizable AngularJS forms based on JSON Schema
+# JSONForms - More Forms. Less Code
+### Complex AngularJS Forms in the blink of an eye
 
 JSONForms extends the AngularJS view model approach by eliminating the need to write HTML templates in order to
 create forms by leveraging the capabilities of JSON and JSON schema.
@@ -7,36 +8,43 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 1. Install JSON Forms via `npm install jsonforms` and require it via `require('jsonforms')`
 2. Annotate the element, where you want to place a form, with a `jsf` class attribute.
 3. Add `jsonforms` as a dependency to your AngularJS app:
-```
-var myApp = angular.module('myApp', ['jsonforms', ...])
-```
-4. Render a form with the `jsonforms` element:
-
-The simplest example looks like this, where `schema`, `uiSchema` and `data` are 
-properties of a aliased controller named `vm`:
- 
-```html 
+  
+  ```
+  var myApp = angular.module('myApp', ['jsonforms', ...])
+  ```
+4. Load `jsonforms.css` in the head section:
+  
+  ```html 
+  <link rel="stylesheet" type="text/css" href="node_modules/jsonforms/dist/jsonforms.css">
+  ```
+5. Render a form with the `jsonforms` element:
+  
+  The simplest example looks like this, where `schema`, `uiSchema` and `data` are 
+  properties of a aliased controller named `vm`:
+  
+  ```html 
   <div class="jsf">
     <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
   </div>
-```
+  ```
 
+# Documentation and more information
+For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
 
 # Developers Documentation
 
 ## First time setup
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
-* Install [typings](https://github.com/typings/typings): `npm install -g typings` 
-* Install [tslint](https://palantir.github.io/tslint/): `npm install -g tslint`
-* Install [webpack](https://github.com/webpack/webpack): `npm install -g webpack`
 * Clone this repository
 * Install dependencies: `npm install`
+* Generate typings: `npm run typings-install`
 
 ## Build & Testing
 * Normal Build: `npm run build` (runs `tslint` as well)
 * Bootstrap Build: `npm run build-bootstrap`
+* Material Build: `npm run build-material`
 * Test: `npm run test`
-* Watch: `npm run dev`, point your browser to `http://localhost:8080/webpack-dev-server/`
+* Watch: `npm run dev` (or `dev-bootstrap`, `dev-material`), point your browser to `http://localhost:8080/webpack-dev-server/`
 
 ## How to run the examples 
 JSONForms ships with a couple of examples. The examples' dependencies are managed

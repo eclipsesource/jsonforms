@@ -20,7 +20,7 @@
     <script src="assets/jsonforms.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="css/main.css"/>
-
+    <link rel="stylesheet" href="assets/jsonforms.css"/>
 
     <script src="bower_components/angular-ui-validate/dist/validate.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
@@ -43,7 +43,9 @@
     <script src="app/arrays/arrays.controller.js" type="text/javascript"></script>
 
     <script src="app/custom/custom.controller.js" type="text/javascript"></script>
-    <script src="app/custom/custom.jsf.js" type="text/javascript"></script>
+    <script src="app/category/category.controller.js" type="text/javascript"></script>
+    <script src="app/layouts/layouts.controller.js" type="text/javascript"></script>
+    <script src="app/rule/rule.controller.js" type="text/javascript"></script>
     <script src="app/polymer/polymer.controller.js" type="text/javascript"></script>
     <script src="app/polymer/polymer.jsf.js" type="text/javascript"></script>
 
@@ -66,18 +68,21 @@
                     <li class="dropdown">
                         <a ng-href="{{index.getPath()}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select example<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li ng-class="index.isActive('/person')"><a href="#/person">Person example</a></li>
-                            <li ng-class="index.isActive('/masterdetail')"><a href="#/masterdetail">Master Detail example</a></li>
-                            <li ng-class="index.isActive('/async')"><a href="#/async">Asynchronous example</a></li>
-                            <li ng-class="index.isActive('/resolve')"><a href="#/resolve">Resolve example</a></li>
-                            <li ng-class="index.isActive('/arrays')"><a href="#/arrays">Array controls</a></li>
-                            <li ng-class="index.isActive('/editor')"><a href="#/editor">Live edit</a></li>
-                            <li ng-class="index.isActive('/default-ui')"><a href="#/default-ui">Generated UI</a></li>
-                            <li ng-class="index.isActive('/default-schema')"><a href="#/default-schema">Generated schema</a></li>
-                            <li ng-class="index.isActive('/polymer')"><a href="#/polymer">Polymer example</a></li>
+                          <li ng-class="index.isActive('/arrays')"><a href="#/arrays">Array controls</a></li>
+                          <li ng-class="index.isActive('/async')"><a href="#/async">Asynchronous example</a></li>
+                          <li ng-class="index.isActive('/category')"><a href="#/category">Category example</a></li>
+                          <li ng-class="index.isActive('/custom')"><a href="#/custom">Custom example</a></li>
+                          <li ng-class="index.isActive('/default-schema')"><a href="#/default-schema">Generated schema</a></li>
+                          <li ng-class="index.isActive('/default-ui')"><a href="#/default-ui">Generated UI</a></li>
+                          <li ng-class="index.isActive('/editor')"><a href="#/editor">Live edit</a></li>
+                          <li ng-class="index.isActive('/layouts')"><a href="#/layouts">Layouts example</a></li>
+                          <li ng-class="index.isActive('/masterdetail')"><a href="#/masterdetail">Master Detail example</a></li>
+                          <li ng-class="index.isActive('/person')"><a href="#/person">Person example</a></li>
+                          <li ng-class="index.isActive('/placeholder-users')"><a href="#/placeholder-users">Placeholder Users</a></li>
+                          <li ng-class="index.isActive('/polymer')"><a href="#/polymer">Polymer example</a></li>
+                          <li ng-class="index.isActive('/resolve')"><a href="#/resolve">Resolve example</a></li>
+                          <li ng-class="index.isActive('/rule')"><a href="#/rule">Rule example</a></li>
                             <!--<li ng-class="index.isActive('/table')"><a href="#/table">Table example</a></li>-->
-                            <li ng-class="index.isActive('/custom')"><a href="#/custom">Custom example</a></li>
-                            <li ng-class="index.isActive('/placeholder-users')"><a href="#/placeholder-users">Placeholder Users</a></li>
                         </ul>
                     </li>
                 </ul>
