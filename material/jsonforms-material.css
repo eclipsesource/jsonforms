@@ -34,6 +34,12 @@ md-datepicker .md-datepicker-input {
 .md-select-value .md-select-icon {
   margin: 0;
 }
+.jsf-control-array-element {
+    flex: grow;
+}
+.jsf-control-array-element-delete {
+    flex: nogrow;
+}
 /* workaround for https://github.com/angular/material/issues/6214 */
 -.md-errors-spacer:empty {
   display: none;
