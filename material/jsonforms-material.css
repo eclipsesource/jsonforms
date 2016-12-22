@@ -4,10 +4,23 @@ md-input-container {
 }
 
 md-input-container ng-transclude > md-select {
-    margin: 0;
-    order: 2;
-    -webkit-box-ordinal-group: 2;
+    -webkit-box-ordinal-group: 3;
     -webkit-order: 2;
+    order: 2;
+    display: block;
+    margin-top: 0;
+    background: none;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-width: 0 0 1px 0;
+    line-height: 26px;
+    height: 30px;
+    -ms-flex-preferred-size: 26px;
+    border-radius: 0;
+    border-style: none;
+    width: 100%;
+    box-sizing: border-box;
+    float: left;
 }
 md-datepicker {
   display: flex;

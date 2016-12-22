@@ -43,16 +43,8 @@ module.exports = {
                 to:   'dist/jsonforms-bootstrap.css'
             },
             {
-                from: 'src/jsonforms.css',
-                to:   'examples/assets/jsonforms.css'
-            },
-            {
                 from: 'bootstrap/jsonforms-bootstrap.css',
-                to:   'examples/assets/jsonforms-bootstrap.css'
-            },
-            {
-                from: 'bootstrap/jsf-bootstrap.css',
-                to:   'dist/bootstrap/jsf-bootstrap.css'
+                to:   'examples/assets/jsonforms.css'
             }
         ])
     ],
