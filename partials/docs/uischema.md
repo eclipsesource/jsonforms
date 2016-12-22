@@ -116,9 +116,9 @@ The default renderer supports a couple of `options`. The `submit` property
 disables adding new entries to an array.
 
 <div ng-controller='UiSchemaController as vm' class='example'>
-  <listing-control schema='vm.example4.schema' 
-                   uischema='vm.example4.uischema' 
-                   data='vm.example4.data'>
+  <listing-control schema='vm.example4b.schema' 
+                   uischema='vm.example4b.uischema' 
+                   data='vm.example4b.data'>
   </listing-control>
 </div>
 
