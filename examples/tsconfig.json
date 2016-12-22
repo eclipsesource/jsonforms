@@ -6,7 +6,8 @@
     "sourceMap": true,
     "declaration": true,
     "module": "commonjs",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "outDir": "../dist/ts-build/examples"
   },
   "files": [
     "./data/jsonforms-examples.ts",
