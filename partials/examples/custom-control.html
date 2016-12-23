@@ -12,10 +12,10 @@
 function customDirective() {
     return {
         restrict: "E",
-        template: "<jsonforms-control><input type=\&quot;text\&quot;" +
-                                           " style=\&quot;border-color: #2ecc71\&quot;" +
-                                           " ng-change=\&quot;vm.triggerChangeEvent()\&quot;" +
-                                           " ng-model=\&quot;vm.resolvedData[vm.fragment]\&quot;/>" +
+        template: "<jsonforms-control><input type=&#39;text&#39;" +
+                                           " style=&#39;background-color: #3278b3; color: #8dd0ff&#39;" +
+                                           " ng-change=&#39;vm.triggerChangeEvent()&#39;" +
+                                           " ng-model=&#39;vm.resolvedData[vm.fragment]&#39;/>" +
                   "</jsonforms-control>",
         controller:  ["BaseController", "$scope", function(BaseController, $scope) {
            var vm = this;
@@ -35,7 +35,8 @@ app.run([&quot;RendererService&quot;, &quot;JSONFormsTesters&quot;, function(Ren
         &quot;custom-control&quot;,
         JSONFormsTesters.and(
              JSONFormsTesters.schemaPathEndsWith(&quot;firstName&quot;),
-             JSONFormsTesters.uiTypeIs(&quot;Control&quot;)
+             JSONFormsTesters.uiTypeIs(&quot;Control&quot;),
+             JSONFormsTesters.optionIs(&quot;useCustom&quot;, true)
         ),
         100
     );

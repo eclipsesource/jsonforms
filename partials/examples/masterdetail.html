@@ -1,8 +1,14 @@
 <p>
-    This example shows the default master detail renderer.
+    This example shows the default master detail renderer with an array as root.
 </p>
 <div class="example">
-    <listing-control schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></listing-control>
+    <listing-control schema="vm.schemaArray" uischema="vm.uiSchema" data="vm.dataArray"></listing-control>
+</div>
+<p>
+    This example shows the default master detail renderer with an object as root.
+</p>
+<div class="example">
+    <listing-control schema="vm.schemaObject" uischema="vm.uiSchema" data="vm.dataObject"></listing-control>
 </div>
 <p>
   The renderer tries to find a fitting UI schema for the detail. If there is none, one is generated, otherwise the registered ui shema is used.

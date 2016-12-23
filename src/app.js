@@ -226,6 +226,7 @@ require('../css/syntax.css');
 require('bootstrap');
 require('jsonforms');
 require('jsonforms/material/jsonforms-material');
+require('jsonforms/dist/ts-build/examples/jsonforms-examples');
 require('angular-animate');
 require('angular-aria');
 require('angular-material');
@@ -243,6 +244,7 @@ angular.module('jsonforms-website', [
     'ui.router',
     'jsonforms',
     'jsonforms-material',
+    'jsonforms-examples',
     'listing'
 ]).directive('mainMenu', function() {
     return {
@@ -586,5 +588,5 @@ require('./examples/live-edit.controller');
 require('./examples/generate-ui.controller');
 require('./examples/generate-schema.controller');
 require('./examples/custom.controller');
-require('./examples/custom.jsf');
+// require('./examples/custom.jsf');
 require('./support/support.controller');

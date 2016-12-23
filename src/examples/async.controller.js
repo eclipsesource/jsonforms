@@ -1,216 +1,74 @@
 'use strict';
 
 angular.module('jsonforms-website')
-    .controller('AsyncController', ['$q', function($q) {
+    .controller('AsyncController',  ['async.schema','async.uischema','async.data','$q', function(Schema,UISchema,Data,$q) {
 
-        var vm = this;
+      var vm = this;
 
-        var dataDefer = $q.defer();
-        var uiSchemaDefer = $q.defer();
-        var schemaDefer = $q.defer();
+      var dataDefer = $q.defer();
+      var uiSchemaDefer = $q.defer();
+      var schemaDefer = $q.defer();
 
-        vm.dataAsync = dataDefer.promise;
-        vm.UIAsync = uiSchemaDefer.promise;
-        vm.schemaAsync = schemaDefer.promise;
+      vm.dataAsync = dataDefer.promise;
+      vm.UIAsync = uiSchemaDefer.promise;
+      vm.schemaAsync = schemaDefer.promise;
 
-        vm.dataLoaded= false;
-        vm.schemaLoaded= false;
-        vm.uiSchemaLoaded= false;
+      vm.dataLoaded= false;
+      vm.schemaLoaded= false;
+      vm.uiSchemaLoaded= false;
 
-        vm.data = data;
-        vm.uischema = uischema;
-        vm.schema = schema;
+      vm.data = Data;
+      vm.uischema = UISchema;
+      vm.schema = Schema;
 
-        vm.loaded = function() {
-            return vm.dataLoaded && vm.schemaLoaded && vm.uiSchemaLoaded;
-        };
+      vm.loaded = function() {
+          return vm.dataLoaded && vm.schemaLoaded && vm.uiSchemaLoaded;
+      };
 
-        vm.loadDataAsyncFun = function () {
-            return $q.when(vm.data);
-        };
+      vm.loadDataAsyncFun = function () {
+          return $q.when(vm.data);
+      };
 
-        vm.loadSchemaAsyncFun = function () {
-            return $q.when(vm.schema);
-        };
+      vm.loadSchemaAsyncFun = function () {
+          return $q.when(vm.schema);
+      };
 
-        vm.loadUiSchemaAsyncFun = function () {
-            return $q.when(vm.uischema);
-        };
+      vm.loadUiSchemaAsyncFun = function () {
+          return $q.when(vm.uischema);
+      };
 
-        vm.loadData = function(){
-            vm.dataLoaded = true;
-            vm.dataForTemplate = data;
-            dataDefer.resolve(data);
-        };
+      vm.loadData = function(){
+          vm.dataLoaded = true;
+          vm.dataForTemplate = Data;
+          dataDefer.resolve(Data);
+      };
 
-        vm.loadUI = function(){
-            vm.uiSchemaLoaded = true;
-            vm.uiSchemaForTemplate = uischema;
-            uiSchemaDefer.resolve(uischema);
-        };
+      vm.loadUI = function(){
+          vm.uiSchemaLoaded = true;
+          vm.uiSchemaForTemplate = UISchema;
+          uiSchemaDefer.resolve(UISchema);
+      };
 
-        vm.loadSchema = function(){
-            vm.schemaLoaded = true;
-            vm.schemaForTemplate = schema;
-            schemaDefer.resolve(schema);
-        };
+      vm.loadSchema = function(){
+          vm.schemaLoaded = true;
+          vm.schemaForTemplate = Schema;
+          schemaDefer.resolve(Schema);
+      };
 
-        vm.formattedData = function() {
-            return JSON.stringify(vm.users, null, 4);
-        };
+      vm.formattedData = function() {
+          return JSON.stringify(vm.users, null, 4);
+      };
 
-        vm.loadDataFunc = function(){
-            return data;
-        };
+      vm.loadDataFunc = function(){
+          return Data;
+      };
 
-        vm.loadUIFunc = function(){
-            return uischema;
-        };
+      vm.loadUIFunc = function(){
+          return UISchema;
+      };
 
-        vm.loadSchemaFunc = function(){
-            return schema;
-        };
+      vm.loadSchemaFunc = function(){
+          return Schema;
+      };
 
-    }]);
-
-
-var data = {
-    name: 'John Doe',
-    vegetarian: false,
-    birthDate: "1985-06-02"
-};
-
-var schema = {
-    "type": "object",
-    "properties": {
-        "id": "user.json",
-        "name": {
-            "type": "string",
-            "minLength": 3
-        },
-        "personalData": {
-            "type": "object",
-            "properties": {
-                "age": {
-                    "type": "integer"
-                },
-                "height": {
-                    "type": "number"
-                }
-            },
-            "required": ["age", "height"]
-        },
-        "vegetarian": {
-            "type": "boolean"
-        },
-        "birthDate": {
-            "type": "string",
-            "format": "date-time"
-        },
-        "nationality": {
-            "type": "string",
-            "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
-        },
-        "occupation": {
-            "type": "string"
-        },
-        /* FIXME: disabling arrays for primitive types */
-        /*"test_wrong": {
-         "type": "array",
-         "items": {"type":"string"}
-         },*/
-        "hobbies": {
-            "type": "array",
-            "items": {"type":"object","properties": {"name": {"type": "string"}}}
-        }
-    },
-    "required": ["occupation", "nationality"]
-};
-
-var uischema = {
-    "type": "VerticalLayout",
-    "elements": [
-        {
-            "type": "VerticalLayout",
-            "elements": [
-            ],
-            "rule":{
-                "effect":"HIDE",
-                "condition":{
-                    "type":"LEAF" ,
-                    "scope": {
-                        "$ref": "#/properties/personalData/properties/age"
-                    },
-                    "expectedValue":36
-                }
-            }
-        },
-        {
-            "type": "HorizontalLayout",
-            "elements": [
-                {
-                    "type": "Control",
-                    "label": {
-                        "text": "Name",
-                        "show": true
-                    },
-                    "scope": {
-                        "$ref": "#/properties/name"
-                    },
-                    "rule":{
-                        "effect":"HIDE",
-                        "condition":{
-                            "type":"LEAF" ,
-                            "scope": {
-                                "$ref": "#/properties/personalData/properties/age"
-                            },
-                            "expectedValue":36
-                        }
-                    }
-                },
-                {
-                    "type": "Control",
-                    "label": {
-                        "text": "Age"
-                    },
-                    "scope": {
-                        "$ref": "#/properties/personalData/properties/age"
-                    }
-                },
-                {
-                    "type": "Control",
-                    "label": "Height",
-                    "scope": {
-                        "$ref": "#/properties/personalData/properties/height"
-                    }
-                }
-            ]
-        },
-        {
-            "type": "HorizontalLayout",
-            "elements": [
-                {
-                    "type": "Control",
-                    "label": "Vegetarian",
-                    "scope": {
-                        "$ref": "#/properties/vegetarian"
-                    }
-                },
-                {
-                    "type": "Control",
-                    "label": "Nationality",
-                    "scope": {
-                        "$ref": "#/properties/nationality"
-                    }
-                },
-                {
-                    "type": "Control",
-                    "label": "Birthday",
-                    "scope": {
-                        "$ref": "#/properties/birthDate"
-                    }
-                }
-            ]
-        }
-    ]
-};
+  }]);
