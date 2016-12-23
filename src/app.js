@@ -588,5 +588,4 @@ require('./examples/live-edit.controller');
 require('./examples/generate-ui.controller');
 require('./examples/generate-schema.controller');
 require('./examples/custom.controller');
-// require('./examples/custom.jsf');
 require('./support/support.controller');
