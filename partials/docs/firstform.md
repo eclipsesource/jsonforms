@@ -191,21 +191,87 @@ data object `tc.taskData`, the data schema `tc.taskSchema`, and the UI schema `t
 
 The complete sources are listed below and you can also find them in the [example application](#/docs/setup) (initial state). Once you have embedded the form into your application, it will bind the data and show live validation.
 
+#### task_data.js
+
+<pre nag-prism class="language-javascript" source="
+angular.module('MiHexample')
+  .value('Task', {
+    'name': 'Send email to Adrian',
+    'description': 'Confirm if you have passed the subject',
+    'done': true
+  }
+); 
+"/>
+
+#### task_schema.js
+
+<pre nag-prism class="language-javascript" source="
+angular.module('MiHexample')
+  .value('Schema', {
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string',
+        'minLength': 3
+      },
+      'description': {
+        'type': 'string'
+      },
+      'done': {
+        'type': 'boolean'
+      }
+    },
+    'required': ['name']
+  }
+);"/>
+
+#### task_uischema.js
+
+<pre nag-prism class="language-javascript" source="
+angular.module('MiHexample')
+  .value('UISchema', {
+    'type': 'VerticalLayout',
+    'elements': [
+      {
+        'type': 'Control',
+        'label': 'Name',
+        'scope': {
+          '$ref': '#/properties/name'
+        }
+      }, {
+        'type': 'Control',
+        'label': 'Description',
+        'scope': {
+          '$ref': '#/properties/description'
+        },
+        'options': {
+          'multi': true
+        }
+      },  {
+        'type': 'Control',
+        'scope': {
+          '$ref': '#/properties/done'
+        }
+      }
+    ]
+  }
+);"/>
+
 #### tasks.controller.js
 
-```javascript
+<pre nag-prism class="language-javascript" source="
 angular.module('MiHexample', ['jsonforms-bootstrap'])
-  .controller('TasksController',['Schema','UISchema','Task', function(Schema,UISchema,Task) {
+  .controller('TasksController', ['Schema', 'UISchema', 'Task', function(Schema, UISchema, Task) {
     var vm = this;
     vm.taskSchema = Schema;
     vm.taskUISchema = UISchema;
     vm.taskData=Task;
 }]);
-```
+"/>
 
 #### index.html
 
-```html
+<pre nag-prism class="language-html" source='
 <!doctype html>
 <html lang="en" ng-app="MiHexample">
     <head>
@@ -246,7 +312,7 @@ angular.module('MiHexample', ['jsonforms-bootstrap'])
         </div>
     </body>
 </html>
-```
+'/>
 
 Now you are able to create forms and integrate them into your web application. 
 We recommend you to take a look at all the available core UI schema elements as outlined in 
