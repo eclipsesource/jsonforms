@@ -6,13 +6,12 @@ export default angular.module('jsonforms-examples.rule', [])
         'name': {
           'type': 'string'
         },
-        'birthDate': {
-          'type': 'string',
-          'format': 'date'
+        'alive': {
+          'type': 'boolean'
         },
-        'nationality': {
+        'kindOfDead': {
           'type': 'string',
-          'enum': ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+          'enum': ['Zombie', 'Vampire', 'Ghoul']
         }
       }
     }
@@ -25,41 +24,31 @@ export default angular.module('jsonforms-examples.rule', [])
           'type': 'Control',
           'label': 'Name',
           'scope': {
-              '$ref': '#/properties/name'
-          },
-          'rule': {
-            'effect': 'HIDE',
-            'condition': {
-              'type': 'LEAF' ,
-              'scope': {
-                '$ref': '#/properties/nationality'
-              },
-              'expectedValue': 'DE'
-            }
+            '$ref': '#/properties/name'
           }
         },
         {
           'type': 'Control',
-          'label': 'Birth Date',
+          'label': 'Is Alive?',
           'scope': {
-              '$ref': '#/properties/birthDate'
+            '$ref': '#/properties/alive'
+          }
+        },
+        {
+          'type': 'Control',
+          'label': 'Kind of dead',
+          'scope': {
+            '$ref': '#/properties/kindOfDead'
           },
           'rule': {
             'effect': 'SHOW',
             'condition': {
               'type': 'LEAF' ,
               'scope': {
-                '$ref': '#/properties/nationality'
+                '$ref': '#/properties/alive'
               },
-              'expectedValue': 'DE'
+              'expectedValue': false
             }
-          }
-        },
-        {
-          'type': 'Control',
-          'label': 'Nationality',
-          'scope': {
-            '$ref': '#/properties/nationality'
           }
         }
       ]
@@ -68,8 +57,8 @@ export default angular.module('jsonforms-examples.rule', [])
   .value('rule.data',
     {
       name: 'John Doe',
-      birthDate: '1985-06-02',
-      nationality: 'DE'
+      alive: true,
+      kindOfDead: 'Zombie'
     }
   )
 .name;
