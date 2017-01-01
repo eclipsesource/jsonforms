@@ -66,6 +66,9 @@ class MasterDetailCollectionController {
     public selectedElementForAdd;
     public selectedScopeForAdd;
     public showSelectKeyDialog: boolean = false;
+
+    private addClickPositionX;
+    private addClickPositionY;
     constructor(private scope) {
     }
     public getArraySubSchemas(schema) {
@@ -151,20 +154,24 @@ class MasterDetailCollectionController {
         }
     }
     public deactivateScroll () {
-      (<HTMLElement>document.activeElement).style.overflow = 'hidden';
+      (<HTMLElement>document.body).style.overflow = 'hidden';
     }
     public activateScroll () {
-      (<HTMLElement>document.activeElement).style.overflow = 'auto';
+      (<HTMLElement>document.body).style.overflow = 'auto';
     }
     public get pageHeight() {
-      return document.activeElement['scrollHeight'];
+      return document.body['scrollHeight'];
     }
     public get pageWidth() {
-      return document.activeElement['scrollWidth'];
+      return document.body['scrollWidth'];
     }
 
     public getBeautifulKeyName(key: string): string {
       return PathUtil.beautify(key);
+    }
+    handleAddClick(event): void {
+      this.addClickPositionX = event.clientX;
+      this.addClickPositionY = event.clientY;
     }
 }
 class MasterDetailCollectionDirective implements ng.IDirective {
@@ -217,7 +224,7 @@ const masterDetailCollectionTemplate = `
       <span class="jsf-masterdetail-entry-add"
         ng-click="vm.selectedScopeForAdd=$parent;vm.selectedSchemaForAdd=schema;
           vm.selectedElementForAdd=child;vm.showSelectKeyDialog=true;
-          vm.addClickPositionX=$event.pageX;vm.addClickPositionY=$event.pageY;vm.deactivateScroll()"
+          vm.handleAddClick($event);vm.deactivateScroll()"
         ng-if="vm.canHaveChildren(schema)">+</span>
       <span class="jsf-masterdetail-entry-remove"
         ng-click="vm.updateHasContents(parentItemContext);
