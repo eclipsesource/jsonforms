@@ -1,72 +1,44 @@
 'use strict';
 
-angular.module('jsonforms-website')
-    .controller('MasterDetailController', function() {
+var userDetailSchema = {
+    "type": "Control",
+    "label": {
+        "text": "Name",
+        "show": true
+    },
+    "scope": {
+        "$ref": "#/properties/name"
+    }
+};
+var app = angular.module('jsonforms-website');
+var validIds = ['#folder_array','#file_array','#drive_array','#folder_object','#file_object','#drive_object'];
 
-        var vm = this;
-        vm.personSchema = {
-            "type": "object",
-            "properties": {
-                "id":"person",
-                "name": {
-                    "type": "string"
-                },
-                "nationality": {
-                    "type": "string",
-                    "enum": ["DE", "IT", "JP", "US", "RU", "Other"]
-                }
-            }
-        };
-        vm.schema = {
-          "type": "object",
-          "properties": {
-            "id":"persons",
-            "name": {
-                "type": "string"
-            },
-            "friends":{
-                "type": "array",
-                "items": vm.personSchema
-            },
-            "enemies":{
-                "type": "array",
-                "items": vm.personSchema
-            }
-          }
-        };
-        vm.data ={
-          "name":"Known Persons",
-          "friends":
-          [
-            {
-              name: 'Todd'
-            },
-            {
-              name: 'Anna'
-            }
-          ],
-          "enemies":
-          [
-            {
-              name: 'Bob'
-            },
-            {
-              name: 'Jane'
-            }
-          ]
-        };
-        vm.uiSchema = {
-          "type":"MasterDetailLayout",
-          "scope": {
-              "$ref": "#"
-          },
-          "options":{
-            "labelProvider":{"persons":"name","person":"name"}
-            // "imageProvider":{"person":"images/examples/person.png"}
-          }
-        };
-
-        vm.formattedData = function() {
-            return JSON.stringify(vm.data, null, 4);
-        };
+app.run(['UiSchemaRegistry', function(UiSchemaRegistry) {
+    UiSchemaRegistry.register(userDetailSchema, function (schema){
+        if(validIds.indexOf(schema.id)===-1) return -1;
+        return 1;
     });
+}]);
+
+angular.module('jsonforms-website')
+    .controller('MasterDetailController', ['masterdetail.schema-array','masterdetail.schema-object','masterdetail.uischema','masterdetail.data-array','masterdetail.data-object',
+function(SchemaArray, SchemaObject, UISchema, DataArray, DataObject) {
+    var vm = this;
+    vm.schemaArray = SchemaArray;
+
+    vm.uiSchema = UISchema;
+
+    vm.dataArray =DataArray;
+
+    vm.dataObject = DataObject;
+
+    vm.schemaObject = SchemaObject;
+
+    //fix icons:
+    vm.uiSchema.options.imageProvider['#folder_array']="images/examples/masterdetail-icons/folder.png";
+    vm.uiSchema.options.imageProvider['#file_array']="images/examples/masterdetail-icons/page.png";
+    vm.uiSchema.options.imageProvider['#drive_array']="images/examples/masterdetail-icons/drive.png";
+    vm.uiSchema.options.imageProvider['#folder_object']="images/examples/masterdetail-icons/folder.png";
+    vm.uiSchema.options.imageProvider['#file_object']="images/examples/masterdetail-icons/page.png";
+    vm.uiSchema.options.imageProvider['#drive_object']="images/examples/masterdetail-icons/drive.png";
+}]);
