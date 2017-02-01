@@ -1,4 +1,8 @@
-angular.module('jsonforms-website')
+'use strict';
+
+var module = angular.module('docs.uischemacontroller',[]);
+
+module
     .controller('UiSchemaController', function() {
         var vm = this;
         vm.example1 = {

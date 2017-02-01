@@ -215,8 +215,6 @@ DynamicData.uiSchema = {
 
 // CSS
 require('angular-material/angular-material.min.css');
-require('jsonforms/dist/jsonforms.css');
-require('jsonforms/dist/jsonforms-material.css');
 require('prismjs/themes/prism.css');
 require('../css/main.css');
 require('../css/syntax.css');
@@ -224,9 +222,7 @@ require('../css/syntax.css');
 // Libs
 
 require('bootstrap');
-require('jsonforms');
-require('jsonforms/material/jsonforms-material');
-require('jsonforms/dist/ts-build/examples/jsonforms-examples');
+require('angular');
 require('angular-animate');
 require('angular-aria');
 require('angular-material');
@@ -238,6 +234,7 @@ require('prismjs/components/prism-typescript');
 
 require('oclazyload');
 require('./examples/examples.routing');
+require('./docs/docs.routing');
 
 angular.module('jsonforms-website', [
     'ngAnimate',
@@ -247,10 +244,8 @@ angular.module('jsonforms-website', [
     'ui.bootstrap',
     'ui.router',
     'oc.lazyLoad',
-    'jsonforms',
-    'jsonforms-material',
-    'jsonforms-examples',
     'listing',
+    'docs.routing',
     'examples.routing'
 ]).directive('mainMenu', function() {
     return {
@@ -266,87 +261,19 @@ angular.module('jsonforms-website', [
             };
         }
     };
-}).directive('docsMenu', ['$anchorScroll', function($anchorScroll) {
-    return {
-        restrict: 'E',
-        template: require('../partials/docs/docs_menu.html'),
-        link: function (scope) {
-            scope.showDocsNav = false;
-            scope.toggleDocsMenu = function () {
-                scope.showDocsNav = !scope.showDocsNav;
-            };
-            scope.hideDocsMenu = function () {
-                scope.showDocsNav = false;
-                $anchorScroll();
-            };
-        }
-    };
-}]).directive('supportPanel', function() {
+}).directive('supportPanel', function() {
     return {
         restrict: 'E',
         template: require('../partials/docs/support_panel.html')
     };
 }).config(['$stateProvider', '$urlRouterProvider',
     function($stateProvider, $urlRouterProvider) {
-      $urlRouterProvider.when("/docs", "/docs/landing");
-      $urlRouterProvider.when("/examples", "/examples/person");
         $stateProvider
             .state('/', {
                 url: '/',
                 template: require('../partials/landing.html'),
                 controller: 'IndexController',
-                controllerAs: 'vm',
-                resolve: {
-
-                }
-            })
-            .state('docs', {
-                url: '/docs',
-                template: require('../partials/docs.html')
-            })
-            .state('docs.landing', {
-                url: '/landing',
-                template: require('../partials/docs/landing.html')
-            })
-            .state('docs.introduction', {
-                url: '/introduction',
-                template: require('../_site/partials/docs/introduction.html')
-            })
-            .state('docs.quickstart', {
-                url: '/quickstart',
-                template: require('../_site/partials/docs/quickstart.html')
-            })
-            .state('docs.jsonformseditor', {
-                url: '/jsonformseditor',
-                template: require('../_site/partials/docs/jsonformseditor.html')
-            })
-            .state('docs.setup', {
-                url: '/setup',
-                template: require('../_site/partials/docs/setup.html')
-            })
-            .state('docs.firstform', {
-                url: '/firstform',
-                template: require('../_site/partials/docs/firstform.html')
-            })
-            .state('docs.customrenderer', {
-                url: '/customrenderer',
-                template: require('../_site/partials/docs/customrenderer.html')
-            })
-            .state('docs.customrenderer-es5', {
-                url: '/customrenderer-es5',
-                template: require('../_site/partials/docs/customrenderer-es5.html')
-            })
-            .state('docs.customrenderer-es6', {
-                url: '/customrenderer-es6',
-                template: require('../_site/partials/docs/customrenderer-es6.html')
-            })
-            .state('docs.customrenderer-ts', {
-                url: '/customrenderer-ts',
-                template: require('../_site/partials/docs/customrenderer-ts.html')
-            })
-            .state('docs.uischema', {
-                url: '/uischema',
-                template: require('../_site/partials/docs/uischema.html')
+                controllerAs: 'vm'
             })
             .state('support', {
                 url: '/support',
@@ -484,9 +411,4 @@ angular.module('jsonforms-website', [
 // Our code
 require('./listing/listing.controller');
 require('./listing/listing.directive');
-require('./docs/uischema/uischema.controller');
-require('./docs/customrenderer/rating.control');
-require('./docs/customrenderer/rating.controller');
-require('./docs/customrenderer/schema.value');
-require('./docs/customrenderer/uischema.value');
 require('./support/support.controller');

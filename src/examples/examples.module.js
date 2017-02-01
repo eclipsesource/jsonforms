@@ -1,5 +1,13 @@
 'use strict';
 
+require('jsonforms/dist/jsonforms.css');
+require('jsonforms/dist/jsonforms-material.css');
+
+require('jsonforms');
+require('jsonforms/material/jsonforms-material');
+require('jsonforms/dist/ts-build/examples/jsonforms-examples');
+
+
 require('./arrays.controller');
 require('./async.controller');
 require('./categories.controller');

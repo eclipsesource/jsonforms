@@ -3,6 +3,7 @@
 require('./examples.menudirective');
 
 function examplesRouting($urlRouterProvider, $stateProvider) {
+    $urlRouterProvider.when("/examples", "/examples/person");
     $urlRouterProvider.otherwise('/examples');
 
     $stateProvider
@@ -17,6 +18,9 @@ function examplesRouting($urlRouterProvider, $stateProvider) {
                         // load examples module and all its dependencies
                         var module = require('./examples.module');
                         $ocLazyLoad.load([
+                            {name: 'jsonforms'},
+                            {name: 'jsonforms-material'},
+                            {name: 'jsonforms-examples'},
                             {name: 'examples'},
                             {name: 'examples.arrayscontroller'},
                             {name: 'examples.asynccontroller'},
