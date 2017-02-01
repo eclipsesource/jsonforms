@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('jsonforms-website')
+var module = angular.module('examples.liveeditcontroller',[]);
+
+module
     .controller('LiveEditController', ['$scope', function($scope) {
 
     var vm = this;

@@ -30,6 +30,7 @@
     "bootstrap": "3.3.7",
     "jsonforms": "1.4.2",
     "mdi": "1.6.50",
+    "oclazyload": "1.0.9",
     "prismjs": "1.5.1",
     "validator-js": "0.2.1"
   },

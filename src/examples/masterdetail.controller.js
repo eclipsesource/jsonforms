@@ -10,17 +10,18 @@ var userDetailSchema = {
         "$ref": "#/properties/name"
     }
 };
-var app = angular.module('jsonforms-website');
 var validIds = ['#folder_array','#file_array','#drive_array','#folder_object','#file_object','#drive_object'];
 
-app.run(['UiSchemaRegistry', function(UiSchemaRegistry) {
+var module = angular.module('examples.masterdetailcontroller',[]);
+
+module.run(['UiSchemaRegistry', function(UiSchemaRegistry) {
     UiSchemaRegistry.register(userDetailSchema, function (schema){
         if(validIds.indexOf(schema.id)===-1) return -1;
         return 1;
     });
 }]);
 
-angular.module('jsonforms-website')
+module
     .controller('MasterDetailController', ['masterdetail.schema-array','masterdetail.schema-object','masterdetail.uischema','masterdetail.data-array','masterdetail.data-object',
 function(SchemaArray, SchemaObject, UISchema, DataArray, DataObject) {
     var vm = this;

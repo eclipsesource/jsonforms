@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('jsonforms-website')
-    .controller('ArraysController',
+var module = angular.module('examples.arrayscontroller',[]);
+
+module.controller('ArraysController',
     ['array.schema','array.uischema','array.uischema-simple','array.data',
       function(Schema,UISchema,UISchemaSimple,Data) {
         var vm = this;

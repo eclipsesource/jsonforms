@@ -5,7 +5,7 @@
             <div class="mainLogo">More Forms. Less Code.</div>
             <h4 class="tag-line">Complex AngularJS Forms in the blink of an eye</h4>
             <md-button class="md-raised md-primary"
-                       ng-click="vm.scrollTo('demo')">Live example</md-button>
+                       ui-sref="examples.live-edit">Live example</md-button>
         </div>
     </div>
 
@@ -21,7 +21,6 @@
                     </p>
                 </div>
             </div>
-
 
             <div flex layout="row"  >
                 <div layout-padding layout="column" >
@@ -51,45 +50,7 @@
         </div>
     </div>
 
-    <div layout="column" layout-align="center" class="md-padding editor-demo">
-        <h2 id="demo" style="text-align:center" class="editor-label">LIVE EXAMPLE</h2>
-        <div layout="row">
-            <div layout="column" flex layout-margin></div>
-            <div layout="column" flex="40"  layout-margin>
-                <h3 class="text-center editor-label" style="font-size: 20px; font-weight:bold">JSON Schema</h3>
-                <div ui-ace="vm.configAce('json')"
-                     ng-model="vm.localStaticModel"
-                     id="localStaticModelEditor"
-                     flex="none"></div>
-            </div>
-            <div layout="column" flex="40"  layout-margin>
-                <h3 class="text-center editor-label" style="font-size: 20px; font-weight:bold">UI Schema</h3>
-                <div ui-ace="vm.configAce('json')"
-                     ng-model="vm.localStaticView"
-                     id="localStaticViewEditor"
-                     flex="none"></div>
-            </div>
-            <div layout="column" flex layout-margin></div>
-        </div>
-
-        <div layout="column" layout-align="center center">
-            <div class="text-center">
-                <md-button class="md-raised md-primary" ng-click="vm.reparseStatic()">Render view</md-button>
-            </div>
-        </div>
-        <div layout="column" layout-align="center center">
-            <div class="panel-body jsf">
-                <jsonforms schema="vm.localStaticModelObject"
-                           uischema="vm.localStaticViewObject"
-                           data="vm.staticDataProvider.data">
-                </jsonforms>
-            </div>
-        </div>
         <div layout="row" layout-align="center center">
-            <div layout="column">
-            <md-button style="background-color: #d9534f"
-                       class="md-raised md-primary"
-                       ui-sref="examples.person">More examples</md-button></div>
             <div layout="column">
             <md-button style="background-color: #d9534f"
                        class="md-raised md-primary"

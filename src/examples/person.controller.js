@@ -81,16 +81,16 @@ var userDetailSchema = {
         }
     ]
 };
-var app = angular.module('jsonforms-website');
+var module = angular.module('examples.personcontroller',[]);
 
-app.run(['UiSchemaRegistry', function(UiSchemaRegistry) {
+module.run(['UiSchemaRegistry', function(UiSchemaRegistry) {
     UiSchemaRegistry.register(userDetailSchema, function (schema){
         if(schema.properties.personalData===undefined) return -1;
         if(schema.properties.name===undefined) return -1;
         return 1;
     });
 }]);
-angular.module('jsonforms-website').controller('PersonController',
+module.controller('PersonController',
 ['person.schema','person.uischema','person.data', function(Schema,UISchema,Data) {
     var vm = this;
     vm.schema = Schema;

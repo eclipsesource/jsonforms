@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('jsonforms-website')
+var module = angular.module('examples.layoutscontroller',[]);
+
+module
     .controller('LayoutsController',
     ['layouts.schema','layouts.uischema-vertical','layouts.uischema-horizontal','layouts.uischema-group','layouts.uischema-complex','layouts.data',
 function(Schema,UISchemaVertical,UISchemaHorizontal,UISchemaGroup,UISchemaComplex,Data) {

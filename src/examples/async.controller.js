@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('jsonforms-website')
-    .controller('AsyncController',  ['async.schema','async.uischema','async.data','$q', function(Schema,UISchema,Data,$q) {
+var module = angular.module('examples.asynccontroller',[]);
+
+module.controller('AsyncController',  ['async.schema','async.uischema','async.data','$q', function(Schema,UISchema,Data,$q) {
 
       var vm = this;
 

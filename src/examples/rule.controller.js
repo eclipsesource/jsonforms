@@ -12,7 +12,10 @@
     };
 }]);
 */
-angular.module('jsonforms-website')
+
+var module = angular.module('examples.rulecontroller',[]);
+
+module
     .controller('RuleController', function() {
 
         var vm = this;
