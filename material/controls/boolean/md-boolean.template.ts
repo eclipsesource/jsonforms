@@ -6,7 +6,7 @@ const booleanTemplate = `<md-input-container flex>
                  ng-disabled="vm.uiSchema.readOnly"/>
                  {{vm.label}}
     </md-checkbox>
-    <div ng-messages="{{vm.label}}.$error" role="alert">
+    <div ng-messages="vm.alerts.length > 0" role="alert">
       <div ng-repeat="errorMessage in vm.alerts">
         <!-- use ng-message-exp for a message whose key is given by an expression -->
         <div>{{errorMessage.msg}}</div>
