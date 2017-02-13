@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ReactiveForms</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link rel="icon" type="image/x-icon" href="favicon.ico"> -->
+  <script src="native-shim.js"></script>
+  <!-- <script src="dist/json-forms.js"></script> -->
+  <script src="assets/bundle.js"></script>
+  <style>
+  .tree-layout {display: flex; flex-direction: row;}
+  .tree-master {flex:1; border:1px solid;}
+  .tree-detail {flex:3; border:1px solid;}
+  .tree-master ul {list-style-type: none;}
+  .tree-master li {min-height: 1em; border:1px solid;}
+  .vertical-layout {display: flex; flex-direction: column;}
+  .vertical-layout > * {flex: 1;}
+  </style>
+</head>
+<body>
+  <script>
+  var body = document.getElementsByTagName('body')[0];
+  var jsonForms = document.createElement('json-forms');
+
+  var dataschema=
+    {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string',
+          'minLength': 3
+        },
+        'personalData': {
+          'type': 'object',
+          'properties': {
+              'age': {
+                  'type': 'integer'
+              },
+              'height': {
+                  'type': 'number'
+              }
+          },
+          'required': ['age', 'height']
+        },
+        'vegetarian': {
+          'type': 'boolean'
+        },
+        'birthDate': {
+          'type': 'string',
+          'format': 'date'
+        },
+        'nationality': {
+          'type': 'string',
+          'enum': ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+        },
+        'occupation': {
+          'type': 'string'
+        }
+      },
+      'required': ['occupation', 'nationality']
+    };
+  var uischema=
+    {
+      'type': 'VerticalLayout',
+      'elements': [
+        {
+          'type': 'VerticalLayout',
+          'elements': [
+            {
+              'type': 'Control',
+              'label': 'Name',
+              'scope': {
+                '$ref': '#/properties/name'
+              }
+            },
+            {
+              'type': 'Control',
+              'label': 'Age',
+              'scope': {
+                '$ref': '#/properties/personalData/properties/age'
+              }
+            },
+            {
+              'type': 'Control',
+              'label': 'Height',
+              'scope': {
+                '$ref': '#/properties/personalData/properties/height'
+              }
+            }
+          ]
+        },
+        {
+          'type': 'VerticalLayout',
+          'elements': [
+            {
+              'type': 'Control',
+              'label': 'Nationality',
+              'scope': {
+                '$ref': '#/properties/nationality'
+              }
+            },
+            {
+              'type': 'Control',
+              'label': 'Occupation',
+              'scope': {
+                '$ref': '#/properties/occupation'
+              },
+              'suggestion': ['Accountant', 'Engineer', 'Freelancer',
+                'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
+            },
+            {
+              'type': 'Control',
+              'label': 'Birthday',
+              'scope': {
+                '$ref': '#/properties/birthDate'
+              }
+            }
+          ]
+        }
+      ]
+    };
+  var data=
+    {
+      name: 'John Doe',
+      vegetarian: false,
+      birthDate: '1985-06-02'
+    };
+
+  // var data ={};
+  // //  {'name':'Bob','test':123,'bool':false,'tree':[{'name':'test1'},{'name':'test2'}]};
+  // var dataschema = {
+  //   "type":"object",
+  //   "properties":{
+  //     "name":{"type":"string", "minLength":3},
+  //     "test":{"type":"integer", "minimum":10},
+  //     "bool":{"type":"boolean"}
+  //   }
+  // };
+  // var uischema = {
+  //   "type":"VerticalLayout",
+  //   "elements":[
+  //     {
+  //       "type":"Control",
+  //       "label":"Name",
+  //       "scope":{
+  //         "$ref":"#/properties/name"
+  //       }
+  //     },
+  //     {
+  //       "type":"Control",
+  //       "label":"Integer",
+  //       "scope":{
+  //         "$ref":"#/properties/test"
+  //       }
+  //     },
+  //     {
+  //       "type":"Control",
+  //       "label":"Bool",
+  //       "scope":{
+  //         "$ref":"#/properties/bool"
+  //       }
+  //     },
+  //     {
+  //       "type":"ArrayControl",
+  //       "label":"Array",
+  //       "scope":{
+  //         "$ref":"#/properties/array"
+  //       }
+  //     },
+  //     {
+  //       "type":"ArrayControl2",
+  //       "label":"Array2",
+  //       "scope":{
+  //         "$ref":"#/properties/array2"
+  //       }
+  //     },
+  //     {
+  //       "type":"TreeControl",
+  //       "label":"Tree",
+  //       "scope":{
+  //         "$ref":"#/properties/tree"
+  //       }
+  //     }
+  //   ]
+  // };
+  jsonForms.data=data;
+  jsonForms.uiSchema=uischema;
+  jsonForms.dataSchema=dataschema;
+  body.appendChild(jsonForms);
+  console.log(data);
+  </script>
+</body>
+</html>

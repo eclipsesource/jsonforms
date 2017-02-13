@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "",
+    "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "mapRoot": "./",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "exclude":[
+    "node_modules"
+  ],
+  "include": [
+    "./src/**/*"
+  ]
+}

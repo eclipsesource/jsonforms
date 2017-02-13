@@ -1,0 +1,23 @@
+{
+  "name": "webcomponents-jsonforms",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^4.11.2"
+  },
+  "devDependencies": {
+    "awesome-typescript-loader": "^3.0.0-beta.18",
+    "file-loader": "^0.10.0",
+    "source-map-loader": "^0.1.6",
+    "typescript": "^2.1.5",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^1.16.3"
+  },
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "build": "webpack --config webpack/webpack.build.js --env=production --display-error-details"
+  }
+}
