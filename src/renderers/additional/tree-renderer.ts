@@ -15,6 +15,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
   }
 
   connectedCallback() {
+    super.connectedCallback();
     const controlElement = <ControlElement> this.uischema;
 
     let div = document.createElement('div');

@@ -14,6 +14,7 @@ class ArrayControlRenderer extends Renderer implements DataChangeListener {
   }
 
   connectedCallback() {
+    super.connectedCallback();
     this.render();
     this.dataService.registerChangeListener(this);
   }
@@ -93,6 +94,7 @@ class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
   }
 
   connectedCallback() {
+    super.connectedCallback();
     this.render();
     this.dataService.registerChangeListener(this);
   }
