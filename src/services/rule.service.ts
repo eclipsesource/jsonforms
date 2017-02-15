@@ -44,6 +44,7 @@ class JsonFormsRuleService implements DataChangeListener, JsonFormService {
     }
   }
   private evaluate(uiSchema: UISchemaElement, data: any) {
+    // TODO condition evaluation should be done somewhere else
     const condition = <LeafCondition>uiSchema.rule.condition;
     const ref = condition.scope.$ref;
     const pair = getValuePropertyPair(data, ref);

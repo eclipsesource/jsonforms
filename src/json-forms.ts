@@ -12,7 +12,7 @@ const CustomElement = (config: CustomElementConfig) => (cls) =>
   selector: 'json-forms'
 })
 export class JsonForms extends HTMLElement {
-
+  private allowDynamicUpdate = false;
   private dataService: DataService;
   private uischema: UISchemaElement;
   private dataschema: JsonSchema;
@@ -23,10 +23,12 @@ export class JsonForms extends HTMLElement {
   }
 
   connectedCallback(): void {
-      this.render();
+    this.allowDynamicUpdate = true;
+    this.render();
   }
 
   disconnectedCallback(): void {
+    this.allowDynamicUpdate = false;
     this.services.forEach(service => service.dispose());
   }
 
@@ -53,17 +55,23 @@ export class JsonForms extends HTMLElement {
 
   set data(data: Object) {
     this.dataService = new DataService(data);
-    this.render();
+    if (this.allowDynamicUpdate) {
+      this.render();
+    }
   }
 
   set uiSchema(uischema: UISchemaElement) {
     this.uischema = uischema;
-    this.render();
+    if (this.allowDynamicUpdate) {
+      this.render();
+    }
   }
 
   set dataSchema(dataschema: JsonSchema) {
     this.dataschema = dataschema;
-    this.render();
+    if (this.allowDynamicUpdate) {
+      this.render();
+    }
   }
 
   private createServices(): void {

@@ -20,7 +20,6 @@ export abstract class BaseControl <T extends HTMLElement>
   }
 
   connectedCallback() {
-    super.connectedCallback();
     const controlElement = <ControlElement> this.uischema;
     this.createLabel(controlElement);
     this.createInput(controlElement);
@@ -37,7 +36,7 @@ export abstract class BaseControl <T extends HTMLElement>
         this.errorElement.textContent = BaseControl.formatErrorMessage(runtime.validationErrors);
         break;
       case RUNTIME_TYPE.VISIBLE:
-        this.hidden = true;
+        this.hidden = !runtime.visible;
         break;
       case RUNTIME_TYPE.ENABLED:
         if (!runtime.enabled) {
