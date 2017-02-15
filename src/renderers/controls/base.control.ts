@@ -33,7 +33,13 @@ export abstract class BaseControl <T extends HTMLElement>
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
       case RUNTIME_TYPE.VALIDATION_ERROR:
+        if (!this.errorElement) {
+          break;
+        }
         this.errorElement.textContent = BaseControl.formatErrorMessage(runtime.validationErrors);
+        break;
+      case RUNTIME_TYPE.VISIBLE:
+        this.classList.toggle('hide', !runtime.visible);
         break;
     }
   }

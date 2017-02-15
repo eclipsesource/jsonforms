@@ -55,8 +55,9 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
     if (!this.uischema.hasOwnProperty('runtime')) {
       const runtime = new Runtime();
       this.uischema['runtime'] = runtime;
-      runtime.addListener(this);
     }
+    const runtime = <Runtime>uischema['runtime'];
+    runtime.addListener(this);
   }
 
   setDataService(dataService: DataService) {
@@ -85,9 +86,10 @@ class RendererService {
     let bestRenderer: string;
     let specificity = -1;
     this.renderers.forEach(renderer => {
-      let rSpec = renderer.tester(uischema, schema);
+      const rSpec = renderer.tester(uischema, schema);
       if (rSpec > specificity) {
         bestRenderer = renderer.renderer;
+        specificity = rSpec;
       }
     });
     let renderer: HTMLElement;
@@ -114,7 +116,7 @@ export class DataService {
   constructor(private data: any) {
   }
   notifyChange(uischema: ControlElement, newValue: any): void {
-    let pair = getValuePropertyPair(this.data, uischema.scope.$ref);
+    const pair = getValuePropertyPair(this.data, uischema.scope.$ref);
     pair.instance[pair.property] = newValue;
     this.changeListeners.forEach(listener => {
       if (listener.isRelevantKey(uischema)) {
