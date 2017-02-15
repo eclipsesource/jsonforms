@@ -1,25 +1,25 @@
-import {UISchemaElement, ControlElement} from "../../models/uischema";
-import {BaseControl} from "./base.control";
-import {JsonFormsRenderer} from "../renderer.util";
+import { UISchemaElement } from '../../models/uischema';
+import { BaseControl } from './base.control';
+import { JsonFormsRenderer } from '../renderer.util';
 
 @JsonFormsRenderer({
-  selector: "jsonforms-text",
-  tester: (uischema: UISchemaElement) => uischema.type === "Control" ? 1 : -1
+  selector: 'jsonforms-text',
+  tester: (uischema: UISchemaElement) => uischema.type === 'Control' ? 1 : -1
 })
 class TextControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {
-    input.type = "text";
+    input.type = 'text';
   }
   protected get valueProperty(): string {
-    return "value";
+    return 'value';
   }
   protected get inputChangeProperty(): string {
-    return "oninput";
+    return 'oninput';
   }
   protected convertModelValue(value: any): any {
-    return value === undefined ? "" : value;
+    return value === undefined ? '' : value;
   }
   protected get inputElement(): HTMLInputElement {
-    return document.createElement("input");
+    return document.createElement('input');
   }
 }
