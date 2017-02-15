@@ -9,6 +9,7 @@
   "devDependencies": {
     "ava": "^0.18.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",
+    "coveralls": "^2.11.16",
     "file-loader": "^0.10.0",
     "nyc": "^10.1.2",
     "source-map-loader": "^0.1.6",
