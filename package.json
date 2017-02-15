@@ -9,6 +9,7 @@
   "devDependencies": {
     "ava": "^0.18.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",
+    "coveralls": "^2.11.16",
     "file-loader": "^0.10.0",
     "nyc": "^10.1.2",
     "source-map-loader": "^0.1.6",
@@ -23,7 +24,8 @@
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "build": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
     "lint": "tslint --project tslint.json",
-    "test": "nyc ava",
+    "test": "tsc && nyc ava",
+    "tsc": "tsc",
     "report": "nyc report --reporter=html"
   }
 }
