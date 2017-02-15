@@ -1,5 +1,27 @@
+export interface Rule {
+    effect: RuleEffect;
+    condition: Condition;
+}
+export enum RuleEffect {
+    HIDE = <any>'HIDE',
+    SHOW = <any>'SHOW',
+    ENABLE = <any>'ENABLE',
+    DISABLE = <any>'DISABLE'
+}
+
+export interface Condition {
+    type: string; // nice to have
+}
+export interface LeafCondition extends Condition {
+    scope: {
+        $ref: string;
+    };
+    expectedValue: any;
+}
+
 export interface UISchemaElement {
   type: string;
+  rule?: Rule;
 }
 export interface Layout extends UISchemaElement {
   elements: Array<UISchemaElement>;
