@@ -19,7 +19,7 @@ export abstract class BaseControl <T extends HTMLElement>
     super();
   }
 
-  connectedCallback() {
+  protected render(): void {
     const controlElement = <ControlElement> this.uischema;
     this.createLabel(controlElement);
     this.createInput(controlElement);
@@ -28,7 +28,9 @@ export abstract class BaseControl <T extends HTMLElement>
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
   }
-
+  protected dispose(): void {
+    // Do nothing
+  }
   notify(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {

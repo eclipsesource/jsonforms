@@ -14,7 +14,10 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     super();
   }
 
-  connectedCallback() {
+  protected dispose(): void {
+    // Do nothing
+  }
+  protected render(): void {
     const controlElement = <ControlElement> this.uischema;
 
     let div = document.createElement('div');
@@ -45,7 +48,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     div.appendChild(this.detail);
 
     this.appendChild(div);
-    this.render();
+    this.renderFull();
     this.dataService.registerChangeListener(this);
   }
 
@@ -55,7 +58,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     this.render();
   }
 
-  private render() {
+  private renderFull() {
     this.renderMaster();
     const controlElement = <ControlElement> this.uischema;
     const arrayData = this.dataService.getValue(controlElement);

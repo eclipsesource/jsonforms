@@ -11,8 +11,7 @@ class VerticalLayoutRenderer extends Renderer {
   constructor() {
     super();
   }
-
-  connectedCallback(): void {
+  protected render(): void {
     const div = document.createElement('div');
     div.className = 'vertical-layout';
     (<VerticalLayout> this.uischema).elements.forEach(element => {
@@ -21,5 +20,8 @@ class VerticalLayoutRenderer extends Renderer {
       div.appendChild(bestRenderer);
     });
     this.appendChild(div);
+  }
+  protected dispose(): void {
+    // Do nothing
   }
 }
