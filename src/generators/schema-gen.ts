@@ -6,14 +6,15 @@ const RequiredProperties   = "required";
 
 type Properties = {[property: string]: JsonSchema}
 
-const distinct = (array: Array<any>, discriminator: (item: any) => any): Array<any> => {
+const distinct = (array: Array<any>, discriminator: (item: any) => string): Array<any> => {
     const known = {};
     return array.filter(item => {
         const discriminatorValue = discriminator(item);
         if (known.hasOwnProperty(discriminatorValue)) {
             return false;
         } else {
-            return (known[discriminatorValue] = true);
+            known[discriminatorValue] = true;
+            return true;
         }
     });
 };
