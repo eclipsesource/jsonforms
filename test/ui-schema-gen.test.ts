@@ -85,31 +85,6 @@ test('generate ui schema for schema with unspecified object root', t => {
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
 
-test('ignore json-schema id attributes', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            id: 'ignore me',
-            name: {
-                type: 'string'
-            }
-        }
-    };
-    const uiSchema: Layout = {
-        type: 'VerticalLayout',
-        elements: [
-            {
-                type: 'Control',
-                label: 'Name',
-                scope: {
-                    $ref: '#/properties/name'
-                }
-            } as ControlElement
-        ]
-    };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
-});
-
 test(`don't ignore non-json-schema id attributes`, t => {
     const schema = {
         type: 'object',

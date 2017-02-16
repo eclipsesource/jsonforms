@@ -13,13 +13,6 @@ const createLayout = (layoutType: string): Layout => ({
 });
 
 /**
- * Determines if the property should be ignored because it is a meta property
- */
-const isIgnoredProperty = (propertyKey: string, propertyValue: any): boolean =>
-    // could be a string (json-schema-id). Ignore in that case
-    propertyKey === 'id' && typeof propertyValue === 'string';
-
-/**
  * Derives the type of the jsonSchema element
  */
 const deriveType = (jsonSchema: any): string => {
@@ -60,7 +53,7 @@ const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string):
 };
 
 const generateUISchema =
-    (jsonSchema: any, schemaElements: UISchemaElement[],
+    (jsonSchema: JsonSchema, schemaElements: UISchemaElement[],
      currentRef: string, schemaName: string, layoutType: string): UISchemaElement => {
 
     const type = deriveType(jsonSchema);
@@ -77,10 +70,8 @@ const generateUISchema =
                 const nextRef: string = currentRef + '/properties';
                 Object.keys(jsonSchema.properties).map(propName => {
                     const value = jsonSchema.properties[propName];
-                    if (!isIgnoredProperty(propName, value)) {
-                        generateUISchema(value, layout.elements,
-                            `${nextRef}/${propName}`, propName, layoutType);
-                    }
+                    generateUISchema(value, layout.elements,
+                        `${nextRef}/${propName}`, propName, layoutType);
                 });
             }
 
