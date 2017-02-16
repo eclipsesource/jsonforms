@@ -33,6 +33,9 @@ export class JsonForms extends HTMLElement {
   }
 
   private render(): void {
+    if (!this.allowDynamicUpdate) {
+      return;
+    }
     if (this.dataService == null
         || this.uischema == null
         || this.dataschema == null) { // TODO uischema and dataschema are only now relevant
@@ -42,11 +45,9 @@ export class JsonForms extends HTMLElement {
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
-    if (this.services.length !== 0) {
-      this.services.forEach(service => service.dispose());
-      this.services = [];
-    }
 
+    this.services.forEach(service => service.dispose());
+    this.services = [];
     this.createServices();
 
     const bestRenderer = JsonFormsHolder.rendererService
@@ -58,23 +59,17 @@ export class JsonForms extends HTMLElement {
 
   set data(data: Object) {
     this.dataService = new DataService(data);
-    if (this.allowDynamicUpdate) {
-      this.render();
-    }
+    this.render();
   }
 
   set uiSchema(uischema: UISchemaElement) {
     this.uischema = uischema;
-    if (this.allowDynamicUpdate) {
-      this.render();
-    }
+    this.render();
   }
 
   set dataSchema(dataschema: JsonSchema) {
     this.dataschema = dataschema;
-    if (this.allowDynamicUpdate) {
-      this.render();
-    }
+    this.render();
   }
 
   private createServices(): void {
