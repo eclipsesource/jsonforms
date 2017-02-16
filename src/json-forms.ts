@@ -42,15 +42,18 @@ export class JsonForms extends HTMLElement {
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
-
-    if (this.services.length === 0) {
-      this.createServices();
-      this.dataService.initialRootRun();
+    if (this.services.length !== 0) {
+      this.services.forEach(service => service.dispose());
+      this.services = [];
     }
+
+    this.createServices();
 
     const bestRenderer = JsonFormsHolder.rendererService
         .getBestRenderer(this.uischema, this.dataschema, this.dataService);
     this.appendChild(bestRenderer);
+
+    this.dataService.initialRootRun();
   }
 
   set data(data: Object) {
