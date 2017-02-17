@@ -16,11 +16,15 @@ function examplesRouting($urlRouterProvider, $stateProvider) {
                     var deferred = $q.defer();
                     require.ensure([], function () {
                         // load examples module and all its dependencies
-                        var module = require('./examples.module');
+                        require('./examples.module');
+                        require('../listing/listing.module');
                         $ocLazyLoad.load([
                             {name: 'jsonforms'},
                             {name: 'jsonforms-material'},
                             {name: 'jsonforms-examples'},
+                            {name: 'listing'},
+                            {name: 'listing.listingcontroller'},
+                            {name: 'listing.listingdirective'},
                             {name: 'examples'},
                             {name: 'examples.arrayscontroller'},
                             {name: 'examples.asynccontroller'},

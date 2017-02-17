@@ -16,10 +16,14 @@ function docsRouting($urlRouterProvider, $stateProvider) {
                     var deferred = $q.defer();
                     require.ensure([], function () {
                         // load examples module and all its dependencies
-                        var module = require('./docs.module');
+                        require('./docs.module');
+                        require('../listing/listing.module');
                         $ocLazyLoad.load([
                             {name: 'jsonforms'},
                             {name: 'jsonforms-material'},
+                            {name: 'listing'},
+                            {name: 'listing.listingcontroller'},
+                            {name: 'listing.listingdirective'},
                             {name: 'docs'},
                             {name: 'docs.uischemacontroller'}]);
                         deferred.resolve();

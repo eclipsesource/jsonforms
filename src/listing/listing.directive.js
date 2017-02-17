@@ -1,4 +1,6 @@
-var app = angular.module('listing', []);
+'use strict';
+
+var app = angular.module('listing.listingdirective', []);
 
 app.provider('listingsCounter', function() {
     var counter = 0;

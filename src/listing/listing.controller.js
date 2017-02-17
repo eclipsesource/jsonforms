@@ -1,4 +1,8 @@
-angular.module('jsonforms-website').controller('ListingController', function() {
+'use strict';
+
+var module = angular.module('listing.listingcontroller',[]);
+
+module.controller('ListingController', function() {
     this.text = "my text";
     var vm = this;
     vm.schema = {

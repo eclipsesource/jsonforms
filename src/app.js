@@ -244,7 +244,6 @@ angular.module('jsonforms-website', [
     'ui.bootstrap',
     'ui.router',
     'oc.lazyLoad',
-    'listing',
     'docs.routing',
     'examples.routing'
 ]).directive('mainMenu', function() {
@@ -409,6 +408,4 @@ angular.module('jsonforms-website', [
 }]);
 
 // Our code
-require('./listing/listing.controller');
-require('./listing/listing.directive');
 require('./support/support.controller');
