@@ -221,12 +221,10 @@ require('../css/syntax.css');
 
 // Libs
 
-require('bootstrap');
 require('angular');
 require('angular-animate');
 require('angular-aria');
 require('angular-material');
-require('angular-ui-bootstrap');
 require('angular-ui-router');
 require('angular-ui-ace');
 require('prismjs');
@@ -241,7 +239,6 @@ angular.module('jsonforms-website', [
     'ngAria',
     'ngMaterial',
     'ui.ace',
-    'ui.bootstrap',
     'ui.router',
     'oc.lazyLoad',
     'docs.routing',
