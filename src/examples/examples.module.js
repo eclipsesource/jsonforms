@@ -1,5 +1,9 @@
 'use strict';
 
+require('brace');
+require('brace/mode/json');
+require('brace/ext/language_tools');
+
 require('jsonforms/dist/jsonforms.css');
 require('jsonforms/dist/jsonforms-material.css');
 
@@ -22,5 +26,5 @@ require('./person.controller');
 require('./remote-ref.controller');
 require('./rule.controller');
 
-// Dependencies are specified in router in Router
+// Dependencies are loaded in routing
 angular.module('examples', []);
