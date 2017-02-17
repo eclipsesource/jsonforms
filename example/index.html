@@ -18,10 +18,12 @@
   .tree-master li {min-height: 1em; border:1px solid;}
   .vertical-layout {display: flex; flex-direction: column;}
   .vertical-layout > * {flex: 1;}
-  .hide {display: none;}
   </style>
 </head>
 <body>
+  <div>
+    <button onclick="change()">Change</button>
+  </div>
   <script>
   var body = document.getElementsByTagName('body')[0];
   var jsonForms = document.createElement('json-forms');
@@ -124,8 +126,9 @@
       "name": "Send email to Adriana",
       "description": "Confirm if you have passed the subject\nHerby ...",
       "done": true,
-      "recurrence":"Daily"
+      "recurrence":"Never"
   };
+
 
   // var data ={};
   // //  {'name':'Bob','test':123,'bool':false,'tree':[{'name':'test1'},{'name':'test2'}]};
@@ -184,11 +187,47 @@
   //     }
   //   ]
   // };
+
+  var uischema2=
+  {
+"type": "VerticalLayout",
+"elements": [
+  {
+    "type": "Control",
+    "scope": {
+      "$ref": "#/properties/name"
+    }
+  },
+  {
+    "type": "Control",
+    "scope": {
+      "$ref": "#/properties/recurrence"
+    }
+  },
+  {
+    "type": "Control",
+    "scope": {
+      "$ref": "#/properties/recurrence_interval"
+    },
+    "rule": {
+        "effect": "HIDE",
+        "condition": {
+            "scope": {
+                "$ref": "#/properties/recurrence"
+            },
+            "expectedValue": "Never"
+        }
+    }
+  }
+]
+};
   jsonForms.data=data;
   jsonForms.uiSchema=uischema;
   jsonForms.dataSchema=dataschema;
   body.appendChild(jsonForms);
-  console.log(data);
+  function change() {
+    jsonForms.uiSchema = uischema2;
+  }
   </script>
 </body>
 </html>

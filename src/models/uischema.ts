@@ -10,7 +10,7 @@ export enum RuleEffect {
 }
 
 export interface Condition {
-    type: string; // nice to have
+    type: string; // TODO needed?
 }
 export interface LeafCondition extends Condition {
     scope: {

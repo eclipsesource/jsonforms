@@ -52,12 +52,6 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
   protected dataSchema: JsonSchema;
   setUiSchema(uischema: UISchemaElement) {
     this.uischema = uischema;
-    if (!this.uischema.hasOwnProperty('runtime')) {
-      const runtime = new Runtime();
-      this.uischema['runtime'] = runtime;
-    }
-    const runtime = <Runtime>uischema['runtime'];
-    runtime.addListener(this);
   }
 
   setDataService(dataService: DataService) {
@@ -71,6 +65,24 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
   notify(type: RUNTIME_TYPE): void {
     //
   }
+
+  connectedCallback(): void {
+    if (!this.uischema.hasOwnProperty('runtime')) {
+      const runtime = new Runtime();
+      this.uischema['runtime'] = runtime;
+    }
+    const runtime = <Runtime>this.uischema['runtime'];
+    runtime.addListener(this);
+    this.render();
+  }
+  disconnectedCallback(): void {
+    this.dispose();
+    const runtime = <Runtime>this.uischema['runtime'];
+    runtime.removeListener(this);
+  }
+
+  protected abstract render(): void;
+  protected abstract dispose(): void;
 }
 export interface RendererTester {
     (element: UISchemaElement, schema: JsonSchema): number;

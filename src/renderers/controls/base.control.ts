@@ -19,7 +19,7 @@ export abstract class BaseControl <T extends HTMLElement>
     super();
   }
 
-  connectedCallback() {
+  protected render(): void {
     const controlElement = <ControlElement> this.uischema;
     this.createLabel(controlElement);
     this.createInput(controlElement);
@@ -28,18 +28,24 @@ export abstract class BaseControl <T extends HTMLElement>
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
   }
-
+  protected dispose(): void {
+    // Do nothing
+  }
   notify(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
       case RUNTIME_TYPE.VALIDATION_ERROR:
-        if (!this.errorElement) {
-          break;
-        }
         this.errorElement.textContent = BaseControl.formatErrorMessage(runtime.validationErrors);
         break;
       case RUNTIME_TYPE.VISIBLE:
-        this.classList.toggle('hide', !runtime.visible);
+        this.hidden = !runtime.visible;
+        break;
+      case RUNTIME_TYPE.ENABLED:
+        if (!runtime.enabled) {
+          this.input.setAttribute('disabled', 'true');
+        } else {
+          this.input.removeAttribute('disabled');
+        }
         break;
     }
   }

@@ -12,7 +12,7 @@ const CustomElement = (config: CustomElementConfig) => (cls) =>
   selector: 'json-forms'
 })
 export class JsonForms extends HTMLElement {
-
+  private allowDynamicUpdate = false;
   private dataService: DataService;
   private uischema: UISchemaElement;
   private dataschema: JsonSchema;
@@ -23,14 +23,19 @@ export class JsonForms extends HTMLElement {
   }
 
   connectedCallback(): void {
-      this.render();
+    this.allowDynamicUpdate = true;
+    this.render();
   }
 
   disconnectedCallback(): void {
+    this.allowDynamicUpdate = false;
     this.services.forEach(service => service.dispose());
   }
 
   private render(): void {
+    if (!this.allowDynamicUpdate) {
+      return;
+    }
     if (this.dataService == null
         || this.uischema == null
         || this.dataschema == null) { // TODO uischema and dataschema are only now relevant
@@ -41,14 +46,15 @@ export class JsonForms extends HTMLElement {
       this.removeChild(this.lastChild);
     }
 
-    if (this.services.length === 0) {
-      this.createServices();
-      this.dataService.initialRootRun();
-    }
+    this.services.forEach(service => service.dispose());
+    this.services = [];
+    this.createServices();
 
     const bestRenderer = JsonFormsHolder.rendererService
         .getBestRenderer(this.uischema, this.dataschema, this.dataService);
     this.appendChild(bestRenderer);
+
+    this.dataService.initialRootRun();
   }
 
   set data(data: Object) {

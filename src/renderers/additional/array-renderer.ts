@@ -13,18 +13,17 @@ class ArrayControlRenderer extends Renderer implements DataChangeListener {
     super();
   }
 
-  connectedCallback() {
-    this.render();
-    this.dataService.registerChangeListener(this);
-  }
-
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
 
-  private render() {
+  protected dispose(): void {
+    // Do nothing
+  }
+  protected render(): void {
+    this.dataService.registerChangeListener(this);
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
@@ -92,18 +91,17 @@ class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
     super();
   }
 
-  connectedCallback() {
-    this.render();
-    this.dataService.registerChangeListener(this);
-  }
-
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
 
-  private render() {
+  protected dispose(): void {
+    // Do nothing
+  }
+  protected render(): void {
+    this.dataService.registerChangeListener(this);
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
