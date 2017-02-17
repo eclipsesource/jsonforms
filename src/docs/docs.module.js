@@ -1,5 +1,9 @@
 'use strict';
 
+require('prismjs');
+require('prismjs/components/prism-typescript');
+require('prismjs/themes/prism.css');
+
 require('jsonforms/dist/jsonforms.css');
 require('jsonforms/dist/jsonforms-material.css');
 

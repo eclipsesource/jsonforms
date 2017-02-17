@@ -215,20 +215,15 @@ DynamicData.uiSchema = {
 
 // CSS
 require('angular-material/angular-material.min.css');
-require('prismjs/themes/prism.css');
 require('../css/main.css');
 require('../css/syntax.css');
 
 // Libs
-
 require('angular');
 require('angular-animate');
 require('angular-aria');
 require('angular-material');
 require('angular-ui-router');
-require('angular-ui-ace');
-require('prismjs');
-require('prismjs/components/prism-typescript');
 
 require('oclazyload');
 require('./examples/examples.routing');
@@ -238,7 +233,6 @@ angular.module('jsonforms-website', [
     'ngAnimate',
     'ngAria',
     'ngMaterial',
-    'ui.ace',
     'ui.router',
     'oc.lazyLoad',
     'docs.routing',

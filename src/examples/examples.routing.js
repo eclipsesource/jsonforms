@@ -19,6 +19,7 @@ function examplesRouting($urlRouterProvider, $stateProvider) {
                         require('./examples.module');
                         require('../listing/listing.module');
                         $ocLazyLoad.load([
+                            {name: 'ui.ace'},
                             {name: 'jsonforms'},
                             {name: 'jsonforms-material'},
                             {name: 'jsonforms-examples'},
