@@ -68,4 +68,8 @@ class JsonFormsRuleService implements DataChangeListener, JsonFormService {
         uischema => this.evaluate(uischema, data))
       );
   }
+
+  schemaChanged(dataSchema: JsonSchema) {
+
+  }
 }

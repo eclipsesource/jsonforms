@@ -2,15 +2,22 @@ import { UISchemaElement, ControlElement, VerticalLayout } from '../../models/ui
 import { JsonForms } from '../../json-forms';
 import { Renderer, DataChangeListener, DataService, JsonFormsHolder } from '../../core';
 import { JsonFormsRenderer } from '../renderer.util';
+import { resolveSchema } from "../../path.util";
+import { generateDefaultUISchema } from "../../generators/ui-schema-gen";
 
 @JsonFormsRenderer({
-  selector: 'jsonforms-array',
-  tester: (uischema: UISchemaElement) => uischema.type === 'ArrayControl' ? 1 : -1
+  selector: 'jsonforms-array2',
+  tester: (uischema: UISchemaElement) => uischema.type === 'ArrayControl2' ? 1 : -1
 })
-class ArrayControlRenderer extends Renderer implements DataChangeListener {
+class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
 
   constructor() {
     super();
+  }
+
+  connectedCallback() {
+    this.render();
+    this.dataService.registerChangeListener(this);
   }
 
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
@@ -83,12 +90,18 @@ class ArrayControlRenderer extends Renderer implements DataChangeListener {
 }
 
 @JsonFormsRenderer({
-  selector: 'jsonforms-array2',
-  tester: (uischema: UISchemaElement) => uischema.type === 'ArrayControl2' ? 1 : -1
+  selector: 'jsonforms-array',
+  tester: (uischema: UISchemaElement) => uischema.type === 'ArrayControl' ? 1 : -1
 })
-class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
+class ArrayControlRenderer extends Renderer implements DataChangeListener {
+
   constructor() {
     super();
+  }
+
+  connectedCallback() {
+    this.render();
+    this.dataService.registerChangeListener(this);
   }
 
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
@@ -115,35 +128,21 @@ class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
 
     const content = document.createElement('div');
     let arrayData = this.dataService.getValue(controlElement);
+    const renderChild = (element) => {
+      const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + "/items");
+      const innerDataSchema = resolvedSchema;
+      const innerUiSchema = generateDefaultUISchema(resolvedSchema);
+      let lastRenderer = JsonFormsHolder.rendererService
+          .getBestRenderer(innerUiSchema, innerDataSchema, new DataService(element));
+      content.appendChild(lastRenderer);
+
+      return innerUiSchema;
+    };
 
     if (arrayData !== undefined) {
-      arrayData.forEach(element => {
-        let innerUiSchema = <VerticalLayout>{
-          'type': 'VerticalLayout',
-          'elements': [
-            <ControlElement>{
-              'type': 'Control',
-              'label': 'Name',
-              'scope': {
-                '$ref': '#/properties/name'
-              }
-            }
-          ]
-        };
-        let innerDataSchema = {
-          'type': 'object',
-          'properties': {
-            'name': {
-              'type' : 'string',
-              'minLength': 5
-            }
-          }
-        };
-        // TODO create sub DataService from existing
-        let lastRenderer = JsonFormsHolder.rendererService
-            .getBestRenderer(innerUiSchema, innerDataSchema, new DataService(element));
-        content.appendChild(lastRenderer);
-      });
+      const uiElements = [];
+      arrayData.forEach(element => uiElements.push(renderChild(element)));
+      controlElement['elements'] = uiElements;
     }
     div.appendChild(content);
 
@@ -153,9 +152,13 @@ class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
       if (arrayData === undefined) {
         arrayData = [];
       }
-      arrayData.push({});
+      const element = {};
+      arrayData.push(element);
+      const renderedChild = renderChild(element);
+      controlElement['elements'].push(renderedChild);
       this.dataService.notifyChange(controlElement, arrayData);
     };
+
     div.appendChild(button);
     this.appendChild(div);
   }

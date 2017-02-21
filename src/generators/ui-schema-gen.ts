@@ -124,7 +124,7 @@ export const startCase = (label: string): string =>
         .map(token => token.charAt(0).toUpperCase() + token.slice(1))
         .join(" ");
 
-const generateDefaultUISchema = (jsonSchema: JsonSchema, layoutType = 'VerticalLayout'): UISchemaElement =>
+export const generateDefaultUISchema = (jsonSchema: JsonSchema, layoutType = 'VerticalLayout'): UISchemaElement =>
     wrapInLayoutIfNecessary(
         generateUISchema(jsonSchema, [], '#', '', layoutType),
         layoutType);
