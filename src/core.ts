@@ -81,8 +81,8 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
     runtime.removeListener(this);
   }
 
-  protected abstract render(): void;
-  protected abstract dispose(): void;
+  abstract render(): HTMLElement;
+  abstract dispose(): void;
 }
 export interface RendererTester {
     (element: UISchemaElement, schema: JsonSchema): number;

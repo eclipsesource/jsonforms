@@ -6,6 +6,8 @@ import { toDataPath } from '../path.util';
 
 import * as AJV from 'ajv';
 
+const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
+
 @JsonFormsServiceElement({})
 class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
@@ -14,14 +16,20 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
     dataService.registerChangeListener(this);
-    const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
     this.validator = ajv.compile(dataSchema);
     this.parseUiSchema(uiSchema);
   }
 
   isRelevantKey = (_: ControlElement): boolean => true;
 
+  schemaChanged(dataSchema: JsonSchema) {
+    this.validator = ajv.compile(dataSchema);
+  }
+
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+    if (uischema != null) {
+      this.parseUiSchema(uischema);
+    }
     this.validate(data);
   }
 
@@ -29,12 +37,21 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     this.dataService.unregisterChangeListener(this);
   }
 
-  private  parseUiSchema(uiSchema: UISchemaElement): void {
+  private parseUiSchema(uiSchema: UISchemaElement, prefix: string = ""): void {
     if (uiSchema.hasOwnProperty('elements')) {
-      (<Layout>uiSchema).elements.forEach(element => this.parseUiSchema(element));
+      const hasScope = uiSchema['scope'] && uiSchema['scope']['$ref'];
+
+      if (hasScope) {
+        const instancePath = (prefix === "" ? "" : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
+        (<Layout>uiSchema).elements.forEach((element, index) => this.parseUiSchema(element, `${instancePath}/${index}`));
+      } else {
+        (<Layout>uiSchema).elements.forEach((element, index) => this.parseUiSchema(element, prefix));
+      }
+
     } else if (uiSchema.hasOwnProperty('scope')) {
       const control = <ControlElement> uiSchema;
-      this.pathToControlMap[toDataPath(control.scope.$ref)] = control;
+      const instancePath = (prefix === "" ? "" : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
+      this.pathToControlMap[instancePath] = control;
     }
   }
 
@@ -50,6 +67,13 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   private mapErrorToControl(error: AJV.ErrorObject): void {
     const uiSchema = this.pathToControlMap[error.dataPath.substring(1)];
+
+    if (uiSchema === undefined) {
+      // TODO: where should we display this?
+      console.warn("No control for showing validation error @", error.dataPath.substring(1));
+      return;
+    }
+
     if (!uiSchema.hasOwnProperty('runtime')) {
       uiSchema['runtime'] = new Runtime();
     }

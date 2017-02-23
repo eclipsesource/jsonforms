@@ -26,10 +26,10 @@ class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
     this.render();
   }
 
-  protected dispose(): void {
+  dispose(): void {
     // Do nothing
   }
-  protected render(): void {
+  render(): HTMLElement {
     this.dataService.registerChangeListener(this);
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
@@ -86,14 +86,16 @@ class ArrayControlRenderer2 extends Renderer implements DataChangeListener {
 
     div.appendChild(button);
     this.appendChild(div);
+    return this;
   }
 }
+
 
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
   tester: (uischema: UISchemaElement) => uischema.type === 'ArrayControl' ? 1 : -1
 })
-class ArrayControlRenderer extends Renderer implements DataChangeListener {
+export class ArrayControlRenderer extends Renderer implements DataChangeListener {
 
   constructor() {
     super();
@@ -110,10 +112,10 @@ class ArrayControlRenderer extends Renderer implements DataChangeListener {
     this.render();
   }
 
-  protected dispose(): void {
+  dispose(): void {
     // Do nothing
   }
-  protected render(): void {
+  render(): HTMLElement {
     this.dataService.registerChangeListener(this);
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
@@ -155,11 +157,15 @@ class ArrayControlRenderer extends Renderer implements DataChangeListener {
       const element = {};
       arrayData.push(element);
       const renderedChild = renderChild(element);
+      if (controlElement['elements'] == undefined) {
+        controlElement['elements'] = [];
+      }
       controlElement['elements'].push(renderedChild);
       this.dataService.notifyChange(controlElement, arrayData);
     };
 
     div.appendChild(button);
     this.appendChild(div);
+    return this;
   }
 }

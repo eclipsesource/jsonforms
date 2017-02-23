@@ -8,13 +8,13 @@ interface CustomElementConfig {
   selector: string;
 }
 const CustomElement = (config: CustomElementConfig) => (cls) =>
-  window.customElements.define(config.selector, cls);
+    customElements.define(config.selector, cls);
 
 @CustomElement({
   selector: 'json-forms'
 })
 export class JsonForms extends HTMLElement {
-
+  private allowDynamicUpdate = false;
   private dataService: DataService;
   private uischema: UISchemaElement;
   private dataschema: JsonSchema;

@@ -14,10 +14,10 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     super();
   }
 
-  protected dispose(): void {
+  dispose(): void {
     // Do nothing
   }
-  protected render(): void {
+  render(): HTMLElement {
     const controlElement = <ControlElement> this.uischema;
 
     let div = document.createElement('div');
@@ -50,6 +50,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     this.appendChild(div);
     this.renderFull();
     this.dataService.registerChangeListener(this);
+    return this;
   }
 
   isRelevantKey = (uischema: ControlElement) => this.uischema === uischema;
