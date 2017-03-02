@@ -43,12 +43,16 @@ export const generateJsonSchemaWithOptions = (options: any) => (instance: Object
 
         schemaObject = (instance: Object): JsonSchema  => {
             const props = this.properties(instance, options);
-            return {
+            const schema: JsonSchema = {
                 'type': 'object',
                 'properties': props,
-                'additionalProperties': findOption(props)(AdditionalProperties),
-                'required': findOption(props)(RequiredProperties)
-            } as JsonSchema;
+                'additionalProperties': findOption(props)(AdditionalProperties)
+            };
+            const required = findOption(props)(RequiredProperties);
+            if (required.lenght > 0) {
+                schema['required'] = required;
+            }
+            return schema;
         };
 
         properties = (instance: Object, options: any) : Properties =>
