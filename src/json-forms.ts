@@ -15,11 +15,11 @@ const CustomElement = (config: CustomElementConfig) => (cls) =>
 })
 export class JsonForms extends HTMLElement {
   private allowDynamicUpdate = false;
-  private dataService: DataService;
-  private uischema: UISchemaElement;
-  private dataschema: JsonSchema;
+  dataService: DataService;
+  uischema: UISchemaElement;
+  dataschema: JsonSchema;
   private services: Array<JsonFormService> = [];
-  private dataObject: any;
+  dataObject: any;
 
   constructor() {
     super();
@@ -44,13 +44,14 @@ export class JsonForms extends HTMLElement {
       this.removeChild(this.lastChild);
     }
 
-    if (this.services.length === 0) {
-      this.createServices();
-      this.dataService.initialRootRun();
-    }
+    this.services.forEach(service => service.dispose());
+    this.services = [];
+    const schema = this.dataSchema;
+    const uiSchema = this.uiSchema;
+    this.createServices(uiSchema, schema);
 
     const bestRenderer = JsonFormsHolder.rendererService
-        .getBestRenderer(this.uiSchema, this.dataSchema, this.dataService);
+        .getBestRenderer(uiSchema, schema, this.dataService);
     this.appendChild(bestRenderer);
   }
 
@@ -67,9 +68,6 @@ export class JsonForms extends HTMLElement {
 
   set dataSchema(dataschema: JsonSchema) {
     this.dataschema = dataschema;
-    this.services.forEach(service =>
-        service.schemaChanged(dataschema)
-    );
     this.render();
   }
 
@@ -87,9 +85,9 @@ export class JsonForms extends HTMLElement {
     return generateDefaultUISchema(this.dataSchema);
   }
 
-  private createServices(): void {
+  private createServices(uiSchema, dataSchema): void {
     JsonFormsHolder.jsonFormsServices.forEach(service =>
-        this.services.push(new service(this.dataService, this.dataSchema, this.uiSchema))
+        this.services.push(new service(this.dataService, dataSchema, uiSchema))
     );
   }
 }

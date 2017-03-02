@@ -157,7 +157,6 @@ export class DataService {
 
 export interface JsonFormService {
   dispose(): void;
-  schemaChanged(dataSchema: JsonSchema);
 }
 interface JsonFormsServiceConstructable {
   new(dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
