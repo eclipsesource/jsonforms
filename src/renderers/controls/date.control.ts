@@ -20,6 +20,7 @@ import { resolveSchema } from '../../path.util';
 class DateControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {
     input.type = 'date';
+    input.classList.add('form-control');
   }
   protected get valueProperty(): string {
     return 'valueAsDate';

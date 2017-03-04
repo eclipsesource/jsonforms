@@ -11,7 +11,7 @@ import { JsonFormsRenderer } from '../renderer.util';
 })
 class TextAreaControl extends BaseControl<HTMLTextAreaElement> {
   protected configureInput(input: HTMLTextAreaElement): void {
-    // Do nothing
+    input.classList.add('form-control');
   }
   protected get valueProperty(): string {
     return 'value';

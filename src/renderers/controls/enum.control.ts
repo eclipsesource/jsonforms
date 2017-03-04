@@ -20,6 +20,7 @@ class EnumControl extends BaseControl<HTMLSelectElement> {
       option.label = optionValue;
       input.appendChild(option);
     });
+    input.classList.add('form-control');
   }
   protected get valueProperty(): string {
     return 'value';
