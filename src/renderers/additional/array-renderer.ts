@@ -18,6 +18,9 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
   connectedCallback() {
     this.render();
     this.dataService.registerChangeListener(this);
+    if (typeof controlElement.label === 'string') {
+    label.textContent = controlElement.label;
+    }
   }
 
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
@@ -38,7 +41,9 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     div.className = 'array-layout';
 
     const label = document.createElement('label');
-    label.textContent = controlElement.label;
+    if (typeof controlElement.label === 'string') {
+      label.textContent = controlElement.label;
+    }
     div.appendChild(label);
 
     const content = document.createElement('div');

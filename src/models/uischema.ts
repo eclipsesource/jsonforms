@@ -29,8 +29,12 @@ export interface Layout extends UISchemaElement {
 }
 export interface VerticalLayout extends Layout {
 }
+export interface ILabelObject {
+    text?: string;
+    show?: boolean;
+}
 export interface ControlElement extends UISchemaElement {
-  label: string;
+  label?: string | boolean | ILabelObject;
   scope: {
     $ref: string;
   };
