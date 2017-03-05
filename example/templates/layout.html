@@ -1,0 +1,166 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>VerticalLayout</strong>
+    </div>
+    <div class="panel-body" id="example-layout-vertical">
+    </div>
+    <div class="panel-heading">
+        <strong>HorizontalLayout</strong>
+    </div>
+    <div class="panel-body" id="example-layout-horizontal">
+    </div>
+    <div class="panel-heading">
+        <strong>Group</strong>
+    </div>
+    <div class="panel-body" id="example-layout-group">
+    </div>
+    <div class="panel-heading">
+        <strong>Complex example</strong>
+    </div>
+    <div class="panel-body" id="example-layout-complex">
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>
+<script>
+var layouts_schema=
+    {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string'
+        },
+        'birthDate': {
+          'type': 'string',
+          'format': 'date'
+        }
+      }
+    };
+  var layouts_uischema_vertical=
+    {
+      'type': 'VerticalLayout',
+      'elements': [
+        {
+          'type': 'Control',
+          'label': 'Name',
+          'scope': {
+            '$ref': '#/properties/name'
+          }
+        },
+        {
+          'type': 'Control',
+          'label': 'Birth Date',
+          'scope': {
+            '$ref': '#/properties/birthDate'
+          }
+        }
+      ]
+    };
+  var layouts_uischema_horizontal=
+    {
+      'type': 'HorizontalLayout',
+      'elements': [
+        {
+          'type': 'Control',
+          'label': 'Name',
+          'scope': {
+            '$ref': '#/properties/name'
+          }
+        },
+        {
+          'type': 'Control',
+          'label': 'Birth Date',
+          'scope': {
+            '$ref': '#/properties/birthDate'
+          }
+        }
+      ]
+    };
+  var layouts_uischema_group=
+    {
+      'type': 'Group',
+      'label': 'My Group',
+      'elements': [
+        {
+          'type': 'Control',
+          'label': 'Name',
+          'scope': {
+            '$ref': '#/properties/name'
+          }
+        },
+        {
+          'type': 'Control',
+          'label': 'Birth Date',
+          'scope': {
+            '$ref': '#/properties/birthDate'
+          }
+        }
+      ]
+    };
+  var layouts_uischema_complex=
+    {
+      'type': 'Group',
+      'label': 'My Group',
+      'elements': [
+        {
+          'type': 'HorizontalLayout',
+          'elements': [
+            {
+              'type': 'VerticalLayout',
+              'elements': [
+                {
+                  'type': 'Control',
+                  'label': 'Name',
+                  'scope': {
+                    '$ref': '#/properties/name'
+                  }
+                },
+                {
+                  'type': 'Control',
+                  'label': 'Birth Date',
+                  'scope': {
+                    '$ref': '#/properties/birthDate'
+                  }
+                }
+              ]
+            },
+            {
+              'type': 'VerticalLayout',
+              'elements': [
+                {
+                  'type': 'Control',
+                  'label': 'Name',
+                  'scope': {
+                    '$ref': '#/properties/name'
+                  }
+                },
+                {
+                  'type': 'Control',
+                  'label': 'Birth Date',
+                  'scope': {
+                    '$ref': '#/properties/birthDate'
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  var layouts_data=
+    {
+      name: 'John Doe',
+      birthDate: '1985-06-02'
+    };
+addJsonForms('example-layout-vertical', layouts_data, layouts_schema, layouts_uischema_vertical);
+addJsonForms('example-layout-horizontal', layouts_data, layouts_schema, layouts_uischema_horizontal);
+addJsonForms('example-layout-group', layouts_data, layouts_schema, layouts_uischema_group);
+addJsonForms('example-layout-complex', layouts_data, layouts_schema, layouts_uischema_complex);
+</script>

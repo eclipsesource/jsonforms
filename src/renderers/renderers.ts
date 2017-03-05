@@ -6,5 +6,6 @@ import './controls/date.control';
 import './controls/enum.control';
 import './controls/textarea.control';
 import './layouts/vertical.layout';
+import './layouts/horizontal.layout';
 import './additional/array-renderer';
 import './additional/tree-renderer';

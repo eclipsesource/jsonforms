@@ -1,0 +1,79 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Basic controls</strong>
+        <div>The Nationality value "DE" is the trigger for rules.</div>
+    </div>
+    <div class="panel-body" id="example-rule">
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>
+<script>
+var rule_schema=
+   {
+     'type': 'object',
+     'properties': {
+       'name': {
+         'type': 'string'
+       },
+       'alive': {
+         'type': 'boolean'
+       },
+       'kindOfDead': {
+         'type': 'string',
+         'enum': ['Zombie', 'Vampire', 'Ghoul']
+       }
+     }
+   };
+ var rule_uischema=
+   {
+     'type': 'HorizontalLayout',
+     'elements': [
+       {
+         'type': 'Control',
+         'label': 'Name',
+         'scope': {
+           '$ref': '#/properties/name'
+         }
+       },
+       {
+         'type': 'Control',
+         'label': 'Is Alive?',
+         'scope': {
+           '$ref': '#/properties/alive'
+         }
+       },
+       {
+         'type': 'Control',
+         'label': 'Kind of dead',
+         'scope': {
+           '$ref': '#/properties/kindOfDead'
+         },
+         'rule': {
+           'effect': 'SHOW',
+           'condition': {
+             'type': 'LEAF' ,
+             'scope': {
+               '$ref': '#/properties/alive'
+             },
+             'expectedValue': false
+           }
+         }
+       }
+     ]
+   };
+ var rule_data=
+ {
+   name: 'John Doe',
+   alive: true,
+   kindOfDead: 'Zombie'
+ };
+addJsonForms('example-rule', rule_data, rule_schema, rule_uischema);
+</script>
