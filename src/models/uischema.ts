@@ -22,6 +22,7 @@ export interface LeafCondition extends Condition {
 export interface UISchemaElement {
   type: string;
   rule?: Rule;
+  options?: any;
 }
 export interface Layout extends UISchemaElement {
   elements: Array<UISchemaElement>;

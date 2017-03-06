@@ -4,6 +4,7 @@ import './controls/integer.control';
 import './controls/number.control';
 import './controls/date.control';
 import './controls/enum.control';
+import './controls/textarea.control';
 import './layouts/vertical.layout';
 import './additional/array-renderer';
 import './additional/tree-renderer';
