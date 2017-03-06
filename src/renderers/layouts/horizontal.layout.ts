@@ -11,7 +11,7 @@ class HorizontalLayoutRenderer extends Renderer {
   constructor() {
     super();
   }
-  protected render(): void {
+  render(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'horizontal-layout';
     (<HorizontalLayout> this.uischema).elements.forEach(element => {
@@ -20,8 +20,9 @@ class HorizontalLayoutRenderer extends Renderer {
       div.appendChild(bestRenderer);
     });
     this.appendChild(div);
+    return this;
   }
-  protected dispose(): void {
+  dispose(): void {
     // Do nothing
   }
 }
