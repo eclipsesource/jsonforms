@@ -24,7 +24,9 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     div.className = 'tree-layout';
 
     const label = document.createElement('label');
-    label.textContent = controlElement.label;
+    if (typeof controlElement.label === 'string') {
+      label.textContent = controlElement.label;
+    }
     this.appendChild(label);
     const button = document.createElement('button');
     button.textContent = 'Add me';

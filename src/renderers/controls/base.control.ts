@@ -1,5 +1,6 @@
 import { ControlElement } from '../../models/uischema';
 import { Renderer, Runtime, RUNTIME_TYPE, DataChangeListener } from '../../core';
+import {getElementLabelObject} from '../label.util';
 
 export abstract class BaseControl <T extends HTMLElement>
   extends Renderer implements DataChangeListener {
@@ -73,7 +74,10 @@ export abstract class BaseControl <T extends HTMLElement>
 
   private createLabel(controlElement: ControlElement): void {
     this.label = document.createElement('label');
-    this.label.textContent = controlElement.label;
+    const labelObject = getElementLabelObject(controlElement);
+    if (labelObject.show) {
+      this.label.textContent = labelObject.text;
+    }
   }
 
   private createInput(controlElement: ControlElement): void {
