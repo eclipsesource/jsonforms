@@ -49,7 +49,7 @@ export const generateJsonSchemaWithOptions = (options: any) => (instance: Object
                 'additionalProperties': findOption(props)(AdditionalProperties)
             };
             const required = findOption(props)(RequiredProperties);
-            if (required.lenght > 0) {
+            if (required.length > 0) {
                 schema['required'] = required;
             }
             return schema;

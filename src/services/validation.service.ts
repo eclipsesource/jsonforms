@@ -22,10 +22,6 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   isRelevantKey = (_: ControlElement): boolean => true;
 
-  schemaChanged(dataSchema: JsonSchema) {
-    this.validator = ajv.compile(dataSchema);
-  }
-
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     if (uischema != null) {
       this.parseUiSchema(uischema);
