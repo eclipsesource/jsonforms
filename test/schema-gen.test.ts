@@ -74,7 +74,14 @@ test('schema generation with options ', t => {
     };
     const schema = generateJsonSchemaWithOptions({
         "additionalProperties": false,
-        "required": (props: string[]) => []
+        "required": (props: string[]) => {
+            const keys = Object.keys(props);
+            if (props !== undefined && keys.length) {
+                return [keys[0]];
+            } else {
+                return [];
+            }
+        }
     })(instance);
 
     t.deepEqual(schema, {
@@ -91,10 +98,10 @@ test('schema generation with options ', t => {
                     }
                 },
                 "additionalProperties": false,
-                "required": []
+                "required": ["streetAddress"]
             }
         },
         "additionalProperties": false,
-        "required": []
+        "required": ["address"]
     } as JsonSchema);
 });

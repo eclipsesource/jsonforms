@@ -10,7 +10,10 @@
     "ava": "^0.18.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "coveralls": "^2.11.16",
+    "document-register-element": "^1.4.1",
     "file-loader": "^0.10.0",
+    "jsdom": "^9.11.0",
+    "jsdom-global": "2.1.1",
     "nyc": "^10.1.2",
     "source-map-loader": "^0.1.6",
     "tslint": "^4.4.2",
@@ -24,8 +27,9 @@
     "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "build": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
     "lint": "tslint --project tslint.json",
-    "test": "tsc && nyc ava",
+    "test": "tsc && nyc ava ",
     "tsc": "tsc",
     "report": "nyc report --reporter=html"
-  }
+  },
+  "main": "dist/jsonforms.js"
 }

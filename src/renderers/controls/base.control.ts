@@ -19,7 +19,7 @@ export abstract class BaseControl <T extends HTMLElement>
     super();
   }
 
-  protected render(): void {
+  render(): HTMLElement {
     const controlElement = <ControlElement> this.uischema;
     this.createLabel(controlElement);
     this.createInput(controlElement);
@@ -28,8 +28,9 @@ export abstract class BaseControl <T extends HTMLElement>
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
     this.classList.add('control');
+    return this;
   }
-  protected dispose(): void {
+  dispose(): void {
     // Do nothing
   }
   notify(type: RUNTIME_TYPE): void {

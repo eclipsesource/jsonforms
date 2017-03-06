@@ -1,22 +1,25 @@
 import { UISchemaElement } from './models/uischema';
 import { DataService, JsonFormService, JsonFormsHolder } from './core';
 import { JsonSchema } from './models/jsonSchema';
+import { generateDefaultUISchema } from './generators/ui-schema-gen';
+import { generateJsonSchema } from './generators/schema-gen';
 
 interface CustomElementConfig {
   selector: string;
 }
 const CustomElement = (config: CustomElementConfig) => (cls) =>
-  window.customElements.define(config.selector, cls);
+    customElements.define(config.selector, cls);
 
 @CustomElement({
   selector: 'json-forms'
 })
 export class JsonForms extends HTMLElement {
   private allowDynamicUpdate = false;
-  private dataService: DataService;
-  private uischema: UISchemaElement;
-  private dataschema: JsonSchema;
+  dataService: DataService;
+  uischema: UISchemaElement;
+  dataschema: JsonSchema;
   private services: Array<JsonFormService> = [];
+  dataObject: any;
 
   constructor() {
     super();
@@ -28,17 +31,12 @@ export class JsonForms extends HTMLElement {
   }
 
   disconnectedCallback(): void {
-    this.allowDynamicUpdate = false;
     this.services.forEach(service => service.dispose());
   }
 
   private render(): void {
-    if (!this.allowDynamicUpdate) {
-      return;
-    }
-    if (this.dataService == null
-        || this.uischema == null
-        || this.dataschema == null) { // TODO uischema and dataschema are only now relevant
+
+    if (this.dataObject == null || this.dataService == null) {
       return;
     }
 
@@ -48,16 +46,17 @@ export class JsonForms extends HTMLElement {
 
     this.services.forEach(service => service.dispose());
     this.services = [];
-    this.createServices();
+    const schema = this.dataSchema;
+    const uiSchema = this.uiSchema;
+    this.createServices(uiSchema, schema);
 
     const bestRenderer = JsonFormsHolder.rendererService
-        .getBestRenderer(this.uischema, this.dataschema, this.dataService);
+        .getBestRenderer(uiSchema, schema, this.dataService);
     this.appendChild(bestRenderer);
-
-    this.dataService.initialRootRun();
   }
 
   set data(data: Object) {
+    this.dataObject = data;
     this.dataService = new DataService(data);
     this.render();
   }
@@ -72,9 +71,23 @@ export class JsonForms extends HTMLElement {
     this.render();
   }
 
-  private createServices(): void {
+  get dataSchema() {
+    if (this.dataschema) {
+      return this.dataschema;
+    }
+    return generateJsonSchema(this.dataObject);
+  }
+
+  get uiSchema() {
+    if (this.uischema) {
+      return this.uischema;
+    }
+    return generateDefaultUISchema(this.dataSchema);
+  }
+
+  private createServices(uiSchema, dataSchema): void {
     JsonFormsHolder.jsonFormsServices.forEach(service =>
-        this.services.push(new service(this.dataService, this.dataschema, this.uischema))
+        this.services.push(new service(this.dataService, dataSchema, uiSchema))
     );
   }
 }

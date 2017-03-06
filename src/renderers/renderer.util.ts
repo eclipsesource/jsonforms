@@ -10,6 +10,6 @@ interface JsonFormsRendererConstructable {
 export const JsonFormsRenderer =
     (config: JsonFormsRendererConfig) =>
     (cls: JsonFormsRendererConstructable) => {
-  window.customElements.define(config.selector, cls);
+    customElements.define(config.selector, cls);
   JsonFormsHolder.rendererService.registerRenderer(config.tester, config.selector);
 };
