@@ -8,7 +8,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- <link rel="icon" type="image/x-icon" href="favicon.ico"> -->
   <script src="native-shim.js"></script>
-  <script src="example-data.js"></script>
   <!-- <script src="dist/json-forms.js"></script> -->
   <script src="assets/bundle.js"></script>
   <style>
@@ -53,11 +52,9 @@
     div.appendChild(clone);
     if(body.firstChild) {
       body.removeChild(body.firstChild);
-
-
-
+    }
     body.appendChild(div);
-            }
+  }
   function addJsonForms(parentId, data, dataschema, uischema){
     var parent = document.getElementById(parentId);
     var jsonForms = document.createElement('json-forms');
