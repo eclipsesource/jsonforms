@@ -18,9 +18,6 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
   connectedCallback() {
     this.render();
     this.dataService.registerChangeListener(this);
-    if (typeof controlElement.label === 'string') {
-    label.textContent = controlElement.label;
-    }
   }
 
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
