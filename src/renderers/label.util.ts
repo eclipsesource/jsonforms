@@ -8,29 +8,29 @@ class LabelObject implements ILabelObject {
         this.show = show;
     }
 }
-const extractLabel = (controlElement: ControlElement): string => {
+const deriveLabel = (controlElement: ControlElement): string => {
   const ref = controlElement.scope.$ref;
   const label = ref.substr(ref.lastIndexOf('/') + 1);
-  return label.substr(0, 1).toUpperCase() + label.substr(1);
+  return label.charAt(0).toUpperCase() + label.substr(1);
 };
 
 export const getElementLabelObject = (withLabel: ControlElement): ILabelObject => {
-    let labelProperty = withLabel.label;
+    const labelProperty = withLabel.label;
     if (typeof labelProperty === 'boolean') {
         if (labelProperty) {
             return new LabelObject(
-                extractLabel(withLabel), labelProperty);
+                deriveLabel(withLabel), labelProperty);
         } else {
             return new LabelObject(undefined, <boolean>labelProperty);
         }
     } else if (typeof labelProperty === 'string') {
         return new LabelObject(<string>labelProperty, true);
     } else if (typeof labelProperty === 'object') {
-        let show = labelProperty.hasOwnProperty('show') ? labelProperty.show : true;
-        let label = labelProperty.hasOwnProperty('text') ?
-          labelProperty.text : extractLabel(withLabel);
+        const show = labelProperty.hasOwnProperty('show') ? labelProperty.show : true;
+        const label = labelProperty.hasOwnProperty('text') ?
+          labelProperty.text : deriveLabel(withLabel);
         return new LabelObject(label, show);
     } else {
-        return new LabelObject(extractLabel(withLabel), true);
+        return new LabelObject(deriveLabel(withLabel), true);
     }
 };
