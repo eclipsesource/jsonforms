@@ -53,6 +53,8 @@ export class JsonForms extends HTMLElement {
     const bestRenderer = JsonFormsHolder.rendererService
         .getBestRenderer(uiSchema, schema, this.dataService);
     this.appendChild(bestRenderer);
+
+    this.dataService.initialRootRun();
   }
 
   set data(data: Object) {
