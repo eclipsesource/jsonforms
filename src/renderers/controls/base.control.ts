@@ -74,7 +74,7 @@ export abstract class BaseControl <T extends HTMLElement>
 
   private createLabel(controlElement: ControlElement): void {
     this.label = document.createElement('label');
-    const labelObject = getElementLabelObject(controlElement);
+    const labelObject = getElementLabelObject(this.dataSchema, controlElement);
     if (labelObject.show) {
       this.label.textContent = labelObject.text;
     }

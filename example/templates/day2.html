@@ -1,0 +1,69 @@
+<div class="panel panel-default">
+   <div class="panel-heading">
+       <strong>Basic controls</strong>
+   </div>
+   <div class="panel-body" id="example-day2">
+   </div>
+</div>
+
+<div class="panel panel-default">
+   <div class="panel-heading">
+       <strong>Bound data</strong>
+   </div>
+   <div class="panel-body">
+       <pre>{{vm.formattedData()}}</pre>
+   </div>
+</div>
+<script>
+  var day2_schema=
+  {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "done": {
+        "type": "boolean"
+      }
+    },
+    "required": ["name"]
+  };
+  var day2_uischema=
+  {
+    "type": "VerticalLayout",
+    "elements": [
+      {
+        "type": "Control",
+        "scope": {
+          "$ref": "#/properties/name"
+        }
+      },
+      {
+        "type": "Control",
+        "label": false,
+        "scope": {
+          "$ref": "#/properties/done"
+        }
+      },
+      {
+        "type": "Control",
+        "scope": {
+          "$ref": "#/properties/description"
+        },
+        "options": {
+            "multi":true
+        }
+      }
+    ]
+  };
+  var day2_data=
+  {
+      "name": "Send email to Adriana",
+      "description": "Confirm if you have passed the subject\nHerby ...",
+      "done": true
+  };
+addJsonForms('example-day2', day2_data, day2_schema, day2_uischema);
+</script>
