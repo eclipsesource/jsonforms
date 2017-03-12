@@ -6,7 +6,7 @@ module.exports = {
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
         './src/index.ts',
-        './example/example.ts'
+        './example/index.ts'
     ],
     output: {
       path: path.resolve("./", "dist"),
