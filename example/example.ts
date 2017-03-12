@@ -1,29 +1,55 @@
 /// <reference path="html-import.d.ts" />
-import personTemplate from './templates/person.html';
-import layoutTemplate from './templates/layout.html';
-import ruleTemplate from './templates/rule.html';
-import generateUiTemplate from './templates/generate-ui.html';
-import generateTemplate from './templates/generate.html';
-import arraysTemplate from './templates/arrays.html';
-import day2 from './templates/day2.html';
-import day4 from './templates/day4.html';
+import {JsonSchema} from '../src/models/jsonSchema';
+import {UISchemaElement} from '../src/models/uischema';
+import {JsonForms} from '../src/json-forms';
 
-window.onload = (ev) => {
-  addTemplate('person', personTemplate);
-  addTemplate('layout', layoutTemplate);
-  addTemplate('rule', ruleTemplate);
-  addTemplate('generate-ui', generateUiTemplate);
-  addTemplate('generate', generateTemplate);
-  addTemplate('arrays', arraysTemplate);
-  addTemplate('day2', day2);
-  addTemplate('day4', day4);
-
-  window['changeExample']();
-};
-function addTemplate(id: string, template: string): void {
-  const body = document.getElementsByTagName('body')[0];
-  const wrapper = document.createElement('template');
-  wrapper.id = id;
-  wrapper.innerHTML = template;
-  body.appendChild(wrapper);
+interface ExampleDescription {
+  name: string;
+  label: string;
+  data: any;
+  schema: JsonSchema;
+  uiSchema: UISchemaElement;
+  setupCallback?: (div: HTMLDivElement) => void;
 }
+let knownExamples: {[key: string]: ExampleDescription} = {};
+export const registerExamples = (examples: Array<ExampleDescription>): void => {
+  examples.forEach(example => knownExamples[example.name] = example);
+};
+const changeExample = (selectedExample: string) => {
+  let body = document.getElementById('view');
+  if (body.firstChild) {
+    body.removeChild(body.firstChild);
+  }
+  const example: ExampleDescription = knownExamples[selectedExample];
+  if (example.setupCallback !== undefined) {
+    const div = document.createElement('div');
+    example.setupCallback(div);
+    body.appendChild(div);
+    body = div;
+  }
+
+  const jsonForms = <JsonForms> document.createElement('json-forms');
+  jsonForms.data = example.data;
+  if (example.uiSchema !== undefined) {
+    jsonForms.uiSchema = example.uiSchema;
+  }
+  if (example.schema !== undefined) {
+    jsonForms.dataSchema = example.schema;
+  }
+
+  body.appendChild(jsonForms);
+};
+window.onload = (ev) => {
+  const examplesDiv = document.getElementById('examples');
+  const select = document.createElement('select');
+  Object.keys(knownExamples).forEach(key => {
+    const example = knownExamples[key];
+    const option = document.createElement('option');
+    option.value = example.name;
+    option.label = example.label;
+    select.appendChild(option);
+  });
+  select.onchange = () => (changeExample(select.value));
+  examplesDiv.appendChild(select);
+  changeExample(select.value);
+};

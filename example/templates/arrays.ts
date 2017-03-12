@@ -1,4 +1,5 @@
-const array_schema = {
+import {registerExamples} from '../example';
+const schema = {
       'type': 'object',
       'properties': {
         'name': {
@@ -36,7 +37,7 @@ const array_schema = {
       },
       'required': ['occupation', 'nationality']
     };
-const array_uischema = {
+const uischema = {
   'type': 'VerticalLayout',
   'elements': [
     {
@@ -50,7 +51,7 @@ const array_uischema = {
     }
   ]
 };
-const array_uischema_simple = {
+const uischema_simple = {
   'type': 'Control',
   'scope': {
     '$ref': '#/properties/comments'
@@ -60,7 +61,7 @@ const array_uischema_simple = {
     'simple': true
   }
 };
-const array_data = {
+const data = {
   'comments': [
     {
       'date': new Date(),
@@ -72,8 +73,8 @@ const array_data = {
     }
   ]
 };
-export const datas = [
-  {name: 'example-arrays', data: array_data, schema: array_schema, uischema: array_uischema},
-  {name: 'example-arrays-simple', data: array_data,
-    schema: array_schema, uischema: array_uischema_simple}
-];
+registerExamples([
+  {name: 'array', label: 'Array', data: data, schema: schema, uiSchema: uischema},
+  {name: 'array-simple', label: 'Array Simple', data: data,
+    schema: schema, uiSchema: uischema_simple}
+]);
