@@ -60,7 +60,7 @@
         "single"
     ],
         "radix": true,
-        "semicolon": true,
+        "semicolon": [true, "ignore-bound-class-methods"],
         "triple-equals": [
         true,
         "allow-null-check"

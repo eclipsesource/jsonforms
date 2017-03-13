@@ -1,10 +1,10 @@
 
-import {JsonSchema} from "../models/jsonSchema";
+import {JsonSchema} from '../models/jsonSchema';
 
-const AdditionalProperties = "additionalProperties";
-const RequiredProperties   = "required";
+const AdditionalProperties = 'additionalProperties';
+const RequiredProperties   = 'required';
 
-type Properties = {[property: string]: JsonSchema}
+type Properties = {[property: string]: JsonSchema};
 
 const distinct = (array: Array<any>, discriminator: (item: any) => string): Array<any> => {
     const known = {};
@@ -18,9 +18,6 @@ const distinct = (array: Array<any>, discriminator: (item: any) => string): Arra
         }
     });
 };
-
-export const generateJsonSchema = (instance: Object): JsonSchema =>
-    generateJsonSchemaWithOptions({})(instance);
 
 export const generateJsonSchemaWithOptions = (options: any) => (instance: Object): JsonSchema => {
 
@@ -41,8 +38,8 @@ export const generateJsonSchemaWithOptions = (options: any) => (instance: Object
 
     const gen = new class {
 
-        schemaObject = (instance: Object): JsonSchema  => {
-            const props = this.properties(instance, options);
+        schemaObject = (data: Object): JsonSchema  => {
+            const props = this.properties(data);
             const schema: JsonSchema = {
                 'type': 'object',
                 'properties': props,
@@ -55,44 +52,44 @@ export const generateJsonSchemaWithOptions = (options: any) => (instance: Object
             return schema;
         };
 
-        properties = (instance: Object, options: any) : Properties =>
-            Object.keys(instance).reduce((acc, propName) => {
-                acc[propName] = this.property(instance[propName]);
+        properties = (data: Object) : Properties =>
+            Object.keys(data).reduce((acc, propName) => {
+                acc[propName] = this.property(data[propName]);
                 return acc;
             }, {});
 
-        property = (instance: any): Object => {
-            switch (typeof instance) {
+        property = (data: any): Object => {
+            switch (typeof data) {
                 case 'string':
                     return { 'type': 'string' };
                 case 'boolean':
                     return { 'type': 'boolean' };
                 case 'number':
-                    if (Number.isInteger(instance)) {
+                    if (Number.isInteger(data)) {
                         return { 'type': 'integer' };
                     }
                     return { 'type': 'number' };
                 case 'object':
-                    if (instance == null) {
-                        return { 'type': 'null' }
+                    if (data == null) {
+                        return { 'type': 'null' };
                     }
-                    return this.schemaObjectOrArray(instance);
+                    return this.schemaObjectOrArray(data);
                 default:
                     return {};
             }
         };
 
-        schemaObjectOrArray = (instance: any): JsonSchema => {
-            if (instance instanceof Array) {
-                return this.schemaArray(<Array<any>>instance)
+        schemaObjectOrArray = (data: any): JsonSchema => {
+            if (data instanceof Array) {
+                return this.schemaArray(<Array<any>>data);
             } else {
-                return this.schemaObject(instance);
+                return this.schemaObject(data);
             }
         };
 
-        schemaArray = (instance: Array<any>): JsonSchema => {
-            if (instance.length) {
-                const allProperties = instance.map(this.property);
+        schemaArray = (data: Array<any>): JsonSchema => {
+            if (data.length) {
+                const allProperties = data.map(this.property);
                 const uniqueProperties = distinct(allProperties, JSON.stringify);
                 if (uniqueProperties.length === 1) {
                     return {
@@ -111,12 +108,15 @@ export const generateJsonSchemaWithOptions = (options: any) => (instance: Object
                 return {
                     'type': 'array',
                     'items': {}
-                }
+                };
             }
-        };
+        }
     };
 
     return gen.schemaObject(instance);
 };
+
+export const generateJsonSchema = (instance: Object): JsonSchema =>
+    generateJsonSchemaWithOptions({})(instance);
 
 export default generateJsonSchema;

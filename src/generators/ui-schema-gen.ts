@@ -1,6 +1,6 @@
 
 import {Layout, ControlElement, UISchemaElement} from '../models/uischema';
-import {JsonSchema} from "../models/jsonSchema";
+import {JsonSchema} from '../models/jsonSchema';
 
 /**
  * Creates a new ILayout.
@@ -52,6 +52,30 @@ const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string):
     return <Layout>uiSchema;
 };
 
+// poor man's version of a startCase implementation
+export const startCase = (label: string): string =>
+    (label.split(/(?=[A-Z])/) || [])
+        .map(token => token.charAt(0).toUpperCase() + token.slice(1))
+        .join(' ');
+
+/**
+ * Adds the given {@code labelName} to the {@code layout} if it exists
+ * @param layout
+ *      The layout which is to receive the label
+ * @param labelName
+ *      The name of the schema
+ */
+const addLabel = (layout: Layout, labelName: string) => {
+    if (labelName && labelName !== '') {
+        // add label with name
+        const label = {
+            type: 'Label',
+            text: startCase(labelName)
+        };
+        layout.elements.push(label);
+    }
+};
+
 const generateUISchema =
     (jsonSchema: JsonSchema, schemaElements: UISchemaElement[],
      currentRef: string, schemaName: string, layoutType: string): UISchemaElement => {
@@ -97,36 +121,12 @@ const generateUISchema =
         default:
             throw new Error('Unknown type: ' + JSON.stringify(jsonSchema));
     }
-
 };
 
-/**
- * Adds the given {@code labelName} to the {@code layout} if it exists
- * @param layout
- *      The layout which is to receive the label
- * @param labelName
- *      The name of the schema
- */
-const addLabel = (layout: Layout, labelName: string) => {
-    if (labelName && labelName !== '') {
-        // add label with name
-        const label = {
-            type: 'Label',
-            text: startCase(labelName)
-        };
-        layout.elements.push(label);
-    }
-};
-
-// poor man's version of a startCase implementation
-export const startCase = (label: string): string =>
-    (label.split(/(?=[A-Z])/) || [])
-        .map(token => token.charAt(0).toUpperCase() + token.slice(1))
-        .join(" ");
-
-export const generateDefaultUISchema = (jsonSchema: JsonSchema, layoutType = 'VerticalLayout'): UISchemaElement =>
-    wrapInLayoutIfNecessary(
-        generateUISchema(jsonSchema, [], '#', '', layoutType),
-        layoutType);
+export const generateDefaultUISchema =
+    (jsonSchema: JsonSchema, layoutType = 'VerticalLayout'): UISchemaElement =>
+        wrapInLayoutIfNecessary(
+            generateUISchema(jsonSchema, [], '#', '', layoutType),
+            layoutType);
 
 export default generateDefaultUISchema;

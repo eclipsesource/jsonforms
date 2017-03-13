@@ -4,8 +4,8 @@ import { JsonSchema } from '../src/models/jsonSchema';
 import { Layout, ControlElement } from '../src/models/uischema';
 
 test('startCase', t => {
-    t.is(startCase("name"), "Name");
-    t.is(startCase("fooBar"), "Foo Bar");
+    t.is(startCase('name'), 'Name');
+    t.is(startCase('fooBar'), 'Foo Bar');
 });
 
 test('generate ui schema for schema w/o properties', t => {
