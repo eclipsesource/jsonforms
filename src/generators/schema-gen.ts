@@ -19,7 +19,7 @@ const distinct = (array: Array<any>, discriminator: (item: any) => string): Arra
     });
 };
 
-export const generateJsonSchemaWithOptions = (options: any) => (instance: Object): JsonSchema => {
+export const generateJsonSchemaWithOptions = (options: any = {}) => (instance: Object): JsonSchema => {
 
     const findOption: (Properties) => (string) => any = (props) => (optionName) => {
         switch (optionName) {
@@ -117,6 +117,6 @@ export const generateJsonSchemaWithOptions = (options: any) => (instance: Object
 };
 
 export const generateJsonSchema = (instance: Object): JsonSchema =>
-    generateJsonSchemaWithOptions({})(instance);
+    generateJsonSchemaWithOptions()(instance);
 
 export default generateJsonSchema;
