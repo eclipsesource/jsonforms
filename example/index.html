@@ -31,44 +31,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
-<div>
-  <button onclick="change()">Change</button>
-    <select onchange="changeExample()" id="example-select">
-      <option value="person" default>Person</option>
-      <option value="layout">Layout</option>
-      <option value="rule">Rule</option>
-      <option value="generate-ui">Generate UI Schema</option>
-      <option value="generate">Generate both Schemas</option>
-      <option value="arrays">Arrays</option>
-      <option value="day2">Day2</option>
-      <option value="day4">Day4</option>
-    </select>
-</div>
+  <div id="examples"></div>
   <div id="view"></div>
-<script>
-  function changeExample() {
-    var selectedExample = document.getElementById("example-select").value;
-    var example = document.getElementById(selectedExample);
-    var clone = document.importNode(example.content, true);
-    var div = document.createElement("div");
-    var body = document.getElementById('view');
-    div.appendChild(clone);
-    if(body.firstChild) {
-      body.removeChild(body.firstChild);
-    }
-    body.appendChild(div);
-  }
-  function addJsonForms(parentId, data, dataschema, uischema){
-    var parent = document.getElementById(parentId);
-    var jsonForms = document.createElement('json-forms');
-    jsonForms.data=data;
-    if(uischema !== undefined)
-      jsonForms.uiSchema=uischema;
-    if(dataschema !== undefined)
-      jsonForms.dataSchema=dataschema;
-    parent.appendChild(jsonForms);
-    }
-</script>
-
 </body>
 </html>
