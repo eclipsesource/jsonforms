@@ -2,8 +2,8 @@ import { UISchemaElement, ControlElement } from '../../models/uischema';
 import { JsonForms } from '../../json-forms';
 import { Renderer, DataChangeListener, DataService } from '../../core';
 import { JsonFormsRenderer } from '../renderer.util';
-import { resolveSchema } from "../../path.util";
-import { generateDefaultUISchema } from "../../generators/ui-schema-gen";
+import { resolveSchema } from '../../path.util';
+import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
@@ -46,9 +46,9 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     const content = document.createElement('div');
     let arrayData = this.dataService.getValue(controlElement);
 
-    const renderChild= (element) => {
+    const renderChild = (element) => {
       const jsonForms = <JsonForms>document.createElement('json-forms');
-      const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + "/items");
+      const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
       const uiSchema = generateDefaultUISchema(resolvedSchema);
       jsonForms.dataObject = element;
       jsonForms.dataService = new DataService(element);
@@ -74,7 +74,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
       const element = {};
       arrayData.push(element);
       const renderedChild = renderChild(element);
-      if (controlElement['elements'] == undefined) {
+      if (controlElement['elements'] === undefined) {
         controlElement['elements'] = [];
       }
       controlElement['elements'].push(renderedChild);

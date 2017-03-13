@@ -33,20 +33,26 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     this.dataService.unregisterChangeListener(this);
   }
 
-  private parseUiSchema(uiSchema: UISchemaElement, prefix: string = ""): void {
+  private parseUiSchema(uiSchema: UISchemaElement, prefix = ''): void {
     if (uiSchema.hasOwnProperty('elements')) {
       const hasScope = uiSchema['scope'] && uiSchema['scope']['$ref'];
 
       if (hasScope) {
-        const instancePath = (prefix === "" ? "" : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
-        (<Layout>uiSchema).elements.forEach((element, index) => this.parseUiSchema(element, `${instancePath}/${index}`));
+        const instancePath = (prefix === '' ?
+                '' : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
+        (<Layout>uiSchema).elements.forEach((element, index) =>
+            this.parseUiSchema(element, `${instancePath}/${index}`)
+        );
       } else {
-        (<Layout>uiSchema).elements.forEach((element, index) => this.parseUiSchema(element, prefix));
+        (<Layout>uiSchema).elements.forEach((element, index) =>
+            this.parseUiSchema(element, prefix)
+        );
       }
 
     } else if (uiSchema.hasOwnProperty('scope')) {
       const control = <ControlElement> uiSchema;
-      const instancePath = (prefix === "" ? "" : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
+      const instancePath = (prefix === '' ?
+              '' : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
       this.pathToControlMap[instancePath] = control;
     }
   }
@@ -66,7 +72,7 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
     if (uiSchema === undefined) {
       // TODO: where should we display this?
-      console.warn("No control for showing validation error @", error.dataPath.substring(1));
+      console.warn('No control for showing validation error @', error.dataPath.substring(1));
       return;
     }
 

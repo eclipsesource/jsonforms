@@ -14,12 +14,12 @@ const CustomElement = (config: CustomElementConfig) => (cls) =>
   selector: 'json-forms'
 })
 export class JsonForms extends HTMLElement {
-  private allowDynamicUpdate = false;
   dataService: DataService;
   uischema: UISchemaElement;
   dataschema: JsonSchema;
-  private services: Array<JsonFormService> = [];
   dataObject: any;
+  private allowDynamicUpdate = false;
+  private services: Array<JsonFormService> = [];
 
   constructor() {
     super();
