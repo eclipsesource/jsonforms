@@ -27,38 +27,40 @@ create forms by leveraging the capabilities of JSON and JSON schema.
     <jsonforms schema="vm.schema" uischema="vm.uiSchema" data="vm.data"></jsonforms>
   </div>
   ```
-6. Use Bootstrap version:
+6. Styling
 
-  In order to use the bootstrap version you need to load the `bootstrap.css`, furthermore you need the `jsonforms-bootstrap.css` instead of the `jsonforms.css`:
-  ```html
+ 1. Use Bootstrap version:
+
+    In order to use the Bootstrap version of JSONForms, you'll need to first load the CSS file of Bootstrap, e.g. by [installing it via npm](https://www.npmjs.com/package/bootstrap) and referencing it in your `index.html`. Furthermore, you'll also need to load JSONForms specific CSS stylings bits which are contained in the `jsonforms-bootstrap.css` file:
+    ```html
   <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css"/>
   <link rel="stylesheet" href="/node_modules/jsonforms/dist/jsonforms-bootstrap.css"/>
-  ```
-  You also need to load the `jsonforms-bootstrap.js` after the `jsonforms.js`:
-  ```html
+    ```
+    You'll also need to load an additional JS file `jsonforms-bootstrap.js` in order to fully integrate JSONForms with Bootstrap:
+    ```html
   <script src="node_modules/jsonforms/dist/jsonforms.js"></script>
   <script src="node_modules/jsonforms/dist/jsonforms-bootstrap.js"></script>
-  ```
-  After this you can add the `jsonforms-bootstrap` module as a dependency to your module:
-  ```javascript
+    ```
+    Finally, you need to add the `jsonforms-bootstrap` module as a depedency of your application module:
+    ```javascript
   angular.module('MyModule', ['jsonforms','jsonforms-bootstrap'])
-  ```
-7. Use Material version:
+    ```
+ 2. Use Material Design version:
 
-  In order to use the material version you need to load the `jsonforms-material.css` after the `jsonforms.css`:
-  ```html
+    In order to use the Material Design version you additionally need to load JSONForms specific CSS stylings bits which are contained in the `jsonforms-material.css` file:
+    ```html
   <link rel="stylesheet" href="/node_modules/jsonforms/dist/jsonforms.css"/>
   <link rel="stylesheet" href="/node_modules/jsonforms/dist/jsonforms-material.css"/>
-  ```
-  You also need to load the `jsonforms-material.js` after the `jsonforms.js`:
-  ```html
+    ```
+    You'll also need to load an additional JS file `jsonforms-material.js` in order to fully integrate JSONForms with Material Design:
+    ```html
   <script src="node_modules/jsonforms/dist/jsonforms.js"></script>
   <script src="node_modules/jsonforms/dist/jsonforms-material.js"></script>
-  ```
-  After this you can add the `jsonforms-material` module as a dependency to your module:
-  ```javascript
+    ```
+    Finally, you need to add the `jsonforms-material` module as a depedency of your application module:
+    ```javascript
   angular.module('MyModule', ['jsonforms','jsonforms-material'])
-  ```
+    ```
 
 # Documentation and more information
 For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
