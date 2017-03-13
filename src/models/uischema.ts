@@ -29,6 +29,8 @@ export interface Layout extends UISchemaElement {
 }
 export interface VerticalLayout extends Layout {
 }
+export interface HorizontalLayout extends Layout {
+}
 export interface ILabelObject {
     text?: string;
     show?: boolean;

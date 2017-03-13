@@ -1,0 +1,102 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>JSONForms generated Forms</strong>
+    </div>
+    <div class="panel-body" id="example-arrays">
+    </div>
+    <div class="panel-body" id="example-arrays-simple">
+      <p>The default renderer supports the <code>simple</code> option which does not render forms
+      for the array's contents</p>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>
+<script>
+var array_schema=
+    {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string'
+        },
+        'vegetarian': {
+          'type': 'boolean'
+        },
+        'birthDate': {
+          'type': 'string',
+          'format': 'date-time'
+        },
+        'nationality': {
+          'type': 'string',
+          'enum': ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+        },
+        'occupation': {
+          'type': 'string'
+        },
+        'comments': {
+          'type': 'array',
+          'items': {
+            'type': 'object',
+            'properties': {
+              'date': {
+                'type': 'string',
+                'format': 'date-time'
+              },
+              'message': {
+                'type': 'string'
+              }
+            }
+          }
+        }
+      },
+      'required': ['occupation', 'nationality']
+    };
+var array_uischema=
+    {
+      'type': 'VerticalLayout',
+      'elements': [
+        {
+          'type': 'Control',
+          'scope': {
+            '$ref': '#/properties/comments'
+          },
+          'options': {
+            'submit': true
+          }
+        }
+      ]
+    };
+  var array_uischema_simple=
+    {
+      'type': 'Control',
+      'scope': {
+        '$ref': '#/properties/comments'
+      },
+      'label': 'Some more comments',
+      'options': {
+        'simple': true
+      }
+    };
+  var array_data=
+    {
+      'comments': [
+        {
+          'date': new Date(),
+          'message': 'This is an example message'
+        },
+        {
+          'date': new Date(),
+          'message': 'Get ready for booohay'
+        }
+      ]
+    };
+  addJsonForms('example-arrays', array_data, array_schema, array_uischema);
+  addJsonForms('example-arrays-simple', array_data, array_schema, array_uischema_simple);
+</script>

@@ -5,7 +5,8 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
-        './src/index.ts'
+        './src/index.ts',
+        './example/example.ts'
     ],
     output: {
       path: path.resolve("./", "dist"),
@@ -29,7 +30,8 @@ module.exports = {
     module: {
       rules: [
         { enforce: 'pre', test: /\.js$/, exclude: /node_modules/, loader: 'source-map-loader' },
-        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' }
+        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' },
+        { test: /\.html$/, exclude: /node_modules/, loader: 'html-loader?exportAsEs6Default'}
       ]
     },
 

@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>JSONForms generated default Forms</strong>
+    </div>
+    <div class="panel-body" id="example-generate-ui">
+        <p>
+            JSON Forms is capable of inferring a UI schema for a given JSON instance and a schema.
+            By default, it will generate a vertical layout for each property of the data instance.
+        </p>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Bound data</strong>
+    </div>
+    <div class="panel-body">
+        <pre>{{vm.formattedData()}}</pre>
+    </div>
+</div>
+<script>
+generate_uischema_schema=
+    {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string'
+        },
+        'age': {
+          'type': 'integer'
+        }
+      }
+    };
+  generate_uischema_uischema = undefined;
+  generate_uischema_data =
+    {
+      name: 'John Doe',
+      age: 36
+    };
+  addJsonForms('example-generate-ui', generate_uischema_data, generate_uischema_schema, generate_uischema_uischema);
+</script>
