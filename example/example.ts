@@ -6,6 +6,7 @@ import generateUiTemplate from './templates/generate-ui.html';
 import generateTemplate from './templates/generate.html';
 import arraysTemplate from './templates/arrays.html';
 import day2 from './templates/day2.html';
+import day4 from './templates/day4.html';
 
 window.onload = (ev) => {
   addTemplate('person', personTemplate);
@@ -15,6 +16,7 @@ window.onload = (ev) => {
   addTemplate('generate', generateTemplate);
   addTemplate('arrays', arraysTemplate);
   addTemplate('day2', day2);
+  addTemplate('day4', day4);
 
   window['changeExample']();
 };
