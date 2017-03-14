@@ -1,0 +1,18 @@
+{
+  "name": "webcomponents-jsonforms",
+  "main": "dist/jsonforms.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/eclipsesource/jsonforms",
+  "description": "Customizable Forms based on JSON Schema and Webcomponents",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "devDependencies": {
+    "iron-test-helpers": "polymerelements/iron-test-helpers#~1.0.3",
+    "test-fixture": "PolymerElements/test-fixture#~1.0.0"
+  }
+}
