@@ -7,7 +7,10 @@ module.exports = {
     },
     output: {
       path: "./",
-      filename: "[name].js"
+      filename: "[name].js",
+      library: "JSONForms",
+      libraryTarget: 'umd',
+      umdNamedDefine: true
     },
 
     // Enable sourcemaps for debugging webpack's output.
