@@ -53,7 +53,21 @@ export abstract class BaseControl <T extends HTMLElement>
     }
   }
 
-  isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.dataService.registerChangeListener(this);
+  }
+  disconnectedCallback(): void {
+    this.dataService.unregisterChangeListener(this);
+    super.disconnectedCallback();
+  }
+
+  isRelevantKey = (uischema: ControlElement): boolean => {
+    if (uischema === null) {
+      return false;
+    }
+    return (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
+  }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.setValue(this.input, newValue);

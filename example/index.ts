@@ -8,3 +8,4 @@ import './templates/layout';
 import './templates/person';
 import './templates/rule';
 import './templates/dynamic';
+import './templates/dynamic2';
