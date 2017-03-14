@@ -42,7 +42,9 @@ class CategorizationRenderer extends Renderer {
     this.renderMaster();
     const controlElement = <Categorization> this.uischema;
     const firstCategory: Category = this.findFirstCategory(controlElement);
-    this.renderDetail(firstCategory, <HTMLLIElement>this.master.firstChild.firstChild);
+    if (firstCategory !== null) {
+      this.renderDetail(firstCategory, <HTMLLIElement>this.master.firstChild.firstChild);
+    }
   }
   private findFirstCategory(categorization: Categorization): Category {
     let firstCategory: Category;
