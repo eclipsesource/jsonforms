@@ -1,7 +1,7 @@
 import test from 'ava';
 
 import { JsonSchema } from '../src/models/jsonSchema';
-import { generateJsonSchema, generateJsonSchemaWithOptions } from '../src/generators/schema-gen';
+import { generateJsonSchema } from '../src/generators/schema-gen';
 
 test('default schema generation ', t => {
     const instance = {
@@ -72,7 +72,7 @@ test('schema generation with options ', t => {
             'city': 'New York'
         }
     };
-    const schema = generateJsonSchemaWithOptions({
+    const schema = generateJsonSchema(instance, {
         'additionalProperties': false,
         'required': (props: string[]) => {
             const keys = Object.keys(props);
@@ -82,7 +82,7 @@ test('schema generation with options ', t => {
                 return [];
             }
         }
-    })(instance);
+    });
 
     t.deepEqual(schema, {
         'type': 'object',

@@ -4,20 +4,25 @@ import { Renderer, DataChangeListener, DataService } from '../../core';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
+import { JsonSchema } from "../../models/jsonSchema";
 
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
-  tester: (uischema: UISchemaElement) => uischema.type === 'ArrayControl' ? 1 : -1
+  tester: (uischema: UISchemaElement, schema: JsonSchema) => {
+    if (uischema.type !== 'Control') {
+      return -1;
+    }
+    const subSchema = resolveSchema(schema, (<ControlElement>uischema).scope.$ref);
+    if (subSchema === undefined) {
+      return -1;
+    }
+    return subSchema.type === 'array' ? 2 : -1;
+  }
 })
 export class ArrayControlRenderer extends Renderer implements DataChangeListener {
 
   constructor() {
     super();
-  }
-
-  connectedCallback() {
-    this.render();
-    this.dataService.registerChangeListener(this);
   }
 
   isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
@@ -27,9 +32,11 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
   }
 
   dispose(): void {
-    this.dataService.unregisterChangeListener(this);
+
   }
+
   render(): HTMLElement {
+
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
