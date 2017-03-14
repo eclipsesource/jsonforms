@@ -7,5 +7,7 @@ import './controls/enum.control';
 import './controls/textarea.control';
 import './layouts/vertical.layout';
 import './layouts/horizontal.layout';
+import './layouts/group.layout';
 import './additional/array-renderer';
 import './additional/tree-renderer';
+import './additional/categorization-renderer';

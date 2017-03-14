@@ -144,6 +144,9 @@ export class DataService {
   }
   getValue(uischema: ControlElement): any {
     const pair = getValuePropertyPair(this.data, uischema.scope.$ref);
+    if (pair.property === undefined) {
+      return pair.instance;
+    }
     return pair.instance[pair.property];
   }
   initialRootRun(): void {

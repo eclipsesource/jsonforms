@@ -1,0 +1,23 @@
+.tree-layout {display: flex; flex-direction: row;}
+.tree-master {flex:1; border:1px solid;}
+.tree-detail {flex:3; border:1px solid;}
+.tree-master ul {list-style-type: none;}
+.tree-master li {min-height: 1em; border:1px solid;}
+.vertical-layout {display: flex; flex-direction: column;}
+.vertical-layout > * {flex: 1;}
+.horizontal-layout {display: flex; flex-direction: row;}
+.horizontal-layout > * {flex: 1;}
+.control {display: flex; flex:1; flex-direction: row; align-items: center; margin: 0.5em 1em;}
+.control > * {margin-left: 0.25em;}
+.control > *:first-child {margin-left: 0;}
+.control > input, .control > textarea {flex:1}
+.control > label {flex-basis: 10em;}
+.control > div:empty {margin-left: 0;}
+.jsf-categorization {display: flex; flex-direction: row;}
+.jsf-categorization > * {border: 1px solid;}
+.jsf-categorization > .jsf-categorization-master {flex: 1;}
+.jsf-categorization > .jsf-categorization-master > ul {list-style-type: none;}
+.jsf-categorization > .jsf-categorization-master > ul > li {cursor: pointer;}
+.jsf-categorization > .jsf-categorization-master > ul > li.selected {font-weight: bold;}
+.jsf-categorization > .jsf-categorization-detail {flex: 3;}
+*[hidden] {display: none;}
