@@ -41,21 +41,22 @@ class CategorizationRenderer extends Renderer {
   private renderFull() {
     this.renderMaster();
     const controlElement = <Categorization> this.uischema;
-    const firstCategory: Category = this.findFirstCategory(controlElement);
-    if (firstCategory !== null) {
-      this.renderDetail(firstCategory, <HTMLLIElement>this.master.firstChild.firstChild);
+    const result = this.findFirstCategory(controlElement,
+      <HTMLUListElement>this.master.firstChild);
+    this.renderDetail(result.category, result.li);
     }
   }
-  private findFirstCategory(categorization: Categorization): Category {
+  private findFirstCategory(categorization: Categorization, parent: HTMLUListElement):
+    {category: Category, li: HTMLLIElement} {
     let firstCategory: Category;
     if (categorization.elements === undefined || categorization.elements.length === 0) {
       return null;
     }
     const category = categorization.elements[0];
     if (isCategorization(category)) {
-      return this.findFirstCategory(category);
+      return this.findFirstCategory(category, <HTMLUListElement> parent.firstChild.lastChild);
     }
-    return category;
+    return {category:category, li: <HTMLLIElement>parent.firstChild};
   }
   private renderMaster() {
     if (this.master.lastChild !== null) {
@@ -65,11 +66,10 @@ class CategorizationRenderer extends Renderer {
     const ul = this.createCategorizationList(categorization);
     this.master.appendChild(ul);
   }
-  private createCategorizationList(categorization: Categorization) {
+  private createCategorizationList(categorization: Categorization): HTMLUListElement {
     const ul = document.createElement('ul');
     categorization.elements.forEach(category => {
       const li = document.createElement('li');
-      li.onclick = (ev: Event) => this.renderDetail(category, li);
       li.textContent = category.label;
       // const div = document.createElement('div');
       // div.className = 'jsf-category-entry';
@@ -77,10 +77,12 @@ class CategorizationRenderer extends Renderer {
       // span.className = 'jsf-category-label';
       // span.innerText
       if (isCategorization(category)) {
-        const subCategories = document.createElement('div');
-        subCategories.className = 'jsf-category-subcategories';
-        const innerUl = this.createCategorizationList(categorization);
-        subCategories.appendChild(ul);
+        const innerUl = this.createCategorizationList(category);
+        innerUl.className = 'jsf-category-subcategories';
+        li.style.cursor = 'default';
+        li.appendChild(innerUl);
+      } else {
+        li.onclick = (ev: Event) => this.renderDetail(category, li);
       }
       ul.appendChild(li);
     });
