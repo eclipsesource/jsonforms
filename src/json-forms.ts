@@ -3,6 +3,7 @@ import { DataService, JsonFormService, JsonFormsHolder } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateDefaultUISchema } from './generators/ui-schema-gen';
 import { generateJsonSchema } from './generators/schema-gen';
+import * as JsonRefs from 'json-refs';
 
 interface CustomElementConfig {
   selector: string;
@@ -18,6 +19,7 @@ export class JsonForms extends HTMLElement {
   uischema: UISchemaElement;
   dataschema: JsonSchema;
   dataObject: any;
+  private schemaPromise: Promise<any> = null;
   private allowDynamicUpdate = false;
   private services: Array<JsonFormService> = [];
 
@@ -35,7 +37,12 @@ export class JsonForms extends HTMLElement {
   }
 
   private render(): void {
-
+    if (!this.allowDynamicUpdate) {
+      return;
+    }
+    if (this.schemaPromise !== null) {
+      return;
+    }
     if (this.dataObject == null || this.dataService == null) {
       return;
     }
@@ -69,8 +76,12 @@ export class JsonForms extends HTMLElement {
   }
 
   set dataSchema(dataschema: JsonSchema) {
-    this.dataschema = dataschema;
-    this.render();
+    this.schemaPromise = JsonRefs.resolveRefs(dataschema);
+    this.schemaPromise.then(result => {
+      this.dataschema = result.resolved;
+      this.schemaPromise = null;
+      this.render();
+    });
   }
 
   get dataSchema() {
