@@ -4,7 +4,7 @@ import {JsonFormsRenderer} from '../renderer.util';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-tree',
-  tester: (uischema: UISchemaElement) => uischema.type === 'TreeControl' ? 1 : -1
+  tester: (uischema: UISchemaElement) => uischema.type === 'MasterDetailLayout' ? 1 : -1
 })
 class TreeRenderer extends Renderer implements DataChangeListener {
   private master: HTMLElement;
@@ -66,28 +66,55 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     const controlElement = <ControlElement> this.uischema;
     const arrayData = this.dataService.getValue(controlElement);
     if (arrayData !== undefined && arrayData.length !== 0) {
-      this.renderDetail(arrayData[0], this.master.lastChild.firstChild);
+      let firstChild = arrayData;
+      if (Array.isArray(firstChild)) {
+        firstChild = firstChild[0];
+      }
+      this.renderDetail(firstChild, <HTMLSpanElement>this.master.lastChild.firstChild.firstChild);
     }
   }
 
-  private renderMaster() {
+  private renderMaster(): void {
     if (this.master.lastChild !== null) {
       this.master.removeChild(this.master.lastChild);
     }
     const controlElement = <ControlElement> this.uischema;
-    const arrayData = this.dataService.getValue(controlElement);
-    if (arrayData !== undefined) {
+    const rootData = this.dataService.getValue(controlElement);
+    if (rootData !== undefined) {
       const ul = document.createElement('ul');
-      arrayData.forEach(element => {
-        const li = document.createElement('li');
-        li.onclick = (ev: Event) => this.renderDetail(element, li);
-        li.textContent = element[Object.keys(element)[0]];
-        ul.appendChild(li);
-      });
+      if (Array.isArray(rootData)) {
+        this.expandArray(rootData, ul);
+      } else {
+        this.expandObject(rootData, ul);
+      }
+
       this.master.appendChild(ul);
     }
   }
-  private renderDetail(element, li) {
+  private expandArray(data: Array<Object>, parent: HTMLUListElement): void {
+    data.forEach(element => {
+      this.expandObject(element, parent);
+    });
+  }
+  private expandObject(data: Object, parent: HTMLUListElement): void {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.style.display = 'block';
+    span.style.cursor = 'pointer';
+    span.onclick = (ev: Event) => this.renderDetail(data, li);
+    span.textContent = data[Object.keys(data)[0]];
+    li.appendChild(span);
+
+    Object.keys(data).forEach(key => {
+      if (Array.isArray(data[key])) {
+        const ul = document.createElement('ul');
+        this.expandArray(data[key], ul);
+        li.appendChild(ul);
+      }
+    });
+    parent.appendChild(li);
+  }
+  private renderDetail(element: Object, label: HTMLSpanElement): void {
     if (this.detail.lastChild !== null) {
       this.detail.removeChild(this.detail.lastChild);
     }
@@ -120,9 +147,9 @@ class TreeRenderer extends Renderer implements DataChangeListener {
       notifyChange(uischema: ControlElement, newValue: any, data: any): void {
         const text = element[Object.keys(element)[0]];
         if (text === undefined) {
-          li.textContent = '';
+          label.textContent = '';
         } else {
-          li.textContent = text;
+          label.textContent = text;
         }
       }
     });
