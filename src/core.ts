@@ -1,6 +1,7 @@
 import { UISchemaElement, ControlElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { getValuePropertyPair } from './path.util';
+import {UiSchemaRegistry, UiSchemaRegistryImpl} from './core/uischema.registry';
 
 export enum RUNTIME_TYPE {
   VALIDATION_ERROR, VISIBLE, ENABLED
@@ -132,7 +133,12 @@ export class DataService {
   }
   notifyChange(uischema: ControlElement, newValue: any): void {
     const pair = getValuePropertyPair(this.data, uischema.scope.$ref);
-    pair.instance[pair.property] = newValue;
+    if (Array.isArray(pair.instance[pair.property])) {
+      pair.instance[pair.property].push(newValue);
+    } else {
+      pair.instance[pair.property] = newValue;
+    }
+
     this.changeListeners.forEach(listener => {
       if (listener.isRelevantKey(uischema)) {
         listener.notifyChange(uischema, newValue, this.data);
@@ -173,4 +179,5 @@ export const JsonFormsServiceElement = (config) => (cls: JsonFormsServiceConstru
 export class JsonFormsHolder {
   public static rendererService = new RendererService();
   public static jsonFormsServices: Array<JsonFormsServiceConstructable> = [];
+  public static uischemaRegistry: UiSchemaRegistry = new UiSchemaRegistryImpl();
 }

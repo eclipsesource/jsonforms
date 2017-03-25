@@ -14,3 +14,4 @@ import './templates/dynamic2';
 import './templates/categorization';
 import './templates/masterdetail';
 import './templates/resolve';
+import './templates/uischema-registry';

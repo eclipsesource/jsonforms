@@ -95,7 +95,7 @@ export class JsonForms extends HTMLElement {
     if (this.uischema) {
       return this.uischema;
     }
-    return generateDefaultUISchema(this.dataSchema);
+    return JsonFormsHolder.uischemaRegistry.getBestUiSchema(this.dataSchema, this.dataObject);
   }
 
   private createServices(uiSchema, dataSchema): void {
