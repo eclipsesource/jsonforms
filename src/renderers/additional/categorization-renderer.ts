@@ -55,7 +55,7 @@ class CategorizationRenderer extends Renderer {
     if (isCategorization(category)) {
       return this.findFirstCategory(category, <HTMLUListElement> parent.firstChild.lastChild);
     }
-    return {category: category, li: <HTMLLIElement>parent.firstChild};
+    return {category:category, li: <HTMLLIElement>parent.firstChild};
   }
   private renderMaster() {
     if (this.master.lastChild !== null) {
