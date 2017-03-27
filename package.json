@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "license": "MIT",
   "dependencies": {
-    "ajv": "^4.11.2"
+    "ajv": "^4.11.2",
+    "json-refs": "^2.1.6"
   },
   "devDependencies": {
     "ava": "^0.18.1",
