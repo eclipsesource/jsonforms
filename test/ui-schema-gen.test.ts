@@ -6,6 +6,9 @@ import { Layout, ControlElement } from '../src/models/uischema';
 test('startCase', t => {
     t.is(startCase('name'), 'Name');
     t.is(startCase('fooBar'), 'Foo Bar');
+    t.is(startCase(''), '');
+    t.is(startCase(null), '');
+    t.is(startCase(undefined), '');
 });
 
 test('generate ui schema for schema w/o properties', t => {
@@ -297,6 +300,28 @@ test('generate named array control', t => {
 test('generate unnamed array control', t => {
     const schema: JsonSchema = {
         'type': 'array',
+        'items': {
+            'properties': {
+                'msg': {'type': 'string'}
+            }
+        }
+    };
+    const uiSchema: Layout = {
+        'type': 'VerticalLayout',
+        'elements': [
+            {
+                'label': '',
+                'type': 'Control',
+                'scope': {
+                    '$ref': '#'
+                }
+            } as ControlElement
+        ]
+    };
+    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+});
+test('generate unnamed array control w/o type', t => {
+    const schema: JsonSchema = {
         'items': {
             'properties': {
                 'msg': {'type': 'string'}
