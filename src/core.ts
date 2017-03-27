@@ -89,8 +89,11 @@ export interface RendererTester {
 }
 class RendererService {
   private renderers= [];
-  registerRenderer(tester, renderer: string): void {
+  registerRenderer(tester: RendererTester, renderer: string): void {
     this.renderers.push({tester: tester, renderer: renderer});
+  }
+  unregisterRenderer(tester: RendererTester, renderer: string): void {
+    this.renderers.splice(this.renderers.indexOf({tester: tester, renderer: renderer}), 1);
   }
   getBestRenderer(uischema: UISchemaElement,
                   schema: JsonSchema,
@@ -144,6 +147,9 @@ export class DataService {
   }
   getValue(uischema: ControlElement): any {
     const pair = getValuePropertyPair(this.data, uischema.scope.$ref);
+    if (pair.property === undefined) {
+      return pair.instance;
+    }
     return pair.instance[pair.property];
   }
   initialRootRun(): void {

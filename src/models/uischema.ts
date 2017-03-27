@@ -31,6 +31,9 @@ export interface VerticalLayout extends Layout {
 }
 export interface HorizontalLayout extends Layout {
 }
+export interface GroupLayout extends Layout {
+  label?: string;
+}
 export interface ILabelObject {
     text?: string;
     show?: boolean;
@@ -40,4 +43,11 @@ export interface ControlElement extends UISchemaElement {
   scope: {
     $ref: string;
   };
+}
+export interface Category extends Layout {
+  label: string;
+}
+export interface Categorization extends UISchemaElement {
+  label: string;
+  elements: Array<Category|Categorization>;
 }
