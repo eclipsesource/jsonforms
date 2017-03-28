@@ -1,5 +1,6 @@
-import { RendererTester, Renderer, JsonFormsHolder } from '../core';
-
+import { JsonFormsHolder } from '../core';
+import {Renderer} from '../core/renderer';
+import {RendererTester} from '../core/renderer.service'
 interface JsonFormsRendererConfig {
   selector: string;
   tester: RendererTester;

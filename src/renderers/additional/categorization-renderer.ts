@@ -1,5 +1,7 @@
 import {UISchemaElement, Categorization, Category} from '../../models/uischema';
-import { Renderer, DataChangeListener, DataService, JsonFormsHolder } from '../../core';
+import {JsonFormsHolder} from '../../core';
+import {Renderer} from '../../core/renderer';
+import {DataService, DataChangeListener} from '../../core/data.service';
 import {JsonFormsRenderer} from '../renderer.util';
 import {JsonForms} from '../../json-forms';
 

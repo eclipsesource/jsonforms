@@ -1,10 +1,11 @@
 import { UISchemaElement, ControlElement } from '../../models/uischema';
 import { JsonForms } from '../../json-forms';
-import { Renderer, DataChangeListener, DataService } from '../../core';
+import { Renderer } from '../../core/renderer';
+import {DataService, DataChangeListener} from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
-import { JsonSchema } from "../../models/jsonSchema";
+import { JsonSchema } from '../../models/jsonSchema';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
@@ -25,14 +26,23 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     super();
   }
 
-  isRelevantKey = (uischema: ControlElement): boolean => this.uischema === uischema;
+  isRelevantKey (uischema: ControlElement): boolean {
+    return uischema === undefined || uischema === null
+    ? false : (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
+  }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
-
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.dataService.registerChangeListener(this);
+  }
+  disconnectedCallback(): void {
+    this.dataService.unregisterChangeListener(this);
+    super.disconnectedCallback();
+  }
   dispose(): void {
-
   }
 
   render(): HTMLElement {

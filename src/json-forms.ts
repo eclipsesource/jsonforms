@@ -1,9 +1,10 @@
 import { UISchemaElement } from './models/uischema';
-import { DataService, JsonFormService, JsonFormsHolder } from './core';
+import { JsonFormService, JsonFormsHolder } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateDefaultUISchema } from './generators/ui-schema-gen';
 import { generateJsonSchema } from './generators/schema-gen';
 import * as JsonRefs from 'json-refs';
+import {DataService} from './core/data.service';
 
 interface CustomElementConfig {
   selector: string;

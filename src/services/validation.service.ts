@@ -1,8 +1,9 @@
 import { UISchemaElement, ControlElement, Layout } from '../models/uischema';
-import { JsonFormsServiceElement, JsonFormService, DataChangeListener, DataService,
-  Runtime } from '../core';
+import { JsonFormsServiceElement, JsonFormService } from '../core';
+  import {Runtime} from '../core/runtime';
 import { JsonSchema } from '../models/jsonSchema';
 import { toDataPath } from '../path.util';
+import {DataService, DataChangeListener} from '../core/data.service';
 
 import * as AJV from 'ajv';
 
@@ -20,7 +21,9 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     this.parseUiSchema(uiSchema);
   }
 
-  isRelevantKey = (_: ControlElement): boolean => true;
+  isRelevantKey(_: ControlElement): boolean {
+    return true;
+  }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     if (uischema != null) {

@@ -1,5 +1,5 @@
 
-import {Layout, ControlElement, UISchemaElement} from '../models/uischema';
+import {Layout, ControlElement, UISchemaElement, LabelElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
 
 /**
@@ -16,13 +16,13 @@ const createLayout = (layoutType: string): Layout => ({
  * Derives the type of the jsonSchema element
  */
 const deriveType = (jsonSchema: JsonSchema): string => {
-    if (jsonSchema.type && typeof jsonSchema.type === 'string') {
+    if (jsonSchema && jsonSchema.type && typeof jsonSchema.type === 'string') {
         return jsonSchema.type;
     }
-    if (jsonSchema.properties || jsonSchema.additionalProperties) {
+    if (jsonSchema && (jsonSchema.properties || jsonSchema.additionalProperties)) {
         return 'object';
     }
-    if (jsonSchema.items) {
+    if (jsonSchema && jsonSchema.items) {
         return 'array';
     }
     // ignore all remaining cases
@@ -75,7 +75,7 @@ const addLabel = (layout: Layout, labelName: string) => {
         const label = {
             type: 'Label',
             text: startCase(labelName)
-        };
+        } as LabelElement;
         layout.elements.push(label);
     }
 };
