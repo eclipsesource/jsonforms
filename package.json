@@ -36,8 +36,7 @@
     "test": "tsc && nyc ava ",
     "tsc": "tsc",
     "report": "nyc report --reporter=html",
-    "example_library": "lite-server -c example_library/bs-config.json",
-    "wct": "wct wct-test/json-forms.html"
+    "example_library": "lite-server -c example_library/bs-config.json"
   },
   "main": "dist/jsonforms.js"
 }
