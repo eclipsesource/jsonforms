@@ -16,10 +16,10 @@ const CustomElement = (config: CustomElementConfig) => (cls) =>
   selector: 'json-forms'
 })
 export class JsonForms extends HTMLElement {
-  dataService: DataService;
-  uischema: UISchemaElement;
-  dataschema: JsonSchema;
-  dataObject: any;
+  private dataService: DataService;
+  private uischema: UISchemaElement;
+  private dataschema: JsonSchema;
+  private dataObject: any;
   private schemaPromise: Promise<any> = null;
   private allowDynamicUpdate = false;
   private services: Array<JsonFormService> = [];

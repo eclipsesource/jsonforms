@@ -26,10 +26,6 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
   }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
-    // FIXME why do we need this?
-    if (uischema != null) {
-      this.parseUiSchema(uischema);
-    }
     this.validate(data);
   }
 
@@ -37,28 +33,14 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
     this.dataService.unregisterChangeListener(this);
   }
 
-  private parseUiSchema(uiSchema: UISchemaElement, prefix = ''): void {
+  private parseUiSchema(uiSchema: UISchemaElement): void {
     if (uiSchema.hasOwnProperty('elements')) {
-      /* FIXME This checks for arrays, do we need this,
-        as for each element in an array renderer an own validation service is created? */
-      const hasScope = uiSchema['scope'] && uiSchema['scope']['$ref'];
-
-      if (hasScope) {
-        const instancePath = (prefix === '' ?
-                '' : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
-        (<Layout>uiSchema).elements.forEach((element, index) =>
-            this.parseUiSchema(element, `${instancePath}/${index}`)
-        );
-      } else {
-        (<Layout>uiSchema).elements.forEach((element, index) =>
-            this.parseUiSchema(element, prefix)
-        );
-      }
-
+      (<Layout>uiSchema).elements.forEach((element, index) =>
+          this.parseUiSchema(element)
+      );
     } else if (uiSchema.hasOwnProperty('scope')) {
       const control = <ControlElement> uiSchema;
-      const instancePath = (prefix === '' ?
-              '' : `${prefix}/`) + toDataPath(control.scope.$ref);
+      const instancePath = toDataPath(control.scope.$ref);
       this.pathToControlMap[instancePath] = control;
     }
   }

@@ -63,22 +63,16 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     const content = document.createElement('div');
     let arrayData = this.dataService.getValue(controlElement);
 
-    const renderChild = (element: Object): UISchemaElement => {
+    const renderChild = (element: Object): void => {
       const jsonForms = <JsonForms>document.createElement('json-forms');
       const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
-      // const uiSchema = generateDefaultUISchema(resolvedSchema);
-      jsonForms.dataObject = element;
-      jsonForms.dataService = new DataService(element);
-      // jsonForms.uischema = uiSchema;
-      jsonForms.dataschema = resolvedSchema;
+      jsonForms.data = element;
+      jsonForms.dataSchema = resolvedSchema;
       content.appendChild(jsonForms);
-      return jsonForms.uiSchema;
     };
 
     if (arrayData !== undefined) {
-      const uiElements = [];
-      arrayData.forEach(element => uiElements.push(renderChild(element)));
-      controlElement['elements'] = uiElements;
+    arrayData.forEach(element => renderChild(element));
     }
     div.appendChild(content);
 
@@ -90,11 +84,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
       }
       const element = {};
       arrayData.push(element);
-      const renderedChild = renderChild(element);
-      if (controlElement['elements'] === undefined) {
-        controlElement['elements'] = [];
-      }
-      controlElement['elements'].push(renderedChild);
+      renderChild(element);
       this.dataService.notifyChange(controlElement, arrayData);
     };
 

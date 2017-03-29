@@ -10,7 +10,7 @@ const schema = {
         },
         'birthDate': {
           'type': 'string',
-          'format': 'date-time'
+          'format': 'date'
         },
         'nationality': {
           'type': 'string',
@@ -26,7 +26,7 @@ const schema = {
             'properties': {
               'date': {
                 'type': 'string',
-                'format': 'date-time'
+                'format': 'date'
               },
               'message': {
                 'type': 'string'
@@ -64,11 +64,11 @@ const uischema_simple = {
 const data = {
   'comments': [
     {
-      'date': new Date(),
+      'date': new Date(2001, 8, 11).toISOString().substr(0, 10),
       'message': 'This is an example message'
     },
     {
-      'date': new Date(),
+      'date': new Date().toISOString().substr(0, 10),
       'message': 'Get ready for booohay'
     }
   ]
