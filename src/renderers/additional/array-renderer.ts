@@ -63,16 +63,16 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     const content = document.createElement('div');
     let arrayData = this.dataService.getValue(controlElement);
 
-    const renderChild = (element) => {
+    const renderChild = (element: Object): UISchemaElement => {
       const jsonForms = <JsonForms>document.createElement('json-forms');
       const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
-      const uiSchema = generateDefaultUISchema(resolvedSchema);
+      // const uiSchema = generateDefaultUISchema(resolvedSchema);
       jsonForms.dataObject = element;
       jsonForms.dataService = new DataService(element);
-      jsonForms.uischema = uiSchema;
+      // jsonForms.uischema = uiSchema;
       jsonForms.dataschema = resolvedSchema;
       content.appendChild(jsonForms);
-      return uiSchema;
+      return jsonForms.uiSchema;
     };
 
     if (arrayData !== undefined) {

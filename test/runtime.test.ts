@@ -17,7 +17,7 @@ test('Runtime accessor visible ', t => {
 });
 test('Runtime accessor validationErrors ', t => {
   const runtime = new Runtime();
-  t.deepEqual(runtime.validationErrors, []);
+  t.is(runtime.validationErrors, undefined);
   const ab = ['a', 'b'];
   runtime.validationErrors = ab;
   t.is(runtime.validationErrors, ab);

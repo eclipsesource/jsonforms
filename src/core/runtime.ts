@@ -5,7 +5,7 @@ export interface RuntimeListener {
   notify(type: RUNTIME_TYPE): void;
 }
 export class Runtime {
-  private _validationErrors: Array<string> = [];
+  private _validationErrors: Array<string>;
   private _visible = true;
   private _enabled = true;
   private _listeners: Array<RuntimeListener> = [];

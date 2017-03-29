@@ -1,6 +1,6 @@
 import { UISchemaElement, ControlElement, Layout } from '../models/uischema';
 import { JsonFormsServiceElement, JsonFormService } from '../core';
-  import {Runtime} from '../core/runtime';
+import {Runtime} from '../core/runtime';
 import { JsonSchema } from '../models/jsonSchema';
 import { toDataPath } from '../path.util';
 import {DataService, DataChangeListener} from '../core/data.service';
@@ -10,7 +10,7 @@ import * as AJV from 'ajv';
 const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
 
 @JsonFormsServiceElement({})
-class JsonFormsValidator implements DataChangeListener, JsonFormService {
+export class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   private validator: AJV.ValidateFunction;
   private pathToControlMap: {[path: string]: ControlElement} = {};
@@ -26,6 +26,7 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
   }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+    // FIXME why do we need this?
     if (uischema != null) {
       this.parseUiSchema(uischema);
     }
@@ -38,6 +39,8 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   private parseUiSchema(uiSchema: UISchemaElement, prefix = ''): void {
     if (uiSchema.hasOwnProperty('elements')) {
+      /* FIXME This checks for arrays, do we need this,
+        as for each element in an array renderer an own validation service is created? */
       const hasScope = uiSchema['scope'] && uiSchema['scope']['$ref'];
 
       if (hasScope) {
@@ -55,16 +58,16 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     } else if (uiSchema.hasOwnProperty('scope')) {
       const control = <ControlElement> uiSchema;
       const instancePath = (prefix === '' ?
-              '' : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
+              '' : `${prefix}/`) + toDataPath(control.scope.$ref);
       this.pathToControlMap[instancePath] = control;
     }
   }
 
-  private validate(data: any) {
+  private validate(data: any): void {
     this.cleanAllValidationErrors();
     const valid = this.validator(data);
     if (valid) {
-      return null;
+      return;
     }
     const errors = this.validator.errors;
     errors.forEach(error => this.mapErrorToControl(error));
@@ -74,7 +77,7 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     const uiSchema = this.pathToControlMap[error.dataPath.substring(1)];
 
     if (uiSchema === undefined) {
-      // TODO: where should we display this?
+      // FIXME should we log this at all?
       console.warn('No control for showing validation error @', error.dataPath.substring(1));
       return;
     }
@@ -83,9 +86,7 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
       uiSchema['runtime'] = new Runtime();
     }
     const runtime = <Runtime> uiSchema['runtime'];
-    if (runtime.validationErrors === undefined) {
-      runtime.validationErrors = [];
-    }
+    runtime.validationErrors = [];
     runtime.validationErrors = runtime.validationErrors.concat(error.message);
   }
 

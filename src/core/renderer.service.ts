@@ -7,12 +7,13 @@ export interface RendererTester {
     (element: UISchemaElement, schema: JsonSchema): number;
 }
 export class RendererService {
-  private renderers= [];
+  private renderers: Array<{tester: RendererTester, renderer: string}> = [];
   registerRenderer(tester: RendererTester, renderer: string): void {
     this.renderers.push({tester: tester, renderer: renderer});
   }
   unregisterRenderer(tester: RendererTester, renderer: string): void {
-    this.renderers.splice(this.renderers.indexOf({tester: tester, renderer: renderer}), 1);
+    const index = this.renderers.indexOf({tester: tester, renderer: renderer});
+    this.renderers = this.renderers.splice(index, 1);
   }
   getBestRenderer(uischema: UISchemaElement,
                   schema: JsonSchema,
