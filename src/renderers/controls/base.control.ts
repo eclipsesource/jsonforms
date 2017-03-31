@@ -26,7 +26,9 @@ export abstract class BaseControl <T extends HTMLElement>
     const controlElement = <ControlElement> this.uischema;
     this.createLabel(controlElement);
     this.createInput(controlElement);
+    this.input.classList.add('input');
     this.errorElement = document.createElement('div');
+    this.errorElement.classList.add('validation');
     this.appendChild(this.label);
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
@@ -41,6 +43,7 @@ export abstract class BaseControl <T extends HTMLElement>
     switch (type) {
       case RUNTIME_TYPE.VALIDATION_ERROR:
         this.errorElement.textContent = BaseControl.formatErrorMessage(runtime.validationErrors);
+        this.classList.toggle('validation_error', runtime.validationErrors !== undefined);
         break;
       case RUNTIME_TYPE.VISIBLE:
         this.hidden = !runtime.visible;

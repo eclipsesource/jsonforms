@@ -71,7 +71,9 @@ class CategorizationRenderer extends Renderer {
     const ul = document.createElement('ul');
     categorization.elements.forEach(category => {
       const li = document.createElement('li');
-      li.textContent = category.label;
+      const span = document.createElement('span');
+      span.textContent = category.label;
+      li.appendChild(span);
       // const div = document.createElement('div');
       // div.className = 'jsf-category-entry';
       // const span = document.createElement('span');
@@ -80,7 +82,7 @@ class CategorizationRenderer extends Renderer {
       if (isCategorization(category)) {
         const innerUl = this.createCategorizationList(category);
         innerUl.className = 'jsf-category-subcategories';
-        li.style.cursor = 'default';
+        li.classList.add('jsf-category-group');
         li.appendChild(innerUl);
       } else {
         li.onclick = (ev: Event) => this.renderDetail(category, li);

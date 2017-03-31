@@ -4,7 +4,7 @@ import { JsonSchema } from './models/jsonSchema';
 import { generateDefaultUISchema } from './generators/ui-schema-gen';
 import { generateJsonSchema } from './generators/schema-gen';
 import * as JsonRefs from 'json-refs';
-import {DataService} from './core/data.service';
+import {DataService, DataChangeListener} from './core/data.service';
 
 interface CustomElementConfig {
   selector: string;
@@ -103,5 +103,8 @@ export class JsonForms extends HTMLElement {
     JsonFormsHolder.jsonFormsServices.forEach(service =>
         this.services.push(new service(this.dataService, dataSchema, uiSchema))
     );
+  }
+  addDataChangeListener(listener: DataChangeListener): void {
+    this.dataService.registerChangeListener(listener);
   }
 }

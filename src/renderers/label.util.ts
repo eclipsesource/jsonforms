@@ -42,6 +42,9 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
     const lastSegment = pathSegments[pathSegments.length - 1];
     const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
     const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
+    if (nextHigherSchemaPath === '') {
+      return false;
+    }
     const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
     if (nextHigherSchema !== undefined && nextHigherSchema.required !== undefined &&
       nextHigherSchema.required.indexOf(lastSegment) !== -1) {

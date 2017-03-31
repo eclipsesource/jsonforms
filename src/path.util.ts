@@ -9,14 +9,16 @@ export const getValuePropertyPair = (instance: any, path: string):
       validPathSegments
           .slice(0, validPathSegments.length - 1)
           .reduce((curInstance, pathSegment) => {
-              if (!curInstance.hasOwnProperty(pathSegment)) {
-                  curInstance[pathSegment] = {};
+            const decodedSegment = decodeURIComponent(pathSegment);
+              if (!curInstance.hasOwnProperty(decodedSegment)) {
+                  curInstance[decodedSegment] = {};
               }
-              return curInstance[pathSegment];
+              return curInstance[decodedSegment];
           }, instance);
     return {
       instance: resolvedInstance,
-      property: validPathSegments[validPathSegments.length - 1]
+      property: validPathSegments.length > 0 ?
+        decodeURIComponent(validPathSegments[validPathSegments.length - 1]) : undefined
   };
 };
 
