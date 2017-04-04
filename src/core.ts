@@ -7,7 +7,7 @@ import {RendererService} from './core/renderer.service';
 export interface JsonFormService {
   dispose(): void;
 }
-interface JsonFormsServiceConstructable {
+export interface JsonFormsServiceConstructable {
   new(dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
 }
 export const JsonFormsServiceElement = (config) => (cls: JsonFormsServiceConstructable) => {

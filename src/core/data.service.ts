@@ -10,8 +10,10 @@ export class DataService {
   constructor(private data: any) {
   }
   notifyChange(uischema: ControlElement, newValue: any): void {
-    const pair = getValuePropertyPair(this.data, uischema.scope.$ref);
-    pair.instance[pair.property] = newValue;
+    if (uischema !== undefined && uischema !== null) {
+      const pair = getValuePropertyPair(this.data, uischema.scope.$ref);
+      pair.instance[pair.property] = newValue;
+    }
 
     this.changeListeners.forEach(listener => {
       if (listener.isRelevantKey(uischema)) {

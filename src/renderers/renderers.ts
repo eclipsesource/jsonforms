@@ -12,3 +12,4 @@ import './additional/array-renderer';
 import './additional/tree-renderer';
 import './additional/categorization-renderer';
 import './additional/table-array.control';
+import './additional/label.renderer';

@@ -28,8 +28,10 @@ export const toDataPath = (path: string): string =>
 export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
   const validPathSegments = path.split('/');
   const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
-      pathSegment === '#' ? curSchema : curSchema[pathSegment], schema);
-  if (resultSchema.$ref !== undefined) {
+      pathSegment === '#' || pathSegment === undefined || pathSegment === '' ?
+      curSchema : curSchema[pathSegment]
+  , schema);
+  if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
     return retrieveResolvableSchema(schema, resultSchema.$ref);
   }
   return resultSchema;
@@ -38,10 +40,10 @@ interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }
 const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
-  if (schema.type === 'object') {
+  if (schema.type === 'object' && schema.properties !== undefined) {
     Object.keys(schema.properties).forEach(key => findAllRefs(schema.properties[key], result));
   }
-  if (schema.type === 'array') {
+  if (schema.type === 'array' && schema.items !== undefined) {
     // FIXME Do we want to support tupples? If so how do we render this?
     if (Array.isArray(schema.items)) {
       schema.items.forEach(child => findAllRefs(child, result));

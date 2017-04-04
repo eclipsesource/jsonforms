@@ -66,6 +66,9 @@ class TreeRenderer extends Renderer implements DataChangeListener {
 
     this.appendChild(div);
     this.dialog = document.createElement('dialog');
+    const title = document.createElement('label');
+    title.innerText = 'Select the Item to create:';
+    this.dialog.appendChild(title);
     const dialogContent = document.createElement('div');
     dialogContent.classList.add('content');
     this.dialog.appendChild(dialogContent);
@@ -128,10 +131,19 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     });
   }
   private getArrayProperties(schema: JsonSchema): Array<string> {
-    return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined);
+    return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined
+      && schema.properties[key].items['type'] === 'object');
   }
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
-    return (element) => element[this.uischema.options['labelProvider'][schema.id]];
+    const labelProvider = this.uischema.options['labelProvider'];
+    if (labelProvider !== undefined) {
+      return (element) => element[labelProvider[schema.id]];
+    }
+    const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
+    if (namingKeys.length !== 0) {
+      return (element) => element[namingKeys[0]];
+    }
+    return JSON.stringify;
   }
   private addElement(key: string, data: Object, schema: JsonSchema, li: HTMLLIElement): void {
     if (data[key] === undefined) {
@@ -155,10 +167,12 @@ class TreeRenderer extends Renderer implements DataChangeListener {
       deleteFunction: (element: Object) => void): void {
     const li = document.createElement('li');
     const div = document.createElement('div');
-    const spanIcon = document.createElement('span');
-    spanIcon.classList.add('icon');
-    spanIcon.classList.add(this.uischema.options['imageProvider'][schema.id]);
-    div.appendChild(spanIcon);
+    if (this.uischema.options['imageProvider']) {
+      const spanIcon = document.createElement('span');
+      spanIcon.classList.add('icon');
+      spanIcon.classList.add(this.uischema.options['imageProvider'][schema.id]);
+      div.appendChild(spanIcon);
+    }
     const span = document.createElement('span');
     span.classList.add('label');
     span.onclick = (ev: Event) => this.renderDetail(data, li, schema);

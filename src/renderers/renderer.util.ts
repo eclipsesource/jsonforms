@@ -1,11 +1,11 @@
 import { JsonFormsHolder } from '../core';
 import {Renderer} from '../core/renderer';
 import {RendererTester} from '../core/renderer.service'
-interface JsonFormsRendererConfig {
+export interface JsonFormsRendererConfig {
   selector: string;
   tester: RendererTester;
 }
-interface JsonFormsRendererConstructable {
+export interface JsonFormsRendererConstructable {
   new(): Renderer;
 }
 export const JsonFormsRenderer =

@@ -8,18 +8,28 @@ import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { JsonSchema } from '../../models/jsonSchema';
 import {getElementLabelObject} from '../label.util';
 
+export const ArrayControlTester = (uischema: UISchemaElement, schema: JsonSchema) => {
+  if (uischema.type !== 'Control') {
+    return -1;
+  }
+  const subSchema = resolveSchema(schema, (<ControlElement>uischema).scope.$ref);
+  if (subSchema === undefined) {
+    return -1;
+  }
+  if (subSchema.type !== 'array') {
+    return -1;
+  }
+  if (subSchema.items === undefined) {
+    return -1;
+  }
+  if (Array.isArray(subSchema.items)) {
+    return -1;
+  }
+  return subSchema.items.type === 'object' ? 2 : -1;
+};
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
-  tester: (uischema: UISchemaElement, schema: JsonSchema) => {
-    if (uischema.type !== 'Control') {
-      return -1;
-    }
-    const subSchema = resolveSchema(schema, (<ControlElement>uischema).scope.$ref);
-    if (subSchema === undefined) {
-      return -1;
-    }
-    return subSchema.type === 'array' ? 2 : -1;
-  }
+  tester: ArrayControlTester
 })
 export class ArrayControlRenderer extends Renderer implements DataChangeListener {
 
@@ -44,6 +54,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     super.disconnectedCallback();
   }
   dispose(): void {
+    // do nothing
   }
 
   render(): HTMLElement {

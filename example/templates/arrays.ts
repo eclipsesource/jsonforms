@@ -58,7 +58,7 @@ const uischema_simple = {
   },
   'label': 'Some more comments',
   'options': {
-    'simple': true
+    'table': true
   }
 };
 const data = {
