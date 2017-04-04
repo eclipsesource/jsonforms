@@ -16,8 +16,8 @@
 .jsf-categorization {display: flex; flex-direction: row;}
 .jsf-categorization > * {border: 1px solid;}
 .jsf-categorization > .jsf-categorization-master {flex: 1;}
-.jsf-categorization > .jsf-categorization-master > ul {list-style-type: none;}
-.jsf-categorization > .jsf-categorization-master > ul > li {cursor: pointer;}
-.jsf-categorization > .jsf-categorization-master > ul > li.selected {font-weight: bold;}
+.jsf-categorization > .jsf-categorization-master ul {list-style-type: none; font-weight: normal;}
+.jsf-categorization > .jsf-categorization-master ul > li {cursor: pointer;}
+.jsf-categorization > .jsf-categorization-master ul > li.selected {font-weight: bold;}
 .jsf-categorization > .jsf-categorization-detail {flex: 3;}
 *[hidden] {display: none;}

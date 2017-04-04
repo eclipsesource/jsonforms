@@ -1,5 +1,7 @@
 import {UISchemaElement, ControlElement, VerticalLayout} from '../../models/uischema';
-import { Renderer, DataChangeListener, DataService, JsonFormsHolder } from '../../core';
+import {JsonFormsHolder} from '../../core';
+import {Renderer} from '../../core/renderer';
+import {DataService, DataChangeListener} from '../../core/data.service';
 import {JsonFormsRenderer} from '../renderer.util';
 
 @JsonFormsRenderer({
@@ -55,7 +57,9 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     return this;
   }
 
-  isRelevantKey = (uischema: ControlElement) => this.uischema === uischema;
+  isRelevantKey (uischema: ControlElement): boolean {
+    return this.uischema === uischema;
+  }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();

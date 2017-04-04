@@ -1,6 +1,8 @@
 import { ControlElement } from '../../models/uischema';
-import { Renderer, Runtime, RUNTIME_TYPE, DataChangeListener } from '../../core';
+import {Renderer} from '../../core/renderer';
+import {DataChangeListener} from '../../core/data.service';
 import {getElementLabelObject} from '../label.util';
+import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
 export abstract class BaseControl <T extends HTMLElement>
   extends Renderer implements DataChangeListener {
@@ -62,7 +64,7 @@ export abstract class BaseControl <T extends HTMLElement>
     super.disconnectedCallback();
   }
 
-  isRelevantKey = (uischema: ControlElement): boolean => {
+  isRelevantKey (uischema: ControlElement): boolean {
     if (uischema === null) {
       return false;
     }

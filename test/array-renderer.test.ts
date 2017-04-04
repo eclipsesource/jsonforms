@@ -7,7 +7,7 @@ installCE(global, 'force');
 import { JsonSchema } from '../src/models/jsonSchema';
 import { ControlElement } from '../src/models/uischema';
 import { ArrayControlRenderer } from '../src/renderers/additional/array-renderer';
-import { DataService } from '../src/core';
+import { DataService } from '../src/core/data.service';
 
 
 test('generate array child control', t => {

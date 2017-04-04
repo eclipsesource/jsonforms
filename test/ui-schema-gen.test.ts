@@ -1,7 +1,7 @@
 import test from 'ava';
 import generateDefaultUISchema, { startCase } from '../src/generators/ui-schema-gen';
 import { JsonSchema } from '../src/models/jsonSchema';
-import { Layout, ControlElement } from '../src/models/uischema';
+import { Layout, ControlElement, LabelElement, VerticalLayout } from '../src/models/uischema';
 
 test('startCase', t => {
     t.is(startCase('name'), 'Name');
@@ -83,6 +83,54 @@ test('generate ui schema for schema with unspecified object root', t => {
                     $ref: '#/properties/age'
                 }
             } as ControlElement
+        ]
+    };
+    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+});
+
+test(`nested object attributes`, t => {
+    const schema = {
+        type: 'object',
+        properties: {
+            id: {
+                type: 'string'
+            },
+            private: {
+              type: 'object',
+              properties: {
+                name: {
+                    type: 'string'
+                }
+              }
+            }
+        }
+    };
+    const uiSchema: Layout = {
+        type: 'VerticalLayout',
+        elements: [
+            {
+                type: 'Control',
+                label: 'Id',
+                scope: {
+                    $ref: '#/properties/id'
+                }
+            } as ControlElement,
+            {
+              type: 'VerticalLayout',
+              elements: [
+                {
+                    type: 'Label',
+                    text: 'Private'
+                } as LabelElement,
+                {
+                    type: 'Control',
+                    label: 'Name',
+                    scope: {
+                        $ref: '#/properties/private/properties/name'
+                    }
+                } as ControlElement
+              ]
+            } as VerticalLayout
         ]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
@@ -340,5 +388,21 @@ test('generate unnamed array control w/o type', t => {
             } as ControlElement
         ]
     };
+    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+});
+test('generate for empty schema', t => {
+    const schema: JsonSchema = {
+    };
+    const uiSchema: Layout = null;
+    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+});
+test('generate for null schema', t => {
+    const schema: JsonSchema = null;
+    const uiSchema: Layout = null;
+    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+});
+test('generate for undefined schema', t => {
+    const schema: JsonSchema = undefined;
+    const uiSchema: Layout = null;
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });

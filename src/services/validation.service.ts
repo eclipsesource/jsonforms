@@ -1,15 +1,16 @@
 import { UISchemaElement, ControlElement, Layout } from '../models/uischema';
-import { JsonFormsServiceElement, JsonFormService, DataChangeListener, DataService,
-  Runtime } from '../core';
+import { JsonFormsServiceElement, JsonFormService } from '../core';
+import {Runtime} from '../core/runtime';
 import { JsonSchema } from '../models/jsonSchema';
 import { toDataPath } from '../path.util';
+import {DataService, DataChangeListener} from '../core/data.service';
 
 import * as AJV from 'ajv';
 
 const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
 
 @JsonFormsServiceElement({})
-class JsonFormsValidator implements DataChangeListener, JsonFormService {
+export class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   private validator: AJV.ValidateFunction;
   private pathToControlMap: {[path: string]: ControlElement} = {};
@@ -20,12 +21,11 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     this.parseUiSchema(uiSchema);
   }
 
-  isRelevantKey = (_: ControlElement): boolean => true;
+  isRelevantKey(_: ControlElement): boolean {
+    return true;
+  }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
-    if (uischema != null) {
-      this.parseUiSchema(uischema);
-    }
     this.validate(data);
   }
 
@@ -33,35 +33,23 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     this.dataService.unregisterChangeListener(this);
   }
 
-  private parseUiSchema(uiSchema: UISchemaElement, prefix = ''): void {
+  private parseUiSchema(uiSchema: UISchemaElement): void {
     if (uiSchema.hasOwnProperty('elements')) {
-      const hasScope = uiSchema['scope'] && uiSchema['scope']['$ref'];
-
-      if (hasScope) {
-        const instancePath = (prefix === '' ?
-                '' : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
-        (<Layout>uiSchema).elements.forEach((element, index) =>
-            this.parseUiSchema(element, `${instancePath}/${index}`)
-        );
-      } else {
-        (<Layout>uiSchema).elements.forEach((element, index) =>
-            this.parseUiSchema(element, prefix)
-        );
-      }
-
+      (<Layout>uiSchema).elements.forEach((element, index) =>
+          this.parseUiSchema(element)
+      );
     } else if (uiSchema.hasOwnProperty('scope')) {
       const control = <ControlElement> uiSchema;
-      const instancePath = (prefix === '' ?
-              '' : `${prefix}/`) + toDataPath(uiSchema['scope']['$ref']);
+      const instancePath = toDataPath(control.scope.$ref);
       this.pathToControlMap[instancePath] = control;
     }
   }
 
-  private validate(data: any) {
+  private validate(data: any): void {
     this.cleanAllValidationErrors();
     const valid = this.validator(data);
     if (valid) {
-      return null;
+      return;
     }
     const errors = this.validator.errors;
     errors.forEach(error => this.mapErrorToControl(error));
@@ -71,7 +59,7 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
     const uiSchema = this.pathToControlMap[error.dataPath.substring(1)];
 
     if (uiSchema === undefined) {
-      // TODO: where should we display this?
+      // FIXME should we log this at all?
       console.warn('No control for showing validation error @', error.dataPath.substring(1));
       return;
     }
@@ -80,9 +68,7 @@ class JsonFormsValidator implements DataChangeListener, JsonFormService {
       uiSchema['runtime'] = new Runtime();
     }
     const runtime = <Runtime> uiSchema['runtime'];
-    if (runtime.validationErrors === undefined) {
-      runtime.validationErrors = [];
-    }
+    runtime.validationErrors = [];
     runtime.validationErrors = runtime.validationErrors.concat(error.message);
   }
 

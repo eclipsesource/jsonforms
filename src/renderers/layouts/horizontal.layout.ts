@@ -1,6 +1,8 @@
 import { UISchemaElement, HorizontalLayout } from '../../models/uischema';
-import { Renderer, JsonFormsHolder, Runtime } from '../../core';
+import { JsonFormsHolder} from '../../core';
+import {Renderer} from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
+import {Runtime} from '../../core/runtime';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-horizontallayout',

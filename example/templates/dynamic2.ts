@@ -1,4 +1,5 @@
-import { JsonFormService, DataService, JsonFormsHolder} from '../../src/core';
+import { JsonFormService, JsonFormsHolder} from '../../src/core';
+import {DataService} from '../../src/core/data.service';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { UISchemaElement, ControlElement, Layout } from '../../src/models/uischema';
 import {JsonForms} from '../../src/json-forms';

@@ -38,6 +38,9 @@ export interface ILabelObject {
     text?: string;
     show?: boolean;
 }
+export interface LabelElement extends UISchemaElement {
+  text: string | boolean | ILabelObject;
+}
 export interface ControlElement extends UISchemaElement {
   label?: string | boolean | ILabelObject;
   scope: {

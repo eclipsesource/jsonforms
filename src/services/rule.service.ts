@@ -1,12 +1,14 @@
 import { UISchemaElement, ControlElement, Layout, LeafCondition, RuleEffect }
   from '../models/uischema';
-import { JsonFormsServiceElement, JsonFormService, DataChangeListener, DataService, Runtime }
+import { JsonFormsServiceElement, JsonFormService}
   from '../core';
 import { JsonSchema } from '../models/jsonSchema';
 import { getValuePropertyPair } from '../path.util';
+import {Runtime} from '../core/runtime';
+import {DataService, DataChangeListener} from '../core/data.service';
 
 @JsonFormsServiceElement({})
-class JsonFormsRuleService implements DataChangeListener, JsonFormService {
+export class JsonFormsRuleService implements DataChangeListener, JsonFormService {
   private pathToControlMap: {[path: string]: Array<UISchemaElement>} = {};
 
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {

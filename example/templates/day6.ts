@@ -1,5 +1,6 @@
 import {registerExamples} from '../example';
-import {JsonFormsHolder, Renderer} from '../../src/core';
+import {JsonFormsHolder} from '../../src/core';
+import {Renderer} from '../../src/core/renderer';
 import {JsonForms} from '../../src/json-forms';
 import { resolveSchema } from '../../src/path.util';
 import { UISchemaElement, ControlElement } from '../../src/models/uischema';
