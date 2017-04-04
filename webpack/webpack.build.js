@@ -2,11 +2,9 @@ const path = require("path");
 const webpack = require('webpack');
 
 module.exports = {
-    entry: {
-      'dist/jsonforms': './src/index.ts'
-    },
+    entry: './src/index.ts',
     output: {
-      path: "./",
+      path: path.resolve("./", "dist"),
       filename: "[name].js",
       library: "JSONForms",
       libraryTarget: 'umd',

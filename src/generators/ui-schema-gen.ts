@@ -15,12 +15,15 @@ const createLayout = (layoutType: string): Layout => ({
 /**
  * Derives the type of the jsonSchema element
  */
-const deriveType = (jsonSchema: any): string => {
-    if (jsonSchema.type) {
+const deriveType = (jsonSchema: JsonSchema): string => {
+    if (jsonSchema.type && typeof jsonSchema.type === 'string') {
         return jsonSchema.type;
     }
     if (jsonSchema.properties || jsonSchema.additionalProperties) {
         return 'object';
+    }
+    if (jsonSchema.items) {
+        return 'array';
     }
     // ignore all remaining cases
     return 'null';
@@ -44,7 +47,7 @@ const createControlElement = (label: string, ref: string): ControlElement => ({
  * @returns the wrapped uiSchema.
  */
 const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string): Layout  => {
-    if (uiSchema['elements'] === undefined) {
+    if (uiSchema && uiSchema['elements'] === undefined) {
         const verticalLayout: Layout = createLayout(layoutType);
         verticalLayout.elements.push(uiSchema);
         return verticalLayout;
@@ -53,8 +56,9 @@ const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string):
 };
 
 // poor man's version of a startCase implementation
+// FIXME why export and if so why here?
 export const startCase = (label: string): string =>
-    (label.split(/(?=[A-Z])/) || [])
+    ((label && label.split(/(?=[A-Z])/)) || [])
         .map(token => token.charAt(0).toUpperCase() + token.slice(1))
         .join(' ');
 

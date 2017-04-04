@@ -11,3 +11,7 @@ import './templates/person';
 import './templates/rule';
 import './templates/dynamic';
 import './templates/dynamic2';
+import './templates/categorization';
+import './templates/masterdetail';
+import './templates/resolve';
+import './templates/uischema-registry';
