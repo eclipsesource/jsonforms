@@ -44,7 +44,6 @@ class CategorizationRenderer extends Renderer {
     const result = this.findFirstCategory(controlElement,
       <HTMLUListElement>this.master.firstChild);
     this.renderDetail(result.category, result.li);
-    }
   }
   private findFirstCategory(categorization: Categorization, parent: HTMLUListElement):
     {category: Category, li: HTMLLIElement} {
@@ -56,7 +55,7 @@ class CategorizationRenderer extends Renderer {
     if (isCategorization(category)) {
       return this.findFirstCategory(category, <HTMLUListElement> parent.firstChild.lastChild);
     }
-    return {category:category, li: <HTMLLIElement>parent.firstChild};
+    return {category: category, li: <HTMLLIElement>parent.firstChild};
   }
   private renderMaster() {
     if (this.master.lastChild !== null) {

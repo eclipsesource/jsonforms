@@ -175,6 +175,7 @@ const data = {
 };
 registerExamples([
   {name: 'categorization', label: 'Categorization', data: data, schema: schema, uiSchema: uischema}
+  // FIXME: add expandbar renderer
   // ,
   // {name: 'categorization_expandbar', label: 'Categorization with Expandbar', data: data,
   //   schema: schema, uiSchema: uischema_expandbar}

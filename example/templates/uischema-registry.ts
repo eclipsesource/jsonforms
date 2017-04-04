@@ -16,26 +16,27 @@ const uischema = {
   ]
 };
 const data = {name: 'John Doe'};
+// HACK to retrigger service creation
 const resetServices = () => {
   const jsonforms = <JsonForms>document.getElementsByTagName('json-forms')[0];
   jsonforms.data = data;
 };
 const tester = (test_uischema, test_data) => 5;
 const setup = (div: HTMLDivElement) => {
-  const register = document.createElement('button');
-  register.innerText = 'Register UI Schema';
-  register.onclick = () => {
+  const registerButton = document.createElement('button');
+  registerButton.innerText = 'Register UI Schema';
+  registerButton.onclick = () => {
     JsonFormsHolder.uischemaRegistry.register(uischema, tester);
     resetServices();
   };
-  div.appendChild(register);
-  const unregister = document.createElement('button');
-  unregister.innerText = 'Unregister UI Schema';
-  unregister.onclick = () => {
+  div.appendChild(registerButton);
+  const unregisterButton = document.createElement('button');
+  unregisterButton.innerText = 'Unregister UI Schema';
+  unregisterButton.onclick = () => {
     JsonFormsHolder.uischemaRegistry.unregister(uischema, tester);
     resetServices();
   };
-  div.appendChild(unregister);
+  div.appendChild(unregisterButton);
 };
 
 
