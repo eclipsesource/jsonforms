@@ -53,7 +53,7 @@ test('resolve nested instance', t => {
     t.is(result.instance, instance.foo);
     t.is(result.property, 'bar');
 });
-test('resolve uninatiated instance', t => {
+test('resolve uninitiated instance', t => {
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {

@@ -11,9 +11,7 @@ declare var global;
 installCE(global, 'force');
 
 test.before(t => {
-  // global.HTMLElement = () => {};
   function Renderer1() {
-    // return Reflect.construct(HTMLElement, [], Renderer1);
     return HTMLElement.apply(this, []);
   }
   Object.setPrototypeOf(Renderer1.prototype, HTMLElement.prototype);
@@ -24,7 +22,6 @@ test.before(t => {
   customElements.define('custom-renderer1', Renderer1);
 
   function Renderer2() {
-    // return Reflect.construct(HTMLElement, [], Renderer2);
     return HTMLElement.apply(this, []);
   }
   Object.setPrototypeOf(Renderer2.prototype, HTMLElement.prototype);

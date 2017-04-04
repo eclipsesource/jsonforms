@@ -28,7 +28,7 @@ export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
   const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
       pathSegment === '#' ? curSchema : curSchema[pathSegment], schema);
   if (resultSchema.$ref !== undefined) {
-    return retriveResolvableSchema(schema, resultSchema.$ref);
+    return retrieveResolvableSchema(schema, resultSchema.$ref);
   }
   return resultSchema;
 };
@@ -51,13 +51,12 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
   }
   return result;
 };
-export const retriveResolvableSchema = (full: JsonSchema, reference: string): JsonSchema => {
+export const retrieveResolvableSchema = (full: JsonSchema, reference: string): JsonSchema => {
   const child = resolveSchema(full, reference);
   const allRefs = findAllRefs(child);
   const innerSelfReference = allRefs[reference];
   if (innerSelfReference !== undefined) {
     innerSelfReference.$ref = '#';
   }
-  // allRefs.forEach(ref => );
   return child;
 };

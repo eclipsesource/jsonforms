@@ -34,7 +34,7 @@ test('UiSchemaRegistry returns registered', t => {
     const bestUiSchema = registry.getBestUiSchema(schema, {name: 'John Doe'});
     t.is(bestUiSchema, uischema);
 });
-test('UiSchemaRegistry returns genered if unregistered', t => {
+test('UiSchemaRegistry returns generated if unregistered', t => {
     const registry: UiSchemaRegistry = new UiSchemaRegistryImpl();
     const schema: JsonSchema = {
         type: 'object',

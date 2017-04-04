@@ -72,7 +72,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     };
 
     if (arrayData !== undefined) {
-    arrayData.forEach(element => renderChild(element));
+      arrayData.forEach(element => renderChild(element));
     }
     div.appendChild(content);
 
