@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require("path");
 
-module.exports = {
+module.exports = [{
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
@@ -41,4 +41,13 @@ module.exports = {
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {
     },
-};
+}, {
+    entry: [
+       './lib/native-shim.js'
+    ],
+    output: {
+        path: path.resolve("./", "dist"),
+        publicPath: "/assets/",
+        filename: "native-shim.js"
+    }
+}];

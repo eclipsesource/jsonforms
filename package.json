@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.1",
   "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
   "dependencies": {
     "ajv": "^4.11.2"
   },
@@ -20,6 +23,8 @@
     "tslint": "^4.4.2",
     "typescript": "^2.1.5",
     "url-loader": "^0.5.7",
+    "web-component-tester": "^5.0.0",
+    "webcomponents.js": "^0.7.24",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^1.16.3"
   },
@@ -31,7 +36,8 @@
     "test": "tsc && nyc ava ",
     "tsc": "tsc",
     "report": "nyc report --reporter=html",
-    "example_library": "lite-server -c example_library/bs-config.json"
+    "example_library": "lite-server -c example_library/bs-config.json",
+    "wct": "wct wct-test/json-forms.html"
   },
   "main": "dist/jsonforms.js"
 }
