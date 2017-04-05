@@ -1,7 +1,7 @@
 
 import {Layout, ControlElement, UISchemaElement, LabelElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
-
+import {startCase} from '../renderers/label.util';
 /**
  * Creates a new ILayout.
  * @param layoutType The type of the laoyut
@@ -54,13 +54,6 @@ const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string):
     }
     return <Layout>uiSchema;
 };
-
-// poor man's version of a startCase implementation
-// FIXME why export and if so why here?
-export const startCase = (label: string): string =>
-    ((label && label.split(/(?=[A-Z])/)) || [])
-        .map(token => token.charAt(0).toUpperCase() + token.slice(1))
-        .join(' ');
 
 /**
  * Adds the given {@code labelName} to the {@code layout} if it exists

@@ -15,9 +15,8 @@ class VerticalLayoutRenderer extends Renderer {
   }
   render(): HTMLElement {
     const group = <GroupLayout> this.uischema;
-    const div = document.createElement('div');
-    div.className = 'group-layout';
     const fieldset = document.createElement('fieldset');
+    fieldset.className = 'group-layout';
     if (group.label !== undefined) {
       const legend = document.createElement('legend');
       legend.innerText = group.label;
@@ -28,8 +27,7 @@ class VerticalLayoutRenderer extends Renderer {
           .getBestRenderer(element, this.dataSchema, this.dataService);
       fieldset.appendChild(bestRenderer);
     });
-    div.appendChild(fieldset);
-    this.appendChild(div);
+    this.appendChild(fieldset);
     return this;
   }
    dispose(): void {

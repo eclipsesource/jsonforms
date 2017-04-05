@@ -150,12 +150,12 @@ const uischema = {
       '#file_object': 'name'
     },
     'imageProvider': {
-      '#folder_array': 'assets/masterdetail-icons/folder.png',
-      '#file_array': 'assets/masterdetail-icons/page.png',
-      '#drive_array': 'assets/masterdetail-icons/drive.png',
-      '#folder_object': 'assets/masterdetail-icons/folder.png',
-      '#file_object': 'assets/masterdetail-icons/page.png',
-      '#drive_object': 'assets/masterdetail-icons/drive.png'
+      '#folder_array': 'folder',
+      '#file_array': 'page',
+      '#drive_array': 'drive',
+      '#folder_object': 'folder',
+      '#file_object': 'page',
+      '#drive_object': 'drive'
     }
   }
 };

@@ -39,7 +39,7 @@ export interface ILabelObject {
     show?: boolean;
 }
 export interface LabelElement extends UISchemaElement {
-  text: string | boolean | ILabelObject;
+  text: string | ILabelObject;
 }
 export interface ControlElement extends UISchemaElement {
   label?: string | boolean | ILabelObject;

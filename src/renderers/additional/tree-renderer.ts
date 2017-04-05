@@ -3,6 +3,9 @@ import {JsonFormsHolder} from '../../core';
 import {Renderer} from '../../core/renderer';
 import {DataService, DataChangeListener} from '../../core/data.service';
 import {JsonFormsRenderer} from '../renderer.util';
+import {resolveSchema} from '../../path.util';
+import {JsonForms} from '../../json-forms';
+import {JsonSchema} from '../../models/jsonSchema';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-tree',
@@ -11,6 +14,10 @@ import {JsonFormsRenderer} from '../renderer.util';
 class TreeRenderer extends Renderer implements DataChangeListener {
   private master: HTMLElement;
   private detail: HTMLElement;
+  private selected: HTMLLIElement;
+  private dialog;
+  private addingToRoot = false;
+  private resolvedSchema: JsonSchema;
 
   constructor() {
     super();
@@ -21,8 +28,9 @@ class TreeRenderer extends Renderer implements DataChangeListener {
   }
   render(): HTMLElement {
     const controlElement = <ControlElement> this.uischema;
+    this.resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref);
 
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     div.className = 'tree-layout';
 
     const label = document.createElement('label');
@@ -30,18 +38,23 @@ class TreeRenderer extends Renderer implements DataChangeListener {
       label.textContent = controlElement.label;
     }
     this.appendChild(label);
-    const button = document.createElement('button');
-    button.textContent = 'Add me';
 
-    let arrayData = this.dataService.getValue(controlElement);
-    button.onclick = (ev: Event) => {
-      if (arrayData === undefined) {
-        arrayData = [];
-      }
-      arrayData.push({});
-      this.dataService.notifyChange(controlElement, arrayData);
-    };
-    this.appendChild(button);
+    const rootData = this.dataService.getValue(controlElement);
+    if (Array.isArray(rootData)) {
+      const button = document.createElement('button');
+      button.textContent = 'Add to root';
+
+      button.onclick = (ev: Event) => {
+        const newData = {};
+        this.addingToRoot = true;
+        const length = rootData.push(newData);
+        this.dataService.notifyChange(controlElement, rootData);
+        this.expandObject(newData, <HTMLUListElement>this.master.firstChild, this.dataSchema.items,
+          toDelete => rootData.splice(length - 1, 1));
+        this.addingToRoot = false;
+      };
+      this.appendChild(button);
+    }
 
     this.master = document.createElement('div');
     this.master.className = 'tree-master';
@@ -52,33 +65,50 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     div.appendChild(this.detail);
 
     this.appendChild(div);
+    this.dialog = document.createElement('dialog');
+    const title = document.createElement('label');
+    title.innerText = 'Select the Item to create:';
+    this.dialog.appendChild(title);
+    const dialogContent = document.createElement('div');
+    dialogContent.classList.add('content');
+    this.dialog.appendChild(dialogContent);
+    const dialogClose = document.createElement('button');
+    dialogClose.innerText = 'Close';
+    dialogClose.onclick = () => this.dialog.close();
+    this.dialog.appendChild(dialogClose);
+    this.appendChild(this.dialog);
     this.renderFull();
     this.dataService.registerChangeListener(this);
     return this;
   }
-
   isRelevantKey (uischema: ControlElement): boolean {
-    return this.uischema === uischema;
+    return this.uischema === uischema && !this.addingToRoot;
   }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
 
-  private renderFull() {
-    this.renderMaster();
+  private renderFull(): void {
+    this.renderMaster(this.resolvedSchema);
+    this.selectFirstElement();
+  }
+
+  private selectFirstElement(): void {
     const controlElement = <ControlElement> this.uischema;
     const arrayData = this.dataService.getValue(controlElement);
     if (arrayData !== undefined && arrayData.length !== 0) {
       let firstChild = arrayData;
+      let schema = this.resolvedSchema;
       if (Array.isArray(firstChild)) {
         firstChild = firstChild[0];
+        schema = schema.items;
       }
-      this.renderDetail(firstChild, <HTMLSpanElement>this.master.lastChild.firstChild.firstChild);
+      this.renderDetail(firstChild, <HTMLLIElement>this.master.firstChild.firstChild, schema);
     }
   }
 
-  private renderMaster(): void {
+  private renderMaster(schema: JsonSchema): void {
     if (this.master.lastChild !== null) {
       this.master.removeChild(this.master.lastChild);
     }
@@ -87,78 +117,174 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     if (rootData !== undefined) {
       const ul = document.createElement('ul');
       if (Array.isArray(rootData)) {
-        this.expandArray(rootData, ul);
+        this.expandArray(rootData, ul, <JsonSchema>schema.items);
       } else {
-        this.expandObject(rootData, ul);
+        this.expandObject(rootData, ul, schema, null);
       }
 
       this.master.appendChild(ul);
     }
   }
-  private expandArray(data: Array<Object>, parent: HTMLUListElement): void {
-    data.forEach(element => {
-      this.expandObject(element, parent);
+  private expandArray(data: Array<Object>, parent: HTMLUListElement, schema: JsonSchema): void {
+    data.forEach((element, index) => {
+      this.expandObject(element, parent, schema, toDelete => data.splice(index, 1));
     });
   }
-  private expandObject(data: Object, parent: HTMLUListElement): void {
+  private getArrayProperties(schema: JsonSchema): Array<string> {
+    return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined
+      && schema.properties[key].items['type'] === 'object');
+  }
+  private getNamingFunction(schema: JsonSchema): (element: Object) => string {
+    if (this.uischema.options === undefined) {
+      return JSON.stringify;
+    }
+    const labelProvider = this.uischema.options['labelProvider'];
+    if (labelProvider !== undefined) {
+      return (element) => element[labelProvider[schema.id]];
+    }
+    const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
+    if (namingKeys.length !== 0) {
+      return (element) => element[namingKeys[0]];
+    }
+    return JSON.stringify;
+  }
+  private addElement(key: string, data: Object, schema: JsonSchema, li: HTMLLIElement): void {
+    if (data[key] === undefined) {
+      data[key] = [];
+    }
+    const childArray = data[key];
+    const newData = {};
+    const length = childArray.push(newData);
+    const subChildren = li.getElementsByTagName('ul');
+    let childParent;
+    if (subChildren.length !== 0) {
+      childParent = subChildren.item(0);
+    } else {
+      childParent = document.createElement('ul');
+      li.appendChild(childParent);
+    }
+    this.expandObject(newData, childParent, schema.properties[key].items,
+      toDelete => childArray.splice(length - 1, 1));
+  };
+  private expandObject(data: Object, parent: HTMLUListElement, schema: JsonSchema,
+      deleteFunction: (element: Object) => void): void {
     const li = document.createElement('li');
+    const div = document.createElement('div');
+    if (this.uischema.options !== undefined &&
+      this.uischema.options['imageProvider'] !== undefined) {
+      const spanIcon = document.createElement('span');
+      spanIcon.classList.add('icon');
+      spanIcon.classList.add(this.uischema.options['imageProvider'][schema.id]);
+      div.appendChild(spanIcon);
+    }
     const span = document.createElement('span');
-    span.style.display = 'block';
-    span.style.cursor = 'pointer';
-    span.onclick = (ev: Event) => this.renderDetail(data, li);
-    span.textContent = data[Object.keys(data)[0]];
-    li.appendChild(span);
+    span.classList.add('label');
+    span.onclick = (ev: Event) => this.renderDetail(data, li, schema);
+    const spanText = document.createElement('span');
+    spanText.textContent = this.getNamingFunction(schema)(data);
+    span.appendChild(spanText);
+    div.appendChild(span);
+    if (this.getArrayProperties(schema).length !== 0) {
+      const spanAdd = document.createElement('span');
+      spanAdd.classList.add('add');
+      spanAdd.onclick = (ev: Event) => {
+        ev.stopPropagation();
+        const content = this.dialog.getElementsByClassName('content')[0];
+        while (content.firstChild) {
+          (<Element>content.firstChild).remove();
+        }
+        this.getArrayProperties(schema).forEach(key => {
+          const button = document.createElement('button');
+          button.innerText = key;
+          button.onclick = () => {
+            this.addElement(key, data, schema, li);
+            this.dialog.close();
+          };
+          content.appendChild(button);
+        });
+        this.dialog.showModal();
+      };
+      spanAdd.textContent = '\u2795';
+      span.appendChild(spanAdd);
+    }
+    if (deleteFunction !== null) {
+      const spanRemove = document.createElement('span');
+      spanRemove.classList.add('remove');
+      spanRemove.onclick = (ev: Event) => {
+        ev.stopPropagation();
+        deleteFunction(data);
+        li.remove();
+        if (this.selected === li) {
+          this.selectFirstElement();
+        }
+      };
+      spanRemove.textContent = '\u274C';
+      span.appendChild(spanRemove);
+    }
+    li.appendChild(div);
 
     Object.keys(data).forEach(key => {
       if (Array.isArray(data[key])) {
-        const ul = document.createElement('ul');
-        this.expandArray(data[key], ul);
-        li.appendChild(ul);
+        this.renderChildren(data[key], schema.properties[key].items, li, key);
       }
     });
+
     parent.appendChild(li);
   }
-  private renderDetail(element: Object, label: HTMLSpanElement): void {
+  private findRendererChildContainer(li: HTMLLIElement, key: string): HTMLUListElement {
+    let ul: HTMLUListElement;
+    const children = li.children;
+    for (let i = 0; i < children.length; i++) {
+      const child = children.item(i);
+      if (child.tagName === 'UL' && child.getAttribute('children') === key) {
+        ul = <HTMLUListElement>child;
+      }
+    }
+    return ul;
+  }
+  private renderChildren
+    (array: Array<Object>, schema: JsonSchema, li: HTMLLIElement, key: string): void {
+    let ul: HTMLUListElement = this.findRendererChildContainer(li, key);
+    if (ul === undefined) {
+      ul = document.createElement('ul');
+      ul.setAttribute('children', key);
+      li.appendChild(ul);
+    } else {
+      while (ul.firstChild) {
+        (<Element>ul.firstChild).remove();
+      }
+    }
+    this.expandArray(array, ul, schema);
+  }
+  private renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
     if (this.detail.lastChild !== null) {
       this.detail.removeChild(this.detail.lastChild);
     }
-    const innerUiSchema = <VerticalLayout>{
-      'type': 'VerticalLayout',
-      'elements': [
-        <ControlElement>{
-          'type': 'Control',
-          'label': 'Name',
-          'scope': {
-            '$ref': '#/properties/name'
-          }
-        }
-      ]
-    };
-    const innerDataSchema = {
-      'type': 'object',
-      'properties': {
-        'name': {
-          'type' : 'string',
-          'minLength': 5
-        }
-      }
-    };
-    const innerDataService = new DataService(element);
-    innerDataService.registerChangeListener({
-      isRelevantKey(uischema: ControlElement): boolean {
-        return true;
+    if (this.selected !== undefined) {
+      this.selected.classList.toggle('selected');
+    }
+    label.classList.toggle('selected');
+    this.selected = label;
+
+    const jsonForms = <JsonForms>document.createElement('json-forms');
+    jsonForms.data = element;
+    jsonForms.dataSchema = schema;
+    jsonForms.addDataChangeListener({
+      isRelevantKey: (uischema: ControlElement): boolean => {
+        return uischema !== null;
       },
-      notifyChange(uischema: ControlElement, newValue: any, data: any): void {
-        const text = element[Object.keys(element)[0]];
-        if (text === undefined) {
-          label.textContent = '';
-        } else {
-          label.textContent = text;
+      notifyChange: (uischema: ControlElement, newValue: any, data: any): void => {
+        const segments = uischema.scope.$ref.split('/');
+        const lastSegemnet = segments[segments.length - 1];
+        if (lastSegemnet === this.uischema.options['labelProvider'][schema.id]) {
+          label.firstChild.lastChild.firstChild.textContent = newValue;
+        }
+        if (Array.isArray(newValue)) {
+          this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref).items, label,
+          lastSegemnet);
         }
       }
     });
-    const lastRenderer = JsonFormsHolder.rendererService
-        .getBestRenderer(innerUiSchema, innerDataSchema, innerDataService);
-    this.detail.appendChild(lastRenderer);
+    this.detail.appendChild(jsonForms);
   }
 }

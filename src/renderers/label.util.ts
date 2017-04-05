@@ -11,30 +11,37 @@ class LabelObject implements ILabelObject {
         this.show = show;
     }
 }
+// poor man's version of a startCase implementation
+// FIXME why export and if so why here?
+export const startCase = (label: string): string =>
+    ((label && label.split(/(?=[A-Z])/)) || [])
+        .map(token => token.charAt(0).toUpperCase() + token.slice(1))
+        .join(' ');
+
 const deriveLabel = (controlElement: ControlElement): string => {
   const ref = controlElement.scope.$ref;
   const label = ref.substr(ref.lastIndexOf('/') + 1);
-  return label.charAt(0).toUpperCase() + label.substr(1);
+  return startCase(label);
 };
 
 const getLabelObject = (withLabel: ControlElement): ILabelObject => {
     const labelProperty = withLabel.label;
+    const derivedLabel = deriveLabel(withLabel);
     if (typeof labelProperty === 'boolean') {
         if (labelProperty) {
-            return new LabelObject(
-                deriveLabel(withLabel), labelProperty);
+            return new LabelObject(derivedLabel, labelProperty);
         } else {
-            return new LabelObject(undefined, <boolean>labelProperty);
+            return new LabelObject(derivedLabel, <boolean>labelProperty);
         }
     } else if (typeof labelProperty === 'string') {
         return new LabelObject(<string>labelProperty, true);
     } else if (typeof labelProperty === 'object') {
         const show = labelProperty.hasOwnProperty('show') ? labelProperty.show : true;
         const label = labelProperty.hasOwnProperty('text') ?
-          labelProperty.text : deriveLabel(withLabel);
+          labelProperty.text : derivedLabel;
         return new LabelObject(label, show);
     } else {
-        return new LabelObject(deriveLabel(withLabel), true);
+        return new LabelObject(derivedLabel, true);
     }
 };
 const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {

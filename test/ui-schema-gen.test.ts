@@ -1,15 +1,7 @@
 import test from 'ava';
-import generateDefaultUISchema, { startCase } from '../src/generators/ui-schema-gen';
+import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { Layout, ControlElement, LabelElement, VerticalLayout } from '../src/models/uischema';
-
-test('startCase', t => {
-    t.is(startCase('name'), 'Name');
-    t.is(startCase('fooBar'), 'Foo Bar');
-    t.is(startCase(''), '');
-    t.is(startCase(null), '');
-    t.is(startCase(undefined), '');
-});
 
 test('generate ui schema for schema w/o properties', t => {
     const schema: JsonSchema = {
