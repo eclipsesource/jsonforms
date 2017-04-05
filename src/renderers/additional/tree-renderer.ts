@@ -30,7 +30,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     const controlElement = <ControlElement> this.uischema;
     this.resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref);
 
-    let div = document.createElement('div');
+    const div = document.createElement('div');
     div.className = 'tree-layout';
 
     const label = document.createElement('label');
@@ -39,7 +39,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     }
     this.appendChild(label);
 
-    let rootData = this.dataService.getValue(controlElement);
+    const rootData = this.dataService.getValue(controlElement);
     if (Array.isArray(rootData)) {
       const button = document.createElement('button');
       button.textContent = 'Add to root';
@@ -135,6 +135,9 @@ class TreeRenderer extends Renderer implements DataChangeListener {
       && schema.properties[key].items['type'] === 'object');
   }
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
+    if (this.uischema.options === undefined) {
+      return JSON.stringify;
+    }
     const labelProvider = this.uischema.options['labelProvider'];
     if (labelProvider !== undefined) {
       return (element) => element[labelProvider[schema.id]];
@@ -152,7 +155,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     const childArray = data[key];
     const newData = {};
     const length = childArray.push(newData);
-    let subChildren = li.getElementsByTagName('ul');
+    const subChildren = li.getElementsByTagName('ul');
     let childParent;
     if (subChildren.length !== 0) {
       childParent = subChildren.item(0);
@@ -167,7 +170,8 @@ class TreeRenderer extends Renderer implements DataChangeListener {
       deleteFunction: (element: Object) => void): void {
     const li = document.createElement('li');
     const div = document.createElement('div');
-    if (this.uischema.options['imageProvider']) {
+    if (this.uischema.options !== undefined &&
+      this.uischema.options['imageProvider'] !== undefined) {
       const spanIcon = document.createElement('span');
       spanIcon.classList.add('icon');
       spanIcon.classList.add(this.uischema.options['imageProvider'][schema.id]);
@@ -227,8 +231,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
 
     parent.appendChild(li);
   }
-  private renderChildren
-    (array: Array<Object>, schema: JsonSchema, li: HTMLLIElement, key: string): void {
+  private findRendererChildContainer(li: HTMLLIElement, key: string): HTMLUListElement {
     let ul: HTMLUListElement;
     const children = li.children;
     for (let i = 0; i < children.length; i++) {
@@ -237,6 +240,11 @@ class TreeRenderer extends Renderer implements DataChangeListener {
         ul = <HTMLUListElement>child;
       }
     }
+    return ul;
+  }
+  private renderChildren
+    (array: Array<Object>, schema: JsonSchema, li: HTMLLIElement, key: string): void {
+    let ul: HTMLUListElement = this.findRendererChildContainer(li, key);
     if (ul === undefined) {
       ul = document.createElement('ul');
       ul.setAttribute('children', key);

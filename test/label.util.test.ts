@@ -1,8 +1,16 @@
 import test from 'ava';
 
-import {getElementLabelObject} from '../src/renderers/label.util';
+import {getElementLabelObject, startCase} from '../src/renderers/label.util';
 import {JsonSchema } from '../src/models/jsonSchema';
 import {ControlElement } from '../src/models/uischema';
+
+test('startCase', t => {
+    t.is(startCase('name'), 'Name');
+    t.is(startCase('fooBar'), 'Foo Bar');
+    t.is(startCase(''), '');
+    t.is(startCase(null), '');
+    t.is(startCase(undefined), '');
+});
 
 test('control relative', t => {
     const schema: JsonSchema = {
@@ -67,7 +75,7 @@ test('control without label string , required', t => {
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo*');
 });
-test.failing('control without label string, camel split', t => {
+test('control without label string, camel split', t => {
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -82,7 +90,7 @@ test.failing('control without label string, camel split', t => {
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo Bar Baz');
 });
-test.failing('control without label string, camel split and required', t => {
+test('control without label string, camel split and required', t => {
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {

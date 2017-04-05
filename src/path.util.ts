@@ -8,8 +8,8 @@ export const getValuePropertyPair = (instance: any, path: string):
   const resolvedInstance =
       validPathSegments
           .slice(0, validPathSegments.length - 1)
-          .reduce((curInstance, pathSegment) => {
-            const decodedSegment = decodeURIComponent(pathSegment);
+          .map(segment => decodeURIComponent(segment))
+          .reduce((curInstance, decodedSegment) => {
               if (!curInstance.hasOwnProperty(decodedSegment)) {
                   curInstance[decodedSegment] = {};
               }
@@ -27,10 +27,10 @@ export const toDataPath = (path: string): string =>
 
 export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
   const validPathSegments = path.split('/');
+  const invalidSegment =
+    (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
-      pathSegment === '#' || pathSegment === undefined || pathSegment === '' ?
-      curSchema : curSchema[pathSegment]
-  , schema);
+      invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment], schema);
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
     return retrieveResolvableSchema(schema, resultSchema.$ref);
   }

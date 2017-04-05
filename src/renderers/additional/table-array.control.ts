@@ -109,7 +109,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     div.appendChild(content);
 
     const button = document.createElement('button');
-    button.textContent = 'Add me';
+    button.textContent = `Add to ${labelObject.text}`;
     button.onclick = (ev: Event) => {
       if (arrayData === undefined) {
         arrayData = [];

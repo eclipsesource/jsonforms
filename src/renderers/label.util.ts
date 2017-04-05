@@ -11,10 +11,17 @@ class LabelObject implements ILabelObject {
         this.show = show;
     }
 }
+// poor man's version of a startCase implementation
+// FIXME why export and if so why here?
+export const startCase = (label: string): string =>
+    ((label && label.split(/(?=[A-Z])/)) || [])
+        .map(token => token.charAt(0).toUpperCase() + token.slice(1))
+        .join(' ');
+
 const deriveLabel = (controlElement: ControlElement): string => {
   const ref = controlElement.scope.$ref;
   const label = ref.substr(ref.lastIndexOf('/') + 1);
-  return label.charAt(0).toUpperCase() + label.substr(1);
+  return startCase(label);
 };
 
 const getLabelObject = (withLabel: ControlElement): ILabelObject => {
