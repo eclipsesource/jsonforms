@@ -59,10 +59,15 @@ test('RendererService unregistered renderer not used', t => {
   const dataService = new DataService(data);
   const uischema = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
   const schema = {type: 'object', properties: {foo: {type: 'string'}}} as JsonSchema;
-  rendererService.registerRenderer(() => 10, 'custom-renderer1');
-  rendererService.registerRenderer(() => 5, 'custom-renderer2');
-  rendererService.unregisterRenderer(() => 10, 'custom-renderer1');
+  const tester1 = () => 5;
+  const tester2 = () => 8;
+  const tester3 = () => 10;
+  rendererService.registerRenderer(tester1, 'custom-renderer1');
+  rendererService.registerRenderer(tester2, 'custom-renderer2');
+  rendererService.registerRenderer(tester3, 'custom-renderer2');
+  rendererService.unregisterRenderer(tester3, 'custom-renderer2');
   const element = rendererService.getBestRenderer(uischema, schema, dataService);
+  // tester2 should be triggered
   t.deepEqual(element.outerHTML, '<custom-renderer2></custom-renderer2>');
 });
 test('RendererService unregister not registered renderer ', t => {

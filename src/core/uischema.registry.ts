@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
 import {generateDefaultUISchema} from '../generators/ui-schema-gen';
@@ -25,29 +26,18 @@ export class UiSchemaRegistryImpl implements UiSchemaRegistry {
         this.registry.push({uiSchema: uiSchema, tester: tester});
     }
     unregister(uiSchema: UISchemaElement, tester: UiSchemaTester): void {
-      const index = this.registry.indexOf({uiSchema: uiSchema, tester: tester});
-      this.registry.splice(index, 1);
+        this.registry = _.filter(this.registry, el =>
+            // compare testers via strict equality
+            el.tester !== tester || !_.eq(el.uiSchema, uiSchema)
+        );
     }
     getBestUiSchema(schema: JsonSchema, data: any): UISchemaElement {
-        let bestSchema = this.maxBy(this.registry, renderer =>
+        const bestSchema = _.maxBy(this.registry, renderer =>
             renderer.tester(schema, data)
         );
         if (bestSchema === NO_UISCHEMA_DEFINITION) {
             return generateDefaultUISchema(schema);
         }
         return bestSchema.uiSchema;
-    }
-
-    private maxBy<T>(array: Array<T>, callback: (value: T) => number): T {
-      let result = null;
-      let maximum = null;
-      array.forEach(element => {
-        const currentValue = callback(element);
-        if (maximum === null || currentValue > maximum) {
-          maximum = currentValue;
-          result = element;
-        }
-      });
-      return result;
     }
 }
