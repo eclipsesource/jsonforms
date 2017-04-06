@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
 import {DataService} from './data.service';
@@ -9,35 +10,30 @@ export interface RendererTester {
 export class RendererService {
   private renderers: Array<{tester: RendererTester, renderer: string}> = [];
   registerRenderer(tester: RendererTester, renderer: string): void {
-    this.renderers.push({tester: tester, renderer: renderer});
+    this.renderers.push({tester, renderer});
   }
   unregisterRenderer(tester: RendererTester, renderer: string): void {
-    const index = this.renderers.indexOf({tester: tester, renderer: renderer});
-    this.renderers = this.renderers.splice(index, 1);
+    this.renderers = _.filter(this.renderers, r =>
+        // compare testers via strict equality
+        r.tester !== tester || !_.eq(r.renderer, renderer)
+    );
   }
   getBestRenderer(uischema: UISchemaElement,
                   schema: JsonSchema,
                   dataService: DataService): HTMLElement {
-    let bestRenderer: string;
-    let specificity = -1;
-    this.renderers.forEach(renderer => {
-      const rSpec = renderer.tester(uischema, schema);
-      if (rSpec > specificity) {
-        bestRenderer = renderer.renderer;
-        specificity = rSpec;
-      }
-    });
-    let renderer: HTMLElement;
+    const bestRenderer = _.maxBy(this.renderers, renderer =>
+        renderer.tester(uischema, schema)
+    );
     if (bestRenderer === undefined) {
-      renderer =  document.createElement('label');
+      const renderer = document.createElement('label');
       renderer.textContent = 'Unknown Schema: ' + JSON.stringify(uischema);
+      return renderer;
     } else {
-      const cRenderer = <Renderer> document.createElement(bestRenderer);
-      cRenderer.setUiSchema(uischema);
-      cRenderer.setDataSchema(schema);
-      cRenderer.setDataService(dataService);
-      renderer = cRenderer;
+      const renderer = <Renderer> document.createElement(bestRenderer.renderer);
+      renderer.setUiSchema(uischema);
+      renderer.setDataSchema(schema);
+      renderer.setDataService(dataService);
+      return renderer;
     }
-    return renderer;
   }
 }
