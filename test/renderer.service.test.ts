@@ -72,8 +72,10 @@ test('RendererService unregistered renderer not used', t => {
 });
 test('RendererService unregister not registered renderer ', t => {
   const rendererService = new RendererService();
-  const tester1 = () => 10;
-  const renderer1 = 'custom-renderer1';
-  rendererService.unregisterRenderer(tester1, renderer1);
-  t.pass();
+  rendererService.registerRenderer(() => 10, 'custom-renderer1');
+  rendererService.registerRenderer(() => 5, 'custom-renderer2');
+  const tester = () => 10;
+  const renderer = 'custom-renderer3';
+  rendererService.unregisterRenderer(tester, renderer);
+  t.is(rendererService['renderers'].length, 2);
 });

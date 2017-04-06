@@ -43,8 +43,11 @@ const setup = (div: HTMLDivElement) => {
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Service';
   buttonUnregister.onclick = () => {
-    JsonFormsHolder.jsonFormsServices.
-      splice(JsonFormsHolder.jsonFormsServices.indexOf(MyService), 1);
+    const index = JsonFormsHolder.jsonFormsServices.indexOf(MyService);
+    if (index === -1) {
+      return;
+    }
+    JsonFormsHolder.jsonFormsServices.splice(index, 1);
     // HACK to retrigger service creation
     resetServices();
     dynamic2_example_div.removeChild(dynamic2_example_div.firstChild);
