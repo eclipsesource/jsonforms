@@ -3,6 +3,7 @@ import { JsonFormsHolder} from '../../core';
 import {Renderer} from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {createRuntimeNotificationEvaluator} from './layout.util';
 
 export const VerticalLayoutRendererTester = (uischema: UISchemaElement) =>
   uischema !== undefined && uischema !== null && uischema.type === 'VerticalLayout' ? 1 : -1;
@@ -11,7 +12,7 @@ export const VerticalLayoutRendererTester = (uischema: UISchemaElement) =>
   tester: VerticalLayoutRendererTester
 })
 export class VerticalLayoutRenderer extends Renderer {
-
+  private evaluateRuntimeNotification: (type: RUNTIME_TYPE) => void;
   constructor() {
     super();
   }
@@ -27,24 +28,13 @@ export class VerticalLayoutRenderer extends Renderer {
       });
     }
     this.appendChild(div);
+    this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
     return this;
   }
   dispose(): void {
     // Do nothing
   }
   notify(type: RUNTIME_TYPE): void {
-    const runtime = <Runtime>this.uischema['runtime'];
-    switch (type) {
-      case RUNTIME_TYPE.VISIBLE:
-        this.hidden = !runtime.visible;
-        break;
-      case RUNTIME_TYPE.ENABLED:
-        if (!runtime.enabled) {
-          this.firstElementChild.setAttribute('disabled', 'true');
-        } else {
-          this.firstElementChild.removeAttribute('disabled');
-        }
-        break;
-    }
+    this.evaluateRuntimeNotification(type);
   }
 }

@@ -1,10 +1,8 @@
 import { JsonSchema } from './models/jsonSchema';
-// const PATH_SEGMENTS_TO_IGNORE = ['#', 'properties'];
 
 export const getValuePropertyPair = (instance: any, path: string):
   {instance: Object, property: string} => {
   const validPathSegments = toDataPathSegments(path);
-      // path.split('/').filter(subPath => PATH_SEGMENTS_TO_IGNORE.indexOf(subPath) === -1);
   const resolvedInstance =
       validPathSegments
           .slice(0, validPathSegments.length - 1)
@@ -24,8 +22,8 @@ export const getValuePropertyPair = (instance: any, path: string):
 const toDataPathSegments = (path: string): Array<string> => {
   const segments = path.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
-  return segments.filter((segment, index) => {
-    if (startFromRoot) {
+  if (startFromRoot) {
+    return segments.filter((segment, index) => {
       if (index === 0) {
         return false;
       } else if (index % 2 === 1) {
@@ -33,12 +31,13 @@ const toDataPathSegments = (path: string): Array<string> => {
       } else {
         return true;
       }
+    });
+  }
+  return segments.filter((segment, index) => {
+    if (index % 2 === 0) {
+      return false;
     } else {
-      if (index % 2 === 0) {
-        return false;
-      } else {
-        return true;
-      }
+      return true;
     }
   });
 }
