@@ -1,7 +1,8 @@
 .github
 .travis.yml
 .npmignore
-.bower.json
+.nyc_output
+bower.json
 CLA.md
 CONTRIBUTING.md
 
