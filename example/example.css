@@ -4,6 +4,11 @@
 input {
   height: 1.25em;
 }
+.jsf-label {
+  margin: 0.5em 1em;
+  font-weight: bold;
+  border-bottom: 1px solid lightgray;
+}
 .control {
   display: flex;
   flex:1;

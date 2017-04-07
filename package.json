@@ -1,10 +1,29 @@
 {
-  "name": "webcomponents-jsonforms",
+  "name": "jsonforms",
   "private": true,
-  "version": "0.0.1",
+  "version": "2.0.0-Alpha2",
   "license": "MIT",
   "directories": {
     "test": "test"
+  },
+  "main": "dist/ts-build/index.js",
+  "typings": "dist/ts-build/index.d.ts",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "build": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
+    "build-all": "npm run tsc && npm run build && ncp example/example.css dist/jsonforms-example.css",
+    "lint": "tslint --project tslint.json",
+    "test": "tsc && nyc ava ",
+    "tsc": "tsc",
+    "report": "nyc report --reporter=html",
+    "example_library": "lite-server -c example_library/bs-config.json",
+    "wct": "wct wct-test/json-forms.html",
+    "publish-patch": "npm run build-all && npm run test && npm -no-git-tag-version version patch && npm run commit-local && npm run push-tag && npm publish",
+    "publish-minor": "npm run build-all && npm run test && npm -no-git-tag-version version minor && npm run commit-local && npm run push-tag && npm publish",
+    "publish-major": "npm run build-all && npm run test && npm -no-git-tag-version version major && npm run commit-local && npm run push-tag && npm publish",
+    "commit-local": "git add package.json && git commit -m \"Bump version number to $npm_package_version\"",
+    "push-tag": "git checkout -b auto-git-publish-$npm_package_version && git add -f dist/**/* && git commit -m \"Release $npm_package_version\" && git tag -a $npm_package_version -m \"Release $npm_package_version\" && git push upstream $npm_package_version",
   },
   "dependencies": {
     "ajv": "^4.11.2",
@@ -28,17 +47,5 @@
     "webcomponents.js": "^0.7.24",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^1.16.3"
-  },
-  "scripts": {
-    "start": "npm run dev",
-    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
-    "build": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
-    "lint": "tslint --project tslint.json",
-    "test": "tsc && nyc ava ",
-    "tsc": "tsc",
-    "report": "nyc report --reporter=html",
-    "example_library": "lite-server -c example_library/bs-config.json",
-    "wct": "wct wct-test/json-forms.html"
-  },
-  "main": "dist/jsonforms.js"
+  }
 }
