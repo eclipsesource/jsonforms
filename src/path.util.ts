@@ -1,10 +1,8 @@
 import { JsonSchema } from './models/jsonSchema';
-const PATH_SEGMENTS_TO_IGNORE = ['#', 'properties'];
 
 export const getValuePropertyPair = (instance: any, path: string):
   {instance: Object, property: string} => {
-  const validPathSegments =
-      path.split('/').filter(subPath => PATH_SEGMENTS_TO_IGNORE.indexOf(subPath) === -1);
+  const validPathSegments = toDataPathSegments(path);
   const resolvedInstance =
       validPathSegments
           .slice(0, validPathSegments.length - 1)
@@ -21,9 +19,31 @@ export const getValuePropertyPair = (instance: any, path: string):
         decodeURIComponent(validPathSegments[validPathSegments.length - 1]) : undefined
   };
 };
-
-export const toDataPath = (path: string): string =>
-  path.split('/').filter(subPath => PATH_SEGMENTS_TO_IGNORE.indexOf(subPath) === -1).join('/');
+const toDataPathSegments = (path: string): Array<string> => {
+  const segments = path.split('/');
+  const startFromRoot = segments[0] === '#' || segments[0] === '';
+  if (startFromRoot) {
+    return segments.filter((segment, index) => {
+      if (index === 0) {
+        return false;
+      } else if (index % 2 === 1) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+  }
+  return segments.filter((segment, index) => {
+    if (index % 2 === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+}
+export const toDataPath = (path: string): string => {
+  return toDataPathSegments(path).join('/');
+}
 
 export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
   const validPathSegments = path.split('/');

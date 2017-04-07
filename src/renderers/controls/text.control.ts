@@ -2,11 +2,13 @@ import { UISchemaElement } from '../../models/uischema';
 import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
 
+export const TextControlTester = (uischema: UISchemaElement) =>
+  uischema !== undefined && uischema !== null && uischema.type === 'Control' ? 1 : -1;
 @JsonFormsRenderer({
   selector: 'jsonforms-text',
-  tester: (uischema: UISchemaElement) => uischema.type === 'Control' ? 1 : -1
+  tester: TextControlTester
 })
-class TextControl extends BaseControl<HTMLInputElement> {
+export class TextControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {
     input.type = 'text';
     input.classList.add('form-control');

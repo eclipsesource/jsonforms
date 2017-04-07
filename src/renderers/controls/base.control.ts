@@ -68,7 +68,7 @@ export abstract class BaseControl <T extends HTMLElement>
   }
 
   isRelevantKey (uischema: ControlElement): boolean {
-    if (uischema === null) {
+    if (uischema === undefined || uischema === null) {
       return false;
     }
     return (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
