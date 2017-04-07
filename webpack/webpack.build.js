@@ -5,7 +5,7 @@ module.exports = {
     entry: './src/index.ts',
     output: {
       path: path.resolve("./", "dist"),
-      filename: "[name].js",
+      filename: "jsonforms.js",
       library: "JSONForms",
       libraryTarget: 'umd',
       umdNamedDefine: true
