@@ -1,15 +1,15 @@
-import {UISchemaElement, ControlElement, VerticalLayout} from '../../models/uischema';
-import {JsonFormsHolder} from '../../core';
+import {ControlElement} from '../../models/uischema';
 import {Renderer} from '../../core/renderer';
-import {DataService, DataChangeListener} from '../../core/data.service';
+import {DataChangeListener} from '../../core/data.service';
 import {JsonFormsRenderer} from '../renderer.util';
 import {resolveSchema} from '../../path.util';
 import {JsonForms} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
+import {uiTypeIs, rankWith} from '../../core/testers';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-tree',
-  tester: (uischema: UISchemaElement) => uischema.type === 'MasterDetailLayout' ? 1 : -1
+  tester: rankWith(1, uiTypeIs('MasterDetailLayout'))
 })
 class TreeRenderer extends Renderer implements DataChangeListener {
   private master: HTMLElement;

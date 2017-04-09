@@ -6,7 +6,7 @@ declare var global;
 installCE(global, 'force');
 import {JsonSchema} from '../src/models/jsonSchema';
 import {ControlElement} from '../src/models/uischema';
-import {ArrayControlRenderer, ArrayControlTester} from '../src/renderers/additional/array-renderer';
+import {ArrayControlRenderer, arrayTester} from '../src/renderers/additional/array-renderer';
 import {DataService } from '../src/core/data.service';
 import {JsonFormsHolder} from '../src/core';
 
@@ -242,19 +242,67 @@ test('array-layout DataService notification', t => {
   t.is(childrenLast.childNodes.length, 2);
 });
 test('array-layout Tester', t => {
-  t.is(ArrayControlTester({type: 'Foo'}, null), -1);
-  t.is(ArrayControlTester({type: 'Control', scope: {$ref: '#'}} as ControlElement,
-    undefined), -1);
-  t.is(ArrayControlTester({type: 'Control', scope: {$ref: '#/properties/x'}} as ControlElement,
-    {type: 'object', properties: {x: {type: 'integer'}}}), -1);
-  t.is(ArrayControlTester({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'array'}}}), -1);
-  t.is(ArrayControlTester({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties:
-      {foo: {type: 'array', items: [{type: 'integer'}, {type: 'string'}]}}}), -1);
-  t.is(ArrayControlTester({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'array', items: {type: 'integer'}}}}), -1);
-  const schema: JsonSchema = {
+  t.is(
+      arrayTester({ type: 'Foo' }, null),
+      -1
+  );
+  t.is(
+      arrayTester(
+          { type: 'Control', scope: { $ref: '#' } } as ControlElement,
+          undefined
+      ),
+      -1);
+  t.is(
+      arrayTester(
+          { type: 'Control', scope: { $ref: '#/properties/x' } } as ControlElement,
+          { type: 'object',  properties: { x: { type: 'integer' } } }
+      ),
+      -1
+  );
+  t.is(
+      arrayTester(
+          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
+          { type: 'object',  properties: { foo: { type: 'array'} } }
+      ),
+      -1
+  );
+  t.is(
+      arrayTester(
+          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
+          {
+              type: 'object',
+              properties:
+                  {
+                      foo: {
+                          type: 'array',
+                          items: [
+                              { type: 'integer' },
+                              { type: 'string' }
+                          ]
+                      }
+                  }
+          }
+      ),
+      -1
+  );
+    t.is(
+        arrayTester({
+                type: 'Control',
+                scope: { $ref: '#/properties/foo'}
+            } as ControlElement,
+            {
+                type: 'object',
+                properties: {
+                    foo: {
+                        type: 'array',
+                        items: { type: 'integer' }
+                    }
+                }
+            }
+        ),
+        -1
+    );
+    const schema: JsonSchema = {
       'type': 'object',
       'properties': {
           'test': {
@@ -275,5 +323,5 @@ test('array-layout Tester', t => {
           '$ref': '#/properties/test'
       }
   };
-  t.is(ArrayControlTester(uiSchema, schema), 2);
+  t.is(arrayTester(uiSchema, schema), 2);
 });

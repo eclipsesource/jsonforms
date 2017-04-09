@@ -1,35 +1,27 @@
-import { UISchemaElement, ControlElement } from '../../models/uischema';
+import * as _ from 'lodash';
+import { ControlElement } from '../../models/uischema';
 import { JsonForms } from '../../json-forms';
 import { Renderer } from '../../core/renderer';
-import {DataService, DataChangeListener} from '../../core/data.service';
+import { DataChangeListener} from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
-import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { JsonSchema } from '../../models/jsonSchema';
-import {getElementLabelObject} from '../label.util';
+import { getElementLabelObject } from '../label.util';
+import { RankedTester, rankWith, and, uiTypeIs, schemaMatches } from '../../core/testers';
 
-export const ArrayControlTester = (uischema: UISchemaElement, schema: JsonSchema) => {
-  if (uischema.type !== 'Control') {
-    return -1;
-  }
-  const subSchema = resolveSchema(schema, (<ControlElement>uischema).scope.$ref);
-  if (subSchema === undefined) {
-    return -1;
-  }
-  if (subSchema.type !== 'array') {
-    return -1;
-  }
-  if (subSchema.items === undefined) {
-    return -1;
-  }
-  if (Array.isArray(subSchema.items)) {
-    return -1;
-  }
-  return subSchema.items.type === 'object' ? 2 : -1;
-};
+export const arrayTester: RankedTester = rankWith(2, and(
+    uiTypeIs('Control'),
+    schemaMatches(schema =>
+        !_.isEmpty(schema)
+        && schema.type === 'array'
+        && !_.isEmpty(schema.items)
+        && !Array.isArray(schema.items) // we don't care about tuples
+        && (schema.items as JsonSchema).type === 'object'
+    ))
+);
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
-  tester: ArrayControlTester
+  tester: arrayTester
 })
 export class ArrayControlRenderer extends Renderer implements DataChangeListener {
 

@@ -1,15 +1,16 @@
-import { UISchemaElement, GroupLayout } from '../../models/uischema';
-import {JsonFormsHolder} from '../../core';
-import {Renderer} from '../../core/renderer';
+import { GroupLayout } from '../../models/uischema';
+import { JsonFormsHolder } from '../../core';
+import { Renderer } from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import {createRuntimeNotificationEvaluator} from './layout.util';
+import { RUNTIME_TYPE } from '../../core/runtime';
+import { createRuntimeNotificationEvaluator } from './layout.util';
+import {uiTypeIs, rankWith, RankedTester} from '../../core/testers';
 
-export const GroupLayoutRendererTester = (uischema: UISchemaElement) =>
-  uischema !== undefined && uischema !== null && uischema.type === 'Group' ? 1 : -1;
+export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
+
 @JsonFormsRenderer({
   selector: 'jsonforms-grouplayout',
-  tester: GroupLayoutRendererTester
+  tester: groupTester
 })
 export class GroupLayoutRenderer extends Renderer {
   private evaluateRuntimeNotification: (type: RUNTIME_TYPE) => void;

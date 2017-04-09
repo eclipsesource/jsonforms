@@ -1,12 +1,11 @@
-import { UISchemaElement, LabelElement } from '../../models/uischema';
-import {JsonFormsHolder} from '../../core';
-import {Renderer} from '../../core/renderer';
+import { LabelElement } from '../../models/uischema';
+import { Renderer } from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
-import {Runtime} from '../../core/runtime';
+import { rankWith, uiTypeIs } from '../../core/testers';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-label',
-  tester: (uischema: UISchemaElement) => uischema.type === 'Label' ? 1 : -1
+  tester: rankWith(1, uiTypeIs('Label'))
 })
 class LabelRenderer extends Renderer {
 

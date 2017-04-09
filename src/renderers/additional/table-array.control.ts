@@ -1,26 +1,19 @@
-import { UISchemaElement, ControlElement } from '../../models/uischema';
+import { ControlElement } from '../../models/uischema';
 import { JsonForms } from '../../json-forms';
 import { Renderer } from '../../core/renderer';
-import {DataService, DataChangeListener} from '../../core/data.service';
+import { DataChangeListener} from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
-import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
-import { JsonSchema } from '../../models/jsonSchema';
-import {getElementLabelObject} from '../label.util';
+import { getElementLabelObject } from '../label.util';
+import { rankWith, uiTypeIs, optionIs, and, schemaTypeIs } from '../../core/testers';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-tablearray',
-  tester: (uischema: UISchemaElement, schema: JsonSchema) => {
-    if (uischema.type !== 'Control' || uischema.options === undefined
-      || !uischema.options['table']) {
-      return -1;
-    }
-    const subSchema = resolveSchema(schema, (<ControlElement>uischema).scope.$ref);
-    if (subSchema === undefined) {
-      return -1;
-    }
-    return subSchema.type === 'array' ? 10 : -1;
-  }
+  tester: rankWith(10, and(
+      uiTypeIs('Control'),
+      optionIs('table', true),
+      schemaTypeIs('array')
+  ))
 })
 export class TableArrayControlRenderer extends Renderer implements DataChangeListener {
 
@@ -45,6 +38,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     super.disconnectedCallback();
   }
   dispose(): void {
+    // no-op
   }
 
   render(): HTMLElement {

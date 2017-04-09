@@ -1,12 +1,12 @@
-import { UISchemaElement } from '../../models/uischema';
 import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
+import { uiTypeIs, rankWith, RankedTester } from '../../core/testers';
 
-export const TextControlTester = (uischema: UISchemaElement) =>
-  uischema !== undefined && uischema !== null && uischema.type === 'Control' ? 1 : -1;
+export const textControlTester: RankedTester = rankWith(1, uiTypeIs('Control'));
+
 @JsonFormsRenderer({
   selector: 'jsonforms-text',
-  tester: TextControlTester
+  tester: textControlTester
 })
 export class TextControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {

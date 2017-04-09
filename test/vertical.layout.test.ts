@@ -2,19 +2,31 @@ import test from 'ava';
 // inject window, document etc.
 import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
 import {VerticalLayout} from '../src/models/uischema';
-import {VerticalLayoutRenderer, VerticalLayoutRendererTester}
+import {VerticalLayoutRenderer, verticalLayoutTester}
   from '../src/renderers/layouts/vertical.layout';
-import {Runtime, RUNTIME_TYPE} from '../src/core/runtime';
+import {Runtime} from '../src/core/runtime';
 
 
 test('VerticalLayoutRendererTester', t => {
-  t.is(-1, VerticalLayoutRendererTester(undefined));
-  t.is(-1, VerticalLayoutRendererTester(null));
-  t.is(-1, VerticalLayoutRendererTester({type: 'Foo'}));
-  t.is(1, VerticalLayoutRendererTester({type: 'VerticalLayout'}));
+  t.is(
+      verticalLayoutTester(undefined, undefined),
+      -1
+  );
+  t.is(
+      verticalLayoutTester(null, undefined),
+      -1
+  );
+  t.is(
+      verticalLayoutTester({type: 'Foo'}, undefined),
+      -1
+  );
+  t.is(
+      verticalLayoutTester({type: 'VerticalLayout'}, undefined),
+      1
+  );
 });
 test('VerticalLayoutRenderer with elements undefined', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();

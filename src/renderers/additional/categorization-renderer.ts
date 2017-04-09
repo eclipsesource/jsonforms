@@ -1,13 +1,12 @@
-import {UISchemaElement, Categorization, Category} from '../../models/uischema';
-import {JsonFormsHolder} from '../../core';
+import {Categorization, Category} from '../../models/uischema';
 import {Renderer} from '../../core/renderer';
-import {DataService, DataChangeListener} from '../../core/data.service';
 import {JsonFormsRenderer} from '../renderer.util';
 import {JsonForms} from '../../json-forms';
+import {uiTypeIs, rankWith} from '../../core/testers';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-categorization',
-  tester: (uischema: UISchemaElement) => uischema.type === 'Categorization' ? 1 : -1
+  tester: rankWith(1, uiTypeIs('Categorization'))
 })
 class CategorizationRenderer extends Renderer {
   private master: HTMLElement;
@@ -22,8 +21,6 @@ class CategorizationRenderer extends Renderer {
     // Do nothing
   }
   render(): HTMLElement {
-    const controlElement = <Categorization> this.uischema;
-
     let div = document.createElement('div');
     div.className = 'jsf-categorization';
 

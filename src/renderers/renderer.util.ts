@@ -1,9 +1,9 @@
-import { JsonFormsHolder } from '../core';
+import {JsonFormsHolder} from '../core';
 import {Renderer} from '../core/renderer';
-import {RendererTester} from '../core/renderer.service'
+import {RankedTester} from '../core/testers';
 export interface JsonFormsRendererConfig {
   selector: string;
-  tester: RendererTester;
+  tester: RankedTester;
 }
 export interface JsonFormsRendererConstructable {
   new(): Renderer;

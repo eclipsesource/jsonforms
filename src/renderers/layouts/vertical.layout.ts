@@ -1,15 +1,16 @@
-import { UISchemaElement, VerticalLayout } from '../../models/uischema';
-import { JsonFormsHolder} from '../../core';
+import {VerticalLayout} from '../../models/uischema';
+import {JsonFormsHolder} from '../../core';
 import {Renderer} from '../../core/renderer';
-import { JsonFormsRenderer } from '../renderer.util';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {JsonFormsRenderer} from '../renderer.util';
+import {RUNTIME_TYPE} from '../../core/runtime';
 import {createRuntimeNotificationEvaluator} from './layout.util';
+import {rankWith, uiTypeIs, RankedTester} from '../../core/testers';
 
-export const VerticalLayoutRendererTester = (uischema: UISchemaElement) =>
-  uischema !== undefined && uischema !== null && uischema.type === 'VerticalLayout' ? 1 : -1;
+export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
+
 @JsonFormsRenderer({
   selector: 'jsonforms-verticallayout',
-  tester: VerticalLayoutRendererTester
+  tester: verticalLayoutTester
 })
 export class VerticalLayoutRenderer extends Renderer {
   private evaluateRuntimeNotification: (type: RUNTIME_TYPE) => void;

@@ -1,15 +1,16 @@
-import { UISchemaElement, HorizontalLayout } from '../../models/uischema';
-import { JsonFormsHolder} from '../../core';
+import { HorizontalLayout } from '../../models/uischema';
+import {JsonFormsHolder} from '../../core';
 import {Renderer} from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {RUNTIME_TYPE} from '../../core/runtime';
 import {createRuntimeNotificationEvaluator} from './layout.util';
+import {uiTypeIs, rankWith, RankedTester} from '../../core/testers';
 
-export const HorizontalLayoutRendererTester = (uischema: UISchemaElement) =>
-  uischema !== undefined && uischema !== null && uischema.type === 'HorizontalLayout' ? 1 : -1;
+export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
+
 @JsonFormsRenderer({
   selector: 'jsonforms-horizontallayout',
-  tester: HorizontalLayoutRendererTester
+  tester: horizontalLayoutTester
 })
 export class HorizontalLayoutRenderer extends Renderer {
   private evaluateRuntimeNotification: (type: RUNTIME_TYPE) => void;
