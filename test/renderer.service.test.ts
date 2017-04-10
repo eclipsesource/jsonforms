@@ -1,13 +1,12 @@
 import {test} from 'ava';
-import {RendererService, RendererTester} from '../src/core/renderer.service';
+import {RendererService} from '../src/core/renderer.service';
 import {DataService} from '../src/core/data.service';
-import {UISchemaElement, ControlElement} from '../src/models/uischema';
+import {ControlElement} from '../src/models/uischema';
 import {JsonSchema} from '../src/models/jsonSchema';
-import {Renderer} from '../src/core/renderer';
 
 import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
 
 test.before(t => {

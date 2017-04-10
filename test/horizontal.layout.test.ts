@@ -5,16 +5,28 @@ import * as installCE from 'document-register-element/pony';
 declare var global;
 installCE(global, 'force');
 import {HorizontalLayout} from '../src/models/uischema';
-import {HorizontalLayoutRenderer, HorizontalLayoutRendererTester}
+import {HorizontalLayoutRenderer, horizontalLayoutTester}
   from '../src/renderers/layouts/horizontal.layout';
 import {Runtime, RUNTIME_TYPE} from '../src/core/runtime';
 
 
 test('HorizontalLayoutRendererTester', t => {
-  t.is(-1, HorizontalLayoutRendererTester(undefined));
-  t.is(-1, HorizontalLayoutRendererTester(null));
-  t.is(-1, HorizontalLayoutRendererTester({type: 'Foo'}));
-  t.is(1, HorizontalLayoutRendererTester({type: 'HorizontalLayout'}));
+  t.is(
+      horizontalLayoutTester(undefined, undefined),
+      -1
+  );
+  t.is(
+      horizontalLayoutTester(null, undefined),
+      -1
+  );
+  t.is(
+      horizontalLayoutTester({ type: 'Foo' }, undefined),
+      -1
+  );
+  t.is(
+      horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined),
+      1
+  );
 });
 test('HorizontalLayoutRenderer with elements undefined', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();

@@ -5,16 +5,28 @@ import * as installCE from 'document-register-element/pony';
 declare var global;
 installCE(global, 'force');
 import {GroupLayout} from '../src/models/uischema';
-import {GroupLayoutRenderer, GroupLayoutRendererTester}
+import {GroupLayoutRenderer, groupTester}
   from '../src/renderers/layouts/group.layout';
 import {Runtime, RUNTIME_TYPE} from '../src/core/runtime';
 
 
 test('GroupLayoutRendererTester', t => {
-  t.is(-1, GroupLayoutRendererTester(undefined));
-  t.is(-1, GroupLayoutRendererTester(null));
-  t.is(-1, GroupLayoutRendererTester({type: 'Foo'}));
-  t.is(1, GroupLayoutRendererTester({type: 'Group'}));
+  t.is(
+      groupTester(undefined, undefined),
+      -1
+  );
+  t.is(
+      groupTester(null, undefined),
+      -1
+  );
+  t.is(
+      groupTester({type: 'Foo'}, undefined),
+      -1
+  );
+  t.is(
+      groupTester({type: 'Group'}, undefined),
+      1
+  );
 });
 test('GroupLayoutRenderer with elements undefined', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();

@@ -1,14 +1,17 @@
-import { UISchemaElement, ControlElement } from '../../models/uischema';
-import { JsonSchema } from '../../models/jsonSchema';
+import { ControlElement } from '../../models/uischema';
 import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
+import { rankWith, and, uiTypeIs, schemaMatches} from '../../core/testers';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-enum',
-  tester: (uischema: UISchemaElement, schema: JsonSchema) =>
-      uischema.type === 'Control' &&
-      resolveSchema(schema, (<ControlElement>uischema).scope.$ref).hasOwnProperty('enum') ? 2 : -1
+  tester: rankWith(2,
+      and(
+          uiTypeIs('Control'),
+          schemaMatches(schema => schema.hasOwnProperty('enum'))
+      )
+  )
 })
 class EnumControl extends BaseControl<HTMLSelectElement> {
   private options: Array<any>;

@@ -2,20 +2,32 @@ import test from 'ava';
 // inject window, document etc.
 import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
 import {ControlElement} from '../src/models/uischema';
 import {JsonSchema} from '../src/models/jsonSchema';
-import {TextControlTester, TextControl} from '../src/renderers/controls/text.control';
-import {Runtime, RUNTIME_TYPE} from '../src/core/runtime';
+import {textControlTester, TextControl} from '../src/renderers/controls/text.control';
+import {Runtime} from '../src/core/runtime';
 import {DataService } from '../src/core/data.service';
 
 
 test('TextControlTester', t => {
-  t.is(-1, TextControlTester(undefined));
-  t.is(-1, TextControlTester(null));
-  t.is(-1, TextControlTester({type: 'Foo'}));
-  t.is(1, TextControlTester({type: 'Control'}));
+  t.is(
+      textControlTester(undefined, undefined),
+      -1
+  );
+  t.is(
+      textControlTester(null, undefined),
+      -1
+  );
+  t.is(
+      textControlTester({type: 'Foo'}, undefined),
+      -1
+  );
+  t.is(
+      textControlTester({type: 'Control'}, undefined),
+      1
+  );
 });
 test('TextControl static', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;

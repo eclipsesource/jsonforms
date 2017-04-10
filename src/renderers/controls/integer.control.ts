@@ -1,14 +1,13 @@
-import { UISchemaElement, ControlElement } from '../../models/uischema';
-import { JsonSchema } from '../../models/jsonSchema';
 import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
-import { resolveSchema } from '../../path.util';
+import { rankWith, uiTypeIs, and, schemaTypeIs } from '../../core/testers';
 
 @JsonFormsRenderer({
   selector: 'jsonforms-integer',
-  tester: (uischema: UISchemaElement, schema: JsonSchema) =>
-      uischema.type === 'Control'
-      && resolveSchema(schema, (<ControlElement>uischema).scope.$ref).type === 'integer' ? 2 : -1
+  tester: rankWith(2, and(
+      uiTypeIs('Control'),
+      schemaTypeIs('integer')
+  ))
 })
 class IntegerControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {

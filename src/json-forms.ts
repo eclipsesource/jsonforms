@@ -1,7 +1,6 @@
 import { UISchemaElement } from './models/uischema';
 import { JsonFormService, JsonFormsHolder } from './core';
 import { JsonSchema } from './models/jsonSchema';
-import { generateDefaultUISchema } from './generators/ui-schema-gen';
 import { generateJsonSchema } from './generators/schema-gen';
 import * as JsonRefs from 'json-refs';
 import {DataService, DataChangeListener} from './core/data.service';
@@ -35,34 +34,6 @@ export class JsonForms extends HTMLElement {
 
   disconnectedCallback(): void {
     this.services.forEach(service => service.dispose());
-  }
-
-  private render(): void {
-    if (!this.allowDynamicUpdate) {
-      return;
-    }
-    if (this.schemaPromise !== null) {
-      return;
-    }
-    if (this.dataObject == null || this.dataService == null) {
-      return;
-    }
-
-    if (this.lastChild !== null) {
-      this.removeChild(this.lastChild);
-    }
-
-    this.services.forEach(service => service.dispose());
-    this.services = [];
-    const schema = this.dataSchema;
-    const uiSchema = this.uiSchema;
-    this.createServices(uiSchema, schema);
-
-    const bestRenderer = JsonFormsHolder.rendererService
-        .getBestRenderer(uiSchema, schema, this.dataService);
-    this.appendChild(bestRenderer);
-
-    this.dataService.initialRootRun();
   }
 
   set data(data: Object) {
@@ -99,12 +70,41 @@ export class JsonForms extends HTMLElement {
     return JsonFormsHolder.uischemaRegistry.getBestUiSchema(this.dataSchema, this.dataObject);
   }
 
+  addDataChangeListener(listener: DataChangeListener): void {
+    this.dataService.registerChangeListener(listener);
+  }
+
+  private render(): void {
+    if (!this.allowDynamicUpdate) {
+      return;
+    }
+    if (this.schemaPromise !== null) {
+      return;
+    }
+    if (this.dataObject == null || this.dataService == null) {
+      return;
+    }
+
+    if (this.lastChild !== null) {
+      this.removeChild(this.lastChild);
+    }
+
+    this.services.forEach(service => service.dispose());
+    this.services = [];
+    const schema = this.dataSchema;
+    const uiSchema = this.uiSchema;
+    this.createServices(uiSchema, schema);
+
+    const bestRenderer = JsonFormsHolder.rendererService
+        .getBestRenderer(uiSchema, schema, this.dataService);
+    this.appendChild(bestRenderer);
+
+    this.dataService.initialRootRun();
+  }
+
   private createServices(uiSchema, dataSchema): void {
     JsonFormsHolder.jsonFormsServices.forEach(service =>
         this.services.push(new service(this.dataService, dataSchema, uiSchema))
     );
-  }
-  addDataChangeListener(listener: DataChangeListener): void {
-    this.dataService.registerChangeListener(listener);
   }
 }

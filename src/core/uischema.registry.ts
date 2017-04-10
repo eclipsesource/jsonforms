@@ -23,7 +23,7 @@ export class UiSchemaRegistryImpl implements UiSchemaRegistry {
     }
 
     register(uiSchema: UISchemaElement, tester: UiSchemaTester): void {
-        this.registry.push({uiSchema: uiSchema, tester: tester});
+        this.registry.push({uiSchema, tester});
     }
     unregister(uiSchema: UISchemaElement, tester: UiSchemaTester): void {
         this.registry = _.filter(this.registry, el =>

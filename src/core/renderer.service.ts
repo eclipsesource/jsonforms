@@ -3,16 +3,14 @@ import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
 import {DataService} from './data.service';
 import {Renderer} from './renderer';
+import {RankedTester} from './testers';
 
-export interface RendererTester {
-    (element: UISchemaElement, schema: JsonSchema): number;
-}
 export class RendererService {
-  private renderers: Array<{tester: RendererTester, renderer: string}> = [];
-  registerRenderer(tester: RendererTester, renderer: string): void {
+  private renderers: Array<{tester: RankedTester, renderer: string}> = [];
+  registerRenderer(tester: RankedTester, renderer: string): void {
     this.renderers.push({tester, renderer});
   }
-  unregisterRenderer(tester: RendererTester, renderer: string): void {
+  unregisterRenderer(tester: RankedTester, renderer: string): void {
     this.renderers = _.filter(this.renderers, r =>
         // compare testers via strict equality
         r.tester !== tester || !_.eq(r.renderer, renderer)
