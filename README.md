@@ -1,39 +1,60 @@
 # JSONForms - More Forms. Less Code
-### Complex AngularJS Forms in the blink of an eye
+### Complex Forms in the blink of an eye
 
 JSONForms uses HTML custom elements and eliminates the need to write HTML templates in order to
 create forms by leveraging the capabilities of JSON and JSON schema.
 
 # Usage
-1. Install JSON Forms via `npm install jsonforms`
-2. Load `jsonforms-example.css` in the head section:
+To use JSONForms add `native-shim.js` and `jsonforms.js` to your HTML in this order. Once you add a `json-forms` element to the DOM with at least a `data` attribute, a form will be rendered for you. Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes. Use CSS to style the form however you want.
 
+## Step by Step Example Usage
+
+1. Install JSONForms via `npm install jsonforms@next`
+2. Add `native-shim.js`, `jsonforms.js` and `jsonforms-example.css` to your HTML
   ```html
-  <script src="node_modules/jsonforms/dist/jsonforms.js"></script>
+    <head>
+    <script src="node_modules/jsonforms/lib/native-shim.js"></script>
+    <script src="node_modules/jsonforms/dist/jsonforms.js"></script>
+    <link rel="stylesheet" type="text/css" href="node_modules/jsonforms/dist/jsonforms-example.css">
+    </head>
   ```
-3. Load `jsonforms-example.css` in the head section:
-
+3. Add Javascript to create a `json-forms` element:
   ```html
-  <link rel="stylesheet" type="text/css" href="node_modules/jsonforms/dist/jsonforms-example.css">
-  ```
-5. Render a form with the `jsonforms` element:
-
-  The simplest example looks like this:
-
-  ```html
-  <html>
-  <head>
-    ...
-  </head>
-  <body>
-  </body>
   <script>
     var jsonForms = document.createElement('json-forms');
     jsonForms.data = {name:'John Doe'};
     document.body.appendChild(jsonForms);
   </script>
+  ```
+
+The whole document may for example now look like this:
+  ```html
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <script src="node_modules/jsonforms/lib/native-shim.js"></script>
+      <script src="node_modules/jsonforms/dist/jsonforms.js"></script>
+      <link rel="stylesheet" type="text/css" href="node_modules/jsonforms/dist/jsonforms-example.css">
+    </head>
+    <body></body>
+    <script>
+      var jsonForms = document.createElement('json-forms');
+      jsonForms.data = {name:'John Doe'};
+      document.body.appendChild(jsonForms);
+    </script>
   </html>
   ```
+4. Optional: Add you own Data and UI schema within the script
+  ```html
+    <script>
+      var jsonForms = document.createElement('json-forms');
+      jsonForms.data = {name:'John Doe'};
+      jsonForms.dataSchema = {type: "object", properties: {name : { type: "string"}}};
+      jsonForms.uiSchema = {type: "Control", scope: { $ref: "#/properties/name" } };
+      document.body.appendChild(jsonForms);
+    </script>
+  ```
+
 # Documentation and more information
 For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
 
@@ -60,12 +81,12 @@ Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.s
  * Run either ```npm run publish-patch```,```npm run publish-minor``` or ```npm run publish-major```.
 
 The script does the following:
-* Build all JSONForms alternatives
+* Build JSONForms
 * Execute tests
 * Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json)
 * Commit version bump to the current branch
 * Checkout a new temporary deploy-branch
-* Commit ```dist/jsonforms.js``` file
+* Commit ```dist/**/*``` directory
 * Create a new version tag
 * Push the version tag to 'upstream'
 * Release the workspace to [npmjs](https://www.npmjs.com/)
