@@ -7,7 +7,7 @@
     "lib": ["es6", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "outDir": "dist/ts-build",
     "sourceMap": true,
     "target": "es5"
   },
@@ -15,7 +15,9 @@
     "node_modules"
   ],
   "include": [
-    "./src/**/*",
     "./test/**/*"
+  ],
+  "files": [
+    "./src/index.ts"
   ]
 }

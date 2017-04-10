@@ -1,0 +1,43 @@
+.github
+.travis.yml
+.npmignore
+.nyc_output
+bower.json
+CLA.md
+CONTRIBUTING.md
+
+###########################################
+# Copied from .gitgnore
+###########################################
+
+temp/
+coverage/
+reports/
+
+# webpack
+webpack/
+
+# npm
+node_modules/
+
+# test
+dist/ts-build/test
+test/
+wct-test/
+wct.conf.json
+
+# typescript cache files
+.tscache/
+
+# logs
+*.log
+
+# examples
+example/
+example_library/
+
+# webstorm
+.idea
+
+# mac users
+.DS_Store
