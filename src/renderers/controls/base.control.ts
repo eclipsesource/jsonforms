@@ -12,7 +12,7 @@ export abstract class BaseControl <T extends HTMLElement>
   private errorElement: HTMLElement;
 
   private static formatErrorMessage(errors: Array<string>) {
-    if (errors === undefined) {
+    if (errors === undefined || errors === null) {
       return '';
     }
     return errors.join('\n');
