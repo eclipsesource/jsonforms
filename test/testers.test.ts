@@ -1,6 +1,5 @@
 import test from 'ava';
 import {
-    always,
     and,
     formatIs,
     optionIs,
@@ -166,7 +165,7 @@ test('refEndsWith checks whether the ref of a control ends with a certain string
             $ref: '#/properties/bar'
         }
     };
-    t.true(refEndsWith('bar')(uiSchema, undefined))
+    t.true(refEndsWith('properties/bar')(uiSchema, undefined))
 });
 
 test('refEndsWith should return false for non-control UI schema elements', t => {
@@ -193,10 +192,6 @@ test('refEndIs should return false for non-control UI schema elements', t => {
         text: 'some text'
     };
     t.false(refEndIs('bar')(label, undefined))
-});
-
-test('always always return true', t => {
-   t.true(always(undefined, undefined));
 });
 
 test('and should allow to compose multiple testers', t => {

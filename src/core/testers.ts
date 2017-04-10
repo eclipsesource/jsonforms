@@ -123,11 +123,6 @@ export const refEndIs = (expected: string): Tester =>
     };
 
 /**
- * A tester that will always return true.
- */
-export const always: Tester = () => true;
-
-/**
  * A tester that allow composing other testers by && them.
  *
  * @param testers the tester to be composed
