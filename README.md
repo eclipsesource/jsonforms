@@ -5,7 +5,7 @@ JSONForms uses HTML custom elements and eliminates the need to write HTML templa
 create forms by leveraging the capabilities of JSON and JSON schema.
 
 # Usage
-To use JSONForms add `native-shim.js` and `jsonforms.js` to your HTML in this order. Once you add a `json-forms` element to the DOM with at least a `data` attribute, a form will be rendered for you. Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes. Use CSS to style the form however you want.
+To use JSONForms add `native-shim.js` and `jsonforms.js` to your HTML in this order. Once you add a `json-forms` element to the DOM with at least a `data` attribute set, a form will be rendered for you. Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes. Use CSS to style the form however you want.
 
 ## Step by Step Example Usage
 
@@ -54,10 +54,7 @@ The whole document may for example now look like this:
       document.body.appendChild(jsonForms);
     </script>
   ```
-
-# Documentation and more information
-For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
-
+  
 # Developers Documentation
 
 ## First time setup
