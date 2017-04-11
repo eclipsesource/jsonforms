@@ -1,0 +1,8 @@
+{
+   "lines": 50,
+   "include": [
+     "dist/ts-build/**/*.js"
+   ],
+   "all": true,
+   "check-coverage": true
+}
