@@ -17,7 +17,7 @@
     "bundle": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
     "build": "npm run tsc && npm run bundle && ncp example/example.css dist/jsonforms-example.css",
     "lint": "tslint --project tslint.json",
-    "test": "tsc && nyc ava ",
+    "test": "tsc --project test/tsconfig.test.json && nyc ava ",
     "tsc": "tsc",
     "report": "nyc report --reporter=html",
     "example_library": "lite-server -c example_library/bs-config.json",
@@ -37,6 +37,7 @@
   "devDependencies": {
     "ava": "^0.18.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",
+    "copy-webpack-plugin": "^4.0.1",
     "coveralls": "^2.11.16",
     "document-register-element": "^1.4.1",
     "file-loader": "^0.10.0",

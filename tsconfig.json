@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
+    "baseUrl": "src",
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -13,9 +13,6 @@
   },
   "exclude":[
     "node_modules"
-  ],
-  "include": [
-    "./test/**/*"
   ],
   "files": [
     "./src/index.ts"

@@ -1,9 +1,9 @@
-/// <reference path="html-import.d.ts" />
 import {JsonSchema} from '../src/models/jsonSchema';
 import {UISchemaElement} from '../src/models/uischema';
 import {JsonForms} from '../src/json-forms';
-
-interface ExampleDescription {
+declare let exampleDivId;
+declare let viewDivId;
+export interface ExampleDescription {
   name: string;
   label: string;
   data: any;
@@ -16,7 +16,7 @@ export const registerExamples = (examples: Array<ExampleDescription>): void => {
   examples.forEach(example => knownExamples[example.name] = example);
 };
 const changeExample = (selectedExample: string) => {
-  let body = document.getElementById('view');
+  let body = document.getElementById(viewDivId);
   if (body.firstChild) {
     body.removeChild(body.firstChild);
   }
@@ -40,7 +40,7 @@ const changeExample = (selectedExample: string) => {
   body.appendChild(jsonForms);
 };
 window.onload = (ev) => {
-  const examplesDiv = document.getElementById('examples');
+  const examplesDiv = document.getElementById(exampleDivId);
   const select = document.createElement('select');
   Object.keys(knownExamples).forEach(key => {
     const example = knownExamples[key];
