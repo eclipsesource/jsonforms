@@ -61,6 +61,7 @@ The whole document may for example now look like this:
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
 * Clone this repository
 * Install dependencies: `npm install`
+* Install typescript: `npm install -g typescript`
 
 ## Build & Testing
 * Normal Build: `npm run build`
