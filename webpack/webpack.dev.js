@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var path = require("path");
+var copyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = [{
     entry: [
@@ -22,10 +23,15 @@ module.exports = [{
         extensions: [".ts", ".js"]
     },
     devServer: {
-        contentBase: './example'
+        contentBase: './example_plain'
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new copyWebpackPlugin([
+            { from: 'example/example.css' },
+            { from: 'lib/native-shim.js' },
+            { from: 'example/icons', to: 'icons' }
+        ])
     ],
     module: {
       rules: [
@@ -41,13 +47,5 @@ module.exports = [{
     // dependencies, which allows browsers to cache those libraries between builds.
     externals: {
     },
-}, {
-    entry: [
-       './lib/native-shim.js'
-    ],
-    output: {
-        path: path.resolve("./", "dist"),
-        publicPath: "/assets/",
-        filename: "native-shim.js"
-    }
-}];
+}
+];

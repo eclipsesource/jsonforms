@@ -5,7 +5,7 @@
         "routes": {
             "/jsonforms.js": "dist/jsonforms.js",
             "/jsonforms.js.map": "dist/jsonforms.js.map",
-            "/native-shim.js": "example/native-shim.js",
+            "/native-shim.js": "lib/native-shim.js",
             "/example.css": "example/example.css"
         }
     }
