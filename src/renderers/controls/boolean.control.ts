@@ -4,7 +4,8 @@ import {and, uiTypeIs, schemaTypeIs, rankWith, RankedTester} from '../../core/te
 
 export const booleanControlTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
-    schemaTypeIs('boolean')));
+    schemaTypeIs('boolean')
+  ));
 
 @JsonFormsRenderer({
   selector: 'jsonforms-boolean',

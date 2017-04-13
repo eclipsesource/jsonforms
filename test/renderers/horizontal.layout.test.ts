@@ -4,10 +4,10 @@ import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
 declare var global;
 installCE(global, 'force');
-import {HorizontalLayout} from '../src/models/uischema';
+import {HorizontalLayout} from '../../src/models/uischema';
 import {HorizontalLayoutRenderer, horizontalLayoutTester}
-  from '../src/renderers/layouts/horizontal.layout';
-import {Runtime, RUNTIME_TYPE} from '../src/core/runtime';
+  from '../../src/renderers/layouts/horizontal.layout';
+import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 
 
 test('HorizontalLayoutRendererTester', t => {

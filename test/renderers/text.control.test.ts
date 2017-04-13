@@ -4,11 +4,11 @@ import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
 declare let global;
 installCE(global, 'force');
-import {ControlElement} from '../src/models/uischema';
-import {JsonSchema} from '../src/models/jsonSchema';
-import {textControlTester, TextControl} from '../src/renderers/controls/text.control';
-import {Runtime} from '../src/core/runtime';
-import {DataService } from '../src/core/data.service';
+import {ControlElement} from '../../src/models/uischema';
+import {JsonSchema} from '../../src/models/jsonSchema';
+import {textControlTester, TextControl} from '../../src/renderers/controls/text.control';
+import {Runtime} from '../../src/core/runtime';
+import {DataService } from '../../src/core/data.service';
 
 
 test('TextControlTester', t => {

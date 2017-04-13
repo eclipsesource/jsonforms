@@ -1,15 +1,16 @@
 import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
-import { rankWith, uiTypeIs, and, schemaTypeIs } from '../../core/testers';
+import { rankWith, uiTypeIs, and, schemaTypeIs, RankedTester } from '../../core/testers';
 
+export const integerControlTester: RankedTester = rankWith(2, and(
+    uiTypeIs('Control'),
+    schemaTypeIs('integer')
+  ));
 @JsonFormsRenderer({
   selector: 'jsonforms-integer',
-  tester: rankWith(2, and(
-      uiTypeIs('Control'),
-      schemaTypeIs('integer')
-  ))
+  tester: integerControlTester
 })
-class IntegerControl extends BaseControl<HTMLInputElement> {
+export class IntegerControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {
     input.type = 'number';
     input.step = '1';

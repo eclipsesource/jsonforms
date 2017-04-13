@@ -3,6 +3,12 @@
    "include": [
      "dist/ts-build/**/*.js"
    ],
+   "exclude": [
+      "**/*.test.js",
+      "dist/ts-build/src/index.js",
+      "dist/ts-build/src/services/services.js",
+      "dist/ts-build/src/renderers/renderers.js"
+   ],
    "all": true,
    "check-coverage": true
 }
