@@ -1,14 +1,32 @@
+import * as _ from 'lodash';
 import {Categorization, Category} from '../../models/uischema';
 import {Renderer} from '../../core/renderer';
 import {JsonFormsRenderer} from '../renderer.util';
 import {JsonForms} from '../../json-forms';
-import {uiTypeIs, rankWith} from '../../core/testers';
+import {uiTypeIs, rankWith, RankedTester, and} from '../../core/testers';
+import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+
+export const categorizationTester: RankedTester = rankWith(1,
+  and(
+    uiTypeIs('Categorization'),
+    (uiSchema) => {
+      const hasCategory = (element: Categorization): boolean => {
+        if (_.isEmpty(element.elements)) {
+          return false;
+        }
+        return element.elements
+          .map(elem => isCategorization(elem) ? hasCategory(elem) : elem.type === 'Category')
+          .reduce((prev, curr) => prev && curr, true);
+      }
+      return hasCategory(uiSchema as Categorization)
+    }
+));
 
 @JsonFormsRenderer({
   selector: 'jsonforms-categorization',
-  tester: rankWith(1, uiTypeIs('Categorization'))
+  tester: categorizationTester
 })
-class CategorizationRenderer extends Renderer {
+export class CategorizationRenderer extends Renderer {
   private master: HTMLElement;
   private detail: HTMLElement;
   private selected: HTMLLIElement;
@@ -20,19 +38,32 @@ class CategorizationRenderer extends Renderer {
   dispose(): void {
     // Do nothing
   }
+  notify(type: RUNTIME_TYPE): void {
+    const runtime = <Runtime>this.uischema['runtime'];
+    switch (type) {
+      case RUNTIME_TYPE.VISIBLE:
+        this.hidden = !runtime.visible;
+        break;
+      case RUNTIME_TYPE.ENABLED:
+        if (!runtime.enabled) {
+          this.setAttribute('disabled', 'true');
+        } else {
+          this.removeAttribute('disabled');
+        }
+        break;
+    }
+  }
   render(): HTMLElement {
-    let div = document.createElement('div');
-    div.className = 'jsf-categorization';
+    this.className = 'jsf-categorization';
 
     this.master = document.createElement('div');
     this.master.className = 'jsf-categorization-master';
-    div.appendChild(this.master);
+    this.appendChild(this.master);
 
     this.detail = document.createElement('div');
     this.detail.className = 'jsf-categorization-detail';
-    div.appendChild(this.detail);
+    this.appendChild(this.detail);
 
-    this.appendChild(div);
     this.renderFull();
     return this;
   }
@@ -47,9 +78,6 @@ class CategorizationRenderer extends Renderer {
   private findFirstCategory(categorization: Categorization, parent: HTMLUListElement):
     {category: Category, li: HTMLLIElement} {
     let firstCategory: Category;
-    if (categorization.elements === undefined || categorization.elements.length === 0) {
-      return null;
-    }
     const category = categorization.elements[0];
     if (isCategorization(category)) {
       return this.findFirstCategory(category, <HTMLUListElement> parent.firstChild.lastChild);
@@ -57,9 +85,6 @@ class CategorizationRenderer extends Renderer {
     return {category: category, li: <HTMLLIElement>parent.firstChild};
   }
   private renderMaster() {
-    if (this.master.lastChild !== null) {
-      this.master.removeChild(this.master.lastChild);
-    }
     const categorization = <Categorization> this.uischema;
     const ul = this.createCategorizationList(categorization);
     this.master.appendChild(ul);
@@ -99,13 +124,15 @@ class CategorizationRenderer extends Renderer {
     this.selected = li;
 
     const wrapper = document.createElement('div');
-    category.elements.forEach(child => {
-      const jsonForms = <JsonForms>document.createElement('json-forms');
-      jsonForms.data = this.dataService.getValue({type: 'Control', scope: {$ref: '#'}});
-      jsonForms.uiSchema = child;
-      jsonForms.dataSchema = this.dataSchema;
-      wrapper.appendChild(jsonForms);
-    });
+    if (category.elements !== undefined && category.elements !== null) {
+      category.elements.forEach(child => {
+        const jsonForms = <JsonForms>document.createElement('json-forms');
+        jsonForms.data = this.dataService.getValue({type: 'Control', scope: {$ref: '#'}});
+        jsonForms.uiSchema = child;
+        jsonForms.dataSchema = this.dataSchema;
+        wrapper.appendChild(jsonForms);
+      });
+    }
     this.detail.appendChild(wrapper);
   }
 }
