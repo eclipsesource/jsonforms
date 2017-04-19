@@ -84,8 +84,7 @@ test('NumberControl inputChange', t => {
   input.oninput(null);
   t.is(data.foo, 2.72);
 });
-// TODO If I add console log, then I see that the value is set, but cannot verify
-test.failing('NumberControl dataService notification', t => {
+test('NumberControl dataService notification', t => {
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
   const renderer: NumberControl = new NumberControl();
   const data = {'foo': 2.72};
@@ -94,12 +93,11 @@ test.failing('NumberControl dataService notification', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 3.14);
   t.is(input.valueAsNumber, 3.14);
 });
-test.failing('NumberControl dataService notification value undefined', t => {
+test('NumberControl dataService notification value undefined', t => {
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
   const renderer: NumberControl = new NumberControl();
   const data = {'foo': 3.14};
@@ -108,12 +106,11 @@ test.failing('NumberControl dataService notification value undefined', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
   t.is(input.valueAsNumber, undefined);
 });
-test.failing('NumberControl dataService notification value null', t => {
+test('NumberControl dataService notification value null', t => {
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
   const renderer: NumberControl = new NumberControl();
   const data = {'foo': 3.14};
@@ -122,8 +119,7 @@ test.failing('NumberControl dataService notification value null', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.valueAsNumber, undefined);
 });
@@ -136,8 +132,7 @@ test('NumberControl dataService notification wrong ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.is(input.valueAsNumber, 3.14);
 });
@@ -150,8 +145,7 @@ test('NumberControl dataService notification null ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(null, 2.72);
   t.is(input.valueAsNumber, 3.14);
 });
@@ -164,8 +158,7 @@ test('NumberControl dataService notification undefined ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(undefined, 2.72);
   t.is(input.valueAsNumber, 3.14);
 });
@@ -178,9 +171,8 @@ test('NumberControl dataService no notification after disconnect', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
   renderer.disconnectedCallback();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.valueAsNumber, 3.14);
 });

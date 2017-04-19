@@ -94,8 +94,7 @@ test('EnumControl inputChange', t => {
   input.onchange(null);
   t.is(data.foo, 'b');
 });
-// TODO If I add console log, then I see that the value is set, but cannot verify
-test.failing('EnumControl dataService notification', t => {
+test('EnumControl dataService notification', t => {
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
@@ -105,10 +104,12 @@ test.failing('EnumControl dataService notification', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
+  t.is(input.selectedIndex, 1);
+  t.is(input.value, 'b');
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'a');
   t.is(input.value, 'a');
+  t.is(input.selectedIndex, 0);
 });
 test.failing('EnumControl dataService notification value undefined', t => {
   const schema = {type: 'object', properties:
@@ -120,10 +121,9 @@ test.failing('EnumControl dataService notification value undefined', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
-  t.is(input.value, undefined);
+  t.is(input.selectedIndex, -1);
 });
 test.failing('EnumControl dataService notification value null', t => {
   const schema = {type: 'object', properties:
@@ -135,10 +135,9 @@ test.failing('EnumControl dataService notification value null', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
-  t.is(input.value, undefined);
+  t.is(input.selectedIndex, -1);
 });
 test('EnumControl dataService notification wrong ref', t => {
   const schema = {type: 'object', properties:
@@ -150,10 +149,10 @@ test('EnumControl dataService notification wrong ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.is(input.value, 'a');
+  t.is(input.selectedIndex, 0);
 });
 test('EnumControl dataService notification null ref', t => {
   const schema = {type: 'object', properties:
@@ -165,10 +164,10 @@ test('EnumControl dataService notification null ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   dataService.notifyChange(null, false);
   t.is(input.value, 'a');
+  t.is(input.selectedIndex, 0);
 });
 test('EnumControl dataService notification undefined ref', t => {
   const schema = {type: 'object', properties:
@@ -180,10 +179,10 @@ test('EnumControl dataService notification undefined ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   dataService.notifyChange(undefined, false);
   t.is(input.value, 'a');
+  t.is(input.selectedIndex, 0);
 });
 test('EnumControl dataService no notification after disconnect', t => {
   const schema = {type: 'object', properties:
@@ -195,11 +194,11 @@ test('EnumControl dataService no notification after disconnect', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
   renderer.disconnectedCallback();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.value, 'a');
+  t.is(input.selectedIndex, 0);
 });
 test('EnumControl notify visible false', t => {
   const renderer: EnumControl = new EnumControl();

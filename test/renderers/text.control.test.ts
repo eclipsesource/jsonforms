@@ -85,8 +85,7 @@ test('TextControl inputChange', t => {
   input.oninput(null);
   t.is(data.name, 'Bar');
 });
-// TODO If I add console log, then I see that the value is set, but cannot verify
-test.failing('TextControl dataService notification', t => {
+test('TextControl dataService notification', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextControl = new TextControl();
   const data = {'name': 'Foo'};
@@ -95,12 +94,11 @@ test.failing('TextControl dataService notification', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Bar');
 });
-test.failing('TextControl dataService notification value undefined', t => {
+test('TextControl dataService notification value undefined', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextControl = new TextControl();
   const data = {'name': 'Foo'};
@@ -109,12 +107,11 @@ test.failing('TextControl dataService notification value undefined', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, undefined);
   t.is(input.value, '');
 });
-test.failing('TextControl dataService notification value null', t => {
+test('TextControl dataService notification value null', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextControl = new TextControl();
   const data = {'name': 'Foo'};
@@ -123,8 +120,7 @@ test.failing('TextControl dataService notification value null', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
   t.is(input.value, '');
 });
@@ -137,8 +133,7 @@ test('TextControl dataService notification wrong ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/firstname'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
@@ -151,8 +146,7 @@ test('TextControl dataService notification null ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(null, 'Bar');
   t.is(input.value, 'Foo');
 });
@@ -165,8 +159,7 @@ test('TextControl dataService notification undefined ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(undefined, 'Bar');
   t.is(input.value, 'Foo');
 });
@@ -179,9 +172,8 @@ test('TextControl dataService no notification after disconnect', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
   renderer.disconnectedCallback();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Foo');
 });

@@ -25,4 +25,7 @@ export class IntegerControl extends BaseControl<HTMLInputElement> {
   protected get inputElement(): HTMLInputElement {
     return document.createElement('input');
   }
+  protected convertModelValue(value: any): any {
+    return value === undefined || value === null ? undefined : value;
+  }
 }

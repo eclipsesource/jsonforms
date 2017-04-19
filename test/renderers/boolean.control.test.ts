@@ -82,8 +82,7 @@ test('BooleanControl inputChange', t => {
   input.onchange(null);
   t.is(data.foo, false);
 });
-// TODO If I add console log, then I see that the value is set, but cannot verify
-test.failing('BooleanControl dataService notification', t => {
+test('BooleanControl dataService notification', t => {
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': false};
@@ -92,12 +91,11 @@ test.failing('BooleanControl dataService notification', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, true);
   t.is(input.checked, true);
 });
-test.failing('BooleanControl dataService notification value undefined', t => {
+test('BooleanControl dataService notification value undefined', t => {
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': true};
@@ -106,12 +104,11 @@ test.failing('BooleanControl dataService notification value undefined', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
   t.is(input.checked, false);
 });
-test.failing('BooleanControl dataService notification value null', t => {
+test('BooleanControl dataService notification value null', t => {
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': true};
@@ -120,8 +117,7 @@ test.failing('BooleanControl dataService notification value null', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.checked, false);
 });
@@ -134,8 +130,7 @@ test('BooleanControl dataService notification wrong ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.is(input.checked, true);
 });
@@ -148,8 +143,7 @@ test('BooleanControl dataService notification null ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(null, false);
   t.is(input.checked, true);
 });
@@ -162,8 +156,7 @@ test('BooleanControl dataService notification undefined ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(undefined, false);
   t.is(input.checked, true);
 });
@@ -176,9 +169,8 @@ test('BooleanControl dataService no notification after disconnect', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
   renderer.disconnectedCallback();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.checked, true);
 });

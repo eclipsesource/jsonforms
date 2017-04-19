@@ -33,4 +33,7 @@ export class EnumControl extends BaseControl<HTMLSelectElement> {
   protected get inputElement(): HTMLSelectElement {
     return document.createElement('select');
   }
+  protected convertModelValue(value: any): any {
+    return (value === undefined || value === null) ? undefined : value;
+  }
 }

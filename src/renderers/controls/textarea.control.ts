@@ -21,7 +21,7 @@ export class TextAreaControl extends BaseControl<HTMLTextAreaElement> {
     return 'oninput';
   }
   protected convertModelValue(value: any): any {
-    return value === undefined ? '' : value;
+    return (value === undefined || value === null) ? '' : value;
   }
   protected get inputElement(): HTMLTextAreaElement {
     return document.createElement('textarea');
