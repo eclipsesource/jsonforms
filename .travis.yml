@@ -28,7 +28,8 @@ before_install:
   - "phantomjs --version"
 
 install:
-  - npm install
+  - npm install -g yarn
+  - yarn
 
 script:
   - npm run test
