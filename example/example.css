@@ -94,72 +94,76 @@ input {
 .jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span:hover {font-weight: normal;}
 .jsf-categorization > .jsf-categorization-master ul > li.selected > span {font-weight: bold;}
 .jsf-categorization > .jsf-categorization-detail {flex: 3;}
-.tree-layout {
+.jsf-treeMasterDetail {
+  display: flex;
+  flex-direction: column;
+}
+.jsf-treeMasterDetail > .jsf-treeMasterDetail-content {
   display: flex;
   flex-direction: row;
 }
-.tree-layout > * {
+.jsf-treeMasterDetail > .jsf-treeMasterDetail-content > * {
   border-style: solid;
   border-width: thin;
   border-color: lightgray;
   border-radius: 0.2em;
 }
-.tree-layout > *:first-child {
+.jsf-treeMasterDetail > .jsf-treeMasterDetail-content > *:first-child {
   margin-right: 0.25em;
 }
-.tree-master {
+.jsf-treeMasterDetail-master {
   flex:1;
 }
-.tree-detail {
+.jsf-treeMasterDetail-detail {
   flex:3;
 }
-.tree-master ul {
+.jsf-treeMasterDetail-master ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   position: relative;
   overflow:hidden;
 }
-.tree-master li {
+.jsf-treeMasterDetail-master li {
   min-height: 1em;
   position: relative;
   padding-left: 1.5em;
 }
-.tree-master li > div {
+.jsf-treeMasterDetail-master li > div {
   display: flex;
   flex-direction: row;
 }
-.tree-master li > div > .icon {
+.jsf-treeMasterDetail-master li > div > .icon {
   flex-basis: 1em;
   min-height: 1em;
   margin-right: 0.25em;
 }
-.tree-master li > div > .icon.folder {
+.jsf-treeMasterDetail-master li > div > .icon.folder {
   background-image: url('./icons/folder.png');
 }
-.tree-master li > div > .icon.page {
+.jsf-treeMasterDetail-master li > div > .icon.page {
   background-image: url('./icons/page.png');
 }
-.tree-master li > div > .icon.drive {
+.jsf-treeMasterDetail-master li > div > .icon.drive {
   background-image: url('./icons/drive.png');
 }
-.tree-master li.selected > div > .label {font-weight: bold;}
-.tree-master li > div > .label {
+.jsf-treeMasterDetail-master li.selected > div > .label {font-weight: bold;}
+.jsf-treeMasterDetail-master li > div > .label {
   display: flex;
   flex: 1;
   margin-right: 1em;
   min-height: 1em;
 }
-.tree-master li > div > .label:empty {
+.jsf-treeMasterDetail-master li > div > .label:empty {
     background: #ffff00;
     min-height: 1em;
 }
-.tree-master li > div > .label:hover {
+.jsf-treeMasterDetail-master li > div > .label:hover {
   font-weight: bold;
   cursor: pointer;
   background-color: gainsboro;
 }
-.tree-master li > div > .label > .add, .tree-master li > div > .label > .remove {
+.jsf-treeMasterDetail-master li > div > .label > .add, .jsf-treeMasterDetail-master li > div > .label > .remove {
   display: none;
   cursor: pointer;
   margin-left: 0.25em;
@@ -168,43 +172,43 @@ input {
   font-weight: normal;
   background-color: lightgray;
 }
-.tree-master li > div > .label:hover > .add, .tree-master li > div > .label:hover > .remove {
+.jsf-treeMasterDetail-master li > div > .label:hover > .add, .jsf-treeMasterDetail-master li > div > .label:hover > .remove {
   display: flex;
   justify-content: center;
 }
-.tree-master li::before, .tree-master li::after, .tree-master ul::after {
+.jsf-treeMasterDetail-master li::before, .jsf-treeMasterDetail-master li::after, .jsf-treeMasterDetail-master ul::after {
   content: '';
   position: absolute;
   left:0.2em;
 }
-.tree-master li::before {
+.jsf-treeMasterDetail-master li::before {
   border-top: 1px solid gray;
   top:0.5em;
   width: 1em;
 }
-.tree-master li::after {
+.jsf-treeMasterDetail-master li::after {
   border-left: 1px solid gray;
   height:100%;
   top:-0.6em;
 }
-.tree-master ul::after {
+.jsf-treeMasterDetail-master ul::after {
   border-left: 1px solid gray;
   height: 0.6em;
   bottom: 0;
 }
-.tree-master ul:last-child::after {
+.jsf-treeMasterDetail-master ul:last-child::after {
   display: none;
 }
-.tree-master > ul > li::after {
+.jsf-treeMasterDetail-master > ul > li::after {
   top:0.5em;
 }
-.tree-master > ul > li:last-child::after {
+.jsf-treeMasterDetail-master > ul > li:last-child::after {
   display: none;
 }
-.tree-master > ul > li:only-child::before {
+.jsf-treeMasterDetail-master > ul > li:only-child::before {
   display: none;
 }
-.tree-master > ul > li:only-child {
+.jsf-treeMasterDetail-master > ul > li:only-child {
   padding-left: 0.25em;
 }
 jsonforms-tree > dialog > .content {

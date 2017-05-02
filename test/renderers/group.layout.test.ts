@@ -4,10 +4,10 @@ import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
 declare var global;
 installCE(global, 'force');
-import {GroupLayout} from '../src/models/uischema';
+import {GroupLayout} from '../../src/models/uischema';
 import {GroupLayoutRenderer, groupTester}
-  from '../src/renderers/layouts/group.layout';
-import {Runtime, RUNTIME_TYPE} from '../src/core/runtime';
+  from '../../src/renderers/layouts/group.layout';
+import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 
 
 test('GroupLayoutRendererTester', t => {

@@ -1,15 +1,17 @@
 import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
-import {and, uiTypeIs, schemaTypeIs, rankWith} from '../../core/testers';
+import {and, uiTypeIs, schemaTypeIs, rankWith, RankedTester} from '../../core/testers';
+
+export const booleanControlTester: RankedTester = rankWith(2, and(
+    uiTypeIs('Control'),
+    schemaTypeIs('boolean')
+  ));
 
 @JsonFormsRenderer({
   selector: 'jsonforms-boolean',
-  tester: rankWith(2, and(
-      uiTypeIs('Control'),
-      schemaTypeIs('boolean')
-  ))
+  tester: booleanControlTester
 })
-class BooleanControl extends BaseControl<HTMLInputElement> {
+export class BooleanControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {
     input.type = 'checkbox';
   }

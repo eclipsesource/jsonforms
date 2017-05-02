@@ -1,19 +1,28 @@
+import * as _ from 'lodash';
 import { ControlElement } from '../../models/uischema';
+import { JsonSchema } from '../../models/jsonSchema';
 import { JsonForms } from '../../json-forms';
 import { Renderer } from '../../core/renderer';
 import { DataChangeListener} from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
 import { getElementLabelObject } from '../label.util';
-import { rankWith, uiTypeIs, optionIs, and, schemaTypeIs } from '../../core/testers';
+import { rankWith, uiTypeIs, optionIs, and, schemaMatches, RankedTester } from '../../core/testers';
 
+export const tableArrayTester: RankedTester = rankWith(10, and(
+    uiTypeIs('Control'),
+    optionIs('table', true),
+    schemaMatches(schema =>
+        !_.isEmpty(schema)
+        && schema.type === 'array'
+        && !_.isEmpty(schema.items)
+        && !Array.isArray(schema.items) // we don't care about tuples
+        && (schema.items as JsonSchema).type === 'object'
+    ))
+);
 @JsonFormsRenderer({
   selector: 'jsonforms-tablearray',
-  tester: rankWith(10, and(
-      uiTypeIs('Control'),
-      optionIs('table', true),
-      schemaTypeIs('array')
-  ))
+  tester: tableArrayTester
 })
 export class TableArrayControlRenderer extends Renderer implements DataChangeListener {
 

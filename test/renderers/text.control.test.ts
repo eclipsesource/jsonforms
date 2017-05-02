@@ -4,11 +4,11 @@ import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
 declare let global;
 installCE(global, 'force');
-import {ControlElement} from '../src/models/uischema';
-import {JsonSchema} from '../src/models/jsonSchema';
-import {textControlTester, TextControl} from '../src/renderers/controls/text.control';
-import {Runtime} from '../src/core/runtime';
-import {DataService } from '../src/core/data.service';
+import {ControlElement} from '../../src/models/uischema';
+import {JsonSchema} from '../../src/models/jsonSchema';
+import {textControlTester, TextControl} from '../../src/renderers/controls/text.control';
+import {Runtime} from '../../src/core/runtime';
+import {DataService } from '../../src/core/data.service';
 
 
 test('TextControlTester', t => {
@@ -85,8 +85,7 @@ test('TextControl inputChange', t => {
   input.oninput(null);
   t.is(data.name, 'Bar');
 });
-// TODO If I add console log, then I see that the value is set, but cannot verify
-test.failing('TextControl dataService notification', t => {
+test('TextControl dataService notification', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextControl = new TextControl();
   const data = {'name': 'Foo'};
@@ -95,10 +94,35 @@ test.failing('TextControl dataService notification', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Bar');
+});
+test('TextControl dataService notification value undefined', t => {
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  const renderer: TextControl = new TextControl();
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.connectedCallback();
+  const input = <HTMLInputElement>renderer.children[1];
+  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, undefined);
+  t.is(input.value, '');
+});
+test('TextControl dataService notification value null', t => {
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  const renderer: TextControl = new TextControl();
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.connectedCallback();
+  const input = <HTMLInputElement>renderer.children[1];
+  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
+  t.is(input.value, '');
 });
 test('TextControl dataService notification wrong ref', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
@@ -109,8 +133,7 @@ test('TextControl dataService notification wrong ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/firstname'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
@@ -123,8 +146,7 @@ test('TextControl dataService notification null ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(null, 'Bar');
   t.is(input.value, 'Foo');
 });
@@ -137,8 +159,7 @@ test('TextControl dataService notification undefined ref', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange(undefined, 'Bar');
   t.is(input.value, 'Foo');
 });
@@ -151,13 +172,12 @@ test('TextControl dataService no notification after disconnect', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
-  const result = renderer.render();
   renderer.disconnectedCallback();
-  const input = <HTMLInputElement>result.children[1];
+  const input = <HTMLInputElement>renderer.children[1];
   dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
-test('TextControl notify visible', t => {
+test('TextControl notify visible false', t => {
   const renderer: TextControl = new TextControl();
   const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
   const data = {'name': 'Foo'};
@@ -170,6 +190,20 @@ test('TextControl notify visible', t => {
   const runtime = <Runtime>controlElement['runtime'];
   runtime.visible = false;
   t.is(renderer.hidden, true);
+});
+test('TextControl notify visible true', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.visible = true;
+  t.is(renderer.hidden, false);
 });
 
 test('TextControl notify disabled', t => {
@@ -204,6 +238,83 @@ test('TextControl notify enabled', t => {
   const input = <HTMLInputElement>renderer.children[1];
   t.false(input.hasAttribute('disabled'));
 });
+
+test('TextControl notify one error', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.validationErrors = ['error a'];
+  const errorsDiv = renderer.getElementsByClassName('validation')[0];
+  t.is(errorsDiv.textContent, 'error a');
+});
+test('TextControl notify multiple errors', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.validationErrors = ['error a', 'error b'];
+  const errorsDiv = renderer.getElementsByClassName('validation')[0];
+  t.is(errorsDiv.textContent, 'error a\nerror b');
+});
+test('TextControl notify errors undefined', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.validationErrors = undefined;
+  const errorsDiv = renderer.getElementsByClassName('validation')[0];
+  t.is(errorsDiv.textContent, '');
+});
+test('TextControl notify errors null', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.validationErrors = null;
+  const errorsDiv = renderer.getElementsByClassName('validation')[0];
+  t.is(errorsDiv.textContent, '');
+});
+test('TextControl notify errors clean', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.validationErrors = ['error a'];
+  runtime.validationErrors = undefined;
+  const errorsDiv = renderer.getElementsByClassName('validation')[0];
+  t.is(errorsDiv.textContent, '');
+});
 test('TextControl disconnected no notify visible', t => {
   const renderer: TextControl = new TextControl();
   const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
@@ -217,6 +328,38 @@ test('TextControl disconnected no notify visible', t => {
   renderer.disconnectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
   runtime.visible = false;
+  t.is(renderer.hidden, false);
+});
+test('TextControl disconnected no notify enabled', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  renderer.disconnectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.enabled = false;
   const input = <HTMLInputElement>renderer.children[1];
-  t.is(input.hidden, false);
+  t.false(input.hasAttribute('disabled'));
+});
+test('TextControl disconnected no notify error', t => {
+  const renderer: TextControl = new TextControl();
+  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
+  const data = {'name': 'Foo'};
+  const dataService = new DataService(data);
+  renderer.setDataService(dataService);
+  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(controlElement);
+  renderer.connectedCallback();
+  renderer.disconnectedCallback();
+  const runtime = <Runtime>controlElement['runtime'];
+  runtime.validationErrors = ['error a'];
+  const errorsDiv = renderer.getElementsByClassName('validation')[0];
+  t.not(errorsDiv.textContent, 'error a',
+    'Diconnected Controls should not be notified about new errors.');
 });

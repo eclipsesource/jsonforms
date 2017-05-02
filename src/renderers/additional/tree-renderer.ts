@@ -5,13 +5,28 @@ import {JsonFormsRenderer} from '../renderer.util';
 import {resolveSchema} from '../../path.util';
 import {JsonForms} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
-import {uiTypeIs, rankWith} from '../../core/testers';
+import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
+import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
+export const treeMasterDetailTester: RankedTester = rankWith(1,
+  and(
+    uiTypeIs('MasterDetailLayout'),
+    (uiSchema) => {
+      const control = uiSchema as ControlElement;
+      if (control.scope === undefined || control.scope === null) {
+        return false;
+      }
+      if (control.scope.$ref === undefined || control.scope.$ref === null) {
+        return false;
+      }
+      return true;
+    }
+));
 @JsonFormsRenderer({
   selector: 'jsonforms-tree',
   tester: rankWith(1, uiTypeIs('MasterDetailLayout'))
 })
-class TreeRenderer extends Renderer implements DataChangeListener {
+export class TreeMasterDetailRenderer extends Renderer implements DataChangeListener {
   private master: HTMLElement;
   private detail: HTMLElement;
   private selected: HTMLLIElement;
@@ -22,22 +37,45 @@ class TreeRenderer extends Renderer implements DataChangeListener {
   constructor() {
     super();
   }
-
+  connectedCallback(): void {
+    super.connectedCallback();
+    this.dataService.registerChangeListener(this);
+  }
+  disconnectedCallback(): void {
+    this.dataService.unregisterChangeListener(this);
+    super.disconnectedCallback();
+  }
   dispose(): void {
     // Do nothing
+  }
+  notify(type: RUNTIME_TYPE): void {
+    const runtime = <Runtime>this.uischema['runtime'];
+    switch (type) {
+      case RUNTIME_TYPE.VISIBLE:
+        this.hidden = !runtime.visible;
+        break;
+      case RUNTIME_TYPE.ENABLED:
+        if (!runtime.enabled) {
+          this.setAttribute('disabled', 'true');
+        } else {
+          this.removeAttribute('disabled');
+        }
+        break;
+    }
   }
   render(): HTMLElement {
     const controlElement = <ControlElement> this.uischema;
     this.resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref);
 
-    const div = document.createElement('div');
-    div.className = 'tree-layout';
+    this.className = 'jsf-treeMasterDetail';
 
+    const divHeader = document.createElement('div');
+    divHeader.className = 'jsf-treeMasterDetail-header';
     const label = document.createElement('label');
     if (typeof controlElement.label === 'string') {
       label.textContent = controlElement.label;
     }
-    this.appendChild(label);
+    divHeader.appendChild(label);
 
     const rootData = this.dataService.getValue(controlElement);
     if (Array.isArray(rootData)) {
@@ -53,15 +91,18 @@ class TreeRenderer extends Renderer implements DataChangeListener {
           toDelete => rootData.splice(length - 1, 1));
         this.addingToRoot = false;
       };
-      this.appendChild(button);
+      divHeader.appendChild(button);
     }
+    this.appendChild(divHeader);
 
+    const div = document.createElement('div');
+    div.className = 'jsf-treeMasterDetail-content';
     this.master = document.createElement('div');
-    this.master.className = 'tree-master';
+    this.master.className = 'jsf-treeMasterDetail-master';
     div.appendChild(this.master);
 
     this.detail = document.createElement('div');
-    this.detail.className = 'tree-detail';
+    this.detail.className = 'jsf-treeMasterDetail-detail';
     div.appendChild(this.detail);
 
     this.appendChild(div);
@@ -78,15 +119,15 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     this.dialog.appendChild(dialogClose);
     this.appendChild(this.dialog);
     this.renderFull();
-    this.dataService.registerChangeListener(this);
     return this;
   }
   isRelevantKey (uischema: ControlElement): boolean {
-    return this.uischema === uischema && !this.addingToRoot;
+    return uischema === undefined || uischema === null ? false :
+      (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
   }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
-    this.render();
+    this.renderFull();
   }
 
   private renderFull(): void {
@@ -97,7 +138,7 @@ class TreeRenderer extends Renderer implements DataChangeListener {
   private selectFirstElement(): void {
     const controlElement = <ControlElement> this.uischema;
     const arrayData = this.dataService.getValue(controlElement);
-    if (arrayData !== undefined && arrayData.length !== 0) {
+    if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
       let firstChild = arrayData;
       let schema = this.resolvedSchema;
       if (Array.isArray(firstChild)) {
@@ -114,18 +155,18 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     }
     const controlElement = <ControlElement> this.uischema;
     const rootData = this.dataService.getValue(controlElement);
-    if (rootData !== undefined) {
-      const ul = document.createElement('ul');
-      if (Array.isArray(rootData)) {
-        this.expandArray(rootData, ul, <JsonSchema>schema.items);
-      } else {
-        this.expandObject(rootData, ul, schema, null);
-      }
-
-      this.master.appendChild(ul);
+    const ul = document.createElement('ul');
+    if (schema.items !== undefined) {
+      this.expandArray(rootData, ul, <JsonSchema>schema.items);
+    } else {
+      this.expandObject(rootData, ul, schema, null);
     }
+    this.master.appendChild(ul);
   }
   private expandArray(data: Array<Object>, parent: HTMLUListElement, schema: JsonSchema): void {
+    if (data === undefined || data === null) {
+      return;
+    }
     data.forEach((element, index) => {
       this.expandObject(element, parent, schema, toDelete => data.splice(index, 1));
     });
@@ -135,12 +176,11 @@ class TreeRenderer extends Renderer implements DataChangeListener {
       && schema.properties[key].items['type'] === 'object');
   }
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
-    if (this.uischema.options === undefined) {
-      return JSON.stringify;
-    }
-    const labelProvider = this.uischema.options['labelProvider'];
-    if (labelProvider !== undefined) {
-      return (element) => element[labelProvider[schema.id]];
+    if (this.uischema.options !== undefined) {
+      const labelProvider = this.uischema.options['labelProvider'];
+      if (labelProvider !== undefined) {
+        return (element) => element[labelProvider[schema.id]];
+      }
     }
     const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
     if (namingKeys.length !== 0) {
@@ -269,22 +309,25 @@ class TreeRenderer extends Renderer implements DataChangeListener {
     const jsonForms = <JsonForms>document.createElement('json-forms');
     jsonForms.data = element;
     jsonForms.dataSchema = schema;
-    jsonForms.addDataChangeListener({
-      isRelevantKey: (uischema: ControlElement): boolean => {
-        return uischema !== null;
-      },
-      notifyChange: (uischema: ControlElement, newValue: any, data: any): void => {
-        const segments = uischema.scope.$ref.split('/');
-        const lastSegemnet = segments[segments.length - 1];
-        if (lastSegemnet === this.uischema.options['labelProvider'][schema.id]) {
-          label.firstChild.lastChild.firstChild.textContent = newValue;
+    // check needed for tests
+    if (jsonForms.addDataChangeListener) {
+      jsonForms.addDataChangeListener({
+        isRelevantKey: (uischema: ControlElement): boolean => {
+          return uischema !== null;
+        },
+        notifyChange: (uischema: ControlElement, newValue: any, data: any): void => {
+          const segments = uischema.scope.$ref.split('/');
+          const lastSegemnet = segments[segments.length - 1];
+          if (lastSegemnet === this.uischema.options['labelProvider'][schema.id]) {
+            label.firstChild.lastChild.firstChild.textContent = newValue;
+          }
+          if (Array.isArray(newValue)) {
+            this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref).items, label,
+            lastSegemnet);
+          }
         }
-        if (Array.isArray(newValue)) {
-          this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref).items, label,
-          lastSegemnet);
-        }
-      }
-    });
+      });
+    }
     this.detail.appendChild(jsonForms);
   }
 }

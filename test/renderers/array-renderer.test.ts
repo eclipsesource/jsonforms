@@ -4,11 +4,11 @@ import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
 declare var global;
 installCE(global, 'force');
-import {JsonSchema} from '../src/models/jsonSchema';
-import {ControlElement} from '../src/models/uischema';
-import {ArrayControlRenderer, arrayTester} from '../src/renderers/additional/array-renderer';
-import {DataService } from '../src/core/data.service';
-import {JsonFormsHolder} from '../src/core';
+import {JsonSchema} from '../../src/models/jsonSchema';
+import {ControlElement} from '../../src/models/uischema';
+import {ArrayControlRenderer, arrayTester} from '../../src/renderers/additional/array-renderer';
+import {DataService } from '../../src/core/data.service';
+import {JsonFormsHolder} from '../../src/core';
 
 
 test('generate array child control', t => {
