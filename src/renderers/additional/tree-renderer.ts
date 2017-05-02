@@ -122,9 +122,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     return this;
   }
   isRelevantKey (uischema: ControlElement): boolean {
-    return uischema === undefined || uischema === null ?
-    false :
-    (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
+    return uischema === undefined || uischema === null ? false :
+      (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
   }
 
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {

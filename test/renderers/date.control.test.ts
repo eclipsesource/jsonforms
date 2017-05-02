@@ -12,19 +12,20 @@ import {DataService } from '../../src/core/data.service';
 
 
 test('DateControlTester', t => {
-  t.is(-1, dateControlTester(undefined, undefined));
-  t.is(-1, dateControlTester(null, undefined));
-  t.is(-1, dateControlTester({type: 'Foo'}, undefined));
-  t.is(-1, dateControlTester({type: 'Control'}, undefined));
-  t.is(-1, dateControlTester(
+  t.is(dateControlTester(undefined, undefined), -1);
+  t.is(dateControlTester(null, undefined), -1);
+  t.is(dateControlTester({type: 'Foo'}, undefined), -1);
+  t.is(dateControlTester({type: 'Control'}, undefined), -1);
+  t.is(dateControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}));
-  t.is(-1, dateControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+  t.is(dateControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'string', format: 'date'}}}));
-  t.is(2, dateControlTester(
+    {type: 'object', properties: {foo: {type: 'string'},
+      bar: {type: 'string', format: 'date'}}}), -1);
+  t.is(dateControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string', format: 'date'}}}));
+    {type: 'object', properties: {foo: {type: 'string', format: 'date'}}}), 2);
 });
 test('DateControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'date'}}} as JsonSchema;

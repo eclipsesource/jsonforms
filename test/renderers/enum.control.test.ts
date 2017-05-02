@@ -12,24 +12,24 @@ import {DataService } from '../../src/core/data.service';
 
 
 test('EnumControlTester', t => {
-  t.is(-1, enumControlTester(undefined, undefined));
-  t.is(-1, enumControlTester(null, undefined));
-  t.is(-1, enumControlTester({type: 'Foo'}, undefined));
-  t.is(-1, enumControlTester({type: 'Control'}, undefined));
-  t.is(-1, enumControlTester(
+  t.is(enumControlTester(undefined, undefined), -1);
+  t.is(enumControlTester(null, undefined), -1);
+  t.is(enumControlTester({type: 'Foo'}, undefined), -1);
+  t.is(enumControlTester({type: 'Control'}, undefined), -1);
+  t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}));
-  t.is(-1, enumControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+  t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
     {type: 'object', properties: {
-      foo: {type: 'string'}, bar: {type: 'string', enum: ['a', 'b']}}}));
-  t.is(2, enumControlTester(
+      foo: {type: 'string'}, bar: {type: 'string', enum: ['a', 'b']}}}), -1);
+  t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string', enum: ['a', 'b']}}}));
+    {type: 'object', properties: {foo: {type: 'string', enum: ['a', 'b']}}}), 2);
   // TODO should this be true?
-  t.is(2, enumControlTester(
+  t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'number', enum: [1, 2]}}}));
+    {type: 'object', properties: {foo: {type: 'number', enum: [1, 2]}}}), 2);
 });
 test('EnumControl static', t => {
   const schema = {type: 'object', properties:

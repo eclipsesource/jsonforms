@@ -12,19 +12,19 @@ import {DataService } from '../../src/core/data.service';
 
 
 test('IntegerControlTester', t => {
-  t.is(-1, integerControlTester(undefined, undefined));
-  t.is(-1, integerControlTester(null, undefined));
-  t.is(-1, integerControlTester({type: 'Foo'}, undefined));
-  t.is(-1, integerControlTester({type: 'Control'}, undefined));
-  t.is(-1, integerControlTester(
+  t.is(integerControlTester(undefined, undefined), -1);
+  t.is(integerControlTester(null, undefined), -1);
+  t.is(integerControlTester({type: 'Foo'}, undefined), -1);
+  t.is(integerControlTester({type: 'Control'}, undefined), -1);
+  t.is(integerControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}));
-  t.is(-1, integerControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+  t.is(integerControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}));
-  t.is(2, integerControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}), -1);
+  t.is(integerControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'integer'}}}));
+    {type: 'object', properties: {foo: {type: 'integer'}}}), 2);
 });
 test('IntegerControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;

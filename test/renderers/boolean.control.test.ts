@@ -12,19 +12,19 @@ import {DataService } from '../../src/core/data.service';
 
 
 test('BooleanControlTester', t => {
-  t.is(-1, booleanControlTester(undefined, undefined));
-  t.is(-1, booleanControlTester(null, undefined));
-  t.is(-1, booleanControlTester({type: 'Foo'}, undefined));
-  t.is(-1, booleanControlTester({type: 'Control'}, undefined));
-  t.is(-1, booleanControlTester(
+  t.is(booleanControlTester(undefined, undefined), -1);
+  t.is(booleanControlTester(null, undefined), -1);
+  t.is(booleanControlTester({type: 'Foo'}, undefined), -1);
+  t.is(booleanControlTester({type: 'Control'}, undefined), -1);
+  t.is(booleanControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}));
-  t.is(-1, booleanControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+  t.is(booleanControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'boolean'}}}));
-  t.is(2, booleanControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'boolean'}}}), -1);
+  t.is(booleanControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'boolean'}}}));
+    {type: 'object', properties: {foo: {type: 'boolean'}}}), 2);
 });
 test('BooleanControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;

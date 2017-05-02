@@ -12,19 +12,19 @@ import {DataService } from '../../src/core/data.service';
 
 
 test('NumberControlTester', t => {
-  t.is(-1, numberControlTester(undefined, undefined));
-  t.is(-1, numberControlTester(null, undefined));
-  t.is(-1, numberControlTester({type: 'Foo'}, undefined));
-  t.is(-1, numberControlTester({type: 'Control'}, undefined));
-  t.is(-1, numberControlTester(
+  t.is(numberControlTester(undefined, undefined), -1);
+  t.is(numberControlTester(null, undefined), -1);
+  t.is(numberControlTester({type: 'Foo'}, undefined), -1);
+  t.is(numberControlTester({type: 'Control'}, undefined), -1);
+  t.is(numberControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}));
-  t.is(-1, numberControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+  t.is(numberControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'number'}}}));
-  t.is(2, numberControlTester(
+    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'number'}}}), -1);
+  t.is(numberControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'number'}}}));
+    {type: 'object', properties: {foo: {type: 'number'}}}), 2);
 });
 test('NumberControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
