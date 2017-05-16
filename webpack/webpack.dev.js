@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var path = require("path");
 var copyWebpackPlugin = require("copy-webpack-plugin");
 
+
 module.exports = [{
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
@@ -29,7 +30,12 @@ module.exports = [{
         new webpack.HotModuleReplacementPlugin(),
         new copyWebpackPlugin([
             { from: 'example/example.css' },
-            { from: 'lib/native-shim.js' },
+            { from: 'lib/native-shim.js'  },
+            { from: 'node_modules/jquery/dist/jquery.js'               },
+            { from: 'node_modules/bootstrap/dist/css/bootstrap.css'    },
+            { from: 'node_modules/bootstrap/dist/js/bootstrap.js'      },
+            { from: 'node_modules/materialize-css/bin/materialize.css' },
+            { from: 'node_modules/materialize-css/bin/materialize.js'  },
             { from: 'example/icons', to: 'icons' }
         ])
     ],

@@ -7,12 +7,35 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="assets/native-shim.js"></script>
-  <script src="assets/bundle.js"></script>
+
+  <!-- JQuery is needed for both, Bootstrap 4 as well as materialize -->
+  <script src="assets/jquery.js"></script>
+
+  <!-- Materialize CSS -->
+  <link rel="stylesheet" href="assets/materialize.css">
+
+  <!-- Bootstrap 4 CSS -->
+  <link rel="stylesheet" href="assets/bootstrap.css">
+
+  <!-- Plain CSS -->
   <link rel="stylesheet" href="assets/example.css">
+
+  <!-- Bootstrap JS, if we need it, it must be loaded before materialize JS, otherwise the select elements seem to break -->
+  <!--<script src="assets/bootstrap.js"></script>-->
+
+  <!-- materialize JS -->
+  <script src="assets/materialize.js"></script>
+  <script src="assets/bundle.js"></script>
 </head>
 <body>
-  <div id="examples"></div>
+<div id="root">
+  <div id="toolbar">
+    <div id="examples"></div>
+    <div id="theme"></div>
+    <div id="style"></div>
+  </div>
   <div id="view"></div>
+</div>
 </body>
 <script>
   exampleDivId = 'examples';
