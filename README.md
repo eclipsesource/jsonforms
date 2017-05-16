@@ -5,14 +5,23 @@ JSONForms uses HTML custom elements and eliminates the need to write HTML templa
 create forms by leveraging the capabilities of JSON and JSON schema.
 
 # Usage
-To use JSONForms add `native-shim.js` and `jsonforms.js` to your HTML in this order. Once you add a `json-forms` element to the DOM with at least a `data` attribute set, a form will be rendered for you. Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes. Use CSS to style the form however you want.
+JSONForms is based on [Custom elements](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Custom_Elements),
+which are not yet supported by all browsers, hence you'll need to include additional files in order to enable Custom Elements support:
+These files are `webcomponents-lite.js` and `native-shim.js` as well as JSONForms itself via `jsonforms.js`.
+Pay attention to the order when including these files.
+
+Once you add a `json-forms` element to the DOM with at least a `data` attribute set, 
+a form will be rendered for you. 
+Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes. 
+Use CSS to style the form however you want.
 
 ## Step by Step Example Usage
 
 1. Install JSONForms via `npm install jsonforms@next`
-2. Add `native-shim.js`, `jsonforms.js` and `jsonforms-example.css` to your HTML
+2. Add `webcomponents-lite.js`, `native-shim.js`, `jsonforms.js` and `jsonforms-example.css` to your HTML
   ```html
     <head>
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="node_modules/jsonforms/lib/native-shim.js"></script>
     <script src="node_modules/jsonforms/dist/jsonforms.js"></script>
     <link rel="stylesheet" type="text/css" href="node_modules/jsonforms/dist/jsonforms-example.css">
