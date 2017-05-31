@@ -1,6 +1,11 @@
-import './renderers/renderers';
-import './json-forms';
-import './services/services';
-
 export * from './core';
-export {Renderer} from './core/renderer';
+export * from './json-forms';
+export * from './path.util';
+export * from './core/data.service';
+export * from './core/renderer';
+export * from './core/runtime';
+export * from './core/testers';
+export * from './models/uischema';
+export * from './models/jsonSchema';
+export * from './renderers/renderers';
+export * from './services/services';
