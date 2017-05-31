@@ -12,6 +12,11 @@ export interface ExampleDescription {
   setupCallback?: (div: HTMLDivElement) => void;
 }
 let knownExamples: {[key: string]: ExampleDescription} = {};
+let knownStyles : {[key: string]: string} = {
+  normal: 'Normal Label Top',
+  dark: 'Dark label Top',
+  labelFixed: 'Label left Fixed'
+};
 export const registerExamples = (examples: Array<ExampleDescription>): void => {
   examples.forEach(example => knownExamples[example.name] = example);
 };
@@ -39,9 +44,14 @@ const changeExample = (selectedExample: string) => {
 
   body.appendChild(jsonForms);
 };
-window.onload = (ev) => {
+const crateExampleSelection = () => {
   const examplesDiv = document.getElementById(exampleDivId);
+  const labelExample = document.createElement('label');
+  labelExample.textContent = 'Example:';
+  labelExample.htmlFor = 'example_select';
+  examplesDiv.appendChild(labelExample);
   const select = document.createElement('select');
+  select.id = 'example_select';
   Object.keys(knownExamples).forEach(key => {
     const example = knownExamples[key];
     const option = document.createElement('option');
@@ -52,4 +62,29 @@ window.onload = (ev) => {
   select.onchange = () => (changeExample(select.value));
   examplesDiv.appendChild(select);
   changeExample(select.value);
+}
+const changeStyle = (style: string) => {
+  document.body.className = style;
+};
+const createStyleSelection = () => {
+  const examplesDiv = document.getElementById('examples');
+  const labelStyle = document.createElement('label');
+  labelStyle.textContent = 'Style:';
+  labelStyle.htmlFor = 'example_style';
+  examplesDiv.appendChild(labelStyle);
+  const select = document.createElement('select');
+  select.id = 'example_style';
+  Object.keys(knownStyles).forEach(key => {
+    const style = knownStyles[key];
+    const option = document.createElement('option');
+    option.value = key;
+    option.label = style;
+    select.appendChild(option);
+  });
+  select.onchange = (ev: Event) => (changeStyle(select.value));
+  examplesDiv.appendChild(select);
+}
+window.onload = (ev) => {
+  crateExampleSelection();
+  createStyleSelection();
 };

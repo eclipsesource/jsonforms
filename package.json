@@ -36,6 +36,7 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@types/gulp": "3.8.28",
     "ava": "^0.18.1",
     "awesome-typescript-loader": "^3.0.0-beta.18",
     "copy-webpack-plugin": "^4.0.1",
@@ -45,6 +46,7 @@
     "jsdom": "^9.11.0",
     "jsdom-global": "2.1.1",
     "lite-server": "^2.3.0",
+    "ncp": "^2.0.0",
     "nyc": "^10.1.2",
     "source-map-loader": "^0.1.6",
     "tslint": "^4.4.2",

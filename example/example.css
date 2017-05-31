@@ -1,3 +1,59 @@
+:root {
+  --jsf-main-bg-color: white;
+  --jsf-modest-bg-color: #dddddd;
+  --jsf-border-color: lightgray;
+  --jsf-modest-bg-highlight-color: silver;
+  --jsf-validation-color: red;
+  --jsf-main-fg-color: black;
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body {
+  width: calc(100vw - 2em);
+  height: calc(100vh - 2em);
+  margin: 0;
+  padding: 1em;
+}
+
+body.dark {
+  --jsf-main-bg-color: #222227;
+  --jsf-modest-bg-color: #333333;
+  --jsf-border-color: #444444;
+  --jsf-modest-bg-highlight-color: #444444;
+  --jsf-validation-color: darkred;
+  --jsf-main-fg-color: #999999;
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body.dark select {
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+  border-color: var(--jsf-border-color);
+}
+body.dark textarea {
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body.dark button {
+  background-color: var(--jsf-modest-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body.labelFixed .control {
+  flex-direction: row;
+}
+body.labelFixed .control > label {
+  min-width: 10em;
+  text-align: end;
+  margin-right: 1em;
+}
+body.labelFixed .control > .input {
+  flex: 1;
+}
+/* Workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=375693 */
+/*body.labelFixed .control > fieldset {
+  display: block;
+  width: 100%;
+}*/
 /* Common */
 [hidden] {display: none;}
 /* Controls */
@@ -7,7 +63,7 @@ input {
 .jsf-label {
   margin: 0.5em 1em;
   font-weight: bold;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid var(--jsf-border-color);
 }
 .control {
   display: flex;
@@ -20,18 +76,24 @@ input {
   margin-left: 0;
   margin-right: -0.25em;
 }
-.control > label {font-weight: bold;}
+.control > label {
+  font-weight: bold;
+  color: var(--jsf-main-fg-color);
+}
 .control > .validation:empty {margin-left: 0;}
-.control > .validation {color:red;}
+.control > .validation {color: var(--jsf-validation-color);}
 .control > .input {
   border-style: solid;
   border-width: thin;
   border-radius: 0.2em;
-  border-color: lightgray;
+  border-color: var(--jsf-border-color);
   padding: 0.2em;
+  color: var(--jsf-main-fg-color);
+}
+.control > input.input {
   background-color: transparent;
 }
-.control.validation_error > .input {border-color: red;}
+.control.validation_error > .input {border-color: var(--jsf-validation-color);}
 .control[hidden] {
   display: none;
 }
@@ -47,6 +109,7 @@ input {
 .horizontal-layout {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 .horizontal-layout[hidden] {
   display: none;
@@ -56,7 +119,7 @@ input {
   display: flex;
   flex-direction: column;
   border-style: solid;
-  border-color: lightgray;
+  border-color: var(--jsf-border-color);
   border-width: thin;
   border-radius: 0.2em;
 }
@@ -66,6 +129,7 @@ input {
 .group-layout > legend {
   padding: 0 0.5em;
   font-weight: bold;
+  color: var(--jsf-main-fg-color);
 }
 .jsf-categorization {
   display: flex;
@@ -77,7 +141,7 @@ input {
 .jsf-categorization > * {
   border-style: solid;
   border-width: thin;
-  border-color: lightgray;
+  border-color: var(--jsf-border-color);
   border-radius: 0.2em;
 }
 .jsf-categorization > *:first-child {
@@ -88,7 +152,11 @@ input {
   list-style-type: none;
   font-weight: normal;
 }
-.jsf-categorization > .jsf-categorization-master ul > li > span {cursor: pointer; display: block;}
+.jsf-categorization > .jsf-categorization-master ul > li > span {
+  cursor: pointer;
+  display: block;
+  color: var(--jsf-main-fg-color);
+}
 .jsf-categorization > .jsf-categorization-master ul > li > span:hover {font-weight: bold;}
 .jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span {cursor: default;}
 .jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span:hover {font-weight: normal;}
@@ -105,7 +173,7 @@ input {
 .jsf-treeMasterDetail > .jsf-treeMasterDetail-content > * {
   border-style: solid;
   border-width: thin;
-  border-color: lightgray;
+  border-color: var(--jsf-border-color);
   border-radius: 0.2em;
 }
 .jsf-treeMasterDetail > .jsf-treeMasterDetail-content > *:first-child {
@@ -137,6 +205,8 @@ input {
   flex-basis: 1em;
   min-height: 1em;
   margin-right: 0.25em;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .jsf-treeMasterDetail-master li > div > .icon.folder {
   background-image: url('./icons/folder.png');
@@ -153,28 +223,31 @@ input {
   flex: 1;
   margin-right: 1em;
   min-height: 1em;
+  color: var(--jsf-main-fg-color);
 }
-.jsf-treeMasterDetail-master li > div > .label:empty {
+/* TODO: Needed? */
+.jsf-treeMasterDetail-master li > div > .label > span:first-child:empty {
     background: #ffff00;
     min-height: 1em;
 }
 .jsf-treeMasterDetail-master li > div > .label:hover {
   font-weight: bold;
   cursor: pointer;
-  background-color: gainsboro;
+  background-color: var(--jsf-modest-bg-color);
 }
 .jsf-treeMasterDetail-master li > div > .label > .add, .jsf-treeMasterDetail-master li > div > .label > .remove {
   display: none;
   cursor: pointer;
   margin-left: 0.25em;
   min-width: 1em;
-  min-height: 1.2em;
   font-weight: normal;
-  background-color: lightgray;
 }
 .jsf-treeMasterDetail-master li > div > .label:hover > .add, .jsf-treeMasterDetail-master li > div > .label:hover > .remove {
   display: flex;
   justify-content: center;
+}
+.jsf-treeMasterDetail-master li > div > .label:hover > .add:hover, .jsf-treeMasterDetail-master li > div > .label:hover > .remove:hover {
+  background-color: var(--jsf-modest-bg-highlight-color);
 }
 .jsf-treeMasterDetail-master li::before, .jsf-treeMasterDetail-master li::after, .jsf-treeMasterDetail-master ul::after {
   content: '';
@@ -182,17 +255,17 @@ input {
   left:0.2em;
 }
 .jsf-treeMasterDetail-master li::before {
-  border-top: 1px solid gray;
+  border-top: 1px solid var(--jsf-border-color);
   top:0.5em;
   width: 1em;
 }
 .jsf-treeMasterDetail-master li::after {
-  border-left: 1px solid gray;
+  border-left: 1px solid var(--jsf-border-color);
   height:100%;
   top:-0.6em;
 }
 .jsf-treeMasterDetail-master ul::after {
-  border-left: 1px solid gray;
+  border-left: 1px solid var(--jsf-border-color);
   height: 0.6em;
   bottom: 0;
 }
@@ -217,9 +290,10 @@ jsonforms-tree > dialog > .content {
 }
 .array-layout {
   display: flex;
+  flex:1;
   flex-direction: column;
   border-style: solid;
-  border-color: lightgray;
+  border-color: var(--jsf-border-color);
   border-width: thin;
   border-radius: 0.2em;
 }
@@ -232,9 +306,10 @@ jsonforms-tree > dialog > .content {
 }
 .array-layout > legend > label {
   margin-right: 1em;
+  color: var(--jsf-main-fg-color);
 }
 .array-layout > .children > * {
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid var(--jsf-border-color);
   display: block;
 }
 .array-layout > .children > *:last-child {
@@ -255,7 +330,7 @@ jsonforms-tree > dialog > .content {
   margin: 0;
 }
 .array-table-layout table, .array-table-layout th, .array-table-layout td {
-    border: 1px solid lightgray;
+    border: 1px solid var(--jsf-border-color);
     border-collapse: collapse;
 }
 .array-table-layout th, .array-table-layout td {
