@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist/ts-build/material"
+  },
+  "files": [
+    "index.ts"
+  ]
+}
