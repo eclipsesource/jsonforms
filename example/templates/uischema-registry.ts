@@ -25,12 +25,14 @@ const tester = (test_uischema, test_data) => 5;
 const setup = (div: HTMLDivElement) => {
   const registerButton = document.createElement('button');
   registerButton.innerText = 'Register UI Schema';
+  registerButton.className = JsonFormsHolder.stylingRegistry.getAsClassName('button');
   registerButton.onclick = () => {
     JsonFormsHolder.uischemaRegistry.register(uischema, tester);
     resetServices();
   };
   div.appendChild(registerButton);
   const unregisterButton = document.createElement('button');
+  unregisterButton.className = JsonFormsHolder.stylingRegistry.getAsClassName('button');
   unregisterButton.innerText = 'Unregister UI Schema';
   unregisterButton.onclick = () => {
     JsonFormsHolder.uischemaRegistry.unregister(uischema, tester);

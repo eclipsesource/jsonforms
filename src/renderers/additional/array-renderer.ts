@@ -8,6 +8,7 @@ import { resolveSchema } from '../../path.util';
 import { JsonSchema } from '../../models/jsonSchema';
 import { getElementLabelObject } from '../label.util';
 import { RankedTester, rankWith, and, uiTypeIs, schemaMatches } from '../../core/testers';
+import { JsonFormsHolder } from '../../core';
 
 export const arrayTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
@@ -85,6 +86,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     div.appendChild(content);
 
     const button = document.createElement('button');
+    button.className = JsonFormsHolder.stylingRegistry.getAsClassName('button');
     button.textContent = `Add to ${labelObject.text}`;
     button.onclick = (ev: Event) => {
       if (arrayData === undefined) {
