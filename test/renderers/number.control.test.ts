@@ -9,7 +9,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {integerControlTester, IntegerControl} from '../../src/renderers/controls/integer.control';
 import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
-
+import {ItemModel} from '../../src/parser/item_model';
 
 test('IntegerControlTester', t => {
   t.is(integerControlTester(undefined, undefined), -1);
@@ -18,20 +18,60 @@ test('IntegerControlTester', t => {
   t.is(integerControlTester({type: 'Control'}, undefined), -1);
   t.is(integerControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string'},
+          dropPoints: {}
+        }
+      }
+    }), -1);
   t.is(integerControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}), -1);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string'},
+          dropPoints: {}
+        },
+        bar: {
+          schema: {type: 'integer'},
+          dropPoints: {}
+        }
+      }
+    }), -1);
   t.is(integerControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'integer'}}}), 2);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'integer'},
+          dropPoints: {}
+        }
+      }
+    }), 2);
 });
 test('IntegerControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
   const renderer: IntegerControl = new IntegerControl();
   const data = {'foo': 42};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   t.is(result.className, 'control')
@@ -53,7 +93,16 @@ test('IntegerControl static no label', t => {
   const renderer: IntegerControl = new IntegerControl();
   const data = {'foo': 13};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'},
     label: false} as ControlElement);
   const result = renderer.render();
@@ -76,7 +125,16 @@ test('IntegerControl inputChange', t => {
   const renderer: IntegerControl = new IntegerControl();
   const data = {'foo': 42};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   const input = <HTMLInputElement>result.children[1];
@@ -90,7 +148,16 @@ test('IntegerControl dataService notification', t => {
   const data = {'foo': 13};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -103,7 +170,16 @@ test('IntegerControl dataService notification value undefined', t => {
   const data = {'foo': 42};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -116,7 +192,16 @@ test('IntegerControl dataService notification value null', t => {
   const data = {'foo': 42};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -129,7 +214,16 @@ test('IntegerControl dataService notification wrong ref', t => {
   const data = {'foo': 42};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -142,7 +236,16 @@ test('IntegerControl dataService notification null ref', t => {
   const data = {'foo': 42};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -155,7 +258,16 @@ test('IntegerControl dataService notification undefined ref', t => {
   const data = {'foo': 42};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -168,7 +280,16 @@ test('IntegerControl dataService no notification after disconnect', t => {
   const data = {'foo': 42};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -183,7 +304,16 @@ test('IntegerControl notify visible false', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -197,7 +327,16 @@ test('IntegerControl notify visible true', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -212,7 +351,16 @@ test('IntegerControl notify disabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -229,7 +377,16 @@ test('IntegerControl notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -245,7 +402,16 @@ test('IntegerControl notify one error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -260,7 +426,16 @@ test('IntegerControl notify multiple errors', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -275,7 +450,16 @@ test('IntegerControl notify errors undefined', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -290,7 +474,16 @@ test('IntegerControl notify errors null', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -305,7 +498,16 @@ test('IntegerControl notify errors clean', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -321,7 +523,16 @@ test('IntegerControl disconnected no notify visible', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -336,7 +547,16 @@ test('IntegerControl disconnected no notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -352,7 +572,16 @@ test('IntegerControl disconnected no notify error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'integer'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

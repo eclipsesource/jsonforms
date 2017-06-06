@@ -11,6 +11,7 @@ import {CategorizationRenderer, categorizationTester}
 import {DataService } from '../../src/core/data.service';
 import {JsonFormsHolder} from '../../src/core';
 import {Runtime} from '../../src/core/runtime';
+import {ItemModel} from '../../src/parser/item_model';
 
 test('CategorizationTester', t => {
   t.is(categorizationTester(undefined, undefined), -1);
@@ -49,7 +50,7 @@ test('CategorizationRenderer static', t => {
   const renderer: CategorizationRenderer = new CategorizationRenderer();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Categorization', elements: [
       {type: 'Categorization', label: 'Bar', elements: [
         {type: 'Category', label: 'A', elements: [
@@ -98,7 +99,7 @@ test('CategorizationRenderer dynamic', t => {
   const renderer: CategorizationRenderer = new CategorizationRenderer();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Categorization', elements: [
       {type: 'Categorization', label: 'Bar', elements: [
         {type: 'Category', label: 'A', elements: [

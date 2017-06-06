@@ -8,16 +8,17 @@ import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
 import { getElementLabelObject } from '../label.util';
 import { rankWith, uiTypeIs, optionIs, and, schemaMatches, RankedTester } from '../../core/testers';
+import {isItemModel, ITEM_MODEL_TYPES, ItemModel} from '../../parser/item_model';
 
 export const tableArrayTester: RankedTester = rankWith(10, and(
     uiTypeIs('Control'),
     optionIs('table', true),
-    schemaMatches(schema =>
-        !_.isEmpty(schema)
-        && schema.type === 'array'
-        && !_.isEmpty(schema.items)
-        && !Array.isArray(schema.items) // we don't care about tuples
-        && (schema.items as JsonSchema).type === 'object'
+    schemaMatches(model =>
+        isItemModel(model) ?
+        !_.isEmpty(model.schema)
+        && model.type === ITEM_MODEL_TYPES.ARRAY // && model.schema.type === 'array'
+        && !Array.isArray(model.schema) // we don't care about tuples
+        && model.schema.type === 'object' : false
     ))
 );
 @JsonFormsRenderer({
@@ -63,7 +64,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     const header = document.createElement('header');
     div.appendChild(header);
     const label = document.createElement('label');
-    const labelObject = getElementLabelObject(this.dataSchema, controlElement);
+    const labelObject = getElementLabelObject(this.dataModel, controlElement);
     if (labelObject.show) {
       label.textContent = labelObject.text;
     }
@@ -72,11 +73,11 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     const content = document.createElement('table');
     const head = document.createElement('thead');
     const headRow = document.createElement('tr');
-    const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
-    Object.keys(resolvedSchema.properties).forEach(key => {
-      if (resolvedSchema.properties[key].type === 'array') {
-        return;
-      }
+    const resolvedSchema = <ItemModel>resolveSchema(this.dataModel, controlElement.scope.$ref);
+    Object.keys(resolvedSchema.attributes).forEach(key => {
+      // if (resolvedSchema.properties[key].type === 'array') {
+      //   return;
+      // }
       const headColumn = document.createElement('th');
       headColumn.innerText = key;
       headRow.appendChild(headColumn);
@@ -87,10 +88,10 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     let arrayData = this.dataService.getValue(controlElement);
     const renderChild = (element: Object): void => {
       const row = document.createElement('tr');
-      Object.keys(resolvedSchema.properties).forEach(key => {
-        if (resolvedSchema.properties[key].type === 'array') {
-          return;
-        }
+      Object.keys(resolvedSchema.attributes).forEach(key => {
+        // if (resolvedSchema.properties[key].type === 'array') {
+        //   return;
+        // }
         const column = document.createElement('td');
         const jsonForms = <JsonForms>document.createElement('json-forms');
         jsonForms.data = element;
@@ -99,7 +100,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
           label: false,
           scope: {$ref: `#/properties/${key}`}
         } as ControlElement;
-        jsonForms.dataSchema = resolvedSchema;
+        jsonForms.dataModel = resolvedSchema;
         column.appendChild(jsonForms);
         row.appendChild(column);
       });

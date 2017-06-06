@@ -1,4 +1,5 @@
 import { JsonSchema } from './models/jsonSchema';
+import {FullDataModelType, isItemModel} from './parser/item_model';
 
 const toDataPathSegments = (path: string): Array<string> => {
   const segments = path.split('/');
@@ -47,19 +48,24 @@ export const getValuePropertyPair = (instance: any, path: string):
   };
 };
 
-export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
+export const resolveSchema = (model: FullDataModelType, path: string): FullDataModelType => {
   const validPathSegments = path.split('/');
   const invalidSegment =
-    (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
-  const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
-      invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment], schema);
-  if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    return retrieveResolvableSchema(schema, resultSchema.$ref);
-  }
+    (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '' ||
+    pathSegment === 'properties';
+  const resultSchema = validPathSegments.reduce((curModel, pathSegment) =>
+    invalidSegment(pathSegment) ? curModel :
+      isItemModel(curModel) ?
+        curModel.dropPoints.hasOwnProperty(pathSegment) ? curModel.dropPoints[pathSegment]
+          : curModel.attributes[pathSegment]
+        : curModel, model);
+  // if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
+  //   return retrieveResolvableSchema(model.schema, resultSchema.$ref);
+  // }
   return resultSchema;
 };
 
-const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
+export const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
   if (schema.type === 'object' && schema.properties !== undefined) {
     Object.keys(schema.properties).forEach(key => findAllRefs(schema.properties[key], result));
   }
@@ -78,14 +84,17 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
 
 export function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
   const child = resolveSchema(full, reference);
-  const allRefs = findAllRefs(child);
+  if (!isItemModel(child)) {
+    return undefined;
+  }
+  const allRefs = findAllRefs(child.schema);
   const innerSelfReference = allRefs[reference];
   if (innerSelfReference !== undefined) {
     innerSelfReference.$ref = '#';
   }
-  return child;
+  return child.schema;
 };
 
-interface ReferenceSchemaMap {
+export interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }

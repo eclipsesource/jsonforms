@@ -7,6 +7,9 @@ import {JsonForms} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
 import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {isItemModel, FullDataModelType, isMultipleItemModel, isReferenceModel, ITEM_MODEL_TYPES}
+  from '../../parser/item_model';
+import {extractSchemaFromModel} from '../../parser/util';
 
 export const treeMasterDetailTester: RankedTester = rankWith(1,
   and(
@@ -32,7 +35,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   private selected: HTMLLIElement;
   private dialog;
   private addingToRoot = false;
-  private resolvedSchema: JsonSchema;
+  private resolvedSchema: FullDataModelType;
 
   constructor() {
     super();
@@ -65,7 +68,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   }
   render(): HTMLElement {
     const controlElement = <ControlElement> this.uischema;
-    this.resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref);
+    this.resolvedSchema = resolveSchema(this.dataModel, controlElement.scope.$ref);
 
     this.className = 'jsf-treeMasterDetail';
 
@@ -87,8 +90,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         this.addingToRoot = true;
         const length = rootData.push(newData);
         this.dataService.notifyChange(controlElement, rootData);
-        this.expandObject(newData, <HTMLUListElement>this.master.firstChild, this.dataSchema.items,
-          toDelete => rootData.splice(length - 1, 1));
+        if (!isItemModel(this.dataModel)) {
+          return;
+        }
+        this.expandObject(newData, <HTMLUListElement>this.master.firstChild,
+          controlElement.scope.$ref === '#' ? this.dataModel.dropPoints['array'] :
+          this.resolvedSchema, toDelete => rootData.splice(length - 1, 1));
         this.addingToRoot = false;
       };
       divHeader.appendChild(button);
@@ -138,57 +145,115 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   private selectFirstElement(): void {
     const controlElement = <ControlElement> this.uischema;
     const arrayData = this.dataService.getValue(controlElement);
-    if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
-      let firstChild = arrayData;
-      let schema = this.resolvedSchema;
-      if (Array.isArray(firstChild)) {
-        firstChild = firstChild[0];
-        schema = schema.items;
+    if (arrayData !== undefined && arrayData !== null) {
+      const helper = (innerModel: FullDataModelType) => {
+        if (isItemModel(innerModel)) {
+          let firstChild = arrayData;
+          let schema = innerModel.schema;
+          if (Array.isArray(firstChild)) {
+            firstChild = firstChild[0];
+          }
+          this.renderDetail(firstChild, <HTMLLIElement>this.master.firstChild.firstChild, schema);
+        } else if (isMultipleItemModel(innerModel)) {
+          // TODO selectFirstElement for MultipleItemModel
+        } else if (isReferenceModel(innerModel)) {
+          helper(innerModel.targetModel);
+        }
+      };
+      if (Array.isArray(arrayData) && isItemModel(this.dataModel)) {
+        helper(controlElement.scope.$ref === '#' ? this.dataModel.dropPoints['array'] :
+          this.resolvedSchema);
+      } else {
+        helper(this.resolvedSchema);
       }
-      this.renderDetail(firstChild, <HTMLLIElement>this.master.firstChild.firstChild, schema);
     }
   }
 
-  private renderMaster(schema: JsonSchema): void {
+  private renderMaster(model: FullDataModelType): void {
     if (this.master.lastChild !== null) {
       this.master.removeChild(this.master.lastChild);
     }
     const controlElement = <ControlElement> this.uischema;
     const rootData = this.dataService.getValue(controlElement);
     const ul = document.createElement('ul');
-    if (schema.items !== undefined) {
-      this.expandArray(rootData, ul, <JsonSchema>schema.items);
-    } else {
-      this.expandObject(rootData, ul, schema, null);
-    }
+    const renderModel = (innerModel: FullDataModelType) => {
+      if (isItemModel(innerModel)) {
+        if (innerModel.schema.items !== undefined || innerModel.type === ITEM_MODEL_TYPES.ARRAY) {
+         // the items are available as a droppoint with key 'array'
+          this.expandArray(<Array<object>>rootData, ul, controlElement.scope.$ref === '#' ?
+          innerModel.dropPoints['array'] : innerModel);
+        } else {
+          this.expandObject(rootData, ul, innerModel, null);
+       }
+      } else if (isMultipleItemModel(innerModel)) {
+        // TODO handle multiple item model when necessary
+      } else if (isReferenceModel(innerModel)) {
+          renderModel(innerModel.targetModel);
+      }
+    };
+
+    renderModel(model);
     this.master.appendChild(ul);
   }
-  private expandArray(data: Array<Object>, parent: HTMLUListElement, schema: JsonSchema): void {
+  private expandArray(data: Array<Object>, parent: HTMLUListElement,
+    model: FullDataModelType): void {
     if (data === undefined || data === null) {
       return;
     }
-    data.forEach((element, index) => {
-      this.expandObject(element, parent, schema, toDelete => data.splice(index, 1));
-    });
-  }
-  private getArrayProperties(schema: JsonSchema): Array<string> {
-    return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined
-      && schema.properties[key].items['type'] === 'object');
-  }
-  private getNamingFunction(schema: JsonSchema): (element: Object) => string {
-    if (this.uischema.options !== undefined) {
-      const labelProvider = this.uischema.options['labelProvider'];
-      if (labelProvider !== undefined) {
-        return (element) => element[labelProvider[schema.id]];
+    const expandModel = (innerModel: FullDataModelType)  => {
+      let schema;
+      if (isItemModel(model)) {
+        schema = model.schema;
+      } else if (isMultipleItemModel(model)) {
+        // TODO handle multiple item model
+      } else if (isReferenceModel(model)) {
+        expandModel(model.targetModel);
       }
+      data.forEach((element, index) => {
+        this.expandObject(element, parent, innerModel, toDelete => data.splice(index, 1));
+      });
+    };
+
+    expandModel(model);
+  }
+
+  /**
+  * Returns the names of all properties of type array.
+  */
+  private getArrayProperties(model: FullDataModelType): Array<string> {
+    if (isItemModel(model)) {
+      return Object.keys(model.dropPoints);
+    } else if (isMultipleItemModel(model)) {
+      // TODO get array properties for MultipleItemModel
+      return undefined;
+    } else if (isReferenceModel(model)) {
+      return this.getArrayProperties(model.targetModel);
     }
-    const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
-    if (namingKeys.length !== 0) {
-      return (element) => element[namingKeys[0]];
+  }
+  /**
+   * Returns a function that produces a name for a data object
+   * defined by the given model
+  */
+  private getNamingFunction(model: FullDataModelType): (element: Object) => string {
+    if (isItemModel(model)) {
+      if (model.schema.properties !== undefined && model.schema.properties !== null) {
+        const namingKeys = Object.keys(model.schema.properties)
+          .filter(key => key === 'id' || key === 'name' || key === 'identifier');
+        if (namingKeys !== undefined && namingKeys !== null && namingKeys.length !== 0) {
+          return (element) => element[namingKeys[0]];
+        }
+      }
+      return (element) => model.label + JSON.stringify(element);
+    } else if (isReferenceModel(model)) {
+      return this.getNamingFunction(model.targetModel);
     }
     return JSON.stringify;
   }
-  private addElement(key: string, data: Object, schema: JsonSchema, li: HTMLLIElement): void {
+  /**
+   * Adds a new element for the property key to the object data.
+   * model is the parsed schema object for data.
+  */
+  private addElement(key: string, data: Object, model: FullDataModelType, li: HTMLLIElement): void {
     if (data[key] === undefined) {
       data[key] = [];
     }
@@ -203,10 +268,22 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       childParent = document.createElement('ul');
       li.appendChild(childParent);
     }
-    this.expandObject(newData, childParent, schema.properties[key].items,
-      toDelete => childArray.splice(length - 1, 1));
+    const expandHelper = (targetModel) => {
+      if (isItemModel(targetModel)) {
+        this.expandObject(newData, childParent, targetModel.dropPoints[key],
+          toDelete => childArray.splice(length - 1, 1));
+      } else if (isMultipleItemModel(targetModel)) {
+        // TODO multiple item model
+      } else if (isReferenceModel(targetModel)) {
+        expandHelper(targetModel.targetModel);
+      }
+    };
+    expandHelper(model);
   };
-  private expandObject(data: Object, parent: HTMLUListElement, schema: JsonSchema,
+  /**
+   * Renders the given data object as a child of the parent.
+  */
+  private expandObject(data: Object, parent: HTMLUListElement, model: FullDataModelType,
       deleteFunction: (element: Object) => void): void {
     const li = document.createElement('li');
     const div = document.createElement('div');
@@ -214,17 +291,20 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       this.uischema.options['imageProvider'] !== undefined) {
       const spanIcon = document.createElement('span');
       spanIcon.classList.add('icon');
-      spanIcon.classList.add(this.uischema.options['imageProvider'][schema.id]);
+      if (isItemModel(model)) {
+        spanIcon.classList.add(this.uischema.options['imageProvider'][model.schema.id]);
+      }
       div.appendChild(spanIcon);
     }
     const span = document.createElement('span');
     span.classList.add('label');
+    let schema: JsonSchema = extractSchemaFromModel(model);
     span.onclick = (ev: Event) => this.renderDetail(data, li, schema);
     const spanText = document.createElement('span');
-    spanText.textContent = this.getNamingFunction(schema)(data);
+    spanText.textContent = this.getNamingFunction(model)(data);
     span.appendChild(spanText);
     div.appendChild(span);
-    if (this.getArrayProperties(schema).length !== 0) {
+    if (this.getArrayProperties(model).length !== 0) {
       const spanAdd = document.createElement('span');
       spanAdd.classList.add('add');
       spanAdd.onclick = (ev: Event) => {
@@ -233,11 +313,11 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         while (content.firstChild) {
           (<Element>content.firstChild).remove();
         }
-        this.getArrayProperties(schema).forEach(key => {
+        this.getArrayProperties(model).forEach(key => {
           const button = document.createElement('button');
           button.innerText = key;
           button.onclick = () => {
-            this.addElement(key, data, schema, li);
+            this.addElement(key, data, model, li);
             this.dialog.close();
           };
           content.appendChild(button);
@@ -265,7 +345,16 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
 
     Object.keys(data).forEach(key => {
       if (Array.isArray(data[key])) {
-        this.renderChildren(data[key], schema.properties[key].items, li, key);
+        const renderHelper = (targetModel) => {
+          if (isItemModel(targetModel)) {
+            this.renderChildren(data[key], targetModel.dropPoints[key] , li, key);
+          } else if (isMultipleItemModel(targetModel)) {
+            // TODO multiple item model
+          } else if (isReferenceModel(targetModel)) {
+            renderHelper(targetModel.targetModel);
+          }
+        };
+        renderHelper(model);
       }
     });
 
@@ -283,7 +372,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     return ul;
   }
   private renderChildren
-    (array: Array<Object>, schema: JsonSchema, li: HTMLLIElement, key: string): void {
+    (array: Array<Object>, model: FullDataModelType, li: HTMLLIElement, key: string): void {
     let ul: HTMLUListElement = this.findRendererChildContainer(li, key);
     if (ul === undefined) {
       ul = document.createElement('ul');
@@ -294,8 +383,11 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         (<Element>ul.firstChild).remove();
       }
     }
-    this.expandArray(array, ul, schema);
+    this.expandArray(array, ul, model);
   }
+  /*
+    Render an element's details with JsonForms.
+  */
   private renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
     if (this.detail.lastChild !== null) {
       this.detail.removeChild(this.detail.lastChild);
@@ -322,8 +414,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
             label.firstChild.lastChild.firstChild.textContent = newValue;
           }
           if (Array.isArray(newValue)) {
-            this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref).items, label,
-            lastSegemnet);
+            this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref)['items'],
+            label, lastSegemnet);
           }
         }
       });

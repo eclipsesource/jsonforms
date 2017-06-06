@@ -21,41 +21,44 @@ test.beforeEach(t => {
 });
 test('JsonFormsValidator registers as datalisteners ', t => {
   const validationService = new JsonFormsValidator(t.context.dataService,
-    t.context.schema, {} as UISchemaElement);
+    {schema: t.context.schema, dropPoints: {}}, {} as UISchemaElement);
   const dataServiceListeners = <Array<any>>t.context.dataService['changeListeners'];
   t.is(dataServiceListeners.length, 1);
   t.is(dataServiceListeners[0], validationService);
 });
 test('JsonFormsValidator dispose unregisters as datalisteners ', t => {
   const validationService = new JsonFormsValidator(t.context.dataService,
-    t.context.schema, {} as UISchemaElement);
+    {schema: t.context.schema, dropPoints: {}}, {} as UISchemaElement);
   validationService.dispose();
   const dataServiceListeners = <Array<any>>t.context.dataService['changeListeners'];
   t.is(dataServiceListeners.length, 0);
 });
 test('JsonFormsValidator isRelevantKey null ', t => {
   const validationService = new JsonFormsValidator(t.context.dataService,
-    t.context.schema, {} as UISchemaElement);
+    {schema: t.context.schema, dropPoints: {}}, {} as UISchemaElement);
   t.true(validationService.isRelevantKey(null));
 });
 test('JsonFormsValidator isRelevantKey existing', t => {
   const uischema = {type: 'VerticalLayout',
     elements: [t.context.control1, t.context.control2]} as Layout;
   const validationService =
-    new JsonFormsValidator(t.context.dataService, t.context.schema, uischema);
+    new JsonFormsValidator(t.context.dataService, {schema: t.context.schema, dropPoints: {}},
+      uischema);
   t.true(validationService.isRelevantKey(t.context.control1));
 });
 test('JsonFormsValidator isRelevantKey not existing', t => {
   const uischema = {type: 'VerticalLayout', elements: [t.context.control1]} as Layout;
   const validationService =
-    new JsonFormsValidator(t.context.dataService, t.context.schema, uischema);
+    new JsonFormsValidator(t.context.dataService, {schema: t.context.schema, dropPoints: {}},
+      uischema);
   t.true(validationService.isRelevantKey(t.context.control2));
 });
 test('JsonFormsValidator notifyChange null', t => {
   const uischema = {type: 'VerticalLayout',
     elements: [t.context.control1, t.context.control2]} as Layout;
   const validationService =
-    new JsonFormsValidator(t.context.dataService, t.context.schema, uischema);
+    new JsonFormsValidator(t.context.dataService, {schema: t.context.schema, dropPoints: {}},
+      uischema);
   validationService.notifyChange(null, null, t.context.data);
   t.is((<Runtime>t.context.control1['runtime']).validationErrors, undefined);
   t.deepEqual((<Runtime>t.context.control2['runtime']).validationErrors, ['should be >= 5']);
@@ -64,7 +67,8 @@ test('JsonFormsValidator notifyChange revalidate', t => {
   const uischema = {type: 'VerticalLayout',
     elements: [t.context.control1, t.context.control2]} as Layout;
   const validationService =
-    new JsonFormsValidator(t.context.dataService, t.context.schema, uischema);
+    new JsonFormsValidator(t.context.dataService, {schema: t.context.schema, dropPoints: {}},
+      uischema);
   validationService.notifyChange(null, null, t.context.data);
   t.context.data.foo = 12;
   t.context.data.bar = 6;
@@ -76,7 +80,8 @@ test('JsonFormsValidator notifyChange error on invisible', t => {
   const uischema = {type: 'VerticalLayout',
     elements: [t.context.control1]} as Layout;
   const validationService =
-    new JsonFormsValidator(t.context.dataService, t.context.schema, uischema);
+    new JsonFormsValidator(t.context.dataService, {schema: t.context.schema, dropPoints: {}},
+      uischema);
   validationService.notifyChange(null, null, t.context.data);
   t.is((<Runtime>t.context.control1['runtime']).validationErrors, undefined);
 });
@@ -84,7 +89,8 @@ test('JsonFormsValidator notifyChange all valid', t => {
   const uischema = {type: 'VerticalLayout',
     elements: [t.context.control1, t.context.control2]} as Layout;
   const validationService =
-    new JsonFormsValidator(t.context.dataService, t.context.schema, uischema);
+    new JsonFormsValidator(t.context.dataService, {schema: t.context.schema, dropPoints: {}},
+      uischema);
   t.context.data.bar = 6;
   validationService.notifyChange(null, null, t.context.data);
   t.is((<Runtime>t.context.control1['runtime']).validationErrors, undefined);

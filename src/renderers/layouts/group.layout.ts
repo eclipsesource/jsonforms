@@ -29,7 +29,7 @@ export class GroupLayoutRenderer extends Renderer {
     if (group.elements !== undefined && group.elements !== null) {
       group.elements.forEach(element => {
         const bestRenderer = JsonFormsHolder.rendererService
-            .getBestRenderer(element, this.dataSchema, this.dataService);
+            .getBestRenderer(element, this.dataModel, this.dataService);
         fieldset.appendChild(bestRenderer);
       });
     }

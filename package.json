@@ -33,6 +33,7 @@
     "@webcomponents/webcomponentsjs": "^1.0.0",
     "ajv": "^4.11.2",
     "json-refs": "^2.1.6",
+    "json-schema-ref-parser": "^3.1.2",
     "lodash": "^4.17.4"
   },
   "devDependencies": {

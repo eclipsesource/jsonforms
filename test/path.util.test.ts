@@ -2,6 +2,7 @@ import test from 'ava';
 
 import {resolveSchema, toDataPath, getValuePropertyPair } from '../src/path.util';
 import {JsonSchema } from '../src/models/jsonSchema';
+import {ItemModel, isItemModel} from '../src/parser/item_model';
 
 test('resolve ', t => {
     const schema: JsonSchema = {
@@ -12,9 +13,19 @@ test('resolve ', t => {
             }
         }
     } as JsonSchema;
-    t.deepEqual(resolveSchema(schema, '#/properties/foo'), {
-        type: 'integer'
-    } as JsonSchema);
+    t.deepEqual(resolveSchema({
+      schema: {type: 'object', properties: {foo: {type: 'integer'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'integer'},
+          dropPoints: {}
+        }
+      }
+    }, '#/properties/foo'), {
+      schema: {type: 'integer'},
+      dropPoints: {}
+    });
 });
 test('toDataPath ', t => {
     t.is(toDataPath('#/properties/foo/properties/bar'), 'foo/bar');
@@ -146,8 +157,11 @@ test('resolve $ref', t => {
           }
         }
     } as JsonSchema;
-    const result = resolveSchema(schema, '#/properties/foos/items');
-    t.deepEqual(result, {type: 'string'});
+    const result = resolveSchema(
+      {schema: schema, dropPoints: {
+        foos: {schema: schema.definitions['foo'], dropPoints: {}, attributes: {}}}},
+      '#/properties/foos');
+    t.deepEqual(result, {schema: {type: 'string'}, attributes: {}, dropPoints: {}});
 });
 test.failing('resolve $ref simple', t => {
     const schema: JsonSchema = {
@@ -174,8 +188,10 @@ test.failing('resolve $ref simple', t => {
           }
         }
     } as JsonSchema;
-    const result = resolveSchema(schema, '#/properties/foos/items');
-    t.deepEqual(result, {
+    const result = resolveSchema({schema: schema, dropPoints: {}} as ItemModel,
+      '#/properties/foos/items');
+    t.true(isItemModel(result));
+    t.deepEqual((<ItemModel>result).schema, {
       type: 'object',
       properties: {
         bar: {
@@ -224,8 +240,10 @@ test.failing('resolve $ref complicated', t => {
           }
         }
     } as JsonSchema;
-    const result = resolveSchema(schema, '#/properties/foos/items');
-    t.deepEqual(result, {
+    const result = resolveSchema({schema: schema, dropPoints: {}} as ItemModel,
+      '#/properties/foos/items');
+    t.true(isItemModel(result));
+    t.deepEqual((<ItemModel>result).schema, {
       definitions: {
         foo2: {
           type: 'object',
