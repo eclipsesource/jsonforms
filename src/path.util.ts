@@ -76,6 +76,9 @@ export const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {})
     }
     findAllRefs(schema.items, result);
   }
+  if (Array.isArray(schema.anyOf)) {
+      schema.anyOf.forEach(child => findAllRefs(child, result));
+  }
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
   }
