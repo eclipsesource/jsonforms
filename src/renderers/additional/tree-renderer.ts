@@ -251,7 +251,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   }
   /**
    * Adds a new element for the property key to the object data.
-   * model is the parsed schema object for data.
+   *
+   * @param key The property that the new element is added to
+   * @param data The data object that the new element is added to
+   * @param model The model representing the type of the element to add
   */
   private addElement(key: string, data: Object, model: FullDataModelType, li: HTMLLIElement): void {
     if (data[key] === undefined) {
@@ -270,7 +273,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     const expandHelper = (targetModel) => {
       if (isItemModel(targetModel)) {
-        this.expandObject(newData, childParent, targetModel.dropPoints[key],
+        this.expandObject(newData, childParent, targetModel,
           toDelete => childArray.splice(length - 1, 1));
       } else if (isMultipleItemModel(targetModel)) {
         // TODO multiple item model
@@ -314,13 +317,29 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           (<Element>content.firstChild).remove();
         }
         this.getArrayProperties(model).forEach(key => {
-          const button = document.createElement('button');
-          button.innerText = key;
-          button.onclick = () => {
-            this.addElement(key, data, model, li);
-            this.dialog.close();
+          if (!isItemModel(model)) {
+            return;
+          }
+          const droppoint = model.dropPoints[key];
+          const addButtons = (buttonModel, multi = false) => {
+            if (isItemModel(buttonModel)) {
+              const button = document.createElement('button');
+              // set unique name in case a MultipleItemModel was resolved earlier
+              button.innerText = multi ? key + '/' + buttonModel.label : key;
+              button.onclick = () => {
+                this.addElement(key, data, buttonModel, li);
+                this.dialog.close();
+              };
+              content.appendChild(button);
+            }
+            if (isMultipleItemModel(buttonModel)) {
+              buttonModel.models.forEach(m => addButtons(m, true));
+            }
+            if (isReferenceModel(buttonModel)) {
+              addButtons(buttonModel.targetModel, multi);
+            }
           };
-          content.appendChild(button);
+          addButtons(droppoint);
         });
         this.dialog.showModal();
       };
