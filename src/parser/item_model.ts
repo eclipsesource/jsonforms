@@ -33,7 +33,8 @@ export function isItemModel
 }
 export function isMultipleItemModel
   (model: FullDataModelType): model is MultipleItemModel {
-    return (<MultipleItemModel>model).type !== undefined;
+    return (<MultipleItemModel>model).type !== undefined &&
+      (<MultipleItemModel>model).models !== undefined;
 }
 export function isDummyModel
   (model: FullDataModelType): model is DummyModel {

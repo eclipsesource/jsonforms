@@ -331,11 +331,9 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
                 this.dialog.close();
               };
               content.appendChild(button);
-            }
-            if (isMultipleItemModel(buttonModel)) {
+            } else if (isMultipleItemModel(buttonModel)) {
               buttonModel.models.forEach(m => addButtons(m, true));
-            }
-            if (isReferenceModel(buttonModel)) {
+            } else if (isReferenceModel(buttonModel)) {
               addButtons(buttonModel.targetModel, multi);
             }
           };
