@@ -10,7 +10,7 @@ import {NOT_FITTING} from './uischema.registry';
 export type Tester = (uiSchema: UISchemaElement, schema: JsonSchema) => boolean
 
 /**
- * A ranked tester associate a tester with a number.
+ * A ranked tester associates a tester with a number.
  */
 export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => number
 
@@ -21,7 +21,8 @@ export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => nu
  * and if so, resolves the sub-schema referenced by the control and applies
  * the given predicate
  *
- * @param predicate the predicate that should be applied to the resolved sub-schema
+ * @param {(JsonSchema) => boolean} predicate the predicate that should be
+ *        applied to the resolved sub-schema
  */
 export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Tester =>
     (uiSchema: UISchemaElement, schema: JsonSchema): boolean => {
@@ -46,7 +47,7 @@ export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Teste
  * and if so, resolves the sub-schema referenced by the control and checks
  * whether the type of the sub-schema matches the expected one.
  *
- * @param expectedType the expected type of the resolved sub-schema
+ * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(schema =>
     !_.isEmpty(schema) && schema.type === expectedType
@@ -59,7 +60,7 @@ export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(sche
  * and if so, resolves the sub-schema referenced by the control and checks
  * whether the format of the sub-schema matches the expected one.
  *
- * @param expectedFormat the expected format of the resolved sub-schema
+ * @param {string} expectedFormat the expected format of the resolved sub-schema
  */
 export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema =>
     !_.isEmpty(schema)
@@ -70,7 +71,7 @@ export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema
 /**
  * Checks whether the given UI schema has the expected type.
  *
- * @param expected the expected UI schema type
+ * @param {string} expected the expected UI schema type
  */
 export const uiTypeIs = (expected: string): Tester =>
     (uiSchema: UISchemaElement): boolean =>
@@ -82,8 +83,8 @@ export const uiTypeIs = (expected: string): Tester =>
  * name and whether it has the expected value. If no options property
  * is set, returns false.
  *
- * @param optionName the name of the option to check
- * @param optionValue the expected value of the option
+ * @param {string} optionName the name of the option to check
+ * @param {any} optionValue the expected value of the option
  */
 export const optionIs = (optionName: string, optionValue: any): Tester =>
     (uiSchema: UISchemaElement): boolean => {
@@ -96,7 +97,7 @@ export const optionIs = (optionName: string, optionValue: any): Tester =>
  *
  * Checks whether the scope $ref of a control ends with the expected string.
  *
- * @param expected the expected ending of the $ref value
+ * @param {string} expected the expected ending of the $ref value
  */
 export const refEndsWith = (expected: string): Tester =>
     (uiSchema: UISchemaElement): boolean => {
@@ -111,7 +112,7 @@ export const refEndsWith = (expected: string): Tester =>
  *
  * Checks whether the last segment of the scope $ref matches the expected string.
  *
- * @param expected the expected ending of the $ref value
+ * @param {string} expected the expected ending of the $ref value
  */
 export const refEndIs = (expected: string): Tester =>
     (uiSchema: UISchemaElement): boolean => {
@@ -125,10 +126,10 @@ export const refEndIs = (expected: string): Tester =>
 /**
  * A tester that allow composing other testers by && them.
  *
- * @param testers the tester to be composed
+ * @param {Array<Tester>} testers the testers to be composed
  */
 export const and = (
-    ...testers: Array<(uiSchema: UISchemaElement, schema: JsonSchema) => boolean>
+    ...testers: Array<Tester>
 ): Tester =>
     (uiSchema: UISchemaElement, schema: JsonSchema) =>
         testers.reduce((acc, tester) => acc && tester(uiSchema, schema), true);
@@ -138,8 +139,8 @@ export const and = (
  * Create a ranked tester that will associate a number with a given tester, if the
  * latter returns true.
  *
- * @param rank the rank to be returned in case the tester returns true
- * @param tester a tester
+ * @param {number} rank the rank to be returned in case the tester returns true
+ * @param {Tester} tester a tester
  */
 export const rankWith = (rank: number, tester: Tester)  =>
     (uiSchema: UISchemaElement, schema: JsonSchema): number => {

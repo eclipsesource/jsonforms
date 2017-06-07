@@ -10,6 +10,10 @@ import { getElementLabelObject } from '../label.util';
 import { RankedTester, rankWith, and, uiTypeIs, schemaMatches } from '../../core/testers';
 import { JsonFormsHolder } from '../../core';
 
+/**
+ * Default tester for an array control.
+ * @type {RankedTester}
+ */
 export const arrayTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
     schemaMatches(schema =>
@@ -20,6 +24,10 @@ export const arrayTester: RankedTester = rankWith(2, and(
         && (schema.items as JsonSchema).type === 'object'
     ))
 );
+
+/**
+ * Default renderer for an array.
+ */
 @JsonFormsRenderer({
   selector: 'jsonforms-array',
   tester: arrayTester
@@ -30,26 +38,47 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     super();
   }
 
+  /**
+   * @inheritDoc
+   */
   isRelevantKey (uischema: ControlElement): boolean {
     return uischema === undefined || uischema === null
     ? false : (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
   }
 
+  /**
+   * @inheritDoc
+   */
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
+
+  /**
+   * @inheritDoc
+   */
   connectedCallback(): void {
     super.connectedCallback();
     this.dataService.registerChangeListener(this);
   }
+
+  /**
+   * @inheritDoc
+   */
   disconnectedCallback(): void {
     this.dataService.unregisterChangeListener(this);
     super.disconnectedCallback();
   }
+
+  /**
+   * @inheritDoc
+   */
   dispose(): void {
     // do nothing
   }
 
+  /**
+   * @inheritDoc
+   */
   render(): HTMLElement {
     this.classList.add('control');
     if (this.lastChild !== null) {

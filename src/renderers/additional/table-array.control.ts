@@ -9,6 +9,11 @@ import { resolveSchema } from '../../path.util';
 import { getElementLabelObject } from '../label.util';
 import { rankWith, uiTypeIs, optionIs, and, schemaMatches, RankedTester } from '../../core/testers';
 
+/**
+ * Alternative tester for an array that also checks whether the 'table'
+ * option is set.
+ * @type {RankedTester}
+ */
 export const tableArrayTester: RankedTester = rankWith(10, and(
     uiTypeIs('Control'),
     optionIs('table', true),
@@ -20,6 +25,10 @@ export const tableArrayTester: RankedTester = rankWith(10, and(
         && (schema.items as JsonSchema).type === 'object'
     ))
 );
+
+/**
+ * Alternative array renderer that uses a HTML table.
+ */
 @JsonFormsRenderer({
   selector: 'jsonforms-tablearray',
   tester: tableArrayTester
@@ -30,26 +39,47 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     super();
   }
 
+  /**
+   * @inheritDoc
+   */
   isRelevantKey (uischema: ControlElement): boolean {
     return uischema === undefined || uischema === null
     ? false : (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
   }
 
+  /**
+   * @inheritDoc
+   */
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
+
+  /**
+   * @inheritDoc
+   */
   connectedCallback(): void {
     super.connectedCallback();
     this.dataService.registerChangeListener(this);
   }
+
+  /**
+   * @inheritDoc
+   */
   disconnectedCallback(): void {
     this.dataService.unregisterChangeListener(this);
     super.disconnectedCallback();
   }
+
+  /**
+   * @inheritDoc
+   */
   dispose(): void {
     // no-op
   }
 
+  /**
+   * @inheritDoc
+   */
   render(): HTMLElement {
 
     if (this.lastChild !== null) {

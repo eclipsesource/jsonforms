@@ -120,6 +120,12 @@ const generateUISchema =
     }
 };
 
+/**
+ * Generate a default UI schema.
+ * @param {JsonSchema} jsonSchema the JSON schema to generated a UI schema for
+ * @param {string} layoutType the desired layout type for the root layout
+ *        of the generated UI schema
+ */
 export const generateDefaultUISchema =
     (jsonSchema: JsonSchema, layoutType = 'VerticalLayout'): UISchemaElement =>
         wrapInLayoutIfNecessary(

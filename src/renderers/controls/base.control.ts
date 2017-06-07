@@ -4,6 +4,9 @@ import {DataChangeListener} from '../../core/data.service';
 import {getElementLabelObject} from '../label.util';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
+/**
+ * Convenience base class for all renderers that represent controls.
+ */
 export abstract class BaseControl <T extends HTMLElement>
   extends Renderer implements DataChangeListener {
 
@@ -18,10 +21,16 @@ export abstract class BaseControl <T extends HTMLElement>
     return errors.join('\n');
   }
 
+  /**
+   * Default constructor.
+   */
   constructor() {
     super();
   }
 
+  /**
+   * @inheritDoc
+   */
   render(): HTMLElement {
     const controlElement = <ControlElement> this.uischema;
     this.createLabel(controlElement);
@@ -35,9 +44,17 @@ export abstract class BaseControl <T extends HTMLElement>
     this.classList.add('control');
     return this;
   }
+
+  /**
+   * @inheritDoc
+   */
   dispose(): void {
     // Do nothing
   }
+
+  /**
+   * @inheritDoc
+   */
   notify(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
@@ -58,15 +75,25 @@ export abstract class BaseControl <T extends HTMLElement>
     }
   }
 
+  /**
+   * @inheritDoc
+   */
   connectedCallback(): void {
     super.connectedCallback();
     this.dataService.registerChangeListener(this);
   }
+
+  /**
+   * @inheritDoc
+   */
   disconnectedCallback(): void {
     this.dataService.unregisterChangeListener(this);
     super.disconnectedCallback();
   }
 
+  /**
+   * @inheritDoc
+   */
   isRelevantKey (uischema: ControlElement): boolean {
     if (uischema === undefined || uischema === null) {
       return false;
@@ -74,21 +101,66 @@ export abstract class BaseControl <T extends HTMLElement>
     return (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
   }
 
+  /**
+   * @inheritDoc
+   */
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.setValue(this.input, newValue);
   }
 
+  /**
+   * Convert the given value before setting it.
+   * By default, this just resembles the identify function.
+   *
+   * @param {any} value the value that may need to be converted
+   * @return {any} the converted value
+   */
   protected convertModelValue(value: any): any {
     return value;
   }
 
+  /**
+   * Convert the given value before displaying it.
+   * By default, this just resembles the identify function.
+   *
+   * @param {any} value the value that may need to be converted
+   * @return {any} the converted value
+   */
   protected convertInputValue(value: any): any {
     return value;
   }
 
+  /**
+   * Returns the name of the property that indicates changes
+   * @example
+   * 'onChange' // in case of a checkbox
+   * @return {string} name of the change property
+   */
   protected abstract get inputChangeProperty(): string;
+
+  /**
+   * Configure the created input element.
+   *
+   * @param input the input element to be configured
+   *
+   * @see inputElement
+   */
   protected abstract configureInput(input: T): void;
+
+  /**
+   * Returns the name of the property that represents the actual value.
+   * @example
+   * 'checked' // in case of a checkbox
+   * @return the name of the value property
+   */
   protected abstract get valueProperty(): string;
+
+  /**
+   * Create and return a HTML element that is used
+   * to enter/update any data.
+   *
+   * @returns {T} the created HTML input element
+   */
   protected abstract get inputElement(): T;
 
   private createLabel(controlElement: ControlElement): void {
