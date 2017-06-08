@@ -4,7 +4,7 @@
   "description": "Generating forms for JSON schema",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
-  "homepage": "http://github.eclipsesource.com/jsonforms/",
+  "homepage": "http://jsonforms.io",
   "license": "MIT",
   "main": "dist/ts-build/index.js",
   "typings": "dist/ts-build/index.d.ts",
