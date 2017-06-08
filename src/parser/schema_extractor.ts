@@ -156,7 +156,7 @@ export class SchemaExtractor {
       if (!(itemSchema instanceof Array)) {
         const innerItem = this.parse(root ?
             'array' : property, itemSchema, root, ITEM_MODEL_TYPES.ARRAY);
-        if (!root) {
+        if (type !== ITEM_MODEL_TYPES.ARRAY && innerItem !== null) {
           return innerItem;
         }
         if (innerItem !== null) {

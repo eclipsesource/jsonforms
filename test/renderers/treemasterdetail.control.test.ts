@@ -147,38 +147,31 @@ test('TreeMasterDetailRenderer static array', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
-    dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
-        attributes: {
-          name: {
-            schema: {type: 'string'},
-            dropPoints: {},
-            attributes: {},
-            type: 1
-          }
-        },
-        type: 1
-      }
-    },
-    attributes: {},
-    type: 0
+      schema: schema.items,
+      dropPoints: {
+        children: {
+          schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+          dropPoints: {},
+          attributes: {
+            name: {
+              schema: {type: 'string'},
+              dropPoints: {},
+              attributes: {},
+              type: 1
+            }
+          },
+          type: 1
+        }
+      },
+      attributes: {
+        name: {
+          schema: {type: 'string'},
+          dropPoints: {},
+          attributes: {},
+          type: 1
+        }
+      },
+      type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {labelProvider: {foo: 'name', bar: 'name'},
@@ -358,25 +351,11 @@ test('TreeMasterDetailRenderer dynamic select', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -388,8 +367,15 @@ test('TreeMasterDetailRenderer dynamic select', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -432,25 +418,11 @@ test('TreeMasterDetailRenderer dynamic add array root', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -462,8 +434,15 @@ test('TreeMasterDetailRenderer dynamic add array root', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -499,25 +478,11 @@ test('TreeMasterDetailRenderer dynamic remove added root', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -529,8 +494,15 @@ test('TreeMasterDetailRenderer dynamic remove added root', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -566,25 +538,11 @@ test('TreeMasterDetailRenderer dynamic add child to existing', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -596,8 +554,15 @@ test('TreeMasterDetailRenderer dynamic add child to existing', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -643,25 +608,11 @@ test('TreeMasterDetailRenderer dynamic remove root', t => {
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -673,8 +624,15 @@ test('TreeMasterDetailRenderer dynamic remove root', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -708,25 +666,11 @@ test('TreeMasterDetailRenderer dynamic remove child from existing', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -738,8 +682,15 @@ test('TreeMasterDetailRenderer dynamic remove child from existing', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -780,25 +731,11 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -810,8 +747,15 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -876,25 +820,11 @@ test('TreeMasterDetailRenderer dynamic cancel add', t => {
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -906,8 +836,15 @@ test('TreeMasterDetailRenderer dynamic cancel add', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);
@@ -951,25 +888,11 @@ test('TreeMasterDetailRenderer dynamic remove added child', t => {
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
   renderer.setDataModel({
-    schema: schema,
+    schema: schema.items,
     dropPoints: {
-      array: {
-        schema: schema.items,
-        dropPoints: {
-          children: {
-            schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
-            dropPoints: {},
-            attributes: {
-              name: {
-                schema: {type: 'string'},
-                dropPoints: {},
-                attributes: {},
-                type: 1
-              }
-            },
-            type: 1
-          }
-        },
+      children: {
+        schema: {type: 'object', id: 'bar', properties: { name: {type: 'string'}}},
+        dropPoints: {},
         attributes: {
           name: {
             schema: {type: 'string'},
@@ -981,8 +904,15 @@ test('TreeMasterDetailRenderer dynamic remove added child', t => {
         type: 1
       }
     },
-    attributes: {},
-    type: 0
+    attributes: {
+      name: {
+        schema: {type: 'string'},
+        dropPoints: {},
+        attributes: {},
+        type: 1
+      }
+    },
+    type: 1
   });
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar', scope: {$ref: '#'},
   options: {}} as ControlElement);

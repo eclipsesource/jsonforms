@@ -65,7 +65,8 @@ export const resolveSchema = (model: FullDataModelType, path: string): FullDataM
   return resultSchema;
 };
 
-export const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
+export const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}):
+  ReferenceSchemaMap => {
   if (schema.type === 'object' && schema.properties !== undefined) {
     Object.keys(schema.properties).forEach(key => findAllRefs(schema.properties[key], result));
   }

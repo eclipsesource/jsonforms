@@ -94,7 +94,6 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           return;
         }
         this.expandObject(newData, <HTMLUListElement>this.master.firstChild,
-          controlElement.scope.$ref === '#' ? this.dataModel.dropPoints['array'] :
           this.resolvedSchema, toDelete => rootData.splice(length - 1, 1));
         this.addingToRoot = false;
       };
@@ -160,12 +159,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           helper(innerModel.targetModel);
         }
       };
-      if (Array.isArray(arrayData) && isItemModel(this.dataModel)) {
-        helper(controlElement.scope.$ref === '#' ? this.dataModel.dropPoints['array'] :
-          this.resolvedSchema);
-      } else {
-        helper(this.resolvedSchema);
-      }
+      helper(this.resolvedSchema);
     }
   }
 
@@ -178,10 +172,9 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     const ul = document.createElement('ul');
     const renderModel = (innerModel: FullDataModelType) => {
       if (isItemModel(innerModel)) {
-        if (innerModel.schema.items !== undefined || innerModel.type === ITEM_MODEL_TYPES.ARRAY) {
+        if (innerModel.type === ITEM_MODEL_TYPES.ARRAY) {
          // the items are available as a droppoint with key 'array'
-          this.expandArray(<Array<object>>rootData, ul, controlElement.scope.$ref === '#' ?
-          innerModel.dropPoints['array'] : innerModel);
+          this.expandArray(<Array<object>>rootData, ul, innerModel);
         } else {
           this.expandObject(rootData, ul, innerModel, null);
        }

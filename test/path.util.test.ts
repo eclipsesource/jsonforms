@@ -163,7 +163,7 @@ test('resolve $ref', t => {
       '#/properties/foos');
     t.deepEqual(result, {schema: {type: 'string'}, attributes: {}, dropPoints: {}});
 });
-test.failing('resolve $ref simple', t => {
+test.failing('resolve $ref simple, should be moved to schema resolution', t => {
     const schema: JsonSchema = {
         definitions: {
           foo: {
@@ -188,8 +188,26 @@ test.failing('resolve $ref simple', t => {
           }
         }
     } as JsonSchema;
-    const result = resolveSchema({schema: schema, dropPoints: {}} as ItemModel,
-      '#/properties/foos/items');
+    const result = resolveSchema({
+      schema: schema,
+      dropPoints: {
+        foos: {
+          schema: {
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'array',
+                items: {
+                  $ref: '#/definitions/foo'
+                }
+              }
+            }
+          },
+          dropPoints: {}
+        }
+      }
+    },
+      '#/properties/foos');
     t.true(isItemModel(result));
     t.deepEqual((<ItemModel>result).schema, {
       type: 'object',
@@ -204,7 +222,7 @@ test.failing('resolve $ref simple', t => {
     });
     t.not((<JsonSchema>schema.definitions.foo.properties.bar.items).$ref, '#');
 });
-test.failing('resolve $ref complicated', t => {
+test.failing('resolve $ref complicated, should be moved to schema resolution', t => {
     const schema: JsonSchema = {
         definitions: {
           foo: {
