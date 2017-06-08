@@ -10,7 +10,7 @@ import {TableArrayControlRenderer, tableArrayTester} from
   '../../src/renderers/additional/table-array.control';
 import {DataService } from '../../src/core/data.service';
 import {JsonFormsHolder} from '../../src/core';
-
+import {ItemModel, ITEM_MODEL_TYPES} from '../../src/parser/item_model';
 
 test('generate array child control', t => {
 
@@ -43,7 +43,36 @@ test('generate array child control', t => {
         }]
     };
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+      label: 'root',
+      schema: schema,
+      dropPoints: {
+        test: {
+          label: 'test',
+          schema: schema.properties['test'].items,
+          dropPoints: {},
+          attributes: {
+            x: {
+              label: 'x',
+              schema: (<JsonSchema>schema.properties['test'].items).properties['x'],
+              dropPoints: {},
+              attributes: {},
+              type: ITEM_MODEL_TYPES.ARRAY
+            },
+            y: {
+              label: 'y',
+              schema: (<JsonSchema>schema.properties['test'].items).properties['y'],
+              dropPoints: {},
+              attributes: {},
+              type: ITEM_MODEL_TYPES.ARRAY
+            }
+          },
+          type: ITEM_MODEL_TYPES.ARRAY
+        }
+      },
+      attributes: {},
+      type: ITEM_MODEL_TYPES.ROOT
+    } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
     const elements = renderer.getElementsByClassName('array-table-layout');
@@ -120,7 +149,36 @@ test('generate array child control w/o data', t => {
     };
     const data = {};
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+      label: 'root',
+      schema: schema,
+      dropPoints: {
+        test: {
+          label: 'test',
+          schema: schema.properties['test'].items,
+          dropPoints: {},
+          attributes: {
+            x: {
+              label: 'x',
+              schema: (<JsonSchema>schema.properties['test'].items).properties['x'],
+              dropPoints: {},
+              attributes: {},
+              type: ITEM_MODEL_TYPES.ARRAY
+            },
+            y: {
+              label: 'y',
+              schema: (<JsonSchema>schema.properties['test'].items).properties['y'],
+              dropPoints: {},
+              attributes: {},
+              type: ITEM_MODEL_TYPES.ARRAY
+            }
+          },
+          type: ITEM_MODEL_TYPES.ARRAY
+        }
+      },
+      attributes: {},
+      type: ITEM_MODEL_TYPES.ROOT
+    } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
     const elements = renderer.getElementsByClassName('array-table-layout');
@@ -186,7 +244,21 @@ test('array-layout add click w/o data', t => {
     };
     const data = {};
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+      label: 'root',
+      schema: schema,
+      dropPoints: {
+        test: {
+          label: 'test',
+          schema: schema.properties['test'].items,
+          dropPoints: {},
+          attributes: {},
+          type: ITEM_MODEL_TYPES.ARRAY
+        }
+      },
+      attributes: {},
+      type: ITEM_MODEL_TYPES.ROOT
+    } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
     const button = renderer.getElementsByTagName('button')[0];
@@ -225,7 +297,21 @@ test('array-layout add click with data', t => {
       }]
     };
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+      label: 'root',
+      schema: schema,
+      dropPoints: {
+        test: {
+          label: 'test',
+          schema: schema.properties['test'].items,
+          dropPoints: {},
+          attributes: {},
+          type: ITEM_MODEL_TYPES.ARRAY
+        }
+      },
+      attributes: {},
+      type: ITEM_MODEL_TYPES.ROOT
+    } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
     const button = renderer.getElementsByTagName('button')[0];
@@ -265,7 +351,21 @@ test('array-layout DataService notification', t => {
   };
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+    label: 'root',
+    schema: schema,
+    dropPoints: {
+      test: {
+        label: 'test',
+        schema: schema.properties['test'].items,
+        dropPoints: {},
+        attributes: {},
+        type: ITEM_MODEL_TYPES.ARRAY
+      }
+    },
+    attributes: {},
+    type: ITEM_MODEL_TYPES.ROOT
+  } as ItemModel);
   renderer.setUiSchema(uiSchema);
   renderer.connectedCallback();
   const childrenInitial = renderer.getElementsByTagName('TBODY')[0];
@@ -297,14 +397,16 @@ test('array-layout Tester', t => {
   t.is(
       tableArrayTester(
           { type: 'Control', scope: { $ref: '#/properties/x' } } as ControlElement,
-          { type: 'object',  properties: { x: { type: 'integer' } } }
-      ),
-      -1
-  );
-  t.is(
-      tableArrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          { type: 'object',  properties: { foo: { type: 'array'} } }
+          {
+            schema: {type: 'object', properties: {x: {type: 'integer'}}},
+            dropPoints: {},
+            attributes: {
+              x: {
+                schema: {type: 'integer'},
+                dropPoints: {}
+              }
+            }
+          }
       ),
       -1
   );
@@ -312,17 +414,25 @@ test('array-layout Tester', t => {
       tableArrayTester(
           { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
           {
-              type: 'object',
-              properties:
-                  {
-                      foo: {
-                          type: 'array',
-                          items: [
-                              { type: 'integer' },
-                              { type: 'string' }
-                          ]
-                      }
-                  }
+            schema: {type: 'object', properties: {foo: {type: 'array'}}},
+            dropPoints: {},
+            attributes: {
+              foo: {
+                schema: {type: 'array'},
+                dropPoints: {}
+              }
+            }
+          }
+      ),
+      -1
+  );
+  t.is(
+      tableArrayTester(
+          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
+          {
+            schema: {type: 'object', properties: {
+              foo: {type: 'array', items: [{ type: 'integer' }, { type: 'string' }]}}},
+            dropPoints: {}
           }
       ),
       -1
@@ -333,13 +443,9 @@ test('array-layout Tester', t => {
                 scope: { $ref: '#/properties/foo'}
             } as ControlElement,
             {
-                type: 'object',
-                properties: {
-                    foo: {
-                        type: 'array',
-                        items: { type: 'integer' }
-                    }
-                }
+              schema: {type: 'object', properties: {
+                foo: {type: 'array', items: { type: 'integer' }}}},
+              dropPoints: {}
             }
         ),
         -1
@@ -365,7 +471,39 @@ test('array-layout Tester', t => {
           '$ref': '#/properties/test'
       }
   };
-  t.is(tableArrayTester(uiSchema, schema), -1);
+  const model = {
+    schema: {type: 'object', properties: {test: {type: 'array', items: {
+        'type': 'object',
+        'properties': {
+            'x': {'type': 'integer'},
+            'y': {'type': 'integer'}
+        }
+    }}}},
+    dropPoints: {
+      test: {
+        schema: {
+            'type': 'object',
+            'properties': {
+                'x': {'type': 'integer'},
+                'y': {'type': 'integer'}
+            }
+        },
+        dropPoints: {},
+        attributes: {
+          x: {
+            schema: {'type': 'integer'},
+            dropPoints: {}
+          },
+          y: {
+            schema: {'type': 'integer'},
+            dropPoints: {}
+          }
+        },
+        type: 1
+      }
+    }
+  };
+  t.is(tableArrayTester(uiSchema, model), -1);
 
   const uiSchema2: ControlElement = {
       'type': 'Control',
@@ -376,5 +514,5 @@ test('array-layout Tester', t => {
         table: true
       }
   };
-  t.is(tableArrayTester(uiSchema2, schema), 10);
+  t.is(tableArrayTester(uiSchema2, model), 10);
 });

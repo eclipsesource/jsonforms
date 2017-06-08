@@ -10,7 +10,7 @@ import {textAreaControlTester, TextAreaControl} from
   '../../src/renderers/controls/textarea.control';
 import {Runtime} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
-
+import {ItemModel} from '../../src/parser/item_model';
 
 test('TextAreaControlTester', t => {
   t.is(textAreaControlTester(undefined, undefined), -1);
@@ -24,7 +24,7 @@ test('TextAreaControl static', t => {
   const renderer: TextAreaControl = new TextAreaControl();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   const result = renderer.render();
   t.is(result.className, 'control')
@@ -44,7 +44,7 @@ test('TextAreaControl static no label', t => {
   const renderer: TextAreaControl = new TextAreaControl();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'},
     label: false} as ControlElement);
   const result = renderer.render();
@@ -65,7 +65,7 @@ test('TextAreaControl inputChange', t => {
   const renderer: TextAreaControl = new TextAreaControl();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   const result = renderer.render();
   const input = <HTMLTextAreaElement>result.children[1];
@@ -79,7 +79,7 @@ test('TextAreaControl dataService notification', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLTextAreaElement>renderer.children[1];
@@ -92,7 +92,7 @@ test('TextAreaControl dataService notification value undefined', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLTextAreaElement>renderer.children[1];
@@ -105,7 +105,7 @@ test('TextAreaControl dataService notification value null', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLTextAreaElement>renderer.children[1];
@@ -118,7 +118,7 @@ test('TextAreaControl dataService notification wrong ref', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLTextAreaElement>renderer.children[1];
@@ -131,7 +131,7 @@ test('TextAreaControl dataService notification null ref', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLTextAreaElement>renderer.children[1];
@@ -144,7 +144,7 @@ test('TextAreaControl dataService notification undefined ref', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLTextAreaElement>renderer.children[1];
@@ -157,7 +157,7 @@ test('TextAreaControl dataService no notification after disconnect', t => {
   const data = {'name': 'Foo'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -172,7 +172,7 @@ test('TextAreaControl notify visible false', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -186,7 +186,7 @@ test('TextAreaControl notify visible true', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -201,7 +201,7 @@ test('TextAreaControl notify disabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -218,7 +218,7 @@ test('TextAreaControl notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -234,7 +234,7 @@ test('TextAreaControl notify one error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -249,7 +249,7 @@ test('TextAreaControl notify multiple errors', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -264,7 +264,7 @@ test('TextAreaControl notify errors undefined', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -279,7 +279,7 @@ test('TextAreaControl notify errors null', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -294,7 +294,7 @@ test('TextAreaControl notify errors clean', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -310,7 +310,7 @@ test('TextAreaControl disconnected no notify visible', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -325,7 +325,7 @@ test('TextAreaControl disconnected no notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -341,7 +341,7 @@ test('TextAreaControl disconnected no notify error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

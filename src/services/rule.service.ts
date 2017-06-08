@@ -6,12 +6,14 @@ import { JsonSchema } from '../models/jsonSchema';
 import { getValuePropertyPair } from '../path.util';
 import {Runtime} from '../core/runtime';
 import {DataService, DataChangeListener} from '../core/data.service';
+import {FullDataModelType} from '../parser/item_model';
 
 @JsonFormsServiceElement({})
 export class JsonFormsRuleService implements DataChangeListener, JsonFormService {
   private pathToControlMap: {[path: string]: Array<UISchemaElement>} = {};
 
-  constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
+  constructor(private dataService: DataService, dataModel: FullDataModelType,
+    uiSchema: UISchemaElement) {
     dataService.registerChangeListener(this);
     this.parseRules(uiSchema);
   }

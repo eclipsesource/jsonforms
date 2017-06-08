@@ -1,4 +1,4 @@
-import { JsonSchema } from './models/jsonSchema';
+import {FullDataModelType, isItemModel} from './parser/item_model';
 
 const toDataPathSegments = (path: string): Array<string> => {
   const segments = path.split('/');
@@ -47,45 +47,19 @@ export const getValuePropertyPair = (instance: any, path: string):
   };
 };
 
-export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
+export const resolveSchema = (model: FullDataModelType, path: string): FullDataModelType => {
   const validPathSegments = path.split('/');
   const invalidSegment =
-    (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
-  const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
-      invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment], schema);
-  if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    return retrieveResolvableSchema(schema, resultSchema.$ref);
-  }
+    (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '' ||
+    pathSegment === 'properties';
+  const resultSchema = validPathSegments.reduce((curModel, pathSegment) =>
+    invalidSegment(pathSegment) ? curModel :
+      isItemModel(curModel) ?
+        curModel.dropPoints.hasOwnProperty(pathSegment) ? curModel.dropPoints[pathSegment]
+          : curModel.attributes[pathSegment]
+        : curModel, model);
+  // if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
+  //   return retrieveResolvableSchema(model.schema, resultSchema.$ref);
+  // }
   return resultSchema;
 };
-
-const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
-  if (schema.type === 'object' && schema.properties !== undefined) {
-    Object.keys(schema.properties).forEach(key => findAllRefs(schema.properties[key], result));
-  }
-  if (schema.type === 'array' && schema.items !== undefined) {
-    // FIXME Do we want to support tupples? If so how do we render this?
-    if (Array.isArray(schema.items)) {
-      schema.items.forEach(child => findAllRefs(child, result));
-    }
-    findAllRefs(schema.items, result);
-  }
-  if (schema.$ref !== undefined) {
-    result[schema.$ref] = schema;
-  }
-  return result;
-};
-
-export function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
-  const child = resolveSchema(full, reference);
-  const allRefs = findAllRefs(child);
-  const innerSelfReference = allRefs[reference];
-  if (innerSelfReference !== undefined) {
-    innerSelfReference.$ref = '#';
-  }
-  return child;
-};
-
-interface ReferenceSchemaMap {
-  [ref: string]: JsonSchema;
-}

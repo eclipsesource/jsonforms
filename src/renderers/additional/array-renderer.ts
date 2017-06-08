@@ -9,15 +9,16 @@ import { JsonSchema } from '../../models/jsonSchema';
 import { getElementLabelObject } from '../label.util';
 import { RankedTester, rankWith, and, uiTypeIs, schemaMatches } from '../../core/testers';
 import { JsonFormsHolder } from '../../core';
+import {isItemModel, ITEM_MODEL_TYPES} from '../../parser/item_model';
 
 export const arrayTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
-    schemaMatches(schema =>
-        !_.isEmpty(schema)
-        && schema.type === 'array'
-        && !_.isEmpty(schema.items)
-        && !Array.isArray(schema.items) // we don't care about tuples
-        && (schema.items as JsonSchema).type === 'object'
+    schemaMatches(model =>
+        isItemModel(model) ?
+        !_.isEmpty(model.schema)
+        && model.type === ITEM_MODEL_TYPES.ARRAY // 'array'
+        && !Array.isArray(model.schema) // we don't care about tuples
+        && model.schema.type === 'object' : false
     ))
 );
 @JsonFormsRenderer({
@@ -62,7 +63,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     const header = document.createElement('legend');
     div.appendChild(header);
     const label = document.createElement('label');
-    const labelObject = getElementLabelObject(this.dataSchema, controlElement);
+    const labelObject = getElementLabelObject(this.dataModel, controlElement);
     if (labelObject.show) {
       label.textContent = labelObject.text;
     }
@@ -74,9 +75,9 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
 
     const renderChild = (element: Object): void => {
       const jsonForms = <JsonForms>document.createElement('json-forms');
-      const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
+      const resolvedSchema = resolveSchema(this.dataModel, controlElement.scope.$ref); // + '/items'
       jsonForms.data = element;
-      jsonForms.dataSchema = resolvedSchema;
+      jsonForms.dataModel = resolvedSchema;
       content.appendChild(jsonForms);
     };
 

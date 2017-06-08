@@ -9,6 +9,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {enumControlTester, EnumControl} from '../../src/renderers/controls/enum.control';
 import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
+import {ItemModel, ITEM_MODEL_TYPES} from '../../src/parser/item_model';
 
 
 test('EnumControlTester', t => {
@@ -18,18 +19,58 @@ test('EnumControlTester', t => {
   t.is(enumControlTester({type: 'Control'}, undefined), -1);
   t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string'},
+          dropPoints: {}
+        }
+      }
+    }), -1);
   t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {
-      foo: {type: 'string'}, bar: {type: 'string', enum: ['a', 'b']}}}), -1);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string'},
+        bar: {type: 'string', enum: ['a', 'b']}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string'},
+          dropPoints: {}
+        },
+        bar: {
+          schema: {type: 'string', enum: ['a', 'b']},
+          dropPoints: {}
+        }
+      }
+    }), -1);
   t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string', enum: ['a', 'b']}}}), 2);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string', enum: ['a', 'b']}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string', enum: ['a', 'b']},
+          dropPoints: {}
+        }
+      }
+    }), 2);
   // TODO should this be true?
   t.is(enumControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'number', enum: [1, 2]}}}), 2);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'number', enum: [1, 2]}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'number', enum: [1, 2]},
+          dropPoints: {}
+        }
+      }
+    }), 2);
 });
 test('EnumControl static', t => {
   const schema = {type: 'object', properties:
@@ -37,7 +78,16 @@ test('EnumControl static', t => {
   const renderer: EnumControl = new EnumControl();
   const data = {'foo': 'a'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+    schema: {type: 'object', properties: {foo: {type: 'string', enum: ['a', 'b']}}},
+    dropPoints: {},
+    attributes: {
+      foo: {
+        schema: {type: 'string', enum: ['a', 'b']},
+        dropPoints: {}
+      }
+    }
+  });
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   t.is(result.className, 'control')
@@ -61,22 +111,31 @@ test('EnumControl static no label', t => {
   const renderer: EnumControl = new EnumControl();
   const data = {'foo': 'b'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'},
     label: false} as ControlElement);
-  const result = renderer.render();
-  t.is(result.className, 'control')
-  t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  renderer.connectedCallback();
+  t.is(renderer.className, 'control')
+  t.is(renderer.childNodes.length, 3);
+  const label = <HTMLLabelElement>renderer.children[0];
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, '');
-  const input = <HTMLSelectElement>result.children[1];
+  const input = <HTMLSelectElement>renderer.children[1];
   t.is(input.tagName, 'SELECT');
   t.is(input.value, 'b');
   t.is(input.options.length, 2);
   t.is(input.options.item(0).value, 'a');
   t.is(input.options.item(1).value, 'b');
-  const validation = result.children[2];
+  const validation = renderer.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
@@ -86,10 +145,19 @@ test('EnumControl inputChange', t => {
   const renderer: EnumControl = new EnumControl();
   const data = {'foo': 'a'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
-  const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  renderer.connectedCallback();
+  const input = <HTMLSelectElement>renderer.children[1];
   input.value = 'b';
   input.onchange(null);
   t.is(data.foo, 'b');
@@ -101,7 +169,16 @@ test('EnumControl dataService notification', t => {
   const data = {'foo': 'b'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLSelectElement>renderer.children[1];
@@ -118,7 +195,16 @@ test.failing('EnumControl dataService notification value undefined', t => {
   const data = {'foo': 'a'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLSelectElement>renderer.children[1];
@@ -132,7 +218,16 @@ test.failing('EnumControl dataService notification value null', t => {
   const data = {'foo': 'a'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLSelectElement>renderer.children[1];
@@ -146,7 +241,16 @@ test('EnumControl dataService notification wrong ref', t => {
   const data = {'foo': 'a'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLSelectElement>renderer.children[1];
@@ -161,7 +265,16 @@ test('EnumControl dataService notification null ref', t => {
   const data = {'foo': 'a'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLSelectElement>renderer.children[1];
@@ -176,7 +289,16 @@ test('EnumControl dataService notification undefined ref', t => {
   const data = {'foo': 'a'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLSelectElement>renderer.children[1];
@@ -191,7 +313,16 @@ test('EnumControl dataService no notification after disconnect', t => {
   const data = {'foo': 'a'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -208,7 +339,16 @@ test('EnumControl notify visible false', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -223,7 +363,16 @@ test('EnumControl notify visible true', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -239,7 +388,16 @@ test('EnumControl notify disabled', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -257,7 +415,16 @@ test('EnumControl notify enabled', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -274,7 +441,16 @@ test('EnumControl notify one error', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -290,7 +466,16 @@ test('EnumControl notify multiple errors', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -306,7 +491,16 @@ test('EnumControl notify errors undefined', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -322,7 +516,16 @@ test('EnumControl notify errors null', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -338,7 +541,16 @@ test('EnumControl notify errors clean', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -355,7 +567,16 @@ test('EnumControl disconnected no notify visible', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -363,7 +584,7 @@ test('EnumControl disconnected no notify visible', t => {
   runtime.visible = false;
   t.is(renderer.hidden, false);
 });
-test('EnumControl disconnected no notify enabled', t => {
+test ('EnumControl disconnected no notify enabled', t => {
   const renderer: EnumControl = new EnumControl();
   const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
   const data = {'foo': 'b'};
@@ -371,7 +592,16 @@ test('EnumControl disconnected no notify enabled', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -388,7 +618,16 @@ test('EnumControl disconnected no notify error', t => {
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties:
     {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({label: 'root', schema: schema, dropPoints: {}, attributes: {
+    foo: {
+      schema: {type: 'string', enum: ['a', 'b']},
+      type: ITEM_MODEL_TYPES.ROOT,
+      label: 'foo',
+      dropPoints: {},
+      attributes: {}
+    }
+  },
+  type: ITEM_MODEL_TYPES.ROOT} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

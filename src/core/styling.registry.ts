@@ -40,7 +40,8 @@ export interface StylingRegistry {
     /**
      * Obtain the CSS class name associated with the given style name.
      * @param styleName the name whose CSS class names should be obtained
-     * @return an array containing the CSS class names, if the style exists, an empty array otherwise
+     * @return an array containing the CSS class names, if the style exists,
+      an empty array otherwise
      */
     get(styleName: string): Array<string>
 

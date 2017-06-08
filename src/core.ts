@@ -4,12 +4,14 @@ import {UiSchemaRegistry, UiSchemaRegistryImpl} from './core/uischema.registry';
 import {DataService} from './core/data.service';
 import {RendererService} from './core/renderer.service';
 import {StylingRegistry, StylingRegistryImpl} from './core/styling.registry';
+import {FullDataModelType} from './parser/item_model';
 
 export interface JsonFormService {
   dispose(): void;
 }
 export interface JsonFormsServiceConstructable {
-  new(dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
+  new(dataService: DataService, dataModel: FullDataModelType,
+    uiSchema: UISchemaElement): JsonFormService;
 }
 export const JsonFormsServiceElement = (config) => (cls: JsonFormsServiceConstructable) => {
   JsonFormsHolder.jsonFormsServices.push(cls);

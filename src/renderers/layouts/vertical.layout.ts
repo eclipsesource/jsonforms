@@ -24,7 +24,7 @@ export class VerticalLayoutRenderer extends Renderer {
     if (verticalLayout.elements !== undefined && verticalLayout.elements !== null) {
       verticalLayout.elements.forEach(element => {
         const bestRenderer = JsonFormsHolder.rendererService
-          .getBestRenderer(element, this.dataSchema, this.dataService);
+          .getBestRenderer(element, this.dataModel, this.dataService);
         div.appendChild(bestRenderer);
       });
     }

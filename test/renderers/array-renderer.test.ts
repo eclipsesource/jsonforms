@@ -9,7 +9,7 @@ import {ControlElement} from '../../src/models/uischema';
 import {ArrayControlRenderer, arrayTester} from '../../src/renderers/additional/array-renderer';
 import {DataService } from '../../src/core/data.service';
 import {JsonFormsHolder} from '../../src/core';
-
+import {ItemModel, ITEM_MODEL_TYPES} from '../../src/parser/item_model';
 
 test('generate array child control', t => {
 
@@ -42,7 +42,38 @@ test('generate array child control', t => {
         }]
     };
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+  schema: {type: 'object', properties: {test: {type: 'array', items: {
+      'type': 'object',
+      'properties': {
+          'x': {'type': 'integer'},
+          'y': {'type': 'integer'}
+      }
+  }}}},
+  dropPoints: {
+    test: {
+      schema: {
+          'type': 'object',
+          'properties': {
+              'x': {'type': 'integer'},
+              'y': {'type': 'integer'}
+          }
+      },
+      dropPoints: {},
+      attributes: {
+        x: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        },
+        y: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        }
+      },
+      type: 1
+    }
+  }
+});
     renderer.setUiSchema(uiSchema);
     const renderedElement = renderer.render();
     const elements = renderedElement.getElementsByClassName('array-layout');
@@ -93,7 +124,38 @@ test('generate array child control w/o data', t => {
     };
     const data = {};
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+  schema: {type: 'object', properties: {test: {type: 'array', items: {
+      'type': 'object',
+      'properties': {
+          'x': {'type': 'integer'},
+          'y': {'type': 'integer'}
+      }
+  }}}},
+  dropPoints: {
+    test: {
+      schema: {
+          'type': 'object',
+          'properties': {
+              'x': {'type': 'integer'},
+              'y': {'type': 'integer'}
+          }
+      },
+      dropPoints: {},
+      attributes: {
+        x: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        },
+        y: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        }
+      },
+      type: 1
+    }
+  }
+});
     renderer.setUiSchema(uiSchema);
     const renderedElement = renderer.render();
     const elements = renderedElement.getElementsByClassName('array-layout');
@@ -143,7 +205,38 @@ test('array-layout add click w/o data', t => {
     };
     const data = {};
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+  schema: {type: 'object', properties: {test: {type: 'array', items: {
+      'type': 'object',
+      'properties': {
+          'x': {'type': 'integer'},
+          'y': {'type': 'integer'}
+      }
+  }}}},
+  dropPoints: {
+    test: {
+      schema: {
+          'type': 'object',
+          'properties': {
+              'x': {'type': 'integer'},
+              'y': {'type': 'integer'}
+          }
+      },
+      dropPoints: {},
+      attributes: {
+        x: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        },
+        y: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        }
+      },
+      type: 1
+    }
+  }
+});
     renderer.setUiSchema(uiSchema);
     const renderedElement = renderer.render();
     const button = renderedElement.getElementsByTagName('button')[0];
@@ -182,7 +275,38 @@ test('array-layout add click with data', t => {
       }]
     };
     renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
+    renderer.setDataModel({
+  schema: {type: 'object', properties: {test: {type: 'array', items: {
+      'type': 'object',
+      'properties': {
+          'x': {'type': 'integer'},
+          'y': {'type': 'integer'}
+      }
+  }}}},
+  dropPoints: {
+    test: {
+      schema: {
+          'type': 'object',
+          'properties': {
+              'x': {'type': 'integer'},
+              'y': {'type': 'integer'}
+          }
+      },
+      dropPoints: {},
+      attributes: {
+        x: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        },
+        y: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        }
+      },
+      type: 1
+    }
+  }
+});
     renderer.setUiSchema(uiSchema);
     const renderedElement = renderer.render();
     const button = renderedElement.getElementsByTagName('button')[0];
@@ -222,7 +346,38 @@ test('array-layout DataService notification', t => {
   };
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {test: {type: 'array', items: {
+      'type': 'object',
+      'properties': {
+          'x': {'type': 'integer'},
+          'y': {'type': 'integer'}
+      }
+  }}}},
+  dropPoints: {
+    test: {
+      schema: {
+          'type': 'object',
+          'properties': {
+              'x': {'type': 'integer'},
+              'y': {'type': 'integer'}
+          }
+      },
+      dropPoints: {},
+      attributes: {
+        x: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        },
+        y: {
+          schema: {'type': 'integer'},
+          dropPoints: {}
+        }
+      },
+      type: 1
+    }
+  }
+});
   renderer.setUiSchema(uiSchema);
   const renderedElement = renderer.render();
   const childrenInitial = renderedElement.getElementsByClassName('children')[0];
@@ -255,21 +410,23 @@ test('array-layout Tester', t => {
   t.is(
       arrayTester(
           { type: 'Control', scope: { $ref: '#/properties/x' } } as ControlElement,
-          { type: 'object',  properties: { x: { type: 'integer' } } }
+          {label: '', schema: { type: 'object',  properties: { x: { type: 'integer' } } },
+            dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
       ),
       -1
   );
   t.is(
       arrayTester(
           { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          { type: 'object',  properties: { foo: { type: 'array'} } }
+          {label: '', schema: { type: 'object',  properties: { foo: { type: 'array'} } },
+            dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
       ),
       -1
   );
   t.is(
       arrayTester(
           { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          {
+          {label: '', schema: {
               type: 'object',
               properties:
                   {
@@ -281,7 +438,7 @@ test('array-layout Tester', t => {
                           ]
                       }
                   }
-          }
+          }, dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
       ),
       -1
   );
@@ -290,7 +447,7 @@ test('array-layout Tester', t => {
                 type: 'Control',
                 scope: { $ref: '#/properties/foo'}
             } as ControlElement,
-            {
+            {label: '', schema: {
                 type: 'object',
                 properties: {
                     foo: {
@@ -298,7 +455,7 @@ test('array-layout Tester', t => {
                         items: { type: 'integer' }
                     }
                 }
-            }
+            }, dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
         ),
         -1
     );
@@ -323,5 +480,34 @@ test('array-layout Tester', t => {
           '$ref': '#/properties/test'
       }
   };
-  t.is(arrayTester(uiSchema, schema), 2);
+  t.is(arrayTester(uiSchema, {
+    label: 'root',
+    schema: schema,
+    dropPoints: {
+      test: {
+        label: 'test',
+        schema: schema.properties['test'].items,
+        dropPoints: {},
+        attributes: {
+          x: {
+            label: 'x',
+            schema: schema.properties['test'].items['properties'].x,
+            dropPoints: {},
+            attributes: {},
+            type: 1
+          },
+          y: {
+            label: 'y',
+            schema: schema.properties['test'].items['properties'].y,
+            dropPoints: {},
+            attributes: {},
+            type: 1
+          }
+        },
+        type: 1
+      }
+    },
+    attributes: {},
+    type: 0
+  } as ItemModel), 2);
 });

@@ -1,5 +1,7 @@
 import {ControlElement, ILabelObject} from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
+import {FullDataModelType, isItemModel} from '../parser/item_model';
+export {FullDataModelType} from '../parser/item_model';
 import {resolveSchema} from '../path.util';
 
 class LabelObject implements ILabelObject {
@@ -44,22 +46,22 @@ const getLabelObject = (withLabel: ControlElement): ILabelObject => {
         return new LabelObject(derivedLabel, true);
     }
 };
-const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
+const isRequired = (model: FullDataModelType, schemaPath: string): boolean => {
     const pathSegments = schemaPath.split('/');
     const lastSegment = pathSegments[pathSegments.length - 1];
     const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
     const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
-    const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
-    if (nextHigherSchema !== undefined && nextHigherSchema.required !== undefined &&
-      nextHigherSchema.required.indexOf(lastSegment) !== -1) {
+    const nextHigherSchema = resolveSchema(model, nextHigherSchemaPath);
+    if (isItemModel(nextHigherSchema) && nextHigherSchema.schema.required !== undefined &&
+      nextHigherSchema.schema.required.indexOf(lastSegment) !== -1) {
         return true;
     }
     return false;
 };
 export const getElementLabelObject =
-  (schema: JsonSchema, controlElement: ControlElement): ILabelObject => {
+  (model: FullDataModelType, controlElement: ControlElement): ILabelObject => {
   const labelObject = getLabelObject(controlElement);
-  if (isRequired(schema, controlElement.scope.$ref)) {
+  if (isRequired(model, controlElement.scope.$ref)) {
     labelObject.text += '*';
   }
   return labelObject;

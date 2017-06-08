@@ -48,5 +48,5 @@ test('Styling registry should overwrite any existing style', t => {
     const stylingRegistry = new StylingRegistryImpl();
     stylingRegistry.register('button', ['btn', 'btn-primary']);
     stylingRegistry.register('button', ['something-else']);
-    t.is(stylingRegistry.getAsClassName('button'), 'something-else',);
+    t.is(stylingRegistry.getAsClassName('button'), 'something-else');
 });

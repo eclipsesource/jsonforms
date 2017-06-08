@@ -9,7 +9,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {numberControlTester, NumberControl} from '../../src/renderers/controls/number.control';
 import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
-
+import {ItemModel} from '../../src/parser/item_model';
 
 test('NumberControlTester', t => {
   t.is(numberControlTester(undefined, undefined), -1);
@@ -18,20 +18,60 @@ test('NumberControlTester', t => {
   t.is(numberControlTester({type: 'Control'}, undefined), -1);
   t.is(numberControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string'},
+          dropPoints: {}
+        }
+      }
+    }), -1);
   t.is(numberControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'number'}}}), -1);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'number'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'string'},
+          dropPoints: {}
+        },
+        bar: {
+          schema: {type: 'number'},
+          dropPoints: {}
+        }
+      }
+    }), -1);
   t.is(numberControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'number'}}}), 2);
+    {
+      schema: {type: 'object', properties: {foo: {type: 'number'}}},
+      dropPoints: {},
+      attributes: {
+        foo: {
+          schema: {type: 'number'},
+          dropPoints: {}
+        }
+      }
+    }), 2);
 });
 test('NumberControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
   const renderer: NumberControl = new NumberControl();
   const data = {'foo': 3.14};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   t.is(result.className, 'control')
@@ -53,7 +93,16 @@ test('NumberControl static no label', t => {
   const renderer: NumberControl = new NumberControl();
   const data = {'foo': 2.72};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'},
     label: false} as ControlElement);
   const result = renderer.render();
@@ -76,7 +125,16 @@ test('NumberControl inputChange', t => {
   const renderer: NumberControl = new NumberControl();
   const data = {'foo': 3.14};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   const input = <HTMLInputElement>result.children[1];
@@ -90,7 +148,16 @@ test('NumberControl dataService notification', t => {
   const data = {'foo': 2.72};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -103,7 +170,16 @@ test('NumberControl dataService notification value undefined', t => {
   const data = {'foo': 3.14};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -116,7 +192,16 @@ test('NumberControl dataService notification value null', t => {
   const data = {'foo': 3.14};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -129,7 +214,16 @@ test('NumberControl dataService notification wrong ref', t => {
   const data = {'foo': 3.14};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -142,7 +236,16 @@ test('NumberControl dataService notification null ref', t => {
   const data = {'foo': 3.14};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -155,7 +258,16 @@ test('NumberControl dataService notification undefined ref', t => {
   const data = {'foo': 3.14};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -168,7 +280,16 @@ test('NumberControl dataService no notification after disconnect', t => {
   const data = {'foo': 3.14};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -183,7 +304,16 @@ test('NumberControl notify visible false', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -197,7 +327,16 @@ test('NumberControl notify visible true', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -212,7 +351,16 @@ test('NumberControl notify disabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -229,7 +377,16 @@ test('NumberControl notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -245,7 +402,16 @@ test('NumberControl notify one error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -260,7 +426,16 @@ test('NumberControl notify multiple errors', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -275,7 +450,16 @@ test('NumberControl notify errors undefined', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -290,7 +474,16 @@ test('NumberControl notify errors null', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -305,7 +498,16 @@ test('NumberControl notify errors clean', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -321,7 +523,16 @@ test('NumberControl disconnected no notify visible', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -336,7 +547,16 @@ test('NumberControl disconnected no notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -352,7 +572,16 @@ test('NumberControl disconnected no notify error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'number'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {foo: {type: 'number'}}},
+  dropPoints: {},
+  attributes: {
+    foo: {
+      schema: {type: 'number'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

@@ -5,6 +5,7 @@ import {JsonForms} from '../../src/json-forms';
 import { resolveSchema } from '../../src/path.util';
 import { UISchemaElement, ControlElement } from '../../src/models/uischema';
 import { JsonSchema } from '../../src/models/jsonSchema';
+import {FullDataModelType, isItemModel} from '../../src/parser/item_model';
 
 const schema = {
   'type': 'object',
@@ -118,9 +119,10 @@ const resetServices = () => {
   jsonforms.data = data;
 };
 
-const tester = (my_uischema: UISchemaElement, my_schema: JsonSchema) =>
-  my_uischema.type === 'Control'
-  && resolveSchema(my_schema, (<ControlElement>my_uischema).scope.$ref).type === 'integer' ? 5 : -1;
+const tester = (my_uischema: UISchemaElement, model: FullDataModelType) =>
+  my_uischema.type === 'Control' &&
+  resolveSchema(model, (<ControlElement>my_uischema).scope.$ref)['schema'].type === 'integer' ? 5 :
+    -1;
 
 class MyControl extends Renderer {
   render(): HTMLElement {

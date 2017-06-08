@@ -3,16 +3,20 @@ import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
 import {resolveSchema} from '../path.util';
 import {NOT_FITTING} from './uischema.registry';
+import {ItemModel, MultipleItemModel, DummyModel, ReferenceModel, isItemModel}
+  from '../parser/item_model';
 
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
  */
-export type Tester = (uiSchema: UISchemaElement, schema: JsonSchema) => boolean
+export type Tester = (uiSchema: UISchemaElement,
+  model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel) => boolean
 
 /**
  * A ranked tester associate a tester with a number.
  */
-export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => number
+export type RankedTester = (uiSchema: UISchemaElement,
+  model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel) => number
 
 /**
  * Only applicable for Controls.
@@ -23,8 +27,10 @@ export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => nu
  *
  * @param predicate the predicate that should be applied to the resolved sub-schema
  */
-export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Tester =>
-    (uiSchema: UISchemaElement, schema: JsonSchema): boolean => {
+export const schemaMatches =
+  (predicate: (model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel) => boolean): Tester =>
+    (uiSchema: UISchemaElement,
+        model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel): boolean => {
         if (_.isEmpty(uiSchema)) {
             return false;
         }
@@ -32,11 +38,11 @@ export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Teste
         if (_.isEmpty(schemaPath)) {
             return false;
         }
-        const currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
-        if (currentDataSchema === undefined) {
+        const currentDataModel = resolveSchema(model, schemaPath);
+        if (currentDataModel === undefined) {
             return false;
         }
-        return predicate(currentDataSchema);
+        return predicate(currentDataModel);
     };
 
 /**
@@ -48,8 +54,9 @@ export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Teste
  *
  * @param expectedType the expected type of the resolved sub-schema
  */
-export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(schema =>
-    !_.isEmpty(schema) && schema.type === expectedType
+export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(model =>
+    isItemModel(model) ?
+    !_.isEmpty(model.schema) && model.schema.type === expectedType : false
 );
 
 /**
@@ -61,10 +68,10 @@ export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(sche
  *
  * @param expectedFormat the expected format of the resolved sub-schema
  */
-export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema =>
-    !_.isEmpty(schema)
-    && schema.format === expectedFormat
-    && schema.type === 'string'
+export const formatIs = (expectedFormat: string): Tester => schemaMatches(model =>
+    isItemModel(model) ? !_.isEmpty(model.schema)
+    && model.schema.format === expectedFormat
+    && model.schema.type === 'string' : false
 );
 
 /**
@@ -128,10 +135,11 @@ export const refEndIs = (expected: string): Tester =>
  * @param testers the tester to be composed
  */
 export const and = (
-    ...testers: Array<(uiSchema: UISchemaElement, schema: JsonSchema) => boolean>
+    ...testers: Array<(uiSchema: UISchemaElement,
+        model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel) => boolean>
 ): Tester =>
-    (uiSchema: UISchemaElement, schema: JsonSchema) =>
-        testers.reduce((acc, tester) => acc && tester(uiSchema, schema), true);
+    (uiSchema: UISchemaElement, model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel) =>
+        testers.reduce((acc, tester) => acc && tester(uiSchema, model), true);
 
 
 /**
@@ -142,8 +150,9 @@ export const and = (
  * @param tester a tester
  */
 export const rankWith = (rank: number, tester: Tester)  =>
-    (uiSchema: UISchemaElement, schema: JsonSchema): number => {
-        if (tester(uiSchema, schema)) {
+    (uiSchema: UISchemaElement,
+        model: ItemModel|MultipleItemModel|DummyModel|ReferenceModel): number => {
+        if (tester(uiSchema, model)) {
             return rank;
         }
         return NOT_FITTING;

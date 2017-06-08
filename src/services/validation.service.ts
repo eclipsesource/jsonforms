@@ -4,6 +4,7 @@ import {Runtime} from '../core/runtime';
 import { JsonSchema } from '../models/jsonSchema';
 import { toDataPath } from '../path.util';
 import {DataService, DataChangeListener} from '../core/data.service';
+import {FullDataModelType, isItemModel} from '../parser/item_model';
 
 import * as AJV from 'ajv';
 
@@ -15,9 +16,13 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
   private validator: AJV.ValidateFunction;
   private pathToControlMap: {[path: string]: ControlElement} = {};
 
-  constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
+  constructor(private dataService: DataService, dataModel: FullDataModelType,
+    uiSchema: UISchemaElement) {
+    if (!isItemModel(dataModel)) {
+      return null;
+    }
     dataService.registerChangeListener(this);
-    this.validator = ajv.compile(dataSchema);
+    this.validator = ajv.compile(dataModel.schema);
     this.parseUiSchema(uiSchema);
   }
 

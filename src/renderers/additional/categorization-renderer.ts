@@ -5,6 +5,7 @@ import {JsonFormsRenderer} from '../renderer.util';
 import {JsonForms} from '../../json-forms';
 import {uiTypeIs, rankWith, RankedTester, and} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {isItemModel} from '../../parser/item_model';
 
 export const categorizationTester: RankedTester = rankWith(1,
   and(
@@ -129,7 +130,7 @@ export class CategorizationRenderer extends Renderer {
         const jsonForms = <JsonForms>document.createElement('json-forms');
         jsonForms.data = this.dataService.getValue({type: 'Control', scope: {$ref: '#'}});
         jsonForms.uiSchema = child;
-        jsonForms.dataSchema = this.dataSchema;
+        jsonForms.dataModel = this.dataModel;
         wrapper.appendChild(jsonForms);
       });
     }

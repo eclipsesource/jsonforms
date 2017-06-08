@@ -3,10 +3,11 @@ import { BaseControl } from './base.control';
 import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
 import { rankWith, and, uiTypeIs, schemaMatches, RankedTester} from '../../core/testers';
+import {isItemModel, ItemModel} from '../../parser/item_model';
 
 export const enumControlTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
-    schemaMatches(schema => schema.hasOwnProperty('enum'))
+    schemaMatches(model => isItemModel(model) ? model.schema.hasOwnProperty('enum') : false)
   ));
 @JsonFormsRenderer({
   selector: 'jsonforms-enum',
@@ -15,7 +16,8 @@ export const enumControlTester: RankedTester = rankWith(2, and(
 export class EnumControl extends BaseControl<HTMLSelectElement> {
   private options: Array<any>;
   protected configureInput(input: HTMLSelectElement): void {
-    this.options = resolveSchema(this.dataSchema, (<ControlElement>this.uischema).scope.$ref).enum;
+    this.options = (<ItemModel>
+      resolveSchema(this.dataModel, (<ControlElement>this.uischema).scope.$ref)).schema.enum;
     this.options.forEach(optionValue => {
       const option = document.createElement('option');
       option.value = optionValue;

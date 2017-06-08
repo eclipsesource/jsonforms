@@ -2,11 +2,12 @@ import { UISchemaElement } from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
 import {DataService} from './data.service';
 import {Runtime, RUNTIME_TYPE, RuntimeListener} from './runtime';
+import {FullDataModelType} from '../parser/item_model';
 
 export abstract class Renderer extends HTMLElement implements RuntimeListener {
   protected uischema: UISchemaElement;
   protected dataService: DataService;
-  protected dataSchema: JsonSchema;
+  protected dataModel: FullDataModelType;
   setUiSchema(uischema: UISchemaElement) {
     this.uischema = uischema;
   }
@@ -15,8 +16,8 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
     this.dataService = dataService;
   }
 
-  setDataSchema(dataSchema: JsonSchema) {
-    this.dataSchema = dataSchema;
+  setDataModel(dataModel: FullDataModelType) {
+    this.dataModel = dataModel;
   }
 
   notify(type: RUNTIME_TYPE): void {

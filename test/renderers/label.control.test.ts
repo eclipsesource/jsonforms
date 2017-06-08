@@ -9,7 +9,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {labelRendererTester, LabelRenderer} from '../../src/renderers/additional/label.renderer';
 import {Runtime} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
-
+import {ItemModel} from '../../src/parser/item_model';
 
 test('labelRendererTester', t => {
   t.is(
@@ -34,7 +34,16 @@ test('LabelRenderer static text undefined', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Label'} as LabelElement);
   const result = renderer.render();
   t.is(result.className, 'jsf-label')
@@ -46,7 +55,16 @@ test('LabelRenderer static text null', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Label', text: null} as LabelElement);
   const result = renderer.render();
   t.is(result.className, 'jsf-label')
@@ -58,7 +76,16 @@ test('LabelRenderer static text', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const data = {'name': 'Foo'};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema({type: 'Label', text: 'Bar'} as LabelElement);
   const result = renderer.render();
   t.is(result.className, 'jsf-label')
@@ -72,7 +99,16 @@ test('LabelRenderer notify visible false', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(labelElement);
   renderer.connectedCallback();
   const runtime = <Runtime>labelElement['runtime'];
@@ -86,7 +122,16 @@ test('LabelRenderer notify visible true', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(labelElement);
   renderer.connectedCallback();
   const runtime = <Runtime>labelElement['runtime'];
@@ -101,7 +146,16 @@ test('LabelRenderer notify disabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(labelElement);
   renderer.connectedCallback();
   const runtime = <Runtime>labelElement['runtime'];
@@ -115,7 +169,16 @@ test('LabelRenderer notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(labelElement);
   renderer.connectedCallback();
   const runtime = <Runtime>labelElement['runtime'];
@@ -129,7 +192,16 @@ test('LabelRenderer disconnected no notify visible', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(labelElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -144,7 +216,16 @@ test('LabelRenderer disconnected no notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+  schema: {type: 'object', properties: {name: {type: 'string'}}},
+  dropPoints: {},
+  attributes: {
+    name: {
+      schema: {type: 'string'},
+      dropPoints: {}
+    }
+  }
+});
   renderer.setUiSchema(labelElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

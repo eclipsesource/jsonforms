@@ -11,6 +11,7 @@ import {
 } from '../src/core/testers';
 import {JsonSchema} from '../src/models/jsonSchema';
 import {ControlElement, LabelElement} from '../src/models/uischema';
+import {ItemModel, isItemModel} from '../src/parser/item_model';
 
 test('schemaTypeIs should check type sub-schema of control', t => {
     const schema: JsonSchema = {
@@ -25,8 +26,16 @@ test('schemaTypeIs should check type sub-schema of control', t => {
             $ref: '#/properties/foo'
         }
     };
-    t.true(schemaTypeIs('string')(uiSchema, schema));
-    t.false(schemaTypeIs('integer')(uiSchema, schema));
+    t.true(schemaTypeIs('string')(uiSchema, {
+      schema: schema,
+      dropPoints: {},
+      attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+    }));
+    t.false(schemaTypeIs('integer')(uiSchema, {
+      schema: schema,
+      dropPoints: {},
+      attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+    }));
 });
 
 test('schemaTypeIs should return false for non-control UI schema elements', t => {
@@ -40,7 +49,11 @@ test('schemaTypeIs should return false for non-control UI schema elements', t =>
         type: 'Label',
         text: 'some text'
     };
-    t.false(schemaTypeIs('integer')(label, schema));
+    t.false(schemaTypeIs('integer')(label, {
+  schema: schema,
+  dropPoints: {},
+  attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+}));
 });
 
 test('schemaTypeIs should return false for control pointing to invalid sub-schema', t => {
@@ -56,7 +69,11 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
             foo: { type: 'string' }
         }
     };
-    t.false(schemaTypeIs('string')(uiSchema, schema));
+    t.false(schemaTypeIs('string')(uiSchema, {
+  schema: schema,
+  dropPoints: {},
+  attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+}));
 });
 
 test('formatIs should check the format of a resolved sub-schema', t => {
@@ -75,7 +92,11 @@ test('formatIs should check the format of a resolved sub-schema', t => {
             }
         }
     };
-    t.true(formatIs('date-time')(uiSchema, schema));
+    t.true(formatIs('date-time')(uiSchema, {
+  schema: schema,
+  dropPoints: {},
+  attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+}));
 });
 
 test('uiTypeIs', t => {
@@ -124,7 +145,12 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
             $ref: '#/properties/foo'
         }
     };
-    t.true(schemaMatches(subSchema => subSchema.type === 'string')(uiSchema, schema));
+    t.true(schemaMatches(model => isItemModel(model) ? model.schema.type === 'string' : false)
+      (uiSchema, {
+        schema: schema,
+        dropPoints: {},
+        attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+      }));
 });
 
 
@@ -139,7 +165,12 @@ test('schemaMatches should return false for non-control UI schema elements', t =
         type: 'Label',
         text: 'some text'
     };
-    t.false(schemaMatches(subSchema => false)(label, schema));
+    t.false(schemaMatches(subSchema => false)
+      (label, {
+  schema: schema,
+  dropPoints: {},
+  attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+}));
 });
 
 test('schemaMatches should return false for control pointing to invalid subschema', t => {
@@ -155,7 +186,12 @@ test('schemaMatches should return false for control pointing to invalid subschem
             $ref: '#/properties/bar'
         }
     };
-    t.false(schemaMatches(subSchema => false)(uiSchema, schema));
+    t.false(schemaMatches(subSchema => false)
+      (uiSchema, {
+  schema: schema,
+  dropPoints: {},
+  attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+}));
 });
 
 test('refEndsWith checks whether the ref of a control ends with a certain string', t => {
@@ -210,6 +246,9 @@ test('and should allow to compose multiple testers', t => {
     t.true(and(
         schemaTypeIs('string'),
         refEndIs('foo')
-    )(uiSchema, schema));
+    )(uiSchema, {
+      schema: schema,
+      dropPoints: {},
+      attributes: {foo: {schema: schema.properties['foo'], dropPoints: {}}}
+    }));
 });
-

@@ -24,7 +24,7 @@ export class HorizontalLayoutRenderer extends Renderer {
     if (horizontalLayout.elements !== undefined && horizontalLayout.elements !== null) {
       horizontalLayout.elements.forEach(element => {
         const bestRenderer = JsonFormsHolder.rendererService
-            .getBestRenderer(element, this.dataSchema, this.dataService);
+            .getBestRenderer(element, this.dataModel, this.dataService);
         div.appendChild(bestRenderer);
       });
     }

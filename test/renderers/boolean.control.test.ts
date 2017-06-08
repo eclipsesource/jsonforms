@@ -9,7 +9,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {booleanControlTester, BooleanControl} from '../../src/renderers/controls/boolean.control';
 import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
-
+import {ItemModel} from '../../src/parser/item_model';
 
 test('BooleanControlTester', t => {
   t.is(booleanControlTester(undefined, undefined), -1);
@@ -18,20 +18,40 @@ test('BooleanControlTester', t => {
   t.is(booleanControlTester({type: 'Control'}, undefined), -1);
   t.is(booleanControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
+    {schema: {type: 'object', properties: {foo: {type: 'string'}}}, dropPoints: {},
+    attributes: {foo: {schema: {type: 'string'}, dropPoints: {}}}}), -1);
   t.is(booleanControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'boolean'}}}), -1);
+    {schema: {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'boolean'}}},
+    dropPoints: {}, attributes: {foo: {schema: {type: 'string'}, dropPoints: {}},
+      bar: {schema: {type: 'boolean'}, dropPoints: {}}}
+    }), -1);
   t.is(booleanControlTester(
     {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'boolean'}}}), 2);
+    {schema: {type: 'object', properties: {foo: {type: 'boolean'}}}, dropPoints: {},
+    attributes: {foo: {schema: {type: 'boolean'}, dropPoints: {}}}}
+    ), 2);
 });
 test('BooleanControl static', t => {
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': true};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({
+    label: 'root',
+    schema: schema,
+    dropPoints: {},
+    attributes: {
+      foo: {
+        schema: {type: 'boolean'},
+        dropPoints: {},
+        label: 'foo',
+        attributes: {},
+        type: 0
+      }
+    },
+    type: 0
+  } as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   t.is(result.className, 'control')
@@ -52,7 +72,7 @@ test('BooleanControl static no label', t => {
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': false};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'},
     label: false} as ControlElement);
   const result = renderer.render();
@@ -74,7 +94,7 @@ test('BooleanControl inputChange', t => {
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': true};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   const result = renderer.render();
   const input = <HTMLInputElement>result.children[1];
@@ -88,7 +108,7 @@ test('BooleanControl dataService notification', t => {
   const data = {'foo': false};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -101,7 +121,7 @@ test('BooleanControl dataService notification value undefined', t => {
   const data = {'foo': true};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -114,7 +134,7 @@ test('BooleanControl dataService notification value null', t => {
   const data = {'foo': true};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -127,7 +147,7 @@ test('BooleanControl dataService notification wrong ref', t => {
   const data = {'foo': true};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -140,7 +160,7 @@ test('BooleanControl dataService notification null ref', t => {
   const data = {'foo': true};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -153,7 +173,7 @@ test('BooleanControl dataService notification undefined ref', t => {
   const data = {'foo': true};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
@@ -166,7 +186,7 @@ test('BooleanControl dataService no notification after disconnect', t => {
   const data = {'foo': true};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -181,7 +201,7 @@ test('BooleanControl notify visible false', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -195,7 +215,7 @@ test('BooleanControl notify visible true', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -210,7 +230,7 @@ test('BooleanControl notify disabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -227,7 +247,7 @@ test('BooleanControl notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -243,7 +263,7 @@ test('BooleanControl notify one error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -258,7 +278,7 @@ test('BooleanControl notify multiple errors', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -273,7 +293,7 @@ test('BooleanControl notify errors undefined', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -288,7 +308,7 @@ test('BooleanControl notify errors null', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -303,7 +323,7 @@ test('BooleanControl notify errors clean', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   const runtime = <Runtime>controlElement['runtime'];
@@ -319,7 +339,7 @@ test('BooleanControl disconnected no notify visible', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -334,7 +354,7 @@ test('BooleanControl disconnected no notify enabled', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
@@ -350,7 +370,7 @@ test('BooleanControl disconnected no notify error', t => {
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
   const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
+  renderer.setDataModel({schema: schema, dropPoints: {}} as ItemModel);
   renderer.setUiSchema(controlElement);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

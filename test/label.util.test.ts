@@ -3,6 +3,7 @@ import test from 'ava';
 import {getElementLabelObject, startCase} from '../src/renderers/label.util';
 import {JsonSchema } from '../src/models/jsonSchema';
 import {ControlElement } from '../src/models/uischema';
+import {ItemModel} from '../src/parser/item_model';
 
 test('startCase', t => {
     t.is(startCase('name'), 'Name');
@@ -23,7 +24,8 @@ test('control relative', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement',
     scope: {$ref: '/properties/foo'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo');
 });
@@ -39,7 +41,8 @@ test('control relative required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement',
     scope: {$ref: '/properties/foo'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo*');
 });
@@ -55,7 +58,8 @@ test('control without label string', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement',
     scope: {$ref: '#/properties/foo'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo');
 });
@@ -71,7 +75,8 @@ test('control without label string , required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement',
     scope: {$ref: '#/properties/foo'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo*');
 });
@@ -86,7 +91,8 @@ test('control without label string, camel split', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement',
     scope: {$ref: '#/properties/fooBarBaz'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo Bar Baz');
 });
@@ -102,7 +108,8 @@ test('control without label string, camel split and required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement',
     scope: {$ref: '#/properties/bazBarFoo'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Baz Bar Foo*');
 });
@@ -117,7 +124,8 @@ test('control with label string', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: 'bar'} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'bar');
 });
@@ -133,7 +141,8 @@ test('control with label string, required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: 'bar'} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'bar*');
 });
@@ -148,7 +157,8 @@ test('control with label boolean', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: true} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo');
 });
@@ -164,7 +174,8 @@ test('control with label boolean, required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: false} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, false);
     t.is(labelObject.text, 'Foo*');
 });
@@ -179,7 +190,8 @@ test('control with label object, empty', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo');
 });
@@ -195,7 +207,8 @@ test('control with label object, empty and required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo*');
 });
@@ -210,7 +223,8 @@ test('control with label object, text-only', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {text: 'mega bar'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'mega bar');
 });
@@ -226,7 +240,8 @@ test('control with label object, text-only and required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {text: 'mega bar'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'mega bar*');
 });
@@ -241,7 +256,8 @@ test('control with label object, visible-only', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {show: true}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'Foo');
 });
@@ -257,7 +273,8 @@ test('control with label object, visible-only and required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {show: false}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, false);
     t.is(labelObject.text, 'Foo*');
 });
@@ -272,7 +289,8 @@ test('control with label object, full', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {show: false, text: 'mega bar'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, false);
     t.is(labelObject.text, 'mega bar');
 });
@@ -288,7 +306,8 @@ test('control with label object, full and required', t => {
     } as JsonSchema;
     const controlElement = {type: 'ControlElement', scope: {$ref: '#/properties/foo'},
       label: {show: true, text: 'mega bar'}} as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getElementLabelObject({schema: schema, dropPoints: {}} as ItemModel,
+      controlElement);
     t.is(labelObject.show, true);
     t.is(labelObject.text, 'mega bar*');
 });
