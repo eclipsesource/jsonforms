@@ -2498,3 +2498,132 @@ test('self contained child schemata: cross recursion', t => {
     t.deepEqual(result, expectedResult);
   });
 });
+test.failing('resolve $ref simple, should be moved to schema resolution', t => {
+    const schema: JsonSchema = {
+        definitions: {
+          foo: {
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'array',
+                items: {
+                  $ref: '#/definitions/foo'
+                }
+              }
+            }
+          }
+        },
+        type: 'object',
+        properties: {
+          foos: {
+            type: 'array',
+            items: {
+              $ref: '#/definitions/foo'
+            }
+          }
+        }
+    } as JsonSchema;
+    const extractor = new SchemaExtractor(schema);
+    const expectedResult = {
+      schema: schema,
+      dropPoints: {
+        foos: {
+          schema: {
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'array',
+                items: {
+                  $ref: '#/definitions/foo'
+                }
+              }
+            }
+          },
+          dropPoints: {}
+        }
+      }
+    };
+    return extractor.extract().then(result => {
+      t.true(isItemModel(result));
+      t.deepEqual(result, expectedResult);
+      t.deepEqual((<ItemModel>result).schema, {
+        type: 'object',
+        properties: {
+          bar: {
+            type: 'array',
+            items: {
+              $ref: '#'
+            }
+          }
+        }
+      });
+      t.not((<JsonSchema>schema.definitions.foo.properties.bar.items).$ref, '#');
+    });
+});
+test.failing('resolve $ref complicated, should be moved to schema resolution', t => {
+    const schema: JsonSchema = {
+        definitions: {
+          foo: {
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'array',
+                items: {
+                  $ref: '#/definitions/foo2'
+                }
+              }
+            }
+          },
+          foo2: {
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'array',
+                items: {
+                  $ref: '#/definitions/foo'
+                }
+              }
+            }
+          }
+        },
+        type: 'object',
+        properties: {
+          foos: {
+            type: 'array',
+            items: {
+              $ref: '#/definitions/foo'
+            }
+          }
+        }
+    } as JsonSchema;
+    const expectedResult = {schema: schema, dropPoints: {}};
+    const extractor = new SchemaExtractor(schema);
+    return extractor.extract().then(result => {
+      t.true(isItemModel(result));
+      t.deepEqual(result, expectedResult);
+      t.deepEqual((<ItemModel>result).schema, {
+        definitions: {
+          foo2: {
+            type: 'object',
+            properties: {
+              bar: {
+                type: 'array',
+                items: {
+                  $ref: '#'
+                }
+              }
+            }
+          }
+        },
+        type: 'object',
+        properties: {
+          bar: {
+            type: 'array',
+            items: {
+              $ref: '#/definitions/foo2'
+            }
+          }
+        }
+      });
+    });
+});

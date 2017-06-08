@@ -1,10 +1,8 @@
 import {JsonSchema} from '../models/jsonSchema';
 import { ItemModel, MultipleItemModel, DummyModel, ReferenceModel, MULTIPLICITY_TYPES, isItemModel,
-  ITEM_MODEL_TYPES}
-  from './item_model';
-import {retrieveResolvableSchema, findAllRefs, ReferenceSchemaMap} from '../path.util';
+  ITEM_MODEL_TYPES} from './item_model';
 import * as SchemaRefParser from 'json-schema-ref-parser';
-import {deepCopy} from './util';
+import {deepCopy, retrieveResolvableSchema, findAllRefs, ReferenceSchemaMap} from './util';
 // import * as JSONRefs from 'json-refs';
 
 export class SchemaExtractor {
