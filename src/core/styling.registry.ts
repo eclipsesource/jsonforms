@@ -1,10 +1,18 @@
 import * as _ from 'lodash';
 
+/**
+ * A style associates a name with a list of CSS class names.
+ */
 export interface Style {
     name: string
     classNames: Array<string>
 }
 
+/**
+ * A registry of all available styles.
+ * A style may be used to alter the appearance of certain elements during
+ * the render process.
+ */
 export interface StylingRegistry {
     /**
      * Register a style.
@@ -40,7 +48,8 @@ export interface StylingRegistry {
     /**
      * Obtain the CSS class name associated with the given style name.
      * @param styleName the name whose CSS class names should be obtained
-     * @return an array containing the CSS class names, if the style exists, an empty array otherwise
+     * @return {Array<String>} an array containing the CSS class names,
+     *         if the style exists, an empty array otherwise
      */
     get(styleName: string): Array<string>
 
@@ -53,6 +62,9 @@ export interface StylingRegistry {
     getAsClassName(styleName: string): string
 }
 
+/**
+ * Styling registry implementation.
+ */
 export class StylingRegistryImpl implements StylingRegistry {
 
     constructor(protected styles: Array<Style> = []) {

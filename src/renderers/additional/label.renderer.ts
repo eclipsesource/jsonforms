@@ -4,7 +4,15 @@ import { JsonFormsRenderer } from '../renderer.util';
 import { rankWith, uiTypeIs, RankedTester } from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
+/**
+ * Default tester for a label.
+ * @type {RankedTester}
+ */
 export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
+
+/**
+ * Default renderer for a label.
+ */
 @JsonFormsRenderer({
   selector: 'jsonforms-label',
   tester: labelRendererTester
@@ -14,6 +22,10 @@ export class LabelRenderer extends Renderer {
   constructor() {
     super();
   }
+
+  /**
+   * @inheritDoc
+   */
   render(): HTMLElement {
     const labelElement = <LabelElement> this.uischema;
     if (labelElement.text !== undefined && labelElement.text !== null) {
@@ -22,9 +34,18 @@ export class LabelRenderer extends Renderer {
     this.className = 'jsf-label';
     return this;
   }
-   dispose(): void {
+
+  /**
+   * @inheritDoc
+   */
+  dispose(): void {
     // Do nothing
   }
+
+  /**
+   * @inheritDoc
+   * @param type
+   */
   notify(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {

@@ -9,26 +9,45 @@ import * as AJV from 'ajv';
 
 const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
 
+/**
+ * Validator service based on ajv.
+ */
 @JsonFormsServiceElement({})
 export class JsonFormsValidator implements DataChangeListener, JsonFormService {
 
   private validator: AJV.ValidateFunction;
   private pathToControlMap: {[path: string]: ControlElement} = {};
 
+  /**
+   * Constructor.
+   *
+   * @param {DataService} dataService the data service
+   * @param {JsonSchema} dataSchema the JSON schema describing the data
+   * @param {UISchemaElement} uiSchema the UI schema to be rendered
+   */
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
     dataService.registerChangeListener(this);
     this.validator = ajv.compile(dataSchema);
     this.parseUiSchema(uiSchema);
   }
 
+  /**
+   * @inheritDoc
+   */
   isRelevantKey(_: ControlElement): boolean {
     return true;
   }
 
+  /**
+   * @inheritDoc
+   */
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     this.validate(data);
   }
 
+  /**
+   * @inheritDoc
+   */
   dispose(): void {
     this.dataService.unregisterChangeListener(this);
   }

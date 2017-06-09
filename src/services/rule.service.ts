@@ -7,14 +7,28 @@ import { getValuePropertyPair } from '../path.util';
 import {Runtime} from '../core/runtime';
 import {DataService, DataChangeListener} from '../core/data.service';
 
+/**
+ * Service that evaluates all rules upon a data change.
+ */
 @JsonFormsServiceElement({})
 export class JsonFormsRuleService implements DataChangeListener, JsonFormService {
   private pathToControlMap: {[path: string]: Array<UISchemaElement>} = {};
 
+  /**
+   * Constructor.
+   *
+   * @param {DataService} dataService the data service
+   * @param {JsonSchema} dataSchema the JSON schema describing the data
+   * @param {UISchemaElement} uiSchema the UI schema to be rendered
+   */
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
     dataService.registerChangeListener(this);
     this.parseRules(uiSchema);
   }
+
+  /**
+   * @inheritDoc
+   */
   isRelevantKey(uischema: ControlElement): boolean {
     // TODO hack
     if (uischema === null) {
@@ -22,6 +36,10 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
     }
     return this.pathToControlMap.hasOwnProperty(uischema.scope.$ref);
   }
+
+  /**
+   * @inheritDoc
+   */
   notifyChange(uischema: ControlElement, newValue: any, data: any): void {
     if (uischema === null) {
       this.initialRun(data);
@@ -30,9 +48,14 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
     const elements = this.pathToControlMap[uischema.scope.$ref];
     elements.forEach(element => this.evaluate(element, data));
   }
+
+  /**
+   * @inheritDoc
+   */
   dispose(): void {
     this.dataService.unregisterChangeListener(this);
   }
+
   private parseRules(uiSchema: UISchemaElement) {
     if (uiSchema.hasOwnProperty('rule')) {
       const ref = (<LeafCondition>uiSchema.rule.condition).scope.$ref;
@@ -45,6 +68,7 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
       (<Layout>uiSchema).elements.forEach(element => this.parseRules(element));
     }
   }
+
   private evaluate(uiSchema: UISchemaElement, data: any) {
     // TODO condition evaluation should be done somewhere else
     const condition = <LeafCondition>uiSchema.rule.condition;
@@ -53,8 +77,7 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
     const value = pair.instance[pair.property];
     const equals = value === condition.expectedValue;
     if (!uiSchema.hasOwnProperty('runtime')) {
-      const runtime = new Runtime();
-      uiSchema['runtime'] = runtime;
+      uiSchema['runtime'] = new Runtime();
     }
     const runtime = <Runtime>uiSchema['runtime'];
     switch (uiSchema.rule.effect) {
@@ -64,6 +87,7 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
       case RuleEffect.ENABLE: runtime.enabled = equals; break;
     }
   }
+
   private initialRun(data: any) {
     Object.keys(this.pathToControlMap).forEach(
       key => this.pathToControlMap[key].forEach(

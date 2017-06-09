@@ -11,7 +11,10 @@ class LabelObject implements ILabelObject {
         this.show = show;
     }
 }
-// poor man's version of a startCase implementation
+/**
+ * Poor man's version of a startCase implementation
+ * @param {string} the label string that is to be capitalized
+ */
 // FIXME why export and if so why here?
 export const startCase = (label: string): string =>
     ((label && label.split(/(?=[A-Z])/)) || [])
@@ -56,6 +59,13 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
     }
     return false;
 };
+
+/**
+ * Return a label object based on the given JSON schema and control element.
+ * @param {JsonSchema} schema the JSON schema that the given control element is referring to
+ * @param {ControlElement} controlElement the UI schema to obtain a label object for
+ * @returns {ILabelObject}
+ */
 export const getElementLabelObject =
   (schema: JsonSchema, controlElement: ControlElement): ILabelObject => {
   const labelObject = getLabelObject(controlElement);
