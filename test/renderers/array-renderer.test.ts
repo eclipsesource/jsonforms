@@ -411,7 +411,7 @@ test('array-layout Tester', t => {
       arrayTester(
           { type: 'Control', scope: { $ref: '#/properties/x' } } as ControlElement,
           {label: '', schema: { type: 'object',  properties: { x: { type: 'integer' } } },
-            dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
+            dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.SINGLE} as ItemModel
       ),
       -1
   );
@@ -419,7 +419,7 @@ test('array-layout Tester', t => {
       arrayTester(
           { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
           {label: '', schema: { type: 'object',  properties: { foo: { type: 'array'} } },
-            dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
+            dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.SINGLE} as ItemModel
       ),
       -1
   );
@@ -438,7 +438,7 @@ test('array-layout Tester', t => {
                           ]
                       }
                   }
-          }, dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
+          }, dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.SINGLE} as ItemModel
       ),
       -1
   );
@@ -455,7 +455,7 @@ test('array-layout Tester', t => {
                         items: { type: 'integer' }
                     }
                 }
-            }, dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.ROOT} as ItemModel
+            }, dropPoints: {}, attributes: {}, type: ITEM_MODEL_TYPES.SINGLE} as ItemModel
         ),
         -1
     );

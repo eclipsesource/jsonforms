@@ -24,7 +24,7 @@ export enum MULTIPLICITY_TYPES {
   ALL_OF, ANY_OF, ONE_OF, NOT
 }
 export enum ITEM_MODEL_TYPES {
-  ROOT, ARRAY, OBJECT
+  SINGLE, ARRAY, OBJECT
 }
 
 export function isItemModel

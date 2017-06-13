@@ -103,6 +103,54 @@ test('no support for tuple array ', t => {
         });
     });
 });
+test('no support for simple string array in object', t => {
+    const schema_stringarray = {
+      type: 'object',
+      properties: {
+        foos: {
+          type: 'array',
+          items: {
+            type: 'string'
+          }
+        }
+      }
+    } as JsonSchema;
+    const extractor = new SchemaExtractor(schema_stringarray);
+    return extractor.extract().then(result => {
+      t.true(isItemModel(result));
+      t.deepEqual(result,
+        {
+          label: 'root',
+          schema: {
+            type: 'object',
+            properties: {
+              foos: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                }
+              }
+            }
+          },
+          dropPoints: {},
+          attributes: {
+            foos: {
+              label: 'foos',
+              schema: {
+                type: 'array',
+                items: {
+                  type: 'string'
+                }
+              },
+              dropPoints: {},
+              attributes: {},
+              type: 0
+            }
+          },
+          type: 0
+        });
+    });
+});
 test('no support for simple string array ', t => {
     const schema_stringarray = {
       type: 'array',
@@ -112,6 +160,7 @@ test('no support for simple string array ', t => {
     } as JsonSchema;
     const extractor = new SchemaExtractor(schema_stringarray);
     return extractor.extract().then(result => {
+      console.log(JSON.stringify(result));
       t.true(isItemModel(result));
       t.deepEqual(result,
         {
@@ -272,7 +321,7 @@ test('root object object properties is dropPoint', t => {
               schema: {type: 'object'},
               dropPoints: {},
               attributes: {},
-              type: 2
+              type: 0
             }
           },
           attributes: {},
@@ -1258,7 +1307,7 @@ test('support easy uml schema with object', t => {
               type: 0
             }
           },
-          type: ITEM_MODEL_TYPES.ROOT
+          type: ITEM_MODEL_TYPES.SINGLE
         } as ItemModel);
     });
 });
@@ -1327,10 +1376,10 @@ test('support easy uischema control', t => {
               schema: {type: 'string'},
               dropPoints: {},
               attributes: {},
-              type: 2
+              type: 0
             }
           },
-          type: 2
+          type: 0
         }
       },
       attributes: {
@@ -1433,7 +1482,7 @@ test('support easy uischema layout, actually invalid', t => {
           type: 0
         }
       },
-      type: ITEM_MODEL_TYPES.ROOT
+      type: ITEM_MODEL_TYPES.SINGLE
     } as ItemModel;
     layout.dropPoints.elements['models'].push(layout);
     t.deepEqual(result, layout);
@@ -1602,7 +1651,7 @@ test.failing('support easy uischema, actually invalid', t => {
             type: 0
           }
         },
-        type: ITEM_MODEL_TYPES.ROOT
+        type: ITEM_MODEL_TYPES.SINGLE
       } as ItemModel;
       layout.dropPoints.elements['models'].push(layout);
       t.deepEqual(result, layout);

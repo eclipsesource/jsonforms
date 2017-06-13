@@ -973,7 +973,7 @@ test('TreeMasterDetailRenderer dataService notification wrong ref', t => {
         type: ITEM_MODEL_TYPES.ARRAY
       } as ItemModel
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {}
   } as ItemModel);
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar',
@@ -1013,7 +1013,7 @@ test('TreeMasterDetailRenderer dataService notification null ref', t => {
         type: ITEM_MODEL_TYPES.ARRAY
       } as ItemModel
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {}
   } as ItemModel);
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar',
@@ -1053,7 +1053,7 @@ test('TreeMasterDetailRenderer dataService notification undefined ref', t => {
         type: ITEM_MODEL_TYPES.ARRAY
       } as ItemModel
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {}
   } as ItemModel);
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar',
@@ -1093,7 +1093,7 @@ test('TreeMasterDetailRenderer dataService no notification after disconnect', t 
         type: ITEM_MODEL_TYPES.ARRAY
       } as ItemModel
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {}
   } as ItemModel);
   renderer.setUiSchema({type: 'MasterDetailLayout', label: 'FooBar',
@@ -1141,7 +1141,7 @@ test('TreeMasterDetailRenderer dataService notification', t => {
         type: ITEM_MODEL_TYPES.ARRAY
       }
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {
       name: {
         schema: schema.properties['name'],
@@ -1199,7 +1199,7 @@ test('TreeMasterDetailRenderer dataService notification value undefined', t => {
         type: ITEM_MODEL_TYPES.ARRAY
       }
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {
       name: {
         schema: schema.properties['name'],
@@ -1253,14 +1253,14 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
         type: ITEM_MODEL_TYPES.ARRAY
       }
     },
-    type: ITEM_MODEL_TYPES.ROOT,
+    type: ITEM_MODEL_TYPES.SINGLE,
     attributes: {
       name: {
         label: 'name',
         schema: schema.properties['name'],
         dropPoints: {},
         attributes: {},
-        type: ITEM_MODEL_TYPES.ROOT
+        type: ITEM_MODEL_TYPES.SINGLE
       }
     }
   });

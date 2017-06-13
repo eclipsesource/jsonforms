@@ -39,6 +39,9 @@ export const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {})
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
   }
+  if (schema['links'] !== undefined) {
+    schema['links'].forEach(link => result[link.targetSchema] = schema);
+  }
   return result;
 };
 

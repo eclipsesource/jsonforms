@@ -152,7 +152,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           if (Array.isArray(firstChild)) {
             firstChild = firstChild[0];
           }
-          this.renderDetail(firstChild, <HTMLLIElement>this.master.firstChild.firstChild, schema);
+          this.renderDetail(firstChild, <HTMLLIElement>this.master.firstChild.firstChild,
+            innerModel);
         } else if (isMultipleItemModel(innerModel)) {
           // TODO selectFirstElement for MultipleItemModel
         } else if (isReferenceModel(innerModel)) {
@@ -215,12 +216,21 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   */
   private getArrayProperties(model: FullDataModelType): Array<string> {
     if (isItemModel(model)) {
-      return Object.keys(model.dropPoints);
+      return Object.keys(model.dropPoints).filter(key => {
+        const dropModel = model.dropPoints[key];
+        if (isItemModel(dropModel) && dropModel.type === ITEM_MODEL_TYPES.SINGLE) {
+          return false;
+        }
+        if (isReferenceModel(dropModel)) {
+          return false;
+        }
+        return true;
+      });
     } else if (isMultipleItemModel(model)) {
       // TODO get array properties for MultipleItemModel
-      return undefined;
+      return model.models.reduce((prev, inner) => prev.concat(this.getArrayProperties(inner)), []);
     } else if (isReferenceModel(model)) {
-      return this.getArrayProperties(model.targetModel);
+      return []; // this.getArrayProperties(model.targetModel);
     }
   }
   /**
@@ -295,7 +305,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     const span = document.createElement('span');
     span.classList.add('label');
     let schema: JsonSchema = extractSchemaFromModel(model);
-    span.onclick = (ev: Event) => this.renderDetail(data, li, schema);
+    span.onclick = (ev: Event) => this.renderDetail(data, li, model);
     const spanText = document.createElement('span');
     spanText.textContent = this.getNamingFunction(model)(data);
     span.appendChild(spanText);
@@ -332,6 +342,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           };
           addButtons(droppoint);
         });
+        this.dialog.style.left = ev['clientX'].toString() + 'px';
+        this.dialog.style.top = ev['clientY'].toString() + 'px';
         this.dialog.showModal();
       };
       spanAdd.textContent = '\u2795';
@@ -398,7 +410,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   /*
     Render an element's details with JsonForms.
   */
-  private renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
+  private renderDetail(element: Object, label: HTMLLIElement, model: FullDataModelType): void {
     if (this.detail.lastChild !== null) {
       this.detail.removeChild(this.detail.lastChild);
     }
@@ -410,7 +422,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
 
     const jsonForms = <JsonForms>document.createElement('json-forms');
     jsonForms.data = element;
-    jsonForms.dataSchema = schema;
+    jsonForms.dataModel = model;
     // check needed for tests
     if (jsonForms.addDataChangeListener) {
       jsonForms.addDataChangeListener({
@@ -420,12 +432,11 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         notifyChange: (uischema: ControlElement, newValue: any, data: any): void => {
           const segments = uischema.scope.$ref.split('/');
           const lastSegemnet = segments[segments.length - 1];
-          if (lastSegemnet === this.uischema.options['labelProvider'][schema.id]) {
+          if (lastSegemnet === this.uischema.options['labelProvider'][model['schema'].id]) {
             label.firstChild.lastChild.firstChild.textContent = newValue;
           }
           if (Array.isArray(newValue)) {
-            this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref)['items'],
-            label, lastSegemnet);
+            this.renderChildren(newValue, model, label, lastSegemnet);
           }
         }
       });

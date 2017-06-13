@@ -18,7 +18,7 @@ export class SchemaExtractor {
       this.$refs = $refs;
       return new Promise<ItemModel|MultipleItemModel|null|DummyModel|ReferenceModel>
       ((resolve, reject) => {
-        const result = this.parse('root', this.schema, true, ITEM_MODEL_TYPES.ROOT);
+        const result = this.parse('root', this.schema, true, ITEM_MODEL_TYPES.SINGLE);
         this.cleanUp(result);
         resolve(result);
       });
@@ -153,7 +153,10 @@ export class SchemaExtractor {
       const itemSchema = schema.items;
       if (!(itemSchema instanceof Array)) {
         const innerItem = this.parse(root ?
-            'array' : property, itemSchema, root, ITEM_MODEL_TYPES.ARRAY);
+            'array' : property, itemSchema, false, ITEM_MODEL_TYPES.ARRAY);
+        if (innerItem === null && !root) {
+          return null;
+        }
         if (type !== ITEM_MODEL_TYPES.ARRAY && innerItem !== null) {
           return innerItem;
         }
@@ -170,7 +173,7 @@ export class SchemaExtractor {
       if (schema.properties !== undefined) {
         Object.keys(schema.properties).forEach(key => {
           const innerSchema = schema.properties[key];
-          const innerItem = this.parse(key, innerSchema, false, ITEM_MODEL_TYPES.OBJECT);
+          const innerItem = this.parse(key, innerSchema, false, ITEM_MODEL_TYPES.SINGLE);
           if (innerItem !== null) {
             result.dropPoints[key] = innerItem;
           } else {

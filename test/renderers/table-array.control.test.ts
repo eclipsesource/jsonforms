@@ -71,7 +71,7 @@ test('generate array child control', t => {
         }
       },
       attributes: {},
-      type: ITEM_MODEL_TYPES.ROOT
+      type: ITEM_MODEL_TYPES.SINGLE
     } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
@@ -177,7 +177,7 @@ test('generate array child control w/o data', t => {
         }
       },
       attributes: {},
-      type: ITEM_MODEL_TYPES.ROOT
+      type: ITEM_MODEL_TYPES.SINGLE
     } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
@@ -257,7 +257,7 @@ test('array-layout add click w/o data', t => {
         }
       },
       attributes: {},
-      type: ITEM_MODEL_TYPES.ROOT
+      type: ITEM_MODEL_TYPES.SINGLE
     } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
@@ -310,7 +310,7 @@ test('array-layout add click with data', t => {
         }
       },
       attributes: {},
-      type: ITEM_MODEL_TYPES.ROOT
+      type: ITEM_MODEL_TYPES.SINGLE
     } as ItemModel);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
@@ -364,7 +364,7 @@ test('array-layout DataService notification', t => {
       }
     },
     attributes: {},
-    type: ITEM_MODEL_TYPES.ROOT
+    type: ITEM_MODEL_TYPES.SINGLE
   } as ItemModel);
   renderer.setUiSchema(uiSchema);
   renderer.connectedCallback();
