@@ -14,46 +14,6 @@ body {
   margin: 0;
   padding: 1em;
 }
-
-body.dark {
-  --jsf-main-bg-color: #222227;
-  --jsf-modest-bg-color: #333333;
-  --jsf-border-color: #444444;
-  --jsf-modest-bg-highlight-color: #444444;
-  --jsf-validation-color: darkred;
-  --jsf-main-fg-color: #999999;
-  background-color: var(--jsf-main-bg-color);
-  color: var(--jsf-main-fg-color);
-}
-body.dark select {
-  background-color: var(--jsf-main-bg-color);
-  color: var(--jsf-main-fg-color);
-  border-color: var(--jsf-border-color);
-}
-body.dark textarea {
-  background-color: var(--jsf-main-bg-color);
-  color: var(--jsf-main-fg-color);
-}
-body.dark button {
-  background-color: var(--jsf-modest-bg-color);
-  color: var(--jsf-main-fg-color);
-}
-body.labelFixed .control {
-  flex-direction: row;
-}
-body.labelFixed .control > label {
-  min-width: 10em;
-  text-align: end;
-  margin-right: 1em;
-}
-body.labelFixed .control > .input {
-  flex: 1;
-}
-/* Workaround for https://bugs.chromium.org/p/chromium/issues/detail?id=375693 */
-/*body.labelFixed .control > fieldset {
-  display: block;
-  width: 100%;
-}*/
 /* Common */
 [hidden] {display: none;}
 /* Controls */

@@ -1,0 +1,30 @@
+body.dark {
+  --jsf-main-bg-color: #222227;
+  --jsf-modest-bg-color: #333333;
+  --jsf-border-color: #444444;
+  --jsf-modest-bg-highlight-color: #444444;
+  --jsf-validation-color: darkred;
+  --jsf-main-fg-color: #999999;
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body.dark input {
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body.dark input:focus {
+  background-color: var(--jsf-main-bg-color);
+}
+body.dark select {
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+  border-color: var(--jsf-border-color);
+}
+body.dark textarea {
+  background-color: var(--jsf-main-bg-color);
+  color: var(--jsf-main-fg-color);
+}
+body.dark button {
+  background-color: var(--jsf-modest-bg-color);
+  color: var(--jsf-main-fg-color);
+}

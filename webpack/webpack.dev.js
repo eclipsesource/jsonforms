@@ -30,6 +30,8 @@ module.exports = [{
         new webpack.HotModuleReplacementPlugin(),
         new copyWebpackPlugin([
             { from: 'example/example.css' },
+            { from: 'example/example.dark.css' },
+            { from: 'example/example.labelfixed.css' },
             { from: 'lib/native-shim.js'  },
             { from: 'node_modules/jquery/dist/jquery.js'               },
             { from: 'node_modules/bootstrap/dist/css/bootstrap.css'    },
