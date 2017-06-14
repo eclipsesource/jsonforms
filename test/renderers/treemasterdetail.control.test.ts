@@ -9,8 +9,8 @@ import {ControlElement} from '../../src/models/uischema';
 import {TreeMasterDetailRenderer, treeMasterDetailTester}
   from '../../src/renderers/additional/tree-renderer';
 import {DataService } from '../../src/core/data.service';
-import {JsonFormsHolder} from '../../src/core';
-import {JsonForms} from '../../src/json-forms';
+import {JsonForms} from '../../src/core';
+import {JsonFormsElement} from '../../src/json-forms';
 import {Runtime} from '../../src/core/runtime';
 
 test('TreeMasterDetailTester', t => {
@@ -657,7 +657,7 @@ test('TreeMasterDetailRenderer dataService notification wrong ref', t => {
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   const ulNew = master.children[0];
   t.is(ulNew, ul);
   t.is(renderer.children.length, 3);
@@ -683,7 +683,7 @@ test('TreeMasterDetailRenderer dataService notification null ref', t => {
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange(null, undefined);
+  dataService.notifyAboutDataChange(null, undefined);
   const ulNew = master.children[0];
   t.is(ulNew, ul);
   t.is(renderer.children.length, 3);
@@ -709,7 +709,7 @@ test('TreeMasterDetailRenderer dataService notification undefined ref', t => {
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange(undefined, undefined);
+  dataService.notifyAboutDataChange(undefined, undefined);
   const ulNew = master.children[0];
   t.is(ulNew, ul);
   t.is(renderer.children.length, 3);
@@ -736,7 +736,7 @@ test('TreeMasterDetailRenderer dataService no notification after disconnect', t 
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/children'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/children'}}, 'Bar');
   const ulNew = master.children[0];
   t.is(ulNew, ul);
   t.is(renderer.children.length, 3);
@@ -762,7 +762,7 @@ test('TreeMasterDetailRenderer dataService notification', t => {
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange({type: 'MasterDetailLayout', scope: {$ref: '#/properties/children'}},
+  dataService.notifyAboutDataChange({type: 'MasterDetailLayout', scope: {$ref: '#/properties/children'}},
     [{name: 'Bar'}, {name: 'Doe'}]);
   const ulNew = master.children[0];
   const equal = ul === ulNew;
@@ -792,7 +792,7 @@ test('TreeMasterDetailRenderer dataService notification value undefined', t => {
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/children'}}, undefined);
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/children'}}, undefined);
   const ulNew = master.children[0];
   const equal = ul === ulNew;
   t.false(equal);
@@ -817,7 +817,7 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
   const master = <HTMLDivElement>content.children[0]; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/children'}}, null);
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/children'}}, null);
   const ulNew = master.children[0];
   const equal = ul === ulNew;
   t.false(equal);

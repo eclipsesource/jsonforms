@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../../models/uischema';
 import { JsonSchema } from '../../models/jsonSchema';
-import { JsonForms } from '../../json-forms';
+import { JsonFormsElement } from '../../json-forms';
 import { Renderer } from '../../core/renderer';
 import { DataChangeListener} from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
@@ -42,7 +42,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
   /**
    * @inheritDoc
    */
-  isRelevantKey (uischema: ControlElement): boolean {
+  needsNotificationAbout (uischema: ControlElement): boolean {
     return uischema === undefined || uischema === null
     ? false : (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
   }
@@ -50,7 +50,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
   /**
    * @inheritDoc
    */
-  notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
 
@@ -59,14 +59,14 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
    */
   connectedCallback(): void {
     super.connectedCallback();
-    this.dataService.registerChangeListener(this);
+    this.dataService.registerDataChangeListener(this);
   }
 
   /**
    * @inheritDoc
    */
   disconnectedCallback(): void {
-    this.dataService.unregisterChangeListener(this);
+    this.dataService.deregisterDataChangeListener(this);
     super.disconnectedCallback();
   }
 
@@ -122,7 +122,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
           return;
         }
         const column = document.createElement('td');
-        const jsonForms = <JsonForms>document.createElement('json-forms');
+        const jsonForms = <JsonFormsElement>document.createElement('json-forms');
         jsonForms.data = element;
         jsonForms.uiSchema = {
           type: 'Control',
@@ -150,7 +150,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
       const element = {};
       arrayData.push(element);
       renderChild(element);
-      this.dataService.notifyChange(controlElement, arrayData);
+      this.dataService.notifyAboutDataChange(controlElement, arrayData);
     };
 
     header.appendChild(button);

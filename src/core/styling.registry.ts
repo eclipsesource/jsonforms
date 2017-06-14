@@ -39,11 +39,11 @@ export interface StylingRegistry {
     registerMany(styles: Array<Style>): void;
 
     /**
-     * Un-register a style.
+     * Deregister a style.
      *
      * @param styleName the name of the style to be un-registered
      */
-    unregister(styleName: string): void;
+    deregister(styleName: string): void;
 
     /**
      * Obtain the CSS class name associated with the given style name.
@@ -75,10 +75,10 @@ export class StylingRegistryImpl implements StylingRegistry {
     register(name: string, classNames: string[]): void;
     register(style: string|Style, classNames?: string[]): void {
         if (typeof style === 'string') {
-            this.unregister(style);
+            this.deregister(style);
             this.styles.push({name: style, classNames});
         } else {
-            this.unregister(style.name);
+            this.deregister(style.name);
             this.styles.push(style);
         }
     }
@@ -87,7 +87,7 @@ export class StylingRegistryImpl implements StylingRegistry {
         styles.forEach(style => this.register(style.name, style.classNames))
     }
 
-    unregister(styleName: any) {
+    deregister(styleName: any) {
         _.remove(this.styles, style => style.name === styleName);
     }
 

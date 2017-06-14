@@ -1,7 +1,7 @@
 import {registerExamples} from '../example';
-import {JsonFormsHolder} from '../../src/core';
+import {JsonForms} from '../../src/core';
 import {Renderer} from '../../src/core/renderer';
-import {JsonForms} from '../../src/json-forms';
+import {JsonFormsElement} from '../../src/json-forms';
 import { resolveSchema } from '../../src/path.util';
 import { UISchemaElement, ControlElement } from '../../src/models/uischema';
 import { JsonSchema } from '../../src/models/jsonSchema';
@@ -114,7 +114,7 @@ const data =  {
 };
 
 const resetServices = () => {
-  const jsonforms = <JsonForms>document.getElementsByTagName('json-forms')[0];
+  const jsonforms = <JsonFormsElement>document.getElementsByTagName('json-forms')[0];
   jsonforms.data = data;
 };
 
@@ -129,7 +129,7 @@ class MyControl extends Renderer {
       const span = document.createElement('span');
       span.innerText = '\u2606';
       span.onclick = () => {
-        this.dataService.notifyChange(controlElement, i);
+        this.dataService.notifyAboutDataChange(controlElement, i);
         this.updateSpans(span);
       };
       span.onmouseover = () => {
@@ -179,7 +179,7 @@ const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Custom Control';
   buttonRegister.onclick = () => {
-    JsonFormsHolder.rendererService.registerRenderer(tester, 'my-control');
+    JsonFormsElement.rendererService.registerRenderer(tester, 'my-control');
     // HACK to retrigger service creation
     resetServices();
   };
@@ -187,7 +187,7 @@ const setup = (div: HTMLDivElement) => {
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Custom Control';
   buttonUnregister.onclick = () => {
-    JsonFormsHolder.rendererService.unregisterRenderer(tester, 'my-control');
+    JsonFormsElement.rendererService.deregisterRenderer(tester, 'my-control');
     // HACK to retrigger service creation
     resetServices();
   };

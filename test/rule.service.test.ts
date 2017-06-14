@@ -34,52 +34,52 @@ test.beforeEach(t => {
   t.context.control5['runtime'] = new Runtime();
   t.context.control6['runtime'] = new Runtime();
 });
-test('JsonFormsRuleService registers as datalisteners ', t => {
+test('rule service should act as data change listener', t => {
   const ruleService = new JsonFormsRuleService(t.context.dataService,
     t.context.schema, {} as UISchemaElement);
-  const dataServiceListeners = <Array<any>>t.context.dataService['changeListeners'];
+  const dataServiceListeners = <Array<any>>t.context.dataService['dataChangeListeners'];
   t.is(dataServiceListeners.length, 1);
   t.is(dataServiceListeners[0], ruleService);
 });
-test('JsonFormsRuleService dispose unregisters as datalisteners ', t => {
+test('disposing the rule service should de-register it as data change listener', t => {
   const ruleService = new JsonFormsRuleService(t.context.dataService,
     t.context.schema, {} as UISchemaElement);
   ruleService.dispose();
-  const dataServiceListeners = <Array<any>>t.context.dataService['changeListeners'];
+  const dataServiceListeners = <Array<any>>t.context.dataService['dataChangeListeners'];
   t.is(dataServiceListeners.length, 0);
 });
-test('JsonFormsRuleService isRelevantKey null ', t => {
+test('rule service needs notification about null', t => {
   const ruleService = new JsonFormsRuleService(t.context.dataService,
     t.context.schema, {} as UISchemaElement);
-  t.true(ruleService.isRelevantKey(null));
+  t.true(ruleService.needsNotificationAbout(null));
 });
-test('JsonFormsRuleService isRelevantKey existing', t => {
-  const uischema = {type: 'VerticalLayout', elements: [t.context.control1, t.context.control2,
+test('rule service needs notification about registered control', t => {
+  const uiSchema = {type: 'VerticalLayout', elements: [t.context.control1, t.context.control2,
     t.context.control3, t.context.control4, t.context.control5, t.context.control6]} as Layout;
-  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uischema);
-  t.true(ruleService.isRelevantKey(t.context.control1));
+  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uiSchema);
+  t.true(ruleService.needsNotificationAbout(t.context.control1));
 });
-test('JsonFormsRuleService isRelevantKey not existing', t => {
-  const uischema = {type: 'VerticalLayout', elements: [t.context.control1]} as Layout;
-  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uischema);
-  t.false(ruleService.isRelevantKey(t.context.control2));
+test('rule service does not need notification about un-registered controls', t => {
+  const uiSchema = {type: 'VerticalLayout', elements: [t.context.control1]} as Layout;
+  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uiSchema);
+  t.false(ruleService.needsNotificationAbout(t.context.control2));
 });
-test('JsonFormsRuleService notifyChange null updates all rules', t => {
-  const uischema = {type: 'VerticalLayout', elements: [t.context.control1, t.context.control2,
+test('data change with null should update all rules', t => {
+  const uiSchema = {type: 'VerticalLayout', elements: [t.context.control1, t.context.control2,
     t.context.control3, t.context.control4, t.context.control5, t.context.control6]} as Layout;
-  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uischema);
-  ruleService.notifyChange(null, null, t.context.data);
+  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uiSchema);
+  ruleService.dataChanged(null, null, t.context.data);
   t.false((<Runtime>t.context.control3['runtime']).visible);
   t.true((<Runtime>t.context.control4['runtime']).visible);
   t.true((<Runtime>t.context.control5['runtime']).enabled);
   t.false((<Runtime>t.context.control6['runtime']).enabled);
 });
-test('JsonFormsRuleService notifyChange updates relevant rules', t => {
-  const uischema = {type: 'VerticalLayout', elements: [t.context.control1, t.context.control2,
+test('data change should update relevant rules', t => {
+  const uiSchema = {type: 'VerticalLayout', elements: [t.context.control1, t.context.control2,
     t.context.control3, t.context.control4, t.context.control5, t.context.control6]} as Layout;
-  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uischema);
+  const ruleService = new JsonFormsRuleService(t.context.dataService, t.context.schema, uiSchema);
   t.context.data.foo = 'Jane';
-  ruleService.notifyChange(t.context.control1, null, t.context.data);
+  ruleService.dataChanged(t.context.control1, null, t.context.data);
   t.true((<Runtime>t.context.control3['runtime']).visible);
   t.false((<Runtime>t.context.control5['runtime']).enabled);
 });

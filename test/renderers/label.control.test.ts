@@ -11,7 +11,7 @@ import {Runtime} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
 
 
-test('labelRendererTester', t => {
+test('Label tester', t => {
   t.is(
       labelRendererTester(undefined, undefined),
       -1
@@ -29,7 +29,7 @@ test('labelRendererTester', t => {
       1
   );
 });
-test('LabelRenderer static text undefined', t => {
+test('Render Label with static undefined text', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: LabelRenderer = new LabelRenderer();
   const data = {'name': 'Foo'};
@@ -37,11 +37,11 @@ test('LabelRenderer static text undefined', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Label'} as LabelElement);
   const result = renderer.render();
-  t.is(result.className, 'jsf-label')
+  t.is(result.className, 'jsf-label');
   t.is(result.childNodes.length, 0);
   t.is(result.textContent, '');
 });
-test('LabelRenderer static text null', t => {
+test('Render Label with static null text', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: LabelRenderer = new LabelRenderer();
   const data = {'name': 'Foo'};
@@ -49,11 +49,11 @@ test('LabelRenderer static text null', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Label', text: null} as LabelElement);
   const result = renderer.render();
-  t.is(result.className, 'jsf-label')
+  t.is(result.className, 'jsf-label');
   t.is(result.childNodes.length, 0);
   t.is(result.textContent, '');
 });
-test('LabelRenderer static text', t => {
+test('Render Label with static text', t => {
   const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: LabelRenderer = new LabelRenderer();
   const data = {'name': 'Foo'};
@@ -61,11 +61,11 @@ test('LabelRenderer static text', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema({type: 'Label', text: 'Bar'} as LabelElement);
   const result = renderer.render();
-  t.is(result.className, 'jsf-label')
+  t.is(result.className, 'jsf-label');
   t.is(result.childNodes.length, 1);
   t.is(result.textContent, 'Bar');
 });
-test('LabelRenderer notify visible false', t => {
+test('Hide Label', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const labelElement = {type: 'Label', text: 'Bar'} as LabelElement;
   const data = {'name': 'Foo'};
@@ -79,7 +79,7 @@ test('LabelRenderer notify visible false', t => {
   runtime.visible = false;
   t.is(renderer.hidden, true);
 });
-test('LabelRenderer notify visible true', t => {
+test('Show Label', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const labelElement = {type: 'Label', text: 'Bar'} as LabelElement;
   const data = {'name': 'Foo'};
@@ -94,7 +94,7 @@ test('LabelRenderer notify visible true', t => {
   t.is(renderer.hidden, false);
 });
 
-test('LabelRenderer notify disabled', t => {
+test('Disable Label', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const labelElement = {type: 'Label', text: 'Bar'} as LabelElement;
   const data = {'name': 'Foo'};
@@ -108,7 +108,7 @@ test('LabelRenderer notify disabled', t => {
   runtime.enabled = false;
   t.is(renderer.getAttribute('disabled'), 'true');
 });
-test('LabelRenderer notify enabled', t => {
+test('Enable Label', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const labelElement = {type: 'Label', text: 'Bar'} as LabelElement;
   const data = {'name': 'Foo'};
@@ -122,7 +122,7 @@ test('LabelRenderer notify enabled', t => {
   runtime.enabled = true;
   t.false(renderer.hasAttribute('disabled'));
 });
-test('LabelRenderer disconnected no notify visible', t => {
+test('Label should not be hidden if disconnected', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const labelElement = {type: 'Label', text: 'Bar'} as LabelElement;
   const data = {'name': 'Foo'};
@@ -137,7 +137,7 @@ test('LabelRenderer disconnected no notify visible', t => {
   runtime.visible = false;
   t.is(renderer.hidden, false);
 });
-test('LabelRenderer disconnected no notify enabled', t => {
+test('Label should not be disabled if disconnected', t => {
   const renderer: LabelRenderer = new LabelRenderer();
   const labelElement = {type: 'Label', text: 'Bar'} as LabelElement;
   const data = {'name': 'Foo'};

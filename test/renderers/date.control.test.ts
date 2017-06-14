@@ -119,7 +119,7 @@ test('DateControl dataService notification', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, '1980-04-04');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, '1980-04-04');
   t.deepEqual(input.valueAsDate, new Date('1980-04-04'));
 });
 test.failing('DateControl dataService notification value undefined', t => {
@@ -132,7 +132,7 @@ test.failing('DateControl dataService notification value undefined', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
   t.is(input.valueAsDate, null);
 });
 test.failing('DateControl dataService notification value null', t => {
@@ -145,7 +145,7 @@ test.failing('DateControl dataService notification value null', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.valueAsDate, null);
 });
 test('DateControl dataService notification wrong ref', t => {
@@ -158,7 +158,7 @@ test('DateControl dataService notification wrong ref', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.deepEqual(input.valueAsDate, new Date('1980-04-04'));
 });
 test('DateControl dataService notification null ref', t => {
@@ -171,7 +171,7 @@ test('DateControl dataService notification null ref', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange(null, '1961-04-12');
+  dataService.notifyAboutDataChange(null, '1961-04-12');
   t.deepEqual(input.valueAsDate, new Date('1980-04-04'));
 });
 test('DateControl dataService notification undefined ref', t => {
@@ -184,7 +184,7 @@ test('DateControl dataService notification undefined ref', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange(undefined, '1961-04-12');
+  dataService.notifyAboutDataChange(undefined, '1961-04-12');
   t.deepEqual(input.valueAsDate, new Date('1980-04-04'));
 });
 test('DateControl dataService no notification after disconnect', t => {
@@ -198,7 +198,7 @@ test('DateControl dataService no notification after disconnect', t => {
   renderer.connectedCallback();
   renderer.disconnectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.deepEqual(input.valueAsDate, new Date('1980-04-04'));
 });
 test('DateControl notify visible false', t => {

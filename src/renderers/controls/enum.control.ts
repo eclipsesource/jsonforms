@@ -54,7 +54,7 @@ export class EnumControl extends BaseControl<HTMLSelectElement> {
   /**
    * @inheritDoc
    */
-  protected get inputElement(): HTMLSelectElement {
+  protected createInputElement(): HTMLSelectElement {
     return document.createElement('select');
   }
 

@@ -49,7 +49,7 @@ export class TextControl extends BaseControl<HTMLInputElement> {
   /**
    * @inheritDoc
    */
-  protected get inputElement(): HTMLInputElement {
+  protected createInputElement(): HTMLInputElement {
     return document.createElement('input');
   }
 }

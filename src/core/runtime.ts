@@ -14,7 +14,7 @@ export interface RuntimeListener {
    * Called when a runtime related property changes.
    * @param {RUNTIME_TYPE} type the type of runtime change
    */
-  notify(type: RUNTIME_TYPE): void;
+  runtimeUpdated(type: RUNTIME_TYPE): void;
 }
 
 /**
@@ -52,7 +52,7 @@ export class Runtime {
    */
   set visible(visible: boolean) {
     this._visible = visible;
-    this.notifyListeners(RUNTIME_TYPE.VISIBLE);
+    this.notifyRuntimeListeners(RUNTIME_TYPE.VISIBLE);
   };
 
   /**
@@ -61,7 +61,7 @@ export class Runtime {
    */
   set enabled(enabled: boolean) {
     this._enabled = enabled;
-    this.notifyListeners(RUNTIME_TYPE.ENABLED);
+    this.notifyRuntimeListeners(RUNTIME_TYPE.ENABLED);
   };
 
   /**
@@ -71,7 +71,7 @@ export class Runtime {
    */
   set validationErrors(validationErrors: Array<string>) {
     this._validationErrors = validationErrors;
-    this.notifyListeners(RUNTIME_TYPE.VALIDATION_ERROR);
+    this.notifyRuntimeListeners(RUNTIME_TYPE.VALIDATION_ERROR);
   };
 
   /**
@@ -79,7 +79,7 @@ export class Runtime {
    *
    * @param {RuntimeListener} listener the runtime listener to be added
    */
-  addListener(listener: RuntimeListener): void {
+  registerRuntimeListener(listener: RuntimeListener): void {
     this._listeners.push(listener);
   }
 
@@ -88,7 +88,7 @@ export class Runtime {
    *
    * @param {RuntimeListener} listener the runtime listener to be removed
    */
-  removeListener(listener: RuntimeListener): void {
+  deregisterRuntimeListener(listener: RuntimeListener): void {
     this._listeners.splice(this._listeners.indexOf(listener), 1);
   }
 
@@ -97,7 +97,7 @@ export class Runtime {
    *
    * @param {RUNTIME_TYPE} type the runtime type
    */
-  private notifyListeners(type: RUNTIME_TYPE): void {
-    this._listeners.forEach(listener => listener.notify(type));
+  private notifyRuntimeListeners(type: RUNTIME_TYPE): void {
+    this._listeners.forEach(listener => listener.runtimeUpdated(type));
   }
 }

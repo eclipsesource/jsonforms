@@ -1,4 +1,4 @@
-import {JsonFormsHolder} from '../core';
+import {JsonForms} from '../core';
 import {Renderer} from '../core/renderer';
 import {RankedTester} from '../core/testers';
 
@@ -34,5 +34,5 @@ export const JsonFormsRenderer =
     (config: JsonFormsRendererConfig) =>
         (cls: JsonFormsRendererConstructable) => {
             customElements.define(config.selector, cls);
-            JsonFormsHolder.rendererService.registerRenderer(config.tester, config.selector);
+            JsonForms.rendererService.registerRenderer(config.tester, config.selector);
         };

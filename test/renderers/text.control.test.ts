@@ -95,7 +95,7 @@ test('TextControl dataService notification', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Bar');
 });
 test('TextControl dataService notification value undefined', t => {
@@ -108,7 +108,7 @@ test('TextControl dataService notification value undefined', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, undefined);
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, undefined);
   t.is(input.value, '');
 });
 test('TextControl dataService notification value null', t => {
@@ -121,7 +121,7 @@ test('TextControl dataService notification value null', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
   t.is(input.value, '');
 });
 test('TextControl dataService notification wrong ref', t => {
@@ -134,7 +134,7 @@ test('TextControl dataService notification wrong ref', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/firstname'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/firstname'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
 test('TextControl dataService notification null ref', t => {
@@ -147,7 +147,7 @@ test('TextControl dataService notification null ref', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange(null, 'Bar');
+  dataService.notifyAboutDataChange(null, 'Bar');
   t.is(input.value, 'Foo');
 });
 test('TextControl dataService notification undefined ref', t => {
@@ -160,7 +160,7 @@ test('TextControl dataService notification undefined ref', t => {
   renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
   renderer.connectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange(undefined, 'Bar');
+  dataService.notifyAboutDataChange(undefined, 'Bar');
   t.is(input.value, 'Foo');
 });
 test('TextControl dataService no notification after disconnect', t => {
@@ -174,7 +174,7 @@ test('TextControl dataService no notification after disconnect', t => {
   renderer.connectedCallback();
   renderer.disconnectedCallback();
   const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
 test('TextControl notify visible false', t => {

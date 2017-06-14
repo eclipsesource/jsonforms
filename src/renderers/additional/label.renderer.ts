@@ -46,7 +46,7 @@ export class LabelRenderer extends Renderer {
    * @inheritDoc
    * @param type
    */
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
       case RUNTIME_TYPE.VISIBLE:
