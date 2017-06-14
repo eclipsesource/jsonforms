@@ -1,35 +1,59 @@
 import { JsonSchema } from './models/jsonSchema';
 
-const toDataPathSegments = (path: string): Array<string> => {
-  const segments = path.split('/');
+/**
+ * Convert a schema path (i.e. JSON pointer) to an array by splitting
+ * at the '/' character and removing all schema-specific keywords.
+ *
+ * The returned value can be used to de-reference a root object by folding over it
+ * and derefercing the single segments to obtain a new object.
+ *
+ *
+ * @param {string} schemaPath the schema path to be converted
+ * @returns {string[]} an array containing only non-schema-specific segments
+ */
+const toDataPathSegments = (schemaPath: string): Array<string> => {
+  const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
   if (startFromRoot) {
     return segments.filter((segment, index) => {
       if (index === 0) {
         return false;
-      } else if (index % 2 === 1) {
-        return false;
       } else {
-        return true;
+        return index % 2 !== 1;
       }
     });
   }
-  return segments.filter((segment, index) => {
-    if (index % 2 === 0) {
-      return false;
-    } else {
-      return true;
-    }
-  });
+  return segments.filter((segment, index) => index % 2 !== 0);
 };
 
-export const toDataPath = (path: string): string => {
-  return toDataPathSegments(path).join('/');
+/**
+ * Remove all schema-specific keywords (e.g. 'properties') from a given path.
+ * @example
+ * toDataPath('#/properties/foo/properties/bar') === '#/foo/bar')
+ *
+ * @param {string} schemaPath the schema path to be converted
+ * @returns {string} the path without schema-specific keywords
+ */
+export const toDataPath = (schemaPath: string): string => {
+  return toDataPathSegments(schemaPath).join('/');
 };
 
-export const getValuePropertyPair = (instance: any, path: string):
+/**
+ * Resolve the given schema path against the given instance until the last
+ * segment. The returned value allows easy assignment of any new value.
+ *
+ * @example
+ * const pair = getValuePropertyPair(someData, someRef);
+ * pair.instance[pair.property] = someValue;
+ *
+ * @param {any} instance the instance to resolve the path against
+ * @param {string} schemaPath the schema path to be resolved
+ * @returns {{instance: string, property: string}} an object containing
+ *          the resolved instance as well the last fragment of
+ */
+export const getValuePropertyPair = (instance: any, schemaPath: string):
   {instance: Object, property: string} => {
-  const validPathSegments = toDataPathSegments(path);
+  const validPathSegments = toDataPathSegments(schemaPath);
   const resolvedInstance =
       validPathSegments
           .slice(0, validPathSegments.length - 1)
@@ -47,8 +71,14 @@ export const getValuePropertyPair = (instance: any, path: string):
   };
 };
 
-export const resolveSchema = (schema: JsonSchema, path: string): JsonSchema => {
-  const validPathSegments = path.split('/');
+/**
+ * Resolve the given schema path in order to obtain a subschema.
+ * @param {JsonSchema} schema the root schema from which to start
+ * @param {string} schemaPath the schema path to be resolved
+ * @returns {JsonSchema} the resolved sub-schema
+ */
+export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchema => {
+  const validPathSegments = schemaPath.split('/');
   const invalidSegment =
     (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
@@ -76,6 +106,13 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
   return result;
 };
 
+/**
+ * Normalizes the schema and resolves the given ref.
+ *
+ * @param {JsonSchema} full the JSON schema to resolved the reference against
+ * @param {string} reference the reference to be resolved
+ * @returns {JsonSchema} the resolved sub-schema
+ */
 export function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
   const child = resolveSchema(full, reference);
   const allRefs = findAllRefs(child);
@@ -84,7 +121,7 @@ export function retrieveResolvableSchema(full: JsonSchema, reference: string): J
     innerSelfReference.$ref = '#';
   }
   return child;
-};
+}
 
 interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;

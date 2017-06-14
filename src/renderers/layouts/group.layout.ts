@@ -6,8 +6,16 @@ import { RUNTIME_TYPE } from '../../core/runtime';
 import { createRuntimeNotificationEvaluator } from './layout.util';
 import {uiTypeIs, rankWith, RankedTester} from '../../core/testers';
 
+/**
+ * Default tester for a group layout.
+ *
+ * @type {RankedTester}
+ */
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
+/**
+ * Default renderer for a group layout.
+ */
 @JsonFormsRenderer({
   selector: 'jsonforms-grouplayout',
   tester: groupTester
@@ -17,6 +25,10 @@ export class GroupLayoutRenderer extends Renderer {
   constructor() {
     super();
   }
+
+  /**
+   * @inheritDoc
+   */
   render(): HTMLElement {
     const group = <GroupLayout> this.uischema;
     const fieldset = document.createElement('fieldset');
@@ -37,9 +49,17 @@ export class GroupLayoutRenderer extends Renderer {
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
     return this;
   }
-   dispose(): void {
+
+  /**
+   * @inheritDoc
+   */
+  dispose(): void {
     // Do nothing
   }
+
+  /**
+   * @inheritDoc
+   */
   notify(type: RUNTIME_TYPE): void {
     this.evaluateRuntimeNotification(type);
   }

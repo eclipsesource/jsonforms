@@ -8,6 +8,10 @@ import {JsonSchema} from '../../models/jsonSchema';
 import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
+/**
+ * Default tester for a master-detail layout.
+ * @type {RankedTester}
+ */
 export const treeMasterDetailTester: RankedTester = rankWith(1,
   and(
     uiTypeIs('MasterDetailLayout'),
@@ -16,12 +20,13 @@ export const treeMasterDetailTester: RankedTester = rankWith(1,
       if (control.scope === undefined || control.scope === null) {
         return false;
       }
-      if (control.scope.$ref === undefined || control.scope.$ref === null) {
-        return false;
-      }
-      return true;
+      return !(control.scope.$ref === undefined || control.scope.$ref === null);
     }
 ));
+
+/**
+ * Default renderer for a tree-based master-detail layout.
+ */
 @JsonFormsRenderer({
   selector: 'jsonforms-tree',
   tester: rankWith(1, uiTypeIs('MasterDetailLayout'))

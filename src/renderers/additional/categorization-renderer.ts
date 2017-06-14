@@ -6,6 +6,10 @@ import {JsonForms} from '../../json-forms';
 import {uiTypeIs, rankWith, RankedTester, and} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
+/**
+ * Default tester for a categorization.
+ * @type {RankedTester}
+ */
 export const categorizationTester: RankedTester = rankWith(1,
   and(
     uiTypeIs('Categorization'),
@@ -17,11 +21,18 @@ export const categorizationTester: RankedTester = rankWith(1,
         return element.elements
           .map(elem => isCategorization(elem) ? hasCategory(elem) : elem.type === 'Category')
           .reduce((prev, curr) => prev && curr, true);
-      }
+      };
       return hasCategory(uiSchema as Categorization)
     }
 ));
 
+function isCategorization(category: Category | Categorization): category is Categorization {
+  return category.type === 'Categorization';
+}
+
+/**
+ * Default renderer for a categorization.
+ */
 @JsonFormsRenderer({
   selector: 'jsonforms-categorization',
   tester: categorizationTester
@@ -35,9 +46,16 @@ export class CategorizationRenderer extends Renderer {
     super();
   }
 
+  /**
+   * @inheritDoc
+   */
   dispose(): void {
     // Do nothing
   }
+
+  /**
+   * @inheritDoc
+   */
   notify(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
@@ -53,6 +71,10 @@ export class CategorizationRenderer extends Renderer {
         break;
     }
   }
+
+  /**
+   * @inheritDoc
+   */
   render(): HTMLElement {
     this.className = 'jsf-categorization';
 
@@ -75,6 +97,7 @@ export class CategorizationRenderer extends Renderer {
       <HTMLUListElement>this.master.firstChild);
     this.renderDetail(result.category, result.li);
   }
+
   private findFirstCategory(categorization: Categorization, parent: HTMLUListElement):
     {category: Category, li: HTMLLIElement} {
     let firstCategory: Category;
@@ -84,11 +107,13 @@ export class CategorizationRenderer extends Renderer {
     }
     return {category: category, li: <HTMLLIElement>parent.firstChild};
   }
+
   private renderMaster() {
     const categorization = <Categorization> this.uischema;
     const ul = this.createCategorizationList(categorization);
     this.master.appendChild(ul);
   }
+
   private createCategorizationList(categorization: Categorization): HTMLUListElement {
     const ul = document.createElement('ul');
     categorization.elements.forEach(category => {
@@ -113,6 +138,7 @@ export class CategorizationRenderer extends Renderer {
     });
     return ul;
   }
+
   private renderDetail(category: Category, li: HTMLLIElement) {
     if (this.detail.lastChild !== null) {
       this.detail.removeChild(this.detail.lastChild);
@@ -135,8 +161,4 @@ export class CategorizationRenderer extends Renderer {
     }
     this.detail.appendChild(wrapper);
   }
-}
-
-function isCategorization(category: Category | Categorization): category is Categorization {
-    return category.type === 'Categorization';
 }
