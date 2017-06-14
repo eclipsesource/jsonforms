@@ -52,7 +52,7 @@
     "ncp": "^2.0.0",
     "nyc": "^10.1.2",
     "source-map-loader": "^0.1.6",
-    "tslint": "^4.4.2",
+    "tslint": "^5.4.3",
     "typescript": "^2.1.5",
     "url-loader": "^0.5.7",
     "web-component-tester": "^5.0.0",
