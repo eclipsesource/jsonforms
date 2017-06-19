@@ -9,7 +9,7 @@ import {Categorization, Category, ControlElement} from '../../src/models/uischem
 import {CategorizationRenderer, categorizationTester}
   from '../../src/renderers/additional/categorization-renderer';
 import {DataService } from '../../src/core/data.service';
-import {JsonFormsHolder} from '../../src/core';
+import {JsonForms} from '../../src/core';
 import {Runtime} from '../../src/core/runtime';
 
 test('CategorizationTester', t => {

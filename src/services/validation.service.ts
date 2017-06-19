@@ -26,7 +26,7 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
    * @param {UISchemaElement} uiSchema the UI schema to be rendered
    */
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
-    dataService.registerChangeListener(this);
+    dataService.registerDataChangeListener(this);
     this.validator = ajv.compile(dataSchema);
     this.parseUiSchema(uiSchema);
   }
@@ -34,14 +34,14 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
   /**
    * @inheritDoc
    */
-  isRelevantKey(_: ControlElement): boolean {
+  needsNotificationAbout(_: ControlElement): boolean {
     return true;
   }
 
   /**
    * @inheritDoc
    */
-  notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
     this.validate(data);
   }
 
@@ -49,7 +49,7 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
    * @inheritDoc
    */
   dispose(): void {
-    this.dataService.unregisterChangeListener(this);
+    this.dataService.deregisterDataChangeListener(this);
   }
 
   private parseUiSchema(uiSchema: UISchemaElement): void {

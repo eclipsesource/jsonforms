@@ -7,10 +7,10 @@ installCE(global, 'force');
 import {GroupLayout} from '../../src/models/uischema';
 import {GroupLayoutRenderer, groupTester}
   from '../../src/renderers/layouts/group.layout';
-import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
+import {Runtime} from '../../src/core/runtime';
 
 
-test('GroupLayoutRendererTester', t => {
+test('GroupLayout tester', t => {
   t.is(
       groupTester(undefined, undefined),
       -1
@@ -28,7 +28,7 @@ test('GroupLayoutRendererTester', t => {
       1
   );
 });
-test('GroupLayoutRenderer with elements undefined', t => {
+test('Render GroupLayout with undefined elements', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   renderer.setUiSchema({type: 'GroupLayout'} as GroupLayout);
   const result = renderer.render();
@@ -38,7 +38,7 @@ test('GroupLayoutRenderer with elements undefined', t => {
   t.is(div.className, 'group-layout');
   t.is(div.children.length, 0);
 });
-test('GroupLayoutRenderer with label', t => {
+test('Render GroupLayout with label', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   renderer.setUiSchema({type: 'GroupLayout', label: 'Foo'} as GroupLayout);
   const result = renderer.render();
@@ -51,7 +51,7 @@ test('GroupLayoutRenderer with label', t => {
   t.is(legend.tagName, 'LEGEND');
   t.is(legend['innerText'], 'Foo');
 });
-test('GroupLayoutRenderer with elements null', t => {
+test('Render GroupLayout with null elements', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   renderer.setUiSchema({type: 'GroupLayout', elements: null} as GroupLayout);
   const result = renderer.render();
@@ -61,7 +61,7 @@ test('GroupLayoutRenderer with elements null', t => {
   t.is(div.className, 'group-layout');
   t.is(div.children.length, 0);
 });
-test('GroupLayoutRenderer with Children', t => {
+test('Render GroupLayout with children', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   renderer.setUiSchema({type: 'GroupLayout',
     elements: [{type: 'Control'}, {type: 'Control'}]} as GroupLayout);
@@ -72,7 +72,7 @@ test('GroupLayoutRenderer with Children', t => {
   t.is(div.className, 'group-layout');
   t.is(div.children.length, 2);
 });
-test('GroupLayoutRenderer notify visible', t => {
+test('Hide GroupLayout', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const groupLayout = {type: 'GroupLayout',
     elements: [{type: 'Control'}]} as GroupLayout;
@@ -86,7 +86,7 @@ test('GroupLayoutRenderer notify visible', t => {
   t.is(div.className, 'group-layout');
   t.is(renderer.hidden, true);
 });
-test('GroupLayoutRenderer notify disabled', t => {
+test('Disable GroupLayout', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const groupLayout = {type: 'GroupLayout',
     elements: [{type: 'Control'}]} as GroupLayout;
@@ -100,7 +100,7 @@ test('GroupLayoutRenderer notify disabled', t => {
   t.is(div.className, 'group-layout');
   t.is(div.getAttribute('disabled'), 'true');
 });
-test('GroupLayoutRenderer notify enabled', t => {
+test('Enable GroupLayout', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const groupLayout = {type: 'GroupLayout',
     elements: [{type: 'Control'}]} as GroupLayout;
@@ -114,7 +114,7 @@ test('GroupLayoutRenderer notify enabled', t => {
   t.is(div.className, 'group-layout');
   t.false(div.hasAttribute('disabled'));
 });
-test('GroupLayoutRenderer disconnected no notify visible', t => {
+test('GroupLayout should not be hidden if disconnected', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const groupLayout = {type: 'GroupLayout',
     elements: [{type: 'Control'}]} as GroupLayout;

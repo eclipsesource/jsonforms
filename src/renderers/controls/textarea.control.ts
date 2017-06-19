@@ -51,7 +51,7 @@ export class TextAreaControl extends BaseControl<HTMLTextAreaElement> {
   /**
    * @inheritDoc
    */
-  protected get inputElement(): HTMLTextAreaElement {
+  protected createInputElement(): HTMLTextAreaElement {
     return document.createElement('textarea');
   }
 }

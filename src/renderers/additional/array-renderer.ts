@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../../models/uischema';
-import { JsonForms } from '../../json-forms';
+import { JsonFormsElement } from '../../json-forms';
 import { Renderer } from '../../core/renderer';
 import { DataChangeListener} from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
@@ -8,7 +8,7 @@ import { resolveSchema } from '../../path.util';
 import { JsonSchema } from '../../models/jsonSchema';
 import { getElementLabelObject } from '../label.util';
 import { RankedTester, rankWith, and, uiTypeIs, schemaMatches } from '../../core/testers';
-import { JsonFormsHolder } from '../../core';
+import { JsonForms } from '../../core';
 
 /**
  * Default tester for an array control.
@@ -41,15 +41,15 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
   /**
    * @inheritDoc
    */
-  isRelevantKey (uischema: ControlElement): boolean {
-    return uischema === undefined || uischema === null
-    ? false : (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
+  needsNotificationAbout (controlElement: ControlElement): boolean {
+    return controlElement === undefined || controlElement === null
+    ? false : (<ControlElement>this.uischema).scope.$ref === controlElement.scope.$ref;
   }
 
   /**
    * @inheritDoc
    */
-  notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
     this.render();
   }
 
@@ -58,14 +58,14 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
    */
   connectedCallback(): void {
     super.connectedCallback();
-    this.dataService.registerChangeListener(this);
+    this.dataService.registerDataChangeListener(this);
   }
 
   /**
    * @inheritDoc
    */
   disconnectedCallback(): void {
-    this.dataService.unregisterChangeListener(this);
+    this.dataService.deregisterDataChangeListener(this);
     super.disconnectedCallback();
   }
 
@@ -102,7 +102,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     let arrayData = this.dataService.getValue(controlElement);
 
     const renderChild = (element: Object): void => {
-      const jsonForms = <JsonForms>document.createElement('json-forms');
+      const jsonForms = <JsonFormsElement>document.createElement('json-forms');
       const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
       jsonForms.data = element;
       jsonForms.dataSchema = resolvedSchema;
@@ -115,7 +115,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     div.appendChild(content);
 
     const button = document.createElement('button');
-    button.className = JsonFormsHolder.stylingRegistry.getAsClassName('button');
+    button.className = JsonForms.stylingRegistry.getAsClassName('button');
     button.textContent = `Add to ${labelObject.text}`;
     button.onclick = (ev: Event) => {
       if (arrayData === undefined) {
@@ -124,7 +124,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
       const element = {};
       arrayData.push(element);
       renderChild(element);
-      this.dataService.notifyChange(controlElement, arrayData);
+      this.dataService.notifyAboutDataChange(controlElement, arrayData);
     };
 
     header.appendChild(button);

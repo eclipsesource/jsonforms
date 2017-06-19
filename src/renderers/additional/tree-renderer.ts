@@ -3,7 +3,7 @@ import {Renderer} from '../../core/renderer';
 import {DataChangeListener} from '../../core/data.service';
 import {JsonFormsRenderer} from '../renderer.util';
 import {resolveSchema} from '../../path.util';
-import {JsonForms} from '../../json-forms';
+import {JsonFormsElement} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
 import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
@@ -44,16 +44,16 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   }
   connectedCallback(): void {
     super.connectedCallback();
-    this.dataService.registerChangeListener(this);
+    this.dataService.registerDataChangeListener(this);
   }
   disconnectedCallback(): void {
-    this.dataService.unregisterChangeListener(this);
+    this.dataService.deregisterDataChangeListener(this);
     super.disconnectedCallback();
   }
   dispose(): void {
     // Do nothing
   }
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
       case RUNTIME_TYPE.VISIBLE:
@@ -91,7 +91,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         const newData = {};
         this.addingToRoot = true;
         const length = rootData.push(newData);
-        this.dataService.notifyChange(controlElement, rootData);
+        this.dataService.notifyAboutDataChange(controlElement, rootData);
         this.expandObject(newData, <HTMLUListElement>this.master.firstChild, this.dataSchema.items,
           toDelete => rootData.splice(length - 1, 1));
         this.addingToRoot = false;
@@ -126,12 +126,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     this.renderFull();
     return this;
   }
-  isRelevantKey (uischema: ControlElement): boolean {
+  needsNotificationAbout (uischema: ControlElement): boolean {
     return uischema === undefined || uischema === null ? false :
       (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
   }
 
-  notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
     this.renderFull();
   }
 
@@ -311,16 +311,16 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     label.classList.toggle('selected');
     this.selected = label;
 
-    const jsonForms = <JsonForms>document.createElement('json-forms');
+    const jsonForms = <JsonFormsElement>document.createElement('json-forms');
     jsonForms.data = element;
     jsonForms.dataSchema = schema;
     // check needed for tests
     if (jsonForms.addDataChangeListener) {
       jsonForms.addDataChangeListener({
-        isRelevantKey: (uischema: ControlElement): boolean => {
+        needsNotificationAbout: (uischema: ControlElement): boolean => {
           return uischema !== null;
         },
-        notifyChange: (uischema: ControlElement, newValue: any, data: any): void => {
+        dataChanged: (uischema: ControlElement, newValue: any, data: any): void => {
           const segments = uischema.scope.$ref.split('/');
           const lastSegemnet = segments[segments.length - 1];
           if (lastSegemnet === this.uischema.options['labelProvider'][schema.id]) {

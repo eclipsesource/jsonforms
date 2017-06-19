@@ -43,7 +43,7 @@
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Custom Control';
   buttonUnregister.onclick = () => {
-    JSONForms.JsonFormsHolder.rendererService.unregisterRenderer(tester, 'custom-element');
+    JSONForms.JsonFormsHolder.rendererService.deregisterRenderer(tester, 'custom-element');
     // HACK to retrigger service creation
     resetServices();
   };

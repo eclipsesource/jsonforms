@@ -1,5 +1,5 @@
 import { GroupLayout } from '../../models/uischema';
-import { JsonFormsHolder } from '../../core';
+import { JsonForms } from '../../core';
 import { Renderer } from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
 import { RUNTIME_TYPE } from '../../core/runtime';
@@ -40,8 +40,8 @@ export class GroupLayoutRenderer extends Renderer {
     }
     if (group.elements !== undefined && group.elements !== null) {
       group.elements.forEach(element => {
-        const bestRenderer = JsonFormsHolder.rendererService
-            .getBestRenderer(element, this.dataSchema, this.dataService);
+        const bestRenderer = JsonForms.rendererService
+            .findMostApplicableRenderer(element, this.dataSchema, this.dataService);
         fieldset.appendChild(bestRenderer);
       });
     }
@@ -60,7 +60,7 @@ export class GroupLayoutRenderer extends Renderer {
   /**
    * @inheritDoc
    */
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     this.evaluateRuntimeNotification(type);
   }
 }

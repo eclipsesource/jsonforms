@@ -8,23 +8,23 @@ import {generateDefaultUISchema} from '../generators/ui-schema-gen';
  * multiple UI schemas are applicable for a given JSON schema in order
  * to resolve ambiguity.
  */
-export interface UiSchemaRegistry {
+export interface UISchemaRegistry {
     /**
      * Register a UI schema.
      *
      * @param {UISchemaElement} uiSchema the UI schema to be registered
-     * @param {UiSchemaTester} tester the tester that determines whether
+     * @param {UISchemaTester} tester the tester that determines whether
      *        the given UI schema should be used
      */
-    register(uiSchema: UISchemaElement, tester: UiSchemaTester): void;
+    register(uiSchema: UISchemaElement, tester: UISchemaTester): void;
 
     /**
-     * Unregister a UI schema.
+     * Deregister a UI schema.
      *
      * @param {UISchemaElement} uiSchema the UI schema to be unregistered
-     * @param {UiSchemaTester} tester
+     * @param {UISchemaTester} tester
      */
-    unregister(uiSchema: UISchemaElement, tester: UiSchemaTester): void;
+    deregister(uiSchema: UISchemaElement, tester: UISchemaTester): void;
 
     /**
      * Find the UI schema that is most applicable for the given JSON schema
@@ -32,7 +32,7 @@ export interface UiSchemaRegistry {
      * @param {JsonSchema} schema the JSON schema for which to find a UI schema
      * @param {any} data the data for which to find a UI schema
      */
-    getBestUiSchema(schema: JsonSchema, data: any): UISchemaElement;
+    findMostApplicableUISchema(schema: JsonSchema, data: any): UISchemaElement;
 }
 
 /**
@@ -41,7 +41,7 @@ export interface UiSchemaRegistry {
  * render the JSON schema/data. The higher the returned number, the more likely
  * the associated UI schema will be used.
  */
-export interface UiSchemaTester {
+export interface UISchemaTester {
     /**
      * The apply method of this tester.
      *
@@ -54,9 +54,9 @@ export interface UiSchemaTester {
 /**
  * Associates a UI schema with a tester.
  */
-interface UiSchemaDefinition {
+interface UISchemaDefinition {
     uiSchema: UISchemaElement;
-    tester: UiSchemaTester;
+    tester: UISchemaTester;
 }
 
 /**
@@ -64,19 +64,19 @@ interface UiSchemaDefinition {
  * a combination of schema/data.
  * @type {number}
  */
-export const NOT_FITTING: number = -1;
+export const NOT_APPLICABLE: number = -1;
 
 /**
  * Default UI schema definition that always returns 0 as its priority.
- * @type {UiSchemaDefinition}
+ * @type {UISchemaDefinition}
  */
-const NO_UISCHEMA_DEFINITION = {uiSchema: null, tester: (schema) => 0} as UiSchemaDefinition;
+const NO_UISCHEMA_DEFINITION = {uiSchema: null, tester: (schema) => 0} as UISchemaDefinition;
 
 /**
  * Implementation of the UI schema registry.
  */
-export class UiSchemaRegistryImpl implements UiSchemaRegistry {
-    private registry: Array<UiSchemaDefinition> = [];
+export class UISchemaRegistryImpl implements UISchemaRegistry {
+    private registry: Array<UISchemaDefinition> = [];
     constructor() {
         this.registry.push(NO_UISCHEMA_DEFINITION);
     }
@@ -84,14 +84,14 @@ export class UiSchemaRegistryImpl implements UiSchemaRegistry {
     /**
      * @inheritDoc
      */
-    register(uiSchema: UISchemaElement, tester: UiSchemaTester): void {
+    register(uiSchema: UISchemaElement, tester: UISchemaTester): void {
         this.registry.push({uiSchema, tester});
     }
 
     /**
      * @inheritDoc
      */
-    unregister(uiSchema: UISchemaElement, tester: UiSchemaTester): void {
+    deregister(uiSchema: UISchemaElement, tester: UISchemaTester): void {
         this.registry = _.filter(this.registry, el =>
             // compare testers via strict equality
             el.tester !== tester || !_.eq(el.uiSchema, uiSchema)
@@ -101,7 +101,7 @@ export class UiSchemaRegistryImpl implements UiSchemaRegistry {
     /**
      * @inheritDoc
      */
-    getBestUiSchema(schema: JsonSchema, data: any): UISchemaElement {
+    findMostApplicableUISchema(schema: JsonSchema, data: any): UISchemaElement {
         const bestSchema = _.maxBy(this.registry, renderer =>
             renderer.tester(schema, data)
         );

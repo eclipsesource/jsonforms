@@ -28,7 +28,7 @@ export class BooleanControl extends BaseControl<HTMLInputElement> {
   protected get inputChangeProperty(): string {
     return 'onchange';
   }
-  protected get inputElement(): HTMLInputElement {
+  protected createInputElement(): HTMLInputElement {
     return document.createElement('input');
   }
 }

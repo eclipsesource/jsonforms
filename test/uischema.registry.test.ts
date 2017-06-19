@@ -2,10 +2,10 @@ import {test} from 'ava';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
 import { Layout, ControlElement } from '../src/models/uischema';
-import {UiSchemaRegistry, UiSchemaRegistryImpl} from '../src/core/uischema.registry';
+import {UISchemaRegistry, UISchemaRegistryImpl} from '../src/core/uischema.registry';
 
-test('UiSchemaRegistry returns GeneratedUiSchema', t => {
-    const registry: UiSchemaRegistry = new UiSchemaRegistryImpl();
+test('UI schema registry generates default UI schema', t => {
+    const registry: UISchemaRegistry = new UISchemaRegistryImpl();
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -14,11 +14,11 @@ test('UiSchemaRegistry returns GeneratedUiSchema', t => {
             }
         }
     };
-    const bestUiSchema = registry.getBestUiSchema(schema, {name: 'John Doe'});
+    const bestUiSchema = registry.findMostApplicableUISchema(schema, {name: 'John Doe'});
     t.deepEqual(bestUiSchema, generateDefaultUISchema(schema));
 });
-test('UiSchemaRegistry returns registered', t => {
-    const registry: UiSchemaRegistry = new UiSchemaRegistryImpl();
+test('UI schema registry returns registered UI schema', t => {
+    const registry: UISchemaRegistry = new UISchemaRegistryImpl();
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -27,15 +27,15 @@ test('UiSchemaRegistry returns registered', t => {
             }
         }
     };
-    const uischema = {type: 'Group', elements: [
+    const uiSchema = {type: 'Group', elements: [
       {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
-    registry.register(uischema, () =>  5);
-    const bestUiSchema = registry.getBestUiSchema(schema, {name: 'John Doe'});
-    t.is(bestUiSchema, uischema);
+    registry.register(uiSchema, () =>  5);
+    const bestUiSchema = registry.findMostApplicableUISchema(schema, {name: 'John Doe'});
+    t.is(bestUiSchema, uiSchema);
 });
-test('UiSchemaRegistry returns generated if unregistered', t => {
-    const registry: UiSchemaRegistry = new UiSchemaRegistryImpl();
+test('UI schema registry generates UI schema if applicable UI schema has been de-registered', t => {
+    const registry: UISchemaRegistry = new UISchemaRegistryImpl();
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -44,17 +44,17 @@ test('UiSchemaRegistry returns generated if unregistered', t => {
             }
         }
     };
-    const uischema = {type: 'Group', elements: [
+    const uiSchema = {type: 'Group', elements: [
       {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
     const tester = () =>  5;
-    registry.register(uischema, tester);
-    registry.unregister(uischema, tester);
-    const bestUiSchema = registry.getBestUiSchema(schema, {name: 'John Doe'});
+    registry.register(uiSchema, tester);
+    registry.deregister(uiSchema, tester);
+    const bestUiSchema = registry.findMostApplicableUISchema(schema, {name: 'John Doe'});
     t.deepEqual(bestUiSchema, generateDefaultUISchema(schema));
 });
-test('UiSchemaRegistry returns highest Fitting', t => {
-    const registry: UiSchemaRegistry = new UiSchemaRegistryImpl();
+test('UI schema registry returns most applicable UI schema', t => {
+    const registry: UISchemaRegistry = new UISchemaRegistryImpl();
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -63,19 +63,19 @@ test('UiSchemaRegistry returns highest Fitting', t => {
             }
         }
     };
-    const uischema1 = {type: 'HorizontalLayout', elements: [
+    const uiSchema1 = {type: 'HorizontalLayout', elements: [
       {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
-    const uischema2 = {type: 'Group', label: 'My Group', elements: [
+    const uiSchema2 = {type: 'Group', label: 'My Group', elements: [
       {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
-    registry.register(uischema2, (test_schema) =>  test_schema === schema ? 10 : -1);
-    registry.register(uischema1, (test_schema) =>  test_schema === schema ? 5 : -1);
-    const bestUiSchema = registry.getBestUiSchema(schema, {name: 'John Doe'});
-    t.is(bestUiSchema, uischema2);
+    registry.register(uiSchema2, (test_schema) =>  test_schema === schema ? 10 : -1);
+    registry.register(uiSchema1, (test_schema) =>  test_schema === schema ? 5 : -1);
+    const bestUiSchema = registry.findMostApplicableUISchema(schema, {name: 'John Doe'});
+    t.is(bestUiSchema, uiSchema2);
 });
-test('UiSchemaRegistry returns best fit after unregistering an element', t => {
-    const registry: UiSchemaRegistry = new UiSchemaRegistryImpl();
+test('UI schema registry returns most applicable UI schema after de-registering UI schema', t => {
+    const registry: UISchemaRegistry = new UISchemaRegistryImpl();
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -84,23 +84,23 @@ test('UiSchemaRegistry returns best fit after unregistering an element', t => {
             }
         }
     };
-    const uischema1 = {type: 'HorizontalLayout', elements: [
+    const uiSchema1 = {type: 'HorizontalLayout', elements: [
         {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
-    const uischema2 = {type: 'Group', label: 'My Group', elements: [
+    const uiSchema2 = {type: 'Group', label: 'My Group', elements: [
         {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
-    const uischema3 = {type: 'VertialLayout', elements: [
+    const uiSchema3 = {type: 'VerticalLayout', elements: [
         {type: 'Control', scope: {$ref: '#/properties/name'}, label: 'My Name'} as ControlElement
     ]} as Layout;
     const tester1 = (test_schema) =>  test_schema === schema ? 1 : -1;
     const tester2 = (test_schema) =>  test_schema === schema ? 3 : -1;
     const tester3 = (test_schema) =>  test_schema === schema ? 2 : -1;
-    registry.register(uischema1, tester1);
-    registry.register(uischema2, tester2);
-    registry.register(uischema3, tester3);
-    registry.unregister(uischema2, tester2);
+    registry.register(uiSchema1, tester1);
+    registry.register(uiSchema2, tester2);
+    registry.register(uiSchema3, tester3);
+    registry.deregister(uiSchema2, tester2);
     // tester3 should be triggered
-    const bestUiSchema = registry.getBestUiSchema(schema, {name: 'John Doe'});
-    t.is(bestUiSchema, uischema3);
+    const bestUiSchema = registry.findMostApplicableUISchema(schema, {name: 'John Doe'});
+    t.is(bestUiSchema, uiSchema3);
 });

@@ -25,13 +25,14 @@ export class RendererService {
   }
 
   /**
-   * Unregister a renderer.
+   * Deregister a renderer.
+   *
    * @param {RankedTester} tester the tester of the renderer to be un-registered.
    *        Note that strict equality is used when un-registering renderers.
    * @param {string} renderer the tag name of the HTML element that represents
    *        the renderer to be un-registered
    */
-  unregisterRenderer(tester: RankedTester, renderer: string): void {
+  deregisterRenderer(tester: RankedTester, renderer: string): void {
     this.renderers = _.filter(this.renderers, r =>
         // compare testers via strict equality
         r.tester !== tester || !_.eq(r.renderer, renderer)
@@ -40,24 +41,24 @@ export class RendererService {
 
   /**
    * Find the renderer that is capable of rendering the given UI schema.
-   * @param {UISchemaElement} uischema the UI schema to be rendered
+   * @param {UISchemaElement} uiSchema the UI schema to be rendered
    * @param {JsonSchema} schema the JSON data schema the associated data schema
    * @param {DataService} dataService the data service holding the data to be rendered
    * @return {HTMLElement} the rendered HTML element
    */
-  getBestRenderer(uischema: UISchemaElement,
-                  schema: JsonSchema,
-                  dataService: DataService): HTMLElement {
+  findMostApplicableRenderer(uiSchema: UISchemaElement,
+                             schema: JsonSchema,
+                             dataService: DataService): HTMLElement {
     const bestRenderer = _.maxBy(this.renderers, renderer =>
-        renderer.tester(uischema, schema)
+        renderer.tester(uiSchema, schema)
     );
     if (bestRenderer === undefined) {
       const renderer = document.createElement('label');
-      renderer.textContent = 'Unknown Schema: ' + JSON.stringify(uischema);
+      renderer.textContent = 'Unknown Schema: ' + JSON.stringify(uiSchema);
       return renderer;
     } else {
       const renderer = <Renderer> document.createElement(bestRenderer.renderer);
-      renderer.setUiSchema(uischema);
+      renderer.setUiSchema(uiSchema);
       renderer.setDataSchema(schema);
       renderer.setDataService(dataService);
       return renderer;

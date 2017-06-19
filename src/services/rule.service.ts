@@ -22,14 +22,14 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
    * @param {UISchemaElement} uiSchema the UI schema to be rendered
    */
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
-    dataService.registerChangeListener(this);
+    dataService.registerDataChangeListener(this);
     this.parseRules(uiSchema);
   }
 
   /**
    * @inheritDoc
    */
-  isRelevantKey(uischema: ControlElement): boolean {
+  needsNotificationAbout(uischema: ControlElement): boolean {
     // TODO hack
     if (uischema === null) {
       return true;
@@ -40,7 +40,7 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
   /**
    * @inheritDoc
    */
-  notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
     if (uischema === null) {
       this.initialRun(data);
       return;
@@ -53,7 +53,7 @@ export class JsonFormsRuleService implements DataChangeListener, JsonFormService
    * @inheritDoc
    */
   dispose(): void {
-    this.dataService.unregisterChangeListener(this);
+    this.dataService.deregisterDataChangeListener(this);
   }
 
   private parseRules(uiSchema: UISchemaElement) {

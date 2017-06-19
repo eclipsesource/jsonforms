@@ -10,7 +10,7 @@ import {HorizontalLayoutRenderer, horizontalLayoutTester}
 import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 
 
-test('HorizontalLayoutRendererTester', t => {
+test('HorizontalLayout tester', t => {
   t.is(
       horizontalLayoutTester(undefined, undefined),
       -1
@@ -28,7 +28,7 @@ test('HorizontalLayoutRendererTester', t => {
       1
   );
 });
-test('HorizontalLayoutRenderer with elements undefined', t => {
+test('Render HorizontalLayout with undefined elements', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   renderer.setUiSchema({type: 'HorizontalLayout'} as HorizontalLayout);
   const result = renderer.render();
@@ -38,7 +38,7 @@ test('HorizontalLayoutRenderer with elements undefined', t => {
   t.is(div.className, 'horizontal-layout');
   t.is(div.children.length, 0);
 });
-test('HorizontalLayoutRenderer with elements null', t => {
+test('Render HorizontalLayout with null elements', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   renderer.setUiSchema({type: 'HorizontalLayout', elements: null} as HorizontalLayout);
   const result = renderer.render();
@@ -48,7 +48,7 @@ test('HorizontalLayoutRenderer with elements null', t => {
   t.is(div.className, 'horizontal-layout');
   t.is(div.children.length, 0);
 });
-test('HorizontalLayoutRenderer with Children', t => {
+test('Render HorizontalLayout with children', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   renderer.setUiSchema({type: 'HorizontalLayout',
     elements: [{type: 'Control'}, {type: 'Control'}]} as HorizontalLayout);
@@ -59,7 +59,7 @@ test('HorizontalLayoutRenderer with Children', t => {
   t.is(div.className, 'horizontal-layout');
   t.is(div.children.length, 2);
 });
-test('HorizontalLayoutRenderer notify visible', t => {
+test('Hide HorizontalLayout', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   const horizontalLayout = {type: 'HorizontalLayout',
     elements: [{type: 'Control'}]} as HorizontalLayout;
@@ -73,7 +73,7 @@ test('HorizontalLayoutRenderer notify visible', t => {
   t.is(div.className, 'horizontal-layout');
   t.is(renderer.hidden, true);
 });
-test('HorizontalLayoutRenderer notify disabled', t => {
+test('Disable HorizontalLayout', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   const horizontalLayout = {type: 'HorizontalLayout',
     elements: [{type: 'Control'}]} as HorizontalLayout;
@@ -87,7 +87,7 @@ test('HorizontalLayoutRenderer notify disabled', t => {
   t.is(div.className, 'horizontal-layout');
   t.is(div.getAttribute('disabled'), 'true');
 });
-test('HorizontalLayoutRenderer notify enabled', t => {
+test('Enable HorizontalLayout', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   const horizontalLayout = {type: 'HorizontalLayout',
     elements: [{type: 'Control'}]} as HorizontalLayout;
@@ -101,7 +101,7 @@ test('HorizontalLayoutRenderer notify enabled', t => {
   t.is(div.className, 'horizontal-layout');
   t.false(div.hasAttribute('disabled'));
 });
-test('HorizontalLayoutRenderer disconnected no notify visible', t => {
+test('HorizontalLayout should not be hidden if disconnected', t => {
   const renderer: HorizontalLayoutRenderer = new HorizontalLayoutRenderer();
   const horizontalLayout = {type: 'HorizontalLayout',
     elements: [{type: 'Control'}]} as HorizontalLayout;

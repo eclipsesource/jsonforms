@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
 import {resolveSchema} from '../path.util';
-import {NOT_FITTING} from './uischema.registry';
+import {NOT_APPLICABLE} from './uischema.registry';
 
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
@@ -147,5 +147,5 @@ export const rankWith = (rank: number, tester: Tester)  =>
         if (tester(uiSchema, schema)) {
             return rank;
         }
-        return NOT_FITTING;
+        return NOT_APPLICABLE;
     };

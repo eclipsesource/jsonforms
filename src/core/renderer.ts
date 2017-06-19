@@ -54,7 +54,7 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
    *
    * @param {RUNTIME_TYPE} type the type of runtime change
    */
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     // no-op
   }
 
@@ -66,7 +66,7 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
       this.uischema['runtime'] = new Runtime();
     }
     const runtime = <Runtime>this.uischema['runtime'];
-    runtime.addListener(this);
+    runtime.registerRuntimeListener(this);
     this.render();
   }
 
@@ -76,7 +76,7 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
   disconnectedCallback(): void {
     this.dispose();
     const runtime = <Runtime>this.uischema['runtime'];
-    runtime.removeListener(this);
+    runtime.deregisterRuntimeListener(this);
   }
 
   /**

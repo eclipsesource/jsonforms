@@ -30,10 +30,10 @@ test('Styling registry allows multiple classNames to be registered at once', t =
     t.deepEqual(stylingRegistry.get('select'), ['custom-select']);
 });
 
-test('Styling registry allows a style to be un-registered', t => {
+test('Styling registry allows a style to be de-registered', t => {
     const stylingRegistry = new StylingRegistryImpl();
     stylingRegistry.register('button', ['btn', 'btn-primary']);
-    stylingRegistry.unregister('button');
+    stylingRegistry.deregister('button');
     t.deepEqual(stylingRegistry.get('button'), []);
 });
 
