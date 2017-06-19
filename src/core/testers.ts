@@ -33,11 +33,34 @@ export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Teste
         if (_.isEmpty(schemaPath)) {
             return false;
         }
-        const currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
+        let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
+        while (currentDataSchema.$ref) {
+          currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
+        }
         if (currentDataSchema === undefined) {
             return false;
         }
         return predicate(currentDataSchema);
+    };
+
+export const schemaSubPathMatches =
+(subPath: string, predicate: (schema: JsonSchema) => boolean): Tester =>
+    (uiSchema: UISchemaElement, schema: JsonSchema): boolean => {
+      if (_.isEmpty(uiSchema)) {
+          return false;
+      }
+      const schemaPath = _.isEmpty(uiSchema['scope']) ? undefined : uiSchema['scope']['$ref'];
+      if (_.isEmpty(schemaPath)) {
+          return false;
+      }
+      let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath + '/' + subPath);
+      while (currentDataSchema.$ref) {
+        currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
+      }
+      if (currentDataSchema === undefined) {
+          return false;
+      }
+      return predicate(currentDataSchema);
     };
 
 /**

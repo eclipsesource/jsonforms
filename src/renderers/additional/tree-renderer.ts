@@ -7,6 +7,7 @@ import {JsonFormsElement} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
 import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {SchemaServiceInstance} from '../../core/schema.service';
 
 /**
  * Default tester for a master-detail layout.
@@ -173,13 +174,13 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       return;
     }
     data.forEach((element, index) => {
-      this.expandObject(element, parent, schema, toDelete => data.splice(index, 1));
+      this.expandObject(element, parent, schema, () => data.splice(index, 1));
     });
   }
-  private getArrayProperties(schema: JsonSchema): Array<string> {
-    return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined
-      && schema.properties[key].items['type'] === 'object');
-  }
+  // private getArrayProperties(schema: JsonSchema): Array<string> {
+  //   return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined
+  //     && schema.properties[key].items['type'] === 'object');
+  // }
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
     if (this.uischema.options !== undefined) {
       const labelProvider = this.uischema.options['labelProvider'];
@@ -193,13 +194,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     return JSON.stringify;
   }
-  private addElement(key: string, data: Object, schema: JsonSchema, li: HTMLLIElement): void {
-    if (data[key] === undefined) {
-      data[key] = [];
-    }
-    const childArray = data[key];
-    const newData = {};
-    const length = childArray.push(newData);
+  private updateTreeOnAdd(schema: JsonSchema, li: HTMLLIElement, newData: object,
+      deleteFunction: (toDelete: object) => void): void {
     const subChildren = li.getElementsByTagName('ul');
     let childParent;
     if (subChildren.length !== 0) {
@@ -208,11 +204,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       childParent = document.createElement('ul');
       li.appendChild(childParent);
     }
-    this.expandObject(newData, childParent, schema.properties[key].items,
-      toDelete => childArray.splice(length - 1, 1));
+    this.expandObject(newData, childParent, schema,  deleteFunction);
   };
   private expandObject(data: Object, parent: HTMLUListElement, schema: JsonSchema,
-      deleteFunction: (element: Object) => void): void {
+      deleteFunction: (toDelete: object) => void): void {
     const li = document.createElement('li');
     const div = document.createElement('div');
     if (this.uischema.options !== undefined &&
@@ -229,7 +224,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     spanText.textContent = this.getNamingFunction(schema)(data);
     span.appendChild(spanText);
     div.appendChild(span);
-    if (this.getArrayProperties(schema).length !== 0) {
+    if (SchemaServiceInstance.hasContainmentProperties(schema)) {
       const spanAdd = document.createElement('span');
       spanAdd.classList.add('add');
       spanAdd.onclick = (ev: Event) => {
@@ -238,11 +233,13 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         while (content.firstChild) {
           (<Element>content.firstChild).remove();
         }
-        this.getArrayProperties(schema).forEach(key => {
+        SchemaServiceInstance.getContainmentProperties(schema).forEach(property => {
           const button = document.createElement('button');
-          button.innerText = key;
+          button.innerText = property.label;
           button.onclick = () => {
-            this.addElement(key, data, schema, li);
+            const newData = {};
+            property.addToData(data, newData);
+            this.updateTreeOnAdd(property.schema, li, newData, property.deleteFromData(data));
             this.dialog.close();
           };
           content.appendChild(button);
@@ -268,9 +265,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     li.appendChild(div);
 
-    Object.keys(data).forEach(key => {
-      if (Array.isArray(data[key])) {
-        this.renderChildren(data[key], schema.properties[key].items, li, key);
+    SchemaServiceInstance.getContainmentProperties(schema).forEach(property => {
+      const propertyData = property.getData(data);
+      if (propertyData) {
+        this.renderChildren(<Array<Object>>propertyData, property.schema, li, property.property);
       }
     });
 
