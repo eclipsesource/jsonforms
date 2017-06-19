@@ -9,7 +9,7 @@ import {ControlElement} from '../../src/models/uischema';
 import {TableArrayControlRenderer, tableArrayTester} from
   '../../src/renderers/additional/table-array.control';
 import {DataService } from '../../src/core/data.service';
-import {JsonFormsHolder} from '../../src/core';
+import {JsonForms} from '../../src/core';
 
 
 test('generate array child control', t => {
@@ -270,16 +270,16 @@ test('array-layout DataService notification', t => {
   renderer.connectedCallback();
   const childrenInitial = renderer.getElementsByTagName('TBODY')[0];
   t.is(childrenInitial.childNodes.length, 1);
-  dataService.notifyChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}]);
+  dataService.notifyAboutDataChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}]);
   const childrenAfter = renderer.getElementsByTagName('TBODY')[0];
   t.is(childrenAfter.childNodes.length, 2);
 
-  dataService.notifyChange(undefined, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
+  dataService.notifyAboutDataChange(undefined, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
   const childrenIgnore = renderer.getElementsByTagName('TBODY')[0];
   t.is(childrenIgnore.childNodes.length, 2);
 
   renderer.disconnectedCallback();
-  dataService.notifyChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
+  dataService.notifyAboutDataChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
   const childrenLast = renderer.getElementsByTagName('TBODY')[0];
   t.is(childrenLast.childNodes.length, 2);
 });

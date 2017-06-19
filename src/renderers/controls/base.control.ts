@@ -55,7 +55,7 @@ export abstract class BaseControl <T extends HTMLElement>
   /**
    * @inheritDoc
    */
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
       case RUNTIME_TYPE.VALIDATION_ERROR:
@@ -80,31 +80,31 @@ export abstract class BaseControl <T extends HTMLElement>
    */
   connectedCallback(): void {
     super.connectedCallback();
-    this.dataService.registerChangeListener(this);
+    this.dataService.registerDataChangeListener(this);
   }
 
   /**
    * @inheritDoc
    */
   disconnectedCallback(): void {
-    this.dataService.unregisterChangeListener(this);
+    this.dataService.deregisterDataChangeListener(this);
     super.disconnectedCallback();
   }
 
   /**
    * @inheritDoc
    */
-  isRelevantKey (uischema: ControlElement): boolean {
-    if (uischema === undefined || uischema === null) {
+  needsNotificationAbout (controlElement: ControlElement): boolean {
+    if (controlElement === undefined || controlElement === null) {
       return false;
     }
-    return (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
+    return (<ControlElement>this.uischema).scope.$ref === controlElement.scope.$ref;
   }
 
   /**
    * @inheritDoc
    */
-  notifyChange(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(controlElement: ControlElement, newValue: any, data: any): void {
     this.setValue(this.input, newValue);
   }
 
@@ -143,7 +143,7 @@ export abstract class BaseControl <T extends HTMLElement>
    *
    * @param input the input element to be configured
    *
-   * @see inputElement
+   * @see createInputElement
    */
   protected abstract configureInput(input: T): void;
 
@@ -161,7 +161,7 @@ export abstract class BaseControl <T extends HTMLElement>
    *
    * @returns {T} the created HTML input element
    */
-  protected abstract get inputElement(): T;
+  protected abstract createInputElement(): T;
 
   private createLabel(controlElement: ControlElement): void {
     this.label = document.createElement('label');
@@ -172,10 +172,10 @@ export abstract class BaseControl <T extends HTMLElement>
   }
 
   private createInput(controlElement: ControlElement): void {
-    this.input = this.inputElement;
+    this.input = this.createInputElement();
     this.configureInput(this.input);
     this.input[this.inputChangeProperty] = ((ev: Event) =>
-            this.dataService.notifyChange(controlElement, this.getValue(this.input))
+            this.dataService.notifyAboutDataChange(controlElement, this.getValue(this.input))
     );
     this.setValue(this.input, this.dataService.getValue(controlElement));
   }

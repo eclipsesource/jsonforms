@@ -1,5 +1,5 @@
 import { UISchemaElement } from './models/uischema';
-import { JsonFormService, JsonFormsHolder } from './core';
+import { JsonFormService, JsonForms } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
 import * as JsonRefs from 'json-refs';
@@ -26,7 +26,7 @@ const CustomElement = (config: CustomElementConfig) => (cls) =>
 @CustomElement({
   selector: 'json-forms'
 })
-export class JsonForms extends HTMLElement {
+export class JsonFormsElement extends HTMLElement {
 
   private dataService: DataService;
   private uischema: UISchemaElement;
@@ -111,7 +111,7 @@ export class JsonForms extends HTMLElement {
     if (this.uischema) {
       return this.uischema;
     }
-    return JsonFormsHolder.uischemaRegistry.getBestUiSchema(this.dataSchema, this.dataObject);
+    return JsonForms.uischemaRegistry.findMostApplicableUISchema(this.dataSchema, this.dataObject);
   }
 
   /**
@@ -120,7 +120,7 @@ export class JsonForms extends HTMLElement {
    * @param {DataChangeListener} listener the listener to be added
    */
   addDataChangeListener(listener: DataChangeListener): void {
-    this.dataService.registerChangeListener(listener);
+    this.dataService.registerDataChangeListener(listener);
   }
 
   private render(): void {
@@ -144,15 +144,15 @@ export class JsonForms extends HTMLElement {
     const uiSchema = this.uiSchema;
     this.createServices(uiSchema, schema);
 
-    const bestRenderer = JsonFormsHolder.rendererService
-        .getBestRenderer(uiSchema, schema, this.dataService);
+    const bestRenderer = JsonForms.rendererService
+        .findMostApplicableRenderer(uiSchema, schema, this.dataService);
     this.appendChild(bestRenderer);
 
-    this.dataService.initialRootRun();
+    this.dataService.initDataChangeListeners();
   }
 
   private createServices(uiSchema, dataSchema): void {
-    JsonFormsHolder.jsonFormsServices.forEach(service =>
+    JsonForms.jsonFormsServices.forEach(service =>
         this.services.push(new service(this.dataService, dataSchema, uiSchema))
     );
   }

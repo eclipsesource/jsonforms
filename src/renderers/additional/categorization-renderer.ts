@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {Categorization, Category} from '../../models/uischema';
 import {Renderer} from '../../core/renderer';
 import {JsonFormsRenderer} from '../renderer.util';
-import {JsonForms} from '../../json-forms';
+import {JsonFormsElement} from '../../json-forms';
 import {uiTypeIs, rankWith, RankedTester, and} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
@@ -56,7 +56,7 @@ export class CategorizationRenderer extends Renderer {
   /**
    * @inheritDoc
    */
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     const runtime = <Runtime>this.uischema['runtime'];
     switch (type) {
       case RUNTIME_TYPE.VISIBLE:
@@ -152,7 +152,7 @@ export class CategorizationRenderer extends Renderer {
     const wrapper = document.createElement('div');
     if (category.elements !== undefined && category.elements !== null) {
       category.elements.forEach(child => {
-        const jsonForms = <JsonForms>document.createElement('json-forms');
+        const jsonForms = <JsonFormsElement>document.createElement('json-forms');
         jsonForms.data = this.dataService.getValue({type: 'Control', scope: {$ref: '#'}});
         jsonForms.uiSchema = child;
         jsonForms.dataSchema = this.dataSchema;

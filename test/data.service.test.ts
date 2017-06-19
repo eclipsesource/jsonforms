@@ -2,7 +2,7 @@ import {test} from 'ava';
 import {DataService, DataChangeListener} from '../src/core/data.service';
 import {ControlElement} from '../src/models/uischema';
 
-test('DataService getValue ', t => {
+test('getValue returns data referenced by control', t => {
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
   const value = dataService.getValue(
@@ -10,7 +10,7 @@ test('DataService getValue ', t => {
   );
   t.is(value, 'John Doe');
 });
-test('DataService getValue root', t => {
+test('getValue returns root data value', t => {
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
   const value = dataService.getValue(
@@ -18,44 +18,44 @@ test('DataService getValue root', t => {
   );
   t.is(value, data);
 });
-test('DataService notifyChange updates data ', t => {
+test('notifyAboutDataChange updates data ', t => {
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
   const controlElement = {
     type: 'Control',
     scope: {$ref: '#/properties/foo/properties/bar'}
   } as ControlElement;
-  dataService.notifyChange(controlElement, 'Jane');
+  dataService.notifyAboutDataChange(controlElement, 'Jane');
   const value = dataService.getValue(controlElement);
   t.is(value, 'Jane');
 });
-test('DataService registered listeners are called on root run', t => {
+test('Registered data change listeners are called on init', t => {
   t.plan(1);
   const dataService = new DataService({});
   const listener1 = {
-    isRelevantKey: (uischema: ControlElement): boolean => true,
-    notifyChange: (uischema: ControlElement, newValue: any, full_data: any): void => t.pass()
+    needsNotificationAbout: (uischema: ControlElement): boolean => true,
+    dataChanged: (uischema: ControlElement, newValue: any, full_data: any): void => t.pass()
   } as DataChangeListener;
-  dataService.registerChangeListener(listener1);
+  dataService.registerDataChangeListener(listener1);
   const listener2 = {
-    isRelevantKey: (uischema: ControlElement): boolean => false,
-    notifyChange: (uischema: ControlElement, newValue: any, full_data: any): void => t.fail()
+    needsNotificationAbout: (uischema: ControlElement): boolean => false,
+    dataChanged: (uischema: ControlElement, newValue: any, full_data: any): void => t.fail()
   } as DataChangeListener;
-  dataService.registerChangeListener(listener2);
-  dataService.initialRootRun();
+  dataService.registerDataChangeListener(listener2);
+  dataService.initDataChangeListeners();
 });
-test('DataService unregistered listeners are not called on root run', t => {
+test('De-registered data change listeners are not called on init', t => {
   t.plan(0);
   const dataService = new DataService({});
   const listener = {
-    isRelevantKey: (uischema: ControlElement): boolean => true,
-    notifyChange: (uischema: ControlElement, newValue: any, full_data: any): void => t.fail()
+    needsNotificationAbout: (uischema: ControlElement): boolean => true,
+    dataChanged: (uischema: ControlElement, newValue: any, full_data: any): void => t.fail()
   } as DataChangeListener;
-  dataService.registerChangeListener(listener);
-  dataService.unregisterChangeListener(listener);
-  dataService.initialRootRun();
+  dataService.registerDataChangeListener(listener);
+  dataService.deregisterDataChangeListener(listener);
+  dataService.initDataChangeListeners();
 });
-test('DataService registered listeners are called on notify', t => {
+test('Registered data change listeners are called when notified', t => {
   t.plan(3);
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
@@ -64,24 +64,24 @@ test('DataService registered listeners are called on notify', t => {
     scope: {$ref: '#/properties/foo/properties/bar'}
   } as ControlElement;
   const listener1 = {
-    isRelevantKey: (uischema: ControlElement): boolean => true,
-    notifyChange: (uischema: ControlElement, newValue: any, full_data: any): void => {
+    needsNotificationAbout: (uischema: ControlElement): boolean => true,
+    dataChanged: (uischema: ControlElement, newValue: any, full_data: any): void => {
       t.is(uischema, controlElement);
       t.is(newValue, 'Jane');
       t.is(full_data, data);
     }
   } as DataChangeListener;
-  dataService.registerChangeListener(listener1);
+  dataService.registerDataChangeListener(listener1);
   const listener2 = {
-    isRelevantKey: (uischema: ControlElement): boolean => false,
-    notifyChange: (uischema: ControlElement, newValue: any, full_data: any): void => {
+    needsNotificationAbout: (uischema: ControlElement): boolean => false,
+    dataChanged: (uischema: ControlElement, newValue: any, full_data: any): void => {
       t.fail();
     }
   } as DataChangeListener;
-  dataService.registerChangeListener(listener2);
-  dataService.notifyChange(controlElement, 'Jane');
+  dataService.registerDataChangeListener(listener2);
+  dataService.notifyAboutDataChange(controlElement, 'Jane');
 });
-test('DataService unregistered listeners are not called on notify', t => {
+test('De-registered data change listeners are not called when notified', t => {
   t.plan(0);
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
@@ -90,12 +90,12 @@ test('DataService unregistered listeners are not called on notify', t => {
     scope: {$ref: '#/properties/foo/properties/bar'}
   } as ControlElement;
   const listener = {
-    isRelevantKey: (uischema: ControlElement): boolean => true,
-    notifyChange: (uischema: ControlElement, newValue: any, full_data: any): void => {
+    needsNotificationAbout: (uischema: ControlElement): boolean => true,
+    dataChanged: (uischema: ControlElement, newValue: any, full_data: any): void => {
       t.fail();
     }
   } as DataChangeListener;
-  dataService.registerChangeListener(listener);
-  dataService.unregisterChangeListener(listener);
-  dataService.notifyChange(controlElement, 'Jane');
+  dataService.registerDataChangeListener(listener);
+  dataService.deregisterDataChangeListener(listener);
+  dataService.notifyAboutDataChange(controlElement, 'Jane');
 });

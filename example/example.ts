@@ -1,8 +1,6 @@
 import {JsonSchema} from '../src/models/jsonSchema';
 import {UISchemaElement} from '../src/models/uischema';
-import {JsonForms} from '../src/json-forms';
-import {Style} from '../src/core/styling.registry';
-
+import {JsonFormsElement} from '../src/json-forms';
 
 declare let exampleDivId;
 declare let viewDivId;
@@ -32,7 +30,7 @@ export const changeExample = (selectedExample: string) => {
     body = div;
   }
 
-  const jsonForms = <JsonForms> document.createElement('json-forms');
+  const jsonForms = <JsonFormsElement> document.createElement('json-forms');
   jsonForms.data = example.data;
   if (example.uiSchema !== undefined) {
     jsonForms.uiSchema = example.uiSchema;

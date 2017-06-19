@@ -1,5 +1,5 @@
 import { HorizontalLayout } from '../../models/uischema';
-import {JsonFormsHolder} from '../../core';
+import {JsonForms} from '../../core';
 import {Renderer} from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
 import {RUNTIME_TYPE} from '../../core/runtime';
@@ -34,8 +34,8 @@ export class HorizontalLayoutRenderer extends Renderer {
     const horizontalLayout = <HorizontalLayout> this.uischema;
     if (horizontalLayout.elements !== undefined && horizontalLayout.elements !== null) {
       horizontalLayout.elements.forEach(element => {
-        const bestRenderer = JsonFormsHolder.rendererService
-            .getBestRenderer(element, this.dataSchema, this.dataService);
+        const bestRenderer = JsonForms.rendererService
+            .findMostApplicableRenderer(element, this.dataSchema, this.dataService);
         div.appendChild(bestRenderer);
       });
     }
@@ -54,7 +54,7 @@ export class HorizontalLayoutRenderer extends Renderer {
   /**
    * @inheritDoc
    */
-  notify(type: RUNTIME_TYPE): void {
+  runtimeUpdated(type: RUNTIME_TYPE): void {
     this.evaluateRuntimeNotification(type);
   }
 }
