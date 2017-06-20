@@ -7,8 +7,8 @@ import {JsonForms} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
 import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import {isItemModel, FullDataModelType, isMultipleItemModel, isReferenceModel, ITEM_MODEL_TYPES}
-  from '../../parser/item_model';
+import {isItemModel, FullDataModelType, isMultipleItemModel, isReferenceModel,
+  ITEM_MODEL_TYPES} from '../../parser/item_model';
 import {extractSchemaFromModel} from '../../parser/util';
 
 export const treeMasterDetailTester: RankedTester = rankWith(1,
@@ -204,13 +204,25 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         expandModel(model.targetModel);
       }
       data.forEach((element, index) => {
-        this.expandObject(element, parent, innerModel, toDelete => data.splice(index, 1));
+        this.expandObject(element, parent, this.mapDataToModel(innerModel, element),
+          toDelete => data.splice(index, 1));
       });
     };
 
     expandModel(model);
   }
 
+  private mapDataToModel(model: FullDataModelType, data: any): FullDataModelType {
+    if (isMultipleItemModel(model)) {
+      const modelMapping = this.uischema.options['modelMapping'];
+      if (modelMapping !== undefined) {
+        const modelKey = data[modelMapping.attribute];
+        const modelId = modelMapping.mapping[modelKey];
+        return model.models.filter(inner => inner.schema.id === modelId)[0];
+      }
+    }
+    return model;
+  }
   /**
   * Returns the names of all properties of type array.
   */
@@ -250,7 +262,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     } else if (isReferenceModel(model)) {
       return this.getNamingFunction(model.targetModel);
     }
-    return JSON.stringify;
+    return (element) => element['name'] || element['id'] || JSON.stringify(element);
   }
   /**
    * Adds a new element for the property key to the object data.
@@ -265,6 +277,14 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     const childArray = data[key];
     const newData = {};
+    if (isItemModel(model)) {
+      const schemaProperties = model.schema.properties;
+      Object.keys(schemaProperties).forEach(property => {
+        if (schemaProperties[property].default) {
+          newData[property] = schemaProperties[property].default;
+        }
+      })
+    }
     const length = childArray.push(newData);
     const subChildren = li.getElementsByTagName('ul');
     let childParent;
@@ -368,7 +388,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     Object.keys(data).forEach(key => {
       if (Array.isArray(data[key])) {
         const renderHelper = (targetModel) => {
-          if (isItemModel(targetModel)) {
+          if (isItemModel(targetModel) && targetModel.dropPoints.hasOwnProperty(key)) {
             this.renderChildren(data[key], targetModel.dropPoints[key] , li, key);
           } else if (isMultipleItemModel(targetModel)) {
             // TODO multiple item model
