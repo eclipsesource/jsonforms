@@ -55,7 +55,7 @@ the project root directory:
 
 ```
 cd examples
-bower install
+../node_modules/.bin/bower install
 ```
 
 Also make sure that you have [followed the instructions](https://github.com/eclipsesource/jsonforms#first-time-setup) for the first time setup in case you haven't done so already.

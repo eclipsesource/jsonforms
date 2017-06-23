@@ -47,6 +47,7 @@
     "babel-istanbul": "0.6.0",
     "bootstrap": "3.3.6",
     "bootstrap-webpack": "0.0.5",
+    "bower": "^1.8.0",
     "browser-sync": "2.11.1",
     "browser-sync-webpack-plugin": "1.0.1",
     "compression-webpack-plugin": "0.3.0",
