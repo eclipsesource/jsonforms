@@ -7,8 +7,7 @@ function customDirective() {
             'ng-change="vm.triggerChangeEvent()" ng-model="vm.resolvedData[vm.fragment]" />' +
         '</jsonforms-control>',
         controller : ['BaseController', '$scope', function(BaseController, $scope) {
-            let vm = this;
-            BaseController.call(vm, $scope);
+            return new BaseController($scope);
         }],
         controllerAs : 'vm'
     };
