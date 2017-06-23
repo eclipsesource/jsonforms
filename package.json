@@ -30,7 +30,7 @@
     "start-placeholder": "node_modules/.bin/json-server examples/assets/db.json"
   },
   "dependencies": {
-    "angular": "1.5.0",
+    "angular": "1.5.8",
     "angular-animate": "1.5.8",
     "angular-aria": "1.5.8",
     "angular-material": "1.1.0",
