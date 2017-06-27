@@ -12,12 +12,12 @@
     "tests"
   ],
   "devDependencies": {
-    "angular-route": "^1.5.8",
+    "angular-route": "1.5.8",
     "bootstrap": "3.3.6"
   },
   "dependencies": {
     "angular-ui-ace": "bower",
-    "angular-ui-validate": "^1.2.2",
-    "angular-resource": "^1.5.8"
+    "angular-ui-validate": "1.2.2",
+    "angular-resource": "1.5.8"
   }
 }
