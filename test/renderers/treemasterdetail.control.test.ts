@@ -12,6 +12,7 @@ import {DataService } from '../../src/core/data.service';
 import {JsonForms} from '../../src/core';
 import {JsonFormsElement} from '../../src/json-forms';
 import {Runtime} from '../../src/core/runtime';
+import {instantiateSchemaService} from '../../src/core/schema.service';
 
 test('TreeMasterDetailTester', t => {
   t.is(treeMasterDetailTester(undefined, undefined), -1);
@@ -37,6 +38,7 @@ test('TreeMasterDetailRenderer static object', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   renderer.setDataService(new DataService(data));
@@ -116,6 +118,7 @@ test('TreeMasterDetailRenderer static array', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
@@ -202,6 +205,7 @@ test('TreeMasterDetailRenderer static array not root', t => {
         type: 'object', properties: { name: {type: 'string'}}}},
       name: {type: 'string'}
     }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   renderer.setDataService(new DataService(data));
@@ -268,6 +272,7 @@ test('TreeMasterDetailRenderer dynamic select', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
@@ -309,6 +314,7 @@ test('TreeMasterDetailRenderer dynamic add array root', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
@@ -343,6 +349,7 @@ test('TreeMasterDetailRenderer dynamic remove added root', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
@@ -377,6 +384,7 @@ test('TreeMasterDetailRenderer dynamic add child to existing', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
@@ -421,6 +429,7 @@ test('TreeMasterDetailRenderer dynamic remove root', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
@@ -453,6 +462,7 @@ test('TreeMasterDetailRenderer dynamic remove child from existing', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
@@ -492,6 +502,7 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
@@ -555,6 +566,7 @@ test('TreeMasterDetailRenderer dynamic cancel add', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
@@ -597,6 +609,7 @@ test('TreeMasterDetailRenderer dynamic remove added child', t => {
         name: {type: 'string'}
     }
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = [{name: 'Foo'}];
   renderer.setDataService(new DataService(data));
@@ -644,6 +657,7 @@ test('TreeMasterDetailRenderer dataService notification wrong ref', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -670,6 +684,7 @@ test('TreeMasterDetailRenderer dataService notification null ref', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -696,6 +711,7 @@ test('TreeMasterDetailRenderer dataService notification undefined ref', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -722,6 +738,7 @@ test('TreeMasterDetailRenderer dataService no notification after disconnect', t 
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -749,6 +766,7 @@ test('TreeMasterDetailRenderer dataService notification', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -779,6 +797,7 @@ test('TreeMasterDetailRenderer dataService notification value undefined', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -804,6 +823,7 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
       type: 'object', properties: { name: {type: 'string'}}}},
     name: {type: 'string'}
   }} as JsonSchema;
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -824,10 +844,12 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
   t.is(ulNew.children.length, 0);
 });
 test('TreeMasterDetailRenderer notify visible', t => {
+  const schema = {type: 'object', properties: {}};
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const treeMasterDetail = {type: 'MasterDetailLayout', scope: {$ref: '#'}} as ControlElement;
   renderer.setDataService(new DataService({}));
-  renderer.setDataSchema({type: 'object', properties: {}});
+  renderer.setDataSchema(schema);
   renderer.setUiSchema(treeMasterDetail);
   renderer.connectedCallback();
   const runtime = <Runtime>treeMasterDetail['runtime'];
@@ -835,10 +857,12 @@ test('TreeMasterDetailRenderer notify visible', t => {
   t.is(renderer.hidden, true);
 });
 test('TreeMasterDetailRenderer notify disabled', t => {
+  const schema = {type: 'object', properties: {}};
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const treeMasterDetail = {type: 'MasterDetailLayout', scope: {$ref: '#'}} as ControlElement;
   renderer.setDataService(new DataService({}));
-  renderer.setDataSchema({type: 'object', properties: {}});
+  renderer.setDataSchema(schema);
   renderer.setUiSchema(treeMasterDetail);
   renderer.connectedCallback();
   const runtime = <Runtime>treeMasterDetail['runtime'];
@@ -846,10 +870,12 @@ test('TreeMasterDetailRenderer notify disabled', t => {
   t.is(renderer.getAttribute('disabled'), 'true');
 });
 test('TreeMasterDetailRenderer notify enabled', t => {
+  const schema = {type: 'object', properties: {}};
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const treeMasterDetail = {type: 'MasterDetailLayout', scope: {$ref: '#'}} as ControlElement;
   renderer.setDataService(new DataService({}));
-  renderer.setDataSchema({type: 'object', properties: {}});
+  renderer.setDataSchema(schema);
   renderer.setUiSchema(treeMasterDetail);
   renderer.connectedCallback();
   const runtime = <Runtime>treeMasterDetail['runtime'];
@@ -857,10 +883,12 @@ test('TreeMasterDetailRenderer notify enabled', t => {
   t.false(renderer.hasAttribute('disabled'));
 });
 test('TreeMasterDetailRenderer disconnected no notify visible', t => {
+  const schema = {type: 'object', properties: {}};
+  instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const treeMasterDetail = {type: 'MasterDetailLayout', scope: {$ref: '#'}} as ControlElement;
   renderer.setDataService(new DataService({}));
-  renderer.setDataSchema({type: 'object', properties: {}});
+  renderer.setDataSchema(schema);
   renderer.setUiSchema(treeMasterDetail);
   renderer.connectedCallback();
   renderer.disconnectedCallback();

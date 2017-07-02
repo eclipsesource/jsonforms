@@ -34,7 +34,7 @@ export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Teste
             return false;
         }
         let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
-        while (currentDataSchema.$ref) {
+        while (currentDataSchema && currentDataSchema.$ref) {
           currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
         }
         if (currentDataSchema === undefined) {

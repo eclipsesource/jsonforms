@@ -89,14 +89,21 @@ export class SchemaServiceImpl implements SchemaService {
     this.selfContainedSchemas[rootSchema.id] = this.rootSchema;
   }
   getContainmentProperties(schema: JsonSchema): Array<ContainmentProperty> {
-    if (schema.$ref) {
-      return this.getContainmentProperties(this.getSelfContainedSchema(schema, schema.$ref));
-    }
-    return Object.keys(schema.properties).
-      reduce((prev, cur) => prev.concat(
-        this.getContainment(cur, cur, schema.properties[cur], schema, false, () => {/*no-op*/},
-          () => () => {/*no-op*/}, (data) => data[cur])),
-      []);
+    // if (schema.$ref) {
+    //   return this.getContainmentProperties(this.getSelfContainedSchema(schema, schema.$ref));
+    // }
+    // if (schema.anyOf) {
+    //   return schema.anyOf.reduce((acc, cur) => acc.concat(this.getContainmentProperties(cur)), []);
+    // }
+    // if (schema.properties) {
+    //   return Object.keys(schema.properties).
+    //   reduce((prev, cur) => prev.concat(
+    //     this.getContainment(cur, cur, schema.properties[cur], schema, false, () => {/*no-op*/},
+    //     () => () => {/*no-op*/}, (data) => data[cur])),
+    //     []);
+    // }
+    // return [];
+    return this.getContainment('root', 'root', schema, schema, false, null, null, null);
   }
   hasContainmentProperties(schema: JsonSchema): boolean {
     return this.getContainmentProperties(schema).length !== 0;
@@ -189,7 +196,11 @@ export class SchemaServiceImpl implements SchemaService {
     if (this.isObject(schema)) {
       return isInContainment ? [
         new ContainmentPropertyImpl(schema, key, name, addFunction, deleteFunction, getFunction)
-      ] : [];
+      ] : Object.keys(schema.properties).
+        reduce((prev, cur) => prev.concat(
+          this.getContainment(cur, cur, schema.properties[cur], rootSchema, false, addFunction,
+          deleteFunction, getFunction)),
+          []);
     }
     if (this.isArray(schema) && !Array.isArray(schema.items)) {
       return this.getContainment(key, name, schema.items, rootSchema, true,
