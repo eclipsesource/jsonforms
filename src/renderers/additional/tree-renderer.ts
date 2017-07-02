@@ -89,13 +89,15 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       button.textContent = 'Add to root';
 
       button.onclick = (ev: Event) => {
-        const newData = {};
-        this.addingToRoot = true;
-        const length = rootData.push(newData);
-        this.dataService.notifyAboutDataChange(controlElement, rootData);
-        this.expandObject(newData, <HTMLUListElement>this.master.firstChild, this.dataSchema.items,
-          toDelete => rootData.splice(length - 1, 1));
-        this.addingToRoot = false;
+        if (!Array.isArray(this.dataSchema.items)) {
+          const newData = {};
+          this.addingToRoot = true;
+          const length = rootData.push(newData);
+          this.dataService.notifyAboutDataChange(controlElement, rootData);
+          this.expandObject(newData, <HTMLUListElement>this.master.firstChild,
+            this.dataSchema.items, toDelete => rootData.splice(length - 1, 1));
+          this.addingToRoot = false;
+        }
       };
       divHeader.appendChild(button);
     }
@@ -147,7 +149,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
       let firstChild = arrayData;
       let schema = this.resolvedSchema;
-      if (Array.isArray(firstChild)) {
+      if (Array.isArray(firstChild) && !Array.isArray(schema.items)) {
         firstChild = firstChild[0];
         schema = schema.items;
       }
@@ -325,8 +327,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
             label.firstChild.lastChild.firstChild.textContent = newValue;
           }
           if (Array.isArray(newValue)) {
-            this.renderChildren(newValue, resolveSchema(schema, uischema.scope.$ref).items, label,
-            lastSegemnet);
+            const childSchema = resolveSchema(schema, uischema.scope.$ref).items;
+            if (!Array.isArray(childSchema)) {
+              this.renderChildren(newValue, childSchema, label, lastSegemnet);
+            }
           }
         }
       });

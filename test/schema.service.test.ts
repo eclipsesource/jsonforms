@@ -290,13 +290,14 @@ test('support easy uml schema with arrays', t => {
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
   t.is(properties[0].label, 'classes');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.properties.classes.items);
+  t.deepEqual(properties[0].schema, schema.properties.classes.items as JsonSchema);
 
-  const propertiesClasses = service.getContainmentProperties(schema.properties.classes.items);
+  const propertiesClasses =
+    service.getContainmentProperties(schema.properties.classes.items as JsonSchema);
   t.is(propertiesClasses.length, 1);
   t.is(propertiesClasses[0].label, 'attributes');
   t.deepEqual(propertiesClasses[0].schema,
-    (<JsonSchema>schema.properties.classes.items).properties.attributes.items);
+    (schema.properties.classes.items as JsonSchema).properties.attributes.items);
 });
 test('support for array references', t => {
   const schema = {
@@ -345,11 +346,12 @@ test('support for array references', t => {
     } as JsonSchema;
     const service: SchemaService = new SchemaServiceImpl(schema);
     const properties =
-      service.getReferenceProperties(schema.definitions.class.properties.associations.items);
+      service.getReferenceProperties(
+        schema.definitions.class.properties.associations.items as JsonSchema);
     t.is(properties.length, 1);
     t.is(properties[0].label, 'id');
-    const selfContainedClassSchema = <JsonSchema>schema.definitions.class;
-    selfContainedClassSchema.properties.associations.items['links'][0].targetSchema = '#';
+    const selfContainedClassSchema = schema.definitions.class as JsonSchema;
+    (selfContainedClassSchema.properties.associations.items as JsonSchema)['links'][0].targetSchema = '#';
     t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
 test('support for object references', t => {

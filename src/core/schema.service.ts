@@ -303,8 +303,9 @@ export class SchemaServiceImpl implements SchemaService {
       // FIXME Do we want to support tupples? If so how do we render this?
       if (Array.isArray(schema.items)) {
         schema.items.forEach(child => this.findAllRefs(child, result));
+      } else {
+        this.findAllRefs(schema.items, result);
       }
-      this.findAllRefs(schema.items, result);
     }
     if (Array.isArray(schema.anyOf)) {
         schema.anyOf.forEach(child => this.findAllRefs(child, result));

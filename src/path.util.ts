@@ -97,8 +97,9 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
     // FIXME Do we want to support tupples? If so how do we render this?
     if (Array.isArray(schema.items)) {
       schema.items.forEach(child => findAllRefs(child, result));
+    } else {
+      findAllRefs(schema.items, result);
     }
-    findAllRefs(schema.items, result);
   }
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
