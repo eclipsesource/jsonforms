@@ -124,7 +124,7 @@ export class SchemaServiceImpl implements SchemaService {
 
   getReferenceProperties(schema: JsonSchema): Array<RefrenceProperty> {
     if (schema.$ref !== undefined) {
-      return this.getReferenceProperties(this.getSelfContainedSchema(schema, schema.$ref));
+      return this.getReferenceProperties(this.getSelfContainedSchema(this.rootSchema, schema.$ref));
     }
     if (schema['links']) {
       const links = schema['links'];
@@ -148,6 +148,9 @@ export class SchemaServiceImpl implements SchemaService {
               }, root);
               const index = (<Array<Object>>containment).indexOf(toAdd);
               if (schema.properties[variable].type === 'array') {
+                if(!data[variable]) {
+                  data[variable] = [];
+                }
                 data[variable].push(index);
               } else {
                 data[variable] = index;
@@ -212,6 +215,9 @@ export class SchemaServiceImpl implements SchemaService {
         childArray.push(valueToAdd);
       }, (data: object) => (valueToDelete: object) => {
         const childArray = data[key];
+        if(!childArray) {
+          return;
+        }
         const indexToDelete = childArray.indexOf(valueToDelete);
         childArray.splice(indexToDelete - 1, 1);
       }, (data: object) => {
@@ -286,7 +292,8 @@ export class SchemaServiceImpl implements SchemaService {
     if (outerSchema.definitions === undefined || outerSchema.definitions === null) {
       outerSchema.definitions = {};
     }
-    outerSchema.definitions[resolved.id] = definitionSchema;
+    const defName = innerRef.substr(innerRef.lastIndexOf('/') + 1);
+    outerSchema.definitions[defName] = definitionSchema;
     includedDefs.push(innerRef);
     // Step 4: recursively self-contain added definition
     this.selfContainSchema(definitionSchema, outerSchema, outerReference, includedDefs);
@@ -301,9 +308,9 @@ export class SchemaServiceImpl implements SchemaService {
     }
     if (schema.type === 'array' && schema.items !== undefined) {
       // FIXME Do we want to support tupples? If so how do we render this?
-      if (Array.isArray(schema.items)) {
-        schema.items.forEach(child => this.findAllRefs(child, result));
-      } else {
+      if (!Array.isArray(schema.items)) {
+      //   schema.items.forEach(child => this.findAllRefs(child, result));
+      // } else {
         this.findAllRefs(schema.items, result);
       }
     }
