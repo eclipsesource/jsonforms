@@ -1,7 +1,8 @@
+import * as _ from 'lodash';
 
-import {Layout, ControlElement, UISchemaElement, LabelElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
-import {startCase} from '../renderers/label.util';
+import {ControlElement, LabelElement, Layout, UISchemaElement} from '../models/uischema';
+
 /**
  * Creates a new ILayout.
  * @param layoutType The type of the laoyut
@@ -16,15 +17,19 @@ const createLayout = (layoutType: string): Layout => ({
  * Derives the type of the jsonSchema element
  */
 const deriveType = (jsonSchema: JsonSchema): string => {
-    if (jsonSchema && jsonSchema.type && typeof jsonSchema.type === 'string') {
+    if (!_.isEmpty(jsonSchema) &&
+        !_.isEmpty(jsonSchema.type) &&
+        typeof jsonSchema.type === 'string') {
         return jsonSchema.type;
     }
-    if (jsonSchema && (jsonSchema.properties || jsonSchema.additionalProperties)) {
+    if (!_.isEmpty(jsonSchema) &&
+        (!_.isEmpty(jsonSchema.properties) || !_.isEmpty(jsonSchema.additionalProperties))) {
         return 'object';
     }
-    if (jsonSchema && jsonSchema.items) {
+    if (!_.isEmpty(jsonSchema) && !_.isEmpty(jsonSchema.items)) {
         return 'array';
     }
+
     // ignore all remaining cases
     return 'null';
 };
@@ -40,6 +45,9 @@ const createControlElement = (label: string, ref: string): ControlElement => ({
     }
 });
 
+const isLayout = (uiSchema: UISchemaElement): uiSchema is Layout =>
+    (uiSchema as Layout).elements !== undefined;
+
 /**
  * Wraps the given {@code uiSchema} in a Layout if there is none already.
  * @param uiSchema The ui schema to wrap in a layout.
@@ -47,12 +55,14 @@ const createControlElement = (label: string, ref: string): ControlElement => ({
  * @returns the wrapped uiSchema.
  */
 const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string): Layout  => {
-    if (uiSchema && uiSchema['elements'] === undefined) {
+    if (!_.isEmpty(uiSchema) && !isLayout(uiSchema)) {
         const verticalLayout: Layout = createLayout(layoutType);
         verticalLayout.elements.push(uiSchema);
+
         return verticalLayout;
     }
-    return <Layout>uiSchema;
+
+    return uiSchema as Layout;
 };
 
 /**
@@ -63,12 +73,12 @@ const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string):
  *      The name of the schema
  */
 const addLabel = (layout: Layout, labelName: string) => {
-    if (labelName && labelName !== '') {
+    if (!_.isEmpty(labelName) ) {
         // add label with name
-        const label = {
+        const label: LabelElement = {
             type: 'Label',
-            text: startCase(labelName)
-        } as LabelElement;
+            text: _.startCase(labelName)
+        };
         layout.elements.push(label);
     }
 };
@@ -86,13 +96,16 @@ const generateUISchema =
 
             addLabel(layout, schemaName);
 
-            if (jsonSchema.properties) {
+            if (!_.isEmpty(jsonSchema.properties)) {
                 // traverse properties
                 const nextRef: string = currentRef + '/properties';
                 Object.keys(jsonSchema.properties).map(propName => {
                     const value = jsonSchema.properties[propName];
-                    generateUISchema(value, layout.elements,
-                        `${nextRef}/${propName}`, propName, layoutType);
+                    generateUISchema(
+                        value,
+                        layout.elements,
+                        `${nextRef}/${propName}`, propName, layoutType
+                    );
                 });
             }
 
@@ -108,10 +121,11 @@ const generateUISchema =
         /* falls through */
         case 'boolean':
             const controlObject: ControlElement = createControlElement(
-                startCase(schemaName),
+                _.startCase(schemaName),
                 currentRef
             );
             schemaElements.push(controlObject);
+
             return controlObject;
         case 'null':
             return null;
@@ -131,5 +145,3 @@ export const generateDefaultUISchema =
         wrapInLayoutIfNecessary(
             generateUISchema(jsonSchema, [], '#', '', layoutType),
             layoutType);
-
-export default generateDefaultUISchema;

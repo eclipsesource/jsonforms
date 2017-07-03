@@ -1,51 +1,156 @@
 import test from 'ava';
+import * as installCE from 'document-register-element/pony';
 // inject window, document etc.
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
-import {ControlElement} from '../../src/models/uischema';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {enumControlTester, EnumControl} from '../../src/renderers/controls/enum.control';
-import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
+import {ControlElement} from '../../src/models/uischema';
+import {EnumControl, enumControlTester} from '../../src/renderers/controls/enum.control';
+import {
+  testDisable,
+  testEnable, testHide,
+  testMultipleErrors,
+  testNotifyAboutEnablementWhenDisconnected,
+  testNotifyAboutValidationWhenDisconnected,
+  testNotifyAboutVisibiltyWhenDisconnected,
+  testNullErrors,
+  testOneError,
+  testResetErrors,
+  testShow,
+  testUndefinedErrors
+} from './base.control.tests';
 
+test.beforeEach(t => {
+  t.context.data = { 'foo': 'a' };
+  t.context.schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        enum: ['a', 'b'],
+      },
+    },
+  };
+  t.context.uiSchema = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo',
+    },
+  };
+});
 
 test('EnumControlTester', t => {
   t.is(enumControlTester(undefined, undefined), -1);
   t.is(enumControlTester(null, undefined), -1);
   t.is(enumControlTester({type: 'Foo'}, undefined), -1);
   t.is(enumControlTester({type: 'Control'}, undefined), -1);
-  t.is(enumControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
-  t.is(enumControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {
-      foo: {type: 'string'}, bar: {type: 'string', enum: ['a', 'b']}}}), -1);
-  t.is(enumControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string', enum: ['a', 'b']}}}), 2);
-  // TODO should this be true?
-  t.is(enumControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'number', enum: [1, 2]}}}), 2);
 });
+
+test('EnumControl tester with wrong prop type', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+      enumControlTester(
+          control,
+          {type: 'object', properties: {foo: {type: 'string'}}}
+      ),
+      -1
+  );
+});
+
+test('EnumControl tester with wrong prop type, but sibling has correct one', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+      enumControlTester(
+          control,
+          {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string'
+              },
+              bar: {
+                type: 'string',
+                enum: ['a', 'b']
+              }
+            }
+          }
+      ),
+      -1
+  );
+});
+
+test('EnumControl tester with matching string type', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+      enumControlTester(
+          control,
+          {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string',
+                enum: ['a', 'b']
+              }
+            }
+          }
+      ),
+      2
+  );
+});
+
+test('EnumControl tester with matching numeric type', t => {
+  const control: ControlElement = {
+    type: 'Control',
+        scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  // TODO should this be true?
+  t.is(
+      enumControlTester(
+          control,
+          {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'number',
+                enum: [1, 2]
+              }
+            }
+          }
+          ),
+      2
+  );
+});
+
 test('EnumControl static', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'control')
+  t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, 'Foo');
-  const input = <HTMLSelectElement>result.children[1];
+  const input = result.children[1] as HTMLSelectElement;
   t.is(input.tagName, 'SELECT');
   t.is(input.value, 'a');
   t.is(input.options.length, 2);
@@ -55,22 +160,27 @@ test('EnumControl static', t => {
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
+
 test('EnumControl static no label', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
   const data = {'foo': 'b'};
+  const uiSchema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    },
+    label: false
+  };
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'},
-    label: false} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'control')
+  t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, '');
-  const input = <HTMLSelectElement>result.children[1];
+  const input = result.children[1] as HTMLSelectElement;
   t.is(input.tagName, 'SELECT');
   t.is(input.value, 'b');
   t.is(input.options.length, 2);
@@ -80,321 +190,171 @@ test('EnumControl static no label', t => {
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
+
 test('EnumControl inputChange', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  const input = <HTMLSelectElement>result.children[1];
+  const input = result.children[1] as HTMLSelectElement;
   input.value = 'b';
   input.onchange(null);
-  t.is(data.foo, 'b');
+  t.is(t.context.data.foo, 'b');
 });
+
 test('EnumControl dataService notification', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
   const data = {'foo': 'b'};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLSelectElement;
   t.is(input.selectedIndex, 1);
   t.is(input.value, 'b');
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'a');
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
+
 test.failing('EnumControl dataService notification value undefined', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
+  const input = renderer.children[1] as HTMLSelectElement;
+  dataService.notifyAboutDataChange(
+      {
+        type: 'Control',
+        scope: {
+          $ref: '#/properties/foo',
+        },
+      },
+      undefined,
+  );
   t.is(input.selectedIndex, -1);
 });
+
 test.failing('EnumControl dataService notification value null', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.selectedIndex, -1);
 });
 test('EnumControl dataService notification wrong ref', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
+  const input = renderer.children[1] as HTMLSelectElement;
+  dataService.notifyAboutDataChange(
+      {
+        type: 'Control',
+        scope: {
+          $ref: '#/properties/bar',
+        },
+      },
+      'Bar',
+  );
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
+
 test('EnumControl dataService notification null ref', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange(null, false);
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
+
 test('EnumControl dataService notification undefined ref', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange(undefined, false);
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
+
 test('EnumControl dataService no notification after disconnect', t => {
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
   const renderer: EnumControl = new EnumControl();
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
-  const input = <HTMLSelectElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
+
 test('EnumControl notify visible false', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = false;
-  t.is(renderer.hidden, true);
+  testHide(t, new EnumControl());
 });
+
 test('EnumControl notify visible true', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'b'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = true;
-  t.is(renderer.hidden, false);
+  testShow(t, new EnumControl());
 });
 
 test('EnumControl notify disabled', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = false;
-  const input = <HTMLSelectElement>renderer.children[1];
-  t.is(input.getAttribute('disabled'), 'true');
-  // TODO would be nice
-  // t.is(input.disabled, true);
+  testDisable(t, new EnumControl());
 });
+
 test('EnumControl notify enabled', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = true;
-  const input = <HTMLSelectElement>renderer.children[1];
-  t.false(input.hasAttribute('disabled'));
+  testEnable(t, new EnumControl());
 });
 
 test('EnumControl notify one error', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'b'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, 'error a');
+  testOneError(t, new EnumControl());
 });
+
 test('EnumControl notify multiple errors', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a', 'error b'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, 'error a\nerror b');
+  testMultipleErrors(t, new EnumControl());
 });
+
 test('EnumControl notify errors undefined', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'b'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = undefined;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testUndefinedErrors(t, new EnumControl());
 });
+
 test('EnumControl notify errors null', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = null;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testNullErrors(t, new EnumControl());
 });
+
 test('EnumControl notify errors clean', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'b'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  runtime.validationErrors = undefined;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testResetErrors(t, new EnumControl());
 });
+
 test('EnumControl disconnected no notify visible', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = false;
-  t.is(renderer.hidden, false);
+  testNotifyAboutVisibiltyWhenDisconnected(t, new EnumControl());
 });
+
 test('EnumControl disconnected no notify enabled', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'b'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = false;
-  const input = <HTMLSelectElement>renderer.children[1];
-  t.false(input.hasAttribute('disabled'));
+  testNotifyAboutEnablementWhenDisconnected(t, new EnumControl());
 });
+
 test('EnumControl disconnected no notify error', t => {
-  const renderer: EnumControl = new EnumControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': 'a'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties:
-    {foo: {type: 'string', enum: ['a', 'b']}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.not(errorsDiv.textContent, 'error a',
-    'Diconnected Controls should not be notified about new errors.');
+  testNotifyAboutValidationWhenDisconnected(t, new EnumControl());
 });

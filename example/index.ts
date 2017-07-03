@@ -19,7 +19,7 @@ import './templates/resolve';
 import './templates/uischema-registry';
 import './templates/ecore';
 
-window.onload = (ev) => {
+window.onload = ev => {
   const selectExampleElement = createExampleSelection();
   createThemeSelection();
   createStyleSelection(selectExampleElement);

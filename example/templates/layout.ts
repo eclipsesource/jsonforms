@@ -11,7 +11,7 @@ const schema = {
     }
   }
 };
-const uischema_vertical = {
+const uischemaVertical = {
   'type': 'VerticalLayout',
   'elements': [
     {
@@ -30,7 +30,7 @@ const uischema_vertical = {
     }
   ]
 };
-const uischema_horizontal = {
+const uischemaHorizontal = {
   'type': 'HorizontalLayout',
   'elements': [
     {
@@ -49,7 +49,7 @@ const uischema_horizontal = {
     }
   ]
 };
-const uischema_group = {
+const uischemaGroup = {
   'type': 'Group',
   'label': 'My Group',
   'elements': [
@@ -69,7 +69,7 @@ const uischema_group = {
     }
   ]
 };
-const uischema_complex = {
+const uischemaComplex = {
   'type': 'Group',
   'label': 'My Group',
   'elements': [
@@ -124,11 +124,11 @@ const data = {
 };
 registerExamples([
   {name: 'layout-vertical', label: 'Layout Vertical', data: data,
-    schema: schema, uiSchema: uischema_vertical},
+    schema: schema, uiSchema: uischemaVertical},
   {name: 'layout-horizontal', label: 'Layout Horizontal', data: data,
-    schema: schema, uiSchema: uischema_horizontal},
+    schema: schema, uiSchema: uischemaHorizontal},
   {name: 'layout-group', label: 'Layout Group', data: data,
-    schema: schema, uiSchema: uischema_group},
+    schema: schema, uiSchema: uischemaGroup},
   {name: 'layout-complex', label: 'Layout Complex', data: data,
-    schema: schema, uiSchema: uischema_complex}
+    schema: schema, uiSchema: uischemaComplex}
 ]);

@@ -1,3 +1,4 @@
+import {Runtime} from '../core/runtime';
 /**
  * A rule that may be attached to any UI schema element.
  */
@@ -23,28 +24,28 @@ export enum RuleEffect {
     /**
      * Effect that hides the associated element.
      */
-    HIDE = <any>'HIDE',
+    HIDE = 'HIDE' as any,
 
         /**
          * Effect that shows the associated element.
          *
          * @type {any}
          */
-    SHOW = <any>'SHOW',
+    SHOW = 'SHOW' as any,
 
         /**
          * Effect that enables the associated element.
          *
          * @type {any}
          */
-    ENABLE = <any>'ENABLE',
+    ENABLE = 'ENABLE' as any,
 
         /**
          * Effect that disables the associated element.
          *
          * @type {any}
          */
-    DISABLE = <any>'DISABLE'
+    DISABLE = 'DISABLE' as any,
 }
 /**
  * Represents a condition to be evaluated.
@@ -91,6 +92,11 @@ export interface UISchemaElement {
      * Any additional options.
      */
     options?: any;
+
+    /**
+     * Runtime object that encapsulates runtime state.
+     */
+    runtime?: Runtime;
 }
 
 /**
@@ -102,7 +108,7 @@ export interface Layout extends UISchemaElement {
     /**
      * The child elements of this layout.
      */
-    elements: Array<UISchemaElement>;
+    elements: UISchemaElement[];
 }
 
 /**
@@ -197,5 +203,5 @@ export interface Categorization extends UISchemaElement {
      * The child elements of this categorization which are either of type
      * {@link Category} or {@link Categorization}.
      */
-    elements: Array<Category|Categorization>;
+    elements: (Category|Categorization)[];
 }

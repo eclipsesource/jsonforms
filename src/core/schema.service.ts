@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {JsonSchema} from '../models/jsonSchema';
 import {resolveSchema} from '../path.util';
 interface ReferenceSchemaMap {
@@ -15,7 +16,7 @@ const deepCopy = <T>(object: T): T => {
 const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
   if (isObject(schema)) {
     Object.keys(schema.properties).forEach(key =>
-        findAllRefs(schema.properties[key], result));
+      findAllRefs(schema.properties[key], result));
   }
   if (isArray(schema)) {
     // FIXME Do we want to support tupples? If so how do we render this?
@@ -24,14 +25,16 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
     }
   }
   if (Array.isArray(schema.anyOf)) {
-      schema.anyOf.forEach(child => findAllRefs(child, result));
+    schema.anyOf.forEach(child => findAllRefs(child, result));
   }
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
   }
+  // tslint:disable:no-string-literal
   if (schema['links'] !== undefined) {
     schema['links'].forEach(link => result[link.targetSchema.$ref] = schema);
   }
+  // tslint:enable:no-string-literal
 
   return result;
 };
@@ -55,34 +58,46 @@ const getArray = (key: string) => (data: object) => {
 };
 const addReference = (schema: JsonSchema, variable: string, pathToContainment: string) =>
   (root: Object, data: Object, toAdd: object) => {
-  const containment = pathToContainment.split('/').
-    reduce((elem, path) => {
-        if (path === '#' || path === '') {return elem; }
+    const containment = pathToContainment
+      .split('/')
+      .reduce(
+        (elem, path) => {
+          if (path === '#' || path === '') {
+            return elem;
+          }
 
-        return elem[path];
-      },   root);
-  const index = (containment as Object[]).indexOf(toAdd);
-  if (schema.properties[variable].type === 'array') {
-    if (!data[variable]) {
-      data[variable] = [];
+          return elem[path];
+        },
+        root
+      );
+    const index = (containment as Object[]).indexOf(toAdd);
+    if (schema.properties[variable].type === 'array') {
+      if (!data[variable]) {
+        data[variable] = [];
+      }
+      data[variable].push(index);
+    } else {
+      data[variable] = index;
     }
-    data[variable].push(index);
-  } else {
-    data[variable] = index;
-  }
-};
+  };
 const getReference = (href: string, variable: string, variableWrapped: string) =>
   (root: Object, data: Object) => {
-  const variableValue = data[variable];
-  const pathToObject = href.replace(variableWrapped, variableValue);
+    const variableValue = data[variable];
+    const pathToObject = href.replace(variableWrapped, variableValue);
 
-  return pathToObject.split('/').
-    reduce((elem, path) => {
-        if (path === '#') {return elem; }
+    return pathToObject
+      .split('/')
+      .reduce(
+        (elem, path) => {
+          if (path === '#') {
+            return elem;
+          }
 
-        return elem[path];
-      },   root);
-};
+          return elem[path];
+        },
+        root
+      );
+  };
 /**
  * A Property wraps a JsonSchema and provides additional information
  * like a label and the property key.
@@ -110,7 +125,7 @@ export interface ContainmentProperty extends Property {
   /**
    * This allows to add data to the containment.
    * @param data The object to add to
-   * @param valueToAdd The object to add
+   * @return a function that expects the element to be added
    */
   addToData(data: Object): (valueToAdd: object) => void;
   /**
@@ -131,7 +146,7 @@ export interface ContainmentProperty extends Property {
  * A ReferenceProperty extends the Property and provides methods
  * which allow to modify reference data.
  */
-export interface RefrenceProperty extends Property {
+export interface ReferenceProperty extends Property {
   /**
    * The schema of the referenced elements.
    */
@@ -151,20 +166,24 @@ export interface RefrenceProperty extends Property {
    */
   getData(root: Object, data: Object): Object;
 }
-export const isContainmentProperty = (property: Property): property is ContainmentProperty => {
-    return property instanceof ContainmentPropertyImpl;
-};
-export const isRefrenceProperty = (property: Property): property is RefrenceProperty => {
-    return property instanceof ReferencePropertyImpl;
-};
+
 class ContainmentPropertyImpl implements ContainmentProperty {
-  constructor(private innerSchema: JsonSchema,  private key: string, private name: string,
-    private addFunction: (data: object)=> (valueToAdd: object) => void,
-    private deleteFunction: (data: object) => (valueToDelete: object) => void,
-    private getFunction: (data: object) => Object
-  ) {}
+  constructor(private innerSchema: JsonSchema,
+              private key: string,
+              private name: string,
+              private addFunction: (data: object) => (valueToAdd: object) => void,
+              private deleteFunction: (data: object) => (valueToDelete: object) => void,
+              private getFunction: (data: object) => Object) {}
   get label(): string {
-    return this.innerSchema.title || this.name || this.innerSchema.id || this.key;
+    return _.find(
+      [
+        this.innerSchema.title,
+        this.name,
+        this.innerSchema.id,
+        this.key
+      ],
+      n => !_.isEmpty(n)
+    );
   }
   get schema(): JsonSchema {
     return this.innerSchema;
@@ -182,14 +201,25 @@ class ContainmentPropertyImpl implements ContainmentProperty {
     return this.getFunction(data);
   }
 }
-class ReferencePropertyImpl implements RefrenceProperty {
-  constructor(private innerSchema: JsonSchema, private innerTargetSchema: JsonSchema,
-    private key: string, private name: string,
+class ReferencePropertyImpl implements ReferenceProperty {
+  constructor(
+    private innerSchema: JsonSchema,
+    private innerTargetSchema: JsonSchema,
+    private key: string,
+    private name: string,
     private addFunction: (root: object, data: object, valueToAdd: object) => void,
     private getFunction: (root: object, data: object) => Object
   ) {}
   get label(): string {
-    return this.innerSchema.title || this.name || this.innerSchema.id || this.key;
+    return _.find(
+      [
+        this.innerSchema.title,
+        this.name,
+        this.innerSchema.id,
+        this.key
+      ],
+      n => !_.isEmpty(n)
+    );
   }
   get schema(): JsonSchema {
     return this.innerSchema;
@@ -207,6 +237,14 @@ class ReferencePropertyImpl implements RefrenceProperty {
     return this.getFunction(root, data);
   }
 }
+
+export const isContainmentProperty = (property: Property): property is ContainmentProperty => {
+  return property instanceof ContainmentPropertyImpl;
+};
+export const isReferenceProperty = (property: Property): property is ReferenceProperty => {
+  return property instanceof ReferencePropertyImpl;
+};
+
 /**
  * The Schema Service allows to retrieve containments and references.
  */
@@ -226,24 +264,24 @@ export interface SchemaService {
    */
   hasContainmentProperties(schema: JsonSchema): boolean;
   /**
-   * Rertieves a self contained schema.
+   * Retieves a self contained schema.
    * @param parentSchema The schema to use for resolvement
    * @param refPath The path to resolve
-   * @return a JsonSchema that is selfcontained
+   * @return a JsonSchema that is self-contained
    */
   getSelfContainedSchema(parentSchema: JsonSchema, refPath: string): JsonSchema;
   /**
    * Retrieves an array of reference properties based on the provided schema.
    * @param schema The schema to check for references
-   * @return The array of {@link RefrenceProperty} or empty if no references are available
-   * @see RefrenceProperty
+   * @return The array of {@link ReferenceProperty} or empty if no references are available
+   * @see ReferenceProperty
    */
-  getReferenceProperties(schema: JsonSchema): RefrenceProperty[];
+  getReferenceProperties(schema: JsonSchema): ReferenceProperty[];
 }
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: {[id: string]: JsonSchema} = {};
   constructor(private rootSchema: JsonSchema) {
-    if (!rootSchema.id) {
+    if (_.isEmpty(rootSchema.id)) {
       rootSchema.id = '#generatedRootID';
     }
     this.selfContainedSchemas[rootSchema.id] = this.rootSchema;
@@ -257,7 +295,7 @@ export class SchemaServiceImpl implements SchemaService {
   getSelfContainedSchema(parentSchema: JsonSchema, refPath: string): JsonSchema {
     let schema = resolveSchema(parentSchema, refPath);
     schema = deepCopy(schema);
-    if (!schema.id) {
+    if (_.isEmpty(schema.id)) {
       schema.id = '#' + refPath;
     }
     if (this.selfContainedSchemas.hasOwnProperty(schema.id)) {
@@ -269,15 +307,17 @@ export class SchemaServiceImpl implements SchemaService {
     return schema;
   }
 
-  getReferenceProperties(schema: JsonSchema): RefrenceProperty[] {
+  getReferenceProperties(schema: JsonSchema): ReferenceProperty[] {
     if (schema.$ref !== undefined) {
       return this.getReferenceProperties(this.getSelfContainedSchema(this.rootSchema, schema.$ref));
     }
+    // tslint:disable:no-string-literal
     if (schema['links']) {
       const links = schema['links'];
-      const result: RefrenceProperty[] = [];
+      // tslint:enable:no-string-literal
+      const result: ReferenceProperty[] = [];
       links.forEach(link => {
-        if (!link.targetSchema || !link.href) {
+        if (_.isEmpty(link.targetSchema) || _.isEmpty(link.href)) {
           // FIXME log
           return;
         }
@@ -286,10 +326,16 @@ export class SchemaServiceImpl implements SchemaService {
         const variableWrapped = href.match(/\{.*\}/)[0];
         const pathToContainment = href.split(/\{.*\}/)[0];
         const variable = variableWrapped.substring(1, variableWrapped.length - 1);
-        result.push(new ReferencePropertyImpl(schema.properties[variable], targetSchema, variable,
-                                              variable,
-                                              addReference(schema, variable, pathToContainment),
-                                              getReference(href, variable, variableWrapped)));
+        result.push(
+          new ReferencePropertyImpl(
+            schema.properties[variable],
+            targetSchema,
+            variable,
+            variable,
+            addReference(schema, variable, pathToContainment),
+            getReference(href, variable, variableWrapped)
+          )
+        );
       });
 
       return result;
@@ -306,29 +352,68 @@ export class SchemaServiceImpl implements SchemaService {
                          deleteFunction: (data: object) => (valueToDelete: object) => void,
                          getFunction: (data: object) => Object): ContainmentProperty[] {
     if (schema.$ref !== undefined) {
-      return this.getContainment(key, schema.$ref === '#' ? undefined :
-        schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
-        this.getSelfContainedSchema(rootSchema, schema.$ref), rootSchema, isInContainment,
-        addFunction, deleteFunction, getFunction);
+      return this.getContainment(
+        key,
+        schema.$ref === '#' ? undefined : schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
+        this.getSelfContainedSchema(rootSchema, schema.$ref),
+        rootSchema,
+        isInContainment,
+        addFunction,
+        deleteFunction,
+        getFunction
+      );
     }
     if (isObject(schema)) {
       return isInContainment ? [
         new ContainmentPropertyImpl(schema, key, name, addFunction, deleteFunction, getFunction)
-      ] : Object.keys(schema.properties).
-        reduce((prev, cur) => prev.concat(
-          this.getContainment(cur, cur, schema.properties[cur], rootSchema, false, addFunction,
-                              deleteFunction, getFunction)),
-               []);
+      ] : Object.keys(schema.properties)
+        .reduce(
+          (prev, cur) =>
+            prev.concat(
+              this.getContainment(
+                cur,
+                cur,
+                schema.properties[cur],
+                rootSchema,
+                false,
+                addFunction,
+                deleteFunction,
+                getFunction
+              )
+            ),
+          []
+        );
     }
     if (isArray(schema) && !Array.isArray(schema.items)) {
-      return this.getContainment(key, name, schema.items, rootSchema, true,
-                                 addToArray(key), deleteFromArray(key), getArray(key));
+      return this.getContainment(
+        key,
+        name,
+        schema.items,
+        rootSchema,
+        true,
+        addToArray(key),
+        deleteFromArray(key),
+        getArray(key)
+      );
     }
     if (schema.anyOf !== undefined) {
-      return schema.anyOf.reduce((prev, cur) => prev.concat(
-        this.getContainment(key, undefined, cur, rootSchema, isInContainment, addFunction,
-                            deleteFunction, getFunction)),
-                                 []);
+      return schema.anyOf
+        .reduce(
+          (prev, cur) =>
+            prev.concat(
+              this.getContainment(
+                key,
+                undefined,
+                cur,
+                rootSchema,
+                isInContainment,
+                addFunction,
+                deleteFunction,
+                getFunction
+              )
+            ),
+          []
+        );
     }
 
     return [];
@@ -346,17 +431,19 @@ export class SchemaServiceImpl implements SchemaService {
    */
   private selfContainSchema(schema: JsonSchema, outerSchema: JsonSchema,
                             outerReference: string, includedDefs: string[] = ['#']): void {
-      // Step 1: get all used references
+    // Step 1: get all used references
     const allInnerRefs = findAllRefs(schema);
     Object.keys(allInnerRefs).forEach(innerRef => {
       const resolved = resolveSchema(this.rootSchema, innerRef);
       // Step 2: recognize refs to outer self and set to '#'
       if (innerRef === outerReference || resolved.id === schema.id) {
         if (allInnerRefs[innerRef] !== undefined) {
-          if (allInnerRefs[innerRef].$ref) {
+          if (!_.isEmpty(allInnerRefs[innerRef].$ref)) {
             allInnerRefs[innerRef].$ref = '#';
-          } else if (allInnerRefs[innerRef]['links']) {
+            // tslint:disable:no-string-literal
+          } else if (!_.isEmpty(allInnerRefs[innerRef]['links'])) {
             allInnerRefs[innerRef]['links'].forEach(link => {
+              // tslint:enable:no-string-literal
               if (link.targetSchema.$ref === innerRef) {
                 link.targetSchema.$ref = '#';
               }
@@ -371,9 +458,10 @@ export class SchemaServiceImpl implements SchemaService {
         // definition was already added to schema
         return;
       }
-      if (resolved.anyOf) {
-          resolved.anyOf.forEach(inner =>
-            this.copyAndResolveInner(inner, innerRef, outerSchema, outerReference, includedDefs));
+      if (!_.isEmpty(resolved.anyOf)) {
+        resolved.anyOf.forEach(inner => {
+          this.copyAndResolveInner(inner, innerRef, outerSchema, outerReference, includedDefs);
+        });
       } else {
         this.copyAndResolveInner(resolved, innerRef, outerSchema, outerReference, includedDefs);
       }

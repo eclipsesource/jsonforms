@@ -51,7 +51,7 @@ const uischema = {
     }
   ]
 };
-const uischema_simple = {
+const uischemaSimple = {
   'type': 'Control',
   'scope': {
     '$ref': '#/properties/comments'
@@ -76,5 +76,5 @@ const data = {
 registerExamples([
   {name: 'array', label: 'Array', data: data, schema: schema, uiSchema: uischema},
   {name: 'array-simple', label: 'Array Simple', data: data,
-    schema: schema, uiSchema: uischema_simple}
+    schema: schema, uiSchema: uischemaSimple}
 ]);

@@ -1,18 +1,20 @@
 import * as _ from 'lodash';
-import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
+import {ControlElement, UISchemaElement} from '../models/uischema';
 import {resolveSchema} from '../path.util';
 import {NOT_APPLICABLE} from './uischema.registry';
 
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
  */
-export type Tester = (uiSchema: UISchemaElement, schema: JsonSchema) => boolean
+export type Tester = (uiSchema: UISchemaElement, schema: JsonSchema) => boolean;
 
 /**
  * A ranked tester associates a tester with a number.
  */
-export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => number
+export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => number;
+
+const isControl = (uiSchema: any): uiSchema is ControlElement => uiSchema.scope !== undefined;
 
 /**
  * Only applicable for Controls.
@@ -26,40 +28,42 @@ export type RankedTester = (uiSchema: UISchemaElement, schema: JsonSchema) => nu
  */
 export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Tester =>
     (uiSchema: UISchemaElement, schema: JsonSchema): boolean => {
-        if (_.isEmpty(uiSchema)) {
+        if (_.isEmpty(uiSchema) || !isControl(uiSchema)) {
             return false;
         }
-        const schemaPath = _.isEmpty(uiSchema['scope']) ? undefined : uiSchema['scope']['$ref'];
+        const schemaPath = uiSchema.scope.$ref;
         if (_.isEmpty(schemaPath)) {
             return false;
         }
         let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
-        while (currentDataSchema && currentDataSchema.$ref) {
+        while (!_.isEmpty(currentDataSchema) && !_.isEmpty(currentDataSchema.$ref)) {
           currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
         }
         if (currentDataSchema === undefined) {
             return false;
         }
+
         return predicate(currentDataSchema);
     };
 
 export const schemaSubPathMatches =
 (subPath: string, predicate: (schema: JsonSchema) => boolean): Tester =>
     (uiSchema: UISchemaElement, schema: JsonSchema): boolean => {
-      if (_.isEmpty(uiSchema)) {
+      if (_.isEmpty(uiSchema) || !isControl(uiSchema)) {
           return false;
       }
-      const schemaPath = _.isEmpty(uiSchema['scope']) ? undefined : uiSchema['scope']['$ref'];
+      const schemaPath = uiSchema.scope.$ref;
       if (_.isEmpty(schemaPath)) {
           return false;
       }
-      let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath + '/' + subPath);
-      while (currentDataSchema.$ref) {
+      let currentDataSchema: JsonSchema = resolveSchema(schema, `${schemaPath}/${subPath}`);
+      while (!_.isEmpty(currentDataSchema.$ref)) {
         currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
       }
       if (currentDataSchema === undefined) {
           return false;
       }
+
       return predicate(currentDataSchema);
     };
 
@@ -100,7 +104,6 @@ export const uiTypeIs = (expected: string): Tester =>
     (uiSchema: UISchemaElement): boolean =>
     !_.isEmpty(uiSchema) && uiSchema.type === expected;
 
-
 /**
  * Checks whether the given UI schema has an option with the given
  * name and whether it has the expected value. If no options property
@@ -111,7 +114,8 @@ export const uiTypeIs = (expected: string): Tester =>
  */
 export const optionIs = (optionName: string, optionValue: any): Tester =>
     (uiSchema: UISchemaElement): boolean => {
-        const options = uiSchema['options'];
+        const options = uiSchema.options;
+
         return !_.isEmpty(options) && options[optionName] === optionValue;
     };
 
@@ -124,10 +128,11 @@ export const optionIs = (optionName: string, optionValue: any): Tester =>
  */
 export const refEndsWith = (expected: string): Tester =>
     (uiSchema: UISchemaElement): boolean => {
-        if (_.isEmpty(expected) || _.isEmpty(uiSchema['scope'])) {
+        if (_.isEmpty(expected) || !isControl(uiSchema)) {
             return false;
         }
-        return _.endsWith(uiSchema['scope']['$ref'], expected);
+
+        return _.endsWith(uiSchema.scope.$ref, expected);
     };
 
 /**
@@ -139,10 +144,11 @@ export const refEndsWith = (expected: string): Tester =>
  */
 export const refEndIs = (expected: string): Tester =>
     (uiSchema: UISchemaElement): boolean => {
-        if (_.isEmpty(expected) || _.isEmpty(uiSchema['scope'])) {
+        if (_.isEmpty(expected) || !isControl(uiSchema)) {
             return false;
         }
-        const schemaPath = uiSchema['scope']['$ref'];
+        const schemaPath = uiSchema.scope.$ref;
+
         return !_.isEmpty(schemaPath) && _.last(schemaPath.split('/')) === expected;
     };
 
@@ -151,12 +157,9 @@ export const refEndIs = (expected: string): Tester =>
  *
  * @param {Array<Tester>} testers the testers to be composed
  */
-export const and = (
-    ...testers: Array<Tester>
-): Tester =>
+export const and = (...testers: Tester[]): Tester =>
     (uiSchema: UISchemaElement, schema: JsonSchema) =>
         testers.reduce((acc, tester) => acc && tester(uiSchema, schema), true);
-
 
 /**
  * Create a ranked tester that will associate a number with a given tester, if the
@@ -170,5 +173,6 @@ export const rankWith = (rank: number, tester: Tester)  =>
         if (tester(uiSchema, schema)) {
             return rank;
         }
+
         return NOT_APPLICABLE;
     };

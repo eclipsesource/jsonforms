@@ -1,7 +1,7 @@
 import test from 'ava';
-import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
-import { JsonSchema } from '../src/models/jsonSchema';
-import { Layout, ControlElement, LabelElement, VerticalLayout } from '../src/models/uischema';
+import {generateDefaultUISchema} from '../src/generators/ui-schema-gen';
+import {JsonSchema} from '../src/models/jsonSchema';
+import {ControlElement, LabelElement, Layout, VerticalLayout} from '../src/models/uischema';
 
 test('generate ui schema for schema w/o properties', t => {
     const schema: JsonSchema = {
@@ -23,17 +23,16 @@ test('generate ui schema for schema with one property', t => {
             }
         }
     };
+    const control = {
+        type: 'Control',
+        label: 'Name',
+        scope: {
+            $ref: '#/properties/name'
+        }
+    };
     const uiSchema: Layout = {
         type: 'VerticalLayout',
-        elements: [
-            {
-                type: 'Control',
-                label: 'Name',
-                scope: {
-                    $ref: '#/properties/name'
-                }
-            } as ControlElement
-        ]
+        elements: [control]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
@@ -42,17 +41,16 @@ test('generate ui schema for schema without object root', t => {
     const schema: JsonSchema = {
         type: 'string'
     };
+    const control: ControlElement = {
+        label: '',
+        type: 'Control',
+        scope: {
+            $ref: '#'
+        }
+    };
     const uiSchema: Layout = {
         type: 'VerticalLayout',
-        elements: [
-            {
-                label: '',
-                type: 'Control',
-                scope: {
-                    $ref: '#'
-                }
-            } as ControlElement
-        ]
+        elements: [control]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
@@ -65,17 +63,16 @@ test('generate ui schema for schema with unspecified object root', t => {
             }
         }
     };
+    const controlElement = {
+        type: 'Control',
+        label: 'Age',
+        scope: {
+            $ref: '#/properties/age'
+        }
+    };
     const uiSchema: Layout = {
         type: 'VerticalLayout',
-        elements: [
-            {
-                type: 'Control',
-                label: 'Age',
-                scope: {
-                    $ref: '#/properties/age'
-                }
-            } as ControlElement
-        ]
+        elements: [controlElement]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
@@ -88,41 +85,45 @@ test(`nested object attributes`, t => {
                 type: 'string'
             },
             private: {
-              type: 'object',
-              properties: {
-                name: {
-                    type: 'string'
+                type: 'object',
+                properties: {
+                    name: {
+                        type: 'string'
+                    }
                 }
-              }
             }
         }
+    };
+    const idControl: ControlElement = {
+        type: 'Control',
+        label: 'Id',
+        scope: {
+            $ref: '#/properties/id'
+        }
+    };
+    const privateLabel: LabelElement = {
+        type: 'Label',
+        text: 'Private'
+    };
+    const nameControl: ControlElement = {
+        type: 'Control',
+        label: 'Name',
+        scope: {
+            $ref: '#/properties/private/properties/name'
+        }
+    };
+    const nestedLayout: VerticalLayout = {
+        type: 'VerticalLayout',
+        elements: [
+            privateLabel,
+            nameControl,
+        ]
     };
     const uiSchema: Layout = {
         type: 'VerticalLayout',
         elements: [
-            {
-                type: 'Control',
-                label: 'Id',
-                scope: {
-                    $ref: '#/properties/id'
-                }
-            } as ControlElement,
-            {
-              type: 'VerticalLayout',
-              elements: [
-                {
-                    type: 'Label',
-                    text: 'Private'
-                } as LabelElement,
-                {
-                    type: 'Control',
-                    label: 'Name',
-                    scope: {
-                        $ref: '#/properties/private/properties/name'
-                    }
-                } as ControlElement
-              ]
-            } as VerticalLayout
+            idControl,
+            nestedLayout
         ]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
@@ -140,23 +141,25 @@ test(`don't ignore non-json-schema id attributes`, t => {
             }
         }
     };
+    const idControl: ControlElement =  {
+        type: 'Control',
+        label: 'Id',
+        scope: {
+            $ref: '#/properties/id'
+        }
+    };
+    const nameControl: ControlElement = {
+        type: 'Control',
+        label: 'Name',
+        scope: {
+            $ref: '#/properties/name'
+        }
+    };
     const uiSchema: Layout = {
         type: 'VerticalLayout',
         elements: [
-            {
-                type: 'Control',
-                label: 'Id',
-                scope: {
-                    $ref: '#/properties/id'
-                }
-            } as ControlElement,
-            {
-                type: 'Control',
-                label: 'Name',
-                scope: {
-                    $ref: '#/properties/name'
-                }
-            } as ControlElement
+            idControl,
+            nameControl
         ]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
@@ -303,63 +306,62 @@ test('generate ui schema for schema with multiple properties', t => {
                     '$ref': '#/properties/birthDate'
                 }
             },
-        ] as Array<ControlElement>
+        ] as ControlElement[]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
 
 test('generate named array control', t => {
     const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'comments': {
-                'type': 'array',
-                'items': {
-                    'properties': {
-                        'msg': {'type': 'string'}
+        type: 'object',
+        properties: {
+            comments: {
+                type: 'array',
+                items: {
+                    properties: {
+                        msg: {type: 'string'}
                     }
                 }
             }
         }
     };
+    const control: ControlElement = {
+        label: 'Comments',
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/comments'
+        }
+    };
     const uiSchema: Layout = {
         'type': 'VerticalLayout',
-        'elements': [
-            {
-                'label': 'Comments',
-                'type': 'Control',
-                'scope': {
-                    '$ref': '#/properties/comments'
-                }
-            } as ControlElement
-        ]
+        'elements': [control]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
 
 test('generate unnamed array control', t => {
     const schema: JsonSchema = {
-        'type': 'array',
-        'items': {
-            'properties': {
-                'msg': {'type': 'string'}
+        type: 'array',
+        items: {
+            properties: {
+                msg: {'type': 'string'}
             }
         }
     };
+    const control: ControlElement = {
+        label: '',
+        type: 'Control',
+        scope: {
+            '$ref': '#'
+        }
+    };
     const uiSchema: Layout = {
-        'type': 'VerticalLayout',
-        'elements': [
-            {
-                'label': '',
-                'type': 'Control',
-                'scope': {
-                    '$ref': '#'
-                }
-            } as ControlElement
-        ]
+        type: 'VerticalLayout',
+        elements: [control]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
+
 test('generate unnamed array control w/o type', t => {
     const schema: JsonSchema = {
         'items': {
@@ -368,31 +370,33 @@ test('generate unnamed array control w/o type', t => {
             }
         }
     };
+    const control = {
+        label: '',
+        type: 'Control',
+        scope: {
+            $ref: '#'
+        }
+    };
     const uiSchema: Layout = {
-        'type': 'VerticalLayout',
-        'elements': [
-            {
-                'label': '',
-                'type': 'Control',
-                'scope': {
-                    '$ref': '#'
-                }
-            } as ControlElement
-        ]
+        type: 'VerticalLayout',
+        elements: [control]
     };
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
+
 test('generate for empty schema', t => {
     const schema: JsonSchema = {
     };
     const uiSchema: Layout = null;
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
+
 test('generate for null schema', t => {
     const schema: JsonSchema = null;
     const uiSchema: Layout = null;
     t.deepEqual(generateDefaultUISchema(schema), uiSchema);
 });
+
 test('generate for undefined schema', t => {
     const schema: JsonSchema = undefined;
     const uiSchema: Layout = null;

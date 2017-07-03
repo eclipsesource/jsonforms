@@ -23,56 +23,56 @@ export interface RuntimeListener {
  * possible validation errors.
  */
 export class Runtime {
-  private _validationErrors: Array<string>;
-  private _visible = true;
-  private _enabled = true;
-  private _listeners: Array<RuntimeListener> = [];
+  private validationErrorMessages: string[];
+  private isVisible = true;
+  private isEnabled = true;
+  private listeners: RuntimeListener[] = [];
 
   /**
    * Whether the element is visible.
    * @return {boolean} true, if the element is visible, false otherwise
    */
-  get visible(): boolean {return this._visible; };
-
-  /**
-   * Whether the element is enabled.
-   * @return {boolean} true, if the element is enabled, false otherwise
-   */
-  get enabled(): boolean {return this._enabled; };
-
-  /**
-   * Returns the validation errors associated with the element.
-   * @return {Array<string>} the validation errors
-   */
-  get validationErrors(): Array<string> {return this._validationErrors; };
+  get visible(): boolean { return this.isVisible; }
 
   /**
    * Set the visibility state of the element
    * @param {boolean} visible whether the element should be visible
    */
   set visible(visible: boolean) {
-    this._visible = visible;
+    this.isVisible = visible;
     this.notifyRuntimeListeners(RUNTIME_TYPE.VISIBLE);
-  };
+  }
+
+  /**
+   * Whether the element is enabled.
+   * @return {boolean} true, if the element is enabled, false otherwise
+   */
+  get enabled(): boolean { return this.isEnabled; }
 
   /**
    * Set the enabled state of the element
    * @param {boolean} enabled whether the element should be enabled
    */
   set enabled(enabled: boolean) {
-    this._enabled = enabled;
+    this.isEnabled = enabled;
     this.notifyRuntimeListeners(RUNTIME_TYPE.ENABLED);
-  };
+  }
+
+  /**
+   * Returns the validation errors associated with the element.
+   * @return {Array<string>} the validation errors
+   */
+  get validationErrors(): string[] { return this.validationErrorMessages; }
 
   /**
    * Set the validation errors.
    *
    * @param {string[]} validationErrors the validation errors
    */
-  set validationErrors(validationErrors: Array<string>) {
-    this._validationErrors = validationErrors;
+  set validationErrors(validationErrors: string[]) {
+    this.validationErrorMessages = validationErrors;
     this.notifyRuntimeListeners(RUNTIME_TYPE.VALIDATION_ERROR);
-  };
+  }
 
   /**
    * Add the given runtime listener.
@@ -80,7 +80,7 @@ export class Runtime {
    * @param {RuntimeListener} listener the runtime listener to be added
    */
   registerRuntimeListener(listener: RuntimeListener): void {
-    this._listeners.push(listener);
+    this.listeners.push(listener);
   }
 
   /**
@@ -89,7 +89,7 @@ export class Runtime {
    * @param {RuntimeListener} listener the runtime listener to be removed
    */
   deregisterRuntimeListener(listener: RuntimeListener): void {
-    this._listeners.splice(this._listeners.indexOf(listener), 1);
+    this.listeners.splice(this.listeners.indexOf(listener), 1);
   }
 
   /**
@@ -98,6 +98,8 @@ export class Runtime {
    * @param {RUNTIME_TYPE} type the runtime type
    */
   private notifyRuntimeListeners(type: RUNTIME_TYPE): void {
-    this._listeners.forEach(listener => listener.runtimeUpdated(type));
+    this.listeners.forEach(listener => {
+      listener.runtimeUpdated(type);
+    });
   }
 }

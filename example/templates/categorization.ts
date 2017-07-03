@@ -95,78 +95,78 @@ const uischema = {
     }
   ]
 };
-const uischema_expandbar = {
-  'type': 'Categorization',
-  'options': {
-    'expandbar': true
-  },
-  'elements': [
-    {
-      'type': 'Categorization',
-      'label': 'A',
-      'elements': [
-        {
-          'type': 'Category',
-          'label': 'Private A',
-          'elements': [
-            {
-              'type': 'Control',
-              'label': 'Name',
-              'scope': {
-                '$ref': '#/properties/name'
-              }
-            }
-          ]
-        },
-        {
-          'type': 'Category',
-          'label': 'Additional A',
-          'elements': [
-            {
-              'type': 'Control',
-              'label': 'Height',
-              'scope': {
-                '$ref': '#/properties/nationality'
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      'type': 'Categorization',
-      'label': 'B',
-      'elements': [
-        {
-          'type': 'Category',
-          'label': 'Private B',
-          'elements': [
-            {
-              'type': 'Control',
-              'label': 'Age',
-              'scope': {
-                '$ref': '#/properties/birthDate'
-              }
-            }
-          ]
-        },
-        {
-          'type': 'Category',
-          'label': 'Additional B',
-          'elements': [
-            {
-              'type': 'Control',
-              'label': 'Vegetarian',
-              'scope': {
-                '$ref': '#/properties/vegetarian'
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
-};
+// const uischemaExpandbar = {
+//   'type': 'Categorization',
+//   'options': {
+//     'expandbar': true
+//   },
+//   'elements': [
+//     {
+//       'type': 'Categorization',
+//       'label': 'A',
+//       'elements': [
+//         {
+//           'type': 'Category',
+//           'label': 'Private A',
+//           'elements': [
+//             {
+//               'type': 'Control',
+//               'label': 'Name',
+//               'scope': {
+//                 '$ref': '#/properties/name'
+//               }
+//             }
+//           ]
+//         },
+//         {
+//           'type': 'Category',
+//           'label': 'Additional A',
+//           'elements': [
+//             {
+//               'type': 'Control',
+//               'label': 'Height',
+//               'scope': {
+//                 '$ref': '#/properties/nationality'
+//               }
+//             }
+//           ]
+//         }
+//       ]
+//     },
+//     {
+//       'type': 'Categorization',
+//       'label': 'B',
+//       'elements': [
+//         {
+//           'type': 'Category',
+//           'label': 'Private B',
+//           'elements': [
+//             {
+//               'type': 'Control',
+//               'label': 'Age',
+//               'scope': {
+//                 '$ref': '#/properties/birthDate'
+//               }
+//             }
+//           ]
+//         },
+//         {
+//           'type': 'Category',
+//           'label': 'Additional B',
+//           'elements': [
+//             {
+//               'type': 'Control',
+//               'label': 'Vegetarian',
+//               'scope': {
+//                 '$ref': '#/properties/vegetarian'
+//               }
+//             }
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// };
 const data = {
   name: 'John Doe',
   vegetarian: false,

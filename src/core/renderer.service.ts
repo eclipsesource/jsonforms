@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import {UISchemaElement} from '../models/uischema';
 import {JsonSchema} from '../models/jsonSchema';
+import {UISchemaElement} from '../models/uischema';
 import {DataService} from './data.service';
 import {Renderer} from './renderer';
 import {RankedTester} from './testers';
@@ -11,7 +11,7 @@ import {RankedTester} from './testers';
  * and a data service.
  */
 export class RendererService {
-  private renderers: Array<{tester: RankedTester, renderer: string}> = [];
+  private renderers: {tester: RankedTester, renderer: string}[] = [];
 
   /**
    * Register a renderer. A renderer is represented by the tag name of the corresponding
@@ -55,12 +55,14 @@ export class RendererService {
     if (bestRenderer === undefined) {
       const renderer = document.createElement('label');
       renderer.textContent = 'Unknown Schema: ' + JSON.stringify(uiSchema);
+
       return renderer;
     } else {
-      const renderer = <Renderer> document.createElement(bestRenderer.renderer);
+      const renderer = document.createElement(bestRenderer.renderer) as Renderer;
       renderer.setUiSchema(uiSchema);
       renderer.setDataSchema(schema);
       renderer.setDataService(dataService);
+
       return renderer;
     }
   }

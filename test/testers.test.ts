@@ -98,7 +98,7 @@ test('optionIs should check for options', t => {
             answer: 42
         }
     };
-    t.true(optionIs('answer', 42)(control, undefined))
+    t.true(optionIs('answer', 42)(control, undefined));
 });
 
 test('optionIs should return false for UI schema elements without options field', t => {
@@ -126,7 +126,6 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
     };
     t.true(schemaMatches(subSchema => subSchema.type === 'string')(uiSchema, schema));
 });
-
 
 test('schemaMatches should return false for non-control UI schema elements', t => {
     const schema: JsonSchema = {
@@ -165,7 +164,7 @@ test('refEndsWith checks whether the ref of a control ends with a certain string
             $ref: '#/properties/bar'
         }
     };
-    t.true(refEndsWith('properties/bar')(uiSchema, undefined))
+    t.true(refEndsWith('properties/bar')(uiSchema, undefined));
 });
 
 test('refEndsWith should return false for non-control UI schema elements', t => {
@@ -173,7 +172,7 @@ test('refEndsWith should return false for non-control UI schema elements', t => 
         type: 'Label',
         text: 'some text'
     };
-    t.false(refEndsWith('properties/bar')(label, undefined))
+    t.false(refEndsWith('properties/bar')(label, undefined));
 });
 
 test('refEndIs checks whether the last segment a control ref equals a certain string', t => {
@@ -183,7 +182,7 @@ test('refEndIs checks whether the last segment a control ref equals a certain st
             $ref: '#/properties/bar'
         }
     };
-    t.true(refEndIs('bar')(uiSchema, undefined))
+    t.true(refEndIs('bar')(uiSchema, undefined));
 });
 
 test('refEndIs should return false for non-control UI schema elements', t => {
@@ -191,7 +190,7 @@ test('refEndIs should return false for non-control UI schema elements', t => {
         type: 'Label',
         text: 'some text'
     };
-    t.false(refEndIs('bar')(label, undefined))
+    t.false(refEndIs('bar')(label, undefined));
 });
 
 test('and should allow to compose multiple testers', t => {
@@ -212,4 +211,3 @@ test('and should allow to compose multiple testers', t => {
         refEndIs('foo')
     )(uiSchema, schema));
 });
-

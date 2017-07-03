@@ -1,10 +1,10 @@
-import {VerticalLayout} from '../../models/uischema';
 import {JsonForms} from '../../core';
 import {Renderer} from '../../core/renderer';
-import {JsonFormsRenderer} from '../renderer.util';
 import {RUNTIME_TYPE} from '../../core/runtime';
+import {RankedTester, rankWith, uiTypeIs} from '../../core/testers';
+import {VerticalLayout} from '../../models/uischema';
+import {JsonFormsRenderer} from '../renderer.util';
 import {createRuntimeNotificationEvaluator} from './layout.util';
-import {rankWith, uiTypeIs, RankedTester} from '../../core/testers';
 
 /**
  * Default tester for a vertical layout.
@@ -31,7 +31,7 @@ export class VerticalLayoutRenderer extends Renderer {
   render(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'vertical-layout';
-    const verticalLayout = <VerticalLayout> this.uischema;
+    const verticalLayout = this.uischema as VerticalLayout;
     if (verticalLayout.elements !== undefined && verticalLayout.elements !== null) {
       verticalLayout.elements.forEach(element => {
         const bestRenderer = JsonForms.rendererService
@@ -41,6 +41,7 @@ export class VerticalLayoutRenderer extends Renderer {
     }
     this.appendChild(div);
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
+
     return this;
   }
 

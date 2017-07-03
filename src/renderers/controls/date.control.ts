@@ -1,6 +1,6 @@
-import { BaseControl } from './base.control';
-import { JsonFormsRenderer } from '../renderer.util';
-import {and, uiTypeIs, rankWith, formatIs, RankedTester} from '../../core/testers';
+import {and, formatIs, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
+import {JsonFormsRenderer} from '../renderer.util';
+import {BaseControl} from './base.control';
 
 /**
  * Default tester for date controls.
@@ -46,7 +46,7 @@ export class DateControl extends BaseControl<HTMLInputElement> {
    * @inheritDoc
    */
   protected convertModelValue(value: any): any {
-    return new Date(<string> value);
+    return new Date(value as string);
   }
 
   /**
@@ -56,7 +56,8 @@ export class DateControl extends BaseControl<HTMLInputElement> {
     if (value === null || value === undefined) {
       return undefined;
     }
-    return (<Date>value).toISOString().substr(0, 10);
+
+    return (value as Date).toISOString().substr(0, 10);
   }
 
   /**

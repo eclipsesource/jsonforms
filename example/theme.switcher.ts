@@ -19,7 +19,9 @@ export const createThemeSelection = () => {
     option.text = style;
     select.appendChild(option);
   });
-  select.onchange = (ev: Event) => (changeTheme(select.value));
+  select.onchange = (ev: Event) => {
+    changeTheme(select.value);
+  };
 
   const themeLabel = document.createElement('label');
   themeLabel.textContent = 'Theme:';

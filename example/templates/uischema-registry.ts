@@ -1,6 +1,5 @@
-import {registerExamples} from '../example';
-import {JsonForms} from '../../src/core';
 import {JsonFormsElement} from '../../src/json-forms';
+import {registerExamples} from '../example';
 
 const uischema = {
   'type': 'Group',
@@ -18,10 +17,10 @@ const uischema = {
 const data = {name: 'John Doe'};
 // HACK to retrigger service creation
 const resetServices = () => {
-  const jsonforms = <JsonFormsElement>document.getElementsByTagName('json-forms')[0];
+  const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
   jsonforms.data = data;
 };
-const tester = (test_uischema, test_data) => 5;
+const tester = (testUiSchema, testData) => 5;
 const setup = (div: HTMLDivElement) => {
   const registerButton = document.createElement('button');
   registerButton.innerText = 'Register UI Schema';
@@ -40,7 +39,6 @@ const setup = (div: HTMLDivElement) => {
   };
   div.appendChild(unregisterButton);
 };
-
 
 registerExamples([
   {name: 'uischema_registry', label: 'UI Schema Registry', schema: undefined,

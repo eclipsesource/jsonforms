@@ -1,5 +1,5 @@
 import {registerExamples} from '../example';
-const schema_array = {
+const schemaArray = {
   'definitions': {
     'folder': {
       'type': 'object',
@@ -71,7 +71,7 @@ const schema_array = {
     '$ref': '#/definitions/drive'
   }
 };
-const schema_object = {
+const schemaObject = {
   'definitions': {
     'folder': {
       'type': 'object',
@@ -159,7 +159,7 @@ const uischema = {
     }
   }
 };
-const data_array = [
+const dataArray = [
   {
     name: 'c',
     folders:
@@ -219,7 +219,7 @@ const data_array = [
     ]
   }
 ];
-const data_object = {
+const dataObject = {
   name: 'c',
   folders:
   [
@@ -249,8 +249,8 @@ const data_object = {
   ]
 };
 registerExamples([
-  {name: 'masterdetail_object', label: 'Master Detail Object Root', data: data_object,
-    schema: schema_object, uiSchema: uischema},
-  {name: 'masterdetail_array', label: 'Master Detail Array Root', data: data_array,
-    schema: schema_array, uiSchema: uischema}
+  {name: 'masterdetail_object', label: 'Master Detail Object Root', data: dataObject,
+    schema: schemaObject, uiSchema: uischema},
+  {name: 'masterdetail_array', label: 'Master Detail Array Root', data: dataArray,
+    schema: schemaArray, uiSchema: uischema}
 ]);

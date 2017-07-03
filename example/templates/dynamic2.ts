@@ -1,8 +1,8 @@
-import { JsonFormService, JsonForms} from '../../src/core';
+import {JsonFormService} from '../../src/core';
 import {DataService} from '../../src/core/data.service';
-import { JsonSchema } from '../../src/models/jsonSchema';
-import { UISchemaElement, ControlElement, Layout } from '../../src/models/uischema';
 import {JsonFormsElement} from '../../src/json-forms';
+import {JsonSchema} from '../../src/models/jsonSchema';
+import {UISchemaElement} from '../../src/models/uischema';
 
 import {registerExamples} from '../example';
 
@@ -17,7 +17,15 @@ class MyService implements JsonFormService {
     const button = document.createElement('button');
     button.innerText = 'Change data';
     button.onclick = () => {
-      this.dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'blub');
+      this.dataService.notifyAboutDataChange(
+          {
+            type: 'Control',
+            scope: {
+              $ref: '#/properties/name'
+            }
+          },
+          'blub'
+      );
     };
     const div = document.getElementById('dynamic2-example');
     div.appendChild(button);
@@ -25,13 +33,13 @@ class MyService implements JsonFormService {
 }
 
 const resetServices = () => {
-  const jsonforms = <JsonFormsElement>document.getElementsByTagName('json-forms')[0];
+  const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
   jsonforms.data = {name: 'bla'};
 };
 
 const setup = (div: HTMLDivElement) => {
-  const dynamic2_example_div = document.createElement('div');
-  dynamic2_example_div.id = 'dynamic2-example';
+  const dynamic2ExampleDiv = document.createElement('div');
+  dynamic2ExampleDiv.id = 'dynamic2-example';
 
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Service';
@@ -50,11 +58,11 @@ const setup = (div: HTMLDivElement) => {
     JsonFormsElement.jsonFormsServices.splice(index, 1);
     // HACK to retrigger service creation
     resetServices();
-    dynamic2_example_div.removeChild(dynamic2_example_div.firstChild);
+    dynamic2ExampleDiv.removeChild(dynamic2ExampleDiv.firstChild);
   };
   div.appendChild(buttonUnregister);
 
-  div.appendChild(dynamic2_example_div);
+  div.appendChild(dynamic2ExampleDiv);
 };
 
 registerExamples([

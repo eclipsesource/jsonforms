@@ -18,7 +18,6 @@ export interface JsonFormsRendererConfig {
     tester: RankedTester;
 }
 
-
 export interface JsonFormsRendererConstructable {
     new(): Renderer;
 }
@@ -30,9 +29,12 @@ export interface JsonFormsRendererConstructable {
  * @param {JsonFormsRendererConfig} config the renderer config to be registered
  * @constructor
  */
+// Used as annotation
+// tslint:disable:variable-name
 export const JsonFormsRenderer =
     (config: JsonFormsRendererConfig) =>
         (cls: JsonFormsRendererConstructable) => {
             customElements.define(config.selector, cls);
             JsonForms.rendererService.registerRenderer(config.tester, config.selector);
         };
+// tslint:enable:variable-name

@@ -1,16 +1,46 @@
 import test from 'ava';
+import * as installCE from 'document-register-element/pony';
 // inject window, document etc.
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
 declare let global;
 installCE(global, 'force');
-import {ControlElement} from '../../src/models/uischema';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {textAreaControlTester, TextAreaControl} from
-  '../../src/renderers/controls/textarea.control';
-import {Runtime} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
+import {ControlElement} from '../../src/models/uischema';
+import {
+  TextAreaControl,
+  textAreaControlTester,
+} from '../../src/renderers/controls/textarea.control';
+import {
+  testDisable,
+  testEnable, testHide,
+  testMultipleErrors,
+  testNotifyAboutEnablementWhenDisconnected,
+  testNotifyAboutValidationWhenDisconnected,
+  testNotifyAboutVisibiltyWhenDisconnected,
+  testNullErrors,
+  testOneError,
+  testResetErrors,
+  testShow,
+  testUndefinedErrors
+} from './base.control.tests';
 
+test.beforeEach(t => {
+  t.context.data = {'name': 'Foo'};
+  t.context.schema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      }
+    }
+  };
+  t.context.uiSchema = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    }
+  };
+});
 
 test('TextAreaControlTester', t => {
   t.is(textAreaControlTester(undefined, undefined), -1);
@@ -19,335 +49,210 @@ test('TextAreaControlTester', t => {
   t.is(textAreaControlTester({type: 'Control'}, undefined), -1);
   t.is(textAreaControlTester({type: 'Control', options: {multi: true}}, undefined), 2);
 });
+
 test('TextAreaControl static', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'control')
+  t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, 'Name');
-  const input = <HTMLTextAreaElement>result.children[1];
+  const input = result.children[1] as HTMLTextAreaElement;
   t.is(input.tagName, 'TEXTAREA');
   t.is(input.value, 'Foo');
   const validation = result.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
+
 test('TextAreaControl static no label', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
+  const uiSchemaWithoutLabel: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    },
+    label: false
+  };
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'},
-    label: false} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(uiSchemaWithoutLabel);
   const result = renderer.render();
-  t.is(result.className, 'control')
+  t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, '');
-  const input = <HTMLTextAreaElement>result.children[1];
+  const input = result.children[1] as HTMLTextAreaElement;
   t.is(input.tagName, 'TEXTAREA');
   t.is(input.value, 'Foo');
   const validation = result.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
+
 test('TextAreaControl inputChange', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  const input = <HTMLTextAreaElement>result.children[1];
+  const input = result.children[1] as HTMLTextAreaElement;
   input.value = 'Bar';
   input.oninput(null);
-  t.is(data.name, 'Bar');
+  t.is(t.context.data.name, 'Bar');
 });
+
 test('TextAreaControl dataService notification', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLTextAreaElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Bar');
 });
+
 test('TextAreaControl dataService notification value undefined', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, undefined);
+  const input = renderer.children[1] as HTMLTextAreaElement;
+  dataService.notifyAboutDataChange(
+      {
+        type: 'Control',
+        scope: {
+          $ref: '#/properties/name'
+        }
+      },
+      undefined
+  );
   t.is(input.value, '');
 });
+
 test('TextAreaControl dataService notification value null', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLTextAreaElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
   t.is(input.value, '');
 });
+
 test('TextAreaControl dataService notification wrong ref', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/firstname'}}, 'Bar');
+  const input = renderer.children[1] as HTMLTextAreaElement;
+  const differentControl: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/firstname'
+    }
+  };
+  dataService.notifyAboutDataChange(
+      differentControl,
+      'Bar'
+  );
   t.is(input.value, 'Foo');
 });
+
 test('TextAreaControl dataService notification null ref', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLTextAreaElement;
   dataService.notifyAboutDataChange(null, 'Bar');
   t.is(input.value, 'Foo');
 });
+
 test('TextAreaControl dataService notification undefined ref', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLTextAreaElement;
   dataService.notifyAboutDataChange(undefined, 'Bar');
   t.is(input.value, 'Foo');
 });
+
 test('TextAreaControl dataService no notification after disconnect', t => {
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
   const renderer: TextAreaControl = new TextAreaControl();
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
-  const input = <HTMLTextAreaElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLTextAreaElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
+
 test('TextAreaControl notify visible false', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = false;
-  t.is(renderer.hidden, true);
+  testHide(t, new TextAreaControl());
 });
+
 test('TextAreaControl notify visible true', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = true;
-  t.is(renderer.hidden, false);
+  testShow(t, new TextAreaControl());
 });
 
 test('TextAreaControl notify disabled', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = false;
-  const input = <HTMLTextAreaElement>renderer.children[1];
-  t.is(input.getAttribute('disabled'), 'true');
-  // TODO would be nice
-  // t.is(input.disabled, true);
+  testDisable(t, new TextAreaControl());
 });
+
 test('TextAreaControl notify enabled', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = true;
-  const input = <HTMLTextAreaElement>renderer.children[1];
-  t.false(input.hasAttribute('disabled'));
+  testEnable(t, new TextAreaControl());
 });
 
 test('TextAreaControl notify one error', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, 'error a');
+  testOneError(t, new TextAreaControl());
 });
+
 test('TextAreaControl notify multiple errors', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a', 'error b'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, 'error a\nerror b');
+  testMultipleErrors(t, new TextAreaControl());
 });
+
 test('TextAreaControl notify errors undefined', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = undefined;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testUndefinedErrors(t, new TextAreaControl());
 });
+
 test('TextAreaControl notify errors null', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = null;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testNullErrors(t, new TextAreaControl());
 });
+
 test('TextAreaControl notify errors clean', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  runtime.validationErrors = undefined;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testResetErrors(t, new TextAreaControl());
 });
+
 test('TextAreaControl disconnected no notify visible', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = false;
-  t.is(renderer.hidden, false);
+  testNotifyAboutVisibiltyWhenDisconnected(t, new TextAreaControl());
 });
+
 test('TextAreaControl disconnected no notify enabled', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = false;
-  const input = <HTMLTextAreaElement>renderer.children[1];
-  t.false(input.hasAttribute('disabled'));
+  testNotifyAboutEnablementWhenDisconnected(t, new TextAreaControl());
 });
+
 test('TextAreaControl disconnected no notify error', t => {
-  const renderer: TextAreaControl = new TextAreaControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/name'}} as ControlElement;
-  const data = {'name': 'Foo'};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {name: {type: 'string'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.not(errorsDiv.textContent, 'error a',
-    'Diconnected Controls should not be notified about new errors.');
+  testNotifyAboutValidationWhenDisconnected(t, new TextAreaControl());
 });

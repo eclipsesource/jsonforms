@@ -1,18 +1,18 @@
 import test from 'ava';
+import * as installCE from 'document-register-element/pony';
 // inject window, document etc.
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
+import {DataService } from '../../src/core/data.service';
 import {JsonSchema} from '../../src/models/jsonSchema';
 import {ControlElement} from '../../src/models/uischema';
 import {ArrayControlRenderer, arrayTester} from '../../src/renderers/additional/array-renderer';
-import {DataService } from '../../src/core/data.service';
-import {JsonForms, instantiateSchemaService} from '../../src/core';
+import {instantiateSchemaService} from '../../src/core';
 
 test('generate array child control', t => {
 
-    const renderer: ArrayControlRenderer = new ArrayControlRenderer;
+    const renderer: ArrayControlRenderer = new ArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -67,8 +67,7 @@ test('generate array child control', t => {
 });
 
 test('generate array child control w/o data', t => {
-
-    const renderer: ArrayControlRenderer = new ArrayControlRenderer;
+    const renderer: ArrayControlRenderer = new ArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -117,43 +116,7 @@ test('generate array child control w/o data', t => {
 });
 
 test('array-layout add click w/o data', t => {
-
-    const renderer: ArrayControlRenderer = new ArrayControlRenderer;
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'test': {
-                'type': 'array',
-                'items': {
-                    'type': 'object',
-                    'properties': {
-                        'x': {'type': 'integer'},
-                        'y': {'type': 'integer'}
-                    }
-                }
-            }
-        }
-    };
-    const uiSchema: ControlElement = {
-        'label': false,
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/test'
-        }
-    };
-    const data = {};
-    instantiateSchemaService(schema);
-    renderer.setDataService(new DataService(data));
-    renderer.setDataSchema(schema);
-    renderer.setUiSchema(uiSchema);
-    const renderedElement = renderer.render();
-    const button = renderedElement.getElementsByTagName('button')[0];
-    button.click();
-    t.is(data['test'].length, 1);
-});
-test('array-layout add click with data', t => {
-
-    const renderer: ArrayControlRenderer = new ArrayControlRenderer;
+    const renderer: ArrayControlRenderer = new ArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -177,10 +140,46 @@ test('array-layout add click with data', t => {
         }
     };
     const data = {
-      'test': [{
-        x: 1,
-        y: 3
-      }]
+        test: []
+    };
+    instantiateSchemaService(schema);
+    renderer.setDataService(new DataService(data));
+    renderer.setDataSchema(schema);
+    renderer.setUiSchema(uiSchema);
+    const renderedElement = renderer.render();
+    const button = renderedElement.getElementsByTagName('button')[0];
+    button.click();
+    t.is(data.test.length, 1);
+});
+test('array-layout add click with data', t => {
+    const renderer: ArrayControlRenderer = new ArrayControlRenderer();
+    const schema: JsonSchema = {
+        'type': 'object',
+        'properties': {
+            'test': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'x': {'type': 'integer'},
+                        'y': {'type': 'integer'}
+                    }
+                }
+            }
+        }
+    };
+    const uiSchema: ControlElement = {
+        'label': false,
+        'type': 'Control',
+        'scope': {
+            '$ref': '#/properties/test'
+        }
+    };
+    const data = {
+        'test': [{
+            x: 1,
+            y: 3
+        }]
     };
     instantiateSchemaService(schema);
     renderer.setDataService(new DataService(data));
@@ -193,138 +192,198 @@ test('array-layout add click with data', t => {
 });
 
 test('array-layout DataService notification', t => {
-  const renderer: ArrayControlRenderer = new ArrayControlRenderer();
-  const schema: JsonSchema = {
-      'type': 'object',
-      'properties': {
-          'test': {
-              'type': 'array',
-              'items': {
-                  'type': 'object',
-                  'properties': {
-                      'x': {'type': 'integer'},
-                      'y': {'type': 'integer'}
-                  }
-              }
-          }
-      }
-  };
-  const uiSchema: ControlElement = {
-      'label': false,
-      'type': 'Control',
-      'scope': {
-          '$ref': '#/properties/test'
-      }
-  };
-  const data = {
-    'test': [{
-      x: 1,
-      y: 3
-    }]
-  };
-  instantiateSchemaService(schema);
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(uiSchema);
-  const renderedElement = renderer.render();
-  const childrenInitial = renderedElement.getElementsByClassName('children')[0];
-  t.is(childrenInitial.childNodes.length, 1);
-  renderer.connectedCallback();
-  dataService.notifyAboutDataChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}]);
-  const childrenAfter = renderer.getElementsByClassName('children')[0];
-  t.is(childrenAfter.childNodes.length, 2);
-
-  dataService.notifyAboutDataChange(undefined, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
-  const childrenIgnore = renderer.getElementsByClassName('children')[0];
-  t.is(childrenIgnore.childNodes.length, 2);
-
-  renderer.disconnectedCallback();
-  dataService.notifyAboutDataChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
-  const childrenLast = renderer.getElementsByClassName('children')[0];
-  t.is(childrenLast.childNodes.length, 2);
-});
-test('array-layout Tester', t => {
-  t.is(
-      arrayTester({ type: 'Foo' }, null),
-      -1
-  );
-  t.is(
-      arrayTester(
-          { type: 'Control', scope: { $ref: '#' } } as ControlElement,
-          undefined
-      ),
-      -1);
-  t.is(
-      arrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/x' } } as ControlElement,
-          { type: 'object',  properties: { x: { type: 'integer' } } }
-      ),
-      -1
-  );
-  t.is(
-      arrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          { type: 'object',  properties: { foo: { type: 'array'} } }
-      ),
-      -1
-  );
-  t.is(
-      arrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          {
-              type: 'object',
-              properties:
-                  {
-                      foo: {
-                          type: 'array',
-                          items: [
-                              { type: 'integer' },
-                              { type: 'string' }
-                          ]
-                      }
-                  }
-          }
-      ),
-      -1
-  );
-    t.is(
-        arrayTester({
-                type: 'Control',
-                scope: { $ref: '#/properties/foo'}
-            } as ControlElement,
-            {
-                type: 'object',
-                properties: {
-                    foo: {
-                        type: 'array',
-                        items: { type: 'integer' }
+    const renderer: ArrayControlRenderer = new ArrayControlRenderer();
+    const schema: JsonSchema = {
+        'type': 'object',
+        'properties': {
+            'test': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'x': {'type': 'integer'},
+                        'y': {'type': 'integer'}
                     }
                 }
             }
-        ),
-        -1
+        }
+    };
+    const uiSchema: ControlElement = {
+        'label': false,
+        'type': 'Control',
+        'scope': {
+            '$ref': '#/properties/test'
+        }
+    };
+    const data = {
+        'test': [{
+            x: 1,
+            y: 3
+        }]
+    };
+    instantiateSchemaService(schema);
+    const dataService = new DataService(data);
+    renderer.setDataService(dataService);
+    renderer.setDataSchema(schema);
+    renderer.setUiSchema(uiSchema);
+    const renderedElement = renderer.render();
+    const childrenInitial = renderedElement.getElementsByClassName('children')[0];
+    t.is(childrenInitial.childNodes.length, 1);
+    renderer.connectedCallback();
+    dataService.notifyAboutDataChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}]);
+    const childrenAfter = renderer.getElementsByClassName('children')[0];
+    t.is(childrenAfter.childNodes.length, 2);
+
+    dataService.notifyAboutDataChange(undefined, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
+    const childrenIgnore = renderer.getElementsByClassName('children')[0];
+    t.is(childrenIgnore.childNodes.length, 2);
+
+    renderer.disconnectedCallback();
+    dataService.notifyAboutDataChange(uiSchema, [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]);
+    const childrenLast = renderer.getElementsByClassName('children')[0];
+    t.is(childrenLast.childNodes.length, 2);
+});
+
+test('array-layout Tester with unknown type', t => {
+    t.is(
+      arrayTester({type: 'Foo'}, null),
+      -1
     );
-    const schema: JsonSchema = {
-      'type': 'object',
-      'properties': {
-          'test': {
-              'type': 'array',
-              'items': {
-                  'type': 'object',
-                  'properties': {
-                      'x': {'type': 'integer'},
-                      'y': {'type': 'integer'}
+});
+
+test('ArrayControl tester with document ref', t => {
+    const control: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#'
+        }
+    };
+    t.is(
+      arrayTester(
+        control,
+        undefined
+      ),
+      -1
+    );
+});
+
+test('ArrayControl tester with wrong prop type', t => {
+    const control = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/x'
+        }
+    };
+    t.is(
+      arrayTester(
+        control,
+        {
+            type: 'object',
+            properties: {
+                x: {
+                    type: 'integer'
+                }
+            }
+        }
+      ),
+      -1
+    );
+});
+
+test('ArrayControl tester with missing items prop', t => {
+    const control = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    t.is(
+      arrayTester(
+        control,
+        {
+            type: 'object',
+            properties: {
+                foo: {
+                    type: 'array'
+                }
+            }
+        }
+      ),
+      -1
+    );
+});
+
+test('ArrayControl tester with tuple type', t => {
+    const control = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    t.is(
+      arrayTester(
+        control,
+        {
+            type: 'object',
+            properties:
+              {
+                  foo: {
+                      type: 'array',
+                      items: [
+                          { type: 'integer' },
+                          { type: 'string' },
+                      ]
                   }
               }
-          }
-      }
-  };
-  const uiSchema: ControlElement = {
-      'type': 'Control',
-      'scope': {
-          '$ref': '#/properties/test'
-      }
-  };
-  t.is(arrayTester(uiSchema, schema), 2);
+        }
+      ),
+      -1
+    );
+});
+
+test('ArrayControl tester with primitive type', t => {
+    const control: ControlElement = {
+        type: 'Control',
+        scope: {$ref: '#/properties/foo'}
+    } ;
+    t.is(
+      arrayTester(
+        control,
+        {
+            type: 'object',
+            properties: {
+                foo: {
+                    type: 'array',
+                    items: {type: 'integer'}
+                }
+            }
+        }
+      ),
+      -1
+    );
+});
+
+test('ArrayControl tester with correct prop type', t => {
+    const schema: JsonSchema = {
+        'type': 'object',
+        'properties': {
+            'test': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'x': {'type': 'integer'},
+                        'y': {'type': 'integer'}
+                    }
+                }
+            }
+        }
+    };
+    const uiSchema: ControlElement = {
+        'type': 'Control',
+        'scope': {
+            '$ref': '#/properties/test'
+        }
+    };
+    t.is(arrayTester(uiSchema, schema), 2);
 });

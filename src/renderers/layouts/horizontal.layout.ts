@@ -1,10 +1,10 @@
-import { HorizontalLayout } from '../../models/uischema';
 import {JsonForms} from '../../core';
 import {Renderer} from '../../core/renderer';
-import { JsonFormsRenderer } from '../renderer.util';
 import {RUNTIME_TYPE} from '../../core/runtime';
+import {RankedTester, rankWith, uiTypeIs} from '../../core/testers';
+import {HorizontalLayout} from '../../models/uischema';
+import {JsonFormsRenderer} from '../renderer.util';
 import {createRuntimeNotificationEvaluator} from './layout.util';
-import {uiTypeIs, rankWith, RankedTester} from '../../core/testers';
 
 /**
  * Default tester for a horizontal layout.
@@ -31,7 +31,7 @@ export class HorizontalLayoutRenderer extends Renderer {
   render(): HTMLElement {
     const div = document.createElement('div');
     div.className = 'horizontal-layout';
-    const horizontalLayout = <HorizontalLayout> this.uischema;
+    const horizontalLayout = this.uischema as HorizontalLayout;
     if (horizontalLayout.elements !== undefined && horizontalLayout.elements !== null) {
       horizontalLayout.elements.forEach(element => {
         const bestRenderer = JsonForms.rendererService
@@ -41,6 +41,7 @@ export class HorizontalLayoutRenderer extends Renderer {
     }
     this.appendChild(div);
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
+
     return this;
   }
 

@@ -1,9 +1,10 @@
+import * as JsonRefs from 'json-refs';
+import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
-import { JsonFormService, JsonForms, instantiateSchemaService } from './core';
+import { instantiateSchemaService, JsonForms, JsonFormService } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
-import * as JsonRefs from 'json-refs';
-import {DataService, DataChangeListener} from './core/data.service';
+import { DataChangeListener, DataService } from './core/data.service';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -17,8 +18,12 @@ interface CustomElementConfig {
  * @param {CustomElementConfig} config the configuration object for the custom element
  * @constructor
  */
-const CustomElement = (config: CustomElementConfig) => (cls) =>
-    customElements.define(config.selector, cls);
+// Usage as decorator
+// tslint:disable:variable-name
+const CustomElement = (config: CustomElementConfig) => cls => {
+// tslint:enable:variable-name
+  customElements.define(config.selector, cls);
+};
 
 /**
  * HTML element that represents the entry point
@@ -34,7 +39,7 @@ export class JsonFormsElement extends HTMLElement {
   private dataObject: any;
   private schemaPromise: Promise<any> = null;
   private allowDynamicUpdate = false;
-  private services: Array<JsonFormService> = [];
+  private services: JsonFormService[] = [];
 
   /**
    * Constructor.
@@ -54,8 +59,10 @@ export class JsonFormsElement extends HTMLElement {
   /**
    * Called when this element is removed from a document.
    */
-  disconnectedCallback(): void {
-    this.services.forEach(service => service.dispose());
+  disconnectedCallback = (): void => {
+    this.services.forEach(service => {
+      service.dispose();
+    });
   }
 
   /**
@@ -78,6 +85,19 @@ export class JsonFormsElement extends HTMLElement {
   }
 
   /**
+   * Returns the UI schema to be rendered.
+   *
+   * @returns {UISchemaElement} the UI schema to be rendered
+   */
+  get uiSchema(): UISchemaElement {
+    if (!_.isEmpty(this.uischema)) {
+      return this.uischema;
+    }
+
+    return JsonForms.uischemaRegistry.findMostApplicableUISchema(this.dataSchema, this.dataObject);
+  }
+
+  /**
    * Set the JSON data schema that describes the data to be rendered.
    * @param {JsonSchema} dataSchema the data schema to be rendered
    */
@@ -96,22 +116,11 @@ export class JsonFormsElement extends HTMLElement {
    * @returns {JsonSchema} the JSON schema that describes the data to be rendered
    */
   get dataSchema(): JsonSchema {
-    if (this.dataschema) {
+    if (!_.isEmpty(this.dataschema)) {
       return this.dataschema;
     }
-    return generateJsonSchema(this.dataObject);
-  }
 
-  /**
-   * Returns the UI schema to be rendered.
-   *
-   * @returns {UISchemaElement} the UI schema to be rendered
-   */
-  get uiSchema(): UISchemaElement {
-    if (this.uischema) {
-      return this.uischema;
-    }
-    return JsonForms.uischemaRegistry.findMostApplicableUISchema(this.dataSchema, this.dataObject);
+    return generateJsonSchema(this.dataObject);
   }
 
   /**
@@ -119,7 +128,7 @@ export class JsonFormsElement extends HTMLElement {
    *
    * @param {DataChangeListener} listener the listener to be added
    */
-  addDataChangeListener(listener: DataChangeListener): void {
+  addDataChangeListener = (listener: DataChangeListener): void => {
     this.dataService.registerDataChangeListener(listener);
   }
 
@@ -138,7 +147,9 @@ export class JsonFormsElement extends HTMLElement {
       this.removeChild(this.lastChild);
     }
 
-    this.services.forEach(service => service.dispose());
+    this.services.forEach(service => {
+      service.dispose();
+    });
     this.services = [];
     const schema = this.dataSchema;
     this.instantiateSchemaIfNeeded(schema);

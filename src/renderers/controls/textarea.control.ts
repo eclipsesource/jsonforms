@@ -1,6 +1,6 @@
-import { BaseControl } from './base.control';
-import { JsonFormsRenderer } from '../renderer.util';
-import { rankWith, and, uiTypeIs, optionIs, RankedTester } from '../../core/testers';
+import {and, optionIs, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
+import {JsonFormsRenderer} from '../renderer.util';
+import {BaseControl} from './base.control';
 
 /**
  * Tester for a multi-line string control.

@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import {UISchemaElement} from '../models/uischema';
-import {JsonSchema} from '../models/jsonSchema';
 import {generateDefaultUISchema} from '../generators/ui-schema-gen';
+import {JsonSchema} from '../models/jsonSchema';
+import {UISchemaElement} from '../models/uischema';
 
 /**
  * A registry of UI schemas. This registry can be utilized whenever
@@ -41,15 +41,7 @@ export interface UISchemaRegistry {
  * render the JSON schema/data. The higher the returned number, the more likely
  * the associated UI schema will be used.
  */
-export interface UISchemaTester {
-    /**
-     * The apply method of this tester.
-     *
-     * @param {JsonSchema} schema the JSON schema to test
-     * @param {any} data the data to test
-     */
-    (schema: JsonSchema, data: any): number;
-}
+export type UISchemaTester = (schema: JsonSchema, data: any) => number;
 
 /**
  * Associates a UI schema with a tester.
@@ -70,13 +62,16 @@ export const NOT_APPLICABLE: number = -1;
  * Default UI schema definition that always returns 0 as its priority.
  * @type {UISchemaDefinition}
  */
-const NO_UISCHEMA_DEFINITION = {uiSchema: null, tester: (schema) => 0} as UISchemaDefinition;
+const NO_UISCHEMA_DEFINITION: UISchemaDefinition = {
+    uiSchema: null,
+    tester: schema => 0
+};
 
 /**
  * Implementation of the UI schema registry.
  */
 export class UISchemaRegistryImpl implements UISchemaRegistry {
-    private registry: Array<UISchemaDefinition> = [];
+    private registry: UISchemaDefinition[] = [];
     constructor() {
         this.registry.push(NO_UISCHEMA_DEFINITION);
     }
@@ -108,6 +103,7 @@ export class UISchemaRegistryImpl implements UISchemaRegistry {
         if (bestSchema === NO_UISCHEMA_DEFINITION) {
             return generateDefaultUISchema(schema);
         }
+
         return bestSchema.uiSchema;
     }
 }

@@ -1,5 +1,5 @@
-import { UISchemaElement } from '../../models/uischema';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {UISchemaElement} from '../../models/uischema';
 
 /**
  * Utility function for evaluating a runtime notification.
@@ -10,7 +10,7 @@ import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 export const createRuntimeNotificationEvaluator =
 (self: HTMLElement, uischema: UISchemaElement) =>
   (type: RUNTIME_TYPE) => {
-  const runtime = <Runtime>uischema['runtime'];
+  const runtime = uischema.runtime as Runtime;
   switch (type) {
     case RUNTIME_TYPE.VISIBLE:
       self.hidden = !runtime.visible;
@@ -22,5 +22,6 @@ export const createRuntimeNotificationEvaluator =
         self.firstElementChild.removeAttribute('disabled');
       }
       break;
+    default:
   }
 };
