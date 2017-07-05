@@ -8,8 +8,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {ControlElement} from '../../src/models/uischema';
 import {ArrayControlRenderer, arrayTester} from '../../src/renderers/additional/array-renderer';
 import {DataService } from '../../src/core/data.service';
-import {JsonForms} from '../../src/core';
-import {instantiateSchemaService} from '../../src/core/schema.service';
+import {JsonForms, instantiateSchemaService} from '../../src/core';
 
 test('generate array child control', t => {
 

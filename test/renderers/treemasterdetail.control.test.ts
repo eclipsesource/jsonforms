@@ -9,10 +9,9 @@ import {ControlElement} from '../../src/models/uischema';
 import {TreeMasterDetailRenderer, treeMasterDetailTester}
   from '../../src/renderers/additional/tree-renderer';
 import {DataService } from '../../src/core/data.service';
-import {JsonForms} from '../../src/core';
+import {JsonForms, instantiateSchemaService} from '../../src/core';
 import {JsonFormsElement} from '../../src/json-forms';
 import {Runtime} from '../../src/core/runtime';
-import {instantiateSchemaService} from '../../src/core/schema.service';
 
 test('TreeMasterDetailTester', t => {
   t.is(treeMasterDetailTester(undefined, undefined), -1);

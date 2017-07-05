@@ -150,8 +150,10 @@ test('support multiple same $ref', t => {
   t.is(properties.length, 2);
   t.is(properties[0].label, 'person');
   t.is(properties[1].label, 'person');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.definitions.person);
-  t.deepEqual(properties[1].schema, <JsonSchema>schema.definitions.person);
+  const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
+  personCopy.id = '#' + (schema.properties.friends.items as JsonSchema).$ref;
+  t.deepEqual(properties[0].schema, personCopy);
+  t.deepEqual(properties[1].schema, personCopy);
 });
 test('support multiple different $ref', t => {
   const schema = {
@@ -178,10 +180,14 @@ test('support multiple different $ref', t => {
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 2);
+  const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
+  personCopy.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
+  const robotCopy = JSON.parse(JSON.stringify(schema.definitions.robot));
+  robotCopy.id = '#' + (schema.properties.robots.items as JsonSchema).$ref;
   t.is(properties[0].label, 'person');
   t.is(properties[1].label, 'robot');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.definitions.person);
-  t.deepEqual(properties[1].schema, <JsonSchema>schema.definitions.robot);
+  t.deepEqual(properties[0].schema, personCopy);
+  t.deepEqual(properties[1].schema, robotCopy);
 });
 test.failing('support root anyOf', t => {
   const schema = {
@@ -221,8 +227,12 @@ test('support array with anyOf', t => {
   t.is(properties.length, 2);
   t.is(properties[0].label, 'a');
   t.is(properties[1].label, 'b');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.definitions.a);
-  t.deepEqual(properties[1].schema, <JsonSchema>schema.definitions.b);
+  const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
+  aCopy.id = '#' + (schema.items as JsonSchema).anyOf[0].$ref;
+  const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
+  bCopy.id = '#' + (schema.items as JsonSchema).anyOf[1].$ref;
+  t.deepEqual(properties[0].schema, aCopy);
+  t.deepEqual(properties[1].schema, bCopy);
 });
 test('support object with array with anyOf', t => {
   const schema = {
@@ -248,8 +258,12 @@ test('support object with array with anyOf', t => {
   t.is(properties.length, 2);
   t.is(properties[0].label, 'a');
   t.is(properties[1].label, 'b');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.definitions.a);
-  t.deepEqual(properties[1].schema, <JsonSchema>schema.definitions.b);
+  const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
+  aCopy.id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[0].$ref;
+  const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
+  bCopy.id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[1].$ref;
+  t.deepEqual(properties[0].schema, aCopy);
+  t.deepEqual(properties[1].schema, bCopy);
 });
 test('support for array references', t => {
   const schema = {
@@ -276,7 +290,7 @@ test('support for array references', t => {
                 links: [{
                   rel: 'full',
                   href: '#/classes/{id}',
-                  targetSchema: '#/definitions/class'
+                  targetSchema: {$ref: '#/definitions/class'}
                 }]
               }
             }
@@ -302,8 +316,9 @@ test('support for array references', t => {
         schema.definitions.class.properties.associations.items as JsonSchema);
     t.is(properties.length, 1);
     t.is(properties[0].label, 'id');
-    const selfContainedClassSchema = schema.definitions.class as JsonSchema;
-    (selfContainedClassSchema.properties.associations.items as JsonSchema)['links'][0].targetSchema = '#';
+    const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class as JsonSchema));
+    (selfContainedClassSchema.properties.associations.items as JsonSchema)['links'][0].targetSchema = {$ref: '#'};
+    selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
     t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
 test('support for object references', t => {
@@ -326,7 +341,7 @@ test('support for object references', t => {
             links: [{
               rel: 'full',
               href: '#/classes/{id}',
-              targetSchema: '#/definitions/class'
+              targetSchema: {$ref: '#/definitions/class'}
             }]
           }
         }
@@ -350,8 +365,10 @@ test('support for object references', t => {
     service.getReferenceProperties(schema.definitions.class.properties.association);
   t.is(properties.length, 1);
   t.is(properties[0].label, 'id');
-  const selfContainedClassSchema = <JsonSchema>schema.definitions.class;
-  selfContainedClassSchema.properties.association['links'][0].targetSchema = '#';
+
+  const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
+  selfContainedClassSchema.properties.association['links'][0].targetSchema = {$ref: '#'};
+  selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
   t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
 test('support object with array $ref', t => {
@@ -399,7 +416,7 @@ test('containment properties add when array not defined', t => {
   const property = service.getContainmentProperties(schema)[0];
   const data = {};
   const valueToAdd = {bar: 'undefined array'};
-  property.addToData(data, valueToAdd);
+  property.addToData(data)(valueToAdd);
   t.true(data['foo'] !== undefined);
   t.is(data['foo'].length, 1);
   t.is(data['foo'][0], valueToAdd);
@@ -423,7 +440,7 @@ test('containment properties add when array defined', t => {
   const property = service.getContainmentProperties(schema)[0];
   const data = {foo: [{bar: 'initial'}]};
   const valueToAdd = {bar: 'defined array'};
-  property.addToData(data, valueToAdd);
+  property.addToData(data)(valueToAdd);
   t.true(data['foo'] !== undefined);
   t.is(data['foo'].length, 2);
   t.is(data['foo'][1], valueToAdd);
@@ -446,7 +463,6 @@ test('containment properties get when array not defined', t => {
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
   const data = {};
-  const valueToAdd = {bar: 'undefined array'};
   const getData = property.getData(data);
   t.true(getData === undefined);
 });
@@ -532,7 +548,7 @@ test('reference object properties add', t => {
         links: [{
           rel: 'full',
           href: '#/classes/{association}',
-          targetSchema: '#/definitions/class'
+          targetSchema: {$ref: '#/definitions/class'}
         }]
       }
     },
@@ -569,7 +585,7 @@ test('reference object properties get', t => {
         links: [{
           rel: 'full',
           href: '#/classes/{association}',
-          targetSchema: '#/definitions/class'
+          targetSchema: {$ref: '#/definitions/class'}
         }]
       }
     },
@@ -609,7 +625,7 @@ test('reference array properties add to undefined', t => {
         links: [{
           rel: 'full',
           href: '#/classes/{associations}',
-          targetSchema: '#/definitions/class'
+          targetSchema: {$ref: '#/definitions/class'}
         }]
       }
     },
@@ -652,7 +668,7 @@ test('reference array properties add to defined', t => {
         links: [{
           rel: 'full',
           href: '#/classes/{associations}',
-          targetSchema: '#/definitions/class'
+          targetSchema: {$ref: '#/definitions/class'}
         }]
       }
     },
@@ -695,7 +711,7 @@ test('reference array properties get', t => {
         links: [{
           rel: 'full',
           href: '#/classes/{associations}',
-          targetSchema: '#/definitions/class'
+          targetSchema: {$ref: '#/definitions/class'}
         }]
       }
     },
@@ -734,7 +750,7 @@ test('property type check', t => {
         links: [{
           rel: 'full',
           href: '#/classes/{association}',
-          targetSchema: '#/definitions/class'
+          targetSchema: {$ref: '#/definitions/class'}
         }]
       }
     },
@@ -791,6 +807,7 @@ test('self contained child schemata: cross recursion', t => {
   const selfContainedPerson = JSON.parse(JSON.stringify(schema.definitions.person));
   selfContainedPerson['definitions'] = {robot: schema.definitions.robot};
   selfContainedPerson['definitions'].robot.properties.humans.items.$ref = '#';
+  selfContainedPerson.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
   t.deepEqual(properties[0].schema, selfContainedPerson);
 });
 // real world examples

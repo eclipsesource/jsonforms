@@ -7,7 +7,7 @@ import {JsonFormsElement} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
 import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import {SchemaServiceInstance} from '../../core/schema.service';
+import { JsonForms } from '../../core';
 
 /**
  * Default tester for a master-detail layout.
@@ -95,7 +95,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           const length = rootData.push(newData);
           this.dataService.notifyAboutDataChange(controlElement, rootData);
           this.expandObject(newData, <HTMLUListElement>this.master.firstChild,
-            this.dataSchema.items, toDelete => rootData.splice(length - 1, 1));
+            this.dataSchema.items, () => rootData.splice(length - 1, 1));
           this.addingToRoot = false;
         }
       };
@@ -179,10 +179,6 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       this.expandObject(element, parent, schema, () => data.splice(index, 1));
     });
   }
-  // private getArrayProperties(schema: JsonSchema): Array<string> {
-  //   return Object.keys(schema.properties).filter(key => schema.properties[key].items !== undefined
-  //     && schema.properties[key].items['type'] === 'object');
-  // }
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
     if (this.uischema.options !== undefined) {
       const labelProvider = this.uischema.options['labelProvider'];
@@ -226,7 +222,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     spanText.textContent = this.getNamingFunction(schema)(data);
     span.appendChild(spanText);
     div.appendChild(span);
-    if (SchemaServiceInstance.hasContainmentProperties(schema)) {
+    if (JsonForms.schemaService.hasContainmentProperties(schema)) {
       const spanAdd = document.createElement('span');
       spanAdd.classList.add('add');
       spanAdd.onclick = (ev: Event) => {
@@ -235,12 +231,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         while (content.firstChild) {
           (<Element>content.firstChild).remove();
         }
-        SchemaServiceInstance.getContainmentProperties(schema).forEach(property => {
+        JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
           const button = document.createElement('button');
           button.innerText = property.label;
           button.onclick = () => {
             const newData = {};
-            property.addToData(data, newData);
+            property.addToData(data)(newData);
             this.updateTreeOnAdd(property.schema, li, newData, property.deleteFromData(data));
             this.dialog.close();
           };
@@ -267,7 +263,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     li.appendChild(div);
 
-    SchemaServiceInstance.getContainmentProperties(schema).forEach(property => {
+    JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
       const propertyData = property.getData(data);
       if (propertyData) {
         this.renderChildren(<Array<Object>>propertyData, property.schema, li, property.property);

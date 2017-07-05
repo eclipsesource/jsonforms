@@ -1,10 +1,9 @@
 import { UISchemaElement } from './models/uischema';
-import { JsonFormService, JsonForms } from './core';
+import { JsonFormService, JsonForms, instantiateSchemaService } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
 import * as JsonRefs from 'json-refs';
 import {DataService, DataChangeListener} from './core/data.service';
-import {instantiateSchemaService} from './core/schema.service';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -83,11 +82,7 @@ export class JsonFormsElement extends HTMLElement {
    * @param {JsonSchema} dataSchema the data schema to be rendered
    */
   set dataSchema(dataSchema: JsonSchema) {
-    this.schemaPromise = JsonRefs.resolveRefs(dataSchema,
-      {
-        // resolveCirculars: true,
-        includeInvalid: true
-      });
+    this.schemaPromise = JsonRefs.resolveRefs(dataSchema, {includeInvalid: true});
     this.schemaPromise.then(result => {
       this.dataschema = result.resolved;
       this.schemaPromise = null;
