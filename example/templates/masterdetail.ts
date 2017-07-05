@@ -86,7 +86,7 @@ const schema_object = {
           'items':
           {
             // TODO make recursive
-            '$ref': '#/definitions/file'
+            '$ref': '#/definitions/folder'
           }
         },
         'files': {

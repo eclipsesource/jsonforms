@@ -17,6 +17,7 @@ import './templates/categorization';
 import './templates/masterdetail';
 import './templates/resolve';
 import './templates/uischema-registry';
+import './templates/ecore';
 
 window.onload = (ev) => {
   const selectExampleElement = createExampleSelection();

@@ -7,7 +7,7 @@ import { JsonFormsRenderer } from '../renderer.util';
 import { resolveSchema } from '../../path.util';
 import { JsonSchema } from '../../models/jsonSchema';
 import { getElementLabelObject } from '../label.util';
-import { RankedTester, rankWith, and, uiTypeIs, schemaMatches } from '../../core/testers';
+import { RankedTester, rankWith, and, uiTypeIs, schemaMatches, schemaSubPathMatches } from '../../core/testers';
 import { JsonForms } from '../../core';
 
 /**
@@ -21,7 +21,9 @@ export const arrayTester: RankedTester = rankWith(2, and(
         && schema.type === 'array'
         && !_.isEmpty(schema.items)
         && !Array.isArray(schema.items) // we don't care about tuples
-        && (schema.items as JsonSchema).type === 'object'
+    ),
+    schemaSubPathMatches('items', schema =>
+        schema.type === 'object'
     ))
 );
 
@@ -103,7 +105,8 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
 
     const renderChild = (element: Object): void => {
       const jsonForms = <JsonFormsElement>document.createElement('json-forms');
-      const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
+      const resolvedSchema = JsonForms.schemaService.getSelfContainedSchema(
+        this.dataSchema, controlElement.scope.$ref + '/items');
       jsonForms.data = element;
       jsonForms.dataSchema = resolvedSchema;
       content.appendChild(jsonForms);

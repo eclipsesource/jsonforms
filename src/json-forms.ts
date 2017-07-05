@@ -1,5 +1,5 @@
 import { UISchemaElement } from './models/uischema';
-import { JsonFormService, JsonForms } from './core';
+import { JsonFormService, JsonForms, instantiateSchemaService } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
 import * as JsonRefs from 'json-refs';
@@ -82,7 +82,7 @@ export class JsonFormsElement extends HTMLElement {
    * @param {JsonSchema} dataSchema the data schema to be rendered
    */
   set dataSchema(dataSchema: JsonSchema) {
-    this.schemaPromise = JsonRefs.resolveRefs(dataSchema);
+    this.schemaPromise = JsonRefs.resolveRefs(dataSchema, {includeInvalid: true});
     this.schemaPromise.then(result => {
       this.dataschema = result.resolved;
       this.schemaPromise = null;
@@ -141,6 +141,7 @@ export class JsonFormsElement extends HTMLElement {
     this.services.forEach(service => service.dispose());
     this.services = [];
     const schema = this.dataSchema;
+    this.instantiateSchemaIfNeeded(schema);
     const uiSchema = this.uiSchema;
     this.createServices(uiSchema, schema);
 
@@ -155,5 +156,15 @@ export class JsonFormsElement extends HTMLElement {
     JsonForms.jsonFormsServices.forEach(service =>
         this.services.push(new service(this.dataService, dataSchema, uiSchema))
     );
+  }
+  private instantiateSchemaIfNeeded(schema: JsonSchema): void {
+    let parent = this.parentNode;
+    while (parent !== document.body && parent !== null) {
+      if (parent.nodeName === 'JSON-FORMS') {
+        return;
+      }
+      parent = parent.parentNode;
+    }
+    instantiateSchemaService(schema);
   }
 }

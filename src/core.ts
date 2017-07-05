@@ -4,6 +4,7 @@ import {UISchemaRegistry, UISchemaRegistryImpl} from './core/uischema.registry';
 import {DataService} from './core/data.service';
 import {RendererService} from './core/renderer.service';
 import {StylingRegistry, StylingRegistryImpl} from './core/styling.registry';
+import {SchemaService, SchemaServiceImpl} from './core/schema.service';
 
 /**
  * Represents a JSONForms service.
@@ -38,7 +39,9 @@ export interface JsonFormsServiceConstructable {
 export const JsonFormsServiceElement = (config) => (cls: JsonFormsServiceConstructable) => {
   JsonForms.jsonFormsServices.push(cls);
 };
-
+export const instantiateSchemaService = (schema: JsonSchema): void => {
+  JsonForms.schemaService =  new SchemaServiceImpl(schema);
+};
 /**
  * Global JSONForms object that holds services and registries.
  */
@@ -47,4 +50,5 @@ export class JsonForms {
   public static jsonFormsServices: Array<JsonFormsServiceConstructable> = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
+  public static schemaService: SchemaService;
 }

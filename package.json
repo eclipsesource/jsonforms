@@ -53,7 +53,7 @@
     "nyc": "^10.1.2",
     "source-map-loader": "^0.1.6",
     "tslint": "^5.4.3",
-    "typescript": "^2.1.5",
+    "typescript": "^2.2.0",
     "url-loader": "^0.5.7",
     "web-component-tester": "^5.0.0",
     "webpack": "^2.2.1",

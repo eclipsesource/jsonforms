@@ -39,7 +39,7 @@ test.cb('Connect JSON Forms element with data and data schema set', t => {
       jsonForms.connectedCallback();
       t.is(jsonForms.children.length, 1);
       t.is(jsonForms.children.item(0).tagName, 'JSONFORMS-VERTICALLAYOUT');
-      t.deepEqual(jsonForms.dataSchema, dataSchema);
+      t.deepEqual(jsonForms.dataSchema.properties, dataSchema.properties);
       t.deepEqual(jsonForms.uiSchema, generateDefaultUISchema(dataSchema));
       t.end();
     }, 100);
@@ -67,7 +67,7 @@ test.cb('Connect JSON Forms element with data, data and UI schema set', t => {
       jsonForms.connectedCallback();
       t.is(jsonForms.children.length, 1);
       t.is(jsonForms.children.item(0).tagName, 'JSONFORMS-TEXT');
-      t.deepEqual(jsonForms.dataSchema, dataSchema);
+      t.deepEqual(jsonForms.dataSchema.properties, dataSchema.properties);
       t.is(jsonForms.uiSchema, uiSchema);
       t.end();
     }, 100);
