@@ -1,4 +1,4 @@
-import { JsonSchema } from './models/jsonSchema';
+import {JsonSchema} from './models/jsonSchema';
 
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting
@@ -11,7 +11,7 @@ import { JsonSchema } from './models/jsonSchema';
  * @param {string} schemaPath the schema path to be converted
  * @returns {string[]} an array containing only non-schema-specific segments
  */
-const toDataPathSegments = (schemaPath: string): Array<string> => {
+const toDataPathSegments = (schemaPath: string): string[] => {
   const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
   if (startFromRoot) {
@@ -23,6 +23,7 @@ const toDataPathSegments = (schemaPath: string): Array<string> => {
       }
     });
   }
+
   return segments.filter((segment, index) => index % 2 !== 0);
 };
 
@@ -58,13 +59,18 @@ export const getValuePropertyPair = (instance: any, schemaPath: string):
       validPathSegments
           .slice(0, validPathSegments.length - 1)
           .map(segment => decodeURIComponent(segment))
-          .reduce((curInstance, decodedSegment) => {
-              if (!curInstance.hasOwnProperty(decodedSegment)) {
+          .reduce(
+              (curInstance, decodedSegment) => {
+                if (!curInstance.hasOwnProperty(decodedSegment)) {
                   curInstance[decodedSegment] = {};
-              }
-              return curInstance[decodedSegment];
-          }, instance);
-    return {
+                }
+
+                return curInstance[decodedSegment];
+              },
+              instance
+          );
+
+  return {
       instance: resolvedInstance,
       property: validPathSegments.length > 0 ?
         decodeURIComponent(validPathSegments[validPathSegments.length - 1]) : undefined
@@ -80,12 +86,16 @@ export const getValuePropertyPair = (instance: any, schemaPath: string):
 export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchema => {
   const validPathSegments = schemaPath.split('/');
   const invalidSegment =
-    (pathSegment) => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
-  const resultSchema = validPathSegments.reduce((curSchema, pathSegment) =>
-      invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment], schema);
+    pathSegment => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
+  const resultSchema = validPathSegments.reduce(
+      (curSchema, pathSegment) =>
+          invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment],
+      schema
+  );
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
     return retrieveResolvableSchema(schema, resultSchema.$ref);
   }
+
   return resultSchema;
 };
 
@@ -104,6 +114,7 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
   }
+
   return result;
 };
 
@@ -114,13 +125,17 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
  * @param {string} reference the reference to be resolved
  * @returns {JsonSchema} the resolved sub-schema
  */
+// disable rule because resolve is mutually recursive
+// tslint:disable:only-arrow-functions
 export function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
+// tslint:enable:only-arrow-functions
   const child = resolveSchema(full, reference);
   const allRefs = findAllRefs(child);
   const innerSelfReference = allRefs[reference];
   if (innerSelfReference !== undefined) {
     innerSelfReference.$ref = '#';
   }
+
   return child;
 }
 

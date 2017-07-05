@@ -1,8 +1,8 @@
 import { LabelElement } from '../../models/uischema';
-import { Renderer } from '../../core/renderer';
 import { JsonFormsRenderer } from '../renderer.util';
-import { rankWith, uiTypeIs, RankedTester } from '../../core/testers';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import { Renderer } from '../../core/renderer';
+import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
 
 /**
  * Default tester for a label.
@@ -27,11 +27,12 @@ export class LabelRenderer extends Renderer {
    * @inheritDoc
    */
   render(): HTMLElement {
-    const labelElement = <LabelElement> this.uischema;
+    const labelElement: LabelElement = this.uischema as LabelElement;
     if (labelElement.text !== undefined && labelElement.text !== null) {
       this.textContent = labelElement.text;
     }
     this.className = 'jsf-label';
+
     return this;
   }
 
@@ -47,7 +48,7 @@ export class LabelRenderer extends Renderer {
    * @param type
    */
   runtimeUpdated(type: RUNTIME_TYPE): void {
-    const runtime = <Runtime>this.uischema['runtime'];
+    const runtime: Runtime = this.uischema.runtime;
     switch (type) {
       case RUNTIME_TYPE.VISIBLE:
         this.hidden = !runtime.visible;
@@ -59,6 +60,7 @@ export class LabelRenderer extends Renderer {
           this.removeAttribute('disabled');
         }
         break;
+      default:
     }
   }
 }

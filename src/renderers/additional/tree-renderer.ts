@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {ControlElement} from '../../models/uischema';
 import {Renderer} from '../../core/renderer';
 import {DataChangeListener} from '../../core/data.service';
@@ -5,25 +6,28 @@ import {JsonFormsRenderer} from '../renderer.util';
 import {resolveSchema} from '../../path.util';
 import {JsonFormsElement} from '../../json-forms';
 import {JsonSchema} from '../../models/jsonSchema';
-import {uiTypeIs, rankWith, and, RankedTester} from '../../core/testers';
+import {and, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import { JsonForms } from '../../core';
+import {JsonForms} from '../../core';
 
 /**
  * Default tester for a master-detail layout.
  * @type {RankedTester}
  */
-export const treeMasterDetailTester: RankedTester = rankWith(1,
-  and(
-    uiTypeIs('MasterDetailLayout'),
-    (uiSchema) => {
-      const control = uiSchema as ControlElement;
-      if (control.scope === undefined || control.scope === null) {
-        return false;
-      }
-      return !(control.scope.$ref === undefined || control.scope.$ref === null);
-    }
-));
+export const treeMasterDetailTester: RankedTester =
+    rankWith(
+        1,
+        and(
+            uiTypeIs('MasterDetailLayout'),
+            uiSchema => {
+              const control = uiSchema as ControlElement;
+              if (control.scope === undefined || control.scope === null) {
+                return false;
+              }
+
+              return !(control.scope.$ref === undefined || control.scope.$ref === null);
+            }
+        ));
 
 /**
  * Default renderer for a tree-based master-detail layout.
@@ -43,19 +47,23 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   constructor() {
     super();
   }
+
   connectedCallback(): void {
     super.connectedCallback();
     this.dataService.registerDataChangeListener(this);
   }
+
   disconnectedCallback(): void {
     this.dataService.deregisterDataChangeListener(this);
     super.disconnectedCallback();
   }
+
   dispose(): void {
     // Do nothing
   }
+
   runtimeUpdated(type: RUNTIME_TYPE): void {
-    const runtime = <Runtime>this.uischema['runtime'];
+    const runtime = this.uischema.runtime as Runtime;
     switch (type) {
       case RUNTIME_TYPE.VISIBLE:
         this.hidden = !runtime.visible;
@@ -67,10 +75,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           this.removeAttribute('disabled');
         }
         break;
+      default:
     }
   }
+
   render(): HTMLElement {
-    const controlElement = <ControlElement> this.uischema;
+    const controlElement = this.uischema as ControlElement;
     this.resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref);
 
     this.className = 'jsf-treeMasterDetail';
@@ -94,8 +104,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           this.addingToRoot = true;
           const length = rootData.push(newData);
           this.dataService.notifyAboutDataChange(controlElement, rootData);
-          this.expandObject(newData, <HTMLUListElement>this.master.firstChild,
-            this.dataSchema.items, () => rootData.splice(length - 1, 1));
+          this.expandObject(
+            newData,
+            this.master.firstChild as HTMLUListElement,
+            this.dataSchema.items,
+            () => rootData.splice(length - 1, 1)
+          );
           this.addingToRoot = false;
         }
       };
@@ -127,11 +141,13 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     this.dialog.appendChild(dialogClose);
     this.appendChild(this.dialog);
     this.renderFull();
+
     return this;
   }
+
   needsNotificationAbout (uischema: ControlElement): boolean {
     return uischema === undefined || uischema === null ? false :
-      (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
+      (this.uischema as ControlElement).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
   }
 
   dataChanged(uischema: ControlElement, newValue: any, data: any): void {
@@ -144,7 +160,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   }
 
   private selectFirstElement(): void {
-    const controlElement = <ControlElement> this.uischema;
+    const controlElement = this.uischema as ControlElement;
     const arrayData = this.dataService.getValue(controlElement);
     if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
       let firstChild = arrayData;
@@ -153,7 +169,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         firstChild = firstChild[0];
         schema = schema.items;
       }
-      this.renderDetail(firstChild, <HTMLLIElement>this.master.firstChild.firstChild, schema);
+      this.renderDetail(firstChild, this.master.firstChild.firstChild as HTMLLIElement, schema);
     }
   }
 
@@ -161,17 +177,18 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     if (this.master.lastChild !== null) {
       this.master.removeChild(this.master.lastChild);
     }
-    const controlElement = <ControlElement> this.uischema;
+    const controlElement = this.uischema as ControlElement;
     const rootData = this.dataService.getValue(controlElement);
     const ul = document.createElement('ul');
     if (schema.items !== undefined) {
-      this.expandArray(rootData, ul, <JsonSchema>schema.items);
+      this.expandArray(rootData, ul, schema.items as JsonSchema);
     } else {
       this.expandObject(rootData, ul, schema, null);
     }
     this.master.appendChild(ul);
   }
-  private expandArray(data: Array<Object>, parent: HTMLUListElement, schema: JsonSchema): void {
+
+  private expandArray(data: Object[], parent: HTMLUListElement, schema: JsonSchema): void {
     if (data === undefined || data === null) {
       return;
     }
@@ -179,21 +196,28 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       this.expandObject(element, parent, schema, () => data.splice(index, 1));
     });
   }
+
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
     if (this.uischema.options !== undefined) {
-      const labelProvider = this.uischema.options['labelProvider'];
+      const labelProvider = this.uischema.options.labelProvider;
       if (labelProvider !== undefined) {
-        return (element) => element[labelProvider[schema.id]];
+        return element => element[labelProvider[schema.id]];
       }
     }
     const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
     if (namingKeys.length !== 0) {
-      return (element) => element[namingKeys[0]];
+      return element => element[namingKeys[0]];
     }
-    return JSON.stringify;
+
+    return obj => JSON.stringify(obj);
   }
-  private updateTreeOnAdd(schema: JsonSchema, li: HTMLLIElement, newData: object,
-      deleteFunction: (toDelete: object) => void): void {
+
+  private updateTreeOnAdd(
+    schema: JsonSchema,
+    li: HTMLLIElement,
+    newData: object,
+    deleteFunction: (toDelete: object) => void
+  ): void {
     const subChildren = li.getElementsByTagName('ul');
     let childParent;
     if (subChildren.length !== 0) {
@@ -203,21 +227,28 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       li.appendChild(childParent);
     }
     this.expandObject(newData, childParent, schema,  deleteFunction);
-  };
-  private expandObject(data: Object, parent: HTMLUListElement, schema: JsonSchema,
-      deleteFunction: (toDelete: object) => void): void {
+  }
+
+  private expandObject(
+    data: Object,
+    parent: HTMLUListElement,
+    schema: JsonSchema,
+    deleteFunction: (toDelete: object) => void
+  ): void {
     const li = document.createElement('li');
     const div = document.createElement('div');
     if (this.uischema.options !== undefined &&
-      this.uischema.options['imageProvider'] !== undefined) {
+      this.uischema.options.imageProvider !== undefined) {
       const spanIcon = document.createElement('span');
       spanIcon.classList.add('icon');
-      spanIcon.classList.add(this.uischema.options['imageProvider'][schema.id]);
+      spanIcon.classList.add(this.uischema.options.imageProvider[schema.id]);
       div.appendChild(spanIcon);
     }
     const span = document.createElement('span');
     span.classList.add('label');
-    span.onclick = (ev: Event) => this.renderDetail(data, li, schema);
+    span.onclick = (ev: Event) => {
+      this.renderDetail(data, li, schema);
+    };
     const spanText = document.createElement('span');
     spanText.textContent = this.getNamingFunction(schema)(data);
     span.appendChild(spanText);
@@ -229,7 +260,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         ev.stopPropagation();
         const content = this.dialog.getElementsByClassName('content')[0];
         while (content.firstChild) {
-          (<Element>content.firstChild).remove();
+          (content.firstChild as Element).remove();
         }
         JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
           const button = document.createElement('button');
@@ -265,34 +296,37 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
 
     JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
       const propertyData = property.getData(data);
-      if (propertyData) {
-        this.renderChildren(<Array<Object>>propertyData, property.schema, li, property.property);
+      if (!_.isEmpty(propertyData)) {
+        this.renderChildren(propertyData as Object[], property.schema, li, property.property);
       }
     });
 
     parent.appendChild(li);
   }
+
   private findRendererChildContainer(li: HTMLLIElement, key: string): HTMLUListElement {
     let ul: HTMLUListElement;
     const children = li.children;
     for (let i = 0; i < children.length; i++) {
       const child = children.item(i);
       if (child.tagName === 'UL' && child.getAttribute('children') === key) {
-        ul = <HTMLUListElement>child;
+        ul = child as HTMLUListElement;
       }
     }
+
     return ul;
   }
+
   private renderChildren
-    (array: Array<Object>, schema: JsonSchema, li: HTMLLIElement, key: string): void {
+    (array: Object[], schema: JsonSchema, li: HTMLLIElement, key: string): void {
     let ul: HTMLUListElement = this.findRendererChildContainer(li, key);
     if (ul === undefined) {
       ul = document.createElement('ul');
       ul.setAttribute('children', key);
       li.appendChild(ul);
     } else {
-      while (ul.firstChild) {
-        (<Element>ul.firstChild).remove();
+      while (!_.isEmpty(ul.firstChild)) {
+        (ul.firstChild as Element).remove();
       }
     }
     this.expandArray(array, ul, schema);
@@ -307,11 +341,11 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     label.classList.toggle('selected');
     this.selected = label;
 
-    const jsonForms = <JsonFormsElement>document.createElement('json-forms');
+    const jsonForms = document.createElement('json-forms') as JsonFormsElement;
     jsonForms.data = element;
     jsonForms.dataSchema = schema;
     // check needed for tests
-    if (jsonForms.addDataChangeListener) {
+    if (!_.isEmpty(jsonForms.addDataChangeListener)) {
       jsonForms.addDataChangeListener({
         needsNotificationAbout: (uischema: ControlElement): boolean => {
           return uischema !== null;
@@ -319,7 +353,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         dataChanged: (uischema: ControlElement, newValue: any, data: any): void => {
           const segments = uischema.scope.$ref.split('/');
           const lastSegemnet = segments[segments.length - 1];
-          if (lastSegemnet === this.uischema.options['labelProvider'][schema.id]) {
+          if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {
             label.firstChild.lastChild.firstChild.textContent = newValue;
           }
           if (Array.isArray(newValue)) {

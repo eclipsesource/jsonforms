@@ -1,8 +1,8 @@
-import { ControlElement } from '../../models/uischema';
-import { BaseControl } from './base.control';
-import { JsonFormsRenderer } from '../renderer.util';
-import { resolveSchema } from '../../path.util';
-import { rankWith, and, uiTypeIs, schemaMatches, RankedTester} from '../../core/testers';
+import {and, RankedTester, rankWith, schemaMatches, uiTypeIs} from '../../core/testers';
+import {ControlElement} from '../../models/uischema';
+import {resolveSchema} from '../../path.util';
+import {JsonFormsRenderer} from '../renderer.util';
+import {BaseControl} from './base.control';
 
 /**
  * Default tester for enum controls.
@@ -21,13 +21,16 @@ export const enumControlTester: RankedTester = rankWith(2, and(
   tester: enumControlTester
 })
 export class EnumControl extends BaseControl<HTMLSelectElement> {
-  private options: Array<any>;
+  private options: any[];
 
   /**
    * @inheritDoc
    */
   protected configureInput(input: HTMLSelectElement): void {
-    this.options = resolveSchema(this.dataSchema, (<ControlElement>this.uischema).scope.$ref).enum;
+    this.options = resolveSchema(
+        this.dataSchema,
+        (this.uischema as ControlElement).scope.$ref
+    ).enum;
     this.options.forEach(optionValue => {
       const option = document.createElement('option');
       option.value = optionValue;

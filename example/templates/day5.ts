@@ -99,7 +99,7 @@ const uischema = {
     }
   ]
 };
-const uischema_category = {
+const uischemaCategory = {
   'type': 'Categorization',
   'elements': [
     {
@@ -190,5 +190,5 @@ const data = {
 registerExamples([
   {name: 'day5', label: 'Day 5', data: data, schema: schema, uiSchema: uischema},
   {name: 'day5_categegory', label: 'Day 5 With Category',
-    data: data, schema: schema, uiSchema: uischema_category}
+    data: data, schema: schema, uiSchema: uischemaCategory}
 ]);

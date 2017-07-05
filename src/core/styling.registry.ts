@@ -4,8 +4,8 @@ import * as _ from 'lodash';
  * A style associates a name with a list of CSS class names.
  */
 export interface Style {
-    name: string
-    classNames: Array<string>
+    name: string;
+    classNames: string[];
 }
 
 /**
@@ -21,7 +21,7 @@ export interface StylingRegistry {
      * @param styleName the name of the style
      * @param classNames CSS class names to be applied
      */
-    register(styleName: string, classNames: Array<string>): void;
+    register(styleName: string, classNames: string[]): void;
 
     /**
      * Register a style.
@@ -36,7 +36,7 @@ export interface StylingRegistry {
      *
      * @param styles an array of styles to be registered
      */
-    registerMany(styles: Array<Style>): void;
+    registerMany(styles: Style[]): void;
 
     /**
      * Deregister a style.
@@ -51,7 +51,7 @@ export interface StylingRegistry {
      * @return {Array<String>} an array containing the CSS class names,
      *         if the style exists, an empty array otherwise
      */
-    get(styleName: string): Array<string>
+    get(styleName: string): string[];
 
     /**
      * Obtain the CSS class name associated with the given style name.
@@ -59,7 +59,7 @@ export interface StylingRegistry {
      * @return a string containing the CSS class name separated by whitespace, if the style exists,
      *         empty string otherwise
      */
-    getAsClassName(styleName: string): string
+    getAsClassName(styleName: string): string;
 }
 
 /**
@@ -67,7 +67,7 @@ export interface StylingRegistry {
  */
 export class StylingRegistryImpl implements StylingRegistry {
 
-    constructor(protected styles: Array<Style> = []) {
+    constructor(protected styles: Style[] = []) {
 
     }
 
@@ -83,8 +83,10 @@ export class StylingRegistryImpl implements StylingRegistry {
         }
     }
 
-    registerMany(styles: Array<Style>) {
-        styles.forEach(style => this.register(style.name, style.classNames))
+    registerMany(styles: Style[]) {
+        styles.forEach(style => {
+            this.register(style.name, style.classNames);
+        });
     }
 
     deregister(styleName: any) {
@@ -93,9 +95,10 @@ export class StylingRegistryImpl implements StylingRegistry {
 
     get(styleName: string): string[] {
         const foundStyle = _.find(this.styles, style => style.name === styleName);
-        if (foundStyle) {
+        if (!_.isEmpty(foundStyle)) {
             return foundStyle.classNames;
         }
+
         return [];
     }
 
@@ -104,6 +107,7 @@ export class StylingRegistryImpl implements StylingRegistry {
         if (_.isEmpty(styles)) {
             return '';
         }
+
         return _.join(styles, ' ');
     }
 }

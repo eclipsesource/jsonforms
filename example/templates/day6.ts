@@ -1,10 +1,9 @@
-import {registerExamples} from '../example';
-import {JsonForms} from '../../src/core';
 import {Renderer} from '../../src/core/renderer';
 import {JsonFormsElement} from '../../src/json-forms';
-import { resolveSchema } from '../../src/path.util';
-import { UISchemaElement, ControlElement } from '../../src/models/uischema';
-import { JsonSchema } from '../../src/models/jsonSchema';
+import {JsonSchema} from '../../src/models/jsonSchema';
+import {ControlElement, UISchemaElement} from '../../src/models/uischema';
+import {resolveSchema} from '../../src/path.util';
+import {registerExamples} from '../example';
 
 const schema = {
   'type': 'object',
@@ -114,17 +113,20 @@ const data =  {
 };
 
 const resetServices = () => {
-  const jsonforms = <JsonFormsElement>document.getElementsByTagName('json-forms')[0];
+  const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
   jsonforms.data = data;
 };
 
-const tester = (my_uischema: UISchemaElement, my_schema: JsonSchema) =>
-  my_uischema.type === 'Control'
-  && resolveSchema(my_schema, (<ControlElement>my_uischema).scope.$ref).type === 'integer' ? 5 : -1;
+const tester = (myUISchema: UISchemaElement, mySchema: JsonSchema) =>
+  myUISchema.type === 'Control'
+  && resolveSchema(
+      mySchema,
+      (myUISchema as ControlElement).scope.$ref
+  ).type === 'integer' ? 5 : -1;
 
 class MyControl extends Renderer {
   render(): HTMLElement {
-    const controlElement = <ControlElement>this.uischema;
+    const controlElement = this.uischema as ControlElement;
     for (let i = 1; i <= 5; i++) {
       const span = document.createElement('span');
       span.innerText = '\u2606';
@@ -143,32 +145,33 @@ class MyControl extends Renderer {
       this.setCurrent();
     };
     this.setCurrent();
+
     return this;
   }
   dispose(): void {
     return;
   }
   private setCurrent(): void {
-    const currentValue = this.dataService.getValue(<ControlElement>this.uischema);
+    const currentValue = this.dataService.getValue(this.uischema as ControlElement);
     for (let i = 1; i <= 5; i++) {
       let star = '\u2605';
       if (i > currentValue || currentValue === undefined) {
         star = '\u2606';
       }
-      (<HTMLSpanElement>this.children.item(i - 1)).innerText = star;
+      (this.children.item(i - 1) as HTMLSpanElement).innerText = star;
     }
   }
   private updateSpans(span: HTMLSpanElement): void {
     span.innerText = '\u2605';
-    let prevStar = <HTMLSpanElement>span.previousElementSibling;
+    let prevStar = span.previousElementSibling as HTMLSpanElement;
     while (prevStar !== null) {
       prevStar.innerText = '\u2605';
-      prevStar = <HTMLSpanElement>prevStar.previousElementSibling;
+      prevStar = prevStar.previousElementSibling as HTMLSpanElement;
     }
-    let nextStar = <HTMLSpanElement>span.nextElementSibling;
+    let nextStar = span.nextElementSibling as HTMLSpanElement;
     while (nextStar !== null) {
       nextStar.innerText = '\u2606';
-      nextStar = <HTMLSpanElement>nextStar.nextElementSibling;
+      nextStar = nextStar.nextElementSibling as HTMLSpanElement;
     }
   }
 

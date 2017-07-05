@@ -1,9 +1,9 @@
-import { UISchemaElement, ControlElement, Layout } from '../models/uischema';
-import { JsonFormsServiceElement, JsonFormService } from '../core';
+import {JsonFormService, JsonFormsServiceElement} from '../core';
+import {DataChangeListener, DataService} from '../core/data.service';
 import {Runtime} from '../core/runtime';
-import { JsonSchema } from '../models/jsonSchema';
-import { toDataPath } from '../path.util';
-import {DataService, DataChangeListener} from '../core/data.service';
+import {JsonSchema} from '../models/jsonSchema';
+import {ControlElement, Layout, UISchemaElement} from '../models/uischema';
+import {toDataPath} from '../path.util';
 
 import * as AJV from 'ajv';
 
@@ -41,24 +41,24 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
   /**
    * @inheritDoc
    */
-  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged = (uischema: ControlElement, newValue: any, data: any): void => {
     this.validate(data);
   }
 
   /**
    * @inheritDoc
    */
-  dispose(): void {
+  dispose = (): void => {
     this.dataService.deregisterDataChangeListener(this);
   }
 
   private parseUiSchema(uiSchema: UISchemaElement): void {
     if (uiSchema.hasOwnProperty('elements')) {
-      (<Layout>uiSchema).elements.forEach((element, index) =>
-          this.parseUiSchema(element)
-      );
+      (uiSchema as Layout).elements.forEach(element => {
+        this.parseUiSchema(element);
+      });
     } else if (uiSchema.hasOwnProperty('scope')) {
-      const control = <ControlElement> uiSchema;
+      const control = uiSchema as ControlElement;
       const instancePath = toDataPath(control.scope.$ref);
       this.pathToControlMap[instancePath] = control;
     }
@@ -71,7 +71,9 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
       return;
     }
     const errors = this.validator.errors;
-    errors.forEach(error => this.mapErrorToControl(error));
+    errors.forEach(error => {
+      this.mapErrorToControl(error);
+    });
   }
 
   private mapErrorToControl(error: AJV.ErrorObject): void {
@@ -80,13 +82,14 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
     if (uiSchema === undefined) {
       // FIXME should we log this at all?
       console.warn('No control for showing validation error @', error.dataPath.substring(1));
+
       return;
     }
 
     if (!uiSchema.hasOwnProperty('runtime')) {
-      uiSchema['runtime'] = new Runtime();
+      uiSchema.runtime = new Runtime();
     }
-    const runtime = <Runtime> uiSchema['runtime'];
+    const runtime: Runtime = uiSchema.runtime;
     runtime.validationErrors = [];
     runtime.validationErrors = runtime.validationErrors.concat(error.message);
   }
@@ -96,7 +99,7 @@ export class JsonFormsValidator implements DataChangeListener, JsonFormService {
       if (!this.pathToControlMap[key].hasOwnProperty('runtime')) {
         return;
       }
-      (<Runtime> this.pathToControlMap[key]['runtime']).validationErrors = undefined;
+      (this.pathToControlMap[key].runtime).validationErrors = undefined;
     });
   }
 }

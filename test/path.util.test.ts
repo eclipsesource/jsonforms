@@ -1,7 +1,7 @@
 import test from 'ava';
 
-import {resolveSchema, toDataPath, getValuePropertyPair } from '../src/path.util';
 import {JsonSchema } from '../src/models/jsonSchema';
+import {getValuePropertyPair, resolveSchema, toDataPath } from '../src/path.util';
 
 test('resolve ', t => {
     const schema: JsonSchema = {
@@ -11,11 +11,15 @@ test('resolve ', t => {
                 'type': 'integer'
             }
         }
-    } as JsonSchema;
-    t.deepEqual(resolveSchema(schema, '#/properties/foo'), {
-        type: 'integer'
-    } as JsonSchema);
+    };
+    t.deepEqual(
+        resolveSchema(schema, '#/properties/foo'),
+        {
+            type: 'integer'
+        }
+    );
 });
+
 test('toDataPath ', t => {
     t.is(toDataPath('#/properties/foo/properties/bar'), 'foo/bar');
 });
@@ -47,28 +51,12 @@ test('toDataPath use of encoded paths relative without /', t => {
     t.is(toDataPath(`properties/${fooBar}`), `${fooBar}`);
 });
 test('resolve instance', t => {
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'foo': {
-                'type': 'integer'
-            }
-        }
-    } as JsonSchema;
     const instance = {foo: 123};
     const result = getValuePropertyPair(instance, '#/properties/foo');
     t.is(result.instance, instance);
     t.is(result.property, 'foo');
 });
 test('resolve instance with keywords', t => {
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'properties': {
-                'type': 'integer'
-            }
-        }
-    } as JsonSchema;
     const instance = {properties: 123};
     const result = getValuePropertyPair(instance, '#/properties/properties');
     t.is(result.instance, instance);
@@ -76,54 +64,20 @@ test('resolve instance with keywords', t => {
     t.is(result.instance[result.property], 123);
 });
 test('resolve instance with encoded', t => {
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'foo/bar': {
-                'type': 'integer'
-            }
-        }
-    } as JsonSchema;
     const instance = {'foo/bar': 123};
-    const fooBar = encodeURIComponent('foo/bar')
+    const fooBar = encodeURIComponent('foo/bar');
     const result = getValuePropertyPair(instance, `#/properties/${fooBar}`);
     t.is(result.instance, instance);
     t.is(result.property, 'foo/bar');
     t.is(result.instance[result.property], 123);
 });
 test('resolve nested instance', t => {
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'foo': {
-                'type': 'object',
-                'properties': {
-                    'bar': {
-                        'type': 'integer'
-                    }
-                }
-            }
-        }
-    } as JsonSchema;
     const instance = {foo: {bar: 123}};
     const result = getValuePropertyPair(instance, '#/properties/foo/properties/bar');
     t.is(result.instance, instance.foo);
     t.is(result.property, 'bar');
 });
 test('resolve uninitiated instance', t => {
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'foo': {
-                'type': 'object',
-                'properties': {
-                    'bar': {
-                        'type': 'integer'
-                    }
-                }
-            }
-        }
-    } as JsonSchema;
     const instance = {};
     const result = getValuePropertyPair(instance, '#/properties/foo/properties/bar');
     t.deepEqual(result.instance, {});
@@ -145,7 +99,7 @@ test('resolve $ref', t => {
             }
           }
         }
-    } as JsonSchema;
+    };
     const result = resolveSchema(schema, '#/properties/foos/items');
     t.deepEqual(result, {type: 'string'});
 });
@@ -173,7 +127,7 @@ test.failing('resolve $ref simple', t => {
             }
           }
         }
-    } as JsonSchema;
+    };
     const result = resolveSchema(schema, '#/properties/foos/items');
     t.deepEqual(result, {
       type: 'object',
@@ -186,7 +140,7 @@ test.failing('resolve $ref simple', t => {
         }
       }
     });
-    t.not((<JsonSchema>schema.definitions.foo.properties.bar.items).$ref, '#');
+    t.not((schema.definitions.foo.properties.bar.items as JsonSchema).$ref, '#');
 });
 test.failing('resolve $ref complicated', t => {
     const schema: JsonSchema = {
@@ -223,7 +177,7 @@ test.failing('resolve $ref complicated', t => {
             }
           }
         }
-    } as JsonSchema;
+    };
     const result = resolveSchema(schema, '#/properties/foos/items');
     t.deepEqual(result, {
       definitions: {

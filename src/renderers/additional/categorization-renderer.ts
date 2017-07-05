@@ -1,34 +1,41 @@
 import * as _ from 'lodash';
-import {Categorization, Category} from '../../models/uischema';
 import {Renderer} from '../../core/renderer';
-import {JsonFormsRenderer} from '../renderer.util';
-import {JsonFormsElement} from '../../json-forms';
-import {uiTypeIs, rankWith, RankedTester, and} from '../../core/testers';
 import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
+import {and, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
+import {JsonFormsElement} from '../../json-forms';
+import {Categorization, Category} from '../../models/uischema';
+import {JsonFormsRenderer} from '../renderer.util';
+
+const isCategorization = (category: Category | Categorization): category is Categorization => {
+  return category.type === 'Categorization';
+};
 
 /**
  * Default tester for a categorization.
  * @type {RankedTester}
  */
-export const categorizationTester: RankedTester = rankWith(1,
-  and(
-    uiTypeIs('Categorization'),
-    (uiSchema) => {
-      const hasCategory = (element: Categorization): boolean => {
-        if (_.isEmpty(element.elements)) {
-          return false;
-        }
-        return element.elements
-          .map(elem => isCategorization(elem) ? hasCategory(elem) : elem.type === 'Category')
-          .reduce((prev, curr) => prev && curr, true);
-      };
-      return hasCategory(uiSchema as Categorization)
-    }
-));
+export const categorizationTester: RankedTester =
+    rankWith(
+        1,
+        and(
+            uiTypeIs('Categorization'),
+            uiSchema => {
+              const hasCategory = (element: Categorization): boolean => {
+                if (_.isEmpty(element.elements)) {
+                  return false;
+                }
 
-function isCategorization(category: Category | Categorization): category is Categorization {
-  return category.type === 'Categorization';
-}
+                return element.elements
+                    .map(elem => isCategorization(elem) ?
+                        hasCategory(elem) :
+                        elem.type === 'Category'
+                    )
+                    .reduce((prev, curr) => prev && curr, true);
+              };
+
+              return hasCategory(uiSchema as Categorization);
+            }
+        ));
 
 /**
  * Default renderer for a categorization.
@@ -57,7 +64,7 @@ export class CategorizationRenderer extends Renderer {
    * @inheritDoc
    */
   runtimeUpdated(type: RUNTIME_TYPE): void {
-    const runtime = <Runtime>this.uischema['runtime'];
+    const runtime = this.uischema.runtime as Runtime;
     switch (type) {
       case RUNTIME_TYPE.VISIBLE:
         this.hidden = !runtime.visible;
@@ -69,6 +76,7 @@ export class CategorizationRenderer extends Renderer {
           this.removeAttribute('disabled');
         }
         break;
+      default:
     }
   }
 
@@ -87,29 +95,33 @@ export class CategorizationRenderer extends Renderer {
     this.appendChild(this.detail);
 
     this.renderFull();
+
     return this;
   }
 
   private renderFull() {
     this.renderMaster();
-    const controlElement = <Categorization> this.uischema;
-    const result = this.findFirstCategory(controlElement,
-      <HTMLUListElement>this.master.firstChild);
+    const controlElement = this.uischema as Categorization;
+    const result = this.findFirstCategory(
+        controlElement,
+        this.master.firstChild as HTMLUListElement
+    );
     this.renderDetail(result.category, result.li);
   }
 
   private findFirstCategory(categorization: Categorization, parent: HTMLUListElement):
     {category: Category, li: HTMLLIElement} {
-    let firstCategory: Category;
+
     const category = categorization.elements[0];
     if (isCategorization(category)) {
-      return this.findFirstCategory(category, <HTMLUListElement> parent.firstChild.lastChild);
+      return this.findFirstCategory(category, parent.firstChild.lastChild as HTMLUListElement);
     }
-    return {category: category, li: <HTMLLIElement>parent.firstChild};
+
+    return {category: category, li: parent.firstChild as HTMLLIElement};
   }
 
   private renderMaster() {
-    const categorization = <Categorization> this.uischema;
+    const categorization = this.uischema as Categorization;
     const ul = this.createCategorizationList(categorization);
     this.master.appendChild(ul);
   }
@@ -132,10 +144,13 @@ export class CategorizationRenderer extends Renderer {
         li.classList.add('jsf-category-group');
         li.appendChild(innerUl);
       } else {
-        li.onclick = (ev: Event) => this.renderDetail(category, li);
+        li.onclick = (ev: Event) => {
+          this.renderDetail(category, li);
+        };
       }
       ul.appendChild(li);
     });
+
     return ul;
   }
 
@@ -152,7 +167,7 @@ export class CategorizationRenderer extends Renderer {
     const wrapper = document.createElement('div');
     if (category.elements !== undefined && category.elements !== null) {
       category.elements.forEach(child => {
-        const jsonForms = <JsonFormsElement>document.createElement('json-forms');
+        const jsonForms = document.createElement('json-forms') as JsonFormsElement;
         jsonForms.data = this.dataService.getValue({type: 'Control', scope: {$ref: '#'}});
         jsonForms.uiSchema = child;
         jsonForms.dataSchema = this.dataSchema;

@@ -1,6 +1,6 @@
+import {and, RankedTester, rankWith, schemaTypeIs, uiTypeIs} from '../../core/testers';
 import {BaseControl} from './base.control';
 import {JsonFormsRenderer} from '../renderer.util';
-import {and, rankWith, schemaTypeIs, uiTypeIs, RankedTester} from '../../core/testers';
 
 /**
  * Default tester for number controls.

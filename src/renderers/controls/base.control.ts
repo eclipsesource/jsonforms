@@ -1,8 +1,8 @@
-import { ControlElement } from '../../models/uischema';
-import {Renderer} from '../../core/renderer';
 import {DataChangeListener} from '../../core/data.service';
+import {Renderer} from '../../core/renderer';
+import {RUNTIME_TYPE} from '../../core/runtime';
+import {ControlElement} from '../../models/uischema';
 import {getElementLabelObject} from '../label.util';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
 
 /**
  * Convenience base class for all renderers that represent controls.
@@ -14,10 +14,11 @@ export abstract class BaseControl <T extends HTMLElement>
   private input: T;
   private errorElement: HTMLElement;
 
-  private static formatErrorMessage(errors: Array<string>) {
+  private static formatErrorMessage(errors: string[]) {
     if (errors === undefined || errors === null) {
       return '';
     }
+
     return errors.join('\n');
   }
 
@@ -32,7 +33,7 @@ export abstract class BaseControl <T extends HTMLElement>
    * @inheritDoc
    */
   render(): HTMLElement {
-    const controlElement = <ControlElement> this.uischema;
+    const controlElement = this.uischema as ControlElement;
     this.createLabel(controlElement);
     this.createInput(controlElement);
     this.input.classList.add('input');
@@ -42,6 +43,7 @@ export abstract class BaseControl <T extends HTMLElement>
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
     this.classList.add('control');
+
     return this;
   }
 
@@ -56,7 +58,7 @@ export abstract class BaseControl <T extends HTMLElement>
    * @inheritDoc
    */
   runtimeUpdated(type: RUNTIME_TYPE): void {
-    const runtime = <Runtime>this.uischema['runtime'];
+    const runtime = this.uischema.runtime;
     switch (type) {
       case RUNTIME_TYPE.VALIDATION_ERROR:
         this.errorElement.textContent = BaseControl.formatErrorMessage(runtime.validationErrors);
@@ -72,6 +74,7 @@ export abstract class BaseControl <T extends HTMLElement>
           this.input.removeAttribute('disabled');
         }
         break;
+      default:
     }
   }
 
@@ -98,7 +101,8 @@ export abstract class BaseControl <T extends HTMLElement>
     if (controlElement === undefined || controlElement === null) {
       return false;
     }
-    return (<ControlElement>this.uischema).scope.$ref === controlElement.scope.$ref;
+
+    return (this.uischema as ControlElement).scope.$ref === controlElement.scope.$ref;
   }
 
   /**
@@ -174,8 +178,9 @@ export abstract class BaseControl <T extends HTMLElement>
   private createInput(controlElement: ControlElement): void {
     this.input = this.createInputElement();
     this.configureInput(this.input);
-    this.input[this.inputChangeProperty] = ((ev: Event) =>
-            this.dataService.notifyAboutDataChange(controlElement, this.getValue(this.input))
+    this.input[this.inputChangeProperty] = ((ev: Event) => {
+          this.dataService.notifyAboutDataChange(controlElement, this.getValue(this.input));
+        }
     );
     this.setValue(this.input, this.dataService.getValue(controlElement));
   }

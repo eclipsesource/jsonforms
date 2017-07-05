@@ -5,7 +5,7 @@
         "member-ordering": [true],
         "no-inferrable-types": true,
         "no-internal-module": true,
-        "no-magic-numbers": true,
+        "no-magic-numbers": false,
         "no-namespace": true,
         "no-non-null-assertion": true,
         "no-reference": true,
@@ -44,7 +44,7 @@
         "no-string-throw": true,
         "no-switch-case-fall-through": true,
         "no-unbound-method": true,
-        "no-unsafe-any": true,
+        "no-unsafe-any": false,
         "no-unsafe-finally": true,
         "no-unused-expression": true,
         "no-unused-variable": true,
@@ -81,11 +81,18 @@
         "no-default-export": true,
         "no-mergeable-namespace": true,
         "no-require-imports": true,
-        "object-literal-sort-keys": true,
+        "object-literal-sort-keys": false,
         "prefer-const": true,
         "trailing-comma": [
-            true,
-            { "multiline": "always", "singleline": "never"}
+            false,
+            {
+                "multiline": {
+                    "objects": "never",
+                    "arrays": "always",
+                    "functions": "never",
+                    "typeLiterals": "ignore"
+                }
+            }
         ],
 
 
@@ -109,7 +116,7 @@
             "check-space"
         ],
         "import-spacing": true,
-        "interface-over-type-literal": true,
+        "interface-over-type-literal": false,
         "jsdoc-format": true,
         "newline-before-return": true,
         "new-parens": true,
@@ -131,8 +138,11 @@
             "check-whitespace"
         ],
         "one-variable-per-declaration": true,
-        "ordered-imports": true,
-        "prefer-function-over-method": true,
+        "ordered-imports": [true, {
+            "import-sources-order": "any",
+            "named-imports-order": "case-insensitive"
+        }],
+        "prefer-function-over-method": false,
         "prefer-method-signature": true,
         "quotemark": [
             true,

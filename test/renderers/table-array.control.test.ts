@@ -1,20 +1,20 @@
 import test from 'ava';
+import * as installCE from 'document-register-element/pony';
 // inject window, document etc.
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
+import {DataService } from '../../src/core/data.service';
 import {JsonSchema} from '../../src/models/jsonSchema';
 import {ControlElement} from '../../src/models/uischema';
-import {TableArrayControlRenderer, tableArrayTester} from
-  '../../src/renderers/additional/table-array.control';
-import {DataService } from '../../src/core/data.service';
-import {JsonForms} from '../../src/core';
-
+import {
+    TableArrayControlRenderer,
+    tableArrayTester
+} from '../../src/renderers/additional/table-array.control';
 
 test('generate array child control', t => {
 
-    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer;
+    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -72,10 +72,10 @@ test('generate array child control', t => {
     t.is(headRow.children.length, 2);
     const headColumn1 = headRow.children.item(0);
     t.is(headColumn1.tagName, 'TH');
-    t.is((<HTMLTableHeaderCellElement>headColumn1).innerText, 'x');
+    t.is((headColumn1 as HTMLTableHeaderCellElement).innerText, 'x');
     const headColumn2 = headRow.children.item(1);
     t.is(headColumn2.tagName, 'TH');
-    t.is((<HTMLTableHeaderCellElement>headColumn2).innerText, 'y');
+    t.is((headColumn2 as HTMLTableHeaderCellElement).innerText, 'y');
 
     const tBody = tableChildren.item(1);
     t.is(tBody.tagName, 'TBODY');
@@ -95,7 +95,7 @@ test('generate array child control', t => {
 
 test('generate array child control w/o data', t => {
 
-    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer;
+    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -131,7 +131,7 @@ test('generate array child control w/o data', t => {
     const header = fieldsetChildren.item(0);
     t.is(header.tagName, 'HEADER');
     const legendChildren = header.children;
-    const label = <HTMLLabelElement>legendChildren.item(0);
+    const label = legendChildren.item(0) as HTMLLabelElement;
     t.is(label.tagName, 'LABEL');
     t.is(label.textContent, '');
     const button = legendChildren.item(1);
@@ -149,10 +149,10 @@ test('generate array child control w/o data', t => {
     t.is(headRow.children.length, 2);
     const headColumn1 = headRow.children.item(0);
     t.is(headColumn1.tagName, 'TH');
-    t.is((<HTMLTableHeaderCellElement>headColumn1).innerText, 'x');
+    t.is((headColumn1 as HTMLTableHeaderCellElement).innerText, 'x');
     const headColumn2 = headRow.children.item(1);
     t.is(headColumn2.tagName, 'TH');
-    t.is((<HTMLTableHeaderCellElement>headColumn2).innerText, 'y');
+    t.is((headColumn2 as HTMLTableHeaderCellElement).innerText, 'y');
 
     const tBody = tableChildren.item(1);
     t.is(tBody.tagName, 'TBODY');
@@ -161,7 +161,7 @@ test('generate array child control w/o data', t => {
 
 test('array-layout add click w/o data', t => {
 
-    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer;
+    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -184,18 +184,20 @@ test('array-layout add click w/o data', t => {
             '$ref': '#/properties/test'
         }
     };
-    const data = {};
+    const data = {
+        test: []
+    };
     renderer.setDataService(new DataService(data));
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
     const button = renderer.getElementsByTagName('button')[0];
     button.click();
-    t.is(data['test'].length, 1);
+    t.is(data.test.length, 1);
 });
 test('array-layout add click with data', t => {
 
-    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer;
+    const renderer: TableArrayControlRenderer = new TableArrayControlRenderer();
     const schema: JsonSchema = {
         'type': 'object',
         'properties': {
@@ -284,97 +286,145 @@ test('array-layout DataService notification', t => {
   t.is(childrenLast.childNodes.length, 2);
 });
 test('array-layout Tester', t => {
-  t.is(
-      tableArrayTester({ type: 'Foo' }, null),
-      -1
-  );
-  t.is(
-      tableArrayTester(
-          { type: 'Control', scope: { $ref: '#' } } as ControlElement,
-          undefined
-      ),
-      -1);
-  t.is(
-      tableArrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/x' } } as ControlElement,
-          { type: 'object',  properties: { x: { type: 'integer' } } }
-      ),
-      -1
-  );
-  t.is(
-      tableArrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          { type: 'object',  properties: { foo: { type: 'array'} } }
-      ),
-      -1
-  );
-  t.is(
-      tableArrayTester(
-          { type: 'Control', scope: { $ref: '#/properties/foo' } } as ControlElement,
-          {
-              type: 'object',
-              properties:
-                  {
-                      foo: {
-                          type: 'array',
-                          items: [
-                              { type: 'integer' },
-                              { type: 'string' }
-                          ]
-                      }
-                  }
-          }
-      ),
-      -1
-  );
     t.is(
-        tableArrayTester({
-                type: 'Control',
-                scope: { $ref: '#/properties/foo'}
-            } as ControlElement,
+        tableArrayTester({type: 'Foo'}, null),
+        -1
+    );
+});
+
+test('array-layout tester with recursive document ref only', t => {
+    const control: ControlElement = {
+        type: 'Control',
+            scope: {
+            $ref: '#'
+        }
+    };
+    t.is(
+        tableArrayTester(
+            control,
+            undefined
+        ),
+        -1
+    );
+});
+
+test('array-layout tester with prop of wrong type', t => {
+    const control: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/x'
+        }
+    };
+    t.is(
+        tableArrayTester(
+            control,
+            {type: 'object', properties: {x: {type: 'integer'}}}
+        ),
+        -1
+    );
+});
+
+test('array-layout tester with correct prop type, but without items', t => {
+    const control: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    t.is(
+        tableArrayTester(
+            control,
+            {type: 'object', properties: {foo: {type: 'array'}}}
+        ),
+        -1
+    );
+});
+
+test('array-layout tester with correct prop type, but different item types', t => {
+    const control: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    t.is(
+        tableArrayTester(
+            control,
             {
                 type: 'object',
                 properties: {
                     foo: {
                         type: 'array',
-                        items: { type: 'integer' }
+                        items: [
+                            {type: 'integer'},
+                            {type: 'string'},
+                        ]
                     }
                 }
             }
         ),
         -1
     );
-    const schema: JsonSchema = {
-      'type': 'object',
-      'properties': {
-          'test': {
-              'type': 'array',
-              'items': {
-                  'type': 'object',
-                  'properties': {
-                      'x': {'type': 'integer'},
-                      'y': {'type': 'integer'}
+});
+
+test('array-layout tester with primitive item type', t => {
+    const control: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    t.is(
+        tableArrayTester(
+            control,
+            {
+                type: 'object',
+                properties: {
+                    foo: {
+                        type: 'array',
+                        items: {type: 'integer'}
+                    }
+                }
+            }
+        ),
+        -1
+    );
+});
+
+test('array-layout with correct option being set', t => {
+  const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+          test: {
+              type: 'array',
+              items: {
+                  type: 'object',
+                  properties: {
+                      x: {type: 'integer'},
+                      y: {type: 'integer'}
                   }
               }
           }
       }
   };
+
   const uiSchema: ControlElement = {
-      'type': 'Control',
-      'scope': {
-          '$ref': '#/properties/test'
+      type: 'Control',
+      scope: {
+          $ref: '#/properties/test'
       }
   };
-  t.is(tableArrayTester(uiSchema, schema), -1);
 
   const uiSchema2: ControlElement = {
-      'type': 'Control',
-      'scope': {
-          '$ref': '#/properties/test'
+      type: 'Control',
+      scope: {
+          $ref: '#/properties/test'
       },
       options: {
         table: true
       }
   };
+
+  t.is(tableArrayTester(uiSchema, schema), -1);
   t.is(tableArrayTester(uiSchema2, schema), 10);
 });

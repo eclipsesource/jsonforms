@@ -31,7 +31,7 @@ export interface DataChangeListener {
  */
 export class DataService {
 
-  private dataChangeListeners: Array<DataChangeListener>= [];
+  private dataChangeListeners: DataChangeListener[] = [];
 
   /**
    * Constructor
@@ -82,6 +82,7 @@ export class DataService {
     if (pair.property === undefined) {
       return pair.instance;
     }
+
     return pair.instance[pair.property];
   }
 

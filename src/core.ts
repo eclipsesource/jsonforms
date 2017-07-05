@@ -32,23 +32,27 @@ export interface JsonFormsServiceConstructable {
 }
 
 /**
- * Annotation for registering a class as JSONForms service.
- * @param config
- * @constructor
- */
-export const JsonFormsServiceElement = (config) => (cls: JsonFormsServiceConstructable) => {
-  JsonForms.jsonFormsServices.push(cls);
-};
-export const instantiateSchemaService = (schema: JsonSchema): void => {
-  JsonForms.schemaService =  new SchemaServiceImpl(schema);
-};
-/**
  * Global JSONForms object that holds services and registries.
  */
 export class JsonForms {
   public static rendererService = new RendererService();
-  public static jsonFormsServices: Array<JsonFormsServiceConstructable> = [];
+  public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
   public static schemaService: SchemaService;
 }
+
+/**
+ * Annotation for registering a class as JSONForms service.
+ * @param config
+ * @constructor
+ */
+// Disable rule because it is used as an decorator
+// tslint:disable:variable-name
+export const JsonFormsServiceElement = config => (cls: JsonFormsServiceConstructable) => {
+  JsonForms.jsonFormsServices.push(cls);
+};
+// tslint:enable:variable-name
+export const instantiateSchemaService = (schema: JsonSchema): void => {
+  JsonForms.schemaService =  new SchemaServiceImpl(schema);
+};

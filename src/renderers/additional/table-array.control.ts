@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
-import { ControlElement } from '../../models/uischema';
-import { JsonSchema } from '../../models/jsonSchema';
-import { JsonFormsElement } from '../../json-forms';
-import { Renderer } from '../../core/renderer';
-import { DataChangeListener} from '../../core/data.service';
-import { JsonFormsRenderer } from '../renderer.util';
-import { resolveSchema } from '../../path.util';
-import { getElementLabelObject } from '../label.util';
-import { rankWith, uiTypeIs, optionIs, and, schemaMatches, RankedTester } from '../../core/testers';
+import {DataChangeListener} from '../../core/data.service';
+import {Renderer} from '../../core/renderer';
+import {and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs} from '../../core/testers';
+import {JsonFormsElement} from '../../json-forms';
+import {JsonSchema} from '../../models/jsonSchema';
+import {ControlElement} from '../../models/uischema';
+import {resolveSchema} from '../../path.util';
+import {getElementLabelObject} from '../label.util';
+import {JsonFormsRenderer} from '../renderer.util';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -44,7 +44,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
    */
   needsNotificationAbout (uischema: ControlElement): boolean {
     return uischema === undefined || uischema === null
-    ? false : (<ControlElement>this.uischema).scope.$ref === uischema.scope.$ref;
+    ? false : (this.uischema as ControlElement).scope.$ref === uischema.scope.$ref;
   }
 
   /**
@@ -85,7 +85,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
-    const controlElement = <ControlElement> this.uischema;
+    const controlElement = this.uischema as ControlElement;
     const div = document.createElement('div');
     div.classList.add('array-table-layout');
     div.classList.add('control');
@@ -122,13 +122,14 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
           return;
         }
         const column = document.createElement('td');
-        const jsonForms = <JsonFormsElement>document.createElement('json-forms');
-        jsonForms.data = element;
-        jsonForms.uiSchema = {
+        const newControl: ControlElement = {
           type: 'Control',
           label: false,
           scope: {$ref: `#/properties/${key}`}
-        } as ControlElement;
+        };
+        const jsonForms = document.createElement('json-forms') as JsonFormsElement;
+        jsonForms.data = element;
+        jsonForms.uiSchema = newControl;
         jsonForms.dataSchema = resolvedSchema;
         column.appendChild(jsonForms);
         row.appendChild(column);
@@ -137,7 +138,9 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     };
     content.appendChild(body);
     if (arrayData !== undefined) {
-      arrayData.forEach(element => renderChild(element));
+      arrayData.forEach(element => {
+        renderChild(element);
+      });
     }
     div.appendChild(content);
 
@@ -155,6 +158,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
 
     header.appendChild(button);
     this.appendChild(div);
+
     return this;
   }
 }

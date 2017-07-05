@@ -1,15 +1,20 @@
 import * as _ from 'lodash';
-import { ControlElement } from '../../models/uischema';
-import { JsonFormsElement } from '../../json-forms';
-import { Renderer } from '../../core/renderer';
-import { DataChangeListener} from '../../core/data.service';
-import { JsonFormsRenderer } from '../renderer.util';
-import { resolveSchema } from '../../path.util';
-import { JsonSchema } from '../../models/jsonSchema';
-import { getElementLabelObject } from '../label.util';
-import { RankedTester, rankWith, and, uiTypeIs, schemaMatches, schemaSubPathMatches } from '../../core/testers';
-import { JsonForms } from '../../core';
-
+import {JsonForms} from '../../core';
+import {DataChangeListener} from '../../core/data.service';
+import {Renderer} from '../../core/renderer';
+import {
+  and,
+  RankedTester,
+  rankWith,
+  schemaMatches,
+  schemaSubPathMatches,
+  uiTypeIs
+} from '../../core/testers';
+import {JsonFormsElement} from '../../json-forms';
+import {ControlElement} from '../../models/uischema';
+import {resolveSchema} from '../../path.util';
+import {getElementLabelObject} from '../label.util';
+import {JsonFormsRenderer} from '../renderer.util';
 /**
  * Default tester for an array control.
  * @type {RankedTester}
@@ -45,7 +50,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
    */
   needsNotificationAbout (controlElement: ControlElement): boolean {
     return controlElement === undefined || controlElement === null
-    ? false : (<ControlElement>this.uischema).scope.$ref === controlElement.scope.$ref;
+    ? false : (this.uischema as ControlElement).scope.$ref === controlElement.scope.$ref;
   }
 
   /**
@@ -86,7 +91,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
-    const controlElement = <ControlElement> this.uischema;
+    const controlElement = this.uischema as ControlElement;
     const div = document.createElement('fieldset');
     div.className = 'array-layout';
 
@@ -104,16 +109,17 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     let arrayData = this.dataService.getValue(controlElement);
 
     const renderChild = (element: Object): void => {
-      const jsonForms = <JsonFormsElement>document.createElement('json-forms');
-      const resolvedSchema = JsonForms.schemaService.getSelfContainedSchema(
-        this.dataSchema, controlElement.scope.$ref + '/items');
+      const jsonForms = document.createElement('json-forms') as JsonFormsElement;
+      const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
       jsonForms.data = element;
       jsonForms.dataSchema = resolvedSchema;
       content.appendChild(jsonForms);
     };
 
     if (arrayData !== undefined) {
-      arrayData.forEach(element => renderChild(element));
+      arrayData.forEach(element => {
+        renderChild(element);
+      });
     }
     div.appendChild(content);
 
@@ -132,6 +138,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
 
     header.appendChild(button);
     this.appendChild(div);
+
     return this;
   }
 }

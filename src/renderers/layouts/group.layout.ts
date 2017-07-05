@@ -1,10 +1,10 @@
-import { GroupLayout } from '../../models/uischema';
-import { JsonForms } from '../../core';
-import { Renderer } from '../../core/renderer';
-import { JsonFormsRenderer } from '../renderer.util';
-import { RUNTIME_TYPE } from '../../core/runtime';
-import { createRuntimeNotificationEvaluator } from './layout.util';
-import {uiTypeIs, rankWith, RankedTester} from '../../core/testers';
+import {JsonForms} from '../../core';
+import {Renderer} from '../../core/renderer';
+import {RUNTIME_TYPE} from '../../core/runtime';
+import {RankedTester, rankWith, uiTypeIs} from '../../core/testers';
+import {GroupLayout} from '../../models/uischema';
+import {JsonFormsRenderer} from '../renderer.util';
+import {createRuntimeNotificationEvaluator} from './layout.util';
 
 /**
  * Default tester for a group layout.
@@ -30,7 +30,7 @@ export class GroupLayoutRenderer extends Renderer {
    * @inheritDoc
    */
   render(): HTMLElement {
-    const group = <GroupLayout> this.uischema;
+    const group = this.uischema as GroupLayout;
     const fieldset = document.createElement('fieldset');
     fieldset.className = 'group-layout';
     if (group.label !== undefined) {
@@ -47,6 +47,7 @@ export class GroupLayoutRenderer extends Renderer {
     }
     this.appendChild(fieldset);
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
+
     return this;
   }
 

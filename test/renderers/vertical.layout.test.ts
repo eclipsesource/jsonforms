@@ -1,14 +1,15 @@
 import test from 'ava';
+import * as installCE from 'document-register-element/pony';
 // inject window, document etc.
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
 declare let global;
 installCE(global, 'force');
-import {VerticalLayout} from '../../src/models/uischema';
-import {VerticalLayoutRenderer, verticalLayoutTester}
-  from '../../src/renderers/layouts/vertical.layout';
 import {Runtime} from '../../src/core/runtime';
-
+import {VerticalLayout} from '../../src/models/uischema';
+import {
+  VerticalLayoutRenderer,
+  verticalLayoutTester,
+} from '../../src/renderers/layouts/vertical.layout';
 
 test('VerticalLayout tester', t => {
   t.is(
@@ -30,7 +31,11 @@ test('VerticalLayout tester', t => {
 });
 test('Render VerticalLayout with undefined elements', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  renderer.setUiSchema({type: 'VerticalLayout'} as VerticalLayout);
+  const uiSchema: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: []
+  };
+  renderer.setUiSchema(uiSchema);
   const result = renderer.render();
   t.is(result.childNodes.length, 1);
   const div = result.children[0];
@@ -40,7 +45,8 @@ test('Render VerticalLayout with undefined elements', t => {
 });
 test('Render VerticalLayout with null elements', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  renderer.setUiSchema({type: 'VerticalLayout', elements: null} as VerticalLayout);
+  const uiSchema: VerticalLayout = { type: 'VerticalLayout', elements: null };
+  renderer.setUiSchema(uiSchema);
   const result = renderer.render();
   t.is(result.childNodes.length, 1);
   const div = result.children[0];
@@ -50,8 +56,11 @@ test('Render VerticalLayout with null elements', t => {
 });
 test('Render VerticalLayout with children', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  renderer.setUiSchema({type: 'VerticalLayout',
-    elements: [{type: 'Control'}, {type: 'Control'}]} as VerticalLayout);
+  const uiSchema: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [ {type: 'Control'}, {type: 'Control'} ]
+  };
+  renderer.setUiSchema(uiSchema);
   const result = renderer.render();
   t.is(result.childNodes.length, 1);
   const div = result.children[0];
@@ -61,10 +70,13 @@ test('Render VerticalLayout with children', t => {
 });
 test('Hide VerticalLayout', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  const verticalLayout = {type: 'VerticalLayout', elements: [{type: 'Control'}]} as VerticalLayout;
+  const verticalLayout: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [{type: 'Control'}]
+  };
   renderer.setUiSchema(verticalLayout);
   renderer.connectedCallback();
-  const runtime = <Runtime>verticalLayout['runtime'];
+  const runtime = verticalLayout.runtime as Runtime;
   runtime.visible = false;
   t.is(renderer.childNodes.length, 1);
   const div = renderer.children[0];
@@ -74,10 +86,13 @@ test('Hide VerticalLayout', t => {
 });
 test('Disable VerticalLayout', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  const verticalLayout = {type: 'VerticalLayout', elements: [{type: 'Control'}]} as VerticalLayout;
+  const verticalLayout: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [{type: 'Control'}]
+  };
   renderer.setUiSchema(verticalLayout);
   renderer.connectedCallback();
-  const runtime = <Runtime>verticalLayout['runtime'];
+  const runtime = verticalLayout.runtime as Runtime;
   runtime.enabled = false;
   t.is(renderer.childNodes.length, 1);
   const div = renderer.children[0];
@@ -87,10 +102,13 @@ test('Disable VerticalLayout', t => {
 });
 test('Enable VerticalLayout', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  const verticalLayout = {type: 'VerticalLayout', elements: [{type: 'Control'}]} as VerticalLayout;
+  const verticalLayout: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [{type: 'Control'}]
+  };
   renderer.setUiSchema(verticalLayout);
   renderer.connectedCallback();
-  const runtime = <Runtime>verticalLayout['runtime'];
+  const runtime = verticalLayout.runtime as Runtime;
   runtime.enabled = true;
   t.is(renderer.childNodes.length, 1);
   const div = renderer.children[0];
@@ -100,11 +118,14 @@ test('Enable VerticalLayout', t => {
 });
 test('VerticalLayout should not be hidden if disconnected', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-  const verticalLayout = {type: 'VerticalLayout', elements: [{type: 'Control'}]} as VerticalLayout;
+  const verticalLayout: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [{type: 'Control'}]
+  };
   renderer.setUiSchema(verticalLayout);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
-  const runtime = <Runtime>verticalLayout['runtime'];
+  const runtime = verticalLayout.runtime as Runtime;
   runtime.visible = false;
   t.is(renderer.childNodes.length, 1);
   const div = renderer.children[0];

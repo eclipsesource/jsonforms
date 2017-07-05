@@ -1,11 +1,16 @@
 import test from 'ava';
 
-import { JsonSchema } from '../src/models/jsonSchema';
 import { generateJsonSchema } from '../src/generators/schema-gen';
 
 test('default schema generation basic types', t => {
-  const instance = {boolean: false, number: 3.14, integer: 3, string: 'PI', null: null,
-    undefined: undefined};
+  const instance = {
+      boolean: false,
+      number: 3.14,
+      integer: 3,
+      string: 'PI',
+      null: null,
+      undefined: undefined
+  };
   const schema = generateJsonSchema(instance);
   // FIXME: Should a property be generated for properties with undefined?
   t.deepEqual(schema, {
@@ -157,9 +162,8 @@ test('default schema generation ', t => {
             'address',
             'phoneNumber'
         ]
-    } as JsonSchema);
+    });
 });
-
 
 test('schema generation with options ', t => {
     const instance = {
@@ -172,7 +176,7 @@ test('schema generation with options ', t => {
         'additionalProperties': false,
         'required': (props: string[]) => {
             const keys = Object.keys(props);
-            if (props !== undefined && keys.length) {
+            if (props !== undefined && keys.length > 0) {
                 return [keys[0]];
             } else {
                 return [];
@@ -199,5 +203,5 @@ test('schema generation with options ', t => {
         },
         'additionalProperties': false,
         'required': ['address']
-    } as JsonSchema);
+    });
 });

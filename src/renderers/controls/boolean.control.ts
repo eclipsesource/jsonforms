@@ -1,6 +1,6 @@
-import { BaseControl } from './base.control';
-import { JsonFormsRenderer } from '../renderer.util';
-import {and, uiTypeIs, schemaTypeIs, rankWith, RankedTester} from '../../core/testers';
+import {and, RankedTester, rankWith, schemaTypeIs, uiTypeIs} from '../../core/testers';
+import {JsonFormsRenderer} from '../renderer.util';
+import {BaseControl} from './base.control';
 
 /**
  * Default tester for boolean controls.

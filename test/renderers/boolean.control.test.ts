@@ -1,45 +1,126 @@
 import test from 'ava';
+import * as installCE from 'document-register-element/pony';
 // inject window, document etc.
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
-declare var global;
+declare let global;
 installCE(global, 'force');
-import {ControlElement} from '../../src/models/uischema';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {booleanControlTester, BooleanControl} from '../../src/renderers/controls/boolean.control';
-import {Runtime, RUNTIME_TYPE} from '../../src/core/runtime';
 import {DataService } from '../../src/core/data.service';
+import {ControlElement} from '../../src/models/uischema';
+import {BooleanControl, booleanControlTester} from '../../src/renderers/controls/boolean.control';
+import {
+  testDisable, testEnable, testHide,
+  testMultipleErrors,
+  testNotifyAboutEnablementWhenDisconnected,
+  testNotifyAboutValidationWhenDisconnected,
+  testNotifyAboutVisibiltyWhenDisconnected,
+  testNullErrors,
+  testOneError,
+  testResetErrors,
+  testShow,
+  testUndefinedErrors
+} from './base.control.tests';
 
+test.beforeEach(t => {
+  t.context.data = { 'foo': true };
+  t.context.schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'boolean'
+      }
+    }
+  };
+  t.context.uiSchema = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+});
 
 test('BooleanControlTester', t => {
   t.is(booleanControlTester(undefined, undefined), -1);
   t.is(booleanControlTester(null, undefined), -1);
   t.is(booleanControlTester({type: 'Foo'}, undefined), -1);
   t.is(booleanControlTester({type: 'Control'}, undefined), -1);
-  t.is(booleanControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}}}), -1);
-  t.is(booleanControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'boolean'}}}), -1);
-  t.is(booleanControlTester(
-    {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement,
-    {type: 'object', properties: {foo: {type: 'boolean'}}}), 2);
 });
+
+test('BooleanControl tester with wrong prop type', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+      booleanControlTester(
+          control,
+          {type: 'object', properties: {foo: {type: 'string'}}}
+      ),
+      -1
+  );
+});
+
+test('Boolean control tester with wrong prop type, but sibling has correct one', t => {
+  const control = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+      booleanControlTester(
+          control,
+          {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string'
+              },
+              bar: {
+                type: 'boolean'
+              }
+            }
+          }
+      ),
+      -1
+  );
+});
+
+test('BooleanControl tester with matching prop type', t => {
+  const control = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+      booleanControlTester(
+          control,
+          {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'boolean'
+              }
+            }
+          }
+      ),
+      2);
+});
+
 test('BooleanControl static', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'control')
+  t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, 'Foo');
-  const input = <HTMLInputElement>result.children[1];
+  const input = result.children[1] as HTMLInputElement;
   t.is(input.tagName, 'INPUT');
   t.is(input.type, 'checkbox');
   t.is(input.checked, true);
@@ -47,21 +128,27 @@ test('BooleanControl static', t => {
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
+
 test('BooleanControl static no label', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': false};
   renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'},
-    label: false} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  const controlWithoutLabel: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    },
+    label: false
+  };
+  renderer.setUiSchema(controlWithoutLabel);
   const result = renderer.render();
-  t.is(result.className, 'control')
+  t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
-  const label = <HTMLLabelElement>result.children[0];
+  const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, '');
-  const input = <HTMLInputElement>result.children[1];
+  const input = result.children[1] as HTMLInputElement;
   t.is(input.tagName, 'INPUT');
   t.is(input.type, 'checkbox');
   t.is(input.checked, false);
@@ -69,294 +156,158 @@ test('BooleanControl static no label', t => {
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
 });
+
 test('BooleanControl inputChange', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  renderer.setDataService(new DataService(data));
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataService(new DataService(t.context.data));
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  const input = <HTMLInputElement>result.children[1];
+  const input = result.children[1] as HTMLInputElement;
   input.checked = false;
   input.onchange(null);
-  t.is(data.foo, false);
+  t.is(t.context.data.foo, false);
 });
+
 test('BooleanControl dataService notification', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
   const data = {'foo': false};
   const dataService = new DataService(data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, true);
   t.is(input.checked, true);
 });
+
 test('BooleanControl dataService notification value undefined', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, undefined);
+  const input = renderer.children[1] as HTMLInputElement;
+  dataService.notifyAboutDataChange(
+      {
+        type: 'Control',
+        scope: {
+          $ref: '#/properties/foo'
+        }
+      },
+      undefined
+  );
   t.is(input.checked, false);
 });
+
 test('BooleanControl dataService notification value null', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.checked, false);
 });
+
 test('BooleanControl dataService notification wrong ref', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.is(input.checked, true);
 });
+
 test('BooleanControl dataService notification null ref', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange(null, false);
   t.is(input.checked, true);
 });
+
 test('BooleanControl dataService notification undefined ref', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange(undefined, false);
   t.is(input.checked, true);
 });
+
 test('BooleanControl dataService no notification after disconnect', t => {
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
   const renderer: BooleanControl = new BooleanControl();
-  const data = {'foo': true};
-  const dataService = new DataService(data);
+  const dataService = new DataService(t.context.data);
   renderer.setDataService(dataService);
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema({type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
-  const input = <HTMLInputElement>renderer.children[1];
+  const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.checked, true);
 });
+
 test('BooleanControl notify visible false', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = false;
-  t.is(renderer.hidden, true);
+  testHide(t, new BooleanControl());
 });
+
 test('BooleanControl notify visible true', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = true;
-  t.is(renderer.hidden, false);
+  testShow(t, new BooleanControl());
 });
 
 test('BooleanControl notify disabled', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = false;
-  const input = <HTMLInputElement>renderer.children[1];
-  t.is(input.getAttribute('disabled'), 'true');
-  // TODO would be nice
-  // t.is(input.disabled, true);
+  testDisable(t, new BooleanControl());
 });
+
 test('BooleanControl notify enabled', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = true;
-  const input = <HTMLInputElement>renderer.children[1];
-  t.false(input.hasAttribute('disabled'));
+  testEnable(t, new BooleanControl());
 });
 
 test('BooleanControl notify one error', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, 'error a');
+  testOneError(t, new BooleanControl());
 });
+
 test('BooleanControl notify multiple errors', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a', 'error b'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, 'error a\nerror b');
+  testMultipleErrors(t, new BooleanControl());
+
 });
+
 test('BooleanControl notify errors undefined', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = undefined;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testUndefinedErrors(t, new BooleanControl());
 });
+
 test('BooleanControl notify errors null', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = null;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testNullErrors(t, new BooleanControl());
 });
+
 test('BooleanControl notify errors clean', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  runtime.validationErrors = undefined;
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.is(errorsDiv.textContent, '');
+  testResetErrors(t, new BooleanControl());
 });
+
 test('BooleanControl disconnected no notify visible', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.visible = false;
-  t.is(renderer.hidden, false);
+  testNotifyAboutVisibiltyWhenDisconnected(t, new BooleanControl());
 });
+
 test('BooleanControl disconnected no notify enabled', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.enabled = false;
-  const input = <HTMLInputElement>renderer.children[1];
-  t.false(input.hasAttribute('disabled'));
+  testNotifyAboutEnablementWhenDisconnected(t, new BooleanControl());
 });
+
 test('BooleanControl disconnected no notify error', t => {
-  const renderer: BooleanControl = new BooleanControl();
-  const controlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}} as ControlElement;
-  const data = {'foo': true};
-  const dataService = new DataService(data);
-  renderer.setDataService(dataService);
-  const schema = {type: 'object', properties: {foo: {type: 'boolean'}}} as JsonSchema;
-  renderer.setDataSchema(schema);
-  renderer.setUiSchema(controlElement);
-  renderer.connectedCallback();
-  renderer.disconnectedCallback();
-  const runtime = <Runtime>controlElement['runtime'];
-  runtime.validationErrors = ['error a'];
-  const errorsDiv = renderer.getElementsByClassName('validation')[0];
-  t.not(errorsDiv.textContent, 'error a',
-    'Diconnected Controls should not be notified about new errors.');
+  testNotifyAboutValidationWhenDisconnected(t, new BooleanControl());
 });

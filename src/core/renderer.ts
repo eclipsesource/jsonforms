@@ -1,5 +1,5 @@
-import { UISchemaElement } from '../models/uischema';
-import { JsonSchema } from '../models/jsonSchema';
+import {JsonSchema} from '../models/jsonSchema';
+import {UISchemaElement} from '../models/uischema';
 import {DataService} from './data.service';
 import {Runtime, RUNTIME_TYPE, RuntimeListener} from './runtime';
 
@@ -63,9 +63,9 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
    */
   connectedCallback(): void {
     if (!this.uischema.hasOwnProperty('runtime')) {
-      this.uischema['runtime'] = new Runtime();
+      this.uischema.runtime = new Runtime();
     }
-    const runtime = <Runtime>this.uischema['runtime'];
+    const runtime = this.uischema.runtime as Runtime;
     runtime.registerRuntimeListener(this);
     this.render();
   }
@@ -75,7 +75,7 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
    */
   disconnectedCallback(): void {
     this.dispose();
-    const runtime = <Runtime>this.uischema['runtime'];
+    const runtime = this.uischema.runtime as Runtime;
     runtime.deregisterRuntimeListener(this);
   }
 

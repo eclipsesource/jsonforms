@@ -1,21 +1,25 @@
 import {test} from 'ava';
-import {SchemaService, SchemaServiceImpl, isContainmentProperty,
-  isRefrenceProperty} from '../src/core/schema.service';
+import {
+  isContainmentProperty,
+  isReferenceProperty,
+  SchemaService,
+  SchemaServiceImpl,
+} from '../src/core/schema.service';
 import {JsonSchema} from '../src/models/jsonSchema';
 
 test.failing('array with array ', t => {
-  const schema = {
-     type: 'array',
-     items: {
-       type: 'array',
-       items: {
-         type: 'object',
-         properties: {
-           foo: {type: 'string'}
-         }
-       }
-     }
-   } as JsonSchema;
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          foo: {type: 'string'}
+        }
+      }
+    }
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
@@ -54,7 +58,7 @@ test('object with object array ', t => {
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
   t.is(properties[0].label, 'foo');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.properties.foo.items);
+  t.deepEqual(properties[0].schema, schema.properties.foo.items as JsonSchema);
 });
 test('object with simple array ', t => {
   const schema = {
@@ -127,10 +131,10 @@ test.failing('object with object property ', t => {
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
   t.is(properties[0].label, 'foo');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.properties.foo.properties);
+  t.deepEqual(properties[0].schema, schema.properties.foo.properties as JsonSchema);
 });
 test('support multiple same $ref', t => {
-  const schema = {
+  const schema: JsonSchema = {
     definitions: {
       person: {
         type: 'object',
@@ -144,7 +148,7 @@ test('support multiple same $ref', t => {
       friends: {type: 'array', items: {$ref: '#/definitions/person'}},
       enemies: {type: 'array', items: {$ref: '#/definitions/person'}}
     }
-  } as JsonSchema;
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 2);
@@ -156,7 +160,7 @@ test('support multiple same $ref', t => {
   t.deepEqual(properties[1].schema, personCopy);
 });
 test('support multiple different $ref', t => {
-  const schema = {
+  const schema: JsonSchema = {
     definitions: {
       person: {
         type: 'object',
@@ -176,7 +180,7 @@ test('support multiple different $ref', t => {
       persons: {type: 'array', items: {$ref: '#/definitions/person'}},
       robots: {type: 'array', items: {$ref: '#/definitions/robot'}}
     }
-  } as JsonSchema;
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 2);
@@ -190,7 +194,7 @@ test('support multiple different $ref', t => {
   t.deepEqual(properties[1].schema, robotCopy);
 });
 test.failing('support root anyOf', t => {
-  const schema = {
+  const schema: JsonSchema = {
     definitions: {
       a: {type: 'object'},
       b: {type: 'object'}
@@ -199,17 +203,17 @@ test.failing('support root anyOf', t => {
       {$ref: '#/definitions/a'},
       {$ref: '#/definitions/b'}
     ]
-  } as JsonSchema;
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 2);
   t.is(properties[0].label, 'a');
   t.is(properties[1].label, 'b');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.definitions.a);
-  t.deepEqual(properties[1].schema, <JsonSchema>schema.definitions.b);
+  t.deepEqual(properties[0].schema, schema.definitions.a as JsonSchema);
+  t.deepEqual(properties[1].schema, schema.definitions.b as JsonSchema);
 });
 test('support array with anyOf', t => {
-  const schema = {
+  const schema: JsonSchema = {
     definitions: {
       a: {type: 'object', properties: {foo: {type: 'string'}}},
       b: {type: 'object', properties: {foo: {type: 'string'}}}
@@ -221,7 +225,7 @@ test('support array with anyOf', t => {
         {$ref: '#/definitions/b'}
       ]
     }
-  } as JsonSchema;
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 2);
@@ -235,24 +239,24 @@ test('support array with anyOf', t => {
   t.deepEqual(properties[1].schema, bCopy);
 });
 test('support object with array with anyOf', t => {
-  const schema = {
-      definitions: {
-        a: {type: 'object', properties: {foo: {type: 'string'}}},
-        b: {type: 'object', properties: {foo: {type: 'string'}}}
-      },
-      type: 'object',
-      properties: {
-        elements: {
-          type: 'array',
-          items: {
-            anyOf: [
-              {$ref: '#/definitions/a'},
-              {$ref: '#/definitions/b'}
-            ]
-          }
+  const schema: JsonSchema = {
+    definitions: {
+      a: {type: 'object', properties: {foo: {type: 'string'}}},
+      b: {type: 'object', properties: {foo: {type: 'string'}}}
+    },
+    type: 'object',
+    properties: {
+      elements: {
+        type: 'array',
+        items: {
+          anyOf: [
+            {$ref: '#/definitions/a'},
+            {$ref: '#/definitions/b'}
+          ]
         }
       }
-    } as JsonSchema;
+    }
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 2);
@@ -266,63 +270,72 @@ test('support object with array with anyOf', t => {
   t.deepEqual(properties[1].schema, bCopy);
 });
 test('support for array references', t => {
-  const schema = {
-      definitions: {
-        class: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string'
-            },
-            name: {
-              type: 'string'
-            },
-            associations: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: {
-                    type: 'integer',
-                    minimum: 0
-                  }
-                },
-                links: [{
-                  rel: 'full',
-                  href: '#/classes/{id}',
-                  targetSchema: {$ref: '#/definitions/class'}
-                }]
-              }
+  // TODO: links property is unknown
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
+    definitions: {
+      class: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          name: {
+            type: 'string'
+          },
+          associations: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                  minimum: 0
+                }
+              },
+              links: [{
+                rel: 'full',
+                href: '#/classes/{id}',
+                targetSchema: {$ref: '#/definitions/class'}
+              }]
             }
           }
         }
+      }
+    },
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
       },
-      type: 'object',
-      properties: {
-        name: {
-          type: 'string'
-        },
-        classes: {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/class'
-          }
+      classes: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/class'
         }
       }
-    } as JsonSchema;
-    const service: SchemaService = new SchemaServiceImpl(schema);
-    const properties =
-      service.getReferenceProperties(
-        schema.definitions.class.properties.associations.items as JsonSchema);
-    t.is(properties.length, 1);
-    t.is(properties[0].label, 'id');
-    const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class as JsonSchema));
-    (selfContainedClassSchema.properties.associations.items as JsonSchema)['links'][0].targetSchema = {$ref: '#'};
-    selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
-    t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
+    }
+  } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const properties =
+    service.getReferenceProperties(
+      schema.definitions.class.properties.associations.items as JsonSchema);
+  t.is(properties.length, 1);
+  t.is(properties[0].label, 'id');
+  const selfContainedClassSchema = JSON.parse(
+    JSON.stringify(schema.definitions.class as JsonSchema)
+  );
+  const items: JsonSchema = selfContainedClassSchema.properties.associations.items;
+  // tslint:disable:no-string-literal
+  items['links'][0].targetSchema = {$ref: '#'};
+  // tslint:enable:no-string-literal
+  selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
+  t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
 test('support for object references', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -360,6 +373,7 @@ test('support for object references', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties =
     service.getReferenceProperties(schema.definitions.class.properties.association);
@@ -367,12 +381,14 @@ test('support for object references', t => {
   t.is(properties[0].label, 'id');
 
   const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
+  // tslint:disable:no-string-literal
   selfContainedClassSchema.properties.association['links'][0].targetSchema = {$ref: '#'};
+  // tslint:enable-no-string-literal
   selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
   t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
 test('support object with array $ref', t => {
-  const schema = {
+  const schema: JsonSchema = {
     definitions: {
       root: {
         type: 'array',
@@ -384,18 +400,18 @@ test('support object with array $ref', t => {
         }
       }
     },
-    'type': 'object',
-    'properties': {
-      'roots': {
-        '$ref': '#/definitions/root'
+    type: 'object',
+    properties: {
+      roots: {
+        $ref: '#/definitions/root'
       }
     }
-  } as JsonSchema;
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
   t.is(properties[0].label, 'root');
-  t.deepEqual(properties[0].schema, <JsonSchema>schema.definitions.root.items);
+  t.deepEqual(properties[0].schema, schema.definitions.root.items as JsonSchema);
 });
 test('containment properties add when array not defined', t => {
   const schema = {
@@ -414,12 +430,14 @@ test('containment properties add when array not defined', t => {
   };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
-  const data = {};
+  const data = {
+    foo: undefined
+  };
   const valueToAdd = {bar: 'undefined array'};
   property.addToData(data)(valueToAdd);
-  t.true(data['foo'] !== undefined);
-  t.is(data['foo'].length, 1);
-  t.is(data['foo'][0], valueToAdd);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 1);
+  t.is(data.foo[0], valueToAdd);
 });
 test('containment properties add when array defined', t => {
   const schema = {
@@ -532,7 +550,8 @@ test('containment properties delete when array defined', t => {
   t.is(data.foo.length, 0);
 });
 test('reference object properties add', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -562,6 +581,7 @@ test('reference object properties add', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2}]};
@@ -569,7 +589,8 @@ test('reference object properties add', t => {
   t.is(data.classes[1]['association'], 0);
 });
 test('reference object properties get', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -599,6 +620,7 @@ test('reference object properties get', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
   const data = {classes: [{id: 1}, {id: 2, association: 0}]};
@@ -606,7 +628,8 @@ test('reference object properties get', t => {
   t.is(getData, data.classes[0]);
 });
 test('reference array properties add to undefined', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -639,6 +662,7 @@ test('reference array properties add to undefined', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
@@ -649,7 +673,8 @@ test('reference array properties add to undefined', t => {
   t.is(associations[0], 0);
 });
 test('reference array properties add to defined', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -682,6 +707,7 @@ test('reference array properties add to defined', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
@@ -692,7 +718,8 @@ test('reference array properties add to defined', t => {
   t.is(associations[0], 0);
 });
 test('reference array properties get', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -725,6 +752,7 @@ test('reference array properties get', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
@@ -734,7 +762,8 @@ test('reference array properties get', t => {
 });
 
 test('property type check', t => {
-  const schema = {
+  // tslint:disable:no-object-literal-type-assertion
+  const schema: JsonSchema = {
     definitions: {
       class: {
         type: 'object',
@@ -764,17 +793,18 @@ test('property type check', t => {
       }
     }
   } as JsonSchema;
+  // tslint:enable:no-object-literal-type-assertion
   const service: SchemaService = new SchemaServiceImpl(schema);
   const refProperty =
     service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
-  t.true(isRefrenceProperty(refProperty));
+  t.true(isReferenceProperty(refProperty));
   t.false(isContainmentProperty(refProperty));
   const containmentProperty = service.getContainmentProperties(schema)[0];
-  t.false(isRefrenceProperty(containmentProperty));
+  t.false(isReferenceProperty(containmentProperty));
   t.true(isContainmentProperty(containmentProperty));
 });
 test('self contained child schemata: cross recursion', t => {
-  const schema = {
+  const schema: JsonSchema = {
     definitions: {
       person: {
         type: 'object',
@@ -799,7 +829,7 @@ test('self contained child schemata: cross recursion', t => {
     properties: {
       persons: {type: 'array', items: {$ref: '#/definitions/person'}}
     }
-  } as JsonSchema;
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
@@ -812,32 +842,31 @@ test('self contained child schemata: cross recursion', t => {
 });
 // real world examples
 test('support easy uml schema with arrays', t => {
-  const schema = {
-      'type': 'object',
-      'properties': {
-        'name': {
-          'type': 'string'
-        },
-        'classes': {
-          'type': 'array',
-          'items': {
-            'type': 'object',
-            'properties': {
-              'name': {
-                'type': 'string'
-              },
-              'attributes': {
-                'type': 'array',
-                'items': {
-                  'type': 'object',
-                  'properties': {
-                    'name': {
-                      'type': 'string'
-                    },
-                    'type': {
-                      'type': 'string',
-                      'enum': ['string', 'integer']
-                    }
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      },
+      classes: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            name: {
+              'type': 'string'
+            },
+            attributes: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  name: {
+                    type: 'string'
+                  },
+                  type: {
+                    type: 'string',
+                    enum: ['string', 'integer']
                   }
                 }
               }
@@ -845,7 +874,8 @@ test('support easy uml schema with arrays', t => {
           }
         }
       }
-    } as JsonSchema;
+    }
+  };
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
@@ -856,6 +886,8 @@ test('support easy uml schema with arrays', t => {
     service.getContainmentProperties(schema.properties.classes.items as JsonSchema);
   t.is(propertiesClasses.length, 1);
   t.is(propertiesClasses[0].label, 'attributes');
-  t.deepEqual(propertiesClasses[0].schema,
-    (schema.properties.classes.items as JsonSchema).properties.attributes.items);
+  t.deepEqual(
+    propertiesClasses[0].schema,
+    (schema.properties.classes.items as JsonSchema).properties.attributes.items
+  );
 });

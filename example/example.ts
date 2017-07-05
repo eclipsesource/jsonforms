@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import {JsonSchema} from '../src/models/jsonSchema';
 import {UISchemaElement} from '../src/models/uischema';
 import {JsonFormsElement} from '../src/json-forms';
@@ -10,16 +11,16 @@ export interface ExampleDescription {
   data: any;
   schema: JsonSchema;
   uiSchema: UISchemaElement;
-  setupCallback?: (div: HTMLDivElement) => void;
+  setupCallback?(div: HTMLDivElement): void;
 }
-let knownExamples: {[key: string]: ExampleDescription} = {};
+const knownExamples: {[key: string]: ExampleDescription} = {};
 
-export const registerExamples = (examples: Array<ExampleDescription>): void => {
+export const registerExamples = (examples: ExampleDescription[]): void => {
   examples.forEach(example => knownExamples[example.name] = example);
 };
 export const changeExample = (selectedExample: string) => {
   let body = document.getElementById(viewDivId);
-  if (body.firstChild) {
+  if (!_.isEmpty(body.firstChild)) {
     body.removeChild(body.firstChild);
   }
   const example: ExampleDescription = knownExamples[selectedExample];
@@ -30,7 +31,7 @@ export const changeExample = (selectedExample: string) => {
     body = div;
   }
 
-  const jsonForms = <JsonFormsElement> document.createElement('json-forms');
+  const jsonForms = document.createElement('json-forms') as JsonFormsElement;
   jsonForms.data = example.data;
   if (example.uiSchema !== undefined) {
     jsonForms.uiSchema = example.uiSchema;
@@ -57,8 +58,11 @@ export const createExampleSelection = (): HTMLSelectElement => {
     option.text = example.label;
     select.appendChild(option);
   });
-  select.onchange = () => (changeExample(select.value));
+  select.onchange = () => {
+    changeExample(select.value);
+  };
   examplesDiv.appendChild(select);
   changeExample(select.value);
+
   return select;
 };
