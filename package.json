@@ -1,6 +1,6 @@
 {
   "name": "jsonforms",
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0-alpha.5",
   "description": "Generating forms for JSON schema",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -22,7 +22,7 @@
     "report": "nyc report --reporter=html",
     "example_library": "npm run bundle && lite-server -c example_library/bs-config.json",
     "wct": "wct wct-test/json-forms.html",
-    "publish-prerelease": "npm run build && npm run test && npm -no-git-tag-version version prerelease && npm run commit-local && npm run push-tag && npm publish",
+    "publish-prerelease": "npm run build && npm -no-git-tag-version version prerelease && npm run commit-local && npm run push-tag && npm publish --tag next",
     "publish-patch": "npm run build && npm run test && npm -no-git-tag-version version patch && npm run commit-local && npm run push-tag && npm publish",
     "publish-minor": "npm run build && npm run test && npm -no-git-tag-version version minor && npm run commit-local && npm run push-tag && npm publish",
     "publish-major": "npm run build && npm run test && npm -no-git-tag-version version major && npm run commit-local && npm run push-tag && npm publish",
