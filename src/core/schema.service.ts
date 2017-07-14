@@ -51,7 +51,7 @@ const deleteFromArray = (key: string) => (data: object) => (valueToDelete: objec
     return;
   }
   const indexToDelete = childArray.indexOf(valueToDelete);
-  childArray.splice(indexToDelete - 1, 1);
+  childArray.splice(indexToDelete, 1);
 };
 const getArray = (key: string) => (data: object) => {
   return data[key];
