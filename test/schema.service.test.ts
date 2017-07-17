@@ -464,6 +464,207 @@ test('containment properties add when array defined', t => {
   t.is(data['foo'].length, 2);
   t.is(data['foo'][1], valueToAdd);
 });
+test('containment properties add default with existing neighbour', t => {
+  // expectation default === add after neighbour
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, firstValue);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], firstValue);
+  t.is(data['foo'][1], valueToAdd);
+  t.is(data['foo'][2], lastValue);
+});
+test('containment properties add after existing neighbour(not last in array)', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, firstValue, true);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], firstValue);
+  t.is(data['foo'][1], valueToAdd);
+  t.is(data['foo'][2], lastValue);
+});
+test('containment properties add after existing neighbour(last in array)', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, lastValue, true);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], firstValue);
+  t.is(data['foo'][1], lastValue);
+  t.is(data['foo'][2], valueToAdd);
+});
+test('containment properties add after non-existant neighbour', t => {
+  // expectation: value is added at the end
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const notInArray = {bar: 'not in array'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, notInArray, true);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], firstValue);
+  t.is(data['foo'][1], lastValue);
+  t.is(data['foo'][2], valueToAdd);
+});
+test('containment properties add before existing neighbour(not first in array)', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, lastValue, false);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], firstValue);
+  t.is(data['foo'][1], valueToAdd);
+  t.is(data['foo'][2], lastValue);
+});
+test('containment properties add before existing neighbour(first in array)', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, firstValue, false);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], valueToAdd);
+  t.is(data['foo'][1], firstValue);
+  t.is(data['foo'][2], lastValue);
+});
+test('containment properties add before non-existant neighbour', t => {
+  // expectation: value is added at the end
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const notInArray = {bar: 'not in array'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, notInArray, false);
+  t.true(data['foo'] !== undefined);
+  t.is(data['foo'].length, 3);
+  t.is(data['foo'][0], firstValue);
+  t.is(data['foo'][1], lastValue);
+  t.is(data['foo'][2], valueToAdd);
+});
 test('containment properties get when array not defined', t => {
   const schema = {
     type: 'object',

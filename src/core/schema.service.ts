@@ -38,12 +38,37 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
 
   return result;
 };
-const addToArray = (key: string) => (data: Object) => (valueToAdd: object) => {
+const addToArray = (key: string) => (data: Object) => (valueToAdd: object, neighbourValue?: object,
+                                                       insertAfter = true) => {
   if (data[key] === undefined) {
     data[key] = [];
   }
   const childArray = data[key];
+  if (neighbourValue) {
+    const index = childArray.indexOf(neighbourValue);
+    if (insertAfter) {
+      if (index >= 0 && index < (childArray.length - 1)) {
+        childArray.splice(index + 1, 0, valueToAdd);
+
+        return;
+      }
+      // TODO proper logging
+      console.log('Warning: Could not add the new value after the given neighbour value.' +
+                  'The new value was added at the end.');
+    } else {
+      if (index >= 0) {
+        childArray.splice(index, 0, valueToAdd);
+
+        return;
+      }
+      // TODO proper logging
+      console.log('Warning: The given neighbour value could not be found.' +
+                  'The new value was added at the end.');
+    }
+  }
+  // default behavior: add at the end
   childArray.push(valueToAdd);
+
 };
 const deleteFromArray = (key: string) => (data: object) => (valueToDelete: object) => {
   const childArray = data[key];
@@ -125,9 +150,13 @@ export interface ContainmentProperty extends Property {
   /**
    * This allows to add data to the containment.
    * @param data The object to add to
-   * @return a function that expects the element to be added
+   * @return a function that expects the element to be added and optionally the value next to which
+   *         the new value is added. insertAfter defines whether the new value should be added
+   *         after or before the neighbourValue. If no neighbour value is provided or it does not
+   *         exist in the containment, the valueToAdd is inserted at the end.
    */
-  addToData(data: Object): (valueToAdd: object) => void;
+  addToData(data: Object): (valueToAdd: object, neighbourValue?: object,
+                            insertAfter?: boolean) => void;
   /**
    * This allows to delete data from the containment.
    * The result is a function accepting the value to delete.
@@ -171,7 +200,9 @@ class ContainmentPropertyImpl implements ContainmentProperty {
   constructor(private innerSchema: JsonSchema,
               private key: string,
               private name: string,
-              private addFunction: (data: object) => (valueToAdd: object) => void,
+              private addFunction: (data: object) => (valueToAdd: object,
+                                                      neighbourValue?: object,
+                                                      insertAfter?: boolean) => void,
               private deleteFunction: (data: object) => (valueToDelete: object) => void,
               private getFunction: (data: object) => Object) {}
   get label(): string {
@@ -191,7 +222,8 @@ class ContainmentPropertyImpl implements ContainmentProperty {
   get property(): string {
     return this.key;
   }
-  addToData(data: object): (valueToAdd: object) => void {
+  addToData(data: object): (valueToAdd: object, neighbourValue?: object, insertAfter?: boolean)
+      => void {
     return this.addFunction(data);
   }
   deleteFromData(data: object): (valueToDelete: object) => void {
@@ -287,6 +319,7 @@ export class SchemaServiceImpl implements SchemaService {
     this.selfContainedSchemas[rootSchema.id] = this.rootSchema;
   }
   getContainmentProperties(schema: JsonSchema): ContainmentProperty[] {
+    console.log('getContainmentProperties');
     return this.getContainment('root', 'root', schema, schema, false, null, null, null);
   }
   hasContainmentProperties(schema: JsonSchema): boolean {
@@ -348,7 +381,9 @@ export class SchemaServiceImpl implements SchemaService {
   }
   private getContainment(key: string, name: string, schema: JsonSchema, rootSchema: JsonSchema,
                          isInContainment: boolean,
-                         addFunction: (data: object) => (valueToAdd: object) => void,
+                         addFunction: (data: object) => (valueToAdd: object,
+                                                         neighbourValue?: object,
+                                                         insertAfter?: boolean) => void,
                          deleteFunction: (data: object) => (valueToDelete: object) => void,
                          getFunction: (data: object) => Object): ContainmentProperty[] {
     if (schema.$ref !== undefined) {
