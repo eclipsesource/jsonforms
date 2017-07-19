@@ -4,6 +4,7 @@ import {JsonSchema} from '../../src/models/jsonSchema';
 import {ControlElement, UISchemaElement} from '../../src/models/uischema';
 import {resolveSchema} from '../../src/path.util';
 import {registerExamples} from '../example';
+import {JsonForms} from "../../src/core";
 
 const schema = {
   'type': 'object',
@@ -182,7 +183,7 @@ const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Custom Control';
   buttonRegister.onclick = () => {
-    JsonFormsElement.rendererService.registerRenderer(tester, 'my-control');
+    JsonForms.rendererService.registerRenderer(tester, 'my-control');
     // HACK to retrigger service creation
     resetServices();
   };
@@ -190,7 +191,7 @@ const setup = (div: HTMLDivElement) => {
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Custom Control';
   buttonUnregister.onclick = () => {
-    JsonFormsElement.rendererService.deregisterRenderer(tester, 'my-control');
+    JsonForms.rendererService.deregisterRenderer(tester, 'my-control');
     // HACK to retrigger service creation
     resetServices();
   };

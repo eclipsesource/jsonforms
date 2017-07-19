@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {JsonFormsHolder} from '../src/core';
+import {JsonForms} from '../src/core';
 import {changeExample} from './example';
 declare let $;
 
@@ -25,7 +25,7 @@ const none = () => {
 
 const bootstrap = () => {
   enableLink('bootstrap');
-  JsonFormsHolder.stylingRegistry.registerMany([
+  JsonForms.stylingRegistry.registerMany([
     {
       name: 'button',
       classNames: ['btn', 'btn-primary']
@@ -35,16 +35,16 @@ const bootstrap = () => {
       classNames: ['custom-select']
     },
   ]);
-  $('select').attr('class', JsonFormsHolder.stylingRegistry.getAsClassName('select'));
+  $('select').attr('class', JsonForms.stylingRegistry.getAsClassName('select'));
 };
 
 const material = () => {
   enableLink('materialize');
-  JsonFormsHolder.stylingRegistry.register(
+  JsonForms.stylingRegistry.register(
       'button',
       ['btn', 'waves-effect', 'waves-light']
   );
-  JsonFormsHolder.stylingRegistry.unregister('select');
+  JsonForms.stylingRegistry.deregister('select');
   $('select').material_select();
 };
 
