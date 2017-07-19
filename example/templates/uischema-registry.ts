@@ -1,5 +1,6 @@
 import {JsonFormsElement} from '../../src/json-forms';
 import {registerExamples} from '../example';
+import {JsonForms} from "../../src/core";
 
 const uischema = {
   'type': 'Group',
@@ -24,17 +25,17 @@ const tester = (testUiSchema, testData) => 5;
 const setup = (div: HTMLDivElement) => {
   const registerButton = document.createElement('button');
   registerButton.innerText = 'Register UI Schema';
-  registerButton.className = JsonFormsElement.stylingRegistry.getAsClassName('button');
+  registerButton.className = JsonForms.stylingRegistry.getAsClassName('button');
   registerButton.onclick = () => {
-    JsonFormsElement.uischemaRegistry.register(uischema, tester);
+    JsonForms.uischemaRegistry.register(uischema, tester);
     resetServices();
   };
   div.appendChild(registerButton);
   const unregisterButton = document.createElement('button');
-  unregisterButton.className = JsonFormsElement.stylingRegistry.getAsClassName('button');
+  unregisterButton.className = JsonForms.stylingRegistry.getAsClassName('button');
   unregisterButton.innerText = 'Unregister UI Schema';
   unregisterButton.onclick = () => {
-    JsonFormsElement.uischemaRegistry.deregister(uischema, tester);
+    JsonForms.uischemaRegistry.deregister(uischema, tester);
     resetServices();
   };
   div.appendChild(unregisterButton);

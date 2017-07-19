@@ -1,4 +1,4 @@
-import {JsonFormService} from '../../src/core';
+import {JsonForms, JsonFormService} from '../../src/core';
 import {DataService} from '../../src/core/data.service';
 import {JsonFormsElement} from '../../src/json-forms';
 import {JsonSchema} from '../../src/models/jsonSchema';
@@ -44,18 +44,18 @@ const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Service';
   buttonRegister.onclick = () => {
-    JsonFormsElement.jsonFormsServices.push(MyService);
+    JsonForms.jsonFormsServices.push(MyService);
     resetServices();
   };
   div.appendChild(buttonRegister);
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Service';
   buttonUnregister.onclick = () => {
-    const index = JsonFormsElement.jsonFormsServices.indexOf(MyService);
+    const index = JsonForms.jsonFormsServices.indexOf(MyService);
     if (index === -1) {
       return;
     }
-    JsonFormsElement.jsonFormsServices.splice(index, 1);
+    JsonForms.jsonFormsServices.splice(index, 1);
     // HACK to retrigger service creation
     resetServices();
     dynamic2ExampleDiv.removeChild(dynamic2ExampleDiv.firstChild);
