@@ -319,7 +319,6 @@ export class SchemaServiceImpl implements SchemaService {
     this.selfContainedSchemas[rootSchema.id] = this.rootSchema;
   }
   getContainmentProperties(schema: JsonSchema): ContainmentProperty[] {
-    console.log('getContainmentProperties');
     return this.getContainment('root', 'root', schema, schema, false, null, null, null);
   }
   hasContainmentProperties(schema: JsonSchema): boolean {
