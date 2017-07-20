@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import {JsonForms} from '../../core';
-import {DataChangeListener} from '../../core/data.service';
-import {Renderer} from '../../core/renderer';
+import { JsonForms } from '../../core';
+import { DataChangeListener } from '../../core/data.service';
+import { Renderer } from '../../core/renderer';
 import {
   and,
   RankedTester,
@@ -10,11 +10,11 @@ import {
   schemaSubPathMatches,
   uiTypeIs
 } from '../../core/testers';
-import {JsonFormsElement} from '../../json-forms';
-import {ControlElement} from '../../models/uischema';
-import {resolveSchema} from '../../path.util';
-import {getElementLabelObject} from '../label.util';
-import {JsonFormsRenderer} from '../renderer.util';
+import { JsonFormsElement } from '../../json-forms';
+import { ControlElement } from '../../models/uischema';
+import { resolveSchema } from '../../path.util';
+import { getElementLabelObject } from '../label.util';
+import { JsonFormsRenderer } from '../renderer.util';
 /**
  * Default tester for an array control.
  * @type {RankedTester}

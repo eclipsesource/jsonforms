@@ -1,10 +1,10 @@
-import {UISchemaElement} from './models/uischema';
-import {JsonSchema} from './models/jsonSchema';
-import {UISchemaRegistry, UISchemaRegistryImpl} from './core/uischema.registry';
-import {DataService} from './core/data.service';
-import {RendererService} from './core/renderer.service';
-import {StylingRegistry, StylingRegistryImpl} from './core/styling.registry';
-import {SchemaService, SchemaServiceImpl} from './core/schema.service';
+import { UISchemaElement } from './models/uischema';
+import { JsonSchema } from './models/jsonSchema';
+import { UISchemaRegistry, UISchemaRegistryImpl } from './core/uischema.registry';
+import { DataService } from './core/data.service';
+import { RendererService } from './core/renderer.service';
+import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
+import { SchemaService, SchemaServiceImpl } from './core/schema.service';
 
 /**
  * Represents a JSONForms service.

@@ -1,4 +1,4 @@
-import {Runtime} from '../core/runtime';
+import { Runtime } from '../core/runtime';
 /**
  * A rule that may be attached to any UI schema element.
  */

@@ -1,7 +1,7 @@
-import {JsonSchema} from '../models/jsonSchema';
-import {UISchemaElement} from '../models/uischema';
-import {DataService} from './data.service';
-import {Runtime, RUNTIME_TYPE, RuntimeListener} from './runtime';
+import { JsonSchema } from '../models/jsonSchema';
+import { UISchemaElement } from '../models/uischema';
+import { DataService } from './data.service';
+import { Runtime, RUNTIME_TYPE, RuntimeListener } from './runtime';
 
 /**
  * A renderer is a regular HTMLElement that has a render method which will

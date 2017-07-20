@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import {generateDefaultUISchema} from '../generators/ui-schema-gen';
-import {JsonSchema} from '../models/jsonSchema';
-import {UISchemaElement} from '../models/uischema';
+import { generateDefaultUISchema } from '../generators/ui-schema-gen';
+import { JsonSchema } from '../models/jsonSchema';
+import { UISchemaElement } from '../models/uischema';
 
 /**
  * A registry of UI schemas. This registry can be utilized whenever

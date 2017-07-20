@@ -1,5 +1,5 @@
 
-import {JsonSchema} from '../models/jsonSchema';
+import { JsonSchema } from '../models/jsonSchema';
 
 const ADDITIONAL_PROPERTIES = 'additionalProperties';
 const REQUIRED_PROPERTIES   = 'required';

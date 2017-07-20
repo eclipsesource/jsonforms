@@ -1,5 +1,5 @@
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import {UISchemaElement} from '../../models/uischema';
+import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
+import { UISchemaElement } from '../../models/uischema';
 
 /**
  * Utility function for evaluating a runtime notification.

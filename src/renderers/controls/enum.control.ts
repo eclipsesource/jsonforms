@@ -1,8 +1,8 @@
-import {and, RankedTester, rankWith, schemaMatches, uiTypeIs} from '../../core/testers';
-import {ControlElement} from '../../models/uischema';
-import {resolveSchema} from '../../path.util';
-import {JsonFormsRenderer} from '../renderer.util';
-import {BaseControl} from './base.control';
+import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
+import { ControlElement } from '../../models/uischema';
+import { resolveSchema } from '../../path.util';
+import { JsonFormsRenderer } from '../renderer.util';
+import { BaseControl } from './base.control';
 
 /**
  * Default tester for enum controls.

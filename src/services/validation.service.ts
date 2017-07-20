@@ -1,9 +1,9 @@
-import {JsonFormService, JsonFormsServiceElement} from '../core';
-import {DataChangeListener, DataService} from '../core/data.service';
-import {Runtime} from '../core/runtime';
-import {JsonSchema} from '../models/jsonSchema';
-import {ControlElement, Layout, UISchemaElement} from '../models/uischema';
-import {toDataPath} from '../path.util';
+import { JsonFormService, JsonFormsServiceElement } from '../core';
+import { DataChangeListener, DataService } from '../core/data.service';
+import { Runtime } from '../core/runtime';
+import { JsonSchema } from '../models/jsonSchema';
+import { ControlElement, Layout, UISchemaElement } from '../models/uischema';
+import { toDataPath } from '../path.util';
 
 import * as AJV from 'ajv';
 

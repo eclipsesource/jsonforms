@@ -1,4 +1,4 @@
-import {ControlElement} from '../models/uischema';
+import { ControlElement } from '../models/uischema';
 import { getValuePropertyPair } from '../path.util';
 
 /**

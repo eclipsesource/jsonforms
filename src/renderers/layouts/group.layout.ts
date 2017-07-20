@@ -1,10 +1,10 @@
-import {JsonForms} from '../../core';
-import {Renderer} from '../../core/renderer';
-import {RUNTIME_TYPE} from '../../core/runtime';
-import {RankedTester, rankWith, uiTypeIs} from '../../core/testers';
-import {GroupLayout} from '../../models/uischema';
-import {JsonFormsRenderer} from '../renderer.util';
-import {createRuntimeNotificationEvaluator} from './layout.util';
+import { JsonForms } from '../../core';
+import { Renderer } from '../../core/renderer';
+import { RUNTIME_TYPE } from '../../core/runtime';
+import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { GroupLayout } from '../../models/uischema';
+import { JsonFormsRenderer } from '../renderer.util';
+import { createRuntimeNotificationEvaluator } from './layout.util';
 
 /**
  * Default tester for a group layout.

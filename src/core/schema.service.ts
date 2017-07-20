@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import {JsonSchema} from '../models/jsonSchema';
-import {resolveSchema} from '../path.util';
+import { JsonSchema } from '../models/jsonSchema';
+import { resolveSchema } from '../path.util';
 interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }

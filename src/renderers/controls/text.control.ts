@@ -1,6 +1,6 @@
-import {RankedTester, rankWith, uiTypeIs} from '../../core/testers';
-import {JsonFormsRenderer} from '../renderer.util';
-import {BaseControl} from './base.control';
+import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { JsonFormsRenderer } from '../renderer.util';
+import { BaseControl } from './base.control';
 
 /**
  * Default tester for text-based/string controls.
