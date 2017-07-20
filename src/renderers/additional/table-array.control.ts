@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
-import {DataChangeListener} from '../../core/data.service';
-import {Renderer} from '../../core/renderer';
-import {and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs} from '../../core/testers';
-import {JsonFormsElement} from '../../json-forms';
-import {JsonSchema} from '../../models/jsonSchema';
-import {ControlElement} from '../../models/uischema';
-import {resolveSchema} from '../../path.util';
-import {getElementLabelObject} from '../label.util';
-import {JsonFormsRenderer} from '../renderer.util';
+import { DataChangeListener } from '../../core/data.service';
+import { Renderer } from '../../core/renderer';
+import { and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
+import { JsonFormsElement } from '../../json-forms';
+import { JsonSchema } from '../../models/jsonSchema';
+import { ControlElement } from '../../models/uischema';
+import { resolveSchema } from '../../path.util';
+import { getElementLabelObject } from '../label.util';
+import { JsonFormsRenderer } from '../renderer.util';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'

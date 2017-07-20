@@ -1,6 +1,6 @@
-import {and, formatIs, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
-import {JsonFormsRenderer} from '../renderer.util';
-import {BaseControl} from './base.control';
+import { and, formatIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { JsonFormsRenderer } from '../renderer.util';
+import { BaseControl } from './base.control';
 
 /**
  * Default tester for date controls.

@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
-import {JsonSchema} from '../models/jsonSchema';
-import {UISchemaElement} from '../models/uischema';
-import {DataService} from './data.service';
-import {Renderer} from './renderer';
-import {RankedTester} from './testers';
+import { JsonSchema } from '../models/jsonSchema';
+import { UISchemaElement } from '../models/uischema';
+import { DataService } from './data.service';
+import { Renderer } from './renderer';
+import { RankedTester } from './testers';
 
 /**
  * The renderer service maintains a list of renderers and

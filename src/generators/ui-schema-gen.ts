@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
-import {JsonSchema} from '../models/jsonSchema';
-import {ControlElement, LabelElement, Layout, UISchemaElement} from '../models/uischema';
+import { JsonSchema } from '../models/jsonSchema';
+import { ControlElement, LabelElement, Layout, UISchemaElement } from '../models/uischema';
 
 /**
  * Creates a new ILayout.

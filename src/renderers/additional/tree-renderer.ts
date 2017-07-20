@@ -1,14 +1,14 @@
 import * as _ from 'lodash';
-import {ControlElement} from '../../models/uischema';
-import {Renderer} from '../../core/renderer';
-import {DataChangeListener} from '../../core/data.service';
-import {JsonFormsRenderer} from '../renderer.util';
-import {resolveSchema} from '../../path.util';
-import {JsonFormsElement} from '../../json-forms';
-import {JsonSchema} from '../../models/jsonSchema';
-import {and, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import {JsonForms} from '../../core';
+import { ControlElement } from '../../models/uischema';
+import { Renderer } from '../../core/renderer';
+import { DataChangeListener } from '../../core/data.service';
+import { JsonFormsRenderer } from '../renderer.util';
+import { resolveSchema } from '../../path.util';
+import { JsonFormsElement } from '../../json-forms';
+import { JsonSchema } from '../../models/jsonSchema';
+import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
+import { JsonForms } from '../../core';
 
 /**
  * Default tester for a master-detail layout.

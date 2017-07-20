@@ -1,6 +1,6 @@
-import {JsonForms} from '../core';
-import {Renderer} from '../core/renderer';
-import {RankedTester} from '../core/testers';
+import { JsonForms } from '../core';
+import { Renderer } from '../core/renderer';
+import { RankedTester } from '../core/testers';
 
 /**
  * A renderer config that is used during renderer registration.

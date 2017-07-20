@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
-import {Renderer} from '../../core/renderer';
-import {Runtime, RUNTIME_TYPE} from '../../core/runtime';
-import {and, RankedTester, rankWith, uiTypeIs} from '../../core/testers';
-import {JsonFormsElement} from '../../json-forms';
-import {Categorization, Category} from '../../models/uischema';
-import {JsonFormsRenderer} from '../renderer.util';
+import { Renderer } from '../../core/renderer';
+import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
+import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { JsonFormsElement } from '../../json-forms';
+import { Categorization, Category } from '../../models/uischema';
+import { JsonFormsRenderer } from '../renderer.util';
 
 const isCategorization = (category: Category | Categorization): category is Categorization => {
   return category.type === 'Categorization';

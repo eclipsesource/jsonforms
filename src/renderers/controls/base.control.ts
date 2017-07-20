@@ -1,8 +1,8 @@
-import {DataChangeListener} from '../../core/data.service';
-import {Renderer} from '../../core/renderer';
-import {RUNTIME_TYPE} from '../../core/runtime';
-import {ControlElement} from '../../models/uischema';
-import {getElementLabelObject} from '../label.util';
+import { DataChangeListener } from '../../core/data.service';
+import { Renderer } from '../../core/renderer';
+import { RUNTIME_TYPE } from '../../core/runtime';
+import { ControlElement } from '../../models/uischema';
+import { getElementLabelObject } from '../label.util';
 
 /**
  * Convenience base class for all renderers that represent controls.

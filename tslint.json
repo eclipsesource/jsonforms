@@ -2,7 +2,20 @@
     "rules": {
 
         "adjacent-overload-signatures": true,
-        "member-ordering": [true],
+        "member-ordering": [
+          true,
+          {
+            "order": [
+              "static-field",
+              "static-method",
+              "instance-field",
+              "constructor",
+              "public-instance-method",
+              "protected-instance-method",
+              "private-instance-method"
+            ]
+          }
+        ],
         "no-inferrable-types": true,
         "no-internal-module": true,
         "no-magic-numbers": false,

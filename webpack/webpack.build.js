@@ -44,7 +44,14 @@ module.exports = {
     module: {
       rules: [
         { enforce: 'pre', test: /\.js$/, exclude: /node_modules/, loader: 'source-map-loader' },
-        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' }
+        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' },
+        { enforce: 'pre', test: /\.ts$/, exclude: /node_modules/, loader: 'tslint-loader',
+          options: {
+            configuration: require('../tslint.json'),
+            failOnHint: true,
+            typeCheck: true
+          }
+        }
       ]
     },
 

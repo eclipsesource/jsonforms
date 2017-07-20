@@ -1,11 +1,11 @@
-import {JsonFormService, JsonFormsServiceElement} from '../core';
-import {DataChangeListener, DataService} from '../core/data.service';
-import {Runtime} from '../core/runtime';
-import {JsonSchema} from '../models/jsonSchema';
+import { JsonFormService, JsonFormsServiceElement } from '../core';
+import { DataChangeListener, DataService } from '../core/data.service';
+import { Runtime } from '../core/runtime';
+import { JsonSchema } from '../models/jsonSchema';
 import {
   ControlElement, Layout, LeafCondition, RuleEffect, UISchemaElement
 } from '../models/uischema';
-import {getValuePropertyPair} from '../path.util';
+import { getValuePropertyPair } from '../path.util';
 
 /**
  * Service that evaluates all rules upon a data change.

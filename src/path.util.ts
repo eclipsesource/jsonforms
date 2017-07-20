@@ -1,4 +1,4 @@
-import {JsonSchema} from './models/jsonSchema';
+import { JsonSchema } from './models/jsonSchema';
 
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting
