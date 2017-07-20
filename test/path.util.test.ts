@@ -1,7 +1,7 @@
 import test from 'ava';
 
-import {JsonSchema } from '../src/models/jsonSchema';
-import {getValuePropertyPair, resolveSchema, toDataPath } from '../src/path.util';
+import { JsonSchema } from '../src/models/jsonSchema';
+import { getValuePropertyPair, resolveSchema, toDataPath } from '../src/path.util';
 
 test('resolve ', t => {
     const schema: JsonSchema = {

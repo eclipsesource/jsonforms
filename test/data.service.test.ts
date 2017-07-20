@@ -1,6 +1,6 @@
-import {test} from 'ava';
-import {DataChangeListener, DataService} from '../src/core/data.service';
-import {ControlElement} from '../src/models/uischema';
+import { test } from 'ava';
+import { DataChangeListener, DataService } from '../src/core/data.service';
+import { ControlElement } from '../src/models/uischema';
 
 test('getValue returns data referenced by control', t => {
   const data = {foo: {bar: 'John Doe'}};

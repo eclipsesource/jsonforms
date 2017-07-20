@@ -1,5 +1,5 @@
-import {JsonFormsElement} from '../../src/json-forms';
-import {registerExamples} from '../example';
+import { JsonFormsElement } from '../../src/json-forms';
+import { registerExamples } from '../example';
 
 const setup = (div: HTMLDivElement) => {
   const button = document.createElement('button');

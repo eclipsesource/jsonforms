@@ -1,7 +1,7 @@
 import test from 'ava';
-import {generateDefaultUISchema} from '../src/generators/ui-schema-gen';
-import {JsonSchema} from '../src/models/jsonSchema';
-import {ControlElement, LabelElement, Layout, VerticalLayout} from '../src/models/uischema';
+import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
+import { JsonSchema } from '../src/models/jsonSchema';
+import { ControlElement, LabelElement, Layout, VerticalLayout } from '../src/models/uischema';
 
 test('generate ui schema for schema w/o properties', t => {
     const schema: JsonSchema = {

@@ -1,4 +1,4 @@
-import {registerExamples} from '../example';
+import { registerExamples } from '../example';
 const schema = {
   'definitions': {
     'address': {

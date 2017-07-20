@@ -10,10 +10,6 @@ import { getElementLabelObject } from '../label.util';
 export abstract class BaseControl <T extends HTMLElement>
   extends Renderer implements DataChangeListener {
 
-  private label: HTMLLabelElement;
-  private input: T;
-  private errorElement: HTMLElement;
-
   private static formatErrorMessage(errors: string[]) {
     if (errors === undefined || errors === null) {
       return '';
@@ -21,6 +17,10 @@ export abstract class BaseControl <T extends HTMLElement>
 
     return errors.join('\n');
   }
+
+  private label: HTMLLabelElement;
+  private input: T;
+  private errorElement: HTMLElement;
 
   /**
    * Default constructor.

@@ -4,8 +4,8 @@ import * as installCE from 'document-register-element/pony';
 import 'jsdom-global/register';
 declare let global;
 installCE(global, 'force');
-import {Runtime} from '../../src/core/runtime';
-import {VerticalLayout} from '../../src/models/uischema';
+import { Runtime } from '../../src/core/runtime';
+import { VerticalLayout } from '../../src/models/uischema';
 import {
   VerticalLayoutRenderer,
   verticalLayoutTester,

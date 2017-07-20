@@ -1,4 +1,4 @@
-import {registerExamples} from '../example';
+import { registerExamples } from '../example';
 const schemaArray = {
   'definitions': {
     'folder': {

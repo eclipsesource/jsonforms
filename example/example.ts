@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import {JsonSchema} from '../src/models/jsonSchema';
-import {UISchemaElement} from '../src/models/uischema';
-import {JsonFormsElement} from '../src/json-forms';
+import { JsonSchema } from '../src/models/jsonSchema';
+import { UISchemaElement } from '../src/models/uischema';
+import { JsonFormsElement } from '../src/json-forms';
 
 declare let exampleDivId;
 declare let viewDivId;

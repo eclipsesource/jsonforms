@@ -1,4 +1,4 @@
-import {registerExamples} from '../example';
+import { registerExamples } from '../example';
 const schema = {
       'type': 'object',
       'properties': {

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import {JsonForms} from '../src/core';
-import {changeExample} from './example';
+import { JsonForms } from '../src/core';
+import { changeExample } from './example';
 declare let $;
 
 /**

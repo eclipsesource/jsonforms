@@ -1,5 +1,5 @@
-import {DataService} from '../../src/core/data.service';
-import {Runtime} from '../../src/core/runtime';
+import { DataService } from '../../src/core/data.service';
+import { Runtime } from '../../src/core/runtime';
 
 export const testHide = (t, renderer) => {
     const dataService = new DataService(t.context.data);

@@ -1,6 +1,6 @@
-import {JsonFormsElement} from '../../src/json-forms';
-import {registerExamples} from '../example';
-import {JsonForms} from "../../src/core";
+import { JsonFormsElement } from '../../src/json-forms';
+import { registerExamples } from '../example';
+import { JsonForms } from '../../src/core';
 
 const uischema = {
   'type': 'Group',

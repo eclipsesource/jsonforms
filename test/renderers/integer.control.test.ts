@@ -4,9 +4,9 @@ import * as installCE from 'document-register-element/pony';
 import 'jsdom-global/register';
 declare let global;
 installCE(global, 'force');
-import {DataService} from '../../src/core/data.service';
-import {ControlElement} from '../../src/models/uischema';
-import {IntegerControl, integerControlTester} from '../../src/renderers/controls/integer.control';
+import { DataService } from '../../src/core/data.service';
+import { ControlElement } from '../../src/models/uischema';
+import { IntegerControl, integerControlTester } from '../../src/renderers/controls/integer.control';
 import {
   testDisable,
   testEnable, testHide,

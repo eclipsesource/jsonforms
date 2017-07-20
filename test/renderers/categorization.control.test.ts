@@ -1,16 +1,16 @@
 import test from 'ava';
 import '../helpers/setup';
 /*tslint:disable:ordered-imports*/
-import {DataService } from '../../src/core/data.service';
+import { DataService } from '../../src/core/data.service';
 /*tslint:enable:ordered-imports*/
-import {Runtime} from '../../src/core/runtime';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {Categorization, ControlElement, Layout} from '../../src/models/uischema';
+import { Runtime } from '../../src/core/runtime';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { Categorization, ControlElement, Layout } from '../../src/models/uischema';
 import {
   CategorizationRenderer,
   categorizationTester
 } from '../../src/renderers/additional/categorization-renderer';
-import {testNotifyAboutVisibiltyWhenDisconnected} from './base.control.tests';
+import { testNotifyAboutVisibiltyWhenDisconnected } from './base.control.tests';
 
 test.beforeEach(t => {
   t.context.data = { };

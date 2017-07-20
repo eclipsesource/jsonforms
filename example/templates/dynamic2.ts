@@ -1,10 +1,10 @@
-import {JsonForms, JsonFormService} from '../../src/core';
-import {DataService} from '../../src/core/data.service';
-import {JsonFormsElement} from '../../src/json-forms';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {UISchemaElement} from '../../src/models/uischema';
+import { JsonForms, JsonFormService } from '../../src/core';
+import { DataService } from '../../src/core/data.service';
+import { JsonFormsElement } from '../../src/json-forms';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { UISchemaElement } from '../../src/models/uischema';
 
-import {registerExamples} from '../example';
+import { registerExamples } from '../example';
 
 class MyService implements JsonFormService {
   constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {

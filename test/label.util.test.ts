@@ -1,8 +1,8 @@
 import test from 'ava';
 
-import {JsonSchema} from '../src/models/jsonSchema';
-import {ControlElement} from '../src/models/uischema';
-import {getElementLabelObject} from '../src/renderers/label.util';
+import { JsonSchema } from '../src/models/jsonSchema';
+import { ControlElement } from '../src/models/uischema';
+import { getElementLabelObject } from '../src/renderers/label.util';
 
 test('control relative', t => {
     const schema: JsonSchema = {

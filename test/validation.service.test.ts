@@ -1,8 +1,8 @@
-import {test} from 'ava';
-import {DataService} from '../src/core/data.service';
-import {Runtime} from '../src/core/runtime';
-import {Layout} from '../src/models/uischema';
-import {JsonFormsValidator} from '../src/services/validation.service';
+import { test } from 'ava';
+import { DataService } from '../src/core/data.service';
+import { Runtime } from '../src/core/runtime';
+import { Layout } from '../src/models/uischema';
+import { JsonFormsValidator } from '../src/services/validation.service';
 
 test.beforeEach(t => {
   t.context.data = {foo: 2, bar: 3};

@@ -4,9 +4,9 @@ import * as installCE from 'document-register-element/pony';
 import 'jsdom-global/register';
 declare let global;
 installCE(global, 'force');
-import {DataService } from '../../src/core/data.service';
-import {ControlElement} from '../../src/models/uischema';
-import {EnumControl, enumControlTester} from '../../src/renderers/controls/enum.control';
+import { DataService } from '../../src/core/data.service';
+import { ControlElement } from '../../src/models/uischema';
+import { EnumControl, enumControlTester } from '../../src/renderers/controls/enum.control';
 import {
   testDisable,
   testEnable, testHide,

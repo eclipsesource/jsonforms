@@ -128,7 +128,7 @@ export interface JsonSchema {
    * Enumerates the values that this schema can be
    * e.g.
    * {"type": "string",
-     *  "enum": ["red", "green", "blue"]}
+   *  "enum": ["red", "green", "blue"]}
    */
   'enum'?: any[];
   /**

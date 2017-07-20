@@ -1,11 +1,12 @@
-import {test} from 'ava';
+/* tslint:disable:max-file-line-count */
+import { test } from 'ava';
 import {
   isContainmentProperty,
   isReferenceProperty,
   SchemaService,
   SchemaServiceImpl,
 } from '../src/core/schema.service';
-import {JsonSchema} from '../src/models/jsonSchema';
+import { JsonSchema } from '../src/models/jsonSchema';
 
 test.failing('array with array ', t => {
   const schema: JsonSchema = {

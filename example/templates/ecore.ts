@@ -1,4 +1,5 @@
-import {registerExamples} from '../example';
+/* tslint:disable:max-file-line-count */
+import { registerExamples } from '../example';
 const schema = {
   'definitions': {
     'eClassifier': {
