@@ -43,6 +43,7 @@ export abstract class BaseControl <T extends HTMLElement>
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
     this.classList.add('control');
+    this.id = controlElement.scope.$ref;
 
     return this;
   }

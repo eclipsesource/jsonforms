@@ -56,6 +56,7 @@ test('TextAreaControl static', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
+  t.is(result.id, t.context.uiSchema.scope.$ref);
   t.is(result.className, 'control');
   t.is(result.childNodes.length, 3);
   const label = result.children[0] as HTMLLabelElement;
