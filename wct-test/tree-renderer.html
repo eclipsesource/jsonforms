@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="../lib/native-shim.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../node_modules/web-component-tester/browser.js"></script>
+    <script src="../dist/jsonforms.js"></script>
+    <script src="../node_modules/drag-mock/dist/drag-mock.min.js"></script>
+    <script src="./tree-renderer.js"></script>
+</head>
+<body>
+<script>
+    suite('tree renderer drag and drop', function() {
+        test('inside one list', function(done) {
+          sameListDnd(done);
+        });
+    });
+</script>
+</body>
+</html>
