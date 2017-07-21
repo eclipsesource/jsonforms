@@ -387,7 +387,7 @@ test('support for object references', t => {
   const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
   // tslint:disable:no-string-literal
   selfContainedClassSchema.properties.association['links'][0].targetSchema = {$ref: '#'};
-  // tslint:enable-no-string-literal
+  // tslint:enable:no-string-literal
   selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
   t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
@@ -624,7 +624,9 @@ test('reference object properties add', t => {
   const property = service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2}]};
   property.addToData(data, data.classes[1], data.classes[0]);
+  // tslint:disable:no-string-literal
   t.is(data.classes[1]['association'], 0);
+  // tslint:enable:no-string-literal
 });
 test('reference object properties get', t => {
   // tslint:disable:no-object-literal-type-assertion
@@ -706,7 +708,9 @@ test('reference array properties add to undefined', t => {
     service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2}]};
   property.addToData(data, data.classes[1], data.classes[0]);
+  // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
+  // tslint:enable:no-string-literal
   t.is(associations.length, 1);
   t.is(associations[0], 0);
 });
@@ -751,7 +755,9 @@ test('reference array properties add to defined', t => {
     service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2, associations: []}]};
   property.addToData(data, data.classes[1], data.classes[0]);
+  // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
+  // tslint:enable:no-string-literal
   t.is(associations.length, 1);
   t.is(associations[0], 0);
 });
@@ -873,8 +879,8 @@ test('self contained child schemata: cross recursion', t => {
   t.is(properties.length, 1);
   t.is(properties[0].label, 'person');
   const selfContainedPerson = JSON.parse(JSON.stringify(schema.definitions.person));
-  selfContainedPerson['definitions'] = {robot: schema.definitions.robot};
-  selfContainedPerson['definitions'].robot.properties.humans.items.$ref = '#';
+  selfContainedPerson.definitions = {robot: schema.definitions.robot};
+  selfContainedPerson.definitions.robot.properties.humans.items.$ref = '#';
   selfContainedPerson.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
   t.deepEqual(properties[0].schema, selfContainedPerson);
 });
