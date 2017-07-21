@@ -1,6 +1,6 @@
-import {createExampleSelection} from './example';
-import {createThemeSelection} from './theme.switcher';
-import {createStyleSelection} from './style.switcher';
+import { createExampleSelection } from './example';
+import { createThemeSelection } from './theme.switcher';
+import { createStyleSelection } from './style.switcher';
 import './templates/arrays';
 import './templates/day2';
 import './templates/day4';

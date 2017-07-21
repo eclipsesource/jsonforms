@@ -1,10 +1,10 @@
-import {Renderer} from '../../src/core/renderer';
-import {JsonFormsElement} from '../../src/json-forms';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {ControlElement, UISchemaElement} from '../../src/models/uischema';
-import {resolveSchema} from '../../src/path.util';
-import {registerExamples} from '../example';
-import {JsonForms} from "../../src/core";
+import { Renderer } from '../../src/core/renderer';
+import { JsonFormsElement } from '../../src/json-forms';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { ControlElement, UISchemaElement } from '../../src/models/uischema';
+import { resolveSchema } from '../../src/path.util';
+import { registerExamples } from '../example';
+import { JsonForms } from '../../src/core';
 
 const schema = {
   'type': 'object',

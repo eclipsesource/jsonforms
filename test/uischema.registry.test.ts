@@ -1,8 +1,8 @@
-import {test} from 'ava';
-import {UISchemaRegistry, UISchemaRegistryImpl} from '../src/core/uischema.registry';
+import { test } from 'ava';
+import { UISchemaRegistry, UISchemaRegistryImpl } from '../src/core/uischema.registry';
 import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
 import { JsonSchema } from '../src/models/jsonSchema';
-import {ControlElement, GroupLayout, Layout, VerticalLayout} from '../src/models/uischema';
+import { ControlElement, GroupLayout, Layout, VerticalLayout } from '../src/models/uischema';
 
 const nameControl: ControlElement =  {
     type: 'Control',

@@ -1,12 +1,12 @@
 import test from 'ava';
 import './helpers/setup';
-import {JsonSchema} from '../src/models/jsonSchema';
-import {ControlElement} from '../src/models/uischema';
-import {JsonFormsElement} from '../src/json-forms';
+import { JsonSchema } from '../src/models/jsonSchema';
+import { ControlElement } from '../src/models/uischema';
+import { JsonFormsElement } from '../src/json-forms';
 import '../src/renderers/renderers';
 import '../src/services/services';
-import {generateDefaultUISchema} from '../src/generators/ui-schema-gen';
-import {generateJsonSchema} from '../src/generators/schema-gen';
+import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
+import { generateJsonSchema } from '../src/generators/schema-gen';
 
 test('Connect JSON Forms element with data only', t => {
     const jsonForms = new JsonFormsElement();

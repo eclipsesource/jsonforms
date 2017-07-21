@@ -2,11 +2,11 @@ import test from 'ava';
 // setup import must come first
 import '../helpers/setup';
 // tslint:disable:ordered-imports
-import {DataService} from '../../src/core/data.service';
+import { DataService } from '../../src/core/data.service';
 // tslint:enable:ordered-imports
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {ControlElement} from '../../src/models/uischema';
-import {NumberControl, numberControlTester} from '../../src/renderers/controls/number.control';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { ControlElement } from '../../src/models/uischema';
+import { NumberControl, numberControlTester } from '../../src/renderers/controls/number.control';
 import {
   testDisable,
   testEnable, testHide,

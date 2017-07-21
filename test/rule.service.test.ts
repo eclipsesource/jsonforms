@@ -1,8 +1,8 @@
-import {test} from 'ava';
-import {DataService} from '../src/core/data.service';
-import {Runtime} from '../src/core/runtime';
-import {RuleEffect, UISchemaElement, VerticalLayout} from '../src/models/uischema';
-import {JsonFormsRuleService} from '../src/services/rule.service';
+import { test } from 'ava';
+import { DataService } from '../src/core/data.service';
+import { Runtime } from '../src/core/runtime';
+import { RuleEffect, UISchemaElement, VerticalLayout } from '../src/models/uischema';
+import { JsonFormsRuleService } from '../src/services/rule.service';
 
 test.beforeEach(t => {
   t.context.data = {foo: 'John', bar: 'Doe',

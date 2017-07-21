@@ -1,5 +1,5 @@
-import {test} from 'ava';
-import {Runtime, RUNTIME_TYPE, RuntimeListener} from '../src/core/runtime';
+import { test } from 'ava';
+import { Runtime, RUNTIME_TYPE, RuntimeListener } from '../src/core/runtime';
 
 test('Enable Runtime', t => {
   const runtime = new Runtime();

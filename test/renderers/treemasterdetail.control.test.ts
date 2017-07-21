@@ -1,20 +1,21 @@
+/* tslint:disable:max-file-line-count */
 import test from 'ava';
 import '../helpers/setup';
-import {DataService } from '../../src/core/data.service';
-import {Runtime} from '../../src/core/runtime';
-import {JsonSchema} from '../../src/models/jsonSchema';
-import {ControlElement} from '../../src/models/uischema';
+import { DataService } from '../../src/core/data.service';
+import { Runtime } from '../../src/core/runtime';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { ControlElement } from '../../src/models/uischema';
 import {
   TreeMasterDetailRenderer,
   treeMasterDetailTester,
 } from '../../src/renderers/additional/tree-renderer';
-import {TextAreaControl} from '../../src/renderers/controls/textarea.control';
+import { TextAreaControl } from '../../src/renderers/controls/textarea.control';
 import {
   testDisable,
   testEnable,
   testNotifyAboutVisibiltyWhenDisconnected,
 } from './base.control.tests';
-import {instantiateSchemaService} from '../../src/core';
+import { instantiateSchemaService } from '../../src/core';
 
 test.beforeEach(t => {
   t.context.data = {};
@@ -95,12 +96,12 @@ test('TreeMasterDetail tester with null scope', t => {
 });
 
 test('TreeMasterDetail tester with empty scope', t => {
-  /*tslint:disable */
+  /*tslint:disable:no-object-literal-type-assertion */
   const masterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: { }
   } as ControlElement;
-  /*tslint:enable */
+  /*tslint:enable:no-object-literal-type-assertion */
   t.is(
       treeMasterDetailTester(
           masterDetailLayout,

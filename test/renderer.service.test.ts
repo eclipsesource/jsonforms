@@ -1,8 +1,8 @@
-import {test} from 'ava';
-import {DataService} from '../src/core/data.service';
-import {RendererService} from '../src/core/renderer.service';
-import {JsonSchema} from '../src/models/jsonSchema';
-import {ControlElement} from '../src/models/uischema';
+import { test } from 'ava';
+import { DataService } from '../src/core/data.service';
+import { RendererService } from '../src/core/renderer.service';
+import { JsonSchema } from '../src/models/jsonSchema';
+import { ControlElement } from '../src/models/uischema';
 
 import './helpers/setup';
 

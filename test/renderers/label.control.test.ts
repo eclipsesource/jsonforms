@@ -4,10 +4,10 @@ import * as installCE from 'document-register-element/pony';
 import 'jsdom-global/register';
 declare let global;
 installCE(global, 'force');
-import {DataService } from '../../src/core/data.service';
-import {Runtime} from '../../src/core/runtime';
-import {LabelElement, UISchemaElement} from '../../src/models/uischema';
-import {LabelRenderer, labelRendererTester} from '../../src/renderers/additional/label.renderer';
+import { DataService } from '../../src/core/data.service';
+import { Runtime } from '../../src/core/runtime';
+import { LabelElement, UISchemaElement } from '../../src/models/uischema';
+import { LabelRenderer, labelRendererTester } from '../../src/renderers/additional/label.renderer';
 import {
   testHide,
   testNotifyAboutVisibiltyWhenDisconnected,
