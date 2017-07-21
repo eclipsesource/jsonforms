@@ -3,50 +3,40 @@ import { Runtime } from '../core/runtime';
  * A rule that may be attached to any UI schema element.
  */
 export interface Rule {
+  /**
+   * The effect of the rule
+   */
+  effect: RuleEffect;
 
-    /**
-     * The effect of the rule
-     */
-    effect: RuleEffect;
-
-    /**
-     * The condition of the rule that must evaluate to true in order
-     * to trigger the effect.
-     */
-    condition: Condition;
+  /**
+   * The condition of the rule that must evaluate to true in order
+   * to trigger the effect.
+   */
+  condition: Condition;
 }
 
 /**
  * The different rule effects.
  */
 export enum RuleEffect {
-
-    /**
-     * Effect that hides the associated element.
-     */
-    HIDE = 'HIDE' as any,
-
-        /**
-         * Effect that shows the associated element.
-         *
-         * @type {any}
-         */
-    SHOW = 'SHOW' as any,
-
-        /**
-         * Effect that enables the associated element.
-         *
-         * @type {any}
-         */
-    ENABLE = 'ENABLE' as any,
-
-        /**
-         * Effect that disables the associated element.
-         *
-         * @type {any}
-         */
-    DISABLE = 'DISABLE' as any,
+  /**
+   * Effect that hides the associated element.
+   */
+  HIDE = 'HIDE',
+  /**
+   * Effect that shows the associated element.
+   */
+  SHOW = 'SHOW',
+  /**
+   * Effect that enables the associated element.
+   */
+  ENABLE = 'ENABLE',
+  /**
+   * Effect that disables the associated element.
+   */
+  DISABLE = 'DISABLE'
 }
+
 /**
  * Represents a condition to be evaluated.
  */
@@ -104,23 +94,24 @@ export interface UISchemaElement {
  * in a specific way.
  */
 export interface Layout extends UISchemaElement {
-
-    /**
-     * The child elements of this layout.
-     */
-    elements: UISchemaElement[];
+  /**
+   * The child elements of this layout.
+   */
+  elements: UISchemaElement[];
 }
 
 /**
  * A layout which orders its child elements vertically (i.e. from top to bottom).
  */
 export interface VerticalLayout extends Layout {
+  type: 'VerticalLayout';
 }
 
 /**
  * A layout which orders its children horizontally (i.e. from left to right).
  */
 export interface HorizontalLayout extends Layout {
+  type: 'HorizontalLayout';
 }
 
 /**
@@ -128,35 +119,36 @@ export interface HorizontalLayout extends Layout {
  * This layout is useful when grouping different elements by a certain criteria.
  */
 export interface GroupLayout extends Layout {
-    /**
-     * The label of this group layout.
-     */
-    label?: string;
+  type: 'Group';
+  /**
+   * The label of this group layout.
+   */
+  label?: string;
 }
 
 /**
  * Represents an object that can be used to configure a label.
  */
 export interface ILabelObject {
-    /**
-     * An optional text to be displayed.
-     */
-    text?: string;
-
-    /**
-     * Optional property that determines whether to show this label.
-     */
-    show?: boolean;
+  /**
+   * An optional text to be displayed.
+   */
+  text?: string;
+  /**
+   * Optional property that determines whether to show this label.
+   */
+  show?: boolean;
 }
 
 /**
  * A label element.
  */
 export interface LabelElement extends UISchemaElement {
-    /**
-     * The text of label.
-     */
-    text: string;
+  type: 'Label';
+  /**
+   * The text of label.
+   */
+  text: string;
 }
 
 /**
@@ -164,28 +156,29 @@ export interface LabelElement extends UISchemaElement {
  * to which part of the schema the control should be bound.
  */
 export interface ControlElement extends UISchemaElement {
-    /**
-     * An optional label that will be associated with the control
-     */
-    label?: string | boolean | ILabelObject;
-
-    /**
-     * The scope that determines to which part of the schema the control
-     * should be bound to. The $ref property is just a regular JSON pointer.
-     */
-    scope: {
-        $ref: string;
-    };
+  type: 'Control';
+  /**
+   * An optional label that will be associated with the control
+   */
+  label?: string | boolean | ILabelObject;
+  /**
+   * The scope that determines to which part of the schema the control
+   * should be bound to. The $ref property is just a regular JSON pointer.
+   */
+  scope: {
+      $ref: string;
+  };
 }
 
 /**
  * The category layout.
  */
 export interface Category extends Layout {
-    /**
-     * The label associated with this category layout.
-     */
-    label: string;
+  type: 'Category';
+  /**
+   * The label associated with this category layout.
+   */
+  label: string;
 }
 
 /**
@@ -194,14 +187,14 @@ export interface Category extends Layout {
  * the categorization element can be used to represent recursive structures like trees.
  */
 export interface Categorization extends UISchemaElement {
-    /**
-     * The label of this categorization.
-     */
-    label: string;
-
-    /**
-     * The child elements of this categorization which are either of type
-     * {@link Category} or {@link Categorization}.
-     */
-    elements: (Category|Categorization)[];
+  type: 'Categorization';
+  /**
+   * The label of this categorization.
+   */
+  label: string;
+  /**
+   * The child elements of this categorization which are either of type
+   * {@link Category} or {@link Categorization}.
+   */
+  elements: (Category|Categorization)[];
 }
