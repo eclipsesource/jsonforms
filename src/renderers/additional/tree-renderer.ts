@@ -9,6 +9,11 @@ import { JsonSchema } from '../../models/jsonSchema';
 import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
 import { JsonForms } from '../../core';
+import { ContainmentProperty } from '../../core/schema.service';
+import * as Sortable from 'sortablejs';
+
+type TreeNodeInfo = {data: object, schema: JsonSchema,
+                     deleteFunction(toDelete: object): void};
 
 /**
  * Default tester for a master-detail layout.
@@ -43,6 +48,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   private dialog;
   private addingToRoot = false;
   private resolvedSchema: JsonSchema;
+
+  /** maps tree nodes (<li>) to their represented data, and schema delete function */
+  private treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo> =
+      new Map<HTMLLIElement, TreeNodeInfo>();
 
   constructor() {
     super();
@@ -180,16 +189,27 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     const controlElement = this.uischema as MasterDetailLayout;
     const rootData = this.dataService.getValue(controlElement);
+
+    // TODO: so far no drag and drop on root level
     const ul = document.createElement('ul');
     if (schema.items !== undefined) {
-      this.expandArray(rootData, ul, schema.items as JsonSchema);
+      this.expandRootArray(rootData, ul, schema.items as JsonSchema);
     } else {
       this.expandObject(rootData, ul, schema, null);
     }
     this.master.appendChild(ul);
   }
 
-  private expandArray(data: Object[], parent: HTMLUListElement, schema: JsonSchema): void {
+  /**
+   * Expands the given array of root elements by expanding every element.
+   * It is assumed that the roor elements do not support drag and drop.
+   * Based on this, a delete function is created for every element.
+   *
+   * @param data the array to expand
+   * @param parent the list that will contain the expanded elements
+   * @param schema the {@link JsonSchema} defining the elements' type
+   */
+  private expandRootArray(data: Object[], parent: HTMLUListElement, schema: JsonSchema): void {
     if (data === undefined || data === null) {
       return;
     }
@@ -198,10 +218,34 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     });
   }
 
+  /**
+   * Expands the given data array by expanding every element.
+   * If the parent data containing the array is provided,
+   * a suitable delete function for the expanded elements is created.
+   *
+   * @param data the array to expand
+   * @param parent the list that will contain the expanded elements
+   * @param property the {@link ContainmentProperty} defining the property that the array belongs to
+   * @param parentData the data containing the array as a property
+   */
+  private expandArray(data: Object[], parent: HTMLUListElement, property: ContainmentProperty,
+                      parentData?: Object): void {
+    if (data === undefined || data === null) {
+      return;
+    }
+    data.forEach((element, index) => {
+      let deleteFunction = null;
+      if (!_.isEmpty(parentData)) {
+        deleteFunction = property.deleteFromData(parentData);
+      }
+      this.expandObject(element, parent, property.schema, deleteFunction);
+    });
+  }
+
   private getNamingFunction(schema: JsonSchema): (element: Object) => string {
     if (this.uischema.options !== undefined) {
       const labelProvider = this.uischema.options.labelProvider;
-      if (labelProvider !== undefined) {
+      if (labelProvider !== undefined && labelProvider[schema.id] !== undefined) {
         return element => element[labelProvider[schema.id]];
       }
     }
@@ -213,23 +257,68 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     return obj => JSON.stringify(obj);
   }
 
+  /**
+   * Updates the tree after a data object was added to property key of tree element li
+   *
+   * @param schema the JSON schema of the added data
+   * @param key the key of the property that the data was added to
+   * @param li the rendered list entry representing the parent object
+   * @param newData the added data
+   * @param deleteFunction function to allow deleting the data in the future
+   */
   private updateTreeOnAdd(
     schema: JsonSchema,
+    key: string,
     li: HTMLLIElement,
     newData: object,
     deleteFunction: (toDelete: object) => void
   ): void {
     const subChildren = li.getElementsByTagName('ul');
     let childParent;
+
+    // find correct child group
     if (subChildren.length !== 0) {
-      childParent = subChildren.item(0);
-    } else {
+      for (let i = 0; i < subChildren.length; i++) {
+        if (li !== subChildren[i].parentNode) {
+          // only lists that are direct children of li are relevant
+          continue;
+        }
+        if (schema.id === undefined || schema.id === null) {
+          // If the schema has no id, see if there is a group matching the key
+          if (key === subChildren[i].getAttribute('childrenId')
+              && subChildren[i].getAttribute('childrenId') === undefined) {
+            childParent = subChildren[i];
+          }
+          continue;
+        }
+
+        if (schema.id === subChildren[i].getAttribute('childrenId')) {
+          childParent = subChildren[i];
+          break;
+        }
+      }
+    }
+    // In case no child group was found, create one
+    if (childParent === undefined) {
+      // TODO proper logging
+      console.warn('Could not find suitable list for key ' + key
+        + '. A new one was created.');
       childParent = document.createElement('ul');
+      childParent.setAttribute('children', key);
       li.appendChild(childParent);
     }
+
     this.expandObject(newData, childParent, schema,  deleteFunction);
   }
 
+  /**
+   * Renders a data object as a <li> child element of the given <ul> list.
+   *
+   * @param data The rendered data
+   * @param parent The parent list to which the rendered element is added
+   * @param schema The schema describing the rendered data's type
+   * @param deleteFunction A function to delete the data from the model
+   */
   private expandObject(
     data: Object,
     parent: HTMLUListElement,
@@ -268,8 +357,15 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           button.innerText = property.label;
           button.onclick = () => {
             const newData = {};
+            // initialize new data with default values from schema
+            Object.keys(property.schema.properties).forEach(key => {
+              if (property.schema.properties[key].default) {
+                newData[key] = property.schema.properties[key].default;
+              }
+            });
             property.addToData(data)(newData);
-            this.updateTreeOnAdd(property.schema, li, newData, property.deleteFromData(data));
+            this.updateTreeOnAdd(property.schema, property.property, li, newData,
+                                 property.deleteFromData(data));
             this.dialog.close();
           };
           content.appendChild(button);
@@ -284,7 +380,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       spanRemove.classList.add('remove');
       spanRemove.onclick = (ev: Event) => {
         ev.stopPropagation();
-        deleteFunction(data);
+        this.treeNodeMapping.get(li).deleteFunction(data);
+        this.treeNodeMapping.delete(li);
         li.remove();
         if (this.selected === li) {
           this.selectFirstElement();
@@ -295,43 +392,124 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     li.appendChild(div);
 
+    // add a separate list for each containment property
     JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
-      const propertyData = property.getData(data);
+      const id = property.schema.id;
+      if (id === undefined || id === null) {
+        // TODO proper logging
+        console.warn('The property\'s schema with label \'' + property.label
+                     + '\' has no id. No Drag & Drop is possible.');
+
+        return;
+      }
+      // create child list and activate drag and drop
+      const ul = document.createElement('ul') as HTMLUListElement;
+      ul.setAttribute('childrenId', id);
+      ul.setAttribute('children', property.property);
+      this.registerDnDWithGroupId(ul, id);
+      li.appendChild(ul);
+    });
+
+    // map li to represented data & delete function
+    const nodeData: TreeNodeInfo = {
+      data: data,
+      schema: schema,
+      deleteFunction: deleteFunction
+    };
+    this.treeNodeMapping.set(li, nodeData);
+
+    // TODO: too much rendering for anyOf containments without id mapping.
+    // elements that are part of an 'anyOf' containment but are not mapped to an id
+    // will be rendered in every list for the anyOf.
+
+    // render contained children of this element
+    JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
+      let propertyData = property.getData(data) as Object[];
+      /*tslint:disable:no-string-literal */
+      if (this.uischema.options !== undefined &&
+        this.uischema.options['modelMapping'] !== undefined && !_.isEmpty(propertyData)) {
+          propertyData = propertyData.filter(value => {
+            // only use filter criterion if the checked value has the mapped attribute
+            if (value[this.uischema.options['modelMapping'].attribute]) {
+              return property.schema.id === this.uischema.options['modelMapping'].
+                mapping[value[this.uischema.options['modelMapping'].attribute]];
+            }
+
+            return true;
+          });
+      }
+      /*tslint:enable:no-string-literal */
       if (!_.isEmpty(propertyData)) {
-        this.renderChildren(propertyData as Object[], property.schema, li, property.property);
+        this.renderChildren(propertyData, property.schema, li, property.property);
       }
     });
 
     parent.appendChild(li);
   }
 
-  private findRendererChildContainer(li: HTMLLIElement, key: string): HTMLUListElement {
+  private findRendererChildContainer(li: HTMLLIElement, key: string, id?: string)
+    : HTMLUListElement {
+    // If an id is provided, the group must match key and id. Otherwise only the key.
     let ul: HTMLUListElement;
     const children = li.children;
     for (let i = 0; i < children.length; i++) {
       const child = children.item(i);
       if (child.tagName === 'UL' && child.getAttribute('children') === key) {
-        ul = child as HTMLUListElement;
+        if (!_.isEmpty(id) && child.getAttribute('childrenId') === id) {
+          ul = child as HTMLUListElement;
+        } else if (_.isEmpty(id)) {
+          ul = child as HTMLUListElement;
+        }
       }
     }
 
     return ul;
   }
 
+  /**
+   * Renders an array as children of the given <li> tree node.
+   *
+   * @param array the objects to render
+   * @param schema the JsonSchema describing the objects
+   * @param li The parent tree node of the rendered objects
+   * @param key The parent's property that contains the rendered children
+   */
   private renderChildren
     (array: Object[], schema: JsonSchema, li: HTMLLIElement, key: string): void {
-    let ul: HTMLUListElement = this.findRendererChildContainer(li, key);
+    let ul: HTMLUListElement = this.findRendererChildContainer(li, key, schema.id);
     if (ul === undefined) {
+      // TODO proper logging
+      console.warn('No suitable list was found for key \'' + key + '\'.');
       ul = document.createElement('ul');
       ul.setAttribute('children', key);
+      if (!_.isEmpty(schema.id)) {
+        ul.setAttribute('childrenId', schema.id);
+        this.registerDnDWithGroupId(ul, schema.id);
+      }
       li.appendChild(ul);
     } else {
       while (!_.isEmpty(ul.firstChild)) {
         (ul.firstChild as Element).remove();
       }
     }
-    this.expandArray(array, ul, schema);
+
+    const parentInfo = this.treeNodeMapping.get(li);
+    const parentProperties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
+    for (const property of parentProperties) {
+      // If available, additionally use schema id to identify the correct property
+      if (!_.isEmpty(schema.id) && schema.id !== property.schema.id) {
+        continue;
+      }
+      if (key === property.property) {
+        this.expandArray(array, ul, property, parentInfo.data);
+
+        return;
+      }
+    }
+    // TODO proper logging
+    console.warn('Could not render children because no fitting property was found.');
   }
+
   private renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
     if (this.detail.lastChild !== null) {
       this.detail.removeChild(this.detail.lastChild);
@@ -345,8 +523,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     const jsonForms = document.createElement('json-forms') as JsonFormsElement;
     jsonForms.data = element;
     jsonForms.dataSchema = schema;
-    // check needed for tests
-    if (!_.isEmpty(jsonForms.addDataChangeListener)) {
+    // NOTE check needed for tests
+    if (jsonForms.addDataChangeListener !== undefined && jsonForms.addDataChangeListener !== null) {
       jsonForms.addDataChangeListener({
         needsNotificationAbout: (uischema: MasterDetailLayout): boolean => {
           return uischema !== null;
@@ -367,5 +545,126 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       });
     }
     this.detail.appendChild(jsonForms);
+  }
+
+  /**
+   * Activates drag and drop for all direct children of the given list.
+   *
+   * @param list the list that will support drag and drop
+   * @param id the id identifying the type of the list's elements
+   */
+  private registerDnDWithGroupId(list: HTMLUListElement, id: string) {
+    Sortable.create(list, {
+      // groups with the same id allow to drag and drop elements between them
+      group: id,
+      // called after an element was added from another list
+      onAdd: this.dragAndDropAddHandler(this),
+      // called when an element's position is changed within the same list
+      onUpdate: this.dragAndDropUpdateHandler(this),
+      // called when an element is removed because it was moved to another list
+      onRemove: this.dragAndDropRemoveHandler(this)
+    });
+  }
+
+  /**
+   * Returns a function that handles the SortableJs onUpdate event.
+   * It is triggered when an element is moved inside a list.
+   * It is not triggered when an element is dragged and then dropped at its original position.
+   */
+  private dragAndDropUpdateHandler(tmd: TreeMasterDetailRenderer): (evt) => (void) {
+    return evt => {
+      const li = evt.item as HTMLLIElement;
+      const nodeInfo = tmd.treeNodeMapping.get(li);
+      // NOTE does not work on root elements
+      const parentLi = li.parentNode.parentNode as HTMLLIElement;
+      const parentInfo = tmd.treeNodeMapping.get(parentLi);
+      const properties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
+      const nodeId = nodeInfo.schema.id;
+
+      for (const property of properties) {
+        const propertyId = property.schema.id;
+        if (propertyId !== nodeId) {
+          continue;
+        }
+        property.deleteFromData(parentInfo.data)(nodeInfo.data);
+        if (evt.newIndex > evt.oldIndex) {
+          const neighbour = li.previousElementSibling as HTMLLIElement;
+          const neighbourData = tmd.treeNodeMapping.get(neighbour).data;
+          property.addToData(parentInfo.data)(nodeInfo.data, neighbourData, true);
+        } else if (evt.newIndex < evt.oldIndex) {
+          const neighbour = li.nextElementSibling as HTMLLIElement;
+          const neighbourData = tmd.treeNodeMapping.get(neighbour).data;
+          property.addToData(parentInfo.data)(nodeInfo.data, neighbourData, false);
+        }
+
+        return;
+      }
+    };
+  }
+
+  /**
+   * Returns a function that handles the sortablejs onAdd Event.
+   */
+  private dragAndDropAddHandler(tmd: TreeMasterDetailRenderer): (evt) => (void) {
+    return evt => {
+      const li = evt.item as HTMLLIElement;
+      const nodeInfo = tmd.treeNodeMapping.get(li);
+      const newParent = evt.to.parentNode as HTMLLIElement;
+      const parentInfo = tmd.treeNodeMapping.get(newParent);
+      const properties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
+      const nodeId = nodeInfo.schema.id;
+
+      /*
+       * If the new data is not added at the end of the target list,
+       * get the data that should follow the new data and use the fitting
+       * containment property to add the new data.
+       */
+      for (const property of properties) {
+        const propertyId = property.schema.id;
+        if (propertyId === nodeId) {
+          // NOTE: assume that a <ul> list only has <li> list elements as children
+          // when this code is called: the added <li> is already part of the target <ul> list
+          if (li.nextElementSibling !== null) {
+            const neighbour = li.nextElementSibling as HTMLLIElement;
+            const neighbourData = tmd.treeNodeMapping.get(neighbour).data;
+            property.addToData(parentInfo.data)(nodeInfo.data, neighbourData, false);
+          } else {
+            property.addToData(parentInfo.data)(nodeInfo.data);
+          }
+
+          // if existing, update the moved element's delete function
+          if (nodeInfo.deleteFunction !== undefined && nodeInfo.deleteFunction !== null) {
+            const newDeleteFunction = property.deleteFromData(parentInfo.data);
+            nodeInfo.deleteFunction = newDeleteFunction;
+          }
+
+          return;
+        }
+      }
+      // TODO proper logging
+      console.error('Failed Drag and Drop add due to missing property in target parent');
+    };
+  }
+
+  /**
+   * Returns a function that handles the sortablejs onRemove event
+   */
+  private dragAndDropRemoveHandler(tmd: TreeMasterDetailRenderer): (evt) => (void) {
+    return evt => {
+      const li = evt.item as HTMLLIElement;
+      const nodeData = tmd.treeNodeMapping.get(li);
+      const oldParent = evt.from.parentNode as HTMLLIElement;
+      const parentData = tmd.treeNodeMapping.get(oldParent);
+      const properties = JsonForms.schemaService.getContainmentProperties(parentData.schema);
+      const nodeId = nodeData.schema.id;
+      for (const property of properties) {
+        const propertyId = property.schema.id;
+        if (propertyId === nodeId) {
+          property.deleteFromData(parentData.data)(nodeData.data);
+
+          return;
+        }
+      }
+    };
   }
 }

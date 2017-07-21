@@ -32,8 +32,10 @@
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.0",
     "ajv": "^4.11.2",
+    "es6-shim": "^0.35.3",
     "json-refs": "^2.1.6",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "sortablejs": "^1.6.0"
   },
   "devDependencies": {
     "ava": "^0.18.1",
