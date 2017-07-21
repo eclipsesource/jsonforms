@@ -4,7 +4,8 @@ import { UISchemaRegistry, UISchemaRegistryImpl } from './core/uischema.registry
 import { DataService } from './core/data.service';
 import { RendererService } from './core/renderer.service';
 import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
-import { SchemaService, SchemaServiceImpl } from './core/schema.service';
+import { SchemaService } from './core/schema.service';
+import { SchemaServiceImpl } from './core/schema.service.impl';
 
 /**
  * Represents a JSONForms service.

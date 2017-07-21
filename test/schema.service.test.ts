@@ -3,9 +3,9 @@ import { test } from 'ava';
 import {
   isContainmentProperty,
   isReferenceProperty,
-  SchemaService,
-  SchemaServiceImpl,
+  SchemaService
 } from '../src/core/schema.service';
+import { SchemaServiceImpl } from '../src/core/schema.service.impl';
 import { JsonSchema } from '../src/models/jsonSchema';
 
 test.beforeEach(t => {
