@@ -44,8 +44,8 @@ const addToArray = (key: string) => (data: Object) => (valueToAdd: object, neigh
     data[key] = [];
   }
   const childArray = data[key];
-  if (neighbourValue) {
-    const index = childArray.indexOf(neighbourValue);
+  if (neighbourValue !== undefined && neighbourValue !== null) {
+    const index = childArray.indexOf(neighbourValue) as number;
     if (insertAfter) {
       if (index >= 0 && index < (childArray.length - 1)) {
         childArray.splice(index + 1, 0, valueToAdd);
@@ -53,7 +53,7 @@ const addToArray = (key: string) => (data: Object) => (valueToAdd: object, neigh
         return;
       }
       // TODO proper logging
-      console.log('Warning: Could not add the new value after the given neighbour value.' +
+      console.warn('Could not add the new value after the given neighbour value. ' +
                   'The new value was added at the end.');
     } else {
       if (index >= 0) {
@@ -62,7 +62,7 @@ const addToArray = (key: string) => (data: Object) => (valueToAdd: object, neigh
         return;
       }
       // TODO proper logging
-      console.log('Warning: The given neighbour value could not be found.' +
+      console.warn('The given neighbour value could not be found. ' +
                   'The new value was added at the end.');
     }
   }
