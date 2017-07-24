@@ -51,7 +51,7 @@ test('Render GroupLayout with undefined elements', t => {
 test('Render GroupLayout with label', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const uiSchema: GroupLayout = {
-    type: 'GroupLayout',
+    type: 'Group',
     label: 'Foo',
     elements: [],
   };
@@ -73,7 +73,7 @@ test('Render GroupLayout with label', t => {
 test('Render GroupLayout with null elements', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const groupLayout: GroupLayout = {
-    type: 'GroupLayout',
+    type: 'Group',
     elements: null
   };
   renderer.setUiSchema(groupLayout);
@@ -88,7 +88,7 @@ test('Render GroupLayout with null elements', t => {
 test('Render GroupLayout with children', t => {
   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
   const groupLayout: GroupLayout = {
-    type: 'GroupLayout',
+    type: 'Group',
     elements: [
       {type: 'Control'},
       {type: 'Control'}

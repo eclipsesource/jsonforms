@@ -151,16 +151,7 @@ export interface LabelElement extends UISchemaElement {
   text: string;
 }
 
-/**
- * A control element. The scope property of the control determines
- * to which part of the schema the control should be bound.
- */
-export interface ControlElement extends UISchemaElement {
-  type: 'Control';
-  /**
-   * An optional label that will be associated with the control
-   */
-  label?: string | boolean | ILabelObject;
+export interface Scopable {
   /**
    * The scope that determines to which part of the schema the control
    * should be bound to. The $ref property is just a regular JSON pointer.
@@ -168,6 +159,26 @@ export interface ControlElement extends UISchemaElement {
   scope: {
       $ref: string;
   };
+}
+
+/**
+ * A control element. The scope property of the control determines
+ * to which part of the schema the control should be bound.
+ */
+export interface ControlElement extends UISchemaElement, Scopable {
+  type: 'Control';
+  /**
+   * An optional label that will be associated with the control
+   */
+  label?: string | boolean | ILabelObject;
+}
+
+export interface MasterDetailLayout extends UISchemaElement, Scopable {
+  type: 'MasterDetailLayout';
+  /**
+   * An optional label that will be associated with the control
+   */
+  label?: string | boolean | ILabelObject;
 }
 
 /**

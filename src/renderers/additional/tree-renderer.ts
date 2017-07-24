@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { ControlElement } from '../../models/uischema';
+import { MasterDetailLayout, Scopable } from '../../models/uischema';
 import { Renderer } from '../../core/renderer';
 import { DataChangeListener } from '../../core/data.service';
 import { JsonFormsRenderer } from '../renderer.util';
@@ -20,7 +20,7 @@ export const treeMasterDetailTester: RankedTester =
         and(
             uiTypeIs('MasterDetailLayout'),
             uiSchema => {
-              const control = uiSchema as ControlElement;
+              const control = uiSchema as MasterDetailLayout;
               if (control.scope === undefined || control.scope === null) {
                 return false;
               }
@@ -80,7 +80,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   }
 
   render(): HTMLElement {
-    const controlElement = this.uischema as ControlElement;
+    const controlElement = this.uischema as MasterDetailLayout;
     this.resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref);
 
     this.className = 'jsf-treeMasterDetail';
@@ -145,12 +145,13 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     return this;
   }
 
-  needsNotificationAbout (uischema: ControlElement): boolean {
+  needsNotificationAbout (uischema: Scopable): boolean {
     return uischema === undefined || uischema === null ? false :
-      (this.uischema as ControlElement).scope.$ref === uischema.scope.$ref && !this.addingToRoot;
+      (this.uischema as MasterDetailLayout).scope.$ref === uischema.scope.$ref
+      && !this.addingToRoot;
   }
 
-  dataChanged(uischema: ControlElement, newValue: any, data: any): void {
+  dataChanged(uischema: MasterDetailLayout, newValue: any, data: any): void {
     this.renderFull();
   }
 
@@ -160,7 +161,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   }
 
   private selectFirstElement(): void {
-    const controlElement = this.uischema as ControlElement;
+    const controlElement = this.uischema as MasterDetailLayout;
     const arrayData = this.dataService.getValue(controlElement);
     if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
       let firstChild = arrayData;
@@ -177,7 +178,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     if (this.master.lastChild !== null) {
       this.master.removeChild(this.master.lastChild);
     }
-    const controlElement = this.uischema as ControlElement;
+    const controlElement = this.uischema as MasterDetailLayout;
     const rootData = this.dataService.getValue(controlElement);
     const ul = document.createElement('ul');
     if (schema.items !== undefined) {
@@ -347,10 +348,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     // check needed for tests
     if (!_.isEmpty(jsonForms.addDataChangeListener)) {
       jsonForms.addDataChangeListener({
-        needsNotificationAbout: (uischema: ControlElement): boolean => {
+        needsNotificationAbout: (uischema: MasterDetailLayout): boolean => {
           return uischema !== null;
         },
-        dataChanged: (uischema: ControlElement, newValue: any, data: any): void => {
+        dataChanged: (uischema: MasterDetailLayout, newValue: any, data: any): void => {
           const segments = uischema.scope.$ref.split('/');
           const lastSegemnet = segments[segments.length - 1];
           if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {

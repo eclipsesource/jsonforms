@@ -5,17 +5,13 @@ import { ControlElement } from '../src/models/uischema';
 test('getValue returns data referenced by control', t => {
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
-  const value = dataService.getValue(
-    {type: 'Control', scope: {$ref: '#/properties/foo/properties/bar'}}
-  );
+  const value = dataService.getValue({scope: {$ref: '#/properties/foo/properties/bar'}});
   t.is(value, 'John Doe');
 });
 test('getValue returns root data value', t => {
   const data = {foo: {bar: 'John Doe'}};
   const dataService = new DataService(data);
-  const value = dataService.getValue(
-    {type: 'Control', scope: {$ref: '#'}}
-  );
+  const value = dataService.getValue({scope: {$ref: '#'}});
   t.is(value, data);
 });
 test('notifyAboutDataChange updates data ', t => {

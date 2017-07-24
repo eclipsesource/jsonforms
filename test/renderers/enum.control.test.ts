@@ -214,7 +214,7 @@ test('EnumControl dataService notification', t => {
   const input = renderer.children[1] as HTMLSelectElement;
   t.is(input.selectedIndex, 1);
   t.is(input.value, 'b');
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'a');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 'a');
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
@@ -229,7 +229,6 @@ test.failing('EnumControl dataService notification value undefined', t => {
   const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: {
           $ref: '#/properties/foo',
         },
@@ -247,7 +246,7 @@ test.failing('EnumControl dataService notification value null', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLSelectElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.selectedIndex, -1);
 });
 test('EnumControl dataService notification wrong ref', t => {
@@ -260,7 +259,6 @@ test('EnumControl dataService notification wrong ref', t => {
   const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: {
           $ref: '#/properties/bar',
         },
@@ -306,7 +304,7 @@ test('EnumControl dataService no notification after disconnect', t => {
   renderer.connectedCallback();
   renderer.disconnectedCallback();
   const input = renderer.children[1] as HTMLSelectElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.value, 'a');
   t.is(input.selectedIndex, 0);
 });
