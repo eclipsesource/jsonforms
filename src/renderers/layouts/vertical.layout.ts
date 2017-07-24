@@ -30,7 +30,7 @@ export class VerticalLayoutRenderer extends Renderer {
    */
   render(): HTMLElement {
     const div = document.createElement('div');
-    div.className = 'vertical-layout';
+    div.className = JsonForms.stylingRegistry.getAsClassName('vertical-layout');
     const verticalLayout = this.uischema as VerticalLayout;
     if (verticalLayout.elements !== undefined && verticalLayout.elements !== null) {
       verticalLayout.elements.forEach(element => {

@@ -30,7 +30,7 @@ export class HorizontalLayoutRenderer extends Renderer {
    */
   render(): HTMLElement {
     const div = document.createElement('div');
-    div.className = 'horizontal-layout';
+    div.className = JsonForms.stylingRegistry.getAsClassName('horizontal-layout');
     const horizontalLayout = this.uischema as HorizontalLayout;
     if (horizontalLayout.elements !== undefined && horizontalLayout.elements !== null) {
       horizontalLayout.elements.forEach(element => {

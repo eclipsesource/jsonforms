@@ -3,6 +3,7 @@ import { JsonFormsRenderer } from '../renderer.util';
 import { Renderer } from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
+import { JsonForms } from '../../core';
 
 /**
  * Default tester for a label.
@@ -31,7 +32,7 @@ export class LabelRenderer extends Renderer {
     if (labelElement.text !== undefined && labelElement.text !== null) {
       this.textContent = labelElement.text;
     }
-    this.className = 'jsf-label';
+    this.className = JsonForms.stylingRegistry.getAsClassName('label-control');
 
     return this;
   }
