@@ -3,11 +3,27 @@ import { test } from 'ava';
 import {
   isContainmentProperty,
   isReferenceProperty,
-  SchemaService,
-  SchemaServiceImpl,
+  SchemaService
 } from '../src/core/schema.service';
+import { SchemaServiceImpl } from '../src/core/schema.service.impl';
 import { JsonSchema } from '../src/models/jsonSchema';
 
+test.beforeEach(t => {
+  t.context.fooBarArraySchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            bar: {type: 'string'}
+          }
+        }
+      }
+    }
+  };
+});
 test.failing('array with array ', t => {
   const schema: JsonSchema = {
     type: 'array',
@@ -41,20 +57,7 @@ test('array with objects ', t => {
   t.is(properties.length, 1);
 });
 test('object with object array ', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const properties = service.getContainmentProperties(schema);
   t.is(properties.length, 1);
@@ -384,7 +387,7 @@ test('support for object references', t => {
   const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
   // tslint:disable:no-string-literal
   selfContainedClassSchema.properties.association['links'][0].targetSchema = {$ref: '#'};
-  // tslint:enable-no-string-literal
+  // tslint:enable:no-string-literal
   selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
   t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
 });
@@ -415,20 +418,7 @@ test('support object with array $ref', t => {
   t.deepEqual(properties[0].schema, schema.definitions.root.items as JsonSchema);
 });
 test('containment properties add when array not defined', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
   const data = {
@@ -441,44 +431,128 @@ test('containment properties add when array not defined', t => {
   t.is(data.foo[0], valueToAdd);
 });
 test('containment properties add when array defined', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
   const data = {foo: [{bar: 'initial'}]};
   const valueToAdd = {bar: 'defined array'};
   property.addToData(data)(valueToAdd);
-  t.true(data['foo'] !== undefined);
-  t.is(data['foo'].length, 2);
-  t.is(data['foo'][1], valueToAdd);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 2);
+  t.is(data.foo[1], valueToAdd);
+});
+test('containment properties add default with existing neighbour', t => {
+  // expectation default === add after neighbour
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, firstValue);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], firstValue);
+  t.is(data.foo[1], valueToAdd);
+  t.is(data.foo[2], lastValue);
+});
+test('containment properties add after existing neighbour(not last in array)', t => {
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, firstValue, true);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], firstValue);
+  t.is(data.foo[1], valueToAdd);
+  t.is(data.foo[2], lastValue);
+});
+test('containment properties add after existing neighbour(last in array)', t => {
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, lastValue, true);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], firstValue);
+  t.is(data.foo[1], lastValue);
+  t.is(data.foo[2], valueToAdd);
+});
+test('containment properties add after non-existant neighbour', t => {
+  // expectation: value is added at the end
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const notInArray = {bar: 'not in array'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, notInArray, true);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], firstValue);
+  t.is(data.foo[1], lastValue);
+  t.is(data.foo[2], valueToAdd);
+});
+test('containment properties add before existing neighbour(not first in array)', t => {
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, lastValue, false);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], firstValue);
+  t.is(data.foo[1], valueToAdd);
+  t.is(data.foo[2], lastValue);
+});
+test('containment properties add before existing neighbour(first in array)', t => {
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, firstValue, false);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], valueToAdd);
+  t.is(data.foo[1], firstValue);
+  t.is(data.foo[2], lastValue);
+});
+test('containment properties add before non-existant neighbour', t => {
+  // expectation: value is added at the end
+  const schema = t.context.fooBarArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getContainmentProperties(schema)[0];
+  const firstValue = {bar: 'first'};
+  const lastValue = {bar: 'last'};
+  const notInArray = {bar: 'not in array'};
+  const data = {foo: [firstValue, lastValue]};
+  const valueToAdd = {bar: 'defined array'};
+  property.addToData(data)(valueToAdd, notInArray, false);
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 3);
+  t.is(data.foo[0], firstValue);
+  t.is(data.foo[1], lastValue);
+  t.is(data.foo[2], valueToAdd);
 });
 test('containment properties get when array not defined', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
   const data = {};
@@ -486,20 +560,7 @@ test('containment properties get when array not defined', t => {
   t.true(getData === undefined);
 });
 test('containment properties get when array defined', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
   const data = {foo: [{bar: 'initial'}]};
@@ -507,20 +568,7 @@ test('containment properties get when array defined', t => {
   t.is(getData, data.foo);
 });
 test('containment properties delete when array not defined', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
   const data = {};
@@ -529,26 +577,15 @@ test('containment properties delete when array not defined', t => {
   t.true(data !== undefined);
 });
 test('containment properties delete when array defined', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
+  const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getContainmentProperties(schema)[0];
-  const initialData = {bar: 'initial'};
-  const data = {foo: [initialData]};
-  property.deleteFromData(data)(initialData);
-  t.is(data.foo.length, 0);
+  const initialData1 = {bar: 'delete'};
+  const initialData2 = {bar: 'stay'};
+  const data = {foo: [initialData1, initialData2]};
+  property.deleteFromData(data)(initialData1);
+  t.is(data.foo.length, 1);
+  t.is(data.foo[0].bar, 'stay');
 });
 test('reference object properties add', t => {
   // tslint:disable:no-object-literal-type-assertion
@@ -587,7 +624,9 @@ test('reference object properties add', t => {
   const property = service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2}]};
   property.addToData(data, data.classes[1], data.classes[0]);
+  // tslint:disable:no-string-literal
   t.is(data.classes[1]['association'], 0);
+  // tslint:enable:no-string-literal
 });
 test('reference object properties get', t => {
   // tslint:disable:no-object-literal-type-assertion
@@ -669,7 +708,9 @@ test('reference array properties add to undefined', t => {
     service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2}]};
   property.addToData(data, data.classes[1], data.classes[0]);
+  // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
+  // tslint:enable:no-string-literal
   t.is(associations.length, 1);
   t.is(associations[0], 0);
 });
@@ -714,7 +755,9 @@ test('reference array properties add to defined', t => {
     service.getReferenceProperties(schema.definitions.class)[0];
   const data = {classes: [{id: 1}, {id: 2, associations: []}]};
   property.addToData(data, data.classes[1], data.classes[0]);
+  // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
+  // tslint:enable:no-string-literal
   t.is(associations.length, 1);
   t.is(associations[0], 0);
 });
@@ -836,8 +879,8 @@ test('self contained child schemata: cross recursion', t => {
   t.is(properties.length, 1);
   t.is(properties[0].label, 'person');
   const selfContainedPerson = JSON.parse(JSON.stringify(schema.definitions.person));
-  selfContainedPerson['definitions'] = {robot: schema.definitions.robot};
-  selfContainedPerson['definitions'].robot.properties.humans.items.$ref = '#';
+  selfContainedPerson.definitions = {robot: schema.definitions.robot};
+  selfContainedPerson.definitions.robot.properties.humans.items.$ref = '#';
   selfContainedPerson.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
   t.deepEqual(properties[0].schema, selfContainedPerson);
 });
