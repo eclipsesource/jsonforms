@@ -193,21 +193,22 @@ test('CategorizationRenderer static', t => {
       $ref: '#/properties/name'
     }
   };
+  const innerCat: Categorization = {
+    type: 'Categorization',
+    label: 'Bar',
+    elements: [
+      {
+        type: 'Category',
+        label: 'A',
+        elements: [nameControl]
+      }
+    ]
+  };
   const categorization: Categorization = {
     type: 'Categorization',
     label: 'Root',
     elements: [
-      {
-        type: 'Categorization',
-        label: 'Bar',
-        elements: [
-          {
-            type: 'Category',
-            label: 'A',
-            elements: [nameControl]
-          }
-        ]
-      },
+      innerCat,
       {
         type: 'Category',
         label: 'B',
@@ -272,21 +273,22 @@ test('CategorizationRenderer dynamic', t => {
       $ref: '#/properties/name'
     }
   };
+  const innerCategorization: Categorization = {
+    type: 'Categorization',
+    label: 'Bar',
+    elements: [
+      {
+        type: 'Category',
+        label: 'A',
+        elements: [nameControl]
+      },
+    ]
+  };
   const categorization: Categorization = {
     type: 'Categorization',
     label: 'Root',
     elements: [
-      {
-        type: 'Categorization',
-        label: 'Bar',
-        elements: [
-          {
-            type: 'Category',
-            label: 'A',
-            elements: [nameControl]
-          },
-        ]
-      },
+      innerCategorization,
       {
         type: 'Category',
         label: 'B',

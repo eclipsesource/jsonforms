@@ -168,7 +168,7 @@ export class CategorizationRenderer extends Renderer {
     if (category.elements !== undefined && category.elements !== null) {
       category.elements.forEach(child => {
         const jsonForms = document.createElement('json-forms') as JsonFormsElement;
-        jsonForms.data = this.dataService.getValue({type: 'Control', scope: {$ref: '#'}});
+        jsonForms.data = this.dataService.getValue({scope: {$ref: '#'}});
         jsonForms.uiSchema = child;
         jsonForms.dataSchema = this.dataSchema;
         wrapper.appendChild(jsonForms);

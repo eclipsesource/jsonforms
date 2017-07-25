@@ -115,7 +115,7 @@ test('TextAreaControl dataService notification', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLTextAreaElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Bar');
 });
 
@@ -129,7 +129,6 @@ test('TextAreaControl dataService notification value undefined', t => {
   const input = renderer.children[1] as HTMLTextAreaElement;
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: {
           $ref: '#/properties/name'
         }
@@ -147,7 +146,7 @@ test('TextAreaControl dataService notification value null', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLTextAreaElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/name'}}, null);
   t.is(input.value, '');
 });
 
@@ -205,7 +204,7 @@ test('TextAreaControl dataService no notification after disconnect', t => {
   renderer.connectedCallback();
   renderer.disconnectedCallback();
   const input = renderer.children[1] as HTMLTextAreaElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Foo');
 });
 

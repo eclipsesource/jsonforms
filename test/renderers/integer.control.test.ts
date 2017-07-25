@@ -144,7 +144,7 @@ test('IntegerControl dataService notification', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLInputElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 42);
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 42);
   t.is(input.valueAsNumber, 42);
 });
 
@@ -158,7 +158,6 @@ test('IntegerControl dataService notification value undefined', t => {
   const input = renderer.children[1] as HTMLInputElement;
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: {
           $ref: '#/properties/foo'
         }
@@ -176,7 +175,7 @@ test('IntegerControl dataService notification value null', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLInputElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, null);
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.valueAsNumber, undefined);
 });
 
@@ -188,7 +187,7 @@ test('IntegerControl dataService notification wrong ref', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLInputElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/bar'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.is(input.valueAsNumber, 42);
 });
 
@@ -225,7 +224,7 @@ test('IntegerControl dataService no notification after disconnect', t => {
   renderer.connectedCallback();
   renderer.disconnectedCallback();
   const input = renderer.children[1] as HTMLInputElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/foo'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.valueAsNumber, 42);
 });
 

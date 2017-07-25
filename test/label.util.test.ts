@@ -14,7 +14,7 @@ test('control relative', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '/properties/foo'
         }
@@ -35,7 +35,7 @@ test('control relative required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '/properties/foo'
         }
@@ -55,7 +55,7 @@ test('control without label string', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {$ref: '#/properties/foo'}
     };
     const labelObject = getElementLabelObject(schema, controlElement);
@@ -74,7 +74,7 @@ test('control without label string , required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         }
@@ -94,7 +94,7 @@ test('control without label string, camel split', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/fooBarBaz'
         }
@@ -115,7 +115,7 @@ test('control without label string, camel split and required', t => {
         required: ['bazBarFoo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/bazBarFoo'
         }
@@ -134,7 +134,7 @@ test('control with label string', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -155,7 +155,7 @@ test('control with label string, required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -176,7 +176,7 @@ test('control with label boolean', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -198,7 +198,7 @@ test('control with label boolean, required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -219,7 +219,7 @@ test('control with label object, empty', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -241,7 +241,7 @@ test('control with label object, empty and required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -262,7 +262,7 @@ test('control with label object, text-only', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -286,7 +286,7 @@ test('control with label object, text-only and required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -309,7 +309,7 @@ test('control with label object, visible-only', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -333,7 +333,7 @@ test('control with label object, visible-only and required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {$ref: '#/properties/foo'},
         label: {
             show: false
@@ -354,7 +354,7 @@ test('control with label object, full', t => {
         }
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },
@@ -379,7 +379,7 @@ test('control with label object, full and required', t => {
         required: ['foo']
     };
     const controlElement: ControlElement = {
-        type: 'ControlElement',
+        type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         },

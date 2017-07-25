@@ -127,7 +127,7 @@ test('TextControl dataService notification', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLInputElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/name'}}, 'Bar');
   t.is(input.value, 'Bar');
 });
 
@@ -154,7 +154,7 @@ test('TextControl dataService notification value null', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLInputElement;
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, null);
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/name'}}, null);
   t.is(input.value, '');
 });
 

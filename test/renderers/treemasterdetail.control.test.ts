@@ -4,7 +4,7 @@ import '../helpers/setup';
 import { DataService } from '../../src/core/data.service';
 import { Runtime } from '../../src/core/runtime';
 import { JsonSchema } from '../../src/models/jsonSchema';
-import { ControlElement } from '../../src/models/uischema';
+import { MasterDetailLayout, Scopable, UISchemaElement } from '../../src/models/uischema';
 import {
   TreeMasterDetailRenderer,
   treeMasterDetailTester,
@@ -36,7 +36,7 @@ test('TreeMasterDetailTester', t => {
 });
 
 test('TreeMasterDetail tester with null $ref', t => {
-  const control: ControlElement = {
+  const control: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: {
       $ref: null
@@ -68,7 +68,7 @@ test('TreeMasterDetail tester matches', t => {
 });
 
 test('TreeMasterDetail tester with unknown type', t => {
-  const control: ControlElement = {
+  const control = {
     type: 'Foo',
     scope: { $ref: '/properties/foo' }
   };
@@ -82,7 +82,7 @@ test('TreeMasterDetail tester with unknown type', t => {
 });
 
 test('TreeMasterDetail tester with null scope', t => {
-  const masterDetailLayout: ControlElement = {
+  const masterDetailLayout: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: null
   };
@@ -100,7 +100,7 @@ test('TreeMasterDetail tester with empty scope', t => {
   const masterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: { }
-  } as ControlElement;
+  } as MasterDetailLayout;
   /*tslint:enable:no-object-literal-type-assertion */
   t.is(
       treeMasterDetailTester(
@@ -112,7 +112,7 @@ test('TreeMasterDetail tester with empty scope', t => {
 });
 
 test('TreeMasterDetail tester with scope, but null $ref', t => {
-  const masterDetailLayout: ControlElement = {
+  const masterDetailLayout: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: {
       $ref: null
@@ -128,7 +128,7 @@ test('TreeMasterDetail tester with scope, but null $ref', t => {
 });
 
 test('TreeMasterDetail tester with regular ref', t => {
-  const masterDetailLayout: ControlElement = {
+  const masterDetailLayout: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: {
       $ref: '/properties/foo'
@@ -170,7 +170,7 @@ test('TreeMasterDetailRenderer static object', t => {
       name: {type: 'string'}
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#' }
@@ -270,7 +270,7 @@ test('TreeMasterDetailRenderer static array', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#' },
@@ -384,7 +384,7 @@ test('TreeMasterDetailRenderer static array not root', t => {
   instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -468,7 +468,7 @@ test('TreeMasterDetailRenderer dynamic select', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -527,7 +527,7 @@ test('TreeMasterDetailRenderer dynamic add array root', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -579,7 +579,7 @@ test('TreeMasterDetailRenderer dynamic remove added root', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -632,7 +632,7 @@ test('TreeMasterDetailRenderer dynamic add child to existing', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -699,7 +699,7 @@ test('TreeMasterDetailRenderer dynamic remove root', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#' },
@@ -744,7 +744,7 @@ test('TreeMasterDetailRenderer dynamic remove child from existing', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#' },
@@ -795,7 +795,7 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -879,7 +879,7 @@ test('TreeMasterDetailRenderer dynamic cancel add', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {
@@ -939,7 +939,7 @@ test('TreeMasterDetailRenderer dynamic remove added child', t => {
       }
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#' },
@@ -1005,7 +1005,7 @@ test('TreeMasterDetailRenderer dataService notification wrong ref', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope:  { $ref: '#/properties/children' },
@@ -1023,7 +1023,7 @@ test('TreeMasterDetailRenderer dataService notification wrong ref', t => {
   const master = content.children[0] as HTMLDivElement; // <-- TODO needed?
   const ul = master.children[0];
   t.is(ul.children.length, 1);
-  dataService.notifyAboutDataChange({type: 'Control', scope: {$ref: '#/properties/name'}}, 'Bar');
+  dataService.notifyAboutDataChange({scope: {$ref: '#/properties/name'}}, 'Bar');
   const ulNew = master.children[0];
   t.is(ulNew, ul);
   t.is(renderer.children.length, 3);
@@ -1046,7 +1046,7 @@ test('TreeMasterDetailRenderer dataService notification null ref', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#/properties/children' },
@@ -1088,7 +1088,7 @@ test('TreeMasterDetailRenderer dataService notification undefined ref', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#/properties/children' },
@@ -1127,7 +1127,7 @@ test('TreeMasterDetailRenderer dataService no notification after disconnect', t 
       name: {type: 'string'}
     }
   };
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#/properties/children' },
@@ -1149,7 +1149,6 @@ test('TreeMasterDetailRenderer dataService no notification after disconnect', t 
   t.is(ul.children.length, 1);
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: { $ref: '#/properties/children' }
       },
       'Bar'
@@ -1177,7 +1176,7 @@ test('TreeMasterDetailRenderer dataService notification', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: {$ref: '#/properties/children'},
@@ -1197,7 +1196,6 @@ test('TreeMasterDetailRenderer dataService notification', t => {
   t.is(ul.children.length, 1);
   dataService.notifyAboutDataChange(
       {
-        type: 'MasterDetailLayout',
         scope: {$ref: '#/properties/children'}
       },
       [
@@ -1230,7 +1228,7 @@ test('TreeMasterDetailRenderer dataService notification value undefined', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#/properties/children' },
@@ -1250,7 +1248,6 @@ test('TreeMasterDetailRenderer dataService notification value undefined', t => {
   t.is(ul.children.length, 1);
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: { $ref: '#/properties/children' }
       },
       undefined
@@ -1276,7 +1273,7 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
     }
   };
   instantiateSchemaService(schema);
-  const uiSchema: ControlElement = {
+  const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
     scope: { $ref: '#/properties/children' },
@@ -1296,7 +1293,6 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
   t.is(ul.children.length, 1);
   dataService.notifyAboutDataChange(
       {
-        type: 'Control',
         scope: { $ref: '#/properties/children'}
       },
       null
@@ -1310,7 +1306,7 @@ test('TreeMasterDetailRenderer notify visible', t => {
   const schema = {type: 'object', properties: {}};
   instantiateSchemaService(schema);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
-  const treeMasterDetail: ControlElement = {
+  const treeMasterDetail: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     scope: {$ref: '#'}
   };
