@@ -1,3 +1,4 @@
+/* tslint:disable:max-file-line-count */
 import * as _ from 'lodash';
 import { MasterDetailLayout, Scopable } from '../../models/uischema';
 import { Renderer } from '../../core/renderer';
@@ -10,10 +11,10 @@ import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
 import { JsonForms } from '../../core';
 import { ContainmentProperty } from '../../core/schema.service';
-import * as Sortable from 'sortablejs';
-
-type TreeNodeInfo = {data: object, schema: JsonSchema,
-                     deleteFunction(toDelete: object): void};
+import {
+  registerDnDWithGroupId,
+  TreeNodeInfo
+} from './tree-renderer.dnd';
 
 /**
  * Default tester for a master-detail layout.
@@ -406,7 +407,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       const ul = document.createElement('ul') as HTMLUListElement;
       ul.setAttribute('childrenId', id);
       ul.setAttribute('children', property.property);
-      this.registerDnDWithGroupId(ul, id);
+      registerDnDWithGroupId(this.treeNodeMapping, ul, id);
       li.appendChild(ul);
     });
 
@@ -484,7 +485,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       ul.setAttribute('children', key);
       if (!_.isEmpty(schema.id)) {
         ul.setAttribute('childrenId', schema.id);
-        this.registerDnDWithGroupId(ul, schema.id);
+        registerDnDWithGroupId(this.treeNodeMapping, ul, schema.id);
       }
       li.appendChild(ul);
     } else {
@@ -545,126 +546,5 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       });
     }
     this.detail.appendChild(jsonForms);
-  }
-
-  /**
-   * Activates drag and drop for all direct children of the given list.
-   *
-   * @param list the list that will support drag and drop
-   * @param id the id identifying the type of the list's elements
-   */
-  private registerDnDWithGroupId(list: HTMLUListElement, id: string) {
-    Sortable.create(list, {
-      // groups with the same id allow to drag and drop elements between them
-      group: id,
-      // called after an element was added from another list
-      onAdd: this.dragAndDropAddHandler(this),
-      // called when an element's position is changed within the same list
-      onUpdate: this.dragAndDropUpdateHandler(this),
-      // called when an element is removed because it was moved to another list
-      onRemove: this.dragAndDropRemoveHandler(this)
-    });
-  }
-
-  /**
-   * Returns a function that handles the SortableJs onUpdate event.
-   * It is triggered when an element is moved inside a list.
-   * It is not triggered when an element is dragged and then dropped at its original position.
-   */
-  private dragAndDropUpdateHandler(tmd: TreeMasterDetailRenderer): (evt) => (void) {
-    return evt => {
-      const li = evt.item as HTMLLIElement;
-      const nodeInfo = tmd.treeNodeMapping.get(li);
-      // NOTE does not work on root elements
-      const parentLi = li.parentNode.parentNode as HTMLLIElement;
-      const parentInfo = tmd.treeNodeMapping.get(parentLi);
-      const properties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
-      const nodeId = nodeInfo.schema.id;
-
-      for (const property of properties) {
-        const propertyId = property.schema.id;
-        if (propertyId !== nodeId) {
-          continue;
-        }
-        property.deleteFromData(parentInfo.data)(nodeInfo.data);
-        if (evt.newIndex > evt.oldIndex) {
-          const neighbour = li.previousElementSibling as HTMLLIElement;
-          const neighbourData = tmd.treeNodeMapping.get(neighbour).data;
-          property.addToData(parentInfo.data)(nodeInfo.data, neighbourData, true);
-        } else if (evt.newIndex < evt.oldIndex) {
-          const neighbour = li.nextElementSibling as HTMLLIElement;
-          const neighbourData = tmd.treeNodeMapping.get(neighbour).data;
-          property.addToData(parentInfo.data)(nodeInfo.data, neighbourData, false);
-        }
-
-        return;
-      }
-    };
-  }
-
-  /**
-   * Returns a function that handles the sortablejs onAdd Event.
-   */
-  private dragAndDropAddHandler(tmd: TreeMasterDetailRenderer): (evt) => (void) {
-    return evt => {
-      const li = evt.item as HTMLLIElement;
-      const nodeInfo = tmd.treeNodeMapping.get(li);
-      const newParent = evt.to.parentNode as HTMLLIElement;
-      const parentInfo = tmd.treeNodeMapping.get(newParent);
-      const properties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
-      const nodeId = nodeInfo.schema.id;
-
-      /*
-       * If the new data is not added at the end of the target list,
-       * get the data that should follow the new data and use the fitting
-       * containment property to add the new data.
-       */
-      for (const property of properties) {
-        const propertyId = property.schema.id;
-        if (propertyId === nodeId) {
-          // NOTE: assume that a <ul> list only has <li> list elements as children
-          // when this code is called: the added <li> is already part of the target <ul> list
-          if (li.nextElementSibling !== null) {
-            const neighbour = li.nextElementSibling as HTMLLIElement;
-            const neighbourData = tmd.treeNodeMapping.get(neighbour).data;
-            property.addToData(parentInfo.data)(nodeInfo.data, neighbourData, false);
-          } else {
-            property.addToData(parentInfo.data)(nodeInfo.data);
-          }
-
-          // if existing, update the moved element's delete function
-          if (nodeInfo.deleteFunction !== undefined && nodeInfo.deleteFunction !== null) {
-            const newDeleteFunction = property.deleteFromData(parentInfo.data);
-            nodeInfo.deleteFunction = newDeleteFunction;
-          }
-
-          return;
-        }
-      }
-      // TODO proper logging
-      console.error('Failed Drag and Drop add due to missing property in target parent');
-    };
-  }
-
-  /**
-   * Returns a function that handles the sortablejs onRemove event
-   */
-  private dragAndDropRemoveHandler(tmd: TreeMasterDetailRenderer): (evt) => (void) {
-    return evt => {
-      const li = evt.item as HTMLLIElement;
-      const nodeData = tmd.treeNodeMapping.get(li);
-      const oldParent = evt.from.parentNode as HTMLLIElement;
-      const parentData = tmd.treeNodeMapping.get(oldParent);
-      const properties = JsonForms.schemaService.getContainmentProperties(parentData.schema);
-      const nodeId = nodeData.schema.id;
-      for (const property of properties) {
-        const propertyId = property.schema.id;
-        if (propertyId === nodeId) {
-          property.deleteFromData(parentData.data)(nodeData.data);
-
-          return;
-        }
-      }
-    };
   }
 }
