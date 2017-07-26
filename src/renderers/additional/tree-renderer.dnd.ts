@@ -8,7 +8,7 @@ export type TreeNodeInfo = {data: object, schema: JsonSchema,
 /**
  * Returns a function that handles the sortablejs onRemove event
  */
-const dragAndDropRemoveHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
+export const dragAndDropRemoveHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
   evt => {
   const li = evt.item as HTMLLIElement;
   const nodeData = treeNodeMapping.get(li);
@@ -31,7 +31,7 @@ const dragAndDropRemoveHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeIn
  * It is triggered when an element is moved inside a list.
  * It is not triggered when an element is dragged and then dropped at its original position.
  */
-const dragAndDropUpdateHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
+export const dragAndDropUpdateHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
   evt => {
   const li = evt.item as HTMLLIElement;
   const nodeInfo = treeNodeMapping.get(li);
@@ -64,7 +64,7 @@ const dragAndDropUpdateHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeIn
 /**
  * Returns a function that handles the sortablejs onAdd Event.
  */
-const dragAndDropAddHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
+export const dragAndDropAddHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
   evt => {
   const li = evt.item as HTMLLIElement;
   const nodeInfo = treeNodeMapping.get(li);
