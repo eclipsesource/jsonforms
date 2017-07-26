@@ -66,8 +66,9 @@ test('TextControl static', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  t.is(result.id, t.context.uiSchema.scope.$ref);
-  t.is(result.className, 'control');
+  const className = result.className;
+  t.true(className.indexOf('root_properties_name') !== -1);
+  t.true(className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
   const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
@@ -94,7 +95,8 @@ test('TextControl static no label', t => {
   };
   renderer.setUiSchema(controlWithLabel);
   const result = renderer.render();
-  t.is(result.className, 'control');
+  const className = result.className;
+  t.true(className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
   const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');

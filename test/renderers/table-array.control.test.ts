@@ -191,7 +191,8 @@ test('array-layout add click w/o data', t => {
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
-    t.is(renderer.id, uiSchema.scope.$ref);
+    const className = renderer.className;
+    t.true(className.indexOf('root_properties_test') !== -1);
     const button = renderer.getElementsByTagName('button')[0];
     button.click();
     t.is(data.test.length, 1);

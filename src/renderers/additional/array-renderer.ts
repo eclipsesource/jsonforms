@@ -138,7 +138,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
 
     header.appendChild(button);
     this.appendChild(div);
-    this.id = controlElement.scope.$ref;
+    this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
     return this;
   }

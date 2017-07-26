@@ -47,7 +47,8 @@ test('generate array child control', t => {
     const renderedElement = renderer.render();
     const elements = renderedElement.getElementsByClassName('array-layout');
     t.is(elements.length, 1);
-    t.is(renderedElement.id, uiSchema.scope.$ref);
+    const className = renderedElement.className;
+    t.true(className.indexOf('root_properties_test') !== -1);
     t.is(elements.item(0).tagName, 'FIELDSET');
     const fieldsetChildren = elements.item(0).children;
     t.is(fieldsetChildren.length, 2);

@@ -9,7 +9,6 @@ import {
   TreeMasterDetailRenderer,
   treeMasterDetailTester,
 } from '../../src/renderers/additional/tree-renderer';
-import { TextAreaControl } from '../../src/renderers/controls/textarea.control';
 import {
   testDisable,
   testEnable,
@@ -182,7 +181,8 @@ test('TreeMasterDetailRenderer static object', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'jsf-treeMasterDetail');
+  const className = result.className;
+  t.true(className.indexOf('jsf-treeMasterDetail') !== -1);
   t.is(result.childNodes.length, 3);
   // header
   const header = result.children[0] as HTMLDivElement;
@@ -291,7 +291,8 @@ test('TreeMasterDetailRenderer static array', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'jsf-treeMasterDetail');
+  const className = result.className;
+  t.true(className.indexOf('jsf-treeMasterDetail') !== -1);
   t.is(result.childNodes.length, 3);
   // header
   const header = result.children[0] as HTMLDivElement;
@@ -396,7 +397,8 @@ test('TreeMasterDetailRenderer static array not root', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'jsf-treeMasterDetail');
+  const className = result.className;
+  t.true(className.indexOf('jsf-treeMasterDetail') !== -1);
   t.is(result.childNodes.length, 3);
   // header
   const header = result.children[0] as HTMLDivElement;
@@ -482,7 +484,8 @@ test('TreeMasterDetailRenderer dynamic select', t => {
   renderer.setDataSchema(schema);
   renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'jsf-treeMasterDetail');
+  const className = result.className;
+  t.true(className.indexOf('jsf-treeMasterDetail') !== -1);
   t.is(result.childNodes.length, 3);
   // content
   const content = result.children[1] as HTMLDivElement;
@@ -1320,11 +1323,27 @@ test('TreeMasterDetailRenderer notify visible', t => {
 });
 test('TreeMasterDetailRenderer notify disabled', t => {
   instantiateSchemaService(t.context.schema);
-  testDisable(t, new TextAreaControl());
+  const dataService = new DataService(t.context.data);
+  const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  renderer.setDataService(dataService);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
+  renderer.connectedCallback();
+  const runtime = t.context.uiSchema.runtime as Runtime;
+  runtime.enabled = false;
+  t.is(renderer.getAttribute('disabled'), 'true');
 });
 test('TreeMasterDetailRenderer notify enabled', t => {
   instantiateSchemaService(t.context.schema);
-  testEnable(t, new TextAreaControl());
+  const dataService = new DataService(t.context.data);
+  const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  renderer.setDataService(dataService);
+  renderer.setDataSchema(t.context.schema);
+  renderer.setUiSchema(t.context.uiSchema);
+  renderer.connectedCallback();
+  const runtime = t.context.uiSchema.runtime as Runtime;
+  runtime.enabled = true;
+  t.false(renderer.hasAttribute('disabled'));
 });
 test('TreeMasterDetailRenderer disconnected no notify visible', t => {
   instantiateSchemaService(t.context.schema);
