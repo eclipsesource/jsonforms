@@ -8,6 +8,7 @@ import { DataService } from '../../src/core/data.service';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement } from '../../src/models/uischema';
 import { TextControl, textControlTester } from '../../src/renderers/controls/text.control';
+import { JsonForms } from '../../src/core';
 import {
   testDisable, testEnable, testHide,
   testMultipleErrors,
@@ -20,7 +21,18 @@ import {
   testShow,
   testUndefinedErrors
 } from './base.control.tests';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data =  { 'name': 'Foo' };
   t.context.schema = {

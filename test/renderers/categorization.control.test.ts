@@ -10,8 +10,32 @@ import {
   CategorizationRenderer,
   categorizationTester
 } from '../../src/renderers/additional/categorization-renderer';
+import { JsonForms } from '../../src/core';
 import { testNotifyAboutVisibiltyWhenDisconnected } from './base.control.tests';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'categorization',
+      classNames: ['jsf-categorization']
+    },
+    {
+      name: 'categorization.master',
+      classNames: ['jsf-categorization-master']
+    },
+    {
+      name: 'category.group',
+      classNames: ['jsf-category-group']
+    },
+    {
+      name: 'category.subcategories',
+      classNames: ['jsf-category-subcategories']
+    },
+    {
+      name: 'categorization.detail',
+      classNames: ['jsf-categorization-detail']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data = { };
   t.context.uiSchema = {

@@ -11,7 +11,15 @@ import {
     TableArrayControlRenderer,
     tableArrayTester
 } from '../../src/renderers/additional/table-array.control';
-
+import { JsonForms } from '../../src/core';
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'array-table',
+      classNames: ['array-table-layout', 'control']
+    }
+  ]);
+});
 test('generate array child control', t => {
 
     const renderer: TableArrayControlRenderer = new TableArrayControlRenderer();
@@ -46,12 +54,8 @@ test('generate array child control', t => {
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
-    const elements = renderer.getElementsByClassName('array-table-layout');
-    t.is(elements.length, 1);
-    t.is(elements.item(0).tagName, 'DIV');
-    const fieldsetChildren = elements.item(0).children;
-    t.is(fieldsetChildren.length, 2);
-    const header = fieldsetChildren.item(0);
+    t.is(renderer.children.length, 2);
+    const header = renderer.children.item(0);
     t.is(header.tagName, 'HEADER');
     const legendChildren = header.children;
     const label = legendChildren.item(0);
@@ -60,7 +64,7 @@ test('generate array child control', t => {
     const button = legendChildren.item(1);
     t.is(button.tagName, 'BUTTON');
     t.is(button.innerHTML, 'Add to Test');
-    const table = fieldsetChildren.item(1);
+    const table = renderer.children.item(1);
     t.is(table.tagName, 'TABLE');
     const tableChildren = table.children;
     t.is(tableChildren.length, 2);
@@ -123,12 +127,8 @@ test('generate array child control w/o data', t => {
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
     renderer.connectedCallback();
-    const elements = renderer.getElementsByClassName('array-table-layout');
-    t.is(elements.length, 1);
-    t.is(elements.item(0).tagName, 'DIV');
-    const fieldsetChildren = elements.item(0).children;
-    t.is(fieldsetChildren.length, 2);
-    const header = fieldsetChildren.item(0);
+    t.is(renderer.children.length, 2);
+    const header = renderer.children.item(0);
     t.is(header.tagName, 'HEADER');
     const legendChildren = header.children;
     const label = legendChildren.item(0) as HTMLLabelElement;
@@ -137,7 +137,7 @@ test('generate array child control w/o data', t => {
     const button = legendChildren.item(1);
     t.is(button.tagName, 'BUTTON');
     t.is(button.innerHTML, 'Add to Test');
-    const table = fieldsetChildren.item(1);
+    const table = renderer.children.item(1);
     t.is(table.tagName, 'TABLE');
     const tableChildren = table.children;
     t.is(tableChildren.length, 2);

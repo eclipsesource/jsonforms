@@ -6,6 +6,7 @@ declare let global;
 installCE(global, 'force');
 import { DataService } from '../../src/core/data.service';
 import { ControlElement } from '../../src/models/uischema';
+import { JsonForms } from '../../src/core';
 import {
   TextAreaControl,
   textAreaControlTester,
@@ -23,7 +24,18 @@ import {
   testShow,
   testUndefinedErrors
 } from './base.control.tests';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data = {'name': 'Foo'};
   t.context.schema = {

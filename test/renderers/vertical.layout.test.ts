@@ -4,13 +4,21 @@ import * as installCE from 'document-register-element/pony';
 import 'jsdom-global/register';
 declare let global;
 installCE(global, 'force');
+import { JsonForms } from '../../src/core';
 import { Runtime } from '../../src/core/runtime';
 import { VerticalLayout } from '../../src/models/uischema';
 import {
   VerticalLayoutRenderer,
   verticalLayoutTester,
 } from '../../src/renderers/layouts/vertical.layout';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'vertical-layout',
+      classNames: ['vertical-layout']
+    }
+  ]);
+});
 test('VerticalLayout tester', t => {
   t.is(
       verticalLayoutTester(undefined, undefined),
