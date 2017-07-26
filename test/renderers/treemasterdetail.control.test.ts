@@ -4,7 +4,7 @@ import '../helpers/setup';
 import { DataService } from '../../src/core/data.service';
 import { Runtime } from '../../src/core/runtime';
 import { JsonSchema } from '../../src/models/jsonSchema';
-import { MasterDetailLayout, Scopable, UISchemaElement } from '../../src/models/uischema';
+import { MasterDetailLayout } from '../../src/models/uischema';
 import {
   TreeMasterDetailRenderer,
   treeMasterDetailTester,
