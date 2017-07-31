@@ -122,7 +122,9 @@ test('DateControl static', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'control');
+  const className = result.className;
+  t.true(className.indexOf('root_properties_foo') !== -1);
+  t.true(result.className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
   const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
@@ -150,7 +152,8 @@ test('DateControl static no label', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  t.is(result.className, 'control');
+  const className = result.className;
+  t.true(result.className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
   const label = result.children[0] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');

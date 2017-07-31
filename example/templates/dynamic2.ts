@@ -19,7 +19,6 @@ class MyService implements JsonFormService {
     button.onclick = () => {
       this.dataService.notifyAboutDataChange(
           {
-            type: 'Control',
             scope: {
               $ref: '#/properties/name'
             }

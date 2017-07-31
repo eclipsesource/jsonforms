@@ -158,6 +158,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
 
     header.appendChild(button);
     this.appendChild(div);
+    this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
     return this;
   }
