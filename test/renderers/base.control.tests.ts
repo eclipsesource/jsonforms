@@ -116,8 +116,9 @@ export const testNotifyAboutVisibiltyWhenDisconnected = (t, renderer) => {
     renderer.setDataSchema(t.context.schema);
     renderer.setUiSchema(t.context.uiSchema);
     renderer.connectedCallback();
-    renderer.disconnectedCallback();
     const runtime = t.context.uiSchema.runtime as Runtime;
+    runtime.visible = true;
+    renderer.disconnectedCallback();
     runtime.visible = false;
     t.is(renderer.hidden, false);
 };

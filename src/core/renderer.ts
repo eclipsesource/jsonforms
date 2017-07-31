@@ -90,4 +90,11 @@ export abstract class Renderer extends HTMLElement implements RuntimeListener {
    * Dispose this renderer.
    */
   abstract dispose(): void;
+
+  protected convertToClassName(value: string): string {
+    let result = value.replace('#', 'root');
+    result = result.replace(new RegExp('/', 'g'), '_');
+
+    return result;
+  }
 }

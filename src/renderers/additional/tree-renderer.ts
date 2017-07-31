@@ -141,6 +141,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     this.dialog.appendChild(dialogClose);
     this.appendChild(this.dialog);
     this.renderFull();
+    this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
     return this;
   }
