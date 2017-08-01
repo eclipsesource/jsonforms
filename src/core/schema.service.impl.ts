@@ -296,14 +296,6 @@ export class SchemaServiceImpl implements SchemaService {
         if (allInnerRefs[innerRef] !== undefined) {
           if (!_.isEmpty(allInnerRefs[innerRef].$ref)) {
             allInnerRefs[innerRef].$ref = '#';
-            // tslint:disable:no-string-literal
-          } else if (!_.isEmpty(allInnerRefs[innerRef]['links'])) {
-            allInnerRefs[innerRef]['links'].forEach(link => {
-              // tslint:enable:no-string-literal
-              if (link.targetSchema.$ref === innerRef) {
-                link.targetSchema.$ref = '#';
-              }
-            });
           }
         }
 
