@@ -8,7 +8,20 @@ import { DataService } from '../../src/core/data.service';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement } from '../../src/models/uischema';
 import { ArrayControlRenderer, arrayTester } from '../../src/renderers/additional/array-renderer';
-import {JsonForms} from "../../src/core";
+import { JsonForms } from '../../src/core';
+
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'array.layout',
+      classNames: ['array-layout']
+    },
+    {
+      name: 'array.children',
+      classNames: ['children']
+    }
+  ]);
+});
 
 test('generate array child control', t => {
 

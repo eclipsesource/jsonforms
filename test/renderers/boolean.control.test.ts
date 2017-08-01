@@ -7,6 +7,7 @@ installCE(global, 'force');
 import { DataService } from '../../src/core/data.service';
 import { ControlElement } from '../../src/models/uischema';
 import { BooleanControl, booleanControlTester } from '../../src/renderers/controls/boolean.control';
+import { JsonForms } from '../../src/core';
 import {
   testDisable, testEnable, testHide,
   testMultipleErrors,
@@ -19,7 +20,18 @@ import {
   testShow,
   testUndefinedErrors
 } from './base.control.tests';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data = { 'foo': true };
   t.context.schema = {

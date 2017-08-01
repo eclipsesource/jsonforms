@@ -24,7 +24,7 @@ export class TextAreaControl extends BaseControl<HTMLTextAreaElement> {
    * @inheritDoc
    */
   protected configureInput(input: HTMLTextAreaElement): void {
-    input.classList.add('form-control');
+    // no-op
   }
 
   /**

@@ -6,6 +6,7 @@ declare let global;
 installCE(global, 'force');
 import { DataService } from '../../src/core/data.service';
 import { Runtime } from '../../src/core/runtime';
+import { JsonForms } from '../../src/core';
 import { LabelElement, UISchemaElement } from '../../src/models/uischema';
 import { LabelRenderer, labelRendererTester } from '../../src/renderers/additional/label.renderer';
 import {
@@ -13,7 +14,14 @@ import {
   testNotifyAboutVisibiltyWhenDisconnected,
   testShow
 } from './base.control.tests';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'label-control',
+      classNames: ['jsf-label']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data =  {'name': 'Foo'};
   t.context.schema = {type: 'object', properties: {name: {type: 'string'}}};

@@ -4,11 +4,19 @@ import '../helpers/setup';
 /*tslint:disable */
 import {HorizontalLayout, UISchemaElement} from '../../src/models/uischema';
 /*tslint:enable */
+import { JsonForms } from '../../src/core';
 import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester
 } from '../../src/renderers/layouts/horizontal.layout';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'horizontal-layout',
+      classNames: ['horizontal-layout']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.uiSchema = {
     type: 'HorizontalLayout',

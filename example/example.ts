@@ -20,7 +20,7 @@ export const registerExamples = (examples: ExampleDescription[]): void => {
 };
 export const changeExample = (selectedExample: string) => {
   let body = document.getElementById(viewDivId);
-  if (!_.isEmpty(body.firstChild)) {
+  if (body.firstChild !== null && body.firstChild.childNodes.length !== 0) {
     body.removeChild(body.firstChild);
   }
   const example: ExampleDescription = knownExamples[selectedExample];

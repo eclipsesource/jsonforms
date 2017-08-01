@@ -3,6 +3,7 @@ import { Renderer } from '../../core/renderer';
 import { RUNTIME_TYPE } from '../../core/runtime';
 import { ControlElement } from '../../models/uischema';
 import { getElementLabelObject } from '../label.util';
+import { JsonForms } from '../../core';
 
 /**
  * Convenience base class for all renderers that represent controls.
@@ -35,14 +36,15 @@ export abstract class BaseControl <T extends HTMLElement>
   render(): HTMLElement {
     const controlElement = this.uischema as ControlElement;
     this.createLabel(controlElement);
+    this.label.className = JsonForms.stylingRegistry.getAsClassName('control.label');
     this.createInput(controlElement);
-    this.input.classList.add('input');
+    this.input.className = JsonForms.stylingRegistry.getAsClassName('control.input');
     this.errorElement = document.createElement('div');
-    this.errorElement.classList.add('validation');
+    this.errorElement.className = JsonForms.stylingRegistry.getAsClassName('control.validation');
     this.appendChild(this.label);
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
-    this.classList.add('control');
+    this.className = JsonForms.stylingRegistry.getAsClassName('control');
     this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
     return this;

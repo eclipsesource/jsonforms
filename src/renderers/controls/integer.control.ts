@@ -26,7 +26,6 @@ export class IntegerControl extends BaseControl<HTMLInputElement> {
   protected configureInput(input: HTMLInputElement): void {
     input.type = 'number';
     input.step = '1';
-    input.classList.add('form-control');
   }
 
   /**
