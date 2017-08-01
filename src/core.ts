@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaRegistry, UISchemaRegistryImpl } from './core/uischema.registry';
@@ -41,6 +42,7 @@ export class JsonForms {
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
+  public static modelMapping;
   public static set schema(schema: JsonSchema) {
     JsonForms._schemaService = new SchemaServiceImpl(schema);
   }
@@ -63,3 +65,45 @@ export const JsonFormsServiceElement = config => (cls: JsonFormsServiceConstruct
   JsonForms.jsonFormsServices.push(cls);
 };
 // tslint:enable:variable-name
+
+/**
+ * Uses the model mapping to filter all objects that are associated with the type
+ * defined by the given schema id.
+ *
+ * @param objects the list of objects to filter
+ * @param schemaId The id of the JsonSchema defining the type to filter for
+ * @return The filtered objects or all objects if there is no mapping
+ */
+export const filterObjectsByType = (objects: Object[], schemaId: string): Object[] => {
+  return objects.filter(value => {
+    const valueSchemaId = getSchemaIdForObject(value);
+    if (valueSchemaId === null) {
+      return true;
+    }
+
+    return valueSchemaId === schemaId;
+  });
+};
+
+/**
+ * Uses the model mapping to find the schema id defining the type of the given object.
+ * If no schema id can be determined either because the object is empty, there is no model mapping,
+ * or the object does not contain a mappable property.
+ *
+ * @param object The object whose type is determined
+ * @return The schema id of the object or null if it could not be determined
+ */
+export const getSchemaIdForObject = (object: Object): string => {
+  // TODO implement
+  if (JsonForms.modelMapping !== undefined && !_.isEmpty(object)) {
+    const mappingAttribute = JsonForms.modelMapping.attribute;
+    if (!_.isEmpty(mappingAttribute)) {
+      const mappingValue = object[mappingAttribute];
+      const schemaId: string = JsonForms.modelMapping.mapping[mappingValue];
+
+      return !_.isEmpty(schemaId) ? schemaId : null;
+    }
+  }
+
+  return null;
+};

@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
+import { JsonForms } from '../core';
 /**
  * A Property wraps a JsonSchema and provides additional information
  * like a label and the property key.
@@ -71,6 +72,12 @@ export interface ReferenceProperty extends Property {
    * @return The referenced value
    */
   getData(root: Object, data: Object): Object;
+
+  /**
+   * Returns all possible values which can be referenced.
+   * @param root The root object needed for finding the values
+   */
+  getOptions(root: Object): Object[];
 }
 
 export class ContainmentPropertyImpl implements ContainmentProperty {
@@ -116,6 +123,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
     private innerTargetSchema: JsonSchema,
     private key: string,
     private name: string,
+    private pathToContainment: string,
     private addFunction: (root: object, data: object, valueToAdd: object) => void,
     private getFunction: (root: object, data: object) => Object
   ) {}
@@ -144,6 +152,21 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   }
   getData(root: object, data: object): Object {
     return this.getFunction(root, data);
+  }
+  getOptions(root: Object): Object[] {
+    const candidates = pathToContainment
+      .split('/')
+      .reduce(
+        (prev, cur) => {
+          if (cur === '#') {
+            return prev;
+          }
+
+          return prev[cur];
+        },
+        root) as Object[];
+
+    return JsonForms.filterObjectsByType(candidates, this.targetSchema.id);
   }
 }
 
