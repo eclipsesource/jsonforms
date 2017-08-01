@@ -55,11 +55,12 @@ export class JsonForms {
 
   /**
    * Uses the model mapping to filter all objects that are associated with the type
-   * defined by the given schema id.
+   * defined by the given schema id. If there is no applicable mapping,
+   * we assume that no mapping is necessary and do not filter out affected data objects.
    *
-   * @param objects the list of objects to filter
+   * @param objects the list of data objects to filter
    * @param schemaId The id of the JsonSchema defining the type to filter for
-   * @return The filtered objects or all objects if there is no mapping
+   * @return The filtered data objects or all objects if there is no applicable mapping
    */
   static filterObjectsByType = (objects: Object[], schemaId: string): Object[] => {
     return objects.filter(value => {

@@ -76,9 +76,11 @@ export interface ReferenceProperty extends Property {
   /**
    * Returns all possible objects which can be referenced by this property.
    *
-   * @param root The root object needed for finding the values
+   * @param root The root data object needed for finding the values
+   * @return The array of data objects which are possible reference targets
+   *         for this reference property.
    */
-  findReferenceTargets(root: Object): Object[];
+  findReferenceTargets(rootData: Object): Object[];
 }
 
 export class ContainmentPropertyImpl implements ContainmentProperty {
@@ -154,7 +156,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   getData(root: object, data: object): Object {
     return this.getFunction(root, data);
   }
-  findReferenceTargets(root: Object): Object[] {
+  findReferenceTargets(rootData: Object): Object[] {
     const candidates = this.pathToContainment
       .split('/')
       .reduce(
@@ -165,7 +167,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
 
           return prev[cur];
         },
-        root) as Object[];
+        rootData) as Object[];
 
     return JsonForms.filterObjectsByType(candidates, this.targetSchema.id);
   }
