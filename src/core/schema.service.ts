@@ -154,7 +154,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
     return this.getFunction(root, data);
   }
   getOptions(root: Object): Object[] {
-    const candidates = pathToContainment
+    const candidates = this.pathToContainment
       .split('/')
       .reduce(
         (prev, cur) => {
