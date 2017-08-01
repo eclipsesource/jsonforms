@@ -7,7 +7,15 @@ import {GroupLayout, UISchemaElement} from '../../src/models/uischema';
 import {
   GroupLayoutRenderer, groupTester
 } from '../../src/renderers/layouts/group.layout';
-
+import { JsonForms } from '../../src/core';
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'group-layout',
+      classNames: ['group-layout']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.uiSchema = {
     type: 'GroupLayout',

@@ -5,6 +5,7 @@ import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { JsonFormsElement } from '../../json-forms';
 import { Categorization, Category } from '../../models/uischema';
 import { JsonFormsRenderer } from '../renderer.util';
+import { JsonForms } from '../../core';
 
 const isCategorization = (category: Category | Categorization): category is Categorization => {
   return category.type === 'Categorization';
@@ -84,14 +85,14 @@ export class CategorizationRenderer extends Renderer {
    * @inheritDoc
    */
   render(): HTMLElement {
-    this.className = 'jsf-categorization';
+    this.className = JsonForms.stylingRegistry.getAsClassName('categorization');
 
     this.master = document.createElement('div');
-    this.master.className = 'jsf-categorization-master';
+    this.master.className = JsonForms.stylingRegistry.getAsClassName('categorization.master');
     this.appendChild(this.master);
 
     this.detail = document.createElement('div');
-    this.detail.className = 'jsf-categorization-detail';
+    this.detail.className = JsonForms.stylingRegistry.getAsClassName('categorization.detail');
     this.appendChild(this.detail);
 
     this.renderFull();
@@ -140,8 +141,8 @@ export class CategorizationRenderer extends Renderer {
       // span.innerText
       if (isCategorization(category)) {
         const innerUl = this.createCategorizationList(category);
-        innerUl.className = 'jsf-category-subcategories';
-        li.classList.add('jsf-category-group');
+        innerUl.className = JsonForms.stylingRegistry.getAsClassName('category.subcategories');
+        li.className = JsonForms.stylingRegistry.getAsClassName('category.group');
         li.appendChild(innerUl);
       } else {
         li.onclick = (ev: Event) => {

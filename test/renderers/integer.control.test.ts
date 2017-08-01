@@ -7,6 +7,7 @@ installCE(global, 'force');
 import { DataService } from '../../src/core/data.service';
 import { ControlElement } from '../../src/models/uischema';
 import { IntegerControl, integerControlTester } from '../../src/renderers/controls/integer.control';
+import { JsonForms } from '../../src/core';
 import {
   testDisable,
   testEnable, testHide,
@@ -21,6 +22,18 @@ import {
   testUndefinedErrors,
 } from './base.control.tests';
 
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data = {'foo': 42};
   t.context.schema = {

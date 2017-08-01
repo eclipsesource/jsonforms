@@ -4,6 +4,7 @@ import '../helpers/setup';
 // tslint:disable:ordered-imports
 import { DataService } from '../../src/core/data.service';
 // tslint:enable:ordered-imports
+import { JsonForms } from '../../src/core';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement } from '../../src/models/uischema';
 import { NumberControl, numberControlTester } from '../../src/renderers/controls/number.control';
@@ -20,7 +21,18 @@ import {
   testShow,
   testUndefinedErrors
 } from './base.control.tests';
-
+test.before(t => {
+  JsonForms.stylingRegistry.registerMany([
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ]);
+});
 test.beforeEach(t => {
   t.context.data = {'foo': 3.14};
   t.context.schema = {
@@ -46,7 +58,7 @@ test('NumberControlTester', t => {
   t.is(numberControlTester({type: 'Control'}, undefined), -1);
 });
 
-test('NumberControl tester with wrong schema type', t => {
+test('NumberCostyleNamentrol tester with wrong schema type', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: {

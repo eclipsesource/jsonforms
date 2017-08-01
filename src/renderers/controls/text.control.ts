@@ -22,7 +22,6 @@ export class TextControl extends BaseControl<HTMLInputElement> {
    */
   protected configureInput(input: HTMLInputElement): void {
     input.type = 'text';
-    input.classList.add('form-control');
   }
 
   /**
