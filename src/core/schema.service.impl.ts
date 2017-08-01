@@ -55,7 +55,7 @@ const addToArray =
     data[key] = [];
   }
   if (!_.isEmpty(identifyingProperty)) {
-    data[identifyingProperty] = uuid.v4();
+    valueToAdd[identifyingProperty] = uuid.v4();
   }
   const childArray = data[key];
   if (neighbourValue !== undefined && neighbourValue !== null) {
