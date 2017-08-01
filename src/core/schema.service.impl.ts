@@ -8,6 +8,7 @@ import {
   ReferencePropertyImpl,
   SchemaService
 } from './schema.service';
+import * as uuid from 'uuid';
 
 interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
@@ -46,10 +47,15 @@ const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): Refer
 
   return result;
 };
-const addToArray = (key: string) => (data: Object) => (valueToAdd: object, neighbourValue?: object,
-                                                       insertAfter = true) => {
+const addToArray =
+    (key: string, identifyingProperty?: string) =>
+    (data: Object) =>
+    (valueToAdd: object, neighbourValue?: object, insertAfter = true) => {
   if (data[key] === undefined) {
     data[key] = [];
+  }
+  if (!_.isEmpty(identifyingProperty)) {
+    data[identifyingProperty] = uuid.v4();
   }
   const childArray = data[key];
   if (neighbourValue !== undefined && neighbourValue !== null) {
@@ -270,7 +276,7 @@ export class SchemaServiceImpl implements SchemaService {
         schema.items,
         rootSchema,
         true,
-        addToArray(key),
+        addToArray(key, this._identifyingProp),
         deleteFromArray(key),
         getArray(key)
       );
