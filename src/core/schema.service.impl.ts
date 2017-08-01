@@ -187,6 +187,7 @@ export class SchemaServiceImpl implements SchemaService {
             variable,
             variable,
             pathToContainment.substring(0, pathToContainment.length - 1),
+            this._identifyingProp,
             addReference(schema, variable, pathToContainment),
             getReference(href, variable, variableWrapped)
           )
