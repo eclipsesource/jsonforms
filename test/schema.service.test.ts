@@ -332,7 +332,7 @@ test('support for array references', t => {
   );
   const items: JsonSchema = selfContainedClassSchema.properties.associations.items;
   // tslint:disable:no-string-literal
-  items['links'][0].targetSchema = {$ref: '#'};
+  // items['links'][0].targetSchema = {$ref: '#'};
   // tslint:enable:no-string-literal
   selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
   t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);
@@ -386,7 +386,7 @@ test('support for object references', t => {
 
   const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
   // tslint:disable:no-string-literal
-  selfContainedClassSchema.properties.association['links'][0].targetSchema = {$ref: '#'};
+  // selfContainedClassSchema.properties.association['links'][0].targetSchema = {$ref: '#'};
   // tslint:enable:no-string-literal
   selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
   t.deepEqual(properties[0].targetSchema, selfContainedClassSchema);

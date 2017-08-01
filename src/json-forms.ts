@@ -22,6 +22,9 @@ interface CustomElementConfig {
 // tslint:disable:variable-name
 const CustomElement = (config: CustomElementConfig) => cls => {
 // tslint:enable:variable-name
+  if (customElements.get(config.selector)) {
+    return;
+  }
   customElements.define(config.selector, cls);
 };
 
