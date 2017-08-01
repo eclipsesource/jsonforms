@@ -14,7 +14,7 @@ import {
   testEnable,
   testNotifyAboutVisibiltyWhenDisconnected,
 } from './base.control.tests';
-import { instantiateSchemaService } from '../../src/core';
+import {JsonForms} from "../../src/core";
 
 test.beforeEach(t => {
   t.context.data = {};
@@ -174,7 +174,7 @@ test('TreeMasterDetailRenderer static object', t => {
     label: 'FooBar',
     scope: { $ref: '#' }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   renderer.setDataService(new DataService(data));
@@ -270,7 +270,7 @@ test('TreeMasterDetailRenderer static array', t => {
       }
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -385,7 +385,7 @@ test('TreeMasterDetailRenderer static array not root', t => {
       name: {type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const uiSchema: MasterDetailLayout = {
@@ -584,7 +584,7 @@ test('TreeMasterDetailRenderer dynamic remove added root', t => {
       }
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -637,7 +637,7 @@ test('TreeMasterDetailRenderer dynamic add child to existing', t => {
       }
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1012,7 +1012,7 @@ test('TreeMasterDetailRenderer dataService notification wrong ref', t => {
       name: { type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1053,7 +1053,7 @@ test('TreeMasterDetailRenderer dataService notification null ref', t => {
       name: {type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1095,7 +1095,7 @@ test('TreeMasterDetailRenderer dataService notification undefined ref', t => {
       name: {type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1141,7 +1141,7 @@ test('TreeMasterDetailRenderer dataService no notification after disconnect', t 
     scope: { $ref: '#/properties/children' },
     options: {}
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const dataService = new DataService(data);
@@ -1183,7 +1183,7 @@ test('TreeMasterDetailRenderer dataService notification', t => {
       name: {type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1235,7 +1235,7 @@ test('TreeMasterDetailRenderer dataService notification value undefined', t => {
       name: {type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1280,7 +1280,7 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
       name: {type: 'string'}
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
     label: 'FooBar',
@@ -1312,7 +1312,7 @@ test('TreeMasterDetailRenderer dataService notification value null', t => {
 });
 test('TreeMasterDetailRenderer notify visible', t => {
   const schema = {type: 'object', properties: {}};
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const treeMasterDetail: MasterDetailLayout = {
     type: 'MasterDetailLayout',
@@ -1327,7 +1327,7 @@ test('TreeMasterDetailRenderer notify visible', t => {
   t.is(renderer.hidden, true);
 });
 test('TreeMasterDetailRenderer notify disabled', t => {
-  instantiateSchemaService(t.context.schema);
+  JsonForms.schema = t.context.schema;
   const dataService = new DataService(t.context.data);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   renderer.setDataService(dataService);
@@ -1339,7 +1339,7 @@ test('TreeMasterDetailRenderer notify disabled', t => {
   t.is(renderer.getAttribute('disabled'), 'true');
 });
 test('TreeMasterDetailRenderer notify enabled', t => {
-  instantiateSchemaService(t.context.schema);
+  JsonForms.schema = t.context.schema;
   const dataService = new DataService(t.context.data);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   renderer.setDataService(dataService);
@@ -1351,6 +1351,6 @@ test('TreeMasterDetailRenderer notify enabled', t => {
   t.false(renderer.hasAttribute('disabled'));
 });
 test('TreeMasterDetailRenderer disconnected no notify visible', t => {
-  instantiateSchemaService(t.context.schema);
+  JsonForms.schema = t.context.schema;
   testNotifyAboutVisibiltyWhenDisconnected(t, new TreeMasterDetailRenderer());
 });
