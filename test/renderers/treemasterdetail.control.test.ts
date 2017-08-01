@@ -4,7 +4,7 @@ import '../helpers/setup';
 import { DataService } from '../../src/core/data.service';
 import { Runtime } from '../../src/core/runtime';
 import { JsonSchema } from '../../src/models/jsonSchema';
-import { MasterDetailLayout, Scopable, UISchemaElement } from '../../src/models/uischema';
+import { MasterDetailLayout } from '../../src/models/uischema';
 import {
   TreeMasterDetailRenderer,
   treeMasterDetailTester,
@@ -213,6 +213,7 @@ test('TreeMasterDetailRenderer static object', t => {
   // li children
   const fooUL = li.children[1];
   t.is(fooUL.tagName, 'UL');
+  t.is(fooUL.getAttribute('children'), 'children');
   const fooLI = fooUL.children[0];
   t.is(fooLI.children.length, 1);
   const divLI = fooLI.children[0];
@@ -330,6 +331,8 @@ test('TreeMasterDetailRenderer static array', t => {
   // li children
   const fooUL = li.children[1];
   t.is(fooUL.tagName, 'UL');
+  t.is(fooUL.getAttribute('children'), 'children');
+  t.is(fooUL.getAttribute('childrenId'), 'bar');
   const fooLI = fooUL.children[0];
   t.is(fooLI.children.length, 1);
   const divLI = fooLI.children[0];
@@ -823,7 +826,7 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
   const div = li.children[0];
   const span = div.children[0] as HTMLSpanElement;
   const spanAdd = span.children[1] as HTMLSpanElement;
-  t.is(li.children.length, 1);
+  t.is(li.children.length, 2); // div and ul for children property
   t.is(dialogContent.children.length, 0);
   spanAdd.click();
   // dialog opened
@@ -832,9 +835,11 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
   t.is(addButton.innerText, 'children');
   addButton.click();
   // li children
-  t.is(li.children.length, 2);
-  const fooUL = li.children[1];
+  t.is(li.children.length, 2); // add to existing list
+  const fooUL = li.children[1]; // children list
   t.is(fooUL.children.length, 1);
+  t.is(fooUL.getAttribute('children'), 'children');
+  t.is(fooUL.getAttribute('childrenId'), 'bar');
   const liNew = fooUL.children[0];
   const divNew = liNew.children[0];
   const spanNew = divNew.children[0] as HTMLSpanElement;
@@ -907,7 +912,7 @@ test('TreeMasterDetailRenderer dynamic cancel add', t => {
   const div = li.children[0];
   const span = div.children[0] as HTMLSpanElement;
   const spanAdd = span.children[1] as HTMLSpanElement;
-  t.is(li.children.length, 1);
+  t.is(li.children.length, 2); // div and ul for children property
   t.is(dialogContent.children.length, 0);
   spanAdd.click();
   // dialog opened
@@ -919,7 +924,7 @@ test('TreeMasterDetailRenderer dynamic cancel add', t => {
   dialogCancel.click();
 
   // li children
-  t.is(li.children.length, 1);
+  t.is(li.children.length, 2);
   /*tslint:disable:no-string-literal */
   t.is(data[0]['children'], undefined);
   /*tslint:enable:no-string-literal */
@@ -965,7 +970,7 @@ test('TreeMasterDetailRenderer dynamic remove added child', t => {
   const div = li.children[0];
   const span = div.children[0] as HTMLSpanElement;
   const spanAdd = span.children[1] as HTMLSpanElement;
-  t.is(li.children.length, 1);
+  t.is(li.children.length, 2); // div and ul for children property
   t.is(dialogContent.children.length, 0);
   spanAdd.click();
   // dialog opened
