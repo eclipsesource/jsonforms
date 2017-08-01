@@ -164,7 +164,6 @@ test('DateControl static no label', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(uiSchema);
   const result = renderer.render();
-  const className = result.className;
   t.true(result.className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
   const label = result.children[0] as HTMLLabelElement;
