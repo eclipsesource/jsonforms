@@ -48,8 +48,9 @@ export class JsonForms {
   }
   public static get schemaService(): SchemaService  {
     if (this._schemaService === undefined) {
-      console.error("Schema service has not been initialized");
+      console.error('Schema service has not been initialized');
     }
+
     return this._schemaService;
   }
 

@@ -10,11 +10,9 @@ import {
   treeMasterDetailTester,
 } from '../../src/renderers/additional/tree-renderer';
 import {
-  testDisable,
-  testEnable,
   testNotifyAboutVisibiltyWhenDisconnected,
 } from './base.control.tests';
-import {JsonForms} from "../../src/core";
+import { JsonForms } from '../../src/core';
 
 test.beforeEach(t => {
   t.context.data = {};
