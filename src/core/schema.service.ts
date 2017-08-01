@@ -74,10 +74,11 @@ export interface ReferenceProperty extends Property {
   getData(root: Object, data: Object): Object;
 
   /**
-   * Returns all possible values which can be referenced.
+   * Returns all possible objects which can be referenced by this property.
+   *
    * @param root The root object needed for finding the values
    */
-  getOptions(root: Object): Object[];
+  findReferenceTargets(root: Object): Object[];
 }
 
 export class ContainmentPropertyImpl implements ContainmentProperty {
@@ -153,7 +154,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   getData(root: object, data: object): Object {
     return this.getFunction(root, data);
   }
-  getOptions(root: Object): Object[] {
+  findReferenceTargets(root: Object): Object[] {
     const candidates = this.pathToContainment
       .split('/')
       .reduce(

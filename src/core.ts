@@ -76,19 +76,19 @@ export class JsonForms {
    * Uses the model mapping to find the schema id defining the type of the given object.
    * If no schema id can be determined either because the object is empty, there is no model
    * mapping, or the object does not contain a mappable property.
+   * TODO expected behavior?
    *
    * @param object The object whose type is determined
    * @return The schema id of the object or null if it could not be determined
    */
   static getSchemaIdForObject = (object: Object): string => {
-    // TODO implement
     if (JsonForms.modelMapping !== undefined && !_.isEmpty(object)) {
       const mappingAttribute = JsonForms.modelMapping.attribute;
       if (!_.isEmpty(mappingAttribute)) {
         const mappingValue = object[mappingAttribute];
-        const schemaId: string = JsonForms.modelMapping.mapping[mappingValue];
+        const schemaElementId: string = JsonForms.modelMapping.mapping[mappingValue];
 
-        return !_.isEmpty(schemaId) ? schemaId : null;
+        return !_.isEmpty(schemaElementId) ? schemaElementId : null;
       }
     }
 
