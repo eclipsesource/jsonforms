@@ -133,6 +133,7 @@ const getReference = (href: string, variable: string, variableWrapped: string) =
   };
 
 export class SchemaServiceImpl implements SchemaService {
+  private _identifyingProp;
   private selfContainedSchemas: {[id: string]: JsonSchema} = {};
   constructor(private rootSchema: JsonSchema) {
     if (_.isEmpty(rootSchema.id)) {
@@ -202,6 +203,26 @@ export class SchemaServiceImpl implements SchemaService {
 
     return [];
   }
+
+  /**
+   * @inheritDoc
+   */
+  setIdentifyingProp(propName: string): SchemaService {
+    this._identifyingProp = propName;
+
+    return this;
+  }
+
+  /**
+   * Determines whether the identifigenerer value should be generated
+   * @returns {boolean} true, if the the identifying value should be generated
+   *
+   * @see setIdentifyingProp
+   */
+  shouldGenerateIdentifier() {
+    return this._identifyingProp !== undefined;
+  }
+
   private getContainment(key: string, name: string, schema: JsonSchema, rootSchema: JsonSchema,
                          isInContainment: boolean,
                          addFunction: (data: object) => (valueToAdd: object,

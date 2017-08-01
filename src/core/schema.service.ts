@@ -245,4 +245,12 @@ export interface SchemaService {
    * @see ReferenceProperty
    */
   getReferenceProperties(schema: JsonSchema): ReferenceProperty[];
+
+  /**
+   * Set the name of the property that uniquely identifies any given schema element.
+   *
+   * @param propName the name of the identifying property
+   * @return the schema service itself for convenience reasons
+   */
+  setIdentifyingProp(propName: string): SchemaService;
 }
