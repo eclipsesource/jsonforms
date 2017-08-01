@@ -34,6 +34,9 @@ export interface JsonFormsRendererConstructable {
 export const JsonFormsRenderer =
     (config: JsonFormsRendererConfig) =>
         (cls: JsonFormsRendererConstructable) => {
+            if (customElements.get(config.selector)) {
+              return;
+            }
             customElements.define(config.selector, cls);
             JsonForms.rendererService.registerRenderer(config.tester, config.selector);
         };

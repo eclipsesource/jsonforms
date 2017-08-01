@@ -8,8 +8,8 @@ import { DataService } from '../../src/core/data.service';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement } from '../../src/models/uischema';
 import { ArrayControlRenderer, arrayTester } from '../../src/renderers/additional/array-renderer';
-import { instantiateSchemaService } from '../../src/core';
 import { JsonForms } from '../../src/core';
+
 test.before(t => {
   JsonForms.stylingRegistry.registerMany([
     {
@@ -22,6 +22,7 @@ test.before(t => {
     }
   ]);
 });
+
 test('generate array child control', t => {
 
     const renderer: ArrayControlRenderer = new ArrayControlRenderer();
@@ -52,7 +53,7 @@ test('generate array child control', t => {
             y: 3
         }]
     };
-    instantiateSchemaService(schema);
+    JsonForms.schema = schema;
     renderer.setDataService(new DataService(data));
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
@@ -156,7 +157,7 @@ test('array-layout add click w/o data', t => {
     const data = {
         test: []
     };
-    instantiateSchemaService(schema);
+    JsonForms.schema = schema;
     renderer.setDataService(new DataService(data));
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
@@ -195,7 +196,7 @@ test('array-layout add click with data', t => {
             y: 3
         }]
     };
-    instantiateSchemaService(schema);
+    JsonForms.schema = schema;
     renderer.setDataService(new DataService(data));
     renderer.setDataSchema(schema);
     renderer.setUiSchema(uiSchema);
@@ -235,7 +236,7 @@ test('array-layout DataService notification', t => {
             y: 3
         }]
     };
-    instantiateSchemaService(schema);
+    JsonForms.schema = schema;
     const dataService = new DataService(data);
     renderer.setDataService(dataService);
     renderer.setDataSchema(schema);
