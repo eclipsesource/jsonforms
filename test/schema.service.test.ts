@@ -411,6 +411,7 @@ test('support object with array $ref', t => {
   t.is(properties[0].label, 'root');
   t.deepEqual(properties[0].schema, schema.definitions.root.items as JsonSchema);
 });
+
 test('containment properties add when array not defined', t => {
   const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
@@ -424,6 +425,38 @@ test('containment properties add when array not defined', t => {
   t.is(data.foo.length, 1);
   t.is(data.foo[0], valueToAdd);
 });
+
+test('containment properties add when array not defined and generate ID', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            bar: { type: 'string' }
+          }
+        }
+      }
+    }
+  };
+
+  const service: SchemaService = new SchemaServiceImpl(schema)
+    .setIdentifyingProp('_id');
+  const property = service.getContainmentProperties(schema)[0];
+  const data = {
+    foo: undefined
+  };
+  const valueToAdd = { bar: `Hey Mum, look, it's an idea` };
+  property.addToData(data)(valueToAdd);
+
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 1);
+  t.true(data.foo[0]._id !== undefined);
+});
+
 test('containment properties add when array defined', t => {
   const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
@@ -435,6 +468,7 @@ test('containment properties add when array defined', t => {
   t.is(data.foo.length, 2);
   t.is(data.foo[1], valueToAdd);
 });
+
 test('containment properties add default with existing neighbour', t => {
   // expectation default === add after neighbour
   const schema = t.context.fooBarArraySchema;
@@ -451,6 +485,7 @@ test('containment properties add default with existing neighbour', t => {
   t.is(data.foo[1], valueToAdd);
   t.is(data.foo[2], lastValue);
 });
+
 test('containment properties add after existing neighbour(not last in array)', t => {
   const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
