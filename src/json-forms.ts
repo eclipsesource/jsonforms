@@ -1,7 +1,7 @@
 import * as JsonRefs from 'json-refs';
 import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
-import { instantiateSchemaService, JsonForms, JsonFormService } from './core';
+import { JsonForms, JsonFormService } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
 import { DataChangeListener, DataService } from './core/data.service';
@@ -179,6 +179,6 @@ export class JsonFormsElement extends HTMLElement {
       }
       parent = parent.parentNode;
     }
-    instantiateSchemaService(schema);
+    JsonForms.schema = schema;
   }
 }

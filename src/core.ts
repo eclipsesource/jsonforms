@@ -36,11 +36,20 @@ export interface JsonFormsServiceConstructable {
  * Global JSONForms object that holds services and registries.
  */
 export class JsonForms {
+  private static _schemaService;
   public static rendererService = new RendererService();
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
-  public static schemaService: SchemaService;
+  public static set schema(schema: JsonSchema) {
+    JsonForms._schemaService = new SchemaServiceImpl(schema);
+  }
+  public static get schemaService(): SchemaService  {
+    if (this._schemaService === undefined) {
+      console.error("Schema service has not been initialized");
+    }
+    return this._schemaService;
+  }
 }
 
 /**
@@ -54,6 +63,3 @@ export const JsonFormsServiceElement = config => (cls: JsonFormsServiceConstruct
   JsonForms.jsonFormsServices.push(cls);
 };
 // tslint:enable:variable-name
-export const instantiateSchemaService = (schema: JsonSchema): void => {
-  JsonForms.schemaService =  new SchemaServiceImpl(schema);
-};

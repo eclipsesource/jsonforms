@@ -1,7 +1,6 @@
 import '../helpers/setup';
 import test from 'ava';
 import {
-  instantiateSchemaService,
   JsonForms
 } from '../../src/core';
 import { JsonSchema } from '../../src/models/jsonSchema';
@@ -34,7 +33,7 @@ test.beforeEach(t => {
       }
     }
   };
-  instantiateSchemaService(schema);
+  JsonForms.schema = schema;
   t.context.schema = schema;
 });
 
