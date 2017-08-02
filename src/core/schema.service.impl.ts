@@ -9,6 +9,7 @@ import {
   SchemaService
 } from './schema.service';
 import * as uuid from 'uuid';
+import { JsonForms } from '../core';
 
 interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
@@ -139,7 +140,6 @@ const getReference = (href: string, variable: string, variableWrapped: string) =
   };
 
 export class SchemaServiceImpl implements SchemaService {
-  private _identifyingProp;
   private selfContainedSchemas: {[id: string]: JsonSchema} = {};
   constructor(private rootSchema: JsonSchema) {
     if (_.isEmpty(rootSchema.id)) {
@@ -194,7 +194,7 @@ export class SchemaServiceImpl implements SchemaService {
             variable,
             variable,
             pathToContainment.substring(0, pathToContainment.length - 1),
-            this._identifyingProp,
+            JsonForms.config.getIdentifyingProp(),
             addReference(schema, variable, pathToContainment),
             getReference(href, variable, variableWrapped)
           )
@@ -208,25 +208,6 @@ export class SchemaServiceImpl implements SchemaService {
     }
 
     return [];
-  }
-
-  /**
-   * @inheritDoc
-   */
-  setIdentifyingProp(propName: string): SchemaService {
-    this._identifyingProp = propName;
-
-    return this;
-  }
-
-  /**
-   * Determines whether the identifigenerer value should be generated
-   * @returns {boolean} true, if the the identifying value should be generated
-   *
-   * @see setIdentifyingProp
-   */
-  shouldGenerateIdentifier() {
-    return this._identifyingProp !== undefined;
   }
 
   private getContainment(key: string, name: string, schema: JsonSchema, rootSchema: JsonSchema,
@@ -276,7 +257,7 @@ export class SchemaServiceImpl implements SchemaService {
         schema.items,
         rootSchema,
         true,
-        addToArray(key, this._identifyingProp),
+        addToArray(key, JsonForms.config.getIdentifyingProp()),
         deleteFromArray(key),
         getArray(key)
       );

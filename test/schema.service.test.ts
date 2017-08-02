@@ -7,6 +7,7 @@ import {
 } from '../src/core/schema.service';
 import { SchemaServiceImpl } from '../src/core/schema.service.impl';
 import { JsonSchema } from '../src/models/jsonSchema';
+import { JsonForms } from '../src/core';
 
 test.beforeEach(t => {
   t.context.fooBarArraySchema = {
@@ -443,8 +444,9 @@ test('containment properties add when array not defined and generate ID', t => {
     }
   };
 
-  const service: SchemaService = new SchemaServiceImpl(schema)
-    .setIdentifyingProp('_id');
+  JsonForms.config.setIdentifyingProp('_id');
+  const service: SchemaService = new SchemaServiceImpl(schema);
+
   const property = service.getContainmentProperties(schema)[0];
   const data = {
     foo: undefined
