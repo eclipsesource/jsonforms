@@ -1,5 +1,10 @@
 /* tslint:disable:max-file-line-count */
 import * as _ from 'lodash';
+import * as snabbdom from 'snabbdom';
+import { propsModule } from 'snabbdom/modules/props';
+import { styleModule } from 'snabbdom/modules/style';
+import { eventListenersModule } from 'snabbdom/modules/eventlisteners';
+import { classModule } from 'snabbdom/modules/class';
 import { MasterDetailLayout, Scopable } from '../../models/uischema';
 import { Renderer } from '../../core/renderer';
 import { DataChangeListener } from '../../core/data.service';
@@ -15,6 +20,19 @@ import {
   registerDnDWithGroupId,
   TreeNodeInfo
 } from './tree-renderer.dnd';
+
+import * as snabbdomJsx from 'snabbdom-jsx';
+import {DialogHandler, VNodeRegistry} from '../../services/vnode.registry';
+declare let $;
+const JSX = {createElement: snabbdomJsx.html};
+
+// Init patch function with chosen modules
+const patch = snabbdom.init([
+  classModule,          // makes it easy to toggle classes
+  propsModule,          // for setting properties on DOM elements
+  styleModule,          // handles styling on elements with support for animations
+  eventListenersModule, // attaches event listeners
+]);
 
 /**
  * Default tester for a master-detail layout.
@@ -46,7 +64,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
   private master: HTMLElement;
   private detail: HTMLElement;
   private selected: HTMLLIElement;
-  private dialog;
+  private dialogPlaceholder;
+  private dialogHandler: DialogHandler;
   private addingToRoot = false;
   private resolvedSchema: JsonSchema;
 
@@ -138,18 +157,10 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     div.appendChild(this.detail);
 
     this.appendChild(div);
-    this.dialog = document.createElement('dialog');
-    const title = document.createElement('label');
-    title.innerText = 'Select the Item to create:';
-    this.dialog.appendChild(title);
-    const dialogContent = document.createElement('div');
-    dialogContent.classList.add('content');
-    this.dialog.appendChild(dialogContent);
-    const dialogClose = document.createElement('button');
-    dialogClose.innerText = 'Close';
-    dialogClose.onclick = () => this.dialog.close();
-    this.dialog.appendChild(dialogClose);
-    this.appendChild(this.dialog);
+
+    this.dialogPlaceholder = document.createElement('div');
+    this.appendChild(this.dialogPlaceholder);
+    this.dialogHandler = VNodeRegistry.dialogHandler();
     this.renderFull();
     this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
@@ -166,12 +177,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     this.renderFull();
   }
 
-  protected renderFull(): void {
+  private renderFull(): void {
     this.renderMaster(this.resolvedSchema);
     this.selectFirstElement();
   }
 
-  protected selectFirstElement(): void {
+  private selectFirstElement(): void {
     const controlElement = this.uischema as MasterDetailLayout;
     const arrayData = this.dataService.getValue(controlElement);
     if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
@@ -183,43 +194,6 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       }
       this.renderDetail(firstChild, this.master.firstChild.firstChild as HTMLLIElement, schema);
     }
-  }
-
-  protected renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
-    if (this.detail.lastChild !== null) {
-      this.detail.removeChild(this.detail.lastChild);
-    }
-    if (this.selected !== undefined) {
-      this.selected.classList.toggle('selected');
-    }
-    label.classList.toggle('selected');
-    this.selected = label;
-
-    const jsonForms = document.createElement('json-forms') as JsonFormsElement;
-    jsonForms.data = element;
-    jsonForms.dataSchema = schema;
-    // NOTE check needed for tests
-    if (jsonForms.addDataChangeListener !== undefined && jsonForms.addDataChangeListener !== null) {
-      jsonForms.addDataChangeListener({
-        needsNotificationAbout: (uischema: MasterDetailLayout): boolean => {
-          return uischema !== null;
-        },
-        dataChanged: (uischema: MasterDetailLayout, newValue: any, data: any): void => {
-          const segments = uischema.scope.$ref.split('/');
-          const lastSegemnet = segments[segments.length - 1];
-          if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {
-            label.firstChild.lastChild.firstChild.textContent = newValue;
-          }
-          if (Array.isArray(newValue)) {
-            const childSchema = resolveSchema(schema, uischema.scope.$ref).items;
-            if (!Array.isArray(childSchema)) {
-              this.renderChildren(newValue, childSchema, label, lastSegemnet);
-            }
-          }
-        }
-      });
-    }
-    this.detail.appendChild(jsonForms);
   }
 
   private renderMaster(schema: JsonSchema): void {
@@ -383,37 +357,58 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     span.appendChild(spanText);
     div.appendChild(span);
     if (JsonForms.schemaService.hasContainmentProperties(schema)) {
+      const itemClassNames = JsonForms.stylingRegistry.get('button');
+
+      const dialog = this.dialogHandler.create(
+        'Add item',
+        'Please select an item to create',
+        <div>
+          {
+            JsonForms.schemaService.getContainmentProperties(schema).map(prop =>
+              <button
+                classNames={itemClassNames}
+                onclick={() => {
+                  const newData = {};
+                  // initialize new data with default values from schema
+                  Object.keys(prop.schema.properties).forEach(key => {
+                    if (prop.schema.properties[key].default) {
+                      newData[key] = prop.schema.properties[key].default;
+                    }
+                  });
+                  prop.addToData(data)(newData);
+                  this.updateTreeOnAdd(
+                    prop.schema,
+                    prop.property,
+                    li,
+                    newData,
+                    prop.deleteFromData(data)
+                  );
+                  this.dialogHandler.close();
+                }}>
+                {prop.label}
+              </button>
+            )
+          }
+        </div>
+      );
+      patch(
+        this.dialogPlaceholder,
+        dialog
+      );
+      $('.modal').modal();
+
       const spanAdd = document.createElement('span');
       spanAdd.classList.add('add');
       spanAdd.onclick = (ev: Event) => {
         ev.stopPropagation();
-        const content = this.dialog.getElementsByClassName('content')[0];
-        while (content.firstChild) {
-          (content.firstChild as Element).remove();
-        }
-        JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
-          const button = document.createElement('button');
-          button.innerText = property.label;
-          button.onclick = () => {
-            const newData = {};
-            // initialize new data with default values from schema
-            Object.keys(property.schema.properties).forEach(key => {
-              if (property.schema.properties[key].default) {
-                newData[key] = property.schema.properties[key].default;
-              }
-            });
-            property.addToData(data)(newData);
-            this.updateTreeOnAdd(property.schema, property.property, li, newData,
-                                 property.deleteFromData(data));
-            this.dialog.close();
-          };
-          content.appendChild(button);
-        });
-        this.dialog.showModal();
+        // create dialog on demand
+        // open dialog
+        this.dialogHandler.open();
       };
       spanAdd.textContent = '\u2795';
       span.appendChild(spanAdd);
     }
+
     if (deleteFunction !== null) {
       const spanRemove = document.createElement('span');
       spanRemove.classList.add('remove');
@@ -547,5 +542,42 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     // TODO proper logging
     console.warn('Could not render children because no fitting property was found.');
+  }
+
+  private renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
+    if (this.detail.lastChild !== null) {
+      this.detail.removeChild(this.detail.lastChild);
+    }
+    if (this.selected !== undefined) {
+      this.selected.classList.toggle('selected');
+    }
+    label.classList.toggle('selected');
+    this.selected = label;
+
+    const jsonForms = document.createElement('json-forms') as JsonFormsElement;
+    jsonForms.data = element;
+    jsonForms.dataSchema = schema;
+    // NOTE check needed for tests
+    if (jsonForms.addDataChangeListener !== undefined && jsonForms.addDataChangeListener !== null) {
+      jsonForms.addDataChangeListener({
+        needsNotificationAbout: (uischema: MasterDetailLayout): boolean => {
+          return uischema !== null;
+        },
+        dataChanged: (uischema: MasterDetailLayout, newValue: any, data: any): void => {
+          const segments = uischema.scope.$ref.split('/');
+          const lastSegemnet = segments[segments.length - 1];
+          if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {
+            label.firstChild.lastChild.firstChild.textContent = newValue;
+          }
+          if (Array.isArray(newValue)) {
+            const childSchema = resolveSchema(schema, uischema.scope.$ref).items;
+            if (!Array.isArray(childSchema)) {
+              this.renderChildren(newValue, childSchema, label, lastSegemnet);
+            }
+          }
+        }
+      });
+    }
+    this.detail.appendChild(jsonForms);
   }
 }

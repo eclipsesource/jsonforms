@@ -21,7 +21,7 @@ module.exports = [{
 
     resolve: {
         // Add '.ts' as resolvable extensions.
-        extensions: [".ts", ".js"]
+        extensions: [".ts", ".js", ".tsx"]
     },
     devServer: {
         contentBase: './example_plain'
@@ -44,7 +44,7 @@ module.exports = [{
     module: {
       rules: [
         { enforce: 'pre', test: /\.js$/, exclude: /node_modules/, loader: 'source-map-loader' },
-        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' },
+        { test: /\.tsx?$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' },
         { test: /\.html$/, exclude: /node_modules/, loader: 'html-loader?exportAsEs6Default'}
       ]
     },

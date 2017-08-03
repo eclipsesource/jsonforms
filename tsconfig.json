@@ -9,7 +9,9 @@
     "moduleResolution": "node",
     "outDir": "dist/ts-build",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "jsx": "react",
+    "reactNamespace": "JSX"
   },
   "exclude":[
     "node_modules"
