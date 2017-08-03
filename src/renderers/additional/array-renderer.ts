@@ -15,6 +15,7 @@ import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { getElementLabelObject } from '../label.util';
 import { JsonFormsRenderer } from '../renderer.util';
+
 /**
  * Default tester for an array control.
  * @type {RankedTester}
@@ -103,7 +104,6 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     if (labelObject.show) {
       label.textContent = labelObject.text;
     }
-    header.appendChild(label);
 
     const content = document.createElement('div');
     content.className = JsonForms.stylingRegistry.getAsClassName('array.children');
@@ -126,7 +126,7 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
 
     const button = document.createElement('button');
     button.className = JsonForms.stylingRegistry.getAsClassName('array.button');
-    button.textContent = `Add to ${labelObject.text}`;
+    button.textContent = `+`;
     button.onclick = (ev: Event) => {
       if (arrayData === undefined) {
         arrayData = [];
@@ -138,6 +138,8 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     };
 
     header.appendChild(button);
+    header.appendChild(label);
+
     this.appendChild(div);
     this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
