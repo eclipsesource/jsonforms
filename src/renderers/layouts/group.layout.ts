@@ -32,9 +32,11 @@ export class GroupLayoutRenderer extends Renderer {
   render(): HTMLElement {
     const group = this.uischema as GroupLayout;
     const fieldset = document.createElement('fieldset');
-    fieldset.className = JsonForms.stylingRegistry.getAsClassName('group-layout');
+    fieldset.className = JsonForms.stylingRegistry.getAsClassName('group.layout');
     if (group.label !== undefined) {
       const legend = document.createElement('legend');
+      const legendStyle = JsonForms.stylingRegistry.getAsClassName('group.label');
+      legend.className = legendStyle;
       legend.innerText = group.label;
       fieldset.appendChild(legend);
     }
