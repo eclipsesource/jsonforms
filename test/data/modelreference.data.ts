@@ -1,235 +1,235 @@
 export const testDataSchema = {
-  "definitions": {
-    "eClassifier": {
-      "anyOf":[
-        {"$ref":"#/definitions/eclass"},
-        {"$ref":"#/definitions/enum"},
-        {"$ref":"#/definitions/datatype"}
+  'definitions': {
+    'eClassifier': {
+      'anyOf': [
+        {'$ref': '#/definitions/eclass'},
+        {'$ref': '#/definitions/enum'},
+        {'$ref': '#/definitions/datatype'}
       ]
     },
-    "type": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "minimum": 0
+    'type': {
+      'type': 'object',
+      'properties': {
+        'id': {
+          'type': 'integer',
+          'minimum': 0
         }
       },
-      "links": [{
-        "rel": "full",
-        "href": "#/eClassifiers/{id}",
-        "targetSchema": {
-          $ref: "#/definitions/eClassifier"
+      'links': [{
+        'rel': 'full',
+        'href': '#/eClassifiers/{id}',
+        'targetSchema': {
+          $ref: '#/definitions/eClassifier'
         }
       }],
-      "additionalProperties": false
+      'additionalProperties': false
     },
-    "enum": {
-      "id":"#enum",
-      "type": "object",
-      "properties": {
-        "eClass": {
-          "type": "string",
-          "default": "http://www.eclipse.org/emf/2002/Ecore#//EEnum"
+    'enum': {
+      'id': '#enum',
+      'type': 'object',
+      'properties': {
+        'eClass': {
+          'type': 'string',
+          'default': 'http://www.eclipse.org/emf/2002/Ecore#//EEnum'
         },
-        "_id": {
-          "type": "string"
+        '_id': {
+          'type': 'string'
         },
-        "name": {
-          "type": "string"
+        'name': {
+          'type': 'string'
         },
-        "instanceClassName": {
-          "type": "string"
+        'instanceClassName': {
+          'type': 'string'
         },
-        "instanceTypeName": {
-          "type": "string"
+        'instanceTypeName': {
+          'type': 'string'
         },
-        "serializable": {
-          "type": "boolean"
+        'serializable': {
+          'type': 'boolean'
         },
-        "eLiterals": {
-          "type": "array",
-          "items": {
-            "type": "string"
+        'eLiterals': {
+          'type': 'array',
+          'items': {
+            'type': 'string'
           }
         },
       },
-      "additionalProperties": false
+      'additionalProperties': false
     },
-    "datatype": {
-      "id":"#datatype",
-      "type": "object",
-      "properties": {
-        "eClass": {
-          "type": "string",
-          "default": "http://www.eclipse.org/emf/2002/Ecore#//EDataType"
+    'datatype': {
+      'id': '#datatype',
+      'type': 'object',
+      'properties': {
+        'eClass': {
+          'type': 'string',
+          'default': 'http://www.eclipse.org/emf/2002/Ecore#//EDataType'
         },
-        "_id": {
-          "type": "string"
+        '_id': {
+          'type': 'string'
         },
-        "name": {
-          "type": "string"
+        'name': {
+          'type': 'string'
         },
-        "instanceClassName": {
-          "type": "string"
+        'instanceClassName': {
+          'type': 'string'
         },
-        "instanceTypeName": {
-          "type": "string"
+        'instanceTypeName': {
+          'type': 'string'
         },
       },
-      "additionalProperties": true
+      'additionalProperties': true
     },
-    "eclass": {
-      "type": "object",
-      "id":"#class",
-      "properties": {
-        "eClass": {
-          "type": "string",
-          "default": "http://www.eclipse.org/emf/2002/Ecore#//EClass"
+    'eclass': {
+      'type': 'object',
+      'id': '#class',
+      'properties': {
+        'eClass': {
+          'type': 'string',
+          'default': 'http://www.eclipse.org/emf/2002/Ecore#//EClass'
         },
-        "_id": {
-          "type": "string"
+        '_id': {
+          'type': 'string'
         },
-        "name": {
-          "type": "string"
+        'name': {
+          'type': 'string'
         },
-        "secondName": {
-          "type": "string"
+        'secondName': {
+          'type': 'string'
         },
-        "instanceClassName": {
-          "type": "string"
+        'instanceClassName': {
+          'type': 'string'
         },
-        "instanceTypeName": {
-          "type": "string"
+        'instanceTypeName': {
+          'type': 'string'
         },
-        "interface": {
-          "type": "boolean"
+        'interface': {
+          'type': 'boolean'
         },
-        "eStructuralFeatures": {
-          "type": "array",
-          "items": {
-            "anyOf": [
-              {"$ref": "#/definitions/attribute"},
-              {"$ref": "#/definitions/reference"}
+        'eStructuralFeatures': {
+          'type': 'array',
+          'items': {
+            'anyOf': [
+              {'$ref': '#/definitions/attribute'},
+              {'$ref': '#/definitions/reference'}
             ]
           }
         }
       },
-      "additionalProperties": true
+      'additionalProperties': true
     },
-    "attribute": {
-      "id":"#attribute",
-      "type": "object",
-      "properties": {
-        "eClass": {
-          "type": "string",
-          "default": "http://www.eclipse.org/emf/2002/Ecore#//EAttribute"
+    'attribute': {
+      'id': '#attribute',
+      'type': 'object',
+      'properties': {
+        'eClass': {
+          'type': 'string',
+          'default': 'http://www.eclipse.org/emf/2002/Ecore#//EAttribute'
         },
-        "_id": {
-          "type": "string"
+        '_id': {
+          'type': 'string'
         },
-        "name": {
-          "type": "string"
+        'name': {
+          'type': 'string'
         },
-        "containment": {
-          "type": "boolean"
+        'containment': {
+          'type': 'boolean'
         },
-        "eType": {
-          "type": "object",
-          "properties": {
-            "$ref": {
-              "type": "string",
-              "enum": [
-                "http://www.eclipse.org/emf/2002/Ecore#//EBoolean",
-                "http://www.eclipse.org/emf/2002/Ecore#//EString",
-                "http://www.eclipse.org/emf/2002/Ecore#//EDate",
-                "http://www.eclipse.org/emf/2002/Ecore#//EInt",
-                "http://www.eclipse.org/emf/2002/Ecore#//EDouble",
+        'eType': {
+          'type': 'object',
+          'properties': {
+            '$ref': {
+              'type': 'string',
+              'enum': [
+                'http://www.eclipse.org/emf/2002/Ecore#//EBoolean',
+                'http://www.eclipse.org/emf/2002/Ecore#//EString',
+                'http://www.eclipse.org/emf/2002/Ecore#//EDate',
+                'http://www.eclipse.org/emf/2002/Ecore#//EInt',
+                'http://www.eclipse.org/emf/2002/Ecore#//EDouble',
               ]
             }
           }
         }
       },
-      "additionalProperties": true
+      'additionalProperties': true
     },
-    "reference": {
-      "id": "#reference",
-      "type": "object",
-      "properties": {
-        "eClass": {
-          "type": "string",
-          "default": "http://www.eclipse.org/emf/2002/Ecore#//EReference"
+    'reference': {
+      'id': '#reference',
+      'type': 'object',
+      'properties': {
+        'eClass': {
+          'type': 'string',
+          'default': 'http://www.eclipse.org/emf/2002/Ecore#//EReference'
         },
-        "_id": {
-          "type": "string"
+        '_id': {
+          'type': 'string'
         },
-        "name": {
-          "type": "string"
+        'name': {
+          'type': 'string'
         },
-        "lowerBound": {
-          "type": "integer"
+        'lowerBound': {
+          'type': 'integer'
         },
-        "upperBound": {
-          "type": "integer"
+        'upperBound': {
+          'type': 'integer'
         },
-        "many": {
-          "type": "boolean"
+        'many': {
+          'type': 'boolean'
         },
-        "containment": {
-          "type": "boolean"
+        'containment': {
+          'type': 'boolean'
         },
-        "eOpposite": {
-          "type": "object",
-          "properties": {
-            "$ref": {
-              "type": "string"
+        'eOpposite': {
+          'type': 'object',
+          'properties': {
+            '$ref': {
+              'type': 'string'
             }
           },
-          "additionalProperties": false
+          'additionalProperties': false
         },
-        "eType": {
-          "type": "string",
+        'eType': {
+          'type': 'string',
         }
       },
-      "links": [{
-        "rel": "full",
-        "href": "#/eClassifiers/{eType}",
-        "targetSchema": {
-          $ref: "#/definitions/eclass"
+      'links': [{
+        'rel': 'full',
+        'href': '#/eClassifiers/{eType}',
+        'targetSchema': {
+          $ref: '#/definitions/eclass'
         }
       }],
-      "additionalProperties": true
+      'additionalProperties': true
     }
   },
-  "type": "object",
-  "id":"#package",
-  "properties": {
-    "eClass": {
-      "type": "string",
-      "default": "http://www.eclipse.org/emf/2002/Ecore#//EPackage"
+  'type': 'object',
+  'id': '#package',
+  'properties': {
+    'eClass': {
+      'type': 'string',
+      'default': 'http://www.eclipse.org/emf/2002/Ecore#//EPackage'
     },
-    "_id": {
-      "type": "string"
+    '_id': {
+      'type': 'string'
     },
-    "name": {
-      "type": "string"
+    'name': {
+      'type': 'string'
     },
-    "nsURI": {
-      "type": "string"
+    'nsURI': {
+      'type': 'string'
     },
-    "nsPrefix": {
-      "type": "string"
+    'nsPrefix': {
+      'type': 'string'
     },
-    "eClassifiers": {
-      "type": "array",
-      "items": {
-        "anyOf": [
-            {"$ref": "#/definitions/eclass"},
-            {"$ref": "#/definitions/enum"},
-            {"$ref": "#/definitions/datatype"}
+    'eClassifiers': {
+      'type': 'array',
+      'items': {
+        'anyOf': [
+            {'$ref': '#/definitions/eclass'},
+            {'$ref': '#/definitions/enum'},
+            {'$ref': '#/definitions/datatype'}
         ]
       }
     }
   },
-  "additionalProperties": false
-}
+  'additionalProperties': false
+};

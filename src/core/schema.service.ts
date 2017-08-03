@@ -81,6 +81,16 @@ export interface ReferenceProperty extends Property {
    *         for this reference property.
    */
   findReferenceTargets(rootData: Object): Object[];
+
+  /**
+   * Resolves a reference value for this Reference by using the given porpertyValue to
+   * identify the referenced Object.
+   *
+   * @param rootData The root data object needed for finding the referenced value.
+   * @param propertyValue The property value identifying the referenced data object.
+   * @return The resolved data object or null if it coiuld not be resolved.
+   */
+  resolveReference(rootData: Object, propertyValue: string): Object;
 }
 
 export class ContainmentPropertyImpl implements ContainmentProperty {
@@ -127,6 +137,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
     private key: string,
     private name: string,
     private pathToContainment: string,
+    private identifyingProperty: string,
     private addFunction: (root: object, data: object, valueToAdd: object) => void,
     private getFunction: (root: object, data: object) => Object
   ) {}
@@ -168,8 +179,33 @@ export class ReferencePropertyImpl implements ReferenceProperty {
           return prev[cur];
         },
         rootData) as Object[];
+    if (!_.isEmpty(candidates)) {
+      return JsonForms.filterObjectsByType(candidates, this.targetSchema.id);
+    }
 
-    return JsonForms.filterObjectsByType(candidates, this.targetSchema.id);
+    return [];
+  }
+
+  resolveReference(rootData: Object, propertyValue: string): Object {
+    if (_.isEmpty(propertyValue) || _.isEmpty(this.identifyingProperty)) {
+      return null;
+    }
+    // get all objects that could be referenced.
+    const candidates = this.findReferenceTargets(rootData);
+    // use identifying property to identify the referenced property by the given propertyValue
+    const resultList = candidates.filter(value => {
+      return value[this.identifyingProperty] === propertyValue;
+    });
+
+    if (_.isEmpty(resultList)) {
+      return null;
+    }
+    if (resultList.length > 1) {
+      throw Error('There was more than one possible reference target with value \'' + propertyValue
+                  + '\' in the identifying property \'' + this.identifyingProperty + '\'.');
+    }
+
+    return _.first(resultList);
   }
 }
 

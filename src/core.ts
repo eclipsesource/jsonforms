@@ -19,6 +19,23 @@ export interface JsonFormService {
   dispose(): void;
 }
 
+export class JsonFormsConfig {
+
+  private _identifyingProp;
+
+  setIdentifyingProp(propName: string) {
+    this._identifyingProp = propName;
+  }
+
+  getIdentifyingProp() {
+    return this._identifyingProp;
+  }
+
+  shouldGenerateIdentifier() {
+    return this._identifyingProp !== undefined;
+  }
+}
+
 /**
  * Encapsulates instantiation logic of a JSONForms service.
  */
@@ -37,6 +54,7 @@ export interface JsonFormsServiceConstructable {
  * Global JSONForms object that holds services and registries.
  */
 export class JsonForms {
+  private static _config = new JsonFormsConfig();
   private static _schemaService;
   public static rendererService = new RendererService();
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
@@ -52,6 +70,10 @@ export class JsonForms {
     }
 
     return this._schemaService;
+  }
+
+  public static get config(): JsonFormsConfig {
+    return this._config;
   }
 
   /**

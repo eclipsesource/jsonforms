@@ -35,7 +35,8 @@
     "es6-shim": "^0.35.3",
     "json-refs": "^2.1.6",
     "lodash": "^4.17.4",
-    "sortablejs": "^1.6.0"
+    "sortablejs": "^1.6.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "ava": "^0.18.1",
