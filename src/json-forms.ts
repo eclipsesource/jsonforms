@@ -162,6 +162,7 @@ export class JsonFormsElement extends HTMLElement {
     const bestRenderer = JsonForms.rendererService
         .findMostApplicableRenderer(uiSchema, schema, this.dataService);
     this.appendChild(bestRenderer);
+    this.className = JsonForms.stylingRegistry.getAsClassName('json-forms');
 
     this.dataService.initDataChangeListeners();
   }
