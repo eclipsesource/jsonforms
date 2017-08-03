@@ -11,7 +11,7 @@ import { JsonForms } from '../../src/core';
 test.before(t => {
   JsonForms.stylingRegistry.registerMany([
     {
-      name: 'group-layout',
+      name: 'group.layout',
       classNames: ['group-layout']
     }
   ]);
