@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { JsonForms } from '../../core';
 import { Renderer } from '../../core/renderer';
 import { RUNTIME_TYPE } from '../../core/runtime';
@@ -44,7 +45,9 @@ export class VerticalLayoutRenderer extends Renderer {
     const childrenSize = div.children.length;
     for (let i = 0; i < childrenSize; i++) {
       const itemStyle = JsonForms.stylingRegistry.getAsClassName('vertical-layout-item', childrenSize);
-      div.children.item(i).className = itemStyle;
+      if (!_.isEmpty(itemStyle)) {
+        div.children.item(i).classList.add(itemStyle);
+      }
     }
 
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
