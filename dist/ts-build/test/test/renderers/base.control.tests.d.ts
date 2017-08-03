@@ -1,0 +1,12 @@
+export declare const testHide: (t: any, renderer: any) => void;
+export declare const testShow: (t: any, renderer: any) => void;
+export declare const testDisable: (t: any, renderer: any, inputIndex?: number) => void;
+export declare const testEnable: (t: any, renderer: any, inputIndex?: number) => void;
+export declare const testOneError: (t: any, renderer: any) => void;
+export declare const testMultipleErrors: (t: any, renderer: any) => void;
+export declare const testUndefinedErrors: (t: any, renderer: any) => void;
+export declare const testNullErrors: (t: any, renderer: any) => void;
+export declare const testResetErrors: (t: any, renderer: any) => void;
+export declare const testNotifyAboutVisibiltyWhenDisconnected: (t: any, renderer: any) => void;
+export declare const testNotifyAboutEnablementWhenDisconnected: (t: any, renderer: any, inputIndex?: number) => void;
+export declare const testNotifyAboutValidationWhenDisconnected: (t: any, renderer: any) => void;
