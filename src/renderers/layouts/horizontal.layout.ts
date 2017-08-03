@@ -40,6 +40,13 @@ export class HorizontalLayoutRenderer extends Renderer {
       });
     }
     this.appendChild(div);
+
+    const childrenSize = div.children.length;
+    for (let i = 0; i < childrenSize; i++) {
+      const itemStyle = JsonForms.stylingRegistry.getAsClassName('horizontal-layout-item', childrenSize);
+      div.children.item(i).className = itemStyle;
+    }
+
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
 
     return this;
