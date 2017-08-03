@@ -1,11 +1,13 @@
 import * as _ from 'lodash';
 
+export type ClassNames = string[] | ((...args: any[]) => string[]);
+
 /**
  * A style associates a name with a list of CSS class names.
  */
 export interface Style {
     name: string;
-    classNames: string[];
+    classNames: ClassNames;
 }
 
 /**
@@ -14,6 +16,7 @@ export interface Style {
  * the render process.
  */
 export interface StylingRegistry {
+
     /**
      * Register a style.
      * If a style with the given name already exists, it will be overwritten.
@@ -59,7 +62,7 @@ export interface StylingRegistry {
      * @return a string containing the CSS class name separated by whitespace, if the style exists,
      *         empty string otherwise
      */
-    getAsClassName(styleName: string): string;
+    getAsClassName(styleName: string, ...args: any[]): string;
 }
 
 /**
@@ -72,7 +75,7 @@ export class StylingRegistryImpl implements StylingRegistry {
     }
 
     register(style: Style): void;
-    register(name: string, classNames: string[]): void;
+    register(name: string, classNames: ClassNames): void;
     register(style: string|Style, classNames?: string[]): void {
         if (typeof style === 'string') {
             this.deregister(style);
@@ -93,21 +96,24 @@ export class StylingRegistryImpl implements StylingRegistry {
         _.remove(this.styles, style => style.name === styleName);
     }
 
-    get(styleName: string): string[] {
+    get(styleName: string, ...args: any[]): string[] {
         const foundStyle = _.find(this.styles, style => style.name === styleName);
-        if (!_.isEmpty(foundStyle)) {
-            return foundStyle.classNames;
+        if (!_.isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
+          return foundStyle.classNames(args);
+        } else if (!_.isEmpty(foundStyle)) {
+            return (foundStyle.classNames as string[]);
         }
 
         return [];
     }
 
-    getAsClassName(styleName: string): string {
-        const styles = this.get(styleName);
+    getAsClassName(styleName: string, ...args: any[]): string {
+        const styles = this.get(styleName, args);
         if (_.isEmpty(styles)) {
             return '';
         }
 
         return _.join(styles, ' ');
     }
+
 }
