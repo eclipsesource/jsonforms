@@ -131,10 +131,10 @@ test('BooleanControl static', t => {
   t.true(className.indexOf('root_properties_foo') !== -1);
   t.true(className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
-  const label = result.children[0] as HTMLLabelElement;
+  const label = result.children[1] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, 'Foo');
-  const input = result.children[1] as HTMLInputElement;
+  const input = result.children[0] as HTMLInputElement;
   t.is(input.tagName, 'INPUT');
   t.is(input.type, 'checkbox');
   t.is(input.checked, true);
@@ -159,10 +159,10 @@ test('BooleanControl static no label', t => {
   const result = renderer.render();
   t.true(result.className.indexOf('control') !== -1);
   t.is(result.childNodes.length, 3);
-  const label = result.children[0] as HTMLLabelElement;
+  const label = result.children[1] as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
   t.is(label.textContent, '');
-  const input = result.children[1] as HTMLInputElement;
+  const input = result.children[0] as HTMLInputElement;
   t.is(input.tagName, 'INPUT');
   t.is(input.type, 'checkbox');
   t.is(input.checked, false);
@@ -177,7 +177,7 @@ test('BooleanControl inputChange', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   const result = renderer.render();
-  const input = result.children[1] as HTMLInputElement;
+  const input = result.children[0] as HTMLInputElement;
   input.checked = false;
   input.onchange(null);
   t.is(t.context.data.foo, false);
@@ -191,7 +191,7 @@ test('BooleanControl dataService notification', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, true);
   t.is(input.checked, true);
 });
@@ -203,7 +203,7 @@ test('BooleanControl dataService notification value undefined', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange(
       {
         scope: {
@@ -222,7 +222,7 @@ test('BooleanControl dataService notification value null', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, null);
   t.is(input.checked, false);
 });
@@ -234,7 +234,7 @@ test('BooleanControl dataService notification wrong ref', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange({scope: {$ref: '#/properties/bar'}}, 'Bar');
   t.is(input.checked, true);
 });
@@ -246,7 +246,7 @@ test('BooleanControl dataService notification null ref', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange(null, false);
   t.is(input.checked, true);
 });
@@ -258,7 +258,7 @@ test('BooleanControl dataService notification undefined ref', t => {
   renderer.setDataSchema(t.context.schema);
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange(undefined, false);
   t.is(input.checked, true);
 });
@@ -271,7 +271,7 @@ test('BooleanControl dataService no notification after disconnect', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   renderer.disconnectedCallback();
-  const input = renderer.children[1] as HTMLInputElement;
+  const input = renderer.children[0] as HTMLInputElement;
   dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.checked, true);
 });
@@ -285,11 +285,11 @@ test('BooleanControl notify visible true', t => {
 });
 
 test('BooleanControl notify disabled', t => {
-  testDisable(t, new BooleanControl());
+  testDisable(t, new BooleanControl(), 0);
 });
 
 test('BooleanControl notify enabled', t => {
-  testEnable(t, new BooleanControl());
+  testEnable(t, new BooleanControl(), 0);
 });
 
 test('BooleanControl notify one error', t => {
@@ -318,7 +318,7 @@ test('BooleanControl disconnected no notify visible', t => {
 });
 
 test('BooleanControl disconnected no notify enabled', t => {
-  testNotifyAboutEnablementWhenDisconnected(t, new BooleanControl());
+  testNotifyAboutEnablementWhenDisconnected(t, new BooleanControl(), 0);
 });
 
 test('BooleanControl disconnected no notify error', t => {

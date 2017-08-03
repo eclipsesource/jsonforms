@@ -23,7 +23,7 @@ export const testShow = (t, renderer) => {
     t.is(renderer.hidden, false);
 };
 
-export const testDisable = (t, renderer) => {
+export const testDisable = (t, renderer, inputIndex = 1) => {
     const dataService = new DataService(t.context.data);
     renderer.setDataService(dataService);
     renderer.setDataSchema(t.context.schema);
@@ -31,13 +31,13 @@ export const testDisable = (t, renderer) => {
     renderer.connectedCallback();
     const runtime = t.context.uiSchema.runtime as Runtime;
     runtime.enabled = false;
-    const input = renderer.children[1] as HTMLInputElement;
+    const input = renderer.children[inputIndex] as HTMLInputElement;
     t.is(input.getAttribute('disabled'), 'true');
     // TODO would be nice
     // t.is(input.disabled, true);
 };
 
-export const testEnable = (t, renderer) => {
+export const testEnable = (t, renderer, inputIndex = 1) => {
     const dataService = new DataService(t.context.data);
     renderer.setDataService(dataService);
     renderer.setDataSchema(t.context.schema);
@@ -45,7 +45,7 @@ export const testEnable = (t, renderer) => {
     renderer.connectedCallback();
     const runtime = t.context.uiSchema.runtime as Runtime;
     runtime.enabled = true;
-    const input = renderer.children[1] as HTMLInputElement;
+    const input = renderer.children[inputIndex] as HTMLInputElement;
     t.false(input.hasAttribute('disabled'));
 };
 
@@ -123,7 +123,7 @@ export const testNotifyAboutVisibiltyWhenDisconnected = (t, renderer) => {
     t.is(renderer.hidden, false);
 };
 
-export const testNotifyAboutEnablementWhenDisconnected = (t, renderer) => {
+export const testNotifyAboutEnablementWhenDisconnected = (t, renderer, inputIndex = 1) => {
     const dataService = new DataService(t.context.data);
     renderer.setDataService(dataService);
     renderer.setDataSchema(t.context.schema);
@@ -132,7 +132,7 @@ export const testNotifyAboutEnablementWhenDisconnected = (t, renderer) => {
     renderer.disconnectedCallback();
     const runtime = t.context.uiSchema.runtime as Runtime;
     runtime.enabled = false;
-    const input = renderer.children[1] as HTMLInputElement;
+    const input = renderer.children[inputIndex] as HTMLInputElement;
     t.false(input.hasAttribute('disabled'));
 };
 

@@ -19,9 +19,10 @@ export abstract class BaseControl <T extends HTMLElement>
     return errors.join('\n');
   }
 
-  private label: HTMLLabelElement;
-  private input: T;
-  private errorElement: HTMLElement;
+  protected label: HTMLLabelElement;
+  protected input: T;
+  protected errorElement: HTMLElement;
+  private errorMessage;
 
   /**
    * Default constructor.
@@ -64,8 +65,16 @@ export abstract class BaseControl <T extends HTMLElement>
     const runtime = this.uischema.runtime;
     switch (type) {
       case RUNTIME_TYPE.VALIDATION_ERROR:
-        this.errorElement.textContent = BaseControl.formatErrorMessage(runtime.validationErrors);
+        this.errorMessage = BaseControl.formatErrorMessage(runtime.validationErrors);
+        this.errorElement.textContent = this.errorMessage;
         this.classList.toggle('validation_error', runtime.validationErrors !== undefined);
+        if (runtime.validationErrors === undefined) {
+          this.input.classList.add('valid');
+          this.input.classList.remove('invalid');
+        } else {
+          this.input.classList.add('invalid');
+          this.input.classList.remove('valid');
+        }
         break;
       case RUNTIME_TYPE.VISIBLE:
         this.hidden = !runtime.visible;
@@ -170,21 +179,26 @@ export abstract class BaseControl <T extends HTMLElement>
    */
   protected abstract createInputElement(): T;
 
-  private createLabel(controlElement: ControlElement): void {
+  protected createLabel(controlElement: ControlElement): void {
     this.label = document.createElement('label');
+    // TODO: see issue #590
+    this.label.htmlFor = controlElement.scope.$ref;
     const labelObject = getElementLabelObject(this.dataSchema, controlElement);
     if (labelObject.show) {
       this.label.textContent = labelObject.text;
     }
   }
 
-  private createInput(controlElement: ControlElement): void {
+  protected createInput(controlElement: ControlElement): void {
     this.input = this.createInputElement();
+    // TODO: see issue #590
+    this.input.id = controlElement.scope.$ref;
     this.configureInput(this.input);
     this.input[this.inputChangeProperty] = ((ev: Event) => {
           this.dataService.notifyAboutDataChange(controlElement, this.getValue(this.input));
         }
     );
+    this.input.className += ' validate';
     this.setValue(this.input, this.dataService.getValue(controlElement));
   }
 
