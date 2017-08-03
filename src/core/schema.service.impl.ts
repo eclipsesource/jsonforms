@@ -10,10 +10,8 @@ import {
 } from './schema.service';
 import * as uuid from 'uuid';
 import { JsonForms } from '../core';
+import { findAllRefs } from '../path.util';
 
-interface ReferenceSchemaMap {
-  [ref: string]: JsonSchema;
-}
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
 };
@@ -23,31 +21,7 @@ const isArray = (schema: JsonSchema): boolean => {
 const deepCopy = <T>(object: T): T => {
   return JSON.parse(JSON.stringify(object)) as T;
 };
-const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
-  if (isObject(schema)) {
-    Object.keys(schema.properties).forEach(key =>
-      findAllRefs(schema.properties[key], result));
-  }
-  if (isArray(schema)) {
-    // FIXME Do we want to support tupples? If so how do we render this?
-    if (!Array.isArray(schema.items)) {
-      findAllRefs(schema.items, result);
-    }
-  }
-  if (Array.isArray(schema.anyOf)) {
-    schema.anyOf.forEach(child => findAllRefs(child, result));
-  }
-  if (schema.$ref !== undefined) {
-    result[schema.$ref] = schema;
-  }
-  // tslint:disable:no-string-literal
-  if (schema['links'] !== undefined) {
-    schema['links'].forEach(link => result[link.targetSchema.$ref] = schema);
-  }
-  // tslint:enable:no-string-literal
 
-  return result;
-};
 const addToArray =
     (key: string, identifyingProperty?: string) =>
     (data: Object) =>
@@ -182,7 +156,12 @@ export class SchemaServiceImpl implements SchemaService {
           // FIXME log
           return;
         }
-        const targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
+        let targetSchema;
+        if (link.targetSchema.$ref !== undefined) {
+          targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
+        } else {
+          targetSchema = link.targetSchema;
+        }
         const href: string = link.href;
         const variableWrapped = href.match(/\{.*\}/)[0];
         const pathToContainment = href.split(/\{.*\}/)[0];

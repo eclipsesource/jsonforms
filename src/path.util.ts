@@ -1,4 +1,12 @@
+import * as _ from 'lodash';
 import { JsonSchema } from './models/jsonSchema';
+
+const isObject = (schema: JsonSchema): boolean => {
+  return schema.properties !== undefined;
+};
+const isArray = (schema: JsonSchema): boolean => {
+  return schema.type === 'array' && schema.items !== undefined;
+};
 
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting
@@ -99,21 +107,48 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
   return resultSchema;
 };
 
-const findAllRefs = (schema: JsonSchema, result: ReferenceSchemaMap = {}): ReferenceSchemaMap => {
-  if (schema.type === 'object' && schema.properties !== undefined) {
-    Object.keys(schema.properties).forEach(key => findAllRefs(schema.properties[key], result));
+/**
+ * Finds all references inside the given schema.
+ *
+ * @param schema The {@link JsonSchema} to find the references in
+ * @param result The initial result map, default: empty map (this parameter is used for recursion
+ *               inside the function)
+ * @param resolveTuples Whether arrays of tuples should be considered; default: false
+ */
+export const findAllRefs =
+    (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false)
+    : ReferenceSchemaMap => {
+  if (isObject(schema)) {
+    Object.keys(schema.properties).forEach(key =>
+      findAllRefs(schema.properties[key], result));
   }
-  if (schema.type === 'array' && schema.items !== undefined) {
-    // FIXME Do we want to support tupples? If so how do we render this?
+  if (isArray(schema)) {
     if (Array.isArray(schema.items)) {
-      schema.items.forEach(child => findAllRefs(child, result));
+      if (resolveTuples) {
+        schema.items.forEach(child => findAllRefs(child, result));
+      }
     } else {
       findAllRefs(schema.items, result);
     }
   }
+  if (Array.isArray(schema.anyOf)) {
+    schema.anyOf.forEach(child => findAllRefs(child, result));
+  }
   if (schema.$ref !== undefined) {
     result[schema.$ref] = schema;
   }
+
+  // tslint:disable:no-string-literal
+  if (schema['links'] !== undefined) {
+    schema['links'].forEach(link => {
+      if (!_.isEmpty(link.targetSchema.$ref)) {
+        result[link.targetSchema.$ref] = schema;
+      } else {
+        findAllRefs(link.targetSchema, result);
+      }
+    });
+  }
+  // tslint:enable:no-string-literal
 
   return result;
 };
@@ -139,6 +174,6 @@ export function retrieveResolvableSchema(full: JsonSchema, reference: string): J
   return child;
 }
 
-interface ReferenceSchemaMap {
+export interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }

@@ -179,8 +179,11 @@ export class ReferencePropertyImpl implements ReferenceProperty {
           return prev[cur];
         },
         rootData) as Object[];
+    if (!_.isEmpty(candidates)) {
+      return JsonForms.filterObjectsByType(candidates, this.targetSchema.id);
+    }
 
-    return JsonForms.filterObjectsByType(candidates, this.targetSchema.id);
+    return [];
   }
 
   resolveReference(rootData: Object, propertyValue: string): Object {
