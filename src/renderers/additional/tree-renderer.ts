@@ -166,12 +166,12 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     this.renderFull();
   }
 
-  private renderFull(): void {
+  protected renderFull(): void {
     this.renderMaster(this.resolvedSchema);
     this.selectFirstElement();
   }
 
-  private selectFirstElement(): void {
+  protected selectFirstElement(): void {
     const controlElement = this.uischema as MasterDetailLayout;
     const arrayData = this.dataService.getValue(controlElement);
     if (arrayData !== undefined && arrayData !== null && arrayData.length !== 0) {
@@ -183,6 +183,43 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       }
       this.renderDetail(firstChild, this.master.firstChild.firstChild as HTMLLIElement, schema);
     }
+  }
+
+  protected renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
+    if (this.detail.lastChild !== null) {
+      this.detail.removeChild(this.detail.lastChild);
+    }
+    if (this.selected !== undefined) {
+      this.selected.classList.toggle('selected');
+    }
+    label.classList.toggle('selected');
+    this.selected = label;
+
+    const jsonForms = document.createElement('json-forms') as JsonFormsElement;
+    jsonForms.data = element;
+    jsonForms.dataSchema = schema;
+    // NOTE check needed for tests
+    if (jsonForms.addDataChangeListener !== undefined && jsonForms.addDataChangeListener !== null) {
+      jsonForms.addDataChangeListener({
+        needsNotificationAbout: (uischema: MasterDetailLayout): boolean => {
+          return uischema !== null;
+        },
+        dataChanged: (uischema: MasterDetailLayout, newValue: any, data: any): void => {
+          const segments = uischema.scope.$ref.split('/');
+          const lastSegemnet = segments[segments.length - 1];
+          if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {
+            label.firstChild.lastChild.firstChild.textContent = newValue;
+          }
+          if (Array.isArray(newValue)) {
+            const childSchema = resolveSchema(schema, uischema.scope.$ref).items;
+            if (!Array.isArray(childSchema)) {
+              this.renderChildren(newValue, childSchema, label, lastSegemnet);
+            }
+          }
+        }
+      });
+    }
+    this.detail.appendChild(jsonForms);
   }
 
   private renderMaster(schema: JsonSchema): void {
@@ -510,42 +547,5 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     // TODO proper logging
     console.warn('Could not render children because no fitting property was found.');
-  }
-
-  private renderDetail(element: Object, label: HTMLLIElement, schema: JsonSchema): void {
-    if (this.detail.lastChild !== null) {
-      this.detail.removeChild(this.detail.lastChild);
-    }
-    if (this.selected !== undefined) {
-      this.selected.classList.toggle('selected');
-    }
-    label.classList.toggle('selected');
-    this.selected = label;
-
-    const jsonForms = document.createElement('json-forms') as JsonFormsElement;
-    jsonForms.data = element;
-    jsonForms.dataSchema = schema;
-    // NOTE check needed for tests
-    if (jsonForms.addDataChangeListener !== undefined && jsonForms.addDataChangeListener !== null) {
-      jsonForms.addDataChangeListener({
-        needsNotificationAbout: (uischema: MasterDetailLayout): boolean => {
-          return uischema !== null;
-        },
-        dataChanged: (uischema: MasterDetailLayout, newValue: any, data: any): void => {
-          const segments = uischema.scope.$ref.split('/');
-          const lastSegemnet = segments[segments.length - 1];
-          if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {
-            label.firstChild.lastChild.firstChild.textContent = newValue;
-          }
-          if (Array.isArray(newValue)) {
-            const childSchema = resolveSchema(schema, uischema.scope.$ref).items;
-            if (!Array.isArray(childSchema)) {
-              this.renderChildren(newValue, childSchema, label, lastSegemnet);
-            }
-          }
-        }
-      });
-    }
-    this.detail.appendChild(jsonForms);
   }
 }
