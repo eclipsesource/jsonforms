@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { JsonForms } from '../../core';
 import { Renderer } from '../../core/renderer';
 import { RUNTIME_TYPE } from '../../core/runtime';
@@ -31,7 +30,7 @@ export class VerticalLayoutRenderer extends Renderer {
    */
   render(): HTMLElement {
     const div = document.createElement('div');
-    div.className = JsonForms.stylingRegistry.getAsClassName('vertical-layout');
+    JsonForms.stylingRegistry.addStyle(div, 'vertical-layout');
     const verticalLayout = this.uischema as VerticalLayout;
     if (verticalLayout.elements !== undefined && verticalLayout.elements !== null) {
       verticalLayout.elements.forEach(element => {
@@ -44,12 +43,9 @@ export class VerticalLayoutRenderer extends Renderer {
 
     const childrenSize = div.children.length;
     for (let i = 0; i < childrenSize; i++) {
-      const itemStyle = JsonForms.stylingRegistry.get('vertical-layout-item', childrenSize);
-      if (!_.isEmpty(itemStyle)) {
-        for (const style of itemStyle) {
-          div.children.item(i).classList.add(style);
-        }
-      }
+      const child = div.children.item(i);
+      JsonForms.stylingRegistry
+        .addStyle(child, 'vertical-layout-item', childrenSize);
     }
 
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);

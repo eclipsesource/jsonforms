@@ -88,25 +88,20 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
    * @inheritDoc
    */
   render(): HTMLElement {
-    this.className = JsonForms.stylingRegistry.getAsClassName('control');
     if (this.lastChild !== null) {
       this.removeChild(this.lastChild);
     }
     const controlElement = this.uischema as ControlElement;
     const div = document.createElement('fieldset');
-    div.className = JsonForms.stylingRegistry.getAsClassName('array.layout');
-
     const header = document.createElement('legend');
     div.appendChild(header);
     const label = document.createElement('label');
-    label.className = JsonForms.stylingRegistry.getAsClassName('array.label');
     const labelObject = getElementLabelObject(this.dataSchema, controlElement);
     if (labelObject.show) {
       label.textContent = labelObject.text;
     }
 
     const content = document.createElement('div');
-    content.className = JsonForms.stylingRegistry.getAsClassName('array.children');
     let arrayData = this.dataService.getValue(controlElement);
 
     const renderChild = (element: Object): void => {
@@ -125,7 +120,6 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
     div.appendChild(content);
 
     const button = document.createElement('button');
-    button.className = JsonForms.stylingRegistry.getAsClassName('array.button');
     button.textContent = `+`;
     button.onclick = (ev: Event) => {
       if (arrayData === undefined) {
@@ -142,6 +136,12 @@ export class ArrayControlRenderer extends Renderer implements DataChangeListener
 
     this.appendChild(div);
     this.classList.add(this.convertToClassName(controlElement.scope.$ref));
+
+    JsonForms.stylingRegistry.addStyle(this, 'control')
+      .addStyle(div, 'array.layout')
+      .addStyle(label, 'array.label')
+      .addStyle(content, 'array.children')
+      .addStyle(button, 'array.button');
 
     return this;
   }

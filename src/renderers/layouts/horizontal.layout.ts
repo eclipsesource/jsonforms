@@ -31,7 +31,7 @@ export class HorizontalLayoutRenderer extends Renderer {
    */
   render(): HTMLElement {
     const div = document.createElement('div');
-    div.className = JsonForms.stylingRegistry.getAsClassName('horizontal-layout');
+    JsonForms.stylingRegistry.addStyle(div, 'horizontal-layout');
     const horizontalLayout = this.uischema as HorizontalLayout;
     if (horizontalLayout.elements !== undefined && horizontalLayout.elements !== null) {
       horizontalLayout.elements.forEach(element => {
@@ -44,13 +44,9 @@ export class HorizontalLayoutRenderer extends Renderer {
 
     const childrenSize = div.children.length;
     for (let i = 0; i < childrenSize; i++) {
-      const itemStyle = JsonForms.stylingRegistry.get('horizontal-layout-item', childrenSize);
       const child = div.children.item(i);
-      if (!_.isEmpty(itemStyle)) {
-        for (const style of itemStyle) {
-          child.classList.add(style);
-        }
-      }
+      JsonForms.stylingRegistry
+        .addStyle(child, 'horizontal-layout-item', childrenSize);
     }
 
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);

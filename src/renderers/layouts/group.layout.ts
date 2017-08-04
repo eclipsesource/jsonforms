@@ -31,24 +31,24 @@ export class GroupLayoutRenderer extends Renderer {
    */
   render(): HTMLElement {
     const group = this.uischema as GroupLayout;
-    const fieldset = document.createElement('fieldset');
-    fieldset.className = JsonForms.stylingRegistry.getAsClassName('group.layout');
+    const fieldSet = document.createElement('fieldset');
+    JsonForms.stylingRegistry.addStyle(fieldSet, 'group.layout');
     if (group.label !== undefined) {
       const legend = document.createElement('legend');
-      const legendStyle = JsonForms.stylingRegistry.getAsClassName('group.label');
-      legend.className = legendStyle;
       legend.innerText = group.label;
-      fieldset.appendChild(legend);
+      fieldSet.appendChild(legend);
+      JsonForms.stylingRegistry.addStyle(legend, 'group.label');
     }
     if (group.elements !== undefined && group.elements !== null) {
       group.elements.forEach(element => {
         const bestRenderer = JsonForms.rendererService
             .findMostApplicableRenderer(element, this.dataSchema, this.dataService);
-        fieldset.appendChild(bestRenderer);
+        fieldSet.appendChild(bestRenderer);
       });
     }
-    this.appendChild(fieldset);
+    this.appendChild(fieldSet);
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
+
 
     return this;
   }
