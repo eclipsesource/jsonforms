@@ -54,7 +54,8 @@ export interface StylingRegistry {
    *
    * @param {HTMLElement} html the element to which a style should be applied
    * @param {string} styleName the style name to be applied
-   * @param args any additional arguments necessary for calculating a list of CSS classes to be applied
+   * @param args any additional arguments necessary for calculating a list of
+   *        CSS classes to be applied
    * @returns {this} the styling registry for convenience reasons
    */
   addStyle(html: Element, styleName: string, ...args: any[]): StylingRegistry;
@@ -91,11 +92,11 @@ export class StylingRegistryImpl implements StylingRegistry {
     _.remove(this.styles, style => style.name === styleName);
   }
 
-
   /**
    * Obtain the CSS class name associated with the given style name.
    * @param styleName the name whose CSS class names should be obtained
-   * @param args any additional arguments necessary for calculating a list of CSS classes to be applied
+   * @param args any additional arguments necessary for calculating a list of
+   *        CSS classes to be applied
    * @return {Array<String>} an array containing the CSS class names,
    *         if the style exists, an empty array otherwise
    */
@@ -112,7 +113,9 @@ export class StylingRegistryImpl implements StylingRegistry {
 
   addStyle(html: Element, styleName: string, ...args: any[]): StylingRegistry {
     const styles = this.get(styleName, args);
-    styles.forEach(style => html.classList.add(style));
+    styles.forEach(style => {
+      html.classList.add(style);
+    });
 
     return this;
   }

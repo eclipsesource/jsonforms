@@ -49,7 +49,6 @@ export class GroupLayoutRenderer extends Renderer {
     this.appendChild(fieldSet);
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
 
-
     return this;
   }
 
