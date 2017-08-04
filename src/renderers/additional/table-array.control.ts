@@ -91,7 +91,6 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     const header = document.createElement('header');
     this.appendChild(header);
     const label = document.createElement('label');
-    label.className = JsonForms.stylingRegistry.getAsClassName('array-table.label');
     const labelObject = getElementLabelObject(this.dataSchema, controlElement);
     if (labelObject.show) {
       label.textContent = labelObject.text;
@@ -99,7 +98,7 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     header.appendChild(label);
 
     const content = document.createElement('table');
-    this.className = JsonForms.stylingRegistry.getAsClassName('array-table.table');
+    JsonForms.stylingRegistry.addStyle(this, 'array-table.table');
     const head = document.createElement('thead');
     const headRow = document.createElement('tr');
     const resolvedSchema = resolveSchema(this.dataSchema, controlElement.scope.$ref + '/items');
@@ -145,7 +144,6 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     this.appendChild(content);
 
     const button = document.createElement('button');
-    button.className = JsonForms.stylingRegistry.getAsClassName('array-table.button');
     button.textContent = `Add to ${labelObject.text}`;
     button.onclick = (ev: Event) => {
       if (arrayData === undefined) {
@@ -158,7 +156,11 @@ export class TableArrayControlRenderer extends Renderer implements DataChangeLis
     };
 
     header.appendChild(button);
-    this.className = JsonForms.stylingRegistry.getAsClassName('array-table');
+
+    JsonForms.stylingRegistry.addStyle(label, 'array-table.label')
+      .addStyle(button, 'array-table.button')
+      .addStyle(this, 'array-table');
+
     this.classList.add(this.convertToClassName(controlElement.scope.$ref));
 
     return this;

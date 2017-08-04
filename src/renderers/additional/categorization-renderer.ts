@@ -85,15 +85,16 @@ export class CategorizationRenderer extends Renderer {
    * @inheritDoc
    */
   render(): HTMLElement {
-    this.className = JsonForms.stylingRegistry.getAsClassName('categorization');
-
     this.master = document.createElement('div');
-    this.master.className = JsonForms.stylingRegistry.getAsClassName('categorization.master');
     this.appendChild(this.master);
 
     this.detail = document.createElement('div');
-    this.detail.className = JsonForms.stylingRegistry.getAsClassName('categorization.detail');
     this.appendChild(this.detail);
+
+    JsonForms.stylingRegistry
+      .addStyle(this, 'categorization')
+      .addStyle(this.master, 'categorization.master')
+      .addStyle(this.detail, 'categorization.detail');
 
     this.renderFull();
 
@@ -141,8 +142,11 @@ export class CategorizationRenderer extends Renderer {
       // span.innerText
       if (isCategorization(category)) {
         const innerUl = this.createCategorizationList(category);
-        innerUl.className = JsonForms.stylingRegistry.getAsClassName('category.subcategories');
-        li.className = JsonForms.stylingRegistry.getAsClassName('category.group');
+
+        JsonForms.stylingRegistry
+          .addStyle(innerUl, 'category.subcategories')
+          .addStyle(li, 'category.group');
+
         li.appendChild(innerUl);
       } else {
         li.onclick = (ev: Event) => {

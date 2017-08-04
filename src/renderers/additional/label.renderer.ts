@@ -32,7 +32,7 @@ export class LabelRenderer extends Renderer {
     if (labelElement.text !== undefined && labelElement.text !== null) {
       this.textContent = labelElement.text;
     }
-    this.className = JsonForms.stylingRegistry.getAsClassName('label-control');
+    JsonForms.stylingRegistry.addStyle(this, 'label-control');
 
     return this;
   }

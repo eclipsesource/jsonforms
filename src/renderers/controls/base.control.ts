@@ -37,16 +37,18 @@ export abstract class BaseControl <T extends HTMLElement>
   render(): HTMLElement {
     const controlElement = this.uischema as ControlElement;
     this.createLabel(controlElement);
-    this.label.className = JsonForms.stylingRegistry.getAsClassName('control.label');
     this.createInput(controlElement);
-    this.input.className = JsonForms.stylingRegistry.getAsClassName('control.input');
     this.errorElement = document.createElement('div');
-    this.errorElement.className = JsonForms.stylingRegistry.getAsClassName('control.validation');
     this.appendChild(this.label);
     this.appendChild(this.input);
     this.appendChild(this.errorElement);
-    this.className = JsonForms.stylingRegistry.getAsClassName('control');
     this.classList.add(this.convertToClassName(controlElement.scope.$ref));
+
+    JsonForms.stylingRegistry
+      .addStyle(this, 'control')
+      .addStyle(this.label, 'control.label')
+      .addStyle(this.input, 'control.input')
+      .addStyle(this.errorElement, 'control.validation');
 
     return this;
   }
