@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { JsonForms } from '../../core';
 import { Renderer } from '../../core/renderer';
 import { RUNTIME_TYPE } from '../../core/runtime';

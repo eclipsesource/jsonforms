@@ -97,7 +97,10 @@ const bootstrap = () => {
       classNames: ['custom-select']
     },
   ]);
-  $('select').attr('class', JsonForms.stylingRegistry.getAsClassName('select'));
+  const selectItems = document.getElementsByClassName('select');
+  for (let i = 0; i < selectItems.length; i++) {
+    JsonForms.stylingRegistry.addStyle(selectItems.item(i), 'select');
+  }
 };
 
 const material = () => {
