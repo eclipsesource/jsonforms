@@ -139,15 +139,20 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
 
     this.appendChild(div);
     this.dialog = document.createElement('dialog');
+    this.dialog.classList.add('jsf-treeMasterDetail-dialog');
     const title = document.createElement('label');
     title.innerText = 'Select the Item to create:';
+    title.classList.add('jsf-treeMasterDetail-dialog-title');
     this.dialog.appendChild(title);
     const dialogContent = document.createElement('div');
     dialogContent.classList.add('content');
+    dialogContent.classList.add('jsf-treeMasterDetail-dialog-content');
     this.dialog.appendChild(dialogContent);
     const dialogClose = document.createElement('button');
     dialogClose.innerText = 'Close';
     dialogClose.onclick = () => this.dialog.close();
+    dialogClose.classList.add('btn');
+    dialogClose.classList.add('jsf-treeMasterDetail-dialog-button');
     this.dialog.appendChild(dialogClose);
     this.appendChild(this.dialog);
     this.renderFull();
@@ -394,6 +399,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
           const button = document.createElement('button');
           button.innerText = property.label;
+          button.classList.add('jsf-treeMasterDetail-dialog-createbutton');
+          button.classList.add('btn');
           button.onclick = () => {
             const newData = {};
             // initialize new data with default values from schema
@@ -410,6 +417,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           content.appendChild(button);
         });
         this.dialog.showModal();
+        // Focus the close dialog's button
+        this.dialog.getElementsByClassName('jsf-treeMasterDetail-dialog-button')[0].focus();
       };
       spanAdd.textContent = '\u2795';
       span.appendChild(spanAdd);
