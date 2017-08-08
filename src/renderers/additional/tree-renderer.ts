@@ -445,7 +445,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       const ul = document.createElement('ul') as HTMLUListElement;
       ul.setAttribute('childrenId', id);
       ul.setAttribute('children', property.property);
-      registerDnDWithGroupId(this.treeNodeMapping, ul, id);
+      registerDnDWithGroupId(this.master, this.treeNodeMapping, ul, id);
       li.appendChild(ul);
     });
 
@@ -523,7 +523,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       ul.setAttribute('children', key);
       if (!_.isEmpty(schema.id)) {
         ul.setAttribute('childrenId', schema.id);
-        registerDnDWithGroupId(this.treeNodeMapping, ul, schema.id);
+        registerDnDWithGroupId(this.master, this.treeNodeMapping, ul, schema.id);
       }
       li.appendChild(ul);
     } else {
