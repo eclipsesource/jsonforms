@@ -24,6 +24,113 @@ test.beforeEach(t => {
       }
     }
   };
+
+  // For reference properties tests
+  JsonForms.config.setIdentifyingProp('id');
+  t.context.referenceObjectSchema = {
+    definitions: {
+      class: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          association: {
+            type: 'string'
+          }
+        },
+        links: [{
+          rel: 'full',
+          href: '#/classes/{association}',
+          targetSchema: {$ref: '#/definitions/class'}
+        }]
+      }
+    },
+    type: 'object',
+    properties: {
+      classes: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/class'
+        }
+      }
+    }
+  };
+  t.context.referenceArraySchema = {
+    definitions: {
+      class: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          associations: {
+            type: 'array',
+            items: {
+              type: 'string'
+            }
+          }
+        },
+        links: [{
+          rel: 'full',
+          href: '#/classes/{associations}',
+          targetSchema: {$ref: '#/definitions/class'}
+        }]
+      }
+    },
+    type: 'object',
+    properties: {
+      classes: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/class'
+        }
+      }
+    }
+  };
+  t.context.referenceFindSchema = {
+    definitions: {
+      class: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          association: {
+            type: 'string'
+          }
+        },
+        links: [{
+          rel: 'full',
+          href: '#/classes/{association}',
+          targetSchema: {$ref: '#/definitions/class'}
+        }]
+      },
+      element : {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string'
+          }
+        }
+      }
+    },
+    type: 'object',
+    properties: {
+      classes: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/class'
+        }
+      },
+      elements: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/element'
+        }
+      }
+    }
+  };
 });
 test.failing('array with array ', t => {
   const schema: JsonSchema = {
@@ -618,222 +725,99 @@ test('containment properties delete when array defined', t => {
   t.is(data.foo.length, 1);
   t.is(data.foo[0].bar, 'stay');
 });
+
 test('reference object properties add', t => {
-  // tslint:disable:no-object-literal-type-assertion
-  const schema: JsonSchema = {
-    definitions: {
-      class: {
-        type: 'object',
-        properties: {
-          id: {
-            type: 'string'
-          },
-          association: {
-            type: 'integer',
-            minimum: 0
-          }
-        },
-        links: [{
-          rel: 'full',
-          href: '#/classes/{association}',
-          targetSchema: {$ref: '#/definitions/class'}
-        }]
-      }
-    },
-    type: 'object',
-    properties: {
-      classes: {
-        type: 'array',
-        items: {
-          $ref: '#/definitions/class'
-        }
-      }
-    }
-  } as JsonSchema;
-  // tslint:enable:no-object-literal-type-assertion
+  const schema: JsonSchema = t.context.referenceObjectSchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.definitions.class)[0];
-  const data = {classes: [{id: 1}, {id: 2}]};
+  const data = {classes: [{id: 'c1'}, {id: 'c2'}]};
   property.addToData(data, data.classes[1], data.classes[0]);
   // tslint:disable:no-string-literal
-  t.is(data.classes[1]['association'], 0);
+  t.is(data.classes[1]['association'], 'c1');
   // tslint:enable:no-string-literal
 });
 test('reference object properties get', t => {
-  // tslint:disable:no-object-literal-type-assertion
-  const schema: JsonSchema = {
-    definitions: {
-      class: {
-        type: 'object',
-        properties: {
-          id: {
-            type: 'string'
-          },
-          association: {
-            type: 'integer',
-            minimum: 0
-          }
-        },
-        links: [{
-          rel: 'full',
-          href: '#/classes/{association}',
-          targetSchema: {$ref: '#/definitions/class'}
-        }]
-      }
-    },
-    type: 'object',
-    properties: {
-      classes: {
-        type: 'array',
-        items: {
-          $ref: '#/definitions/class'
-        }
-      }
-    }
-  } as JsonSchema;
-  // tslint:enable:no-object-literal-type-assertion
+  const schema: JsonSchema = t.context.referenceObjectSchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
-  const data = {classes: [{id: 1}, {id: 2, association: 0}]};
+  const data = {classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}]};
   const getData = property.getData(data, data.classes[1]);
   t.is(getData, data.classes[0]);
 });
+
 test('reference array properties add to undefined', t => {
-  // tslint:disable:no-object-literal-type-assertion
-  const schema: JsonSchema = {
-    definitions: {
-      class: {
-        type: 'object',
-        properties: {
-          id: {
-            type: 'string'
-          },
-          associations: {
-            type: 'array',
-            items: {
-              type: 'integer',
-              minimum: 0
-            }
-          }
-        },
-        links: [{
-          rel: 'full',
-          href: '#/classes/{associations}',
-          targetSchema: {$ref: '#/definitions/class'}
-        }]
-      }
-    },
-    type: 'object',
-    properties: {
-      classes: {
-        type: 'array',
-        items: {
-          $ref: '#/definitions/class'
-        }
-      }
-    }
-  } as JsonSchema;
-  // tslint:enable:no-object-literal-type-assertion
+  const schema: JsonSchema = t.context.referenceArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
-  const data = {classes: [{id: 1}, {id: 2}]};
+  const data = {classes: [{id: 'c1'}, {id: 'c2'}]};
   property.addToData(data, data.classes[1], data.classes[0]);
   // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
   // tslint:enable:no-string-literal
   t.is(associations.length, 1);
-  t.is(associations[0], 0);
+  t.is(associations[0], 'c1');
 });
 test('reference array properties add to defined', t => {
-  // tslint:disable:no-object-literal-type-assertion
-  const schema: JsonSchema = {
-    definitions: {
-      class: {
-        type: 'object',
-        properties: {
-          id: {
-            type: 'string'
-          },
-          associations: {
-            type: 'array',
-            items: {
-              type: 'integer',
-              minimum: 0
-            }
-          }
-        },
-        links: [{
-          rel: 'full',
-          href: '#/classes/{associations}',
-          targetSchema: {$ref: '#/definitions/class'}
-        }]
-      }
-    },
-    type: 'object',
-    properties: {
-      classes: {
-        type: 'array',
-        items: {
-          $ref: '#/definitions/class'
-        }
-      }
-    }
-  } as JsonSchema;
-  // tslint:enable:no-object-literal-type-assertion
+  const schema: JsonSchema = t.context.referenceArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
-  const data = {classes: [{id: 1}, {id: 2, associations: []}]};
+  const data = {classes: [{id: 'c1'}, {id: 'c2', associations: []}]};
   property.addToData(data, data.classes[1], data.classes[0]);
   // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
   // tslint:enable:no-string-literal
   t.is(associations.length, 1);
-  t.is(associations[0], 0);
+  t.is(associations[0], 'c1');
 });
 test('reference array properties get', t => {
-  // tslint:disable:no-object-literal-type-assertion
-  const schema: JsonSchema = {
-    definitions: {
-      class: {
-        type: 'object',
-        properties: {
-          id: {
-            type: 'string'
-          },
-          associations: {
-            type: 'array',
-            items: {
-              type: 'integer',
-              minimum: 0
-            }
-          }
-        },
-        links: [{
-          rel: 'full',
-          href: '#/classes/{associations}',
-          targetSchema: {$ref: '#/definitions/class'}
-        }]
-      }
-    },
-    type: 'object',
-    properties: {
-      classes: {
-        type: 'array',
-        items: {
-          $ref: '#/definitions/class'
-        }
-      }
-    }
-  } as JsonSchema;
-  // tslint:enable:no-object-literal-type-assertion
+  const schema: JsonSchema = t.context.referenceArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
-  const data = {classes: [{id: 1}, {id: 2, associations: [0]}]};
+  const data = {classes: [{id: 'c1'}, {id: 'c2', associations: ['c1']}]};
   const getData = property.getData(data, data.classes[1]);
-  t.is(getData, data.classes[0]);
+  t.true(Array.isArray(getData));
+  t.deepEqual(getData, [data.classes[0]]);
+});
+test('reference array properties get multiple', t => {
+  const schema: JsonSchema = t.context.referenceArraySchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property =
+    service.getReferenceProperties(schema.definitions.class)[0];
+  const data = {classes: [{id: 'c1'}, {id: 'c2', associations: ['c1', 'c3']}, {id: 'c3'},
+                          {id: 'c4'}]};
+  const getData = property.getData(data, data.classes[1]);
+  t.true(Array.isArray(getData));
+  const getDataArray = getData as Object[];
+  t.is(getDataArray.length, 2);
+  t.is(getDataArray[0], data.classes[0]);
+  t.is(getDataArray[1], data.classes[2]);
+});
+
+test('reference property find reference targets', t => {
+  const schema = t.context.referenceFindSchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  const data = {
+    classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}],
+    elements: [{id: 'e1'}]
+  };
+  const targets = property.findReferenceTargets(data);
+  t.is(targets.length, 2);
+  t.is(targets[0], data.classes[0]);
+  t.is(targets[1], data.classes[1]);
+});
+test('reference property find reference targets - target container undefined', t => {
+  const schema = t.context.referenceFindSchema;
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  const data = {
+    elements: [{id: 'e1'}]
+  };
+  const targets = property.findReferenceTargets(data);
+  t.deepEqual(targets, []);
 });
 
 test('property type check', t => {
