@@ -1,13 +1,13 @@
 import { JsonForms, JsonFormService } from '../../src/core';
-import { DataService } from '../../src/core/data.service';
 import { JsonFormsElement } from '../../src/json-forms';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { UISchemaElement } from '../../src/models/uischema';
 
 import { registerExamples } from '../example';
+import { Store } from 'redux';
 
 class MyService implements JsonFormService {
-  constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
+  constructor(private store: Store<any>, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
     this.createButton();
   }
   dispose(): void {
@@ -17,14 +17,14 @@ class MyService implements JsonFormService {
     const button = document.createElement('button');
     button.innerText = 'Change data';
     button.onclick = () => {
-      this.dataService.notifyAboutDataChange(
-          {
-            scope: {
-              $ref: '#/properties/name'
-            }
-          },
-          'blub'
-      );
+      // this.dataService.notifyAboutDataChange(
+      //     {
+      //       scope: {
+      //         $ref: '#/properties/name'
+      //       }
+      //     },
+      //     'blub'
+      // );
     };
     const div = document.getElementById('dynamic2-example');
     div.appendChild(button);

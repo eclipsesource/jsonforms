@@ -5,6 +5,10 @@
     "target": "es6"
   },
   "include": [
-    "**/*.ts"
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+     "**/renderers/treemasterdetail.dnd.test.tsx"
   ]
 }

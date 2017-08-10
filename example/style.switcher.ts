@@ -2,8 +2,6 @@ import * as _ from 'lodash';
 import { JsonForms } from '../src/core';
 import { changeExample } from './example';
 import { Style } from '../src/core/styling.registry';
-import { VNodeRegistry } from '../src/services/vnode.registry';
-import { MaterializeDialogHandler } from './material.dialog';
 declare let $;
 
 /**
@@ -13,7 +11,7 @@ declare let $;
  * @param wantedHref a substring of the link's href value, which is to be enabled
  */
 const enableLink = (wantedHref: string): void => {
-  const links = $('link').toArray();
+  const links: any[] = $('link').toArray();
   // disable all links
   _.forEach(links, link => link.disabled = true);
   const wantedLinks = _.filter(links, (link: HTMLLinkElement) => link.href.includes(wantedHref)
@@ -104,6 +102,7 @@ const bootstrap = () => {
 };
 
 const material = () => {
+
   JsonForms.stylingRegistry.registerMany([
     {
       name: 'button',
@@ -142,20 +141,26 @@ const material = () => {
       classNames: ['row']
     },
     {
-      name: 'json-forms',
-      classNames: ['container']
+      name: 'array.children',
+      classNames: ['row']
     }
   ]);
 
+  const calcClasses = childrenSize => {
+    const colSize = Math.floor(12 / childrenSize[0]);
+
+    return ['col', `s${colSize}`];
+  };
+
   JsonForms.stylingRegistry.register({
     name: 'horizontal-layout-item',
-    classNames: childrenSize => {
-      console.log('children size is', childrenSize[0]);
-      const colSize = Math.floor(12 / childrenSize[0]);
+    classNames: calcClasses
+  });
 
-      return ['col', `s${colSize}`];
-    }
-  } as Style);
+  JsonForms.stylingRegistry.register({
+    name: 'array.item',
+    classNames: calcClasses
+  });
 
   JsonForms.stylingRegistry.register({
     name: 'vertical-layout-item',
@@ -201,5 +206,5 @@ export const createStyleSelection = (selectExampleElement: HTMLSelectElement) =>
   styleDiv.appendChild(styleLabel);
   styleDiv.appendChild(selectStyle);
 
-  changeStyle('materialize');
+  changeStyle('none');
 };

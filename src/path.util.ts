@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { JsonSchema } from './models/jsonSchema';
+import { Scopable } from './models/uischema';
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
@@ -19,7 +20,7 @@ const isArray = (schema: JsonSchema): boolean => {
  * @param {string} schemaPath the schema path to be converted
  * @returns {string[]} an array containing only non-schema-specific segments
  */
-const toDataPathSegments = (schemaPath: string): string[] => {
+export const toDataPathSegments = (schemaPath: string): string[] => {
   const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
   if (startFromRoot) {
@@ -85,6 +86,28 @@ export const getValuePropertyPair = (instance: any, schemaPath: string):
   };
 };
 
+export const composeWithUi = (scopableUi: Scopable, path: string) => {
+  const segments = toDataPathSegments(scopableUi.scope.$ref);
+
+  return _.isEmpty(segments) ? path : compose(path, segments.join('.'));
+};
+
+export const compose = (path1: string, path2: string) => {
+  let p1 = path1;
+  if (!_.isEmpty(path1) && !path2.startsWith('[')) {
+    p1 = path1 + '.';
+  }
+
+  if (_.isEmpty(p1)) {
+    return path2;
+  } else {
+    return `${p1}${path2}`;
+  }
+};
+
+export const resolveData = (data, path) =>
+ _.isEmpty(path) ? data : _.get(data, path);
+
 /**
  * Resolve the given schema path in order to obtain a subschema.
  * @param {JsonSchema} schema the root schema from which to start
@@ -118,6 +141,7 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
 export const findAllRefs =
     (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false)
     : ReferenceSchemaMap => {
+
   if (isObject(schema)) {
     Object.keys(schema.properties).forEach(key =>
       findAllRefs(schema.properties[key], result));
@@ -148,7 +172,6 @@ export const findAllRefs =
       }
     });
   }
-  // tslint:enable:no-string-literal
 
   return result;
 };

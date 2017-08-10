@@ -45,8 +45,8 @@ const createControlElement = (label: string, ref: string): ControlElement => ({
     }
 });
 
-const isLayout = (uiSchema: UISchemaElement): uiSchema is Layout =>
-    (uiSchema as Layout).elements !== undefined;
+const isLayout = (uischema: UISchemaElement): uischema is Layout =>
+    (uischema as Layout).elements !== undefined;
 
 /**
  * Wraps the given {@code uiSchema} in a Layout if there is none already.
@@ -54,15 +54,15 @@ const isLayout = (uiSchema: UISchemaElement): uiSchema is Layout =>
  * @param layoutType The type of the layout to create.
  * @returns the wrapped uiSchema.
  */
-const wrapInLayoutIfNecessary = (uiSchema: UISchemaElement, layoutType: string): Layout  => {
-    if (!_.isEmpty(uiSchema) && !isLayout(uiSchema)) {
+const wrapInLayoutIfNecessary = (uischema: UISchemaElement, layoutType: string): Layout  => {
+    if (!_.isEmpty(uischema) && !isLayout(uischema)) {
         const verticalLayout: Layout = createLayout(layoutType);
-        verticalLayout.elements.push(uiSchema);
+        verticalLayout.elements.push(uischema);
 
         return verticalLayout;
     }
 
-    return uiSchema as Layout;
+    return uischema as Layout;
 };
 
 /**
@@ -141,7 +141,7 @@ const generateUISchema =
  *        of the generated UI schema
  */
 export const generateDefaultUISchema =
-    (jsonSchema: JsonSchema, layoutType = 'VerticalLayout'): UISchemaElement =>
+    (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
         wrapInLayoutIfNecessary(
-            generateUISchema(jsonSchema, [], '#', '', layoutType),
+            generateUISchema(jsonSchema, [], prefix, '', layoutType),
             layoutType);

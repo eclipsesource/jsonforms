@@ -91,7 +91,7 @@
             true,
             100
         ],
-        "no-default-export": true,
+        "no-default-export": false,
         "no-mergeable-namespace": true,
         "no-require-imports": true,
         "object-literal-sort-keys": false,
@@ -165,7 +165,7 @@
             true,
             "always"
         ],
-        "variable-name": [true, "allow-leading-underscore"],
+        "variable-name": [false, "allow-leading-underscore"],
         "whitespace": [
             true,
             "check-branch",

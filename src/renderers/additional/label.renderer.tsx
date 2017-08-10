@@ -1,0 +1,50 @@
+import * as _ from 'lodash';
+import { LabelElement } from '../../models/uischema';
+import { isVisible, Renderer} from '../../core/renderer';
+import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { JsonForms } from '../../core';
+import { connect } from 'inferno-redux';
+
+/**
+ * Default tester for a label.
+ * @type {RankedTester}
+ */
+export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
+
+/**
+ * Default renderer for a label.
+ */
+export class LabelRenderer extends Renderer {
+
+  /**
+   * @inheritDoc
+   */
+  render() {
+    const { uischema, visible } = this.props;
+    const labelElement: LabelElement = uischema as LabelElement;
+    const classNames = [JsonForms.stylingRegistry.getAsClassName('label-control')];
+    const isHidden = !visible;
+
+    return (
+      <label hidden={isHidden} className={classNames}>
+        {
+          labelElement.text !== undefined && labelElement.text !== null ?
+            labelElement.text : ''
+        }
+      </label>
+    );
+  }
+}
+
+const mapStateToProps = (state, ownProps) => {
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
+
+  return {
+    visible
+  };
+};
+
+export default JsonForms.rendererService.registerRenderer(
+  labelRendererTester,
+  connect(mapStateToProps)(LabelRenderer)
+);

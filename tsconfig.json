@@ -10,8 +10,10 @@
     "outDir": "dist/ts-build",
     "sourceMap": true,
     "target": "es5",
-    "jsx": "react",
-    "reactNamespace": "JSX"
+    "jsx": "react-native",
+    "types": [
+      "inferno"
+    ]
   },
   "exclude":[
     "node_modules"

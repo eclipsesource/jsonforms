@@ -19,14 +19,14 @@ test('schemaTypeIs should check type sub-schema of control', t => {
             foo: { type: 'string' }
         }
     };
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         }
     };
-    t.true(schemaTypeIs('string')(uiSchema, schema));
-    t.false(schemaTypeIs('integer')(uiSchema, schema));
+    t.true(schemaTypeIs('string')(uischema, schema));
+    t.false(schemaTypeIs('integer')(uischema, schema));
 });
 
 test('schemaTypeIs should return false for non-control UI schema elements', t => {
@@ -44,7 +44,7 @@ test('schemaTypeIs should return false for non-control UI schema elements', t =>
 });
 
 test('schemaTypeIs should return false for control pointing to invalid sub-schema', t => {
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/bar'
@@ -56,11 +56,11 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
             foo: { type: 'string' }
         }
     };
-    t.false(schemaTypeIs('string')(uiSchema, schema));
+    t.false(schemaTypeIs('string')(uischema, schema));
 });
 
 test('formatIs should check the format of a resolved sub-schema', t => {
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/foo'
@@ -75,7 +75,7 @@ test('formatIs should check the format of a resolved sub-schema', t => {
             }
         }
     };
-    t.true(formatIs('date-time')(uiSchema, schema));
+    t.true(formatIs('date-time')(uischema, schema));
 });
 
 test('uiTypeIs', t => {
@@ -118,13 +118,13 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
             foo: { type: 'string' }
         }
     };
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/foo'
         }
     };
-    t.true(schemaMatches(subSchema => subSchema.type === 'string')(uiSchema, schema));
+    t.true(schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema));
 });
 
 test('schemaMatches should return false for non-control UI schema elements', t => {
@@ -148,23 +148,23 @@ test('schemaMatches should return false for control pointing to invalid subschem
             foo: { type: 'string' }
         }
     };
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/bar'
         }
     };
-    t.false(schemaMatches(subSchema => false)(uiSchema, schema));
+    t.false(schemaMatches(subSchema => false)(uischema, schema));
 });
 
 test('refEndsWith checks whether the ref of a control ends with a certain string', t => {
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/bar'
         }
     };
-    t.true(refEndsWith('properties/bar')(uiSchema, undefined));
+    t.true(refEndsWith('properties/bar')(uischema, undefined));
 });
 
 test('refEndsWith should return false for non-control UI schema elements', t => {
@@ -176,13 +176,13 @@ test('refEndsWith should return false for non-control UI schema elements', t => 
 });
 
 test('refEndIs checks whether the last segment a control ref equals a certain string', t => {
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/bar'
         }
     };
-    t.true(refEndIs('bar')(uiSchema, undefined));
+    t.true(refEndIs('bar')(uischema, undefined));
 });
 
 test('refEndIs should return false for non-control UI schema elements', t => {
@@ -200,7 +200,7 @@ test('and should allow to compose multiple testers', t => {
             foo: { type: 'string' }
         }
     };
-    const uiSchema: ControlElement = {
+    const uischema: ControlElement = {
         type: 'Control',
         scope: {
             $ref: '#/properties/foo'
@@ -209,5 +209,5 @@ test('and should allow to compose multiple testers', t => {
     t.true(and(
         schemaTypeIs('string'),
         refEndIs('foo')
-    )(uiSchema, schema));
+    )(uischema, schema));
 });

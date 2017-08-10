@@ -7,11 +7,11 @@ test('generate ui schema for schema w/o properties', t => {
     const schema: JsonSchema = {
         type: 'object'
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: []
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate ui schema for schema with one property', t => {
@@ -30,11 +30,11 @@ test('generate ui schema for schema with one property', t => {
             $ref: '#/properties/name'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [control]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate ui schema for schema without object root', t => {
@@ -48,11 +48,11 @@ test('generate ui schema for schema without object root', t => {
             $ref: '#'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [control]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate ui schema for schema with unspecified object root', t => {
@@ -70,11 +70,11 @@ test('generate ui schema for schema with unspecified object root', t => {
             $ref: '#/properties/age'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [controlElement]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test(`nested object attributes`, t => {
@@ -119,14 +119,14 @@ test(`nested object attributes`, t => {
             nameControl,
         ]
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [
             idControl,
             nestedLayout
         ]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test(`don't ignore non-json-schema id attributes`, t => {
@@ -155,14 +155,14 @@ test(`don't ignore non-json-schema id attributes`, t => {
             $ref: '#/properties/name'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [
             idControl,
             nameControl
         ]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate ui schema for schema with multiple properties', t => {
@@ -226,7 +226,7 @@ test('generate ui schema for schema with multiple properties', t => {
             'email'
         ]
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         'type': 'VerticalLayout',
         'elements': [
             {
@@ -308,7 +308,7 @@ test('generate ui schema for schema with multiple properties', t => {
             },
         ] as ControlElement[]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate named array control', t => {
@@ -332,11 +332,11 @@ test('generate named array control', t => {
             $ref: '#/properties/comments'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         'type': 'VerticalLayout',
         'elements': [control]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate unnamed array control', t => {
@@ -355,11 +355,11 @@ test('generate unnamed array control', t => {
             '$ref': '#'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [control]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate unnamed array control w/o type', t => {
@@ -377,28 +377,28 @@ test('generate unnamed array control w/o type', t => {
             $ref: '#'
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'VerticalLayout',
         elements: [control]
     };
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate for empty schema', t => {
     const schema: JsonSchema = {
     };
-    const uiSchema: Layout = null;
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    const uischema: Layout = null;
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate for null schema', t => {
     const schema: JsonSchema = null;
-    const uiSchema: Layout = null;
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    const uischema: Layout = null;
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
 test('generate for undefined schema', t => {
     const schema: JsonSchema = undefined;
-    const uiSchema: Layout = null;
-    t.deepEqual(generateDefaultUISchema(schema), uiSchema);
+    const uischema: Layout = null;
+    t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
