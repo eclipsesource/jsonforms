@@ -5,6 +5,7 @@ import * as Sortable from 'sortablejs';
 export type TreeNodeInfo = {data: object, schema: JsonSchema,
                             deleteFunction(toDelete: object): void};
 
+export const DROP_TARGET_CSS = 'jsf-dnd-drop-target';
 /**
  * Returns a function that handles the sortablejs onRemove event
  */
@@ -105,23 +106,61 @@ export const dragAndDropAddHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNo
 };
 
 /**
+ * Returns a function that handles the SortableJs onStart event.
+ * The function sets the CSS class jsf-dnd-drop-target to all lists
+ * that are compatible to the dragged element.
+ *
+ * @param treeElement The HTML element containing the tree
+ * @param id the id identifying the type of the list's elements that this handler is used for
+ */
+export const dragAndDropStartHandler = (treeElement: HTMLElement, id: string) => evt => {
+  const lists = treeElement.getElementsByTagName('UL');
+  for (let i = 0; i < lists.length; i++) {
+    const list = lists.item(i);
+    if (list.getAttribute('childrenId') === id) {
+      list.classList.toggle(DROP_TARGET_CSS, true);
+    }
+  }
+};
+
+/**
+ * Returns a function that handles the SortableJs onEnd event.
+ * The function removes the CSS class jsf-dnd-drop-target from all lists.
+ *
+ * @param treeElement The HTML element containing the tree
+ * @param id the id identifying the type of the list's elements that this handler is used for
+ */
+export const dragAndDropEndHandler = (treeElement: HTMLElement, id: string) => evt => {
+  const lists = treeElement.getElementsByTagName('UL');
+  for (let i = 0; i < lists.length; i++) {
+    lists.item(i).classList.toggle(DROP_TARGET_CSS, false);
+  }
+};
+
+/**
  * Activates drag and drop for all direct children of the given list.
  *
+ * @param treeElement The HTML element containing the tree
  * @param treeNodeMapping maps the trees renderer li nodes to their represented data, schema,
  *        and delete function
  * @param list the list that will support drag and drop
  * @param id the id identifying the type of the list's elements
  */
-export const registerDnDWithGroupId = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>,
+export const registerDnDWithGroupId = (treeElement: HTMLElement,
+                                       treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>,
                                        list: HTMLUListElement, id: string) => {
   Sortable.create(list, {
     // groups with the same id allow to drag and drop elements between them
     group: id,
+    // called after dragging started
+    onStart: dragAndDropStartHandler(treeElement, id),
     // called after an element was added from another list
     onAdd: dragAndDropAddHandler(treeNodeMapping),
     // called when an element's position is changed within the same list
     onUpdate: dragAndDropUpdateHandler(treeNodeMapping),
     // called when an element is removed because it was moved to another list
-    onRemove: dragAndDropRemoveHandler(treeNodeMapping)
+    onRemove: dragAndDropRemoveHandler(treeNodeMapping),
+    // called after dragging ended
+    onEnd: dragAndDropEndHandler(treeElement, id)
   });
 };
