@@ -819,6 +819,81 @@ test('reference property find reference targets - target container undefined', t
   const targets = property.findReferenceTargets(data);
   t.deepEqual(targets, []);
 });
+test('reference property find reference targets - targets are subset of available objects.', t => {
+  const schema = {
+    definitions: {
+      class: {
+        type: 'object',
+        id: '#class',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          association: {
+            type: 'string'
+          },
+          type: {
+            type: 'string',
+            default: 'class'
+          }
+        },
+        links: [{
+          rel: 'full',
+          href: '#/objects/{association}',
+          targetSchema: {$ref: '#/definitions/class'}
+        }]
+      },
+      element : {
+        type: 'object',
+        id: '#element',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          type: {
+            type: 'string',
+            default: 'element'
+          }
+        }
+      }
+    },
+    type: 'object',
+    properties: {
+      objects: {
+        type: 'array',
+        items: {
+          anyOf: [
+            { $ref: '#/definitions/class' },
+            { $ref: '#/definitions/element' }
+          ]
+        }
+      }
+    }
+  };
+
+  const modelMapping = {
+    attribute: 'type',
+    mapping: {
+      'class': '#class',
+      'element': '#element'
+    }
+  };
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  JsonForms.modelMapping = modelMapping;
+  const property = service.getReferenceProperties(schema.definitions.class as JsonSchema)[0];
+  const data = {
+    objects: [
+      {id: 'c1', type: 'class'},
+      {id: 'e1', type: 'element'},
+      {id: 'c2', type: 'class'},
+      {id: 'e2', type: 'element'}
+    ]
+  };
+  const targets = property.findReferenceTargets(data);
+  t.is(targets.length, 2);
+  t.is(targets[0], data.objects[0]);
+  t.is(targets[1], data.objects[2]);
+});
 
 test('property type check', t => {
   // tslint:disable:no-object-literal-type-assertion

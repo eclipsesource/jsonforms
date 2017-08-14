@@ -70,21 +70,21 @@ const deleteFromArray = (key: string) => (data: object) => (valueToDelete: objec
 const getArray = (key: string) => (data: object) => {
   return data[key];
 };
-const addReference = (schema: JsonSchema, identifyingProperty: string, variable: string) =>
+const addReference = (schema: JsonSchema, identifyingProperty: string, propName: string) =>
   (root: Object, data: Object, toAdd: object) => {
 
     const refValue = toAdd[identifyingProperty];
-    if (schema.properties[variable].type === 'array') {
-      if (!data[variable]) {
-        data[variable] = [];
+    if (schema.properties[propName].type === 'array') {
+      if (!data[propName]) {
+        data[propName] = [];
       }
-      data[variable].push(refValue);
+      data[propName].push(refValue);
     } else {
-      data[variable] = refValue;
+      data[propName] = refValue;
     }
   };
 const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Object[],
-                    identifyingProperty: string, variable: string) =>
+                    identifyingProperty: string, propName: string) =>
   (rootData: Object, data: Object) => {
     if (_.isEmpty(data) || _.isEmpty(identifyingProperty)) {
       return null;
@@ -92,26 +92,32 @@ const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Objec
     // get all objects that could be referenced.
     const candidates = findTargets(rootData);
 
-    if (schema.properties[variable].type === 'array') {
-      const ids: object[] = data[variable];
-      const resultList = candidates.filter(value => {
-        return ids.indexOf(value[identifyingProperty]) > -1;
-      });
+    if (schema.properties[propName].type === 'array') {
+      const ids: object[] = data[propName];
+      const resultList = candidates.filter(value => ids.indexOf(value[identifyingProperty]) > -1);
+
+      // check that there is at most one reference target for every id
+      for (const id of ids) {
+        const idResults = resultList.filter(result => result[identifyingProperty] === id);
+        if (idResults.length > 1) {
+          throw Error(`There was more than one possible reference target with value
+                      '${JSON.stringify(id)}' in its identifying property
+                      '${identifyingProperty}'.`);
+        }
+      }
 
       return resultList;
     } else {
       // use identifying property to identify the referenced object
-      const resultList = candidates.filter(value => {
-        return value[identifyingProperty] === data[variable];
-      });
+      const resultList = candidates.filter(value => value[identifyingProperty] === data[propName]);
 
       if (_.isEmpty(resultList)) {
         return null;
       }
       if (resultList.length > 1) {
-        throw Error('There was more than one possible reference target with value \'' +
-                    JSON.stringify(data[variable]) + '\' in its identifying property \'' +
-                    identifyingProperty + '\'.');
+        throw Error(`There was more than one possible reference target with value
+                    '${JSON.stringify(data[propName])}' in its identifying property
+                    '${identifyingProperty}'.`);
       }
 
       return _.first(resultList);
@@ -191,7 +197,7 @@ export class SchemaServiceImpl implements SchemaService {
         const variableWrapped = href.match(/\{.*\}/)[0];
         const pathToContainment = href.split(/\/\{.*\}/)[0];
         const variable = variableWrapped.substring(1, variableWrapped.length - 1);
-        const findTargets = findReferenceTargets(pathToContainment, targetSchema.id);
+        const foundTargets = findReferenceTargets(pathToContainment, targetSchema.id);
         const identifyingProp = JsonForms.config.getIdentifyingProp();
         result.push(
           new ReferencePropertyImpl(
@@ -199,9 +205,9 @@ export class SchemaServiceImpl implements SchemaService {
             targetSchema,
             variable,
             variable,
-            findTargets,
+            foundTargets,
             addReference(schema, identifyingProp, variable),
-            resolveRef(schema, findTargets, identifyingProp, variable)
+            resolveRef(schema, foundTargets, identifyingProp, variable)
           )
         );
       });
