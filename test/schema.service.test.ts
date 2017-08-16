@@ -795,6 +795,43 @@ test('reference array properties get multiple', t => {
   t.is(getDataArray[0], data.classes[0]);
   t.is(getDataArray[1], data.classes[2]);
 });
+test(`reference properties get - linking property's schema without type`, t => {
+  const schema = {
+    definitions: {
+      class: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'string'
+          },
+          association: {
+            type: ''
+          }
+        },
+        links: [{
+          rel: 'full',
+          href: '#/classes/{association}',
+          targetSchema: {$ref: '#/definitions/class'}
+        }]
+      }
+    },
+    type: 'object',
+    properties: {
+      classes: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/class'
+        }
+      }
+    }
+  };
+
+  const service: SchemaService = new SchemaServiceImpl(schema);
+  const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  const data = {classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}]};
+  const error: Error = t.throws(() => property.getData(data, data.classes[1]));
+  t.is(error.message, `The schema of the property 'association' does not specify a schema type.`);
+});
 
 test('reference property find reference targets', t => {
   const schema = t.context.referenceFindSchema;

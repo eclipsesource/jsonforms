@@ -92,6 +92,9 @@ const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Objec
     // get all objects that could be referenced.
     const candidates = findTargets(rootData);
 
+    if (_.isEmpty(schema.properties[propName].type)) {
+      throw Error(`The schema of the property '${propName}' does not specify a schema type.`);
+    }
     if (schema.properties[propName].type === 'array') {
       const ids: object[] = data[propName];
       const resultList = candidates.filter(value => ids.indexOf(value[identifyingProperty]) > -1);
@@ -124,7 +127,7 @@ const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Objec
     }
   };
 
-const findReferenceTargets = (pathToContainment: string, schemaId: string) =>
+const getFindReferenceTargetsFunction = (pathToContainment: string, schemaId: string) =>
   (rootData: Object) => {
     const candidates = pathToContainment
       .split('/')
@@ -197,7 +200,7 @@ export class SchemaServiceImpl implements SchemaService {
         const variableWrapped = href.match(/\{.*\}/)[0];
         const pathToContainment = href.split(/\/\{.*\}/)[0];
         const variable = variableWrapped.substring(1, variableWrapped.length - 1);
-        const foundTargets = findReferenceTargets(pathToContainment, targetSchema.id);
+        const findTargets = getFindReferenceTargetsFunction(pathToContainment, targetSchema.id);
         const identifyingProp = JsonForms.config.getIdentifyingProp();
         result.push(
           new ReferencePropertyImpl(
@@ -205,9 +208,9 @@ export class SchemaServiceImpl implements SchemaService {
             targetSchema,
             variable,
             variable,
-            foundTargets,
+            findTargets,
             addReference(schema, identifyingProp, variable),
-            resolveRef(schema, foundTargets, identifyingProp, variable)
+            resolveRef(schema, findTargets, identifyingProp, variable)
           )
         );
       });
