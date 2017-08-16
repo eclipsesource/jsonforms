@@ -173,6 +173,7 @@ test('TreeMasterDetailRenderer static object', t => {
     scope: { $ref: '#' }
   };
   JsonForms.schema = schema;
+  JsonForms.stylingRegistry.register('button', ['buttonCSS']);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   renderer.setDataService(new DataService(data));
@@ -244,7 +245,8 @@ test('TreeMasterDetailRenderer static object', t => {
   t.is(dialogContent.className, 'content jsf-treeMasterDetail-dialog-content');
   const dialogClose = dialog.children[2] as HTMLButtonElement;
   t.is(dialogClose.tagName, 'BUTTON');
-  t.is(dialogClose.className, 'button jsf-treeMasterDetail-dialog-button');
+  t.true(dialogClose.classList.contains('jsf-treeMasterDetail-dialog-button'));
+  t.true(dialogClose.classList.contains('buttonCSS'));
   t.is(dialogClose.innerText, 'Close');
 });
 
@@ -288,6 +290,7 @@ test('TreeMasterDetailRenderer static array', t => {
     }
   };
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  JsonForms.stylingRegistry.register('button', ['buttonCSS']);
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataSchema(schema);
@@ -368,7 +371,8 @@ test('TreeMasterDetailRenderer static array', t => {
   t.is(dialogContent.className, 'content jsf-treeMasterDetail-dialog-content');
   const dialogClose = dialog.children[2] as HTMLButtonElement;
   t.is(dialogClose.tagName, 'BUTTON');
-  t.is(dialogClose.className, 'button jsf-treeMasterDetail-dialog-button');
+  t.true(dialogClose.classList.contains('jsf-treeMasterDetail-dialog-button'));
+  t.true(dialogClose.classList.contains('buttonCSS'));
   t.is(dialogClose.innerText, 'Close');
 });
 
@@ -391,6 +395,7 @@ test('TreeMasterDetailRenderer static array not root', t => {
   };
   JsonForms.schema = schema;
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  JsonForms.stylingRegistry.register('button', ['buttonCSS']);
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
@@ -455,7 +460,8 @@ test('TreeMasterDetailRenderer static array not root', t => {
   t.is(dialogContent.className, 'content jsf-treeMasterDetail-dialog-content');
   const dialogClose = dialog.children[2] as HTMLButtonElement;
   t.is(dialogClose.tagName, 'BUTTON');
-  t.is(dialogClose.className, 'button jsf-treeMasterDetail-dialog-button');
+  t.true(dialogClose.classList.contains('jsf-treeMasterDetail-dialog-button'));
+  t.true(dialogClose.classList.contains('buttonCSS'));
   t.is(dialogClose.innerText, 'Close');
 });
 
