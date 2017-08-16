@@ -173,6 +173,7 @@ test('TreeMasterDetailRenderer static object', t => {
     scope: { $ref: '#' }
   };
   JsonForms.schema = schema;
+  JsonForms.stylingRegistry.register('button', ['buttonCSS']);
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   renderer.setDataService(new DataService(data));
@@ -234,14 +235,18 @@ test('TreeMasterDetailRenderer static object', t => {
   // dialog
   const dialog = result.children[2];
   t.is(dialog.children.length, 3);
+  t.is(dialog.className, 'jsf-treeMasterDetail-dialog');
   const dialogLabel = dialog.children[0] as HTMLLabelElement;
   t.is(dialogLabel.tagName, 'LABEL');
   t.is(dialogLabel.innerText, 'Select the Item to create:');
+  t.is(dialogLabel.className, 'jsf-treeMasterDetail-dialog-title');
   const dialogContent = dialog.children[1] as HTMLDivElement;
   t.is(dialogContent.tagName, 'DIV');
-  t.is(dialogContent.className, 'content');
+  t.is(dialogContent.className, 'content jsf-treeMasterDetail-dialog-content');
   const dialogClose = dialog.children[2] as HTMLButtonElement;
   t.is(dialogClose.tagName, 'BUTTON');
+  t.true(dialogClose.classList.contains('jsf-treeMasterDetail-dialog-button'));
+  t.true(dialogClose.classList.contains('buttonCSS'));
   t.is(dialogClose.innerText, 'Close');
 });
 
@@ -285,6 +290,7 @@ test('TreeMasterDetailRenderer static array', t => {
     }
   };
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  JsonForms.stylingRegistry.register('button', ['buttonCSS']);
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
   renderer.setDataService(new DataService(data));
   renderer.setDataSchema(schema);
@@ -355,14 +361,18 @@ test('TreeMasterDetailRenderer static array', t => {
   // dialog
   const dialog = result.children[2];
   t.is(dialog.children.length, 3);
+  t.is(dialog.className, 'jsf-treeMasterDetail-dialog');
   const dialogLabel = dialog.children[0] as HTMLLabelElement;
   t.is(dialogLabel.tagName, 'LABEL');
   t.is(dialogLabel.innerText, 'Select the Item to create:');
+  t.is(dialogLabel.className, 'jsf-treeMasterDetail-dialog-title');
   const dialogContent = dialog.children[1] as HTMLDivElement;
   t.is(dialogContent.tagName, 'DIV');
-  t.is(dialogContent.className, 'content');
+  t.is(dialogContent.className, 'content jsf-treeMasterDetail-dialog-content');
   const dialogClose = dialog.children[2] as HTMLButtonElement;
   t.is(dialogClose.tagName, 'BUTTON');
+  t.true(dialogClose.classList.contains('jsf-treeMasterDetail-dialog-button'));
+  t.true(dialogClose.classList.contains('buttonCSS'));
   t.is(dialogClose.innerText, 'Close');
 });
 
@@ -385,6 +395,7 @@ test('TreeMasterDetailRenderer static array not root', t => {
   };
   JsonForms.schema = schema;
   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  JsonForms.stylingRegistry.register('button', ['buttonCSS']);
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
   const uiSchema: MasterDetailLayout = {
     type: 'MasterDetailLayout',
@@ -439,14 +450,18 @@ test('TreeMasterDetailRenderer static array not root', t => {
   // dialog
   const dialog = result.children[2];
   t.is(dialog.children.length, 3);
+  t.is(dialog.className, 'jsf-treeMasterDetail-dialog');
   const dialogLabel = dialog.children[0] as HTMLLabelElement;
   t.is(dialogLabel.tagName, 'LABEL');
   t.is(dialogLabel.innerText, 'Select the Item to create:');
+  t.is(dialogLabel.className, 'jsf-treeMasterDetail-dialog-title');
   const dialogContent = dialog.children[1] as HTMLDivElement;
   t.is(dialogContent.tagName, 'DIV');
-  t.is(dialogContent.className, 'content');
+  t.is(dialogContent.className, 'content jsf-treeMasterDetail-dialog-content');
   const dialogClose = dialog.children[2] as HTMLButtonElement;
   t.is(dialogClose.tagName, 'BUTTON');
+  t.true(dialogClose.classList.contains('jsf-treeMasterDetail-dialog-button'));
+  t.true(dialogClose.classList.contains('buttonCSS'));
   t.is(dialogClose.innerText, 'Close');
 });
 
