@@ -6,8 +6,11 @@ import {
 import { JsonSchema } from '../../src/models/jsonSchema';
 import {
   dragAndDropAddHandler,
+  dragAndDropEndHandler,
   dragAndDropRemoveHandler,
+  dragAndDropStartHandler,
   dragAndDropUpdateHandler,
+  DROP_TARGET_CSS,
   TreeNodeInfo
 } from '../../src/renderers/additional/tree-renderer.dnd';
 
@@ -35,6 +38,48 @@ test.beforeEach(t => {
   };
   JsonForms.schema = schema;
   t.context.schema = schema;
+});
+
+test('TreeMasterDetailRenderer Drag And Drop - add handler', t => {
+    const id = 'testId';
+    const root = document.createElement('div');
+    const list1 = document.createElement('ul');
+    const list2 = document.createElement('ul');
+    const list3 = document.createElement('ul');
+    root.appendChild(list1);
+    root.appendChild(list2);
+    root.appendChild(list3);
+
+    list1.setAttribute('childrenId', id);
+    list2.setAttribute('childrenId', id);
+    list2.classList.toggle(DROP_TARGET_CSS, true);
+
+    dragAndDropStartHandler(root, id)({});
+    t.is(root.children.length, 3);
+    t.true(list1.classList.contains(DROP_TARGET_CSS));
+    t.true(list2.classList.contains(DROP_TARGET_CSS));
+    t.false(list3.classList.contains(DROP_TARGET_CSS));
+});
+
+test('TreeMasterDetailRenderer Drag And Drop - end handler', t => {
+    const id = 'testId';
+    const root = document.createElement('div');
+    const list1 = document.createElement('ul');
+    const list2 = document.createElement('ul');
+    const list3 = document.createElement('ul');
+    root.appendChild(list1);
+    root.appendChild(list2);
+    root.appendChild(list3);
+
+    list1.setAttribute('childrenId', id);
+    list1.classList.toggle(DROP_TARGET_CSS, true);
+    list2.setAttribute('childrenId', id);
+
+    dragAndDropEndHandler(root, id)({});
+    t.is(root.children.length, 3);
+    t.false(list1.classList.contains(DROP_TARGET_CSS));
+    t.false(list2.classList.contains(DROP_TARGET_CSS));
+    t.false(list3.classList.contains(DROP_TARGET_CSS));
 });
 
 test('TreeMasterDetailRenderer Drag And Drop - update handler', t => {
