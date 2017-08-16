@@ -151,7 +151,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     const dialogClose = document.createElement('button');
     dialogClose.innerText = 'Close';
     dialogClose.onclick = () => this.dialog.close();
-    dialogClose.classList.add('btn');
+    dialogClose.classList.add('button');
     dialogClose.classList.add('jsf-treeMasterDetail-dialog-button');
     this.dialog.appendChild(dialogClose);
     this.appendChild(this.dialog);
@@ -400,7 +400,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
           const button = document.createElement('button');
           button.innerText = property.label;
           button.classList.add('jsf-treeMasterDetail-dialog-createbutton');
-          button.classList.add('btn');
+          button.classList.add('button');
           button.onclick = () => {
             const newData = {};
             // initialize new data with default values from schema
