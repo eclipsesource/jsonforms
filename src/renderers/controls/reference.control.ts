@@ -33,11 +33,15 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
   }
 
   /**
-   * Overwrite to provide the root data object which contains the possible reference targets.
+   * Returns the root data object that contains the possible reference targets.
+   * Might be overwritten to provide the root data object in another way
+   * than from the static JsonForms object.
    *
    * @return The root data object containing the possible reference targets.
    */
-  protected abstract getRootData(): Object;
+  protected getRootData(): Object {
+    return JsonForms.rootData;
+  }
 
   /**
    * Overwrite to provide the property that contains the label to display for
@@ -55,6 +59,16 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
   }
 
   /**
+   * Returns the label of the default option.
+   * Might be overwritten by implementing classes to change the label.
+   *
+   * @return the label of the default option.
+   */
+  protected getDefaultOptionLabel(): string {
+    return 'Choose Reference Target...';
+  }
+
+  /**
    * Adds all possible reference targets as options to the control's combo box.
    */
   protected addOptions(input) {
@@ -63,6 +77,13 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
       _.head(JsonForms.schemaService.getReferenceProperties(eReferenceSchema));
 
     const referencees = eTypeRefProp.findReferenceTargets(this.getRootData());
+
+    const defaultOption = document.createElement('option');
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    defaultOption.hidden = true;
+    defaultOption.innerText = this.getDefaultOptionLabel();
+    input.appendChild(defaultOption);
 
     referencees.forEach((referencee, index) => {
       const option = document.createElement('option');

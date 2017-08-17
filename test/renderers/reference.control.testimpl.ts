@@ -24,10 +24,6 @@ export class ReferenceControlTestImpl extends ReferenceControl {
     this.labelProperty = labelProperty;
   }
 
-  protected getRootData(): Object {
-    return this.rootData;
-  }
-
   protected getLabelProperty(): string {
     return this.labelProperty;
   }
