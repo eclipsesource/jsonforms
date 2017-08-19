@@ -35,6 +35,7 @@ export class EnumControl extends BaseControl<HTMLSelectElement> {
       const option = document.createElement('option');
       option.value = optionValue;
       option.label = optionValue;
+      option.innerText = optionValue;
       input.appendChild(option);
     });
   }
