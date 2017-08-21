@@ -72,12 +72,15 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
    * Adds all possible reference targets as options to the control's combo box.
    */
   protected addOptions(input) {
-    const eReferenceSchema = this.dataSchema;
-    const eTypeRefProp: ReferenceProperty =
-      _.head(JsonForms.schemaService.getReferenceProperties(eReferenceSchema));
+    // The object schema contains the reference property rendererd by this renderer
+    // as one of its properties.
+    const objectSchema = this.dataSchema;
+    const referenceProperty: ReferenceProperty =
+      _.head(JsonForms.schemaService.getReferenceProperties(objectSchema));
 
-    const referencees = eTypeRefProp.findReferenceTargets(this.getRootData());
+    const referencees = referenceProperty.findReferenceTargets(this.getRootData());
 
+    // add default option which is displayed if no reference target has been selected
     const defaultOption = document.createElement('option');
     defaultOption.selected = true;
     defaultOption.disabled = true;
@@ -85,6 +88,7 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
     defaultOption.innerText = this.getDefaultOptionLabel();
     input.appendChild(defaultOption);
 
+    // add an option for every possible reference target
     referencees.forEach((referencee, index) => {
       const option = document.createElement('option');
       option.value = referencee[this.getIdentifyingProperty()];
