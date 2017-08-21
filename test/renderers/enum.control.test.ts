@@ -169,7 +169,9 @@ test('EnumControl static', t => {
   t.is(input.value, 'a');
   t.is(input.options.length, 2);
   t.is(input.options.item(0).value, 'a');
+  t.is(input.options.item(0).innerText, 'a');
   t.is(input.options.item(1).value, 'b');
+  t.is(input.options.item(1).innerText, 'b');
   const validation = result.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
@@ -200,7 +202,9 @@ test('EnumControl static no label', t => {
   t.is(input.value, 'b');
   t.is(input.options.length, 2);
   t.is(input.options.item(0).value, 'a');
+  t.is(input.options.item(0).innerText, 'a');
   t.is(input.options.item(1).value, 'b');
+  t.is(input.options.item(1).innerText, 'b');
   const validation = result.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
