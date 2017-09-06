@@ -72,7 +72,7 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
    * Adds all possible reference targets as options to the control's combo box.
    */
   protected addOptions(input) {
-    // The object schema contains the reference property rendererd by this renderer
+    // The object schema contains the reference property rendered by this renderer
     // as one of its properties.
     const objectSchema = this.dataSchema;
     const referenceProperty: ReferenceProperty =
