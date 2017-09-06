@@ -29,7 +29,7 @@ const addToArray =
   if (data[key] === undefined) {
     data[key] = [];
   }
-  if (!_.isEmpty(identifyingProperty)) {
+  if (!_.isEmpty(identifyingProperty) && _.isEmpty(valueToAdd[identifyingProperty])) {
     valueToAdd[identifyingProperty] = uuid.v4();
   }
   const childArray = data[key];
