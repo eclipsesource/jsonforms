@@ -566,6 +566,39 @@ test('containment properties add when array not defined and generate ID', t => {
   t.true(data.foo[0]._id !== undefined);
 });
 
+test('containment properties add when array not defined and do not overwrite existing ID', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            bar: { type: 'string' }
+          }
+        }
+      }
+    }
+  };
+
+  JsonForms.config.setIdentifyingProp('_id');
+  const service: SchemaService = new SchemaServiceImpl(schema);
+
+  const property = service.getContainmentProperties(schema)[0];
+  const data = {
+    foo: undefined
+  };
+  const valueToAdd = { bar: `Hey Mum, look, it's an idea`, _id: 'TEST-ID' };
+  property.addToData(data)(valueToAdd);
+
+  t.true(data.foo !== undefined);
+  t.is(data.foo.length, 1);
+  t.is(data.foo[0].bar, `Hey Mum, look, it's an idea`);
+  t.is(data.foo[0]._id, 'TEST-ID');
+});
+
 test('containment properties add when array defined', t => {
   const schema = t.context.fooBarArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
