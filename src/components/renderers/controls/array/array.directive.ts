@@ -122,6 +122,7 @@ class ArrayController extends AbstractControl {
         let index = this.resolvedData[this.fragment].indexOf(element);
         if (index !== -1) {
             this.resolvedData[this.fragment].splice(index, 1);
+            this.triggerChangeEvent()
         }
     }
     public get supportsSubmit(){
