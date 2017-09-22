@@ -7,6 +7,7 @@ import { RendererService } from './core/renderer.service';
 import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
 import { SchemaService } from './core/schema.service';
 import { SchemaServiceImpl } from './core/schema.service.impl';
+import { ResourceSet, ResourceSetImpl } from './core/resource-set';
 
 /**
  * Represents a JSONForms service.
@@ -62,6 +63,7 @@ export class JsonForms {
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
   public static modelMapping;
   public static rootData: Object;
+  public static resources: ResourceSet = new ResourceSetImpl();
   public static set schema(schema: JsonSchema) {
     JsonForms._schemaService = new SchemaServiceImpl(schema);
   }
