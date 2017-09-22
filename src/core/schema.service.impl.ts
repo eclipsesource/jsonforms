@@ -1,3 +1,4 @@
+import * as AJV from 'ajv';
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
 import { resolveSchema } from '../path.util';
@@ -11,6 +12,10 @@ import {
 import * as uuid from 'uuid';
 import { JsonForms } from '../core';
 import { findAllRefs } from '../path.util';
+import { RS_PROTOCOL } from './resource-set';
+
+// TODO configure ajv for json schema 04
+const ajv = new AJV({jsonPointers: true});
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
@@ -83,6 +88,8 @@ const addReference = (schema: JsonSchema, identifyingProperty: string, propName:
       data[propName] = refValue;
     }
   };
+
+// reference resolvement for id based references
 const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Object[],
                     identifyingProperty: string, propName: string) =>
   (rootData: Object, data: Object) => {
@@ -147,6 +154,120 @@ const getFindReferenceTargetsFunction = (pathToContainment: string, schemaId: st
     return [];
   };
 
+const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp: string) => () => {
+  let targetData: Object;
+  // TODO get local path starting at target document root
+  let localPath: string;
+  if (_.startsWith(href, RS_PROTOCOL)) {
+    // TODO extract resource name
+
+    const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
+    localPath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
+    targetData = JsonForms.resources.getResource(resourceName);
+    // reference to data in resource set
+  } else if (_.startsWith(href, 'http://')) {
+    // remote data
+    console.warn(`Remote data resolution is not yet implemented for data links.`);
+
+    return;
+  } else if (_.startsWith(href, '#')) {
+    // local data
+    targetData = JsonForms.rootData;
+    localPath = href;
+  } else {
+    console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
+
+    return [];
+  }
+
+  // assume targetSchema is resolved
+  if (!_.isEmpty(targetSchema.properties) && !_.isEmpty(targetSchema.properties[idProp])) {
+    // TODO use id based referencing & reuse existing code for now
+  } else {
+    // use path based referencing
+    return collectReferencePaths(targetData, localPath, targetSchema);
+  }
+};
+
+export const collectReferencePaths = (data: Object, scopePath: string,
+                                      targetSchema: JsonSchema)
+                                      : string[] => {
+  // TODO search for all paths to objects that match the targetSchema
+  // and are located within scope (directly or indirectly)
+
+  // step 1 get scoped root
+  const scopedRoot = scopePath.split('/')
+    .reduce(
+      (elem, path) => {
+        if (path === '#' || _.isEmpty(path)) {
+          return elem;
+        }
+
+        return elem[path];
+      },
+      data);
+
+  // step 2 (recursively) search for targets matching the target schema
+  return collectionHelper(scopePath, scopedRoot, targetSchema);
+
+};
+
+// NOTE Json Schema 04 allows additional properties by default. probably needs to be
+// restricted to work for finding valid UI Schema targets
+
+/**
+ * Recursive method to find all paths to valid reference targets based on the
+ * target schema identifying them.
+ * This method searches the target based on the given data and calculates the path
+ * based on the current location and adding the next path segment for child properties
+ * or array elements.
+ *
+ */
+const collectionHelper = (currentPath: string, data: Object, targetSchema: JsonSchema) => {
+  const result: string[] = [];
+  if (checkData(data, targetSchema)) {
+    // must be done  before null check before null might be a valid target
+    result.push(currentPath);
+  }
+  if (data === undefined || data === null) {
+    return result;
+  }
+  if (Array.isArray(data)) {
+    // TODO how to deal with array? index? - assume index for now
+    for (let i = 0; i < data.length; i++) {
+      const childResult = collectionHelper(`${currentPath}/${i}`, data[i], targetSchema);
+      result.concat(childResult);
+    }
+  } else if (!_.isEmpty(data)) {
+    // for (const prop in data) {
+    //   if (data.hasOwnProperty(prop)) {
+    //     console.log(prop);
+    //     console.log(data[prop]);
+    //     const d = data[prop];
+    //     const childResult = collectionHelper('', d, targetSchema);
+    //     result.concat(childResult);
+    //   }
+    // }
+    Object.keys(data).forEach(key => {
+      // NOTE later maybe need to check for refs and thereby circles
+      console.log(key);
+      console.log(data[key]);
+      const d = data[key];
+      const childResult = collectionHelper('', d, targetSchema);
+      result.concat(childResult);
+    });
+  }
+
+  console.log(Object.keys(data));
+
+  return result;
+};
+
+const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
+  // TODO use AJV to validate data against targetSchema and return result
+  return ajv.validate(targetSchema, data);
+};
+
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: {[id: string]: JsonSchema} = {};
   constructor(private rootSchema: JsonSchema) {
@@ -191,6 +312,8 @@ export class SchemaServiceImpl implements SchemaService {
           return;
         }
         let targetSchema;
+        // TODO what if schema is url but not resolved?
+        // Special case: JSON Schema 04 for UI Schema editor
         if (link.targetSchema.$ref !== undefined) {
           targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
         } else {
