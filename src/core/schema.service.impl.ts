@@ -156,7 +156,6 @@ const getFindReferenceTargetsFunction = (pathToContainment: string, schemaId: st
 
 const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp?: string) => () => {
   let targetData: Object;
-  // TODO get local path starting at target document root
   let localPath: string;
   if (_.startsWith(href, RS_PROTOCOL)) {
     // TODO extract resource name
@@ -181,13 +180,76 @@ const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp?:
   }
 
   // assume targetSchema is resolved
-  if (!_.isEmpty(idProp) && !_.isEmpty(targetSchema.properties)
+  if (!_.isEmpty(idProp) && !_.isEmpty(targetSchema.id)
+      && !_.isEmpty(targetSchema.properties)
       && !_.isEmpty(targetSchema.properties[idProp])) {
-    // TODO use id based referencing & reuse existing code for now
+    // use id based referencing & reuse existing code for now
+    // TODO reuse of existing id behavior sub-optimal (does not search cascaded)
+    return getFindReferenceTargetsFunction(localPath, targetSchema.id)(targetData);
   } else {
     // use path based referencing
     return collectReferencePaths(targetData, localPath, targetSchema);
   }
+};
+
+/**
+ * Retrieves the data that contains the reference targets by resolving the given href uri.
+ * Thereby, the root data is gathered based on the protocol and then resolved
+ * against the uri's path.
+ *
+ * Important: This method does not resolve the actual reference targets but only the
+ * root data containing them.
+ *
+ * @return the resolved data containing the reference targets; null if the href cannot be resolved
+ */
+const getReferenceTargetData = (href: string): Object => {
+  let rootData: Object;
+  let localPath: string;
+  if (_.startsWith(href, RS_PROTOCOL)) {
+    const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
+    localPath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
+    rootData = JsonForms.resources.getResource(resourceName);
+    // reference to data in resource set
+  } else if (_.startsWith(href, 'http://')) {
+    // remote data
+    console.warn(`Remote data resolution is not yet implemented for data links.`);
+
+    return null;
+  } else if (_.startsWith(href, '#')) {
+    // local data
+    rootData = JsonForms.rootData;
+    localPath = href;
+  } else {
+    console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
+
+    return null;
+  }
+
+  return resolveLocalData(rootData, localPath);
+};
+
+/**
+ * Resolves the given local data path against the root data.
+ *
+ * @param rootData the root data to resolve the data from
+ * @param path The path to resolve against the root data
+ * @return the resolved data or null if the path is not a valid path in the root data
+ */
+const resolveLocalData = (rootData: Object, path: string): Object => {
+  let resolvedData = rootData;
+  for (const segment of path.split('/')) {
+    if (segment === '#' || _.isEmpty(segment)) {
+      continue;
+    }
+    if (_.isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
+      console.error(`The local path '${path}' cannot be resolved in the given data:`, rootData);
+
+      return null;
+    }
+    resolvedData = resolvedData[segment];
+  }
+
+  return resolvedData;
 };
 
 /**
@@ -204,19 +266,7 @@ export const collectReferencePaths = (data: Object, scopePath: string,
                                       targetSchema: JsonSchema)
                                       : string[] => {
   // step 1: scope data
-  let scopedRoot = data;
-  for (const segment of scopePath.split('/')) {
-    if (segment === '#' || _.isEmpty(segment)) {
-      continue;
-    }
-    if (_.isEmpty(scopedRoot) || !scopedRoot.hasOwnProperty(segment)) {
-      console.error(`Cannot collect reference paths because the local path '${scopePath}' `
-                    + 'cannot be resolved in the given data:', data);
-
-      return [];
-    }
-    scopedRoot = scopedRoot[segment];
-  }
+  const scopedRoot = resolveLocalData(data, scopePath);
   // step 2: (recursively) search for targets matching the target schema
   return collectionHelper(scopePath, scopedRoot, targetSchema);
 
