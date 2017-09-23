@@ -154,7 +154,7 @@ const getFindReferenceTargetsFunction = (pathToContainment: string, schemaId: st
     return [];
   };
 
-const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp: string) => () => {
+const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp?: string) => () => {
   let targetData: Object;
   // TODO get local path starting at target document root
   let localPath: string;
@@ -181,7 +181,8 @@ const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp: 
   }
 
   // assume targetSchema is resolved
-  if (!_.isEmpty(targetSchema.properties) && !_.isEmpty(targetSchema.properties[idProp])) {
+  if (!_.isEmpty(idProp) && !_.isEmpty(targetSchema.properties)
+      && !_.isEmpty(targetSchema.properties[idProp])) {
     // TODO use id based referencing & reuse existing code for now
   } else {
     // use path based referencing
@@ -189,25 +190,34 @@ const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp: 
   }
 };
 
+/**
+ * Search for all paths to objects that match the targetSchema
+ * and are located within the scope (directly or indirectly)
+ *
+ * @param data The unscoped data to search for reference targets
+ * @param scopePath The path defining where to search for reference targets
+ *                  within the given data
+ * @param targetSchema The schema that valid reference targets have to validate against
+ * @return All paths to reference targets as a string array
+ */
 export const collectReferencePaths = (data: Object, scopePath: string,
                                       targetSchema: JsonSchema)
                                       : string[] => {
-  // TODO search for all paths to objects that match the targetSchema
-  // and are located within scope (directly or indirectly)
+  // step 1: scope data
+  let scopedRoot = data;
+  for (const segment of scopePath.split('/')) {
+    if (segment === '#' || _.isEmpty(segment)) {
+      continue;
+    }
+    if (_.isEmpty(scopedRoot) || !scopedRoot.hasOwnProperty(segment)) {
+      console.error(`Cannot collect reference paths because the local path '${scopePath}' `
+                    + 'cannot be resolved in the given data:', data);
 
-  // step 1 get scoped root
-  const scopedRoot = scopePath.split('/')
-    .reduce(
-      (elem, path) => {
-        if (path === '#' || _.isEmpty(path)) {
-          return elem;
-        }
-
-        return elem[path];
-      },
-      data);
-
-  // step 2 (recursively) search for targets matching the target schema
+      return [];
+    }
+    scopedRoot = scopedRoot[segment];
+  }
+  // step 2: (recursively) search for targets matching the target schema
   return collectionHelper(scopePath, scopedRoot, targetSchema);
 
 };
@@ -224,7 +234,7 @@ export const collectReferencePaths = (data: Object, scopePath: string,
  *
  */
 const collectionHelper = (currentPath: string, data: Object, targetSchema: JsonSchema) => {
-  const result: string[] = [];
+  let result: string[] = [];
   if (checkData(data, targetSchema)) {
     // must be done  before null check before null might be a valid target
     result.push(currentPath);
@@ -236,36 +246,22 @@ const collectionHelper = (currentPath: string, data: Object, targetSchema: JsonS
     // TODO how to deal with array? index? - assume index for now
     for (let i = 0; i < data.length; i++) {
       const childResult = collectionHelper(`${currentPath}/${i}`, data[i], targetSchema);
-      result.concat(childResult);
+      result = result.concat(childResult);
     }
-  } else if (!_.isEmpty(data)) {
-    // for (const prop in data) {
-    //   if (data.hasOwnProperty(prop)) {
-    //     console.log(prop);
-    //     console.log(data[prop]);
-    //     const d = data[prop];
-    //     const childResult = collectionHelper('', d, targetSchema);
-    //     result.concat(childResult);
-    //   }
-    // }
+  } else if (!_.isEmpty(data) && typeof data !== 'string') {
     Object.keys(data).forEach(key => {
       // NOTE later maybe need to check for refs and thereby circles
-      console.log(key);
-      console.log(data[key]);
-      const d = data[key];
-      const childResult = collectionHelper('', d, targetSchema);
-      result.concat(childResult);
+      const childResult = collectionHelper(`${currentPath}/${key}`, data[key], targetSchema);
+      result = result.concat(childResult);
     });
   }
-
-  console.log(Object.keys(data));
 
   return result;
 };
 
 const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
-  // TODO use AJV to validate data against targetSchema and return result
-  return ajv.validate(targetSchema, data);
+  // use AJV to validate data against targetSchema and return result
+  return ajv.validate(targetSchema, data);;
 };
 
 export class SchemaServiceImpl implements SchemaService {

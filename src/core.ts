@@ -63,7 +63,7 @@ export class JsonForms {
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
   public static modelMapping;
   public static rootData: Object;
-  public static resources: ResourceSet = new ResourceSetImpl();
+  private static _resources: ResourceSet = new ResourceSetImpl();
   public static set schema(schema: JsonSchema) {
     JsonForms._schemaService = new SchemaServiceImpl(schema);
   }
@@ -77,6 +77,13 @@ export class JsonForms {
 
   public static get config(): JsonFormsConfig {
     return this._config;
+  }
+
+  /**
+   * Returns the {ResourceSet} containing all registered resources.
+   */
+  public static get resources(): ResourceSet {
+    return this._resources;
   }
 
   /**

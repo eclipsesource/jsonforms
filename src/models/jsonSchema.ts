@@ -36,7 +36,7 @@ export interface JsonSchema {
    * It is recommended that the meta-schema is
    * included in the root of any JSON Schema
    */
-  $schema?: JsonSchema;
+  $schema?: JsonSchema | string;
   /**
    * Title of the schema
    */
