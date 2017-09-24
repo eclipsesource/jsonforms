@@ -84,6 +84,7 @@ test.beforeEach(t => {
     }
   };
   JsonForms.modelMapping = t.context.modelMapping;
+  JsonForms.config.setIdentifyingProp('_id');
 
 });
 
@@ -99,8 +100,11 @@ test('available options filtering for reference attribute', t => {
 
   const service: SchemaService = new SchemaServiceImpl(testDataSchema);
   const reference = service.getReferenceProperties(testDataSchema.definitions.reference)[0];
-  const availableOptions = reference.findReferenceTargets(t.context.data);
-
-  t.is(Object.keys(availableOptions).length, 2, 'array of length two expected');
+  JsonForms.rootData = t.context.data;
+  const availableOptions = reference.findReferenceTargets();
+  console.log('availableOptions keys', Object.keys(availableOptions));
+  t.is(Object.keys(availableOptions).length, 2, 'obect with two keys expected');
+  t.is(Object.keys(availableOptions)[0], 'id-class-a');
+  t.is(Object.keys(availableOptions)[1], 'id-class-b');
 
 });

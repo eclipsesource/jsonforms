@@ -133,7 +133,7 @@ const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp:
     const candidates = getReferenceTargetData(href) as Object[];
     if (!_.isEmpty(candidates)) {
       const result = {};
-      for (const candidate in JsonForms.filterObjectsByType(candidates, schemaId)) {
+      for (const candidate of JsonForms.filterObjectsByType(candidates, schemaId)) {
         const id = candidate[idProp];
         result[id] = candidate;
       }
@@ -155,10 +155,10 @@ const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp:
  */
 const getReferenceTargetData = (href: string): Object => {
   let rootData: Object;
-  let localPath: string;
+  let localTemplatePath: string;
   if (_.startsWith(href, RS_PROTOCOL)) {
     const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
-    localPath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
+    localTemplatePath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
     rootData = JsonForms.resources.getResource(resourceName);
     // reference to data in resource set
   } else if (_.startsWith(href, 'http://')) {
@@ -169,13 +169,14 @@ const getReferenceTargetData = (href: string): Object => {
   } else if (_.startsWith(href, '#')) {
     // local data
     rootData = JsonForms.rootData;
-    localPath = href;
+    localTemplatePath = href;
   } else {
     console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
 
-    return null;
+    return {};
   }
 
+  const localPath = localTemplatePath.split(/\/\{.*\}/)[0]
   return resolveLocalData(rootData, localPath);
 };
 
