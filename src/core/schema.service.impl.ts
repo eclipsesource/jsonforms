@@ -76,7 +76,7 @@ const getArray = (key: string) => (data: object) => {
   return data[key];
 };
 const addReference = (schema: JsonSchema, identifyingProperty: string, propName: string) =>
-  (root: Object, data: Object, toAdd: object) => {
+  (data: Object, toAdd: object) => {
 
     const refValue = toAdd[identifyingProperty];
     if (schema.properties[propName].type === 'array') {
@@ -90,107 +90,58 @@ const addReference = (schema: JsonSchema, identifyingProperty: string, propName:
   };
 
 // reference resolvement for id based references
-const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Object[],
-                    identifyingProperty: string, propName: string) =>
-  (rootData: Object, data: Object) => {
-    if (_.isEmpty(data) || _.isEmpty(identifyingProperty)) {
-      return null;
+const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Object },
+                    propName: string) => (data: Object) => {
+    if (_.isEmpty(data)) {
+      return {};
     }
     // get all objects that could be referenced.
-    const candidates = findTargets(rootData);
-
+    const candidates = findTargets();
+    const result = {};
     if (_.isEmpty(schema.properties[propName].type)) {
       throw Error(`The schema of the property '${propName}' does not specify a schema type.`);
     }
     if (schema.properties[propName].type === 'array') {
-      const ids: object[] = data[propName];
-      const resultList = candidates.filter(value => ids.indexOf(value[identifyingProperty]) > -1);
+      const ids = data[propName] as string[];
 
       // check that there is at most one reference target for every id
       for (const id of ids) {
-        const idResults = resultList.filter(result => result[identifyingProperty] === id);
-        if (idResults.length > 1) {
-          throw Error(`There was more than one possible reference target with value
-                      '${JSON.stringify(id)}' in its identifying property
-                      '${identifyingProperty}'.`);
+        const idResult = candidates[id];
+        if (idResult === undefined) {
+          console.warn(`Could not resolve the referenced data for id '${id}'.`);
+          continue;
         }
+        result[id] = idResult;
       }
-
-      return resultList;
     } else {
       // use identifying property to identify the referenced object
-      const resultList = candidates.filter(value => value[identifyingProperty] === data[propName]);
+      const id = data[propName];
+      const idResult = candidates[id];
+      if (idResult === undefined) {
+        console.warn(`Could not resolve the referenced data for id '${id}'.`);
 
-      if (_.isEmpty(resultList)) {
-        return null;
+        return result;
       }
-      if (resultList.length > 1) {
-        throw Error(`There was more than one possible reference target with value
-                    '${JSON.stringify(data[propName])}' in its identifying property
-                    '${identifyingProperty}'.`);
-      }
-
-      return _.first(resultList);
+      result[id] = idResult;
     }
+
+    return result;
   };
 
-const getFindReferenceTargetsFunction = (pathToContainment: string, schemaId: string) =>
-  (rootData: Object) => {
-    const candidates = pathToContainment
-      .split('/')
-      .reduce(
-        (elem, path) => {
-          if (path === '#') {
-            return elem;
-          }
-
-          return elem[path];
-        },
-        rootData) as Object[];
+const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp: string) =>
+  () => {
+    const candidates = getReferenceTargetData(href) as Object[];
     if (!_.isEmpty(candidates)) {
-      return JsonForms.filterObjectsByType(candidates, schemaId);
+      const result = {};
+      for (const candidate in JsonForms.filterObjectsByType(candidates, schemaId)) {
+        const id = candidate[idProp];
+        result[id] = candidate;
+      }
+      return result;
     }
 
-    return [];
+    return {};
   };
-
-const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp?: string) => () => {
-  let targetData: Object;
-  let localPath: string;
-  if (_.startsWith(href, RS_PROTOCOL)) {
-    // TODO extract resource name
-
-    const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
-    localPath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
-    targetData = JsonForms.resources.getResource(resourceName);
-    // reference to data in resource set
-  } else if (_.startsWith(href, 'http://')) {
-    // remote data
-    console.warn(`Remote data resolution is not yet implemented for data links.`);
-
-    return;
-  } else if (_.startsWith(href, '#')) {
-    // local data
-    targetData = JsonForms.rootData;
-    localPath = href;
-  } else {
-    console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
-
-    return [];
-  }
-
-  // assume targetSchema is resolved
-  if (!_.isEmpty(idProp) && !_.isEmpty(targetSchema.id)
-      && !_.isEmpty(targetSchema.properties)
-      && !_.isEmpty(targetSchema.properties[idProp])) {
-    // use id based referencing & reuse existing code for now
-    // TODO reuse of existing id behavior sub-optimal (does not search cascaded)
-    return getFindReferenceTargetsFunction(localPath, targetSchema.id)(targetData);
-  } else {
-    // use path based referencing
-    return collectReferencePaths(targetData, localPath, targetSchema);
-  }
-};
 
 /**
  * Retrieves the data that contains the reference targets by resolving the given href uri.
@@ -200,7 +151,7 @@ const findRefTargetsFunction = (href: string, targetSchema: JsonSchema, idProp?:
  * Important: This method does not resolve the actual reference targets but only the
  * root data containing them.
  *
- * @return the resolved data containing the reference targets; null if the href cannot be resolved
+ * @return the resolved data containing the reference targets; {null} if the href cannot be resolved
  */
 const getReferenceTargetData = (href: string): Object => {
   let rootData: Object;
@@ -233,7 +184,7 @@ const getReferenceTargetData = (href: string): Object => {
  *
  * @param rootData the root data to resolve the data from
  * @param path The path to resolve against the root data
- * @return the resolved data or null if the path is not a valid path in the root data
+ * @return the resolved data or {null} if the path is not a valid path in the root data
  */
 const resolveLocalData = (rootData: Object, path: string): Object => {
   let resolvedData = rootData;
@@ -252,26 +203,6 @@ const resolveLocalData = (rootData: Object, path: string): Object => {
   return resolvedData;
 };
 
-/**
- * Search for all paths to objects that match the targetSchema
- * and are located within the scope (directly or indirectly)
- *
- * @param data The unscoped data to search for reference targets
- * @param scopePath The path defining where to search for reference targets
- *                  within the given data
- * @param targetSchema The schema that valid reference targets have to validate against
- * @return All paths to reference targets as a string array
- */
-export const collectReferencePaths = (data: Object, scopePath: string,
-                                      targetSchema: JsonSchema)
-                                      : string[] => {
-  // step 1: scope data
-  const scopedRoot = resolveLocalData(data, scopePath);
-  // step 2: (recursively) search for targets matching the target schema
-  return collectionHelper(scopePath, scopedRoot, targetSchema);
-
-};
-
 // NOTE Json Schema 04 allows additional properties by default. probably needs to be
 // restricted to work for finding valid UI Schema targets
 
@@ -282,12 +213,15 @@ export const collectReferencePaths = (data: Object, scopePath: string,
  * based on the current location and adding the next path segment for child properties
  * or array elements.
  *
+ * The result is an object mapping from the found paths to the target data object
+ * found at the path.
  */
-const collectionHelper = (currentPath: string, data: Object, targetSchema: JsonSchema) => {
-  let result: string[] = [];
+const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema)
+    : { [key: string]: Object } => {
+  let result = {};
   if (checkData(data, targetSchema)) {
-    // must be done  before null check before null might be a valid target
-    result.push(currentPath);
+    // must be done before null check before null might be a valid target
+    result[currentPath] = data;
   }
   if (data === undefined || data === null) {
     return result;
@@ -295,20 +229,72 @@ const collectionHelper = (currentPath: string, data: Object, targetSchema: JsonS
   if (Array.isArray(data)) {
     // TODO how to deal with array? index? - assume index for now
     for (let i = 0; i < data.length; i++) {
-      const childResult = collectionHelper(`${currentPath}/${i}`, data[i], targetSchema);
-      result = result.concat(childResult);
+      const childResult = collectionHelperMap(`${currentPath}/${i}`, data[i], targetSchema);
+      _.assign(result, childResult);
     }
   } else if (!_.isEmpty(data) && typeof data !== 'string') {
     Object.keys(data).forEach(key => {
       // NOTE later maybe need to check for refs and thereby circles
-      const childResult = collectionHelper(`${currentPath}/${key}`, data[key], targetSchema);
-      result = result.concat(childResult);
+      const childResult = collectionHelperMap(`${currentPath}/${key}`, data[key], targetSchema);
+      _.assign(result, childResult);
     });
   }
 
   return result;
 };
 
+/**
+ * Adds the reference path given in toAdd to the data's reference property.
+ */
+const addPathBasedRef = (schema: JsonSchema, propName: string) =>
+  (data: Object, toAdd: object) => {
+    if (typeof toAdd !== 'string') {
+      console.error(`Path based reference values must be of type string. The given value was of`
+        + ` type '${typeof toAdd}' and could not be added.`);
+
+      return;
+    }
+
+    // const refValue = toAdd[identifyingProperty];
+    if (schema.properties[propName].type === 'array') {
+      if (!data[propName]) {
+        data[propName] = [];
+      }
+      data[propName].push(toAdd);
+    } else {
+      data[propName] = toAdd;
+    }
+}
+
+const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Object)
+    : { [key: string]: Object} => {
+  const targetData = getReferenceTargetData(href);
+  const paths = data[pathProperty];
+  const result = {};
+  if (Array.isArray(paths)) {
+    for (const path in paths) {
+      const curRes = resolveLocalData(targetData, path);
+      result[path] = curRes;
+    }
+  } else {
+    result[paths] = resolveLocalData(targetData, paths);
+  }
+
+  return result;
+}
+
+const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => ()
+    : { [key: string]: Object } => {
+
+  const targetData = getReferenceTargetData(href);
+  return collectionHelperMap('#', targetData, targetSchema);
+}
+
+/**
+ * Validates the given data against the given JSON Schema.
+ *
+ * @return true if the data adheres to the schema, false otherwise
+ */
 const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
   // use AJV to validate data against targetSchema and return result
   return ajv.validate(targetSchema, data);;
@@ -359,27 +345,51 @@ export class SchemaServiceImpl implements SchemaService {
         }
         let targetSchema;
         // TODO what if schema is url but not resolved?
-        // Special case: JSON Schema 04 for UI Schema editor
+        // TODO Special case: JSON Schema 04 for UI Schema editor
         if (link.targetSchema.$ref !== undefined) {
           targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
         } else {
           targetSchema = link.targetSchema;
         }
+
         const href: string = link.href;
-        const variableWrapped = href.match(/\{.*\}/)[0];
-        const pathToContainment = href.split(/\/\{.*\}/)[0];
-        const variable = variableWrapped.substring(1, variableWrapped.length - 1);
-        const findTargets = getFindReferenceTargetsFunction(pathToContainment, targetSchema.id);
         const identifyingProp = JsonForms.config.getIdentifyingProp();
+        const variableWrapped = href.match(/\{.*\}/)[0];
+        const variable = variableWrapped.substring(1, variableWrapped.length - 1);
+
+        let findRefTargets: () => { [key: string]: Object };
+        let resolveReference: (data: Object) => { [key: string]: Object };
+        let addToReference: (data: Object, toAdd: object) => void;
+        let idBased: boolean;
+
+        // assume targetSchema is resolved
+        if (!_.isEmpty(identifyingProp) && !_.isEmpty(targetSchema.id)
+            && !_.isEmpty(targetSchema.properties)
+            && !_.isEmpty(targetSchema.properties[identifyingProp])) {
+          // use id based referencing & reuse existing code for now
+          // TODO reuse of existing id behavior sub-optimal (does not search cascaded)
+          idBased = true;
+          findRefTargets = getFindReferenceTargetsFunction(href, targetSchema.id, identifyingProp);
+          resolveReference = resolveRef(schema, findRefTargets, variable);
+          addToReference = addReference(schema, identifyingProp, variable);
+        } else {
+          // use path based referencing
+          idBased = false;
+          findRefTargets = getPathBasedRefTargets(href, targetSchema);
+          resolveReference = resolvePathBasedRef(href, variable);
+          addToReference = addPathBasedRef(schema, variable);
+        }
+
         result.push(
           new ReferencePropertyImpl(
             schema.properties[variable],
             targetSchema,
             variable,
             variable,
-            findTargets,
-            addReference(schema, identifyingProp, variable),
-            resolveRef(schema, findTargets, identifyingProp, variable)
+            idBased,
+            findRefTargets,
+            addToReference,
+            resolveReference
           )
         );
       });
