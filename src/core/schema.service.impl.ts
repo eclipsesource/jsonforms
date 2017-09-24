@@ -114,7 +114,9 @@ const getReferenceTargetData = (href: string): Object => {
   let localTemplatePath: string;
   if (_.startsWith(href, RS_PROTOCOL)) {
     const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
+    console.log('resource name', resourceName);
     localTemplatePath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
+    console.log('local template path', localTemplatePath);
     rootData = JsonForms.resources.getResource(resourceName);
     // reference to data in resource set
   } else if (_.startsWith(href, 'http://')) {
@@ -122,7 +124,7 @@ const getReferenceTargetData = (href: string): Object => {
     console.warn(`Remote data resolution is not yet implemented for data links.`);
 
     return null;
-  } else if (_.startsWith(href, '#')) {
+  } else if (_.startsWith(href, '#') || (href.match(/\{.*\}/) !== null)) {
     // local data
     rootData = JsonForms.rootData;
     localTemplatePath = href;
@@ -132,6 +134,10 @@ const getReferenceTargetData = (href: string): Object => {
     return {};
   }
   const localPath = localTemplatePath.split(/\/\{.*\}/)[0];
+  if (localPath.match(/\{.*\}/) !== null) {
+    // the local path only contains the template variable
+    return rootData;
+  }
 
   return resolveLocalData(rootData, localPath);
 };
@@ -217,13 +223,15 @@ export const collectionHelperMap = (currentPath: string, data: Object, targetSch
   if (Array.isArray(data)) {
     // TODO how to deal with array? index? - assume index for now
     for (let i = 0; i < data.length; i++) {
-      const childResult = collectionHelperMap(`${currentPath}/${i}`, data[i], targetSchema);
+      const childPath = _.isEmpty(currentPath) ? `${i}` : `${currentPath}/${i}`;
+      const childResult = collectionHelperMap(childPath, data[i], targetSchema);
       _.assign(result, childResult);
     }
   } else if (!_.isEmpty(data) && typeof data !== 'string') {
     Object.keys(data).forEach(key => {
       // NOTE later maybe need to check for refs and thereby circles
-      const childResult = collectionHelperMap(`${currentPath}/${key}`, data[key], targetSchema);
+      const childPath = _.isEmpty(currentPath) ? key : `${currentPath}/${key}`;
+      const childResult = collectionHelperMap(childPath, data[key], targetSchema);
       _.assign(result, childResult);
     });
   }
@@ -274,6 +282,10 @@ const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Objec
 const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => ()
     : { [key: string]: Object } => {
   const targetData = getReferenceTargetData(href);
+
+  if (href.indexOf('#') > -1) {
+    return collectionHelperMap('', targetData, targetSchema);
+  }
 
   return collectionHelperMap('#', targetData, targetSchema);
 };

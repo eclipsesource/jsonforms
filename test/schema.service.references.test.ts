@@ -2,10 +2,9 @@
 /* tslint:disable:no-string-literal */
 import { test } from 'ava';
 import { collectionHelperMap, SchemaServiceImpl } from '../src/core/schema.service.impl';
-import { JsonSchema } from '../src/models/jsonSchema';
 import { JsonForms } from '../src/core';
 import { jsonSchemaFourMod } from './data/schema-04';
-import { ReferenceProperty, SchemaService } from '../src/core/schema.service';
+import { SchemaService } from '../src/core/schema.service';
 
 test.beforeEach(t => {
   t.context.simpleSchema = {
@@ -15,6 +14,7 @@ test.beforeEach(t => {
     },
     required: ['a']
   };
+
   t.context.schema = {
     type: 'object',
     properties: {
@@ -22,11 +22,28 @@ test.beforeEach(t => {
     },
     links: [
       {
-        href: '#/{ref}',
+        href: '{ref}',
         targetSchema: t.context.simpleSchema
       }
     ]
-  }
+  };
+
+  t.context.schemaArray = {
+    type: 'object',
+    properties: {
+      ref: {
+        type: 'array',
+        items: { type: 'string' }
+      }
+    },
+    links: [
+      {
+        href: '{ref}',
+        targetSchema: t.context.simpleSchema
+      }
+    ]
+  };
+
   t.context.data = {
     a: 'A',
     obj: {
@@ -65,7 +82,67 @@ test('Reference Property - path based - find Ref targets', t => {
     t.is(targets['#/obj/ted'], data.obj.ted);
 });
 
-test('Reference Property - path based - resolve Ref target', t => {
+test('Reference Property - path based - find Ref targets in Resource', t => {
+    const data = t.context.data;
+    const schema = {
+      type: 'object',
+      properties: {
+        ref: { type: 'string' }
+      },
+      links: [
+        {
+          href: 'rs://res-name/{ref}',
+          targetSchema: t.context.simpleSchema
+        }
+      ]
+    };
+    JsonForms.resources.registerResource('res-name', data, false);
+
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    const targets = property.findReferenceTargets();
+    const keys = Object.keys(targets);
+    t.is(keys.length, 3);
+    t.true(keys.indexOf('#') > -1);
+    t.true(keys.indexOf('#/obj/arr/1') > -1);
+    t.true(keys.indexOf('#/obj/ted') > -1);
+    t.is(targets['#'], data);
+    t.is(targets['#/obj/arr/1'], data.obj.arr[1]);
+    t.is(targets['#/obj/ted'], data.obj.ted);
+});
+
+test('Reference Property - path based - find Ref targets in scoped Resource', t => {
+    const data = t.context.data;
+    const schema = {
+      type: 'object',
+      properties: {
+        ref: { type: 'string' }
+      },
+      links: [
+        {
+          href: 'rs://res-name/#/obj/{ref}',
+          targetSchema: t.context.simpleSchema
+        }
+      ]
+    };
+    JsonForms.resources.registerResource('res-name', data, false);
+
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    const targets = property.findReferenceTargets();
+    const keys = Object.keys(targets);
+    t.is(keys.length, 2);
+    t.true(keys.indexOf('arr/1') > -1);
+    t.true(keys.indexOf('ted') > -1);
+    t.is(targets['arr/1'], data.obj.arr[1]);
+    t.is(targets['ted'], data.obj.ted);
+});
+
+test('Reference Object - path based - resolve Ref target', t => {
     const data = t.context.data;
     const schema = t.context.schema;
     JsonForms.rootData = data;
@@ -83,7 +160,28 @@ test('Reference Property - path based - resolve Ref target', t => {
     t.is(resolved['#/obj/ted'], data.obj.ted);
 });
 
-test('Reference Property - path based - add defined and set', t => {
+test('Reference Array - path based - resolve Ref targets', t => {
+    const data = t.context.data;
+    const schema = t.context.schemaArray;
+    JsonForms.rootData = data;
+
+    const refData = { ref: ['#', '#/obj/arr/1', '#/obj/ted'] };
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    const resolved = property.getData(refData);
+    const keys = Object.keys(resolved);
+    t.is(keys.length, 3);
+    t.true(keys.indexOf('#') > -1);
+    t.true(keys.indexOf('#/obj/arr/1') > -1);
+    t.true(keys.indexOf('#/obj/ted') > -1);
+    t.is(resolved['#'], data);
+    t.is(resolved['#/obj/ted'], data.obj.ted);
+    t.is(resolved['#/obj/arr/1'], data.obj.arr[1]);
+});
+
+test('Reference Object - path based - add to defined', t => {
     const data = t.context.data;
     const schema = t.context.schema;
     JsonForms.rootData = data;
@@ -94,7 +192,63 @@ test('Reference Property - path based - add defined and set', t => {
     t.false(property.isIdBased());
 
     property.addToData(refData, '#');
-    // t.deepEqual(refData, { ref: '#'});
+    t.deepEqual(refData, { ref: '#'});
+});
+
+test('Reference Object - path based - add to undefined', t => {
+    const data = t.context.data;
+    const schema = t.context.schema;
+    JsonForms.rootData = data;
+
+    const refData = {};
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    property.addToData(refData, '#');
+    t.deepEqual(refData, { ref: '#'});
+});
+
+test('Reference Object - path based - added value is no string', t => {
+    const data = t.context.data;
+    const schema = t.context.schema;
+    JsonForms.rootData = data;
+
+    const refData = {};
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    property.addToData(refData, {});
+    t.deepEqual(refData, {});
+});
+
+test('Reference Array - path based - add to undefined', t => {
+    const data = t.context.data;
+    const schema = t.context.schemaArray;
+    JsonForms.rootData = data;
+
+    const refData = {};
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    property.addToData(refData, '#');
+    t.deepEqual(refData, { ref: ['#']});
+});
+
+test('Reference Array - path based - add to defined', t => {
+    const data = t.context.data;
+    const schema = t.context.schemaArray;
+    JsonForms.rootData = data;
+
+    const refData = { ref: ['#/obj']};
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    property.addToData(refData, '#');
+    t.deepEqual(refData, { ref: ['#/obj', '#']});
 });
 
 test('Simple Schema - Root Scope', t => {
