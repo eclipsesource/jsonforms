@@ -204,7 +204,7 @@ const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp:
  * The result is an object mapping from the found paths to the target data object
  * found at the path.
  */
-const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema)
+export const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema)
     : { [key: string]: Object } => {
   const result = {};
   if (checkData(data, targetSchema)) {

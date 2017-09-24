@@ -64,7 +64,7 @@ export interface ReferenceProperty extends Property {
    * @param valueToAdd For id based referencing: The object referenced by the id.
    *                   For path based referencing: the path itself
    */
-  addToData(data: Object, valueToAdd: object): void;
+  addToData(data: Object, valueToAdd: Object): void;
   /**
    * This allows to retrieve the refernced data object(s) of the reference.
    * The result object contains the data objects' identifier (its ID or path) as key
@@ -161,7 +161,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   get targetSchema(): JsonSchema {
     return this.innerTargetSchema;
   }
-  addToData(data: object, valueToAdd: object): void {
+  addToData(data: object, valueToAdd: Object): void {
     this.addFunction(data, valueToAdd);
   }
   getData(data: object): { [key: string]: Object } {
