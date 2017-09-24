@@ -782,7 +782,7 @@ test('reference object properties get', t => {
   const keys = Object.keys(getData);
   t.is(keys.length, 1);
   t.is(keys[0], 'c1');
-  t.is(getData['c1'], data.classes[0]);
+  t.is(getData[keys[0]], data.classes[0]);
 });
 
 test('reference array properties add to undefined', t => {
@@ -827,7 +827,7 @@ test('reference array properties get', t => {
   const keys = Object.keys(getData);
   t.is(keys.length, 1);
   t.is(keys[0], 'c1');
-  t.deepEqual(getData['c1'], data.classes[0]);
+  t.deepEqual(getData[keys[0]], data.classes[0]);
 });
 test('reference array properties get multiple', t => {
   const schema: JsonSchema = t.context.referenceArraySchema;
@@ -843,8 +843,8 @@ test('reference array properties get multiple', t => {
   t.is(keys.length, 2);
   t.is(keys[0], 'c1');
   t.is(keys[1], 'c3');
-  t.deepEqual(getData['c1'], data.classes[0]);
-  t.deepEqual(getData['c3'], data.classes[2]);
+  t.deepEqual(getData[keys[0]], data.classes[0]);
+  t.deepEqual(getData[keys[1]], data.classes[2]);
 });
 test(`reference properties get - linking property's schema without type`, t => {
   const schema = {
@@ -901,8 +901,8 @@ test('reference property find reference targets', t => {
   t.is(keys.length, 2);
   t.is(keys[0], 'c1');
   t.is(keys[1], 'c2');
-  t.deepEqual(targets['c1'], data.classes[0]);
-  t.deepEqual(targets['c2'], data.classes[1]);
+  t.deepEqual(targets[keys[0]], data.classes[0]);
+  t.deepEqual(targets[keys[1]], data.classes[1]);
 });
 test('reference property find reference targets - target container undefined', t => {
   const schema = t.context.referenceFindSchema;
@@ -994,8 +994,8 @@ test('reference property find reference targets - targets are subset of availabl
   t.is(keys.length, 2);
   t.is(keys[0], 'c1');
   t.is(keys[1], 'c2');
-  t.deepEqual(targets['c1'], data.objects[0]);
-  t.deepEqual(targets['c2'], data.objects[2]);
+  t.deepEqual(targets[keys[0]], data.objects[0]);
+  t.deepEqual(targets[keys[1]], data.objects[2]);
 });
 
 test('property type check', t => {

@@ -22,7 +22,7 @@ export interface JsonFormService {
 
 export class JsonFormsConfig {
 
-  private _identifyingProp;
+  private _identifyingProp: string;
 
   setIdentifyingProp(propName: string) {
     this._identifyingProp = propName;

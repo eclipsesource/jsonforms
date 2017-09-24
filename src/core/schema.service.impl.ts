@@ -1,3 +1,4 @@
+/* tslint:disable:max-file-line-count */
 import * as AJV from 'ajv';
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
@@ -11,7 +12,7 @@ import {
 } from './schema.service';
 import * as uuid from 'uuid';
 import { JsonForms } from '../core';
-import { findAllRefs } from '../path.util';
+import { findAllRefs, resolveLocalData } from '../path.util';
 import { RS_PROTOCOL } from './resource-set';
 
 // TODO configure ajv for json schema 04
@@ -25,6 +26,15 @@ const isArray = (schema: JsonSchema): boolean => {
 };
 const deepCopy = <T>(object: T): T => {
   return JSON.parse(JSON.stringify(object)) as T;
+};
+/**
+ * Validates the given data against the given JSON Schema.
+ *
+ * @return true if the data adheres to the schema, false otherwise
+ */
+const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
+  // use AJV to validate data against targetSchema and return result
+  return ajv.validate(targetSchema, data);
 };
 
 const addToArray =
@@ -89,6 +99,43 @@ const addReference = (schema: JsonSchema, identifyingProperty: string, propName:
     }
   };
 
+/**
+ * Retrieves the data that contains the reference targets by resolving the given href uri.
+ * Thereby, the root data is gathered based on the protocol and then resolved
+ * against the uri's path.
+ *
+ * Important: This method does not resolve the actual reference targets but only the
+ * root data containing them.
+ *
+ * @return the resolved data containing the reference targets; {null} if the href cannot be resolved
+ */
+const getReferenceTargetData = (href: string): Object => {
+  let rootData: Object;
+  let localTemplatePath: string;
+  if (_.startsWith(href, RS_PROTOCOL)) {
+    const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
+    localTemplatePath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
+    rootData = JsonForms.resources.getResource(resourceName);
+    // reference to data in resource set
+  } else if (_.startsWith(href, 'http://')) {
+    // remote data
+    console.warn(`Remote data resolution is not yet implemented for data links.`);
+
+    return null;
+  } else if (_.startsWith(href, '#')) {
+    // local data
+    rootData = JsonForms.rootData;
+    localTemplatePath = href;
+  } else {
+    console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
+
+    return {};
+  }
+  const localPath = localTemplatePath.split(/\/\{.*\}/)[0];
+
+  return resolveLocalData(rootData, localPath);
+};
+
 // reference resolvement for id based references
 const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Object },
                     propName: string) => (data: Object) => {
@@ -137,72 +184,12 @@ const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp:
         const id = candidate[idProp];
         result[id] = candidate;
       }
+
       return result;
     }
 
     return {};
   };
-
-/**
- * Retrieves the data that contains the reference targets by resolving the given href uri.
- * Thereby, the root data is gathered based on the protocol and then resolved
- * against the uri's path.
- *
- * Important: This method does not resolve the actual reference targets but only the
- * root data containing them.
- *
- * @return the resolved data containing the reference targets; {null} if the href cannot be resolved
- */
-const getReferenceTargetData = (href: string): Object => {
-  let rootData: Object;
-  let localTemplatePath: string;
-  if (_.startsWith(href, RS_PROTOCOL)) {
-    const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
-    localTemplatePath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
-    rootData = JsonForms.resources.getResource(resourceName);
-    // reference to data in resource set
-  } else if (_.startsWith(href, 'http://')) {
-    // remote data
-    console.warn(`Remote data resolution is not yet implemented for data links.`);
-
-    return null;
-  } else if (_.startsWith(href, '#')) {
-    // local data
-    rootData = JsonForms.rootData;
-    localTemplatePath = href;
-  } else {
-    console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
-
-    return {};
-  }
-
-  const localPath = localTemplatePath.split(/\/\{.*\}/)[0]
-  return resolveLocalData(rootData, localPath);
-};
-
-/**
- * Resolves the given local data path against the root data.
- *
- * @param rootData the root data to resolve the data from
- * @param path The path to resolve against the root data
- * @return the resolved data or {null} if the path is not a valid path in the root data
- */
-const resolveLocalData = (rootData: Object, path: string): Object => {
-  let resolvedData = rootData;
-  for (const segment of path.split('/')) {
-    if (segment === '#' || _.isEmpty(segment)) {
-      continue;
-    }
-    if (_.isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
-      console.error(`The local path '${path}' cannot be resolved in the given data:`, rootData);
-
-      return null;
-    }
-    resolvedData = resolvedData[segment];
-  }
-
-  return resolvedData;
-};
 
 // NOTE Json Schema 04 allows additional properties by default. probably needs to be
 // restricted to work for finding valid UI Schema targets
@@ -219,7 +206,7 @@ const resolveLocalData = (rootData: Object, path: string): Object => {
  */
 const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema)
     : { [key: string]: Object } => {
-  let result = {};
+  const result = {};
   if (checkData(data, targetSchema)) {
     // must be done before null check before null might be a valid target
     result[currentPath] = data;
@@ -265,7 +252,7 @@ const addPathBasedRef = (schema: JsonSchema, propName: string) =>
     } else {
       data[propName] = toAdd;
     }
-}
+};
 
 const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Object)
     : { [key: string]: Object} => {
@@ -273,7 +260,7 @@ const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Objec
   const paths = data[pathProperty];
   const result = {};
   if (Array.isArray(paths)) {
-    for (const path in paths) {
+    for (const path of paths) {
       const curRes = resolveLocalData(targetData, path);
       result[path] = curRes;
     }
@@ -282,23 +269,13 @@ const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Objec
   }
 
   return result;
-}
+};
 
 const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => ()
     : { [key: string]: Object } => {
-
   const targetData = getReferenceTargetData(href);
-  return collectionHelperMap('#', targetData, targetSchema);
-}
 
-/**
- * Validates the given data against the given JSON Schema.
- *
- * @return true if the data adheres to the schema, false otherwise
- */
-const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
-  // use AJV to validate data against targetSchema and return result
-  return ajv.validate(targetSchema, data);;
+  return collectionHelperMap('#', targetData, targetSchema);
 };
 
 export class SchemaServiceImpl implements SchemaService {
@@ -370,7 +347,8 @@ export class SchemaServiceImpl implements SchemaService {
           // use id based referencing & reuse existing code for now
           // TODO reuse of existing id behavior sub-optimal (does not search cascaded)
           idBased = true;
-          findRefTargets = getFindReferenceTargetsFunction(href, targetSchema.id, identifyingProp);
+          const schemaId = targetSchema.id as string;
+          findRefTargets = getFindReferenceTargetsFunction(href, schemaId, identifyingProp);
           resolveReference = resolveRef(schema, findRefTargets, variable);
           addToReference = addReference(schema, identifyingProp, variable);
         } else {

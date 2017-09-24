@@ -10,7 +10,7 @@ test('Test ResourceSetImpl', t => {
   const name1 = 'erni';
   t.false(resourceSet.hasResource(name1));
 
-  const register1 = resourceSet.registerResource(name1, data1)
+  const register1 = resourceSet.registerResource(name1, data1);
   t.is(register1, undefined);
   t.true(resourceSet.hasResource(name1));
   t.deepEqual(resourceSet.getResource(name1), data1);

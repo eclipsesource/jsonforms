@@ -71,7 +71,8 @@ export interface ReferenceProperty extends Property {
    * and the data object as value.
    *
    * @param data The object that contains the reference
-   * @return The referenced value(s). If no referenced value(s) are found an empty object is returned.
+   * @return The referenced value(s).
+   *         If no referenced value(s) are found an empty object is returned.
    */
   getData(data: Object): { [key: string]: Object };
 
@@ -86,8 +87,8 @@ export interface ReferenceProperty extends Property {
    * and the referencable data object as value
    *
    * @return The object containing possible reference targets. Keys are identifiers of the targets
-             and values are the actual data objects. If there are no available reference targets,
-             an empty object is returned.
+   *         and values are the actual data objects. If there are no available reference targets,
+   *         an empty object is returned.
    */
   findReferenceTargets(): { [key: string]: Object };
 }

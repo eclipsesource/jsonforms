@@ -150,5 +150,5 @@ export const jsonSchemaFourMod = {
     },
     'default': {},
     // NOTE this was added manually
-    additionalProperties: false
-}
+    'additionalProperties': false
+};
