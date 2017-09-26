@@ -44,7 +44,6 @@ test.beforeEach(t => {
 
 test('TreeMasterDetailRenderer Drag And Drop - start handler', t => {
     const schema = t.context.schema;
-    const id = 'testId';
     const root = document.createElement('div');
     const list1 = document.createElement('ul');
     const list2 = document.createElement('ul');

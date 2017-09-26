@@ -144,7 +144,7 @@ const getReferenceTargetData = (href: string): Object => {
 
 // reference resolvement for id based references
 const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Object },
-                    propName: string) => (data: Object) => {
+                    propName: string) => (data: Object): { [key: string]: Object } => {
     if (_.isEmpty(data)) {
       return {};
     }
@@ -182,7 +182,7 @@ const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Obje
   };
 
 const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp: string) =>
-  () => {
+  (): { [key: string]: Object } => {
     const candidates = getReferenceTargetData(href) as Object[];
     if (!_.isEmpty(candidates)) {
       const result = {};
