@@ -7,6 +7,10 @@ import { jsonSchemaFourMod } from './data/schema-04';
 import { SchemaService } from '../src/core/schema.service';
 
 test.beforeEach(t => {
+  // Reset relevant static variables
+  JsonForms.resources.clear();
+  JsonForms.rootData = undefined;
+
   t.context.simpleSchema = {
     type: 'object',
     properties: {
@@ -24,6 +28,21 @@ test.beforeEach(t => {
       {
         href: '{ref}',
         targetSchema: t.context.simpleSchema
+      }
+    ]
+  };
+
+  t.context.schemaTargetResource = {
+    type: 'object',
+    properties: {
+      ref: { type: 'string' }
+    },
+    links: [
+      {
+        href: '{ref}',
+        targetSchema: {
+          resource: 'target'
+        }
       }
     ]
   };
@@ -61,6 +80,37 @@ test.beforeEach(t => {
   };
 });
 
+test('Reference Property - path based - target schema in resource', t => {
+    const data = t.context.data;
+    const schema = t.context.schemaTargetResource;
+    JsonForms.rootData = data;
+    JsonForms.resources.registerResource('target', t.context.simpleSchema, false);
+
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const property = service.getReferenceProperties(schema)[0];
+    t.false(property.isIdBased());
+
+    const targets = property.findReferenceTargets();
+    const keys = Object.keys(targets);
+    t.is(keys.length, 3);
+    t.true(keys.indexOf('#') > -1);
+    t.true(keys.indexOf('#/obj/arr/1') > -1);
+    t.true(keys.indexOf('#/obj/ted') > -1);
+    t.is(targets['#'], data);
+    t.is(targets['#/obj/arr/1'], data.obj.arr[1]);
+    t.is(targets['#/obj/ted'], data.obj.ted);
+});
+
+test('Reference Property - path based - target schema in resource not found', t => {
+    const data = t.context.data;
+    const schema = t.context.schemaTargetResource;
+    JsonForms.rootData = data;
+
+    const service: SchemaService = new SchemaServiceImpl(schema);
+    const properties = service.getReferenceProperties(schema);
+    t.is(properties.length, 0);
+});
+
 test('Reference Property - path based - find Ref targets', t => {
     const data = t.context.data;
     const schema = t.context.schema;
@@ -71,7 +121,6 @@ test('Reference Property - path based - find Ref targets', t => {
     t.false(property.isIdBased());
 
     const targets = property.findReferenceTargets();
-    console.log('ref prop path based 01 targets', targets);
     const keys = Object.keys(targets);
     t.is(keys.length, 3);
     t.true(keys.indexOf('#') > -1);
@@ -153,7 +202,6 @@ test('Reference Object - path based - resolve Ref target', t => {
     t.false(property.isIdBased());
 
     const resolved = property.getData(refData);
-    console.log('ref prop path based resolved', resolved);
     const keys = Object.keys(resolved);
     t.is(keys.length, 1);
     t.true(keys.indexOf('#/obj/ted') > -1);

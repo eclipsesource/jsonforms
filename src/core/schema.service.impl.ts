@@ -338,6 +338,15 @@ export class SchemaServiceImpl implements SchemaService {
         // TODO Special case: JSON Schema 04 for UI Schema editor
         if (link.targetSchema.$ref !== undefined) {
           targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
+        } else if (link.targetSchema.resource !== undefined) {
+          const resSchema = JsonForms.resources.getResource(link.targetSchema.resource);
+          if (resSchema === undefined) {
+            console.error(`Could not find target schema: There is no resource with name:` +
+                          `${link.targetSchema.resource}`);
+
+            return [];
+          }
+          targetSchema = resSchema;
         } else {
           targetSchema = link.targetSchema;
         }
