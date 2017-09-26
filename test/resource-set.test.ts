@@ -19,4 +19,8 @@ test('Test ResourceSetImpl', t => {
   t.true(resourceSet.hasResource(name1));
   t.deepEqual(register2, data1);
   t.deepEqual(resourceSet.getResource(name1), data2);
+
+  resourceSet.clear();
+  t.false(resourceSet.hasResource(name1));
+  t.is(resourceSet.getResource(name1), undefined);
 });

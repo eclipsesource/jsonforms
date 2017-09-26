@@ -29,6 +29,11 @@ export interface ResourceSet {
    * @return The old resource if one was already registered for the given name, undefined otherwise
    */
   registerResource(name: string, resource: Object, resolveReferences: boolean): Object;
+
+  /**
+   * Remove all registered resources from the ResourceSet.
+   */
+  clear();
 }
 
 export class ResourceSetImpl implements ResourceSet {
@@ -58,5 +63,9 @@ export class ResourceSetImpl implements ResourceSet {
     }
 
     return oldResource;
+  }
+
+  clear() {
+    this.resourceMap = {};
   }
 }
