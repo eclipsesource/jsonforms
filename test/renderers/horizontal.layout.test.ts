@@ -14,6 +14,10 @@ test.before(t => {
     {
       name: 'horizontal-layout',
       classNames: ['horizontal-layout']
+    },
+    {
+      name: 'horizontal-layout-item',
+      classNames: ['horizontal-layout-myitem']
     }
   ]);
 });
@@ -88,6 +92,8 @@ test('Render HorizontalLayout with children', t => {
   t.is(div.tagName, 'DIV');
   t.is(div.className, 'horizontal-layout');
   t.is(div.children.length, 2);
+  t.is(div.children[0].className, 'horizontal-layout-myitem');
+  t.is(div.children[1].className, 'horizontal-layout-myitem');
 });
 
 test('Hide HorizontalLayout', t => {

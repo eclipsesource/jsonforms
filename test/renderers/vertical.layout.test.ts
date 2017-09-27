@@ -16,7 +16,11 @@ test.before(t => {
     {
       name: 'vertical-layout',
       classNames: ['vertical-layout']
-    }
+    },
+    {
+      name: 'vertical-layout-item',
+      classNames: ['vertical-layout-myitem']
+    },
   ]);
 });
 test('VerticalLayout tester', t => {
@@ -75,6 +79,8 @@ test('Render VerticalLayout with children', t => {
   t.is(div.tagName, 'DIV');
   t.is(div.className, 'vertical-layout');
   t.is(div.children.length, 2);
+  t.is(div.children[0].className, 'vertical-layout-myitem');
+  t.is(div.children[1].className, 'vertical-layout-myitem');
 });
 test('Hide VerticalLayout', t => {
   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
