@@ -354,7 +354,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       li.appendChild(childParent);
     }
 
-    this.expandObject(newData, childParent, schema,  deleteFunction);
+    const created = this.expandObject(newData, childParent, schema,  deleteFunction);
+    this.renderDetail(newData, created, schema);
   }
 
   /**
@@ -370,7 +371,7 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     parent: HTMLUListElement,
     schema: JsonSchema,
     deleteFunction: (toDelete: object) => void
-  ): void {
+  ): HTMLLIElement {
     const li = document.createElement('li');
     const div = document.createElement('div');
     if (this.uischema.options !== undefined &&
@@ -379,6 +380,9 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
       spanIcon.classList.add('icon');
       spanIcon.classList.add(this.uischema.options.imageProvider[schema.id]);
       div.appendChild(spanIcon);
+      spanIcon.onclick = (ev: Event) => {
+        this.renderDetail(data, li, schema);
+      };
     }
     const span = document.createElement('span');
     span.classList.add('label');
@@ -489,6 +493,8 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     });
 
     parent.appendChild(li);
+
+    return li;
   }
 
   /**

@@ -114,9 +114,7 @@ const getReferenceTargetData = (href: string): Object => {
   let localTemplatePath: string;
   if (_.startsWith(href, RS_PROTOCOL)) {
     const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
-    console.log('resource name', resourceName);
     localTemplatePath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
-    console.log('local template path', localTemplatePath);
     rootData = JsonForms.resources.getResource(resourceName);
     // reference to data in resource set
   } else if (_.startsWith(href, 'http://')) {
