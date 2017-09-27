@@ -56,7 +56,7 @@ export class ResourceSetImpl implements ResourceSet {
     if (resolveReferences) {
       const resourcePromise = JsonRefs.resolveRefs(resource, {includeInvalid: true});
       resourcePromise.then(result => {
-        this.resourceMap[name] = result;
+        this.resourceMap[name] = result.resolved;
       });
     } else {
       this.resourceMap[name] = resource;

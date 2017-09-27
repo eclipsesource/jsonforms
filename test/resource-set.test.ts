@@ -24,3 +24,26 @@ test('Test ResourceSetImpl', t => {
   t.false(resourceSet.hasResource(name1));
   t.is(resourceSet.getResource(name1), undefined);
 });
+
+test.cb('ResourceSetImpl - resolve references on registrations', t => {
+  const resourceSet = new ResourceSetImpl();
+  const data = {
+    a: 1,
+    b: { $ref: '#/a' },
+    invalidRef: { $ref: '#/invalid' }
+  };
+
+  resourceSet.registerResource('data', data, true);
+  setTimeout(
+    ()  => {
+      const res = resourceSet.getResource('data');
+      const expected = {
+        a: 1,
+        b: 1,
+        invalidRef: { $ref: '#/invalid' }
+      };
+      t.deepEqual(res, expected);
+      t.end();
+  },
+    50);
+});
