@@ -9,6 +9,7 @@ export * from './controls/number.control';
 export * from './controls/date.control';
 export * from './controls/enum.control';
 export * from './controls/reference.control';
+export * from './controls/reference.path.control';
 export * from './controls/textarea.control';
 export * from './layouts/vertical.layout';
 export * from './layouts/horizontal.layout';
