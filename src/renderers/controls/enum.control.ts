@@ -24,6 +24,13 @@ export class EnumControl extends BaseControl<HTMLSelectElement> {
   private options: any[];
 
   /**
+   * @return The label of the default option that is shown if no value has been selected
+   */
+  protected getDefaultOptionLabel(): string {
+    return 'Select Value...';
+  }
+
+  /**
    * @inheritDoc
    */
   protected configureInput(input: HTMLSelectElement): void {
@@ -31,6 +38,15 @@ export class EnumControl extends BaseControl<HTMLSelectElement> {
         this.dataSchema,
         (this.uischema as ControlElement).scope.$ref
     ).enum;
+
+      // add default option which is displayed if no value has been selected
+    const defaultOption = document.createElement('option');
+    defaultOption.selected = true;
+    defaultOption.disabled = true;
+    defaultOption.hidden = true;
+    defaultOption.innerText = this.getDefaultOptionLabel();
+    input.appendChild(defaultOption);
+
     this.options.forEach(optionValue => {
       const option = document.createElement('option');
       option.value = optionValue;
