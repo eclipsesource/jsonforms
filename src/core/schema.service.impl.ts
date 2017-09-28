@@ -15,7 +15,6 @@ import { JsonForms } from '../core';
 import { findAllRefs, resolveLocalData } from '../path.util';
 import { RS_PROTOCOL } from './resource-set';
 
-// TODO configure ajv for json schema 04
 const ajv = new AJV({jsonPointers: true});
 
 const isObject = (schema: JsonSchema): boolean => {
@@ -56,7 +55,6 @@ const addToArray =
 
         return;
       }
-      // TODO proper logging
       console.warn('Could not add the new value after the given neighbour value. ' +
                   'The new value was added at the end.');
     } else {
@@ -65,7 +63,6 @@ const addToArray =
 
         return;
       }
-      // TODO proper logging
       console.warn('The given neighbour value could not be found. ' +
                   'The new value was added at the end.');
     }
@@ -194,9 +191,6 @@ const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp:
 
     return {};
   };
-
-// NOTE Json Schema 04 allows additional properties by default. probably needs to be
-// restricted to work for finding valid UI Schema targets
 
 /**
  * Recursive method to find all paths to valid reference targets based on the
@@ -328,12 +322,13 @@ export class SchemaServiceImpl implements SchemaService {
       const result: ReferenceProperty[] = [];
       links.forEach(link => {
         if (_.isEmpty(link.targetSchema) || _.isEmpty(link.href)) {
-          // FIXME log
+          console.warn(`Could not create link property because the configuration was invalid`,
+                       link);
+
           return;
         }
         let targetSchema;
         // TODO what if schema is url but not resolved?
-        // TODO Special case: JSON Schema 04 for UI Schema editor
         if (link.targetSchema.$ref !== undefined) {
           targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
         } else if (link.targetSchema.resource !== undefined) {
@@ -408,7 +403,6 @@ export class SchemaServiceImpl implements SchemaService {
                                                          insertAfter?: boolean) => void,
                          deleteFunction: (data: object) => (valueToDelete: object) => void,
                          getFunction: (data: object) => Object,
-                         // TODO rename
                          internal = false
                        ): ContainmentProperty[] {
     if (schema.$ref !== undefined) {

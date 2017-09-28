@@ -6,7 +6,6 @@ declare let global;
 installCE(global, 'force');
 import { JsonForms } from '../../src/core';
 import { DataService } from '../../src/core/data.service';
-import { JsonSchema } from '../../src/models/jsonSchema';
 import { ReferencePathControl } from '../../src/renderers/controls/reference.path.control';
 
 test.beforeEach(t => {
@@ -111,7 +110,6 @@ test('no referene property', t => {
   JsonForms.schema = schema;
   JsonForms.resources.registerResource('data', t.context.refdata, false);
   const renderer: ReferencePathControl = new ReferencePathControl();
-  const dataService = new DataService({ ref: '#/obj/ted' });
   renderer.setDataService(new DataService(t.context.data));
   renderer.setDataSchema(schema);
   renderer.setUiSchema(t.context.uiSchema);

@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 
 import { JsonForms } from '../../core';
 import { BaseControl } from './base.control';
-import { ReferenceProperty } from '../../core/schema.service';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { JsonFormsRenderer } from '../renderer.util';
