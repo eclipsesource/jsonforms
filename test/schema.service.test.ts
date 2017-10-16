@@ -763,8 +763,10 @@ test('reference object properties add', t => {
   const schema: JsonSchema = t.context.referenceObjectSchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.definitions.class)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2'}]};
-  property.addToData(data, data.classes[1], data.classes[0]);
+  JsonForms.rootData = data;
+  property.addToData(data.classes[1], data.classes[0]);
   // tslint:disable:no-string-literal
   t.is(data.classes[1]['association'], 'c1');
   // tslint:enable:no-string-literal
@@ -773,9 +775,14 @@ test('reference object properties get', t => {
   const schema: JsonSchema = t.context.referenceObjectSchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}]};
-  const getData = property.getData(data, data.classes[1]);
-  t.is(getData, data.classes[0]);
+  JsonForms.rootData = data;
+  const getData = property.getData(data.classes[1]);
+  const keys = Object.keys(getData);
+  t.is(keys.length, 1);
+  t.is(keys[0], 'c1');
+  t.is(getData[keys[0]], data.classes[0]);
 });
 
 test('reference array properties add to undefined', t => {
@@ -783,8 +790,10 @@ test('reference array properties add to undefined', t => {
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2'}]};
-  property.addToData(data, data.classes[1], data.classes[0]);
+  JsonForms.rootData = data;
+  property.addToData(data.classes[1], data.classes[0]);
   // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
   // tslint:enable:no-string-literal
@@ -796,8 +805,10 @@ test('reference array properties add to defined', t => {
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2', associations: []}]};
-  property.addToData(data, data.classes[1], data.classes[0]);
+  JsonForms.rootData = data;
+  property.addToData(data.classes[1], data.classes[0]);
   // tslint:disable:no-string-literal
   const associations = data.classes[1]['associations'];
   // tslint:enable:no-string-literal
@@ -809,24 +820,31 @@ test('reference array properties get', t => {
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2', associations: ['c1']}]};
-  const getData = property.getData(data, data.classes[1]);
-  t.true(Array.isArray(getData));
-  t.deepEqual(getData, [data.classes[0]]);
+  JsonForms.rootData = data;
+  const getData = property.getData(data.classes[1]);
+  const keys = Object.keys(getData);
+  t.is(keys.length, 1);
+  t.is(keys[0], 'c1');
+  t.deepEqual(getData[keys[0]], data.classes[0]);
 });
 test('reference array properties get multiple', t => {
   const schema: JsonSchema = t.context.referenceArraySchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property =
     service.getReferenceProperties(schema.definitions.class)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2', associations: ['c1', 'c3']}, {id: 'c3'},
                           {id: 'c4'}]};
-  const getData = property.getData(data, data.classes[1]);
-  t.true(Array.isArray(getData));
-  const getDataArray = getData as Object[];
-  t.is(getDataArray.length, 2);
-  t.is(getDataArray[0], data.classes[0]);
-  t.is(getDataArray[1], data.classes[2]);
+  JsonForms.rootData = data;
+  const getData = property.getData(data.classes[1]);
+  const keys = Object.keys(getData);
+  t.is(keys.length, 2);
+  t.is(keys[0], 'c1');
+  t.is(keys[1], 'c3');
+  t.deepEqual(getData[keys[0]], data.classes[0]);
+  t.deepEqual(getData[keys[1]], data.classes[2]);
 });
 test(`reference properties get - linking property's schema without type`, t => {
   const schema = {
@@ -861,8 +879,10 @@ test(`reference properties get - linking property's schema without type`, t => {
 
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  t.true(property.isIdBased());
   const data = {classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}]};
-  const error: Error = t.throws(() => property.getData(data, data.classes[1]));
+  JsonForms.rootData = data;
+  const error: Error = t.throws(() => property.getData(data.classes[1]));
   t.is(error.message, `The schema of the property 'association' does not specify a schema type.`);
 });
 
@@ -870,24 +890,31 @@ test('reference property find reference targets', t => {
   const schema = t.context.referenceFindSchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  t.true(property.isIdBased());
   const data = {
     classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}],
     elements: [{id: 'e1'}]
   };
-  const targets = property.findReferenceTargets(data);
-  t.is(targets.length, 2);
-  t.is(targets[0], data.classes[0]);
-  t.is(targets[1], data.classes[1]);
+  JsonForms.rootData = data;
+  const targets = property.findReferenceTargets();
+  const keys = Object.keys(targets);
+  t.is(keys.length, 2);
+  t.is(keys[0], 'c1');
+  t.is(keys[1], 'c2');
+  t.deepEqual(targets[keys[0]], data.classes[0]);
+  t.deepEqual(targets[keys[1]], data.classes[1]);
 });
 test('reference property find reference targets - target container undefined', t => {
   const schema = t.context.referenceFindSchema;
   const service: SchemaService = new SchemaServiceImpl(schema);
   const property = service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
+  t.true(property.isIdBased());
   const data = {
     elements: [{id: 'e1'}]
   };
-  const targets = property.findReferenceTargets(data);
-  t.deepEqual(targets, []);
+  JsonForms.rootData = data;
+  const targets = property.findReferenceTargets();
+  t.deepEqual(targets, {});
 });
 test('reference property find reference targets - targets are subset of available objects.', t => {
   const schema = {
@@ -951,6 +978,7 @@ test('reference property find reference targets - targets are subset of availabl
   const service: SchemaService = new SchemaServiceImpl(schema);
   JsonForms.modelMapping = modelMapping;
   const property = service.getReferenceProperties(schema.definitions.class as JsonSchema)[0];
+  t.true(property.isIdBased());
   const data = {
     objects: [
       {id: 'c1', type: 'class'},
@@ -959,10 +987,15 @@ test('reference property find reference targets - targets are subset of availabl
       {id: 'e2', type: 'element'}
     ]
   };
-  const targets = property.findReferenceTargets(data);
-  t.is(targets.length, 2);
-  t.is(targets[0], data.objects[0]);
-  t.is(targets[1], data.objects[2]);
+  JsonForms.rootData = data;
+
+  const targets = property.findReferenceTargets();
+  const keys = Object.keys(targets);
+  t.is(keys.length, 2);
+  t.is(keys[0], 'c1');
+  t.is(keys[1], 'c2');
+  t.deepEqual(targets[keys[0]], data.objects[0]);
+  t.deepEqual(targets[keys[1]], data.objects[2]);
 });
 
 test('property type check', t => {

@@ -167,11 +167,12 @@ test('EnumControl static', t => {
   const input = result.children[1] as HTMLSelectElement;
   t.is(input.tagName, 'SELECT');
   t.is(input.value, 'a');
-  t.is(input.options.length, 2);
-  t.is(input.options.item(0).value, 'a');
-  t.is(input.options.item(0).innerText, 'a');
-  t.is(input.options.item(1).value, 'b');
-  t.is(input.options.item(1).innerText, 'b');
+  t.is(input.options.length, 3);
+  t.is(input.options.item(0).innerText, 'Select Value...');
+  t.is(input.options.item(1).value, 'a');
+  t.is(input.options.item(1).innerText, 'a');
+  t.is(input.options.item(2).value, 'b');
+  t.is(input.options.item(2).innerText, 'b');
   const validation = result.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
@@ -200,11 +201,11 @@ test('EnumControl static no label', t => {
   const input = result.children[1] as HTMLSelectElement;
   t.is(input.tagName, 'SELECT');
   t.is(input.value, 'b');
-  t.is(input.options.length, 2);
-  t.is(input.options.item(0).value, 'a');
-  t.is(input.options.item(0).innerText, 'a');
-  t.is(input.options.item(1).value, 'b');
-  t.is(input.options.item(1).innerText, 'b');
+  t.is(input.options.item(0).innerText, 'Select Value...');
+  t.is(input.options.item(1).value, 'a');
+  t.is(input.options.item(1).innerText, 'a');
+  t.is(input.options.item(2).value, 'b');
+  t.is(input.options.item(2).innerText, 'b');
   const validation = result.children[2];
   t.is(validation.tagName, 'DIV');
   t.is(validation.children.length, 0);
@@ -231,11 +232,11 @@ test('EnumControl dataService notification', t => {
   renderer.setUiSchema(t.context.uiSchema);
   renderer.connectedCallback();
   const input = renderer.children[1] as HTMLSelectElement;
-  t.is(input.selectedIndex, 1);
+  t.is(input.selectedIndex, 2);
   t.is(input.value, 'b');
   dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 'a');
   t.is(input.value, 'a');
-  t.is(input.selectedIndex, 0);
+  t.is(input.selectedIndex, 1);
 });
 
 test.failing('EnumControl dataService notification value undefined', t => {
@@ -285,7 +286,7 @@ test('EnumControl dataService notification wrong ref', t => {
       'Bar',
   );
   t.is(input.value, 'a');
-  t.is(input.selectedIndex, 0);
+  t.is(input.selectedIndex, 1);
 });
 
 test('EnumControl dataService notification null ref', t => {
@@ -298,7 +299,7 @@ test('EnumControl dataService notification null ref', t => {
   const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange(null, false);
   t.is(input.value, 'a');
-  t.is(input.selectedIndex, 0);
+  t.is(input.selectedIndex, 1);
 });
 
 test('EnumControl dataService notification undefined ref', t => {
@@ -311,7 +312,7 @@ test('EnumControl dataService notification undefined ref', t => {
   const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange(undefined, false);
   t.is(input.value, 'a');
-  t.is(input.selectedIndex, 0);
+  t.is(input.selectedIndex, 1);
 });
 
 test('EnumControl dataService no notification after disconnect', t => {
@@ -325,7 +326,7 @@ test('EnumControl dataService no notification after disconnect', t => {
   const input = renderer.children[1] as HTMLSelectElement;
   dataService.notifyAboutDataChange({scope: {$ref: '#/properties/foo'}}, 'Bar');
   t.is(input.value, 'a');
-  t.is(input.selectedIndex, 0);
+  t.is(input.selectedIndex, 1);
 });
 
 test('EnumControl notify visible false', t => {

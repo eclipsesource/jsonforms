@@ -78,7 +78,7 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
     const referenceProperty: ReferenceProperty =
       _.head(JsonForms.schemaService.getReferenceProperties(objectSchema));
 
-    const referencees = referenceProperty.findReferenceTargets(this.getRootData());
+    const referencees = referenceProperty.findReferenceTargets();
 
     // add default option which is displayed if no reference target has been selected
     const defaultOption = document.createElement('option');
@@ -88,9 +88,11 @@ export abstract class ReferenceControl extends BaseControl<HTMLSelectElement> {
     defaultOption.innerText = this.getDefaultOptionLabel();
     input.appendChild(defaultOption);
 
+    // TODO ref control for path based references
     // add an option for every possible reference target
-    referencees.forEach((referencee, index) => {
+    Object.keys(referencees).forEach(key => {
       const option = document.createElement('option');
+      const referencee = referencees[key];
       option.value = referencee[this.getIdentifyingProperty()];
       option.label = referencee[this.getLabelProperty()];
       option.innerText = referencee[this.getLabelProperty()];

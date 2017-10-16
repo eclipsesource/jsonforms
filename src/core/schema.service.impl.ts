@@ -1,3 +1,5 @@
+/* tslint:disable:max-file-line-count */
+import * as AJV from 'ajv';
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
 import { resolveSchema } from '../path.util';
@@ -10,7 +12,10 @@ import {
 } from './schema.service';
 import * as uuid from 'uuid';
 import { JsonForms } from '../core';
-import { findAllRefs } from '../path.util';
+import { findAllRefs, resolveLocalData } from '../path.util';
+import { RS_PROTOCOL } from './resource-set';
+
+const ajv = new AJV({jsonPointers: true});
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
@@ -20,6 +25,15 @@ const isArray = (schema: JsonSchema): boolean => {
 };
 const deepCopy = <T>(object: T): T => {
   return JSON.parse(JSON.stringify(object)) as T;
+};
+/**
+ * Validates the given data against the given JSON Schema.
+ *
+ * @return true if the data adheres to the schema, false otherwise
+ */
+const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
+  // use AJV to validate data against targetSchema and return result
+  return ajv.validate(targetSchema, data);
 };
 
 const addToArray =
@@ -41,7 +55,6 @@ const addToArray =
 
         return;
       }
-      // TODO proper logging
       console.warn('Could not add the new value after the given neighbour value. ' +
                   'The new value was added at the end.');
     } else {
@@ -50,7 +63,6 @@ const addToArray =
 
         return;
       }
-      // TODO proper logging
       console.warn('The given neighbour value could not be found. ' +
                   'The new value was added at the end.');
     }
@@ -71,7 +83,7 @@ const getArray = (key: string) => (data: object) => {
   return data[key];
 };
 const addReference = (schema: JsonSchema, identifyingProperty: string, propName: string) =>
-  (root: Object, data: Object, toAdd: object) => {
+  (data: Object, toAdd: object) => {
 
     const refValue = toAdd[identifyingProperty];
     if (schema.properties[propName].type === 'array') {
@@ -83,69 +95,192 @@ const addReference = (schema: JsonSchema, identifyingProperty: string, propName:
       data[propName] = refValue;
     }
   };
-const resolveRef = (schema: JsonSchema, findTargets: (rootData: Object) => Object[],
-                    identifyingProperty: string, propName: string) =>
-  (rootData: Object, data: Object) => {
-    if (_.isEmpty(data) || _.isEmpty(identifyingProperty)) {
-      return null;
+
+/**
+ * Retrieves the data that contains the reference targets by resolving the given href uri.
+ * Thereby, the root data is gathered based on the protocol and then resolved
+ * against the uri's path.
+ *
+ * Important: This method does not resolve the actual reference targets but only the
+ * root data containing them.
+ *
+ * @return the resolved data containing the reference targets; {null} if the href cannot be resolved
+ */
+const getReferenceTargetData = (href: string): Object => {
+  let rootData: Object;
+  let localTemplatePath: string;
+  if (_.startsWith(href, RS_PROTOCOL)) {
+    const resourceName = href.substring(RS_PROTOCOL.length).split('/')[0];
+    localTemplatePath = href.substring(RS_PROTOCOL.length + resourceName.length + 1);
+    rootData = JsonForms.resources.getResource(resourceName);
+    // reference to data in resource set
+  } else if (_.startsWith(href, 'http://')) {
+    // remote data
+    console.warn(`Remote data resolution is not yet implemented for data links.`);
+
+    return null;
+  } else if (_.startsWith(href, '#') || (href.match(/\{.*\}/) !== null)) {
+    // local data
+    rootData = JsonForms.rootData;
+    localTemplatePath = href;
+  } else {
+    console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
+
+    return {};
+  }
+  const localPath = localTemplatePath.split(/\/\{.*\}/)[0];
+  if (localPath.match(/\{.*\}/) !== null) {
+    // the local path only contains the template variable
+    return rootData;
+  }
+
+  return resolveLocalData(rootData, localPath);
+};
+
+// reference resolvement for id based references
+const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Object },
+                    propName: string) => (data: Object): { [key: string]: Object } => {
+    if (_.isEmpty(data)) {
+      return {};
     }
     // get all objects that could be referenced.
-    const candidates = findTargets(rootData);
-
+    const candidates = findTargets();
+    const result = {};
     if (_.isEmpty(schema.properties[propName].type)) {
       throw Error(`The schema of the property '${propName}' does not specify a schema type.`);
     }
     if (schema.properties[propName].type === 'array') {
-      const ids: object[] = data[propName];
-      const resultList = candidates.filter(value => ids.indexOf(value[identifyingProperty]) > -1);
+      const ids = data[propName] as string[];
 
       // check that there is at most one reference target for every id
       for (const id of ids) {
-        const idResults = resultList.filter(result => result[identifyingProperty] === id);
-        if (idResults.length > 1) {
-          throw Error(`There was more than one possible reference target with value
-                      '${JSON.stringify(id)}' in its identifying property
-                      '${identifyingProperty}'.`);
+        const idResult = candidates[id];
+        if (idResult === undefined) {
+          console.warn(`Could not resolve the referenced data for id '${id}'.`);
+          continue;
         }
+        result[id] = idResult;
       }
-
-      return resultList;
     } else {
       // use identifying property to identify the referenced object
-      const resultList = candidates.filter(value => value[identifyingProperty] === data[propName]);
+      const id = data[propName];
+      const idResult = candidates[id];
+      if (idResult === undefined) {
+        console.warn(`Could not resolve the referenced data for id '${id}'.`);
 
-      if (_.isEmpty(resultList)) {
-        return null;
+        return result;
       }
-      if (resultList.length > 1) {
-        throw Error(`There was more than one possible reference target with value
-                    '${JSON.stringify(data[propName])}' in its identifying property
-                    '${identifyingProperty}'.`);
-      }
-
-      return _.first(resultList);
+      result[id] = idResult;
     }
+
+    return result;
   };
 
-const getFindReferenceTargetsFunction = (pathToContainment: string, schemaId: string) =>
-  (rootData: Object) => {
-    const candidates = pathToContainment
-      .split('/')
-      .reduce(
-        (elem, path) => {
-          if (path === '#') {
-            return elem;
-          }
-
-          return elem[path];
-        },
-        rootData) as Object[];
+const getFindReferenceTargetsFunction = (href: string, schemaId: string, idProp: string) =>
+  (): { [key: string]: Object } => {
+    const candidates = getReferenceTargetData(href) as Object[];
     if (!_.isEmpty(candidates)) {
-      return JsonForms.filterObjectsByType(candidates, schemaId);
+      const result = {};
+      for (const candidate of JsonForms.filterObjectsByType(candidates, schemaId)) {
+        const id = candidate[idProp];
+        result[id] = candidate;
+      }
+
+      return result;
     }
 
-    return [];
+    return {};
   };
+
+/**
+ * Recursive method to find all paths to valid reference targets based on the
+ * target schema identifying them.
+ * This method searches the target based on the given data and calculates the path
+ * based on the current location and adding the next path segment for child properties
+ * or array elements.
+ *
+ * The result is an object mapping from the found paths to the target data object
+ * found at the path.
+ */
+export const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema)
+    : { [key: string]: Object } => {
+  const result = {};
+  if (checkData(data, targetSchema)) {
+    // must be done before null check before null might be a valid target
+    result[currentPath] = data;
+  }
+  if (data === undefined || data === null) {
+    return result;
+  }
+  if (Array.isArray(data)) {
+    // TODO how to deal with array? index? - assume index for now
+    for (let i = 0; i < data.length; i++) {
+      const childPath = _.isEmpty(currentPath) ? `${i}` : `${currentPath}/${i}`;
+      const childResult = collectionHelperMap(childPath, data[i], targetSchema);
+      _.assign(result, childResult);
+    }
+  } else if (!_.isEmpty(data) && typeof data !== 'string') {
+    Object.keys(data).forEach(key => {
+      // NOTE later maybe need to check for refs and thereby circles
+      const childPath = _.isEmpty(currentPath) ? key : `${currentPath}/${key}`;
+      const childResult = collectionHelperMap(childPath, data[key], targetSchema);
+      _.assign(result, childResult);
+    });
+  }
+
+  return result;
+};
+
+/**
+ * Adds the reference path given in toAdd to the data's reference property.
+ */
+const addPathBasedRef = (schema: JsonSchema, propName: string) =>
+  (data: Object, toAdd: object) => {
+    if (typeof toAdd !== 'string') {
+      console.error(`Path based reference values must be of type string. The given value was of`
+        + ` type '${typeof toAdd}' and could not be added.`);
+
+      return;
+    }
+
+    // const refValue = toAdd[identifyingProperty];
+    if (schema.properties[propName].type === 'array') {
+      if (!data[propName]) {
+        data[propName] = [];
+      }
+      data[propName].push(toAdd);
+    } else {
+      data[propName] = toAdd;
+    }
+};
+
+const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Object)
+    : { [key: string]: Object} => {
+  const targetData = getReferenceTargetData(href);
+  const paths = data[pathProperty];
+  const result = {};
+  if (Array.isArray(paths)) {
+    for (const path of paths) {
+      const curRes = resolveLocalData(targetData, path);
+      result[path] = curRes;
+    }
+  } else {
+    result[paths] = resolveLocalData(targetData, paths);
+  }
+
+  return result;
+};
+
+const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => ()
+    : { [key: string]: Object } => {
+  const targetData = getReferenceTargetData(href);
+
+  if (href.indexOf('#') > -1) {
+    return collectionHelperMap('', targetData, targetSchema);
+  }
+
+  return collectionHelperMap('#', targetData, targetSchema);
+};
 
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: {[id: string]: JsonSchema} = {};
@@ -187,30 +322,67 @@ export class SchemaServiceImpl implements SchemaService {
       const result: ReferenceProperty[] = [];
       links.forEach(link => {
         if (_.isEmpty(link.targetSchema) || _.isEmpty(link.href)) {
-          // FIXME log
+          console.warn(`Could not create link property because the configuration was invalid`,
+                       link);
+
           return;
         }
         let targetSchema;
+        // TODO what if schema is url but not resolved?
         if (link.targetSchema.$ref !== undefined) {
           targetSchema = this.getSelfContainedSchema(this.rootSchema, link.targetSchema.$ref);
+        } else if (link.targetSchema.resource !== undefined) {
+          const resSchema = JsonForms.resources.getResource(link.targetSchema.resource);
+          if (resSchema === undefined) {
+            console.error(`Could not find target schema: There is no resource with name:` +
+                          `${link.targetSchema.resource}`);
+
+            return [];
+          }
+          targetSchema = resSchema;
         } else {
           targetSchema = link.targetSchema;
         }
+
         const href: string = link.href;
-        const variableWrapped = href.match(/\{.*\}/)[0];
-        const pathToContainment = href.split(/\/\{.*\}/)[0];
-        const variable = variableWrapped.substring(1, variableWrapped.length - 1);
-        const findTargets = getFindReferenceTargetsFunction(pathToContainment, targetSchema.id);
         const identifyingProp = JsonForms.config.getIdentifyingProp();
+        const variableWrapped = href.match(/\{.*\}/)[0];
+        const variable = variableWrapped.substring(1, variableWrapped.length - 1);
+
+        let findRefTargets: () => { [key: string]: Object };
+        let resolveReference: (data: Object) => { [key: string]: Object };
+        let addToReference: (data: Object, toAdd: object) => void;
+        let idBased: boolean;
+
+        // assume targetSchema is resolved
+        if (!_.isEmpty(identifyingProp) && !_.isEmpty(targetSchema.id)
+            && !_.isEmpty(targetSchema.properties)
+            && !_.isEmpty(targetSchema.properties[identifyingProp])) {
+          // use id based referencing & reuse existing code for now
+          // TODO reuse of existing id behavior sub-optimal (does not search cascaded)
+          idBased = true;
+          const schemaId = targetSchema.id as string;
+          findRefTargets = getFindReferenceTargetsFunction(href, schemaId, identifyingProp);
+          resolveReference = resolveRef(schema, findRefTargets, variable);
+          addToReference = addReference(schema, identifyingProp, variable);
+        } else {
+          // use path based referencing
+          idBased = false;
+          findRefTargets = getPathBasedRefTargets(href, targetSchema);
+          resolveReference = resolvePathBasedRef(href, variable);
+          addToReference = addPathBasedRef(schema, variable);
+        }
+
         result.push(
           new ReferencePropertyImpl(
             schema.properties[variable],
             targetSchema,
             variable,
             variable,
-            findTargets,
-            addReference(schema, identifyingProp, variable),
-            resolveRef(schema, findTargets, identifyingProp, variable)
+            idBased,
+            findRefTargets,
+            addToReference,
+            resolveReference
           )
         );
       });
@@ -231,7 +403,6 @@ export class SchemaServiceImpl implements SchemaService {
                                                          insertAfter?: boolean) => void,
                          deleteFunction: (data: object) => (valueToDelete: object) => void,
                          getFunction: (data: object) => Object,
-                         // TODO rename
                          internal = false
                        ): ContainmentProperty[] {
     if (schema.$ref !== undefined) {

@@ -59,30 +59,38 @@ export interface ReferenceProperty extends Property {
   readonly targetSchema: JsonSchema;
   /**
    * This allows to set the reference.
-   * @param root The root object, needed for matching the valueToAdd
+   *
    * @param data The object to add to
-   * @param valueToAdd The object to add
+   * @param valueToAdd For id based referencing: The object referenced by the id.
+   *                   For path based referencing: the path itself
    */
-  addToData(root: Object, data: Object, valueToAdd: object): void;
+  addToData(data: Object, valueToAdd: Object): void;
   /**
    * This allows to retrieve the refernced data object(s) of the reference.
+   * The result object contains the data objects' identifier (its ID or path) as key
+   * and the data object as value.
    *
-   * @param root The root object, The root data object needed for finding the referenced value(s).
    * @param data The object that contains the reference
-   * @return The referenced value(s). If no referenced value was found and the reference property
-   *         defines a single reference, null is returned. If the property defines a multi
-   *         reference, in this case an empty array is returned.
+   * @return The referenced value(s).
+   *         If no referenced value(s) are found an empty object is returned.
    */
-  getData(root: Object, data: Object): Object;
+  getData(data: Object): { [key: string]: Object };
+
+  /**
+   * Returns true if the references use ids to identify targets and false if they use paths.
+   */
+  isIdBased(): boolean;
 
   /**
    * Returns all possible objects which can be referenced by this property.
+   * The result object contains targets' identifier (its ID or path) as key
+   * and the referencable data object as value
    *
-   * @param root The root data object needed for finding the values
-   * @return The array of data objects which are possible reference targets
-   *         for this reference property.
+   * @return The object containing possible reference targets. Keys are identifiers of the targets
+   *         and values are the actual data objects. If there are no available reference targets,
+   *         an empty object is returned.
    */
-  findReferenceTargets(rootData: Object): Object[];
+  findReferenceTargets(): { [key: string]: Object };
 }
 
 export class ContainmentPropertyImpl implements ContainmentProperty {
@@ -128,9 +136,10 @@ export class ReferencePropertyImpl implements ReferenceProperty {
     private innerTargetSchema: JsonSchema,
     private key: string,
     private name: string,
-    private findFunction: (rootObject: Object) => Object[],
-    private addFunction: (root: object, data: object, valueToAdd: object) => void,
-    private getFunction: (root: object, data: object) => Object
+    private idBased: boolean,
+    private findFunction: () => { [key: string]: Object },
+    private addFunction: (data: object, valueToAdd: object) => void,
+    private getFunction: (data: object) => { [key: string]: Object }
   ) {}
   get label(): string {
     return _.find(
@@ -152,14 +161,17 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   get targetSchema(): JsonSchema {
     return this.innerTargetSchema;
   }
-  addToData(root: object, data: object, valueToAdd: object): void {
-    this.addFunction(root, data, valueToAdd);
+  addToData(data: object, valueToAdd: Object): void {
+    this.addFunction(data, valueToAdd);
   }
-  getData(root: object, data: object): Object {
-    return this.getFunction(root, data);
+  getData(data: object): { [key: string]: Object } {
+    return this.getFunction(data);
   }
-  findReferenceTargets(rootData: Object): Object[] {
-    return this.findFunction(rootData);
+  isIdBased(): boolean {
+    return this.idBased;
+  }
+  findReferenceTargets(): {[key: string]: Object} {
+    return this.findFunction();
   }
 }
 

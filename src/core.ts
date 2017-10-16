@@ -7,6 +7,7 @@ import { RendererService } from './core/renderer.service';
 import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
 import { SchemaService } from './core/schema.service';
 import { SchemaServiceImpl } from './core/schema.service.impl';
+import { ResourceSet, ResourceSetImpl } from './core/resource-set';
 
 /**
  * Represents a JSONForms service.
@@ -21,7 +22,7 @@ export interface JsonFormService {
 
 export class JsonFormsConfig {
 
-  private _identifyingProp;
+  private _identifyingProp: string;
 
   setIdentifyingProp(propName: string) {
     this._identifyingProp = propName;
@@ -62,6 +63,7 @@ export class JsonForms {
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
   public static modelMapping;
   public static rootData: Object;
+  private static _resources: ResourceSet = new ResourceSetImpl();
   public static set schema(schema: JsonSchema) {
     JsonForms._schemaService = new SchemaServiceImpl(schema);
   }
@@ -75,6 +77,13 @@ export class JsonForms {
 
   public static get config(): JsonFormsConfig {
     return this._config;
+  }
+
+  /**
+   * Returns the {ResourceSet} containing all registered resources.
+   */
+  public static get resources(): ResourceSet {
+    return this._resources;
   }
 
   /**
