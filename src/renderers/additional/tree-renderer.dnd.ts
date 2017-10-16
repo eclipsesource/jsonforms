@@ -1,22 +1,38 @@
 import { JsonForms } from '../../core';
 import { JsonSchema } from '../../models/jsonSchema';
 import * as Sortable from 'sortablejs';
+import * as _ from 'lodash';
 
 export type TreeNodeInfo = {data: object, schema: JsonSchema,
                             deleteFunction(toDelete: object): void};
 
 export const DROP_TARGET_CSS = 'jsf-dnd-drop-target';
+export const CANCEL_DND_ATTRIBUTE = 'jsf-cancel-dnd';
+
 /**
  * Returns a function that handles the sortablejs onRemove event
  */
 export const dragAndDropRemoveHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
   evt => {
   const li = evt.item as HTMLLIElement;
+  // To be always consistent with add: use attribute set in add handler
+  if (li.hasAttribute(CANCEL_DND_ATTRIBUTE)) {
+    const from = evt.from as HTMLElement;
+    if (from.children.length <= evt.oldIndex) {
+      from.appendChild(li);
+    } else {
+      from.children.item(evt.oldIndex).insertAdjacentElement('beforebegin', li);
+    }
+    li.removeAttribute(CANCEL_DND_ATTRIBUTE);
+
+    return;
+  }
+
   const nodeData = treeNodeMapping.get(li);
+  const nodeId = nodeData.schema.id;
   const oldParent = evt.from.parentNode as HTMLLIElement;
   const parentData = treeNodeMapping.get(oldParent);
   const properties = JsonForms.schemaService.getContainmentProperties(parentData.schema);
-  const nodeId = nodeData.schema.id;
   for (const property of properties) {
     const propertyId = property.schema.id;
     if (propertyId === nodeId) {
@@ -34,6 +50,7 @@ export const dragAndDropRemoveHandler = (treeNodeMapping: Map<HTMLLIElement, Tre
  */
 export const dragAndDropUpdateHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) =>
   evt => {
+    // TODO check if adaption to unified list is necessary
   const li = evt.item as HTMLLIElement;
   const nodeInfo = treeNodeMapping.get(li);
   // NOTE does not work on root elements
@@ -69,10 +86,21 @@ export const dragAndDropAddHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNo
   evt => {
   const li = evt.item as HTMLLIElement;
   const nodeInfo = treeNodeMapping.get(li);
+  const nodeId = nodeInfo.schema.id;
+  const toList: HTMLUListElement = evt.to;
+  const toListChildrenIds = _.split(toList.getAttribute('childrenIds'), ' ');
+
+  // undo add in case it was not legal
+  if (_.indexOf(toListChildrenIds, nodeId) < 0) {
+    toList.removeChild(li);
+    li.setAttribute(CANCEL_DND_ATTRIBUTE, '');
+
+    return;
+  }
+
   const newParent = evt.to.parentNode as HTMLLIElement;
   const parentInfo = treeNodeMapping.get(newParent);
   const properties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
-  const nodeId = nodeInfo.schema.id;
 
   /*
    * If the new data is not added at the end of the target list,
@@ -101,7 +129,6 @@ export const dragAndDropAddHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNo
       return;
     }
   }
-  // TODO proper logging
   console.error('Failed Drag and Drop add due to missing property in target parent');
 };
 
@@ -113,11 +140,19 @@ export const dragAndDropAddHandler = (treeNodeMapping: Map<HTMLLIElement, TreeNo
  * @param treeElement The HTML element containing the tree
  * @param id the id identifying the type of the list's elements that this handler is used for
  */
-export const dragAndDropStartHandler = (treeElement: HTMLElement, id: string) => evt => {
+export const dragAndDropStartHandler =
+  (treeElement: HTMLElement, treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>) => evt => {
   const lists = treeElement.getElementsByTagName('UL');
+  const li = evt.item as HTMLLIElement;
   for (let i = 0; i < lists.length; i++) {
-    const list = lists.item(i);
-    if (list.getAttribute('childrenId') === id) {
+    const list = lists.item(i) as HTMLUListElement;
+    const childrenIdsAttr = list.getAttribute('childrenIds');
+    const id = treeNodeMapping.get(li).schema.id;
+    if (_.isEmpty(id) || _.isEmpty(childrenIdsAttr)) {
+      continue;
+    }
+    const childrenIdsArray = _.split(childrenIdsAttr, ' ');
+    if (_.indexOf(childrenIdsArray, id) >= 0) {
       list.classList.toggle(DROP_TARGET_CSS, true);
     }
   }
@@ -128,9 +163,8 @@ export const dragAndDropStartHandler = (treeElement: HTMLElement, id: string) =>
  * The function removes the CSS class jsf-dnd-drop-target from all lists.
  *
  * @param treeElement The HTML element containing the tree
- * @param id the id identifying the type of the list's elements that this handler is used for
  */
-export const dragAndDropEndHandler = (treeElement: HTMLElement, id: string) => evt => {
+export const dragAndDropEndHandler = (treeElement: HTMLElement) => evt => {
   const lists = treeElement.getElementsByTagName('UL');
   for (let i = 0; i < lists.length; i++) {
     lists.item(i).classList.toggle(DROP_TARGET_CSS, false);
@@ -144,16 +178,15 @@ export const dragAndDropEndHandler = (treeElement: HTMLElement, id: string) => e
  * @param treeNodeMapping maps the trees renderer li nodes to their represented data, schema,
  *        and delete function
  * @param list the list that will support drag and drop
- * @param id the id identifying the type of the list's elements
  */
-export const registerDnDWithGroupId = (treeElement: HTMLElement,
-                                       treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>,
-                                       list: HTMLUListElement, id: string) => {
+export const registerDragAndDrop = (treeElement: HTMLElement,
+                                    treeNodeMapping: Map<HTMLLIElement, TreeNodeInfo>,
+                                    list: HTMLUListElement) => {
   Sortable.create(list, {
     // groups with the same id allow to drag and drop elements between them
-    group: id,
+    group: 'jsf-dnd',
     // called after dragging started
-    onStart: dragAndDropStartHandler(treeElement, id),
+    onStart: dragAndDropStartHandler(treeElement, treeNodeMapping),
     // called after an element was added from another list
     onAdd: dragAndDropAddHandler(treeNodeMapping),
     // called when an element's position is changed within the same list
@@ -161,6 +194,6 @@ export const registerDnDWithGroupId = (treeElement: HTMLElement,
     // called when an element is removed because it was moved to another list
     onRemove: dragAndDropRemoveHandler(treeNodeMapping),
     // called after dragging ended
-    onEnd: dragAndDropEndHandler(treeElement, id)
+    onEnd: dragAndDropEndHandler(treeElement)
   });
 };

@@ -230,7 +230,10 @@ export class SchemaServiceImpl implements SchemaService {
                                                          neighbourValue?: object,
                                                          insertAfter?: boolean) => void,
                          deleteFunction: (data: object) => (valueToDelete: object) => void,
-                         getFunction: (data: object) => Object): ContainmentProperty[] {
+                         getFunction: (data: object) => Object,
+                         // TODO rename
+                         internal = false
+                       ): ContainmentProperty[] {
     if (schema.$ref !== undefined) {
       return this.getContainment(
         key,
@@ -240,13 +243,24 @@ export class SchemaServiceImpl implements SchemaService {
         isInContainment,
         addFunction,
         deleteFunction,
-        getFunction
+        getFunction,
+        internal
       );
     }
     if (isObject(schema)) {
-      return isInContainment ? [
-        new ContainmentPropertyImpl(schema, key, name, addFunction, deleteFunction, getFunction)
-      ] : Object.keys(schema.properties)
+      if (isInContainment) {
+
+        return [new ContainmentPropertyImpl(schema, key, name, addFunction, deleteFunction,
+                                            getFunction)];
+      }
+      if (internal) {
+        // If internal is true the schema service does not need to resolve further,
+        // because only directly contained containments are wanted.
+        // This prevents running into circles
+        return [];
+      }
+
+      return Object.keys(schema.properties)
         .reduce(
           (prev, cur) =>
             prev.concat(
@@ -258,7 +272,8 @@ export class SchemaServiceImpl implements SchemaService {
                 false,
                 addFunction,
                 deleteFunction,
-                getFunction
+                getFunction,
+                true
               )
             ),
           []
@@ -273,7 +288,8 @@ export class SchemaServiceImpl implements SchemaService {
         true,
         addToArray(key, JsonForms.config.getIdentifyingProp()),
         deleteFromArray(key),
-        getArray(key)
+        getArray(key),
+        internal
       );
     }
     if (schema.anyOf !== undefined) {
@@ -289,7 +305,8 @@ export class SchemaServiceImpl implements SchemaService {
                 isInContainment,
                 addFunction,
                 deleteFunction,
-                getFunction
+                getFunction,
+                internal
               )
             ),
           []

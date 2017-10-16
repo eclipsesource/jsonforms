@@ -336,7 +336,7 @@ test('TreeMasterDetailRenderer static array', t => {
   const fooUL = li.children[1];
   t.is(fooUL.tagName, 'UL');
   t.is(fooUL.getAttribute('children'), 'children');
-  t.is(fooUL.getAttribute('childrenId'), 'bar');
+  t.is(fooUL.getAttribute('childrenIds'), 'bar');
   const fooLI = fooUL.children[0];
   t.is(fooLI.children.length, 1);
   const divLI = fooLI.children[0];
@@ -852,7 +852,7 @@ test('TreeMasterDetailRenderer dynamic add child to empty', t => {
   const fooUL = li.children[1]; // children list
   t.is(fooUL.children.length, 1);
   t.is(fooUL.getAttribute('children'), 'children');
-  t.is(fooUL.getAttribute('childrenId'), 'bar');
+  t.is(fooUL.getAttribute('childrenIds'), 'bar');
   const liNew = fooUL.children[0];
   const divNew = liNew.children[0];
   const spanNew = divNew.children[0] as HTMLSpanElement;
@@ -1366,4 +1366,90 @@ test('TreeMasterDetailRenderer notify enabled', t => {
 test('TreeMasterDetailRenderer disconnected no notify visible', t => {
   JsonForms.schema = t.context.schema;
   testNotifyAboutVisibiltyWhenDisconnected(t, new TreeMasterDetailRenderer());
+});
+
+test('TreeMasterDetailRenderer render anyOf with model mapping', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    id: '#foo',
+    properties: {
+      children: {
+        type: 'array',
+        items: {
+          anyOf: [
+            {
+              id: '#a',
+              type: 'object',
+              properties: { type: {type: 'string'} }
+            },
+            {
+              id: '#b',
+              type: 'object',
+              properties: { type: {type: 'string'} }
+            }
+          ]
+        }
+      },
+      name: {type: 'string'}
+    }
+  };
+  const uiSchema: MasterDetailLayout = {
+    type: 'MasterDetailLayout',
+    label: 'FooBar',
+    scope: {
+      $ref: '#'
+    },
+    options: {
+      modelMapping: {
+        attribute: 'type',
+        mapping: {
+          'a': '#a',
+          'b': '#b'
+        }
+      }
+    }
+  };
+  const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
+  const data = {
+    name: 'foo',
+    children: [
+      { type: 'a' },
+      { type: 'b' }
+    ]
+  };
+  renderer.setDataService(new DataService(data));
+  renderer.setDataSchema(schema);
+  renderer.setUiSchema(uiSchema);
+  const result = renderer.render();
+  // content
+  const content = result.children[1] as HTMLDivElement;
+  const dialog = result.children[2] as HTMLDivElement;
+  const dialogContent = dialog.children[1];
+  // content -> master tree
+  const master = content.children[0] as HTMLDivElement; // <-- TODO needed?
+  const ul = master.children[0];
+  const li = ul.children[0];
+  const div = li.children[0];
+  const span = div.children[0] as HTMLSpanElement;
+  const spanAdd = span.children[1] as HTMLSpanElement;
+  t.is(li.children.length, 2); // div and ul for children property
+  t.is(dialogContent.children.length, 0);
+  spanAdd.click();
+  // dialog opened
+  t.is(dialogContent.children.length, 2);
+  const aAddButton = dialogContent.children[0] as HTMLButtonElement;
+  t.is(aAddButton.innerText, 'a');
+  const bAddButton = dialogContent.children[1] as HTMLButtonElement;
+  t.is(bAddButton.innerText, 'b');
+  // cancel dialog
+  const dialogCancel = dialog.children[2] as HTMLButtonElement;
+  dialogCancel.click();
+
+  // li children
+  t.is(li.children.length, 2);
+  const childrenUl = li.children.item(1) as HTMLUListElement;
+  // one li each for each child of foo
+  t.is(childrenUl.children.length, 2);
+  t.is(childrenUl.getAttribute('childrenIds'), '#a #b');
+  t.is(childrenUl.getAttribute('children'), 'children');
 });

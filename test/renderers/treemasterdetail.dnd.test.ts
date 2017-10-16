@@ -5,6 +5,7 @@ import {
 } from '../../src/core';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import {
+  CANCEL_DND_ATTRIBUTE,
   dragAndDropAddHandler,
   dragAndDropEndHandler,
   dragAndDropRemoveHandler,
@@ -13,6 +14,7 @@ import {
   DROP_TARGET_CSS,
   TreeNodeInfo
 } from '../../src/renderers/additional/tree-renderer.dnd';
+import * as _ from 'lodash';
 
 test.beforeEach(t => {
   const schema: JsonSchema = {
@@ -40,7 +42,8 @@ test.beforeEach(t => {
   t.context.schema = schema;
 });
 
-test('TreeMasterDetailRenderer Drag And Drop - add handler', t => {
+test('TreeMasterDetailRenderer Drag And Drop - start handler', t => {
+    const schema = t.context.schema;
     const id = 'testId';
     const root = document.createElement('div');
     const list1 = document.createElement('ul');
@@ -50,11 +53,22 @@ test('TreeMasterDetailRenderer Drag And Drop - add handler', t => {
     root.appendChild(list2);
     root.appendChild(list3);
 
-    list1.setAttribute('childrenId', id);
-    list2.setAttribute('childrenId', id);
+    list1.setAttribute('childrenIds', 'bar');
+    list2.setAttribute('childrenIds', 'bar');
+    list3.setAttribute('childrenIds', 'a');
     list2.classList.toggle(DROP_TARGET_CSS, true);
+    const childSchema = schema.properties.children.items as JsonSchema;
+    const tni = {
+      data: {name: '1'},
+      schema: childSchema,
+      deleteFunction: null
+    };
 
-    dragAndDropStartHandler(root, id)({});
+    const treeNodeMapping = new Map<HTMLLIElement, TreeNodeInfo>();
+    const li =  document.createElement('li') as HTMLLIElement;
+    treeNodeMapping.set(li, tni);
+    dragAndDropStartHandler(root, treeNodeMapping)({ item: li });
+
     t.is(root.children.length, 3);
     t.true(list1.classList.contains(DROP_TARGET_CSS));
     t.true(list2.classList.contains(DROP_TARGET_CSS));
@@ -71,11 +85,11 @@ test('TreeMasterDetailRenderer Drag And Drop - end handler', t => {
     root.appendChild(list2);
     root.appendChild(list3);
 
-    list1.setAttribute('childrenId', id);
+    list1.setAttribute('childrenIds', id);
     list1.classList.toggle(DROP_TARGET_CSS, true);
-    list2.setAttribute('childrenId', id);
+    list2.setAttribute('childrenIds', id);
 
-    dragAndDropEndHandler(root, id)({});
+    dragAndDropEndHandler(root)({});
     t.is(root.children.length, 3);
     t.false(list1.classList.contains(DROP_TARGET_CSS));
     t.false(list2.classList.contains(DROP_TARGET_CSS));
@@ -88,7 +102,7 @@ test('TreeMasterDetailRenderer Drag And Drop - update handler', t => {
   // build tree
   const liParent = document.createElement('li');
   const childrenUl = document.createElement('ul');
-  childrenUl.setAttribute('childrenId', 'bar');
+  childrenUl.setAttribute('childrenIds', 'bar');
   childrenUl.setAttribute('children', 'children');
   const li1 = document.createElement('li');
   const li2 = document.createElement('li');
@@ -156,7 +170,7 @@ test('TreeMasterDetailRenderer Drag And Drop - remove handler', t => {
   // build tree
   const liParent = document.createElement('li');
   const childrenUl = document.createElement('ul');
-  childrenUl.setAttribute('childrenId', 'bar');
+  childrenUl.setAttribute('childrenIds', 'bar');
   childrenUl.setAttribute('children', 'children');
   const li1 = document.createElement('li');
   const li2 = document.createElement('li');
@@ -198,13 +212,60 @@ test('TreeMasterDetailRenderer Drag And Drop - remove handler', t => {
   t.is(data.children[0].name, '2');
 });
 
+test('TreeMasterDetailRenderer Drag And Drop - remove handler - canceled add', t => {
+  const schema: JsonSchema = t.context.schema;
+  const data = {children: [{name: '1'}]};
+  // build tree
+  const liParent = document.createElement('li');
+  const childrenUl = document.createElement('ul');
+  childrenUl.setAttribute('childrenIds', 'bar');
+  childrenUl.setAttribute('children', 'children');
+  const li1 = document.createElement('li');
+  liParent.appendChild(childrenUl);
+
+  // in the tree l1 is already deleted when the handler is called
+  const childSchema = schema.properties.children.items as JsonSchema;
+  const childrenProperty = JsonForms.schemaService.getContainmentProperties(schema)[0];
+  const deleteFunction = childrenProperty.deleteFromData(data);
+  const tniParent = {
+    data: data,
+    schema: schema,
+    deleteFunction: null
+  };
+  const tni1 = {
+    data: data.children[0],
+    schema: childSchema,
+    deleteFunction: deleteFunction
+  };
+  const treeNodeMapping = new Map<HTMLLIElement, TreeNodeInfo>();
+  treeNodeMapping.set(liParent, tniParent);
+  treeNodeMapping.set(li1, tni1);
+  const removeEvent = {
+    from: childrenUl,
+    oldIndex: 0,
+    item: li1
+  };
+  // simulate cancelled add
+  li1.setAttribute(CANCEL_DND_ATTRIBUTE, '');
+
+  dragAndDropRemoveHandler(treeNodeMapping)(removeEvent);
+  // data was not changed
+  t.is(data.children.length, 1);
+  t.is(data.children[0].name, '1');
+  // removed cancel attribute from affected li again
+  t.false(li1.hasAttribute(CANCEL_DND_ATTRIBUTE));
+  // removed li was re-inserted to original list
+  t.is(childrenUl.children.length, 1);
+  t.is(_.indexOf(childrenUl.children, li1), 0);
+});
+
 test('TreeMasterDetailRenderer Drag And Drop - add handler', t => {
   const schema: JsonSchema = t.context.schema;
   const data = {children: [{name: '2'}]};
   // build tree
   const liParent = document.createElement('li');
   const childrenUl = document.createElement('ul');
-  childrenUl.setAttribute('childrenId', 'bar');
+  childrenUl.setAttribute('childrenIds', 'bar');
   childrenUl.setAttribute('children', 'children');
   const li1 = document.createElement('li');
   const li2 = document.createElement('li');
@@ -269,7 +330,7 @@ test('TreeMasterDetailRenderer Drag And Drop - add handler', t => {
   t.is(data.children[2].name, '3');
 });
 
-test('TreeMasterDetailRenderer Drag And Drop - add handler - missing target property', t => {
+test('TreeMasterDetailRenderer Drag And Drop - add handler - invalid drop target', t => {
   const schema: JsonSchema = t.context.schema;
   const data = {children: [{name: '1'}]};
 
@@ -284,13 +345,14 @@ test('TreeMasterDetailRenderer Drag And Drop - add handler - missing target prop
   // build tree
   const liParent = document.createElement('li');
   const childrenUl = document.createElement('ul');
-  childrenUl.setAttribute('childrenId', 'bar');
+  childrenUl.setAttribute('childrenIds', 'bar');
   childrenUl.setAttribute('children', 'children');
   const liAdd = document.createElement('li');
   const li1 = document.createElement('li');
   liParent.appendChild(childrenUl);
 
   // Append children in target order (after implied drag and drop)
+  childrenUl.appendChild(liAdd);
   childrenUl.appendChild(li1);
 
   const childSchema = schema.properties.children.items as JsonSchema;
@@ -325,4 +387,5 @@ test('TreeMasterDetailRenderer Drag And Drop - add handler - missing target prop
   t.is(data.children.length, 1);
   t.is(data.children[0].name, '1');
   t.is(Object.keys(data).length, 1);
+  t.true(liAdd.hasAttribute(CANCEL_DND_ATTRIBUTE));
 });
