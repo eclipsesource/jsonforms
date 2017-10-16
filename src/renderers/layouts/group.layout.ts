@@ -32,12 +32,12 @@ export class GroupLayoutRenderer extends Renderer {
   render(): HTMLElement {
     const group = this.uischema as GroupLayout;
     const fieldSet = document.createElement('fieldset');
-    JsonForms.stylingRegistry.addStyle(fieldSet, 'group.layout');
+    JsonForms.stylingRegistry.addStyle(fieldSet, 'group-layout');
     if (group.label !== undefined) {
       const legend = document.createElement('legend');
       legend.innerText = group.label;
       fieldSet.appendChild(legend);
-      JsonForms.stylingRegistry.addStyle(legend, 'group.label');
+      JsonForms.stylingRegistry.addStyle(legend, 'group-label');
     }
     if (group.elements !== undefined && group.elements !== null) {
       group.elements.forEach(element => {
@@ -47,6 +47,14 @@ export class GroupLayoutRenderer extends Renderer {
       });
     }
     this.appendChild(fieldSet);
+
+    const childrenSize = fieldSet.children.length;
+    for (let i = 0; i < childrenSize; i++) {
+      const child = fieldSet.children.item(i);
+      JsonForms.stylingRegistry
+        .addStyle(child, 'group-layout-item', childrenSize);
+    }
+
     this.evaluateRuntimeNotification = createRuntimeNotificationEvaluator(this, this.uischema);
 
     return this;
