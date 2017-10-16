@@ -9,7 +9,7 @@ import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.u
 import { update } from '../../actions';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
-import { DispatchRenderer } from '../dispatch.renderer';
+import DispatchRenderer from '../dispatch.renderer';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'

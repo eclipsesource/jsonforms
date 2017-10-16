@@ -16,7 +16,7 @@ import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { update } from '../../actions';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
-import { DispatchRenderer } from '../dispatch.renderer';
+import DispatchRenderer from '../dispatch.renderer';
 
 export const getStyle = (styleName: string) =>
   JsonForms.stylingRegistry.getAsClassName(styleName);
@@ -63,7 +63,7 @@ export class ArrayControlRenderer extends Renderer {
    * @inheritDoc
    */
   render() {
-    const { schema, uischema, data, path, dispatch } = this.props;
+    const { schema, uischema, data, path } = this.props;
     const controlElement = uischema as ControlElement;
     const label = getElementLabelObject(schema, controlElement);
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');

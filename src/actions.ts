@@ -1,5 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { getData } from './reducers/index';
+import { JsonFormsRendererConstructable } from './renderers/renderer.util';
+import { RankedTester } from './core/testers';
 
 export const INIT = 'INIT';
 export const UPDATE_DATA = 'UPDATE';
@@ -9,6 +11,7 @@ export const SHOW = 'SHOW';
 export const HIDE = 'HIDE';
 export const ENABLE = 'ENABLE';
 export const DISABLE = 'DISABLE';
+export const ADD_RENDERER = 'ADD_RENDERER';
 
 // TODO: fix typings
 export const update =
@@ -35,3 +38,12 @@ export const validate = () => (dispatch, getState) => {
     data: getData(getState())
   });
 };
+
+export const registerRenderer = (
+  tester: RankedTester,
+  renderer: JsonFormsRendererConstructable
+) => ({
+  type: ADD_RENDERER,
+  tester,
+  renderer
+});

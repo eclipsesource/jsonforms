@@ -1,11 +1,13 @@
 import { combineReducers, Reducer } from 'redux';
-import { validationReducer} from './validation';
+import { validationReducer } from './validation';
+import { rendererReducer } from './renderers';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 
 export const appReducer: Reducer<any> = combineReducers(
   {
     'common': commonStateReducer,
-    'validation': validationReducer
+    'validation': validationReducer,
+    'renderers': rendererReducer
   }
 );
 

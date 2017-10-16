@@ -51,7 +51,8 @@ export class JsonFormsElement extends HTMLElement {
 
   schemaPromise: Promise<any> = null;
   private allowDynamicUpdate = false;
-  private store: Store<any>;
+  // TODO: maybe make only dispatch accessible?
+  store: Store<any>;
 
   /**
    * Constructor.
@@ -148,7 +149,8 @@ export class JsonFormsElement extends HTMLElement {
     this.store = createJsonFormsStore({
       common: {
         data: this.dataObject
-      }
+      },
+      renderers: JsonForms.rendererService.renderers
     });
 
     this.store.dispatch({
@@ -165,7 +167,11 @@ export class JsonFormsElement extends HTMLElement {
     // --
 
     const bestRenderer = JsonForms.rendererService
-        .findMostApplicableRenderer(uischema, schema, this.store);
+        .findMostApplicableRenderer(
+          uischema,
+          schema,
+          this.store
+        );
 
     Inferno.render(
       <Provider store={this.store}>

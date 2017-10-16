@@ -4,7 +4,7 @@ import { UISchemaElement } from '../models/uischema';
 import { RankedTester } from './testers';
 import { JsonFormsRendererConstructable } from '../renderers/renderer.util';
 import { Store } from 'redux';
-import { DispatchRenderer } from '../renderers/dispatch.renderer';
+import DispatchRenderer from '../renderers/dispatch.renderer';
 
 /**
  * The renderer service maintains a list of renderers and

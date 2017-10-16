@@ -4,7 +4,7 @@ import { isVisible, Renderer, RendererProps } from '../core/renderer';
 import { RankedTester } from '../core/testers';
 import { UISchemaElement } from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
-import { DispatchRenderer } from './dispatch.renderer';
+import DispatchRenderer from './dispatch.renderer';
 
 /**
  * A renderer config that is used during renderer registration.
@@ -42,6 +42,7 @@ export const mapStateToLayoutProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
+    renderers: state.renderers,
     visible,
     path: ownProps.path
   };
@@ -51,7 +52,8 @@ export const renderChildren = (
   elements: UISchemaElement[],
   schema: JsonSchema,
   childType: string,
-  path: string) => {
+  path: string
+) => {
 
   if (_.isEmpty(elements)) {
     return [];

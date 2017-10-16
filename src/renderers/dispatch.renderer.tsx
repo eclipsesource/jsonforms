@@ -1,8 +1,9 @@
 import * as _ from 'lodash';
-import { JsonForms } from '../core';
 import { UnknownRenderer } from './unknown.renderer';
 import { UISchemaElement } from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
+import { RankedTester } from '../core/testers';
+import { connect } from 'inferno-redux';
 
 export interface DispatchRendererProps {
 
@@ -16,6 +17,8 @@ export interface DispatchRendererProps {
    */
   schema: JsonSchema;
 
+  renderers: { tester: RankedTester, renderer: any }[];
+
   /**
    * Optional instance path. Necessary when the actual data
    * path can not be inferred via the UI schema element as
@@ -25,18 +28,28 @@ export interface DispatchRendererProps {
 }
 
 export const DispatchRenderer = (props: DispatchRendererProps) => {
-  const { uischema, path, schema } = props;
-  const renderer = _.maxBy(JsonForms.rendererService.renderers, r =>
-      r.tester(uischema, schema)
-  );
+  const { uischema, path, schema, renderers } = props;
+  const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
 
   if (renderer.tester(uischema, schema) === -1) {
     return <UnknownRenderer/>;
   } else {
-    return <renderer.renderer
-      uischema={uischema}
-      schema={schema}
-      path={path}
-    />;
+    return (
+      <renderer.renderer
+        uischema={uischema}
+        schema={schema}
+        path={path}
+        renderers={renderers}
+      />
+    );
   }
 };
+
+const mapDispatchToProps = state => ({
+  renderers: state.renderers
+});
+
+export default connect(
+  mapDispatchToProps,
+  null
+)(DispatchRenderer);

@@ -5,6 +5,9 @@ import { ControlElement, UISchemaElement } from '../../src/models/uischema';
 import { resolveSchema } from '../../src/path.util';
 import { registerExamples } from '../example';
 import { JsonForms } from '../../src/core';
+import { connect } from 'inferno-redux';
+import { mapStateToControlProps } from '../../src/renderers/controls/base.control';
+import { registerRenderer } from '../../src/actions';
 const schema = {
   'type': 'object',
   'properties': {
@@ -117,12 +120,22 @@ const resetServices = () => {
   jsonforms.data = data;
 };
 
-const tester = (myUISchema: UISchemaElement, mySchema: JsonSchema) =>
-  myUISchema.type === 'Control'
-  && resolveSchema(
+const tester = (myUISchema: UISchemaElement, mySchema: JsonSchema) => {
+  console.log('my UI Schema', myUISchema);
+  if (myUISchema.type === 'Control') {
+    console.log('my Schema');
+    const subschema = resolveSchema(
       mySchema,
-      (myUISchema as ControlElement).scope.$ref
+      (myUISchema as ControlElement).scope.$ref);
+    console.log('my UI ', subschema);
+  }
+
+  return myUISchema.type === 'Control'
+  && resolveSchema(
+    mySchema,
+    (myUISchema as ControlElement).scope.$ref
   ).type === 'integer' ? 5 : -1;
+};
 
 // TODO
 class MyControl extends Renderer {
@@ -148,7 +161,7 @@ class MyControl extends Renderer {
     // this.setCurrent();
     //
     // return this;
-    return <div>my control</div>;
+    return <div>My custom control is here!</div>;
   }
   // dispose(): void {
   //   return;
@@ -184,9 +197,8 @@ const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Custom Control';
   buttonRegister.onclick = () => {
-    JsonForms.rendererService.registerRenderer(tester, MyControl);
-    // HACK to retrigger service creation
-    resetServices();
+    const jsonForms =  document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
+    jsonForms.store.dispatch(registerRenderer(tester, connect(mapStateToControlProps)(MyControl)));
   };
   div.appendChild(buttonRegister);
   const buttonUnregister = document.createElement('button');

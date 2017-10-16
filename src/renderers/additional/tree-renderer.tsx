@@ -11,7 +11,7 @@ import { update } from '../../actions';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
-import { DispatchRenderer } from '../dispatch.renderer';
+import DispatchRenderer from '../dispatch.renderer';
 
 /**
  * Default tester for a master-detail layout.
