@@ -12,7 +12,7 @@ import { Runtime, RUNTIME_TYPE } from '../../core/runtime';
 import { JsonForms } from '../../core';
 import { ContainmentProperty } from '../../core/schema.service';
 import {
-  registerDnDWithGroupId,
+  registerDragAndDrop,
   TreeNodeInfo
 } from './tree-renderer.dnd';
 
@@ -211,14 +211,16 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         },
         dataChanged: (uischema: MasterDetailLayout, newValue: any, data: any): void => {
           const segments = uischema.scope.$ref.split('/');
-          const lastSegemnet = segments[segments.length - 1];
-          if (lastSegemnet === this.uischema.options.labelProvider[schema.id]) {
+          const lastSegment = segments[segments.length - 1];
+          if (lastSegment === this.uischema.options.labelProvider[schema.id]) {
+            // TODO very ugly setting of label
             label.firstChild.lastChild.firstChild.textContent = newValue;
           }
           if (Array.isArray(newValue)) {
             const childSchema = resolveSchema(schema, uischema.scope.$ref).items;
             if (!Array.isArray(childSchema)) {
-              this.renderChildren(newValue, childSchema, label, lastSegemnet);
+              // TODO is the check of childSchema unnecessary?
+              this.renderChildren(newValue, label, lastSegment);
             }
           }
         }
@@ -270,19 +272,34 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
    * @param data the array to expand
    * @param parent the list that will contain the expanded elements
    * @param property the {@link ContainmentProperty} defining the property that the array belongs to
+   *                 or an array of ContainmentProperties that contains a property for every
+   *                 data object of the same index.
    * @param parentData the data containing the array as a property
    */
-  private expandArray(data: Object[], parent: HTMLUListElement, property: ContainmentProperty,
+  private expandArray(data: Object[], parent: HTMLUListElement,
+                      property: ContainmentProperty|ContainmentProperty[],
                       parentData?: Object): void {
     if (data === undefined || data === null) {
       return;
     }
     data.forEach((element, index) => {
+      let actualProperty: ContainmentProperty;
+      if (Array.isArray(property)) {
+        actualProperty = property[index];
+      } else {
+        actualProperty = property;
+      }
+      if (_.isEmpty(actualProperty)) {
+        console.error(`Could not render data object because no containment property was given`,
+                      element);
+
+        return;
+      }
       let deleteFunction = null;
       if (!_.isEmpty(parentData)) {
-        deleteFunction = property.deleteFromData(parentData);
+        deleteFunction = actualProperty.deleteFromData(parentData);
       }
-      this.expandObject(element, parent, property.schema, deleteFunction);
+      this.expandObject(element, parent, actualProperty.schema, deleteFunction);
     });
   }
 
@@ -317,36 +334,21 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     newData: object,
     deleteFunction: (toDelete: object) => void
   ): void {
-    const subChildren = li.getElementsByTagName('ul');
+    // get UL lists that are direct children of li
+    const childLists = _.filter(li.children, child => child.tagName === 'UL');
     let childParent;
 
     // find correct child group
-    if (subChildren.length !== 0) {
-      for (let i = 0; i < subChildren.length; i++) {
-        if (li !== subChildren[i].parentNode) {
-          // only lists that are direct children of li are relevant
-          continue;
-        }
-        if (schema.id === undefined || schema.id === null) {
-          // If the schema has no id, see if there is a group matching the key
-          if (key === subChildren[i].getAttribute('childrenId')
-              && subChildren[i].getAttribute('childrenId') === undefined) {
-            childParent = subChildren[i];
-          }
-          continue;
-        }
-
-        if (schema.id === subChildren[i].getAttribute('childrenId')) {
-          childParent = subChildren[i];
-          break;
-        }
+    for (const list of childLists) {
+      if (key === list.getAttribute('children')) {
+        childParent = list;
+        break;
       }
     }
+
     // In case no child group was found, create one
     if (childParent === undefined) {
-      // TODO proper logging
-      console.warn('Could not find suitable list for key ' + key
-        + '. A new one was created.');
+      console.warn(`Could not find suitable list for key '${key}'. A new one was created.`);
       childParent = document.createElement('ul');
       childParent.setAttribute('children', key);
       li.appendChild(childParent);
@@ -399,6 +401,9 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
         JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
           const button = document.createElement('button');
           button.innerText = property.label;
+          if (_.startsWith(button.innerText, '#') && button.innerText.length > 1) {
+            button.innerText = button.innerText.substr(1);
+          }
           button.classList.add('jsf-treeMasterDetail-dialog-createbutton');
           JsonForms.stylingRegistry.addStyle(button, 'button');
           button.onclick = () => {
@@ -440,25 +445,32 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     }
     li.appendChild(div);
 
-    // add a separate list for each containment property
-    JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
-      const id = property.schema.id;
-      if (id === undefined || id === null) {
-        // TODO proper logging
-        console.warn('The property\'s schema with label \'' + property.label
-                     + '\' has no id. No Drag & Drop is possible.');
+    const props = JsonForms.schemaService.getContainmentProperties(schema);
+    const groupedProperties = _.groupBy(props, property => property.property);
 
-        return;
-      }
-      // create child list and activate drag and drop
+    // create list for every property in the schema, unify anyOf
+    Object.keys(groupedProperties).forEach(key => {
+      // key is the name of the property that the data is contained in
+      const properties = groupedProperties[key];
       const ul = document.createElement('ul') as HTMLUListElement;
-      ul.setAttribute('childrenId', id);
-      ul.setAttribute('children', property.property);
-      registerDnDWithGroupId(this.master, this.treeNodeMapping, ul, id);
+      // get schema ids of objects allowed in this list
+      let childrenIds = [];
+      properties.forEach(property => {
+        if (_.isEmpty(property.schema.id)) {
+          console.warn(`The property's schema with label '${property.label}' has no schema id.
+                        No proper Drag & Drop will be possible.`);
+
+          return;
+        }
+        childrenIds = _.concat(childrenIds, property.schema.id);
+      });
+      ul.setAttribute('childrenIds', _.join(childrenIds, ' '));
+      ul.setAttribute('children', key);
       li.appendChild(ul);
+      registerDragAndDrop(this.master, this.treeNodeMapping, ul);
     });
 
-    // map li to represented data & delete function
+    // map li to represented data, schema & delete function
     const nodeData: TreeNodeInfo = {
       data: data,
       schema: schema,
@@ -466,95 +478,113 @@ export class TreeMasterDetailRenderer extends Renderer implements DataChangeList
     };
     this.treeNodeMapping.set(li, nodeData);
 
-    // TODO: too much rendering for anyOf containments without id mapping.
-    // elements that are part of an 'anyOf' containment but are not mapped to an id
-    // will be rendered in every list for the anyOf.
-
     // render contained children of this element
-    JsonForms.schemaService.getContainmentProperties(schema).forEach(property => {
-      let propertyData = property.getData(data) as Object[];
-      /*tslint:disable:no-string-literal */
-      if (this.uischema.options !== undefined &&
-        this.uischema.options['modelMapping'] !== undefined && !_.isEmpty(propertyData)) {
-          propertyData = propertyData.filter(value => {
-            // only use filter criterion if the checked value has the mapped attribute
-            if (value[this.uischema.options['modelMapping'].attribute]) {
-              return property.schema.id === this.uischema.options['modelMapping'].
-                mapping[value[this.uischema.options['modelMapping'].attribute]];
-            }
-
-            return true;
-          });
-      }
-      /*tslint:enable:no-string-literal */
+    Object.keys(groupedProperties).forEach(key => {
+      const properties = groupedProperties[key];
+      // resolved data is complete for every property in case of anyOf
+      const propertyData = properties[0].getData(data) as Object[];
       if (!_.isEmpty(propertyData)) {
-        this.renderChildren(propertyData, property.schema, li, property.property);
+        this.renderChildren(propertyData, li, key);
       }
     });
 
     parent.appendChild(li);
   }
 
-  private findRendererChildContainer(li: HTMLLIElement, key: string, id?: string)
-    : HTMLUListElement {
-    // If an id is provided, the group must match key and id. Otherwise only the key.
-    let ul: HTMLUListElement;
-    const children = li.children;
-    for (let i = 0; i < children.length; i++) {
-      const child = children.item(i);
-      if (child.tagName === 'UL' && child.getAttribute('children') === key) {
-        if (!_.isEmpty(id) && child.getAttribute('childrenId') === id) {
-          ul = child as HTMLUListElement;
-        } else if (_.isEmpty(id)) {
-          ul = child as HTMLUListElement;
+  /**
+   * use the model mapping to match a data object to one ContainmentProperty out of a given list
+   * of ContainmentProperties.
+   */
+  private matchContainmentProperty(data: Object, properties: ContainmentProperty[])
+            : ContainmentProperty {
+    if (properties.length === 1) {
+      return properties[0];
+    }
+    // tslint:disable:no-string-literal
+    if (!_.isEmpty(this.uischema.options) &&
+      !_.isEmpty(this.uischema.options['modelMapping']) &&
+      !_.isEmpty(this.uischema.options['modelMapping'].mapping)) {
+        const filtered = properties.filter(property => {
+          // only use filter criterion if the checked value has the mapped attribute
+          if (data[this.uischema.options['modelMapping'].attribute]) {
+            return property.schema.id === this.uischema.options['modelMapping'].
+              mapping[data[this.uischema.options['modelMapping'].attribute]];
+          }
+
+          // NOTE if mapped attribute is not present do not filter out property
+          return true;
+        });
+        // tslint:enable:no-string-literal
+        // TODO improve handling
+        if (filtered.length > 1) {
+          console.warn('More than one matching containment property was found for the given data',
+                       data);
         }
+
+        return _.head(filtered);
+    }
+
+    console.error('Could not find containment property for data', data);
+
+    // TODO should something else be returned?
+    return null;
+  }
+
+  /**
+   * @param li the LI element containing the lists
+   * @param key the property key defining the searched lists content
+   * @return the list for data belonging to the given key
+   */
+  private findRendererChildContainer(li: HTMLLIElement, key: string): HTMLUListElement {
+    const children = _.filter(li.children, child => child.tagName === 'UL');
+    for (const child of children) {
+      if (child.getAttribute('children') === key) {
+        return (child as HTMLUListElement);
       }
     }
 
-    return ul;
+    return undefined;
   }
 
   /**
    * Renders an array as children of the given <li> tree node.
    *
    * @param array the objects to render
-   * @param schema the JsonSchema describing the objects
    * @param li The parent tree node of the rendered objects
    * @param key The parent's property that contains the rendered children
    */
   private renderChildren
-    (array: Object[], schema: JsonSchema, li: HTMLLIElement, key: string): void {
-    let ul: HTMLUListElement = this.findRendererChildContainer(li, key, schema.id);
+    (array: Object[], li: HTMLLIElement, key: string): void {
+    // with unified lists, no need for schema id
+    let ul: HTMLUListElement = this.findRendererChildContainer(li, key);
     if (ul === undefined) {
-      // TODO proper logging
-      console.warn('No suitable list was found for key \'' + key + '\'.');
+      console.warn(`No suitable list was found for key '${key}'.
+                    Created a new one without drag and drop`);
       ul = document.createElement('ul');
       ul.setAttribute('children', key);
-      if (!_.isEmpty(schema.id)) {
-        ul.setAttribute('childrenId', schema.id);
-        registerDnDWithGroupId(this.master, this.treeNodeMapping, ul, schema.id);
-      }
       li.appendChild(ul);
-    } else {
-      while (!_.isEmpty(ul.firstChild)) {
-        (ul.firstChild as Element).remove();
-      }
+    }
+    // clean list before re-rendering children
+    while (!_.isEmpty(ul.firstChild)) {
+      (ul.firstChild as Element).remove();
     }
 
     const parentInfo = this.treeNodeMapping.get(li);
     const parentProperties = JsonForms.schemaService.getContainmentProperties(parentInfo.schema);
-    for (const property of parentProperties) {
-      // If available, additionally use schema id to identify the correct property
-      if (!_.isEmpty(schema.id) && schema.id !== property.schema.id) {
-        continue;
+    const keyProperties = parentProperties.filter(property => property.property === key);
+    if (keyProperties.length > 1) {
+      // anyOf
+      const arrayProperties: ContainmentProperty[] = [];
+      for (const dataObject of array) {
+        // determine schema of dataObject with model mapping
+        arrayProperties.push(this.matchContainmentProperty(dataObject, keyProperties));
       }
-      if (key === property.property) {
-        this.expandArray(array, ul, property, parentInfo.data);
-
-        return;
-      }
+      this.expandArray(array, ul, arrayProperties, parentInfo.data);
+    } else if (keyProperties.length === 1) {
+      // no anyOf
+      this.expandArray(array, ul, keyProperties[0], parentInfo.data);
+    } else {
+      console.error('Could not render children because no fitting property was found.');
     }
-    // TODO proper logging
-    console.warn('Could not render children because no fitting property was found.');
   }
 }
