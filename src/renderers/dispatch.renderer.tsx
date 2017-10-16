@@ -45,11 +45,11 @@ export const DispatchRenderer = (props: DispatchRendererProps) => {
   }
 };
 
-const mapDispatchToProps = state => ({
+const mapStateToProps = state => ({
   renderers: state.renderers
 });
 
 export default connect(
-  mapDispatchToProps,
+  mapStateToProps,
   null
 )(DispatchRenderer);
