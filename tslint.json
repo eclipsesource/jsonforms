@@ -24,7 +24,7 @@
         "no-reference": true,
         "no-var-requires": true,
         "only-arrow-functions": true,
-        "prefer-for-of": true,
+        "prefer-for-of": false,
 
 
         "curly": true,
