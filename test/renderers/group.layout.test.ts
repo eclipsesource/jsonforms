@@ -11,8 +11,12 @@ import { JsonForms } from '../../src/core';
 test.before(t => {
   JsonForms.stylingRegistry.registerMany([
     {
-      name: 'group.layout',
+      name: 'group-layout',
       classNames: ['group-layout']
+    },
+    {
+      name: 'group-layout-item',
+      classNames: ['group-layout-myitem']
     }
   ]);
 });
@@ -109,6 +113,8 @@ test('Render GroupLayout with children', t => {
   t.is(div.tagName, 'FIELDSET');
   t.is(div.className, 'group-layout');
   t.is(div.children.length, 2);
+  t.is(div.children[0].className, 'group-layout-myitem');
+  t.is(div.children[1].className, 'group-layout-myitem');
 });
 
 test('Hide GroupLayout', t => {
