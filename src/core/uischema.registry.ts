@@ -56,7 +56,7 @@ interface UISchemaDefinition {
  * a combination of schema/data.
  * @type {number}
  */
-export const NOT_APPLICABLE: number = -1;
+export const NOT_APPLICABLE = -1;
 
 /**
  * Default UI schema definition that always returns 0 as its priority.
