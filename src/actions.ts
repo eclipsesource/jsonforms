@@ -12,6 +12,7 @@ export const HIDE = 'HIDE';
 export const ENABLE = 'ENABLE';
 export const DISABLE = 'DISABLE';
 export const ADD_RENDERER = 'ADD_RENDERER';
+export const REMOVE_RENDERER = 'REMOVE_RENDERER';
 
 // TODO: fix typings
 export const update =
@@ -44,6 +45,15 @@ export const registerRenderer = (
   renderer: JsonFormsRendererConstructable
 ) => ({
   type: ADD_RENDERER,
+  tester,
+  renderer
+});
+
+export const unregisterRenderer = (
+  tester: RankedTester,
+  renderer: JsonFormsRendererConstructable
+) => ({
+  type: REMOVE_RENDERER,
   tester,
   renderer
 });
