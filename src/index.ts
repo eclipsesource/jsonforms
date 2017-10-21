@@ -8,4 +8,4 @@ export * from './core/styling.registry';
 export * from './core/testers';
 export * from './models/uischema';
 export * from './models/jsonSchema';
-export * from './renderers/renderers';
+export * from './renderers';

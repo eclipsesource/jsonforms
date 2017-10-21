@@ -1,13 +1,10 @@
-import { Renderer } from '../../src/core/renderer';
 import { JsonFormsElement } from '../../src/json-forms';
-import { JsonSchema } from '../../src/models/jsonSchema';
-import { ControlElement, UISchemaElement } from '../../src/models/uischema';
-import { resolveSchema } from '../../src/path.util';
 import { registerExamples } from '../example';
-import { JsonForms } from '../../src/core';
 import { connect } from 'inferno-redux';
 import { mapStateToControlProps } from '../../src/renderers/controls/base.control';
-import { registerRenderer } from '../../src/actions';
+import { registerRenderer, unregisterRenderer } from '../../src/actions';
+import { RatingControl, ratingControlTester } from './rating.control';
+
 const schema = {
   'type': 'object',
   'properties': {
@@ -112,101 +109,24 @@ const data =  {
   'name': 'Send email to Adriana',
   'description': 'Confirm if you have passed the subject\nHerby ...',
   'done': true,
-  'recurrence': 'Daily'
+  'recurrence': 'Daily',
+  'rating': 3,
 };
-
-const resetServices = () => {
-  const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-  jsonforms.data = data;
-};
-
-const tester = (myUISchema: UISchemaElement, mySchema: JsonSchema) => {
-  console.log('my UI Schema', myUISchema);
-  if (myUISchema.type === 'Control') {
-    console.log('my Schema');
-    const subschema = resolveSchema(
-      mySchema,
-      (myUISchema as ControlElement).scope.$ref);
-    console.log('my UI ', subschema);
-  }
-
-  return myUISchema.type === 'Control'
-  && resolveSchema(
-    mySchema,
-    (myUISchema as ControlElement).scope.$ref
-  ).type === 'integer' ? 5 : -1;
-};
-
-// TODO
-class MyControl extends Renderer {
-  render() {
-    // const controlElement = this.uischema as ControlElement;
-    // for (let i = 1; i <= 5; i++) {
-    //   const span = document.createElement('span');
-    //   span.innerText = '\u2606';
-    //   span.onclick = () => {
-    //     this.dataService.notifyAboutDataChange(controlElement, i);
-    //     this.updateSpans(span);
-    //   };
-    //   span.onmouseover = () => {
-    //     this.updateSpans(span);
-    //   };
-    //   span.style.cursor = 'default';
-    //   this.appendChild(span);
-    // }
-    // this.className = 'rating';
-    // this.onmouseout = () => {
-    //   this.setCurrent();
-    // };
-    // this.setCurrent();
-    //
-    // return this;
-    return <div>My custom control is here!</div>;
-  }
-  // dispose(): void {
-  //   return;
-  // }
-  // private setCurrent(): void {
-  //   const currentValue = this.dataService.getValue(this.uischema as ControlElement);
-  //   for (let i = 1; i <= 5; i++) {
-  //     let star = '\u2605';
-  //     if (i > currentValue || currentValue === undefined) {
-  //       star = '\u2606';
-  //     }
-  //     (this.children.item(i - 1) as HTMLSpanElement).innerText = star;
-  //   }
-  // }
-  // private updateSpans(span: HTMLSpanElement): void {
-  //   span.innerText = '\u2605';
-  //   let prevStar = span.previousElementSibling as HTMLSpanElement;
-  //   while (prevStar !== null) {
-  //     prevStar.innerText = '\u2605';
-  //     prevStar = prevStar.previousElementSibling as HTMLSpanElement;
-  //   }
-  //   let nextStar = span.nextElementSibling as HTMLSpanElement;
-  //   while (nextStar !== null) {
-  //     nextStar.innerText = '\u2606';
-  //     nextStar = nextStar.nextElementSibling as HTMLSpanElement;
-  //   }
-  // }
-
-}
-// customElements.define('my-control', MyControl);
 
 const setup = (div: HTMLDivElement) => {
+  const ConnectedRatingControl = connect(mapStateToControlProps)(RatingControl);
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Custom Control';
   buttonRegister.onclick = () => {
     const jsonForms =  document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-    jsonForms.store.dispatch(registerRenderer(tester, connect(mapStateToControlProps)(MyControl)));
+    jsonForms.store.dispatch(registerRenderer(ratingControlTester, ConnectedRatingControl));
   };
   div.appendChild(buttonRegister);
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Custom Control';
   buttonUnregister.onclick = () => {
-    JsonForms.rendererService.deregisterRenderer(tester, MyControl);
-    // HACK to retrigger service creation
-    resetServices();
+    const jsonForms =  document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
+    jsonForms.store.dispatch(unregisterRenderer(ratingControlTester, ConnectedRatingControl));
   };
   div.appendChild(buttonUnregister);
 };

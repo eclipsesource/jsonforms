@@ -1,6 +1,6 @@
 import * as JsonRefs from 'json-refs';
 import * as _ from 'lodash';
-import './renderers/renderers';
+import './renderers';
 import { UISchemaElement } from './models/uischema';
 import { JsonForms } from './core';
 import { JsonSchema } from './models/jsonSchema';
