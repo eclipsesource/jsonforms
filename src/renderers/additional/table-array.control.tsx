@@ -10,6 +10,7 @@ import { update } from '../../actions';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch.renderer';
+import { ControlProps } from '../controls/Control';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -28,7 +29,7 @@ export const tableArrayTester: RankedTester = rankWith(10, and(
     ))
 );
 
-export class TableArrayControl extends Renderer {
+export class TableArrayControl extends Renderer<ControlProps, void> {
 
   // TODO duplicate code
   addNewItem(path: string) {

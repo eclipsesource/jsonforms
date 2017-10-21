@@ -3,6 +3,7 @@ import { JsonForms } from '../../core';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
+import { ControlProps } from './Control';
 
 /**
  * Default tester for integer controls.
@@ -13,7 +14,7 @@ export const integerControlTester: RankedTester = rankWith(2, and(
     schemaTypeIs('integer')
   ));
 
-export class IntegerControl extends BaseControl<HTMLInputElement> {
+export class IntegerControl extends BaseControl<ControlProps, void> {
 
   inputChangeProperty = 'onInput';
   valueProperty = 'value';

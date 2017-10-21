@@ -1,5 +1,5 @@
 import { JsonForms } from '../../core';
-import { Renderer } from '../../core/renderer';
+import {Renderer, RendererProps} from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { GroupLayout } from '../../models/uischema';
 import { JsonFormsLayout, mapStateToLayoutProps, renderChildren } from '../renderer.util';
@@ -12,7 +12,7 @@ import { connect } from 'inferno-redux';
  */
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
-export class GroupLayoutRenderer extends Renderer {
+export class GroupLayoutRenderer extends Renderer<RendererProps, void> {
 
   render() {
     const { schema, uischema, path, visible } = this.props;

@@ -19,7 +19,7 @@ export interface JsonFormsRendererConfig {
 
 export interface JsonFormsRendererConstructable {
   // TODO: any state?
-  new(props: RendererProps): Renderer;
+  new(props: RendererProps): Renderer<RendererProps, any>;
 }
 
 /**

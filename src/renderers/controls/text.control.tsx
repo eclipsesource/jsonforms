@@ -2,6 +2,7 @@ import { JsonForms } from '../../core';
 import { isControl, RankedTester, rankWith } from '../../core/testers';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
+import { ControlProps } from './Control';
 
 /**
  * Default tester for text-based/string controls.
@@ -9,7 +10,7 @@ import { connect } from 'inferno-redux';
  */
 export const textControlTester: RankedTester = rankWith(1, isControl);
 
-export class TextControl extends BaseControl<HTMLInputElement> {
+export class TextControl extends BaseControl<ControlProps, void> {
 
   inputChangeProperty = 'onInput';
   valueProperty = 'value';

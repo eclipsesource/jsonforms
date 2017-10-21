@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { LabelElement } from '../../models/uischema';
-import { isVisible, Renderer} from '../../core/renderer';
+import {isVisible, Renderer, RendererProps} from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { JsonForms } from '../../core';
 import { connect } from 'inferno-redux';
@@ -14,7 +14,7 @@ export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
 /**
  * Default renderer for a label.
  */
-export class LabelRenderer extends Renderer {
+export class LabelRenderer extends Renderer<RendererProps, void> {
 
   /**
    * @inheritDoc

@@ -17,6 +17,7 @@ import { update } from '../../actions';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch.renderer';
+import {ControlProps} from "../controls/Control";
 
 export const getStyle = (styleName: string) =>
   JsonForms.stylingRegistry.getAsClassName(styleName);
@@ -38,7 +39,7 @@ export const arrayTester: RankedTester = rankWith(2, and(
     ))
 );
 
-export class ArrayControlRenderer extends Renderer {
+export class ArrayControlRenderer extends Renderer<ControlProps, void> {
 
   addNewItem(path: string) {
     const element = {};

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { JsonForms } from '../../core';
-import { Renderer } from '../../core/renderer';
+import {Renderer, RendererProps} from '../../core/renderer';
 import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Categorization, Category } from '../../models/uischema';
 import { mapStateToLayoutProps } from '../renderer.util';
@@ -37,7 +37,13 @@ export const categorizationTester: RankedTester =    rankWith(
             }
         ));
 
-class CategorizationRenderer extends Renderer {
+export interface CategorizationState {
+  selected: {
+    category: Category
+  };
+}
+
+class CategorizationRenderer extends Renderer<RendererProps, CategorizationState> {
 
   /**
    * @inheritDoc

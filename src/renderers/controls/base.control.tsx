@@ -7,12 +7,13 @@ import { composeWithUi, resolveData } from '../../path.util';
 import { update } from '../../actions';
 import { getData, getValidation } from '../../reducers/index';
 import { errorAt } from '../../reducers/validation';
+import { ControlProps } from './Control';
 
 /**
  * Convenience base class for all renderers that represent controls.
  */
 // TODO: remove HTMLElement reference
-export abstract class BaseControl<T extends HTMLElement> extends Renderer {
+export abstract class BaseControl<P extends ControlProps, S> extends Renderer<P, S> {
 
   /**
    * @inheritDoc
@@ -106,7 +107,7 @@ export abstract class BaseControl<T extends HTMLElement> extends Renderer {
     return _.merge(props, additionalProps);
   }
 
-  protected getInputValue(input: T): any {
+  protected getInputValue(input): any {
     return this.toModel(input[this.valueProperty]);
   }
 }

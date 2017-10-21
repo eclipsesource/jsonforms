@@ -2,6 +2,7 @@ import { and, formatIs, RankedTester, rankWith, uiTypeIs } from '../../core/test
 import { JsonForms } from '../../core';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
+import { ControlProps } from './Control';
 
 /**
  * Default tester for date controls.
@@ -12,7 +13,7 @@ export const dateControlTester: RankedTester = rankWith(2, and(
     formatIs('date')
   ));
 
-export class DateControl extends BaseControl<HTMLInputElement> {
+export class DateControl extends BaseControl<ControlProps, void> {
 
   inputChangeProperty = 'oninput';
   valueProperty = 'value';

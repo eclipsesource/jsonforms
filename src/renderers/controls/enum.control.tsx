@@ -5,6 +5,7 @@ import { BaseControl, mapStateToControlProps } from './base.control';
 import { JsonForms } from '../../core';
 import { connect } from 'inferno-redux';
 import { update } from '../../actions';
+import { ControlProps } from './Control';
 
 /**
  * Default tester for enum controls.
@@ -15,7 +16,7 @@ export const enumControlTester: RankedTester = rankWith(2, and(
     schemaMatches(schema => schema.hasOwnProperty('enum'))
   ));
 
-export class EnumControl extends BaseControl<HTMLSelectElement> {
+export class EnumControl extends BaseControl<ControlProps, void> {
 
   valueProperty = 'value';
 

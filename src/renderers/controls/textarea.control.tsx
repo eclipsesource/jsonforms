@@ -2,6 +2,7 @@ import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/test
 import { JsonForms } from '../../core';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
+import { ControlProps } from './Control';
 /**
  * Tester for a multi-line string control.
  * @type {RankedTester}
@@ -11,7 +12,7 @@ export const textAreaControlTester: RankedTester = rankWith(2, and(
     optionIs('multi', true)
   ));
 
-export class TextAreaControl extends BaseControl<HTMLTextAreaElement> {
+export class TextAreaControl extends BaseControl<ControlProps, void> {
 
   protected inputChangeProperty = 'onInput';
   protected valueProperty = 'value';

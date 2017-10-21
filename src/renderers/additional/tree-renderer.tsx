@@ -12,6 +12,7 @@ import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch.renderer';
+import {ControlProps} from "../controls/Control";
 
 /**
  * Default tester for a master-detail layout.
@@ -34,7 +35,15 @@ export const treeMasterDetailTester: RankedTester =
 
 const isNotTuple = (schema: JsonSchema) => !Array.isArray(schema.items);
 
-export class TreeMasterDetail extends Renderer {
+export interface TreeMasterDetailState {
+  selected: {
+    schema: JsonSchema,
+    data: any,
+    path: string
+  }
+}
+
+export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailState> {
 
   componentWillMount() {
     const { uischema, data, resolvedSchema } = this.props;

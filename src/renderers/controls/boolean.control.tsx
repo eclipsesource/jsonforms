@@ -2,6 +2,7 @@ import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { JsonForms } from '../../core';
 import { connect } from 'inferno-redux';
+import { ControlProps } from './Control';
 
 /**
  * Default tester for boolean controls.
@@ -12,7 +13,7 @@ export const booleanControlTester: RankedTester = rankWith(2, and(
     schemaTypeIs('boolean')
   ));
 
-export class BooleanControl extends BaseControl<HTMLInputElement> {
+export class BooleanControl extends BaseControl<ControlProps, void> {
 
   inputChangeProperty = 'onClick';
   valueProperty = 'checked';

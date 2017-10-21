@@ -43,12 +43,7 @@ export interface RendererState {
   selected?: any;
 }
 
-/**
- * A renderer is a regular HTMLElement that has a render method which will
- * manipulate the underlying document when called. It also provides several
- * lifecycle hooks.
- */
-export class Renderer extends Component<RendererProps, RendererState> {
+export class Renderer<P extends RendererProps, S> extends Component<P, S> {
 
 }
 
