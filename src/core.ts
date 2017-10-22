@@ -55,7 +55,7 @@ export interface JsonFormsServiceConstructable {
 export class JsonForms {
   private static _config = new JsonFormsConfig();
   private static _schemaService;
-  public static renderers = []
+  public static renderers = [];
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();

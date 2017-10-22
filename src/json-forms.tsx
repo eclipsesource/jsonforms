@@ -9,8 +9,7 @@ import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
 import { Store } from 'redux';
 import { Provider } from 'inferno-redux';
-import { INIT, VALIDATE } from './actions';
-import { createJsonFormsStore } from './store';
+import { initJsonFormsStore } from './store';
 import DispatchRenderer from './renderers/dispatch-renderer';
 
 /**
@@ -147,26 +146,7 @@ export class JsonFormsElement extends HTMLElement {
     this.instantiateSchemaIfNeeded(schema);
     const uischema = this.uiSchema;
 
-    // TODO: fold actions
-    this.store = createJsonFormsStore({
-      common: {
-        data: this.dataObject
-      },
-      renderers: JsonForms.renderers
-    });
-
-    this.store.dispatch({
-      type: INIT,
-      data: this.dataObject,
-      schema,
-      uischema
-    });
-
-    this.store.dispatch({
-      type: VALIDATE,
-      data: this.dataObject
-    });
-    // --
+    this.store = initJsonFormsStore(this.dataObject, schema, uischema);
 
     Inferno.render(
       <Provider store={this.store}>

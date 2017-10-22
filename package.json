@@ -17,6 +17,7 @@
     "bundle": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
     "build": "npm run tsc && npm run bundle && ncp example/example.css dist/jsonforms-example.css",
     "test": "tsc --project test/tsconfig.test.json && ava ",
+    "lint": "tslint --project tslint.json --exclude src/models/jsonSchema.ts",
     "tsc": "tsc",
     "report": "nyc report --reporter=html",
     "example_library": "npm run bundle && lite-server -c example_library/bs-config.json",
