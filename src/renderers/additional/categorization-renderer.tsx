@@ -4,7 +4,7 @@ import { JsonForms } from '../../core';
 import { Renderer, RendererProps } from '../../core/renderer';
 import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Categorization, Category } from '../../models/uischema';
-import { mapStateToLayoutProps } from '../renderer.util';
+import { mapStateToLayoutProps, registerStartupRenderer } from '../renderer.util';
 import { connect } from 'inferno-redux';
 import DispatchRenderer from '../dispatch-renderer';
 
@@ -157,7 +157,7 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   categorizationTester,
   connect(mapStateToLayoutProps)(CategorizationRenderer)
 );

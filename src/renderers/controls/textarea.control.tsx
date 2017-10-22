@@ -1,9 +1,9 @@
 import { JSX } from '../JSX';
 import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
-import { JsonForms } from '../../core';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
 import { ControlProps } from './Control';
+import { registerStartupRenderer } from '../renderer.util';
 /**
  * Tester for a multi-line string control.
  * @type {RankedTester}
@@ -30,7 +30,7 @@ export class TextAreaControl extends BaseControl<ControlProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   textAreaControlTester,
   connect(mapStateToControlProps)(TextAreaControl)
 );

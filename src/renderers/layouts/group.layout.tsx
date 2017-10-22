@@ -4,7 +4,7 @@ import { JsonForms } from '../../core';
 import { Renderer, RendererProps } from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { GroupLayout } from '../../models/uischema';
-import { JsonFormsLayout, mapStateToLayoutProps, renderChildren } from '../renderer.util';
+import {JsonFormsLayout, mapStateToLayoutProps, registerStartupRenderer, renderChildren} from '../renderer.util';
 import { connect } from 'inferno-redux';
 
 /**
@@ -43,7 +43,7 @@ export class GroupLayoutRenderer extends Renderer<RendererProps, void> {
     );
   }
 }
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   groupTester,
   connect(mapStateToLayoutProps)(GroupLayoutRenderer)
 );

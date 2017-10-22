@@ -1,9 +1,9 @@
 import { JSX } from '../JSX';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { BaseControl, mapStateToControlProps } from './base.control';
-import { JsonForms } from '../../core';
 import { connect } from 'inferno-redux';
 import { ControlProps } from './Control';
+import { registerStartupRenderer } from '../renderer.util';
 
 /**
  * Default tester for boolean controls.
@@ -27,7 +27,7 @@ export class BooleanControl extends BaseControl<ControlProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   booleanControlTester,
   connect(mapStateToControlProps)(BooleanControl)
 );

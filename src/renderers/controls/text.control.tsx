@@ -1,9 +1,9 @@
 import { JSX } from '../JSX';
-import { JsonForms } from '../../core';
 import { isControl, RankedTester, rankWith } from '../../core/testers';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
 import { ControlProps } from './Control';
+import { registerStartupRenderer } from '../renderer.util';
 
 /**
  * Default tester for text-based/string controls.
@@ -25,7 +25,7 @@ export class TextControl extends BaseControl<ControlProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   textControlTester,
   connect(mapStateToControlProps)(TextControl)
 );

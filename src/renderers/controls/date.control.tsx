@@ -4,6 +4,7 @@ import { JsonForms } from '../../core';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
 import { ControlProps } from './Control';
+import {registerStartupRenderer} from "../renderer.util";
 
 /**
  * Default tester for date controls.
@@ -42,7 +43,7 @@ export class DateControl extends BaseControl<ControlProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   dateControlTester,
   connect(mapStateToControlProps)(DateControl)
 );

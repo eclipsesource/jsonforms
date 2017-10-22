@@ -2,7 +2,7 @@ import { JSX } from '../JSX';
 import { Renderer, RendererProps } from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { HorizontalLayout } from '../../models/uischema';
-import { JsonFormsLayout, mapStateToLayoutProps, renderChildren } from '../renderer.util';
+import {JsonFormsLayout, mapStateToLayoutProps, registerStartupRenderer, renderChildren} from '../renderer.util';
 import { JsonForms } from '../../core';
 import { connect } from 'inferno-redux';
 /**
@@ -38,7 +38,7 @@ export class HorizontalLayoutRenderer extends Renderer<RendererProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   horizontalLayoutTester,
   connect(mapStateToLayoutProps)(HorizontalLayoutRenderer)
 );

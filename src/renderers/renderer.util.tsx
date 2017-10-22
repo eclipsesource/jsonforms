@@ -35,7 +35,7 @@ export interface JsonFormsRendererConstructable {
 export const JsonFormsRenderer =
     (config: JsonFormsRendererConfig) =>
       (cls: JsonFormsRendererConstructable) => {
-        JsonForms.rendererService.registerRenderer(config.tester, cls);
+        registerStartupRenderer(config.tester, cls);
       };
 // tslint:enable:variable-name
 
@@ -122,4 +122,13 @@ export const formatErrorMessage = errors => {
   }
 
   return errors.join('\n');
+};
+
+export const registerStartupRenderer = (tester: RankedTester, renderer: any) => {
+  JsonForms.renderers.push({
+    tester,
+    renderer
+  });
+
+  return renderer;
 };

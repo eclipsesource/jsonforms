@@ -152,7 +152,7 @@ export class JsonFormsElement extends HTMLElement {
       common: {
         data: this.dataObject
       },
-      renderers: JsonForms.rendererService.renderers
+      renderers: JsonForms.renderers
     });
 
     this.store.dispatch({

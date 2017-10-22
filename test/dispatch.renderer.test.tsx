@@ -1,30 +1,33 @@
+import { JSX } from '../src/renderers/JSX';
 import { test } from 'ava';
 import * as _ from 'lodash';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { initJsonFormsStore } from './helpers/setup';
-import { Renderer } from '../src/core/renderer';
+import { Renderer, RendererProps } from '../src/core/renderer';
 import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
 } from 'inferno-test-utils';
-import { DispatchRenderer } from '../src/renderers/dispatch.renderer';
+import DispatchRenderer from '../src/renderers/dispatch-renderer';
 import { Provider } from 'inferno-redux';
 import { JsonForms } from '../src/core';
+import '../src/renderers';
+import { registerRenderer, unregisterRenderer } from '../src/actions';
 
-class CustomRenderer1 extends Renderer {
+class CustomRenderer1 extends Renderer<RendererProps, void> {
   render() {
     return (<h1>test</h1>);
   }
 }
 
-class CustomRenderer2 extends Renderer {
+class CustomRenderer2 extends Renderer<RendererProps, void> {
   render() {
     return (<h2>test</h2>);
   }
 }
 
-class CustomRenderer3 extends Renderer {
+class CustomRenderer3 extends Renderer<RendererProps, void> {
   render() {
     return (<h3>test</h3>);
   }
@@ -67,9 +70,9 @@ test('DispatchRenderer should report about missing renderer', t => {
 });
 
 test('DispatchRenderer should pick most applicable renderer', t => {
-  JsonForms.rendererService.registerRenderer(() => 10, CustomRenderer1);
-  JsonForms.rendererService.registerRenderer(() => 5, CustomRenderer2);
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer1));
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema} />
@@ -82,11 +85,11 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
   const tester1 = () => 9;
   const tester2 = () => 8;
   const tester3 = () => 10;
-  JsonForms.rendererService.registerRenderer(tester1, CustomRenderer1);
-  JsonForms.rendererService.registerRenderer(tester2, CustomRenderer2);
-  JsonForms.rendererService.registerRenderer(tester3, CustomRenderer2);
-  JsonForms.rendererService.deregisterRenderer(tester3, CustomRenderer2);
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  store.dispatch(registerRenderer(tester1, CustomRenderer1));
+  store.dispatch(registerRenderer(tester2, CustomRenderer2));
+  store.dispatch(registerRenderer(tester3, CustomRenderer3));
+  store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema} />
@@ -97,10 +100,11 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
 });
 
 test('deregister an unregistered renderer should be a no-op', t => {
-  JsonForms.rendererService.registerRenderer(() => 10, CustomRenderer1);
-  JsonForms.rendererService.registerRenderer(() => 5, CustomRenderer2);
+  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
   const tester = () => 10;
-  const renderers = JsonForms.rendererService.renderers.length;
-  JsonForms.rendererService.deregisterRenderer(tester, CustomRenderer3);
-  t.is(JsonForms.rendererService.renderers.length, renderers);
+  const nrOfRenderers = store.getState().renderers.length;
+  store.dispatch(unregisterRenderer(tester, CustomRenderer3));
+  t.is(store.getState().renderers.length, nrOfRenderers);
 });

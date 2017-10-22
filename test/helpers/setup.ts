@@ -7,7 +7,8 @@ import { INIT } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { UISchemaElement } from '../../src/models/uischema';
 import { createJsonFormsStore } from '../../src/store';
-import '../../src/renderers/renderers';
+import '../../src/renderers';
+import { JsonForms } from '../../src/core';
 
 export const dispatchInputEvent = (input: HTMLElement) => {
   const evt = new Event('input', {
@@ -25,7 +26,8 @@ export const initJsonFormsStore = (
   const store = createJsonFormsStore({
     common: {
       data
-    }
+    },
+    renderers: JsonForms.renderers
   });
   store.dispatch({
     type: INIT,

@@ -19,6 +19,7 @@ import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch-renderer';
 import { ControlProps } from '../controls/Control';
+import { registerStartupRenderer } from '../renderer.util';
 
 export const getStyle = (styleName: string) =>
   JsonForms.stylingRegistry.getAsClassName(styleName);
@@ -121,7 +122,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   arrayTester,
   connect(mapStateToProps)(ArrayControlRenderer)
 );

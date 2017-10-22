@@ -1,10 +1,11 @@
 import { JSX } from '../JSX';
+import { connect } from 'inferno-redux';
 import * as _ from 'lodash';
 import { LabelElement } from '../../models/uischema';
 import { isVisible, Renderer, RendererProps } from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { JsonForms } from '../../core';
-import { connect } from 'inferno-redux';
+import { registerStartupRenderer } from '../renderer.util';
 
 /**
  * Default tester for a label.
@@ -45,7 +46,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   labelRendererTester,
   connect(mapStateToProps)(LabelRenderer)
 );

@@ -5,6 +5,7 @@ import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
 import { ControlProps } from './Control';
+import { registerStartupRenderer } from '../renderer.util';
 
 /**
  * Default tester for integer controls.
@@ -45,7 +46,7 @@ export class IntegerControl extends BaseControl<ControlProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   integerControlTester,
   connect(mapStateToControlProps)(IntegerControl)
 );

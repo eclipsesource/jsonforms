@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaRegistry, UISchemaRegistryImpl } from './core/uischema.registry';
-import { RendererService } from './core/renderer.service';
 import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
 import { SchemaService } from './core/schema.service';
 import { SchemaServiceImpl } from './core/schema.service.impl';
@@ -56,7 +55,7 @@ export interface JsonFormsServiceConstructable {
 export class JsonForms {
   private static _config = new JsonFormsConfig();
   private static _schemaService;
-  public static rendererService = new RendererService();
+  public static renderers = []
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();

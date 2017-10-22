@@ -1,5 +1,6 @@
 import { JSX } from '../JSX';
 import * as _ from 'lodash';
+import { connect } from 'inferno-redux';
 import { JsonForms } from '../../core';
 import { convertToClassName, Renderer } from '../../core/renderer';
 import { and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
@@ -8,10 +9,10 @@ import { ControlElement } from '../../models/uischema';
 import { getElementLabelObject } from '../label.util';
 import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.util';
 import { update } from '../../actions';
-import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch-renderer';
 import { ControlProps } from '../controls/Control';
+import { registerStartupRenderer } from '../renderer.util';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -150,7 +151,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   tableArrayTester,
   connect(mapStateToProps)(TableArrayControl)
 );

@@ -3,10 +3,10 @@ import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { BaseControl, mapStateToControlProps } from './base.control';
-import { JsonForms } from '../../core';
 import { connect } from 'inferno-redux';
 import { update } from '../../actions';
 import { ControlProps } from './Control';
+import { registerStartupRenderer } from '../renderer.util';
 
 /**
  * Default tester for enum controls.
@@ -73,7 +73,7 @@ export class EnumControl extends BaseControl<ControlProps, void> {
   }
 }
 
-export default JsonForms.rendererService.registerRenderer(
+export default registerStartupRenderer(
   enumControlTester,
   connect(mapStateToControlProps)(EnumControl)
 );
