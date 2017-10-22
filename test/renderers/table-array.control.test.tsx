@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { initJsonFormsStore } from '../helpers/setup';
 import TableArrayControl from '../../src/renderers/additional/table-array.control';

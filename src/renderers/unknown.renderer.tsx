@@ -1,3 +1,4 @@
+import { JSX } from './JSX';
 import { Renderer, RendererProps } from '../core/renderer';
 
 export class UnknownRenderer extends Renderer<RendererProps, void> {

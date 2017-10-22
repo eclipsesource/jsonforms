@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { convertToClassName, Renderer } from '../../core/renderer';
 import {
@@ -16,8 +17,8 @@ import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { update } from '../../actions';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
-import DispatchRenderer from '../dispatch.renderer';
-import {ControlProps} from "../controls/Control";
+import DispatchRenderer from '../dispatch-renderer';
+import { ControlProps } from '../controls/Control';
 
 export const getStyle = (styleName: string) =>
   JsonForms.stylingRegistry.getAsClassName(styleName);

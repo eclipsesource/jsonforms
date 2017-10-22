@@ -1,3 +1,5 @@
+import { JSX } from './renderers/JSX';
+import Inferno from 'inferno';
 import * as JsonRefs from 'json-refs';
 import * as _ from 'lodash';
 import './renderers';
@@ -5,11 +7,11 @@ import { UISchemaElement } from './models/uischema';
 import { JsonForms } from './core';
 import { JsonSchema } from './models/jsonSchema';
 import { generateJsonSchema } from './generators/schema-gen';
-import Inferno from 'inferno';
 import { Store } from 'redux';
 import { Provider } from 'inferno-redux';
 import { INIT, VALIDATE } from './actions';
 import { createJsonFormsStore } from './store';
+import DispatchRenderer from './renderers/dispatch-renderer';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -166,16 +168,9 @@ export class JsonFormsElement extends HTMLElement {
     });
     // --
 
-    const bestRenderer = JsonForms.rendererService
-        .findMostApplicableRenderer(
-          uischema,
-          schema,
-          this.store
-        );
-
     Inferno.render(
       <Provider store={this.store}>
-        {bestRenderer}
+        <DispatchRenderer uischema={uischema} schema={schema} />
       </Provider>,
       this
     );

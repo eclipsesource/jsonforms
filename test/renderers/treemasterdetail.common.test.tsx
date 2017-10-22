@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import { initJsonFormsStore } from '../helpers/setup';
 import test from 'ava';
 import { MasterDetailLayout } from '../../src/models/uischema';

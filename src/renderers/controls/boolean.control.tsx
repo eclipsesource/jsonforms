@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { BaseControl, mapStateToControlProps } from './base.control';
 import { JsonForms } from '../../core';
@@ -19,8 +20,8 @@ export class BooleanControl extends BaseControl<ControlProps, void> {
   valueProperty = 'checked';
 
   createInputElement() {
-    const props = this.createProps();
-    props['checked'] = this.props.data;
+    const props: any = this.createProps();
+    props.checked = this.props.data;
 
     return <input type='checkbox' {...props} />;
   }

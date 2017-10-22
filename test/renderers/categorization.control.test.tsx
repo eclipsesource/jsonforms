@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { Categorization, ControlElement, Layout } from '../../src/models/uischema';
 import CategorizationRenderer, {

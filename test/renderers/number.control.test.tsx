@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
@@ -8,7 +9,6 @@ import { JsonForms } from '../../src/core';
 import { initJsonFormsStore } from '../helpers/setup';
 import { ControlElement } from '../../src/models/uischema';
 import { dispatchInputEvent } from '../helpers/setup';
-import { compose, withState } from 'incompose';
 import { update, validate } from '../../src/actions';
 import NumberControl, { numberControlTester } from '../../src/renderers/controls/number.control';
 import { JsonSchema } from '../../src/models/jsonSchema';

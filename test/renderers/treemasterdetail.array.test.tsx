@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import * as _ from 'lodash';
 import { initJsonFormsStore } from '../helpers/setup';
 import test from 'ava';
@@ -344,7 +345,7 @@ test('cancel dialog', t => {
 
   // same length as before
   t.is(li.children.length, 1);
-  t.false(_.has(_.head(store.getState().data), 'children'));
+  t.false(_.has(_.head<any>(store.getState().data), 'children'));
 });
 
 test('add and remove child', t => {

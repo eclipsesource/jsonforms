@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import { JsonForms } from '../src/core';
 import { changeExample } from './example';
-import { Style } from '../src/core/styling.registry';
 declare let $;
 
 /**

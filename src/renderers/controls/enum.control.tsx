@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';

@@ -2,7 +2,6 @@ import test from 'ava';
 import './helpers/setup';
 import { ControlElement } from '../src/models/uischema';
 import { JsonFormsElement } from '../src/json-forms';
-import '../src/renderers/renderers';
 import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
 import { generateJsonSchema } from '../src/generators/schema-gen';
 import { JsonForms } from '../src/core';

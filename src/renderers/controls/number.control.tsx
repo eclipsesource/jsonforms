@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { BaseControl, mapStateToControlProps } from './base.control';

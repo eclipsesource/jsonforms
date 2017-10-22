@@ -1,9 +1,14 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { dispatchInputEvent, initJsonFormsStore } from '../helpers/setup';
 import { ControlElement } from '../../src/models/uischema';
 import EnumControl, { enumControlTester } from '../../src/renderers/controls/enum.control';
 import { JsonForms } from '../../src/core';
-import { findRenderedDOMElementWithClass, findRenderedDOMElementWithTag, renderIntoDocument } from 'inferno-test-utils';
+import {
+  findRenderedDOMElementWithClass,
+  findRenderedDOMElementWithTag,
+  renderIntoDocument
+} from 'inferno-test-utils';
 import { Provider } from 'inferno-redux';
 import { getData } from '../../src/reducers/index';
 import { update, validate } from '../../src/actions';

@@ -1,12 +1,16 @@
 import test from 'ava';
-import '../helpers/setup';
+import { JSX } from '../../src/renderers/JSX';
+import { initJsonFormsStore } from '../helpers/setup';
 import { JsonForms } from '../../src/core';
-import {UISchemaElement, VerticalLayout} from '../../src/models/uischema';
-import {
-  VerticalLayoutRenderer,
+import { UISchemaElement, VerticalLayout } from '../../src/models/uischema';
+import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/renderers/layouts/vertical.layout';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from 'inferno-test-utils';
+import {
+  findRenderedDOMElementWithClass,
+  renderIntoDocument
+} from 'inferno-test-utils';
+import { Provider } from 'inferno-redux';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -28,8 +32,11 @@ test('render with undefined elements', t => {
   const uischema: UISchemaElement = {
     type: 'VerticalLayout'
   };
+  const store = initJsonFormsStore({}, {}, uischema);
   const tree = renderIntoDocument(
-    <VerticalLayoutRenderer uischema={uischema} />
+    <Provider store={store}>
+      <VerticalLayoutRenderer uischema={uischema} />
+    </Provider>
   );
 
   t.not(findRenderedDOMElementWithClass(tree, 'vertical-layout'), undefined);
@@ -40,8 +47,11 @@ test('render with null elements', t => {
     type: 'VerticalLayout',
     elements: null
   };
+  const store = initJsonFormsStore({}, {}, uischema);
   const tree = renderIntoDocument(
-    <VerticalLayoutRenderer uischema={uischema} />
+    <Provider store={store}>
+      <VerticalLayoutRenderer uischema={uischema} />
+    </Provider>
   );
 
   t.not(findRenderedDOMElementWithClass(tree, 'vertical-layout'), undefined);
@@ -52,8 +62,11 @@ test('render with children', t => {
     type: 'VerticalLayout',
     elements: [ {type: 'Control'}, {type: 'Control'} ]
   };
+  const store = initJsonFormsStore({}, {}, uischema);
   const tree = renderIntoDocument(
-    <VerticalLayoutRenderer uischema={uischema} />
+    <Provider store={store}>
+      <VerticalLayoutRenderer uischema={uischema} />
+    </Provider>
   );
   const verticalLayout = findRenderedDOMElementWithClass(tree, 'vertical-layout');
 
@@ -66,10 +79,13 @@ test('hide', t => {
     type: 'VerticalLayout',
     elements: [{ type: 'Control' }],
   };
+  const store = initJsonFormsStore({}, {}, uischema);
   const tree = renderIntoDocument(
-    <VerticalLayoutRenderer uischema={uischema}
-                            visible={false}
-    />
+    <Provider store={store}>
+      <VerticalLayoutRenderer uischema={uischema}
+                              visible={false}
+      />
+    </Provider>
   );
   const verticalLayout = findRenderedDOMElementWithClass(tree, 'vertical-layout') as HTMLDivElement;
   t.true(verticalLayout.hidden);
@@ -80,52 +96,12 @@ test('show by default', t => {
     type: 'VerticalLayout',
     elements: [{ type: 'Control' }],
   };
+  const store = initJsonFormsStore({}, {}, uischema);
   const tree = renderIntoDocument(
-    <VerticalLayoutRenderer uischema={uischema} />
+    <Provider store={store}>
+      <VerticalLayoutRenderer uischema={uischema} />
+    </Provider>
   );
   const verticalLayout = findRenderedDOMElementWithClass(tree, 'vertical-layout') as HTMLDivElement;
   t.false(verticalLayout.hidden);
 });
-
-// test('Render disabled VerticalLayout', t => {
-//   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-//   const verticalLayout: VerticalLayout = {
-//     type: 'VerticalLayout',
-//     elements: [{type: 'Control'}]
-//   };
-//   renderer.setUiSchema(verticalLayout);
-//   renderer.insert();
-//   const runtime = verticalLayout.runtime as Runtime;
-//   runtime.enabled = false;
-//
-//   const result = patch(
-//     document.createElement('div'),
-//     renderer.render()
-//   ).elm as HTMLFieldSetElement;
-//
-//   t.is(result.tagName, 'DIV');
-//   t.is(result.className, 'vertical-layout');
-//   t.true(result.disabled);
-// });
-//
-// test('Render enabled VerticalLayout', t => {
-//   const renderer: VerticalLayoutRenderer = new VerticalLayoutRenderer();
-//   const verticalLayout: VerticalLayout = {
-//     type: 'VerticalLayout',
-//     elements: [{type: 'Control'}],
-//     runtime: new Runtime()
-//   };
-//   renderer.setUiSchema(verticalLayout);
-//   renderer.insert();
-//   const runtime = verticalLayout.runtime as Runtime;
-//   runtime.enabled = true;
-//
-//   const result = patch(
-//     document.createElement('div'),
-//     renderer.render()
-//   ).elm as HTMLFieldSetElement;
-//
-//   t.is(result.tagName, 'DIV');
-//   t.is(result.className, 'vertical-layout');
-//   t.false(result.disabled);
-// });

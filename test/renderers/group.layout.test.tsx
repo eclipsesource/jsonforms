@@ -1,13 +1,15 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
-import '../helpers/setup';
+import { initJsonFormsStore } from '../helpers/setup';
 import { GroupLayout } from '../../src/models/uischema';
-import {
-  GroupLayoutRenderer, groupTester
+import GroupLayoutRenderer, {
+  groupTester
 } from '../../src/renderers/layouts/group.layout';
 import { JsonForms } from '../../src/core';
 import { findRenderedDOMElementWithClass, renderIntoDocument } from 'inferno-test-utils';
+import { Provider } from 'inferno-redux';
 
-test.before(t => {
+test.before(() => {
   JsonForms.stylingRegistry.registerMany([
     {
       name: 'group-layout',
@@ -30,25 +32,18 @@ test('tester', t => {
   t.is(groupTester({type: 'Group'}, undefined), 1);
 });
 
-// test('Render GroupLayout with undefined elements', t => {
-//   const renderer: GroupLayoutRenderer = new GroupLayoutRenderer();
-//   const uiSchema: UISchemaElement = {
-//     type: 'GroupLayout'
-//   };
-//   renderer.setUiSchema(uischema);
-//   const div = patchAndGetElement(renderer.render());
-//   t.is(div.tagName, 'DIV');
-//   t.is(div.className, 'group-layout');
-//   t.is(div.children.length, 0);
-// });
-// //
 test('render with label', t => {
   const uischema: GroupLayout = {
     type: 'Group',
     label: 'Foo',
     elements: [],
   };
-  const tree = renderIntoDocument(<GroupLayoutRenderer uischema={uischema} />);
+  const store = initJsonFormsStore({}, {}, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <GroupLayoutRenderer uischema={uischema} />
+    </Provider>
+  );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'DIV');
   t.is(groupLayout.className, 'group-layout');
@@ -63,7 +58,12 @@ test('render with null elements', t => {
     type: 'Group',
     elements: null
   };
-  const tree = renderIntoDocument(<GroupLayoutRenderer uischema={uischema} />);
+  const store = initJsonFormsStore({}, {}, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <GroupLayoutRenderer uischema={uischema} />
+    </Provider>
+  );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'DIV');
   t.is(groupLayout.children.length, 0);
@@ -77,24 +77,37 @@ test('render with children', t => {
       {type: 'Control'}
     ]
   };
-  const tree = renderIntoDocument(<GroupLayoutRenderer uischema={uischema} />);
+  const store = initJsonFormsStore({}, {}, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <GroupLayoutRenderer uischema={uischema} />
+    </Provider>
+  );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'DIV');
   t.is(groupLayout.children.length, 2);
 });
 
 test('hide', t => {
+  const store = initJsonFormsStore({}, {}, t.context.uischema);
   const tree = renderIntoDocument(
-    <GroupLayoutRenderer uischema={t.context.uischema}
-                         visible={false}
-    />
+    <Provider store={store}>
+      <GroupLayoutRenderer uischema={t.context.uischema}
+                           visible={false}
+      />
+    </Provider>
   );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout') as HTMLDivElement;
   t.true(groupLayout.hidden);
 });
 
 test('show by default', t => {
-  const tree = renderIntoDocument(<GroupLayoutRenderer uischema={t.context.uischema} />);
+  const store = initJsonFormsStore({}, {}, t.context.uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <GroupLayoutRenderer uischema={t.context.uischema} />
+    </Provider>
+  );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout') as HTMLDivElement;
   t.false(groupLayout.hidden);
 });

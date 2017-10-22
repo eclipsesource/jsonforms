@@ -1,4 +1,5 @@
-import {Renderer, RendererProps} from '../../core/renderer';
+import { JSX } from '../JSX';
+import { Renderer, RendererProps } from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { HorizontalLayout } from '../../models/uischema';
 import { JsonFormsLayout, mapStateToLayoutProps, renderChildren } from '../renderer.util';

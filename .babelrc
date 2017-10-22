@@ -1,23 +1,5 @@
 {
-  "compact": false,
   "presets": [
-    ["es2015", {"loose": true, "modules": false}]
-  ],
-  "plugins": [
-    "transform-es2015-modules-commonjs",
-    "transform-class-properties",
-    "transform-object-rest-spread",
-    "babel-plugin-syntax-jsx",
-    ["babel-plugin-inferno", {"imports": true}]
-  ],
-  "env": {
-    "test": {
-      "plugins": [
-        "transform-class-properties",
-        "transform-object-rest-spread",
-        "babel-plugin-syntax-jsx",
-        ["babel-plugin-inferno", {"imports": true}]
-      ]
-    }
-  }
+    ["es2015"]
+  ]
 }

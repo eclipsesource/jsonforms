@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { JsonForms } from '../../core';
 import { convertToClassName, Renderer } from '../../core/renderer';
@@ -9,7 +10,7 @@ import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.u
 import { update } from '../../actions';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
-import DispatchRenderer from '../dispatch.renderer';
+import DispatchRenderer from '../dispatch-renderer';
 import { ControlProps } from '../controls/Control';
 
 /**

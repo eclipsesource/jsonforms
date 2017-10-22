@@ -1,5 +1,6 @@
-import { JsonFormsControl } from '../renderer.util';
+import { JSX } from '../JSX';
 import * as _ from 'lodash';
+import { JsonFormsControl } from '../renderer.util';
 import { ControlElement } from '../../models/uischema';
 import { getElementLabelObject } from '../label.util';
 import { convertToClassName, isEnabled, isVisible, Renderer } from '../../core/renderer';
@@ -19,23 +20,23 @@ export abstract class BaseControl<P extends ControlProps, S> extends Renderer<P,
    * @inheritDoc
    */
   render() {
-    const { uischema, schema, errors } = this.props;
+    const { uischema, labelText, errors } = this.props;
     const controlElement = uischema as ControlElement;
-    const labelObject = getElementLabelObject(schema, controlElement);
     const isValid = _.isEmpty(errors);
 
-    const classes: string[] = controlElement.scope ?
+    const classes: string[] = !_.isEmpty(controlElement.scope) ?
       []
         .concat([`control ${convertToClassName(controlElement.scope.$ref)}`])
         .concat([isValid ? 'valid' : 'invalid'])
       : [''];
+    const controlId = _.has(controlElement.scope, 'ref') ? controlElement.scope.$ref : '';
 
     return (
       <JsonFormsControl
         classes={classes.join(' ')}
-        controlId={controlElement.scope && controlElement.scope.$ref}
-        labelText={labelObject.show && labelObject.text}
-        validationErrors={errors || []}
+        controlId={controlId}
+        labelText={labelText}
+        validationErrors={errors}
       >
         {this.createInputElement()}
       </JsonFormsControl>
@@ -116,10 +117,13 @@ export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
+  const labelObject = getElementLabelObject(ownProps.schema, ownProps.uischema);
+  const labelText = labelObject.show ? labelObject.text : '';
 
   return {
     data: resolveData(getData(state), path),
     errors: errorAt(path)(getValidation(state)).map(error => error.message),
+    labelText,
     visible,
     enabled,
     path

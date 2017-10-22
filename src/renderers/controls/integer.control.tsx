@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { JsonForms } from '../../core';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';

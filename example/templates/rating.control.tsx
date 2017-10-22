@@ -1,7 +1,5 @@
-import { JsonForms } from '../../src/core';
+import { JSX } from '../../src/renderers/JSX';
 import { RankedTester, rankWith, refEndsWith } from '../../src/core/testers';
-import { mapStateToControlProps } from '../../src/renderers/controls/base.control';
-import { connect } from 'inferno-redux';
 import { Control, ControlProps } from '../../src/renderers/controls/Control';
 import { Rating } from './Rating';
 
@@ -26,8 +24,3 @@ export class RatingControl extends Control<ControlProps, void> {
     this.updateData(ev.value);
   }
 }
-
-// export default JsonForms.rendererService.registerRenderer(
-//   ratingControlTester,
-//   connect(mapStateToControlProps)(RatingControl)
-// );

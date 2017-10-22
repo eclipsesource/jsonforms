@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import * as _ from 'lodash';
 import Component from 'inferno-component';
 

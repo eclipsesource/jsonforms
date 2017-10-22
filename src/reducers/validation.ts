@@ -1,7 +1,6 @@
 import * as AJV from 'ajv';
 import * as _ from 'lodash';
 import { ErrorObject, ValidateFunction } from 'ajv';
-import { UISchemaElement } from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
 import { INIT, VALIDATE } from '../actions';
 const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
@@ -9,14 +8,13 @@ const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'proper
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   const valid = validator(data);
   if (valid) {
-    return;
+    return [];
   }
 
   return validator.errors;
 };
 
 export interface ValidationState {
-  uiSchema: UISchemaElement;
   errors: ErrorObject[];
   validator: ValidateFunction;
   schema: JsonSchema;
@@ -24,10 +22,9 @@ export interface ValidationState {
 
 export const validationReducer = (
   state: ValidationState = {
-    uiSchema: {} as UISchemaElement,
     errors: [] as ErrorObject[],
     validator: () => true,
-    schema: {} as JsonSchema
+    schema: {}
   },
   action): ValidationState => {
 
@@ -45,9 +42,7 @@ export const validationReducer = (
         validator = ajv.compile(state.schema);
       }
 
-      const errs = validate(validator, action.data);
-
-      const errors = (errs || []).map(error => {
+      const errors = validate(validator, action.data).map(error => {
         error.dataPath = error.dataPath.replace('/', '.').substr(1);
 
         return error;
@@ -64,7 +59,5 @@ export const validationReducer = (
 };
 
 export const errorAt = instancePath => (state): any[] => {
-  const x = _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
-
   return _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
 };

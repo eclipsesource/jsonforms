@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { dispatchInputEvent, initJsonFormsStore } from '../helpers/setup';
 import { JsonSchema } from '../../src/models/jsonSchema';

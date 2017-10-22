@@ -1,6 +1,6 @@
 import { JsonFormsRendererConstructable } from '../renderers/renderer.util';
 import { RankedTester } from '../core/testers';
-import {ADD_RENDERER, REMOVE_RENDERER} from '../actions';
+import { ADD_RENDERER, REMOVE_RENDERER } from '../actions';
 
 export const rendererReducer = (
   state: { tester: RankedTester, renderer: JsonFormsRendererConstructable }[] = [],

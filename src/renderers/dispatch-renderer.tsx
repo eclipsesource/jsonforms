@@ -1,3 +1,4 @@
+import { JSX } from './JSX';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './unknown.renderer';
 import { UISchemaElement } from '../models/uischema';
@@ -31,11 +32,13 @@ export const DispatchRenderer = (props: DispatchRendererProps) => {
   const { uischema, path, schema, renderers } = props;
   const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
 
-  if (renderer.tester(uischema, schema) === -1) {
+  if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
     return <UnknownRenderer/>;
   } else {
+    const Render = renderer.renderer;
+
     return (
-      <renderer.renderer
+      <Render
         uischema={uischema}
         schema={schema}
         path={path}
@@ -46,10 +49,12 @@ export const DispatchRenderer = (props: DispatchRendererProps) => {
 };
 
 const mapStateToProps = state => ({
-  renderers: state.renderers
+  renderers: state.renderers || []
 });
 
-export default connect(
+export const JsonFormsRenderer = connect(
   mapStateToProps,
   null
 )(DispatchRenderer);
+
+export default JsonFormsRenderer;

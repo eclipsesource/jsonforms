@@ -4,10 +4,9 @@ import { JsonSchema } from '../../src/models/jsonSchema';
 import { UISchemaElement } from '../../src/models/uischema';
 
 import { registerExamples } from '../example';
-import { Store } from 'redux';
 
 class MyService implements JsonFormService {
-  constructor(private store: Store<any>, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
+  constructor(dataSchema: JsonSchema, uiSchema: UISchemaElement) {
     this.createButton();
   }
   dispose(): void {
@@ -43,14 +42,14 @@ const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Service';
   buttonRegister.onclick = () => {
-    JsonForms.jsonFormsServices.push(MyService);
+    // JsonForms.jsonFormsServices.push(MyService);
     resetServices();
   };
   div.appendChild(buttonRegister);
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Service';
   buttonUnregister.onclick = () => {
-    const index = JsonForms.jsonFormsServices.indexOf(MyService);
+    const index = -1; // JsonForms.jsonFormsServices.indexOf(MyService);
     if (index === -1) {
       return;
     }

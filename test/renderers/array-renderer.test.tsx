@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { initJsonFormsStore } from '../helpers/setup';
 import { JsonSchema } from '../../src/models/jsonSchema';
@@ -115,13 +116,6 @@ test('add data via click', t => {
 });
 
 test('update via action', t => {
-  const uischema: ControlElement = {
-    'label': false,
-    'type': 'Control',
-    'scope': {
-      '$ref': '#/properties/test'
-    }
-  };
   JsonForms.schema = t.context.schema;
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(

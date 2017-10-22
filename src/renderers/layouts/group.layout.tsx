@@ -1,5 +1,7 @@
+import { JSX } from '../JSX';
+import * as _ from 'lodash';
 import { JsonForms } from '../../core';
-import {Renderer, RendererProps} from '../../core/renderer';
+import { Renderer, RendererProps } from '../../core/renderer';
 import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { GroupLayout } from '../../models/uischema';
 import { JsonFormsLayout, mapStateToLayoutProps, renderChildren } from '../renderer.util';
@@ -24,7 +26,7 @@ export class GroupLayoutRenderer extends Renderer<RendererProps, void> {
         visible={visible}
       >
         {
-          group.label ?
+          !_.isEmpty(group.label) ?
             <legend className={JsonForms.stylingRegistry.getAsClassName('group.label')}>
               {group.label}
             </legend> : ''

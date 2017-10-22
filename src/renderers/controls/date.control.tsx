@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import { and, formatIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { JsonForms } from '../../core';
 import { BaseControl, mapStateToControlProps } from './base.control';
@@ -22,7 +23,7 @@ export class DateControl extends BaseControl<ControlProps, void> {
    return (<input type='date' {...this.createProps()} />);
    }
 
-   /**
+  /**
    * @inheritDoc
    */
   protected toInput(value: any): any {

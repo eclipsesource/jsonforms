@@ -9,6 +9,19 @@ const isArray = (schema: JsonSchema): boolean => {
   return schema.type === 'array' && schema.items !== undefined;
 };
 
+export const compose = (path1: string, path2: string) => {
+  let p1 = path1;
+  if (!_.isEmpty(path1) && !path2.startsWith('[')) {
+    p1 = path1 + '.';
+  }
+
+  if (_.isEmpty(p1)) {
+    return path2;
+  } else {
+    return `${p1}${path2}`;
+  }
+};
+
 /**
  * Convert a schema path (i.e. JSON pointer) to an array by splitting
  * at the '/' character and removing all schema-specific keywords.
@@ -92,21 +105,8 @@ export const composeWithUi = (scopableUi: Scopable, path: string) => {
   return _.isEmpty(segments) ? path : compose(path, segments.join('.'));
 };
 
-export const compose = (path1: string, path2: string) => {
-  let p1 = path1;
-  if (!_.isEmpty(path1) && !path2.startsWith('[')) {
-    p1 = path1 + '.';
-  }
-
-  if (_.isEmpty(p1)) {
-    return path2;
-  } else {
-    return `${p1}${path2}`;
-  }
-};
-
 export const resolveData = (data, path) =>
- _.isEmpty(path) ? data : _.get(data, path);
+ _.isEmpty(path) ? data : _.get<any, any>(data, path);
 
 /**
  * Resolve the given schema path in order to obtain a subschema.

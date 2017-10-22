@@ -49,7 +49,8 @@ module.exports = [{
           test: /\.tsx?$/, 						  // All ts and tsx files will be process by
           loaders: [ 'babel-loader', 'ts-loader' ], // first babel-loader, then ts-loader
           exclude: /node_modules/                   // ignore node_modules
-        }, {
+        },
+        {
           test: /\.jsx?$/,                          // all js and jsx files will be processed by
           loader: 'babel-loader',                   // babel-loader
           exclude: /node_modules/                  // ignore node_modules

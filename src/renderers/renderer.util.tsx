@@ -1,10 +1,11 @@
+import { JSX } from './JSX';
 import * as _ from 'lodash';
 import { JsonForms } from '../core';
 import { isVisible, Renderer, RendererProps } from '../core/renderer';
 import { RankedTester } from '../core/testers';
 import { UISchemaElement } from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
-import DispatchRenderer from './dispatch.renderer';
+import DispatchRenderer from './dispatch-renderer';
 
 /**
  * A renderer config that is used during renderer registration.

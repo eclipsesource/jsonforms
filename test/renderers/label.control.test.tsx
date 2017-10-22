@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { Provider } from 'inferno-redux';
 import { initJsonFormsStore } from '../helpers/setup';

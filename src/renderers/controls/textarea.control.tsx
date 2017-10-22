@@ -1,3 +1,4 @@
+import { JSX } from '../JSX';
 import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { JsonForms } from '../../core';
 import { BaseControl, mapStateToControlProps } from './base.control';

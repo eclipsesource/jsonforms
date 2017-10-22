@@ -1,6 +1,7 @@
+import { JSX } from '../JSX';
+import Inferno from 'inferno';
 import { JsonForms } from '../../core';
 import { isEnabled, isVisible, Renderer } from '../../core/renderer';
-import Inferno from 'inferno';
 import * as _ from 'lodash';
 import { MasterDetailLayout } from '../../models/uischema';
 import { compose, resolveData, resolveSchema, toDataPathSegments } from '../../path.util';
@@ -11,8 +12,8 @@ import { update } from '../../actions';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
-import DispatchRenderer from '../dispatch.renderer';
-import {ControlProps} from "../controls/Control";
+import DispatchRenderer from '../dispatch-renderer';
+import { ControlProps } from '../controls/Control';
 
 /**
  * Default tester for a master-detail layout.
@@ -40,7 +41,7 @@ export interface TreeMasterDetailState {
     schema: JsonSchema,
     data: any,
     path: string
-  }
+  };
 }
 
 export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailState> {
@@ -88,7 +89,9 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
             Array.isArray(rootData) &&
               <button
                 className='jsf-treeMasterDetail-add'
-                onClick={() => this.addToRoot()}
+                onClick={() => {
+                  this.addToRoot();
+                }}
               >
                 Add to root
               </button>
@@ -117,7 +120,9 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
             <div id='dialog-content-container' className='content'/>
             <button
               className='jsf-treeMasterDetail-dialog-close'
-              onClick={() => this.closeDialog()}>
+              onClick={() => {
+                this.closeDialog();
+              }}>
               Close
             </button>
           </dialog>
@@ -283,7 +288,7 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
         };
       }
 
-      const composedPath = compose(path, index + '');
+      const composedPath = compose(path, index.toString() + '');
 
       return this.expandObject(composedPath, property.schema, deleteFunction);
     });
@@ -329,10 +334,8 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
     const vnode = (<li className={liClasses}>
       <div>
         {
-          uischema.options !== undefined && uischema.options.imageProvider !== undefined ?
-            <span
-              className={'icon ' + uischema.options.imageProvider[schema.id]}
-            /> : ''
+          _.has(uischema.options, 'imageProvider') ?
+            <span className={`icon ${uischema.options.imageProvider[schema.id]}`} /> : ''
         }
 
         <span
@@ -355,7 +358,9 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
             JsonForms.schemaService.hasContainmentProperties(schema) ?
               (<span
                 className='add'
-                onClick={ev => this.openDialog(ev, schema, scopedPath)}
+                onClick={ev => {
+                  this.openDialog(ev, schema, scopedPath);
+                }}
               >
                 {'\u2795'}
               </span>) : ''
@@ -364,7 +369,9 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
             deleteFunction !== null &&
               <span
                 className='remove'
-                onClick ={() => deleteFunction()}
+                onClick ={() => {
+                  deleteFunction();
+                }}
               >{'\u274C'}</span>
           }
         </span>
@@ -398,7 +405,7 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
 
   private propHasData(prop: ContainmentProperty, data: any) {
 
-    const { uischema, dataService } = this.props;
+    const { uischema } = this.props;
     const sid = prop.schema.id;
 
     if (sid === undefined || sid === null) {

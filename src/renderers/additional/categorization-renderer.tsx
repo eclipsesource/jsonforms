@@ -1,11 +1,12 @@
+import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { JsonForms } from '../../core';
-import {Renderer, RendererProps} from '../../core/renderer';
+import { Renderer, RendererProps } from '../../core/renderer';
 import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Categorization, Category } from '../../models/uischema';
 import { mapStateToLayoutProps } from '../renderer.util';
 import { connect } from 'inferno-redux';
-import DispatchRenderer from '../dispatch.renderer';
+import DispatchRenderer from '../dispatch-renderer';
 
 const isCategorization = (category: Category | Categorization): category is Categorization => {
   return category.type === 'Categorization';

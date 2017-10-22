@@ -1,3 +1,4 @@
+import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import DateControl, { dateControlTester } from '../../src/renderers/controls/date.control';
 import { JsonForms } from '../../src/core';
