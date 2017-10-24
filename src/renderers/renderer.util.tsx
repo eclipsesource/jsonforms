@@ -1,11 +1,21 @@
-import { JSX } from './JSX';
-import * as _ from 'lodash';
-import { JsonForms } from '../core';
-import { isVisible, Renderer, RendererProps } from '../core/renderer';
-import { RankedTester } from '../core/testers';
-import { UISchemaElement } from '../models/uischema';
 import { JsonSchema } from '../models/jsonSchema';
+import { JSX } from './JSX';
+import { JsonForms } from '../core';
+import {
+  convertToClassName,
+  isEnabled,
+  isVisible,
+  Renderer,
+  RendererProps
+} from '../core/renderer';
+import { RankedTester } from '../core/testers';
+import { ControlElement, UISchemaElement } from '../models/uischema';
+import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
+import { composeWithUi, resolveData } from '../path.util';
+import { getElementLabelObject } from './label.util';
+import { errorAt } from '../reducers/validation';
+import { getData, getValidation } from '../reducers/index';
 
 /**
  * A renderer config that is used during renderer registration.
@@ -94,54 +104,6 @@ export const JsonFormsLayout = ({ styleName, children, visible }) => {
   );
 };
 
-// tslint:disable:variable-name
-export const JsonFormsControl =
-// tslint:enable:variable-name
-  ({ classes, controlId, labelText, validationErrors, children, labelFirst, createValidationDiv}) => {
-
-    const isValid = _.isEmpty(validationErrors);
-    const labelClass = JsonForms.stylingRegistry.getAsClassName('control.label');
-
-    if (labelFirst === undefined || labelFirst === null || labelFirst) {
-      return (
-        <div className={classes}>
-          <label for={controlId} className={labelClass} data-error={validationErrors}>
-            {labelText}
-          </label>
-          {children}
-          {
-            createValidationDiv ?
-              <div
-                className={['validation'].concat([isValid ? '' : 'validation_error']).join(' ')}
-              >
-                {!isValid ? formatErrorMessage(validationErrors) : ''}
-              </div> : ''
-          }
-        </div>
-      );
-    } else {
-      return (
-        <div className={classes}>
-          {children}
-          <label for={controlId}
-                 className={labelClass}
-                 data-error={formatErrorMessage(validationErrors)}>
-            {labelText}
-          </label>
-          {
-            createValidationDiv ?
-              <div
-                className={['validation'].concat([isValid ? '' : 'validation_error']).join(' ')}
-              >
-                {!isValid ? formatErrorMessage(validationErrors) : ''}
-              </div> : ''
-          }
-
-        </div>
-      );
-    }
-  };
-
 export const formatErrorMessage = errors => {
   if (errors === undefined || errors === null) {
     return '';
@@ -157,4 +119,41 @@ export const registerStartupRenderer = (tester: RankedTester, renderer: any) => 
   });
 
   return renderer;
+};
+
+export const mapStateToControlProps = (state, ownProps) => {
+  const path = composeWithUi(ownProps.uischema, ownProps.path);
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
+  const labelObject = getElementLabelObject(ownProps.schema, ownProps.uischema);
+  const label = labelObject.show ? labelObject.text : '';
+  const errors = errorAt(path)(getValidation(state)).map(error => error.message);
+  const isValid = _.isEmpty(errors);
+  const controlElement = ownProps.uischema as ControlElement;
+  const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
+
+  const styles = JsonForms.stylingRegistry.get('control');
+  const classNames: string[] = !_.isEmpty(controlElement.scope) ?
+    styles.concat(
+      [`${convertToClassName(controlElement.scope.$ref)}`]
+    ) : [''];
+  const inputClassName =
+    ['validate']
+      .concat(isValid ? 'valid' : 'invalid');
+  const labelClass = JsonForms.stylingRegistry.getAsClassName('control.label');
+
+  return {
+    data: resolveData(getData(state), path),
+    errors,
+    classNames: {
+      wrapper: classNames.join(' '),
+      input: inputClassName.join(' '),
+      label: labelClass
+    },
+    label,
+    visible,
+    enabled,
+    id,
+    path,
+  };
 };

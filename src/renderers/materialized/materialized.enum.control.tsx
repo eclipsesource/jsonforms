@@ -1,26 +1,23 @@
 import { JSX } from '../JSX';
-import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
+import { withIncreasedRank } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { connect } from 'inferno-redux';
 import { update } from '../../actions';
-import { Control, ControlProps } from './Control';
-import {
-  formatErrorMessage,
-  mapStateToControlProps,
-  registerStartupRenderer
-} from '../renderer.util';
-
-/**
- * Default tester for enum controls.
- * @type {RankedTester}
- */
-export const enumControlTester: RankedTester = rankWith(2, and(
-    uiTypeIs('Control'),
-    schemaMatches(schema => schema.hasOwnProperty('enum'))
-  ));
+import { Control, ControlProps } from '../controls/Control';
+import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import { enumControlTester } from '../controls/enum.control';
+declare let $;
 
 export class EnumControl extends Control<ControlProps, void> {
+
+  componentDidMount() {
+    $('select').material_select();
+  }
+
+  componentDidUpdate() {
+    $('select').material_select();
+  }
 
   render() {
     const {
@@ -32,28 +29,20 @@ export class EnumControl extends Control<ControlProps, void> {
       visible,
       enabled,
       data,
-      dispatch,
-      path,
       errors
     } = this.props;
-    const isValid = errors.length === 0;
     const options = resolveSchema(
       schema,
       (uischema as ControlElement).scope.$ref
     ).enum;
-    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
-      <div className={classNames.wrapper}>
-        <label for={id} className={classNames.label} data-error={errors}>
-          {label}
-        </label>
+      <div className={classNames.wrapper} hidden={!visible}>
         <select
           className={classNames.input}
-          hidden={!visible}
           disabled={!enabled}
           value={data}
-          onInput={ev => dispatch(update(path, () => ev.target.value)) }
+          onChange={ev => this.updateData(ev.target.value) }
         >
           {
             [<option value='' selected={data === undefined}/>]
@@ -72,15 +61,15 @@ export class EnumControl extends Control<ControlProps, void> {
             )
           }
         </select>
-        <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : ''}
-        </div>
+        <label for={id} data-error={errors}>
+          {label}
+        </label>
       </div>
     );
   }
 }
 
 export default registerStartupRenderer(
-  enumControlTester,
+  withIncreasedRank(1, enumControlTester),
   connect(mapStateToControlProps)(EnumControl)
 );

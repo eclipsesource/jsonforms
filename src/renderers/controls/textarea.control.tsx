@@ -1,9 +1,13 @@
 import { JSX } from '../JSX';
 import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
-import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
-import { ControlProps } from './Control';
-import { registerStartupRenderer } from '../renderer.util';
+import { Control, ControlProps } from './Control';
+import {
+  formatErrorMessage,
+  mapStateToControlProps,
+  registerStartupRenderer
+} from '../renderer.util';
+
 /**
  * Tester for a multi-line string control.
  * @type {RankedTester}
@@ -13,13 +17,32 @@ export const textAreaControlTester: RankedTester = rankWith(2, and(
     optionIs('multi', true)
   ));
 
-export class TextAreaControl extends BaseControl<ControlProps, void> {
+export class TextAreaControl extends Control<ControlProps, void> {
 
-  protected inputChangeProperty = 'onInput';
-  protected valueProperty = 'value';
+  render() {
 
-  protected createInputElement() {
-    return (<textarea {...this.createProps()}/>);
+    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const isValid = errors.length === 0;
+    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
+
+    return (
+      <div className={classNames.wrapper}>
+        <label for={id} className={classNames.label}>
+          {label}
+        </label>
+        <textarea
+          value={data}
+          onInput={ev => this.updateData(ev.target.value)}
+          className={classNames.input}
+          id={id}
+          hidden={!visible}
+          disabled={!enabled}
+        />
+        <div className={divClassNames}>
+          {!isValid ? formatErrorMessage(errors) : ''}
+        </div>
+      </div>
+    );
   }
 
   /**

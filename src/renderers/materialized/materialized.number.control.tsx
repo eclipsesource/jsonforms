@@ -1,29 +1,15 @@
 import { JSX } from '../JSX';
 import * as _ from 'lodash';
-import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
+import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs, withIncreasedRank } from '../../core/testers';
 import { connect } from 'inferno-redux';
-import { Control, ControlProps } from './Control';
-import {
-  formatErrorMessage,
-  mapStateToControlProps,
-  registerStartupRenderer
-} from '../renderer.util';
-
-/**
- * Default tester for number controls.
- * @type {RankedTester}
- */
-export const numberControlTester: RankedTester = rankWith(2, and(
-    uiTypeIs('Control'),
-    schemaTypeIs('number')
-  ));
+import { Control, ControlProps } from '../controls/Control';
+import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import { numberControlTester } from '../controls/number.control';
 
 export class NumberControl extends Control<ControlProps, void> {
 
   render() {
     const { data, classNames, id, visible, enabled, errors, label } = this.props;
-    const isValid = errors.length === 0;
-    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
       <div className={classNames.wrapper}>
@@ -39,15 +25,12 @@ export class NumberControl extends Control<ControlProps, void> {
                hidden={!visible}
                disabled={!enabled}
         />
-        <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : ''}
-        </div>
       </div>
     );
   }
 }
 
 export default registerStartupRenderer(
-  numberControlTester,
+  withIncreasedRank(1, numberControlTester),
   connect(mapStateToControlProps)(NumberControl)
 );

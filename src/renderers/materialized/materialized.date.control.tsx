@@ -1,28 +1,14 @@
 import { JSX } from '../JSX';
-import { and, formatIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { withIncreasedRank } from '../../core/testers';
 import { connect } from 'inferno-redux';
-import { Control, ControlProps } from './Control';
-import {
-  formatErrorMessage,
-  mapStateToControlProps,
-  registerStartupRenderer
-} from '../renderer.util';
-
-/**
- * Default tester for date controls.
- * @type {RankedTester}
- */
-export const dateControlTester: RankedTester = rankWith(2, and(
-    uiTypeIs('Control'),
-    formatIs('date')
-  ));
+import { Control, ControlProps } from '../controls/Control';
+import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import { dateControlTester } from '../controls/date.control';
 
 export class DateControl extends Control<ControlProps, void> {
 
   render() {
     const { data, classNames, id, visible, enabled, errors, label } = this.props;
-    const isValid = errors.length === 0;
-    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
       <div className={classNames.wrapper}>
@@ -39,15 +25,12 @@ export class DateControl extends Control<ControlProps, void> {
                hidden={!visible}
                disabled={!enabled}
         />
-        <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : ''}
-        </div>
       </div>
     );
   }
 }
 
 export default registerStartupRenderer(
-  dateControlTester,
+  withIncreasedRank(1, dateControlTester),
   connect(mapStateToControlProps)(DateControl)
 );

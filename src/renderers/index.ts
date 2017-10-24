@@ -1,7 +1,7 @@
 export * from './label.util';
 export * from './renderer.util';
 
-export * from './controls/base.control';
+export * from './controls/Control';
 export * from './controls/text.control';
 export * from './controls/boolean.control';
 export * from './controls/integer.control';
