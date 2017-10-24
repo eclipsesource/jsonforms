@@ -77,7 +77,7 @@ test('render with data and UI schema set', t => {
   jsonForms.uiSchema = uischema;
   jsonForms.connectedCallback();
   t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'control root_properties_name valid');
+  t.is(jsonForms.children.item(0).className, 'root_properties_name');
   t.deepEqual(jsonForms.dataSchema, generateJsonSchema({name: 'foo'}));
   t.is(jsonForms.uiSchema, uischema);
 });
@@ -93,7 +93,7 @@ test.cb('render with data, data schema and UI schema set', t => {
     () => {
       jsonForms.connectedCallback();
       t.is(jsonForms.children.length, 1);
-      t.is(jsonForms.children.item(0).className, 'control root_properties_name valid');
+      t.is(jsonForms.children.item(0).className, 'root_properties_name');
       t.deepEqual(jsonForms.dataSchema.properties, t.context.schema.properties);
       t.is(jsonForms.uiSchema, t.context.uischema);
       t.end();

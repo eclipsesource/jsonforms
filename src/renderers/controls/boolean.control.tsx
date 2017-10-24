@@ -1,9 +1,12 @@
 import { JSX } from '../JSX';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
-import { BaseControl, mapStateToControlProps } from './base.control';
 import { connect } from 'inferno-redux';
-import { ControlProps } from './Control';
-import { registerStartupRenderer } from '../renderer.util';
+import { Control, ControlProps } from './Control';
+import {
+  formatErrorMessage,
+  mapStateToControlProps,
+  registerStartupRenderer
+} from '../renderer.util';
 
 /**
  * Default tester for boolean controls.
@@ -14,16 +17,31 @@ export const booleanControlTester: RankedTester = rankWith(2, and(
     schemaTypeIs('boolean')
   ));
 
-export class BooleanControl extends BaseControl<ControlProps, void> {
+export class BooleanControl extends Control<ControlProps, void> {
 
-  inputChangeProperty = 'onClick';
-  valueProperty = 'checked';
+  render() {
+    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const isValid = errors.length === 0;
+    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
-  createInputElement() {
-    const props: any = this.createProps();
-    props.checked = this.props.data;
-
-    return <input type='checkbox' {...props} />;
+    return (
+      <div className={classNames.wrapper}>
+        <label for={id} className={classNames.label} data-error={errors}>
+          {label}
+        </label>
+        <input type='checkbox'
+               checked={data}
+               onClick={ev => this.updateData(ev.target.checked === true)}
+               className={classNames.input}
+               id={id}
+               hidden={!visible}
+               disabled={!enabled}
+        />
+        <div className={divClassNames}>
+          {!isValid ? formatErrorMessage(errors) : ''}
+        </div>
+      </div>
+    );
   }
 }
 

@@ -180,3 +180,8 @@ export const rankWith = (rank: number, tester: Tester)  =>
 
         return NOT_APPLICABLE;
     };
+
+export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
+  (uischema: UISchemaElement, schema: JsonSchema): number => {
+    return rankedTester(uischema, schema) + by;
+};

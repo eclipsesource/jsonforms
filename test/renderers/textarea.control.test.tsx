@@ -8,7 +8,7 @@ import TextAreaControl, {
 import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
-  renderIntoDocument
+  renderIntoDocument,
 } from 'inferno-test-utils';
 import { ControlElement } from '../../src/models/uischema';
 import { update, validate } from '../../src/actions';
