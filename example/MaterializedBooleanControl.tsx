@@ -28,8 +28,6 @@ export class MaterializedBooleanControl extends BooleanControl {
       : [''];
     const controlId = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
 
-    console.log("<<<< materialized boolean");
-
     return (
       <JsonFormsControl
         classes={classes.join(' ')}

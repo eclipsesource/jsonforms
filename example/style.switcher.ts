@@ -112,6 +112,10 @@ const material = () => {
       classNames: ['input-field']
     },
     {
+      name: 'control.label',
+      classNames: ['active']
+    },
+    {
       name: 'array.button',
       classNames: ['btn-floating', 'waves-effect', 'waves-light', 'array-button']
     },

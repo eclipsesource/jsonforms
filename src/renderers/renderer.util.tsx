@@ -100,11 +100,12 @@ export const JsonFormsControl =
   ({ classes, controlId, labelText, validationErrors, children, labelFirst, createValidationDiv}) => {
 
     const isValid = _.isEmpty(validationErrors);
+    const labelClass = JsonForms.stylingRegistry.getAsClassName('control.label');
 
     if (labelFirst === undefined || labelFirst === null || labelFirst) {
       return (
         <div className={classes}>
-          <label for={controlId} className='control.label' data-error={validationErrors}>
+          <label for={controlId} className={labelClass} data-error={validationErrors}>
             {labelText}
           </label>
           {children}
@@ -123,7 +124,7 @@ export const JsonFormsControl =
         <div className={classes}>
           {children}
           <label for={controlId}
-                 className='control.label'
+                 className={labelClass}
                  data-error={formatErrorMessage(validationErrors)}>
             {labelText}
           </label>
