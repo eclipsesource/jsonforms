@@ -36,8 +36,8 @@ module.exports = [{
             { from: 'node_modules/jquery/dist/jquery.js'               },
             { from: 'node_modules/bootstrap/dist/css/bootstrap.css'    },
             { from: 'node_modules/bootstrap/dist/js/bootstrap.js'      },
-            { from: 'node_modules/materialize-css/bin/materialize.css' },
-            { from: 'node_modules/materialize-css/bin/materialize.js'  },
+            { from: 'node_modules/materialize-css/dist/css/materialize.css' },
+            { from: 'node_modules/materialize-css/dist/js/materialize.js'  },
             { from: 'example/icons', to: 'icons' },
             { from: 'jsoneditor.css' }
         ])

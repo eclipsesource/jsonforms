@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { JSX } from '../JSX';
 import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
@@ -19,28 +20,35 @@ export const enumControlTester: RankedTester = rankWith(2, and(
 
 export class EnumControl extends BaseControl<ControlProps, void> {
 
+  // TODO: these are not in use actually
+  inputChangeProperty = 'onChange';
   valueProperty = 'value';
 
   createInputElement() {
-    const { uischema, schema, visible, enabled, data, dispatch, path } = this.props;
+    const { uischema, schema, visible, enabled, data, dispatch, path, errors } = this.props;
     const isHidden = !visible;
     const isDisabled = !enabled;
     const options = resolveSchema(
       schema,
       (uischema as ControlElement).scope.$ref
     ).enum;
+    const isValid = _.isEmpty(errors);
+    const className  = ['validate']
+      .concat(isValid ? 'valid' : 'invalid')
+      .join(' ');
 
     return (
       <select
+        className={className}
         hidden={isHidden}
         disabled={isDisabled}
         value={data}
-        onInput={ev => {
+        onChange={ev => {
           dispatch(update(path, () => this.getInputValue(ev.target)));
         }}
       >
         {
-          [<option value=''/>].concat(
+          [<option value='' selected={data === undefined}/>].concat(
             options.map(optionValue => {
               return (
                 <option
@@ -56,13 +64,6 @@ export class EnumControl extends BaseControl<ControlProps, void> {
         }
       </select>
     );
-  }
-
-  /**
-   * @inheritDoc
-   */
-  protected get inputChangeProperty(): string {
-    return 'onchange';
   }
 
   /**

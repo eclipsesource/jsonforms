@@ -9,6 +9,7 @@ import { update } from '../../actions';
 import { getData, getValidation } from '../../reducers/index';
 import { errorAt } from '../../reducers/validation';
 import { ControlProps } from './Control';
+import { JsonForms } from '../../core';
 
 /**
  * Convenience base class for all renderers that represent controls.
@@ -22,14 +23,14 @@ export abstract class BaseControl<P extends ControlProps, S> extends Renderer<P,
   render() {
     const { uischema, labelText, errors } = this.props;
     const controlElement = uischema as ControlElement;
-    const isValid = _.isEmpty(errors);
 
+    const styles = JsonForms.stylingRegistry.get('control');
     const classes: string[] = !_.isEmpty(controlElement.scope) ?
       []
         .concat([`control ${convertToClassName(controlElement.scope.$ref)}`])
-        .concat([isValid ? 'valid' : 'invalid'])
+        .concat(styles)
       : [''];
-    const controlId = _.has(controlElement.scope, 'ref') ? controlElement.scope.$ref : '';
+    const controlId = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
 
     return (
       <JsonFormsControl
@@ -37,6 +38,8 @@ export abstract class BaseControl<P extends ControlProps, S> extends Renderer<P,
         controlId={controlId}
         labelText={labelText}
         validationErrors={errors}
+        labelFirst={false}
+        createValidationDiv={false}
       >
         {this.createInputElement()}
       </JsonFormsControl>
@@ -88,13 +91,16 @@ export abstract class BaseControl<P extends ControlProps, S> extends Renderer<P,
   protected abstract createInputElement();
 
   protected createProps(classNames: string[] = [], additionalProps: object = {}) {
-    const { uischema, data, dispatch, visible, enabled } = this.props;
+    const { uischema, data, dispatch, visible, enabled, errors } = this.props;
     const controlElement = uischema as ControlElement;
     const isHidden = !visible;
     const isDisabled = !enabled;
+    const isValid = _.isEmpty(errors);
 
     const props = {
-      className: ['validate'].concat(classNames),
+      className: ['validate']
+        .concat(isValid ? 'valid' : 'invalid')
+        .concat(classNames).join(' '),
       id: controlElement.scope.$ref,
       hidden: isHidden,
       disabled: isDisabled,

@@ -97,23 +97,48 @@ export const JsonFormsLayout = ({ styleName, children, visible }) => {
 // tslint:disable:variable-name
 export const JsonFormsControl =
 // tslint:enable:variable-name
-  ({ classes, controlId, labelText, validationErrors, children }) => {
+  ({ classes, controlId, labelText, validationErrors, children, labelFirst, createValidationDiv}) => {
 
     const isValid = _.isEmpty(validationErrors);
 
-    return (
-      <div className={classes}>
-        <label for={controlId} className='control.label'>
-          { labelText }
-        </label>
-        {children}
-        <div
-          className={['validation'].concat([isValid ? '' : 'validation_error']).join(' ')}
-        >
-          { !isValid ? formatErrorMessage(validationErrors) : '' }
+    if (labelFirst === undefined || labelFirst === null || labelFirst) {
+      return (
+        <div className={classes}>
+          <label for={controlId} className='control.label' data-error={validationErrors}>
+            {labelText}
+          </label>
+          {children}
+          {
+            createValidationDiv ?
+              <div
+                className={['validation'].concat([isValid ? '' : 'validation_error']).join(' ')}
+              >
+                {!isValid ? formatErrorMessage(validationErrors) : ''}
+              </div> : ''
+          }
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className={classes}>
+          {children}
+          <label for={controlId}
+                 className='control.label'
+                 data-error={formatErrorMessage(validationErrors)}>
+            {labelText}
+          </label>
+          {
+            createValidationDiv ?
+              <div
+                className={['validation'].concat([isValid ? '' : 'validation_error']).join(' ')}
+              >
+                {!isValid ? formatErrorMessage(validationErrors) : ''}
+              </div> : ''
+          }
+
+        </div>
+      );
+    }
   };
 
 export const formatErrorMessage = errors => {

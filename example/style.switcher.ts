@@ -108,6 +108,10 @@ const material = () => {
       classNames: ['btn', 'waves-effect', 'waves-light']
     },
     {
+      name: 'control',
+      classNames: ['input-field']
+    },
+    {
       name: 'array.button',
       classNames: ['btn-floating', 'waves-effect', 'waves-light', 'array-button']
     },
@@ -131,10 +135,10 @@ const material = () => {
       name: 'item',
       classNames: ['collection-item']
     },
-    {
-      name: 'item-active',
-      classNames: ['active']
-    },
+    // {
+    //   name: 'item-active',
+    //   classNames: ['active']
+    // },
     {
       name: 'horizontal-layout',
       classNames: ['row']
@@ -205,5 +209,5 @@ export const createStyleSelection = (selectExampleElement: HTMLSelectElement) =>
   styleDiv.appendChild(styleLabel);
   styleDiv.appendChild(selectStyle);
 
-  changeStyle('none');
+  changeStyle('materialize');
 };

@@ -18,6 +18,8 @@ import './templates/masterdetail';
 import './templates/resolve';
 import './templates/uischema-registry';
 import './templates/ecore';
+import './MaterializedEnumControl';
+import './MaterializedBooleanControl';
 
 window.onload = ev => {
   const selectExampleElement = createExampleSelection();
