@@ -20,6 +20,7 @@
     "node_modules"
   ],
   "files": [
-    "./src/index.ts"
+    "./src/index.ts",
+    "./src/renderers/materialized/index.ts"
   ]
 }
