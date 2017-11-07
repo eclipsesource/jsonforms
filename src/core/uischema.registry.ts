@@ -47,7 +47,7 @@ export type UISchemaTester = (schema: JsonSchema, data: any) => number;
  * Associates a UI schema with a tester.
  */
 interface UISchemaDefinition {
-    uiSchema: UISchemaElement;
+    uischema: UISchemaElement;
     tester: UISchemaTester;
 }
 
@@ -56,14 +56,14 @@ interface UISchemaDefinition {
  * a combination of schema/data.
  * @type {number}
  */
-export const NOT_APPLICABLE: number = -1;
+export const NOT_APPLICABLE = -1;
 
 /**
  * Default UI schema definition that always returns 0 as its priority.
  * @type {UISchemaDefinition}
  */
 const NO_UISCHEMA_DEFINITION: UISchemaDefinition = {
-    uiSchema: null,
+    uischema: null,
     tester: schema => 0
 };
 
@@ -79,17 +79,17 @@ export class UISchemaRegistryImpl implements UISchemaRegistry {
     /**
      * @inheritDoc
      */
-    register(uiSchema: UISchemaElement, tester: UISchemaTester): void {
-        this.registry.push({uiSchema, tester});
+    register(uischema: UISchemaElement, tester: UISchemaTester): void {
+        this.registry.push({uischema, tester});
     }
 
     /**
      * @inheritDoc
      */
-    deregister(uiSchema: UISchemaElement, tester: UISchemaTester): void {
+    deregister(uischema: UISchemaElement, tester: UISchemaTester): void {
         this.registry = _.filter(this.registry, el =>
             // compare testers via strict equality
-            el.tester !== tester || !_.eq(el.uiSchema, uiSchema)
+            el.tester !== tester || !_.eq(el.uischema, uischema)
         );
     }
 
@@ -104,6 +104,6 @@ export class UISchemaRegistryImpl implements UISchemaRegistry {
             return generateDefaultUISchema(schema);
         }
 
-        return bestSchema.uiSchema;
+        return bestSchema.uischema;
     }
 }

@@ -21,7 +21,7 @@ module.exports = [{
 
     resolve: {
         // Add '.ts' as resolvable extensions.
-        extensions: [".ts", ".js"]
+        extensions: [".ts", ".js", ".tsx"]
     },
     devServer: {
         contentBase: './example_plain'
@@ -36,16 +36,26 @@ module.exports = [{
             { from: 'node_modules/jquery/dist/jquery.js'               },
             { from: 'node_modules/bootstrap/dist/css/bootstrap.css'    },
             { from: 'node_modules/bootstrap/dist/js/bootstrap.js'      },
-            { from: 'node_modules/materialize-css/bin/materialize.css' },
-            { from: 'node_modules/materialize-css/bin/materialize.js'  },
-            { from: 'example/icons', to: 'icons' }
+            { from: 'node_modules/materialize-css/dist/css/materialize.css' },
+            { from: 'node_modules/materialize-css/dist/js/materialize.js'  },
+            { from: 'example/icons', to: 'icons' },
+            { from: 'jsoneditor.css' }
         ])
     ],
     module: {
       rules: [
         { enforce: 'pre', test: /\.js$/, exclude: /node_modules/, loader: 'source-map-loader' },
-        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' },
-        { test: /\.html$/, exclude: /node_modules/, loader: 'html-loader?exportAsEs6Default'}
+        {
+          test: /\.tsx?$/, 						  // All ts and tsx files will be process by
+          loaders: [ 'babel-loader', 'ts-loader' ], // first babel-loader, then ts-loader
+          exclude: /node_modules/                   // ignore node_modules
+        },
+        {
+          test: /\.jsx?$/,                          // all js and jsx files will be processed by
+          loader: 'babel-loader',                   // babel-loader
+          exclude: /node_modules/                  // ignore node_modules
+        },
+       { test: /\.html$/, exclude: /node_modules/, loader: 'html-loader?exportAsEs6Default'}
       ]
     },
 

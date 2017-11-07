@@ -70,9 +70,7 @@ export interface StylingRegistry {
  */
 export class StylingRegistryImpl implements StylingRegistry {
 
-    constructor(protected styles: Style[] = []) {
-
-    }
+    constructor(protected styles: Style[] = []) { }
 
     register(style: Style): void;
     register(name: string, classNames: ClassNames): void;

@@ -1,5 +1,4 @@
 import { JsonForms, JsonFormService } from '../../src/core';
-import { DataService } from '../../src/core/data.service';
 import { JsonFormsElement } from '../../src/json-forms';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { UISchemaElement } from '../../src/models/uischema';
@@ -7,7 +6,7 @@ import { UISchemaElement } from '../../src/models/uischema';
 import { registerExamples } from '../example';
 
 class MyService implements JsonFormService {
-  constructor(private dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement) {
+  constructor(dataSchema: JsonSchema, uiSchema: UISchemaElement) {
     this.createButton();
   }
   dispose(): void {
@@ -17,14 +16,14 @@ class MyService implements JsonFormService {
     const button = document.createElement('button');
     button.innerText = 'Change data';
     button.onclick = () => {
-      this.dataService.notifyAboutDataChange(
-          {
-            scope: {
-              $ref: '#/properties/name'
-            }
-          },
-          'blub'
-      );
+      // this.dataService.notifyAboutDataChange(
+      //     {
+      //       scope: {
+      //         $ref: '#/properties/name'
+      //       }
+      //     },
+      //     'blub'
+      // );
     };
     const div = document.getElementById('dynamic2-example');
     div.appendChild(button);
@@ -43,14 +42,14 @@ const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Service';
   buttonRegister.onclick = () => {
-    JsonForms.jsonFormsServices.push(MyService);
+    // JsonForms.jsonFormsServices.push(MyService);
     resetServices();
   };
   div.appendChild(buttonRegister);
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Service';
   buttonUnregister.onclick = () => {
-    const index = JsonForms.jsonFormsServices.indexOf(MyService);
+    const index = -1; // JsonForms.jsonFormsServices.indexOf(MyService);
     if (index === -1) {
       return;
     }

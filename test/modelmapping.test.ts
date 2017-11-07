@@ -1,6 +1,6 @@
 import test from 'ava';
 import { JsonForms } from '../src/core';
-import { testDataSchema } from './data/modelreference.data';
+import { testDataSchema } from './helpers/modelreference.data';
 import { SchemaService } from '../src/core/schema.service';
 import { SchemaServiceImpl } from '../src/core/schema.service.impl';
 

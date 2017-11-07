@@ -2,11 +2,10 @@ import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaRegistry, UISchemaRegistryImpl } from './core/uischema.registry';
-import { DataService } from './core/data.service';
-import { RendererService } from './core/renderer.service';
 import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
 import { SchemaService } from './core/schema.service';
 import { SchemaServiceImpl } from './core/schema.service.impl';
+import { Store } from 'redux';
 
 /**
  * Represents a JSONForms service.
@@ -43,11 +42,11 @@ export interface JsonFormsServiceConstructable {
   /**
    * Constructor logic.
    *
-   * @param {DataService} dataService the data service
+   * @param {store}
    * @param {JsonSchema} dataSchema the JSON schema describing the data
    * @param {UISchemaElement} uiSchema the UI schema to be rendered
    */
-  new(dataService: DataService, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
+  new(store: Store<any>, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
 }
 
 /**
@@ -56,7 +55,7 @@ export interface JsonFormsServiceConstructable {
 export class JsonForms {
   private static _config = new JsonFormsConfig();
   private static _schemaService;
-  public static rendererService = new RendererService();
+  public static renderers = [];
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();

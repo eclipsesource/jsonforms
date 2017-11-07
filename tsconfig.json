@@ -9,12 +9,18 @@
     "moduleResolution": "node",
     "outDir": "dist/ts-build",
     "sourceMap": true,
-    "target": "es5"
+    "target": "es5",
+    "jsx": "react",
+    "reactNamespace": "JSX",
+    "types": [
+      "inferno"
+    ]
   },
   "exclude":[
     "node_modules"
   ],
   "files": [
-    "./src/index.ts"
+    "./src/index.ts",
+    "./src/renderers/materialized/index.ts"
   ]
 }

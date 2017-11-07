@@ -15,10 +15,15 @@ class LabelObject implements ILabelObject {
 }
 
 const deriveLabel = (controlElement: ControlElement): string => {
-  const ref = controlElement.scope.$ref;
-  const label = ref.substr(ref.lastIndexOf('/') + 1);
 
-  return _.startCase(label);
+  if (controlElement.scope !== undefined) {
+    const ref = controlElement.scope.$ref;
+    const label = ref.substr(ref.lastIndexOf('/') + 1);
+
+    return _.startCase(label);
+  }
+
+  return '';
 };
 
 const getLabelObject = (withLabel: ControlElement): ILabelObject => {
@@ -48,12 +53,10 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
     const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
     const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
     const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
-    if (nextHigherSchema !== undefined && nextHigherSchema.required !== undefined &&
-      nextHigherSchema.required.indexOf(lastSegment) !== -1) {
-        return true;
-    }
 
-    return false;
+    return nextHigherSchema !== undefined
+      && nextHigherSchema.required !== undefined
+      && nextHigherSchema.required.indexOf(lastSegment) !== -1;
 };
 
 /**
@@ -65,7 +68,7 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
 export const getElementLabelObject =
   (schema: JsonSchema, controlElement: ControlElement): ILabelObject => {
   const labelObject = getLabelObject(controlElement);
-  if (isRequired(schema, controlElement.scope.$ref)) {
+  if (controlElement.scope !== undefined && isRequired(schema, controlElement.scope.$ref)) {
     labelObject.text += '*';
   }
 

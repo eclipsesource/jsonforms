@@ -1,6 +1,8 @@
 import * as _ from 'lodash';
 import { JsonForms } from '../src/core';
 import { changeExample } from './example';
+import '../src/renderers/materialized';
+import { materialize } from '../src/renderers/materialized/index';
 declare let $;
 
 /**
@@ -10,7 +12,7 @@ declare let $;
  * @param wantedHref a substring of the link's href value, which is to be enabled
  */
 const enableLink = (wantedHref: string): void => {
-  const links = $('link').toArray();
+  const links: any[] = $('link').toArray();
   // disable all links
   _.forEach(links, link => link.disabled = true);
   const wantedLinks = _.filter(links, (link: HTMLLinkElement) => link.href.includes(wantedHref)
@@ -101,12 +103,7 @@ const bootstrap = () => {
 };
 
 const material = () => {
-  enableLink('materialize');
-  JsonForms.stylingRegistry.register(
-      'button',
-      ['btn', 'waves-effect', 'waves-light']
-  );
-  JsonForms.stylingRegistry.deregister('select');
+  materialize();
   $('select').material_select();
 };
 
@@ -143,5 +140,5 @@ export const createStyleSelection = (selectExampleElement: HTMLSelectElement) =>
   styleDiv.appendChild(styleLabel);
   styleDiv.appendChild(selectStyle);
 
-  changeStyle('none');
+  changeStyle('materialize');
 };

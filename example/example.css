@@ -177,7 +177,7 @@ input {
 .jsf-treeMasterDetail-master li > div > .icon.drive {
   background-image: url('./icons/drive.png');
 }
-.jsf-treeMasterDetail-master li.selected > div > .label {font-weight: bold;}
+.jsf-treeMasterDetail-master li.selected > div > .label {font-weight: bold; background-color: lightgray}
 .jsf-treeMasterDetail-master li > div > .label {
   display: flex;
   flex: 1;

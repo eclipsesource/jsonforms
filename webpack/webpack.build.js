@@ -16,7 +16,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' as resolvable extensions.
-        extensions: [".ts", ".js"]
+        extensions: [".ts", ".js", ".tsx"]
     },
     plugins: [
     //   new webpack.LoaderOptionsPlugin({
@@ -44,7 +44,21 @@ module.exports = {
     module: {
       rules: [
         { enforce: 'pre', test: /\.js$/, exclude: /node_modules/, loader: 'source-map-loader' },
-        { test: /\.ts$/, exclude: /node_modules/, loader: 'awesome-typescript-loader' },
+        {
+          test: /\.ts$/, 						  // All ts and tsx files will be process by
+          loaders: ['ts-loader' ], // first ts-loader, then babel-loader
+          exclude: /node_modules/                   // ignore node_modules
+        },
+        {
+          test: /\.tsx$/, 						  // All ts and tsx files will be process by
+          loaders: [ 'babel-loader', 'ts-loader' ], // first ts-loader, then babel-loader
+          exclude: /node_modules/                   // ignore node_modules
+        },
+        {
+          test: /\.jsx?$/,                          // all js and jsx files will be processed by
+          loader: 'babel-loader',                   // babel-loader
+          exclude: /node_modules/                  // ignore node_modules
+        },
         { enforce: 'pre', test: /\.ts$/, exclude: /node_modules/, loader: 'tslint-loader',
           options: {
             configuration: require('../tslint.json'),

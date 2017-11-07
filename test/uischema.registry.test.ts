@@ -36,13 +36,13 @@ test('UI schema registry returns registered UI schema', t => {
             }
         }
     };
-    const uiSchema: Layout = {
+    const uischema: Layout = {
         type: 'Group',
         elements: [nameControl]
     };
-    registry.register(uiSchema, () =>  5);
+    registry.register(uischema, () =>  5);
     const bestUiSchema = registry.findMostApplicableUISchema(schema, {name: 'John Doe'});
-    t.is(bestUiSchema, uiSchema);
+    t.is(bestUiSchema, uischema);
 });
 
 test('UI schema registry generates UI schema if applicable UI schema has been de-registered', t => {

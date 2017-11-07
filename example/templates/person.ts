@@ -66,7 +66,16 @@ const uischema = {
           'scope': {
             '$ref': '#/properties/personalData/properties/height'
           }
-        }
+        },
+        {
+          'type': 'Control',
+          'label': {
+            'text': 'Age'
+          },
+          'scope': {
+            '$ref': '#/properties/personalData/properties/age'
+          }
+        },
       ]
     },
     {
@@ -77,6 +86,13 @@ const uischema = {
           'label': 'Nationality',
           'scope': {
             '$ref': '#/properties/nationality'
+          }
+        },
+        {
+          'type': 'Control',
+          'label': 'Height',
+          'scope': {
+            '$ref': '#/properties/personalData/properties/height'
           }
         },
         {

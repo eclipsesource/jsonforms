@@ -35,7 +35,8 @@
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Custom Control';
   buttonRegister.onclick = () => {
-    JSONForms.JsonFormsHolder.rendererService.registerRenderer(tester, 'custom-element');
+    // TODO
+    // JSONForms.JsonFormsHolder.renderers.registerRenderer(tester, 'custom-element');
     // HACK to retrigger service creation
     resetServices();
   };
@@ -43,7 +44,8 @@
   const buttonUnregister = document.createElement('button');
   buttonUnregister.innerText = 'Unregister Custom Control';
   buttonUnregister.onclick = () => {
-    JSONForms.JsonFormsHolder.rendererService.deregisterRenderer(tester, 'custom-element');
+    // TODO
+    // JSONForms.JsonFormsHolder.renderers.deregisterRenderer(tester, 'custom-element');
     // HACK to retrigger service creation
     resetServices();
   };

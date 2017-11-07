@@ -1,0 +1,167 @@
+:root {
+    /*--jsf-main-bg-color: white;*/
+    --jsf-modest-bg-color: #ee6e73;
+    --jsf-border-color: lightgray;
+    --jsf-modest-bg-highlight-color: #26a69a;
+    --jsf-validation-color: #F44336;
+    /*--jsf-main-fg-color: black;*/
+    /*background-color: var(--jsf-main-bg-color);*/
+    /*color: var(--jsf-main-fg-color);*/
+}
+
+#toolbar {
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+#editor {
+    margin: auto;
+    width: 75%;
+}
+
+.array-button {
+    margin-right: 0.5em
+}
+
+.group.label {
+    color: lightgray;
+}
+
+.validation_error  {
+    color: var(--jsf-validation-color);
+}
+
+fieldset {
+    margin-bottom: 0.5em;
+}
+
+fieldset legend label {
+    font-size: 1em;
+}
+
+jsf-treeMasterDetail {
+    display: flex;
+    flex-direction: column;
+}
+.jsf-treeMasterDetail > .jsf-treeMasterDetail-content {
+    display: flex;
+    flex-direction: row;
+}
+.jsf-treeMasterDetail > .jsf-treeMasterDetail-content > * {
+    padding: 0.5em;
+    border-style: solid;
+    border-width: thin;
+    border-color: var(--jsf-border-color);
+    border-radius: 0.2em;
+}
+.jsf-treeMasterDetail > .jsf-treeMasterDetail-content > *:first-child {
+    margin-right: 0.25em;
+}
+.jsf-treeMasterDetail-master {
+    flex:1;
+}
+.jsf-treeMasterDetail-detail {
+    flex:3;
+}
+.jsf-treeMasterDetail-master ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow:hidden;
+}
+.jsf-treeMasterDetail-master li {
+    min-height: 1em;
+    position: relative;
+    padding-left: 1.5em;
+}
+.jsf-treeMasterDetail-master li > div {
+    display: flex;
+    flex-direction: row;
+}
+.jsf-treeMasterDetail-master li > div > .icon {
+    flex-basis: 1em;
+    min-height: 1em;
+    margin-right: 0.25em;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.jsf-treeMasterDetail-master li.selected > div > .label {
+    font-weight: bold;
+}
+.jsf-treeMasterDetail-master li > div > .label {
+    display: flex;
+    flex: 1;
+    margin-right: 1em;
+    min-height: 1.5em;
+    color: var(--jsf-main-fg-color);
+}
+/* TODO: Needed? */
+.jsf-treeMasterDetail-master li > div > .label > span:first-child:empty {
+    background: #ffff00;
+    min-height: 1.5em;
+}
+.jsf-treeMasterDetail-master li > div > .label:hover {
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    opacity: 0.9;
+    background-color: var(--jsf-modest-bg-color);
+}
+.jsf-treeMasterDetail-master li > div > .label > .add,
+.jsf-treeMasterDetail-master li > div > .label > .remove {
+    display: none;
+    cursor: pointer;
+    margin-left: 0.25em;
+    min-width: 1.5em;
+    font-weight: normal;
+}
+.jsf-treeMasterDetail-master li > div > .label:hover > .add,
+.jsf-treeMasterDetail-master li > div > .label:hover > .remove {
+    display: flex;
+    justify-content: center;
+}
+.jsf-treeMasterDetail-master li > div > .label:hover > .add:hover,
+.jsf-treeMasterDetail-master li > div > .label:hover > .remove:hover {
+    color: white;
+    background-color: var(--jsf-modest-bg-highlight-color);
+    border-radius: 50%;
+}
+.jsf-treeMasterDetail-master li::before,
+.jsf-treeMasterDetail-master li::after,
+.jsf-treeMasterDetail-master ul::after {
+    content: '';
+    position: absolute;
+    left:0.2em;
+}
+.jsf-treeMasterDetail-master li::before {
+    border-top: 1px solid var(--jsf-border-color);
+    top:0.5em;
+    width: 1em;
+}
+.jsf-treeMasterDetail-master li::after {
+    border-left: 1px solid var(--jsf-border-color);
+    height:100%;
+    top:-0.6em;
+}
+.jsf-treeMasterDetail-master ul::after {
+    border-left: 1px solid var(--jsf-border-color);
+    height: 0.6em;
+    bottom: 0;
+}
+.jsf-treeMasterDetail-master ul:last-child::after {
+    display: none;
+}
+.jsf-treeMasterDetail-master > ul > li::after {
+    top:0.5em;
+}
+.jsf-treeMasterDetail-master > ul > li:last-child::after {
+    display: none;
+}
+.jsf-treeMasterDetail-master > ul > li:only-child::before {
+    display: none;
+}
+.jsf-treeMasterDetail-master > ul > li:only-child {
+    padding-left: 0.25em;
+}
