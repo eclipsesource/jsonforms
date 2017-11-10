@@ -35,6 +35,7 @@ export class TextControl extends Control<ControlProps, ControlState> {
                id={id}
                hidden={!visible}
                disabled={!enabled}
+               autofocus
         />
         <div className={divClassNames}>
           {!isValid ? formatErrorMessage(errors) : ''}

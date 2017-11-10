@@ -20,6 +20,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
                id={id}
                hidden={!visible}
                disabled={!enabled}
+               autofocus
         />
         <label htmlFor={id} className={classNames.label} data-error={errors}>
           {label}
