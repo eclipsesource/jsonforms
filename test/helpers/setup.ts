@@ -10,14 +10,6 @@ import { createJsonFormsStore } from '../../src/store';
 import '../../src/renderers';
 import { JsonForms } from '../../src/core';
 
-export const dispatchInputEvent = (input: HTMLElement) => {
-  const evt = new Event('input', {
-    'bubbles': true,
-    'cancelable': true
-  });
-  input.dispatchEvent(evt);
-};
-
 export const initJsonFormsStore = (
   data: any,
   schema: JsonSchema,

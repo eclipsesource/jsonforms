@@ -8,8 +8,8 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

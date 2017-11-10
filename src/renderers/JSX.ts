@@ -1,5 +1,5 @@
-import createEl from 'inferno-create-element';
+import { createElement } from '../common/binding';
 
 export const JSX: any = {
-  createElement: createEl
+  createElement: createElement
 };

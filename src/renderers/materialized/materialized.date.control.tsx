@@ -1,24 +1,24 @@
 import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
-import { connect } from 'inferno-redux';
-import { Control, ControlProps } from '../controls/Control';
+import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
 import { dateControlTester } from '../controls/date.control';
+import { connect, Event } from '../../common/binding';
 
-export class DateControl extends Control<ControlProps, void> {
+export class DateControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const { classNames, id, visible, enabled, errors, label } = this.props;
 
     return (
       <div className={classNames.wrapper}>
-        <label for={id} className={classNames.label} data-error={errors}>
+        <label htmlFor={id} className={classNames.label} data-error={errors}>
           {label}
         </label>
         <input type='date'
-               value={data}
-               onInput={ev =>
-                 this.updateData(new Date(ev.target.value).toISOString().substr(0, 10))
+               value={this.state.value}
+               onChange={(ev: Event<HTMLInputElement>) =>
+                 this.handleChange(new Date(ev.currentTarget.value).toISOString().substr(0, 10))
                }
                className={classNames.input}
                id={id}

@@ -1,9 +1,9 @@
 import { JsonFormsElement } from '../../src/json-forms';
 import { registerExamples } from '../example';
-import { connect } from 'inferno-redux';
 import { registerRenderer, unregisterRenderer } from '../../src/actions';
 import { RatingControl, ratingControlTester } from './rating.control';
 import { mapStateToControlProps } from '../../src/renderers/renderer.util';
+import { connect } from '../../src/common/binding';
 
 const schema = {
   'type': 'object',

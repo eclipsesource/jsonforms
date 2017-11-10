@@ -5,8 +5,8 @@ import { Renderer, RendererProps } from '../../core/renderer';
 import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Categorization, Category } from '../../models/uischema';
 import { mapStateToLayoutProps, registerStartupRenderer } from '../renderer.util';
-import { connect } from 'inferno-redux';
 import DispatchRenderer from '../dispatch-renderer';
+import { Component, connect } from '../../common/binding';
 
 const isCategorization = (category: Category | Categorization): category is Categorization => {
   return category.type === 'Categorization';
@@ -16,7 +16,7 @@ const isCategorization = (category: Category | Categorization): category is Cate
  * Default tester for a categorization.
  * @type {RankedTester}
  */
-export const categorizationTester: RankedTester =    rankWith(
+export const categorizationTester: RankedTester = rankWith(
         1,
         and(
             uiTypeIs('Categorization'),
@@ -44,7 +44,7 @@ export interface CategorizationState {
   };
 }
 
-class CategorizationRenderer extends Renderer<RendererProps, CategorizationState> {
+class CategorizationRenderer extends Component<RendererProps, CategorizationState> {
 
   /**
    * @inheritDoc
@@ -53,15 +53,9 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
     const { uischema, visible, enabled } = this.props;
     const controlElement = uischema as Categorization;
     const categorization = uischema as Categorization;
-    const classNames = [].concat(
-      JsonForms.stylingRegistry.getAsClassName('categorization')
-    );
-    const masterClassNames = [].concat(
-      JsonForms.stylingRegistry.getAsClassName('categorization.master')
-    );
-    const detailClassNames = [].concat(
-      JsonForms.stylingRegistry.getAsClassName('categorization.detail')
-    );
+    const classNames = JsonForms.stylingRegistry.getAsClassName('categorization');
+    const masterClassNames = JsonForms.stylingRegistry.getAsClassName('categorization.master');
+    const detailClassNames = JsonForms.stylingRegistry.getAsClassName('categorization.detail');
 
     return (
       <fieldset className={classNames}
@@ -107,7 +101,7 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
     return (
       <div id='categorization.detail'>
         {
-          category.elements.map(child =>
+          (category.elements || []).map(child =>
             (
               <DispatchRenderer
                 uischema={child}

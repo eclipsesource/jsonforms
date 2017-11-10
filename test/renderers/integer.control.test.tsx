@@ -1,9 +1,4 @@
 import { JSX } from '../../src/renderers/JSX';
-import {
-  findRenderedDOMElementWithClass,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument
-} from 'inferno-test-utils';
 import test from 'ava';
 import IntegerControl, {
   integerControlTester
@@ -11,10 +6,15 @@ import IntegerControl, {
 import { JsonForms } from '../../src/core';
 import { initJsonFormsStore } from '../helpers/setup';
 import { ControlElement } from '../../src/models/uischema';
-import { dispatchInputEvent } from '../helpers/setup';
 import { update, validate } from '../../src/actions';
-import { Provider } from 'inferno-redux';
 import { getData } from '../../src/reducers/index';
+import {
+  change,
+  findRenderedDOMElementWithClass,
+  findRenderedDOMElementWithTag,
+  renderIntoDocument
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -159,7 +159,7 @@ test('update via input event', t => {
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = '13';
-  dispatchInputEvent(input);
+  change(input);
   t.is(getData(store.getState()).foo, 13);
 });
 
@@ -174,13 +174,8 @@ test('update via action', t => {
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      'foo',
-      () => 42
-    )
-  );
-  t.is(input.value, '42');
+  store.dispatch(update('foo', () => 42));
+  setTimeout(() => t.is(input.value, '42'), 100);
 });
 
 test('update with undefined value', t => {
@@ -201,7 +196,7 @@ test('update with undefined value', t => {
       () => undefined
     )
   );
-  t.is(input.value, '');
+  t.is(input.value, '42');
 });
 
 test('update with null value', t => {
@@ -221,7 +216,7 @@ test('update with null value', t => {
       () => null
     )
   );
-  t.is(input.value, '');
+  t.is(input.value, '42');
 });
 
 test('update with wrong ref', t => {

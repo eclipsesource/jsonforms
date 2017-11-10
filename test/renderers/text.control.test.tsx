@@ -1,18 +1,19 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
-import { dispatchInputEvent, initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../helpers/setup';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement } from '../../src/models/uischema';
 import TextControl , { textControlTester } from '../../src/renderers/controls/text.control';
 import { JsonForms } from '../../src/core';
+import { update, validate } from '../../src/actions';
+import { getData } from '../../src/reducers/index';
 import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { update, validate } from '../../src/actions';
-import { Provider } from 'inferno-redux';
-import { getData } from '../../src/reducers/index';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
+import { change } from '../helpers/test';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -137,7 +138,7 @@ test('update via input event', t => {
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = 'Bar';
-  dispatchInputEvent(input);
+  change(input);
   t.is(getData(store.getState()).name, 'Bar');
 });
 
@@ -156,7 +157,7 @@ test('update via action', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => 'Bar'));
-  t.is(input.value, 'Bar');
+  setTimeout(() => t.is(input.value, 'Bar'), 100);
 });
 
 test('update with undefined value', t => {
@@ -174,7 +175,7 @@ test('update with undefined value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLTextAreaElement;
   store.dispatch(update('name', () => undefined));
-  t.is(input.value, '');
+  t.is(input.value, 'Foo');
 });
 
 test('update with null value', t => {
@@ -192,7 +193,7 @@ test('update with null value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLTextAreaElement;
   store.dispatch(update('name', () => null));
-  t.is(input.value, '');
+  t.is(input.value, 'Foo');
 });
 
 test('update with wrong ref', t => {
@@ -348,12 +349,12 @@ test('single error', t => {
 
 test('multiple errors', t => {
   const schema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        minLength: 3,
-        enum: ['foo', 'bar']
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string',
+        'minLength': 3,
+        'enum': ['foo', 'bar']
       }
     }
   };

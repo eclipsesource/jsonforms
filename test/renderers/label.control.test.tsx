@@ -1,11 +1,11 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
-import { Provider } from 'inferno-redux';
 import { initJsonFormsStore } from '../helpers/setup';
 import { JsonForms } from '../../src/core';
 import { LabelElement, UISchemaElement } from '../../src/models/uischema';
 import LabelRenderer, { labelRendererTester } from '../../src/renderers/additional/label.renderer';
-import { findRenderedDOMElementWithTag, renderIntoDocument } from 'inferno-test-utils';
+import { findRenderedDOMElementWithTag, renderIntoDocument } from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

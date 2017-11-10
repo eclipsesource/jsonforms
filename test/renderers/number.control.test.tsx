@@ -1,19 +1,19 @@
 import { JSX } from '../../src/renderers/JSX';
-import {
-  findRenderedDOMElementWithClass,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument
-} from 'inferno-test-utils';
 import test from 'ava';
 import { JsonForms } from '../../src/core';
 import { initJsonFormsStore } from '../helpers/setup';
 import { ControlElement } from '../../src/models/uischema';
-import { dispatchInputEvent } from '../helpers/setup';
 import { update, validate } from '../../src/actions';
 import NumberControl, { numberControlTester } from '../../src/renderers/controls/number.control';
 import { JsonSchema } from '../../src/models/jsonSchema';
-import { Provider } from 'inferno-redux';
 import { getData } from '../../src/reducers/index';
+import {
+  change,
+  findRenderedDOMElementWithClass,
+  findRenderedDOMElementWithTag,
+  renderIntoDocument
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -210,7 +210,7 @@ test('update via input event', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = '2.72';
-  dispatchInputEvent(input);
+  change(input);
   t.is(getData(store.getState()).foo, 2.72);
 });
 
@@ -226,7 +226,7 @@ test('update via action', t => {
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, '2.72');
   store.dispatch(update('foo', () => 3.14));
-  t.is(input.value, '3.14');
+  setTimeout(() => t.is(input.value, 'Bar'), 3.14);
 });
 
 test('update with undefined value', t => {
@@ -240,7 +240,7 @@ test('update with undefined value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
-  t.is(input.value, '');
+  t.is(input.value, '3.14');
 });
 
 test('update with null value', t => {
@@ -254,7 +254,7 @@ test('update with null value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => null));
-  t.is(input.value, '');
+  t.is(input.value, '3.14');
 });
 
 test('update with wrong ref', t => {

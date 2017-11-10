@@ -4,30 +4,29 @@ import * as _ from 'lodash';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { initJsonFormsStore } from './helpers/setup';
 import { Renderer, RendererProps } from '../src/core/renderer';
+import DispatchRenderer from '../src/renderers/dispatch-renderer';
+import { Provider } from '../src/common/binding';
+import '../src/renderers';
+import { registerRenderer, unregisterRenderer } from '../src/actions';
 import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from 'inferno-test-utils';
-import DispatchRenderer from '../src/renderers/dispatch-renderer';
-import { Provider } from 'inferno-redux';
-import { JsonForms } from '../src/core';
-import '../src/renderers';
-import { registerRenderer, unregisterRenderer } from '../src/actions';
+} from './helpers/test';
 
-class CustomRenderer1 extends Renderer<RendererProps, void> {
+class CustomRenderer1 extends Renderer<RendererProps, any> {
   render() {
     return (<h1>test</h1>);
   }
 }
 
-class CustomRenderer2 extends Renderer<RendererProps, void> {
+class CustomRenderer2 extends Renderer<RendererProps, any> {
   render() {
     return (<h2>test</h2>);
   }
 }
 
-class CustomRenderer3 extends Renderer<RendererProps, void> {
+class CustomRenderer3 extends Renderer<RendererProps, any> {
   render() {
     return (<h3>test</h3>);
   }
@@ -91,10 +90,10 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
   store.dispatch(registerRenderer(tester3, CustomRenderer3));
   store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
   const tree = renderIntoDocument(
-    <Provider store={store}>
-      <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema} />
-    </Provider>
-  );
+  <Provider store={store}>
+    <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema}/>
+  </Provider>
+);
 
   t.not(findRenderedDOMElementWithTag(tree, 'h1'), undefined);
 });

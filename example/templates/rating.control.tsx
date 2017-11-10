@@ -1,6 +1,6 @@
 import { JSX } from '../../src/renderers/JSX';
 import { RankedTester, rankWith, refEndsWith } from '../../src/core/testers';
-import { Control, ControlProps } from '../../src/renderers/controls/Control';
+import { Control, ControlProps, ControlState } from '../../src/renderers/controls/Control';
 import { Rating } from './Rating';
 
 /**
@@ -9,7 +9,7 @@ import { Rating } from './Rating';
  */
 export const ratingControlTester: RankedTester = rankWith(3, refEndsWith('rating'));
 
-export class RatingControl extends Control<ControlProps, void> {
+export class RatingControl extends Control<ControlProps, ControlState> {
 
   /**
    * @inheritDoc
@@ -21,6 +21,6 @@ export class RatingControl extends Control<ControlProps, void> {
   }
 
   private onClick(ev) {
-    this.updateData(ev.value);
+    this.handleChange(ev.value);
   }
 }

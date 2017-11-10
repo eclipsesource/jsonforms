@@ -1,6 +1,7 @@
 import { JSX } from '../../src/renderers/JSX';
 import * as _ from 'lodash';
-import Component from 'inferno-component';
+import { Component } from '../../src/common/binding';
+
 
 export interface RatingState {
   rating: number;

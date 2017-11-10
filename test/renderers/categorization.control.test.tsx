@@ -5,14 +5,15 @@ import CategorizationRenderer, {
   categorizationTester
 } from '../../src/renderers/additional/categorization-renderer';
 import { JsonForms } from '../../src/core';
+import { initJsonFormsStore } from '../helpers/setup';
+import { JsonSchema } from '../../src/models/jsonSchema';
 import {
+  click,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { initJsonFormsStore } from '../helpers/setup';
-import { Provider } from 'inferno-redux';
-import { JsonSchema } from '../../src/models/jsonSchema';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -345,12 +346,7 @@ test('render on click', t => {
   const liB = ul.children[1] as HTMLLIElement;
   const liC = ul.children[2] as HTMLLIElement;
   const liD = ul.children[3] as HTMLLIElement;
-  // detail
   const detail = fieldSet.children[1] as HTMLDivElement;
-  const evt = new Event('click', {
-    'bubbles': true,
-    'cancelable': true
-  });
 
   t.is(fieldSet.className, 'jsf-categorization');
   t.is(fieldSet.childNodes.length, 2);
@@ -359,17 +355,17 @@ test('render on click', t => {
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 1);
-  liB.dispatchEvent(evt);
+  click(liB);
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 2);
 
-  liC.dispatchEvent(evt);
+  click(liC);
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 0);
 
-  liD.dispatchEvent(evt);
+  click(liD);
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 0);
