@@ -9,7 +9,7 @@ import { connect, Event } from '../../common/binding';
 export class NumberControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const { data, classNames, id, visible, enabled, errors, label, uischema } = this.props;
 
     return (
       <div className={classNames.wrapper}>
@@ -26,6 +26,7 @@ export class NumberControl extends Control<ControlProps, ControlState> {
                id={id}
                hidden={!visible}
                disabled={!enabled}
+               autoFocus={uischema.options && uischema.options.focus}
         />
       </div>
     );

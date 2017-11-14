@@ -4,8 +4,9 @@ import IntegerControl, {
   integerControlTester
 } from '../../src/renderers/controls/integer.control';
 import { JsonForms } from '../../src/core';
+import { JsonSchema } from '../../src/models/jsonSchema';
 import { initJsonFormsStore } from '../helpers/setup';
-import { ControlElement } from '../../src/models/uischema';
+import { ControlElement, HorizontalLayout } from '../../src/models/uischema';
 import { update, validate } from '../../src/actions';
 import { getData } from '../../src/reducers/index';
 import {
@@ -15,6 +16,7 @@ import {
   renderIntoDocument
 } from '../helpers/test';
 import { Provider } from '../../src/common/binding';
+import { HorizontalLayoutRenderer } from '../../src/renderers/layouts/horizontal.layout';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -45,6 +47,123 @@ test.beforeEach(t => {
       $ref: '#/properties/foo',
     },
   };
+});
+
+test('autofocus on first element', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            firstIntegerField: { type: 'integer', minimum: 5 },
+            secondIntegerField: { type: 'integer', minimum: 5 }
+        }
+    };
+    const firstControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/firstIntegerField'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const secondControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/secondIntegerField'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const uischema: HorizontalLayout = {
+        type: 'HorizontalLayout',
+        elements: [
+            firstControlElement,
+            secondControlElement
+        ]
+    };
+    const data = {
+        'firstIntegerField': 10,
+        'secondIntegerField': 12
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    renderIntoDocument(
+        <Provider store={store}>
+            <HorizontalLayoutRenderer schema={schema}
+                                      uischema={uischema}
+            />
+        </Provider>
+    );
+    const activeElement = document.activeElement.getElementsByTagName('input')[0].id;
+    t.is(activeElement, '#/properties/firstIntegerField');
+    t.not(activeElement, '#/properties/secondIntegerField');
+});
+
+test('autofocus active', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <IntegerControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.true(input.autofocus);
+});
+
+test('autofocus inactive', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        },
+        options: {
+            focus: false
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <IntegerControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.false(input.autofocus);
+});
+
+test('autofocus inactive by default', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <IntegerControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.false(input.autofocus);
 });
 
 test('tester', t => {
