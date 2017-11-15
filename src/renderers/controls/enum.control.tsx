@@ -24,8 +24,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
 
   render() {
     const  { uischema, schema, classNames, id, label,
-      visible, enabled, data, path, errors, dispatch } = this.props;
-
+      visible, enabled, data, path, errors, dispatch, required } = this.props;
     const isValid = errors.length === 0;
     const options = resolveSchema(
       schema,
@@ -36,7 +35,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {label}
+            {required && !this.state.value ? label + '*' : label}
         </label>
         <select
           className={classNames.input}

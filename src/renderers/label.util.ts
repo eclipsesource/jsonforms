@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, ILabelObject } from '../models/uischema';
-import { resolveSchema } from '../path.util';
 
 class LabelObject implements ILabelObject {
     public text: string;
@@ -47,17 +46,6 @@ const getLabelObject = (withLabel: ControlElement): ILabelObject => {
         return new LabelObject(derivedLabel, true);
     }
 };
-const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
-    const pathSegments = schemaPath.split('/');
-    const lastSegment = pathSegments[pathSegments.length - 1];
-    const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
-    const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
-    const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
-
-    return nextHigherSchema !== undefined
-      && nextHigherSchema.required !== undefined
-      && nextHigherSchema.required.indexOf(lastSegment) !== -1;
-};
 
 /**
  * Return a label object based on the given JSON schema and control element.
@@ -67,10 +55,6 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
  */
 export const getElementLabelObject =
   (schema: JsonSchema, controlElement: ControlElement): ILabelObject => {
-  const labelObject = getLabelObject(controlElement);
-  if (controlElement.scope !== undefined && isRequired(schema, controlElement.scope.$ref)) {
-    labelObject.text += '*';
-  }
 
-  return labelObject;
+  return getLabelObject(controlElement);
 };

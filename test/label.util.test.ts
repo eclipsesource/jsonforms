@@ -42,7 +42,7 @@ test('control relative required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'Foo*');
+    t.is(labelObject.text, 'Foo');
 });
 
 test('control without label string', t => {
@@ -81,7 +81,7 @@ test('control without label string , required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'Foo*');
+    t.is(labelObject.text, 'Foo');
 });
 
 test('control without label string, camel split', t => {
@@ -122,7 +122,7 @@ test('control without label string, camel split and required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'Baz Bar Foo*');
+    t.is(labelObject.text, 'Baz Bar Foo');
 });
 test('control with label string', t => {
     const schema: JsonSchema = {
@@ -163,7 +163,7 @@ test('control with label string, required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'bar*');
+    t.is(labelObject.text, 'bar');
 });
 
 test('control with label boolean', t => {
@@ -206,7 +206,7 @@ test('control with label boolean, required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, false);
-    t.is(labelObject.text, 'Foo*');
+    t.is(labelObject.text, 'Foo');
 });
 
 test('control with label object, empty', t => {
@@ -249,7 +249,7 @@ test('control with label object, empty and required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'Foo*');
+    t.is(labelObject.text, 'Foo');
 });
 
 test('control with label object, text-only', t => {
@@ -296,7 +296,7 @@ test('control with label object, text-only and required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'mega bar*');
+    t.is(labelObject.text, 'mega bar');
 });
 
 test('control with label object, visible-only', t => {
@@ -341,7 +341,7 @@ test('control with label object, visible-only and required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, false);
-    t.is(labelObject.text, 'Foo*');
+    t.is(labelObject.text, 'Foo');
 });
 
 test('control with label object, full', t => {
@@ -389,5 +389,5 @@ test('control with label object, full and required', t => {
     };
     const labelObject = getElementLabelObject(schema, controlElement);
     t.is(labelObject.show, true);
-    t.is(labelObject.text, 'mega bar*');
+    t.is(labelObject.text, 'mega bar');
 });

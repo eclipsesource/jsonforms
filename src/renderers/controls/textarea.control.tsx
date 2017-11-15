@@ -20,14 +20,15 @@ export const textAreaControlTester: RankedTester = rankWith(2, and(
 export class TextAreaControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { classNames, id, visible, enabled, errors, label, path, dispatch, uischema } = this.props;
+    const { classNames, id, visible, enabled, errors, label, path, dispatch,
+      uischema, required } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {label}
+          {required && !this.state.value ? label + '*' : label}
         </label>
         <textarea
           value={this.state.value}

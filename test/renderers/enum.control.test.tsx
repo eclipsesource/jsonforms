@@ -6,6 +6,7 @@ import EnumControl, { enumControlTester } from '../../src/renderers/controls/enu
 import { JsonForms } from '../../src/core';
 import { getData } from '../../src/reducers/index';
 import { update, validate } from '../../src/actions';
+import { JsonSchema } from '../../src/models/jsonSchema';
 import {
   change,
   findRenderedDOMElementWithClass,
@@ -462,4 +463,107 @@ test('reset validation message', t => {
   store.dispatch(update('foo', () => 'a'));
   store.dispatch(validate());
   t.is(validation.textContent, '');
+});
+
+test('required field no warning', t => {
+    const schema: JsonSchema = {
+        'type': 'object',
+        'properties': {
+            'enumField': {
+                'type': 'string',
+                'enum': ['a', 'b']
+            }
+        },
+        'required': ['enumField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/enumField'
+        }
+    };
+    const data = {
+        enumField: 'a'
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <EnumControl schema={schema}
+                       uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Enum Field');
+});
+
+test('required field with warning', t => {
+    const schema: JsonSchema = {
+        'type': 'object',
+        'properties': {
+            'enumField': {
+                'type': 'string',
+                'enum': ['a', 'b']
+            }
+        },
+        'required': ['enumField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/enumField'
+        }
+    };
+
+    const store = initJsonFormsStore(
+        {},
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <EnumControl schema={schema}
+                       uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Enum Field*');
+});
+
+test('not required', t => {
+    const schema: JsonSchema = {
+        'type': 'object',
+        'properties': {
+            'enumField': {
+                'type': 'string',
+                'enum': ['a', 'b']
+            }
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/enumField'
+        }
+    };
+
+    const store = initJsonFormsStore(
+        {},
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <EnumControl schema={schema}
+                       uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Enum Field');
 });

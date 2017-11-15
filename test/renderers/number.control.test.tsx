@@ -558,3 +558,137 @@ test('reset validation message', t => {
   store.dispatch(validate());
   t.is(validation.textContent, '');
 });
+
+test('required field no warning', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            numberField: {
+                type: 'number'
+            }
+        },
+        required: ['numberField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/numberField'
+        }
+    };
+    const data = {
+        numberField: 5
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <NumberControl schema={schema}
+                         uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Number Field');
+});
+
+test('required field with warning', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            numberField: {
+                type: 'number'
+            }
+        },
+        required: ['numberField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/numberField'
+        }
+    };
+    const store = initJsonFormsStore(
+        {},
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <NumberControl schema={schema}
+                         uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Number Field*');
+});
+
+test('not required', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            numberField: {
+                type: 'number'
+            }
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/numberField'
+        }
+    };
+
+    const store = initJsonFormsStore(
+        {},
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <NumberControl schema={schema}
+                         uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Number Field');
+});
+
+test('required field with warning when number is 0', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            numberField: {
+                type: 'number'
+            }
+        },
+        required: ['numberField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/numberField'
+        }
+    };
+    const data = {
+        numberField: 0
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <NumberControl schema={schema}
+                         uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Number Field*');
+});
