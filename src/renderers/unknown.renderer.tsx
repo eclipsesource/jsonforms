@@ -1,7 +1,7 @@
 import { JSX } from './JSX';
-import { Renderer, RendererProps } from '../core/renderer';
+import { Component } from '../common/binding';
 
-export class UnknownRenderer extends Renderer<RendererProps, void> {
+export class UnknownRenderer extends Component<any, any> {
 
   render() {
     return (

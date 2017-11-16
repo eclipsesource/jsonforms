@@ -1,6 +1,5 @@
 import { JSX } from '../JSX';
 import * as _ from 'lodash';
-import { connect } from 'inferno-redux';
 import { JsonForms } from '../../core';
 import { convertToClassName, Renderer } from '../../core/renderer';
 import { and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
@@ -13,6 +12,7 @@ import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch-renderer';
 import { ControlProps } from '../controls/Control';
 import { registerStartupRenderer } from '../renderer.util';
+import { connect } from '../../common/binding';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -78,7 +78,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
     });
 
     return (
-      <div className={tableClasses}>
+      <div className={tableClasses.join(' ')}>
         <header className={headerClass}>
           <label className={labelClass}>
             {
@@ -87,7 +87,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           </label>
           <button
             className={buttonClass}
-            onclick={ () => this.addNewItem(path) }
+            onClick={ () => this.addNewItem(path) }
           >
             Add to {labelObject.text}
           </button>
@@ -99,7 +99,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
               _(resolvedSchema.properties)
                 .keys()
                 .filter(prop => resolvedSchema.properties[prop].type !== 'array')
-                .map(prop => <th>{prop}</th>)
+                .map(prop => <th key={prop}>{prop}</th>)
                 .value()
             }
           </tr>
@@ -107,18 +107,17 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           <tbody>
           {
             data ? data.map((child, index) => {
+              const childPath = compose(path, index + '');
+
               return (
-                <tr>
+                <tr key={childPath}>
                   {
                     _.chain(resolvedSchema.properties)
                       .keys()
                       .filter(prop => resolvedSchema.properties[prop].type !== 'array')
-                      .map(prop => {
-
-                        const childPath = compose(path, index + '');
-
+                      .map((prop, idx) => {
                         return (
-                          <td>
+                          <td key={compose(childPath, idx.toString())}>
                             <DispatchRenderer
                               schema={resolvedSchema}
                               uischema={createControlElement(prop)}

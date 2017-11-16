@@ -70,7 +70,7 @@ export const renderChildren = (
     return [];
   }
 
-  return elements.map(child => {
+  return elements.map((child, index) => {
     const classes = JsonForms.stylingRegistry.get(
       childType,
       elements.length
@@ -79,7 +79,7 @@ export const renderChildren = (
       .join(' ');
 
     return (
-      <div className={classes}>
+      <div className={classes} key={`${path}-${index}`}>
         <DispatchRenderer
           uischema={child}
           schema={schema}

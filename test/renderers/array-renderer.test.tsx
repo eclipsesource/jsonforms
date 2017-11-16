@@ -5,14 +5,15 @@ import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement } from '../../src/models/uischema';
 import ArrayControlRenderer, { arrayTester } from '../../src/renderers/additional/array-renderer';
 import { JsonForms } from '../../src/core';
+import { Provider } from '../../src/common/binding';
+import { update } from '../../src/actions';
+import { getData } from '../../src/reducers/index';
 import {
+  click,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
-import { update } from '../../src/actions';
-import { getData } from '../../src/reducers/index';
+} from '../helpers/test';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -97,7 +98,7 @@ test('add data via click - empty array case', t => {
     </Provider>
   );
   const button = findRenderedDOMElementWithTag(tree, 'button') as HTMLButtonElement;
-  button.click();
+  click(button);
   t.is(getData(store.getState()).test.length, 1);
 });
 
@@ -111,7 +112,7 @@ test('add data via click', t => {
     </Provider>
   );
   const button = findRenderedDOMElementWithTag(tree, 'button') as HTMLButtonElement;
-  button.click();
+  click(button);
   t.is(getData(store.getState()).test.length, 2);
 });
 

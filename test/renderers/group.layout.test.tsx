@@ -6,8 +6,8 @@ import GroupLayoutRenderer, {
   groupTester
 } from '../../src/renderers/layouts/group.layout';
 import { JsonForms } from '../../src/core';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
+import { Provider } from '../../src/common/binding';
+import {findRenderedDOMElementWithClass, renderIntoDocument} from "../helpers/test";
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

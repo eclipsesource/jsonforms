@@ -6,11 +6,8 @@ import { UISchemaElement, VerticalLayout } from '../../src/models/uischema';
 import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/renderers/layouts/vertical.layout';
-import {
-  findRenderedDOMElementWithClass,
-  renderIntoDocument
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
+import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

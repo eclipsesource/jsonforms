@@ -6,13 +6,14 @@ import BooleanControl, { booleanControlTester } from '../../src/renderers/contro
 import { JsonForms } from '../../src/core';
 import '../helpers/setup';
 import { update, validate } from '../../src/actions';
+import { getData } from '../../src/reducers/index';
 import {
+  change,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
-import { getData } from '../../src/reducers/index';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -189,16 +190,18 @@ test('update via input event', t => {
   );
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  const evt = new Event('click', {
-    'bubbles': true,
-    'cancelable': true
-  });
-  input.dispatchEvent(evt);
+  input.checked = false;
+  change(input);
+  // const evt = new Event('click', {
+  //   'bubbles': true,
+  //   'cancelable': true
+  // });
+  // input.dispatchEvent(evt);
   t.is(getData(store.getState()).foo, false);
 });
 
 test('update via action', t => {
-  const data = { 'foo': 13 };
+  const data = { 'foo': false };
   const store = initJsonFormsStore(data,  t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
@@ -285,7 +288,7 @@ test('update with null ref', t => {
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => 13));
+  store.dispatch(update(null, () => false));
   t.is(input.checked, true);
 });
 
@@ -298,7 +301,7 @@ test('update with undefined ref', t => {
       />
     </Provider>
   );
-  store.dispatch(update(undefined, () => 13));
+  store.dispatch(update(undefined, () => false));
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.checked, true);
 });
@@ -356,11 +359,11 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-    <BooleanControl schema={t.context.schema}
-  uischema={t.context.uischema}
-/>
-  </Provider>
-);
+      <BooleanControl schema={t.context.schema}
+                      uischema={t.context.uischema}
+      />
+    </Provider>
+  );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });

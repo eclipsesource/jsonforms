@@ -1,19 +1,20 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
-import { dispatchInputEvent, initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../helpers/setup';
 import { JsonForms } from '../../src/core';
 import TextAreaControl, {
   textAreaControlTester,
 } from '../../src/renderers/controls/textarea.control';
-import {
-  findRenderedDOMElementWithClass,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument,
-} from 'inferno-test-utils';
 import { ControlElement } from '../../src/models/uischema';
 import { update, validate } from '../../src/actions';
-import { Provider } from 'inferno-redux';
 import { getData } from '../../src/reducers/index';
+import {
+  change,
+  findRenderedDOMElementWithClass,
+  findRenderedDOMElementWithTag,
+  renderIntoDocument
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -123,7 +124,7 @@ test('update via input event', t => {
 
   const textarea = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLTextAreaElement;
   textarea.value = 'Bar';
-  dispatchInputEvent(textarea);
+  change(textarea);
   t.is(getData(store.getState()).name, 'Bar');
 });
 
@@ -138,7 +139,7 @@ test('update via action', t => {
   );
   const textarea = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLTextAreaElement;
   store.dispatch(update('name', () => 'Bar'));
-  t.is(textarea.value, 'Bar');
+  setTimeout(() => t.is(textarea.value, 'Bar'), 100);
 });
 
 test('update with undefined value', t => {
@@ -152,7 +153,8 @@ test('update with undefined value', t => {
   );
   const textArea = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLTextAreaElement;
   store.dispatch(update('name', () => undefined));
-  t.is(textArea.value, '');
+  // keep value
+  t.is(textArea.value, 'Foo');
 });
 
 test('update with null value', t => {
@@ -166,7 +168,7 @@ test('update with null value', t => {
   );
   const textArea = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLTextAreaElement;
   store.dispatch(update('name', () => null));
-  t.is(textArea.value, '');
+  t.is(textArea.value, 'Foo');
 });
 
 test('update with wrong ref', t => {

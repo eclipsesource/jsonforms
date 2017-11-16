@@ -15,11 +15,11 @@ import { getElementLabelObject } from '../label.util';
 import { JsonForms } from '../../core';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { update } from '../../actions';
-import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch-renderer';
 import { ControlProps } from '../controls/Control';
 import { registerStartupRenderer } from '../renderer.util';
+import { connect } from '../../common/binding';
 
 export const getStyle = (styleName: string) =>
   JsonForms.stylingRegistry.getAsClassName(styleName);
@@ -29,44 +29,40 @@ export const getStyle = (styleName: string) =>
  * @type {RankedTester}
  */
 export const arrayTester: RankedTester = rankWith(2, and(
-    uiTypeIs('Control'),
-    schemaMatches(schema =>
-        !_.isEmpty(schema)
-        && schema.type === 'array'
-        && !_.isEmpty(schema.items)
-        && !Array.isArray(schema.items) // we don't care about tuples
-    ),
-    schemaSubPathMatches('items', schema =>
-        schema.type === 'object'
-    ))
+  uiTypeIs('Control'),
+  schemaMatches(schema =>
+    !_.isEmpty(schema)
+    && schema.type === 'array'
+    && !_.isEmpty(schema.items)
+    && !Array.isArray(schema.items) // we don't care about tuples
+  ),
+  schemaSubPathMatches('items', schema =>
+    schema.type === 'object'
+  ))
 );
 
-export class ArrayControlRenderer extends Renderer<ControlProps, void> {
-
-  addNewItem(path: string) {
-    const element = {};
-    this.props.dispatch(
-      update(
-        path,
-        array => {
-          if (array === undefined || array === null) {
-            return [element];
-          }
-
-          const clone = _.clone(array);
-          clone.push(element);
-
-          return clone;
+const addNewItem = (dispatch, path: string) => {
+  const element = {};
+  dispatch(
+    update(
+      path,
+      array => {
+        if (array === undefined || array === null) {
+          return [element];
         }
-      )
-    );
-  }
 
-  /**
-   * @inheritDoc
-   */
-  render() {
-    const { schema, uischema, data, path } = this.props;
+        const clone = _.clone(array);
+        clone.push(element);
+
+        return clone;
+      }
+    )
+  );
+};
+
+export const ArrayControlRenderer  =
+  ({  schema, uischema, data, path, dispatch }: ControlProps) => {
+
     const controlElement = uischema as ControlElement;
     const label = getElementLabelObject(schema, controlElement);
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
@@ -79,7 +75,7 @@ export class ArrayControlRenderer extends Renderer<ControlProps, void> {
           <legend>
             <button
               className={getStyle('array.button')}
-              onclick={() => this.addNewItem(path)}
+              onClick={() => addNewItem(dispatch, path)}
             >
               +
             </button>
@@ -99,6 +95,7 @@ export class ArrayControlRenderer extends Renderer<ControlProps, void> {
                     schema={resolvedSchema}
                     uischema={generatedUi}
                     path={childPath}
+                    key={childPath}
                   >
                   </DispatchRenderer>
                 );
@@ -108,8 +105,7 @@ export class ArrayControlRenderer extends Renderer<ControlProps, void> {
         </fieldset>
       </div>
     );
-  }
-}
+  };
 
 const mapStateToProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);

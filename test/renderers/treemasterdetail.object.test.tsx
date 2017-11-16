@@ -5,11 +5,12 @@ import { MasterDetailLayout } from '../../src/models/uischema';
 import TreeMasterDetail from '../../src/renderers/additional/tree-renderer';
 import { JsonForms } from '../../src/core';
 import {
+  click,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.beforeEach(t => {
   t.context.data = {};
@@ -67,10 +68,10 @@ test('render object', t => {
   const spanLILabel = spanLI.children[0];
   const spanLIDelete = spanLI.children[1];
   const detail = findRenderedDOMElementWithClass(tree, 'jsf-treeMasterDetail-detail');
-  const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
-  const dialogLabel = dialog.children[0] as HTMLLabelElement;
-  const dialogContent = dialog.children[1] as HTMLDivElement;
-  const dialogClose = dialog.children[2] as HTMLButtonElement;
+  // const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
+  // const dialogLabel = dialog.children[0] as HTMLLabelElement;
+  // const dialogContent = dialog.children[1] as HTMLDivElement;
+  // const dialogClose = dialog.children[2] as HTMLButtonElement;
 
   t.is(label.textContent, 'FooBar');
   t.is(master.children.length, 1);
@@ -94,13 +95,13 @@ test('render object', t => {
   t.is(spanLIDelete.className, 'remove');
   t.is(spanLIDelete.textContent, '\u274C');
   t.is(detail.children.length, 1);
-  t.is(dialog.children.length, 3);
-  t.is(dialogLabel.tagName, 'LABEL');
-  t.is(dialogLabel.textContent, 'Select item to create');
-  t.is(dialogContent.tagName, 'DIV');
-  t.is(dialogContent.className, 'content');
-  t.is(dialogClose.tagName, 'BUTTON');
-  t.is(dialogClose.textContent, 'Close');
+  // t.is(dialog.children.length, 3);
+  // t.is(dialogLabel.tagName, 'LABEL');
+  // t.is(dialogLabel.textContent, 'Select item to create');
+  // t.is(dialogContent.tagName, 'DIV');
+  // t.is(dialogContent.className, 'content');
+  // t.is(dialogClose.tagName, 'BUTTON');
+  // t.is(dialogClose.textContent, 'Close');
 });
 
 test('render object with array', t => {
@@ -123,7 +124,9 @@ test('render object with array', t => {
       />
     </Provider>
   );
+
   const result = findRenderedDOMElementWithClass(tree, 'jsf-treeMasterDetail');
+
   const header = result.children[0] as HTMLDivElement;
   const label = header.children[0] as HTMLLabelElement;
   const rootButton = header.children[1] as HTMLButtonElement;
@@ -136,10 +139,6 @@ test('render object with array', t => {
   const spanLabel = span.children[0];
   const spanDelete = span.children[1];
   const detail = content.children[1] as HTMLDivElement;
-  const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
-  const dialogLabel = dialog.children[0] as HTMLLabelElement;
-  const dialogContent = dialog.children[1] as HTMLDivElement;
-  const dialogClose = dialog.children[2] as HTMLButtonElement;
 
   t.is(result.childNodes.length, 3);
   t.is(header.children.length, 2);
@@ -158,11 +157,4 @@ test('render object with array', t => {
   t.is(spanDelete.textContent, '\u274C');
   t.is(detail.className, 'jsf-treeMasterDetail-detail');
   t.is(detail.children.length, 1);
-  t.is(dialog.children.length, 3);
-  t.is(dialogLabel.tagName, 'LABEL');
-  t.is(dialogLabel.textContent, 'Select item to create');
-  t.is(dialogContent.tagName, 'DIV');
-  t.is(dialogContent.className, 'content');
-  t.is(dialogClose.tagName, 'BUTTON');
-  t.is(dialogClose.textContent, 'Close');
 });

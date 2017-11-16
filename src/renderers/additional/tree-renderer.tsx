@@ -1,7 +1,6 @@
 import { JSX } from '../JSX';
-import Inferno from 'inferno';
 import { JsonForms } from '../../core';
-import { isEnabled, isVisible, Renderer } from '../../core/renderer';
+import { isEnabled, isVisible } from '../../core/renderer';
 import * as _ from 'lodash';
 import { MasterDetailLayout } from '../../models/uischema';
 import { compose, resolveData, resolveSchema, toDataPathSegments } from '../../path.util';
@@ -10,46 +9,64 @@ import { and, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { ContainmentProperty } from '../../core/schema.service';
 import { update } from '../../actions';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
-import { connect } from 'inferno-redux';
 import { getData } from '../../reducers/index';
 import DispatchRenderer from '../dispatch-renderer';
-import { ControlProps } from '../controls/Control';
+import { Control, ControlProps, ControlState } from '../controls/Control';
 import { registerStartupRenderer } from '../renderer.util';
+import { connect, Event } from '../../common/binding';
 
 /**
  * Default tester for a master-detail layout.
  * @type {RankedTester}
  */
 export const treeMasterDetailTester: RankedTester =
-    rankWith(
-        2,
-        and(
-            uiTypeIs('MasterDetailLayout'),
-            uischema => {
-              const control = uischema as MasterDetailLayout;
-              if (control.scope === undefined || control.scope === null) {
-                return false;
-              }
+  rankWith(
+    2,
+    and(
+      uiTypeIs('MasterDetailLayout'),
+      uischema => {
+        const control = uischema as MasterDetailLayout;
+        if (control.scope === undefined || control.scope === null) {
+          return false;
+        }
 
-              return !(control.scope.$ref === undefined || control.scope.$ref === null);
-            }
-        ));
+        return !(control.scope.$ref === undefined || control.scope.$ref === null);
+      }
+    ));
 
 const isNotTuple = (schema: JsonSchema) => !Array.isArray(schema.items);
 
-export interface TreeMasterDetailState {
+export interface TreeMasterDetailState extends ControlState {
   selected: {
     schema: JsonSchema,
     data: any,
     path: string
   };
+  dialog: {
+    open: boolean,
+    schema: JsonSchema,
+    path: string
+  };
 }
 
-export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailState> {
+export interface TreeProps extends ControlProps {
+  resolvedSchema: any;
+  rootData: any;
+}
+
+export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
 
   componentWillMount() {
     const { uischema, data, resolvedSchema } = this.props;
     const controlElement = uischema as MasterDetailLayout;
+
+    this.setState({
+      dialog: {
+        open: false,
+        schema: undefined,
+        path: undefined
+      }
+    });
 
     if (_.isArray(data)) {
       const dataPathSegments = toDataPathSegments(controlElement.scope.$ref);
@@ -73,29 +90,27 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
   }
 
   render() {
-    const { uischema, resolvedSchema, visible } = this.props;
+    const { uischema, resolvedSchema, visible, dispatch } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const rootData = this.props.data;
 
+    const dialogProps = {
+      open: this.state.dialog.open
+    };
+
     return (
-      <div
-        hidden={!visible}
-        className={'jsf-treeMasterDetail'}
-      >
+      <div hidden={!visible} className={'jsf-treeMasterDetail'}>
         <div className={'jsf-treeMasterDetail-header'}>
           <label>
             {  typeof controlElement.label === 'string' ? controlElement.label : '' }
           </label>
           {
             Array.isArray(rootData) &&
-              <button
-                className='jsf-treeMasterDetail-add'
-                onClick={() => {
-                  this.addToRoot();
-                }}
-              >
-                Add to root
-              </button>
+            <button className='jsf-treeMasterDetail-add'
+                    onClick={() => this.addToRoot() }
+            >
+              Add to root
+            </button>
           }
         </div>
         <div className='jsf-treeMasterDetail-content'>
@@ -114,84 +129,70 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
           </div>
         </div>
         <div>
-          <dialog id='dialog'>
-            <label>
-              Select item to create
-            </label>
-            <div id='dialog-content-container' className='content'/>
-            <button
-              className='jsf-treeMasterDetail-dialog-close'
-              onClick={() => {
-                this.closeDialog();
-              }}>
-              Close
-            </button>
-          </dialog>
+          {
+            this.state.dialog.open &&
+            <dialog id='dialog' {...dialogProps}>
+              <label>
+                Select item to create
+              </label>
+              <div className='dialog-content content'>
+                {
+                  JsonForms.schemaService.getContainmentProperties(this.state.dialog.schema)
+                    .map(prop =>
+                      <button
+                        className={JsonForms.stylingRegistry.getAsClassName('button')}
+                        onClick={() => {
+                          const newData = _.keys(prop.schema.properties).reduce(
+                            (d, key) => {
+                              if (prop.schema.properties[key].default) {
+                                d[key] = prop.schema.properties[key].default;
+                              }
+
+                              return d;
+                            },
+                            {}
+                          );
+                          dispatch(
+                            update(
+                              compose(this.state.dialog.path, prop.property),
+                              array => {
+                                if (_.isEmpty(array)) {
+                                  return [newData];
+                                }
+                                array.push(newData);
+
+                                return array;
+                              }
+                            )
+                          );
+                          this.closeDialog();
+                        }}
+                      >
+                        {prop.label}
+                      </button>
+                    )
+                }
+              </div>
+              <button
+                className='jsf-treeMasterDetail-dialog-close'
+                onClick={() => this.closeDialog()}>
+                Close
+              </button>
+            </dialog>
+          }
         </div>
       </div>
     );
   }
 
-  // create dialog on demand
-  // open dialog
-  openDialog(ev: Event, schema: JsonSchema, parentPath: string) {
-    const { dispatch } = this.props;
-    ev.stopPropagation();
-
-    const dialog: any = document.getElementById('dialog');
-    const vnodeContent =
-      <div className='dialog-content'>
-        {
-          JsonForms.schemaService.getContainmentProperties(schema)
-            .map(prop =>
-              <button
-                className={JsonForms.stylingRegistry.get('button')}
-                onClick={() => {
-                  const newData = _.keys(prop.schema.properties).reduce(
-                    (d, key) => {
-                      if (prop.schema.properties[key].default) {
-                        d[key] = prop.schema.properties[key].default;
-                      }
-
-                      return d;
-                    },
-                    {}
-                  );
-                  // prop.addToData(data)(newData);
-                  dispatch(
-                    update(
-                      compose(parentPath, prop.property),
-                      array => {
-                        if (_.isEmpty(array)) {
-                          return [newData];
-                        }
-                        array.push(newData);
-
-                        return array;
-                      }
-                    )
-                  );
-                  dialog.close();
-                }}
-              >
-                {prop.label}
-              </button>
-            )
-        }
-      </div>;
-
-      // TODO
-    Inferno.render(
-      vnodeContent,
-      document.getElementById('dialog-content-container')
-    );
-
-    dialog.showModal();
-  }
-
   private closeDialog() {
-    const dialog: any = document.getElementById('dialog');
-    dialog.close();
+    this.setState({
+      dialog: {
+        open: false,
+        schema: undefined,
+        path: undefined
+      }
+    });
   }
 
   private addToRoot() {
@@ -216,13 +217,11 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
     // TODO: so far no drag and drop support
     if (schema.items !== undefined) {
       return (
-        <ul>
-          { this.expandRootArray(schema.items as JsonSchema) }
-        </ul>
+        <ul>{ this.expandRootArray(schema.items as JsonSchema) }</ul>
       );
-    } else {
-      return (<ul>{ this.expandObject(this.props.path, schema, null) }</ul>);
     }
+
+    return (<ul>{ this.expandObject(this.props.path, schema, null) }</ul>);
   }
 
   /**
@@ -230,7 +229,6 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
    * It is assumed that the roor elements do not support drag and drop.
    * Based on this, a delete function is created for every element.
    *
-   * @param data the array to expand
    * @param schema the {@link JsonSchema} defining the elements' type
    */
   private expandRootArray(schema: JsonSchema) {
@@ -332,51 +330,55 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
     const data = resolveData(rootData, scopedPath);
     const liClasses = this.state.selected === data ? 'selected' : '';
 
-    const vnode = (<li className={liClasses}>
-      <div>
-        {
-          _.has(uischema.options, 'imageProvider') ?
-            <span className={`icon ${uischema.options.imageProvider[schema.id]}`} /> : ''
-        }
+    // TODO: key should be set in caller
+    const vnode = (
+      <li className={liClasses} key={scopedPath}>
+        <div>
+          {
+            _.has(uischema.options, 'imageProvider') ?
+              <span className={`icon ${uischema.options.imageProvider[schema.id]}`} /> : ''
+          }
 
-        <span
-          className='label'
-          onClick={ev => {
-            this.setState({
-              selected: {
-                schema,
-                data,
-                path: scopedPath
-              }
-            });
-          }
-          }
-        >
+          <span
+            className='label'
+            onClick={ev =>
+              this.setState({
+                selected: {
+                  schema,
+                  data,
+                  path: scopedPath
+                }
+              })
+            }
+          >
           <span>
             {this.getNamingFunction(schema)(data)}
           </span>
-          {
-            JsonForms.schemaService.hasContainmentProperties(schema) ?
-              (<span
-                className='add'
-                onClick={ev => {
-                  this.openDialog(ev, schema, scopedPath);
-                }}
-              >
+            {
+              JsonForms.schemaService.hasContainmentProperties(schema) ?
+                (<span
+                  className='add'
+                  onClick={(ev: Event<HTMLSpanElement>) =>
+                    this.setState({
+                      dialog: {
+                        open: true,
+                        schema,
+                        path: scopedPath
+                      }
+                    })
+                  }
+                >
                 {'\u2795'}
               </span>) : ''
-          }
-          {
-            deleteFunction !== null &&
-              <span
-                className='remove'
-                onClick ={() => {
-                  deleteFunction();
-                }}
-              >{'\u274C'}</span>
-          }
+            }
+            {
+              deleteFunction !== null &&
+              <span className='remove' onClick ={() => deleteFunction() }>
+                {'\u274C'}
+              </span>
+            }
         </span>
-      </div>
+        </div>
         {
           // render contained children of this element
           JsonForms.schemaService.getContainmentProperties(schema)
@@ -391,8 +393,7 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
       const id = p.schema.id;
       if (id === undefined || id === null) {
         // TODO proper logging
-        console.warn('The property\'s schema with label \'' + p.label
-                     + '\' has no id. No Drag & Drop is possible.');
+        console.warn(`The property's schema with label '${p.label}' has no id. DnD not possible.`);
 
         return;
       }
@@ -411,8 +412,7 @@ export class TreeMasterDetail extends Renderer<ControlProps, TreeMasterDetailSta
 
     if (sid === undefined || sid === null) {
       // TODO proper logging
-      console.warn('The property\'s schema with label \'' + prop.label
-        + '\' has no id. No Drag & Drop is possible.');
+      console.warn(`The property's schema with label '${prop.label}' has no id. DnD not possible.`);
     }
 
     let propertyData = prop.getData(data) as Object[];

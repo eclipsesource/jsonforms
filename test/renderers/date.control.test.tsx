@@ -2,15 +2,16 @@ import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import DateControl, { dateControlTester } from '../../src/renderers/controls/date.control';
 import { JsonForms } from '../../src/core';
-import { dispatchInputEvent, initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../helpers/setup';
+import { getData } from '../../src/reducers/index';
+import { update, validate } from '../../src/actions';
 import {
+  change,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
-import { getData } from '../../src/reducers/index';
-import { update, validate } from '../../src/actions';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -173,8 +174,8 @@ test('update via event', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = '1961-04-12';
-  dispatchInputEvent(input);
-  t.is(getData(store.getState()).foo, '1961-04-12');
+  change(input);
+  setTimeout(() => t.is(getData(store.getState()).foo, '1961-04-12'), 100);
 });
 
 test('update via action', t => {
@@ -187,13 +188,8 @@ test('update via action', t => {
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      'foo',
-      () => '1961-04-12'
-    )
-  );
-  t.is(input.value, '1961-04-12');
+  store.dispatch(update('foo', () => '1961-04-12'));
+  setTimeout(() => t.is(input.value, '1961-04-12'), 100);
 });
 
 test.failing('update with null value', t => {
@@ -207,7 +203,7 @@ test.failing('update with null value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = '';
-  dispatchInputEvent(input);
+  change(input);
   // FIXME: how does reset of date value look like?
   t.is(getData(store.getState()).foo, '1970-01-01');
 });
@@ -223,7 +219,7 @@ test.failing('update with undefined value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = undefined;
-  dispatchInputEvent(input);
+  change(input);
   t.is(getData(store.getState()).foo, '1970-01-01');
 });
 
@@ -238,7 +234,7 @@ test('update with wrong ref', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = undefined;
-  dispatchInputEvent(input);
+  change(input);
   store.dispatch(
     update(
       'bar',
@@ -258,7 +254,7 @@ test('update with null ref', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = undefined;
-  dispatchInputEvent(input);
+  change(input);
   store.dispatch(
     update(
       null,
@@ -278,7 +274,7 @@ test('update with undefined ref', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = undefined;
-  dispatchInputEvent(input);
+  change(input);
   store.dispatch(
     update(
       undefined,

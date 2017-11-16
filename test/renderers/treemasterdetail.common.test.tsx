@@ -6,14 +6,14 @@ import TreeMasterDetail, {
   treeMasterDetailTester,
 } from '../../src/renderers/additional/tree-renderer';
 import { JsonForms } from '../../src/core';
+import { update } from '../../src/actions';
 import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument,
-  scryRenderedDOMElementsWithClass,
-} from 'inferno-test-utils';
-import { update } from '../../src/actions';
-import { Provider } from 'inferno-redux';
+  scryRenderedDOMElementsWithClass
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.beforeEach(t => {
   t.context.data = { name: 'Foo', children: [{name: 'Bar'}] };

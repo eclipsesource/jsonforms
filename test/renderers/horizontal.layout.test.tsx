@@ -6,8 +6,8 @@ import { JsonForms } from '../../src/core';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/renderers/layouts/horizontal.layout';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
+import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

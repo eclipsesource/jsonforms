@@ -1,25 +1,27 @@
 import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
-import { connect } from 'inferno-redux';
-import { Control, ControlProps } from '../controls/Control';
+import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
 import { textControlTester } from '../controls/text.control';
+import { connect, Event } from '../../common/binding';
 
-export class TextControl extends Control<ControlProps, void> {
+export class MaterializedTextControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const { classNames, id, visible, enabled, errors, label } = this.props;
 
     return (
       <div className={classNames.wrapper}>
-        <input value={data}
-               onInput={ev => this.updateData(ev.target.value)}
+        <input value={this.state.value}
+               onChange={(ev: Event<HTMLInputElement>) =>
+                 this.handleChange(ev.currentTarget.value)
+               }
                className={classNames.input}
                id={id}
                hidden={!visible}
                disabled={!enabled}
         />
-        <label for={id} className={classNames.label} data-error={errors}>
+        <label htmlFor={id} className={classNames.label} data-error={errors}>
           {label}
         </label>
       </div>
@@ -29,5 +31,5 @@ export class TextControl extends Control<ControlProps, void> {
 
 export default registerStartupRenderer(
   withIncreasedRank(1, textControlTester),
-  connect(mapStateToControlProps)(TextControl)
+  connect(mapStateToControlProps)(MaterializedTextControl)
 );

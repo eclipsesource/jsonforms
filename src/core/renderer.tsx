@@ -1,9 +1,8 @@
 import * as _ from 'lodash';
-import Component from 'inferno-component';
+import { Component } from '../common/binding';
 import { JsonSchema } from '../models/jsonSchema';
 import { LeafCondition, RuleEffect, Scopable, UISchemaElement } from '../models/uischema';
 import { getValuePropertyPair } from '../path.util';
-import { JsonFormsStore } from '../json-forms';
 import { getData } from '../reducers/index';
 
 export const convertToClassName = (value: string): string => {
@@ -32,11 +31,33 @@ export const getValue = (data: any, controlElement: Scopable, prefix = ''): any 
   return pair.instance[pair.property];
 };
 
-// TODO
 export interface RendererProps {
+  /**
+   * The UI schema to be rendered.
+   */
   uischema: UISchemaElement;
-  store: JsonFormsStore;
+
+  /**
+   * The JSON schema that describes the data.
+   */
   schema: JsonSchema;
+
+  /**
+   * Whether the rendered element should be visible.
+   */
+  visible?: boolean;
+
+  /**
+   * Whether the rendered element should be enabled.
+   */
+  enabled?: boolean;
+
+  /**
+   * Optional instance path. Necessary when the actual data
+   * path can not be inferred via the UI schema element as
+   * it is the case with nested controls.
+   */
+  path?: string;
 }
 
 export interface RendererState {
@@ -44,6 +65,10 @@ export interface RendererState {
 }
 
 export class Renderer<P extends RendererProps, S> extends Component<P, S> {
+
+  constructor(props: P) {
+    super(props);
+  }
 
 }
 

@@ -5,15 +5,16 @@ import test from 'ava';
 import { MasterDetailLayout } from '../../src/models/uischema';
 import TreeMasterDetail from '../../src/renderers/additional/tree-renderer';
 import { JsonForms } from '../../src/core';
+import { getData } from '../../src/reducers/index';
 import {
+  click,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithClass,
   scryRenderedDOMElementsWithTag
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
-import { getData } from '../../src/reducers/index';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.beforeEach(t => {
   t.context.data = {};
@@ -54,20 +55,21 @@ test.beforeEach(t => {
 
 const openDialog = (tree): void => {
   const openDialogSpan = findRenderedDOMElementWithClass(tree, 'add') as HTMLSpanElement;
-  openDialogSpan.click();
+  click(openDialogSpan);
 };
 
 const closeDialog = (tree): void => {
   const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
   const dialogCloseButton = dialog.lastElementChild as HTMLButtonElement;
-  dialogCloseButton.click();
+  click(dialogCloseButton);
 };
 
 const clickFirstDialogButton = (tree): void => {
   const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
-  const dialogContent = _.head(dialog.getElementsByClassName('dialog-content'));
+  const dialogContents = dialog.getElementsByClassName('dialog-content');
+  const dialogContent = _.head(dialogContents);
   const button = dialogContent.firstElementChild as HTMLButtonElement;
-  button.click();
+  click(button);
 };
 
 test('render', t => {
@@ -129,11 +131,6 @@ test('render', t => {
   const spanLiLabel = spanLi.children[0];
   const spanLiRemove = spanLi.children[1];
 
-  const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
-  const dialogLabel = dialog.children[0] as HTMLLabelElement;
-  const dialogContent = dialog.children[1] as HTMLDivElement;
-  const dialogClose = dialog.children[2] as HTMLButtonElement;
-
   t.is(result.childNodes.length, 3);
   t.is(header.children.length, 2);
   t.is(label.textContent, 'FooBar');
@@ -165,13 +162,6 @@ test('render', t => {
   t.is(spanLiRemove.textContent, '\u274C');
   t.is(detail.className, 'jsf-treeMasterDetail-detail');
   t.is(detail.children.length, 1);
-  t.is(dialog.children.length, 3);
-  t.is(dialogLabel.tagName, 'LABEL');
-  t.is(dialogLabel.textContent, 'Select item to create');
-  t.is(dialogContent.tagName, 'DIV');
-  t.is(dialogContent.className, 'content');
-  t.is(dialogClose.tagName, 'BUTTON');
-  t.is(dialogClose.textContent, 'Close');
 });
 
 test('select', t => {
@@ -206,7 +196,7 @@ test('add to root', t => {
 
   const rootButton = _.head(scryRenderedDOMElementsWithTag(tree, 'button')) as HTMLButtonElement;
   const ul = _.head(scryRenderedDOMElementsWithTag(tree, 'ul'));
-  rootButton.click();
+  click(rootButton);
   const liNew = ul.children[1];
   const divNew = liNew.firstElementChild;
   const spanNew = divNew.firstElementChild as HTMLSpanElement;
@@ -275,7 +265,7 @@ test('remove from root', t => {
 
   const ul = findRenderedDOMElementWithTag(tree, 'ul') as HTMLUListElement;
   const spanRemove = findRenderedDOMElementWithClass(tree, 'remove') as HTMLSpanElement;
-  spanRemove.click();
+  click(spanRemove);
 
   t.is(ul.children.length, 0);
   t.is(getData(store.getState()).length, 0);
@@ -293,7 +283,7 @@ test('remove from nested data', t => {
   );
 
   const spanRemove = _.last(scryRenderedDOMElementsWithClass(tree, 'remove')) as HTMLSpanElement;
-  spanRemove.click();
+  click(spanRemove);
   const ul = _.head(scryRenderedDOMElementsWithTag(tree, 'li'));
   const li = ul.firstElementChild;
 
@@ -362,7 +352,7 @@ test('add and remove child', t => {
   openDialog(tree);
   clickFirstDialogButton(tree);
   const removeButton = _.last(scryRenderedDOMElementsWithClass(tree, 'remove')) as HTMLSpanElement;
-  removeButton.click();
+  click(removeButton);
 
   t.is(getData(store.getState())[0].children.length, 0);
 });

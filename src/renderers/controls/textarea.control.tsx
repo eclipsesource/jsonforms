@@ -1,12 +1,12 @@
 import { JSX } from '../JSX';
 import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
-import { connect } from 'inferno-redux';
-import { Control, ControlProps } from './Control';
+import { Control, ControlProps, ControlState } from './Control';
 import {
   formatErrorMessage,
   mapStateToControlProps,
   registerStartupRenderer
 } from '../renderer.util';
+import { connect, Event } from '../../common/binding';
 
 /**
  * Tester for a multi-line string control.
@@ -17,22 +17,23 @@ export const textAreaControlTester: RankedTester = rankWith(2, and(
     optionIs('multi', true)
   ));
 
-export class TextAreaControl extends Control<ControlProps, void> {
+export class TextAreaControl extends Control<ControlProps, ControlState> {
 
   render() {
-
-    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const { classNames, id, visible, enabled, errors, label, path, dispatch } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
       <div className={classNames.wrapper}>
-        <label for={id} className={classNames.label}>
+        <label htmlFor={id} className={classNames.label}>
           {label}
         </label>
         <textarea
-          value={data}
-          onInput={ev => this.updateData(ev.target.value)}
+          value={this.state.value}
+          onChange={(ev: Event<HTMLTextAreaElement>) =>
+            this.handleChange(ev.currentTarget.value)
+          }
           className={classNames.input}
           id={id}
           hidden={!visible}
@@ -43,13 +44,6 @@ export class TextAreaControl extends Control<ControlProps, void> {
         </div>
       </div>
     );
-  }
-
-  /**
-   * @inheritDoc
-   */
-  protected toInput(value: any): any {
-    return (value === undefined || value === null) ? '' : value;
   }
 }
 

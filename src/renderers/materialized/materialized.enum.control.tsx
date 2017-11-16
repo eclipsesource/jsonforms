@@ -2,14 +2,13 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
-import { connect } from 'inferno-redux';
-import { update } from '../../actions';
-import { Control, ControlProps } from '../controls/Control';
+import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
 import { enumControlTester } from '../controls/enum.control';
+import { connect } from '../../common/binding';
 declare let $;
 
-export class EnumControl extends Control<ControlProps, void> {
+export class MaterializedEnumControl extends Control<ControlProps, ControlState> {
 
   componentDidMount() {
     $('select').material_select();
@@ -41,11 +40,11 @@ export class EnumControl extends Control<ControlProps, void> {
         <select
           className={classNames.input}
           disabled={!enabled}
-          value={data}
-          onChange={ev => this.updateData(ev.target.value) }
+          value={this.state.value}
+          onChange={ev => this.handleChange(ev.target.value) }
         >
           {
-            [<option value='' selected={data === undefined}/>]
+            [<option value='' selected={data === undefined} key={'empty'}/>]
               .concat(
                 options.map(optionValue => {
                   return (
@@ -53,6 +52,7 @@ export class EnumControl extends Control<ControlProps, void> {
                       value={optionValue}
                       label={optionValue}
                       selected={data === optionValue}
+                      key={optionValue}
                     >
                       {optionValue}
                     </option>
@@ -61,7 +61,7 @@ export class EnumControl extends Control<ControlProps, void> {
             )
           }
         </select>
-        <label for={id} data-error={errors}>
+        <label htmlFor={id} data-error={errors}>
           {label}
         </label>
       </div>
@@ -71,5 +71,5 @@ export class EnumControl extends Control<ControlProps, void> {
 
 export default registerStartupRenderer(
   withIncreasedRank(1, enumControlTester),
-  connect(mapStateToControlProps)(EnumControl)
+  connect(mapStateToControlProps)(MaterializedEnumControl)
 );

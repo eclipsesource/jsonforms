@@ -1,17 +1,18 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
-import { dispatchInputEvent, initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../helpers/setup';
 import { ControlElement } from '../../src/models/uischema';
 import EnumControl, { enumControlTester } from '../../src/renderers/controls/enum.control';
 import { JsonForms } from '../../src/core';
+import { getData } from '../../src/reducers/index';
+import { update, validate } from '../../src/actions';
 import {
+  change,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from 'inferno-test-utils';
-import { Provider } from 'inferno-redux';
-import { getData } from '../../src/reducers/index';
-import { update, validate } from '../../src/actions';
+} from '../helpers/test';
+import { Provider } from '../../src/common/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -204,7 +205,7 @@ test('update via input event', t => {
 
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
   select.value = 'b';
-  dispatchInputEvent(select);
+  change(select);
   t.is(getData(store.getState()).foo, 'b');
 });
 
@@ -226,6 +227,7 @@ test('update via action', t => {
     )
   );
   t.is(select.value, 'b');
+  t.is(select.selectedIndex, 2);
 });
 
 test('update with undefined value', t => {
@@ -244,8 +246,8 @@ test('update with undefined value', t => {
       () => undefined
     )
   );
-  t.is(select.selectedIndex, 0);
-  t.is(select.value, '');
+  t.is(select.selectedIndex, 1);
+  t.is(select.value, 'a');
 });
 
 test('update with null value', t => {
@@ -264,8 +266,8 @@ test('update with null value', t => {
       () => null
     )
   );
-  t.is(select.selectedIndex, 0);
-  t.is(select.value, '');
+  t.is(select.selectedIndex, 1);
+  t.is(select.value, 'a');
 });
 
 test('update with wrong ref', t => {

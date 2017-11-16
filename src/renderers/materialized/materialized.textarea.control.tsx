@@ -1,24 +1,26 @@
 import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
-import { connect } from 'inferno-redux';
-import { Control, ControlProps } from '../controls/Control';
+import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
 import { textAreaControlTester } from '../controls/textarea.control';
+import { connect, Event } from '../../common/binding';
 
-export class TextAreaControl extends Control<ControlProps, void> {
+export class MaterializedTextareaControl extends Control<ControlProps, ControlState> {
 
   render() {
 
-    const { data, classNames, id, visible, enabled, errors, label } = this.props;
+    const { classNames, id, visible, enabled, errors, label } = this.props;
 
     return (
       <div className={classNames.wrapper}>
-        <label for={id} className={classNames.label} data-error={errors}>
+        <label htmlFor={id} className={classNames.label} data-error={errors}>
           {label}
         </label>
         <textarea
-          value={data}
-          onInput={ev => this.updateData(ev.target.value)}
+          value={this.state.value}
+          onChange={(ev: Event<HTMLTextAreaElement>) =>
+            this.handleChange(ev.currentTarget.value)
+          }
           className={classNames.input}
           id={id}
           hidden={!visible}
@@ -31,5 +33,5 @@ export class TextAreaControl extends Control<ControlProps, void> {
 
 export default registerStartupRenderer(
   withIncreasedRank(1, textAreaControlTester),
-  connect(mapStateToControlProps)(TextAreaControl)
+  connect(mapStateToControlProps)(MaterializedTextareaControl)
 );
