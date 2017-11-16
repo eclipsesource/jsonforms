@@ -98,6 +98,21 @@ export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema
 );
 
 /**
+ * Only applicable for Controls.
+ *
+ * This function checks whether the given UI schema is of type Control
+ * and if so, resolves the sub-schema referenced by the control and checks
+ * whether the pattern of the sub-schema matches the expected one.
+ *
+ * @param {string} expectedPattern the expected pattern of the resolved sub-schema
+ */
+export const patternIs = (expectedPattern: string): Tester => schemaMatches(schema =>
+    !_.isEmpty(schema)
+    && schema.pattern === expectedPattern
+    && schema.type === 'string'
+);
+
+/**
  * Checks whether the given UI schema has the expected type.
  *
  * @param {string} expected the expected UI schema type
