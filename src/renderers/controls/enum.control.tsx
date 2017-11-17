@@ -35,7 +35,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
 
     return (
       <div className={classNames.wrapper}>
-        <label htmlFor={id} className={classNames.label} data-error={errors}>
+        <label htmlFor={id} className={classNames.label}>
           {label}
         </label>
         <select
