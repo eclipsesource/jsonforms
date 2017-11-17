@@ -1,5 +1,5 @@
 import { JSX } from '../JSX';
-import { isControl, RankedTester, rankWith } from '../../core/testers';
+import { and, hasProperty, isControl, RankedTester, rankWith } from '../../core/testers';
 import { Control, ControlProps, ControlState } from './Control';
 import {
     formatErrorMessage,
@@ -12,7 +12,10 @@ import { connect, Event } from '../../common/binding';
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const textfieldlengthControlTester: RankedTester = rankWith(4, isControl);
+export const textfieldlengthControlTester: RankedTester = rankWith(2, and(
+    isControl,
+    hasProperty('maxlength')
+));
 
 export class TextfieldlengthControl extends Control<ControlProps, ControlState> {
 
@@ -26,7 +29,7 @@ export class TextfieldlengthControl extends Control<ControlProps, ControlState> 
                 <label htmlFor={id} className={classNames.label}>
                     {label}
                 </label>
-                <input value={this.state.value}
+                <input value={this.state.value.default}
                        onChange={
                            (ev: Event<HTMLInputElement>) =>
                                this.handleChange(ev.currentTarget.value)
@@ -35,8 +38,8 @@ export class TextfieldlengthControl extends Control<ControlProps, ControlState> 
                        id={id}
                        hidden={!visible}
                        disabled={!enabled}
-                       maxlength='10'
-                       size='10'
+                       maxlength={this.state.value.maxlength}
+                       size={this.state.value.maxlength}
                 />
                 <div className={divClassNames}>
                     {!isValid ? formatErrorMessage(errors) : ''}

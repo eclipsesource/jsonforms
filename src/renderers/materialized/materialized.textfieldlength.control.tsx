@@ -12,7 +12,7 @@ export class MaterializedTextfieldlengthControl extends Control<ControlProps, Co
 
         return (
             <div className={classNames.wrapper}>
-                <input value={this.state.value}
+                <input value={this.state.value.default}
                        onChange={(ev: Event<HTMLInputElement>) =>
                            this.handleChange(ev.currentTarget.value)
                        }
@@ -20,8 +20,8 @@ export class MaterializedTextfieldlengthControl extends Control<ControlProps, Co
                        id={id}
                        hidden={!visible}
                        disabled={!enabled}
-                       data-length='10'
-                       style='width:20px;'
+                       maxlength={this.state.value.maxlength}
+                       style={'width :' + this.state.value.maxlength * 15 + 'px;'}
                 />
                 <label htmlFor={id} className={classNames.label} data-error={errors}>
                     {label}
