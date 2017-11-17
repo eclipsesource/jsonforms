@@ -17,8 +17,6 @@ export type RankedTester = (uischema: UISchemaElement, schema: JsonSchema) => nu
 export const isControl = (uischema: any): uischema is ControlElement =>
   !_.isEmpty(uischema) && uischema.scope !== undefined;
 
-export const isScopable = (uischema: any): uischema is Scopable =>
-  !_.isEmpty(uischema) && uischema.scope !== undefined;
 
 /**
  * Only applicable for Controls.
