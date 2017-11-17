@@ -38,8 +38,7 @@ module.exports = [{
             { from: 'node_modules/bootstrap/dist/js/bootstrap.js'      },
             { from: 'node_modules/materialize-css/dist/css/materialize.css' },
             { from: 'node_modules/materialize-css/dist/js/materialize.js'  },
-            { from: 'example/icons', to: 'icons' },
-            { from: 'jsoneditor.css' }
+            { from: 'example/icons', to: 'icons' }
         ])
     ],
     module: {
