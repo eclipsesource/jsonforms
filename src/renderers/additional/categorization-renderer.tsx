@@ -50,29 +50,28 @@ class CategorizationRenderer extends Component<RendererProps, CategorizationStat
    * @inheritDoc
    */
   render() {
-    const { uischema, visible, enabled } = this.props;
+    const { uischema, visible } = this.props;
     const controlElement = uischema as Categorization;
     const categorization = uischema as Categorization;
     const classNames = JsonForms.stylingRegistry.getAsClassName('categorization');
     const masterClassNames = JsonForms.stylingRegistry.getAsClassName('categorization.master');
     const detailClassNames = JsonForms.stylingRegistry.getAsClassName('categorization.detail');
-
+    const selectedCategory = this.findCategory(controlElement);
     return (
-      <fieldset className={classNames}
+      <div className={classNames}
            hidden={visible === null || visible === undefined ? false : !visible}
-           disabled={enabled === null || enabled === undefined ? false : !enabled}
       >
         <div className={masterClassNames}>
           {
-            this.createCategorization(categorization)
+            this.createCategorization(categorization, selectedCategory)
           }
         </div>
         <div className={detailClassNames}>
           {
-            this.renderCategory(this.findCategory(controlElement))
+            this.renderCategory(selectedCategory)
           }
         </div>
-      </fieldset>
+      </div>
     );
   }
 
@@ -114,8 +113,10 @@ class CategorizationRenderer extends Component<RendererProps, CategorizationStat
       </div>
     );
   }
-
-  private createCategorization(categorization: Categorization, depth = 0) {
+  private getCategoryClassName (category: Category, selectedCategory: Category): string {
+    return selectedCategory === category ? 'selected' : '';
+  }
+  private createCategorization(categorization: Categorization, selectedCategory: Category, depth = 0) {
     return (
       <ul className={JsonForms.stylingRegistry.getAsClassName('category.subcategories')}>
         {
@@ -126,7 +127,7 @@ class CategorizationRenderer extends Component<RendererProps, CategorizationStat
                   className={JsonForms.stylingRegistry.getAsClassName('category.group')}>
                   <span>{category.label}</span>
                   {
-                    this.createCategorization(category as Categorization, depth + 1)
+                    this.createCategorization(category, selectedCategory, depth + 1)
                   }
                 </li>
               );
@@ -138,7 +139,7 @@ class CategorizationRenderer extends Component<RendererProps, CategorizationStat
                       category
                     }
                   });
-                }}
+                }} className={this.getCategoryClassName(category, selectedCategory)}
                 >
                   <span>{category.label}</span>
                 </li>
