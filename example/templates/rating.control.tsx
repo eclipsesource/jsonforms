@@ -7,7 +7,7 @@ import { Rating } from './Rating';
  * Default tester for integer controls.
  * @type {RankedTester}
  */
-export const ratingControlTester: RankedTester = rankWith(3, refEndsWith('rating'));
+export const ratingControlTester: RankedTester = rankWith(Number.MAX_VALUE, refEndsWith('rating'));
 
 export class RatingControl extends Control<ControlProps, ControlState> {
 
