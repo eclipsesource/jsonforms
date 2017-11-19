@@ -1,6 +1,6 @@
 import { JSX } from '../JSX';
 import * as _ from 'lodash';
-import { and, patternIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { and, formatIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { Control, ControlProps, ControlState } from './Control';
 import {
     formatErrorMessage,
@@ -15,7 +15,7 @@ import { connect, Event } from '../../common/binding';
  */
 export const timeControlTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
-    patternIs('^([0-1][0-9]|2[0-3]):[0-5][0-9]$')
+    formatIs('time')
 ));
 
 export class TimeControl extends Control<ControlProps, ControlState> {

@@ -33,7 +33,7 @@ test.beforeEach(t => {
     properties: {
       foo: {
         type: 'string',
-        pattern: '^([0-1][0-9]|2[0-3]):[0-5][0-9]$'
+        format: 'time'
       },
     },
   };
@@ -77,7 +77,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
               foo: { type: 'string' },
               bar: {
                 type: 'string',
-                pattern: '^([0-1][0-9]|2[0-3]):[0-5][0-9]$'
+                format: 'time'
               },
             },
           },
@@ -95,7 +95,7 @@ test('tester with correct prop type', t => {
         properties: {
           foo: {
             type: 'string',
-            pattern: '^([0-1][0-9]|2[0-3]):[0-5][0-9]$',
+            format: 'time',
           },
         },
       },
@@ -367,7 +367,7 @@ test('multiple errors', t => {
     'properties': {
       'foo': {
         'type': 'string',
-        'pattern': '^([0-1][0-9]|2[0-3]):[0-5][0-9]$',
+        'format': 'time',
         'enum': ['16:19']
       }
     }
