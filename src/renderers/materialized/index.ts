@@ -8,6 +8,7 @@ export * from './materialized.integer.control';
 export * from './materialized.number.control';
 export * from './materialized.text.control';
 export * from './materialized.textarea.control';
+export * from './materialized.properenumeration.control';
 
 export const materialize = () => {
   JsonForms.stylingRegistry.registerMany([
