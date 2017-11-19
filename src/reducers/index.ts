@@ -6,7 +6,7 @@ import { commonStateReducer, extractData, extractSchema, extractUiSchema } from 
 export const appReducer: Reducer<any> = combineReducers(
   {
     'common': commonStateReducer,
-    'validation': ,
+    'validation': validationReducer,
     'renderers': rendererReducer
   }
 );
