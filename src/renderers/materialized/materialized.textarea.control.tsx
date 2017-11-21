@@ -14,7 +14,7 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required && !this.state.value ? label + '*' : label}
+          {required ? label + '*' : label}
         </label>
         <textarea
           value={this.state.value}

@@ -28,7 +28,7 @@ export class TextAreaControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {required && !this.state.value ? label + '*' : label}
+          {required ? label + '*' : label}
         </label>
         <textarea
           value={this.state.value}

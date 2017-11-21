@@ -63,7 +63,7 @@ export class MaterializedEnumControl extends Control<ControlProps, ControlState>
           }
         </select>
         <label htmlFor={id} data-error={errors}>
-          {required && !this.state.value ? label + '*' : label}
+          {required ? label + '*' : label}
         </label>
       </div>
     );

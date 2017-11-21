@@ -465,42 +465,6 @@ test('reset validation message', t => {
   t.is(validation.textContent, '');
 });
 
-test('required field no warning', t => {
-    const schema: JsonSchema = {
-        'type': 'object',
-        'properties': {
-            'enumField': {
-                'type': 'string',
-                'enum': ['a', 'b']
-            }
-        },
-        'required': ['enumField']
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/enumField'
-        }
-    };
-    const data = {
-        enumField: 'a'
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <EnumControl schema={schema}
-                       uischema={uischema}
-          />
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Enum Field');
-});
-
 test('required field with warning', t => {
     const schema: JsonSchema = {
         'type': 'object',

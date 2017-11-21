@@ -28,7 +28,7 @@ export class DateControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required && !this.state.value ? label + '*' : label}
+          {required ? label + '*' : label}
         </label>
         <input type='date'
                value={this.state.value}

@@ -545,42 +545,6 @@ test('reset validation message', t => {
   t.is(validation.textContent, '');
 });
 
-test('required field no warning', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            textField: {
-                type: 'string',
-                minLength: 3
-            }
-        },
-        required: ['textField']
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/textField'
-        }
-    };
-    const data = {
-        textField: 'Foo'
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <TextControl schema={schema}
-                         uischema={uischema}
-            />
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Text Field');
-});
-
 test('required field with warning', t => {
     const schema: JsonSchema = {
         type: 'object',

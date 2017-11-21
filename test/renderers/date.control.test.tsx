@@ -553,42 +553,6 @@ test('reset validation message', t => {
   t.is(validation.textContent, '');
 });
 
-test('required field no warning', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            dateField: {
-                type: 'string',
-                format: 'date'
-            }
-        },
-        required: ['dateField']
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/dateField'
-        }
-    };
-    const data = {
-        dateField: '1980-04-04'
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <DateControl schema={schema}
-                           uischema={uischema}
-          />
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Date Field');
-});
-
 test('required field with warning', t => {
     const schema: JsonSchema = {
         type: 'object',

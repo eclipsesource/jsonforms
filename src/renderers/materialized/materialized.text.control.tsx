@@ -23,7 +23,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
                autoFocus={uischema.options && uischema.options.focus}
         />
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required && !this.state.value ? label + '*' : label}
+          {required ? label + '*' : label}
         </label>
       </div>
     );

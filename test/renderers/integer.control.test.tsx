@@ -531,41 +531,6 @@ test('reset validation message', t => {
   t.is(validation.textContent, '');
 });
 
-test('required field no warning', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            integerField: {
-                type: 'number'
-            }
-        },
-        required: ['integerField']
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/integerField'
-        }
-    };
-    const data = {
-        integerField: 5
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <IntegerControl schema={schema}
-                         uischema={uischema}
-          />
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Integer Field');
-});
-
 test('required field with warning', t => {
     const schema: JsonSchema = {
         type: 'object',
