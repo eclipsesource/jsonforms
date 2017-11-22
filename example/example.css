@@ -118,6 +118,7 @@ input {
   color: var(--jsf-main-fg-color);
 }
 .jsf-categorization > .jsf-categorization-master ul > li > span:hover {font-weight: bold;}
+.jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > ul {padding-left: 0.5em;}
 .jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span {cursor: default;}
 .jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span:hover {font-weight: normal;}
 .jsf-categorization > .jsf-categorization-master ul > li.selected > span {font-weight: bold;}

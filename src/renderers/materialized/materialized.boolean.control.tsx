@@ -15,15 +15,13 @@ export class BooleanControl extends Control<ControlProps, ControlState> {
       <div className={className}>
         <input type='checkbox'
                checked={this.state.value}
-               onClick={(ev: Event<HTMLInputElement>) =>
-                 this.handleChange(ev.currentTarget.checked)
-               }
                className={classNames.input}
                id={id}
                hidden={!visible}
                disabled={!enabled}
         />
-        <label htmlFor={id} className={classNames.label} data-error={errors}>
+        <label htmlFor={id} className={classNames.label} data-error={errors}
+          onClick={() => this.handleChange(!this.state.value)}>
           {label}
         </label>
       </div>
