@@ -9,12 +9,12 @@ import { JsonForms } from '../../src/core';
 import { update, validate } from '../../src/actions';
 import { getData } from '../../src/reducers/index';
 import {
+  change,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from '../helpers/test';
+} from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
-import { change } from '../helpers/test';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

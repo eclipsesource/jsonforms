@@ -6,7 +6,7 @@ import { UISchemaElement, VerticalLayout } from '../../src/models/uischema';
 import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/renderers/layouts/vertical.layout';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/test';
+import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 
 test.before(() => {

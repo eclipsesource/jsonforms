@@ -13,7 +13,7 @@ import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from '../helpers/test';
+} from '../helpers/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
