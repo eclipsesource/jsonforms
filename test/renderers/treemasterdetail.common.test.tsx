@@ -12,7 +12,7 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithClass
-} from '../helpers/test';
+} from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 
 test.beforeEach(t => {

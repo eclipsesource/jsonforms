@@ -7,7 +7,7 @@ import GroupLayoutRenderer, {
 } from '../../src/renderers/layouts/group.layout';
 import { JsonForms } from '../../src/core';
 import { Provider } from '../../src/common/binding';
-import {findRenderedDOMElementWithClass, renderIntoDocument} from "../helpers/test";
+import {findRenderedDOMElementWithClass, renderIntoDocument} from "../helpers/binding";
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

@@ -4,7 +4,7 @@ import { initJsonFormsStore } from '../helpers/setup';
 import { JsonForms } from '../../src/core';
 import { LabelElement, UISchemaElement } from '../../src/models/uischema';
 import LabelRenderer, { labelRendererTester } from '../../src/renderers/additional/label.renderer';
-import { findRenderedDOMElementWithTag, renderIntoDocument } from '../helpers/test';
+import { findRenderedDOMElementWithTag, renderIntoDocument } from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 
 test.before(() => {

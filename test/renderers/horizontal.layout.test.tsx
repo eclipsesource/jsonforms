@@ -6,7 +6,7 @@ import { JsonForms } from '../../src/core';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/renderers/layouts/horizontal.layout';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/test';
+import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 
 test.before(() => {

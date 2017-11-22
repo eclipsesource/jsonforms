@@ -14,7 +14,7 @@ import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument
-} from '../helpers/test';
+} from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 import { HorizontalLayoutRenderer } from '../../src/renderers/layouts/horizontal.layout';
 
