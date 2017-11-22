@@ -14,7 +14,8 @@ import {
   change,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
-  renderIntoDocument
+  renderIntoDocument,
+  scryRenderedDOMElementsWithTag
 } from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 
@@ -92,16 +93,16 @@ test('autofocus on first element', t => {
         schema,
         uischema
     );
-    renderIntoDocument(
+    const tree = renderIntoDocument(
         <Provider store={store}>
             <HorizontalLayoutRenderer schema={schema}
                                       uischema={uischema}
             />
         </Provider>
     );
-    const activeElement = document.activeElement.getElementsByTagName('input')[0].id;
-    t.is(activeElement, '#/properties/firstName');
-    t.not(activeElement, '#/properties/lastName');
+    const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+    t.not(document.activeElement, inputs[0]);
+    t.is(document.activeElement, inputs[1]);
 });
 
 test('autofocus active', t => {
@@ -123,7 +124,7 @@ test('autofocus active', t => {
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
-    t.true(input.autofocus);
+    t.is(document.activeElement, input)
 });
 
 test('autofocus inactive', t => {

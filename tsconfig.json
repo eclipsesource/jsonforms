@@ -13,7 +13,8 @@
     "jsx": "react",
     "reactNamespace": "JSX",
     "types": [
-      "inferno"
+      "react",
+      "react-redux"
     ]
   },
   "exclude":[

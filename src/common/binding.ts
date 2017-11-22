@@ -1,2 +1,2 @@
-export * from './inferno';
-// export * from './react'
+// export * from './inferno';
+export * from './react'

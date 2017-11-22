@@ -12,7 +12,7 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from './helpers/test';
+} from './helpers/binding';
 
 class CustomRenderer1 extends Renderer<RendererProps, any> {
   render() {
