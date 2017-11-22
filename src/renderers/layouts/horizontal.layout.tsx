@@ -8,6 +8,7 @@ import {
   renderChildren
 } from '../renderer.util';
 import { connect } from '../../common/binding';
+import {RendererProps} from "../../core/renderer";
 
 /**
  * Default tester for a horizontal layout.
@@ -15,7 +16,7 @@ import { connect } from '../../common/binding';
  */
 export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
 
-export const HorizontalLayoutRenderer = ({ schema, uischema, path, visible }) => {
+export const HorizontalLayoutRenderer = ({ schema, uischema, path, visible }: RendererProps) => {
 
   const horizontalLayout = uischema as HorizontalLayout;
 
