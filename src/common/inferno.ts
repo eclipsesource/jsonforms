@@ -10,10 +10,7 @@ export const connect: any = reduxConnect;
 export const Provider = ReduxProvider;
 
 export interface Event<T> {
-  currentTarget: {
-    value: any
-    checked: boolean;
-  };
+  currentTarget: T;
 }
 
 import InfernoComponent from 'inferno-component';

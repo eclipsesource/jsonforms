@@ -257,7 +257,7 @@ test('render', t => {
   );
 
   // master tree
-  const fieldSet = findRenderedDOMElementWithTag(tree, 'fieldset') as HTMLFieldSetElement;
+  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
   const master = findRenderedDOMElementWithClass(tree, 'jsf-categorization-master');
   const ul = master.children[0];
   const liA = ul.children[0];
@@ -268,10 +268,10 @@ test('render', t => {
   const liB = ul.children[1];
   const spanB = liB.children[0];
   // detail
-  const detail = fieldSet.children[1] as HTMLDivElement;
+  const detail = div.children[1] as HTMLDivElement;
 
-  t.is(fieldSet.className, 'jsf-categorization');
-  t.is(fieldSet.childNodes.length, 2);
+  t.is(div.className, 'jsf-categorization');
+  t.is(div.childNodes.length, 2);
   t.is(master.className, 'jsf-categorization-master');
   t.is(master.children.length, 1);
   t.is(ul.children.length, 2);
@@ -340,16 +340,16 @@ test('render on click', t => {
     </Provider>
   );
 
-  const fieldSet = findRenderedDOMElementWithTag(tree, 'fieldset') as HTMLFieldSetElement;
-  const master = fieldSet.children[0] as HTMLDivElement;
+  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
+  const master = div.children[0] as HTMLDivElement;
   const ul = master.children[0];
   const liB = ul.children[1] as HTMLLIElement;
   const liC = ul.children[2] as HTMLLIElement;
   const liD = ul.children[3] as HTMLLIElement;
-  const detail = fieldSet.children[1] as HTMLDivElement;
+  const detail = div.children[1] as HTMLDivElement;
 
-  t.is(fieldSet.className, 'jsf-categorization');
-  t.is(fieldSet.childNodes.length, 2);
+  t.is(div.className, 'jsf-categorization');
+  t.is(div.childNodes.length, 2);
   t.is(master.children.length, 1);
   t.is(ul.children.length, 4);
   t.is(detail.children.length, 1);
@@ -393,8 +393,8 @@ test('hide', t => {
     </Provider>
   );
 
-  const fieldSet = findRenderedDOMElementWithTag(tree, 'fieldset') as HTMLFieldSetElement;
-  t.true(fieldSet.hidden);
+  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
+  t.true(div.hidden);
 });
 
 test('showed by default', t => {
@@ -418,55 +418,6 @@ test('showed by default', t => {
     </Provider>
   );
 
-  const fieldSet = findRenderedDOMElementWithTag(tree, 'fieldset') as HTMLFieldSetElement;
-  t.false(fieldSet.hidden);
-});
-
-test('disabled', t => {
-  const uischema: Categorization = {
-    type: 'Categorization',
-    label: '',
-    elements: [
-      {
-        type: 'Category',
-        label: 'B',
-        elements: []
-      }
-    ]
-  };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <CategorizationRenderer schema={t.context.schema}
-                              uischema={uischema}
-                              enabled={false}
-      />
-    </Provider>
-  );
-  const fieldSet = findRenderedDOMElementWithTag(tree, 'fieldset') as HTMLFieldSetElement;
-  t.true(fieldSet.disabled);
-});
-
-test('enabled by default', t => {
-  const uischema: Categorization = {
-    type: 'Categorization',
-    label: '',
-    elements: [
-      {
-        type: 'Category',
-        label: 'B',
-        elements: []
-      }
-    ]
-  };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <CategorizationRenderer schema={t.context.schema}
-                              uischema={uischema}
-      />
-    </Provider>
-  );
-  const fieldSet = findRenderedDOMElementWithTag(tree, 'fieldset') as HTMLFieldSetElement;
-  t.false(fieldSet.disabled);
+  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
+  t.false(div.hidden);
 });

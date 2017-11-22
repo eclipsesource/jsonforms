@@ -45,7 +45,7 @@ test('render with label', t => {
     </Provider>
   );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
-  t.is(groupLayout.tagName, 'DIV');
+  t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.className, 'group-layout');
   t.is(groupLayout.children.length, 1);
   const legend = groupLayout.children[0];
@@ -65,7 +65,7 @@ test('render with null elements', t => {
     </Provider>
   );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
-  t.is(groupLayout.tagName, 'DIV');
+  t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.children.length, 0);
 });
 
@@ -84,7 +84,7 @@ test('render with children', t => {
     </Provider>
   );
   const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
-  t.is(groupLayout.tagName, 'DIV');
+  t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.children.length, 2);
 });
 

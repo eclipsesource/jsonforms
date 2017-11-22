@@ -9,7 +9,8 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
 
   render() {
     const { classNames, id, visible, enabled, errors, label, uischema } = this.props;
-
+    classNames.input += ' materialize-textarea';
+    
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
