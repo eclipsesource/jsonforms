@@ -9,7 +9,6 @@
     "**/*.tsx"
   ],
   "exclude": [
-     "**/renderers/treemasterdetail.dnd.test.tsx"
   ],
   "types": [
   ]
