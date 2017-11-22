@@ -1,10 +1,13 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import DateControl, { dateControlTester } from '../../src/renderers/controls/date.control';
+import { ControlElement, HorizontalLayout } from '../../src/models/uischema';
+import { HorizontalLayoutRenderer } from '../../src/renderers/layouts/horizontal.layout';
 import { JsonForms } from '../../src/core';
-import { initJsonFormsStore } from '../helpers/setup';
 import { getData } from '../../src/reducers/index';
 import { update, validate } from '../../src/actions';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { initJsonFormsStore } from '../helpers/setup';
 import {
   change,
   findRenderedDOMElementWithClass,
@@ -43,6 +46,123 @@ test.beforeEach(t => {
       $ref: '#/properties/foo',
     },
   };
+});
+
+test('autofocus on first element', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            firstDate: { type: 'string', format: 'date' },
+            secondDate: { type: 'string', format: 'date' }
+        }
+    };
+    const firstControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/firstDate'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const secondControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/secondDate'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const uischema: HorizontalLayout = {
+        type: 'HorizontalLayout',
+        elements: [
+            firstControlElement,
+            secondControlElement
+        ]
+    };
+    const data = {
+        'firstDate': '1980-04-04',
+        'secondDate': '1980-04-04'
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    renderIntoDocument(
+        <Provider store={store}>
+            <HorizontalLayoutRenderer schema={schema}
+                                      uischema={uischema}
+            />
+        </Provider>
+    );
+    const activeElement = document.activeElement.getElementsByTagName('input')[0].id;
+    t.is(activeElement, '#/properties/firstDate');
+    t.not(activeElement, '#/properties/secondDate');
+});
+
+test('autofocus active', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <DateControl schema={t.context.schema}
+                         uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.true(input.autofocus);
+});
+
+test('autofocus inactive', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        },
+        options: {
+            focus: false
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <DateControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.false(input.autofocus);
+});
+
+test('autofocus inactive by default', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <DateControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.false(input.autofocus);
 });
 
 test('tester', t => {

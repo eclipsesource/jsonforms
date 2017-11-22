@@ -2,10 +2,12 @@ import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { initJsonFormsStore } from '../helpers/setup';
 import { JsonForms } from '../../src/core';
+import { JsonSchema } from '../../src/models/jsonSchema';
+import { HorizontalLayoutRenderer } from '../../src/renderers/layouts/horizontal.layout';
 import TextAreaControl, {
   textAreaControlTester,
 } from '../../src/renderers/controls/textarea.control';
-import { ControlElement } from '../../src/models/uischema';
+import { ControlElement, HorizontalLayout } from '../../src/models/uischema';
 import { update, validate } from '../../src/actions';
 import { getData } from '../../src/reducers/index';
 import {
@@ -46,6 +48,123 @@ test.beforeEach(t => {
       $ref: '#/properties/name'
     }
   };
+});
+
+test('autofocus on first element', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            firstName: { type: 'string', minLength: 3 },
+            lastName: { type: 'string', minLength: 3 }
+        }
+    };
+    const firstControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/firstName'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const secondControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/lastName'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const uischema: HorizontalLayout = {
+        type: 'HorizontalLayout',
+        elements: [
+            firstControlElement,
+            secondControlElement
+        ]
+    };
+    const data = {
+        'firstName': 'Foo',
+        'lastName': 'Boo'
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    renderIntoDocument(
+        <Provider store={store}>
+            <HorizontalLayoutRenderer schema={schema}
+                                      uischema={uischema}
+            />
+        </Provider>
+    );
+    const activeElement = document.activeElement.getElementsByTagName('input')[0].id;
+    t.is(activeElement, '#/properties/firstName');
+    t.not(activeElement, '#/properties/lastName');
+});
+
+test('autofocus active', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <TextAreaControl schema={t.context.schema}
+                             uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
+    t.true(input.autofocus);
+});
+
+test('autofocus inactive', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        },
+        options: {
+            focus: false
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <TextAreaControl schema={t.context.schema}
+                             uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
+    t.false(input.autofocus);
+});
+
+test('autofocus inactive by default', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <TextAreaControl schema={t.context.schema}
+                             uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
+    t.false(input.autofocus);
 });
 
 test('tester', t => {

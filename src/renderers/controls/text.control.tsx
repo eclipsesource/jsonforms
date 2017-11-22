@@ -17,7 +17,7 @@ export const textControlTester: RankedTester = rankWith(1, isControl);
 export class TextControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { classNames, id, visible, enabled, errors, label } = this.props;
+    const { classNames, id, visible, enabled, errors, label, uischema } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
@@ -35,6 +35,7 @@ export class TextControl extends Control<ControlProps, ControlState> {
                id={id}
                hidden={!visible}
                disabled={!enabled}
+               autoFocus={uischema.options && uischema.options.focus}
         />
         <div className={divClassNames}>
           {!isValid ? formatErrorMessage(errors) : ''}

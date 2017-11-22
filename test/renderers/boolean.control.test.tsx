@@ -1,8 +1,10 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { initJsonFormsStore } from '../helpers/setup';
-import { ControlElement } from '../../src/models/uischema';
+import { ControlElement, HorizontalLayout } from '../../src/models/uischema';
+import { JsonSchema } from '../../src/models/jsonSchema';
 import BooleanControl, { booleanControlTester } from '../../src/renderers/controls/boolean.control';
+import { HorizontalLayoutRenderer } from '../../src/renderers/layouts/horizontal.layout';
 import { JsonForms } from '../../src/core';
 import '../helpers/setup';
 import { update, validate } from '../../src/actions';
@@ -43,6 +45,123 @@ test.beforeEach(t => {
       $ref: '#/properties/foo'
     }
   };
+});
+
+test('autofocus on first element', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            firstBooleanField: { type: 'boolean' },
+            secondBooleanField: { type: 'boolean' }
+        }
+    };
+    const firstControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/firstBooleanField'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const secondControlElement: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/secondBooleanField'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const uischema: HorizontalLayout = {
+        type: 'HorizontalLayout',
+        elements: [
+            firstControlElement,
+            secondControlElement
+        ]
+    };
+    const data = {
+        'firstBooleanField': true,
+        'secondBooleanField': false
+    };
+    const store = initJsonFormsStore(
+        data,
+        schema,
+        uischema
+    );
+    renderIntoDocument(
+        <Provider store={store}>
+            <HorizontalLayoutRenderer schema={schema}
+                                      uischema={uischema}
+            />
+        </Provider>
+    );
+    const activeElement = document.activeElement.getElementsByTagName('input')[0].id;
+    t.is(activeElement, '#/properties/firstBooleanField');
+    t.not(activeElement, '#/properties/secondBooleanField');
+});
+
+test('autofocus active', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        },
+        options: {
+            focus: true
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <BooleanControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.true(input.autofocus);
+});
+
+test('autofocus inactive', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        },
+        options: {
+            focus: false
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <BooleanControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.false(input.autofocus);
+});
+
+test('autofocus inactive by default', t => {
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/foo'
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <BooleanControl schema={t.context.schema}
+                            uischema={uischema}
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.false(input.autofocus);
 });
 
 test('tester', t => {
