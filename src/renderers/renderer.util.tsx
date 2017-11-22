@@ -12,7 +12,7 @@ import { RankedTester } from '../core/testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
-import { composeWithUi, resolveData } from '../path.util';
+import { composeWithUi, resolveData, resolveSchema } from '../path.util';
 import { getElementLabelObject } from './label.util';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers/index';
@@ -130,12 +130,15 @@ export const mapStateToControlProps = (state, ownProps) => {
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
-  const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
+  const ref = controlElement.scope.$ref;
+  const id = _.has(controlElement.scope, '$ref') ? ref : '';
+  const maxLength = ref === undefined || ownProps.schema === undefined ? undefined :
+      resolveSchema(ownProps.schema, ref).maxLength;
 
   const styles = JsonForms.stylingRegistry.get('control');
   const classNames: string[] = !_.isEmpty(controlElement.scope) ?
     styles.concat(
-      [`${convertToClassName(controlElement.scope.$ref)}`]
+      [`${convertToClassName(ref)}`]
     ) : [''];
   const inputClassName =
     ['validate']
@@ -155,5 +158,6 @@ export const mapStateToControlProps = (state, ownProps) => {
     enabled,
     id,
     path,
+    maxLength,
   };
 };

@@ -457,6 +457,53 @@ test('enabled by default', t => {
   t.false(input.disabled);
 });
 
+test('use maxLength for attributes size and maxlength', t => {
+    const schema = {
+        'type': 'object',
+        'properties': {
+            'name': {
+                'type': 'string',
+                'maxLength': 5
+            }
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, schema, t.context.uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <TextControl schema={schema}
+                         uischema={t.context.uischema}
+
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.is(input.maxLength, 5);
+    t.is(input.size, 5);
+});
+
+test('if maxLength is not specified, attributes size and maxlength should have default values', t => {
+    const schema = {
+        'type': 'object',
+        'properties': {
+            'name': {
+                'type': 'string',
+            }
+        }
+    };
+    const store = initJsonFormsStore(t.context.data, schema, t.context.uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <TextControl schema={schema}
+                         uischema={t.context.uischema}
+
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.is(input.maxLength, 524288);
+    t.is(input.size, 20);
+});
+
 test('single error', t => {
   const store = initJsonFormsStore(
     t.context.data,
