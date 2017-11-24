@@ -37,30 +37,27 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
 
         return (
             <div className={classNames.wrapper} hidden={!visible}>
-                <select
-                    className={classNames.input}
-                    disabled={!enabled}
-                    value={this.state.value}
-                    onChange={ev => this.handleChange(ev.target.value) }
-                >
-                    {
-                        [<input type='radio' value='' selected={data === undefined} key={'empty'}/>]
-                            .concat(
-                                options.map(optionValue => {
-                                    return (
-                                        <option
+                {
+                    [<input type='radio' value='' selected={data === undefined} key={'empty'}/>]
+                        .concat(
+                            options.map(optionValue => {
+                                return (
+                                    <p>
+                                        <input
+                                            type='radio'
                                             value={optionValue}
-                                            label={optionValue}
                                             selected={data === optionValue}
                                             key={optionValue}
-                                        >
+                                            id={optionValue}
+                                        />
+                                        <label for={optionValue}>
                                             {optionValue}
-                                        </option>
-                                    );
-                                })
-                            )
+                                        </label>
+                                    </p>
+                                );
+                            })
+                        )
                     }
-                </select>
                 <label htmlFor={id} data-error={errors}>
                     {label}
                 </label>
