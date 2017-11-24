@@ -43,7 +43,7 @@ export const validationReducer = (
       }
 
       const errors = validate(validator, action.data).map(error => {
-        error.dataPath = error.dataPath.replace('/', '.').substr(1);
+        error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
 
         return error;
       });
