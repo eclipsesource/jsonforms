@@ -118,7 +118,8 @@ const uischema = {
 const data = {
   name: 'John Doe',
   vegetarian: false,
-  birthDate: '1985-06-02'
+  birthDate: '1985-06-02',
+  personalData: {}
 };
 registerExamples([
   {name: 'person', label: 'Person', data: data, schema: schema, uiSchema: uischema}
