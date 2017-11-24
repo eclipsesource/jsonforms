@@ -33,10 +33,6 @@ const schema = {
               }
             }
           }
-        },
-        'time': {
-          'type': 'string',
-          'format': 'time'
         }
       },
       'required': ['occupation', 'nationality']
@@ -52,12 +48,6 @@ const uischema = {
       'options': {
         'submit': true
       }
-    },
-    {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/time'
-      },
     }
   ]
 };
@@ -81,8 +71,7 @@ const data = {
       'date': new Date().toISOString().substr(0, 10),
       'message': 'Get ready for booohay'
     }
-  ],
-  'time': '13:37'
+  ]
 };
 registerExamples([
   {name: 'array', label: 'Array', data: data, schema: schema, uiSchema: uischema},
