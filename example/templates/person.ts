@@ -31,7 +31,11 @@ const schema = {
     },
     'occupation': {
       'type': 'string'
-    }
+    },
+    'postalCode': {
+      'type': 'string',
+      'maxLength': 5
+    },
   },
   'required': ['occupation', 'nationality']
 };
@@ -112,13 +116,29 @@ const uischema = {
           }
         }
       ]
+    },
+    {
+      'type': 'HorizontalLayout',
+      'elements': [
+        {
+          'type': 'Control',
+          'scope': {
+            '$ref': '#/properties/postalCode'
+          },
+          'options': {
+            'trim': true,
+            'restrict': true
+          }
+        }
+      ]
     }
   ]
 };
 const data = {
   name: 'John Doe',
   vegetarian: false,
-  birthDate: '1985-06-02'
+  birthDate: '1985-06-02',
+  postalCode: '12345'
 };
 registerExamples([
   {name: 'person', label: 'Person', data: data, schema: schema, uiSchema: uischema}

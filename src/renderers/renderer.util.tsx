@@ -12,7 +12,7 @@ import { RankedTester } from '../core/testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
-import { composeWithUi, resolveData, resolveSchema } from '../path.util';
+import { composeWithUi, resolveData } from '../path.util';
 import { getElementLabelObject } from './label.util';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers/index';
@@ -132,8 +132,6 @@ export const mapStateToControlProps = (state, ownProps) => {
   const controlElement = ownProps.uischema as ControlElement;
   const ref = controlElement.scope.$ref;
   const id = _.has(controlElement.scope, '$ref') ? ref : '';
-  const maxLength = ref === undefined || ownProps.schema === undefined ? undefined :
-      resolveSchema(ownProps.schema, ref).maxLength;
 
   const styles = JsonForms.stylingRegistry.get('control');
   const classNames: string[] = !_.isEmpty(controlElement.scope) ?
@@ -157,7 +155,6 @@ export const mapStateToControlProps = (state, ownProps) => {
     visible,
     enabled,
     id,
-    path,
-    maxLength,
+    path
   };
 };
