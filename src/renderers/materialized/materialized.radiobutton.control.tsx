@@ -37,15 +37,14 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
 
         return (
             <div className={classNames.wrapper} hidden={!visible}>
-                <input
-                    type='radio'
+                <select
                     className={classNames.input}
                     disabled={!enabled}
                     value={this.state.value}
                     onChange={ev => this.handleChange(ev.target.value) }
                 >
                     {
-                        [<option value='' selected={data === undefined} key={'empty'}/>]
+                        [<input type='radio' value='' selected={data === undefined} key={'empty'}/>]
                             .concat(
                                 options.map(optionValue => {
                                     return (
@@ -61,7 +60,7 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
                                 })
                             )
                     }
-                </input>
+                </select>
                 <label htmlFor={id} data-error={errors}>
                     {label}
                 </label>

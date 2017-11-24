@@ -1,5 +1,6 @@
 import { JSX } from '../JSX';
-import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
+import { and, enumLengthAtMost, RankedTester } from '../../core/testers';
+import { rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { update } from '../../actions';
@@ -17,7 +18,8 @@ import {
  */
 export const radiobottonControlTester: RankedTester = rankWith(9, and(
     uiTypeIs('Control'),
-    schemaMatches(schema => schema.hasOwnProperty('enum'))
+    schemaMatches(schema => schema.hasOwnProperty('enum')),
+    enumLengthAtMost(3)
 ));
 
 export class RadiobuttonControl extends Control<ControlProps, ControlState> {
@@ -38,8 +40,7 @@ export class RadiobuttonControl extends Control<ControlProps, ControlState> {
                 <label htmlFor={id} className={classNames.label} data-error={errors}>
                     {label}
                 </label>
-                <input
-                    type='radio'
+                <select
                     className={classNames.input}
                     hidden={!visible}
                     disabled={!enabled}
@@ -65,7 +66,7 @@ export class RadiobuttonControl extends Control<ControlProps, ControlState> {
                                 })
                             )
                     }
-                </input>
+                </select>
                 <div className={divClassNames}>
                     {!isValid ? formatErrorMessage(errors) : ''}
                 </div>
