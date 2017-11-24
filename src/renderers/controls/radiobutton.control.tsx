@@ -15,12 +15,12 @@ import {
  * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const properenumerationControlTester: RankedTester = rankWith(2, and(
+export const radiobottonControlTester: RankedTester = rankWith(9, and(
     uiTypeIs('Control'),
     schemaMatches(schema => schema.hasOwnProperty('enum'))
 ));
 
-export class ProperenumerationControl extends Control<ControlProps, ControlState> {
+export class RadiobuttonControl extends Control<ControlProps, ControlState> {
 
     render() {
         const  { uischema, schema, classNames, id, label,
@@ -38,7 +38,8 @@ export class ProperenumerationControl extends Control<ControlProps, ControlState
                 <label htmlFor={id} className={classNames.label} data-error={errors}>
                     {label}
                 </label>
-                <select
+                <input
+                    type='radio'
                     className={classNames.input}
                     hidden={!visible}
                     disabled={!enabled}
@@ -64,7 +65,7 @@ export class ProperenumerationControl extends Control<ControlProps, ControlState
                                 })
                             )
                     }
-                </select>
+                </input>
                 <div className={divClassNames}>
                     {!isValid ? formatErrorMessage(errors) : ''}
                 </div>
@@ -74,6 +75,6 @@ export class ProperenumerationControl extends Control<ControlProps, ControlState
 }
 
 export default registerStartupRenderer(
-    properenumerationControlTester,
-    connect(mapStateToControlProps)(ProperenumerationControl)
+    radiobottonControlTester,
+    connect(mapStateToControlProps)(RadiobuttonControl)
 );

@@ -4,11 +4,11 @@ import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { properenumerationControlTester } from '../controls/properenumeration.control';
+import { radiobottonControlTester } from '../controls/radiobutton.control';
 import { connect } from '../../common/binding';
 declare let $;
 
-export class MaterializedProperenumerationControl extends Control<ControlProps, ControlState> {
+export class MaterializedRadiobuttonControl extends Control<ControlProps, ControlState> {
 
     componentDidMount() {
         $('select').material_select();
@@ -37,7 +37,8 @@ export class MaterializedProperenumerationControl extends Control<ControlProps, 
 
         return (
             <div className={classNames.wrapper} hidden={!visible}>
-                <select
+                <input
+                    type='radio'
                     className={classNames.input}
                     disabled={!enabled}
                     value={this.state.value}
@@ -60,7 +61,7 @@ export class MaterializedProperenumerationControl extends Control<ControlProps, 
                                 })
                             )
                     }
-                </select>
+                </input>
                 <label htmlFor={id} data-error={errors}>
                     {label}
                 </label>
@@ -70,6 +71,6 @@ export class MaterializedProperenumerationControl extends Control<ControlProps, 
 }
 
 export default registerStartupRenderer(
-    withIncreasedRank(1, properenumerationControlTester),
-    connect(mapStateToControlProps)(MaterializedProperenumerationControl)
+    withIncreasedRank(1, radiobottonControlTester),
+    connect(mapStateToControlProps)(MaterializedRadiobuttonControl)
 );
