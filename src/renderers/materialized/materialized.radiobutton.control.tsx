@@ -37,30 +37,26 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
 
         return (
             <div className={classNames.wrapper} hidden={!visible}>
+            <label htmlFor={id} data-error={errors}>
+                {label}
+            </label>
                 {
-                    [<input type='radio' value='' selected={data === undefined} key={'empty'}/>]
-                        .concat(
-                            options.map(optionValue => {
-                                return (
-                                    <p>
-                                        <input
-                                            type='radio'
-                                            value={optionValue}
-                                            selected={data === optionValue}
-                                            key={optionValue}
-                                            id={optionValue}
-                                        />
-                                        <label for={optionValue}>
-                                            {optionValue}
-                                        </label>
-                                    </p>
-                                );
-                            })
-                        )
-                    }
-                <label htmlFor={id} data-error={errors}>
-                    {label}
-                </label>
+                    options.map(optionValue => {
+                        return (
+                            <p>
+                                <input
+                                    type='radio'
+                                    name={optionValue}
+                                    value={optionValue}
+                                    id={optionValue}
+                                />
+                                <label for={optionValue}>
+                                    {optionValue}
+                                </label>
+                            </p>
+                        );
+                    })
+                }
             </div>
         );
     }
