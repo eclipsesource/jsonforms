@@ -13,7 +13,8 @@ import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument,
-  scryRenderedDOMElementsWithTag
+  scryRenderedDOMElementsWithTag,
+  scryRenderedDOMElementsWithClass
 } from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
 
@@ -544,4 +545,75 @@ test('reset validation message', t => {
   store.dispatch(update('name', () => 'aaa'));
   store.dispatch(validate());
   t.is(validation.textContent, '');
+});
+
+test('validation of nested schema', t => {
+  const schema = {
+    'type': 'object',
+    'properties': {
+       'name': {
+          'type': 'string'
+       },
+       'personalData': {
+          'type': 'object',
+          'properties': {
+             'middleName': {
+                 'type': 'string'
+             },
+             'lastName': {
+                 'type': 'string'
+             }
+          },
+          'required': ['middleName', 'lastName']
+       }
+    },
+    'required': ['name']
+  };
+  const firstControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+        $ref: '#/properties/name'
+    }
+  };
+  const secondControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+        $ref: '#/properties/personalData/properties/middleName'
+    }
+  };
+  const thirdControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+        $ref: '#/properties/personalData/properties/lastName'
+    }
+  };
+  const uischema: HorizontalLayout = {
+    type: 'HorizontalLayout',
+    elements: [
+        firstControlElement,
+        secondControlElement,
+        thirdControlElement
+    ]
+  };
+  const data = {
+    name: 'John Doe',
+    personalData: {}
+  };
+  const store = initJsonFormsStore(
+      data,
+      schema,
+      uischema
+  );
+  const tree = renderIntoDocument(
+      <Provider store={store}>
+          <HorizontalLayoutRenderer schema={schema}
+                                    uischema={uischema}
+          />
+      </Provider>
+  );
+  const validation = scryRenderedDOMElementsWithClass(tree, 'validation');
+  store.dispatch(validate());
+  t.is(validation[0].textContent, '');
+  t.is(validation[1].textContent, 'is a required property');
+  t.is(validation[2].textContent, 'is a required property');
 });
