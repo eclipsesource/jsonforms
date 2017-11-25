@@ -5,7 +5,7 @@ import { convertToClassName, Renderer } from '../../core/renderer';
 import { and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
 import { JsonSchema } from '../../models/jsonSchema';
 import { ControlElement } from '../../models/uischema';
-import { getElementLabelObject } from '../label.util';
+import { getLabelObject } from '../label.util';
 import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.util';
 import { update } from '../../actions';
 import { getData } from '../../reducers/index';
@@ -69,7 +69,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
     const headerClass = JsonForms.stylingRegistry.getAsClassName('array-table')
       .concat(convertToClassName(controlElement.scope.$ref));
 
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getLabelObject(controlElement);
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',

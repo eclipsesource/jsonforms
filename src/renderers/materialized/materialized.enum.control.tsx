@@ -3,7 +3,11 @@ import { withIncreasedRank } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { Control, ControlProps, ControlState } from '../controls/Control';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import {
+  mapStateToControlProps,
+  registerStartupRenderer,
+  setLabelField
+} from '../renderer.util';
 import { enumControlTester } from '../controls/enum.control';
 import { connect } from '../../common/binding';
 declare let $;
@@ -63,7 +67,7 @@ export class MaterializedEnumControl extends Control<ControlProps, ControlState>
           }
         </select>
         <label htmlFor={id} data-error={errors}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
       </div>
     );

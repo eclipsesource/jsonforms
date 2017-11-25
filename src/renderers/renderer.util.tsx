@@ -13,7 +13,7 @@ import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
 import { composeWithUi, resolveData } from '../path.util';
-import { getElementLabelObject } from './label.util';
+import { getLabelObject } from './label.util';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers/index';
 import { resolveSchema } from '../path.util';
@@ -134,11 +134,15 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
         && nextHigherSchema.required.indexOf(lastSegment) !== -1;
 };
 
+export const setLabelField = (label: string, required: boolean): string => {
+  return required ? label + '*' : label;
+};
+
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
-  const labelObject = getElementLabelObject(ownProps.schema, ownProps.uischema);
+  const labelObject = getLabelObject(ownProps.uischema);
   const label = labelObject.show ? labelObject.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const isValid = _.isEmpty(errors);

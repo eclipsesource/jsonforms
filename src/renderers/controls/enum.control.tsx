@@ -8,7 +8,8 @@ import { Control, ControlProps, ControlState } from './Control';
 import {
   formatErrorMessage,
   mapStateToControlProps,
-  registerStartupRenderer
+  registerStartupRenderer,
+  setLabelField
 } from '../renderer.util';
 
 /**
@@ -35,7 +36,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
         <select
           className={classNames.input}

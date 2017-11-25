@@ -11,7 +11,7 @@ import {
 } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.util';
-import { getElementLabelObject } from '../label.util';
+import { getLabelObject } from '../label.util';
 import { JsonForms } from '../../core';
 import { generateDefaultUISchema } from '../../generators/ui-schema-gen';
 import { update } from '../../actions';
@@ -64,7 +64,7 @@ export const ArrayControlRenderer  =
   ({  schema, uischema, data, path, dispatch }: ControlProps) => {
 
     const controlElement = uischema as ControlElement;
-    const label = getElementLabelObject(schema, controlElement);
+    const label = getLabelObject(controlElement);
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
     const className = `control ${(convertToClassName(controlElement.scope.$ref))}`;
 

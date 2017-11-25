@@ -1,7 +1,11 @@
 import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import {
+    mapStateToControlProps,
+    registerStartupRenderer,
+    setLabelField
+} from '../renderer.util';
 import { textAreaControlTester } from '../controls/textarea.control';
 import { connect, Event } from '../../common/binding';
 
@@ -14,7 +18,7 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
         <textarea
           value={this.state.value}

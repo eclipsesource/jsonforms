@@ -25,7 +25,14 @@ const deriveLabel = (controlElement: ControlElement): string => {
   return '';
 };
 
-const getLabelObject = (withLabel: ControlElement): ILabelObject => {
+/**
+ * Return a label object based on the given JSON schema and control element.
+ * @param {JsonSchema} schema the JSON schema that the given control element is referring to
+ * @param {ControlElement} controlElement the UI schema to obtain a label object for
+ * @returns {ILabelObject}
+ */
+
+export const getLabelObject = (withLabel: ControlElement): ILabelObject => {
     const labelProperty = withLabel.label;
     const derivedLabel = deriveLabel(withLabel);
     if (typeof labelProperty === 'boolean') {
@@ -45,16 +52,4 @@ const getLabelObject = (withLabel: ControlElement): ILabelObject => {
     } else {
         return new LabelObject(derivedLabel, true);
     }
-};
-
-/**
- * Return a label object based on the given JSON schema and control element.
- * @param {JsonSchema} schema the JSON schema that the given control element is referring to
- * @param {ControlElement} controlElement the UI schema to obtain a label object for
- * @returns {ILabelObject}
- */
-export const getElementLabelObject =
-  (schema: JsonSchema, controlElement: ControlElement): ILabelObject => {
-
-  return getLabelObject(controlElement);
 };

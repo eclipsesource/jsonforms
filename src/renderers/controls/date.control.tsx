@@ -5,7 +5,8 @@ import { Control, ControlProps, ControlState } from './Control';
 import {
   formatErrorMessage,
   mapStateToControlProps,
-  registerStartupRenderer
+  registerStartupRenderer,
+  setLabelField
 } from '../renderer.util';
 import { connect, Event } from '../../common/binding';
 
@@ -28,7 +29,7 @@ export class DateControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
         <input type='date'
                value={this.state.value}

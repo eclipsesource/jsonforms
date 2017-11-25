@@ -2,7 +2,11 @@ import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import {
+    mapStateToControlProps,
+    registerStartupRenderer,
+    setLabelField
+} from '../renderer.util';
 import { numberControlTester } from '../controls/number.control';
 import { connect, Event } from '../../common/binding';
 
@@ -15,7 +19,7 @@ export class NumberControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
         <input type='number'
                step='0.1'

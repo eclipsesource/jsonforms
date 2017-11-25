@@ -1,7 +1,11 @@
 import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import {
+    mapStateToControlProps,
+    registerStartupRenderer,
+    setLabelField
+} from '../renderer.util';
 import { textControlTester } from '../controls/text.control';
 import { connect, Event } from '../../common/binding';
 
@@ -23,7 +27,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
                autoFocus={uischema.options && uischema.options.focus}
         />
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
       </div>
     );

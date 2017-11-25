@@ -4,7 +4,8 @@ import { Control, ControlProps, ControlState } from './Control';
 import {
   formatErrorMessage,
   mapStateToControlProps,
-  registerStartupRenderer
+  registerStartupRenderer,
+  setLabelField
 } from '../renderer.util';
 import { connect, Event } from '../../common/binding';
 
@@ -24,7 +25,7 @@ export class TextControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {required ? label + '*' : label}
+          {setLabelField(label, required)}
         </label>
         <input value={this.state.value}
                onChange={
