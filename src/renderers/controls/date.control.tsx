@@ -24,6 +24,7 @@ export class DateControl extends Control<ControlProps, ControlState> {
     const { classNames, id, visible, enabled, errors, label, uischema } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
+    const now = new Date().toISOString().substr(0, 10);
 
     return (
       <div className={classNames.wrapper}>
@@ -31,7 +32,7 @@ export class DateControl extends Control<ControlProps, ControlState> {
           {label}
         </label>
         <input type='date'
-               value={this.state.value}
+               value={this.state.value || ''}
                onChange={(ev: Event<HTMLInputElement>) => {
                  if (_.isDate(ev.currentTarget.value)) {
                    this.handleChange(

@@ -146,9 +146,10 @@ export class JsonFormsElement extends HTMLElement {
     const uischema = this.uiSchema;
 
     this.store = initJsonFormsStore(this.dataObject, schema, uischema);
+    const storeId = new Date().toISOString();
 
     render(
-      <Provider store={this.store}>
+      <Provider store={this.store} key={`${storeId}-store`}>
         <DispatchRenderer uischema={uischema} schema={schema} />
       </Provider>,
       this

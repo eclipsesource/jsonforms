@@ -360,7 +360,7 @@ test('update with undefined value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
-  t.is(input.value, '3.14');
+  t.is(input.value, '');
 });
 
 test('update with null value', t => {
@@ -374,7 +374,7 @@ test('update with null value', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => null));
-  t.is(input.value, '3.14');
+  t.is(input.value, '');
 });
 
 test('update with wrong ref', t => {

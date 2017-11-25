@@ -18,7 +18,7 @@ export class MaterializedIntegerControl extends Control<ControlProps, ControlSta
         </label>
         <input type='number'
                step='1'
-               value={this.state.value}
+               value={this.state.value || ''}
                onChange={(ev: Event<HTMLInputElement>) =>
                  this.handleChange(_.toInteger(ev.currentTarget.value))
                }

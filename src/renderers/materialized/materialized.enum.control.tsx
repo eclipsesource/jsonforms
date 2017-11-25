@@ -40,18 +40,17 @@ export class MaterializedEnumControl extends Control<ControlProps, ControlState>
         <select
           className={classNames.input}
           disabled={!enabled}
-          value={this.state.value}
+          value={this.state.value || ''}
           onChange={ev => this.handleChange(ev.target.value) }
         >
           {
-            [<option value='' selected={data === undefined} key={'empty'}/>]
+            [<option value='' key={'empty'}/>]
               .concat(
                 options.map(optionValue => {
                   return (
                     <option
                       value={optionValue}
                       label={optionValue}
-                      selected={data === optionValue}
                       key={optionValue}
                     >
                       {optionValue}

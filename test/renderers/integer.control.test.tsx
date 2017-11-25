@@ -309,15 +309,13 @@ test('update with undefined value', t => {
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '42');
-
   store.dispatch(
     update(
       'foo',
       () => undefined
     )
   );
-  t.is(input.value, '42');
+  t.is(input.value, '');
 });
 
 test('update with null value', t => {
@@ -337,7 +335,7 @@ test('update with null value', t => {
       () => null
     )
   );
-  t.is(input.value, '42');
+  t.is(input.value, '');
 });
 
 test('update with wrong ref', t => {

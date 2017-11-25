@@ -5,8 +5,8 @@
     "target": "es6"
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.ts"
   ],
   "exclude": [
   ],

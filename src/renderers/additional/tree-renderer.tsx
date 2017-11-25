@@ -141,6 +141,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                     .map(prop =>
                       <button
                         className={JsonForms.stylingRegistry.getAsClassName('button')}
+                        key={`${prop.label}-button`}
                         onClick={() => {
                           const newData = _.keys(prop.schema.properties).reduce(
                             (d, key) => {
@@ -232,7 +233,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
    * @param schema the {@link JsonSchema} defining the elements' type
    */
   private expandRootArray(schema: JsonSchema) {
-    const { dispatch, path } = this.props;
+    const { path } = this.props;
     const data = this.props.data;
     if (data === undefined || data === null) {
       return;
@@ -244,17 +245,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
       return this.expandObject(
         composedPath,
         schema,
-        () => dispatch(
-          update(
-            path,
-            d => {
-              const clone = d.slice();
-              clone.splice(index, 1);
-
-              return clone;
-            }
-          )
-        )
+        path
       );
     });
   }
@@ -266,30 +257,19 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
    *
    * @param data the array to expand
    * @param property the {@link ContainmentProperty} defining the property that the array belongs to
-   * @param parentData the data containing the array as a property
+   * @param path the instance path where data can be obtained from
    */
   private expandArray(data: Object[],
                       property: ContainmentProperty,
-                      path: string,
-                      parentData?: Object) {
+                      path: string) {
 
     if (data === undefined || data === null) {
       return;
     }
 
     return data.map((element, index) => {
-      let deleteFunction = null;
-      if (!_.isEmpty(parentData)) {
-        deleteFunction = d => {
-          property.deleteFromData(parentData)(d);
-
-          return parentData;
-        };
-      }
-
-      const composedPath = compose(path, index.toString() + '');
-
-      return this.expandObject(composedPath, property.schema, deleteFunction);
+      const composedPath = compose(path, index.toString());
+      return this.expandObject(composedPath, property.schema, path);
     });
   }
 
@@ -316,23 +296,24 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   /**
    * Renders a data object as a <li> child element of the given <ul> list.
    *
-   * @param data The rendered data
+   * @param path the instance path of the object to be expanded
    * @param schema The schema describing the rendered data's type
-   * @param deleteFunction A function to delete the data from the model
+   * @param parentPath the instance parent path holding the object to be expanded
    */
+  // TODO: Extract to component
   private expandObject(
-    scopedPath: string,
+    path: string,
     schema: JsonSchema,
-    deleteFunction: () => void
+    parentPath?: string
   ) {
 
-    const { uischema, rootData } = this.props;
-    const data = resolveData(rootData, scopedPath);
+    const { uischema, rootData, dispatch } = this.props;
+    const data = resolveData(rootData, path);
     const liClasses = this.state.selected === data ? 'selected' : '';
 
     // TODO: key should be set in caller
     const vnode = (
-      <li className={liClasses} key={scopedPath}>
+      <li className={liClasses} key={path}>
         <div>
           {
             _.has(uischema.options, 'imageProvider') ?
@@ -346,7 +327,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                 selected: {
                   schema,
                   data,
-                  path: scopedPath
+                  path: path
                 }
               })
             }
@@ -363,7 +344,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                       dialog: {
                         open: true,
                         schema,
-                        path: scopedPath
+                        path: path
                       }
                     })
                   }
@@ -372,8 +353,18 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
               </span>) : ''
             }
             {
-              deleteFunction !== null &&
-              <span className='remove' onClick ={() => deleteFunction() }>
+              parentPath !== null &&
+              <span className='remove' onClick ={() => {
+                dispatch(
+                  update(
+                    parentPath,
+                    array => {
+                      const copy = array.slice();
+                      return _.filter(copy, el => !_.isEqual(el, data))
+                    }
+                  )
+                )
+              }}>
                 {'\u274C'}
               </span>
             }
@@ -383,7 +374,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
           // render contained children of this element
           JsonForms.schemaService.getContainmentProperties(schema)
             .filter(prop => this.propHasData(prop, data))
-            .map(prop => <ul>{ this.renderChildren(prop, scopedPath, schema, data) }</ul>)
+            .map(prop => <ul key={prop.label}>{ this.renderChildren(prop, path, schema) }</ul>)
         }
       </li>
     );
@@ -439,8 +430,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   // TODO: update selected element once selection has been changed
   private renderChildren(prop: ContainmentProperty,
                          parentPath: string,
-                         parentSchema: JsonSchema,
-                         parentData: any) {
+                         parentSchema: JsonSchema) {
 
     const composedPath = compose(parentPath, prop.property);
     const data = resolveData(this.props.data, composedPath);
@@ -455,7 +445,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
         continue;
       }
       if (key === property.property) {
-        return this.expandArray(array, property, composedPath, parentData);
+        return this.expandArray(array, property, composedPath);
       }
     }
     // TODO proper logging

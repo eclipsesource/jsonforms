@@ -2,6 +2,7 @@ import 'jsdom-global/register';
 import * as installCE from 'document-register-element/pony';
 declare let global;
 installCE(global, 'force');
+global.requestAnimationFrame = (cb) => setTimeout(cb, 0);
 import { JsonFormsStore } from '../../src/json-forms';
 import { INIT } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';

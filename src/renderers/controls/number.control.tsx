@@ -32,7 +32,7 @@ export class NumberControl extends Control<ControlProps, ControlState> {
         </label>
         <input type='number'
                step='0.1'
-               value={this.state.value}
+               value={this.state.value || ''}
                onChange={(ev: Event<HTMLInputElement>) =>
                  this.handleChange(_.toNumber(ev.currentTarget.value))
                }

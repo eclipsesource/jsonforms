@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { get, set } from 'dot-prop-immutable';
 import { INIT, UPDATE_DATA } from '../actions';
 
@@ -38,7 +39,8 @@ export const commonStateReducer = (
         };
       } else {
         const currData = get(state.data, action.path);
-        const newState = set(state.data, action.path, action.updater(currData));
+        const data = action.updater(currData);
+        const newState = set(state.data, action.path, data);
 
         return {
           data: newState,

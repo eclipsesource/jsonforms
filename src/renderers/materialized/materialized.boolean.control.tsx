@@ -14,7 +14,7 @@ export class BooleanControl extends Control<ControlProps, ControlState> {
     return (
       <div className={className}>
         <input type='checkbox'
-               checked={this.state.value}
+               checked={this.state.value || ''}
                className={classNames.input}
                id={id}
                hidden={!visible}

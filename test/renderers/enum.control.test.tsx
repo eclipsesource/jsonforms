@@ -246,8 +246,8 @@ test('update with undefined value', t => {
       () => undefined
     )
   );
-  t.is(select.selectedIndex, 1);
-  t.is(select.value, 'a');
+  t.is(select.selectedIndex, 0);
+  t.is(select.value, '');
 });
 
 test('update with null value', t => {
@@ -266,8 +266,8 @@ test('update with null value', t => {
       () => null
     )
   );
-  t.is(select.selectedIndex, 1);
-  t.is(select.value, 'a');
+  t.is(select.selectedIndex, 0);
+  t.is(select.value, '');
 });
 
 test('update with wrong ref', t => {
