@@ -16,6 +16,9 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
     if (uischema.options && uischema.options.trim && maxLength !== undefined) {
       const fontSize = parseFloat($('[id="' + id + '"]').css('font-size'));
       $('[id="' + id + '"]').css('width', (maxLength * 15) * (fontSize / 14.5) + 'px');
+
+      // work-around of https://github.com/Dogfalo/materialize/issues/5408
+      $('[id="' + id + '-parent"]').css('text-align', 'initial');
     }
   }
 
@@ -25,7 +28,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
     const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
 
     return (
-      <div className={classNames.wrapper}>
+      <div className={classNames.wrapper} id={id + '-parent'}>
         <input value={this.state.value}
                onChange={(ev: Event<HTMLInputElement>) =>
                  this.handleChange(ev.currentTarget.value)
