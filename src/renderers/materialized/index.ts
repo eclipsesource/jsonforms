@@ -2,6 +2,7 @@ import { JsonForms } from '../../core';
 
 export * from './materialized.boolean.control';
 export * from './materialized.date.control';
+export * from './materialized.datetime.control';
 export * from './materialized.enum.control';
 export * from './materialized.integer.control';
 export * from './materialized.number.control';
