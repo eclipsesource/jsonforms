@@ -2,10 +2,10 @@ import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import {
+  computeLabel,
   formatErrorMessage,
   mapStateToControlProps,
-  registerStartupRenderer,
-  setLabelField
+  registerStartupRenderer
 } from '../renderer.util';
 import { connect, Event } from '../../common/binding';
 import { Control, ControlProps, ControlState } from './Control';
@@ -29,7 +29,7 @@ export class IntegerControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {setLabelField(label, required)}
+          {computeLabel(label, required)}
         </label>
         <input type='number'
                step='1'

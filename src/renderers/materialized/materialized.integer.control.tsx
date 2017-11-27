@@ -3,9 +3,9 @@ import * as _ from 'lodash';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import {
+    computeLabel,
     mapStateToControlProps,
-    registerStartupRenderer,
-    setLabelField
+    registerStartupRenderer
 } from '../renderer.util';
 import { integerControlTester } from '../controls/integer.control';
 import { connect, Event } from '../../common/binding';
@@ -18,7 +18,7 @@ export class MaterializedIntegerControl extends Control<ControlProps, ControlSta
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {setLabelField(label, required)}
+          {computeLabel(label, required)}
         </label>
         <input type='number'
                step='1'

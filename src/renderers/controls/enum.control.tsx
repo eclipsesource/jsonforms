@@ -6,10 +6,10 @@ import { update } from '../../actions';
 import { connect, Event } from '../../common/binding';
 import { Control, ControlProps, ControlState } from './Control';
 import {
+  computeLabel,
   formatErrorMessage,
   mapStateToControlProps,
-  registerStartupRenderer,
-  setLabelField
+  registerStartupRenderer
 } from '../renderer.util';
 
 /**
@@ -36,7 +36,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {setLabelField(label, required)}
+          {computeLabel(label, required)}
         </label>
         <select
           className={classNames.input}

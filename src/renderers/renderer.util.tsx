@@ -134,7 +134,7 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
         && nextHigherSchema.required.indexOf(lastSegment) !== -1;
 };
 
-export const setLabelField = (label: string, required: boolean): string => {
+export const computeLabel = (label: string, required: boolean): string => {
   return required ? label + '*' : label;
 };
 

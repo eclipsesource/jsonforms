@@ -2,9 +2,9 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import {
+    computeLabel,
     mapStateToControlProps,
-    registerStartupRenderer,
-    setLabelField
+    registerStartupRenderer
 } from '../renderer.util';
 import { textAreaControlTester } from '../controls/textarea.control';
 import { connect, Event } from '../../common/binding';
@@ -18,7 +18,7 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {setLabelField(label, required)}
+          {computeLabel(label, required)}
         </label>
         <textarea
           value={this.state.value}

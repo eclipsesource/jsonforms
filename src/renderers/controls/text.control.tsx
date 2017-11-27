@@ -2,10 +2,10 @@ import { JSX } from '../JSX';
 import { isControl, RankedTester, rankWith } from '../../core/testers';
 import { Control, ControlProps, ControlState } from './Control';
 import {
+  computeLabel,
   formatErrorMessage,
   mapStateToControlProps,
-  registerStartupRenderer,
-  setLabelField
+  registerStartupRenderer
 } from '../renderer.util';
 import { connect, Event } from '../../common/binding';
 
@@ -25,7 +25,7 @@ export class TextControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {setLabelField(label, required)}
+          {computeLabel(label, required)}
         </label>
         <input value={this.state.value}
                onChange={

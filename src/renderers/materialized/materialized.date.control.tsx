@@ -2,9 +2,9 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import {
+    computeLabel,
     mapStateToControlProps,
-    registerStartupRenderer,
-    setLabelField
+    registerStartupRenderer
 } from '../renderer.util';
 import { dateControlTester } from '../controls/date.control';
 import { connect, Event } from '../../common/binding';
@@ -29,7 +29,7 @@ export class DateControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {setLabelField(label, required)}
+          {computeLabel(label, required)}
         </label>
         <input type='text'
                value={this.state.value}
