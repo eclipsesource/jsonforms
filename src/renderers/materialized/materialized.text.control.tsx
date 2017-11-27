@@ -12,7 +12,8 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
   componentDidMount() {
     const { id, uischema, schema } = this.props;
     const controlElement = uischema as ControlElement;
-    const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
+    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const maxLength = resolvedSchema ? resolvedSchema.maxLength : undefined;
     if (uischema.options && uischema.options.trim && maxLength !== undefined) {
       const fontSize = parseFloat($('[id="' + id + '"]').css('font-size'));
       $('[id="' + id + '"]').css('width', (maxLength * 15) * (fontSize / 14.5) + 'px');
