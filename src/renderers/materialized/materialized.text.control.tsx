@@ -25,7 +25,8 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
   render() {
     const { classNames, id, visible, enabled, errors, label, uischema, schema } = this.props;
     const controlElement = uischema as ControlElement;
-    const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
+    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const maxLength = resolvedSchema ? resolvedSchema.maxLength : undefined;
 
     return (
       <div className={classNames.wrapper} id={id + '-parent'}>
