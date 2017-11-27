@@ -46,8 +46,7 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
                             <p>
                                 <input
                                     type='radio'
-                                    name={optionValue}
-                                    value={optionValue}
+                                    name='group1'
                                     id={optionValue}
                                 />
                                 <label for={optionValue}>
