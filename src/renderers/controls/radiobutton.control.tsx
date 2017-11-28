@@ -54,16 +54,17 @@ export class RadiobuttonControl extends Control<ControlProps, ControlState> {
                             .concat(
                                 options.map(optionValue => {
                                     return (
-                                        <p>
+                                        <div>
                                             <input
                                                 type='radio'
                                                 name='goup1'
                                                 id={optionValue}
+                                                value={optionValue}
                                             />
                                             <label for={optionValue}>
                                                 {optionValue}
                                             </label>
-                                        </p>
+                                        </div>
                                     );
                                 })
                             )
