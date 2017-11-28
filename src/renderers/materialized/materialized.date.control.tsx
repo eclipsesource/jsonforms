@@ -25,9 +25,6 @@ export class DateControl extends Control<ControlProps, ControlState> {
 
     return (
       <div className={classNames.wrapper}>
-        <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {label}
-        </label>
         <input type='text'
                value={this.state.value || ''}
                onChange={ev => this.handleChange(ev.target.value)}
@@ -37,6 +34,9 @@ export class DateControl extends Control<ControlProps, ControlState> {
                disabled={!enabled}
                autoFocus={uischema.options && uischema.options.focus}
         />
+        <label htmlFor={id} className={classNames.label} data-error={errors}>
+          {label}
+        </label>
       </div>
     );
   }
