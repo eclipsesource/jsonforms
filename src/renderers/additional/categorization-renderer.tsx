@@ -60,16 +60,11 @@ export interface SingleCategoryProps {
   path: string;
 }
 
-export const SingleCategory = ({ category, schema, path }: SingleCategoryProps) => {
+export const SingleCategory = ({ category, schema, path }: SingleCategoryProps) => (
   // TODO: add selected style
-  if (category.elements === undefined) {
-    return (<div id='categorization.detail'/>);
-  }
-
-  return (
-    <div id='categorization.detail'>
-      {
-        (category.elements || []).map((child, index) =>
+  <div id='categorization.detail'>
+    {
+      (category.elements || []).map((child, index) =>
           (
             <DispatchRenderer
               key={path + index.toString()}
@@ -78,16 +73,13 @@ export const SingleCategory = ({ category, schema, path }: SingleCategoryProps) 
               path={path}
             />
           )
-        )
-      }
-    </div>
-  );
-};
+      )
+    }
+  </div>
+);
 
-
-const isCategorization = (category: Category | Categorization): category is Categorization => {
-  return category.type === 'Categorization';
-};
+const isCategorization = (category: Category | Categorization): category is Categorization =>
+  category.type === 'Categorization';
 
 /**
  * Default tester for a categorization.

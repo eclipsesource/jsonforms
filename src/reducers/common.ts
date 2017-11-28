@@ -38,9 +38,9 @@ export const commonStateReducer = (
           schema: state.schema
         };
       } else {
-        const currData = get(state.data, action.path);
-        const data = action.updater(currData);
-        const newState = set(state.data, action.path, data);
+        const oldData = get(state.data, action.path);
+        const newData = action.updater(oldData);
+        const newState = set(state.data, action.path, newData);
 
         return {
           data: newState,
