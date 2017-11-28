@@ -26,8 +26,8 @@ const deriveLabel = (controlElement: ControlElement): string => {
 };
 
 /**
- * Return a label object based on the given JSON schema and control element.
- * @param {ControlElement} controlElement the UI schema to obtain a label object for
+ * Return a label object based on the given control element.
+ * @param {ControlElement} withLabel the UI schema to obtain a label object for
  * @returns {ILabelObject}
  */
 
