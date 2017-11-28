@@ -13,9 +13,6 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
     
     return (
       <div className={classNames.wrapper}>
-        <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {label}
-        </label>
         <textarea
           value={this.state.value || ''}
           onChange={(ev: Event<HTMLTextAreaElement>) =>
@@ -27,6 +24,9 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
           disabled={!enabled}
           autoFocus={uischema.options && uischema.options.focus}
         />
+        <label htmlFor={id} className={classNames.label} data-error={errors}>
+          {label}
+        </label>
       </div>
     );
   }
