@@ -273,8 +273,7 @@ test('update with undefined value', t => {
   );
   const textArea = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLTextAreaElement;
   store.dispatch(update('name', () => undefined));
-  // keep value
-  t.is(textArea.value, 'Foo');
+  t.is(textArea.value, '');
 });
 
 test('update with null value', t => {
@@ -288,7 +287,7 @@ test('update with null value', t => {
   );
   const textArea = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLTextAreaElement;
   store.dispatch(update('name', () => null));
-  t.is(textArea.value, 'Foo');
+  t.is(textArea.value, '');
 });
 
 test('update with wrong ref', t => {

@@ -30,7 +30,7 @@ export class TextAreaControl extends Control<ControlProps, ControlState> {
           {label}
         </label>
         <textarea
-          value={this.state.value}
+          value={this.state.value || ''}
           onChange={(ev: Event<HTMLTextAreaElement>) =>
             this.handleChange(ev.currentTarget.value)
           }

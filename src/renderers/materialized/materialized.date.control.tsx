@@ -22,13 +22,14 @@ export class DateControl extends Control<ControlProps, ControlState> {
   render() {
     const { classNames, id, visible, enabled, errors, label, uischema } = this.props;
     classNames.input += ' datepicker';
+
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
           {label}
         </label>
         <input type='text'
-               value={this.state.value}
+               value={this.state.value || ''}
                onChange={ev => this.handleChange(ev.target.value)}
                className={classNames.input}
                id={id}

@@ -23,8 +23,18 @@ export const enumControlTester: RankedTester = rankWith(2, and(
 export class EnumControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const  { uischema, schema, classNames, id, label,
-      visible, enabled, data, path, errors, dispatch } = this.props;
+    const  {
+      uischema,
+      schema,
+      classNames,
+      id,
+      label,
+      visible,
+      enabled,
+      path,
+      errors,
+      dispatch
+    } = this.props;
 
     const isValid = errors.length === 0;
     const options = resolveSchema(
@@ -42,27 +52,26 @@ export class EnumControl extends Control<ControlProps, ControlState> {
           className={classNames.input}
           hidden={!visible}
           disabled={!enabled}
-          value={this.state.value}
+          value={this.state.value || ''}
           onChange={(ev: Event<HTMLSelectElement>) =>
             dispatch(update(path, () => ev.currentTarget.value))
           }
         >
           {
-            [<option value='' selected={data === undefined}/>]
+            [<option value='' key={'empty'} />]
               .concat(
-                options.map(optionValue => {
-                  return (
-                    <option
-                      value={optionValue}
-                      label={optionValue}
-                      selected={data === optionValue}
-                      key={optionValue}
-                    >
-                      {optionValue}
-                    </option>
-                  );
-                })
-              )
+                options.map(optionValue =>
+                    (
+                      <option
+                        value={optionValue}
+                        label={optionValue}
+                        key={optionValue}
+                      >
+                        {optionValue}
+                      </option>
+                    )
+                )
+            )
           }
         </select>
         <div className={divClassNames}>

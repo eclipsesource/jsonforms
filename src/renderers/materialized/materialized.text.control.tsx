@@ -12,7 +12,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
 
     return (
       <div className={classNames.wrapper}>
-        <input value={this.state.value}
+        <input value={this.state.value || ''}
                onChange={(ev: Event<HTMLInputElement>) =>
                  this.handleChange(ev.currentTarget.value)
                }

@@ -30,7 +30,7 @@ export class BooleanControl extends Control<ControlProps, ControlState> {
           {label}
         </label>
         <input type='checkbox'
-               checked={this.state.value}
+               checked={this.state.value || ''}
                onChange={(ev: Event<HTMLInputElement>) =>
                  this.handleChange(ev.currentTarget.checked)
                }

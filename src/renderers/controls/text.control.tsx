@@ -26,7 +26,7 @@ export class TextControl extends Control<ControlProps, ControlState> {
         <label htmlFor={id} className={classNames.label}>
           {label}
         </label>
-        <input value={this.state.value}
+        <input value={this.state.value || ''}
                onChange={
                  (ev: Event<HTMLInputElement>) =>
                    this.handleChange(ev.currentTarget.value)

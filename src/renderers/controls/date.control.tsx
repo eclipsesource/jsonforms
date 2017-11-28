@@ -31,7 +31,7 @@ export class DateControl extends Control<ControlProps, ControlState> {
           {label}
         </label>
         <input type='date'
-               value={this.state.value}
+               value={this.state.value || ''}
                onChange={(ev: Event<HTMLInputElement>) => {
                  if (_.isDate(ev.currentTarget.value)) {
                    this.handleChange(

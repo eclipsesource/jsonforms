@@ -312,11 +312,6 @@ test('update via input event', t => {
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.checked = false;
   change(input);
-  // const evt = new Event('click', {
-  //   'bubbles': true,
-  //   'cancelable': true
-  // });
-  // input.dispatchEvent(evt);
   t.is(getData(store.getState()).foo, false);
 });
 
