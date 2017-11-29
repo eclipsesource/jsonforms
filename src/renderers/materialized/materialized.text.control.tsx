@@ -12,22 +12,32 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
   componentDidMount() {
     const { id, uischema, schema } = this.props;
     const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
-    const maxLength = resolvedSchema ? resolvedSchema.maxLength : undefined;
+    const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
     if (uischema.options && uischema.options.trim && maxLength !== undefined) {
-      const fontSize = parseFloat($('[id="' + id + '"]').css('font-size'));
-      $('[id="' + id + '"]').css('width', (maxLength * 15) * (fontSize / 14.5) + 'px');
+      const input = $(`[id="${id}"]`);
+      const fontSize = parseFloat(input.css('font-size'));
+
+      /* The widest letter of the latin alphabet is W and has a width of 15px when
+         displayed with a font-size of 14.5px.
+         For the calculation of the input's width, the maximum number of allowed characters
+         (maxLength) has to be multiplied by 15px, as an input text consisting of W only
+         can be assumed to be the widest input text possible.
+         Furthermore, the result of this has to be multiplied by the ratio with which the
+         font-size has increased (decreased) compared to the base font-size of 14.5px
+         that applies to the mentioned width of 15px for a W, in order to enlarge (shrink)
+         the input width according to the changed font-size.
+       */
+      input.css('width', `${(maxLength * 15) * (fontSize / 14.5)}px`);
 
       // work-around of https://github.com/Dogfalo/materialize/issues/5408
-      $('[id="' + id + '-parent"]').css('text-align', 'initial');
+      $(`[id="${id}-parent"]`).css('text-align', 'initial');
     }
   }
 
   render() {
     const { classNames, id, visible, enabled, errors, label, uischema, schema } = this.props;
     const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
-    const maxLength = resolvedSchema ? resolvedSchema.maxLength : undefined;
+    const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
 
     return (
       <div className={classNames.wrapper} id={id + '-parent'}>
