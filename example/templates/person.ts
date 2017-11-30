@@ -31,6 +31,11 @@ const schema = {
     },
     'occupation': {
       'type': 'string'
+    },
+    'slider': {
+      'type': 'number',
+      'maximum': 50,
+      'minimum': 1
     }
   },
   'required': ['occupation', 'nationality']
@@ -111,6 +116,21 @@ const uischema = {
             '$ref': '#/properties/birthDate'
           }
         }
+      ]
+    },
+    {
+      'type': 'HorizontalLayout',
+      'elements': [
+         {
+           'type': 'Control',
+           'label': 'Slider',
+           'scope': {
+             '$ref': '#/properties/slider'
+           },
+           'options': {
+             'slider': true
+           }
+         }
       ]
     }
   ]
