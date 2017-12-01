@@ -5,9 +5,11 @@ node_js:
 
 install:
   - npm install
+  - lerna bootstrap
 
 script:
-  - npm run test
+  - lerna run build
+  - lerna run test
 
 after_success:
     - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'

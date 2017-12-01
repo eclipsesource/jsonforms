@@ -1,0 +1,61 @@
+{
+  "name": "jsonforms-core",
+  "version": "2.1.0",
+  "description": "Generating forms for JSON schema",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "main": "dist/ts-build/index.js",
+  "typings": "dist/ts-build/index.d.ts",
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "bundle": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
+    "build": "../../node_modules/.bin/tsc && npm run bundle",
+    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
+    "test-coverage": "tsc --project test/tsconfig.test.json && nyc ava",
+    "lint": "../../node_modules/.bin/tslint --project tslint.json --exclude src/models/jsonSchema.ts",
+    "tsc": "tsc",
+    "report": "nyc report --reporter=html",
+    "example_library": "npm run bundle && lite-server -c example_library/bs-config.json",
+    "wct": "wct wct-test",
+    "publish-prerelease": "npm run build && npm -no-git-tag-version version prerelease && npm run commit-local && npm run push-tag && npm publish --tag next",
+    "publish-patch": "npm run build && npm run test && npm -no-git-tag-version version patch && npm run commit-local && npm run push-tag && npm publish",
+    "publish-patch-local": "npm run build && npm run test && npm -no-git-tag-version version patch && npm run commit-local && npm publish",
+    "publish-minor": "npm run build && npm run test && npm -no-git-tag-version version minor && npm run commit-local && npm run push-tag && npm publish",
+    "publish-major": "npm run build && npm run test && npm -no-git-tag-version version major && npm run commit-local && npm run push-tag && npm publish",
+    "commit-local": "git add package.json && git commit -m \"Bump version number to $npm_package_version\"",
+    "push-tag": "git checkout -b auto-git-publish-$npm_package_version && git add -f dist/**/* && git commit -m \"Release $npm_package_version\" && git tag -a $npm_package_version -m \"Release $npm_package_version\" && git push upstream $npm_package_version",
+    "clean": "rm -rf dist"
+  },
+  "ava": {
+    "verbose": true,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^1.0.20",
+    "ajv": "^4.11.2",
+    "dot-prop-immutable": "^1.3.1",
+    "es6-shim": "^0.35.3",
+    "json-refs": "^2.1.6",
+    "lodash": "^4.17.4",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "ts-loader": "^3.2.0",
+    "tslint-loader": "^3.5.3",
+    "webpack": "^3.10.0"
+  }
+}
