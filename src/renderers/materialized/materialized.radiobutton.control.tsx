@@ -40,7 +40,8 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
             // https://stackoverflow.com/questions/47338362/radio-buttons-are-not-working-
             // for-materialize-css-design
             // we need here a hack to delete input field.
-            <form className={classNames.wrapper.replace('input-field','')} hidden={!visible}>
+            <form className={classNames.wrapper.replace('input-field','')} hidden={!visible}
+                  action='#'>
                 <label htmlFor={id} data-error={errors}>
                     {label}
                 </label>
@@ -50,7 +51,7 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
                             <p>
                                 <input
                                     type='radio'
-                                    name='group1'
+                                    name={label}
                                     id={optionValue}
                                     value={this.state.value}
                                 />
