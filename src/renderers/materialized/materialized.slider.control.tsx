@@ -14,26 +14,31 @@ export class SliderControl extends Control<ControlProps, ControlState> {
         const { classNames, id, visible, enabled, errors, label, uischema, schema } = this.props;
         const controlElement = uischema as ControlElement;
         const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+        // class name has to be range-field otherwise tooltip icon doesn't move on
+        // change or it doesn't disappear on mouse down
+        classNames.wrapper = 'range-field';
 
         return (
+          <div>
+            <label htmlFor={id} className={classNames.label} data-error={errors}>
+              {label}
+            </label>
             <div className={classNames.wrapper}>
-                <label htmlFor={id} className={classNames.label} data-error={errors}>
-                    {label}
-                </label>
-                <input type='range'
-                       max={resolvedSchema.maximum}
-                       min={resolvedSchema.minimum}
-                       value={this.state.value}
-                       onChange={(ev: Event<HTMLInputElement>) =>
-                           this.handleChange(_.toNumber(ev.currentTarget.value))
-                       }
-                       className={classNames.input}
-                       id={id}
-                       hidden={!visible}
-                       disabled={!enabled}
-                       autoFocus={uischema.options && uischema.options.focus}
-                />
+              <input type='range'
+                     max={resolvedSchema.maximum}
+                     min={resolvedSchema.minimum}
+                     value={this.state.value}
+                     onChange={(ev: Event<HTMLInputElement>) =>
+                       this.handleChange(_.toNumber(ev.currentTarget.value))
+                     }
+                     className={classNames.input}
+                     id={id}
+                     hidden={!visible}
+                     disabled={!enabled}
+                     autoFocus={uischema.options && uischema.options.focus}
+              />
             </div>
+          </div>
         );
     }
 }

@@ -164,6 +164,15 @@ export const and = (...testers: Tester[]): Tester =>
         testers.reduce((acc, tester) => acc && tester(uischema, schema), true);
 
 /**
+ * A tester that allow composing other testers by || them.
+ *
+ * @param {Array<Tester>} testers the testers to be composed
+ */
+export const or = (...testers: Tester[]): Tester =>
+  (uischema: UISchemaElement, schema: JsonSchema) =>
+    testers.reduce((acc, tester) => acc || tester(uischema, schema), false);
+
+/**
  * Create a ranked tester that will associate a number with a given tester, if the
  * latter returns true.
  *

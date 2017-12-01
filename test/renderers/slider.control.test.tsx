@@ -113,7 +113,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
   );
 });
 
-test('tester with matching schema type', t => {
+test('tester with matching schema type (number)', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: {
@@ -131,6 +131,40 @@ test('tester with matching schema type', t => {
         properties: {
           foo: {
             type: 'number'
+          }
+        }
+      }
+    ),
+    4
+  );
+});
+
+test('tester with matching schema type (integer)', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'integer'
+      }
+    }
+  };
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    },
+    options: {
+      slider: true
+    }
+  };
+  t.is(
+    sliderControlTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'integer'
           }
         }
       }

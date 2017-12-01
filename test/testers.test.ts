@@ -3,6 +3,7 @@ import {
     and,
     formatIs,
     optionIs,
+    or,
     refEndIs,
     refEndsWith,
     schemaMatches,
@@ -211,3 +212,23 @@ test('and should allow to compose multiple testers', t => {
         refEndIs('foo')
     )(uischema, schema));
 });
+
+test('or should allow to compose multiple testers', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: 'integer' }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.true(or(
+    schemaTypeIs('integer'),
+    optionIs('slider', true)
+  )(uischema, schema));
+});
+

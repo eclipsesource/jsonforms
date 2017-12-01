@@ -10,10 +10,14 @@ const schema = {
       'type': 'object',
       'properties': {
           'age': {
-              'type': 'integer'
+              'type': 'integer',
+              'maximum': 25,
+              'minimum': 1
           },
           'height': {
-              'type': 'number'
+              'type': 'number',
+              'maximum': 100,
+              'minimum': 1
           }
       },
       'required': ['age', 'height']
@@ -31,11 +35,6 @@ const schema = {
     },
     'occupation': {
       'type': 'string'
-    },
-    'slider': {
-      'type': 'number',
-      'maximum': 50,
-      'minimum': 1
     }
   },
   'required': ['occupation', 'nationality']
@@ -63,6 +62,9 @@ const uischema = {
           },
           'scope': {
             '$ref': '#/properties/personalData/properties/age'
+          },
+          'options': {
+            'slider': true
           }
         },
         {
@@ -70,6 +72,9 @@ const uischema = {
           'label': 'Height',
           'scope': {
             '$ref': '#/properties/personalData/properties/height'
+          },
+          'options': {
+            'slider': true
           }
         },
         {
@@ -116,21 +121,6 @@ const uischema = {
             '$ref': '#/properties/birthDate'
           }
         }
-      ]
-    },
-    {
-      'type': 'HorizontalLayout',
-      'elements': [
-         {
-           'type': 'Control',
-           'label': 'Slider',
-           'scope': {
-             '$ref': '#/properties/slider'
-           },
-           'options': {
-             'slider': true
-           }
-         }
       ]
     }
   ]
