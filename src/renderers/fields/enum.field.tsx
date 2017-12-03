@@ -19,7 +19,6 @@ export class EnumField extends Field<FieldProps, FieldState> {
         autoFocus={uischema.options && uischema.options.focus}
         value={data || ''}
         onChange={(ev: Event<HTMLSelectElement>) => {
-          console.log(ev.currentTarget.value);
           this.handleChange(ev.currentTarget.value);
         }
         }

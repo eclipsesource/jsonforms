@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { integerControlTester } from '../controls/integer.control';
+import { integerFieldTester } from '../fields/integer.field';
 import { connect, Event } from '../../common/binding';
 
 export class MaterializedIntegerControl extends Control<ControlProps, ControlState> {
@@ -34,6 +34,6 @@ export class MaterializedIntegerControl extends Control<ControlProps, ControlSta
 }
 
 export default registerStartupRenderer(
-  withIncreasedRank(1, integerControlTester),
+  withIncreasedRank(1, integerFieldTester),
   connect(mapStateToControlProps)(MaterializedIntegerControl)
 );

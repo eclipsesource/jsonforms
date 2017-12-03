@@ -2,7 +2,7 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { textAreaControlTester } from '../controls/textarea.control';
+import { textAreaFieldTester } from '../fields/textarea.field';
 import { connect, Event } from '../../common/binding';
 
 export class MaterializedTextareaControl extends Control<ControlProps, ControlState> {
@@ -10,7 +10,7 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
   render() {
     const { classNames, id, visible, enabled, errors, label, uischema } = this.props;
     classNames.input += ' materialize-textarea';
-    
+
     return (
       <div className={classNames.wrapper}>
         <textarea
@@ -33,6 +33,6 @@ export class MaterializedTextareaControl extends Control<ControlProps, ControlSt
 }
 
 export default registerStartupRenderer(
-  withIncreasedRank(1, textAreaControlTester),
+  withIncreasedRank(1, textAreaFieldTester),
   connect(mapStateToControlProps)(MaterializedTextareaControl)
 );

@@ -2,7 +2,7 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { textControlTester } from '../controls/text.control';
+import { textFieldTester } from '../fields/text.field';
 import { connect, Event } from '../../common/binding';
 
 export class MaterializedTextControl extends Control<ControlProps, ControlState> {
@@ -31,6 +31,6 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
 }
 
 export default registerStartupRenderer(
-  withIncreasedRank(1, textControlTester),
+  withIncreasedRank(1, textFieldTester),
   connect(mapStateToControlProps)(MaterializedTextControl)
 );

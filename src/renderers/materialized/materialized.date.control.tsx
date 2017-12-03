@@ -2,7 +2,7 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { dateControlTester } from '../controls/date.control';
+import { dateFieldTester } from '../fields/date.field';
 import { connect, Event } from '../../common/binding';
 declare let $;
 export class DateControl extends Control<ControlProps, ControlState> {
@@ -43,6 +43,6 @@ export class DateControl extends Control<ControlProps, ControlState> {
 }
 
 export default registerStartupRenderer(
-  withIncreasedRank(1, dateControlTester),
+  withIncreasedRank(1, dateFieldTester),
   connect(mapStateToControlProps)(DateControl)
 );

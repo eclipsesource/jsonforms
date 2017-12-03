@@ -1,14 +1,8 @@
 export * from './label.util';
 export * from './renderer.util';
-
+export * from './fields/index';
 export * from './controls/Control';
-export * from './controls/text.control';
-export * from './controls/boolean.control';
-export * from './controls/integer.control';
-export * from './controls/number.control';
-export * from './controls/date.control';
-export * from './controls/enum.control';
-export * from './controls/textarea.control';
+export * from './controls/input.control';
 export * from './layouts/vertical.layout';
 export * from './layouts/horizontal.layout';
 export * from './layouts/group.layout';

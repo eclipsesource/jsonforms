@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { numberControlTester } from '../controls/number.control';
+import { numberFieldTester } from '../fields/number.field';
 import { connect, Event } from '../../common/binding';
 
 export class NumberControl extends Control<ControlProps, ControlState> {
@@ -34,6 +34,6 @@ export class NumberControl extends Control<ControlProps, ControlState> {
 }
 
 export default registerStartupRenderer(
-  withIncreasedRank(1, numberControlTester),
+  withIncreasedRank(1, numberFieldTester),
   connect(mapStateToControlProps)(NumberControl)
 );
