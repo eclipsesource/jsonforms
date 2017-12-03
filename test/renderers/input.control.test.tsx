@@ -182,7 +182,7 @@ test.skip('hide', t => {
     />
     </Provider>
 );
-  const control = findRenderedDOMElementWithClass(tree, 'control');
+  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
 
@@ -199,7 +199,7 @@ test.skip('show by default', t => {
 />
   </Provider>
 );
-  const control = findRenderedDOMElementWithClass(tree, 'control');
+  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
 
