@@ -78,7 +78,7 @@ export const schemaSubPathMatches =
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(schema =>
-    !_.isEmpty(schema) && schema.type === expectedType
+  !_.isEmpty(schema) && schema.type === expectedType
 );
 
 /**
@@ -181,7 +181,7 @@ export const rankWith = (rank: number, tester: Tester) =>
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
   (uischema: UISchemaElement, schema: JsonSchema): number => {
     return rankedTester(uischema, schema) + by;
-};
+  };
 
 /**
  * Default tester for boolean.
