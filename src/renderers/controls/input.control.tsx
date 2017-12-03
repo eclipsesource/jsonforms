@@ -11,12 +11,12 @@ import DispatchField from '../fields/dispatch.field';
 import { isControl, RankedTester, rankWith } from '../../core/testers';
 
 export const InputControl =
-  ({ classNames, id, errors, label, uischema, schema }: ControlProps) => {
+  ({ classNames, id, errors, label, uischema, schema, visible }: ControlProps) => {
   const isValid = errors.length === 0;
   const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
   return (
-    <div className={classNames.wrapper}>
+    <div className={classNames.wrapper} hidden={!visible}>
       <label htmlFor={id} className={classNames.label}>
         {label}
       </label>
