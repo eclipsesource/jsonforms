@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Component } from 'react';
 import * as _ from 'lodash';
-
 export interface RatingState {
   rating: number;
   hoverAt: number | null;
