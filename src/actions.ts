@@ -13,6 +13,8 @@ export const ENABLE = 'ENABLE';
 export const DISABLE = 'DISABLE';
 export const ADD_RENDERER = 'ADD_RENDERER';
 export const REMOVE_RENDERER = 'REMOVE_RENDERER';
+export const ADD_INPUT = 'ADD_INPUT';
+export const REMOVE_INPUT = 'REMOVE_INPUT';
 
 // TODO: fix typings
 export const update =

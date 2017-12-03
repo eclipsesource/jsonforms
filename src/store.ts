@@ -21,24 +21,25 @@ export const createJsonFormsStore = (initialState): JsonFormsStore => {
 export const initJsonFormsStore =
   (data: any, schema: JsonSchema, uischema: UISchemaElement): JsonFormsStore => {
 
-  const store = createJsonFormsStore({
-    common: {
+    const store = createJsonFormsStore({
+      common: {
+        data
+      },
+      renderers: JsonForms.renderers,
+      inputs: JsonForms.inputs
+    });
+
+    store.dispatch({
+      type: INIT,
+      data,
+      schema,
+      uischema
+    });
+
+    store.dispatch({
+      type: VALIDATE,
       data
-    },
-    renderers: JsonForms.renderers
-  });
+    });
 
-  store.dispatch({
-    type: INIT,
-    data,
-    schema,
-    uischema
-  });
-
-  store.dispatch({
-    type: VALIDATE,
-    data
-  });
-
-  return store;
-};
+    return store;
+  };
