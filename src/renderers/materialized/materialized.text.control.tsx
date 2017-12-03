@@ -17,17 +17,32 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
       const input = $(`[id="${id}"]`);
       const fontSize = parseFloat(input.css('font-size'));
 
-      /* The widest letter of the latin alphabet is W and has a width of 15px when
-         displayed with a font-size of 14.5px.
-         For the calculation of the input's width, the maximum number of allowed characters
-         (maxLength) has to be multiplied by 15px, as an input text consisting of W only
-         can be assumed to be the widest input text possible.
-         Furthermore, the result of this has to be multiplied by the ratio with which the
-         font-size has increased (decreased) compared to the base font-size of 14.5px
-         that applies to the mentioned width of 15px for a W, in order to enlarge (shrink)
-         the input width according to the changed font-size.
+      /**
+       * The widest letter of the latin alphabet is W and has a width of
+       * widestLetterWidth when displayed with a font-size of baseFontSize.
+       * Needed for the calculation of the input's width.
+       * @type {number}
        */
-      input.css('width', `${(maxLength * 15) * (fontSize / 14.5)}px`);
+      const widestLetterWidth = 15;
+
+      /**
+       * Base font size at which the letter W has a width of widestLetterWidth.
+       * Needed for taking the current font-size of the input into account
+       * when calculating the input's width.
+       * @type {number}
+       */
+      const baseFontSize = 14.5;
+
+      /*
+         For the calculation of the input's width, the maximum number of allowed characters
+         (maxLength) has to be multiplied by widestLetterWidth, as an input text consisting
+         of W only can be assumed to be the widest input text possible.
+         Furthermore, the result of this has to be multiplied by the ratio with which the
+         font-size has increased (decreased) compared to the baseFontSize that applies to
+         the mentioned widestLetterWidth for a W, in order to enlarge (shrink) the input
+         width according to the changed font-size.
+       */
+      input.css('width', `${(maxLength * widestLetterWidth) * (fontSize / baseFontSize)}px`);
 
       // work-around of https://github.com/Dogfalo/materialize/issues/5408
       $(`[id="${id}-parent"]`).css('text-align', 'initial');
