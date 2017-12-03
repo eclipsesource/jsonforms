@@ -171,7 +171,7 @@ test('render without label', t => {
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
 });
-// TODO: why are we hiding only the input?
+
 test.skip('hide', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
@@ -182,8 +182,8 @@ test.skip('hide', t => {
     />
     </Provider>
 );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.hidden);
+  const control = findRenderedDOMElementWithClass(tree, 'control');
+  t.true(control.hidden);
 });
 
 test.skip('show by default', t => {
@@ -199,8 +199,8 @@ test.skip('show by default', t => {
 />
   </Provider>
 );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.hidden);
+  const control = findRenderedDOMElementWithClass(tree, 'control');
+  t.false(control.hidden);
 });
 
 test('single error', t => {
