@@ -172,7 +172,7 @@ test('render without label', t => {
   t.is((validation as HTMLDivElement).children.length, 0);
 });
 
-test.skip('hide', t => {
+test('hide', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
@@ -186,7 +186,7 @@ test.skip('hide', t => {
   t.true(control.hidden);
 });
 
-test.skip('show by default', t => {
+test('show by default', t => {
   const store = initJsonFormsStore(
     t.context.data,
     t.context.schema,
