@@ -277,23 +277,37 @@ jsonforms-tree > dialog > .content {
   border-bottom: none;
 }
 
-.array-table-layout header {
+.array-table-layout.control > header {
   display: flex;
+  margin: 0.25em;
 }
 .array-table-layout header label{
   flex: 1;
   font-weight: bold;
 }
 .array-table-layout table {
-  width: 100%;
+  flex:1;
+  display: flex;
+  flex-direction: column;
 }
-.array-table-layout table .control {
+.array-table-layout table.control > * {
   margin: 0;
+}
+.array-table-layout tr{
+    display:flex;
 }
 .array-table-layout table, .array-table-layout th, .array-table-layout td {
     border: 1px solid var(--jsf-border-color);
     border-collapse: collapse;
 }
-.array-table-layout th, .array-table-layout td {
+.array-table-layout th{
     padding: 5px;
+    flex:1
+}
+.array-table-layout td {
+  display: flex;
+  flex:1;
+}
+.array-table-layout td > * {
+  flex:1;
 }
