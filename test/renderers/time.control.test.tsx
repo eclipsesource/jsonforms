@@ -1,13 +1,10 @@
 import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
-import DateControl, { dateControlTester } from '../../src/renderers/controls/date.control';
-import { ControlElement, HorizontalLayout } from '../../src/models/uischema';
-import { HorizontalLayoutRenderer } from '../../src/renderers/layouts/horizontal.layout';
+import TimeControl, { timeControlTester } from '../../src/renderers/controls/time.control';
 import { JsonForms } from '../../src/core';
+import { initJsonFormsStore } from '../helpers/setup';
 import { getData } from '../../src/reducers/index';
 import { update, validate } from '../../src/actions';
-import { JsonSchema } from '../../src/models/jsonSchema';
-import { initJsonFormsStore } from '../helpers/setup';
 import {
   change,
   findRenderedDOMElementWithClass,
@@ -30,13 +27,13 @@ test.before(() => {
 });
 
 test.beforeEach(t => {
-  t.context.data = { 'foo': '1980-04-04' };
+  t.context.data = { 'foo': '13:37' };
   t.context.schema = {
     type: 'object',
     properties: {
       foo: {
         type: 'string',
-        format: 'date'
+        format: 'time'
       },
     },
   };
@@ -48,133 +45,16 @@ test.beforeEach(t => {
   };
 });
 
-test('autofocus on first element', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            firstDate: { type: 'string', format: 'date' },
-            secondDate: { type: 'string', format: 'date' }
-        }
-    };
-    const firstControlElement: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/firstDate'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const secondControlElement: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/secondDate'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const uischema: HorizontalLayout = {
-        type: 'HorizontalLayout',
-        elements: [
-            firstControlElement,
-            secondControlElement
-        ]
-    };
-    const data = {
-        'firstDate': '1980-04-04',
-        'secondDate': '1980-04-04'
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    renderIntoDocument(
-        <Provider store={store}>
-            <HorizontalLayoutRenderer schema={schema}
-                                      uischema={uischema}
-            />
-        </Provider>
-    );
-    const activeElement = document.activeElement.getElementsByTagName('input')[0].id;
-    t.is(activeElement, '#/properties/firstDate');
-    t.not(activeElement, '#/properties/secondDate');
-});
-
-test('autofocus active', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/foo'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <DateControl schema={t.context.schema}
-                         uischema={uischema}
-            />
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.true(input.autofocus);
-});
-
-test('autofocus inactive', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/foo'
-        },
-        options: {
-            focus: false
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <DateControl schema={t.context.schema}
-                            uischema={uischema}
-            />
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.false(input.autofocus);
-});
-
-test('autofocus inactive by default', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/foo'
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <DateControl schema={t.context.schema}
-                            uischema={uischema}
-            />
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.false(input.autofocus);
-});
-
 test('tester', t => {
-  t.is(dateControlTester(undefined, undefined), -1);
-  t.is(dateControlTester(null, undefined), -1);
-  t.is(dateControlTester({ type: 'Foo' }, undefined), -1);
-  t.is(dateControlTester({ type: 'Control' }, undefined), -1);
+  t.is(timeControlTester(undefined, undefined), -1);
+  t.is(timeControlTester(null, undefined), -1);
+  t.is(timeControlTester({ type: 'Foo' }, undefined), -1);
+  t.is(timeControlTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-      dateControlTester(
+      timeControlTester(
           t.context.uischmea,
           {
             type: 'object',
@@ -189,7 +69,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-      dateControlTester(
+      timeControlTester(
           t.context.uischema,
           {
             type: 'object',
@@ -197,7 +77,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
               foo: { type: 'string' },
               bar: {
                 type: 'string',
-                format: 'date',
+                format: 'time'
               },
             },
           },
@@ -208,14 +88,14 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with correct prop type', t => {
   t.is(
-    dateControlTester(
+    timeControlTester(
       t.context.uischema,
       {
         type: 'object',
         properties: {
           foo: {
             type: 'string',
-            format: 'date',
+            format: 'time',
           },
         },
       },
@@ -228,7 +108,7 @@ test('render', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -244,8 +124,8 @@ test('render', t => {
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
   t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);
   t.is(label.textContent, 'Foo');
-  t.is(input.type, 'date');
-  t.is(input.value, '1980-04-04');
+  t.is(input.type, 'time');
+  t.is(input.value, '13:37');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
 });
@@ -261,7 +141,7 @@ test('render without label', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={uischema}
       />
     </Provider>
@@ -277,8 +157,8 @@ test('render without label', t => {
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
   t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);
   t.is(label.textContent, '');
-  t.is(input.type, 'date');
-  t.is(input.value, '1980-04-04');
+  t.is(input.type, 'time');
+  t.is(input.value, '13:37');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
 });
@@ -287,36 +167,36 @@ test('update via event', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '1961-04-12';
+  input.value = '20:15';
   change(input);
-  setTimeout(() => t.is(getData(store.getState()).foo, '1961-04-12'), 100);
+  setTimeout(() => t.is(getData(store.getState()).foo, '20:15'), 100);
 });
 
 test('update via action', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => '1961-04-12'));
-  setTimeout(() => t.is(input.value, '1961-04-12'), 100);
+  store.dispatch(update('foo', () => '20:15'));
+  setTimeout(() => t.is(input.value, '20:15'), 100);
 });
 
 test.failing('update with null value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -324,15 +204,15 @@ test.failing('update with null value', t => {
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = '';
   change(input);
-  // FIXME: how does reset of date value look like?
-  t.is(getData(store.getState()).foo, '1970-01-01');
+  // FIXME: how does reset of time value look like?
+  t.is(getData(store.getState()).foo, '23:59');
 });
 
 test.failing('update with undefined value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -340,14 +220,14 @@ test.failing('update with undefined value', t => {
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   input.value = undefined;
   change(input);
-  t.is(getData(store.getState()).foo, '1970-01-01');
+  t.is(getData(store.getState()).foo, '23:59');
 });
 
 test('update with wrong ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -360,14 +240,14 @@ test('update with wrong ref', t => {
       'bar',
       () => 'Bar'
   ));
-  t.is(input.value, '1980-04-04');
+  t.is(input.value, 'undefined');
 });
 
 test('update with null ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -378,16 +258,16 @@ test('update with null ref', t => {
   store.dispatch(
     update(
       null,
-      () => '1961-04-12'
+      () => '20:15'
     ));
-  t.is(input.value, '1980-04-04');
+  t.is(input.value, 'undefined');
 });
 
 test('update with undefined ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -398,16 +278,16 @@ test('update with undefined ref', t => {
   store.dispatch(
     update(
       undefined,
-      () => '1961-04-12'
+      () => '20:15'
     ));
-  t.is(input.value, '1980-04-04');
+  t.is(input.value, 'undefined');
 });
 
 test('hide', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
                       visible={false}
       />
@@ -425,7 +305,7 @@ test('show by default', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
       />
     </Provider>
@@ -442,7 +322,7 @@ test('disable', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
                       enabled={false}
       />
@@ -456,7 +336,7 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
       />
     </Provider>
@@ -469,7 +349,7 @@ test('single error', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
 
       />
@@ -487,15 +367,15 @@ test('multiple errors', t => {
     'properties': {
       'foo': {
         'type': 'string',
-        'format': 'date',
-        'enum': ['1985-01-01']
+        'format': 'time',
+        'enum': ['16:19']
       }
     }
   };
   const store = initJsonFormsStore(t.context.data, schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
 
       />
@@ -518,7 +398,7 @@ test('empty errors by default', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                       uischema={t.context.uischema}
 
       />
@@ -536,7 +416,7 @@ test('reset validation message', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateControl schema={t.context.schema}
+      <TimeControl schema={t.context.schema}
                    uischema={t.context.uischema}
       />
     </Provider>
@@ -546,76 +426,9 @@ test('reset validation message', t => {
   store.dispatch(
     update(
       'foo',
-      () => '1961-04-12'
+      () => '20:15'
     )
   );
   store.dispatch(validate());
   t.is(validation.textContent, '');
-});
-
-test('required field with warning', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            dateField: {
-                type: 'string',
-                format: 'date'
-            }
-        },
-        required: ['dateField']
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/dateField'
-        }
-    };
-
-    const store = initJsonFormsStore(
-        {},
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <DateControl schema={schema}
-                       uischema={uischema}
-          />
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Date Field*');
-});
-
-test('not required', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            dateField: {
-                type: 'string',
-                format: 'date'
-            }
-        }
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/dateField'
-        }
-    };
-
-    const store = initJsonFormsStore(
-        {},
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <DateControl schema={schema}
-                       uischema={uischema}
-          />
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Date Field');
 });

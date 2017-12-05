@@ -6,6 +6,7 @@ import { update } from '../../actions';
 import { connect, Event } from '../../common/binding';
 import { Control, ControlProps, ControlState } from './Control';
 import {
+  computeLabel,
   formatErrorMessage,
   mapStateToControlProps,
   registerStartupRenderer
@@ -24,8 +25,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
 
   render() {
     const  { uischema, schema, classNames, id, label,
-      visible, enabled, data, path, errors, dispatch } = this.props;
-
+      visible, enabled, data, path, errors, dispatch, required } = this.props;
     const isValid = errors.length === 0;
     const options = resolveSchema(
       schema,
@@ -36,7 +36,7 @@ export class EnumControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {label}
+          {computeLabel(label, required)}
         </label>
         <select
           className={classNames.input}

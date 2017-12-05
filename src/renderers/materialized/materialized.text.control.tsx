@@ -3,7 +3,11 @@ import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { resolveSchema } from '../../path.util';
 import { ControlElement } from '../../models/uischema';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import {
+    computeLabel,
+    mapStateToControlProps,
+    registerStartupRenderer
+} from '../renderer.util';
 import { textControlTester } from '../controls/text.control';
 import { connect, Event } from '../../common/binding';
 declare let $;
@@ -50,7 +54,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
   }
 
   render() {
-    const { classNames, id, visible, enabled, errors, label, uischema, schema } = this.props;
+    const { classNames, id, visible, enabled, errors, label, uischema, schema, required } = this.props;
     const controlElement = uischema as ControlElement;
     const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
 
@@ -68,7 +72,7 @@ export class MaterializedTextControl extends Control<ControlProps, ControlState>
                maxlength={uischema.options && uischema.options.restrict ? maxLength : undefined}
         />
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {label}
+          {computeLabel(label, required)}
         </label>
       </div>
     );

@@ -2,6 +2,7 @@ import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import {
+  computeLabel,
   formatErrorMessage,
   mapStateToControlProps,
   registerStartupRenderer
@@ -21,14 +22,14 @@ export const integerControlTester: RankedTester = rankWith(2, and(
 export class IntegerControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const {classNames, id, visible, enabled, errors, label, uischema } = this.props;
+    const {classNames, id, visible, enabled, errors, label, uischema, required } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {label}
+          {computeLabel(label, required)}
         </label>
         <input type='number'
                step='1'

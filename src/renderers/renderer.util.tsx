@@ -13,9 +13,10 @@ import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
 import { composeWithUi, resolveData } from '../path.util';
-import { getElementLabelObject } from './label.util';
+import { getLabelObject } from './label.util';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers/index';
+import { resolveSchema } from '../path.util';
 
 /**
  * A renderer config that is used during renderer registration.
@@ -121,17 +122,34 @@ export const registerStartupRenderer = (tester: RankedTester, renderer: any) => 
   return renderer;
 };
 
+const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
+    const pathSegments = schemaPath.split('/');
+    const lastSegment = pathSegments[pathSegments.length - 1];
+    const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
+    const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
+    const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
+
+    return nextHigherSchema !== undefined
+        && nextHigherSchema.required !== undefined
+        && nextHigherSchema.required.indexOf(lastSegment) !== -1;
+};
+
+export const computeLabel = (label: string, required: boolean): string => {
+  return required ? label + '*' : label;
+};
+
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
-  const labelObject = getElementLabelObject(ownProps.schema, ownProps.uischema);
+  const labelObject = getLabelObject(ownProps.uischema);
   const label = labelObject.show ? labelObject.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
-  const ref = controlElement.scope.$ref;
-  const id = _.has(controlElement.scope, '$ref') ? ref : '';
+  const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
+  const required =
+      controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
 
   const styles = JsonForms.stylingRegistry.get('control');
   const classNames: string[] = !_.isEmpty(controlElement.scope) ?
@@ -155,6 +173,7 @@ export const mapStateToControlProps = (state, ownProps) => {
     visible,
     enabled,
     id,
-    path
+    path,
+    required
   };
 };

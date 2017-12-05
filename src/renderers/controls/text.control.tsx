@@ -4,6 +4,7 @@ import { Control, ControlProps, ControlState } from './Control';
 import { resolveSchema } from '../../path.util';
 import { ControlElement } from '../../models/uischema';
 import {
+  computeLabel,
   formatErrorMessage,
   mapStateToControlProps,
   registerStartupRenderer
@@ -19,7 +20,7 @@ export const textControlTester: RankedTester = rankWith(1, isControl);
 export class TextControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { classNames, id, visible, enabled, errors, label, uischema, schema } = this.props;
+    const { classNames, id, visible, enabled, errors, label, uischema, schema, required } = this.props;
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
     const controlElement = uischema as ControlElement;
@@ -28,7 +29,7 @@ export class TextControl extends Control<ControlProps, ControlState> {
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label}>
-          {label}
+          {computeLabel(label, required)}
         </label>
         <input value={this.state.value}
                onChange={
