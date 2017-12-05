@@ -10,6 +10,7 @@ import {
   scryRenderedDOMElementsWithTag
 } from '../helpers/binding';
 import { Provider } from '../../src/common/binding';
+import '../../src/renderers/fields/text.field';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -98,16 +99,11 @@ test('render two children', t => {
 
   const tds = scryRenderedDOMElementsWithTag(tree, 'td');
   t.is(tds.length, 2);
-
-  t.not(
-    findRenderedDOMElementWithClass(tree, 'root_properties_x'),
-    undefined
-  );
-
-  t.not(
-    findRenderedDOMElementWithClass(tree, 'root_properties_y'),
-    undefined
-  );
+  console.log(tds[0].innerHTML);
+  t.is(tds[0].children.length, 1);
+  t.is(tds[0].children[0].id, '#/properties/x');
+  t.is(tds[1].children.length, 1);
+  t.is(tds[1].children[0].id, '#/properties/y');
 });
 
 // test('render empty data', t => {

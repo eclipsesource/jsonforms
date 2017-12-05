@@ -2,7 +2,6 @@ import { JSX } from '../../src/renderers/JSX';
 import * as _ from 'lodash';
 import { Component } from '../../src/common/binding';
 
-
 export interface RatingState {
   rating: number;
   hoverAt: number | null;
@@ -11,6 +10,7 @@ export interface RatingState {
 export interface RatingProps {
   onClick: any;
   value: number;
+  id: string;
 }
 
 export class Rating extends Component<RatingProps, RatingState> {
@@ -55,6 +55,7 @@ export class Rating extends Component<RatingProps, RatingState> {
                            this.handleClick(i);
                            onClick({ value: i + 1});
                          }}
+                         key={`${this.props.id}_${i}`}
             >
               {i < rating ? '\u2605' : '\u2606'}
             </span>;

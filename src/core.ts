@@ -56,6 +56,7 @@ export class JsonForms {
   private static _config = new JsonFormsConfig();
   private static _schemaService;
   public static renderers = [];
+  public static fields = [];
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
@@ -63,7 +64,7 @@ export class JsonForms {
   public static set schema(schema: JsonSchema) {
     JsonForms._schemaService = new SchemaServiceImpl(schema);
   }
-  public static get schemaService(): SchemaService  {
+  public static get schemaService(): SchemaService {
     if (this._schemaService === undefined) {
       console.error('Schema service has not been initialized');
     }

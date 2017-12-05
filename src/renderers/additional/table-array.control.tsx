@@ -9,7 +9,7 @@ import { getElementLabelObject } from '../label.util';
 import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.util';
 import { update } from '../../actions';
 import { getData } from '../../reducers/index';
-import DispatchRenderer from '../dispatch-renderer';
+import DispatchField from '../fields/dispatch.field';
 import { ControlProps } from '../controls/Control';
 import { registerStartupRenderer } from '../renderer.util';
 import { connect } from '../../common/binding';
@@ -118,7 +118,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
                       .map((prop, idx) => {
                         return (
                           <td key={compose(childPath, idx.toString())}>
-                            <DispatchRenderer
+                            <DispatchField
                               schema={resolvedSchema}
                               uischema={createControlElement(prop)}
                               path={childPath}

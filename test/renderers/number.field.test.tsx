@@ -4,7 +4,7 @@ import { JsonForms } from '../../src/core';
 import { initJsonFormsStore } from '../helpers/setup';
 import { ControlElement, HorizontalLayout } from '../../src/models/uischema';
 import { update, validate } from '../../src/actions';
-import NumberControl, { numberControlTester } from '../../src/renderers/controls/number.control';
+import NumberField, { numberFieldTester } from '../../src/renderers/fields/number.field';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { getData } from '../../src/reducers/index';
 import {
@@ -48,7 +48,6 @@ test.beforeEach(t => {
     },
   };
 });
-
 test('autofocus on first element', t => {
     const schema: JsonSchema = {
         type: 'object',
@@ -93,9 +92,7 @@ test('autofocus on first element', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <HorizontalLayoutRenderer schema={schema}
-                                      uischema={uischema}
-            />
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
         </Provider>
     );
 
@@ -117,9 +114,7 @@ test('autofocus active', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <NumberControl schema={t.context.schema}
-                           uischema={uischema}
-            />
+          <NumberField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -139,9 +134,7 @@ test('autofocus inactive', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <NumberControl schema={t.context.schema}
-                           uischema={uischema}
-            />
+          <NumberField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -158,9 +151,7 @@ test('autofocus inactive by default', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <NumberControl schema={t.context.schema}
-                           uischema={uischema}
-            />
+          <NumberField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -168,10 +159,10 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(numberControlTester(undefined, undefined), -1);
-  t.is(numberControlTester(null, undefined), -1);
-  t.is(numberControlTester({type: 'Foo'}, undefined), -1);
-  t.is(numberControlTester({type: 'Control'}, undefined), -1);
+  t.is(numberFieldTester(undefined, undefined), -1);
+  t.is(numberFieldTester(null, undefined), -1);
+  t.is(numberFieldTester({type: 'Foo'}, undefined), -1);
+  t.is(numberFieldTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong schema type', t => {
@@ -182,7 +173,7 @@ test('tester with wrong schema type', t => {
     }
   };
   t.is(
-      numberControlTester(
+      numberFieldTester(
           control,
           {
             type: 'object',
@@ -205,7 +196,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
     }
   };
   t.is(
-      numberControlTester(
+      numberFieldTester(
           control,
           {
             type: 'object',
@@ -231,7 +222,7 @@ test('tester with machting schema type', t => {
     }
   };
   t.is(
-      numberControlTester(
+      numberFieldTester(
           control,
           {
             type: 'object',
@@ -258,74 +249,21 @@ test('render', t => {
   const store = initJsonFormsStore({ 'foo': 3.14 }, schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={schema} uischema={t.context.uischema}/>
     </Provider>
   );
-
-  const control = findRenderedDOMElementWithClass(tree, 'control');
-  t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
-  t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-  t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);
-
-  const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
-  t.is(label.textContent, 'Foo');
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.type, 'number');
   t.is(input.step, '0.1');
   t.is(input.value, '3.14');
-
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  t.is(validation.tagName, 'DIV');
-  t.is((validation as HTMLDivElement).children.length, 0);
-});
-
-test('render without label', t => {
-  const store = initJsonFormsStore({ 'foo': 2.72 }, t.context.schema, t.context.uischema);
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
-    label: false
-  };
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={uischema}
-      />
-    </Provider>
-  );
-
-  const control = findRenderedDOMElementWithClass(tree, 'control');
-  t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
-  t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-  t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);
-
-  const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
-  t.is(label.textContent, '');
-
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.type, 'number');
-  t.is(input.step, '0.1');
-  t.is(input.value, '2.72');
-
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  t.is(validation.tagName, 'DIV');
-  t.is((validation as HTMLDivElement).children.length, 0);
 });
 
 test('update via input event', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -338,9 +276,7 @@ test('update via action', t => {
   const store = initJsonFormsStore({ 'foo': 2.72 }, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -353,9 +289,7 @@ test('update with undefined value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -367,9 +301,7 @@ test('update with null value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -381,9 +313,7 @@ test('update with wrong ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -395,9 +325,7 @@ test('update with null ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -409,45 +337,12 @@ test('update with undefined ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   store.dispatch(update(undefined, () => 13));
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, '3.14');
-});
-
-test('hide', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                      uischema={t.context.uischema}
-                      visible={false}
-      />
-    </Provider>
-  );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.hidden);
-});
-
-test('show by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                      uischema={t.context.uischema}
-      />
-    </Provider>
-  );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.hidden);
 });
 
 test('disable', t => {
@@ -458,10 +353,7 @@ test('disable', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                      uischema={t.context.uischema}
-                      enabled={false}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -472,91 +364,9 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                      uischema={t.context.uischema}
-      />
+      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
-});
-
-test('single error', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-
-      />
-    </Provider>
-  );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  store.dispatch(update('foo', () => 2));
-  store.dispatch(validate());
-  t.is(validation.textContent, 'should be >= 5');
-});
-
-test('multiple errors', t => {
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number',
-        minimum: 4,
-        enum: [4, 6, 8]
-      }
-    }
-  };
-  const store = initJsonFormsStore(t.context.data, schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                     uischema={t.context.uischema}
-
-      />
-    </Provider>
-  );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  store.dispatch(update('foo', () => 3));
-  store.dispatch(validate());
-  t.is(
-    validation.textContent,
-    'should be >= 4\nshould be equal to one of the allowed values'
-  );
-});
-
-test('empty errors by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                      uischema={t.context.uischema}
-
-      />
-    </Provider>
-  );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  t.is(validation.textContent, '');
-});
-
-test('reset validation message', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <NumberControl schema={t.context.schema}
-                      uischema={t.context.uischema}
-
-      />
-    </Provider>
-  );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  store.dispatch(update('foo', () => 3));
-  store.dispatch(update('foo', () => 10));
-  store.dispatch(validate());
-  t.is(validation.textContent, '');
 });

@@ -2,7 +2,7 @@ import { JSX } from '../JSX';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
 import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { booleanControlTester } from '../controls/boolean.control';
+import { booleanFieldTester } from '../fields/boolean.field';
 import { connect, Event } from '../../common/binding';
 
 export class BooleanControl extends Control<ControlProps, ControlState> {
@@ -31,6 +31,6 @@ export class BooleanControl extends Control<ControlProps, ControlState> {
 }
 
 export default registerStartupRenderer(
-  withIncreasedRank(1, booleanControlTester),
+  withIncreasedRank(1, booleanFieldTester),
   connect(mapStateToControlProps)(BooleanControl)
 );

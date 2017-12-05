@@ -120,7 +120,6 @@ export const registerStartupRenderer = (tester: RankedTester, renderer: any) => 
 
   return renderer;
 };
-
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
@@ -141,6 +140,7 @@ export const mapStateToControlProps = (state, ownProps) => {
     ['validate']
       .concat(isValid ? 'valid' : 'invalid');
   const labelClass = JsonForms.stylingRegistry.getAsClassName('control.label');
+  const inputs = state.inputs;
 
   return {
     data: resolveData(getData(state), path),
@@ -155,5 +155,6 @@ export const mapStateToControlProps = (state, ownProps) => {
     enabled,
     id,
     path,
+    inputs
   };
 };

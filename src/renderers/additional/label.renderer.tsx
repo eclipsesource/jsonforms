@@ -28,7 +28,7 @@ export const LabelRenderer = ({uischema, visible}: RendererProps) => {
       }
     </label>
   );
-}
+};
 
 const mapStateToProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);

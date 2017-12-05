@@ -15,8 +15,7 @@ export type Tester = (uischema: UISchemaElement, schema: JsonSchema) => boolean;
 export type RankedTester = (uischema: UISchemaElement, schema: JsonSchema) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
-  !_.isEmpty(uischema) && uischema.scope !== undefined;
-
+  !_.isEmpty(uischema) && uischema.scope !== undefined && uischema.scope.$ref !== undefined;
 
 /**
  * Only applicable for Controls.
@@ -29,41 +28,41 @@ export const isControl = (uischema: any): uischema is ControlElement =>
  *        applied to the resolved sub-schema
  */
 export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Tester =>
-    (uischema: UISchemaElement, schema: JsonSchema): boolean => {
-        if (_.isEmpty(uischema) || !isControl(uischema)) {
-            return false;
-        }
-        const schemaPath = uischema.scope.$ref;
-        if (_.isEmpty(schemaPath)) {
-            return false;
-        }
-        let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
-        while (!_.isEmpty(currentDataSchema) && !_.isEmpty(currentDataSchema.$ref)) {
-          currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
-        }
-        if (currentDataSchema === undefined) {
-            return false;
-        }
+  (uischema: UISchemaElement, schema: JsonSchema): boolean => {
+    if (_.isEmpty(uischema) || !isControl(uischema)) {
+      return false;
+    }
+    const schemaPath = uischema.scope.$ref;
+    if (_.isEmpty(schemaPath)) {
+      return false;
+    }
+    let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
+    while (!_.isEmpty(currentDataSchema) && !_.isEmpty(currentDataSchema.$ref)) {
+      currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
+    }
+    if (currentDataSchema === undefined) {
+      return false;
+    }
 
-        return predicate(currentDataSchema);
-    };
+    return predicate(currentDataSchema);
+  };
 
 export const schemaSubPathMatches =
-(subPath: string, predicate: (schema: JsonSchema) => boolean): Tester =>
+  (subPath: string, predicate: (schema: JsonSchema) => boolean): Tester =>
     (uischema: UISchemaElement, schema: JsonSchema): boolean => {
       if (_.isEmpty(uischema) || !isControl(uischema)) {
-          return false;
+        return false;
       }
       const schemaPath = uischema.scope.$ref;
       if (_.isEmpty(schemaPath)) {
-          return false;
+        return false;
       }
       let currentDataSchema: JsonSchema = resolveSchema(schema, `${schemaPath}/${subPath}`);
       while (!_.isEmpty(currentDataSchema.$ref)) {
         currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
       }
       if (currentDataSchema === undefined) {
-          return false;
+        return false;
       }
 
       return predicate(currentDataSchema);
@@ -79,7 +78,7 @@ export const schemaSubPathMatches =
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(schema =>
-    !_.isEmpty(schema) && schema.type === expectedType
+  !_.isEmpty(schema) && schema.type === expectedType
 );
 
 /**
@@ -92,9 +91,9 @@ export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(sche
  * @param {string} expectedFormat the expected format of the resolved sub-schema
  */
 export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema =>
-    !_.isEmpty(schema)
-    && schema.format === expectedFormat
-    && schema.type === 'string'
+  !_.isEmpty(schema)
+  && schema.format === expectedFormat
+  && schema.type === 'string'
 );
 
 /**
@@ -103,7 +102,7 @@ export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema
  * @param {string} expected the expected UI schema type
  */
 export const uiTypeIs = (expected: string): Tester =>
-    (uischema: UISchemaElement): boolean =>
+  (uischema: UISchemaElement): boolean =>
     !_.isEmpty(uischema) && uischema.type === expected;
 
 /**
@@ -115,11 +114,11 @@ export const uiTypeIs = (expected: string): Tester =>
  * @param {any} optionValue the expected value of the option
  */
 export const optionIs = (optionName: string, optionValue: any): Tester =>
-    (uischema: UISchemaElement): boolean => {
-        const options = uischema.options;
+  (uischema: UISchemaElement): boolean => {
+    const options = uischema.options;
 
-        return !_.isEmpty(options) && options[optionName] === optionValue;
-    };
+    return !_.isEmpty(options) && options[optionName] === optionValue;
+  };
 
 /**
  * Only applicable for Controls.
@@ -129,13 +128,13 @@ export const optionIs = (optionName: string, optionValue: any): Tester =>
  * @param {string} expected the expected ending of the $ref value
  */
 export const refEndsWith = (expected: string): Tester =>
-    (uischema: UISchemaElement): boolean => {
-        if (_.isEmpty(expected) || !isControl(uischema)) {
-            return false;
-        }
+  (uischema: UISchemaElement): boolean => {
+    if (_.isEmpty(expected) || !isControl(uischema)) {
+      return false;
+    }
 
-        return _.endsWith(uischema.scope.$ref, expected);
-    };
+    return _.endsWith(uischema.scope.$ref, expected);
+  };
 
 /**
  * Only applicable for Controls.
@@ -145,14 +144,14 @@ export const refEndsWith = (expected: string): Tester =>
  * @param {string} expected the expected ending of the $ref value
  */
 export const refEndIs = (expected: string): Tester =>
-    (uischema: UISchemaElement): boolean => {
-        if (_.isEmpty(expected) || !isControl(uischema)) {
-            return false;
-        }
-        const schemaPath = uischema.scope.$ref;
+  (uischema: UISchemaElement): boolean => {
+    if (_.isEmpty(expected) || !isControl(uischema)) {
+      return false;
+    }
+    const schemaPath = uischema.scope.$ref;
 
-        return !_.isEmpty(schemaPath) && _.last(schemaPath.split('/')) === expected;
-    };
+    return !_.isEmpty(schemaPath) && _.last(schemaPath.split('/')) === expected;
+  };
 
 /**
  * A tester that allow composing other testers by && them.
@@ -160,8 +159,8 @@ export const refEndIs = (expected: string): Tester =>
  * @param {Array<Tester>} testers the testers to be composed
  */
 export const and = (...testers: Tester[]): Tester =>
-    (uischema: UISchemaElement, schema: JsonSchema) =>
-        testers.reduce((acc, tester) => acc && tester(uischema, schema), true);
+  (uischema: UISchemaElement, schema: JsonSchema) =>
+    testers.reduce((acc, tester) => acc && tester(uischema, schema), true);
 
 /**
  * Create a ranked tester that will associate a number with a given tester, if the
@@ -170,16 +169,16 @@ export const and = (...testers: Tester[]): Tester =>
  * @param {number} rank the rank to be returned in case the tester returns true
  * @param {Tester} tester a tester
  */
-export const rankWith = (rank: number, tester: Tester)  =>
-    (uischema: UISchemaElement, schema: JsonSchema): number => {
-        if (tester(uischema, schema)) {
-            return rank;
-        }
+export const rankWith = (rank: number, tester: Tester) =>
+  (uischema: UISchemaElement, schema: JsonSchema): number => {
+    if (tester(uischema, schema)) {
+      return rank;
+    }
 
-        return NOT_APPLICABLE;
-    };
+    return NOT_APPLICABLE;
+  };
 
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
   (uischema: UISchemaElement, schema: JsonSchema): number => {
     return rankedTester(uischema, schema) + by;
-};
+  };
