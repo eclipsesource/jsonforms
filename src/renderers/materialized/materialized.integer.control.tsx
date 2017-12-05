@@ -2,19 +2,23 @@ import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import { withIncreasedRank } from '../../core/testers';
 import { Control, ControlProps, ControlState } from '../controls/Control';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
+import {
+    computeLabel,
+    mapStateToControlProps,
+    registerStartupRenderer
+} from '../renderer.util';
 import { integerControlTester } from '../controls/integer.control';
 import { connect, Event } from '../../common/binding';
 
 export class MaterializedIntegerControl extends Control<ControlProps, ControlState> {
 
   render() {
-    const { classNames, id, visible, enabled, errors, label, uischema } = this.props;
+    const { classNames, id, visible, enabled, errors, label, uischema, required } = this.props;
 
     return (
       <div className={classNames.wrapper}>
         <label htmlFor={id} className={classNames.label} data-error={errors}>
-          {label}
+          {computeLabel(label, required)}
         </label>
         <input type='number'
                step='1'

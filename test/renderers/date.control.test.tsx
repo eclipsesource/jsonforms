@@ -552,3 +552,70 @@ test('reset validation message', t => {
   store.dispatch(validate());
   t.is(validation.textContent, '');
 });
+
+test('required field with warning', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            dateField: {
+                type: 'string',
+                format: 'date'
+            }
+        },
+        required: ['dateField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/dateField'
+        }
+    };
+
+    const store = initJsonFormsStore(
+        {},
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <DateControl schema={schema}
+                       uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Date Field*');
+});
+
+test('not required', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            dateField: {
+                type: 'string',
+                format: 'date'
+            }
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/dateField'
+        }
+    };
+
+    const store = initJsonFormsStore(
+        {},
+        schema,
+        uischema
+    );
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <DateControl schema={schema}
+                       uischema={uischema}
+          />
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Date Field');
+});
