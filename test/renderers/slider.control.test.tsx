@@ -104,6 +104,78 @@ test('tester with wrong schema type, but sibling has correct one', t => {
   );
 });
 
+test('tester with wrong schema type, missing maximum and minimum fields', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+    sliderControlTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number'
+          }
+        }
+      }
+    ),
+    -1
+  );
+});
+
+test('tester with wrong schema type, missing maximum', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+    sliderControlTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            minimum: 2
+          }
+        }
+      }
+    ),
+    -1
+  );
+});
+
+test('tester with wrong schema type, missing minimum', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.is(
+    sliderControlTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            maximum: 10
+          }
+        }
+      }
+    ),
+    -1
+  );
+});
+
+
 test('tester with matching schema type (number)', t => {
   const control: ControlElement = {
     type: 'Control',
