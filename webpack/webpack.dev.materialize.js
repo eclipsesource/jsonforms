@@ -24,18 +24,14 @@ module.exports = [{
         extensions: [".ts", ".js", ".tsx"]
     },
     devServer: {
-        contentBase: './example_plain'
+        contentBase: './example_materialize'
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new copyWebpackPlugin([
             { from: 'example/example.css' },
-            { from: 'example/example.dark.css' },
-            { from: 'example/example.labelfixed.css' },
             { from: 'lib/native-shim.js'  },
             { from: 'node_modules/jquery/dist/jquery.js'               },
-            { from: 'node_modules/bootstrap/dist/css/bootstrap.css'    },
-            { from: 'node_modules/bootstrap/dist/js/bootstrap.js'      },
             { from: 'node_modules/materialize-css/dist/css/materialize.css' },
             { from: 'node_modules/materialize-css/dist/js/materialize.js'  },
             { from: 'example/icons', to: 'icons' }

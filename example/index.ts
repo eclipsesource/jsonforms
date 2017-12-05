@@ -1,6 +1,4 @@
 import { createExampleSelection } from './example';
-import { createThemeSelection } from './theme.switcher';
-import { createStyleSelection } from './style.switcher';
 import './templates/arrays';
 import './templates/day2';
 import './templates/day4';
@@ -19,8 +17,12 @@ import './templates/resolve';
 import './templates/uischema-registry';
 import './templates/ecore';
 
+import '../src/renderers/materialized';
+import { materialize } from '../src/renderers/materialized/index';
+declare let $;
+
 window.onload = ev => {
   const selectExampleElement = createExampleSelection();
-  createThemeSelection();
-  createStyleSelection(selectExampleElement);
+  materialize();
+  $('select').material_select();
 };

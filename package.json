@@ -13,7 +13,8 @@
   "typings": "dist/ts-build/index.d.ts",
   "scripts": {
     "start": "npm run dev",
-    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "dev": "npm run dev-materialize",
+    "dev-materialize": "webpack --config webpack/webpack.dev.materialize.js && webpack-dev-server --config webpack/webpack.dev.materialize.js --env=dev --inline",
     "dev-default": "webpack --config webpack/webpack.dev.default.js && webpack-dev-server --config webpack/webpack.dev.default.js --env=dev --inline",
     "bundle": "webpack --config webpack/webpack.build.js --env=production --display-error-details",
     "build": "npm run tsc && npm run bundle && ncp example/example.css dist/jsonforms-example.css",
