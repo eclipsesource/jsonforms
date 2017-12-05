@@ -10,5 +10,6 @@ export * from './additional/tree-renderer';
 export * from './additional/categorization-renderer';
 export * from './additional/table-array.control';
 export * from './additional/label.renderer';
+export * from './controls/slider.control';
 
 export * from './JSX';
