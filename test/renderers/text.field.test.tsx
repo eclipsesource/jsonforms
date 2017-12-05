@@ -48,8 +48,7 @@ test.beforeEach(t => {
     }
   };
 });
-// TODO: I don't understand this test
-test.skip('autofocus on first element', t => {
+test('autofocus on first element', t => {
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -93,9 +92,7 @@ test.skip('autofocus on first element', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <HorizontalLayoutRenderer schema={schema}
-                                      uischema={uischema}
-            />
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
         </Provider>
     );
     const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
@@ -120,9 +117,7 @@ test('autofocus active', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <TextField schema={t.context.schema}
-                         uischema={uischema}
-            />
+          <TextField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -146,9 +141,7 @@ test('autofocus inactive', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <TextField schema={t.context.schema}
-                         uischema={uischema}
-            />
+          <TextField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -169,9 +162,7 @@ test('autofocus inactive by default', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <TextField schema={t.context.schema}
-                         uischema={uischema}
-            />
+          <TextField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -197,9 +188,7 @@ test('render', t => {
   const store = initJsonFormsStore(data, schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -215,9 +204,7 @@ test('update via input event', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -235,9 +222,7 @@ test('update via action', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -253,9 +238,7 @@ test('update with undefined value', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -271,9 +254,7 @@ test('update with null value', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -289,18 +270,11 @@ test('update with wrong ref', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      'firstname',
-      () => 'Bar'
-    )
-  );
+  store.dispatch(update('firstname', () => 'Bar'));
   t.is(input.value, 'Foo');
 });
 
@@ -312,18 +286,11 @@ test('update with null ref', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      null,
-      () => 'Bar'
-    )
-  );
+  store.dispatch(update(null, () => 'Bar'));
   t.is(input.value, 'Foo');
 });
 
@@ -335,50 +302,12 @@ test('update with undefined ref', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      undefined,
-      () => 'Bar'
-    )
-  );
+  store.dispatch(update(undefined, () => 'Bar'));
   t.is(input.value, 'Foo');
-});
-
-test('hide', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-                   visible={false}
-      />
-    </Provider>
-  );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.hidden);
-});
-
-test('show by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
-    </Provider>
-  );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.hidden);
 });
 
 test('disable', t => {
@@ -389,10 +318,7 @@ test('disable', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-                   enabled={false}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -403,9 +329,7 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;

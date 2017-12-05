@@ -3,29 +3,29 @@ import * as _ from 'lodash';
 import { UnknownRenderer } from '../unknown.renderer';
 import { RankedTester } from '../../core/testers';
 import { connect } from '../../common/binding';
-import { FieldProps } from './field';
+import { FieldProps } from './field.util';
 
 export interface DispatchFieldProps extends FieldProps {
-  inputs?: { tester: RankedTester, input: any }[];
+  fields?: { tester: RankedTester, field: any }[];
 }
 
-export const DispatchField = (dispatchInputProps: DispatchFieldProps) => {
-  const uischema = dispatchInputProps.uischema;
-  const schema = dispatchInputProps.schema;
-  const renderer = _.maxBy(dispatchInputProps.inputs, r => r.tester(uischema, schema));
+export const DispatchField = (dispatchFieldProps: DispatchFieldProps) => {
+  const uischema = dispatchFieldProps.uischema;
+  const schema = dispatchFieldProps.schema;
+  const field = _.maxBy(dispatchFieldProps.fields, r => r.tester(uischema, schema));
 
-  if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
+  if (field === undefined || field.tester(uischema, schema) === -1) {
     return <UnknownRenderer/>;
   } else {
-    const Render = renderer.input;
+    const Field = field.field;
 
     return (
-      <Render schema={schema} uischema={uischema} path={dispatchInputProps.path}/>
+      <Field schema={schema} uischema={uischema} path={dispatchFieldProps.path}/>
     );
   }
 };
 
 const mapStateToProps = state => ({
-  inputs: state.inputs || []
+  fields: state.fields || []
 });
 export default connect(mapStateToProps)(DispatchField);

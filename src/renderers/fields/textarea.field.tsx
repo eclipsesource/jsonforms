@@ -1,26 +1,20 @@
 import { JSX } from '../JSX';
-import { mapStateToInputProps, registerStartupInput } from './field.util';
+import { FieldProps, handleChange, mapStateToInputProps, registerStartupInput } from './field.util';
 import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
 import { connect, Event } from '../../common/binding';
-import { Field, FieldProps, FieldState } from './field';
 
-export class TextAreaField extends Field<FieldProps, FieldState> {
-  render() {
-    const { data, className, id, visible, enabled, uischema } = this.props;
+export const TextAreaField = (props: FieldProps) => {
+  const { data, className, id, enabled, uischema } = props;
 
-    return <textarea
-         value={data || ''}
-         onChange={(ev: Event<HTMLTextAreaElement>) =>
-           this.handleChange(ev.currentTarget.value)
-         }
-         className={className}
-         id={id}
-         hidden={!visible}
-         disabled={!enabled}
-         autoFocus={uischema.options && uischema.options.focus}
-       />;
-  }
-}
+  return <textarea
+       value={data || ''}
+       onChange={(ev: Event<HTMLTextAreaElement>) => handleChange(props, ev.currentTarget.value)}
+       className={className}
+       id={id}
+       disabled={!enabled}
+       autoFocus={uischema.options && uischema.options.focus}
+     />;
+};
 
 /**
  * Tester for a multi-line string control.

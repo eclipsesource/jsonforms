@@ -56,7 +56,7 @@ export class JsonForms {
   private static _config = new JsonFormsConfig();
   private static _schemaService;
   public static renderers = [];
-  public static inputs = [];
+  public static fields = [];
   public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
   public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
   public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();

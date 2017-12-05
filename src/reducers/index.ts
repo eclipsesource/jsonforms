@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from 'redux';
 import { validationReducer } from './validation';
 import { rendererReducer } from './renderers';
-import { inputReducer } from './inputs';
+import { fieldReducer } from './inputs';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 
 export const appReducer: Reducer<any> = combineReducers(
@@ -9,7 +9,7 @@ export const appReducer: Reducer<any> = combineReducers(
     'common': commonStateReducer,
     'validation': validationReducer,
     'renderers': rendererReducer,
-    'inputs': inputReducer
+    'fields': fieldReducer
   }
 );
 

@@ -48,8 +48,7 @@ test.beforeEach(t => {
     },
   };
 });
-// TODO: don't understand this test case
-test.skip('autofocus on first element', t => {
+test('autofocus on first element', t => {
     const schema: JsonSchema = {
         type: 'object',
         properties: {
@@ -93,9 +92,7 @@ test.skip('autofocus on first element', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <HorizontalLayoutRenderer schema={schema}
-                                      uischema={uischema}
-            />
+          <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
         </Provider>
     );
     const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
@@ -116,9 +113,7 @@ test('autofocus active', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <DateField schema={t.context.schema}
-                         uischema={uischema}
-            />
+          <DateField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -138,9 +133,7 @@ test('autofocus inactive', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <DateField schema={t.context.schema}
-                            uischema={uischema}
-            />
+          <DateField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -157,9 +150,7 @@ test('autofocus inactive by default', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <DateField schema={t.context.schema}
-                            uischema={uischema}
-            />
+          <DateField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -229,9 +220,7 @@ test('render', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -244,9 +233,7 @@ test('update via event', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -259,9 +246,7 @@ test('update via action', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -273,9 +258,7 @@ test('update with null value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -287,9 +270,7 @@ test('update with undefined value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -301,17 +282,11 @@ test('update with wrong ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      'bar',
-      () => 'Bar'
-  ));
+  store.dispatch(update('bar', () => 'Bar'));
   t.is(input.value, '1980-04-04');
 });
 
@@ -319,17 +294,11 @@ test('update with null ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      null,
-      () => '1961-04-12'
-    ));
+  store.dispatch(update(null, () => '1961-04-12'));
   t.is(input.value, '1980-04-04');
 });
 
@@ -337,49 +306,12 @@ test('update with undefined ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(
-    update(
-      undefined,
-      () => '1961-04-12'
-    ));
+  store.dispatch(update(undefined, () => '1961-04-12'));
   t.is(input.value, '1980-04-04');
-});
-
-test('hide', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <DateField schema={t.context.schema}
-                      uischema={t.context.uischema}
-                      visible={false}
-      />
-    </Provider>
-  );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.hidden);
-});
-
-test('show by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <DateField schema={t.context.schema}
-                      uischema={t.context.uischema}
-      />
-    </Provider>
-  );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.hidden);
 });
 
 test('disable', t => {
@@ -390,10 +322,7 @@ test('disable', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                      uischema={t.context.uischema}
-                      enabled={false}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -404,9 +333,7 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema}
-                      uischema={t.context.uischema}
-      />
+      <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;

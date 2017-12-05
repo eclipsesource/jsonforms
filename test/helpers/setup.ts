@@ -21,7 +21,7 @@ export const initJsonFormsStore = (
       data
     },
     renderers: JsonForms.renderers,
-    inputs: JsonForms.inputs
+    fields: JsonForms.fields
   });
   store.dispatch({
     type: INIT,

@@ -124,9 +124,7 @@ test('render', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                      uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -143,9 +141,7 @@ test('update via input event', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -160,18 +156,11 @@ test('update via action', t => {
   const store = initJsonFormsStore(data,  t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(
-    update(
-      'foo',
-      () => 'b'
-    )
-  );
+  store.dispatch(update('foo', () => 'b'));
   t.is(select.value, 'b');
   t.is(select.selectedIndex, 2);
 });
@@ -180,18 +169,11 @@ test('update with undefined value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(
-    update(
-      'foo',
-      () => undefined
-    )
-  );
+  store.dispatch(update('foo', () => undefined));
   t.is(select.selectedIndex, 0);
   t.is(select.value, '');
 });
@@ -200,18 +182,11 @@ test('update with null value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(
-    update(
-      'foo',
-      () => null
-    )
-  );
+  store.dispatch(update('foo', () => null));
   t.is(select.selectedIndex, 0);
   t.is(select.value, '');
 });
@@ -220,18 +195,11 @@ test('update with wrong ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(
-    update(
-      'bar',
-      () => 'Bar'
-    )
-  );
+  store.dispatch(update('bar', () => 'Bar'));
   t.is(select.selectedIndex, 1);
   t.is(select.value, 'a');
 });
@@ -240,18 +208,11 @@ test('update with null ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(
-    update(
-      null,
-      () => false
-    )
-  );
+  store.dispatch(update(null, () => false));
   t.is(select.selectedIndex, 1);
   t.is(select.value, 'a');
 });
@@ -260,53 +221,15 @@ test('update with undefined ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  store.dispatch(
-    update(
-      undefined,
-      () => false
-    )
-  );
+  store.dispatch(update(undefined, () => false));
   t.is(select.selectedIndex, 1);
   t.is(select.value, 'a');
 });
 
-test('hide', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-                   visible={false}
-      />
-    </Provider>
-  );
-  const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  t.true(select.hidden);
-});
-
-test('show by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
-  const tree = renderIntoDocument(
-    <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                      uischema={t.context.uischema}
-      />
-    </Provider>
-  );
-  const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-  t.false(select.hidden);
-});
-//
 test('disable', t => {
   const store = initJsonFormsStore(
     t.context.data,
@@ -315,10 +238,7 @@ test('disable', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-                   enabled={false}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
@@ -329,9 +249,7 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema}
-                   uischema={t.context.uischema}
-      />
+      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;

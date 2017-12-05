@@ -2,25 +2,47 @@ import * as _ from 'lodash';
 import { ControlElement, UISchemaElement } from '../../models/uischema';
 import { RankedTester } from '../../core/testers';
 import { JsonForms } from '../../core';
+import { JsonSchema } from '../../models/jsonSchema';
 import { isEnabled, isVisible } from '../../core/renderer';
 import { composeWithUi, resolveData } from '../../path.util';
 import { getData, getValidation } from '../../reducers/index';
 import { Component } from '../../common/binding';
 import { errorAt } from '../../reducers/validation';
-import { Field, FieldProps } from './field';
+import { update } from '../../actions';
 
-export interface JsonFormsInputConstructable {
-  // TODO: any state?
-  new(props: FieldProps): Field<FieldProps, any>;
+export interface JsonFormsFieldConstructable {
+  new(props: FieldProps): Component<FieldProps, any>;
 }
+export interface FieldProps {
+  /**
+   * The UI schema to be rendered.
+   */
+  uischema: UISchemaElement;
 
-export const registerStartupInput = (tester: RankedTester, input: any) => {
-  JsonForms.inputs.push({
+  /**
+   * The JSON schema that describes the data.
+   */
+  schema: JsonSchema;
+  /**
+   * Optional instance path. Necessary when the actual data
+   * path can not be inferred via the UI schema element as
+   * it is the case with nested controls.
+   */
+  path?: string;
+  data: any;
+  className: string;
+  id: string;
+  visible: boolean;
+  enabled: boolean;
+  dispatch: any;
+}
+export const registerStartupInput = (tester: RankedTester, field: any) => {
+  JsonForms.fields.push({
     tester,
-    input
+    field
   });
 
-  return input;
+  return field;
 };
 export const mapStateToInputProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
@@ -41,3 +63,4 @@ export const mapStateToInputProps = (state, ownProps) => {
     path
   };
 };
+export const handleChange = (props, value) => props.dispatch(update(props.path, () => value));

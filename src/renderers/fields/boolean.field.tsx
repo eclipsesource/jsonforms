@@ -1,26 +1,20 @@
 import { JSX } from '../JSX';
-import { mapStateToInputProps, registerStartupInput } from './field.util';
+import { FieldProps, handleChange, mapStateToInputProps, registerStartupInput } from './field.util';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { connect, Event } from '../../common/binding';
-import { Field, FieldProps, FieldState } from './field';
 
-export class BooleanField extends Field<FieldProps, FieldState> {
-  render() {
-    const { data, className, id, visible, enabled, uischema } = this.props;
+export const BooleanField = (props: FieldProps) => {
+  const { dispatch, path, data, className, id, enabled, uischema } = props;
 
-    return <input type='checkbox'
-           checked={data || ''}
-           onChange={(ev: Event<HTMLInputElement>) =>
-             this.handleChange(ev.currentTarget.checked)
-           }
-           className={className}
-           id={id}
-           hidden={!visible}
-           disabled={!enabled}
-           autoFocus={uischema.options && uischema.options.focus}
-    />;
-  }
-}
+  return <input type='checkbox'
+         checked={data || ''}
+         onChange={(ev: Event<HTMLInputElement>) => handleChange(props, ev.currentTarget.checked)}
+         className={className}
+         id={id}
+         disabled={!enabled}
+         autoFocus={uischema.options && uischema.options.focus}
+  />;
+};
 
 /**
  * Default tester for boolean controls.

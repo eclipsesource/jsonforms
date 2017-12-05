@@ -1,28 +1,24 @@
 import { JSX } from '../JSX';
 import * as _ from 'lodash';
-import { mapStateToInputProps, registerStartupInput } from './field.util';
+import { FieldProps, handleChange, mapStateToInputProps, registerStartupInput } from './field.util';
 import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { connect, Event } from '../../common/binding';
-import { Field, FieldProps, FieldState } from './field';
 
-export class IntegerField extends Field<FieldProps, FieldState> {
-  render() {
-    const { data, className, id, visible, enabled, uischema } = this.props;
+export const IntegerField  = (props: FieldProps) => {
+  const { data, className, id, enabled, uischema } = props;
 
-    return <input type='number'
-         step='1'
-         value={data || ''}
-         onChange={(ev: Event<HTMLInputElement>) =>
-           this.handleChange(_.toInteger(ev.currentTarget.value))
-         }
-         className={className}
-         id={id}
-         hidden={!visible}
-         disabled={!enabled}
-         autoFocus={uischema.options && uischema.options.focus}
-         />;
-  }
-}
+  return <input type='number'
+       step='1'
+       value={data || ''}
+       onChange={(ev: Event<HTMLInputElement>) =>
+         handleChange(props, _.toInteger(ev.currentTarget.value))
+       }
+       className={className}
+       id={id}
+       disabled={!enabled}
+       autoFocus={uischema.options && uischema.options.focus}
+       />;
+};
 /**
  * Default tester for integer controls.
  * @type {RankedTester}

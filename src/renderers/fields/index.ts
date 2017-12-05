@@ -6,7 +6,6 @@ export * from './number.field';
 export * from './text.field';
 export * from './textarea.field';
 
-export * from './field';
 export * from './field.util';
 
 export * from './dispatch.field';

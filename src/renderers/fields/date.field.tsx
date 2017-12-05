@@ -1,27 +1,20 @@
 import { JSX } from '../JSX';
-import * as _ from 'lodash';
 import { and, formatIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
-import { mapStateToInputProps, registerStartupInput } from './field.util';
+import { FieldProps, handleChange, mapStateToInputProps, registerStartupInput } from './field.util';
 import { connect, Event } from '../../common/binding';
-import { Field, FieldProps, FieldState } from './field';
 
-export class DateField extends Field<FieldProps, FieldState> {
-  render() {
-    const { data, className, id, visible, enabled, uischema } = this.props;
+export const DateField = (props: FieldProps) => {
+    const { data, className, id, enabled, uischema } = props;
 
     return <input type='date'
          value={data || ''}
-         onChange={(ev: Event<HTMLInputElement>) => {
-           this.handleChange(ev.currentTarget.value);
-         }}
+         onChange={(ev: Event<HTMLInputElement>) => handleChange(props, ev.currentTarget.value)}
          className={className}
          id={id}
-         hidden={!visible}
          disabled={!enabled}
          autoFocus={uischema.options && uischema.options.focus}
     />;
-  }
-}
+};
 /**
  * Default tester for date controls.
  * @type {RankedTester}
