@@ -147,7 +147,8 @@ export const mapStateToControlProps = (state, ownProps) => {
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
-  const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
+  const ref = controlElement.scope.$ref;
+  const id = _.has(controlElement.scope, '$ref') ? ref : '';
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
 
