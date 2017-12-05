@@ -2,10 +2,10 @@ import { JSX } from '../JSX';
 import * as _ from 'lodash';
 import {
   and,
-  optionIs,
   or,
   RankedTester,
   rankWith,
+  schemaMatches,
   schemaTypeIs,
   uiTypeIs
 } from '../../core/testers';
@@ -22,7 +22,9 @@ import { ControlElement } from '../../models/uischema';
 export const sliderControlTester: RankedTester = rankWith(4, and(
     uiTypeIs('Control'),
     or(schemaTypeIs('number'), schemaTypeIs('integer')),
-    optionIs('slider', true)
+    schemaMatches(schema =>
+      schema.hasOwnProperty('maximum') && schema.hasOwnProperty('minimum')
+    )
 ));
 
 export class SliderControl extends Control<ControlProps, ControlState> {

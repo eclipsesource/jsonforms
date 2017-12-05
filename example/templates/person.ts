@@ -62,9 +62,6 @@ const uischema = {
           },
           'scope': {
             '$ref': '#/properties/personalData/properties/age'
-          },
-          'options': {
-            'slider': true
           }
         },
         {
@@ -72,9 +69,6 @@ const uischema = {
           'label': 'Height',
           'scope': {
             '$ref': '#/properties/personalData/properties/height'
-          },
-          'options': {
-            'slider': true
           }
         },
         {
