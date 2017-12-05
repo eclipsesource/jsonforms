@@ -457,6 +457,266 @@ test('enabled by default', t => {
   t.false(input.disabled);
 });
 
+test('use maxLength for attributes size and maxlength', t => {
+    const schema = {
+        'type': 'object',
+        'properties': {
+            'name': {
+                'type': 'string',
+                'maxLength': 5
+            }
+        }
+    };
+    const uischema = {
+      'type': 'Control',
+      'scope': {
+        '$ref': '#/properties/name'
+      },
+      'options': {
+        'trim': true,
+        'restrict': true
+      }
+    };
+    const store = initJsonFormsStore(t.context.data, schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <TextControl schema={schema}
+                         uischema={uischema}
+
+            />
+        </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.is(input.maxLength, 5);
+    t.is(input.size, 5);
+});
+
+test('use maxLength for attribute size only', t => {
+  const schema = {
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string',
+        'maxLength': 5
+      }
+    }
+  };
+  const uischema = {
+    'type': 'Control',
+    'scope': {
+      '$ref': '#/properties/name'
+    },
+    'options': {
+      'trim': true
+    }
+  };
+  const store = initJsonFormsStore(t.context.data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <TextControl schema={schema}
+                   uischema={uischema}
+
+      />
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.is(input.maxLength, 524288);
+  t.is(input.size, 5);
+});
+
+test('use maxLength for attribute maxlength only', t => {
+  const schema = {
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string',
+        'maxLength': 5
+      }
+    }
+  };
+  const uischema = {
+    'type': 'Control',
+    'scope': {
+      '$ref': '#/properties/name'
+    },
+    'options': {
+      'restrict': true
+    }
+  };
+  const store = initJsonFormsStore(t.context.data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <TextControl schema={schema}
+                   uischema={uischema}
+
+      />
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.is(input.maxLength, 5);
+  t.is(input.size, 20);
+});
+
+test('do not use maxLength', t => {
+  const schema = {
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string',
+        'maxLength': 5
+      }
+    }
+  };
+  const uischema = {
+    'type': 'Control',
+    'scope': {
+      '$ref': '#/properties/name'
+    }
+  };
+  const store = initJsonFormsStore(t.context.data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <TextControl schema={schema}
+                   uischema={uischema}
+
+      />
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.is(input.maxLength, 524288);
+  t.is(input.size, 20);
+});
+
+test('if maxLength is not specified, attributes should have default values (trim && restrict)',
+     t => {
+  const schema = {
+    'type': 'object',
+    'properties': {
+      'name': {
+        'type': 'string'
+      }
+    }
+  };
+  const uischema = {
+    'type': 'Control',
+    'scope': {
+      '$ref': '#/properties/name'
+    },
+    'options': {
+      'trim': true,
+      'restrict': true
+    }
+  };
+  const store = initJsonFormsStore(t.context.data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <TextControl schema={schema}
+                   uischema={uischema}
+
+      />
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.is(input.maxLength, 524288);
+  t.is(input.size, 20);
+});
+
+test('if maxLength is not specified, attributes should have default values (trim)',
+     t => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string'
+        }
+      }
+    };
+    const uischema = {
+      'type': 'Control',
+      'scope': {
+        '$ref': '#/properties/name'
+      },
+      'options': {
+        'trim': true
+      }
+    };
+    const store = initJsonFormsStore(t.context.data, schema, uischema);
+    const tree = renderIntoDocument(
+      <Provider store={store}>
+        <TextControl schema={schema}
+                     uischema={uischema}
+
+        />
+      </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.is(input.maxLength, 524288);
+    t.is(input.size, 20);
+});
+
+test('if maxLength is not specified, attributes should have default values (restrict)',
+     t => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string'
+        }
+      }
+    };
+    const uischema = {
+      'type': 'Control',
+      'scope': {
+        '$ref': '#/properties/name'
+      },
+      'options': {
+        'restrict': true
+      }
+    };
+    const store = initJsonFormsStore(t.context.data, schema, uischema);
+    const tree = renderIntoDocument(
+      <Provider store={store}>
+        <TextControl schema={schema}
+                     uischema={uischema}
+
+        />
+      </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.is(input.maxLength, 524288);
+    t.is(input.size, 20);
+  });
+
+test('if maxLength is not specified, attributes should have default values',
+     t => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'name': {
+          'type': 'string'
+        }
+      }
+    };
+    const uischema = {
+      'type': 'Control',
+      'scope': {
+        '$ref': '#/properties/name'
+      }
+    };
+    const store = initJsonFormsStore(t.context.data, schema, uischema);
+    const tree = renderIntoDocument(
+      <Provider store={store}>
+        <TextControl schema={schema}
+                     uischema={uischema}
+
+        />
+      </Provider>
+    );
+    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+    t.is(input.maxLength, 524288);
+    t.is(input.size, 20);
+  });
+
 test('single error', t => {
   const store = initJsonFormsStore(
     t.context.data,
