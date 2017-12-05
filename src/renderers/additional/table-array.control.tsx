@@ -1,17 +1,18 @@
-import { JSX } from '../JSX';
 import * as _ from 'lodash';
+import { getElementLabelObject } from '../label.util';
 import { JsonForms } from '../../core';
 import { convertToClassName, Renderer } from '../../core/renderer';
 import { and, optionIs, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
 import { JsonSchema } from '../../models/jsonSchema';
 import { ControlElement } from '../../models/uischema';
-import { getElementLabelObject } from '../label.util';
+import { JSX } from '../JSX';
 import { compose, composeWithUi, resolveData, resolveSchema } from '../../path.util';
 import { update } from '../../actions';
 import { getData } from '../../reducers/index';
 import DispatchField from '../fields/dispatch.field';
 import { ControlProps } from '../controls/Control';
-import { registerStartupRenderer } from '../renderer.util';
+import { formatErrorMessage, mapStateToControlProps,
+  registerStartupRenderer } from '../renderer.util';
 import { connect } from '../../common/binding';
 
 /**
@@ -21,7 +22,6 @@ import { connect } from '../../common/binding';
  */
 export const tableArrayTester: RankedTester = rankWith(10, and(
     uiTypeIs('Control'),
-    optionIs('table', true),
     schemaMatches(schema =>
         !_.isEmpty(schema)
         && schema.type === 'array'
@@ -57,42 +57,39 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
    * @inheritDoc
    */
   render() {
-    const { uischema, schema, path, data } = this.props;
+    const { uischema, schema, path, data, visible, errors, label } = this.props;
     const controlElement = uischema as ControlElement;
 
-    const tableClasses = [
-      JsonForms.stylingRegistry.getAsClassName('array-table.table'),
-      `control ${convertToClassName(controlElement.scope.$ref)}`
-    ];
+    const tableClass = JsonForms.stylingRegistry.getAsClassName('array-table.table');
     const labelClass = JsonForms.stylingRegistry.getAsClassName('array-table.label');
     const buttonClass = JsonForms.stylingRegistry.getAsClassName('array-table.button');
-    const headerClass = JsonForms.stylingRegistry.getAsClassName('array-table')
-      .concat(convertToClassName(controlElement.scope.$ref));
+    const controlClass = [JsonForms.stylingRegistry.getAsClassName('array-table'),
+      convertToClassName(controlElement.scope.$ref)].join(' ');
 
-    const labelObject = getElementLabelObject(schema, controlElement);
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',
       label: false,
       scope: { $ref: `#/properties/${key}` }
     });
+    const labelObject = getElementLabelObject(schema, controlElement);
+    const isValid = errors.length === 0;
+    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
     return (
-      <div className={tableClasses.join(' ')}>
-        <header className={headerClass}>
+      <div className={controlClass} hidden={!visible}>
+        <header>
           <label className={labelClass}>
-            {
-              labelObject.show && labelObject.text
-            }
+            {label}
           </label>
-          <button
-            className={buttonClass}
-            onClick={ () => this.addNewItem(path) }
-          >
+          <button className={buttonClass} onClick={ () => this.addNewItem(path) }>
             Add to {labelObject.text}
           </button>
         </header>
-        <table>
+        <div className={divClassNames}>
+          {!isValid ? formatErrorMessage(errors) : ''}
+        </div>
+        <table className={tableClass}>
           <thead>
           <tr>
             {
@@ -106,7 +103,8 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           </thead>
           <tbody>
           {
-            data ? data.map((child, index) => {
+            (!data || !Array.isArray(data) || data.length === 0) ?
+              <tr><td>No data</td></tr> : data.map((child, index) => {
               const childPath = compose(path, index + '');
 
               return (
@@ -130,7 +128,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
                   }
                 </tr>
               );
-            })  : <p>No data</p>
+            })
           }
           </tbody>
         </table>
@@ -139,18 +137,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const path = composeWithUi(ownProps.uischema, ownProps.path);
-
-  return {
-    data: resolveData(getData(state), path),
-    uischema: ownProps.uischema,
-    schema: ownProps.schema,
-    path
-  };
-};
-
 export default registerStartupRenderer(
   tableArrayTester,
-  connect(mapStateToProps)(TableArrayControl)
+  connect(mapStateToControlProps)(TableArrayControl)
 );

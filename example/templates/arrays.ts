@@ -1,42 +1,42 @@
 import { registerExamples } from '../example';
 const schema = {
-      'type': 'object',
-      'properties': {
-        'name': {
-          'type': 'string'
-        },
-        'vegetarian': {
-          'type': 'boolean'
-        },
-        'birthDate': {
-          'type': 'string',
-          'format': 'date'
-        },
-        'nationality': {
-          'type': 'string',
-          'enum': ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-        },
-        'occupation': {
-          'type': 'string'
-        },
-        'comments': {
-          'type': 'array',
-          'items': {
-            'type': 'object',
-            'properties': {
-              'date': {
-                'type': 'string',
-                'format': 'date'
-              },
-              'message': {
-                'type': 'string'
-              }
-            }
+  'type': 'object',
+  'properties': {
+    'name': {
+      'type': 'string'
+    },
+    'vegetarian': {
+      'type': 'boolean'
+    },
+    'birthDate': {
+      'type': 'string',
+      'format': 'date'
+    },
+    'nationality': {
+      'type': 'string',
+      'enum': ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+    },
+    'occupation': {
+      'type': 'string'
+    },
+    'comments': {
+      'type': 'array',
+      'items': {
+        'type': 'object',
+        'properties': {
+          'date': {
+            'type': 'string',
+            'format': 'date'
+          },
+          'message': {
+            'type': 'string'
           }
         }
-      },
-      'required': ['occupation', 'nationality']
-    };
+      }
+    }
+  },
+  'required': ['occupation', 'nationality']
+};
 const uischema = {
   'type': 'VerticalLayout',
   'elements': [
@@ -51,16 +51,6 @@ const uischema = {
     }
   ]
 };
-const uischemaSimple = {
-  'type': 'Control',
-  'scope': {
-    '$ref': '#/properties/comments'
-  },
-  'label': 'Some more comments',
-  'options': {
-    'table': true
-  }
-};
 const data = {
   'comments': [
     {
@@ -74,7 +64,5 @@ const data = {
   ]
 };
 registerExamples([
-  {name: 'array', label: 'Array', data: data, schema: schema, uiSchema: uischema},
-  {name: 'array-simple', label: 'Array Simple', data: data,
-    schema: schema, uiSchema: uischemaSimple}
+  { name: 'array', label: 'Array', data: data, schema: schema, uiSchema: uischema },
 ]);
