@@ -1,6 +1,6 @@
 import { JSX } from '../JSX';
 import { mapStateToInputProps, registerStartupInput } from './field.util';
-import { and, optionIs, RankedTester, rankWith, uiTypeIs } from '../../core/testers';
+import { and, optionIs, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { connect, Event } from '../../common/binding';
 import { Field, FieldProps, FieldState } from './field';
 
@@ -28,6 +28,7 @@ export class TextAreaField extends Field<FieldProps, FieldState> {
  */
 export const textAreaFieldTester: RankedTester = rankWith(2, and(
   uiTypeIs('Control'),
+  schemaTypeIs('string'),
   optionIs('multi', true)
 ));
 

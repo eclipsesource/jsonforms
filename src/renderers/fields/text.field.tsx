@@ -1,6 +1,6 @@
 import { JSX } from '../JSX';
 import { mapStateToInputProps, registerStartupInput } from './field.util';
-import { isControl, RankedTester, rankWith } from '../../core/testers';
+import { and, RankedTester, rankWith, schemaTypeIs, uiTypeIs } from '../../core/testers';
 import { connect, Event } from '../../common/binding';
 import { Field, FieldProps, FieldState } from './field';
 
@@ -26,7 +26,10 @@ export class TextField extends Field<FieldProps, FieldState> {
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const textFieldTester: RankedTester = rankWith(1, isControl);
+export const textFieldTester: RankedTester = rankWith(1, and(
+  uiTypeIs('Control'),
+  schemaTypeIs('string')
+));
 
 export default registerStartupInput(
   textFieldTester,

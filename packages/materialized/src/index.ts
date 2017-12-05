@@ -1,12 +1,7 @@
 import { JsonForms } from 'jsonforms-core';
-
-export * from './controls/materialized.boolean.control';
-export * from './controls/materialized.date.control';
-export * from './controls/materialized.enum.control';
-export * from './controls/materialized.integer.control';
-export * from './controls/materialized.number.control';
-export * from './controls/materialized.text.control';
-export * from './controls/materialized.textarea.control';
+export * from './fields/index';
+export * from './material-input.control';
+export * from './material-boolean.control';
 export * from './layouts/horizontal.layout';
 export * from './layouts/vertical.layout';
 export * from './layouts/group.layout';
