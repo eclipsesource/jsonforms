@@ -10,14 +10,15 @@ const schema = {
       'type': 'object',
       'properties': {
           'age': {
-              'type': 'integer',
-              'maximum': 25,
-              'minimum': 1
+              'type': 'integer'
           },
           'height': {
-              'type': 'number',
-              'maximum': 100,
-              'minimum': 1
+              'type': 'number'
+          },
+          'drivingSkill': {
+            'type': 'number',
+            'maximum': 10,
+            'minimum': 1
           }
       },
       'required': ['age', 'height']
@@ -74,10 +75,10 @@ const uischema = {
         {
           'type': 'Control',
           'label': {
-            'text': 'Age'
+            'text': 'Driving Skill'
           },
           'scope': {
-            '$ref': '#/properties/personalData/properties/age'
+            '$ref': '#/properties/personalData/properties/drivingSkill'
           }
         },
       ]

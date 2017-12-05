@@ -104,7 +104,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
   );
 });
 
-test('tester with wrong schema type, missing maximum and minimum fields', t => {
+test('tester with correct schema type, but missing maximum and minimum fields', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: {
@@ -127,7 +127,7 @@ test('tester with wrong schema type, missing maximum and minimum fields', t => {
   );
 });
 
-test('tester with wrong schema type, missing maximum', t => {
+test('tester with correct schema type, but missing maximum', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: {
@@ -151,7 +151,7 @@ test('tester with wrong schema type, missing maximum', t => {
   );
 });
 
-test('tester with wrong schema type, missing minimum', t => {
+test('tester with correct schema type,but missing minimum', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: {
