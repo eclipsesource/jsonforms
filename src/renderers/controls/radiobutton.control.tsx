@@ -59,9 +59,10 @@ export class RadiobuttonControl extends Control<ControlProps, ControlState> {
                                                 type='radio'
                                                 name={label}
                                                 id={optionValue}
-                                                value={this.state.value}
+                                                value={optionValue}
                                             />
                                             <label for={optionValue}>
+                                                onClick={e => this.handleChange(e.target.value)}>
                                                 {optionValue}
                                             </label>
                                         </div>

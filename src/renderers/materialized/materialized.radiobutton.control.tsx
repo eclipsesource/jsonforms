@@ -53,10 +53,10 @@ export class MaterializedRadiobuttonControl extends Control<ControlProps, Contro
                                     type='radio'
                                     name={label}
                                     id={optionValue}
-                                    value={this.state.value}
+                                    value={optionValue}
                                 />
                                 <label for={optionValue}
-                                       onClick={() => this.handleChange(!this.state.value)}>
+                                       onClick={e => this.handleChange(e.target.value)}>
                                     {optionValue}
                                 </label>
                             </p>
