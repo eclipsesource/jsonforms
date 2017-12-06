@@ -11,9 +11,7 @@
     "sourceMap": true,
     "target": "es5",
     "jsx": "react",
-    "types": [
-
-    ]
+    "typeRoots": ["../../node_modules/@types"]
   },
   "exclude":[
     "node_modules"

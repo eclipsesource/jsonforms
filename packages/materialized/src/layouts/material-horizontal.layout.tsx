@@ -1,16 +1,20 @@
-import { JSX } from '../JSX';
-import * as _ from 'lodash';
-import { JsonSchema } from '../../models/jsonSchema';
-import { RankedTester, rankWith, uiTypeIs } from '../../core/testers';
-import { HorizontalLayout, UISchemaElement } from '../../models/uischema';
+import * as React from 'react';
 import {
+  DispatchRenderer,
+  HorizontalLayout,
   JsonFormsLayout,
+  JsonSchema,
   mapStateToLayoutProps,
-  registerStartupRenderer
-} from '../renderer.util';
-import { connect } from '../../common/binding';
-import { RendererProps } from '../../core/renderer';
-import DispatchRenderer from '../dispatch-renderer';
+  RankedTester,
+  rankWith,
+  registerStartupRenderer,
+  RendererProps,
+  UISchemaElement,
+  uiTypeIs
+} from 'jsonforms-core';
+import { connect } from 'react-redux';
+import * as _ from 'lodash';
+
 import Grid  from 'material-ui/Grid';
 
 /**

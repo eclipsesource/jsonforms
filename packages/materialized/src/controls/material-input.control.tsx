@@ -1,14 +1,15 @@
-import { JSX } from '../JSX';
-
-import { ControlProps } from '../controls/Control';
+import * as React from 'react';
 import {
+  ControlProps,
+  DispatchField,
   formatErrorMessage,
+  isControl,
   mapStateToControlProps,
+  rankWith,
   registerStartupRenderer
-} from '../renderer.util';
-import { connect, Event } from '../../common/binding';
-import DispatchField from '../fields/dispatch.field';
-import { isControl, RankedTester, rankWith } from '../../core/testers';
+} from 'jsonforms-core';
+import { connect } from 'react-redux';
+
 import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 

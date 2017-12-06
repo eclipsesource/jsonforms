@@ -1,9 +1,9 @@
 import 'jsonforms-materialized';
 import { createExampleSelection } from '../src/register';
 
-declare let $;
+// declare let $;
 
 window.onload = ev => {
   createExampleSelection();
-  $('select').material_select();
+  // $('select').material_select();
 };

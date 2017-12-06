@@ -1,12 +1,16 @@
-import { JSX } from '../JSX';
-import { withIncreasedRank } from '../../core/testers';
-import { ControlProps } from '../controls/Control';
-import { mapStateToControlProps, registerStartupRenderer } from '../renderer.util';
-import { booleanFieldTester } from '../fields/boolean.field';
-import { connect, Event } from '../../common/binding';
+import * as React from 'react';
+import {
+  ControlProps,
+  isBooleanControl,
+  mapStateToControlProps,
+  rankWith,
+  registerStartupRenderer
+} from 'jsonforms-core';
+import { connect } from 'react-redux';
+
 import { FormControlLabel } from 'material-ui/Form';
 
-import MaterialBooleanField from './fields/material-boolean.field';
+import MaterialBooleanField from '../fields/material-boolean.field';
 
 export const MaterialBooleanControl =
     ({ classNames, id, errors, label, uischema, schema }: ControlProps) => {
@@ -20,6 +24,6 @@ export const MaterialBooleanControl =
   };
 
 export default registerStartupRenderer(
-  withIncreasedRank(2, booleanFieldTester),
+  rankWith(2, isBooleanControl),
   connect(mapStateToControlProps)(MaterialBooleanControl)
 );

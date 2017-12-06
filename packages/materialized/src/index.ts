@@ -1,11 +1,9 @@
 import { JsonForms } from 'jsonforms-core';
-export * from './fields/index';
-export * from './material-input.control';
-export * from './material-boolean.control';
-export * from './material-horizontal.layout';
-export * from './layouts/vertical.layout';
-export * from './layouts/group.layout';
-export * from './complex/array-renderer';
+import 'react-dom';
+export * from './complex';
+export * from './controls';
+export * from './layouts';
+export * from './fields';
 
 export const materialize = () => {
   JsonForms.stylingRegistry.registerMany([

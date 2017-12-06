@@ -13,11 +13,10 @@
   "typings": "dist/ts-build-materialized/index.d.ts",
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config webpack/webpack.build.js --env=production --display-error-details",
-    "build": "npm run tsc",
+    "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf dist",
-    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "nyc report --reporter=html",
-    "tsc": "tsc --project tsconfig.json",
     "test": "echo 'TODO: implement materialized test'"
   },
   "ava": {
@@ -29,8 +28,9 @@
   },
   "dependencies": {
     "jsonforms-core": "2.1.0",
-    "materialize-css": "0.100.2",
+    "material-ui": "^1.0.0-beta.22",
     "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },

@@ -1,8 +1,5 @@
 {
 	"scripts": {},
-    "dev-default": "webpack --config webpack/webpack.dev.default.js && webpack-dev-server --config webpack/webpack.dev.default.js --env=dev --inline",
-    "material-ui": "^1.0.0-beta.22",
-    "typeface-roboto": "0.0.45",
 	"devDependencies": {
 		"@types/react": "^16.0.27",
 		"ava": "^0.24.0",
