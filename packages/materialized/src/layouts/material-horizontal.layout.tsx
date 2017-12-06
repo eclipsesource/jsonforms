@@ -35,7 +35,7 @@ const renderChildren = (
   return elements.map((child, index) => {
 
     return (
-      <Grid item key={`${path}-${index}`}>
+      <Grid item key={`${path}-${index}`} xs>
         <DispatchRenderer
           uischema={child}
           schema={schema}

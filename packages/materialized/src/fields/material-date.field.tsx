@@ -26,6 +26,7 @@ export const MaterialDateField = (props: FieldProps) => {
     id={id}
     disabled={!enabled}
     autoFocus={uischema.options && uischema.options.focus}
+    fullWidth
   />;
 };
 export const dateFieldTester: RankedTester = rankWith(3, and(

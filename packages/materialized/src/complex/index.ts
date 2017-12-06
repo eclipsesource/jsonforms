@@ -1,1 +1,1 @@
-export * from './array-renderer';
+export * from './table-array.control';

@@ -23,6 +23,7 @@ export const MaterialTextField = (props: FieldProps) => {
     disabled={!enabled}
     autoFocus={uischema.options && uischema.options.focus}
     multiline={uischema.options && uischema.options.multi}
+    fullWidth
   />;
 };
 /**

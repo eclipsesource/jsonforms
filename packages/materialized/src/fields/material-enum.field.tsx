@@ -29,6 +29,7 @@ export const MaterialEnumField = (props: FieldProps) => {
     autoFocus={uischema.options && uischema.options.focus}
     value={data || ''}
     onChange={ ev => handleChange(props, ev.target.value)}
+    fullWidth
     >
       {
         [<MenuItem value='' key={'empty'} />]

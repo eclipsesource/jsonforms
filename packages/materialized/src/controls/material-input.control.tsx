@@ -18,7 +18,7 @@ export const MaterializedControl =
   const isValid = errors.length === 0;
 
   return (
-    <FormControl className={classNames.wrapper} hidden={!visible}>
+    <FormControl className={classNames.wrapper} hidden={!visible} fullWidth>
       <InputLabel htmlFor={id} className={classNames.label}>{label}</InputLabel>
       <DispatchField uischema = {uischema} schema = {schema}/>
       <FormHelperText error={!isValid}>{errors}</FormHelperText>

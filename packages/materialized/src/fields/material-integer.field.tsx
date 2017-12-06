@@ -24,6 +24,7 @@ export const MaterialIntegerField = (props: FieldProps) => {
     id={id}
     disabled={!enabled}
     autoFocus={uischema.options && uischema.options.focus}
+    fullWidth
   />;
 };
 export const integerFieldTester: RankedTester = rankWith(2, and(
