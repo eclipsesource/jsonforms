@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
-export const EnumField = (props: FieldProps) => {
+const EnumField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema } = props;
   const options = resolveSchema(schema, (uischema as ControlElement).scope.$ref).enum;
 
@@ -25,7 +25,9 @@ export const EnumField = (props: FieldProps) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLSelectElement>) => handleChange(props, ev.currentTarget.value)}
+      onChange={(ev: SyntheticEvent<HTMLSelectElement>) =>
+        handleChange(props, ev.currentTarget.value)
+      }
     >
       {
         [<option value='' key={'empty'} />]

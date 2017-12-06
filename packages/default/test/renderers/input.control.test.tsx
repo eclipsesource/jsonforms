@@ -1,6 +1,7 @@
 import '../helpers/setup';
 import * as React from 'react';
 import test from 'ava';
+import '../../src/fields';
 import {
   ControlElement,
   HorizontalLayout,
@@ -10,7 +11,6 @@ import {
   update,
   validate
 } from 'jsonforms-core';
-import '../../src/index';
 import InputControl, { inputControlTester } from '../../src/controls/input.control';
 import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
 import {

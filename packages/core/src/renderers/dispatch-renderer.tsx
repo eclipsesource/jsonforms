@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as _ from 'lodash';
+import { connect } from 'react-redux';
 import { UnknownRenderer } from './unknown.renderer';
 import { RankedTester } from '../core/testers';
-import { connect } from '../common/binding';
 import { RendererProps } from '../core/renderer';
 
 export interface DispatchRendererProps extends RendererProps {
@@ -11,9 +11,8 @@ export interface DispatchRendererProps extends RendererProps {
 
 const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) => {
   const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-
   if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
-    return <UnknownRenderer/>;
+    return <UnknownRenderer type={'renderer'}/>;
   } else {
     const Render = renderer.renderer;
 

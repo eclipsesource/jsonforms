@@ -3,6 +3,7 @@ import {
   and,
   FieldProps,
   handleChange,
+  isBooleanControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
@@ -13,7 +14,7 @@ import {
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
-export const BooleanField = (props: FieldProps) => {
+const BooleanFd = (props: FieldProps) => {
   const { data, className, id, enabled, uischema } = props;
 
   return (
@@ -34,11 +35,9 @@ export const BooleanField = (props: FieldProps) => {
  * Default tester for boolean controls.
  * @type {RankedTester}
  */
-export const booleanFieldTester: RankedTester = rankWith(2, and(
-    uiTypeIs('Control'),
-    schemaTypeIs('boolean')
-  ));
-export default registerStartupInput(
+export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
+export const BooleanField = registerStartupInput(
   booleanFieldTester,
-  connect(mapStateToInputProps)(BooleanField)
+  connect(mapStateToInputProps)(BooleanFd)
 );
+export default BooleanField;

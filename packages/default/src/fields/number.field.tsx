@@ -13,7 +13,7 @@ import {
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
-export const NumberField = (props: FieldProps) => {
+const NumberField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema } = props;
 
   return <input type='number'

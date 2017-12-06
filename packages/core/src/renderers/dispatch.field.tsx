@@ -15,7 +15,7 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
   const field = _.maxBy(dispatchFieldProps.fields, r => r.tester(uischema, schema));
 
   if (field === undefined || field.tester(uischema, schema) === -1) {
-    return <UnknownRenderer/>;
+    return <UnknownRenderer type={'field'}/>;
   } else {
     const Field = field.field;
 

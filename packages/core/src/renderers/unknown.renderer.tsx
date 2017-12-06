@@ -6,7 +6,7 @@ export class UnknownRenderer extends Component<any, any> {
   render() {
     return (
       <div style={{color: 'red'}}>
-        No applicable renderer found.
+        No applicable {this.props.type} found.
       </div>
     );
   }
