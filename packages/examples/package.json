@@ -1,0 +1,51 @@
+{
+  "name": "jsonforms-examples",
+  "version": "2.1.0",
+  "description": "Generating forms for JSON schema",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "main": "dist/ts-build/index.js",
+  "typings": "dist/ts-build/index.d.ts",
+  "scripts": {
+    "bundle": "webpack --config ../../webpack.build.js --env=production --display-error-details",
+    "build": "../../node_modules/.bin/tsc",
+    "clean": "rm -rf dist",
+    "dev-materialize": "webpack --config webpack/webpack.dev.materialize.js && webpack-dev-server --config webpack/webpack.dev.materialize.js --env=dev --inline",
+    "dev-default": "webpack --config webpack/webpack.dev.default.js && webpack-dev-server --config webpack/webpack.dev.default.js --env=dev --inline",
+    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "report": "../../node_modules/.bin/nyc report --reporter=html",
+    "start": "npm run dev-materialize",
+    "test": "echo 'Nothing to do for `examples` package'",
+    "test-coverage": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
+    "wct": "wct wct-test"
+  },
+  "ava": {
+    "verbose": true,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "dependencies": {
+    "jsonforms-core": "2.1.0",
+    "jsonforms-default": "2.1.0",
+    "jsonforms-materialized": "2.1.0",
+    "react": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.2.3",
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.100.2",
+    "source-map-loader": "^0.2.3",
+    "ts-loader": "^3.2.0",
+    "tslint-loader": "^3.5.3",
+    "webpack-dev-server": "^2.9.5"
+  }
+}

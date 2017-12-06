@@ -1,12 +1,16 @@
 import { JsonForms } from 'jsonforms-core';
 
-export * from './materialized.boolean.control';
-export * from './materialized.date.control';
-export * from './materialized.enum.control';
-export * from './materialized.integer.control';
-export * from './materialized.number.control';
-export * from './materialized.text.control';
-export * from './materialized.textarea.control';
+export * from './controls/materialized.boolean.control';
+export * from './controls/materialized.date.control';
+export * from './controls/materialized.enum.control';
+export * from './controls/materialized.integer.control';
+export * from './controls/materialized.number.control';
+export * from './controls/materialized.text.control';
+export * from './controls/materialized.textarea.control';
+export * from './layouts/horizontal.layout';
+export * from './layouts/vertical.layout';
+export * from './layouts/group.layout';
+export * from './complex/array-renderer';
 
 export const materialize = () => {
   JsonForms.stylingRegistry.registerMany([
@@ -98,3 +102,5 @@ export const materialize = () => {
   });
   JsonForms.stylingRegistry.deregister('select');
 };
+
+materialize();

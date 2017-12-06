@@ -1,11 +1,15 @@
 {
   "name": "jsonforms-default",
   "version": "2.1.0",
+  "description": "Default Renderer Set for JSON Forms",
+  "main": "dist/ts-build/index.js",
+  "typings": "dist/ts-build/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-
-    "clean": "rm -rf dist"
+    "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
+    "build": "../../node_modules/.bin/tsc",
+    "clean": "rm -rf dist",
+    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava"
   },
   "dependencies": {
     "jsonforms-core": "2.1.0",

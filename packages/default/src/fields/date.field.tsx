@@ -13,12 +13,14 @@ import {
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
-export const DateField = (props: FieldProps) => {
+const DateField = (props: FieldProps) => {
     const { data, className, id, enabled, uischema } = props;
 
     return <input type='date'
          value={data || ''}
-         onChange={(ev: SyntheticEvent<HTMLInputElement>) => handleChange(props, ev.currentTarget.value)}
+         onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+           handleChange(props, ev.currentTarget.value)
+         }
          className={className}
          id={id}
          disabled={!enabled}

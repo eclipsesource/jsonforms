@@ -5,10 +5,10 @@ import {
   FieldProps,
   handleChange,
   mapStateToInputProps,
+  optionIs,
   RankedTester,
   rankWith,
   registerStartupInput,
-  optionIs,
   uiTypeIs
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
@@ -18,7 +18,9 @@ export const TextAreaField = (props: FieldProps) => {
 
   return <textarea
        value={data || ''}
-       onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) => handleChange(props, ev.currentTarget.value)}
+       onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
+         handleChange(props, ev.currentTarget.value)
+       }
        className={className}
        id={id}
        disabled={!enabled}

@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
-  and,
   FieldProps,
   handleChange,
+  isControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  isControl
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
-export const TextField = (props: FieldProps) => {
+const TextField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema } = props;
 
   return <input type='text'
