@@ -31,9 +31,6 @@ module.exports = [{
         new copyWebpackPlugin([
             { from: 'example.css' },
             { from: 'lib/native-shim.js'  },
-            { from: 'node_modules/jquery/dist/jquery.js'               },
-            { from: 'node_modules/materialize-css/dist/css/materialize.css' },
-            { from: 'node_modules/materialize-css/dist/js/materialize.js'  },
             { from: 'icons', to: 'icons' }
         ])
     ],
