@@ -1,6 +1,5 @@
 {
 	"scripts": {
-		"test": "cross-env NODE_ENV=test ava"
 	},
 	"devDependencies": {
 		"@types/react": "^16.0.27",
