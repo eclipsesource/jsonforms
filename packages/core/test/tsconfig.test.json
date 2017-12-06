@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist/ts-build/test",
+    "target": "es6"
+  },
+  "include": [
+    "**/schema.service.test.ts"
+  ],
+  "exclude": [
+  ],
+  "types": [
+  ]
+}

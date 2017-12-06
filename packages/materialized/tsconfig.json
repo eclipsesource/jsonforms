@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "dist/ts-build-materialized",
+    "sourceMap": true,
+    "target": "es5",
+    "jsx": "react",
+    "types": [
+
+    ]
+  },
+  "exclude":[
+    "node_modules"
+  ],
+  "files": [
+    "./src/index.ts"
+  ]
+}
