@@ -69,13 +69,12 @@ The whole document may for example now look like this:
 ## First time setup
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
 * Clone this repository
-* Install dependencies: `npm install`
-* Install typescript: `npm install -g typescript`
+* Install dependencies & hook up dependencies between packages: `lerna bootstrap`
 
 ## Build & Testing
-* Normal Build: `npm run build`
-* Test: `npm run test`
-* Watch: `npm run dev`, point your browser to `http://localhost:8080/`
+* Build (all packages): `lerna run build`
+* Test (all packages): `lerna run test`
+* Clean (delete `dist` folder of all packages): `lerna run clean` 
 
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
