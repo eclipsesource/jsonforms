@@ -2,7 +2,7 @@ import { JsonForms } from 'jsonforms-core';
 export * from './fields/index';
 export * from './material-input.control';
 export * from './material-boolean.control';
-export * from './layouts/horizontal.layout';
+export * from './material-horizontal.layout';
 export * from './layouts/vertical.layout';
 export * from './layouts/group.layout';
 export * from './complex/array-renderer';
