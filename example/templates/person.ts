@@ -32,6 +32,21 @@ const schema = {
     'occupation': {
       'type': 'string'
     },
+    'gender': {
+      'type': 'string',
+      'enum': ['male', 'female', 'other']
+    },
+    'yearsOfExperience': {
+      'type': 'string',
+      'enum': ['0', '1', '2', '3', '4', 'more']
+    },
+    'province': {
+      'type': 'string',
+      'enum': ['Baden-Württemberg', 'Bavaria', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg',
+        'Hessen', 'Niedersachsen', 'Mecklenburg-Vorpommern', 'Nordrhein-Westfalen',
+        'Rheinland-Pfalz', 'Saarland', 'Sachsen', 'Sachsen-Anhalt', 'Schleswig-Holstein',
+        'Thüringen']
+    },
     'postalCode': {
       'type': 'string',
       'maxLength': 5
@@ -123,6 +138,24 @@ const uischema = {
         {
           'type': 'Control',
           'scope': {
+            '$ref': '#/properties/gender'
+          }
+        },
+        {
+          'type': 'Control',
+          'scope': {
+            '$ref': '#/properties/yearsOfExperience'
+          }
+        },
+        {
+          'type': 'Control',
+          'scope': {
+            '$ref': '#/properties/province'
+          }
+        },
+        {
+          'type': 'Control',
+          'scope': {
             '$ref': '#/properties/postalCode'
           },
           'options': {
@@ -131,7 +164,7 @@ const uischema = {
           }
         }
       ]
-    }
+    },
   ]
 };
 const data = {

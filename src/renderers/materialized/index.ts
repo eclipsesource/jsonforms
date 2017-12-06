@@ -9,6 +9,7 @@ export * from './materialized.number.control';
 export * from './materialized.text.control';
 export * from './materialized.textarea.control';
 export * from './materialized.radiobutton.control';
+export * from './materialized.autocomplete.control';
 
 export const materialize = () => {
   JsonForms.stylingRegistry.registerMany([

@@ -2,7 +2,7 @@ import { JSX } from '../../src/renderers/JSX';
 import test from 'ava';
 import { initJsonFormsStore } from '../helpers/setup';
 import { ControlElement } from '../../src/models/uischema';
-import RadioButtonControl, { radiobottonControlTester } from '../../src/renderers/controls/radiobutton.control';
+import { radiobuttonControlTester } from '../../src/renderers/controls/radiobutton.control';
 import { JsonForms } from '../../src/core';
 import { getData } from '../../src/reducers/index';
 import { update, validate } from '../../src/actions';
@@ -46,15 +46,15 @@ test.beforeEach(t => {
 });
 
 test('tester', t => {
-    t.is(radiobottonControlTester(undefined, undefined), -1);
-    t.is(radiobottonControlTester(null, undefined), -1);
-    t.is(radiobottonControlTester({type: 'Foo'}, undefined), -1);
-    t.is(radiobottonControlTester({type: 'Control'}, undefined), -1);
+    t.is(radiobuttonControlTester(undefined, undefined), -1);
+    t.is(radiobuttonControlTester(null, undefined), -1);
+    t.is(radiobuttonControlTester({type: 'Foo'}, undefined), -1);
+    t.is(radiobuttonControlTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
     t.is(
-        radiobottonControlTester(
+        radiobuttonControlTester(
             t.context.uischema,
             { type: 'object', properties: {foo: {type: 'string'}} }
         ),
@@ -64,7 +64,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
     t.is(
-        radiobottonControlTester(
+        radiobuttonControlTester(
             t.context.uischema,
             {
                 'type': 'object',
@@ -85,7 +85,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with matching string type', t => {
     t.is(
-        radiobottonControlTester(
+        radiobuttonControlTester(
             t.context.uischema,
             {
                 'type': 'object',
@@ -104,7 +104,7 @@ test('tester with matching string type', t => {
 test('tester with matching numeric type', t => {
     // TODO should this be true?
     t.is(
-        radiobottonControlTester(
+        radiobuttonControlTester(
             t.context.uischema,
             {
                 'type': 'object',
@@ -124,7 +124,7 @@ test('render', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -164,7 +164,7 @@ test('render without label', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={uischema}
             />
         </Provider>
@@ -197,7 +197,7 @@ test('update via input event', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -214,7 +214,7 @@ test('update via action', t => {
     const store = initJsonFormsStore(data,  t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -234,7 +234,7 @@ test('update with undefined value', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -254,7 +254,7 @@ test('update with null value', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -274,7 +274,7 @@ test('update with wrong ref', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -294,7 +294,7 @@ test('update with null ref', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -314,7 +314,7 @@ test('update with undefined ref', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -334,7 +334,7 @@ test('hide', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
                          visible={false}
             />
@@ -352,7 +352,7 @@ test('show by default', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -369,7 +369,7 @@ test('disable', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
                          enabled={false}
             />
@@ -383,7 +383,7 @@ test('enabled by default', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -396,7 +396,7 @@ test('single error', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -411,7 +411,7 @@ test('multiple errors', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
             />
         </Provider>
@@ -433,7 +433,7 @@ test('empty errors by default', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
 
             />
@@ -451,7 +451,7 @@ test('reset validation message', t => {
     );
     const tree = renderIntoDocument(
         <Provider store={store}>
-            <radiobottonControlTester schema={t.context.schema}
+            <radiobuttonControlTester schema={t.context.schema}
                          uischema={t.context.uischema}
 
             />

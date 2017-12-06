@@ -33,21 +33,6 @@ const schema = {
               }
             }
           }
-        },
-        'gender': {
-            'type': 'string',
-            'enum': ['male', 'female', 'other']
-        },
-        'yearsOfExperience': {
-          'type': 'string',
-          'enum': ['0', '1', '2', '3', '4', 'more']
-        },
-        'province': {
-            'type': 'string',
-            'enum': ['Baden-Württemberg', 'Bavaria', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg',
-                'Hessen', 'Niedersachsen', 'mecklenburg-Vorpommern', 'Nordrhein-Westfalen',
-                'Rheinland-Pfalz', 'Saarland', 'Sachsen', 'Sachsen-Anhalt', 'Schleswig-Holstein',
-                'Thüringen']
         }
       },
       'required': ['occupation', 'nationality']
@@ -63,25 +48,7 @@ const uischema = {
       'options': {
         'submit': true
       }
-    },
-      {
-        'type': 'Control',
-          'scope': {
-          '$ref': '#/properties/gender'
-          }
-      },
-      {
-          'type': 'Control',
-          'scope': {
-              '$ref': '#/properties/yearsOfExperience'
-          }
-      },
-      {
-          'type': 'Control',
-          'scope': {
-              '$ref': '#/properties/province'
-          }
-      }
+    }
   ]
 };
 const uischemaSimple = {

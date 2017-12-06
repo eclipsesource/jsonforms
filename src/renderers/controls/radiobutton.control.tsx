@@ -16,7 +16,7 @@ import {
  * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const radiobottonControlTester: RankedTester = rankWith(9, and(
+export const radiobuttonControlTester: RankedTester = rankWith(9, and(
     uiTypeIs('Control'),
     schemaMatches(schema => schema.hasOwnProperty('enum')),
     enumLengthAtMost(3)
@@ -77,6 +77,6 @@ export class RadiobuttonControl extends Control<ControlProps, ControlState> {
 }
 
 export default registerStartupRenderer(
-    radiobottonControlTester,
+    radiobuttonControlTester,
     connect(mapStateToControlProps)(RadiobuttonControl)
 );
