@@ -16,10 +16,13 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 export const MaterialInputControl =
   ({ classNames, id, errors, label, uischema, schema, visible, required }: ControlProps) => {
   const isValid = errors.length === 0;
+  const trim = uischema.options && uischema.options.trim;
 
   return (
-    <FormControl className={classNames.wrapper} hidden={!visible} fullWidth>
-      <InputLabel htmlFor={id} className={classNames.label}>{computeLabel(label, required)}</InputLabel>
+    <FormControl className={classNames.wrapper} hidden={!visible} fullWidth={!trim}>
+      <InputLabel htmlFor={id} className={classNames.label}>
+        {computeLabel(label, required)}
+      </InputLabel>
       <DispatchField uischema = {uischema} schema = {schema}/>
       <FormHelperText error={!isValid}>{errors}</FormHelperText>
     </FormControl>
