@@ -29,8 +29,7 @@ import Button from 'material-ui/Button';
 import Toolbar from 'material-ui/Toolbar';
 
 /**
- * Alternative tester for an array that also checks whether the 'table'
- * option is set.
+ * Tester for an array of objects.
  * @type {RankedTester}
  */
 export const tableArrayTester: RankedTester = rankWith(10, and(

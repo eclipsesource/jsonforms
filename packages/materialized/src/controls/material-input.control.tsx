@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   ControlProps,
   DispatchField,
-  formatErrorMessage,
   isControl,
   mapStateToControlProps,
   rankWith,
@@ -13,7 +12,7 @@ import { connect } from 'react-redux';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
-export const MaterializedControl =
+export const MaterialInputControl =
   ({ classNames, id, errors, label, uischema, schema, visible }: ControlProps) => {
   const isValid = errors.length === 0;
 
@@ -28,5 +27,5 @@ export const MaterializedControl =
 
 export default registerStartupRenderer(
   rankWith(2, isControl),
-  connect(mapStateToControlProps)(MaterializedControl)
+  connect(mapStateToControlProps)(MaterialInputControl)
 );

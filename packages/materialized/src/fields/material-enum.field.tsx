@@ -3,7 +3,6 @@ import {
   and,
   ControlElement,
   FieldProps,
-  formatIs,
   handleChange,
   mapStateToInputProps,
   RankedTester,
