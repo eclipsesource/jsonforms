@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  computeLabel,
   ControlProps,
   DispatchField,
   isControl,
@@ -13,12 +14,12 @@ import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
 export const MaterialInputControl =
-  ({ classNames, id, errors, label, uischema, schema, visible }: ControlProps) => {
+  ({ classNames, id, errors, label, uischema, schema, visible, required }: ControlProps) => {
   const isValid = errors.length === 0;
 
   return (
     <FormControl className={classNames.wrapper} hidden={!visible} fullWidth>
-      <InputLabel htmlFor={id} className={classNames.label}>{label}</InputLabel>
+      <InputLabel htmlFor={id} className={classNames.label}>{computeLabel(label, required)}</InputLabel>
       <DispatchField uischema = {uischema} schema = {schema}/>
       <FormHelperText error={!isValid}>{errors}</FormHelperText>
     </FormControl>
