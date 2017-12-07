@@ -4,6 +4,7 @@ import * as day2 from './day2';
 import * as day4 from './day4';
 import * as day5 from './day5';
 import * as day6 from './day6';
+import * as dates from './dates';
 import * as dyanmic from './dynamic';
 import * as ecore from './ecore';
 import * as generators from './generate';
@@ -27,6 +28,7 @@ export {
   layout,
   person,
   rule,
+  dates,
   dyanmic,
   masterDetail,
   resolve,
