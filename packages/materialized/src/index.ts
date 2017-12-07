@@ -56,6 +56,10 @@ export const materialize = () => {
       classNames: ['row']
     },
     {
+      name: 'array-table',
+      classNames: ['array-table-layout', 'control']
+    },
+    {
       name: 'categorization',
       classNames: ['jsf-categorization']
     },

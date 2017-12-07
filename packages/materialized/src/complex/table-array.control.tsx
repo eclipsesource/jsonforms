@@ -7,11 +7,11 @@ import {
   ControlProps,
   convertToClassName,
   DispatchField,
-  mapStateToControlProps,
   formatErrorMessage,
   getElementLabelObject,
   JsonForms,
   JsonSchema,
+  mapStateToControlProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
@@ -22,6 +22,11 @@ import {
   update
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
+
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Typography from 'material-ui/Typography';
+import Button from 'material-ui/Button';
+import Toolbar from 'material-ui/Toolbar';
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -86,60 +91,59 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
 
     return (
       <div className={controlClass} hidden={!visible}>
-        <header>
-          <label className={labelClass}>
-            {label}
-          </label>
-          <button className={buttonClass} onClick={ () => this.addNewItem(path) }>
+        <Toolbar>
+          <Typography type='title'>{label}</Typography>
+          <Button raised color='primary' className={buttonClass}
+            onClick={ () => this.addNewItem(path) }>
             Add to {labelObject.text}
-          </button>
-        </header>
+          </Button>
+        </Toolbar>
         <div className={divClassNames}>
           {!isValid ? formatErrorMessage(errors) : ''}
         </div>
-        <table className={tableClass}>
-          <thead>
-          <tr>
+        <Table className={tableClass}>
+          <TableHead>
+            <TableRow>
             {
               _(resolvedSchema.properties)
                 .keys()
                 .filter(prop => resolvedSchema.properties[prop].type !== 'array')
-                .map(prop => <th key={prop}>{prop}</th>)
+                .map(prop => <TableCell key={prop}>{prop}</TableCell>)
                 .value()
             }
-          </tr>
-          </thead>
-          <tbody>
+            </TableRow>
+          </TableHead>
+          <TableBody>
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
-              <tr><td>No data</td></tr> : data.map((child, index) => {
+              <TableRow><TableCell>No data</TableCell></TableRow> : data.map((child, index) => {
               const childPath = compose(path, index + '');
 
               return (
-                <tr key={childPath}>
+                <TableRow key={childPath}>
                   {
                     _.chain(resolvedSchema.properties)
                       .keys()
                       .filter(prop => resolvedSchema.properties[prop].type !== 'array')
                       .map((prop, idx) => {
                         return (
-                          <td key={compose(childPath, idx.toString())}>
+                          <TableCell key={compose(childPath, idx.toString())}>
                             <DispatchField
                               schema={resolvedSchema}
                               uischema={createControlElement(prop)}
                               path={childPath}
                             />
-                          </td>
+                          </TableCell>
                         );
                       })
                       .value()
                   }
-                </tr>
+                </TableRow>
               );
             })
           }
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     );
   }
