@@ -15,6 +15,11 @@ export const schema = {
         },
         'height': {
           'type': 'number'
+        },
+        'drivingSkill': {
+          'type': 'number',
+          'maximum': 10,
+          'minimum': 1
         }
       },
       'required': ['age', 'height']
@@ -80,6 +85,12 @@ export const uischema = {
           },
           'scope': {
             '$ref': '#/properties/personalData/properties/age'
+          }
+        },
+        {
+          'type': 'Control',
+          'scope': {
+            '$ref': '#/properties/personalData/properties/drivingSkill'
           }
         },
       ]
