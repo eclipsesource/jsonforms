@@ -1,16 +1,9 @@
 import { JsonForms } from 'jsonforms-core';
-
-export * from './controls/materialized.boolean.control';
-export * from './controls/materialized.date.control';
-export * from './controls/materialized.enum.control';
-export * from './controls/materialized.integer.control';
-export * from './controls/materialized.number.control';
-export * from './controls/materialized.text.control';
-export * from './controls/materialized.textarea.control';
-export * from './layouts/horizontal.layout';
-export * from './layouts/vertical.layout';
-export * from './layouts/group.layout';
-export * from './complex/array-renderer';
+import 'react-dom';
+export * from './complex';
+export * from './controls';
+export * from './layouts';
+export * from './fields';
 
 export const materialize = () => {
   JsonForms.stylingRegistry.registerMany([
@@ -61,6 +54,10 @@ export const materialize = () => {
     {
       name: 'array.children',
       classNames: ['row']
+    },
+    {
+      name: 'array-table',
+      classNames: ['array-table-layout', 'control']
     },
     {
       name: 'categorization',
