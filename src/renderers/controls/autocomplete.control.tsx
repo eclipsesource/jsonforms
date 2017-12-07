@@ -7,6 +7,7 @@ import { update } from '../../actions';
 import { connect, Event } from '../../common/binding';
 import { Control, ControlProps, ControlState } from './Control';
 import {
+    formatErrorMessage,
     mapStateToControlProps,
     registerStartupRenderer
 } from '../renderer.util';
@@ -15,7 +16,7 @@ import {
  * Default tester for autocomplete controls.
  * @type {RankedTester}
  */
-export const autocompleteControlTester: RankedTester = rankWith(9, and(
+export const autocompleteControlTester: RankedTester = rankWith(2, and(
     uiTypeIs('Control'),
     schemaMatches(schema => schema.hasOwnProperty('enum')),
     enumLengthAtLeast(15)
@@ -27,10 +28,12 @@ export class AutocompleteControl extends Control<ControlProps, ControlState> {
         const  { uischema, schema, classNames, id, label,
             visible, enabled, path, errors, dispatch } = this.props;
 
+        const isValid = errors.length === 0;
         const options = resolveSchema(
             schema,
             (uischema as ControlElement).scope.$ref
         ).enum;
+        const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
         return (
             <div className={classNames.wrapper}>
@@ -56,6 +59,9 @@ export class AutocompleteControl extends Control<ControlProps, ControlState> {
                         })
                     }
                 </datalist>
+              <div className={divClassNames}>
+                {!isValid ? formatErrorMessage(errors) : ''}
+              </div>
             </div>
         );
     }

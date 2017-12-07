@@ -1,4 +1,3 @@
-///<reference path="../../core/testers.ts"/>
 import { JSX } from '../JSX';
 import { and, enumLengthAtLeast, enumLengthAtMost, RankedTester } from '../../core/testers';
 import { rankWith, schemaMatches, uiTypeIs } from '../../core/testers';

@@ -93,7 +93,7 @@ test('tester with matching string type', t => {
             'properties': {
               'foo': {
                 'type': 'string',
-                'enum': ['a', 'b']
+                'enum': ['a', 'b', 'c', 'd']
               }
             }
           }
@@ -112,7 +112,7 @@ test('tester with matching numeric type', t => {
             'properties': {
               'foo': {
                 'type': 'number',
-                'enum': [1, 2]
+                'enum': [1, 2, 3, 4]
               }
             }
           }
