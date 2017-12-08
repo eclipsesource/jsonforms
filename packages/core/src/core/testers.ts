@@ -78,7 +78,7 @@ export const schemaSubPathMatches =
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(schema =>
-    !_.isEmpty(schema) && schema.type === expectedType
+  !_.isEmpty(schema) && schema.type === expectedType
 );
 
 /**
@@ -163,6 +163,14 @@ export const and = (...testers: Tester[]): Tester =>
     testers.reduce((acc, tester) => acc && tester(uischema, schema), true);
 
 /**
+ * A tester that allow composing other testers by || them.
+ *
+ * @param {Array<Tester>} testers the testers to be composed
+ */
+export const or = (...testers: Tester[]): Tester =>
+  (uischema: UISchemaElement, schema: JsonSchema) =>
+    testers.reduce((acc, tester) => acc || tester(uischema, schema), false);
+/**
  * Create a ranked tester that will associate a number with a given tester, if the
  * latter returns true.
  *
@@ -181,7 +189,7 @@ export const rankWith = (rank: number, tester: Tester) =>
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
   (uischema: UISchemaElement, schema: JsonSchema): number => {
     return rankedTester(uischema, schema) + by;
-};
+  };
 
 /**
  * Default tester for boolean.
