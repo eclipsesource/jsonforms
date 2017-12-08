@@ -19,6 +19,40 @@ export const isControl = (uischema: any): uischema is ControlElement =>
 
 
 /**
+ * Checks whether the given UI schema has an option with an enum array
+ * and whether the length of the enum is at least the given minLength.
+ * If no enum array is present, returns false.
+ *
+ * @param {number} minLength the lower bound for the length of the enum array
+ */
+export const enumLengthAtLeast = (minLength: number): Tester =>
+    (uischema: UISchemaElement, schema: JsonSchema): boolean => {
+        const options = resolveSchema(
+            schema,
+            (uischema as ControlElement).scope.$ref
+        ).enum;
+
+        return !_.isEmpty(options) && options.length >= minLength;
+    };
+
+/**
+ * Checks whether the given UI schema has an option with an enum array
+ * and whether the length of the enum is at most the given maxLength.
+ * If no enum array is present, returns false.
+ *
+ * @param {number} maxLength the upper bound for the length of the enum array
+ */
+export const enumLengthAtMost = (maxLength: number): Tester =>
+    (uischema: UISchemaElement, schema: JsonSchema): boolean => {
+        const options = resolveSchema(
+            schema,
+            (uischema as ControlElement).scope.$ref
+        ).enum;
+
+        return !_.isEmpty(options) && options.length <= maxLength;
+    };
+
+/**
  * Only applicable for Controls.
  *
  * This function checks whether the given UI schema is of type Control

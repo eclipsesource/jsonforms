@@ -1,5 +1,6 @@
 import { JSX } from '../JSX';
-import { and, RankedTester, rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
+import { and, enumLengthAtLeast, enumLengthAtMost, RankedTester } from '../../core/testers';
+import { rankWith, schemaMatches, uiTypeIs } from '../../core/testers';
 import { ControlElement } from '../../models/uischema';
 import { resolveSchema } from '../../path.util';
 import { update } from '../../actions';
@@ -18,7 +19,9 @@ import {
  */
 export const enumControlTester: RankedTester = rankWith(2, and(
   uiTypeIs('Control'),
-  schemaMatches(schema => schema.hasOwnProperty('enum'))
+  schemaMatches(schema => schema.hasOwnProperty('enum')),
+  enumLengthAtLeast(4),
+  enumLengthAtMost(14)
 ));
 
 export class EnumControl extends Control<ControlProps, ControlState> {
