@@ -321,7 +321,7 @@ test('validation of nested schema', t => {
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');
 });
-test('required field with warning', t => {
+test('required field is marked', t => {
     const schema: JsonSchema = {
         type: 'object',
         properties: {

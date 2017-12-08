@@ -16,10 +16,9 @@ export const InputControl =
   ({ classNames, id, errors, label, uischema, schema, visible, required }: ControlProps) => {
   const isValid = errors.length === 0;
   const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
-  const trim = uischema.options && uischema.options.trim;
 
   return (
-    <div className={classNames.wrapper} hidden={!visible} data-trim={trim}>
+    <div className={classNames.wrapper} hidden={!visible}>
       <label htmlFor={id} className={classNames.label}>
         {computeLabel(label, required)}
       </label>

@@ -151,10 +151,14 @@ export const mapStateToControlProps = (state, ownProps) => {
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
 
   const styles = JsonForms.stylingRegistry.get('control');
-  const classNames: string[] = !_.isEmpty(controlElement.scope) ?
+  let classNames: string[] = !_.isEmpty(controlElement.scope) ?
     styles.concat(
       [`${convertToClassName(controlElement.scope.$ref)}`]
     ) : [''];
+  const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
+  if (trim) {
+    classNames = classNames.concat(JsonForms.stylingRegistry.get('control.trim'));
+  }
   const inputClassName =
     ['validate']
       .concat(isValid ? 'valid' : 'invalid');

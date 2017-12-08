@@ -31,10 +31,10 @@ input {
   flex-direction: column;
   margin: 0.5em 1em;
 }
-.control[data-trim=true] {
+.control.trim {
   display: inline-flex;
 }
-.control[data-trim=true]  > *:first-child {
+.control.trim  > *:first-child {
   margin-right: 0;
 }
 .control > * {margin-left: 0.25em;}

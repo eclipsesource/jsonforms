@@ -20,6 +20,9 @@ import {
 } from '../helpers/binding';
 import { Provider } from 'react-redux';
 
+const defaultMaxLength = 524288;
+const defaultSize = 20;
+
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
     {
@@ -401,7 +404,7 @@ test('use maxLength for attribute size only', t => {
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 524288);
+  t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, 5);
 });
 
@@ -432,7 +435,7 @@ test('use maxLength for attribute maxlength only', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
-  t.is(input.size, 20);
+  t.is(input.size, defaultSize);
 });
 
 test('do not use maxLength', t => {
@@ -458,8 +461,8 @@ test('do not use maxLength', t => {
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 524288);
-  t.is(input.size, 20);
+  t.is(input.maxLength, defaultMaxLength);
+  t.is(input.size, defaultSize);
 });
 
 test('if maxLength is not specified, attributes should have default values (trim && restrict)',
@@ -489,8 +492,8 @@ test('if maxLength is not specified, attributes should have default values (trim
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 524288);
-  t.is(input.size, 20);
+  t.is(input.maxLength, defaultMaxLength);
+  t.is(input.size, defaultSize);
 });
 
 test('if maxLength is not specified, attributes should have default values (trim)',
@@ -519,8 +522,8 @@ test('if maxLength is not specified, attributes should have default values (trim
       </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.is(input.maxLength, 524288);
-    t.is(input.size, 20);
+    t.is(input.maxLength, defaultMaxLength);
+    t.is(input.size, defaultSize);
 });
 
 test('if maxLength is not specified, attributes should have default values (restrict)',
@@ -549,8 +552,8 @@ test('if maxLength is not specified, attributes should have default values (rest
       </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.is(input.maxLength, 524288);
-    t.is(input.size, 20);
+    t.is(input.maxLength, defaultMaxLength);
+    t.is(input.size, defaultSize);
   });
 
 test('if maxLength is not specified, attributes should have default values',
@@ -576,6 +579,6 @@ test('if maxLength is not specified, attributes should have default values',
       </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.is(input.maxLength, 524288);
-    t.is(input.size, 20);
+    t.is(input.maxLength, defaultMaxLength);
+    t.is(input.size, defaultSize);
   });
