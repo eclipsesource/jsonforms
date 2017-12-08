@@ -8,12 +8,13 @@ module.exports = [{
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
         './src/index.ts',
-        './default/index.ts'
+        '../examples/src/index.ts',
+        './example/index.ts'
     ],
     output: {
       path: path.resolve("./", "dist"),
       publicPath: "/assets/",
-      filename: "bundle_default.js"
+      filename: "bundle.js"
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -24,15 +25,14 @@ module.exports = [{
         extensions: [".ts", ".js", ".tsx"]
     },
     devServer: {
-        contentBase: './default'
+        contentBase: './example'
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new copyWebpackPlugin([
-            { from: 'example.css' },
-            { from: 'default/example.dark.css' },
-            { from: 'lib/native-shim.js'  },
-            { from: 'icons', to: 'icons' }
+            { from: '../examples/example.css' },
+            { from: '../examples/lib/native-shim.js'  },
+            { from: '../examples/icons', to: 'icons' }
         ])
     ],
     module: {

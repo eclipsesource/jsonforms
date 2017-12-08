@@ -12,8 +12,9 @@
   "main": "dist/ts-build-materialized/index.js",
   "typings": "dist/ts-build-materialized/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config webpack/webpack.build.js --env=production --display-error-details",
+    "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
+    "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rm -rf dist",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "nyc report --reporter=html",
@@ -34,5 +35,11 @@
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.2.3",
+    "source-map-loader": "^0.2.3",
+    "ts-loader": "^3.2.0",
+    "tslint-loader": "^3.5.3",
+    "webpack-dev-server": "^2.9.5"
+  }
 }

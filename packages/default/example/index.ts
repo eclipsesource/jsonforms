@@ -1,5 +1,5 @@
 import { JsonForms } from 'jsonforms-core';
-import { createExampleSelection } from '../src/register';
+import { createExampleSelection } from '../../examples/src/register';
 import { createThemeSelection } from './theme.switcher';
 import 'jsonforms-default';
 
