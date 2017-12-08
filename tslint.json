@@ -1,4 +1,5 @@
 {
+    "extends": ["tslint-react"],
     "rules": {
 
         "adjacent-overload-signatures": true,
