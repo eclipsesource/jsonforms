@@ -6,12 +6,8 @@ import RadiobuttonControl,
 { radiobuttonControlTester
 } from '../../src/renderers/controls/radiobutton.control';
 import { JsonForms } from '../../src/core';
-import { getData } from '../../src/reducers/index';
-import { update, validate } from '../../src/actions';
 import {
-    change,
     findRenderedDOMElementWithClass,
-    findRenderedDOMElementWithTag,
     renderIntoDocument
 } from '../helpers/test';
 import { Provider } from '../../src/common/binding';
@@ -136,15 +132,10 @@ test('render', t => {
     t.not(control, undefined);
     t.is(control.childNodes.length, 3);
     t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-    t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);
     t.not(findRenderedDOMElementWithClass(tree, 'control'), undefined);
 
     const label = control.firstChild as HTMLLabelElement;
     t.is(label.textContent, 'Foo');
-
-    const validation = findRenderedDOMElementWithClass(tree, 'validation');
-    t.is(validation.tagName, 'DIV');
-    t.is((validation as HTMLDivElement).children.length, 0);
 });
 
 test('render without label', t => {
@@ -168,191 +159,8 @@ test('render without label', t => {
     t.not(control, undefined);
     t.is(control.childNodes.length, 3);
     t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-    t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);
     t.not(findRenderedDOMElementWithClass(tree, 'control'), undefined);
 
     const label = control.firstChild as HTMLLabelElement;
     t.is(label.textContent, '');
-
-    const validation = findRenderedDOMElementWithClass(tree, 'validation');
-    t.is(validation.tagName, 'DIV');
-    t.is((validation as HTMLDivElement).children.length, 0);
-});
-
-test('update via input event', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    select.value = 'b';
-    change(select);
-    t.is(getData(store.getState()).foo, '');
-});
-
-test('update with undefined value', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    store.dispatch(
-        update(
-            'foo',
-            () => undefined
-        )
-    );
-    t.is(select.selectedIndex, 0);
-    t.is(select.value, '');
-});
-
-test('update with null value', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    store.dispatch(
-        update(
-            'foo',
-            () => null
-        )
-    );
-    t.is(select.selectedIndex, 0);
-    t.is(select.value, '');
-});
-
-test('update with wrong ref', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    store.dispatch(
-        update(
-            'bar',
-            () => 'Bar'
-        )
-    );
-    t.is(select.selectedIndex, 0);
-    t.is(select.value, '');
-});
-
-test('update with null ref', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    store.dispatch(
-        update(
-            null,
-            () => false
-        )
-    );
-    t.is(select.selectedIndex, 0);
-    t.is(select.value, '');
-});
-
-test('update with undefined ref', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    store.dispatch(
-        update(
-            undefined,
-            () => false
-        )
-    );
-    t.is(select.selectedIndex, 0);
-    t.is(select.value, '');
-});
-
-test('hide', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-                         visible={false}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    t.true(select.hidden);
-});
-
-test('show by default', t => {
-    const store = initJsonFormsStore(
-        t.context.data,
-        t.context.schema,
-        t.context.uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    t.false(select.hidden);
-});
-//
-test('disable', t => {
-    const store = initJsonFormsStore(
-        t.context.data,
-        t.context.schema,
-        t.context.uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-                         enabled={false}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    t.true(select.disabled);
-});
-
-test('enabled by default', t => {
-    const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-            <RadiobuttonControl schema={t.context.schema}
-                         uischema={t.context.uischema}
-            />
-        </Provider>
-    );
-    const select = findRenderedDOMElementWithTag(tree, 'select') as HTMLSelectElement;
-    t.false(select.disabled);
 });
