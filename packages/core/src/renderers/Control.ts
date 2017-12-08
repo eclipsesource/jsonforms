@@ -17,6 +17,7 @@ export interface ControlProps extends RendererProps {
   label: string;
   errors: any[];
   dispatch: any;
+  required: boolean;
 }
 
 export interface ControlState {

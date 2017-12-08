@@ -3,26 +3,26 @@ import * as React from 'react';
 import {
   and,
   compose,
+  composeWithUi,
+  ControlElement,
   ControlProps,
+  convertToClassName,
   DispatchRenderer,
   generateDefaultUISchema,
   getData,
+  getLabelObject,
   JsonForms,
   RankedTester,
   rankWith,
   registerStartupRenderer,
   resolveData,
   resolveSchema,
-  uiTypeIs,
   schemaMatches,
   schemaSubPathMatches,
-  getElementLabelObject,
-  convertToClassName,
-  ControlElement,
-  composeWithUi,
+  uiTypeIs,
   update
 } from 'jsonforms-core';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 export const getStyle = (styleName: string) =>
   JsonForms.stylingRegistry.getAsClassName(styleName);
@@ -67,7 +67,7 @@ export const ArrayControlRenderer  =
   ({  schema, uischema, data, path, dispatch }: ControlProps) => {
 
     const controlElement = uischema as ControlElement;
-    const label = getElementLabelObject(schema, controlElement);
+    const label = getLabelObject(controlElement);
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
     const className = `control ${(convertToClassName(controlElement.scope.$ref))}`;
 

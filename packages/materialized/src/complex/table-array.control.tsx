@@ -8,7 +8,7 @@ import {
   convertToClassName,
   DispatchField,
   formatErrorMessage,
-  getElementLabelObject,
+  getLabelObject,
   JsonForms,
   JsonSchema,
   mapStateToControlProps,
@@ -84,7 +84,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
       label: false,
       scope: { $ref: `#/properties/${key}` }
     });
-    const labelObject = getElementLabelObject(schema, controlElement);
+    const labelObject = getLabelObject(controlElement);
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 

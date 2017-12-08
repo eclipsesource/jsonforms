@@ -321,3 +321,57 @@ test('validation of nested schema', t => {
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');
 });
+test('required field is marked', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            dateField: {
+                type: 'string',
+                format: 'date'
+            }
+        },
+        required: ['dateField']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/dateField'
+        }
+    };
+
+    const store = initJsonFormsStore({}, schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Date Field*');
+});
+
+test('not required', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            dateField: {
+                type: 'string',
+                format: 'date'
+            }
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/dateField'
+        }
+    };
+
+    const store = initJsonFormsStore({}, schema, uischema);
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+          <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const label = findRenderedDOMElementWithTag(tree, 'label');
+    t.is(label.textContent, 'Date Field');
+});

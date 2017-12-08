@@ -4,3 +4,4 @@ export * from './material-enum.field';
 export * from './material-integer.field';
 export * from './material-number.field';
 export * from './material-text.field';
+export * from './material-time.field';

@@ -31,6 +31,12 @@ input {
   flex-direction: column;
   margin: 0.5em 1em;
 }
+.control.trim {
+  display: inline-flex;
+}
+.control.trim  > *:first-child {
+  margin-right: 0;
+}
 .control > * {margin-left: 0.25em;}
 .control > *:first-child {
   margin-left: 0;

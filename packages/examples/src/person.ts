@@ -10,12 +10,12 @@ export const schema = {
     'personalData': {
       'type': 'object',
       'properties': {
-          'age': {
-              'type': 'integer'
-          },
-          'height': {
-              'type': 'number'
-          }
+        'age': {
+          'type': 'integer'
+        },
+        'height': {
+          'type': 'number'
+        }
       },
       'required': ['age', 'height']
     },
@@ -32,6 +32,10 @@ export const schema = {
     },
     'occupation': {
       'type': 'string'
+    },
+    'postalCode': {
+      'type': 'string',
+      'maxLength': 5
     }
   },
   'required': ['occupation', 'nationality']
@@ -114,6 +118,21 @@ export const uischema = {
           }
         }
       ]
+    },
+    {
+      'type': 'HorizontalLayout',
+      'elements': [
+        {
+          'type': 'Control',
+          'scope': {
+            '$ref': '#/properties/postalCode'
+          },
+          'options': {
+            'trim': true,
+            'restrict': true
+          }
+        }
+      ]
     }
   ]
 };
@@ -121,7 +140,8 @@ export const data = {
   name: 'John Doe',
   vegetarian: false,
   birthDate: '1985-06-02',
-  personalData: {}
+  personalData: {},
+  postalCode: '12345'
 };
 registerExamples([
   {

@@ -3,7 +3,8 @@ import * as _ from 'lodash';
 import { ErrorObject, ValidateFunction } from 'ajv';
 import { JsonSchema } from '../models/jsonSchema';
 import { INIT, VALIDATE } from '../actions';
-const ajv = new AJV({allErrors: true, jsonPointers: true, errorDataPath: 'property'});
+const ajv = new AJV({ allErrors: true, jsonPointers: true, errorDataPath: 'property' });
+ajv.addFormat('time', '^([0-1][0-9]|2[0-3]):[0-5][0-9]$');
 
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   const valid = validator(data);
@@ -32,7 +33,7 @@ export const validationReducer = (
     // TODO: review use of actions
     case INIT:
       return {
-          ...state,
+        ...state,
         schema: action.schema,
         validator: ajv.compile(action.schema)
       };
