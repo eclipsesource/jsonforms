@@ -15,8 +15,6 @@
     "bundle": "webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf dist",
-    "dev-materialize": "../../node_modules/.bin/webpack --config webpack/webpack.dev.materialize.js && webpack-dev-server --config webpack/webpack.dev.materialize.js --env=dev --inline",
-    "dev-default": "../../node_modules/.bin/webpack --config webpack/webpack.dev.default.js && webpack-dev-server --config webpack/webpack.dev.default.js --env=dev --inline",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "start": "npm run dev-materialize",
@@ -40,10 +38,5 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "copy-webpack-plugin": "^4.2.3",
-    "source-map-loader": "^0.2.3",
-    "ts-loader": "^3.2.0",
-    "tslint-loader": "^3.5.3",
-    "webpack-dev-server": "^2.9.5"
   }
 }

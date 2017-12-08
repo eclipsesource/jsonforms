@@ -8,7 +8,8 @@ module.exports = [{
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
         './src/index.ts',
-        './materialize/index.ts'
+        '../examples/src/index.ts',
+        './example/index.ts'
     ],
     output: {
       path: path.resolve("./", "dist"),
@@ -24,14 +25,15 @@ module.exports = [{
         extensions: [".ts", ".js", ".tsx"]
     },
     devServer: {
-        contentBase: './materialize'
+        contentBase: './example'
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new copyWebpackPlugin([
-            { from: 'example.css' },
-            { from: 'lib/native-shim.js'  },
-            { from: 'icons', to: 'icons' }
+            { from: '../examples/example.css' },
+            { from: './example/example.dark.css' },
+            { from: '../examples/lib/native-shim.js'  },
+            { from: '../examples/icons', to: 'icons' }
         ])
     ],
     module: {
