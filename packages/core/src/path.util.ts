@@ -37,7 +37,7 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
   const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
   if (startFromRoot) {
-    return segments.filter((segment, index) => {
+    return segments.filter((_segment, index) => {
       if (index === 0) {
         return false;
       } else {
@@ -46,7 +46,7 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
     });
   }
 
-  return segments.filter((segment, index) => index % 2 !== 0);
+  return segments.filter((_segment, index) => index % 2 !== 0);
 };
 
 /**
@@ -75,27 +75,27 @@ export const toDataPath = (schemaPath: string): string => {
  *          the resolved instance as well the last fragment of
  */
 export const getValuePropertyPair = (instance: any, schemaPath: string):
-  {instance: Object, property: string} => {
+  { instance: Object, property: string } => {
   const validPathSegments = toDataPathSegments(schemaPath);
   const resolvedInstance =
-      validPathSegments
-          .slice(0, validPathSegments.length - 1)
-          .map(segment => decodeURIComponent(segment))
-          .reduce(
-              (curInstance, decodedSegment) => {
-                if (!curInstance.hasOwnProperty(decodedSegment)) {
-                  curInstance[decodedSegment] = {};
-                }
+    validPathSegments
+      .slice(0, validPathSegments.length - 1)
+      .map(segment => decodeURIComponent(segment))
+      .reduce(
+      (curInstance, decodedSegment) => {
+        if (!curInstance.hasOwnProperty(decodedSegment)) {
+          curInstance[decodedSegment] = {};
+        }
 
-                return curInstance[decodedSegment];
-              },
-              instance
-          );
+        return curInstance[decodedSegment];
+      },
+      instance
+      );
 
   return {
-      instance: resolvedInstance,
-      property: validPathSegments.length > 0 ?
-        decodeURIComponent(validPathSegments[validPathSegments.length - 1]) : undefined
+    instance: resolvedInstance,
+    property: validPathSegments.length > 0 ?
+      decodeURIComponent(validPathSegments[validPathSegments.length - 1]) : undefined
   };
 };
 
@@ -106,7 +106,7 @@ export const composeWithUi = (scopableUi: Scopable, path: string) => {
 };
 
 export const resolveData = (data, path) =>
- _.isEmpty(path) ? data : _.get<any, any>(data, path);
+  _.isEmpty(path) ? data : _.get<any, any>(data, path);
 
 /**
  * Resolve the given schema path in order to obtain a subschema.
@@ -119,9 +119,9 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
   const invalidSegment =
     pathSegment => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce(
-      (curSchema, pathSegment) =>
-          invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment],
-      schema
+    (curSchema, pathSegment) =>
+      invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment],
+    schema
   );
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
     return retrieveResolvableSchema(schema, resultSchema.$ref);
@@ -139,42 +139,42 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
  * @param resolveTuples Whether arrays of tuples should be considered; default: false
  */
 export const findAllRefs =
-    (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false)
+  (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false)
     : ReferenceSchemaMap => {
 
-  if (isObject(schema)) {
-    Object.keys(schema.properties).forEach(key =>
-      findAllRefs(schema.properties[key], result));
-  }
-  if (isArray(schema)) {
-    if (Array.isArray(schema.items)) {
-      if (resolveTuples) {
-        schema.items.forEach(child => findAllRefs(child, result));
-      }
-    } else {
-      findAllRefs(schema.items, result);
+    if (isObject(schema)) {
+      Object.keys(schema.properties).forEach(key =>
+        findAllRefs(schema.properties[key], result));
     }
-  }
-  if (Array.isArray(schema.anyOf)) {
-    schema.anyOf.forEach(child => findAllRefs(child, result));
-  }
-  if (schema.$ref !== undefined) {
-    result[schema.$ref] = schema;
-  }
-
-  // tslint:disable:no-string-literal
-  if (schema['links'] !== undefined) {
-    schema['links'].forEach(link => {
-      if (!_.isEmpty(link.targetSchema.$ref)) {
-        result[link.targetSchema.$ref] = schema;
+    if (isArray(schema)) {
+      if (Array.isArray(schema.items)) {
+        if (resolveTuples) {
+          schema.items.forEach(child => findAllRefs(child, result));
+        }
       } else {
-        findAllRefs(link.targetSchema, result);
+        findAllRefs(schema.items, result);
       }
-    });
-  }
+    }
+    if (Array.isArray(schema.anyOf)) {
+      schema.anyOf.forEach(child => findAllRefs(child, result));
+    }
+    if (schema.$ref !== undefined) {
+      result[schema.$ref] = schema;
+    }
 
-  return result;
-};
+    // tslint:disable:no-string-literal
+    if (schema['links'] !== undefined) {
+      schema['links'].forEach(link => {
+        if (!_.isEmpty(link.targetSchema.$ref)) {
+          result[link.targetSchema.$ref] = schema;
+        } else {
+          findAllRefs(link.targetSchema, result);
+        }
+      });
+    }
+
+    return result;
+  };
 
 /**
  * Normalizes the schema and resolves the given ref.
@@ -186,7 +186,7 @@ export const findAllRefs =
 // disable rule because resolve is mutually recursive
 // tslint:disable:only-arrow-functions
 export function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
-// tslint:enable:only-arrow-functions
+  // tslint:enable:only-arrow-functions
   const child = resolveSchema(full, reference);
   const allRefs = findAllRefs(child);
   const innerSelfReference = allRefs[reference];

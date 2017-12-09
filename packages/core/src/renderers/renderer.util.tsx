@@ -1,6 +1,5 @@
 import { JsonSchema } from '../models/jsonSchema';
 import * as React from 'react';
-import { Component } from 'react';
 import { JsonForms } from '../core';
 import {
   convertToClassName,
