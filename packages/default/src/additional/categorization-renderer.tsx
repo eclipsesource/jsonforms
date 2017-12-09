@@ -1,22 +1,21 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { Component } from 'react';
 import {
   and,
+  Categorization,
+  Category,
   DispatchRenderer,
   JsonForms,
   JsonSchema,
+  mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  Category,
-  Categorization,
-  RendererProps,
-  mapStateToLayoutProps,
   registerStartupRenderer,
   Renderer,
+  RendererProps,
   uiTypeIs
 } from 'jsonforms-core';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 const getCategoryClassName = (category: Category, selectedCategory: Category): string =>
   selectedCategory === category ? 'selected' : '';
@@ -25,7 +24,7 @@ export interface CategorizationProps {
   categorization: Categorization;
   selectedCategory: Category;
   depth: number;
-  onSelect: any
+  onSelect: any;
 }
 
 export const CategorizationList  = ({ categorization, selectedCategory, depth, onSelect }: CategorizationProps) =>
@@ -117,7 +116,7 @@ export const categorizationTester: RankedTester = rankWith(
         ));
 
 export interface CategorizationState {
-  selectedCategory: Category
+  selectedCategory: Category;
 }
 
 class CategorizationRenderer extends Renderer<RendererProps, CategorizationState> {
@@ -142,7 +141,7 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
             categorization={categorization}
             selectedCategory={selectedCategory}
             depth={0}
-            onSelect={(category) =>
+            onSelect={ category =>
               this.setState({ selectedCategory: category })
             }
           />

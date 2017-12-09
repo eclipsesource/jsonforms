@@ -1,15 +1,12 @@
 import * as React from 'react';
 import {
-  and,
   FieldProps,
   handleChange,
   isBooleanControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  schemaTypeIs,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';

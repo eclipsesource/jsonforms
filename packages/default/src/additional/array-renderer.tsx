@@ -83,12 +83,12 @@ export const ArrayControlRenderer  =
               +
             </button>
             <label className={'array.label'}>
-              { label.show ? label.text : '' }
+              {label.show ? label.text : ''}
             </label>
           </legend>
           <div className={JsonForms.stylingRegistry.getAsClassName('array.children')}>
             {
-              data ? data.map((child, index) => {
+              data ? data.map((_child, index) => {
 
                 const generatedUi = generateDefaultUISchema(resolvedSchema, 'HorizontalLayout');
                 const childPath = compose(path, index + '');

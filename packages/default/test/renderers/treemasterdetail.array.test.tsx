@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { initJsonFormsStore } from '../helpers/setup';
 import test from 'ava';
-import { MasterDetailLayout, getData } from 'jsonforms-core';
+import { getData, MasterDetailLayout } from 'jsonforms-core';
 import { JsonForms } from 'jsonforms-core';
 import {
   click,
@@ -10,11 +10,11 @@ import {
   renderIntoDocument
 } from '../helpers/binding';
 import { Provider } from 'react-redux';
-import TreeMasterDetail, { treeMasterDetailTester } from '../../src/additional/tree-renderer';
+import TreeMasterDetail from '../../src/additional/tree-renderer';
 import {
   findRenderedDOMElementWithTag,
   scryRenderedDOMElementsWithClass, scryRenderedDOMElementsWithTag
-} from "../helpers/react-test";
+} from '../helpers/react-test';
 
 test.beforeEach(t => {
   t.context.data = {};
