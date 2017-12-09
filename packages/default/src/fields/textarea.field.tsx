@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
-  and,
   FieldProps,
   handleChange,
+  isMultiLineControl,
   mapStateToInputProps,
-  optionIs,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
@@ -32,10 +30,7 @@ export const TextAreaField = (props: FieldProps) => {
  * Tester for a multi-line string control.
  * @type {RankedTester}
  */
-export const textAreaFieldTester: RankedTester = rankWith(2, and(
-  uiTypeIs('Control'),
-  optionIs('multi', true)
-));
+export const textAreaFieldTester: RankedTester = rankWith(2, isMultiLineControl);
 
 export default registerStartupInput(
   textAreaFieldTester,

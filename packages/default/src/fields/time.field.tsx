@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {
-  and,
   FieldProps,
-  formatIs,
   handleChange,
+  isTimeControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
@@ -32,10 +30,7 @@ const TimeField = (props: FieldProps) => {
  * Default tester for date controls.
  * @type {RankedTester}
  */
-export const timeFieldTester: RankedTester = rankWith(2, and(
-  uiTypeIs('Control'),
-  formatIs('time')
-));
+export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
 
 export default registerStartupInput(
   timeFieldTester,

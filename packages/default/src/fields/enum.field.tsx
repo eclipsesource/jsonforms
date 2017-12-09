@@ -1,16 +1,14 @@
 import * as React from 'react';
 import {
-  and,
   ControlElement,
   FieldProps,
   handleChange,
+  isEnumControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
   registerStartupInput,
-  resolveSchema,
-  schemaMatches,
-  uiTypeIs
+  resolveSchema
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
@@ -39,18 +37,14 @@ const EnumField = (props: FieldProps) => {
               </option>
             )
           )
-        )
-      }
+        )}
   </select>;
 };
 /**
  * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const enumFieldTester: RankedTester = rankWith(2, and(
-  uiTypeIs('Control'),
-  schemaMatches(schema => schema.hasOwnProperty('enum'))
-));
+export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 
 export default registerStartupInput(
   enumFieldTester,

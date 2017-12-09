@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {
-  and,
   FieldProps,
-  formatIs,
   handleChange,
+  isTimeControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
@@ -30,10 +28,7 @@ export const MaterialTimeField = (props: FieldProps) => {
     fullWidth
   />;
 };
-export const timeFieldTester: RankedTester = rankWith(3, and(
-  uiTypeIs('Control'),
-  formatIs('time')
-));
+export const timeFieldTester: RankedTester = rankWith(3, isTimeControl);
 export default registerStartupInput(
   timeFieldTester,
   connect(mapStateToInputProps)(MaterialTimeField)

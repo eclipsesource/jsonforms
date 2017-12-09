@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {
-  and,
   FieldProps,
   handleChange,
+  isNumberControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  schemaTypeIs,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
@@ -20,7 +18,7 @@ export const MaterialNumberField = (props: FieldProps) => {
 
   return <Input type='number'
     value={data || ''}
-    onChange={ ev => handleChange(props, Number(ev.target.value))}
+    onChange={ev => handleChange(props, Number(ev.target.value))}
     className={className}
     id={id}
     disabled={!enabled}
@@ -33,10 +31,7 @@ export const MaterialNumberField = (props: FieldProps) => {
  * Default tester for number controls.
  * @type {RankedTester}
  */
-export const numberFieldTester: RankedTester = rankWith(2, and(
-  uiTypeIs('Control'),
-  schemaTypeIs('number')
-));
+export const numberFieldTester: RankedTester = rankWith(2, isNumberControl);
 export default registerStartupInput(
     numberFieldTester,
     connect(mapStateToInputProps)(MaterialNumberField)
