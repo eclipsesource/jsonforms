@@ -1,17 +1,7 @@
 {
+  "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "baseUrl": "src",
-    "declaration": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
-    "module": "commonjs",
-    "moduleResolution": "node",
     "outDir": "dist/ts-build",
-    "sourceMap": true,
-    "target": "es5",
-    "jsx": "react",
-    "typeRoots": ["../../node_modules/@types"]
   },
   "exclude":[
     "node_modules"
