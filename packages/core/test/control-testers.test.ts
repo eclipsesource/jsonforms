@@ -112,7 +112,6 @@ test('test isEnumControl', t => {
       { 'type': 'object', 'properties': { 'foo': { 'type': 'string', 'enum': ['a', 'b'] } } }
     )
   );
-  // TODO should this be true?
   t.true(
     isEnumControl(
       t.context.uischema,
