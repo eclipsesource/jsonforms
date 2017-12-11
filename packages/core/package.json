@@ -42,5 +42,8 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
+    "document-register-element": "^1.7.0",
+    "jsdom": "^11.5.1",
+    "jsdom-global": "^3.0.2"
   }
 }
