@@ -253,3 +253,10 @@ export const isMultiLineControl = and(
   uiTypeIs('Control'),
   optionIs('multi', true)
 );
+
+/**
+ * Tests whether the given UI schema is of type Control and if the schema
+ * has a 'time' format.
+ * @type {Tester}
+ */
+export const isTimeControl = and(uiTypeIs('Control'), formatIs('time'));

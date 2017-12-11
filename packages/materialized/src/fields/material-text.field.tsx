@@ -3,7 +3,7 @@ import {
   ControlElement,
   FieldProps,
   handleChange,
-  isControl,
+  isStringControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
@@ -23,7 +23,7 @@ export const MaterialTextField = (props: FieldProps) => {
 
   return <Input type='text'
     value={data || ''}
-    onChange={ ev => handleChange(props, ev.target.value)}
+    onChange={ev => handleChange(props, ev.target.value)}
     className={className}
     id={id}
     disabled={!enabled}
@@ -37,7 +37,7 @@ export const MaterialTextField = (props: FieldProps) => {
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const textFieldTester: RankedTester = rankWith(1, isControl);
+export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 export default registerStartupInput(
   textFieldTester,
   connect(mapStateToInputProps)(MaterialTextField)

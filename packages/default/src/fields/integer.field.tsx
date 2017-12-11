@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
-  and,
   FieldProps,
   handleChange,
+  isIntegerControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  schemaTypeIs,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
@@ -32,10 +30,7 @@ const IntegerField  = (props: FieldProps) => {
  * Default tester for integer controls.
  * @type {RankedTester}
  */
-export const integerFieldTester: RankedTester = rankWith(2, and(
-  uiTypeIs('Control'),
-  schemaTypeIs('integer')
-));
+export const integerFieldTester: RankedTester = rankWith(2, isIntegerControl);
 
 export default registerStartupInput(
   integerFieldTester,

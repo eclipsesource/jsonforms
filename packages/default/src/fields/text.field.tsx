@@ -4,7 +4,7 @@ import {
   ControlElement,
   FieldProps,
   handleChange,
-  isControl,
+  isStringControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
@@ -36,7 +36,7 @@ const TextField = (props: FieldProps) => {
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const textFieldTester: RankedTester = rankWith(1, isControl);
+export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 
 export default registerStartupInput(
   textFieldTester,

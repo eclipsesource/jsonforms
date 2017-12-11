@@ -1,16 +1,14 @@
 import * as React from 'react';
 import {
-  and,
   ControlElement,
   FieldProps,
   handleChange,
+  isEnumControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
   registerStartupInput,
   resolveSchema,
-  schemaMatches,
-  uiTypeIs
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 
@@ -27,7 +25,7 @@ export const MaterialEnumField = (props: FieldProps) => {
     disabled={!enabled}
     autoFocus={uischema.options && uischema.options.focus}
     value={data || ''}
-    onChange={ ev => handleChange(props, ev.target.value)}
+    onChange={ev => handleChange(props, ev.target.value)}
     fullWidth
     >
       {
@@ -40,18 +38,14 @@ export const MaterialEnumField = (props: FieldProps) => {
               </MenuItem>
             )
           )
-        )
-      }
+        )}
   </Select>;
 };
 /**
  * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const enumFieldTester: RankedTester = rankWith(2, and(
-  uiTypeIs('Control'),
-  schemaMatches(schema => schema.hasOwnProperty('enum'))
-));
+export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 export default registerStartupInput(
   enumFieldTester,
   connect(mapStateToInputProps)(MaterialEnumField)
