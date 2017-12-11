@@ -1,18 +1,9 @@
 import test from 'ava';
 
-import { JsonSchema } from '../src/models/jsonSchema';
 import { ControlElement } from '../src/models/uischema';
 import { getLabelObject } from '../src/renderers/label.util';
 
 test('control relative', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        type: 'string'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -25,14 +16,6 @@ test('control relative', t => {
 });
 
 test('control without label string, camel split', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'fooBarBaz': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -45,14 +28,6 @@ test('control without label string, camel split', t => {
 });
 
 test('control with label string', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -66,14 +41,6 @@ test('control with label string', t => {
 });
 
 test('control with label boolean', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -87,14 +54,6 @@ test('control with label boolean', t => {
 });
 
 test('control with label object, empty', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -108,14 +67,6 @@ test('control with label object, empty', t => {
 });
 
 test('control with label object, text-only', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -131,14 +82,6 @@ test('control with label object, text-only', t => {
 });
 
 test('control with label object, visible-only', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {
@@ -154,14 +97,6 @@ test('control with label object, visible-only', t => {
 });
 
 test('control with label object, full', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
   const controlElement: ControlElement = {
     type: 'Control',
     scope: {

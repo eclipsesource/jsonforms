@@ -1,14 +1,12 @@
 import * as React from 'react';
 import {
   FieldProps,
-  formatIs,
   handleChange,
   isDateControl,
   mapStateToInputProps,
   RankedTester,
   rankWith,
   registerStartupInput,
-  uiTypeIs
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 

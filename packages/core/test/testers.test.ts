@@ -139,7 +139,7 @@ test('schemaMatches should return false for non-control UI schema elements', t =
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaMatches(subSchema => false)(label, schema));
+  t.false(schemaMatches(() => false)(label, schema));
 });
 
 test('schemaMatches should return false for control pointing to invalid subschema', t => {
@@ -155,7 +155,7 @@ test('schemaMatches should return false for control pointing to invalid subschem
       $ref: '#/properties/bar'
     }
   };
-  t.false(schemaMatches(subSchema => false)(uischema, schema));
+  t.false(schemaMatches(() => false)(uischema, schema));
 });
 
 test('refEndsWith checks whether the ref of a control ends with a certain string', t => {

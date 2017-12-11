@@ -6,8 +6,7 @@ import {
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
-  uiTypeIs
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
