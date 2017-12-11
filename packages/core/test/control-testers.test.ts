@@ -9,8 +9,7 @@ import {
   isStringControl,
   isTimeControl
 } from '../src/core/testers';
-import { JsonSchema } from '../src/models/jsonSchema';
-import { context.LabelElement.t, uischema } from '../src/models/uischema';
+
 test.beforeEach(t => {
   t.context.uischema = {
     type: 'Control',
@@ -230,7 +229,7 @@ test('tester isMultiLineControl', t => {
   t.false(isMultiLineControl({ type: 'Foo' }, undefined));
   t.false(isMultiLineControl({ type: 'Control' }, undefined));
   t.false(
-    isStringControl(
+    isMultiLineControl(
       t.context.uischema,
       { type: 'object', properties: { foo: { type: 'string' } } }
     )

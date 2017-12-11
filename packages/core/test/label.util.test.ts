@@ -24,66 +24,6 @@ test('control relative', t => {
   t.is(labelObject.text, 'Foo');
 });
 
-test('control relative required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '/properties/foo'
-    }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'Foo*');
-});
-
-test('control without label string', t => {
-  const schema: JsonSchema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'integer'
-      }
-    }
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: { $ref: '#/properties/foo' }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'Foo');
-});
-
-test('control without label string , required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'Foo*');
-});
-
 test('control without label string, camel split', t => {
   const schema: JsonSchema = {
     'type': 'object',
@@ -104,26 +44,6 @@ test('control without label string, camel split', t => {
   t.is(labelObject.text, 'Foo Bar Baz');
 });
 
-test('control without label string, camel split and required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      bazBarFoo: {
-        type: 'integer'
-      }
-    },
-    required: ['bazBarFoo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/bazBarFoo'
-    }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'Baz Bar Foo*');
-});
 test('control with label string', t => {
   const schema: JsonSchema = {
     'type': 'object',
@@ -143,27 +63,6 @@ test('control with label string', t => {
   const labelObject = getLabelObject(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'bar');
-});
-test('control with label string, required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
-    label: 'bar'
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'bar*');
 });
 
 test('control with label boolean', t => {
@@ -187,28 +86,6 @@ test('control with label boolean', t => {
   t.is(labelObject.text, 'Foo');
 });
 
-test('control with label boolean, required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
-    label: false
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, false);
-  t.is(labelObject.text, 'Foo*');
-});
-
 test('control with label object, empty', t => {
   const schema: JsonSchema = {
     'type': 'object',
@@ -228,28 +105,6 @@ test('control with label object, empty', t => {
   const labelObject = getLabelObject(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo');
-});
-
-test('control with label object, empty and required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
-    label: {}
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'Foo*');
 });
 
 test('control with label object, text-only', t => {
@@ -275,30 +130,6 @@ test('control with label object, text-only', t => {
   t.is(labelObject.text, 'mega bar');
 });
 
-test('control with label object, text-only and required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        'type': 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
-    label: {
-      text: 'mega bar'
-    }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'mega bar*');
-});
-
 test('control with label object, visible-only', t => {
   const schema: JsonSchema = {
     'type': 'object',
@@ -320,28 +151,6 @@ test('control with label object, visible-only', t => {
   const labelObject = getLabelObject(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo');
-});
-
-test('control with label object, visible-only and required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: { $ref: '#/properties/foo' },
-    label: {
-      show: false
-    }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, false);
-  t.is(labelObject.text, 'Foo*');
 });
 
 test('control with label object, full', t => {
@@ -366,29 +175,4 @@ test('control with label object, full', t => {
   const labelObject = getLabelObject(controlElement);
   t.is(labelObject.show, false);
   t.is(labelObject.text, 'mega bar');
-});
-
-test('control with label object, full and required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'integer'
-      }
-    },
-    required: ['foo']
-  };
-  const controlElement: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
-    label: {
-      show: true,
-      text: 'mega bar'
-    }
-  };
-  const labelObject = getLabelObject(controlElement);
-  t.is(labelObject.show, true);
-  t.is(labelObject.text, 'mega bar*');
 });

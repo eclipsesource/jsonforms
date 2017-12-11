@@ -1,18 +1,24 @@
-import { JSX } from '../src/renderers/JSX';
+import 'jsdom-global/register';
+import * as installCE from 'document-register-element/pony';
+declare let global;
+installCE(global, 'force');
+global.requestAnimationFrame = cb => setTimeout(cb, 0);
+
+import * as React from 'react';
 import { test } from 'ava';
 import * as _ from 'lodash';
+import { Provider } from 'react-redux';
 import { JsonSchema } from '../src/models/jsonSchema';
-import { initJsonFormsStore } from './helpers/setup';
+import { initJsonFormsStore } from '../src/store';
 import { Renderer, RendererProps } from '../src/core/renderer';
 import DispatchRenderer from '../src/renderers/dispatch-renderer';
-import { Provider } from '../src/common/binding';
 import '../src/renderers';
 import { registerRenderer, unregisterRenderer } from '../src/actions';
 import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from './helpers/binding';
+} from '../../default/test/helpers/react-test';
 
 class CustomRenderer1 extends Renderer<RendererProps, any> {
   render() {
