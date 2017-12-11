@@ -131,6 +131,8 @@ test('render', t => {
   t.is(label.textContent, 'Foo');
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.not(input, undefined);
+  t.not(input, null);
 
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
@@ -162,6 +164,8 @@ test('render without label', t => {
   t.is(label.textContent, '');
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.not(input, undefined);
+  t.not(input, null);
 
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');

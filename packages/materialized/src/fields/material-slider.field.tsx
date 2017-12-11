@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { SyntheticEvent } from 'react';
 import {
   and,
   ControlElement,
@@ -28,7 +27,7 @@ const MaterialSliderField = (props: FieldProps) => {
   return <Input
     type='range'
     value={data || ''}
-    onChange={ ev => handleChange(props, Number(ev.currentTarget.value))}
+    onChange={ev => handleChange(props, Number(ev.currentTarget.value))}
     className={className}
     id={id}
     disabled={!enabled}

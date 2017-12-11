@@ -24,8 +24,7 @@ import {
   uiTypeIs,
   update
 } from 'jsonforms-core';
-import {connect} from 'react-redux';
-import {SyntheticEvent} from "react";
+import { connect } from 'react-redux';
 
 /**
  * Default tester for a master-detail layout.
@@ -114,12 +113,12 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
       <div hidden={!visible} className={'jsf-treeMasterDetail'}>
         <div className={'jsf-treeMasterDetail-header'}>
           <label>
-            {  typeof controlElement.label === 'string' ? controlElement.label : '' }
+            {typeof controlElement.label === 'string' ? controlElement.label : ''}
           </label>
           {
             Array.isArray(rootData) &&
             <button className='jsf-treeMasterDetail-add'
-                    onClick={() => this.addToRoot() }
+                    onClick={() => this.addToRoot()}
             >
               Add to root
             </button>
@@ -230,11 +229,11 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
     // TODO: so far no drag and drop support
     if (schema.items !== undefined) {
       return (
-        <ul>{ this.expandRootArray(schema.items as JsonSchema) }</ul>
+        <ul>{this.expandRootArray(schema.items as JsonSchema)}</ul>
       );
     }
 
-    return (<ul>{ this.expandObject(this.props.path, schema, null) }</ul>);
+    return (<ul>{this.expandObject(this.props.path, schema, null)}</ul>);
   }
 
   /**
@@ -251,7 +250,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
       return;
     }
 
-    return data.map((element, index) => {
+    return data.map((_element, index) => {
       const composedPath = compose(path, index + '');
 
       return this.expandObject(
@@ -279,7 +278,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
       return;
     }
 
-    return data.map((element, index) => {
+    return data.map((_element, index) => {
       const composedPath = compose(path, index.toString());
       return this.expandObject(composedPath, property.schema, path);
     });
@@ -334,7 +333,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
 
           <span
             className='label'
-            onClick={ev =>
+            onClick={() =>
               this.setState({
                 selected: {
                   schema,
@@ -351,7 +350,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
               JsonForms.schemaService.hasContainmentProperties(schema) ?
                 (<span
                   className='add'
-                  onClick={(ev: SyntheticEvent<HTMLSpanElement>) =>
+                  onClick={() =>
                     this.setState({
                       dialog: {
                         open: true,
@@ -366,16 +365,16 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
             }
             {
               parentPath !== null &&
-              <span className='remove' onClick ={() => {
+              <span className='remove' onClick={() => {
                 dispatch(
                   update(
                     parentPath,
                     array => {
                       const copy = array.slice();
-                      return _.filter(copy, el => !_.isEqual(el, data))
+                      return _.filter(copy, el => !_.isEqual(el, data));
                     }
                   )
-                )
+                );
               }}>
                 {'\u274C'}
               </span>
@@ -386,7 +385,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
           // render contained children of this element
           JsonForms.schemaService.getContainmentProperties(schema)
             .filter(prop => this.propHasData(prop, data))
-            .map(prop => <ul key={prop.label}>{ this.renderChildren(prop, path, schema) }</ul>)
+            .map(prop => <ul key={prop.label}>{this.renderChildren(prop, path, schema)}</ul>)
         }
       </li>
     );

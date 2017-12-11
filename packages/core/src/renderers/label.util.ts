@@ -1,8 +1,6 @@
 import * as _ from 'lodash';
 
-import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, ILabelObject } from '../models/uischema';
-import { resolveSchema } from '../path.util';
 
 class LabelObject implements ILabelObject {
   public text: string;

@@ -9,8 +9,8 @@
   "directories": {
     "test": "test"
   },
-  "main": "dist/ts-build-materialized/index.js",
-  "typings": "dist/ts-build-materialized/index.d.ts",
+  "main": "dist/ts-build/index.js",
+  "typings": "dist/ts-build/index.d.ts",
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",

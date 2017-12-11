@@ -91,9 +91,9 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
     return (
       <div className={controlClass} hidden={!visible}>
         <Toolbar>
-          <Typography type='title'>{label}</Typography>
+          <Typography type='title' className={labelClass}>{label}</Typography>
           <Button raised color='primary' className={buttonClass}
-            onClick={ () => this.addNewItem(path) }>
+            onClick={() => this.addNewItem(path)}>
             Add to {labelObject.text}
           </Button>
         </Toolbar>
@@ -115,7 +115,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           <TableBody>
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
-              <TableRow><TableCell>No data</TableCell></TableRow> : data.map((child, index) => {
+              <TableRow><TableCell>No data</TableCell></TableRow> : data.map((_child, index) => {
               const childPath = compose(path, index + '');
 
               return (

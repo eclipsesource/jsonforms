@@ -1,6 +1,6 @@
 import './helpers/setup';
 import test from 'ava';
-import { JsonForms, JsonFormsElement } from 'jsonforms-core';
+import { JsonFormsElement } from 'jsonforms-core';
 import '../src/index';
 import { ControlElement, generateDefaultUISchema, generateJsonSchema } from 'jsonforms-core';
 

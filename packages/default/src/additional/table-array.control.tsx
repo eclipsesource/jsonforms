@@ -90,7 +90,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           <label className={labelClass}>
             {label}
           </label>
-          <button className={buttonClass} onClick={ () => this.addNewItem(path) }>
+          <button className={buttonClass} onClick={() => this.addNewItem(path)}>
             Add to {labelObject.text}
           </button>
         </header>
@@ -112,7 +112,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           <tbody>
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
-              <tr><td>No data</td></tr> : data.map((child, index) => {
+              <tr><td>No data</td></tr> : data.map((_child, index) => {
               const childPath = compose(path, index + '');
 
               return (

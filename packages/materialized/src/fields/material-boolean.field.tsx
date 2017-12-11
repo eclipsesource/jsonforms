@@ -14,16 +14,16 @@ import Checkbox from 'material-ui/Checkbox';
 export const MaterialBooleanField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema } = props;
 
-  return <Checkbox
-    checked={data || ''}
-    onChange={ (ev, checked) =>
-      handleChange(props, checked)
-    }
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-  />;
+  return (
+    <Checkbox
+      checked={data || ''}
+      onChange={(_ev, checked) => handleChange(props, checked)}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
 
 export default registerStartupInput(

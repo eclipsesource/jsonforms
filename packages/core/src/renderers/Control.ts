@@ -35,7 +35,7 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
     // tslint:enable:no-object-literal-type-assertion
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (this.props.data !== prevProps.data) {
       this.setState({ value: this.props.data });
     }

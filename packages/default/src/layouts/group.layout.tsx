@@ -8,7 +8,6 @@ import {
   GroupLayout,
   JsonForms,
   renderChildren,
-  JsonFormsLayout,
   mapStateToLayoutProps,
   registerStartupRenderer,
 } from 'jsonforms-core';

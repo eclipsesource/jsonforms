@@ -2,17 +2,14 @@ import * as React from 'react';
 import {
   DispatchRenderer,
   HorizontalLayout,
-  JsonSchema,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
   RendererProps,
-  UISchemaElement,
   uiTypeIs
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
-import * as _ from 'lodash';
 
 import Grid from 'material-ui/Grid';
 
@@ -25,9 +22,10 @@ export const horizontalLayoutTester: RankedTester = rankWith(2, uiTypeIs('Horizo
 export const MaterialHorizontalLayoutRenderer = ({ schema, uischema, path, visible }: RendererProps) => {
 
   const horizontalLayout = uischema as HorizontalLayout;
+  const className = !visible ? 'hidden' : '' ;
 
   return (
-    <Grid container>
+    <Grid container className={className}>
     {
       (horizontalLayout.elements || []).map((child, index) => {
 
