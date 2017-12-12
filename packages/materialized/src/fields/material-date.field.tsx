@@ -6,7 +6,7 @@ import {
   mapStateToInputProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
+  registerStartupInput
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 

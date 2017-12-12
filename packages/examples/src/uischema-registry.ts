@@ -20,7 +20,7 @@ const resetServices = () => {
   const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
   jsonforms.data = data;
 };
-const tester = (testUiSchema, testData) => 5;
+const tester = () => 5;
 const setup = (div: HTMLDivElement) => {
   const registerButton = document.createElement('button');
   registerButton.innerText = 'Register UI Schema';

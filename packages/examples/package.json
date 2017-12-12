@@ -17,7 +17,6 @@
     "clean": "rm -rf dist",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "start": "npm run dev-materialize",
     "test": "echo 'Nothing to do for `examples` package'",
     "test-coverage": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
     "wct": "wct wct-test"
