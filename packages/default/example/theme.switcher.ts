@@ -19,7 +19,7 @@ export const createThemeSelection = () => {
     option.text = style;
     select.appendChild(option);
   });
-  select.onchange = (ev: Event) => {
+  select.onchange = () => {
     changeTheme(select.value);
   };
 
