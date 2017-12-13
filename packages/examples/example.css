@@ -317,3 +317,9 @@ jsonforms-tree > dialog > .content {
 .array-table-layout td > * {
   flex:1;
 }
+.input-description {
+  border: 2px;
+  border-style: solid;
+  border-color: #30B455;
+  padding: 5px;
+};

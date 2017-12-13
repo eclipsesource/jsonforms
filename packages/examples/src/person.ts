@@ -5,13 +5,15 @@ export const schema = {
   'properties': {
     'name': {
       'type': 'string',
-      'minLength': 3
+      'minLength': 3,
+      'description': 'Please enter your full name.'
     },
     'personalData': {
       'type': 'object',
       'properties': {
         'age': {
-          'type': 'integer'
+          'type': 'integer',
+          'description': 'Please enter your age.'
         },
         'height': {
           'type': 'number'

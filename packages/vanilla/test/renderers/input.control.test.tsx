@@ -14,6 +14,8 @@ import {
 import InputControl, { inputControlTester } from '../../src/controls/input.control';
 import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
 import {
+  blur,
+  focus,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument,
@@ -31,6 +33,10 @@ test.before(() => {
     {
       name: 'control.validation',
       classNames: ['validation']
+    },
+    {
+      name: 'input-description',
+      classNames: ['input-description']
     }
   ]);
 });
@@ -378,4 +384,123 @@ test('not required', t => {
     );
     const label = findRenderedDOMElementWithTag(tree, 'label');
     t.is(label.textContent, 'Date Field');
+});
+
+test('show description on focus', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        description: 'Enter your first name'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    }
+  };
+  const data = { isFocused: false };
+  const store = initJsonFormsStore(data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
+  focus(control);
+  const description =
+    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLParagraphElement;
+  t.is(description.textContent, 'Enter your first name');
+});
+
+test('hide description when input field is not focused', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        description: 'Enter your first name'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    }
+  };
+  const data = { isFocused: false };
+  const store = initJsonFormsStore(data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const description =
+    scryRenderedDOMElementsWithClass(tree, 'input-description');
+  t.is(description.length, 0);
+});
+
+test('hide description on blur', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        description: 'Enter your first name'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    }
+  };
+  const data = { isFocused: false };
+  const store = initJsonFormsStore(data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
+  focus(control);
+  const description =
+    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLParagraphElement;
+  t.is(description.textContent, 'Enter your first name');
+  blur(control);
+  const hiddenDescription =
+    scryRenderedDOMElementsWithClass(tree, 'input-description');
+  t.is(hiddenDescription.length, 0);
+});
+
+test('description undefined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    }
+  };
+  const data = { isFocused: false };
+  const store = initJsonFormsStore(data, schema, uischema);
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const description =
+    scryRenderedDOMElementsWithClass(tree, 'input-description');
+  t.is(description.length, 0);
 });
