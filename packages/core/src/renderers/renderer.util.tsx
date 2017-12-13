@@ -8,15 +8,15 @@ import {
   Renderer,
   RendererProps
 } from '../core/renderer';
-import { RankedTester } from '../core/testers';
+import { RankedTester } from '../testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
-import { composeWithUi, resolveData } from '../path.util';
+import { composeWithUi } from '../path.util';
 import { getLabelObject } from './label.util';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers/index';
-import { resolveSchema } from '../path.util';
+import { resolveData, resolveSchema } from '../resolvers';
 
 /**
  * A renderer config that is used during renderer registration.

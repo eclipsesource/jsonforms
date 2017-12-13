@@ -1,7 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { getData } from './reducers/index';
 import { JsonFormsRendererConstructable } from './renderers/renderer.util';
-import { RankedTester } from './core/testers';
+import { RankedTester } from './testers';
 
 export const INIT = 'INIT';
 export const UPDATE_DATA = 'UPDATE';

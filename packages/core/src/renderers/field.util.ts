@@ -1,11 +1,12 @@
 import { Component } from 'react';
 import * as _ from 'lodash';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import { RankedTester } from '../core/testers';
+import { RankedTester } from '../testers';
 import { JsonForms } from '../core';
 import { JsonSchema } from '../models/jsonSchema';
 import { isEnabled, isVisible } from '../core/renderer';
-import { composeWithUi, resolveData } from '../path.util';
+import { composeWithUi } from '../path.util';
+import { resolveData } from '../resolvers';
 import { getData, getValidation } from '../reducers';
 import { errorAt } from '../reducers/validation';
 import { update } from '../actions';

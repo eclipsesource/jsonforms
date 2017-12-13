@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
-import { resolveSchema } from '../path.util';
+import { findAllRefs, resolveSchema } from '../resolvers';
 import {
   ContainmentProperty,
   ContainmentPropertyImpl,
@@ -10,7 +10,6 @@ import {
 } from './schema.service';
 import * as uuid from 'uuid';
 import { JsonForms } from '../core';
-import { findAllRefs } from '../path.util';
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './unknown.renderer';
-import { RankedTester } from '../core/testers';
+import { RankedTester } from '../testers';
 import { RendererProps } from '../core/renderer';
 
 export interface DispatchRendererProps extends RendererProps {

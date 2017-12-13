@@ -1,5 +1,5 @@
 import { JsonFormsRendererConstructable } from '../renderers/renderer.util';
-import { RankedTester } from '../core/testers';
+import { RankedTester } from '../testers';
 import { ADD_RENDERER, REMOVE_RENDERER } from '../actions';
 
 export const rendererReducer = (
