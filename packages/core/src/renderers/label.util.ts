@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 
-import { ControlElement, ILabelObject } from '../models/uischema';
+import { ControlElement, LabelDescription } from '../models/uischema';
 
-class LabelObject implements ILabelObject {
+class LabelObject implements LabelDescription {
   public text: string;
   public show: boolean;
 
@@ -26,9 +26,9 @@ const deriveLabel = (controlElement: ControlElement): string => {
 /**
  * Return a label object based on the given control element.
  * @param {ControlElement} withLabel the UI schema to obtain a label object for
- * @returns {ILabelObject}
+ * @returns {LabelDescription}
  */
-export const getLabelObject = (withLabel: ControlElement): ILabelObject => {
+export const getLabelObject = (withLabel: ControlElement): LabelDescription => {
   const labelProperty = withLabel.label;
   const derivedLabel = deriveLabel(withLabel);
   if (typeof labelProperty === 'boolean') {
