@@ -31,7 +31,7 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 JSON Forms ships with predefined styles based on Bootstrap and Material Design, see the [Styling](http://jsonforms-beta.de/#/docs/styling) section of the documentation.
     
 # Documentation and more information
-For documentation, examples and more information, please see [jsonforms.org](http://github.eclipsesource.com/jsonforms/).
+For documentation, examples and more information, please see [jsonforms.io](http://jsonforms.io/).
 
 # Developers Documentation
 
