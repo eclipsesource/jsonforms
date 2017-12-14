@@ -1,7 +1,8 @@
 import test from 'ava';
 
-import { JsonSchema } from '../src/models/jsonSchema';
-import { getValuePropertyPair, resolveSchema, toDataPath } from '../src/path.util';
+import { JsonSchema } from '../src';
+import { resolveData, resolveSchema } from '../src/helpers';
+import { toDataPath } from '../src/helpers/path.util';
 
 test('resolve ', t => {
     const schema: JsonSchema = {
@@ -52,36 +53,29 @@ test('toDataPath use of encoded paths relative without /', t => {
 });
 test('resolve instance', t => {
     const instance = {foo: 123};
-    const result = getValuePropertyPair(instance, '#/properties/foo');
-    t.is(result.instance, instance);
-    t.is(result.property, 'foo');
+    const result = resolveData(instance, toDataPath('#/properties/foo'));
+    t.is(result, 123);
 });
 test('resolve instance with keywords', t => {
-    const instance = {properties: 123};
-    const result = getValuePropertyPair(instance, '#/properties/properties');
-    t.is(result.instance, instance);
-    t.is(result.property, 'properties');
-    t.is(result.instance[result.property], 123);
+    const instance = { properties: 123 };
+    const result = resolveData(instance, toDataPath('#/properties/properties'));
+    t.is(result, 123);
 });
 test('resolve instance with encoded', t => {
-    const instance = {'foo/bar': 123};
+    const instance = { 'foo/bar': 123 };
     const fooBar = encodeURIComponent('foo/bar');
-    const result = getValuePropertyPair(instance, `#/properties/${fooBar}`);
-    t.is(result.instance, instance);
-    t.is(result.property, 'foo/bar');
-    t.is(result.instance[result.property], 123);
+    const result = resolveData(instance, toDataPath(`#/properties/${fooBar}`));
+    t.is(result, 123);
 });
 test('resolve nested instance', t => {
-    const instance = {foo: {bar: 123}};
-    const result = getValuePropertyPair(instance, '#/properties/foo/properties/bar');
-    t.is(result.instance, instance.foo);
-    t.is(result.property, 'bar');
+    const instance = { foo: { bar: 123 } };
+    const result = resolveData(instance, toDataPath('#/properties/foo/properties/bar'));
+    t.is(result, 123);
 });
 test('resolve uninitiated instance', t => {
     const instance = {};
-    const result = getValuePropertyPair(instance, '#/properties/foo/properties/bar');
-    t.deepEqual(result.instance, {});
-    t.is(result.property, 'bar');
+    const result = resolveData(instance, toDataPath('#/properties/foo/properties/bar'));
+    t.is(result, undefined);
 });
 test('resolve $ref', t => {
     const schema: JsonSchema = {

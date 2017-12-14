@@ -1,35 +1,9 @@
+import { Component } from 'react';
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
-import { LeafCondition, RuleEffect, Scopable, UISchemaElement } from '../models/uischema';
-import { getValuePropertyPair } from '../path.util';
-import { getData } from '../reducers/index';
-import {Component} from 'react';
-
-export const convertToClassName = (value: string): string => {
-  let result = value.replace('#', 'root');
-  result = result.replace(new RegExp('/', 'g'), '_');
-
-  return result;
-};
-
-export const getValue = (data: any, controlElement: Scopable, prefix = ''): any => {
-
-  if (_.isEmpty(controlElement)) {
-    return undefined;
-  }
-
-  const path = _.isEmpty(prefix) ?
-    controlElement.scope.$ref :
-    prefix + controlElement.scope.$ref.substr(1);
-
-  const pair = getValuePropertyPair(data, path);
-
-  if (pair.property === undefined) {
-    return pair.instance;
-  }
-
-  return pair.instance[pair.property];
-};
+import { LeafCondition, RuleEffect, UISchemaElement } from '../models/uischema';
+import { getData } from '../reducers';
+import { resolveSchema } from '../helpers';
 
 export interface RendererProps {
   /**
@@ -100,8 +74,7 @@ export const evalVisibility = (uischema: UISchemaElement, data: any) => {
 
   const condition = uischema.rule.condition as LeafCondition;
   const ref = condition.scope.$ref;
-  const pair = getValuePropertyPair(data, ref);
-  const value = pair.instance[pair.property];
+  const value = resolveSchema(data, ref);
   const equals = value === condition.expectedValue;
 
   switch (uischema.rule.effect) {
@@ -122,8 +95,7 @@ export const evalEnablement = (uischema: UISchemaElement, data: any) => {
   // TODO condition evaluation should be done somewhere else
   const condition = uischema.rule.condition as LeafCondition;
   const ref = condition.scope.$ref;
-  const pair = getValuePropertyPair(data, ref);
-  const value = pair.instance[pair.property];
+  const value = resolveSchema(data, ref);
   const equals = value === condition.expectedValue;
 
   switch (uischema.rule.effect) {

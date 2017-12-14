@@ -5,11 +5,11 @@ import { RankedTester } from '../testers';
 import { JsonForms } from '../core';
 import { JsonSchema } from '../models/jsonSchema';
 import { isEnabled, isVisible } from '../core/renderer';
-import { composeWithUi } from '../path.util';
-import { resolveData } from '../resolvers';
 import { getData, getValidation } from '../reducers';
 import { errorAt } from '../reducers/validation';
 import { update } from '../actions';
+import { resolveData } from '../helpers';
+import { composeWithUi } from '../helpers/path.util';
 
 export interface JsonFormsFieldConstructable {
   new(props: FieldProps): Component<FieldProps, any>;

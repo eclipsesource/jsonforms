@@ -1,4 +1,3 @@
-export * from './label.util';
 export * from './renderer.util';
 export * from './field.util';
 export * from './dispatch-renderer';

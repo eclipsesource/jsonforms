@@ -1,5 +1,24 @@
 import * as _ from 'lodash';
-import { JsonSchema } from './models/jsonSchema';
+
+import { JsonSchema } from '../';
+
+// export const resolveData = (instance: any, dataPath: string): any => {
+//   const dataPathSegments = dataPath.split('/');
+//
+//   return dataPathSegments
+//     .slice(0, dataPathSegments.length )
+//     .map(segment => decodeURIComponent(segment))
+//     .reduce(
+//       (curInstance, decodedSegment) => {
+//         if (curInstance === undefined || !curInstance.hasOwnProperty(decodedSegment)) {
+//           return undefined;
+//         }
+//
+//         return curInstance[decodedSegment];
+//       },
+//       instance
+//     );
+// };
 
 export const resolveData = (data, path) =>
   _.isEmpty(path) ? data : _.get<any, any>(data, path);

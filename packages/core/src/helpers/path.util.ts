@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Scopable } from './models/uischema';
+import { Scopable } from '../';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
@@ -51,44 +51,6 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  */
 export const toDataPath = (schemaPath: string): string => {
   return toDataPathSegments(schemaPath).join('/');
-};
-
-/**
- * Resolve the given schema path against the given instance until the last
- * segment. The returned value allows easy assignment of any new value.
- *
- * @example
- * const pair = getValuePropertyPair(someData, someRef);
- * pair.instance[pair.property] = someValue;
- *
- * @param {any} instance the instance to resolve the path against
- * @param {string} schemaPath the schema path to be resolved
- * @returns {{instance: string, property: string}} an object containing
- *          the resolved instance as well the last fragment of
- */
-export const getValuePropertyPair = (instance: any, schemaPath: string):
-  { instance: Object, property: string } => {
-  const validPathSegments = toDataPathSegments(schemaPath);
-  const resolvedInstance =
-    validPathSegments
-      .slice(0, validPathSegments.length - 1)
-      .map(segment => decodeURIComponent(segment))
-      .reduce(
-      (curInstance, decodedSegment) => {
-        if (!curInstance.hasOwnProperty(decodedSegment)) {
-          curInstance[decodedSegment] = {};
-        }
-
-        return curInstance[decodedSegment];
-      },
-      instance
-      );
-
-  return {
-    instance: resolvedInstance,
-    property: validPathSegments.length > 0 ?
-      decodeURIComponent(validPathSegments[validPathSegments.length - 1]) : undefined
-  };
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string) => {
