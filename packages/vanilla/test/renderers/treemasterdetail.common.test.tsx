@@ -1,18 +1,19 @@
 import * as React from 'react';
 import { initJsonFormsStore } from '../helpers/setup';
 import test from 'ava';
-import {MasterDetailLayout, update} from '@jsonforms/core';
+import { MasterDetailLayout, update } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/core';
 import {
   findRenderedDOMElementWithClass,
   renderIntoDocument
 } from '../helpers/binding';
 import { Provider } from 'react-redux';
-import TreeMasterDetail, { treeMasterDetailTester } from '../../src/additional/tree-renderer';
+import TreeMasterDetail from '../../src/additional/tree';
 import {
   findRenderedDOMElementWithTag,
   scryRenderedDOMElementsWithClass
-} from "../helpers/react-test";
+} from '../helpers/react-test';
+import { treeMasterDetailTester } from '../../src/additional/tree/tester';
 
 test.beforeEach(t => {
   t.context.data = { name: 'Foo', children: [{name: 'Bar'}] };
@@ -179,8 +180,9 @@ test('update via action', t => {
   const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );

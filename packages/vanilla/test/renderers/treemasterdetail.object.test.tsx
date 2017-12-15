@@ -8,7 +8,7 @@ import {
   renderIntoDocument
 } from '../helpers/binding';
 import { Provider } from 'react-redux';
-import TreeMasterDetail from '../../src/additional/tree-renderer';
+import TreeMasterDetail from '../../src/additional/tree';
 
 test.beforeEach(t => {
   t.context.data = {};
@@ -43,8 +43,9 @@ test('render object', t => {
   const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -66,10 +67,6 @@ test('render object', t => {
   const spanLILabel = spanLI.children[0];
   const spanLIDelete = spanLI.children[1];
   const detail = findRenderedDOMElementWithClass(tree, 'jsf-treeMasterDetail-detail');
-  // const dialog = findRenderedDOMElementWithTag(tree, 'dialog');
-  // const dialogLabel = dialog.children[0] as HTMLLabelElement;
-  // const dialogContent = dialog.children[1] as HTMLDivElement;
-  // const dialogClose = dialog.children[2] as HTMLButtonElement;
 
   t.is(label.textContent, 'FooBar');
   t.is(master.children.length, 1);
@@ -78,6 +75,7 @@ test('render object', t => {
   t.is(header.children.length, 1);
   t.is(div.children.length, 1);
   t.is(span.className, 'label');
+  console.log(">>", span.innerHTML)
   t.is(span.children.length, 2);
   t.is(spanLabel.textContent, 'Foo');
   t.is(spanAdd.className, 'add');

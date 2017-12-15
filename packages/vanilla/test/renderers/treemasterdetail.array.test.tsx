@@ -10,7 +10,7 @@ import {
   renderIntoDocument
 } from '../helpers/binding';
 import { Provider } from 'react-redux';
-import TreeMasterDetail from '../../src/additional/tree-renderer';
+import TreeMasterDetail from '../../src/additional/tree';
 import {
   findRenderedDOMElementWithTag,
   scryRenderedDOMElementsWithClass, scryRenderedDOMElementsWithTag
