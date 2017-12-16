@@ -1,6 +1,11 @@
 import * as React from 'react';
+import * as _ from 'lodash';
+import { connect } from 'react-redux';
 import {
-  Paths
+  getData,
+  JsonForms,
+  Paths,
+  resolveData
 } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
 
@@ -13,19 +18,20 @@ import ObjectListItem from './ObjectListItem';
  * @param property the {@link ContainmentProperty} defining the property that the array belongs to
  * @param parentPath the instance path where data can be obtained from
  */
-export const ExpandArray = ({
-                       data,
-                       resolvedRootData,
-                       property,
-                       path,
-                       isSelected,
-                       openDialog,
-                       setSelection,
-                       uischema
-                     }) => {
+export const ExpandArray = (
+  {
+    rootData,
+    schema,
+    path,
+    selection,
+    handlers,
+    uischema
+  }
+) => {
 
+  const data = resolveData(rootData, path);
   if (data === undefined || data === null) {
-    return;
+    return 'No data';
   }
 
   return data.map((_element, index) => {
@@ -35,14 +41,61 @@ export const ExpandArray = ({
       <ObjectListItem
         key={composedPath}
         path={composedPath}
-        schema={property.schema}
-        parentPath={path}
-        isSelected={isSelected}
-        openDialog={openDialog}
-        setSelection={setSelection}
+        schema={schema}
+        selection={selection}
+        handlers={handlers}
         uischema={uischema}
-        resolvedRootData={resolvedRootData}
       />
     );
   });
 };
+
+// TODO: update selected element once selection has been changed
+export const ExpandArrayContainer = (
+  {
+    prop,
+    path,
+    schema,
+    rootData,
+    selection,
+    uischema,
+    handlers
+  }
+) => {
+
+  const composedPath = Paths.compose(path, prop.property);
+  const propSchema = prop.schema;
+  const propKey = prop.property;
+
+  const parentProperties = JsonForms.schemaService.getContainmentProperties(schema);
+
+  for (const property of parentProperties) {
+    // If available, additionally use schema id to identify the correct property
+    if (!_.isEmpty(propSchema.id) && propSchema.id !== property.schema.id) {
+      continue;
+    }
+    if (propKey === property.property) {
+      return (
+        <ExpandArray
+          schema={property.schema}
+          path={composedPath}
+          rootData={rootData}
+          selection={selection}
+          handlers={handlers}
+          uischema={uischema}
+        />
+      );
+    }
+  }
+
+  return undefined;
+};
+
+const mapStateToProps = state => ({
+  rootData: getData(state)
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(ExpandArrayContainer);

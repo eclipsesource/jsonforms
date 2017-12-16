@@ -5,12 +5,11 @@ import {
   getData,
   JsonForms,
   JsonSchema,
-  Paths,
   resolveData,
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import { ExpandArray } from './ExpandArray';
+import ExpandArray from './ExpandArray';
 
 const getNamingFunction =
   (schema: JsonSchema, uischema: UISchemaElement) => (element: Object): string => {
@@ -68,31 +67,32 @@ export interface ObjectListItemProps {
   path: string;
   schema: JsonSchema;
   uischema: UISchemaElement;
-  resolvedRootData: any;
+  rootData: any;
   data: any;
-  remove?: any;
-  isSelected: any;
-  setSelection: any;
-  openDialog: any;
+  selection: any;
+  handlers: {
+    onRemove?: any;
+    onAdd: any;
+    onSelect: any;
+  };
 }
 
-const ObjectListItem = ({
-                        path,
-                        schema,
-                        uischema,
-                        resolvedRootData,
-                        data,
-                        remove,
-                        isSelected,
-                        setSelection,
-                        openDialog
-                      }: ObjectListItemProps) => {
+const ObjectListItem = (
+  {
+    path,
+    schema,
+    uischema,
+    rootData,
+    data,
+    handlers,
+    selection,
+  }: ObjectListItemProps) => {
 
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
-  const liClasses = isSelected ? /*this.state.selected === data ?*/ 'selected' : '';
-
-  const hasParent = !_.isEmpty(parentPath)
+  const liClasses = selection === data ? 'selected' : '';
+  const hasParent = !_.isEmpty(parentPath);
+  const scopedData = resolveData(rootData, parentPath);
 
   // TODO: key should be set in caller
   return (
@@ -105,7 +105,7 @@ const ObjectListItem = ({
 
         <span
           className='label'
-          onClick={setSelection(schema, data, path)}
+          onClick={handlers.onSelect(schema, data, path)}
         >
           <span>
             {getNamingFunction(schema, uischema)(data)}
@@ -115,17 +115,17 @@ const ObjectListItem = ({
               (
                 <span
                   className='add'
-                  onClick={openDialog(schema, path)}
+                  onClick={handlers.onAdd(schema, path)}
                 >
                   {'\u2795'}
                 </span>
               ) : ''
           }
           {
-            (hasParent || _.isArray(resolvedRootData)) &&
+            (hasParent || _.isArray(scopedData)) &&
             <span
               className='remove'
-              onClick={remove}
+              onClick={handlers.onRemove}
             >
               {'\u274C'}
             </span>
@@ -138,15 +138,13 @@ const ObjectListItem = ({
           .filter(prop => propHasData(prop, data, uischema))
           .map(prop =>
             <ul key={prop.label}>
-              <RenderChildren
+              <ExpandArray
                 prop={prop}
                 path={path}
                 schema={schema}
-                resolvedRootData={resolvedRootData}
-                isSelected={isSelected}
+                selection={selection}
                 uischema={uischema}
-                openDialog={openDialog}
-                setSelection={setSelection}
+                handlers={handlers}
               />
             </ul>)
       }
@@ -184,8 +182,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...dispatchProps,
     ...ownProps,
     data,
-    remove() {
-      return dispatchProps.remove(data);
+    handlers: {
+      ...ownProps.handlers,
+      onRemove() {
+        return dispatchProps.remove(data);
+      }
     }
   };
 };
@@ -195,46 +196,3 @@ export default connect(
   mapDispatchToProps,
   mergeProps
 )(ObjectListItem);
-
-// TODO: update selected element once selection has been changed
-const RenderChildren = ({
-                          prop,
-                          path,
-                          schema,
-                          resolvedRootData,
-                          isSelected,
-                          uischema,
-                          openDialog,
-                          setSelection
-                        }) => {
-
-  const composedPath = Paths.compose(path, prop.property);
-  const array = resolveData(resolvedRootData, composedPath);
-  const propSchema = prop.schema;
-  const propKey = prop.property;
-
-  const parentProperties = JsonForms.schemaService.getContainmentProperties(schema);
-
-  for (const property of parentProperties) {
-    // If available, additionally use schema id to identify the correct property
-    if (!_.isEmpty(propSchema.id) && propSchema.id !== property.schema.id) {
-      continue;
-    }
-    if (propKey === property.property) {
-      return (
-        <ExpandArray
-          data={array}
-          property={property}
-          path={composedPath}
-          resolvedRootData={resolvedRootData}
-          isSelected={isSelected}
-          openDialog={openDialog}
-          setSelection={setSelection}
-          uischema={uischema}
-        />
-      );
-    }
-  }
-
-  return undefined;
-};

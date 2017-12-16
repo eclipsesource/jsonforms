@@ -21,16 +21,19 @@ import {
 } from 'jsonforms-core';
 import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
+import { ExpandArray } from './ExpandArray';
 
 export interface MasterProps {
   schema: JsonSchema;
   path: string;
   rootData: any;
-  resolvedRootData: any;
-  dispatch: any;
-  isSelected: boolean;
-  openDialog: any;
-  setSelection: any;
+  selection: any;
+  // TODO: unify types
+  handlers: {
+    onAdd: any;
+    onRemove?: any;
+    onSelect: any;
+  };
   uischema: UISchemaElement;
 }
 
@@ -38,25 +41,24 @@ const Master = (
   {
     schema,
     path,
-    rootData,
-    isSelected,
-    openDialog,
-    setSelection,
+    selection,
+    handlers,
     uischema,
-    resolvedRootData
+    rootData
   }: MasterProps) => {
   // TODO: so far no drag and drop support
   if (schema.items !== undefined) {
     return (
-        <RootArray
-          resolvedRootData={resolvedRootData}
-          uischema={uischema}
-          isSelected={isSelected}
-          openDialog={openDialog}
-          setSelection={setSelection}
-          path={path}
+      <ul>
+        <ExpandArray
+          rootData={rootData}
           schema={schema.items as JsonSchema}
+          path={path}
+          selection={selection}
+          handlers={handlers}
+          uischema={uischema}
         />
+      </ul>
     );
   }
 
@@ -65,67 +67,15 @@ const Master = (
       <ObjectListItem
         path={path}
         schema={schema}
-        rootData={rootData}
-        isSelected={isSelected}
-        openDialog={openDialog}
-        setSelection={setSelection}
         uischema={uischema}
-        resolvedRootData={resolvedRootData}
+        selection={selection}
+        handlers={handlers}
       />
     </ul>
   );
 };
 
 const isNotTuple = (schema: JsonSchema) => !Array.isArray(schema.items);
-
-export interface RootArrayProps {
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  path: string;
-  resolvedRootData: any;
-  isSelected: boolean;
-  openDialog: any;
-  setSelection: any;
-}
-
-const RootArray = (
-  {
-    schema,
-    uischema,
-    path,
-    resolvedRootData,
-    isSelected,
-    openDialog,
-    setSelection
-  }: RootArrayProps
-) => {
-  if (resolvedRootData === undefined || resolvedRootData === null) {
-    return (<ul/>);
-  }
-
-  return (
-    <ul>
-      {
-        resolvedRootData.map((_element, index) => {
-          const composedPath = Paths.compose(path, index + '');
-
-          return (
-            <ObjectListItem
-              key={composedPath}
-              path={composedPath}
-              schema={schema}
-              uischema={uischema}
-              resolvedRootData={resolvedRootData}
-              isSelected={isSelected}
-              openDialog={openDialog}
-              setSelection={setSelection}
-            />
-          );
-        })
-      }
-    </ul>
-  );
-};
 
 export interface TreeMasterDetailState extends ControlState {
   selected: {
@@ -210,10 +160,15 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, resolvedSchema, visible, dispatch, path, rootData, resolvedRootData } = this.props;
+    const { uischema, resolvedSchema, visible, dispatch, path, rootData } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
+    };
+    const resolvedRootData = resolveData(rootData, path);
+    const handlers = {
+      onSelect: this.setSelection,
+      onAdd: this.openDialog,
     };
 
     return (
@@ -235,14 +190,11 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
         <div className='jsf-treeMasterDetail-content'>
           <div className='jsf-treeMasterDetail-master'>
             <Master
-              resolvedRootData={resolvedRootData}
               uischema={uischema}
               schema={resolvedSchema}
               path={path}
-              setSelection={this.setSelection}
-              openDialog={this.openDialog}
-              isSelected={false} // FIXME!
-              dispatch={dispatch}
+              handlers={handlers}
+              selection={this.state.selected.data}
               rootData={rootData}
             />
           </div>
