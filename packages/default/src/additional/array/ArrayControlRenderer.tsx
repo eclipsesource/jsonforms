@@ -21,7 +21,7 @@ export interface ArrayControlRendererProps extends ControlProps {
   addItem(path: string);
 }
 
-export const ArrayControlRenderer  =
+const ArrayControlRenderer  =
   ({  schema, uischema, data, path, addItem }: ArrayControlRendererProps) => {
 
     const controlElement = uischema as ControlElement;
