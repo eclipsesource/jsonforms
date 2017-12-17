@@ -120,14 +120,4 @@ export class JsonForms {
   }
 }
 
-/**
- * Annotation for registering a class as JSONForms service.
- * @param config
- * @constructor
- */
-// Disable rule because it is used as an decorator
-// tslint:disable:variable-name
-export const JsonFormsServiceElement = () => (cls: JsonFormsServiceConstructable) => {
-  JsonForms.jsonFormsServices.push(cls);
-};
 // tslint:enable:variable-name

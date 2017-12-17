@@ -1,27 +1,23 @@
 import * as _ from 'lodash';
 
-import { JsonSchema } from '../';
+import { JsonSchema } from '../models/jsonSchema';
 
-// export const resolveData = (instance: any, dataPath: string): any => {
-//   const dataPathSegments = dataPath.split('/');
-//
-//   return dataPathSegments
-//     .slice(0, dataPathSegments.length )
-//     .map(segment => decodeURIComponent(segment))
-//     .reduce(
-//       (curInstance, decodedSegment) => {
-//         if (curInstance === undefined || !curInstance.hasOwnProperty(decodedSegment)) {
-//           return undefined;
-//         }
-//
-//         return curInstance[decodedSegment];
-//       },
-//       instance
-//     );
-// };
+export const resolveData = (instance: any, dataPath: string): any => {
+  const dataPathSegments = dataPath.split('/');
 
-export const resolveData = (data, path) =>
-  _.isEmpty(path) ? data : _.get<any, any>(data, path);
+  return dataPathSegments
+    .map(segment => decodeURIComponent(segment))
+    .reduce(
+      (curInstance, decodedSegment) => {
+        if (curInstance === undefined || !curInstance.hasOwnProperty(decodedSegment)) {
+          return undefined;
+        }
+
+        return curInstance[decodedSegment];
+      },
+      instance
+    );
+};
 
 /**
  * Resolve the given schema path in order to obtain a subschema.

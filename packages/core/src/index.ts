@@ -1,17 +1,18 @@
 export * from './core';
+export * from './helpers';
 export * from './json-forms';
-export * from './core/renderer';
-export * from './core/runtime';
+export { Renderer } from './core/renderer';
 export * from './core/schema.service';
 export * from './core/styling.registry';
 
 export * from './models/jsonSchema';
 export * from './store';
-export *  from './actions';
+export * from './actions';
+import * as Actions from './actions';
+export { Actions };
 export *  from './renderers';
 export * from './reducers';
 export * from './generators';
-export * from './helpers';
 
 export * from './models/uischema';
 
@@ -34,3 +35,4 @@ const Helpers: {
 };
 
 export { Helpers };
+

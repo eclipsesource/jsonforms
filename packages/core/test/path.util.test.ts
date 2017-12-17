@@ -1,8 +1,7 @@
 import test from 'ava';
-
 import { JsonSchema } from '../src';
-import { resolveData, resolveSchema } from '../src/helpers';
-import { toDataPath } from '../src/helpers/path.util';
+
+import { Resolve, toDataPath } from '../src/helpers';
 
 test('resolve ', t => {
     const schema: JsonSchema = {
@@ -14,7 +13,7 @@ test('resolve ', t => {
         }
     };
     t.deepEqual(
-        resolveSchema(schema, '#/properties/foo'),
+        Resolve.schema(schema, '#/properties/foo'),
         {
             type: 'integer'
         }
@@ -53,28 +52,28 @@ test('toDataPath use of encoded paths relative without /', t => {
 });
 test('resolve instance', t => {
     const instance = {foo: 123};
-    const result = resolveData(instance, toDataPath('#/properties/foo'));
+    const result = Resolve.data(instance, toDataPath('#/properties/foo'));
     t.is(result, 123);
 });
 test('resolve instance with keywords', t => {
     const instance = { properties: 123 };
-    const result = resolveData(instance, toDataPath('#/properties/properties'));
+    const result = Resolve.data(instance, toDataPath('#/properties/properties'));
     t.is(result, 123);
 });
 test('resolve instance with encoded', t => {
     const instance = { 'foo/bar': 123 };
     const fooBar = encodeURIComponent('foo/bar');
-    const result = resolveData(instance, toDataPath(`#/properties/${fooBar}`));
+    const result = Resolve.data(instance, toDataPath(`#/properties/${fooBar}`));
     t.is(result, 123);
 });
 test('resolve nested instance', t => {
     const instance = { foo: { bar: 123 } };
-    const result = resolveData(instance, toDataPath('#/properties/foo/properties/bar'));
+    const result = Resolve.data(instance, toDataPath('#/properties/foo/properties/bar'));
     t.is(result, 123);
 });
 test('resolve uninitiated instance', t => {
     const instance = {};
-    const result = resolveData(instance, toDataPath('#/properties/foo/properties/bar'));
+    const result = Resolve.data(instance, toDataPath('#/properties/foo/properties/bar'));
     t.is(result, undefined);
 });
 test('resolve $ref', t => {
@@ -94,7 +93,7 @@ test('resolve $ref', t => {
           }
         }
     };
-    const result = resolveSchema(schema, '#/properties/foos/items');
+    const result = Resolve.schema(schema, '#/properties/foos/items');
     t.deepEqual(result, {type: 'string'});
 });
 test.failing('resolve $ref simple', t => {
@@ -122,7 +121,7 @@ test.failing('resolve $ref simple', t => {
           }
         }
     };
-    const result = resolveSchema(schema, '#/properties/foos/items');
+    const result = Resolve.schema(schema, '#/properties/foos/items');
     t.deepEqual(result, {
       type: 'object',
       properties: {
@@ -172,7 +171,7 @@ test.failing('resolve $ref complicated', t => {
           }
         }
     };
-    const result = resolveSchema(schema, '#/properties/foos/items');
+    const result = Resolve.schema(schema, '#/properties/foos/items');
     t.deepEqual(result, {
       definitions: {
         foo2: {

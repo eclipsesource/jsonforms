@@ -1,5 +1,4 @@
 import { JsonSchema, Scopable } from '../';
-
 export { createLabelDescriptionFrom } from './label';
 
 export const convertToValidClassName = (s: string): string =>
@@ -28,11 +27,23 @@ export { resolveData, resolveSchema } from './resolvers';
 export { Resolve };
 
 // Paths --
-import { compose as composePaths, composeWithUi, toDataPathSegments } from './path.util';
+import {
+  compose as composePaths,
+  composeWithUi, toDataPath,
+  toDataPathSegments
+} from './path.util';
 const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope.$ref).join('.');
 
 const Paths = {
   compose: composePaths,
   fromScopable
 };
-export { composePaths, composeWithUi, Paths };
+export { composePaths, composeWithUi, Paths, toDataPath };
+
+// Runtime --
+import { isEnabled, isVisible } from './runtime';
+const Runtime = {
+  isEnabled,
+  isVisible,
+};
+export { isEnabled, isVisible, Runtime };

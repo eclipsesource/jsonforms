@@ -8,7 +8,7 @@ import {
   isNumberControl,
   isStringControl,
   isTimeControl
-} from '../src/core/testers';
+} from '../src/testers';
 
 test.beforeEach(t => {
   t.context.uischema = {

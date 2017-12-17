@@ -4,12 +4,15 @@ import { ControlElement, UISchemaElement } from '../models/uischema';
 import { RankedTester } from '../testers';
 import { JsonForms } from '../core';
 import { JsonSchema } from '../models/jsonSchema';
-import { isEnabled, isVisible } from '../core/renderer';
 import { getData, getValidation } from '../reducers';
 import { errorAt } from '../reducers/validation';
 import { update } from '../actions';
-import { resolveData } from '../helpers';
-import { composeWithUi } from '../helpers/path.util';
+import {
+  composeWithUi,
+  isEnabled,
+  isVisible,
+  Resolve
+} from '../helpers';
 
 export interface JsonFormsFieldConstructable {
   new(props: FieldProps): Component<FieldProps, any>;
@@ -56,7 +59,7 @@ export const mapStateToInputProps = (state, ownProps) => {
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
 
   return {
-    data: resolveData(getData(state), path),
+    data: Resolve.data(getData(state), path),
     className: inputClassName.join(' '),
     visible,
     enabled,

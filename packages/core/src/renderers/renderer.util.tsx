@@ -2,21 +2,23 @@ import { JsonSchema } from '../models/jsonSchema';
 import * as React from 'react';
 import { JsonForms } from '../core';
 import {
-  isEnabled,
-  isVisible,
   Renderer,
   RendererProps,
 } from '../core/renderer';
+import {
+  isEnabled,
+  isVisible,
+  Resolve
+} from '../helpers';
+import { composeWithUi } from '../helpers';
+import { createLabelDescriptionFrom } from '../helpers';
+import { convertToValidClassName } from '../helpers';
 import { RankedTester } from '../testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers';
-import { resolveData, resolveSchema } from '../helpers/resolvers';
-import { composeWithUi } from '../helpers/path.util';
-import { createLabelDescriptionFrom } from '../helpers';
-import { convertToValidClassName } from '../helpers';
 
 /**
  * A renderer config that is used during renderer registration.
@@ -118,7 +120,7 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
      const lastSegment = pathSegments[pathSegments.length - 1];
      const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
      const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
-     const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
+     const nextHigherSchema = Resolve.schema(schema, nextHigherSchemaPath);
 
      return nextHigherSchema !== undefined
          && nextHigherSchema.required !== undefined
@@ -157,7 +159,7 @@ export const mapStateToControlProps = (state, ownProps) => {
   const inputs = state.inputs;
 
   return {
-    data: resolveData(getData(state), path),
+    data: Resolve.data(getData(state), path),
     errors,
     classNames: {
       wrapper: classNames.join(' '),

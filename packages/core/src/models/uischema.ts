@@ -1,4 +1,3 @@
-import { Runtime } from '../core/runtime';
 /**
  * A rule that may be attached to any UI schema element.
  */
@@ -82,11 +81,6 @@ export interface UISchemaElement {
      * Any additional options.
      */
     options?: any;
-
-    /**
-     * Runtime object that encapsulates runtime state.
-     */
-    runtime?: Runtime;
 }
 
 /**

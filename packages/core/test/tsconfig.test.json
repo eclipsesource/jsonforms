@@ -1,7 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../dist/ts-build/test",
+    "outDir": "../dist/test",
     "target": "es6"
   },
   "include": [
