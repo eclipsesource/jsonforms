@@ -3,12 +3,14 @@ import { Scopable } from '../';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
-  if (!_.isEmpty(path1) && !path2.startsWith('[')) {
+  if (!_.isEmpty(path1) && !_.isEmpty(path2) && !path2.startsWith('[')) {
     p1 = path1 + '.';
   }
 
   if (_.isEmpty(p1)) {
     return path2;
+  } else if (_.isEmpty(path2)) {
+    return p1;
   } else {
     return `${p1}${path2}`;
   }
