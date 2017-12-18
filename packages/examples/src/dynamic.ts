@@ -1,4 +1,4 @@
-import { JsonFormsElement } from 'jsonforms-core';
+import { JsonFormsElement } from '@jsonforms/core';
 import { registerExamples } from './register';
 
 const setup = (div: HTMLDivElement) => {
