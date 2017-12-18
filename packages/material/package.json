@@ -23,7 +23,9 @@
     "clean": "rm -rf dist",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "nyc report --reporter=html",
-    "test": "echo 'TODO: implement materialized test'"
+    "test": "echo 'TODO: implement materialized test'",
+    "doc": "echo 'TODO: implement documentation generation'",
+    "preparePublish": "npm run lint && npm run doc && npm run build && npm run test && npm run bundle"
   },
   "ava": {
     "verbose": true,
