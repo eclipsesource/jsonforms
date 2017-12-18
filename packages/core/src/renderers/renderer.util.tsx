@@ -2,10 +2,6 @@ import { JsonSchema } from '../models/jsonSchema';
 import * as React from 'react';
 import { JsonForms } from '../core';
 import {
-  Renderer,
-  RendererProps,
-} from '../core/renderer';
-import {
   isEnabled,
   isVisible,
   Resolve
@@ -19,6 +15,7 @@ import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
 import { errorAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers';
+import {Renderer, RendererProps} from "./renderer";
 
 /**
  * A renderer config that is used during renderer registration.

@@ -1,9 +1,8 @@
 export * from './core';
 export * from './helpers';
 export * from './json-forms';
-export { Renderer } from './core/renderer';
-export * from './core/schema.service';
-export * from './core/styling.registry';
+export * from './legacy/schema.service';
+export * from './legacy/styling.registry';
 
 export * from './models/jsonSchema';
 export * from './store';
@@ -35,4 +34,3 @@ const Helpers: {
 };
 
 export { Helpers };
-

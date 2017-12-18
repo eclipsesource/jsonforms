@@ -1,5 +1,5 @@
 import { test } from 'ava';
-import { UISchemaRegistry, UISchemaRegistryImpl } from '../src/core/uischema.registry';
+import { UISchemaRegistry, UISchemaRegistryImpl } from '../src/legacy/uischema.registry';
 import { generateDefaultUISchema } from '../src/generators/ui-schema-gen';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { ControlElement, GroupLayout, Layout, VerticalLayout } from '../src/models/uischema';

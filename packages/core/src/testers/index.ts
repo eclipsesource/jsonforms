@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import { NOT_APPLICABLE } from '../core/uischema.registry';
+import { NOT_APPLICABLE } from '../legacy/uischema.registry';
 import { resolveSchema} from '../helpers/resolvers';
 
 /**

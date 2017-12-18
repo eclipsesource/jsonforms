@@ -1,5 +1,5 @@
-import { Renderer, RendererProps } from '../core/renderer';
 import { update } from '../actions';
+import { Renderer, RendererProps } from './renderer';
 
 export interface ControlClassNames {
   input: string;
