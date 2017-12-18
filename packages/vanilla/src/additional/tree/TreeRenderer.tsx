@@ -1,27 +1,24 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import {
-  // ContainmentProperty,
+  Actions,
   Control,
   ControlProps,
   ControlState,
   DispatchRenderer,
   generateDefaultUISchema,
   getData,
-  isEnabled,
-  isVisible,
-  JsonForms,
   JsonSchema,
   MasterDetailLayout,
   Paths,
-  resolveData,
-  resolveSchema,
+  Resolve,
+  Runtime,
   UISchemaElement,
-  update
-} from 'jsonforms-core';
+} from '@jsonforms/core';
 import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import { ExpandArray } from './ExpandArray';
+import Dialog from './Dialog';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -94,6 +91,7 @@ export interface TreeProps extends ControlProps {
   resolvedSchema: any;
   rootData: any;
   resolvedRootData: any;
+  addToRoot: any;
 }
 
 export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
@@ -160,12 +158,12 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, resolvedSchema, visible, dispatch, path, rootData } = this.props;
+    const { uischema, schema, resolvedSchema, visible, path, rootData, addToRoot } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
     };
-    const resolvedRootData = resolveData(rootData, path);
+    const resolvedRootData = Resolve.data(rootData, path);
     const handlers = {
       onSelect: this.setSelection,
       onAdd: this.openDialog,
@@ -181,7 +179,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
             Array.isArray(resolvedRootData) &&
             <button
               className='jsf-treeMasterDetail-add'
-              onClick={() => this.addToRoot()}
+              onClick={addToRoot(schema, path)}
             >
               Add to root
             </button>
@@ -212,96 +210,58 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
         <div>
           {
             this.state.dialog.open &&
-            <dialog id='dialog' {...dialogProps}>
-              <label>
-                Select item to create
-              </label>
-              <div className='dialog-content content'>
-                {
-                  JsonForms.schemaService.getContainmentProperties(this.state.dialog.schema)
-                    .map(prop =>
-                      <button
-                        className={JsonForms.stylingRegistry.getAsClassName('button')}
-                        key={`${prop.label}-button`}
-                        onClick={() => {
-                          const newData = _.keys(prop.schema.properties).reduce(
-                            (d, key) => {
-                              if (prop.schema.properties[key].default) {
-                                d[key] = prop.schema.properties[key].default;
-                              }
-
-                              return d;
-                            },
-                            {}
-                          );
-                          dispatch(
-                            update(
-                              Paths.compose(this.state.dialog.path, prop.property),
-                              array => {
-                                if (_.isEmpty(array)) {
-                                  return [newData];
-                                }
-                                array.push(newData);
-
-                                return array;
-                              }
-                            )
-                          );
-                          this.closeDialog();
-                        }}
-                      >
-                        {prop.label}
-                      </button>
-                    )
-                }
-              </div>
-              <button
-                className='jsf-treeMasterDetail-dialog-close'
-                onClick={this.closeDialog}>
-                Close
-              </button>
-            </dialog>
+              <Dialog
+                path={this.state.dialog.path}
+                schema={this.state.dialog.schema}
+                closeDialog={this.closeDialog}
+                dialogProps={dialogProps}
+              />
           }
         </div>
       </div>
     );
   }
-
-  private addToRoot() {
-    const { schema, dispatch, path } = this.props;
-
-    if (isNotTuple(schema)) {
-      dispatch(
-        update(
-          path,
-          data => {
-            const clone = data.slice();
-            clone.push({});
-
-            return clone;
-          }
-        )
-      );
-    }
-  }
 }
 
 const mapStateToProps = (state, ownProps) => {
   const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
-  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
   const rootData = getData(state);
 
   return {
     rootData: getData(state),
-    resolvedRootData: resolveData(rootData, path),
+    resolvedRootData: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    resolvedSchema: resolveSchema(ownProps.schema, ownProps.uischema.scope.$ref),
+    resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope.$ref),
     path,
     visible,
     enabled
   };
 };
 
-export default connect(mapStateToProps)(TreeMasterDetail);
+const mapDispatchToProps = dispatch => ({
+  addToRoot(schema, path) {
+    return () => {
+      if (isNotTuple(schema)) {
+        dispatch(
+          Actions.update(
+            path,
+            data => {
+              const clone = data.slice();
+              clone.push({});
+
+              return clone;
+            }
+          )
+        );
+      }
+    }
+  }
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TreeMasterDetail);

@@ -19,7 +19,6 @@ export interface CategorizationState {
 class CategorizationRenderer extends Renderer<RendererProps, CategorizationState> {
 
   onCategorySelected = (category) => () => {
-    console.log('setting selected category', category);
     return this.setState({selectedCategory: category});
   }
 

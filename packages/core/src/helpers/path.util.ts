@@ -52,7 +52,7 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
  * @returns {string} the path without schema-specific keywords
  */
 export const toDataPath = (schemaPath: string): string => {
-  return toDataPathSegments(schemaPath).join('/');
+  return toDataPathSegments(schemaPath).join('.');
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string) => {

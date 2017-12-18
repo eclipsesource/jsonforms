@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 import { Provider } from 'react-redux';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { initJsonFormsStore } from '../src/store';
-import { Renderer, RendererProps } from '../src/core/renderer';
+import { Renderer, RendererProps } from '../src/renderers/renderer';
 import DispatchRenderer from '../src/renderers/dispatch-renderer';
 import '../src/renderers';
 import { registerRenderer, unregisterRenderer } from '../src/actions';

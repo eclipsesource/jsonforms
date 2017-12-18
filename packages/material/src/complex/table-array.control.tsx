@@ -2,16 +2,15 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   and,
-  compose,
   ControlElement,
   ControlProps,
-  convertToClassName,
   DispatchField,
   formatErrorMessage,
-  getLabelObject,
+  Helpers,
   JsonForms,
   JsonSchema,
   mapStateToControlProps,
+  Paths,
   RankedTester,
   rankWith,
   registerStartupRenderer,
@@ -76,7 +75,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
     const labelClass = JsonForms.stylingRegistry.getAsClassName('array-table.label');
     const buttonClass = JsonForms.stylingRegistry.getAsClassName('array-table.button');
     const controlClass = [JsonForms.stylingRegistry.getAsClassName('array-table'),
-      convertToClassName(controlElement.scope.$ref)].join(' ');
+      Helpers.convertToValidClassName(controlElement.scope.$ref)].join(' ');
 
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
     const createControlElement = (key: string): ControlElement => ({
@@ -84,7 +83,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
       label: false,
       scope: { $ref: `#/properties/${key}` }
     });
-    const labelObject = getLabelObject(controlElement);
+    const labelObject = Helpers.createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
@@ -92,8 +91,12 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
       <div className={controlClass} hidden={!visible}>
         <Toolbar>
           <Typography type='title' className={labelClass}>{label}</Typography>
-          <Button raised color='primary' className={buttonClass}
-            onClick={() => this.addNewItem(path)}>
+          <Button
+            raised
+            color='primary'
+            className={buttonClass}
+            onClick={() => this.addNewItem(path)}
+          >
             Add to {labelObject.text}
           </Button>
         </Toolbar>
@@ -116,7 +119,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
               <TableRow><TableCell>No data</TableCell></TableRow> : data.map((_child, index) => {
-              const childPath = compose(path, index + '');
+              const childPath = Paths.compose(path, index + '');
 
               return (
                 <TableRow key={childPath}>
@@ -126,7 +129,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
                       .filter(prop => resolvedSchema.properties[prop].type !== 'array')
                       .map((prop, idx) => {
                         return (
-                          <TableCell key={compose(childPath, idx.toString())}>
+                          <TableCell key={Paths.compose(childPath, idx.toString())}>
                             <DispatchField
                               schema={resolvedSchema}
                               uischema={createControlElement(prop)}

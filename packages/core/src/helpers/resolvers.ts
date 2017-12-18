@@ -3,7 +3,10 @@ import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
 
 export const resolveData = (instance: any, dataPath: string): any => {
-  const dataPathSegments = dataPath.split('/');
+  const dataPathSegments = dataPath.split('.');
+  if (_.isEmpty(dataPath)) {
+    return instance;
+  }
 
   return dataPathSegments
     .map(segment => decodeURIComponent(segment))
