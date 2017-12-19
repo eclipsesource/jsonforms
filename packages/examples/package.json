@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0-beta.1",
   "description": "JSON Forms usage examples",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -28,7 +28,7 @@
     "test-coverage": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
     "wct": "wct wct-test",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run lint && npm run doc && npm run build && npm run test && npm run bundle"
+    "preparePublish": "npm run doc && npm run build && npm run test && npm run bundle"
   },
   "ava": {
     "verbose": true,
@@ -38,13 +38,11 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "@jsonforms/core": "2.0.0-beta.0",
-    "@jsonforms/vanilla-renderers": "2.0.0-beta.0",
-    "@jsonforms/material-renderers": "2.0.0-beta.0",
+    "@jsonforms/core": "^2.0.0-beta.1",
+    "@jsonforms/material-renderers": "^2.0.0-beta.1",
+    "@jsonforms/vanilla-renderers": "^2.0.0-beta.1",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
-  },
-  "devDependencies": {
   }
 }
