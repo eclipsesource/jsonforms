@@ -10,9 +10,9 @@ which are not yet supported by all browsers, hence you'll need to include additi
 These files are `webcomponents-lite.js` and `native-shim.js` as well as JSONForms itself via `jsonforms.js`.
 Pay attention to the order when including these files.
 
-Once you add a `json-forms` element to the DOM with at least a `data` attribute set, 
-a form will be rendered for you. 
-Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes. 
+Once you add a `json-forms` element to the DOM with at least a `data` attribute set,
+a form will be rendered for you.
+Data and UI schemas can be configured by the `dataSchema` and `uiSchema` attributes.
 Use CSS to style the form however you want.
 
 ## Step by Step Example Usage
@@ -63,7 +63,7 @@ The whole document may for example now look like this:
       document.body.appendChild(jsonForms);
     </script>
   ```
-  
+
 # Developers Documentation
 
 ## First time setup
@@ -76,7 +76,7 @@ The whole document may for example now look like this:
 * Build (all packages): `lerna run build`
 * Test (all packages): `lerna run test`
 * Clean (delete `dist` folder of all packages): `lerna run clean`
-* Run examples: `cd packages/examples && npm run start` 
+* Run examples: `cd packages/examples && npm run start`
 
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
@@ -84,22 +84,7 @@ The JSONForms project is build and tested via [Travis](https://travis-ci.org/). 
 Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=jsonforms2)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=jsonforms2&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=jsonforms2)
 
 ## Deployment
- * Locally login as one of the (npm) owners of the package ([npm doc](https://docs.npmjs.com/cli/adduser))
- * Make sure your workspace looks exactly the way you want to release it. (Files specified in [.npmignore](https://github.com/eclipsesource/jsonforms/blob/master/.npmignore) are normally ignored by npm, but this functionality is buggy. Therefore to be sure you should still remove all unwanted files before deploying.)
- * Run either ```npm run publish-patch```,```npm run publish-minor``` or ```npm run publish-major```.
-
-The script does the following:
-* Build JSONForms
-* Execute tests
-* Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json)
-* Commit version bump to the current branch
-* Checkout a new temporary deploy-branch
-* Commit ```dist/**/*``` directory
-* Create a new version tag
-* Push the version tag to 'upstream'
-* Release the workspace to [npmjs](https://www.npmjs.com/)
-
-If any of the steps fail the script will abort. If the script was successful you should create a pull-request with the version bump commit to 'upstream'.
+ * Execute `npm run publishNpmAndGithub` in the root folder. This will lint, build, test and publish all packages.
 
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.

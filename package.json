@@ -1,6 +1,6 @@
 {
 	"scripts": {
-		"publishNpmAndGithub": "npm run lerna preparePublish && lerna publish --git-remote upstream"
+		"publishNpmAndGithub": "npm run lerna preparePublish && lerna publish"
 	},
 	"devDependencies": {
 		"@types/react": "^16.0.27",
