@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-beta.2",
   "description": "Default Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -25,7 +25,7 @@
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test && npm run bundle"
+    "preparePublish": "npm run doc && npm run build && npm run test"
   },
   "ava": {
     "verbose": true,
@@ -35,7 +35,7 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.1",
+    "@jsonforms/core": "^2.0.0-beta.2",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
