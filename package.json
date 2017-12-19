@@ -1,6 +1,7 @@
 {
 	"scripts": {
-		"publishNpmAndGithub": "npm run lerna preparePublish && lerna publish"
+		"lerna": "lerna",
+		"publishNpmAndGithub": "lerna run preparePublish && lerna publish"
 	},
 	"devDependencies": {
 		"@types/react": "^16.0.27",
