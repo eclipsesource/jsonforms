@@ -18,20 +18,29 @@ export const MaterialTextField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
-  const config = {'maxLength': maxLength};
+  let config;
+  if (uischema.options && uischema.options.restrict) {
+    config = {'maxLength': maxLength};
+  } else {
+    config = {};
+  }
   const trim = uischema.options && uischema.options.trim;
+  const onChange = ev => handleChange(props, ev.target.value);
 
-  return <Input type='text'
-    value={data || ''}
-    onChange={ev => handleChange(props, ev.target.value)}
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-    multiline={uischema.options && uischema.options.multi}
-    fullWidth={!trim}
-    inputProps={config}
-  />;
+  return (
+    <Input
+      type='text'
+      value={data || ''}
+      onChange={onChange}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      multiline={uischema.options && uischema.options.multi}
+      fullWidth={!trim}
+      inputProps={config}
+    />
+  );
 };
 /**
  * Default tester for text-based/string controls.
