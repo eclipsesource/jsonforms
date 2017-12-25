@@ -9,12 +9,13 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
+  JsonForms,
   mapStateToControlProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
   resolveSchema
-} from 'jsonforms-core';
+} from '@jsonforms/core';
 import { connect } from 'react-redux';
 
 export class InputControl extends Control<ControlProps, ControlState> {
@@ -24,7 +25,8 @@ export class InputControl extends Control<ControlProps, ControlState> {
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
-    const inputDescriptionClassName = 'input-description';
+    const inputDescriptionClassName =
+      JsonForms.stylingRegistry.getAsClassName('input-description');
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
 
     return (
@@ -41,7 +43,12 @@ export class InputControl extends Control<ControlProps, ControlState> {
         <div className={divClassNames}>
           {!isValid ? formatErrorMessage(errors) : ''}
         </div>
-        {isDescriptionHidden(visible, description, this.state.isFocused) ? null : <p className={inputDescriptionClassName}>{description}</p>}
+        <div
+          hidden={isDescriptionHidden(visible, description, this.state.isFocused)}
+          className={inputDescriptionClassName}
+        >
+          {description}
+        </div>
       </div>
     );
   }

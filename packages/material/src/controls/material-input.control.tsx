@@ -13,7 +13,7 @@ import {
   rankWith,
   registerStartupRenderer,
   resolveSchema
-} from 'jsonforms-core';
+} from '@jsonforms/core';
 import { connect } from 'react-redux';
 
 import { InputLabel } from 'material-ui/Input';
@@ -40,8 +40,12 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
           {computeLabel(label, required)}
         </InputLabel>
         <DispatchField uischema={uischema} schema={schema}/>
-        <FormHelperText error={!isValid}>{errors}</FormHelperText>
-        {isDescriptionHidden(visible, description, this.state.isFocused) ? null : <FormHelperText error={false}>{description}</FormHelperText>}
+        <FormHelperText
+          error={!isValid}
+          hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}
+        >
+          {!isValid ? errors : description}
+        </FormHelperText>
       </FormControl>
     );
   }

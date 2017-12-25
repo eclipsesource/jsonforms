@@ -129,7 +129,7 @@ test('render', t => {
 
   const control = findRenderedDOMElementWithClass(tree, 'control');
   t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
+  t.is(control.childNodes.length, 4);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
   /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
 
@@ -143,6 +143,10 @@ test('render', t => {
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
+
+  const description = findRenderedDOMElementWithClass(tree, 'input-description');
+  t.is(description.tagName, 'DIV');
+  t.is((description as HTMLDivElement).children.length, 0);
 });
 
 test('render without label', t => {
@@ -162,7 +166,7 @@ test('render without label', t => {
 
   const control = findRenderedDOMElementWithClass(tree, 'control');
   t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
+  t.is(control.childNodes.length, 4);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
   /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
 
@@ -176,6 +180,10 @@ test('render without label', t => {
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
+
+  const description = findRenderedDOMElementWithClass(tree, 'input-description');
+  t.is(description.tagName, 'DIV');
+  t.is((description as HTMLDivElement).children.length, 0);
 });
 
 test('hide', t => {
@@ -412,8 +420,9 @@ test('show description on focus', t => {
   const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
   focus(control);
   const description =
-    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLParagraphElement;
+    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
+  t.false(description.hidden);
 });
 
 test('hide description when input field is not focused', t => {
@@ -439,9 +448,8 @@ test('hide description when input field is not focused', t => {
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const description =
-    scryRenderedDOMElementsWithClass(tree, 'input-description');
-  t.is(description.length, 0);
+  const description = findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+  t.true(description.hidden);
 });
 
 test('hide description on blur', t => {
@@ -470,12 +478,13 @@ test('hide description on blur', t => {
   const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
   focus(control);
   const description =
-    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLParagraphElement;
+    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
+  t.false(description.hidden);
   blur(control);
   const hiddenDescription =
-    scryRenderedDOMElementsWithClass(tree, 'input-description');
-  t.is(hiddenDescription.length, 0);
+    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+  t.true(hiddenDescription.hidden);
 });
 
 test('description undefined', t => {
@@ -501,6 +510,6 @@ test('description undefined', t => {
     </Provider>
   );
   const description =
-    scryRenderedDOMElementsWithClass(tree, 'input-description');
-  t.is(description.length, 0);
+    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+  t.true(description.hidden);
 });
