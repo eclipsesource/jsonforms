@@ -20,10 +20,10 @@ export const MaterialInputControl =
 
   return (
     <FormControl className={classNames.wrapper} hidden={!visible} fullWidth={!trim}>
-      <InputLabel htmlFor={id} className={classNames.label}>
+      <InputLabel htmlFor={id} className={classNames.label} error={!isValid}>
         {computeLabel(label, required)}
       </InputLabel>
-      <DispatchField uischema = {uischema} schema = {schema}/>
+      <DispatchField uischema={uischema} schema={schema}/>
       <FormHelperText error={!isValid}>{errors}</FormHelperText>
     </FormControl>
   );
