@@ -1,4 +1,4 @@
-import { JsonForms, JsonFormsElement } from 'jsonforms-core';
+import { JsonForms, JsonFormsElement } from '@jsonforms/core';
 import { registerExamples } from './register';
 
 export const uischema = {

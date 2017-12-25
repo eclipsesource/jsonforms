@@ -5,7 +5,7 @@ import {
   mapStateToControlProps,
   registerRenderer,
   unregisterRenderer
-} from 'jsonforms-core';
+} from '@jsonforms/core';
 import { RatingControl, ratingControlTester } from './rating.control';
 
 const schema = {

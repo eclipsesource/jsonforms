@@ -6,7 +6,7 @@ import {
   RankedTester,
   rankWith,
   refEndsWith
-} from 'jsonforms-core';
+} from '@jsonforms/core';
 import { Rating } from './Rating';
 
 /**

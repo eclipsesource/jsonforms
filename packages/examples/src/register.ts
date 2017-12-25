@@ -1,4 +1,4 @@
-import {  JsonFormsElement } from 'jsonforms-core';
+import {  JsonFormsElement } from '@jsonforms/core';
 import { ExampleDescription } from './example';
 
 declare let exampleDivId;
