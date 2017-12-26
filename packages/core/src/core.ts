@@ -119,5 +119,3 @@ export class JsonForms {
     return null;
   }
 }
-
-// tslint:enable:variable-name

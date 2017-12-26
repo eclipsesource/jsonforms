@@ -8,9 +8,11 @@ import { generateDefaultUISchema } from './ui-schema-gen';
 
 const Generate: {
   jsonSchema(instance: Object, options?: any): JsonSchema;
-  uiSchema(jsonSchema: JsonSchema, layoutType?: string, prefix?: string): UISchemaElement } = {
-
+  uiSchema(jsonSchema: JsonSchema, layoutType?: string, prefix?: string): UISchemaElement
+} = {
   jsonSchema: generateJsonSchema,
   uiSchema: generateDefaultUISchema,
 };
+
 export { Generate };
+export default Generate;
