@@ -6,7 +6,8 @@ import { Provider } from 'react-redux';
 import { Categorization, ControlElement, JsonForms, JsonSchema, Layout } from '@jsonforms/core';
 import { renderIntoDocument } from '../helpers/binding';
 import { click, findRenderedDOMElementWithClass, } from '../helpers/react-test';
-import CategorizationRenderer, { categorizationTester } from '../../src/additional/categorization-renderer';
+import CategorizationRenderer from '../../src/additional/categorization';
+import { categorizationTester } from '../../src/additional/categorization/tester';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -328,8 +329,10 @@ test('render on click', t => {
   const store = initJsonFormsStore(data, t.context.schema, uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer schema={t.context.schema}
-                              uischema={uischema} />
+      <CategorizationRenderer
+        schema={t.context.schema}
+        uischema={uischema}
+      />
     </Provider>
   );
 

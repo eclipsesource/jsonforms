@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './unknown.renderer';
-import { RankedTester } from '../core/testers';
-import { RendererProps } from '../core/renderer';
+import { RankedTester } from '../testers';
+import { RendererProps } from './renderer';
 
 export interface DispatchRendererProps extends RendererProps {
   renderers?: { tester: RankedTester, renderer: any }[];

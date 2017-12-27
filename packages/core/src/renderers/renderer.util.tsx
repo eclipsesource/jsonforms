@@ -2,21 +2,20 @@ import { JsonSchema } from '../models/jsonSchema';
 import * as React from 'react';
 import { JsonForms } from '../core';
 import {
-  convertToClassName,
   isEnabled,
   isVisible,
-  Renderer,
-  RendererProps
-} from '../core/renderer';
-import { RankedTester } from '../core/testers';
+  Resolve
+} from '../helpers';
+import { composeWithUi } from '../helpers';
+import { createLabelDescriptionFrom } from '../helpers';
+import { convertToValidClassName } from '../helpers';
+import { RankedTester } from '../testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import * as _ from 'lodash';
 import DispatchRenderer from './dispatch-renderer';
-import { composeWithUi, resolveData } from '../path.util';
-import { getLabelObject } from './label.util';
 import { errorAt } from '../reducers/validation';
-import { getData, getValidation } from '../reducers/index';
-import { resolveSchema } from '../path.util';
+import { getData, getValidation } from '../reducers';
+import {Renderer, RendererProps} from "./renderer";
 
 /**
  * A renderer config that is used during renderer registration.
@@ -105,14 +104,6 @@ export const JsonFormsLayout = ({ styleName, children, visible }) => {
   );
 };
 
-export const formatErrorMessage = errors => {
-  if (errors === undefined || errors === null) {
-    return '';
-  }
-
-  return errors.join('\n');
-};
-
 export const registerStartupRenderer = (tester: RankedTester, renderer: any) => {
   JsonForms.renderers.push({
     tester,
@@ -126,7 +117,7 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
      const lastSegment = pathSegments[pathSegments.length - 1];
      const nextHigherSchemaSegments = pathSegments.slice(0, pathSegments.length - 2);
      const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
-     const nextHigherSchema = resolveSchema(schema, nextHigherSchemaPath);
+     const nextHigherSchema = Resolve.schema(schema, nextHigherSchemaPath);
 
      return nextHigherSchema !== undefined
          && nextHigherSchema.required !== undefined
@@ -140,8 +131,8 @@ export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
-  const labelObject = getLabelObject(ownProps.uischema);
-  const label = labelObject.show ? labelObject.text : '';
+  const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
+  const label = labelDesc.show ? labelDesc.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
@@ -152,7 +143,7 @@ export const mapStateToControlProps = (state, ownProps) => {
   const styles = JsonForms.stylingRegistry.get('control');
   let classNames: string[] = !_.isEmpty(controlElement.scope) ?
     styles.concat(
-      [`${convertToClassName(controlElement.scope.$ref)}`]
+      [`${convertToValidClassName(controlElement.scope.$ref)}`]
     ) : [''];
   const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
   if (trim) {
@@ -165,7 +156,7 @@ export const mapStateToControlProps = (state, ownProps) => {
   const inputs = state.inputs;
 
   return {
-    data: resolveData(getData(state), path),
+    data: Resolve.data(getData(state), path),
     errors,
     classNames: {
       wrapper: classNames.join(' '),

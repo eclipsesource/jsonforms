@@ -1,5 +1,5 @@
 import { JsonFormsFieldConstructable } from '../renderers/field.util';
-import { RankedTester } from '../core/testers';
+import { RankedTester } from '../testers';
 import { ADD_FIELD, REMOVE_FIELD } from '../actions';
 
 export const fieldReducer = (

@@ -1,4 +1,3 @@
-import { Runtime } from '../core/runtime';
 /**
  * A rule that may be attached to any UI schema element.
  */
@@ -82,11 +81,6 @@ export interface UISchemaElement {
      * Any additional options.
      */
     options?: any;
-
-    /**
-     * Runtime object that encapsulates runtime state.
-     */
-    runtime?: Runtime;
 }
 
 /**
@@ -129,7 +123,7 @@ export interface GroupLayout extends Layout {
 /**
  * Represents an object that can be used to configure a label.
  */
-export interface ILabelObject {
+export interface LabelDescription {
   /**
    * An optional text to be displayed.
    */
@@ -170,7 +164,7 @@ export interface ControlElement extends UISchemaElement, Scopable {
   /**
    * An optional label that will be associated with the control
    */
-  label?: string | boolean | ILabelObject;
+  label?: string | boolean | LabelDescription;
 }
 
 export interface MasterDetailLayout extends UISchemaElement, Scopable {
@@ -178,7 +172,7 @@ export interface MasterDetailLayout extends UISchemaElement, Scopable {
   /**
    * An optional label that will be associated with the control
    */
-  label?: string | boolean | ILabelObject;
+  label?: string | boolean | LabelDescription;
 }
 
 /**

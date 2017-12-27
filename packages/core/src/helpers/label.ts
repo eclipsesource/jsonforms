@@ -1,16 +1,6 @@
 import * as _ from 'lodash';
 
-import { ControlElement, ILabelObject } from '../models/uischema';
-
-class LabelObject implements ILabelObject {
-  public text: string;
-  public show: boolean;
-
-  constructor(text: string, show: boolean) {
-    this.text = text;
-    this.show = show;
-  }
-}
+import { ControlElement, LabelDescription } from '../models/uischema';
 
 const deriveLabel = (controlElement: ControlElement): string => {
 
@@ -26,26 +16,41 @@ const deriveLabel = (controlElement: ControlElement): string => {
 /**
  * Return a label object based on the given control element.
  * @param {ControlElement} withLabel the UI schema to obtain a label object for
- * @returns {ILabelObject}
+ * @returns {LabelDescription}
  */
-export const getLabelObject = (withLabel: ControlElement): ILabelObject => {
+export const createLabelDescriptionFrom = (withLabel: ControlElement): LabelDescription => {
   const labelProperty = withLabel.label;
   const derivedLabel = deriveLabel(withLabel);
   if (typeof labelProperty === 'boolean') {
     if (labelProperty) {
-      return new LabelObject(derivedLabel, labelProperty);
+      return {
+        text: derivedLabel,
+        show: labelProperty
+      };
     } else {
-      return new LabelObject(derivedLabel, labelProperty as boolean);
+      return {
+        text: derivedLabel,
+        show: labelProperty as boolean
+      };
     }
   } else if (typeof labelProperty === 'string') {
-    return new LabelObject(labelProperty as string, true);
+    return {
+      text: labelProperty as string,
+      show: true
+    };
   } else if (typeof labelProperty === 'object') {
     const show = labelProperty.hasOwnProperty('show') ? labelProperty.show : true;
     const label = labelProperty.hasOwnProperty('text') ?
       labelProperty.text : derivedLabel;
 
-    return new LabelObject(label, show);
+    return {
+      text: label,
+      show
+    };
   } else {
-    return new LabelObject(derivedLabel, true);
+    return {
+      text: derivedLabel,
+      show: true
+    };
   }
 };

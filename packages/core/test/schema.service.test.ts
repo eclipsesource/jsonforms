@@ -4,8 +4,8 @@ import {
   isContainmentProperty,
   isReferenceProperty,
   SchemaService
-} from '../src/core/schema.service';
-import { SchemaServiceImpl } from '../src/core/schema.service.impl';
+} from '../src/legacy/schema.service';
+import { SchemaServiceImpl } from '../src/legacy/schema.service.impl';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { JsonForms } from '../src/core';
 

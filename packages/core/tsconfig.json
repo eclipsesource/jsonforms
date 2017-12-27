@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base",
   "compilerOptions": {
-    "outDir": "dist/ts-build",
+    "outDir": "./lib"
   },
   "exclude":[
     "node_modules"

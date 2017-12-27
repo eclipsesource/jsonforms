@@ -1,5 +1,5 @@
 import { test } from 'ava';
-import { StylingRegistryImpl } from '../src/core/styling.registry';
+import { StylingRegistryImpl } from '../src/legacy/styling.registry';
 
 test('Styling registry allows to register a style', t => {
     const stylingRegistry = new StylingRegistryImpl();

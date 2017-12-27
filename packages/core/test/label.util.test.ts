@@ -1,7 +1,7 @@
 import test from 'ava';
 
 import { ControlElement } from '../src/models/uischema';
-import { getLabelObject } from '../src/renderers/label.util';
+import { createLabelDescriptionFrom } from '../src/helpers/label';
 
 test('control relative', t => {
   const controlElement: ControlElement = {
@@ -10,7 +10,7 @@ test('control relative', t => {
       $ref: '/properties/foo'
     }
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo');
 });
@@ -22,7 +22,7 @@ test('control without label string, camel split', t => {
       $ref: '#/properties/fooBarBaz'
     }
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo Bar Baz');
 });
@@ -35,7 +35,7 @@ test('control with label string', t => {
     },
     label: 'bar'
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'bar');
 });
@@ -48,7 +48,7 @@ test('control with label boolean', t => {
     },
     label: true
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo');
 });
@@ -61,7 +61,7 @@ test('control with label object, empty', t => {
     },
     label: {}
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo');
 });
@@ -76,7 +76,7 @@ test('control with label object, text-only', t => {
       text: 'mega bar'
     }
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'mega bar');
 });
@@ -91,7 +91,7 @@ test('control with label object, visible-only', t => {
       show: true
     }
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
   t.is(labelObject.text, 'Foo');
 });
@@ -107,7 +107,7 @@ test('control with label object, full', t => {
       text: 'mega bar'
     }
   };
-  const labelObject = getLabelObject(controlElement);
+  const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, false);
   t.is(labelObject.text, 'mega bar');
 });

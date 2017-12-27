@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
-import { UISchemaRegistry, UISchemaRegistryImpl } from './core/uischema.registry';
-import { StylingRegistry, StylingRegistryImpl } from './core/styling.registry';
-import { SchemaService } from './core/schema.service';
-import { SchemaServiceImpl } from './core/schema.service.impl';
+import { UISchemaRegistry, UISchemaRegistryImpl } from './legacy/uischema.registry';
+import { StylingRegistry, StylingRegistryImpl } from './legacy/styling.registry';
+import { SchemaService } from './legacy/schema.service';
+import { SchemaServiceImpl } from './legacy/schema.service.impl';
 import { Store } from 'redux';
 
 /**
@@ -119,15 +119,3 @@ export class JsonForms {
     return null;
   }
 }
-
-/**
- * Annotation for registering a class as JSONForms service.
- * @param config
- * @constructor
- */
-// Disable rule because it is used as an decorator
-// tslint:disable:variable-name
-export const JsonFormsServiceElement = () => (cls: JsonFormsServiceConstructable) => {
-  JsonForms.jsonFormsServices.push(cls);
-};
-// tslint:enable:variable-name

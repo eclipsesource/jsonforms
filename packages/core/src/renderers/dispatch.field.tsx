@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './unknown.renderer';
-import { RankedTester } from '../core/testers';
+import { RankedTester } from '../testers';
 import { FieldProps } from './field.util';
 import { connect } from 'react-redux';
 

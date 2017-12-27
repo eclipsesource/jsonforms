@@ -13,8 +13,8 @@
     "src": "src",
     "test": "test"
   },
-  "main": "dist/ts-build/index.js",
-  "typings": "dist/ts-build/index.d.ts",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",

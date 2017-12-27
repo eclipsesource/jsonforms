@@ -2,19 +2,6 @@
   "name": "@jsonforms/vanilla-renderers",
   "version": "2.0.0-beta.2",
   "description": "Default Renderer Set for JSON Forms",
-  "repository": "https://github.com/eclipsesource/jsonforms",
-  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
-  "homepage": "http://jsonforms.io/",
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "directories": {
-    "example": "example",
-    "src": "src",
-    "test": "test",
-    "webpack": "webpack"
-  },
   "main": "dist/ts-build/index.js",
   "typings": "dist/ts-build/index.d.ts",
   "scripts": {
@@ -51,5 +38,12 @@
     "ts-loader": "^3.2.0",
     "tslint-loader": "^3.5.3",
     "webpack-dev-server": "^2.9.5"
+  },
+  "ava": {
+    "verbose": true,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }

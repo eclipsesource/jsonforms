@@ -1,27 +1,35 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  and,
-  compose,
   ControlElement,
   ControlProps,
-  convertToClassName,
   DispatchField,
   formatErrorMessage,
-  getLabelObject,
+  Helpers,
   JsonForms,
   JsonSchema,
   mapStateToControlProps,
+  Paths,
   RankedTester,
-  rankWith,
   registerStartupRenderer,
   Renderer,
-  resolveSchema,
-  schemaMatches,
-  uiTypeIs,
+  Resolve,
+  Test,
   update
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
+
+const {
+  createLabelDescriptionFrom,
+  convertToValidClassName
+} = Helpers;
+
+const {
+  and,
+  rankWith,
+  schemaMatches,
+  uiTypeIs,
+} = Test;
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -72,15 +80,15 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
     const labelClass = JsonForms.stylingRegistry.getAsClassName('array-table.label');
     const buttonClass = JsonForms.stylingRegistry.getAsClassName('array-table.button');
     const controlClass = [JsonForms.stylingRegistry.getAsClassName('array-table'),
-      convertToClassName(controlElement.scope.$ref)].join(' ');
+      convertToValidClassName(controlElement.scope.$ref)].join(' ');
 
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref + '/items');
+    const resolvedSchema = Resolve.schema(schema, controlElement.scope.$ref + '/items');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',
       label: false,
       scope: { $ref: `#/properties/${key}` }
     });
-    const labelObject = getLabelObject(controlElement);
+    const labelObject = createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
 
@@ -113,7 +121,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
               <tr><td>No data</td></tr> : data.map((_child, index) => {
-              const childPath = compose(path, index + '');
+              const childPath = Paths.compose(path, index + '');
 
               return (
                 <tr key={childPath}>
@@ -123,7 +131,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
                       .filter(prop => resolvedSchema.properties[prop].type !== 'array')
                       .map((prop, idx) => {
                         return (
-                          <td key={compose(childPath, idx.toString())}>
+                          <td key={Paths.compose(childPath, idx.toString())}>
                             <DispatchField
                               schema={resolvedSchema}
                               uischema={createControlElement(prop)}

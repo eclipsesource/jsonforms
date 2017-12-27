@@ -9,7 +9,7 @@ import {
   schemaMatches,
   schemaTypeIs,
   uiTypeIs
-} from '../src/core/testers';
+} from '../src/testers';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { ControlElement, LabelElement } from '../src/models/uischema';
 
