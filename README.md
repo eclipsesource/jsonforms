@@ -76,7 +76,8 @@ The whole document may for example now look like this:
 * Build (all packages): `lerna run build`
 * Test (all packages): `lerna run test`
 * Clean (delete `dist` folder of all packages): `lerna run clean`
-* Run examples: `cd packages/examples && npm run start`
+* Run vanilla examples: `cd packages/vanilla && npm run dev`
+* Run material examples: `cd packages/material && npm run dev`
 
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
