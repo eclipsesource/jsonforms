@@ -1,16 +1,15 @@
 import * as React from 'react';
 import {
-  JsonFormsLayout,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
-  renderChildren,
   RendererProps,
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
+import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from './layout.util';
 
 /**
  * Default tester for a vertical layout.
@@ -18,27 +17,21 @@ import { connect } from 'react-redux';
  */
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
-export const VerticalLayoutRenderer  = ({ schema, uischema, path, visible }: RendererProps) => {
+export const MaterialVerticalLayoutRenderer  = (
+  { schema, uischema, path, visible }: RendererProps) => {
   const verticalLayout = uischema as VerticalLayout;
+  const childProps: MaterialLayoutRendererProps = {
+    elements: verticalLayout.elements,
+    schema,
+    path,
+    direction: 'column',
+    visible
+  };
 
-  return (
-    <JsonFormsLayout
-      styleName='vertical-layout'
-      visible={visible}
-    >
-      {
-        renderChildren(
-          verticalLayout.elements,
-          schema,
-          'vertical-layout-item',
-          path
-        )
-      }
-    </JsonFormsLayout>
-  );
+  return <MaterialLayoutRenderer {...childProps}/>;
 };
 
 export default registerStartupRenderer(
   verticalLayoutTester,
-  connect(mapStateToLayoutProps)(VerticalLayoutRenderer)
+  connect(mapStateToLayoutProps)(MaterialVerticalLayoutRenderer)
 );
