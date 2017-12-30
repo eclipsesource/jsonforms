@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import { NOT_APPLICABLE } from '../legacy/uischema.registry';
-import { resolveSchema} from '../helpers/resolvers';
+import { resolveSchema } from '../helpers/resolvers';
 
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
@@ -260,3 +260,21 @@ export const isMultiLineControl = and(
  * @type {Tester}
  */
 export const isTimeControl = and(uiTypeIs('Control'), formatIs('time'));
+
+/**
+ * Tests whether the given UI schema is of type Control and if the schema
+ * is an array of objects.
+ * @type {Tester}
+ */
+export const isArrayObjectControl = and(
+  uiTypeIs('Control'),
+  schemaMatches(schema =>
+    !_.isEmpty(schema)
+    && schema.type === 'array'
+    && !_.isEmpty(schema.items)
+    && !Array.isArray(schema.items) // we don't care about tuples
+  ),
+  schemaSubPathMatches('items', schema =>
+    schema.type === 'object'
+  )
+);

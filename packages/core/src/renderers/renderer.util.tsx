@@ -1,21 +1,20 @@
+import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
-import * as React from 'react';
 import { JsonForms } from '../core';
 import {
-  isEnabled,
-  isVisible,
-  Resolve
+  composeWithUi,
+  convertToValidClassName,
+  createLabelDescriptionFrom,
+  isEnabled, isVisible, Resolve
 } from '../helpers';
-import { composeWithUi } from '../helpers';
-import { createLabelDescriptionFrom } from '../helpers';
-import { convertToValidClassName } from '../helpers';
 import { RankedTester } from '../testers';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import * as _ from 'lodash';
+import * as React from 'react';
 import DispatchRenderer from './dispatch-renderer';
-import { errorAt } from '../reducers/validation';
+import { errorAt, subErrorsAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers';
-import {Renderer, RendererProps} from "./renderer";
+import { Renderer, RendererProps } from './renderer';
+import { update } from '../actions';
 
 /**
  * A renderer config that is used during renderer registration.
@@ -172,3 +171,49 @@ export const mapStateToControlProps = (state, ownProps) => {
     required
   };
 };
+export const mapStateToTableControlProps = (state, ownProps) => {
+  const {path, ...props} = mapStateToControlProps(state, ownProps);
+
+  const childErrors = subErrorsAt(path)(getValidation(state));
+  const controlElement = ownProps.uischema as ControlElement;
+  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope.$ref + '/items');
+
+  return {
+    ...props,
+    path,
+    childErrors,
+    resolvedSchema
+  };
+};
+export const mapDispatchToTableControlProps = dispatch => ({
+  addItem: (path: string) => () => {
+    dispatch(
+      update(
+        path,
+        array => {
+          if (array === undefined || array === null) {
+            return [{}];
+          }
+
+          const clone = _.clone(array);
+          clone.push({});
+
+          return clone;
+        }
+      )
+    );
+  },
+  removeItems: (path: string, toDelete: any[]) => () => {
+    dispatch(
+      update(
+        path,
+        array => {
+          const clone = _.clone(array);
+          toDelete.forEach(s => clone.splice(clone.indexOf(s), 1));
+
+          return clone;
+        }
+      )
+    );
+  }
+});

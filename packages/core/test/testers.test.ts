@@ -2,6 +2,7 @@ import test from 'ava';
 import {
   and,
   formatIs,
+  isArrayObjectControl,
   optionIs,
   or,
   refEndIs,
@@ -230,4 +231,78 @@ test('or should allow to compose multiple testers', t => {
     schemaTypeIs('integer'),
     optionIs('slider', true)
   )(uischema, schema));
+});
+test('tester isArrayObjectControl', t => {
+  t.false(isArrayObjectControl({type: 'Foo'}, null));
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  t.false(isArrayObjectControl(control, undefined), 'No Schema not checked!');
+
+  t.false(
+    isArrayObjectControl(
+      control,
+      {type: 'object', properties: {bar: {type: 'integer'}}}
+    ),
+    'Wrong Schema Type not checked!'
+  );
+  t.false(
+    isArrayObjectControl(
+      control,
+      {type: 'object', properties: {foo: {type: 'array'}}}
+    ),
+    'Array Schema Type without items not checked!'
+  );
+  t.false(
+    isArrayObjectControl(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: [
+              {type: 'integer'},
+              {type: 'string'},
+            ]
+          }
+        }
+      }
+    ),
+    'Array Schema Type with tuples not checked!'
+  );
+  t.false(
+    isArrayObjectControl(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: {type: 'integer'}
+          }
+        }
+      }
+    ),
+    'Array Schema Type with wrong item type not checked!'
+  );
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            x: {type: 'integer'},
+            y: {type: 'integer'}
+          }
+        }
+      }
+    }
+  };
+  t.true(isArrayObjectControl(control, schema));
 });
