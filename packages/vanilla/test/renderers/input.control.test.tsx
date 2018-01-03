@@ -129,7 +129,7 @@ test('render', t => {
 
   const control = findRenderedDOMElementWithClass(tree, 'control');
   t.not(control, undefined);
-  t.is(control.childNodes.length, 4);
+  t.is(control.childNodes.length, 3);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
   /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
 
@@ -143,10 +143,6 @@ test('render', t => {
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
-
-  const description = findRenderedDOMElementWithClass(tree, 'input-description');
-  t.is(description.tagName, 'DIV');
-  t.is((description as HTMLDivElement).children.length, 0);
 });
 
 test('render without label', t => {
@@ -166,7 +162,7 @@ test('render without label', t => {
 
   const control = findRenderedDOMElementWithClass(tree, 'control');
   t.not(control, undefined);
-  t.is(control.childNodes.length, 4);
+  t.is(control.childNodes.length, 3);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
   /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
 
@@ -180,10 +176,6 @@ test('render without label', t => {
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
-
-  const description = findRenderedDOMElementWithClass(tree, 'input-description');
-  t.is(description.tagName, 'DIV');
-  t.is((description as HTMLDivElement).children.length, 0);
 });
 
 test('hide', t => {

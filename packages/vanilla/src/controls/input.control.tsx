@@ -22,11 +22,11 @@ export class InputControl extends Control<ControlProps, ControlState> {
   render() {
     const { classNames, id, errors, label, uischema, schema, visible, required } = this.props;
     const isValid = errors.length === 0;
-    const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
-    const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
     const inputDescriptionClassName =
       JsonForms.stylingRegistry.getAsClassName('input-description');
+    const divClassNames = 'validation' + (isValid ? ' ' + inputDescriptionClassName : ' validation_error');
+    const controlElement = uischema as ControlElement;
+    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
 
     return (
@@ -40,14 +40,11 @@ export class InputControl extends Control<ControlProps, ControlState> {
           {computeLabel(label, required)}
         </label>
         <DispatchField uischema={uischema} schema={schema}/>
-        <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : ''}
-        </div>
         <div
-          hidden={isDescriptionHidden(visible, description, this.state.isFocused)}
-          className={inputDescriptionClassName}
+          className={divClassNames}
+          hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}
         >
-          {description}
+          {!isValid ? formatErrorMessage(errors) : description}
         </div>
       </div>
     );

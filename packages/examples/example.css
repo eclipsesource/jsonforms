@@ -5,6 +5,7 @@
   --jsf-modest-bg-highlight-color: silver;
   --jsf-validation-color: red;
   --jsf-main-fg-color: black;
+  --jsf-description-color: #939393;
   background-color: var(--jsf-main-bg-color);
   color: var(--jsf-main-fg-color);
 }
@@ -317,10 +318,4 @@ jsonforms-tree > dialog > .content {
 .array-table-layout td > * {
   flex:1;
 }
-.input-description {
-  border: 0.1rem;
-  border-style: solid;
-  border-color: #30B455;
-  padding: 0.5rem;
-  margin: 0.5rem;
-}
+.control > .input-description {color: var(--jsf-description-color);}
