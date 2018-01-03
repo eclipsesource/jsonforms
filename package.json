@@ -18,6 +18,11 @@
 		"typedoc": "^0.9.0",
 		"typescript": "^2.6.2",
 		"webpack": "^3.10.0",
-		"webpack-merge": "^4.1.1"
+		"webpack-merge": "^4.1.1",
+		"material-ui": "^1.0.0-beta.24",
+		"material-ui-pickers": "^1.0.0-beta.12",
+		"moment": "^2.20.1",
+		"react": "^16.0.27",
+		"react-dom": "^16.0.27"
 	}
 }
