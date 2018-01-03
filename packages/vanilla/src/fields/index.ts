@@ -7,3 +7,4 @@ export * from './slider.field';
 export * from './text.field';
 export * from './textarea.field';
 export * from './time.field';
+export * from './datetime.field';
