@@ -39,6 +39,7 @@ export interface FieldProps {
   visible?: boolean;
   enabled: boolean;
   dispatch: any;
+  isValid: boolean;
 }
 export const registerStartupInput = (tester: RankedTester, field: any) => {
   JsonForms.fields.push({
@@ -64,7 +65,8 @@ export const mapStateToInputProps = (state, ownProps) => {
     visible,
     enabled,
     id,
-    path
+    path,
+    isValid
   };
 };
 export const handleChange = (props, value) => props.dispatch(update(props.path, () => value));

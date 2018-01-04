@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import Input from 'material-ui/Input';
 
 export const MaterialTextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema } = props;
+  const { data, className, id, enabled, uischema, schema, isValid } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
   let config;
@@ -39,6 +39,7 @@ export const MaterialTextField = (props: FieldProps) => {
       multiline={uischema.options && uischema.options.multi}
       fullWidth={!trim}
       inputProps={config}
+      error={!isValid}
     />
   );
 };
