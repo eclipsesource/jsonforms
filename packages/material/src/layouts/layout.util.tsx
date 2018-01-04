@@ -34,7 +34,10 @@ export interface MaterialLayoutRendererProps {
 }
 export const MaterialLayoutRenderer = (
     {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
-        if (!_.isEmpty(elements)) {
+        if (_.isEmpty(elements)) {
+            return null;
+        }
+        else {
             return (
                 <Grid container hidden={{ xsUp: !visible }} direction={direction}>
                     {renderChildren(elements, schema, path)}
