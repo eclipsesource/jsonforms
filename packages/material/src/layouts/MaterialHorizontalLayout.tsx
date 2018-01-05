@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  DispatchRenderer,
   HorizontalLayout,
   mapStateToLayoutProps,
   RankedTester,
@@ -10,8 +9,7 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-
-import Grid from 'material-ui/Grid';
+import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from './layout.util';
 
 /**
  * Default tester for a horizontal layout.
@@ -19,29 +17,18 @@ import Grid from 'material-ui/Grid';
  */
 export const horizontalLayoutTester: RankedTester = rankWith(2, uiTypeIs('HorizontalLayout'));
 
-export const MaterialHorizontalLayoutRenderer = ({ schema, uischema, path, visible }: RendererProps) => {
-
+export const MaterialHorizontalLayoutRenderer = (
+  { schema, uischema, path, visible }: RendererProps) => {
   const horizontalLayout = uischema as HorizontalLayout;
-  const className = !visible ? 'hidden' : '' ;
+  const childProps: MaterialLayoutRendererProps = {
+    elements: horizontalLayout.elements,
+    schema,
+    path,
+    direction: 'row',
+    visible
+  };
 
-  return (
-    <Grid container className={className}>
-    {
-      (horizontalLayout.elements || []).map((child, index) => {
-
-        return (
-          <Grid item key={`${path}-${index}`} xs>
-            <DispatchRenderer
-              uischema={child}
-              schema={schema}
-              path={path}
-            />
-          </Grid>
-        );
-      })
-    }
-    </Grid>
-  );
+  return <MaterialLayoutRenderer {...childProps}/>;
 };
 
 export default registerStartupRenderer(
