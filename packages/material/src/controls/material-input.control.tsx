@@ -5,6 +5,7 @@ import {
   DispatchField,
   isControl,
   mapStateToControlProps,
+  RankedTester,
   rankWith,
   registerStartupRenderer
 } from '@jsonforms/core';
@@ -28,8 +29,8 @@ export const MaterialInputControl =
     </FormControl>
   );
 };
-
+export const inputControlTester: RankedTester = rankWith(1, isControl);
 export default registerStartupRenderer(
-  rankWith(2, isControl),
+  inputControlTester,
   connect(mapStateToControlProps)(MaterialInputControl)
 );

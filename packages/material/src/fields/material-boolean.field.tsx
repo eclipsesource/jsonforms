@@ -4,6 +4,7 @@ import {
   handleChange,
   isBooleanControl,
   mapStateToInputProps,
+  RankedTester,
   rankWith,
   registerStartupInput
 } from '@jsonforms/core';
@@ -26,7 +27,8 @@ export const MaterialBooleanField = (props: FieldProps) => {
   );
 };
 
+export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
 export default registerStartupInput(
-  rankWith(3, isBooleanControl),
+  booleanFieldTester,
   connect(mapStateToInputProps)(MaterialBooleanField)
 );

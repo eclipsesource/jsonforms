@@ -14,13 +14,6 @@
     "doc": "echo 'TODO: implement documentation generation'",
     "preparePublish": "npm run doc && npm run build && npm run test"
   },
-  "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-beta.2",
     "react": "^16.2.0",

@@ -37,7 +37,7 @@ export const MaterialTextField = (props: FieldProps) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim}
+      fullWidth={!trim || maxLength === undefined}
       inputProps={config}
       error={!isValid}
     />
