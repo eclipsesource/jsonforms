@@ -38,6 +38,7 @@ export class MaterialArrayControlRenderer extends Renderer<TableProps, TableStat
       selectAll: this.selectAll,
       select: this.select,
       isSelected: this.isSelected,
+      numSelected,
       ...this.props
     };
 
