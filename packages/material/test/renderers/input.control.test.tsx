@@ -1,4 +1,4 @@
-import '../helpers/setup';
+import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
 import '../../src/fields';
@@ -17,7 +17,7 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from '../helpers/binding';
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
 test.beforeEach(t => {

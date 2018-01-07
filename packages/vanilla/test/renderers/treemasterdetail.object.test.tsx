@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../../../test/helpers/setup';
 import test from 'ava';
 import { MasterDetailLayout } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/core';
 import {
   findRenderedDOMElementWithClass,
   renderIntoDocument
-} from '../helpers/binding';
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import TreeMasterDetail from '../../src/additional/tree';
 
@@ -75,7 +75,7 @@ test('render object', t => {
   t.is(header.children.length, 1);
   t.is(div.children.length, 1);
   t.is(span.className, 'label');
-  console.log(">>", span.innerHTML)
+  console.log('>>', span.innerHTML);
   t.is(span.children.length, 2);
   t.is(spanLabel.textContent, 'Foo');
   t.is(spanAdd.className, 'add');

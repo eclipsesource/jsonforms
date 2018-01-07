@@ -1,9 +1,9 @@
-import '../helpers/setup';
+import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
 import { getData, initJsonFormsStore, JsonForms, update } from '@jsonforms/core';
 import EnumField, { enumFieldTester } from '../../src/fields/enum.field';
-import { change, findRenderedDOMElementWithTag, renderIntoDocument } from '../helpers/binding';
+import { change, findRenderedDOMElementWithTag, renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
 test.before(() => {

@@ -18,7 +18,7 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from '../../vanilla/test/helpers/react-test';
+} from '../../test/helpers/react-test';
 
 class CustomRenderer1 extends Renderer<RendererProps, any> {
   render() {

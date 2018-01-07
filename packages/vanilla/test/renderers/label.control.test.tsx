@@ -1,8 +1,8 @@
-import '../helpers/setup';
+import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
-import { initJsonFormsStore, JsonForms, UISchemaElement, LabelElement } from '@jsonforms/core';
-import { findRenderedDOMElementWithTag, renderIntoDocument } from '../helpers/binding';
+import { initJsonFormsStore, JsonForms, LabelElement, UISchemaElement } from '@jsonforms/core';
+import { findRenderedDOMElementWithTag, renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import LabelRenderer, { labelRendererTester } from '../../src/additional/label.renderer';
 

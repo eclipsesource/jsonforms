@@ -1,4 +1,4 @@
-import './helpers/setup';
+import '../../test/helpers/setup';
 import test from 'ava';
 import { JsonFormsElement } from '@jsonforms/core';
 import '../src/index';

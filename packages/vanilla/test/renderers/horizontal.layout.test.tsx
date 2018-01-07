@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {initJsonFormsStore} from '../helpers/setup';
+import {initJsonFormsStore } from '../../../test/helpers/setup';
 import test from 'ava';
-import {HorizontalLayout, JsonForms, UISchemaElement} from '@jsonforms/core';
-import {renderIntoDocument} from '../helpers/binding';
-import {Provider} from 'react-redux';
-import {findRenderedDOMElementWithClass} from "../helpers/react-test";
-import HorizontalLayoutRenderer, {horizontalLayoutTester} from "../../src/layouts/horizontal.layout";
+import { HorizontalLayout, JsonForms, UISchemaElement } from '@jsonforms/core';
+import { renderIntoDocument } from '../../../test/helpers/binding';
+import { Provider } from 'react-redux';
+import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';
+import HorizontalLayoutRenderer, { horizontalLayoutTester } from '../../src/layouts/horizontal.layout';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

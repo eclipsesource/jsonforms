@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {initJsonFormsStore} from '../helpers/setup';
+import {initJsonFormsStore} from '../../../test/helpers/setup';
 import test from 'ava';
-import {JsonForms, GroupLayout} from '@jsonforms/core';
-import {renderIntoDocument} from '../helpers/binding';
+import {GroupLayout, JsonForms} from '@jsonforms/core';
+import { renderIntoDocument } from '../../../test/helpers/binding';
 import {Provider} from 'react-redux';
-import {findRenderedDOMElementWithClass} from "../helpers/react-test";
-import GroupLayoutRenderer, {groupTester} from "../../src/layouts/group.layout";
+import {findRenderedDOMElementWithClass} from '../../../test/helpers/react-test';
+import GroupLayoutRenderer, {groupTester } from '../../src/layouts/group.layout';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
