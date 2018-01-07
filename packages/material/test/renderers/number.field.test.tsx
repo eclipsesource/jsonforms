@@ -11,7 +11,7 @@ import {
   update
 } from '@jsonforms/core';
 import NumberField, { numberFieldTester } from '../../src/fields/material-number.field';
-import HorizontalLayoutRenderer from '../../src/layouts/material-horizontal.layout';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   change,
   findRenderedDOMElementWithTag,

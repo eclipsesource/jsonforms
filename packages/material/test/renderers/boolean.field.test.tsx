@@ -11,7 +11,7 @@ import {
   update
 } from '@jsonforms/core';
 import BooleanField, { booleanFieldTester } from '../../src/fields/material-boolean.field';
-import HorizontalLayoutRenderer from '../../src/layouts/material-horizontal.layout';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   change,
   findRenderedDOMElementWithTag,

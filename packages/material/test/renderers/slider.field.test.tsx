@@ -11,7 +11,7 @@ import {
   update
 } from '@jsonforms/core';
 import SliderField, { sliderFieldTester } from '../../src/fields/material-slider.field';
-import HorizontalLayoutRenderer from '../../src/layouts/material-horizontal.layout';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   change,
   findRenderedDOMElementWithTag,

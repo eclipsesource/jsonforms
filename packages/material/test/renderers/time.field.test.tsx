@@ -10,7 +10,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import HorizontalLayoutRenderer from '../../src/layouts/material-horizontal.layout';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import TimeField, { timeFieldTester } from '../../src/fields/material-time.field';
 import {
   change,

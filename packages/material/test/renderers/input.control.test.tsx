@@ -11,7 +11,7 @@ import {
   validate
 } from '@jsonforms/core';
 import InputControl, { inputControlTester } from '../../src/controls/material-input.control';
-import HorizontalLayoutRenderer from '../../src/layouts/material-horizontal.layout';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
