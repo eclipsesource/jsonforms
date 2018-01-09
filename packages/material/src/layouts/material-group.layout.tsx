@@ -23,7 +23,6 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
             <div style={ {marginBottom: '10px' }}>
                 <Card className={classNames}
                     style={{ padding: '10px 12px 10px 12px',
-                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                         color: 'rgba(0, 0, 0, 0.54)' }}>
                     {
                         !_.isEmpty(group.label) ?
