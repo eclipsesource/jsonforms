@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {
   FieldProps,
-  handleChange,
   isDateControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -13,13 +13,13 @@ import { connect } from 'react-redux';
 import Input from 'material-ui/Input';
 
 export const MaterialDateField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema } = props;
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (
     <Input
       type='date'
       value={data || ''}
-      onChange={ev => handleChange(props, ev.target.value)}
+      onChange={ev => handleChange(path, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}
@@ -31,5 +31,5 @@ export const MaterialDateField = (props: FieldProps) => {
 export const dateFieldTester: RankedTester = rankWith(2, isDateControl);
 export default registerStartupInput(
   dateFieldTester,
-  connect(mapStateToInputProps)(MaterialDateField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateField)
 );

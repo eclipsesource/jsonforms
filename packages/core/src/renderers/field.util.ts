@@ -40,6 +40,8 @@ export interface FieldProps {
   enabled: boolean;
   dispatch: any;
   isValid: boolean;
+
+  handleChange(string, any): (void);
 }
 export const registerStartupInput = (tester: RankedTester, field: any) => {
   JsonForms.fields.push({
@@ -49,7 +51,7 @@ export const registerStartupInput = (tester: RankedTester, field: any) => {
 
   return field;
 };
-export const mapStateToInputProps = (state, ownProps) => {
+export const mapStateToFieldProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, state);
@@ -69,4 +71,8 @@ export const mapStateToInputProps = (state, ownProps) => {
     isValid
   };
 };
-export const handleChange = (props, value) => props.dispatch(update(props.path, () => value));
+export const mapDispatchToFieldProps = dispatch => ({
+  handleChange(path, value) {
+    dispatch(update(path, () => value));
+  },
+});

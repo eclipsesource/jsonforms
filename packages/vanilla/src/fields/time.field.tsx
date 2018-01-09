@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {
   FieldProps,
-  handleChange,
   isTimeControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -12,13 +12,13 @@ import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const TimeField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema } = props;
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return <input
     type='time'
     value={data || ''}
     onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-      handleChange(props, ev.currentTarget.value)
+      handleChange(path, ev.currentTarget.value)
     }
     className={className}
     id={id}
@@ -34,5 +34,5 @@ export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
 
 export default registerStartupInput(
   timeFieldTester,
-  connect(mapStateToInputProps)(TimeField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(TimeField)
 );

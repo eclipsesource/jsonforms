@@ -2,9 +2,9 @@ import * as React from 'react';
 import {
   ControlElement,
   FieldProps,
-  handleChange,
   isEnumControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput,
@@ -14,31 +14,33 @@ import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const EnumField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema } = props;
+  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const options = resolveSchema(schema, (uischema as ControlElement).scope.$ref).enum;
 
-  return <select
+  return (
+    <select
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       value={data || ''}
       onChange={(ev: SyntheticEvent<HTMLSelectElement>) =>
-        handleChange(props, ev.currentTarget.value)
+        handleChange(path, ev.currentTarget.value)
       }
     >
       {
         [<option value='' key={'empty'} />]
           .concat(
             options.map(optionValue =>
-            (
-              <option value={optionValue} label={optionValue} key={optionValue}>
-                {optionValue}
-              </option>
+              (
+                <option value={optionValue} label={optionValue} key={optionValue}>
+                  {optionValue}
+                </option>
+              )
             )
-          )
-        )}
-  </select>;
+          )}
+    </select>
+  );
 };
 /**
  * Default tester for enum controls.
@@ -48,5 +50,5 @@ export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 
 export default registerStartupInput(
   enumFieldTester,
-  connect(mapStateToInputProps)(EnumField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(EnumField)
 );
