@@ -16,16 +16,19 @@ export const MaterialNumberField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema } = props;
   const config = {'step': '0.1'};
 
-  return <Input type='number'
-    value={data || ''}
-    onChange={ev => handleChange(props, Number(ev.target.value))}
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-    inputProps={config}
-    fullWidth
-  />;
+  return (
+    <Input
+      type='number'
+      value={data || ''}
+      onChange={ev => handleChange(props, Number(ev.target.value))}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      inputProps={config}
+      fullWidth={true}
+    />
+  );
 };
 /**
  * Default tester for number controls.

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import test from 'ava';
-import { initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../../../test/helpers/setup';
 import { JsonForms, UISchemaElement, VerticalLayout } from '@jsonforms/core';
 import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/layouts/vertical.layout';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from '../helpers/binding';
+import { findRenderedDOMElementWithClass, renderIntoDocument } from '../../../test/helpers/binding';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([

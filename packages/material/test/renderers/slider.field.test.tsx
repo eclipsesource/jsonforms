@@ -10,8 +10,8 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import SliderField, { sliderFieldTester } from '../../src/fields/slider.field';
-import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
+import SliderField, { sliderFieldTester } from '../../src/fields/material-slider.field';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   change,
   findRenderedDOMElementWithTag,

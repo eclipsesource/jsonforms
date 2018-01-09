@@ -19,9 +19,7 @@ export const MaterialDateField = (props: FieldProps) => {
     <Input
       type='date'
       value={data || ''}
-      onChange={ ev =>
-        handleChange(props, ev.target.value)
-      }
+      onChange={ev => handleChange(props, ev.target.value)}
       className={className}
       id={id}
       disabled={!enabled}
@@ -30,7 +28,7 @@ export const MaterialDateField = (props: FieldProps) => {
     />
   );
 };
-export const dateFieldTester: RankedTester = rankWith(3, isDateControl);
+export const dateFieldTester: RankedTester = rankWith(2, isDateControl);
 export default registerStartupInput(
   dateFieldTester,
   connect(mapStateToInputProps)(MaterialDateField)

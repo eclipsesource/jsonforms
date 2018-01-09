@@ -3,7 +3,7 @@ import * as installCE from 'document-register-element/pony';
 declare let global;
 installCE(global, 'force');
 global.requestAnimationFrame = cb => setTimeout(cb, 0);
-import { JsonFormsStore, INIT, JsonSchema, UISchemaElement, createJsonFormsStore, JsonForms } from '@jsonforms/core';
+import { createJsonFormsStore, INIT, JsonForms, JsonFormsStore, JsonSchema, UISchemaElement } from '@jsonforms/core';
 
 export const initJsonFormsStore = (
   data: any,

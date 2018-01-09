@@ -6,41 +6,27 @@ import {
   ControlElement,
   HorizontalLayout,
   initJsonFormsStore,
-  JsonForms,
   JsonSchema,
   update,
   validate
 } from '@jsonforms/core';
-import InputControl, { inputControlTester } from '../../src/controls/input.control';
-import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
+import InputControl, { inputControlTester } from '../../src/controls/material-input.control';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument,
-  scryRenderedDOMElementsWithClass,
   scryRenderedDOMElementsWithTag
 } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]);
-});
 test.beforeEach(t => {
-  t.context.data = { 'foo': true };
+  t.context.data = { 'foo': 'bar' };
   t.context.schema = {
     type: 'object',
     properties: {
       foo: {
-        type: 'boolean'
+        type: 'string'
       }
     }
   };
@@ -56,14 +42,14 @@ test('autofocus on first element', t => {
     const schema: JsonSchema = {
         type: 'object',
         properties: {
-            firstBooleanField: { type: 'boolean' },
-            secondBooleanField: { type: 'boolean' }
+            firstStringField: { type: 'string' },
+            secondStringField: { type: 'string' }
         }
     };
     const firstControlElement: ControlElement = {
         type: 'Control',
         scope: {
-            $ref: '#/properties/firstBooleanField'
+            $ref: '#/properties/firstStringField'
         },
         options: {
             focus: true
@@ -72,7 +58,7 @@ test('autofocus on first element', t => {
     const secondControlElement: ControlElement = {
         type: 'Control',
         scope: {
-            $ref: '#/properties/secondBooleanField'
+            $ref: '#/properties/secondStringField'
         },
         options: {
             focus: true
@@ -86,8 +72,8 @@ test('autofocus on first element', t => {
         ]
     };
     const data = {
-        'firstBooleanField': true,
-        'secondBooleanField': false
+        'firstStringField': true,
+        'secondStringField': false
     };
     const store = initJsonFormsStore(
         data,
@@ -121,7 +107,7 @@ test('render', t => {
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'control');
+  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo');
   t.not(control, undefined);
   t.is(control.childNodes.length, 3);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
@@ -134,9 +120,10 @@ test('render', t => {
   t.not(input, undefined);
   t.not(input, null);
 
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  t.is(validation.tagName, 'DIV');
-  t.is((validation as HTMLDivElement).children.length, 0);
+  const validation = findRenderedDOMElementWithTag(tree, 'p');
+  t.is(validation.tagName, 'P');
+  t.not(validation.className.indexOf('MuiFormHelperText-root'), -1);
+  t.is((validation as HTMLParagraphElement).children.length, 0);
 });
 
 test('render without label', t => {
@@ -154,7 +141,7 @@ test('render without label', t => {
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'control');
+  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo');
   t.not(control, undefined);
   t.is(control.childNodes.length, 3);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
@@ -167,9 +154,10 @@ test('render without label', t => {
   t.not(input, undefined);
   t.not(input, null);
 
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
-  t.is(validation.tagName, 'DIV');
-  t.is((validation as HTMLDivElement).children.length, 0);
+  const validation = findRenderedDOMElementWithTag(tree, 'p');
+  t.is(validation.tagName, 'P');
+  t.not(validation.className.indexOf('MuiFormHelperText-root'), -1);
+  t.is((validation as HTMLParagraphElement).children.length, 0);
 });
 
 test('hide', t => {
@@ -179,7 +167,7 @@ test('hide', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema} visible={false}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
+  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo') as HTMLElement;
   t.true(control.hidden);
 });
 
@@ -194,7 +182,7 @@ test('show by default', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
+  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo') as HTMLElement;
   t.false(control.hidden);
 });
 
@@ -205,10 +193,10 @@ test('single error', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = findRenderedDOMElementWithTag(tree, 'p');
   store.dispatch(update('foo', () => 2));
   store.dispatch(validate());
-  t.is(validation.textContent, 'should be boolean');
+  t.is(validation.textContent, 'should be string');
 });
 
 test('multiple errors', t => {
@@ -218,10 +206,10 @@ test('multiple errors', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = findRenderedDOMElementWithTag(tree, 'p');
   store.dispatch(update('foo', () => 3));
   store.dispatch(validate());
-  t.is(validation.textContent, 'should be boolean');
+  t.is(validation.textContent, 'should be string');
 });
 
 test('empty errors by default', t => {
@@ -235,7 +223,7 @@ test('empty errors by default', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = findRenderedDOMElementWithTag(tree, 'p');
   t.is(validation.textContent, '');
 });
 
@@ -250,9 +238,9 @@ test('reset validation message', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = findRenderedDOMElementWithTag(tree, 'p');
   store.dispatch(update('foo', () => 3));
-  store.dispatch(update('foo', () => true));
+  store.dispatch(update('foo', () => 'bar'));
   store.dispatch(validate());
   t.is(validation.textContent, '');
 });
@@ -319,7 +307,7 @@ test('validation of nested schema', t => {
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const validation = scryRenderedDOMElementsWithClass(tree, 'validation');
+  const validation = scryRenderedDOMElementsWithTag(tree, 'p');
   store.dispatch(validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');

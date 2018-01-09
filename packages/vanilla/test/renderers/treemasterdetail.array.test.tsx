@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../../../test/helpers/setup';
 import test from 'ava';
 import { getData, MasterDetailLayout } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/core';
@@ -8,13 +8,13 @@ import {
   click,
   findRenderedDOMElementWithClass,
   renderIntoDocument
-} from '../helpers/binding';
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import TreeMasterDetail from '../../src/additional/tree';
 import {
   findRenderedDOMElementWithTag,
   scryRenderedDOMElementsWithClass, scryRenderedDOMElementsWithTag
-} from '../helpers/react-test';
+} from '../../../test/helpers/react-test';
 
 test.beforeEach(t => {
   t.context.data = {};

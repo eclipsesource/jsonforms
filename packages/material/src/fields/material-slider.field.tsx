@@ -24,23 +24,25 @@ const MaterialSliderField = (props: FieldProps) => {
   const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
   const config = {'max': resolvedSchema.maximum, 'min': resolvedSchema.minimum};
 
-  return <Input
-    type='range'
-    value={data || ''}
-    onChange={ev => handleChange(props, Number(ev.currentTarget.value))}
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-    inputProps={config}
-  />;
+  return (
+    <Input
+      type='range'
+      value={data || ''}
+      onChange={ev => handleChange(props, Number(ev.currentTarget.value))}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      inputProps={config}
+    />
+  );
 };
 
 /**
  * Matrial tester for slider controls.
  * @type {RankedTester}
  */
-export const materialSliderFieldTester: RankedTester = rankWith(4, and(
+export const sliderFieldTester: RankedTester = rankWith(4, and(
      uiTypeIs('Control'),
      or(schemaTypeIs('number'), schemaTypeIs('integer')),
      schemaMatches(schema =>
@@ -49,6 +51,6 @@ export const materialSliderFieldTester: RankedTester = rankWith(4, and(
  ));
 
 export default registerStartupInput(
-  materialSliderFieldTester,
+  sliderFieldTester,
   connect(mapStateToInputProps)(MaterialSliderField)
 );

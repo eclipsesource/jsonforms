@@ -10,8 +10,8 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import TextField, { textFieldTester, } from '../../src/fields/text.field';
-import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
+import TextField, { textFieldTester, } from '../../src/fields/material-text.field';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   change,
   findRenderedDOMElementWithTag,
@@ -21,7 +21,6 @@ import {
 import { Provider } from 'react-redux';
 
 const defaultMaxLength = 524288;
-const defaultSize = 20;
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -375,7 +374,7 @@ test('use maxLength for attributes size and maxlength', t => {
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
     t.is(input.maxLength, 5);
-    t.is(input.size, 5);
+    t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
 
 test('use maxLength for attribute size only', t => {
@@ -405,7 +404,7 @@ test('use maxLength for attribute size only', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, 5);
+  t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
 
 test('use maxLength for attribute maxlength only', t => {
@@ -435,7 +434,7 @@ test('use maxLength for attribute maxlength only', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
-  t.is(input.size, defaultSize);
+  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
 
 test('do not use maxLength', t => {
@@ -462,7 +461,7 @@ test('do not use maxLength', t => {
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
+  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
 
 test('if maxLength is not specified, attributes should have default values (trim && restrict)',
@@ -493,7 +492,7 @@ test('if maxLength is not specified, attributes should have default values (trim
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
-  t.is(input.size, defaultSize);
+  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
 
 test('if maxLength is not specified, attributes should have default values (trim)',
@@ -523,7 +522,7 @@ test('if maxLength is not specified, attributes should have default values (trim
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
     t.is(input.maxLength, defaultMaxLength);
-    t.is(input.size, defaultSize);
+    t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
 
 test('if maxLength is not specified, attributes should have default values (restrict)',
@@ -553,7 +552,7 @@ test('if maxLength is not specified, attributes should have default values (rest
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
     t.is(input.maxLength, defaultMaxLength);
-    t.is(input.size, defaultSize);
+    t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
   });
 
 test('if maxLength is not specified, attributes should have default values',
@@ -580,5 +579,5 @@ test('if maxLength is not specified, attributes should have default values',
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
     t.is(input.maxLength, defaultMaxLength);
-    t.is(input.size, defaultSize);
+    t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
   });

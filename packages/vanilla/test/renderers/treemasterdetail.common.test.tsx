@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { initJsonFormsStore } from '../helpers/setup';
+import { initJsonFormsStore } from '../../../test/helpers/setup';
 import test from 'ava';
 import { MasterDetailLayout, update } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/core';
 import {
   findRenderedDOMElementWithClass,
   renderIntoDocument
-} from '../helpers/binding';
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import TreeMasterDetail from '../../src/additional/tree';
 import {
   findRenderedDOMElementWithTag,
   scryRenderedDOMElementsWithClass
-} from '../helpers/react-test';
+} from '../../../test/helpers/react-test';
 import { treeMasterDetailTester } from '../../src/additional/tree/tester';
 
 test.beforeEach(t => {

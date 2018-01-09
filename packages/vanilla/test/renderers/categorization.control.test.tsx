@@ -1,11 +1,11 @@
-import '../helpers/setup';
-import { initJsonFormsStore } from '../helpers/setup';
+import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
 import { Categorization, ControlElement, JsonForms, JsonSchema, Layout } from '@jsonforms/core';
-import { renderIntoDocument } from '../helpers/binding';
-import { click, findRenderedDOMElementWithClass, } from '../helpers/react-test';
+import { renderIntoDocument } from '../../../test/helpers/binding';
+import { click, findRenderedDOMElementWithClass, } from '../../../test/helpers/react-test';
 import CategorizationRenderer from '../../src/additional/categorization';
 import { categorizationTester } from '../../src/additional/categorization/tester';
 

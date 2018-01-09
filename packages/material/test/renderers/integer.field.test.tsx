@@ -10,8 +10,8 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import SliderField, { sliderFieldTester } from '../../src/fields/slider.field';
-import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
+import IntegerField, { integerFieldTester } from '../../src/fields/material-integer.field';
+import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
   change,
   findRenderedDOMElementWithTag,
@@ -32,16 +32,14 @@ test.before(() => {
     }
   ]);
 });
-
 test.beforeEach(t => {
-  t.context.data = {'foo': 5};
+  t.context.data = {'foo': 42};
   t.context.schema = {
     type: 'object',
     properties: {
       foo: {
-        type: 'number',
-        maximum: 10,
-        minimum: 2
+        type: 'integer',
+        minimum: 5
       },
     },
   };
@@ -49,22 +47,21 @@ test.beforeEach(t => {
     type: 'Control',
     scope: {
       $ref: '#/properties/foo',
-    }
+    },
   };
 });
-
 test.failing('autofocus on first element', t => {
     const schema: JsonSchema = {
         type: 'object',
         properties: {
-            firstSliderField: { type: 'number', minimum: 5, maximum: 10 },
-            secondSliderField: { type: 'number', minimum: 5, maximum: 10 }
+            firstIntegerField: { type: 'integer', minimum: 5 },
+            secondIntegerField: { type: 'integer', minimum: 5 }
         }
     };
     const firstControlElement: ControlElement = {
         type: 'Control',
         scope: {
-            $ref: '#/properties/firstSliderField'
+            $ref: '#/properties/firstIntegerField'
         },
         options: {
             focus: true
@@ -73,7 +70,7 @@ test.failing('autofocus on first element', t => {
     const secondControlElement: ControlElement = {
         type: 'Control',
         scope: {
-            $ref: '#/properties/secondSliderField'
+            $ref: '#/properties/secondIntegerField'
         },
         options: {
             focus: true
@@ -87,8 +84,8 @@ test.failing('autofocus on first element', t => {
         ]
     };
     const data = {
-        'firstSliderField': 3.14,
-        'secondSliderField': 5.12
+        'firstIntegerField': 10,
+        'secondIntegerField': 12
     };
     const store = initJsonFormsStore(
         data,
@@ -100,10 +97,10 @@ test.failing('autofocus on first element', t => {
           <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
         </Provider>
     );
-
     const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
     t.not(document.activeElement, inputs[0]);
     t.is(document.activeElement, inputs[1]);
+
 });
 
 test('autofocus active', t => {
@@ -119,7 +116,7 @@ test('autofocus active', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-          <SliderField schema={t.context.schema} uischema={uischema}/>
+          <IntegerField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -139,7 +136,7 @@ test('autofocus inactive', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-          <SliderField schema={t.context.schema} uischema={uischema}/>
+          <IntegerField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -156,7 +153,7 @@ test('autofocus inactive by default', t => {
     const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
     const tree = renderIntoDocument(
         <Provider store={store}>
-          <SliderField schema={t.context.schema} uischema={uischema}/>
+          <IntegerField schema={t.context.schema} uischema={uischema}/>
         </Provider>
     );
     const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -164,251 +161,107 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(sliderFieldTester(undefined, undefined), -1);
-  t.is(sliderFieldTester(null, undefined), -1);
-  t.is(sliderFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(sliderFieldTester({type: 'Control'}, undefined), -1);
-});
+  t.is(integerFieldTester(undefined, undefined), -1);
+  t.is(integerFieldTester(null, undefined), -1);
+  t.is(integerFieldTester({type: 'Foo'}, undefined), -1);
+  t.is(integerFieldTester({type: 'Control'}, undefined), -1);
 
-test('tester with wrong schema type', t => {
-  const control: ControlElement = {
+  const controlElement: ControlElement = {
     type: 'Control',
     scope: {
       $ref: '#/properties/foo'
     }
   };
   t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          }
-        }
-      }
+    integerFieldTester(
+      controlElement,
+      {type: 'object', properties: {foo: {type: 'string'}}}
     ),
     -1
   );
-});
-
-test('tester with wrong schema type, but sibling has correct one', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
   t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          },
-          bar: {
-            type: 'number'
-          }
-        }
-      }
+    integerFieldTester(
+      controlElement,
+      {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}
     ),
     -1
   );
-});
-
-test('tester with correct schema type, but missing maximum and minimum fields', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
   t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number'
-          }
-        }
-      }
-    ),
-    -1
-  );
-});
-
-test('tester with correct schema type, but missing maximum', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
-  t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            minimum: 2
-          }
-        }
-      }
-    ),
-    -1
-  );
-});
-
-test('tester with correct schema type,but missing minimum', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
-  t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10
-          }
-        }
-      }
-    ),
-    -1
-  );
-});
-
-test('tester with matching schema type (number)', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
-  t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'number',
-            maximum: 10,
-            minimum: 2
-          }
-        }
-      }
-    ),
-    4
-  );
-});
-
-test('tester with matching schema type (integer)', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
-  };
-  t.is(
-    sliderFieldTester(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'integer',
-            maximum: 10,
-            minimum: 2
-          }
-        }
-      }
-    ),
-    4
+    integerFieldTester(
+      controlElement,
+      {type: 'object', properties: {foo: {type: 'integer'}}}),
+    2
   );
 });
 
 test('render', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number',
-        maximum: 10,
-        minimum: 2
-      }
-    }
-  };
-  const store = initJsonFormsStore({ 'foo': 5 }, schema, t.context.uischema);
+  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.type, 'range');
-  t.is(input.value, '5');
+  t.is(input.type, 'number');
+  t.is(input.step, '1');
+  t.is(input.value, '42');
 });
 
 test('update via input event', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
+
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '3';
+  input.value = '13';
   change(input);
-  t.is(getData(store.getState()).foo, 3);
+  t.is(getData(store.getState()).foo, 13);
 });
 
-test('update via action', t => {
-  const store = initJsonFormsStore({ 'foo': 3 }, t.context.schema, t.context.uischema);
+test.cb('update via action', t => {
+  const data = { 'foo': 13 };
+  const store = initJsonFormsStore(data,  t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '3');
-  store.dispatch(update('foo', () => 4));
-  setTimeout(() => t.is(input.value, 'Bar'), 4);
+  store.dispatch(update('foo', () => 42));
+  setTimeout(
+    () => {
+      t.is(input.value, '42');
+      t.end();
+    },
+    100
+  );
 });
-// FIXME this moves the slider and changes the value
-test.failing('update with undefined value', t => {
+
+test('update with undefined value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
   t.is(input.value, '');
 });
-// FIXME this moves the slider and changes the value
-test.failing('update with null value', t => {
+
+test('update with null value', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+
   store.dispatch(update('foo', () => null));
   t.is(input.value, '');
 });
@@ -417,36 +270,36 @@ test('update with wrong ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 11));
-  t.is(input.value, '5');
+  t.is(input.value, '42');
 });
 
 test('update with null ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => 3));
-  t.is(input.value, '5');
+  store.dispatch(update(null, () => 13));
+  t.is(input.value, '42');
 });
 
 test('update with undefined ref', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   store.dispatch(update(undefined, () => 13));
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, '5');
+  t.is(input.value, '42');
 });
 
 test('disable', t => {
@@ -457,7 +310,7 @@ test('disable', t => {
   );
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
@@ -468,7 +321,7 @@ test('enabled by default', t => {
   const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
+      <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;

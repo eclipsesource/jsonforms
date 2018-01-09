@@ -1,4 +1,4 @@
-import '../helpers/setup';
+import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
 import {
@@ -17,7 +17,7 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from '../helpers/binding';
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
 test.before(() => {
@@ -202,8 +202,8 @@ test.cb('update via action', t => {
   store.dispatch(update('name', () => 'Bar'));
   setTimeout(() => {
     t.is(textarea.value, 'Bar');
-    t.end()
-  }, 100);
+    t.end();
+  },         100);
 });
 
 test('update with undefined value', t => {
