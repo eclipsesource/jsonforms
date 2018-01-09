@@ -22,7 +22,7 @@ import {
   scryRenderedDOMElementsWithClass,
   scryRenderedDOMElementsWithTag
 } from '../helpers/binding';
-import '../../src'
+import '../../src';
 
 test.before(() => {
   JsonForms.stylingRegistry.registerMany([
@@ -341,7 +341,7 @@ test('tester', t => {
        }
    };
 
-   t.is(tableArrayTester(uischema, schema), 10);
+   t.is(tableArrayTester(uischema, schema), 3);
 });
 
 test('hide', t => {

@@ -7,7 +7,6 @@ import {
   formatErrorMessage,
   Helpers,
   JsonForms,
-  JsonSchema,
   mapStateToControlProps,
   Paths,
   RankedTester,
@@ -25,10 +24,8 @@ const {
 } = Helpers;
 
 const {
-  and,
-  rankWith,
-  schemaMatches,
-  uiTypeIs,
+  isArrayObjectControl,
+  rankWith
 } = Test;
 
 /**
@@ -36,16 +33,7 @@ const {
  * option is set.
  * @type {RankedTester}
  */
-export const tableArrayTester: RankedTester = rankWith(10, and(
-    uiTypeIs('Control'),
-    schemaMatches(schema =>
-        !_.isEmpty(schema)
-        && schema.type === 'array'
-        && !_.isEmpty(schema.items)
-        && !Array.isArray(schema.items) // we don't care about tuples
-        && (schema.items as JsonSchema).type === 'object'
-    ))
-);
+export const tableArrayTester: RankedTester = rankWith(3, isArrayObjectControl);
 
 export class TableArrayControl extends Renderer<ControlProps, void> {
 

@@ -29,6 +29,9 @@ export const resolveData = (instance: any, dataPath: string): any => {
  * @returns {JsonSchema} the resolved sub-schema
  */
 export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchema => {
+  if (_.isEmpty(schema)) {
+    return undefined;
+  }
   const validPathSegments = schemaPath.split('/');
   const invalidSegment =
     pathSegment => pathSegment === '#' || pathSegment === undefined || pathSegment === '';

@@ -30,7 +30,8 @@ export const schema = {
             'format': 'date'
           },
           'message': {
-            'type': 'string'
+            'type': 'string',
+            'maxLength': 5
           }
         }
       }
