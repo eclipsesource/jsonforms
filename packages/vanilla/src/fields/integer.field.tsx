@@ -2,9 +2,9 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
   FieldProps,
-  handleChange,
   isIntegerControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -12,19 +12,22 @@ import {
 import { connect } from 'react-redux';
 
 const IntegerField  = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema } = props;
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-  return <input type='number'
-       step='1'
-       value={data || ''}
-       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-         handleChange(props, parseInt(ev.currentTarget.value, 10))
-       }
-       className={className}
-       id={id}
-       disabled={!enabled}
-       autoFocus={uischema.options && uischema.options.focus}
-       />;
+  return (
+    <input
+      type='number'
+      step='1'
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+        handleChange(path, parseInt(ev.currentTarget.value, 10))
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
 /**
  * Default tester for integer controls.
@@ -34,5 +37,5 @@ export const integerFieldTester: RankedTester = rankWith(2, isIntegerControl);
 
 export default registerStartupInput(
   integerFieldTester,
-  connect(mapStateToInputProps)(IntegerField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(IntegerField)
 );
