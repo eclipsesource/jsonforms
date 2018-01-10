@@ -64,3 +64,5 @@ export class Rating extends Component<RatingProps, RatingState> {
     );
   }
 }
+
+export default Rating;

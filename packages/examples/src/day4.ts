@@ -1,102 +1,59 @@
 import { registerExamples } from './register';
+import {
+  data as day3Data,
+  schema as day3Schema,
+  uischema as day3UiSchema,
+} from './day3';
 
 export const schema = {
-  'type': 'object',
-  'properties': {
-    'name': {
-      'type': 'string'
+  type: 'object',
+  properties: {
+    ...day3Schema.properties,
+    recurrence: {
+        type: 'string',
+        enum: ['Never', 'Daily', 'Weekly', 'Monthly']
     },
-    'description': {
-      'type': 'string'
-    },
-    'done': {
-      'type': 'boolean'
-    },
-    'due_date': {
-      'type': 'string',
-      'format': 'date'
-    },
-    'rating': {
-      'type': 'integer',
-      'maximum': 5
-    },
-    'recurrence': {
-        'type': 'string',
-        'enum': ['Never', 'Daily', 'Weekly', 'Monthly']
-    },
-    'recurrence_interval': {
-        'type': 'integer'
+    recurrenceInterval: {
+        type: 'integer'
     }
   },
-  'required': ['name']
+  required: ['name']
 };
+
 export const uischema = {
-  'type': 'VerticalLayout',
-  'elements': [
+  type: 'VerticalLayout',
+  elements: [
+    ...day3UiSchema.elements,
     {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/name'
+      type: 'Control',
+      scope: {
+        $ref: '#/properties/recurrence'
       }
     },
     {
-      'type': 'Control',
-      'label': false,
-      'scope': {
-        '$ref': '#/properties/done'
-      }
-    },
-    {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/description'
+      type: 'Control',
+      scope: {
+        $ref: '#/properties/recurrenceInterval'
       },
-      'options': {
-        'multi': true
-      }
-    },
-    {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/due_date'
-      }
-    },
-    {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/rating'
-      }
-    },
-    {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/recurrence'
-      }
-    },
-    {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/recurrence_interval'
-      },
-      'rule': {
-          'effect': 'HIDE',
-          'condition': {
-              'scope': {
-                  '$ref': '#/properties/recurrence'
+      rule: {
+          effect: 'HIDE',
+          condition: {
+              scope: {
+                  $ref: '#/properties/recurrence'
               },
-              'expectedValue': 'Never'
+              expectedValue: 'Never'
           }
       }
     }
   ]
 };
+
 export const data = {
-    'name': 'Send email to Adrian',
-    'description': 'Confirm if you have passed the subject\nHereby ...',
-    'done': true,
-    'recurrence': 'Never',
-    'recurrence_interval': 5
+  ...day3Data,
+  recurrence: 'Daily',
+  recurrenceInterval: 5
 };
+
 registerExamples([
   {
     name: 'day4',
