@@ -39,7 +39,7 @@ module.exports = {
         },
         { enforce: 'pre', test: /\.ts$/, exclude: /node_modules/, loader: 'tslint-loader',
           options: {
-            configuration: require('tslint.json'),
+            configuration: require('./tslint.json'),
             failOnHint: false,
             typeCheck: true
           }
