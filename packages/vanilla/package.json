@@ -12,7 +12,7 @@
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-beta.3",

@@ -22,7 +22,7 @@
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "report": "nyc report --reporter=html",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "ava": {
     "verbose": true,
