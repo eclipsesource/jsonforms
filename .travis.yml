@@ -9,6 +9,7 @@ install:
 
 script:
   - lerna run build
+  - lerna run bundle
   - lerna run test
 
 after_success:
