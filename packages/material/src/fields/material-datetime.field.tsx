@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {
   FieldProps,
-  handleChange,
   isDateTimeControl,
-  mapStateToInputProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -16,7 +15,7 @@ import 'moment/locale/de';
 moment.locale('de');
 
 export const MaterialDateTimeField = (props: FieldProps) => {
-  const { data, id, enabled, uischema } = props;
+  const { data, id, enabled, uischema, handleChange } = props;
 
   // TODO: move this to internationalization file
   const german = {
@@ -53,5 +52,5 @@ export const MaterialDateTimeField = (props: FieldProps) => {
 export const datetimeFieldTester: RankedTester = rankWith(3, isDateTimeControl);
 export default registerStartupInput(
   datetimeFieldTester,
-  connect(mapStateToInputProps)(MaterialDateTimeField)
+  connect(mapStateToFieldProps)(MaterialDateTimeField)
 );
