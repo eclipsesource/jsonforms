@@ -6,7 +6,7 @@ import { JsonForms } from './core';
 import { INIT, VALIDATE } from './actions';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaElement } from './models/uischema';
-import { generateDefaultUISchema } from './generators';
+import { generateDefaultUISchema, generateJsonSchema } from './generators';
 
 export const createJsonFormsStore = (initialState): JsonFormsStore => {
   // TODO: typing
@@ -21,7 +21,7 @@ export const createJsonFormsStore = (initialState): JsonFormsStore => {
 
 export const initJsonFormsStore = (
   data: any,
-  schema: JsonSchema,
+  schema: JsonSchema = generateJsonSchema(data),
   uischema: UISchemaElement = generateDefaultUISchema(schema)
 ): JsonFormsStore => {
 
