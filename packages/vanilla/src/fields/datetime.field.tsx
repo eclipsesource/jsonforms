@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   FieldProps,
-  handleChange,
   isDateTimeControl,
   mapStateToFieldProps,
   RankedTester,
