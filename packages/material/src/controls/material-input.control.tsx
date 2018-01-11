@@ -19,8 +19,13 @@ export const MaterialInputControl =
   const isValid = errors.length === 0;
   const trim = uischema.options && uischema.options.trim;
 
+  let style = {};
+  if (!visible) {
+    style = {display: 'none'};
+  }
+
   return (
-    <FormControl className={classNames.wrapper} hidden={!visible} fullWidth={!trim}>
+    <FormControl className={classNames.wrapper} style={style} fullWidth={!trim}>
       <InputLabel htmlFor={id} className={classNames.label} error={!isValid}>
         {computeLabel(label, required)}
       </InputLabel>

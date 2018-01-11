@@ -168,7 +168,7 @@ test('hide', t => {
     </Provider>
   );
   const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo') as HTMLElement;
-  t.true(control.hidden);
+  t.is(getComputedStyle(control).display, 'none');
 });
 
 test('show by default', t => {
