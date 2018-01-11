@@ -5,7 +5,6 @@ import './renderers';
 import { UISchemaElement } from './models/uischema';
 import { JsonForms } from './core';
 import { JsonSchema } from './models/jsonSchema';
-import { generateJsonSchema } from './generators/schema-gen';
 import { Store } from 'redux';
 import { initJsonFormsStore } from './store';
 import DispatchRenderer from './renderers/dispatch-renderer';
@@ -91,19 +90,6 @@ export class JsonFormsElement extends HTMLElement {
   }
 
   /**
-   * Returns the UI schema to be rendered.
-   *
-   * @returns {UISchemaElement} the UI schema to be rendered
-   */
-  get uiSchema(): UISchemaElement {
-    if (!_.isEmpty(this.uischema)) {
-      return this.uischema;
-    }
-
-    return JsonForms.uischemaRegistry.findMostApplicableUISchema(this.dataSchema, this.dataObject);
-  }
-
-  /**
    * Set the JSON data schema that describes the data to be rendered.
    * @param {JsonSchema} dataSchema the data schema to be rendered
    */
@@ -116,19 +102,6 @@ export class JsonFormsElement extends HTMLElement {
     });
   }
 
-  /**
-   * Returns the JSON schema that describes the data to be rendered.
-   *
-   * @returns {JsonSchema} the JSON schema that describes the data to be rendered
-   */
-  get dataSchema(): JsonSchema {
-    if (!_.isEmpty(this.dataschema)) {
-      return this.dataschema;
-    }
-
-    return generateJsonSchema(this.dataObject);
-  }
-
   private render(): void {
     if (!this.allowDynamicUpdate) {
       return;
@@ -136,21 +109,18 @@ export class JsonFormsElement extends HTMLElement {
     if (this.schemaPromise !== null) {
       return;
     }
-
-    if (_.isEmpty(this.dataObject)) {
+    if ((this.dataObject === undefined || this.dataObject === null)
+      && _.isEmpty(this.dataschema)) {
       return;
     }
 
-    const schema = this.dataSchema;
-    this.instantiateSchemaIfNeeded(schema);
-    const uischema = this.uiSchema;
-
-    this.store = initJsonFormsStore(this.dataObject, schema, uischema);
+    this.store = initJsonFormsStore(this.dataObject, this.dataschema, this.uischema);
+    this.instantiateSchemaIfNeeded(this.store.getState().common.schema);
     const storeId = new Date().toISOString();
 
     render(
       <Provider store={this.store} key={`${storeId}-store`}>
-        <DispatchRenderer uischema={uischema} schema={schema} />
+        <DispatchRenderer />
       </Provider>,
       this
     );

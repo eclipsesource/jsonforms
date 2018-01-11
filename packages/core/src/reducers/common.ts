@@ -13,8 +13,8 @@ export const commonStateReducer = (
     case INIT:
       return {
         data: action.data,
-        schema: state.schema,
-        uischema: state.uischema
+        schema: action.schema,
+        uischema: action.uischema
       };
     case UPDATE_DATA: {
       if (action.path === undefined || action.path === null) {

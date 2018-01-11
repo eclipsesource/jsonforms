@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { UnknownRenderer } from './unknown.renderer';
 import { RankedTester } from '../testers';
 import { RendererProps } from './renderer';
+import { getSchema, getUiSchema } from '../reducers';
 
 export interface DispatchRendererProps extends RendererProps {
   renderers?: { tester: RankedTester, renderer: any }[];
@@ -27,8 +28,10 @@ const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) 
   }
 };
 
-const mapStateToProps = state => ({
-  renderers: state.renderers || []
+const mapStateToProps = (state, ownProps) => ({
+  renderers: state.renderers || [],
+  schema: ownProps.schema || getSchema(state),
+  uischema: ownProps.uischema || getUiSchema(state)
 });
 
 export const DispatchRenderer = connect(
