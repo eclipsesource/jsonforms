@@ -6,3 +6,4 @@ export * from './material-number.field';
 export * from './material-slider.field';
 export * from './material-text.field';
 export * from './material-time.field';
+export * from './material-datetime.field';
