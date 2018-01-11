@@ -24,15 +24,16 @@ export const MaterialDateTimeField = (props: FieldProps) => {
       cancelLabel: 'ABBRECHEN'
   };
 
+  let inputProps = {};
+
   return (
     <div style={{
-        marginTop: '16px',
-        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+        marginTop: '16px'
       }}>
       <DateTimePicker
           value={data || ''}
           onChange={ datetime =>
-            handleChange(props, datetime.format())  
+            handleChange(props, moment(datetime).format())
           }
           id={id}
           format={german.format}
@@ -41,6 +42,10 @@ export const MaterialDateTimeField = (props: FieldProps) => {
           disabled={!enabled}
           autoFocus={uischema.options && uischema.options.focus}
           fullWidth={true}
+          leftArrowIcon='keyboard_arrow_left'
+          rightArrowIcon='keyboard_arrow_right'
+          onClear={() => {}}
+          InputProps={inputProps}
       />
     </div>
   );
