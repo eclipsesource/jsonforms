@@ -3,7 +3,7 @@ import {
   FieldProps,
   handleChange,
   isDateTimeControl,
-  mapStateToInputProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const DateTimeField = (props: FieldProps) => {
-    const { data, className, id, enabled, uischema } = props;
+    const { data, className, id, enabled, uischema, handleChange } = props;
     const toISOString = (inputDateTime: string) => {
         return (inputDateTime === '' ? '' : inputDateTime + ':00.000Z');
     }
@@ -38,5 +38,5 @@ export const datetimeFieldTester: RankedTester = rankWith(2, isDateTimeControl);
 
 export default registerStartupInput(
   datetimeFieldTester,
-  connect(mapStateToInputProps)(DateTimeField)
+  connect(mapStateToFieldProps)(DateTimeField)
 );
