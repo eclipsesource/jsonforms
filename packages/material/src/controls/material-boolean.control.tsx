@@ -13,10 +13,15 @@ import { FormControlLabel } from 'material-ui/Form';
 import MaterialBooleanField from '../fields/material-boolean.field';
 
 export const MaterialBooleanControl =
-    ({ classNames, label, uischema, schema }: ControlProps) => {
+    ({ classNames, label, uischema, schema, visible }: ControlProps) => {
+    let style = {};
+    if (!visible) {
+      style = {display: 'none'};
+    }
 
     return (
       <FormControlLabel
+        style={style}
         className={classNames.wrapper}
         label={label}
         control={<MaterialBooleanField uischema={uischema} schema={schema}/>}

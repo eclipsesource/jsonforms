@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.4",
   "description": "Core module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -24,7 +24,7 @@
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "ava": {
     "verbose": true,

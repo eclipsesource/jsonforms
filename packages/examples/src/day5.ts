@@ -1,98 +1,71 @@
 import { registerExamples } from './register';
+import { data as day4Data, schema as day4Schema } from './day4';
 
-export const schema = {
-  'type': 'object',
-  'properties': {
-    'name': {
-      'type': 'string'
-    },
-    'description': {
-      'type': 'string'
-    },
-    'done': {
-      'type': 'boolean'
-    },
-    'due_date': {
-      'type': 'string',
-      'format': 'date'
-    },
-    'rating': {
-      'type': 'integer',
-      'maximum': 5
-    },
-    'recurrence': {
-        'type': 'string',
-        'enum': ['Never', 'Daily', 'Weekly', 'Monthly']
-    },
-    'recurrence_interval': {
-        'type': 'integer'
-    }
-  },
-  'required': ['name']
-};
+export const schema = day4Schema;
+
 export const uischema = {
-  'type': 'VerticalLayout',
-  'elements': [
+  type: 'VerticalLayout',
+  elements: [
     {
-      'type': 'Control',
-      'label': false,
-      'scope': {
-        '$ref': '#/properties/done'
+      type: 'Control',
+      label: false,
+      scope: {
+        $ref: '#/properties/done'
       }
     },
     {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/name'
+      type: 'Control',
+      scope: {
+        $ref: '#/properties/name'
       }
     },
     {
-      'type': 'HorizontalLayout',
-      'elements': [
+      type: 'HorizontalLayout',
+      elements: [
         {
-          'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/due_date'
+          type: 'Control',
+          scope: {
+            $ref: '#/properties/dueDate'
           }
         },
         {
-          'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/rating'
+          type: 'Control',
+          scope: {
+            $ref: '#/properties/rating'
           }
         }
       ]
     },
     {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/description'
+      type: 'Control',
+      scope: {
+        $ref: '#/properties/description'
       },
-      'options': {
-          'multi': true
+      options: {
+          multi: true
       }
     },
     {
-      'type': 'HorizontalLayout',
-      'elements': [
+      type: 'HorizontalLayout',
+      elements: [
         {
-          'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/recurrence'
+          type: 'Control',
+          scope: {
+            $ref: '#/properties/recurrence'
           }
         },
         {
-          'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/recurrence_interval'
+          type: 'Control',
+          scope: {
+            $ref: '#/properties/recurrenceInterval'
           },
-          'rule': {
-              'effect': 'HIDE',
-              'condition': {
-                  'scope': {
-                      '$ref': '#/properties/recurrence'
+          rule: {
+              effect: 'HIDE',
+              condition: {
+                  scope: {
+                      $ref: '#/properties/recurrence'
                   },
-                  'expectedValue': 'Never'
+                  expectedValue: 'Never'
               }
           }
         }
@@ -100,79 +73,80 @@ export const uischema = {
     }
   ]
 };
-export const uischemaCategory = {
-  'type': 'Categorization',
-  'elements': [
+
+export const categoryUiSchema = {
+  type: 'Categorization',
+  elements: [
     {
-      'type': 'Category',
-      'label': 'Main',
-      'elements': [
+      type: 'Category',
+      label: 'Main',
+      elements: [
         {
-          'type': 'Control',
-          'label': false,
-          'scope': {
-            '$ref': '#/properties/done'
+          type: 'Control',
+          label: false,
+          scope: {
+            $ref: '#/properties/done'
           }
         },
         {
-          'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/name'
+          type: 'Control',
+          scope: {
+            $ref: '#/properties/name'
           }
         },
         {
-          'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/description'
+          type: 'Control',
+          scope: {
+            $ref: '#/properties/description'
           },
-          'options': {
+          options: {
               'multi': true
           }
         }
       ]
     },
     {
-      'type': 'Category',
-      'label': 'Additional',
-      'elements': [
+      type: 'Category',
+      label: 'Additional',
+      elements: [
         {
-          'type': 'HorizontalLayout',
-          'elements': [
+          type: 'HorizontalLayout',
+          elements: [
             {
-              'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/due_date'
+              type: 'Control',
+              scope: {
+                $ref: '#/properties/dueDate'
               }
             },
             {
-              'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/rating'
+              type: 'Control',
+              scope: {
+                $ref: '#/properties/rating'
               }
             }
           ]
         },
         {
-          'type': 'HorizontalLayout',
-          'elements': [
+          type: 'HorizontalLayout',
+          elements: [
             {
-              'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/recurrence'
+              type: 'Control',
+              scope: {
+                $ref: '#/properties/recurrence'
               }
             },
             {
-              'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/recurrence_interval'
+              type: 'Control',
+              scope: {
+                $ref: '#/properties/recurrenceInterval'
               },
-              'rule': {
-                  'effect': 'HIDE',
-                  'condition': {
-                      'scope': {
-                          '$ref': '#/properties/recurrence'
+              rule: {
+                  effect: 'HIDE',
+                  condition: {
+                      scope: {
+                          $ref: '#/properties/recurrence'
                       },
-                      'expectedValue': 'Never'
+                      expectedValue: 'Never'
                   }
               }
             }
@@ -182,12 +156,9 @@ export const uischemaCategory = {
     }
   ]
 };
-export const data = {
-  'name': 'Send email to Adrian',
-  'description': 'Confirm if you have passed the subject\nHereby ...',
-  'done': true,
-  'recurrence': 'Daily'
-};
+
+export const data = day4Data;
+
 registerExamples([
   {
     name: 'day5',
@@ -197,11 +168,10 @@ registerExamples([
     uiSchema: uischema
   },
   {
-    name: 'day5_categegory',
+    name: 'day5_category',
     label: 'Day 5 With Category',
     data,
     schema,
-    uiSchema: uischemaCategory
+    uiSchema: categoryUiSchema
   }
 ]);
-

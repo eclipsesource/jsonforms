@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.4",
   "description": "Default Renderer Set for JSON Forms",
   "main": "dist/ts-build/index.js",
   "typings": "dist/ts-build/index.d.ts",
@@ -12,10 +12,10 @@
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.2",
+    "@jsonforms/core": "^2.0.0-beta.4",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"

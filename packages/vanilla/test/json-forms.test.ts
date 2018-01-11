@@ -31,8 +31,8 @@ test('render with data set', t => {
 
   t.is(jsonForms.children.length, 1);
   t.is(jsonForms.children.item(0).className, 'vertical-layout');
-  t.deepEqual(jsonForms.dataSchema, jsonSchema);
-  t.deepEqual(jsonForms.uiSchema, generateDefaultUISchema(jsonSchema));
+  t.deepEqual(jsonForms.store.getState().common.schema, jsonSchema);
+  t.deepEqual(jsonForms.store.getState().common.uischema, generateDefaultUISchema(jsonSchema));
 });
 
 test('render with data and data schema set', t => {
@@ -53,8 +53,8 @@ test.cb('render with data and data schema set', t => {
       jsonForms.connectedCallback();
       t.is(jsonForms.children.length, 1);
       t.is(jsonForms.children.item(0).className, 'vertical-layout');
-      t.deepEqual(jsonForms.dataSchema.properties, t.context.schema.properties);
-      t.deepEqual(jsonForms.uiSchema, generateDefaultUISchema(t.context.schema));
+      t.deepEqual(jsonForms.store.getState().common.schema.properties, t.context.schema.properties);
+      t.deepEqual(jsonForms.store.getState().common.uischema, generateDefaultUISchema(t.context.schema));
       t.end();
     },
     100
@@ -69,8 +69,8 @@ test('render with data and UI schema set', t => {
   jsonForms.connectedCallback();
   t.is(jsonForms.children.length, 1);
   t.is(jsonForms.children.item(0).className, 'control root_properties_name');
-  t.deepEqual(jsonForms.dataSchema, generateJsonSchema({ name: 'foo' }));
-  t.is(jsonForms.uiSchema, uischema);
+  t.deepEqual(jsonForms.store.getState().common.schema, generateJsonSchema({ name: 'foo' }));
+  t.is(jsonForms.store.getState().common.uischema, uischema);
 });
 
 test.cb('render with data, data schema and UI schema set', t => {
@@ -85,8 +85,8 @@ test.cb('render with data, data schema and UI schema set', t => {
       jsonForms.connectedCallback();
       t.is(jsonForms.children.length, 1);
       t.is(jsonForms.children.item(0).className, 'control root_properties_name');
-      t.deepEqual(jsonForms.dataSchema.properties, t.context.schema.properties);
-      t.is(jsonForms.uiSchema, t.context.uischema);
+      t.deepEqual(jsonForms.store.getState().common.schema.properties, t.context.schema.properties);
+      t.is(jsonForms.store.getState().common.uischema, t.context.uischema);
       t.end();
     },
     100
@@ -101,9 +101,10 @@ test.cb('render with data schema and UI schema set', t => {
   setTimeout(
     () => {
       jsonForms.connectedCallback();
-      t.is(jsonForms.children.length, 0);
-      t.deepEqual(jsonForms.dataSchema, t.context.schema);
-      t.is(jsonForms.uiSchema, t.context.uischema);
+      // label is rendered
+      t.is(jsonForms.children.length, 1);
+      t.deepEqual(jsonForms.store.getState().common.schema, t.context.schema);
+      t.is(jsonForms.store.getState().common.uischema, t.context.uischema);
       t.end();
     },
     100

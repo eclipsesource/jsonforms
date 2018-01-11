@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.4",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -22,7 +22,7 @@
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "report": "nyc report --reporter=html",
     "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "ava": {
     "verbose": true,
@@ -32,7 +32,7 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.2",
+    "@jsonforms/core": "^2.0.0-beta.4",
     "material-ui": "^1.0.0-beta.25",
     "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.2.0",

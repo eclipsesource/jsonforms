@@ -1,53 +1,38 @@
 import { registerExamples } from './register';
+import {  data as day1Data, schema as day1Schema } from './day1';
 
-export const schema = {
-  'type': 'object',
-  'properties': {
-    'name': {
-      'type': 'string'
-    },
-    'description': {
-      'type': 'string'
-    },
-    'done': {
-      'type': 'boolean'
-    }
-  },
-  'required': ['name']
-};
+export const schema = day1Schema;
 
 export const uischema = {
-  'type': 'VerticalLayout',
-  'elements': [
+  type: 'VerticalLayout',
+  elements: [
     {
-      'type': 'Control',
-      'scope': {
+      type: 'Control',
+      scope: {
         '$ref': '#/properties/name'
       }
     },
     {
-      'type': 'Control',
-      'label': false,
-      'scope': {
-        '$ref': '#/properties/done'
+      type: 'Control',
+      label: false,
+      scope: {
+        $ref: '#/properties/done'
       }
     },
     {
-      'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/description'
+      type: 'Control',
+      scope: {
+        $ref: '#/properties/description'
       },
-      'options': {
-          'multi': true
+      options: {
+          multi: true
       }
-    }
+    },
   ]
 };
-export const data = {
-    'name': 'Send email to Adrian',
-    'description': 'Confirm if you have passed the subject\nHereby ...',
-    'done': true
-};
+
+export const data = day1Data;
+
 registerExamples([
   {
     name: 'day2',

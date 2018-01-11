@@ -27,11 +27,14 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
-
+    let style = {};
+    if (!visible) {
+      style = {display: 'none'};
+    }
     return (
       <FormControl
         className={classNames.wrapper}
-        hidden={!visible}
+        style={style}
         fullWidth={!trim}
         onFocus={() => this.onFocus()}
         onBlur={() => this.onBlur()}
@@ -48,7 +51,6 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         </FormHelperText>
       </FormControl>
     );
-  }
 };
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 export default registerStartupRenderer(

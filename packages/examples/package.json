@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.4",
   "description": "JSON Forms usage examples",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -38,13 +38,11 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.2",
-    "@jsonforms/material-renderers": "^2.0.0-beta.2",
-    "@jsonforms/vanilla-renderers": "^2.0.0-beta.2",
+    "@jsonforms/core": "^2.0.0-beta.4",
+    "@jsonforms/material-renderers": "^2.0.0-beta.4",
+    "@jsonforms/vanilla-renderers": "^2.0.0-beta.4",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
-  },
-  "devDependencies": {
   }
 }
