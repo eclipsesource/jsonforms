@@ -15,7 +15,7 @@ import 'moment/locale/de';
 moment.locale('de');
 
 export const MaterialDateTimeField = (props: FieldProps) => {
-  const { data, id, enabled, uischema, handleChange } = props;
+  const { data, id, enabled, uischema, path, handleChange } = props;
 
   // TODO: move this to internationalization file
   const german = {
@@ -32,7 +32,7 @@ export const MaterialDateTimeField = (props: FieldProps) => {
       <DateTimePicker
           value={data || ''}
           onChange={ datetime =>
-            handleChange(props, moment(datetime).format())
+            handleChange(path, moment(datetime).format())
           }
           id={id}
           format={german.format}

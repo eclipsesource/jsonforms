@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const DateTimeField = (props: FieldProps) => {
-    const { data, className, id, enabled, uischema, handleChange } = props;
+    const { data, className, id, enabled, uischema, path, handleChange } = props;
     const toISOString = (inputDateTime: string) => {
         return (inputDateTime === '' ? '' : inputDateTime + ':00.000Z');
     }
@@ -20,7 +20,7 @@ const DateTimeField = (props: FieldProps) => {
         type='datetime-local'
         value={(data || '').substr(0, 16)}
         onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-          handleChange(props, toISOString(ev.currentTarget.value))
+          handleChange(path, toISOString(ev.currentTarget.value))
         }
         className={className}
         id={id}
