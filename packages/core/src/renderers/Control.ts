@@ -22,6 +22,7 @@ export interface ControlProps extends RendererProps {
 
 export interface ControlState {
   value: any;
+  isFocused: boolean;
 }
 
 export class Control<P extends ControlProps, S extends ControlState> extends Renderer<P, S> {
@@ -30,7 +31,8 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
     super(props);
     // tslint:disable:no-object-literal-type-assertion
     this.state = {
-      value: props.data ? props.data : ''
+      value: props.data ? props.data : '',
+      isFocused: false
     } as Readonly<S>;
     // tslint:enable:no-object-literal-type-assertion
   }
@@ -44,6 +46,14 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
   handleChange(value) {
     this.setState({ value });
     this.updateData(value);
+  }
+
+  onFocus() {
+    this.setState({ isFocused:  true });
+  }
+
+  onBlur() {
+    this.setState({ isFocused:  false });
   }
 
   private updateData(value) {

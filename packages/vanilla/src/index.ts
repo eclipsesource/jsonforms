@@ -64,5 +64,9 @@ JsonForms.stylingRegistry.registerMany([
   {
     name: 'array-table',
     classNames: ['array-table-layout', 'control']
+  },
+  {
+    name: 'input-description',
+    classNames: ['input-description']
   }
 ]);

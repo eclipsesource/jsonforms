@@ -126,6 +126,13 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
 export const computeLabel = (label: string, required: boolean): string => {
    return required ? label + '*' : label;
  };
+
+export const isDescriptionHidden = (visible, description, isFocused) => {
+  return  description === undefined ||
+  (description !== undefined && !visible) ||
+  !isFocused;
+};
+
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
