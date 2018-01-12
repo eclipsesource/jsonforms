@@ -1,0 +1,7 @@
+{
+    "cors": true,
+    "server": {
+        "baseDir": "./ecore-serve"
+    },
+    "port": 3001
+}

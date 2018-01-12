@@ -1,0 +1,75 @@
+{
+  "ecore": {
+    "name": "MyPackage",
+    "eClassifiers": [
+      {
+        "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EClass",
+        "name": "A",
+        "eStructuralFeatures": [
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EAttribute",
+            "eType": {},
+            "name": "a1"
+          },
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EAttribute",
+            "eType": {},
+            "name": "a2"
+          },
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EAttribute",
+            "eType": {},
+            "name": "a3"
+          },
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EReference",
+            "name": "r1"
+          }
+        ],
+        "eOperations": [
+          {
+            "eClass": "o1"
+          },
+          {
+            "name": "o1"
+          }
+        ]
+      },
+      {
+        "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EClass",
+        "name": "B",
+        "eStructuralFeatures": [
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EAttribute",
+            "eType": {},
+            "name": "a4"
+          },
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EReference",
+            "name": "r2"
+          },
+          {
+            "eClass": "http://www.eclipse.org/emf/2002/Ecore#//EReference",
+            "name": "r3"
+          }
+        ]
+      }
+    ]
+  },
+  "task": {
+    "tasks": [
+      {
+        "assignee": 0,
+        "name": "Hi"
+      },
+      {
+        "assignee": 1
+      }
+    ],
+    "users": [
+      {},
+      {}
+    ],
+    "name": "TaskManagement"
+  }
+}

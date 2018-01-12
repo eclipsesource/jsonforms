@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "outDir": "dist/ts-build",
+  },
+  "exclude":[
+    "node_modules"
+  ],
+  "files": [
+    "./src/jsoneditor.ts"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "definitions": {
+    "task": {
+      "id":"#task",
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "assignee": {"type":"integer"}
+      },
+      "links": [{
+        "rel": "full",
+        "href": "#/users/{assignee}",
+        "targetSchema": "#/definitions/user"
+      }]
+    },
+    "user": {
+      "id":"#user",
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"}
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {"type":"string"},
+    "tasks": {
+      "type": "array",
+      "items": {
+        "$ref":"#/definitions/task"
+      }
+    },
+    "users": {
+      "type": "array",
+      "items": {
+        "$ref":"#/definitions/user"
+      }
+    }
+  }
+}

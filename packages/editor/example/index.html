@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ecore Editor</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="example.css">
+  <script src="assets/native-shim.js"></script>
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--<link rel="stylesheet" href="assets/materialize.css"> -->
+  <link href="assets/jsoneditor.css" rel="stylesheet">
+  <link href="assets/jsoneditor.materialize.css" rel="stylesheet">
+  <script src="assets/jquery.js"></script>
+  <!--<script src="assets/materialize.js"></script>-->
+</head>
+<body>
+<nav>
+  <div class="nav-wrapper" id="toolbar">
+    <a href="#" class="brand-logo"><strong>Ecore</strong> Editor</a>
+    <div id="nav-mobile" class="right hide-on-med-and-down">
+      <button
+              id="upload-data-button"
+              class="btn">
+        Open Data File
+      </button>
+      <button
+              id="export-data-button"
+              class="btn"
+      >
+        Export Model
+      </button>
+      <button id="download-data-button" class="btn">Download Model</button>
+    </div>
+  </div>
+</nav>
+<div id="editor"></div>
+</body>
+<script src="bundle.js"></script>
+</html>
