@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   GroupLayout,
-  JsonForms,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
@@ -23,21 +22,19 @@ export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 export const GroupLayoutRenderer = ({ schema, uischema, path, visible }: RendererProps) => {
   const group = uischema as GroupLayout;
 
-  const classNames = JsonForms.stylingRegistry.getAsClassName('group-layout');
-
   return (
-    <fieldset className={classNames}
-         hidden={visible === undefined || visible === null ? false : !visible}
+    <fieldset
+      hidden={visible === undefined || visible === null ? false : !visible}
     >
     {
-      !_.isEmpty(group.label) ?
-        <legend className={JsonForms.stylingRegistry.getAsClassName('group.label')}>
+      !_.isEmpty(group.label) &&
+        <legend>
           {group.label}
-        </legend> : ''
+        </legend>
     }
     {
       renderChildren(
-        group.elements,
+        group,
         schema,
         'group-layout-item',
         path

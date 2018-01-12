@@ -4,25 +4,33 @@ import { connect } from 'react-redux';
 
 import {
   ControlElement,
-  ControlProps,
   getData,
   Helpers,
-  JsonForms,
   Paths,
   Resolve,
   update
 } from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
+import {
+  getStyle as style,
+  getStyleAsClassName as styleAsClassName
+} from '../../../../core/src/reducers';
+import { VanillaControlProps } from '../../index';
 
-export const getStyle = (styleName: string) =>
-  JsonForms.stylingRegistry.getAsClassName(styleName);
-
-export interface ArrayControlRendererProps extends ControlProps {
+export interface ArrayControlRendererProps extends VanillaControlProps {
   addItem(path: string);
 }
 
 const ArrayControlRenderer  =
-  ({  schema, uischema, data, path, addItem }: ArrayControlRendererProps) => {
+  ({
+     schema,
+     uischema,
+     data,
+     path,
+     addItem,
+     getStyle,
+     getStyleAsClassName
+  }: ArrayControlRendererProps) => {
 
     const controlElement = uischema as ControlElement;
     const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
@@ -33,7 +41,7 @@ const ArrayControlRenderer  =
       `control ${(Helpers.convertToValidClassName(controlElement.scope.$ref))}`;
     const fieldSetClassName = getStyle('array.layout');
     const buttonClassName = getStyle('array.button');
-    const childrenClassName = JsonForms.stylingRegistry.getAsClassName('array.children');
+    const childrenClassName = getStyleAsClassName('array.children');
     const classNames = {
       wrapper: controlClassName,
       fieldSet: fieldSetClassName,
@@ -60,6 +68,8 @@ const mapStateToProps = (state, ownProps) => {
     data: Resolve.data(getData(state), path),
     uischema: ownProps.uischema,
     schema: ownProps.schema,
+    getStyle: style(state),
+    getStyleAsClassName: styleAsClassName(state),
     path
   };
 };

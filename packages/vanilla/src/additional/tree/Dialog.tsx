@@ -13,7 +13,8 @@ const Dialog = (
     path,
     schema,
     closeDialog,
-    dialogProps
+    dialogProps,
+    buttonClassName
   }) => (
   <dialog id='dialog' {...dialogProps}>
     <label>
@@ -24,7 +25,7 @@ const Dialog = (
         JsonForms.schemaService.getContainmentProperties(schema)
           .map(prop =>
             <button
-              className={JsonForms.stylingRegistry.getAsClassName('button')}
+              className={buttonClassName}
               key={`${prop.label}-button`}
               onClick={() => {
                 const newData = _.keys(prop.schema.properties).reduce(

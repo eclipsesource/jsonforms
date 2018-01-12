@@ -2,20 +2,18 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import test from 'ava';
 import { initJsonFormsStore } from '../../../test/helpers/setup';
-import { JsonForms, UISchemaElement, VerticalLayout } from '@jsonforms/core';
+import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
 import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/layouts/vertical.layout';
 import { findRenderedDOMElementWithClass, renderIntoDocument } from '../../../test/helpers/binding';
 
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'vertical-layout',
-      classNames: ['vertical-layout']
-    }
-  ]);
-});
+const styles = [
+  {
+    name: 'vertical-layout',
+    classNames: ['vertical-layout']
+  }
+];
 
 test('tester', t => {
   t.is(verticalLayoutTester(undefined, undefined), -1);
@@ -28,7 +26,12 @@ test('render with undefined elements', t => {
   const uischema: UISchemaElement = {
     type: 'VerticalLayout'
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
@@ -43,7 +46,12 @@ test('render with null elements', t => {
     type: 'VerticalLayout',
     elements: null
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
@@ -58,7 +66,12 @@ test('render with children', t => {
     type: 'VerticalLayout',
     elements: [ {type: 'Control'}, {type: 'Control'} ]
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
@@ -75,11 +88,18 @@ test('hide', t => {
     type: 'VerticalLayout',
     elements: [{ type: 'Control' }],
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles
+  });
+
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <VerticalLayoutRenderer uischema={uischema}
-                              visible={false}
+      <VerticalLayoutRenderer
+        uischema={uischema}
+        visible={false}
       />
     </Provider>
   );
@@ -92,7 +112,13 @@ test('show by default', t => {
     type: 'VerticalLayout',
     elements: [{ type: 'Control' }],
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles
+  });
+
   const tree = renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />

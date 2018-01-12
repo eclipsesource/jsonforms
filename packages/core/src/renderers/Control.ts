@@ -5,6 +5,7 @@ export interface ControlClassNames {
   input: string;
   label: string;
   wrapper: string;
+  description: string;
 }
 
 export interface ControlProps extends RendererProps {

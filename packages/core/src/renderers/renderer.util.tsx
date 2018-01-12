@@ -5,14 +5,16 @@ import {
   composeWithUi,
   convertToValidClassName,
   createLabelDescriptionFrom,
-  isEnabled, isVisible, Resolve
+  isEnabled,
+  isVisible,
+  Resolve
 } from '../helpers';
 import { RankedTester } from '../testers';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import { ControlElement, Layout } from '../models/uischema';
 import * as React from 'react';
 import DispatchRenderer from './dispatch-renderer';
 import { errorAt, subErrorsAt } from '../reducers/validation';
-import { getData, getValidation } from '../reducers';
+import { getData, getStyle, getStyleAsClassName, getValidation } from '../reducers';
 import { Renderer, RendererProps } from './renderer';
 import { update } from '../actions';
 
@@ -54,31 +56,26 @@ export const mapStateToLayoutProps = (state, ownProps) => {
   return {
     renderers: state.renderers,
     visible,
-    path: ownProps.path
+    path: ownProps.path,
+    getStyle: getStyle(state),
+    getStyleAsClassName: getStyleAsClassName(state)
   };
 };
 
 export const renderChildren = (
-  elements: UISchemaElement[],
+  layout: Layout,
   schema: JsonSchema,
-  childType: string,
+  classNames: string,
   path: string
 ) => {
 
-  if (_.isEmpty(elements)) {
+  if (_.isEmpty(layout.elements)) {
     return [];
   }
 
-  return elements.map((child, index) => {
-    const classes = JsonForms.stylingRegistry.get(
-      childType,
-      elements.length
-    )
-      .concat([childType])
-      .join(' ');
-
+  return layout.elements.map((child, index) => {
     return (
-      <div className={classes} key={`${path}-${index}`}>
+      <div className={classNames} key={`${path}-${index}`}>
         <DispatchRenderer
           uischema={child}
           schema={schema}
@@ -90,13 +87,13 @@ export const renderChildren = (
 };
 
 // tslint:disable:variable-name
-export const JsonFormsLayout = ({ styleName, children, visible }) => {
+export const JsonFormsLayout = ({ className, children, visible }) => {
 // tslint:enable:variable-name
-  const classNames = JsonForms.stylingRegistry.getAsClassName(styleName);
 
   return (
-    <div className={classNames}
-         hidden={visible === undefined || visible === null ? false : !visible}
+    <div
+      className={className}
+      hidden={visible === undefined || visible === null ? false : !visible}
     >
       {children}
     </div>
@@ -146,19 +143,20 @@ export const mapStateToControlProps = (state, ownProps) => {
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
 
-  const styles = JsonForms.stylingRegistry.get('control');
+  const styles = getStyle(state)('control');
   let classNames: string[] = !_.isEmpty(controlElement.scope) ?
     styles.concat(
       [`${convertToValidClassName(controlElement.scope.$ref)}`]
     ) : [''];
   const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
   if (trim) {
-    classNames = classNames.concat(JsonForms.stylingRegistry.get('control.trim'));
+    classNames = classNames.concat(getStyle(state)('control.trim'));
   }
   const inputClassName =
     ['validate']
       .concat(isValid ? 'valid' : 'invalid');
-  const labelClass = JsonForms.stylingRegistry.getAsClassName('control.label');
+  const labelClass = getStyleAsClassName(state)('control.label');
+  const descriptionClassName = getStyleAsClassName(state)('input-description');
   const inputs = state.inputs;
 
   return {
@@ -167,7 +165,8 @@ export const mapStateToControlProps = (state, ownProps) => {
     classNames: {
       wrapper: classNames.join(' '),
       input: inputClassName.join(' '),
-      label: labelClass
+      label: labelClass,
+      description: descriptionClassName
     },
     label,
     visible,

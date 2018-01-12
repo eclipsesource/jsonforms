@@ -2,12 +2,9 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ControlElement,
-  ControlProps,
   DispatchField,
   formatErrorMessage,
   Helpers,
-  JsonForms,
-  mapStateToControlProps,
   Paths,
   RankedTester,
   registerStartupRenderer,
@@ -17,6 +14,7 @@ import {
   update
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
+import {mapStateToVanillaControlProps, VanillaControlProps} from '../index';
 
 const {
   createLabelDescriptionFrom,
@@ -35,7 +33,7 @@ const {
  */
 export const tableArrayTester: RankedTester = rankWith(3, isArrayObjectControl);
 
-export class TableArrayControl extends Renderer<ControlProps, void> {
+export class TableArrayControl extends Renderer<VanillaControlProps, void> {
 
   // TODO duplicate code
   addNewItem(path: string) {
@@ -61,13 +59,22 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
    * @inheritDoc
    */
   render() {
-    const { uischema, schema, path, data, visible, errors, label } = this.props;
+    const {
+      uischema,
+      schema,
+      path,
+      data,
+      visible,
+      errors,
+      label,
+      getStyleAsClassName
+    } = this.props;
     const controlElement = uischema as ControlElement;
 
-    const tableClass = JsonForms.stylingRegistry.getAsClassName('array-table.table');
-    const labelClass = JsonForms.stylingRegistry.getAsClassName('array-table.label');
-    const buttonClass = JsonForms.stylingRegistry.getAsClassName('array-table.button');
-    const controlClass = [JsonForms.stylingRegistry.getAsClassName('array-table'),
+    const tableClass = getStyleAsClassName('array-table.table');
+    const labelClass = getStyleAsClassName('array-table.label');
+    const buttonClass = getStyleAsClassName('array-table.button');
+    const controlClass = [getStyleAsClassName('array-table'),
       convertToValidClassName(controlElement.scope.$ref)].join(' ');
 
     const resolvedSchema = Resolve.schema(schema, controlElement.scope.$ref + '/items');
@@ -143,5 +150,5 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
 
 export default registerStartupRenderer(
   tableArrayTester,
-  connect(mapStateToControlProps)(TableArrayControl)
+  connect(mapStateToVanillaControlProps)(TableArrayControl)
 );

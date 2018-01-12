@@ -19,10 +19,19 @@ export const createJsonFormsStore = (initialState): JsonFormsStore => {
   return store as JsonFormsStore;
 };
 
-export const initJsonFormsStore = (
-  data: any,
-  schema: JsonSchema = generateJsonSchema(data),
-  uischema: UISchemaElement = generateDefaultUISchema(schema)
+export interface JsonFormsState {
+  data: any;
+  schema?: JsonSchema;
+  uischema?: UISchemaElement;
+  styles?: { name: string, classNames: string[] }[];
+}
+
+export const initJsonFormsStore = ({
+                                     data,
+                                     schema = generateJsonSchema(data),
+                                     uischema = generateDefaultUISchema(schema),
+                                     ...props
+                                   }: JsonFormsState
 ): JsonFormsStore => {
 
     const store = createJsonFormsStore({
@@ -30,7 +39,8 @@ export const initJsonFormsStore = (
         data
       },
       renderers: JsonForms.renderers,
-      fields: JsonForms.fields
+      fields: JsonForms.fields,
+      ...props
     });
 
     store.dispatch({

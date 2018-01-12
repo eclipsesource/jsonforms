@@ -1,10 +1,34 @@
-import { JsonForms } from '@jsonforms/core';
+import {
+  ControlProps,
+  getStyleAsClassName as findStyleAsClassName,
+  mapStateToControlProps,
+  RendererProps
+} from '@jsonforms/core';
 export * from './additional';
 export * from './controls';
 export * from './layouts';
 export * from './fields';
 
-JsonForms.stylingRegistry.registerMany([
+export interface VanillaControlProps extends ControlProps {
+  getStyle(styleName: string, ...args: any[]): string[];
+  getStyleAsClassName(styleName: string): string;
+}
+
+export interface VanillaRendererProps extends RendererProps {
+  getStyle(styleName: string, ...args: any[]): string[];
+  getStyleAsClassName(styleName: string): string;
+}
+
+export const mapStateToVanillaControlProps = (state, ownProps) => {
+  const props = mapStateToControlProps(state, ownProps)
+
+  return {
+    ...props,
+    getStyleAsClassName: findStyleAsClassName(state)
+  };
+}
+
+export const vanillaStyles = [
   {
     name: 'control',
     classNames: ['control']
@@ -69,4 +93,4 @@ JsonForms.stylingRegistry.registerMany([
     name: 'input-description',
     classNames: ['input-description']
   }
-]);
+];

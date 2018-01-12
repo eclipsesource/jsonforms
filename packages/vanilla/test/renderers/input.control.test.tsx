@@ -6,7 +6,6 @@ import {
   ControlElement,
   HorizontalLayout,
   initJsonFormsStore,
-  JsonForms,
   JsonSchema,
   update,
   validate
@@ -15,31 +14,15 @@ import InputControl, { inputControlTester } from '../../src/controls/input.contr
 import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
 import {
   blur,
-  focus,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
+  focus,
   renderIntoDocument,
   scryRenderedDOMElementsWithClass,
   scryRenderedDOMElementsWithTag
 } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    },
-    {
-      name: 'input-description',
-      classNames: ['input-description']
-    }
-  ]);
-});
 test.beforeEach(t => {
   t.context.data = { 'foo': true };
   t.context.schema = {
@@ -56,58 +39,72 @@ test.beforeEach(t => {
       $ref: '#/properties/foo'
     }
   };
+  t.context.styles = [
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    },
+    {
+      name: 'input-description',
+      classNames: ['input-description']
+    }
+  ];
 });
 
 test('autofocus on first element', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            firstBooleanField: { type: 'boolean' },
-            secondBooleanField: { type: 'boolean' }
-        }
-    };
-    const firstControlElement: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/firstBooleanField'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const secondControlElement: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/secondBooleanField'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const uischema: HorizontalLayout = {
-        type: 'HorizontalLayout',
-        elements: [
-            firstControlElement,
-            secondControlElement
-        ]
-    };
-    const data = {
-        'firstBooleanField': true,
-        'secondBooleanField': false
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-        </Provider>
-    );
-    const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
-    t.not(document.activeElement, inputs[0]);
-    t.is(document.activeElement, inputs[1]);
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      firstBooleanField: { type: 'boolean' },
+      secondBooleanField: { type: 'boolean' }
+    }
+  };
+  const firstControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/firstBooleanField'
+    },
+    options: {
+      focus: true
+    }
+  };
+  const secondControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/secondBooleanField'
+    },
+    options: {
+      focus: true
+    }
+  };
+  const uischema: HorizontalLayout = {
+    type: 'HorizontalLayout',
+    elements: [
+      firstControlElement,
+      secondControlElement
+    ]
+  };
+  const data = {
+    'firstBooleanField': true,
+    'secondBooleanField': false
+  };
+  const store = initJsonFormsStore({
+    data,
+    schema,
+    uischema
+  });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+  t.not(document.activeElement, inputs[0]);
+  t.is(document.activeElement, inputs[1]);
 });
 
 test('tester', t => {
@@ -120,7 +117,12 @@ test('tester', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
@@ -153,7 +155,12 @@ test('render without label', t => {
     },
     label: false
   };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={uischema}/>
@@ -179,7 +186,12 @@ test('render without label', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema} visible={false}/>
@@ -190,11 +202,12 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
@@ -205,7 +218,11 @@ test('show by default', t => {
 });
 
 test('single error', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
@@ -218,7 +235,11 @@ test('single error', t => {
 });
 
 test('multiple errors', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
@@ -231,11 +252,11 @@ test('multiple errors', t => {
 });
 
 test('empty errors by default', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
@@ -246,11 +267,11 @@ test('empty errors by default', t => {
 });
 
 test('reset validation message', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
@@ -265,61 +286,62 @@ test('reset validation message', t => {
 
 test('validation of nested schema', t => {
   const schema = {
-    'type': 'object',
-    'properties': {
-       'name': {
-          'type': 'string'
-       },
-       'personalData': {
-          'type': 'object',
-          'properties': {
-             'middleName': {
-                 'type': 'string'
-             },
-             'lastName': {
-                 'type': 'string'
-             }
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      },
+      personalData: {
+        type: 'object',
+        properties: {
+          middleName: {
+            type: 'string'
           },
-          'required': ['middleName', 'lastName']
-       }
+          lastName: {
+            type: 'string'
+          }
+        },
+        required: ['middleName', 'lastName']
+      }
     },
-    'required': ['name']
+    required: ['name']
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
     scope: {
-        $ref: '#/properties/name'
+      $ref: '#/properties/name'
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
     scope: {
-        $ref: '#/properties/personalData/properties/middleName'
+      $ref: '#/properties/personalData/properties/middleName'
     }
   };
   const thirdControlElement: ControlElement = {
     type: 'Control',
     scope: {
-        $ref: '#/properties/personalData/properties/lastName'
+      $ref: '#/properties/personalData/properties/lastName'
     }
   };
   const uischema: HorizontalLayout = {
     type: 'HorizontalLayout',
     elements: [
-        firstControlElement,
-        secondControlElement,
-        thirdControlElement
+      firstControlElement,
+      secondControlElement,
+      thirdControlElement
     ]
   };
   const data = {
     name: 'John Doe',
     personalData: {}
   };
-  const store = initJsonFormsStore(
-      data,
-      schema,
-      uischema
-  );
+  const store = initJsonFormsStore({
+    data,
+    schema,
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
@@ -332,58 +354,112 @@ test('validation of nested schema', t => {
   t.is(validation[2].textContent, 'is a required property');
 });
 test('required field is marked', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            dateField: {
-                type: 'string',
-                format: 'date'
-            }
-        },
-        required: ['dateField']
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/dateField'
-        }
-    };
-
-    const store = initJsonFormsStore({}, schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <InputControl schema={schema} uischema={uischema}/>
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Date Field*');
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      dateField: {
+        type: 'string',
+        format: 'date'
+      }
+    },
+    required: ['dateField']
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/dateField'
+    }
+  };
+  const store = initJsonFormsStore({
+    data: {},
+    schema,
+    uischema,
+  });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = findRenderedDOMElementWithTag(tree, 'label');
+  t.is(label.textContent, 'Date Field*');
 });
 
 test('not required', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            dateField: {
-                type: 'string',
-                format: 'date'
-            }
-        }
-    };
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/dateField'
-        }
-    };
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      dateField: {
+        type: 'string',
+        format: 'date'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/dateField'
+    }
+  };
+  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = findRenderedDOMElementWithTag(tree, 'label');
+  t.is(label.textContent, 'Date Field');
+});
+test('required field is marked', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      dateField: {
+        type: 'string',
+        format: 'date'
+      }
+    },
+    required: ['dateField']
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: { $ref: '#/properties/dateField' }
+  };
 
-    const store = initJsonFormsStore({}, schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <InputControl schema={schema} uischema={uischema}/>
-        </Provider>
-    );
-    const label = findRenderedDOMElementWithTag(tree, 'label');
-    t.is(label.textContent, 'Date Field');
+  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = findRenderedDOMElementWithTag(tree, 'label');
+  t.is(label.textContent, 'Date Field*');
+});
+
+test('not required', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      dateField: {
+        type: 'string',
+        format: 'date'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/dateField'
+    }
+  };
+
+  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = findRenderedDOMElementWithTag(tree, 'label');
+  t.is(label.textContent, 'Date Field');
 });
 
 test('show description on focus', t => {
@@ -398,12 +474,10 @@ test('show description on focus', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: { $ref: '#/properties/name' }
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore(data, schema, uischema);
+  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -434,7 +508,7 @@ test('hide description when input field is not focused', t => {
     }
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore(data, schema, uischema);
+  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -456,12 +530,10 @@ test('hide description on blur', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: { $ref: '#/properties/name' }
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore(data, schema, uischema);
+  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -490,12 +562,10 @@ test('description undefined', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: { $ref: '#/properties/name' }
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore(data, schema, uischema);
+  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>

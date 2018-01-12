@@ -1,25 +1,25 @@
 import * as React from 'react';
-import {initJsonFormsStore } from '../../../test/helpers/setup';
+import { initJsonFormsStore } from '../../../test/helpers/setup';
 import test from 'ava';
-import { HorizontalLayout, JsonForms, UISchemaElement } from '@jsonforms/core';
+import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
 import { renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';
-import HorizontalLayoutRenderer, { horizontalLayoutTester } from '../../src/layouts/horizontal.layout';
+import HorizontalLayoutRenderer, {
+  horizontalLayoutTester
+} from '../../src/layouts/horizontal.layout';
 
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'horizontal-layout',
-      classNames: ['horizontal-layout']
-    }
-  ]);
-});
 test.beforeEach(t => {
   t.context.uischema = {
     type: 'HorizontalLayout',
     elements: [{type: 'Control'}]
   };
+  t.context.styles = [
+    {
+      name: 'horizontal-layout',
+      classNames: ['horizontal-layout']
+    }
+  ];
 });
 
 test('tester', t => {
@@ -33,7 +33,12 @@ test('render with undefined elements', t => {
   const uischema: UISchemaElement = {
     type: 'HorizontalLayout'
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
@@ -50,7 +55,12 @@ test('render with null elements', t => {
     type: 'HorizontalLayout',
     elements: null
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
@@ -69,7 +79,12 @@ test('render with children', t => {
       { type: 'Control' }
     ]
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
@@ -81,11 +96,17 @@ test('render with children', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore({}, {}, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer uischema={t.context.uischema}
-                                visible={false}
+      <HorizontalLayoutRenderer
+        uischema={t.context.uischema}
+        visible={false}
       />
     </Provider>
   );
@@ -96,7 +117,12 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore({}, {}, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={t.context.uischema}/>

@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  Categorization,
-  Category,
-  JsonForms
-} from '@jsonforms/core';
+import { Categorization, Category } from '@jsonforms/core';
 import { isCategorization } from './tester';
 
 const getCategoryClassName = (category: Category, selectedCategory: Category): string =>
@@ -14,20 +10,28 @@ export interface CategorizationProps {
   selectedCategory: Category;
   depth: number;
   onSelect: any;
+  subcategoriesClassName;
+  groupClassName: string;
 }
 
 export const CategorizationList  = (
-  { categorization, selectedCategory, depth, onSelect }: CategorizationProps
-) =>
+  {
+    categorization,
+    selectedCategory,
+    depth,
+    onSelect,
+    subcategoriesClassName,
+    groupClassName
+  }: CategorizationProps) =>
   (
-    <ul className={JsonForms.stylingRegistry.getAsClassName('category.subcategories')}>
+    <ul className={subcategoriesClassName}>
       {
         categorization.elements.map(category => {
           if (isCategorization(category)) {
             return (
               <li
                 key={category.label}
-                className={JsonForms.stylingRegistry.getAsClassName('category.group')}
+                className={groupClassName}
               >
                 <span>{category.label}</span>
                 <CategorizationList
@@ -35,6 +39,8 @@ export const CategorizationList  = (
                   selectedCategory={selectedCategory}
                   depth={depth + 1}
                   onSelect={onSelect}
+                  subcategoriesClassName={subcategoriesClassName}
+                  groupClassName={groupClassName}
                 />
               </li>
             );

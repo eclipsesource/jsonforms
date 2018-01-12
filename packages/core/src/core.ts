@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaRegistry, UISchemaRegistryImpl } from './legacy/uischema.registry';
-import { StylingRegistry, StylingRegistryImpl } from './legacy/styling.registry';
 import { SchemaService } from './legacy/schema.service';
 import { SchemaServiceImpl } from './legacy/schema.service.impl';
 import { Store } from 'redux';
@@ -58,7 +57,6 @@ export class JsonFormsGlobal {
   public renderers = [];
   public fields = [];
   public uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
-  public stylingRegistry: StylingRegistry = new StylingRegistryImpl();
   public modelMapping;
   public set schema(schema: JsonSchema) {
     this._schemaService = new SchemaServiceImpl(schema);

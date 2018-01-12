@@ -3,36 +3,11 @@ import { initJsonFormsStore } from '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
-import { Categorization, ControlElement, JsonForms, JsonSchema, Layout } from '@jsonforms/core';
+import { Categorization, ControlElement, JsonSchema, Layout } from '@jsonforms/core';
 import { renderIntoDocument } from '../../../test/helpers/binding';
 import { click, findRenderedDOMElementWithClass, } from '../../../test/helpers/react-test';
 import CategorizationRenderer from '../../src/additional/categorization';
 import { categorizationTester } from '../../src/additional/categorization/tester';
-
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'categorization',
-      classNames: ['jsf-categorization']
-    },
-    {
-      name: 'categorization.master',
-      classNames: ['jsf-categorization-master']
-    },
-    {
-      name: 'category.group',
-      classNames: ['jsf-category-group']
-    },
-    {
-      name: 'category.subcategories',
-      classNames: ['jsf-category-subcategories']
-    },
-    {
-      name: 'categorization.detail',
-      classNames: ['jsf-categorization-detail']
-    }
-  ]);
-});
 
 test.beforeEach(t => {
   t.context.data = { };
@@ -53,6 +28,28 @@ test.beforeEach(t => {
       },
     ]
   };
+  t.context.styles = [
+    {
+      name: 'categorization',
+      classNames: ['jsf-categorization']
+    },
+    {
+      name: 'categorization.master',
+      classNames: ['jsf-categorization-master']
+    },
+    {
+      name: 'category.group',
+      classNames: ['jsf-category-group']
+    },
+    {
+      name: 'category.subcategories',
+      classNames: ['jsf-category-subcategories']
+    },
+    {
+      name: 'categorization.detail',
+      classNames: ['jsf-categorization-detail']
+    }
+  ];
 });
 
 test('tester', t => {
@@ -242,11 +239,18 @@ test('render', t => {
     ]
   };
 
-  const store = initJsonFormsStore(t.context.data, schema, uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema,
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer schema={schema}
-                              uischema={uischema} />
+      <CategorizationRenderer
+        schema={schema}
+        uischema={uischema}
+      />
     </Provider>
   );
 
@@ -326,7 +330,13 @@ test('render on click', t => {
       },
     ]
   };
-  const store = initJsonFormsStore(data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema,
+    styles: t.context.styles
+  });
+
   const tree = renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
@@ -379,12 +389,19 @@ test('hide', t => {
       }
     ]
   };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema,
+    styles: t.context.styles
+  });
+
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer schema={t.context.schema}
-                              uischema={uischema}
-                              visible={false}
+      <CategorizationRenderer
+        schema={t.context.schema}
+        uischema={uischema}
+        visible={false}
       />
     </Provider>
   );
@@ -405,11 +422,17 @@ test('showed by default', t => {
       }
     ]
   };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer schema={t.context.schema}
-                              uischema={uischema}
+      <CategorizationRenderer
+        schema={t.context.schema}
+        uischema={uischema}
       />
     </Provider>
   );

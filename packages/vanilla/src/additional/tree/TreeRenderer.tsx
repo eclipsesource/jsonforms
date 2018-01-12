@@ -3,11 +3,11 @@ import * as React from 'react';
 import {
   Actions,
   Control,
-  ControlProps,
   ControlState,
   DispatchRenderer,
   generateDefaultUISchema,
   getData,
+  getStyleAsClassName as styleAsClassName,
   JsonSchema,
   MasterDetailLayout,
   Paths,
@@ -19,6 +19,7 @@ import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import { ExpandArray } from './ExpandArray';
 import Dialog from './Dialog';
+import { VanillaControlProps } from '../../index';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -87,7 +88,7 @@ export interface TreeMasterDetailState extends ControlState {
   };
 }
 
-export interface TreeProps extends ControlProps {
+export interface TreeProps extends VanillaControlProps {
   resolvedSchema: any;
   rootData: any;
   resolvedRootData: any;
@@ -158,7 +159,16 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, schema, resolvedSchema, visible, path, rootData, addToRoot } = this.props;
+    const {
+      uischema,
+      schema,
+      resolvedSchema,
+      visible,
+      path,
+      rootData,
+      addToRoot,
+      getStyleAsClassName
+    } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -215,6 +225,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                 schema={this.state.dialog.schema}
                 closeDialog={this.closeDialog}
                 dialogProps={dialogProps}
+                buttonClassName={getStyleAsClassName('button')}
               />
           }
         </div>
@@ -225,26 +236,29 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
 
 const mapStateToProps = (state, ownProps) => {
   const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
-  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
+  const visible = _.has(ownProps, 'visible') ?
+    ownProps.visible :  Runtime.isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled') ?
+    ownProps.enabled :  Runtime.isEnabled(ownProps, state);
   const rootData = getData(state);
 
   return {
-    rootData: getData(state),
+    rootData:  getData(state),
     resolvedRootData: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
     schema: ownProps.schema,
     resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope.$ref),
     path,
     visible,
-    enabled
+    enabled,
+    getStyleAsClassName: styleAsClassName(state)
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   addToRoot(schema, path) {
     return () => {
-      if (isNotTuple(schema)) {
+      if  (isNotTuple(schema)) {
         dispatch(
           Actions.update(
             path,

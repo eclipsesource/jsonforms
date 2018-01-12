@@ -1,23 +1,15 @@
 import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
-import { getData, initJsonFormsStore, JsonForms, update } from '@jsonforms/core';
+import { getData, initJsonFormsStore, update } from '@jsonforms/core';
 import EnumField, { enumFieldTester } from '../../src/fields/enum.field';
-import { change, findRenderedDOMElementWithTag, renderIntoDocument } from '../../../test/helpers/binding';
+import {
+  change,
+  findRenderedDOMElementWithTag,
+  renderIntoDocument
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]);
-});
 test.beforeEach(t => {
   t.context.data = { 'foo': 'a' };
   t.context.schema = {
@@ -35,6 +27,16 @@ test.beforeEach(t => {
       $ref: '#/properties/foo',
     },
   };
+  t.context.styles = [
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ];
 });
 
 test('tester', t => {
@@ -113,7 +115,11 @@ test('tester with matching numeric type', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -130,7 +136,11 @@ test('render', t => {
 });
 
 test('update via input event', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -145,7 +155,11 @@ test('update via input event', t => {
 
 test('update via action', t => {
   const data = { 'foo': 'b' };
-  const store = initJsonFormsStore(data,  t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -158,7 +172,11 @@ test('update via action', t => {
 });
 
 test('update with undefined value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -171,7 +189,11 @@ test('update with undefined value', t => {
 });
 
 test('update with null value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -184,7 +206,11 @@ test('update with null value', t => {
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -197,7 +223,11 @@ test('update with wrong ref', t => {
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -210,7 +240,11 @@ test('update with null ref', t => {
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -223,11 +257,11 @@ test('update with undefined ref', t => {
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
@@ -238,7 +272,11 @@ test('disable', t => {
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema}/>

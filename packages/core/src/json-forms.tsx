@@ -9,6 +9,7 @@ import { Store } from 'redux';
 import { initJsonFormsStore } from './store';
 import DispatchRenderer from './renderers/dispatch-renderer';
 import { Provider, render } from './common/binding';
+import { getStyleAsClassName } from './reducers';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -47,6 +48,7 @@ export class JsonFormsElement extends HTMLElement {
   private dataObject: any;
   private uischema: UISchemaElement;
   private dataschema: JsonSchema;
+  private styleDefs: { name: string, classNames: string[] }[];
 
   schemaPromise: Promise<any> = null;
   private allowDynamicUpdate = false;
@@ -89,6 +91,11 @@ export class JsonFormsElement extends HTMLElement {
     this.render();
   }
 
+  set styles(styles: { name: string, classNames: string[] }[]) {
+    this.styleDefs = styles;
+    this.render();
+  }
+
   /**
    * Set the JSON data schema that describes the data to be rendered.
    * @param {JsonSchema} dataSchema the data schema to be rendered
@@ -114,7 +121,12 @@ export class JsonFormsElement extends HTMLElement {
       return;
     }
 
-    this.store = initJsonFormsStore(this.dataObject, this.dataschema, this.uischema);
+    this.store = initJsonFormsStore({
+      data: this.dataObject,
+      schema: this.dataschema,
+      uischema: this.uischema,
+      styles: this.styleDefs
+    });
     this.instantiateSchemaIfNeeded(this.store.getState().common.schema);
     const storeId = new Date().toISOString();
 
@@ -125,7 +137,7 @@ export class JsonFormsElement extends HTMLElement {
       this
     );
 
-    this.className = JsonForms.stylingRegistry.getAsClassName('json-forms');
+    this.className = getStyleAsClassName(this.store.getState())('json-forms');
   }
 
   private instantiateSchemaIfNeeded(schema: JsonSchema): void {
