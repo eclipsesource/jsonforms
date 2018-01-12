@@ -56,3 +56,17 @@ export const unregisterRenderer = (
   tester,
   renderer
 });
+
+export const loadTranslationData = translations => dispatch => {
+  dispatch({
+    type: LOAD_TRANSLATION,
+    translations,
+  });
+};
+
+export const setLocale = locale => dispatch => {
+  dispatch({
+    type: SET_LOCALE,
+    locale,
+  });
+};

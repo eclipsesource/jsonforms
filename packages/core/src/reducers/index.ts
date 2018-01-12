@@ -5,11 +5,13 @@ import { fieldReducer } from './fields';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 import { JsonForms } from '../core';
 import { JsonFormsState } from '../store';
+import { translationReducer } from './translation';
 export {
   validationReducer,
   rendererReducer,
   fieldReducer,
   commonStateReducer,
+  translationReducer
 };
 
 export const jsonformsReducer = (): Reducer<JsonFormsState> =>

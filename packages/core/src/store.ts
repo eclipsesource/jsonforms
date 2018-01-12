@@ -26,4 +26,6 @@ export interface JsonFormsInitialState {
   uischema?: UISchemaElement;
   // allow additional state
   [x: string]: any;
+  translations?: any;
+  locale?: String;
 }
