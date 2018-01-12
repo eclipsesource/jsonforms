@@ -51,6 +51,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         </FormHelperText>
       </FormControl>
     );
+  }
 };
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 export default registerStartupRenderer(
