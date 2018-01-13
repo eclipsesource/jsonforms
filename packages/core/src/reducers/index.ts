@@ -5,13 +5,13 @@ import { fieldReducer } from './fields';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 import { JsonForms } from '../core';
 import { JsonFormsState } from '../store';
-import { translationReducer } from './translation';
+import { i18nReducer } from './i18n';
 export {
   validationReducer,
   rendererReducer,
   fieldReducer,
   commonStateReducer,
-  translationReducer
+  i18nReducer
 };
 
 export const jsonformsReducer = (): Reducer<JsonFormsState> =>
@@ -21,7 +21,7 @@ export const jsonformsReducer = (): Reducer<JsonFormsState> =>
       validation: validationReducer,
       renderers: rendererReducer,
       fields: fieldReducer,
-      translation: translationReducer,
+      i18n: i18nReducer,
       ...JsonForms.reducers
     })
   });

@@ -1,13 +1,13 @@
-import { LOAD_TRANSLATION, SET_LOCALE } from '../actions';
+import { SET_LOCALE, SET_TRANSLATIONS } from '../actions';
 
-export const translationReducer = (
+export const i18nReducer = (
   state = {
     translations: {},
-    locale: ''
+    locale: navigator.language
   },
   action) => {
   switch (action.type) {
-    case LOAD_TRANSLATION:
+    case SET_TRANSLATIONS:
       return {
         ...state,
         translations: action.translations

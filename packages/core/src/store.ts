@@ -13,6 +13,10 @@ export interface JsonFormsState {
     };
     renderers?: any[];
     fields?: any[];
+    i18n: {
+      translations?: any;
+      locale?: String;
+    };
     // allow additional state for JSONForms
     [x: string]: any;
   };

@@ -84,6 +84,8 @@ export class JsonFormsElement extends HTMLElement {
           },
           renderers: JsonForms.renderers,
           fields: JsonForms.fields,
+          translations: initialState.translations,
+          locale: initialState.locale
         }
       },
       applyMiddleware(thunk),

@@ -59,9 +59,9 @@ export const unregisterRenderer = (
   renderer
 });
 
-export const loadTranslationData = translations => dispatch => {
+export const setTranslationData = translations => dispatch => {
   dispatch({
-    type: LOAD_TRANSLATION,
+    type: SET_TRANSLATIONS,
     translations,
   });
 };

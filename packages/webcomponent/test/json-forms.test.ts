@@ -25,6 +25,15 @@ test.beforeEach(t => {
     type: 'Control',
     scope: '#/properties/name'
   };
+  t.context.translations = {
+    'en-US': {
+      name: 'foo'
+    },
+    'de-DE': {
+      name: 'bar'
+    }
+  };
+  t.context.locale = 'de-DE';
 });
 
 test.cb('render with data set', t => {
@@ -173,4 +182,29 @@ test.cb('Connect JSON Forms element and cause data change', t => {
     },
     100
   );
+});
+
+test('render with data and translation object', t => {
+  const jsonForms = new JsonFormsElement();
+  jsonForms.data = t.context.data;
+  jsonForms.translations = t.context.translations;
+  jsonForms.connectedCallback();
+
+  t.is(jsonForms.children.length, 1);
+  t.is(jsonForms.children.item(0).className, 'vertical-layout');
+  t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
+  t.is(jsonForms.store.getState().i18n.locale, navigator.language);
+});
+
+test('render with data, translation object and locale', t => {
+  const jsonForms = new JsonFormsElement();
+  jsonForms.data = t.context.data;
+  jsonForms.locale = t.context.locale;
+  jsonForms.translations = t.context.translations;
+  jsonForms.connectedCallback();
+
+  t.is(jsonForms.children.length, 1);
+  t.is(jsonForms.children.item(0).className, 'vertical-layout');
+  t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
+  t.is(jsonForms.store.getState().i18n.locale, t.context.locale);
 });
