@@ -193,7 +193,7 @@ test('render with data and translation object', t => {
   t.is(jsonForms.children.length, 1);
   t.is(jsonForms.children.item(0).className, 'vertical-layout');
   t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
-  t.is(jsonForms.store.getState().i18n.locale, navigator.language);
+  t.is(jsonForms.store.getState().i18n.locale, navigator.languages[0]);
 });
 
 test('render with data, translation object and locale', t => {

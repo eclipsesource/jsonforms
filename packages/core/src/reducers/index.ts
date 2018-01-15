@@ -34,3 +34,8 @@ export const getErrorAt = instancePath => state => {
   return errorAt(instancePath)(state.jsonforms.validation);
 };
 export const getSubErrorsAt = instancePath => state => subErrorsAt(instancePath)(state.jsonforms.validation);
+
+const fetchTranslation = state => {
+  return state.translations ? state.translations[state.locale] : undefined;
+};
+export const getTranslations = state => fetchTranslation(state.i18n);
