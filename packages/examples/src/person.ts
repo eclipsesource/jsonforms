@@ -65,7 +65,7 @@ export const uischema = {
         {
           type: 'Control',
           label: {
-            text: 'Name',
+            text: '%name',
             show: true
           },
           scope: '#/properties/name'
@@ -73,19 +73,21 @@ export const uischema = {
         {
           type: 'Control',
           label: {
-            text: 'Age'
+            text: '%age'
           },
           scope: '#/properties/personalData/properties/age'
         },
         {
           type: 'Control',
-          label: 'Height',
-          scope: '#/properties/personalData/properties/height'
+          label: '%height',
+          scope: {
+            $ref: '#/properties/personalData/properties/height'
+          }
         },
         {
           type: 'Control',
           label: {
-            text: 'Age'
+            text: '%age'
           },
           scope: '#/properties/personalData/properties/age'
         },
@@ -100,26 +102,33 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          label: 'Nationality',
-          scope: '#/properties/nationality'
-
+          label: '%nationality',
+          scope: {
+            $ref: '#/properties/nationality'
+          }
         },
         {
           type: 'Control',
-          label: 'Height',
-          scope: '#/properties/personalData/properties/height'
+          label: '%height',
+          scope: {
+            $ref: '#/properties/personalData/properties/height'
+          }
         },
         {
           type: 'Control',
-          label: 'Occupation',
-          scope: '#/properties/occupation',
+          label: '%occupation',
+          scope: {
+            $ref: '#/properties/occupation'
+          },
           suggestion: ['Accountant', 'Engineer', 'Freelancer',
             'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
         },
         {
           type: 'Control',
-          label: 'Birthday',
-          scope: '#/properties/birthDate'
+          label: '%birthday',
+          scope: {
+            $ref: '#/properties/birthDate'
+          }
         }
       ]
     },
@@ -147,12 +156,35 @@ export const data = {
   postalCode: '12345'
 };
 
+const translations = {
+  'en-US': {
+    name: 'Name',
+    height: 'Height',
+    age: 'Age',
+    nationality: 'Nationality',
+    occupation: 'Occupation',
+    birthday: 'Birthday',
+  },
+  'de-DE': {
+    name: 'Name',
+    height: 'Höhe',
+    age: 'Alter',
+    nationality: 'Staatsangehörigkeit',
+    occupation: 'Besetzung',
+    birthday: 'Geburtstag',
+  }
+};
+
+const locale = 'de-DE';
+
 registerExamples([
   {
     name: 'person',
     label: 'Person',
     data,
     schema,
-    uiSchema: uischema
+    uiSchema: uischema,
+    translations,
+    locale
   }
 ]);

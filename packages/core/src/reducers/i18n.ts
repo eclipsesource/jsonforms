@@ -3,7 +3,7 @@ import { SET_LOCALE, SET_TRANSLATIONS } from '../actions';
 export const i18nReducer = (
   state = {
     translations: {},
-    locale: navigator.language
+    locale: navigator.languages[0]
   },
   action) => {
   switch (action.type) {

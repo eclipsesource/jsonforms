@@ -10,7 +10,7 @@ import {
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
-import { getData, getErrorAt, getSubErrorsAt } from '../reducers';
+import { getData, getErrorAt, getSubErrorsAt, getTranslations } from '../reducers';
 import { Renderer, RendererProps } from '../renderers/Renderer';
 import { update } from '../actions';
 
@@ -74,7 +74,8 @@ export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
-  const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
+  let labelDesc = createLabelDescriptionFrom(ownProps.uischema);
+  labelDesc = translateLabel(getTranslations(state), labelDesc);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = getErrorAt(path)(state).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
