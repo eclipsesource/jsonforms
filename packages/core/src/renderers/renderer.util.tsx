@@ -174,6 +174,7 @@ export const mapStateToControlProps = (state, ownProps) => {
     enabled,
     id,
     path,
+    parentPath: ownProps.path,
     inputs,
     required
   };
