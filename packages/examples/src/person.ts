@@ -175,8 +175,6 @@ const translations = {
   }
 };
 
-const locale = 'de-DE';
-
 registerExamples([
   {
     name: 'person',
@@ -184,7 +182,6 @@ registerExamples([
     data,
     schema,
     uiSchema: uischema,
-    translations,
-    locale
+    translations
   }
 ]);
