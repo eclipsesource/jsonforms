@@ -5,7 +5,7 @@ import { fieldReducer } from './fields';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 import { JsonForms } from '../core';
 import { JsonFormsState } from '../store';
-import { i18nReducer } from './i18n';
+import { fetchTranslation, i18nReducer } from './i18n';
 export {
   validationReducer,
   rendererReducer,
@@ -35,7 +35,4 @@ export const getErrorAt = instancePath => state => {
 };
 export const getSubErrorsAt = instancePath => state => subErrorsAt(instancePath)(state.jsonforms.validation);
 
-const fetchTranslation = state => {
-  return state.translations ? state.translations[state.locale] : undefined;
-};
 export const getTranslations = state => fetchTranslation(state.i18n);
