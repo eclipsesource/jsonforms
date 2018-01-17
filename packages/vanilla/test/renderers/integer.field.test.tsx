@@ -6,7 +6,6 @@ import {
   getData,
   HorizontalLayout,
   initJsonFormsStore,
-  JsonForms,
   JsonSchema,
   update
 } from '@jsonforms/core';
@@ -20,18 +19,6 @@ import {
 } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]);
-});
 test.beforeEach(t => {
   t.context.data = {'foo': 42};
   t.context.schema = {
@@ -49,115 +36,139 @@ test.beforeEach(t => {
       $ref: '#/properties/foo',
     },
   };
+  t.context.styles = [
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ];
 });
 test.failing('autofocus on first element', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            firstIntegerField: { type: 'integer', minimum: 5 },
-            secondIntegerField: { type: 'integer', minimum: 5 }
-        }
-    };
-    const firstControlElement: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/firstIntegerField'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const secondControlElement: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/secondIntegerField'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const uischema: HorizontalLayout = {
-        type: 'HorizontalLayout',
-        elements: [
-            firstControlElement,
-            secondControlElement
-        ]
-    };
-    const data = {
-        'firstIntegerField': 10,
-        'secondIntegerField': 12
-    };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-        </Provider>
-    );
-    const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
-    t.not(document.activeElement, inputs[0]);
-    t.is(document.activeElement, inputs[1]);
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      firstIntegerField: { type: 'integer', minimum: 5 },
+      secondIntegerField: { type: 'integer', minimum: 5 }
+    }
+  };
+  const firstControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/firstIntegerField'
+    },
+    options: {
+      focus: true
+    }
+  };
+  const secondControlElement: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/secondIntegerField'
+    },
+    options: {
+      focus: true
+    }
+  };
+  const uischema: HorizontalLayout = {
+    type: 'HorizontalLayout',
+    elements: [
+      firstControlElement,
+      secondControlElement
+    ]
+  };
+  const data = {
+    'firstIntegerField': 10,
+    'secondIntegerField': 12
+  };
+  const store = initJsonFormsStore({
+    data,
+    schema,
+    uischema
+  });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+  t.not(document.activeElement, inputs[0]);
+  t.is(document.activeElement, inputs[1]);
 
 });
 
 test('autofocus active', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/foo'
-        },
-        options: {
-            focus: true
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <IntegerField schema={t.context.schema} uischema={uischema}/>
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.is(document.activeElement, input);
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    },
+    options: {
+      focus: true
+    }
+  };
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema
+  });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <IntegerField schema={t.context.schema} uischema={uischema}/>
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.is(document.activeElement, input);
 });
 
 test('autofocus inactive', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/foo'
-        },
-        options: {
-            focus: false
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <IntegerField schema={t.context.schema} uischema={uischema}/>
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.false(input.autofocus);
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    },
+    options: {
+      focus: false
+    }
+  };
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema
+  });
+
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <IntegerField schema={t.context.schema} uischema={uischema}/>
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.false(input.autofocus);
 });
 
 test('autofocus inactive by default', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/foo'
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <IntegerField schema={t.context.schema} uischema={uischema}/>
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-    t.false(input.autofocus);
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    }
+  };
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema
+  });
+
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <IntegerField schema={t.context.schema} uischema={uischema}/>
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  t.false(input.autofocus);
 });
 
 test('tester', t => {
@@ -195,7 +206,11 @@ test('tester', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -209,7 +224,11 @@ test('render', t => {
 });
 
 test('update via input event', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -224,7 +243,12 @@ test('update via input event', t => {
 
 test.cb('update via action', t => {
   const data = { 'foo': 13 };
-  const store = initJsonFormsStore(data,  t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
+
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -242,7 +266,11 @@ test.cb('update via action', t => {
 });
 
 test('update with undefined value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -254,7 +282,11 @@ test('update with undefined value', t => {
 });
 
 test('update with null value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -267,7 +299,11 @@ test('update with null value', t => {
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -279,7 +315,11 @@ test('update with wrong ref', t => {
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -291,7 +331,11 @@ test('update with null ref', t => {
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -303,11 +347,11 @@ test('update with undefined ref', t => {
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
@@ -318,7 +362,11 @@ test('disable', t => {
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <IntegerField schema={t.context.schema} uischema={t.context.uischema}/>

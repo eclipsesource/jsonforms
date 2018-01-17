@@ -1,26 +1,26 @@
 import * as React from 'react';
-import {initJsonFormsStore} from '../../../test/helpers/setup';
+import '../../../test/helpers/setup';
 import test from 'ava';
-import {GroupLayout, JsonForms} from '@jsonforms/core';
+import {
+  GroupLayout,
+  initJsonFormsStore
+} from '@jsonforms/core';
 import { renderIntoDocument } from '../../../test/helpers/binding';
-import {Provider} from 'react-redux';
-import {findRenderedDOMElementWithClass} from '../../../test/helpers/react-test';
-import GroupLayoutRenderer, {groupTester } from '../../src/layouts/group.layout';
-
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'group-layout',
-      classNames: ['group-layout']
-    }
-  ]);
-});
+import { Provider } from 'react-redux';
+import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';
+import GroupLayoutRenderer, { groupTester } from '../../src/layouts/group.layout';
 
 test.beforeEach(t => {
   t.context.uischema = {
     type: 'GroupLayout',
     elements: [{type: 'Control'}]
   };
+  t.context.styles = [
+    {
+      name: 'group-layout',
+      classNames: ['group-layout']
+    }
+  ];
 });
 
 test('tester', t => {
@@ -36,7 +36,12 @@ test('render with label', t => {
     label: 'Foo',
     elements: [],
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
@@ -56,7 +61,12 @@ test('render with null elements', t => {
     type: 'Group',
     elements: null
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
@@ -75,7 +85,12 @@ test('render with children', t => {
       {type: 'Control'}
     ]
   };
-  const store = initJsonFormsStore({}, {}, uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
@@ -87,11 +102,17 @@ test('render with children', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore({}, {}, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <GroupLayoutRenderer uischema={t.context.uischema}
-                           visible={false}
+      <GroupLayoutRenderer
+        uischema={t.context.uischema}
+        visible={false}
       />
     </Provider>
   );
@@ -100,7 +121,12 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore({}, {}, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: {},
+    schema: {},
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={t.context.uischema} />

@@ -1,11 +1,8 @@
 import * as _ from 'lodash';
-import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaRegistry, UISchemaRegistryImpl } from './legacy/uischema.registry';
-import { StylingRegistry, StylingRegistryImpl } from './legacy/styling.registry';
 import { SchemaService } from './legacy/schema.service';
 import { SchemaServiceImpl } from './legacy/schema.service.impl';
-import { Store } from 'redux';
 
 /**
  * Represents a JSONForms service.
@@ -36,20 +33,6 @@ export class JsonFormsConfig {
 }
 
 /**
- * Encapsulates instantiation logic of a JSONForms service.
- */
-export interface JsonFormsServiceConstructable {
-  /**
-   * Constructor logic.
-   *
-   * @param {store}
-   * @param {JsonSchema} dataSchema the JSON schema describing the data
-   * @param {UISchemaElement} uiSchema the UI schema to be rendered
-   */
-  new(store: Store<any>, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
-}
-
-/**
  * Global JSONForms object that holds services and registries.
  */
 export class JsonFormsGlobal {
@@ -57,12 +40,13 @@ export class JsonFormsGlobal {
   private _schemaService;
   public renderers = [];
   public fields = [];
+  public reducers: {[key: string]: any} = {};
   public uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
-  public stylingRegistry: StylingRegistry = new StylingRegistryImpl();
   public modelMapping;
   public set schema(schema: JsonSchema) {
     this._schemaService = new SchemaServiceImpl(schema);
   }
+
   public get schemaService(): SchemaService {
     if (this._schemaService === undefined) {
       console.error('Schema service has not been initialized');

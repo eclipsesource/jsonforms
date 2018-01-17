@@ -115,15 +115,16 @@ test('tester with null $ref', t => {
 test('update with wrong ref', t => {
   JsonForms.schema = t.context.schema;
   // TODO: can we shorten this?
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -140,11 +141,16 @@ test('update with wrong ref', t => {
 test('update with null ref', t => {
   JsonForms.schema = t.context.schema;
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -156,11 +162,16 @@ test('update with null ref', t => {
 test('update with undefined ref', t => {
   JsonForms.schema = t.context.schema;
   const data = { name: 'Foo', children: [{name: 'Bar'}] };
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -177,7 +188,11 @@ test('update with undefined ref', t => {
 test('update via action', t => {
   JsonForms.schema = t.context.schema;
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TreeMasterDetail
@@ -211,11 +226,16 @@ test('update via action', t => {
 test('update with undefined value', t => {
   JsonForms.schema = t.context.schema;
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -230,11 +250,16 @@ test('update with undefined value', t => {
 test('update with null value', t => {
   JsonForms.schema = t.context.schema;
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -255,14 +280,20 @@ test('hide', t => {
     type: 'MasterDetailLayout',
     scope: { $ref: '#' },
   };
-  const store = initJsonFormsStore(data, schema, uischema);
-  const vnode =
+  const store = initJsonFormsStore({
+    data,
+    schema,
+    uischema,
+  });
+  const vnode = (
     <Provider store={store}>
-      <TreeMasterDetail schema={schema}
-                        uischema={uischema}
-                        visible={false}
+      <TreeMasterDetail
+        schema={schema}
+        uischema={uischema}
+        visible={false}
       />
-    </Provider>;
+    </Provider>
+  );
   const tree = renderIntoDocument(vnode);
   const div = findRenderedDOMElementWithClass(tree, 'jsf-treeMasterDetail') as HTMLDivElement;
   t.true(div.hidden);
@@ -276,29 +307,20 @@ test('visible by default', t => {
     type: 'MasterDetailLayout',
     scope: { $ref: '#' },
   };
-  const store = initJsonFormsStore(data, schema, uischema);
-  const vnode =
+  const store = initJsonFormsStore({
+    data,
+    schema,
+    uischema,
+  });
+  const vnode = (
     <Provider store={store}>
-      <TreeMasterDetail schema={schema}
-                        uischema={uischema}
+      <TreeMasterDetail
+        schema={schema}
+        uischema={uischema}
       />
-    </Provider>;
+    </Provider>
+  );
   const tree = renderIntoDocument(vnode);
   const div = findRenderedDOMElementWithClass(tree, 'jsf-treeMasterDetail') as HTMLDivElement;
   t.false(div.hidden);
 });
-
-// TODO: divs have no disabled attribute
-// test('TreeMasterDetailRenderer notify disabled', t => {
-//   JsonForms.schema = t.context.schema;
-//   const dataService = new DataService(t.context.data);
-//   const renderer: TreeMasterDetailRenderer = new TreeMasterDetailRenderer();
-//   renderer.setDataService(dataService);
-//   renderer.setschema(t.context.schema);
-//   renderer.setUiSchema(t.context.uiSchema);
-//   renderer.connectedCallback();
-//   const runtime = t.context.uiSchema.runtime as Runtime;
-//   runtime.enabled = false;
-//   const result = patchAndGetElement(renderer.render()).elm as HTMLElement;
-//   t.is(result.getAttribute('disabled'), 'true');
-// });

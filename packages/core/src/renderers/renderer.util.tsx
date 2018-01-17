@@ -3,12 +3,13 @@ import { JsonSchema } from '../models/jsonSchema';
 import { JsonForms } from '../core';
 import {
   composeWithUi,
-  convertToValidClassName,
   createLabelDescriptionFrom,
-  isEnabled, isVisible, Resolve
+  isEnabled,
+  isVisible,
+  Resolve
 } from '../helpers';
 import { RankedTester } from '../testers';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import { ControlElement, Layout } from '../models/uischema';
 import * as React from 'react';
 import DispatchRenderer from './dispatch-renderer';
 import { errorAt, subErrorsAt } from '../reducers/validation';
@@ -54,31 +55,24 @@ export const mapStateToLayoutProps = (state, ownProps) => {
   return {
     renderers: state.renderers,
     visible,
-    path: ownProps.path
+    path: ownProps.path,
   };
 };
 
 export const renderChildren = (
-  elements: UISchemaElement[],
+  layout: Layout,
   schema: JsonSchema,
-  childType: string,
+  classNames: string,
   path: string
 ) => {
 
-  if (_.isEmpty(elements)) {
+  if (_.isEmpty(layout.elements)) {
     return [];
   }
 
-  return elements.map((child, index) => {
-    const classes = JsonForms.stylingRegistry.get(
-      childType,
-      elements.length
-    )
-      .concat([childType])
-      .join(' ');
-
+  return layout.elements.map((child, index) => {
     return (
-      <div className={classes} key={`${path}-${index}`}>
+      <div className={classNames} key={`${path}-${index}`}>
         <DispatchRenderer
           uischema={child}
           schema={schema}
@@ -90,13 +84,13 @@ export const renderChildren = (
 };
 
 // tslint:disable:variable-name
-export const JsonFormsLayout = ({ styleName, children, visible }) => {
+export const JsonFormsLayout = ({ className, children, visible }) => {
 // tslint:enable:variable-name
-  const classNames = JsonForms.stylingRegistry.getAsClassName(styleName);
 
   return (
-    <div className={classNames}
-         hidden={visible === undefined || visible === null ? false : !visible}
+    <div
+      className={className}
+      hidden={visible === undefined || visible === null ? false : !visible}
     >
       {children}
     </div>
@@ -140,35 +134,15 @@ export const mapStateToControlProps = (state, ownProps) => {
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
-  const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
   const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
-
-  const styles = JsonForms.stylingRegistry.get('control');
-  let classNames: string[] = !_.isEmpty(controlElement.scope) ?
-    styles.concat(
-      [`${convertToValidClassName(controlElement.scope.$ref)}`]
-    ) : [''];
-  const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
-  if (trim) {
-    classNames = classNames.concat(JsonForms.stylingRegistry.get('control.trim'));
-  }
-  const inputClassName =
-    ['validate']
-      .concat(isValid ? 'valid' : 'invalid');
-  const labelClass = JsonForms.stylingRegistry.getAsClassName('control.label');
   const inputs = state.inputs;
 
   return {
     data: Resolve.data(getData(state), path),
     errors,
-    classNames: {
-      wrapper: classNames.join(' '),
-      input: inputClassName.join(' '),
-      label: labelClass
-    },
     label,
     visible,
     enabled,

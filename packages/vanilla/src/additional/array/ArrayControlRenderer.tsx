@@ -2,27 +2,24 @@ import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import {
-  ControlElement,
-  ControlProps,
-  getData,
-  Helpers,
-  JsonForms,
-  Paths,
-  Resolve,
-  update
-} from '@jsonforms/core';
+import { ControlElement, Helpers, Resolve, update } from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
+import { mapStateToVanillaControlProps, VanillaControlProps } from '../../helpers';
 
-export const getStyle = (styleName: string) =>
-  JsonForms.stylingRegistry.getAsClassName(styleName);
-
-export interface ArrayControlRendererProps extends ControlProps {
+export interface ArrayControlRendererProps extends VanillaControlProps {
   addItem(path: string);
 }
 
 const ArrayControlRenderer  =
-  ({  schema, uischema, data, path, addItem }: ArrayControlRendererProps) => {
+  ({
+     schema,
+     uischema,
+     data,
+     path,
+     addItem,
+     getStyle,
+     getStyleAsClassName
+  }: ArrayControlRendererProps) => {
 
     const controlElement = uischema as ControlElement;
     const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
@@ -33,7 +30,7 @@ const ArrayControlRenderer  =
       `control ${(Helpers.convertToValidClassName(controlElement.scope.$ref))}`;
     const fieldSetClassName = getStyle('array.layout');
     const buttonClassName = getStyle('array.button');
-    const childrenClassName = JsonForms.stylingRegistry.getAsClassName('array.children');
+    const childrenClassName = getStyleAsClassName('array.children');
     const classNames = {
       wrapper: controlClassName,
       fieldSet: fieldSetClassName,
@@ -52,17 +49,6 @@ const ArrayControlRenderer  =
       />
     );
   };
-
-const mapStateToProps = (state, ownProps) => {
-  const path = Paths.compose(Paths.fromScopable(ownProps.uischema), ownProps.path);
-
-  return {
-    data: Resolve.data(getData(state), path),
-    uischema: ownProps.uischema,
-    schema: ownProps.schema,
-    path
-  };
-};
 
 const mapDispatchToProps = dispatch => ({
   addItem: (path: string) => () => {
@@ -85,6 +71,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  mapStateToProps,
+  mapStateToVanillaControlProps,
   mapDispatchToProps)
 (ArrayControlRenderer);

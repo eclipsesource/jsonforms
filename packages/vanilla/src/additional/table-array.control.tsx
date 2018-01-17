@@ -2,21 +2,23 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ControlElement,
-  ControlProps,
   DispatchField,
   formatErrorMessage,
   Helpers,
-  JsonForms,
-  mapStateToControlProps,
   Paths,
   RankedTester,
   registerStartupRenderer,
   Renderer,
-  Resolve,
   Test,
-  update
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
+import {
+  ControlProps,
+  mapDispatchToTableControlProps,
+  mapStateToTableControlProps
+} from '../../../core/src/renderers';
+import { JsonSchema } from '../../../core/src';
+import { getStyleAsClassName as findStyleAsClassName } from '../reducers';
 
 const {
   createLabelDescriptionFrom,
@@ -35,42 +37,34 @@ const {
  */
 export const tableArrayTester: RankedTester = rankWith(3, isArrayObjectControl);
 
-export class TableArrayControl extends Renderer<ControlProps, void> {
+export interface TableProps extends ControlProps {
+  resolvedSchema: JsonSchema;
+  addItem(path: string): () => void;
+  removeItems(path: string, toDelete: any[]): () => void;
+  getStyleAsClassName(style: string): string;
+}
 
-  // TODO duplicate code
-  addNewItem(path: string) {
-    const element = {};
-    this.props.dispatch(
-      update(
-        path,
-        array => {
-          if (array === undefined || array === null) {
-            return [element];
-          }
+class TableArrayControl extends Renderer<TableProps, void> {
 
-          const clone = _.clone(array);
-          clone.push(element);
-
-          return clone;
-        }
-      )
-    );
-  }
-
-  /**
-   * @inheritDoc
-   */
   render() {
-    const { uischema, schema, path, data, visible, errors, label } = this.props;
+    const {
+      addItem,
+      uischema,
+      resolvedSchema,
+      path,
+      data,
+      visible,
+      errors,
+      label,
+      getStyleAsClassName,
+    } = this.props;
+
     const controlElement = uischema as ControlElement;
-
-    const tableClass = JsonForms.stylingRegistry.getAsClassName('array-table.table');
-    const labelClass = JsonForms.stylingRegistry.getAsClassName('array-table.label');
-    const buttonClass = JsonForms.stylingRegistry.getAsClassName('array-table.button');
-    const controlClass = [JsonForms.stylingRegistry.getAsClassName('array-table'),
+    const tableClass = getStyleAsClassName('array-table.table');
+    const labelClass = getStyleAsClassName('array-table.label');
+    const buttonClass = getStyleAsClassName('array-table.button');
+    const controlClass = [getStyleAsClassName('array-table'),
       convertToValidClassName(controlElement.scope.$ref)].join(' ');
-
-    const resolvedSchema = Resolve.schema(schema, controlElement.scope.$ref + '/items');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',
       label: false,
@@ -86,7 +80,7 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
           <label className={labelClass}>
             {label}
           </label>
-          <button className={buttonClass} onClick={() => this.addNewItem(path)}>
+          <button className={buttonClass} onClick={addItem(path)}>
             Add to {labelObject.text}
           </button>
         </header>
@@ -141,7 +135,16 @@ export class TableArrayControl extends Renderer<ControlProps, void> {
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+  const props = mapStateToTableControlProps(state, ownProps);
+
+  return {
+    ...props,
+    getStyleAsClassName: findStyleAsClassName(state),
+  };
+};
+
 export default registerStartupRenderer(
   tableArrayTester,
-  connect(mapStateToControlProps)(TableArrayControl)
+  connect(mapStateToProps, mapDispatchToTableControlProps)(TableArrayControl)
 );

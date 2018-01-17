@@ -90,12 +90,17 @@ test('render', t => {
     }
   };
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
-  const store = initJsonFormsStore(data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail data={data}
-                        schema={t.context.schema}
-                        uischema={uischema}
+      <TreeMasterDetail
+        data={data}
+        schema={t.context.schema}
+        uischema={uischema}
       />
     </Provider>
   );
@@ -166,11 +171,16 @@ test('render', t => {
 
 test('select', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -185,11 +195,16 @@ test('select', t => {
 
 test('add to root', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -209,11 +224,16 @@ test('add to root', t => {
 test('add to root and remove', t => {
   JsonForms.schema = t.context.schema;
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -230,11 +250,16 @@ test('add to root and remove', t => {
 test('add to nested data', t => {
   JsonForms.schema = t.context.schema;
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -254,11 +279,16 @@ test('add to nested data', t => {
 test('remove from root', t => {
   JsonForms.schema = t.context.schema;
   const data = [{name: 'Foo'}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -273,11 +303,16 @@ test('remove from root', t => {
 
 test('remove from nested data', t => {
   const data = [{name: 'Foo', children: [{name: 'Bar'}]}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -293,11 +328,16 @@ test('remove from nested data', t => {
 
 test('add two nested children', t => {
   const data = [{ name: 'Foo' }];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -320,11 +360,16 @@ test('add two nested children', t => {
 
 test('cancel dialog', t => {
   const data = [{name: 'Foo'}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -340,11 +385,16 @@ test('cancel dialog', t => {
 
 test('add and remove child', t => {
   const data = [{name: 'Foo'}];
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={t.context.uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );

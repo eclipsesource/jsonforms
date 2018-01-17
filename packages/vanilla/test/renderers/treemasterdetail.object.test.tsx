@@ -40,7 +40,11 @@ test.beforeEach(t => {
 test('render object', t => {
   JsonForms.schema = t.context.schema;
   const data = {name: 'Foo', children: [{name: 'Bar'}]};
-  const store = initJsonFormsStore(data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TreeMasterDetail
@@ -75,7 +79,6 @@ test('render object', t => {
   t.is(header.children.length, 1);
   t.is(div.children.length, 1);
   t.is(span.className, 'label');
-  console.log('>>', span.innerHTML);
   t.is(span.children.length, 2);
   t.is(spanLabel.textContent, 'Foo');
   t.is(spanAdd.className, 'add');
@@ -112,11 +115,16 @@ test('render object with array', t => {
     options: {}
   };
 
-  const store = initJsonFormsStore(data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema: t.context.schema,
+    uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <TreeMasterDetail schema={t.context.schema}
-                        uischema={uischema}
+      <TreeMasterDetail
+        schema={t.context.schema}
+        uischema={uischema}
       />
     </Provider>
   );

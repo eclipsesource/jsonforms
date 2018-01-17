@@ -1,24 +1,25 @@
 import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
-import { initJsonFormsStore, JsonForms, LabelElement, UISchemaElement } from '@jsonforms/core';
+import {
+  initJsonFormsStore,
+  LabelElement,
+  UISchemaElement
+} from '@jsonforms/core';
 import { findRenderedDOMElementWithTag, renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import LabelRenderer, { labelRendererTester } from '../../src/additional/label.renderer';
-
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'label-control',
-      classNames: ['jsf-label']
-    }
-  ]);
-});
 
 test.beforeEach(t => {
   t.context.data =  {'name': 'Foo'};
   t.context.schema = {type: 'object', properties: {name: {type: 'string'}}};
   t.context.uischema = {type: 'Label', text: 'Bar'};
+  t.context.styles = [
+    {
+      name: 'label-control',
+      classNames: ['jsf-label']
+    }
+  ];
 });
 
 test('tester', t => {
@@ -30,11 +31,17 @@ test('tester', t => {
 
 test('render with undefined text', t => {
   const uischema: UISchemaElement = { type: 'Label' };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema}
-                     uischema={uischema}
+      <LabelRenderer
+        schema={t.context.schema}
+        uischema={uischema}
       />
     </Provider>
   );
@@ -49,11 +56,18 @@ test('render with null text', t => {
     type: 'Label',
     text: null
   };
-  const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema,
+    styles: t.context.styles
+  });
+
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema}
-                     uischema={uischema}
+      <LabelRenderer
+        schema={t.context.schema}
+        uischema={uischema}
       />
     </Provider>
   );
@@ -63,11 +77,17 @@ test('render with null text', t => {
 });
 
 test('render with text', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+    styles: t.context.styles
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema}
-                     uischema={t.context.uischema}
+      <LabelRenderer
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );
@@ -78,12 +98,17 @@ test('render with text', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema}
-                     uischema={t.context.uischema}
-                     visible={false}
+      <LabelRenderer
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        visible={false}
       />
     </Provider>
   );
@@ -92,11 +117,16 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema}
-                     uischema={t.context.uischema}
+      <LabelRenderer
+        schema={t.context.schema}
+        uischema={t.context.uischema}
       />
     </Provider>
   );

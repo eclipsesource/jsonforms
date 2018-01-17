@@ -1,4 +1,10 @@
-import { JsonForms, JsonFormsElement } from '@jsonforms/core';
+import {
+  Actions,
+  getSchema,
+  getUiSchema,
+  JsonForms,
+  JsonFormsElement
+} from '@jsonforms/core';
 import { registerExamples } from './register';
 
 export const uischema = {
@@ -18,20 +24,25 @@ export const data = {name: 'John Doe'};
 // HACK to retrigger service creation
 const resetServices = () => {
   const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-  jsonforms.data = data;
+  const currentState = jsonforms.store.getState();
+  jsonforms.store.dispatch({
+    type: Actions.INIT,
+    data,
+    schema: getSchema(currentState),
+    uischema: getUiSchema(currentState),
+    styles: currentState.styles
+  });
 };
 const tester = () => 5;
 const setup = (div: HTMLDivElement) => {
   const registerButton = document.createElement('button');
   registerButton.innerText = 'Register UI Schema';
-  registerButton.className = JsonForms.stylingRegistry.getAsClassName('button');
   registerButton.onclick = () => {
     JsonForms.uischemaRegistry.register(uischema, tester);
     resetServices();
   };
   div.appendChild(registerButton);
   const unregisterButton = document.createElement('button');
-  unregisterButton.className = JsonForms.stylingRegistry.getAsClassName('button');
   unregisterButton.innerText = 'Unregister UI Schema';
   unregisterButton.onclick = () => {
     JsonForms.uischemaRegistry.deregister(uischema, tester);

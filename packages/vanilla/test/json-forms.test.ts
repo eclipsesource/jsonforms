@@ -3,6 +3,8 @@ import test from 'ava';
 import { JsonFormsElement } from '@jsonforms/core';
 import '../src/index';
 import { ControlElement, generateDefaultUISchema, generateJsonSchema } from '@jsonforms/core';
+import { vanillaStyles } from '../src/helpers';
+import '../src/reducers/styling';
 
 test.beforeEach(t => {
   t.context.data = { name: 'foo' };
@@ -22,39 +24,47 @@ test.beforeEach(t => {
   };
 });
 
-test('render with data set', t => {
+test.cb('render with data set', t => {
   const jsonForms = new JsonFormsElement();
-  const jsonSchema = generateJsonSchema({ name: 'foo' });
-
-  jsonForms.data = t.context.data;
+  const jsonSchema = generateJsonSchema(t.context.data);
+  jsonForms.state = {
+    data: t.context.data,
+    schema: jsonSchema,
+    uischema: generateDefaultUISchema(jsonSchema),
+    styles: vanillaStyles
+  };
   jsonForms.connectedCallback();
 
-  t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'vertical-layout');
-  t.deepEqual(jsonForms.store.getState().common.schema, jsonSchema);
-  t.deepEqual(jsonForms.store.getState().common.uischema, generateDefaultUISchema(jsonSchema));
-});
-
-test('render with data and data schema set', t => {
-  const jsonForms = new JsonFormsElement();
-  jsonForms.data = t.context.data;
-  jsonForms.dataSchema = t.context.schema;
-  jsonForms.connectedCallback();
-  t.is(jsonForms.children.length, 0);
+  setTimeout(
+    () => {
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'vertical-layout');
+      t.deepEqual(jsonForms.store.getState().common.schema, jsonSchema);
+      t.deepEqual(jsonForms.store.getState().common.uischema, generateDefaultUISchema(jsonSchema));
+      t.end();
+    },
+    100
+  );
 });
 
 test.cb('render with data and data schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
-  jsonForms.data = t.context.data;
-  jsonForms.dataSchema = t.context.schema;
+  jsonForms.state = {
+    data: t.context.data,
+    schema: t.context.schema,
+    styles: vanillaStyles
+  };
   setTimeout(
     () => {
       jsonForms.connectedCallback();
       t.is(jsonForms.children.length, 1);
       t.is(jsonForms.children.item(0).className, 'vertical-layout');
       t.deepEqual(jsonForms.store.getState().common.schema.properties, t.context.schema.properties);
-      t.deepEqual(jsonForms.store.getState().common.uischema, generateDefaultUISchema(t.context.schema));
+      t.deepEqual(
+        jsonForms.store.getState().common.uischema,
+        generateDefaultUISchema(t.context.schema)
+      );
       t.end();
     },
     100
@@ -63,9 +73,12 @@ test.cb('render with data and data schema set', t => {
 
 test('render with data and UI schema set', t => {
   const jsonForms = new JsonFormsElement();
-  jsonForms.data = { name: 'foo' };
   const uischema: ControlElement = t.context.uischema;
-  jsonForms.uiSchema = uischema;
+  jsonForms.state = {
+    data: { name: 'foo' },
+    uischema: t.context.uischema,
+    styles: vanillaStyles
+  };
   jsonForms.connectedCallback();
   t.is(jsonForms.children.length, 1);
   t.is(jsonForms.children.item(0).className, 'control root_properties_name');
@@ -76,9 +89,12 @@ test('render with data and UI schema set', t => {
 test.cb('render with data, data schema and UI schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
-  jsonForms.data = t.context.data;
-  jsonForms.dataSchema = t.context.schema;
-  jsonForms.uiSchema = t.context.uischema;
+  jsonForms.state = {
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+    styles: vanillaStyles,
+  };
 
   setTimeout(
     () => {
@@ -96,8 +112,11 @@ test.cb('render with data, data schema and UI schema set', t => {
 test.cb('render with data schema and UI schema set', t => {
   t.plan(3);
   const jsonForms = new JsonFormsElement();
-  jsonForms.dataSchema = t.context.schema;
-  jsonForms.uiSchema = t.context.uischema;
+  jsonForms.state = {
+    data: undefined,
+    schema: t.context.schema,
+    uischema: t.context.uischema,
+  };
   setTimeout(
     () => {
       jsonForms.connectedCallback();
@@ -113,7 +132,10 @@ test.cb('render with data schema and UI schema set', t => {
 
 test('Connect JSON Forms element and cause data change', t => {
   const jsonForms = new JsonFormsElement();
-  jsonForms.data = { name: 'foo' };
+  jsonForms.state = {
+    data: t.context.data,
+    styles: vanillaStyles
+  };
   jsonForms.connectedCallback();
   t.is(jsonForms.children.length, 1);
 
@@ -121,7 +143,10 @@ test('Connect JSON Forms element and cause data change', t => {
   t.is(verticalLayout1.className, 'vertical-layout');
   t.is(verticalLayout1.children[0].children.length, 1);
 
-  jsonForms.data = { lastname: 'foo', fristname: 'bar' };
+  jsonForms.state = {
+    data: { lastname: 'foo', firstname: 'bar' },
+    styles: vanillaStyles
+  };
   t.is(jsonForms.children.length, 1);
 
   const verticalLayout2 = jsonForms.children.item(0);
