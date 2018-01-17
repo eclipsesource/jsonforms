@@ -107,8 +107,8 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
       }
     });
 
+    const path = Paths.fromScopable(controlElement);
     if (_.isArray(resolvedRootData)) {
-      const path = Paths.fromScopable(controlElement);
       this.setState({
         selected: {
           schema: resolvedSchema.items,
@@ -121,13 +121,13 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
         selected: {
           schema: resolvedSchema,
           data: resolvedRootData,
-          path: ''
+          path: path
         }
       });
     }
   }
 
-  setSelection = (schema, data, path) => () => {
+  setSelection = (schema, data, path) => {
     return () => this.setState({
       selected: {
         schema,
@@ -257,7 +257,7 @@ const mapDispatchToProps = dispatch => ({
           )
         );
       }
-    }
+    };
   }
 });
 

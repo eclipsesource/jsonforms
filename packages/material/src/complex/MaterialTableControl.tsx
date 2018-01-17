@@ -13,7 +13,7 @@ import { ValidationIcon } from './ValidationIcon';
 export const MaterialTableControl = props =>  {
     const { data, path, resolvedSchema, numSelected, selectAll } = props;
     const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
-    const rowCount = data.length;
+    const rowCount = data ? data.length : 0;
 
     return (
         <Table>

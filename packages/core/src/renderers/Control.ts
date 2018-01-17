@@ -10,6 +10,7 @@ export interface ControlClassNames {
 export interface ControlProps extends RendererProps {
   data: any;
   path: string;
+  parentPath?: string;
   classNames: ControlClassNames;
   id: string;
   visible: boolean;

@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 
 export class InputControl extends Control<ControlProps, ControlState> {
   render() {
-    const { classNames, id, errors, label, uischema, schema, visible, required } = this.props;
+    const { classNames, id, errors, label, uischema, schema, visible, required, parentPath } = this.props;
     const isValid = errors.length === 0;
     const inputDescriptionClassName =
       JsonForms.stylingRegistry.getAsClassName('input-description');
@@ -39,7 +39,7 @@ export class InputControl extends Control<ControlProps, ControlState> {
         <label htmlFor={id} className={classNames.label}>
           {computeLabel(label, required)}
         </label>
-        <DispatchField uischema={uischema} schema={schema}/>
+      <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
         <div
           className={divClassNames}
           hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}

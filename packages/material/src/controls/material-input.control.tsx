@@ -21,7 +21,7 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
   render() {
-    const { classNames, id, errors, label, uischema, schema, visible, required } = this.props;
+    const { classNames, id, errors, label, uischema, schema, visible, required, parentPath } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
     const controlElement = uischema as ControlElement;
@@ -42,7 +42,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         <InputLabel htmlFor={id} className={classNames.label} error={!isValid}>
           {computeLabel(label, required)}
         </InputLabel>
-        <DispatchField uischema={uischema} schema={schema}/>
+      <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
         <FormHelperText
           error={!isValid}
           hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}
