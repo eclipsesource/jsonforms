@@ -37,8 +37,7 @@
     "react-dom": "^16.2.0",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "sortablejs": "^1.7.0"
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^3.1.3",

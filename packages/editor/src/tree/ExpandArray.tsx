@@ -21,7 +21,7 @@ import ObjectListItem from './ObjectListItem';
 export const ExpandArray = (
   {
     rootData,
-    schema,
+    props,
     path,
     selection,
     handlers,
@@ -32,17 +32,23 @@ export const ExpandArray = (
 
   const data = resolveData(rootData, path);
   if (data === undefined || data === null) {
-    return 'No data';
+    // return 'No data';
+    return '';
   }
 
   return data.map((_element, index) => {
     const composedPath = Paths.compose(path, index.toString());
+    const property = schemaService.matchContainmentProperty(_element, props);
+
+    if (property === undefined || data === null) {
+      return <li>No ContainmentProperty</li>;
+    }
 
     return (
       <ObjectListItem
         key={composedPath}
         path={composedPath}
-        schema={schema}
+        schema={property.schema}
         selection={selection}
         handlers={handlers}
         uischema={uischema}
@@ -55,9 +61,9 @@ export const ExpandArray = (
 // TODO: update selected element once selection has been changed
 export const ExpandArrayContainer = (
   {
-    prop,
+    props,
     path,
-    schema,
+    // schema,
     rootData,
     selection,
     uischema,
@@ -66,33 +72,24 @@ export const ExpandArrayContainer = (
   }
 ) => {
 
-  const composedPath = Paths.compose(path, prop.property);
-  const propSchema = prop.schema;
-  const propKey = prop.property;
+  const composedPath = Paths.compose(path, _.head(props).property);
 
-  const parentProperties = schemaService.getContainmentProperties(schema);
-
-  for (const property of parentProperties) {
-    // If available, additionally use schema id to identify the correct property
-    if (!_.isEmpty(propSchema.id) && propSchema.id !== property.schema.id) {
-      continue;
-    }
-    if (propKey === property.property) {
-      return (
-        <ExpandArray
-          schema={property.schema}
-          path={composedPath}
-          rootData={rootData}
-          selection={selection}
-          handlers={handlers}
-          uischema={uischema}
-          schemaService={schemaService}
-        />
-      );
-    }
+  if (_.isEmpty(props)) {
+    return undefined;
   }
 
-  return undefined;
+  return (
+    <ExpandArray
+      // schema={property.schema}
+      props={props}
+      path={composedPath}
+      rootData={rootData}
+      selection={selection}
+      handlers={handlers}
+      uischema={uischema}
+      schemaService={schemaService}
+    />
+  );
 };
 
 const mapStateToProps = state => ({

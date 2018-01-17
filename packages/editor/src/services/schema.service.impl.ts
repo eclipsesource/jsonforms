@@ -143,7 +143,7 @@ const getReferenceTargetData = (href: string): Object => {
 
 // reference resolvement for id based references
 const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Object },
-  propName: string) => (data: Object): { [key: string]: Object } => {
+                    propName: string) => (data: Object): { [key: string]: Object } => {
     if (_.isEmpty(data)) {
       return {};
     }
@@ -311,7 +311,7 @@ export const filterObjectsByType =
 
       return valueSchemaId === schemaId;
     });
-  }
+  };
 
 /**
  * Uses the model mapping to find the schema id defining the type of the given object.
@@ -334,7 +334,7 @@ const getSchemaIdForObject = (object: Object, modelMapping: ModelMapping): strin
   }
 
   return null;
-}
+};
 
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: { [id: string]: JsonSchema } = {};
@@ -345,6 +345,32 @@ export class SchemaServiceImpl implements SchemaService {
       editorContext.dataSchema.id = '#generatedRootID';
     }
     this.selfContainedSchemas[editorContext.dataSchema.id] = this.editorContext.dataSchema;
+  }
+
+  matchContainmentProperty(data: Object, properties: ContainmentProperty[]) {
+    if (properties.length === 1) {
+      return properties[0];
+    }
+    if (!_.isEmpty(this.editorContext.modelMapping) &&
+      !_.isEmpty(this.editorContext.modelMapping.mapping)) {
+        const filtered = properties.filter(property => {
+          // only use filter criterion if the checked value has the mapped attribute
+          if (data[this.editorContext.modelMapping.attribute]) {
+            return property.schema.id === this.editorContext.modelMapping.
+              mapping[data[this.editorContext.modelMapping.attribute]];
+          }
+
+          // NOTE if mapped attribute is not present do not filter out property
+          return true;
+        });
+        // TODO improve handling
+        if (filtered.length > 1) {
+          console.warn('More than one matching containment property was found for the given data',
+                       data);
+        }
+
+        return _.head(filtered);
+      }
   }
 
   getContainmentProperties(schema: JsonSchema): ContainmentProperty[] {
@@ -380,7 +406,7 @@ export class SchemaServiceImpl implements SchemaService {
       links.forEach(link => {
         if (_.isEmpty(link.targetSchema) || _.isEmpty(link.href)) {
           console.warn(`Could not create link property because the configuration was invalid`,
-            link);
+                       link);
 
           return;
         }
@@ -419,7 +445,7 @@ export class SchemaServiceImpl implements SchemaService {
           idBased = true;
           const schemaId = targetSchema.id as string;
           findRefTargets = getFindReferenceTargetsFunction(href, schemaId,
-            this.editorContext.identifyingProperty, this.editorContext.modelMapping);
+                                                           this.editorContext.identifyingProperty, this.editorContext.modelMapping);
           resolveReference = resolveRef(schema, findRefTargets, variable);
           addToReference = addReference(schema, this.editorContext.identifyingProperty, variable);
         } else {
@@ -454,13 +480,13 @@ export class SchemaServiceImpl implements SchemaService {
   }
 
   private getContainment(key: string, name: string, schema: JsonSchema, rootSchema: JsonSchema,
-    isInContainment: boolean,
-    addFunction: (data: object) => (valueToAdd: object,
-      neighbourValue?: object,
-      insertAfter?: boolean) => void,
-    deleteFunction: (data: object) => (valueToDelete: object) => void,
-    getFunction: (data: object) => Object,
-    internal = false
+                         isInContainment: boolean,
+                         addFunction: (data: object) => (valueToAdd: object,
+                                                         neighbourValue?: object,
+                                                         insertAfter?: boolean) => void,
+                         deleteFunction: (data: object) => (valueToDelete: object) => void,
+                         getFunction: (data: object) => Object,
+                         internal = false
   ): ContainmentProperty[] {
     if (schema.$ref !== undefined) {
       return this.getContainment(
@@ -479,7 +505,7 @@ export class SchemaServiceImpl implements SchemaService {
       if (isInContainment) {
 
         return [new ContainmentPropertyImpl(schema, key, name, addFunction, deleteFunction,
-          getFunction)];
+                                            getFunction)];
       }
       if (internal) {
         // If internal is true the schema service does not need to resolve further,
@@ -555,7 +581,7 @@ export class SchemaServiceImpl implements SchemaService {
    * @param includedDefs The list of definitions which were already added to the outer schema
    */
   private selfContainSchema(schema: JsonSchema, outerSchema: JsonSchema,
-    outerReference: string, includedDefs: string[] = ['#']): void {
+                            outerReference: string, includedDefs: string[] = ['#']): void {
     // Step 1: get all used references
     const allInnerRefs = findAllRefs(schema);
     Object.keys(allInnerRefs).forEach(innerRef => {
@@ -585,7 +611,7 @@ export class SchemaServiceImpl implements SchemaService {
     });
   }
   private copyAndResolveInner(resolved: JsonSchema, innerRef: string, outerSchema: JsonSchema,
-    outerReference: string, includedDefs: string[]) {
+                              outerReference: string, includedDefs: string[]) {
     // get a copy of the referenced type's schema
     const definitionSchema = deepCopy(resolved);
     if (outerSchema.definitions === undefined || outerSchema.definitions === null) {

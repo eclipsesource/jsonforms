@@ -19,7 +19,7 @@ import {
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
-import { ExpandArray } from './ExpandArray';
+import ExpandRootArray from './ExpandRootArray';
 import Dialog from './Dialog';
 import { SchemaService } from '../services/schema.service';
 
@@ -52,7 +52,7 @@ const Master = (
   if (schema.items !== undefined) {
     return (
       <ul>
-        <ExpandArray
+        <ExpandRootArray
           rootData={rootData}
           schema={schema.items as JsonSchema}
           path={path}

@@ -29,41 +29,6 @@ const getNamingFunction =
     return JSON.stringify(element);
   };
 
-const propHasData = (
-  prop,
-  data,
-  uischema
-) => {
-
-  const sid = prop.schema.id;
-
-  if (sid === undefined || sid === null) {
-    // TODO proper logging
-    console.warn(`The property's schema with label '${prop.label}' has no id. DnD not possible.`);
-  }
-
-  let propertyData = prop.getData(data) as Object[];
-
-  /*tslint:disable:no-string-literal */
-  if (uischema.options !== undefined &&
-    uischema.options['modelMapping'] !== undefined
-    && !_.isEmpty(propertyData)) {
-
-    propertyData = propertyData.filter(value => {
-      // only use filter criterion if the checked value has the mapped attribute
-      if (value[uischema.options['modelMapping'].attribute]) {
-        return prop.schema.id === uischema.options['modelMapping']
-          .mapping[value[uischema.options['modelMapping'].attribute]];
-      }
-
-      return true;
-    });
-  }
-
-  // TODO: remove check OR add id to test data (?)
-  return !_.isEmpty(propertyData);
-};
-
 export interface ObjectListItemProps {
   path: string;
   schema: JsonSchema;
@@ -96,6 +61,8 @@ const ObjectListItem = (
   const liClasses = selection === data ? 'selected' : '';
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
+  const containmentProps = schemaService.getContainmentProperties(schema);
+  const groupedProps = _.groupBy(containmentProps, property => property.property);
 
   // TODO: key should be set in caller
   return (
@@ -136,22 +103,20 @@ const ObjectListItem = (
         </span>
       </div>
       {
-        // render contained children of this element
-        schemaService.getContainmentProperties(schema)
-          .filter(prop => propHasData(prop, data, uischema))
-          .map(prop =>
-            <ul key={prop.label}>
-              <ExpandArray
-                prop={prop}
+      Object.keys(groupedProps).map(groupKey =>
+        <ul key={_.head(groupedProps[groupKey]).property}>
+          <ExpandArray
+                props={groupedProps[groupKey]}
                 path={path}
                 schema={schema}
                 selection={selection}
                 uischema={uischema}
                 handlers={handlers}
                 schemaService={schemaService}
-              />
-            </ul>)
-      }
+          />
+        </ul>
+      )
+    }
     </li>
   );
 };

@@ -187,6 +187,16 @@ export const isReferenceProperty = (property: Property): property is ReferencePr
  */
 export interface SchemaService {
   /**
+   * Determines the ContainmentProperty of the given data object by using the model mapping.
+   * If only one ContainmentProperty is given, it is assumed to be the matching one.
+   *
+   * @param data The data object to match
+   * @param properties The array of ContainmentProperties
+   * @return The matching {@link ContainmentProperty}
+   */
+  matchContainmentProperty(data: Object, properties: ContainmentProperty[]): ContainmentProperty;
+
+  /**
    * Retrieves an array of containment properties based on the provided schema.
    * @param schema The schema to check for containments
    * @return The array of {@link ContainmentProperty} or empty if no containments are available
