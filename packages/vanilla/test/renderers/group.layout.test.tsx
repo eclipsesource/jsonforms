@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { initJsonFormsStore } from '../../../test/helpers/setup';
+import '../../../test/helpers/setup';
 import test from 'ava';
-import { GroupLayout } from '@jsonforms/core';
+import {
+  GroupLayout,
+  initJsonFormsStore
+} from '@jsonforms/core';
 import { renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';

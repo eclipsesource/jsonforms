@@ -1,15 +1,13 @@
 import * as React from 'react';
+import { Store } from 'redux';
+import * as ReactDOM from 'react-dom';
 import * as JsonRefs from 'json-refs';
-import * as _ from 'lodash';
+import { Provider } from 'react-redux';
 import './renderers';
-import { UISchemaElement } from './models/uischema';
 import { JsonForms } from './core';
 import { JsonSchema } from './models/jsonSchema';
-import { Store } from 'redux';
-import { initJsonFormsStore } from './store';
 import DispatchRenderer from './renderers/dispatch-renderer';
-import { Provider, render } from './common/binding';
-import { getStyleAsClassName } from './reducers';
+import { initJsonFormsStore, JsonFormsInitialState } from './store';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -45,15 +43,8 @@ export interface JsonFormsStore extends Store<any> {
 })
 export class JsonFormsElement extends HTMLElement {
 
-  private dataObject: any;
-  private uischema: UISchemaElement;
-  private dataschema: JsonSchema;
-  private styleDefs: { name: string, classNames: string[] }[];
-
-  schemaPromise: Promise<any> = null;
   private allowDynamicUpdate = false;
-  // TODO: maybe make only dispatch accessible?
-  store: Store<any>;
+  private _store: Store<any>;
 
   /**
    * Constructor.
@@ -72,72 +63,49 @@ export class JsonFormsElement extends HTMLElement {
 
   /**
    * Set the data to be rendered.
-   * @param {Object} data the data to be rendered
+   * @param {Object} initialState initial state describing what is to be rendered
    */
-  set data(data: Object) {
-    this.dataObject = data;
-
-    // TODO
-    this.render();
-  }
-
-  /**
-   * Set the UI schema.
-   * @param {UISchemaElement} uischema the UI schema element to be set
-   */
-  set uiSchema(uischema: UISchemaElement) {
-    this.uischema = uischema;
-    // TODO
-    this.render();
-  }
-
-  set styles(styles: { name: string, classNames: string[] }[]) {
-    this.styleDefs = styles;
-    this.render();
-  }
-
-  /**
-   * Set the JSON data schema that describes the data to be rendered.
-   * @param {JsonSchema} dataSchema the data schema to be rendered
-   */
-  set dataSchema(dataSchema: JsonSchema) {
-    this.schemaPromise = JsonRefs.resolveRefs(dataSchema, {includeInvalid: true});
-    this.schemaPromise.then(result => {
-      this.dataschema = result.resolved;
-      this.schemaPromise = null;
+  set state(initialState: JsonFormsInitialState) {
+    if (initialState.schema) {
+      JsonRefs
+        .resolveRefs(initialState.schema, {includeInvalid: true})
+        .then(result => {
+          const resolvedSchema = result.resolved;
+          this._store = initJsonFormsStore({
+            ...initialState,
+            data: initialState.data,
+            schema: resolvedSchema,
+            uischema: initialState.uischema,
+          });
+          this.render();
+        });
+    } else {
+      this._store = initJsonFormsStore(initialState);
       this.render();
-    });
+    }
+  }
+
+  get store() {
+    return this._store;
   }
 
   private render(): void {
     if (!this.allowDynamicUpdate) {
       return;
     }
-    if (this.schemaPromise !== null) {
-      return;
-    }
-    if ((this.dataObject === undefined || this.dataObject === null)
-      && _.isEmpty(this.dataschema)) {
+    if (this._store === null || this._store === undefined) {
       return;
     }
 
-    this.store = initJsonFormsStore({
-      data: this.dataObject,
-      schema: this.dataschema,
-      uischema: this.uischema,
-      styles: this.styleDefs
-    });
-    this.instantiateSchemaIfNeeded(this.store.getState().common.schema);
+    this.instantiateSchemaIfNeeded(this._store.getState().common.schema);
     const storeId = new Date().toISOString();
 
-    render(
-      <Provider store={this.store} key={`${storeId}-store`}>
+    ReactDOM.render(
+      <Provider store={this._store} key={`${storeId}-store`}>
         <DispatchRenderer />
       </Provider>,
       this
     );
-
-    this.className = getStyleAsClassName(this.store.getState())('json-forms');
   }
 
   private instantiateSchemaIfNeeded(schema: JsonSchema): void {

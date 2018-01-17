@@ -16,10 +16,6 @@ export const REMOVE_RENDERER = 'REMOVE_RENDERER';
 export const ADD_FIELD = 'ADD_FIELD';
 export const REMOVE_FIELD = 'REMOVE_FIELD';
 
-export const REGISTER_STYLE = 'REGISTER_STYLE';
-export const REGISTER_STYLES = 'REGISTER_STYLES';
-export const UNREGISTER_STYLE = 'UNREGISTER_STYLE';
-
 // TODO: fix typings
 export const update =
   (path: string, updater: (any) => any): ThunkAction<void, any, void> =>
@@ -62,20 +58,4 @@ export const unregisterRenderer = (
   type: REMOVE_RENDERER,
   tester,
   renderer
-});
-
-export const registerStyle = (styleName: string, classNames: string[]) => ({
-  type: REGISTER_STYLE,
-  name: styleName,
-  classNames
-});
-
-export const unregisterStyle = (styleName: string) => ({
-  type: UNREGISTER_STYLE,
-  name: styleName
-});
-
-export const registerStyles = (styleDefs: { name: string, classNames: string[] }[]) => ({
-  type: REGISTER_STYLES,
-  styles: styleDefs
 });

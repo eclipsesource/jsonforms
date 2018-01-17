@@ -1,6 +1,7 @@
 import { test } from 'ava';
-import { findStyle, findStyleAsClassName, stylingReducer } from '../src/reducers/styling';
 import { registerStyle, registerStyles, unregisterStyle } from '../src/actions';
+import { stylingReducer } from '../src/reducers';
+import { findStyle, findStyleAsClassName } from '../src/reducers/styling';
 
 test('register single style', t => {
     const after = stylingReducer(

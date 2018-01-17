@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { initJsonFormsStore } from '../../../test/helpers/setup';
+import '../../../test/helpers/setup';
 import test from 'ava';
-import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
+import {
+  HorizontalLayout,
+  initJsonFormsStore,
+  UISchemaElement
+} from '@jsonforms/core';
 import { renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';

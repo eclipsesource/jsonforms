@@ -1,12 +1,17 @@
+import '../../../test/helpers/setup';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import test from 'ava';
-import { initJsonFormsStore } from '../../../test/helpers/setup';
-import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
+import {
+  initJsonFormsStore,
+  UISchemaElement,
+  VerticalLayout
+} from '@jsonforms/core';
 import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/layouts/vertical.layout';
 import { findRenderedDOMElementWithClass, renderIntoDocument } from '../../../test/helpers/binding';
+
 
 const styles = [
   {

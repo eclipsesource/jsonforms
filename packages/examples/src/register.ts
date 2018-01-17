@@ -1,5 +1,6 @@
-import {  JsonFormsElement } from '@jsonforms/core';
+import { JsonFormsElement } from '@jsonforms/core';
 import { ExampleDescription } from './example';
+import { vanillaStyles } from '../../vanilla/src/helpers';
 
 declare let exampleDivId;
 declare let viewDivId;
@@ -24,13 +25,12 @@ export const changeExample = (selectedExample: string) => {
   }
 
   const jsonForms = document.createElement('json-forms') as JsonFormsElement;
-  jsonForms.data = example.data;
-  if (example.uiSchema !== undefined) {
-    jsonForms.uiSchema = example.uiSchema;
-  }
-  if (example.schema !== undefined) {
-    jsonForms.dataSchema = example.schema;
-  }
+  jsonForms.state = {
+    data: example.data,
+    schema: example.schema,
+    uischema: example.uiSchema,
+    styles: vanillaStyles
+  };
 
   body.appendChild(jsonForms);
 };

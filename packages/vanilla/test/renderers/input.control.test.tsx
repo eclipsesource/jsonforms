@@ -4,24 +4,24 @@ import test from 'ava';
 import '../../src/fields';
 import {
   ControlElement,
+  DispatchRenderer,
   HorizontalLayout,
   initJsonFormsStore,
   JsonSchema,
   update,
   validate
 } from '@jsonforms/core';
-import InputControl, { inputControlTester } from '../../src/controls/input.control';
+import { renderIntoDocument, scryRenderedDOMElementsWithTag } from '../../../test/helpers/binding';
+import { Provider } from 'react-redux';
+import '../../src';
 import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
+import InputControl, { inputControlTester } from '../../src/controls/input.control';
 import {
   blur,
   findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
-  focus,
-  renderIntoDocument,
-  scryRenderedDOMElementsWithClass,
-  scryRenderedDOMElementsWithTag
-} from '../../../test/helpers/binding';
-import { Provider } from 'react-redux';
+  focus, scryRenderedDOMElementsWithClass,
+} from '../../../test/helpers/react-test';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': true };
@@ -95,11 +95,12 @@ test('autofocus on first element', t => {
   const store = initJsonFormsStore({
     data,
     schema,
-    uischema
+    uischema,
+    styles: t.context.styles
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
   const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
@@ -125,7 +126,7 @@ test('render', t => {
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
 
@@ -133,7 +134,6 @@ test('render', t => {
   t.not(control, undefined);
   t.is(control.childNodes.length, 3);
   t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-  /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
 
   const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.textContent, 'Foo');
@@ -158,12 +158,12 @@ test('render without label', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema,
+    uischema,
     styles: t.context.styles
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
 
@@ -194,7 +194,13 @@ test('hide', t => {
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema} visible={false}/>
+      <InputControl
+        data={t.context.data}
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        path={''}
+        visible={false}
+      />
     </Provider>
   );
   const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
@@ -259,7 +265,7 @@ test('empty errors by default', t => {
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
@@ -274,7 +280,7 @@ test('reset validation message', t => {
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
   const validation = findRenderedDOMElementWithClass(tree, 'validation');
@@ -536,7 +542,7 @@ test('hide description on blur', t => {
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
   const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
@@ -568,7 +574,7 @@ test('description undefined', t => {
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
   const tree = renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema}/>
+      <DispatchRenderer />
     </Provider>
   );
   const description =

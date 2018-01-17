@@ -1,15 +1,7 @@
 import * as _ from 'lodash';
+import { JsonForms } from '@jsonforms/core/lib/core';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
-
-export type ClassNames = string[] | ((...args: any[]) => string[]);
-
-/**
- * A style associates a name with a list of CSS class names.
- */
-export interface StyleDef {
-  name: string;
-  classNames: ClassNames;
-}
+import { StyleDef } from '../helpers';
 
 const removeStyle = (styles, name) => {
   const copy = styles.slice();
@@ -25,7 +17,9 @@ const registerStyle = (styles, { name, classNames }) => {
   return copy;
 };
 
-export const findStyle = (styles: StyleDef[]) => (style: string, ...args: any[]) => {
+export const findStyle = (styles: StyleDef[]) =>
+  (style: string, ...args: any[]) => {
+
   const foundStyle = _.find(styles, s => s.name === style);
   if (!_.isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
     return foundStyle.classNames(args);
@@ -55,3 +49,5 @@ export const stylingReducer = (state: StyleDef[]  = [], action) => {
       return state;
   }
 };
+
+JsonForms.reducers['styles'] = stylingReducer;

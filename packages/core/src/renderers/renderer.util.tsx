@@ -3,7 +3,6 @@ import { JsonSchema } from '../models/jsonSchema';
 import { JsonForms } from '../core';
 import {
   composeWithUi,
-  convertToValidClassName,
   createLabelDescriptionFrom,
   isEnabled,
   isVisible,
@@ -14,7 +13,7 @@ import { ControlElement, Layout } from '../models/uischema';
 import * as React from 'react';
 import DispatchRenderer from './dispatch-renderer';
 import { errorAt, subErrorsAt } from '../reducers/validation';
-import { getData, getStyle, getStyleAsClassName, getValidation } from '../reducers';
+import { getData, getValidation } from '../reducers';
 import { Renderer, RendererProps } from './renderer';
 import { update } from '../actions';
 
@@ -57,8 +56,6 @@ export const mapStateToLayoutProps = (state, ownProps) => {
     renderers: state.renderers,
     visible,
     path: ownProps.path,
-    getStyle: getStyle(state),
-    getStyleAsClassName: getStyleAsClassName(state)
   };
 };
 
@@ -137,37 +134,15 @@ export const mapStateToControlProps = (state, ownProps) => {
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
-  const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
   const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
-
-  const styles = getStyle(state)('control');
-  let classNames: string[] = !_.isEmpty(controlElement.scope) ?
-    styles.concat(
-      [`${convertToValidClassName(controlElement.scope.$ref)}`]
-    ) : [''];
-  const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
-  if (trim) {
-    classNames = classNames.concat(getStyle(state)('control.trim'));
-  }
-  const inputClassName =
-    ['validate']
-      .concat(isValid ? 'valid' : 'invalid');
-  const labelClass = getStyleAsClassName(state)('control.label');
-  const descriptionClassName = getStyleAsClassName(state)('input-description');
   const inputs = state.inputs;
 
   return {
     data: Resolve.data(getData(state), path),
     errors,
-    classNames: {
-      wrapper: classNames.join(' '),
-      input: inputClassName.join(' '),
-      label: labelClass,
-      description: descriptionClassName
-    },
     label,
     visible,
     enabled,
