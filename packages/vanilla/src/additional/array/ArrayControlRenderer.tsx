@@ -2,20 +2,9 @@ import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import {
-  ControlElement,
-  getData,
-  Helpers,
-  Paths,
-  Resolve,
-  update
-} from '@jsonforms/core';
+import { ControlElement, Helpers, Resolve, update } from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
-import {
-  getStyle as style,
-  getStyleAsClassName as styleAsClassName
-} from '../../../../core/src/reducers';
-import { VanillaControlProps } from '../../index';
+import { mapStateToVanillaControlProps, VanillaControlProps } from '../../helpers';
 
 export interface ArrayControlRendererProps extends VanillaControlProps {
   addItem(path: string);
@@ -61,19 +50,6 @@ const ArrayControlRenderer  =
     );
   };
 
-const mapStateToProps = (state, ownProps) => {
-  const path = Paths.compose(Paths.fromScopable(ownProps.uischema), ownProps.path);
-
-  return {
-    data: Resolve.data(getData(state), path),
-    uischema: ownProps.uischema,
-    schema: ownProps.schema,
-    getStyle: style(state),
-    getStyleAsClassName: styleAsClassName(state),
-    path
-  };
-};
-
 const mapDispatchToProps = dispatch => ({
   addItem: (path: string) => () => {
     dispatch(
@@ -95,6 +71,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  mapStateToProps,
+  mapStateToVanillaControlProps,
   mapDispatchToProps)
 (ArrayControlRenderer);

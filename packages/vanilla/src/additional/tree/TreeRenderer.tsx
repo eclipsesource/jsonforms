@@ -7,7 +7,6 @@ import {
   DispatchRenderer,
   generateDefaultUISchema,
   getData,
-  getStyleAsClassName as styleAsClassName,
   JsonSchema,
   MasterDetailLayout,
   Paths,
@@ -19,7 +18,8 @@ import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import { ExpandArray } from './ExpandArray';
 import Dialog from './Dialog';
-import { VanillaControlProps } from '../../index';
+import { VanillaControlProps } from '../../helpers';
+import { getStyle as findStyle, getStyleAsClassName as findStyleAsClassName } from '../../reducers';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -95,7 +95,7 @@ export interface TreeProps extends VanillaControlProps {
   addToRoot: any;
 }
 
-export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
+class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
 
   componentWillMount() {
     const { uischema, resolvedRootData, resolvedSchema } = this.props;
@@ -251,7 +251,8 @@ const mapStateToProps = (state, ownProps) => {
     path,
     visible,
     enabled,
-    getStyleAsClassName: styleAsClassName(state)
+    getStyle: findStyle(state),
+    getStyleAsClassName: findStyleAsClassName(state),
   };
 };
 

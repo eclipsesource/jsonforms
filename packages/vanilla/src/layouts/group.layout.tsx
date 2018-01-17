@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   GroupLayout,
-  mapStateToLayoutProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
@@ -10,7 +9,7 @@ import {
   uiTypeIs,
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { VanillaRendererProps } from '../index';
+import { mapStateToVanillaLayoutProps, VanillaRendererProps } from '../helpers';
 
 /**
  * Default tester for a group layout.
@@ -60,5 +59,5 @@ export const GroupLayoutRenderer = (
 
 export default registerStartupRenderer(
   groupTester,
-  connect(mapStateToLayoutProps)(GroupLayoutRenderer)
+  connect(mapStateToVanillaLayoutProps)(GroupLayoutRenderer)
 );

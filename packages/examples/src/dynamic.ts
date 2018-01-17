@@ -1,4 +1,4 @@
-import { JsonFormsElement } from '@jsonforms/core';
+import { Actions, getSchema, getUiSchema, JsonFormsElement } from '@jsonforms/core';
 import { registerExamples } from './register';
 
 const setup = (div: HTMLDivElement) => {
@@ -6,7 +6,14 @@ const setup = (div: HTMLDivElement) => {
   button.innerText = 'Change data';
   button.onclick = () => {
     const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-    jsonforms.data = {id: 'aaa'};
+    const currentState = jsonforms.store.getState();
+    jsonforms.store.dispatch({
+      type: Actions.INIT,
+      data: { id: 'aaa' },
+      schema: getSchema(currentState),
+      uischema: getUiSchema(currentState),
+      styles: currentState.styles
+    });
   };
   div.appendChild(button);
 };

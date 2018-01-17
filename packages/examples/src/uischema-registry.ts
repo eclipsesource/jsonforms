@@ -1,4 +1,10 @@
-import { JsonForms, JsonFormsElement } from '@jsonforms/core';
+import {
+  Actions,
+  getSchema,
+  getUiSchema,
+  JsonForms,
+  JsonFormsElement
+} from '@jsonforms/core';
 import { registerExamples } from './register';
 
 export const uischema = {
@@ -18,7 +24,14 @@ export const data = {name: 'John Doe'};
 // HACK to retrigger service creation
 const resetServices = () => {
   const jsonforms = document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-  jsonforms.data = data;
+  const currentState = jsonforms.store.getState();
+  jsonforms.store.dispatch({
+    type: Actions.INIT,
+    data,
+    schema: getSchema(currentState),
+    uischema: getUiSchema(currentState),
+    styles: currentState.styles
+  });
 };
 const tester = () => 5;
 const setup = (div: HTMLDivElement) => {

@@ -1,10 +1,12 @@
 import * as React from 'react';
+import * as _ from 'lodash';
 import {
   computeLabel,
   Control,
   ControlElement,
   ControlProps,
   ControlState,
+  convertToValidClassName,
   DispatchField,
   isControl,
   isDescriptionHidden,
@@ -21,7 +23,16 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
   render() {
-    const { classNames, id, errors, label, uischema, schema, visible, required, parentPath } = this.props;
+    const {  
+      id, 
+      errors, 
+      label, 
+      uischema, 
+      schema, 
+      visible, 
+      required, 
+      parentPath 
+    } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
     const controlElement = uischema as ControlElement;
@@ -31,18 +42,21 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     if (!visible) {
       style = {display: 'none'};
     }
+    const classNames: string[] = !_.isEmpty(controlElement.scope) ?
+        [`${convertToValidClassName(controlElement.scope.$ref)}`] : [];
+
     return (
       <FormControl
-        className={classNames.wrapper}
+        className={classNames.join(' ')}
         style={style}
         fullWidth={!trim}
         onFocus={() => this.onFocus()}
         onBlur={() => this.onBlur()}
       >
-        <InputLabel htmlFor={id} className={classNames.label} error={!isValid}>
+        <InputLabel htmlFor={id} error={!isValid}>
           {computeLabel(label, required)}
         </InputLabel>
-      <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
+        <DispatchField uischema={uischema} schema={schema} path={parentPath} />
         <FormHelperText
           error={!isValid}
           hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}

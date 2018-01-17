@@ -9,13 +9,13 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
-  mapStateToControlProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
+import { mapStateToVanillaControlProps } from '../helpers';
 
 export class InputControl extends Control<ControlProps, ControlState> {
   render() {
@@ -30,6 +30,7 @@ export class InputControl extends Control<ControlProps, ControlState> {
       required, 
       parentPath 
     } = this.props;
+
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const controlElement = uischema as ControlElement;
@@ -59,7 +60,8 @@ export class InputControl extends Control<ControlProps, ControlState> {
 }
 
 export const inputControlTester: RankedTester = rankWith(1, isControl);
+
 export default registerStartupRenderer(
   inputControlTester,
-  connect(mapStateToControlProps)(InputControl)
+  connect(mapStateToVanillaControlProps)(InputControl)
 );

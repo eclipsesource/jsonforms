@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import {
   Categorization,
   Category,
-  mapStateToLayoutProps,
   Renderer,
 } from '@jsonforms/core';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
-import { VanillaRendererProps } from '../../index';
+import { mapStateToVanillaLayoutProps, VanillaRendererProps } from '../../helpers';
 
 export interface CategorizationState {
   selectedCategory: Category;
@@ -25,7 +24,7 @@ class CategorizationRenderer extends Renderer<VanillaRendererProps, Categorizati
    * @inheritDoc
    */
   render() {
-    const { uischema, visible, getStyleAsClassName } = this.props;
+    const { uischema, visible, getStyleAsClassName  } = this.props;
     const categorization = uischema as Categorization;
     const classNames = getStyleAsClassName('categorization');
     const masterClassNames = getStyleAsClassName('categorization.master');
@@ -75,4 +74,4 @@ class CategorizationRenderer extends Renderer<VanillaRendererProps, Categorizati
   }
 }
 
-export default connect(mapStateToLayoutProps)(CategorizationRenderer);
+export default connect(mapStateToVanillaLayoutProps)(CategorizationRenderer);

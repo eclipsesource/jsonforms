@@ -9,12 +9,16 @@ import {
   RankedTester,
   registerStartupRenderer,
   Renderer,
-  Resolve,
   Test,
-  update
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import {mapStateToVanillaControlProps, VanillaControlProps} from '../index';
+import {
+  ControlProps,
+  mapDispatchToTableControlProps,
+  mapStateToTableControlProps
+} from '../../../core/src/renderers';
+import { JsonSchema } from '../../../core/src';
+import { getStyleAsClassName as findStyleAsClassName } from '../reducers';
 
 const {
   createLabelDescriptionFrom,
@@ -33,51 +37,34 @@ const {
  */
 export const tableArrayTester: RankedTester = rankWith(3, isArrayObjectControl);
 
-export class TableArrayControl extends Renderer<VanillaControlProps, void> {
+export interface TableProps extends ControlProps {
+  resolvedSchema: JsonSchema;
+  addItem(path: string): () => void;
+  removeItems(path: string, toDelete: any[]): () => void;
+  getStyleAsClassName(style: string): string;
+}
 
-  // TODO duplicate code
-  addNewItem(path: string) {
-    const element = {};
-    this.props.dispatch(
-      update(
-        path,
-        array => {
-          if (array === undefined || array === null) {
-            return [element];
-          }
+class TableArrayControl extends Renderer<TableProps, void> {
 
-          const clone = _.clone(array);
-          clone.push(element);
-
-          return clone;
-        }
-      )
-    );
-  }
-
-  /**
-   * @inheritDoc
-   */
   render() {
     const {
+      addItem,
       uischema,
-      schema,
+      resolvedSchema,
       path,
       data,
       visible,
       errors,
       label,
-      getStyleAsClassName
+      getStyleAsClassName,
     } = this.props;
-    const controlElement = uischema as ControlElement;
 
+    const controlElement = uischema as ControlElement;
     const tableClass = getStyleAsClassName('array-table.table');
     const labelClass = getStyleAsClassName('array-table.label');
     const buttonClass = getStyleAsClassName('array-table.button');
     const controlClass = [getStyleAsClassName('array-table'),
       convertToValidClassName(controlElement.scope.$ref)].join(' ');
-
-    const resolvedSchema = Resolve.schema(schema, controlElement.scope.$ref + '/items');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',
       label: false,
@@ -93,7 +80,7 @@ export class TableArrayControl extends Renderer<VanillaControlProps, void> {
           <label className={labelClass}>
             {label}
           </label>
-          <button className={buttonClass} onClick={() => this.addNewItem(path)}>
+          <button className={buttonClass} onClick={addItem(path)}>
             Add to {labelObject.text}
           </button>
         </header>
@@ -148,7 +135,16 @@ export class TableArrayControl extends Renderer<VanillaControlProps, void> {
   }
 }
 
+const mapStateToProps = (state, ownProps) => {
+  const props = mapStateToTableControlProps(state, ownProps);
+
+  return {
+    ...props,
+    getStyleAsClassName: findStyleAsClassName(state),
+  };
+};
+
 export default registerStartupRenderer(
   tableArrayTester,
-  connect(mapStateToVanillaControlProps)(TableArrayControl)
+  connect(mapStateToProps, mapDispatchToTableControlProps)(TableArrayControl)
 );

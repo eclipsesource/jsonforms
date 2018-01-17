@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  getStyleAsClassName as styleAsClassName,
   isVisible,
   LabelElement,
   RankedTester,
@@ -10,7 +9,8 @@ import {
   uiTypeIs,
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { VanillaRendererProps } from '../index';
+import { VanillaRendererProps } from '../helpers';
+import { getStyle as findStyle, getStyleAsClassName as findStyleAsClassName } from '../reducers';
 
 /**
  * Default tester for a label.
@@ -21,13 +21,16 @@ export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
 /**
  * Default renderer for a label.
  */
-export const LabelRenderer = ({ getStyleAsClassName, uischema, visible }: VanillaRendererProps) => {
+export const LabelRenderer = ({ uischema, visible, getStyleAsClassName }: VanillaRendererProps) => {
   const labelElement: LabelElement = uischema as LabelElement;
   const classNames = getStyleAsClassName('label-control');
   const isHidden = !visible;
 
   return (
-    <label hidden={isHidden} className={classNames}>
+    <label
+      hidden={isHidden}
+      className={classNames}
+    >
       {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
     </label>
   );
@@ -38,7 +41,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     visible,
-    getStyleAsClassName: styleAsClassName(state)
+    getStyle: findStyle(state),
+    getStyleAsClassName: findStyleAsClassName(state),
   };
 };
 

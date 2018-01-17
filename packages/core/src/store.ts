@@ -1,5 +1,5 @@
 import thunk from 'redux-thunk';
-import { appReducer } from './reducers';
+import { jsonformsReducer } from './reducers';
 import { applyMiddleware, createStore } from 'redux';
 import { JsonFormsStore } from './json-forms';
 import { JsonForms } from './core';
@@ -8,10 +8,10 @@ import { JsonSchema } from './models/jsonSchema';
 import { UISchemaElement } from './models/uischema';
 import { generateDefaultUISchema, generateJsonSchema } from './generators';
 
-export const createJsonFormsStore = (initialState): JsonFormsStore => {
+export const createJsonFormsStore = (initialState: JsonFormsState): JsonFormsStore => {
   // TODO: typing
   const store = createStore(
-    appReducer,
+    jsonformsReducer,
     initialState,
     applyMiddleware(thunk)
   );
@@ -20,10 +20,23 @@ export const createJsonFormsStore = (initialState): JsonFormsStore => {
 };
 
 export interface JsonFormsState {
+  common: {
+    data: any;
+    schema?: JsonSchema;
+    uischema?: UISchemaElement;
+  };
+  renderers: any[];
+  fields: any[];
+  // allow additional state
+  [x: string]: any;
+}
+
+export interface JsonFormsInitialState {
   data: any;
   schema?: JsonSchema;
   uischema?: UISchemaElement;
-  styles?: { name: string, classNames: string[] }[];
+  // allow additional state
+  [x: string]: any;
 }
 
 export const initJsonFormsStore = ({
@@ -31,12 +44,14 @@ export const initJsonFormsStore = ({
                                      schema = generateJsonSchema(data),
                                      uischema = generateDefaultUISchema(schema),
                                      ...props
-                                   }: JsonFormsState
+                                   }: JsonFormsInitialState
 ): JsonFormsStore => {
 
     const store = createJsonFormsStore({
       common: {
-        data
+        data,
+        schema,
+        uischema
       },
       renderers: JsonForms.renderers,
       fields: JsonForms.fields,
