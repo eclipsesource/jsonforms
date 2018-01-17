@@ -11,7 +11,7 @@ import { generateDefaultUISchema, generateJsonSchema } from './generators';
 export const createJsonFormsStore = (initialState: JsonFormsState): JsonFormsStore => {
   // TODO: typing
   const store = createStore(
-    jsonformsReducer,
+    jsonformsReducer(),
     initialState,
     applyMiddleware(thunk)
   );

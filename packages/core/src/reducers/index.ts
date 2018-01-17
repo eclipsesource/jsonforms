@@ -12,7 +12,7 @@ export {
   commonStateReducer,
 };
 
-export const jsonformsReducer: Reducer<JsonFormsState> =
+export const jsonformsReducer = (): Reducer<JsonFormsState> =>
   combineReducers({
     common: commonStateReducer,
     validation: validationReducer,
