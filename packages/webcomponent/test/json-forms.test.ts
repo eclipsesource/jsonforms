@@ -186,25 +186,33 @@ test.cb('Connect JSON Forms element and cause data change', t => {
 
 test('render with data and translation object', t => {
   const jsonForms = new JsonFormsElement();
-  jsonForms.data = t.context.data;
-  jsonForms.translations = t.context.translations;
+  jsonForms.state = {
+    data: t.context.data,
+    uischema: t.context.uischema,
+    styles: vanillaStyles,
+    translations: t.context.translations
+  };
   jsonForms.connectedCallback();
 
   t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'vertical-layout');
+  t.is(jsonForms.children.item(0).className, 'control root_properties_name');
   t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
   t.is(jsonForms.store.getState().i18n.locale, navigator.languages[0]);
 });
 
 test('render with data, translation object and locale', t => {
   const jsonForms = new JsonFormsElement();
-  jsonForms.data = t.context.data;
-  jsonForms.locale = t.context.locale;
-  jsonForms.translations = t.context.translations;
+  jsonForms.state = {
+    data: t.context.data,
+    uischema: t.context.uischema,
+    styles: vanillaStyles,
+    translations: t.context.translations,
+    locale: t.context.locale
+  };
   jsonForms.connectedCallback();
 
   t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'vertical-layout');
+  t.is(jsonForms.children.item(0).className, 'control root_properties_name');
   t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
   t.is(jsonForms.store.getState().i18n.locale, t.context.locale);
 });
