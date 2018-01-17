@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "description": "Default Renderer Set for JSON Forms",
   "main": "dist/ts-build/index.js",
   "typings": "dist/ts-build/index.d.ts",
@@ -15,7 +15,7 @@
     "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.4",
+    "@jsonforms/core": "^2.0.0-beta.5",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
