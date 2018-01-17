@@ -13,7 +13,6 @@ import {
 import InputControl, { inputControlTester } from '../../src/controls/material-input.control';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import {
-  findRenderedDOMElementWithClass,
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
@@ -111,11 +110,9 @@ test('render', t => {
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo');
+  const control = scryRenderedDOMElementsWithTag(tree, 'div')[0];
   t.not(control, undefined);
   t.is(control.childNodes.length, 3);
-  t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-  /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
 
   const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.textContent, 'Foo');
@@ -141,7 +138,7 @@ test('render without label', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema,
+    uischema
   });
   const tree = renderIntoDocument(
     <Provider store={store}>
@@ -149,11 +146,9 @@ test('render without label', t => {
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo');
-  t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
-  t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-  /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
+  const div = scryRenderedDOMElementsWithTag(tree, 'div')[0];
+  t.not(div, undefined);
+  t.is(div.childNodes.length, 3);
 
   const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.textContent, '');
@@ -179,7 +174,7 @@ test('hide', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema} visible={false}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo') as HTMLElement;
+  const control = scryRenderedDOMElementsWithTag(tree, 'div')[0] as HTMLElement;
   t.is(getComputedStyle(control).display, 'none');
 });
 
@@ -195,7 +190,7 @@ test('show by default', t => {
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'root_properties_foo') as HTMLElement;
+  const control = scryRenderedDOMElementsWithTag(tree, 'div')[0] as HTMLElement;
   t.false(control.hidden);
 });
 

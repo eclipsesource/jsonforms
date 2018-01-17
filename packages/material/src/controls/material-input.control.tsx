@@ -1,12 +1,10 @@
 import * as React from 'react';
-import * as _ from 'lodash';
 import {
   computeLabel,
   Control,
   ControlElement,
   ControlProps,
   ControlState,
-  convertToValidClassName,
   DispatchField,
   isControl,
   isDescriptionHidden,
@@ -23,14 +21,14 @@ import { FormControl, FormHelperText } from 'material-ui/Form';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
   render() {
-    const {  
-      id, 
-      errors, 
-      label, 
-      uischema, 
-      schema, 
-      visible, 
-      required, 
+    const {
+      id,
+      errors,
+      label,
+      uischema,
+      schema,
+      visible,
+      required,
       parentPath 
     } = this.props;
     const isValid = errors.length === 0;
@@ -42,12 +40,9 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     if (!visible) {
       style = {display: 'none'};
     }
-    const classNames: string[] = !_.isEmpty(controlElement.scope) ?
-        [`${convertToValidClassName(controlElement.scope.$ref)}`] : [];
 
     return (
       <FormControl
-        className={classNames.join(' ')}
         style={style}
         fullWidth={!trim}
         onFocus={() => this.onFocus()}
