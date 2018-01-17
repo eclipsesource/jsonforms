@@ -3,11 +3,13 @@ import {
   Control,
   ControlProps,
   ControlState,
+  mapStateToControlProps,
   RankedTester,
   rankWith,
   refEndsWith
 } from '@jsonforms/core';
 import { Rating } from './Rating';
+import { connect } from 'react-redux';
 
 /**
  * Default tester for integer controls.
@@ -30,3 +32,5 @@ export class RatingControl extends Control<ControlProps, ControlState> {
     this.handleChange(ev.value);
   }
 }
+
+export default connect(mapStateToControlProps)(RatingControl);
