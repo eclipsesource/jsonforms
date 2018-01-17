@@ -6,7 +6,7 @@ import {
   registerRenderer,
   unregisterRenderer
 } from '@jsonforms/core';
-import { RatingControl, ratingControlTester } from './rating.control';
+import ConnectedRatingControl, { ratingControlTester } from './rating.control';
 import {
   data as day5Data,
   schema as day5Schema,
@@ -18,7 +18,6 @@ export const uischema = day5UiSchema;
 export const data = day5Data;
 
 const setup = (div: HTMLDivElement) => {
-  const ConnectedRatingControl = connect(mapStateToControlProps)(RatingControl);
   const buttonRegister = document.createElement('button');
   buttonRegister.innerText = 'Register Custom Control';
   buttonRegister.onclick = () => {
