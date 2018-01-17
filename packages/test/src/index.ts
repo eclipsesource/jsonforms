@@ -17,6 +17,8 @@ export const initJsonFormsStore = ({
                                      data,
                                      schema,
                                      uischema,
+                                     translations,
+                                     locale = navigator.languages[0],
                                      ...props
                                    }: JsonFormsInitialState): JsonFormsStore => {
   const store = createStore(
@@ -30,6 +32,10 @@ export const initJsonFormsStore = ({
         },
         renderers: JsonForms.renderers,
         fields: JsonForms.fields,
+        i18n: {
+          translations,
+          locale
+        },
         ...props
       }
     },
