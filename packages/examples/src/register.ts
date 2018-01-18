@@ -1,17 +1,20 @@
 import { JsonFormsElement } from '@jsonforms/core';
 import { ExampleDescription } from './example';
-import { vanillaStyles } from '../../vanilla/src/helpers';
 
 declare let exampleDivId;
 declare let viewDivId;
 
 const knownExamples: {[key: string]: ExampleDescription} = {};
 
+export interface AdditionalState {
+  [x: string]: any;
+}
+
 export const registerExamples = (examples: ExampleDescription[]): void => {
   examples.forEach(example => knownExamples[example.name] = example);
 };
 
-export const changeExample = (selectedExample: string) => {
+export const changeExample = (selectedExample: string, additionalState: AdditionalState) => {
   let body = document.getElementById(viewDivId);
   if (body.firstChild !== null && body.firstChild.childNodes.length !== 0) {
     body.removeChild(body.firstChild);
@@ -29,13 +32,13 @@ export const changeExample = (selectedExample: string) => {
     data: example.data,
     schema: example.schema,
     uischema: example.uiSchema,
-    styles: vanillaStyles
+    ...additionalState,
   };
 
   body.appendChild(jsonForms);
 };
 
-export const createExampleSelection = (): HTMLSelectElement => {
+export const createExampleSelection = (additionalState?: AdditionalState): HTMLSelectElement => {
   const examplesDiv = document.getElementById(exampleDivId);
   const labelExample = document.createElement('label');
   labelExample.textContent = 'Example:';
@@ -52,10 +55,10 @@ export const createExampleSelection = (): HTMLSelectElement => {
     select.appendChild(option);
   });
   select.onchange = () => {
-    changeExample(select.value);
+    changeExample(select.value, additionalState);
   };
   examplesDiv.appendChild(select);
-  changeExample(select.value);
+  changeExample(select.value, additionalState);
 
   return select;
 };
