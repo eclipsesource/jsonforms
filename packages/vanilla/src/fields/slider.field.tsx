@@ -2,6 +2,8 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
   and,
+  boundSchemaMatches,
+  boundSchemaTypeIs,
   ControlElement,
   FieldProps,
   mapDispatchToFieldProps,
@@ -11,8 +13,6 @@ import {
   rankWith,
   registerStartupInput,
   resolveSchema,
-  schemaMatches,
-  schemaTypeIs,
   uiTypeIs
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
@@ -43,8 +43,8 @@ const SliderField = (props: FieldProps) => {
  */
 export const sliderFieldTester: RankedTester = rankWith(4, and(
      uiTypeIs('Control'),
-     or(schemaTypeIs('number'), schemaTypeIs('integer')),
-     schemaMatches(schema =>
+     or(boundSchemaTypeIs('number'), boundSchemaTypeIs('integer')),
+     boundSchemaMatches(schema =>
        schema.hasOwnProperty('maximum') && schema.hasOwnProperty('minimum')
      )
  ));
