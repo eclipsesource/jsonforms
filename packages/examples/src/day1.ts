@@ -1,3 +1,5 @@
+import { registerExamples } from './register';
+
 export const schema = {
   type: 'object',
   properties: {
@@ -19,3 +21,12 @@ export const data = {
   description: 'Confirm if you have passed the subject\nHereby ...',
   done: true,
 };
+registerExamples([
+  {
+    name: 'day1',
+    label: 'Day 1',
+    data,
+    schema,
+    uiSchema: undefined
+  }
+]);

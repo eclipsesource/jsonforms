@@ -1,5 +1,5 @@
 import { registerExamples } from './register';
-import { schema as day2Schema, uischema as day2UiSchema, data as day2Data } from './day2';
+import { data as day2Data, schema as day2Schema, uischema as day2UiSchema } from './day2';
 
 export const schema = {
   type: 'object',
