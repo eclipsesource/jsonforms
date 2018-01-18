@@ -29,9 +29,9 @@ export const MaterialDateTimeField = (props: FieldProps) => {
 
   return (
       <DateTimePicker
-          value={data || ''}
+          value={data || null}
           onChange={ datetime => 
-            handleChange(path, moment(datetime).format())
+            handleChange(path, datetime ? moment(datetime).format() : '')
           }
           id={id}
           format={german.format}
@@ -45,7 +45,7 @@ export const MaterialDateTimeField = (props: FieldProps) => {
           leftArrowIcon='keyboard_arrow_left'
           rightArrowIcon='keyboard_arrow_right'
           onClear={() =>
-              handleChange(path, undefined)
+              handleChange(path, '')
           }
           InputProps={inputProps}
       />

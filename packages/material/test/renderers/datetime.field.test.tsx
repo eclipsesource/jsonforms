@@ -6,7 +6,6 @@ import {
   getData,
   HorizontalLayout,
   initJsonFormsStore,
-  JsonForms,
   JsonSchema,
   update
 } from '@jsonforms/core';
@@ -20,19 +19,6 @@ import {
 } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import * as moment from 'moment';
-
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]);
-});
 
 test.beforeEach(t => {
   t.context.data = { 'foo': moment('1980-04-04 13:37').format() };
@@ -89,11 +75,11 @@ test.failing('autofocus on first element', t => {
         'firstDateTime': moment('1980-04-04 13:37').format(),
         'secondDateTime': moment('1980-04-04 13:37').format()
     };
-    const store = initJsonFormsStore(
+    const store = initJsonFormsStore({
         data,
         schema,
         uischema
-    );
+    });
     const tree = renderIntoDocument(
         <Provider store={store}>
           <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
@@ -114,7 +100,11 @@ test('autofocus active', t => {
             focus: true
         }
     };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const store = initJsonFormsStore({
+      data: t.context.data,
+      schema: t.context.schema,
+      uischema
+    });
     const tree = renderIntoDocument(
         <Provider store={store}>
           <DateTimeField schema={t.context.schema} uischema={uischema}/>
@@ -134,7 +124,11 @@ test('autofocus inactive', t => {
             focus: false
         }
     };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const store = initJsonFormsStore({
+      data: t.context.data,
+      schema: t.context.schema,
+      uischema
+    });
     const tree = renderIntoDocument(
         <Provider store={store}>
           <DateTimeField schema={t.context.schema} uischema={uischema}/>
@@ -151,7 +145,11 @@ test('autofocus inactive by default', t => {
             $ref: '#/properties/foo'
         }
     };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const store = initJsonFormsStore({
+      data: t.context.data,
+      schema: t.context.schema,
+      uischema
+    })
     const tree = renderIntoDocument(
         <Provider store={store}>
           <DateTimeField schema={t.context.schema} uischema={uischema}/>
@@ -221,7 +219,11 @@ test('tester with correct prop type', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -234,7 +236,11 @@ test('render', t => {
 });
 
 test.cb('update via event', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  })
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -245,7 +251,7 @@ test.cb('update via event', t => {
   change(input);
   setTimeout(
     () => {
-      t.is(getData(store.getState()).foo, '12.04.1961 20:15');
+      t.is(getData(store.getState()).foo, moment('1961-04-12 20:15').format());
       t.end();
     },
     100
@@ -253,14 +259,18 @@ test.cb('update via event', t => {
 });
 
 test.cb('update via action', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  })
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => '12.04.1961 20:15'));
+  store.dispatch(update('foo', () => moment('1961-04-12 20:15').format()));
   setTimeout(
     () => {
       t.is(input.value, '12.04.1961 20:15');
@@ -271,7 +281,11 @@ test.cb('update via action', t => {
 });
 
 test('update with null value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  })
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -283,7 +297,11 @@ test('update with null value', t => {
 });
 
 test('update with undefined value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  })
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -295,7 +313,11 @@ test('update with undefined value', t => {
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  })
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -307,7 +329,11 @@ test('update with wrong ref', t => {
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -319,7 +345,11 @@ test('update with null ref', t => {
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -331,11 +361,11 @@ test('update with undefined ref', t => {
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
@@ -346,7 +376,11 @@ test('disable', t => {
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
