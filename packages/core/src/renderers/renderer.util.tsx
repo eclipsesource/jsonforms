@@ -9,9 +9,8 @@ import {
   Resolve
 } from '../helpers';
 import { RankedTester } from '../testers';
-import { ControlElement, Layout } from '../models/uischema';
+import { ControlElement } from '../models/uischema';
 import * as React from 'react';
-import DispatchRenderer from './dispatch-renderer';
 import { errorAt, subErrorsAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers';
 import { Renderer, RendererProps } from './renderer';
@@ -57,30 +56,6 @@ export const mapStateToLayoutProps = (state, ownProps) => {
     visible,
     path: ownProps.path,
   };
-};
-
-export const renderChildren = (
-  layout: Layout,
-  schema: JsonSchema,
-  classNames: string,
-  path: string
-) => {
-
-  if (_.isEmpty(layout.elements)) {
-    return [];
-  }
-
-  return layout.elements.map((child, index) => {
-    return (
-      <div className={classNames} key={`${path}-${index}`}>
-        <DispatchRenderer
-          uischema={child}
-          schema={schema}
-          path={path}
-        />
-      </div>
-    );
-  });
 };
 
 // tslint:disable:variable-name

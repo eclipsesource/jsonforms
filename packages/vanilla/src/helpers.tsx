@@ -1,8 +1,12 @@
+import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ControlElement,
   ControlProps,
   convertToValidClassName,
+  DispatchRenderer,
+  JsonSchema,
+  Layout,
   mapStateToControlProps,
   mapStateToLayoutProps,
   RendererProps
@@ -18,6 +22,30 @@ export interface StyleDef {
   name: string;
   classNames: ClassNames;
 }
+
+export const renderChildren = (
+  layout: Layout,
+  schema: JsonSchema,
+  classNames: string,
+  path: string
+) => {
+
+  if (_.isEmpty(layout.elements)) {
+    return [];
+  }
+
+  return layout.elements.map((child, index) => {
+    return (
+      <div className={classNames} key={`${path}-${index}`}>
+        <DispatchRenderer
+          uischema={child}
+          schema={schema}
+          path={path}
+        />
+      </div>
+    );
+  });
+};
 
 export const mapStateToVanillaControlProps = (state, ownProps) => {
   const props = mapStateToControlProps(state, ownProps);

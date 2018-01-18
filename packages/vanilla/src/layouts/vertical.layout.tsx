@@ -4,12 +4,11 @@ import {
   RankedTester,
   rankWith,
   registerStartupRenderer,
-  renderChildren,
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { mapStateToVanillaLayoutProps, VanillaRendererProps } from '../helpers';
+import { mapStateToVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../helpers';
 
 /**
  * Default tester for a vertical layout.
@@ -39,14 +38,7 @@ export const VerticalLayoutRenderer  = (
       className={layoutClassName}
       visible={visible}
     >
-      {
-        renderChildren(
-          verticalLayout,
-          schema,
-          childClassNames,
-          path
-        )
-      }
+      {renderChildren(verticalLayout, schema, childClassNames, path)}
     </JsonFormsLayout>
   );
 };
