@@ -11,8 +11,7 @@ import {
   SchemaService
 } from './schema.service';
 import * as uuid from 'uuid';
-// import { JsonForms } from '../core';
-import { findAllRefs } from '@jsonforms/core/lib/helpers/resolvers';
+import { findAllRefs } from '@jsonforms/core/lib/util/resolvers';
 import { resolveLocalData } from '../helpers/util';
 import { RS_PROTOCOL } from '../resources/resource-set';
 import { Resources } from '../resources/resources';
@@ -288,14 +287,14 @@ const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => ()
 };
 
 /**
-   * Uses the model mapping to filter all objects that are associated with the type
-   * defined by the given schema id. If there is no applicable mapping,
-   * we assume that no mapping is necessary and do not filter out affected data objects.
-   *
-   * @param objects the list of data objects to filter
-   * @param schemaId The id of the JsonSchema defining the type to filter for
-   * @return The filtered data objects or all objects if there is no applicable mapping
-   */
+ * Uses the model mapping to filter all objects that are associated with the type
+ * defined by the given schema id. If there is no applicable mapping,
+ * we assume that no mapping is necessary and do not filter out affected data objects.
+ *
+ * @param objects the list of data objects to filter
+ * @param schemaId The id of the JsonSchema defining the type to filter for
+ * @return The filtered data objects or all objects if there is no applicable mapping
+ */
 export const filterObjectsByType =
   (objects: Object[], schemaId: string, modelMapping?: ModelMapping): Object[] => {
     // No filtering possible without a mapping, return all
@@ -396,7 +395,8 @@ export class SchemaServiceImpl implements SchemaService {
 
   getReferenceProperties(schema: JsonSchema): ReferenceProperty[] {
     if (schema.$ref !== undefined) {
-      return this.getReferenceProperties(this.getSelfContainedSchema(this.editorContext.dataSchema, schema.$ref));
+      return this.getReferenceProperties(
+        this.getSelfContainedSchema(this.editorContext.dataSchema, schema.$ref));
     }
     // tslint:disable:no-string-literal
     if (schema['links']) {
@@ -413,7 +413,8 @@ export class SchemaServiceImpl implements SchemaService {
         let targetSchema;
         // TODO what if schema is url but not resolved?
         if (link.targetSchema.$ref !== undefined) {
-          targetSchema = this.getSelfContainedSchema(this.editorContext.dataSchema, link.targetSchema.$ref);
+          targetSchema = this.getSelfContainedSchema(this.editorContext.dataSchema,
+                                                     link.targetSchema.$ref);
         } else if (link.targetSchema.resource !== undefined) {
           const resSchema = Resources.resourceSet.getResource(link.targetSchema.resource);
           if (resSchema === undefined) {
@@ -445,7 +446,8 @@ export class SchemaServiceImpl implements SchemaService {
           idBased = true;
           const schemaId = targetSchema.id as string;
           findRefTargets = getFindReferenceTargetsFunction(href, schemaId,
-                                                           this.editorContext.identifyingProperty, this.editorContext.modelMapping);
+                                                           this.editorContext.identifyingProperty,
+                                                           this.editorContext.modelMapping);
           resolveReference = resolveRef(schema, findRefTargets, variable);
           addToReference = addReference(schema, this.editorContext.identifyingProperty, variable);
         } else {

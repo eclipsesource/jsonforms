@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/editor",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-rc.3",
   "description": "JSON Editor",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -25,17 +25,20 @@
     "lint": "tslint --project tslint.json"
   },
   "dependencies": {
-    "@jsonforms/core": "2.0.0-beta.4",
-    "@jsonforms/material-renderers": "2.0.0-beta.4",
-    "@jsonforms/vanilla-renderers": "2.0.0-beta.4",
+    "@jsonforms/core": "2.0.0-rc.3",
+    "@jsonforms/material-renderers": "2.0.0-rc.3",
+    "@jsonforms/vanilla-renderers": "2.0.0-rc.3",
+    "@jsonforms/react": "2.0.0-rc.3",
     "ajv": "^4.11.2",
     "bootstrap": "^3.3.7",
     "jquery": "^3.2.1",
     "json-refs": "^2.1.6",
     "lodash": "^4.17.4",
     "materialize-css": "^0.100.1",
-    "react-dom": "^16.2.0",
     "react": "^16.2.0",
+    "react-dnd": "^2.5.4",
+    "react-dnd-html5-backend": "^2.5.4",
+    "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },

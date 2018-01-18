@@ -4,24 +4,29 @@ import * as _ from 'lodash';
 import * as React from 'react';
 import {
   Actions,
-  Control,
   ControlProps,
   ControlState,
-  DispatchRenderer,
   generateDefaultUISchema,
   getData,
   JsonSchema,
-  MasterDetailLayout,
   Paths,
   Resolve,
   Runtime,
   UISchemaElement,
 } from '@jsonforms/core';
+import {
+  Control,
+  JsonForms
+} from '@jsonforms/react';
 import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import ExpandRootArray from './ExpandRootArray';
 import Dialog from './Dialog';
 import { SchemaService } from '../services/schema.service';
+import HTML5Backend from 'react-dnd-html5-backend';
+// import TouchBackend from 'react-dnd-touch-backend';
+import { DragDropContext } from 'react-dnd';
+import { MasterDetailLayout } from '../master-detail-layout';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -48,7 +53,6 @@ const Master = (
     rootData,
     schemaService
   }: MasterProps) => {
-  // TODO: so far no drag and drop support
   if (schema.items !== undefined) {
     return (
       <ul>
@@ -74,6 +78,7 @@ const Master = (
         selection={selection}
         handlers={handlers}
         schemaService={schemaService}
+        isRoot={true}
       />
     </ul>
   );
@@ -208,7 +213,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
           <div className='jsf-treeMasterDetail-detail'>
             {
               this.state.selected ?
-                <DispatchRenderer
+                <JsonForms
                   schema={this.state.selected.schema}
                   path={this.state.selected.path}
                   uischema={generateDefaultUISchema(this.state.selected.schema)}
@@ -245,7 +250,7 @@ const mapStateToProps = (state, ownProps) => {
     uischema: ownProps.uischema,
     schema: ownProps.schema,
     schemaService: ownProps.schemaService,
-    resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope.$ref),
+    resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope),
     path,
     visible,
     enabled
@@ -272,7 +277,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
+const DnDTreeMasterDetail =
+  DragDropContext(HTML5Backend)(TreeMasterDetail);
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TreeMasterDetail);
+)(DnDTreeMasterDetail);

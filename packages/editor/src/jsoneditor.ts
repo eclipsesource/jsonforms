@@ -1,11 +1,9 @@
-import '@jsonforms/material-renderers';
+import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
+import { combineReducers, createStore, Store } from 'redux';
 import {
-  initJsonFormsStore,
-  JsonForms,
-  // JsonFormsElement,
-  JsonFormsStore,
+  Actions,
+  jsonformsReducer,
   JsonSchema,
-  // MasterDetailLayout,
   UISchemaElement
 } from '@jsonforms/core';
 import { ModelMapping } from './editor-config';
@@ -36,18 +34,17 @@ export * from './editor-config';
  */
 export class JsonEditor extends HTMLElement implements Editor {
   public static rootData;
-  static uiSchemata: {[schemaId: string]: UISchemaElement} = {};
+  static uiSchemata: { [schemaId: string]: UISchemaElement } = {};
 
   static getUiSchema(schemaId: string): UISchemaElement {
     return JsonEditor.uiSchemata[schemaId];
 
   }
 
-  store: JsonFormsStore;
+  store: Store<any>;
   private connected = false;
   private _editorContext: EditorContext;
   private schemaPromise;
-  // private treeRenderer: TreeMasterDetailRenderer;
   private container: HTMLElement;
 
   constructor() {
@@ -74,7 +71,6 @@ export class JsonEditor extends HTMLElement implements Editor {
    * Returns the current data displayed in the editor.
    */
   get data() {
-    // return this.editorContext.data;
     if (this.store === undefined || this.store === null) {
       return {};
     }
@@ -87,6 +83,7 @@ export class JsonEditor extends HTMLElement implements Editor {
   set data(data: object) {
     this.editorContext.data = data;
     JsonEditor.rootData = data;
+    // FIXME set data to store
     this.render();
   }
 
@@ -196,7 +193,6 @@ export class JsonEditor extends HTMLElement implements Editor {
    * in order to determine which type objects of a "anyOf-property" belong to.
    */
   setModelMapping(modelMapping: ModelMapping): void {
-    JsonForms.modelMapping = modelMapping;
     this.editorContext.modelMapping = modelMapping;
   }
 
@@ -223,10 +219,8 @@ export class JsonEditor extends HTMLElement implements Editor {
    * @param {string} schemaId The id of the type's JsonSchema that the UI Schema is registered for
    * @param {UISchemaElement} uiSchema The UI Schema to use when rendering instances of the schema
    */
-  registerDetailSchema(schemaId: string, uiSchema: UISchemaElement) {
-    JsonForms.uischemaRegistry.register(uiSchema, (schema, _data) =>
-      schema.id !== undefined && schema.id === schemaId ? 2 : -1);
-    JsonEditor.uiSchemata[schemaId] = uiSchema;
+  registerDetailSchema(_schemaId: string, _uiSchema: UISchemaElement) {
+    // FIXME implement UI Schema registry
   }
 
   private render(): void {
@@ -246,9 +240,7 @@ export class JsonEditor extends HTMLElement implements Editor {
 
     const uischema = {
       'type': 'MasterDetailLayout',
-      'scope': {
-        '$ref': '#'
-      },
+      'scope': '#',
       'options': {
         'labelProvider': this.editorContext.labelProvider,
         'imageProvider': this.editorContext.imageProvider,
@@ -257,7 +249,7 @@ export class JsonEditor extends HTMLElement implements Editor {
     };
 
     if (this.store === undefined) {
-      this.store = initJsonFormsStore(this.data, this.schema, uischema);
+      this.store = this.initStore(this.data, this.schema, uischema);
     }
     const schemaService = new SchemaServiceImpl(this.editorContext);
 
@@ -271,6 +263,22 @@ export class JsonEditor extends HTMLElement implements Editor {
     });
 
     ReactDOM.render(masterDetailComponent, this.container);
+  }
+
+  private initStore(data, schema, uischema): Store<any> {
+    const store = createStore(
+      combineReducers({ jsonforms: jsonformsReducer() }),
+      {
+        jsonforms: {
+          renderers: materialRenderers,
+          fields: materialFields,
+        }
+      }
+    );
+
+    store.dispatch(Actions.init(data, schema, uischema));
+
+    return store;
   }
 }
 

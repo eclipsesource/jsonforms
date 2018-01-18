@@ -1,6 +1,4 @@
 /* tslint:disable:no-invalid-this */
-import './ereference.renderer';
-import './eattribute.renderer';
 import '../src/jsoneditor';
 import './ecore-editor';
 import {
@@ -9,7 +7,6 @@ import {
   configureUploadButton,
   createExportDataDialog
 } from '../src/toolbar';
-import { applyMaterialStyle } from '../src/material.styling';
 import { EcoreEditor } from './ecore-editor';
 
 window.onload = () => {
@@ -29,6 +26,4 @@ window.onload = () => {
   configureDownloadButton(editor, downloadButton);
 
   document.getElementById('editor').appendChild(editor);
-
-  applyMaterialStyle();
 };

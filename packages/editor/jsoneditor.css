@@ -223,18 +223,14 @@ jsf-treeMasterDetail {
 }
 .jsf-treeMasterDetail-dialog-button {
   width: -webkit-fill-available;
-  margin-top: 15px;
+  margin-top: 10px;
   margin-bottom: 0;
 }
 
-/* Create border for possible drag and drop drop-zones */
-.jsf-treeMasterDetail .jsf-dnd-drop-target {
-  min-height: 0.75em;
-  border-style: dashed;
-  border-width: thin;
-  border-color: #ccc;
+.jsf-treeMasterDetail-dialog-close {
+  width: -webkit-fill-available;
+  margin-top: 20px;
 }
-
 /*temporary fix*/
 /*.tree-master li > div {
   min-height: 1.25em;
@@ -248,3 +244,26 @@ jsf-treeMasterDetail {
   min-width: 2em;
   min-height: 1em;
 }*/
+
+/* Drag and Drop */
+
+/* Create border for possible drag and drop drop-zones */
+
+.jsf-editor-dnd-target-valid,
+.jsf-editor-dnd-target-invalid {
+    border-style: dashed;
+    border-width: thin;
+}
+
+.jsf-editor-dnd-target-valid {
+    border-color: rgb(88, 199, 23);
+    min-height: 1em;
+}
+
+.jsf-editor-dnd-target-invalid {
+  border-color: rgb(189, 0, 0);
+}
+
+.jsf-editor-dnd-current-target {
+    border-width:  medium;
+}

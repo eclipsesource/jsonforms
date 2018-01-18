@@ -28,7 +28,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new copyWebpackPlugin([
-      {from: '../examples/lib/native-shim.js', to: 'assets/native-shim.js' },
+      {from: '../examples/vendor/native-shim.js', to: 'assets/native-shim.js' },
       {from: '../examples/example.css', to: 'assets/jsonforms-example.css'},
       {from: './node_modules/materialize-css/dist/css/materialize.css', to: 'assets/materialize.css' },
       {from: './node_modules/materialize-css/dist/js/materialize.js', to: 'assets/materialize.js' },

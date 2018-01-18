@@ -49,6 +49,7 @@ export const ExpandRootArray = (
           handlers={handlers}
           uischema={uischema}
           schemaService={schemaService}
+          isRoot={true}
         />
       );
     });

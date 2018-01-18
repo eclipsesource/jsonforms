@@ -1,9 +1,9 @@
 // tslint:disable:jsx-no-multiline-js
+// tslint:disable:jsx-no-lambda
 import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
-  JsonForms,
   Paths,
   update
 } from '@jsonforms/core';
@@ -26,7 +26,7 @@ const Dialog = (
         schemaService.getContainmentProperties(schema)
           .map(prop =>
             <button
-              className={JsonForms.stylingRegistry.getAsClassName('button')}
+              className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
               key={`${prop.label}-button`}
               onClick={() => {
                 const newData = _.keys(prop.schema.properties).reduce(
@@ -35,6 +35,7 @@ const Dialog = (
                       d[key] = prop.schema.properties[key].default;
                     }
 
+                    // FIXME generate id if identifying property is set in editor to allow id refs
                     return d;
                   },
                   {}
@@ -49,7 +50,7 @@ const Dialog = (
       }
     </div>
     <button
-      className='jsf-treeMasterDetail-dialog-close'
+      className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-close'
       onClick={closeDialog}
     >
       Close
