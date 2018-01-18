@@ -24,22 +24,22 @@ export interface ControlProps extends RendererProps {
   parentPath?: string;
 
   /**
-   * An unique ID that can be used to identify the rendered form.
+   * An unique ID that can be used to identify the rendered element.
    */
   id: string;
 
   /**
-   * Determines whether the rendered form should be visible.
+   * Determines whether the rendered element should be visible.
    */
   visible: boolean;
 
   /**
-   * Determines whether the rendered form should be enabeld.
+   * Determines whether the rendered element should be enabeld.
    */
   enabled: boolean;
 
   /**
-   * The label for the rendered form.
+   * The label for the rendered element.
    */
   label: string;
 
