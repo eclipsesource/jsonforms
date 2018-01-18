@@ -5,11 +5,10 @@ import {
   RankedTester,
   rankWith,
   registerStartupRenderer,
-  renderChildren,
   uiTypeIs,
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { mapStateToVanillaLayoutProps, VanillaRendererProps } from '../helpers';
+import { mapStateToVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../helpers';
 
 /**
  * Default tester for a group layout.
@@ -45,14 +44,7 @@ export const GroupLayoutRenderer = (
             {group.label}
           </legend> : ''
       }
-      {
-        renderChildren(
-          group,
-          schema,
-          childClassNames,
-          path
-        )
-      }
+      {renderChildren(group, schema, childClassNames, path)}
     </fieldset>
   );
 };
