@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "2.0.0-beta.5",
+  "version": "2.0.0-beta.6",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -32,7 +32,7 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.5",
+    "@jsonforms/core": "^2.0.0-beta.6",
     "material-ui": "^1.0.0-beta.25",
     "material-ui-icons": "^1.0.0-beta.17",
     "react": "^16.2.0",

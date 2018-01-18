@@ -1,13 +1,13 @@
 {
   "name": "@jsonforms/test",
   "private": true,
-  "version": "2.0.0-beta.5",
+  "version": "2.0.0-beta.6",
   "description": "Test helper for JSON Forms",
   "scripts": {
     "test": "echo 'Nothing to do for `test` package'"
   },
   "devDependencies": {
-    "@jsonforms/core": "^2.0.0-beta.5",
+    "@jsonforms/core": "^2.0.0-beta.6",
     "document-register-element": "^1.7.0",
     "jsdom": "^11.5.1",
     "jsdom-global": "^3.0.2",
