@@ -1,8 +1,6 @@
 import { registerExamples } from './register';
-import { connect } from 'react-redux';
 import {
   JsonFormsElement,
-  mapStateToControlProps,
   registerRenderer,
   unregisterRenderer
 } from '@jsonforms/core';

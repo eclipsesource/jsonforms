@@ -6,13 +6,13 @@ import { JsonForms } from '../core';
 import { JsonSchema } from '../models/jsonSchema';
 import { getData, getValidation } from '../reducers';
 import { errorAt } from '../reducers/validation';
-import { update } from '../actions';
 import {
   composeWithUi,
   isEnabled,
   isVisible,
   Resolve
 } from '../helpers';
+import { mapDispatchToControlProps } from './renderer.util';
 
 export interface JsonFormsFieldConstructable {
   new(props: FieldProps): Component<FieldProps, any>;
@@ -71,8 +71,4 @@ export const mapStateToFieldProps = (state, ownProps) => {
     isValid
   };
 };
-export const mapDispatchToFieldProps = dispatch => ({
-  handleChange(path, value) {
-    dispatch(update(path, () => value));
-  },
-});
+export const mapDispatchToFieldProps = mapDispatchToControlProps;

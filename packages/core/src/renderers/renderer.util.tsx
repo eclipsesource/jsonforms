@@ -153,6 +153,14 @@ export const mapStateToControlProps = (state, ownProps) => {
     required
   };
 };
+
+export const mapDispatchToControlProps = dispatch => ({
+  handleChange(path, value) {
+    dispatch(update(path, () => value));
+  }
+});
+
+
 export const mapStateToTableControlProps = (state, ownProps) => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
 

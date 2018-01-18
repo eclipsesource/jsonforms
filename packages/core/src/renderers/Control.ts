@@ -1,25 +1,65 @@
-import { update } from '../actions';
 import { Renderer, RendererProps } from './renderer';
 
-export interface ControlClassNames {
-  input: string;
-  label: string;
-  wrapper: string;
-  description: string;
-}
-
+/**
+ * Props of a renderer.
+ */
 export interface ControlProps extends RendererProps {
+
+  /**
+   * The data to be rendered.
+   */
   data: any;
+
+  /**
+   * The absolute path to the value being rendered.
+   * A path is a sequence of property names separated by dots,
+   * e.g. for accessing the value of b in the object
+   * { foo: { a: { b: 42 } } }, one would use foo.a.b.
+   */
   path: string;
+
+  /**
+   * Path of the parent renderer, if any.
+   */
   parentPath?: string;
-  classNames: ControlClassNames;
+
+  /**
+   * An unique ID that can be used to identify the rendered element.
+   */
   id: string;
+
+  /**
+   * Determines whether the rendered element should be visible.
+   */
   visible: boolean;
+
+  /**
+   * Determines whether the rendered element should be enabeld.
+   */
   enabled: boolean;
+
+  /**
+   * The label for the rendered element.
+   */
   label: string;
+
+  /**
+   * Any validation errors that are caused by the data to be rendered.
+   */
   errors: any[];
-  dispatch: any;
+
+  /**
+   * Whether the rendered data is required.
+   */
   required: boolean;
+
+  /**
+   * Update handler that emits a data change
+   *
+   * @param {string} the absolute path
+   * @param value
+   */
+  handleChange(path: string, value: any);
 }
 
 export interface ControlState {
@@ -59,6 +99,6 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
   }
 
   private updateData(value) {
-    this.props.dispatch(update(this.props.path, () => value));
+    this.props.handleChange(this.props.path, value);
   }
 }

@@ -3,7 +3,6 @@ import {
   computeLabel,
   Control,
   ControlElement,
-  ControlProps,
   ControlState,
   DispatchField,
   formatErrorMessage,
@@ -15,20 +14,20 @@ import {
   resolveSchema
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { mapStateToVanillaControlProps } from '../helpers';
+import { mapStateToVanillaControlProps, VanillaControlProps } from '../helpers';
 
-export class InputControl extends Control<ControlProps, ControlState> {
+export class InputControl extends Control<VanillaControlProps, ControlState> {
   render() {
-    const { 
-      classNames, 
+    const {
+      classNames,
       id,
-      errors, 
-      label, 
-      uischema, 
-      schema, 
-      visible, 
-      required, 
-      parentPath 
+      errors,
+      label,
+      uischema,
+      schema,
+      visible,
+      required,
+      parentPath
     } = this.props;
 
     const isValid = errors.length === 0;
