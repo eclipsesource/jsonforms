@@ -56,8 +56,8 @@ export interface ControlProps extends RendererProps {
   /**
    * Update handler that emits a data change
    *
-   * @param {string} the absolute path
-   * @param value
+   * @param {string} path the path to the data to be updated
+   * @param value the new value
    */
   handleChange(path: string, value: any);
 }
@@ -75,7 +75,7 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
     this.state = {
       value: props.data ? props.data : '',
       isFocused: false
-    } as Readonly<S>;
+    } as S;
     // tslint:enable:no-object-literal-type-assertion
   }
 

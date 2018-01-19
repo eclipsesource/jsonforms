@@ -3,14 +3,14 @@ import { JsonForms } from '@jsonforms/core/lib/core';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
 import { StyleDef } from '../helpers';
 
-const removeStyle = (styles, name) => {
+const removeStyle = (styles: StyleDef[], name) => {
   const copy = styles.slice();
   _.remove(copy, styleDef => styleDef.name === name);
 
   return copy;
 };
 
-const registerStyle = (styles, { name, classNames }) => {
+const registerStyle = (styles: StyleDef[], { name, classNames }) => {
   const copy = removeStyle(styles, name);
   copy.push({ name, classNames });
 

@@ -12,7 +12,7 @@ module.exports = [{
         './example/index.ts'
     ],
     output: {
-      path: path.resolve("./", "dist"),
+      path: path.resolve("./", "lib"),
       publicPath: "/assets/",
       filename: "bundle.js"
     },

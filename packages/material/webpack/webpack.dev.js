@@ -12,7 +12,7 @@ module.exports = [{
         './example/index.ts'
     ],
     output: {
-      path: path.resolve("./", "dist"),
+      path: path.resolve("./", "lib"),
       publicPath: "/assets/",
       filename: "bundle.js"
     },
@@ -31,7 +31,7 @@ module.exports = [{
         new webpack.HotModuleReplacementPlugin(),
         new copyWebpackPlugin([
             { from: '../examples/example.css' },
-            { from: '../examples/lib/native-shim.js'  },
+            { from: '../examples/vendor/native-shim.js'  },
             { from: '../examples/icons', to: 'icons' }
         ])
     ],
