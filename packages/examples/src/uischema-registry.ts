@@ -8,14 +8,14 @@ import {
 import { registerExamples } from './register';
 
 export const uischema = {
-  'type': 'Group',
-  'label': 'Registered UI Schema',
-  'elements': [
+  type: 'Group',
+  label: 'Registered UI Schema',
+  elements: [
     {
-      'type': 'Control',
-      'label': 'Name',
-      'scope': {
-        '$ref': '#/properties/name'
+      type: 'Control',
+      label: 'Name',
+      scope: {
+        $ref: '#/properties/name'
       }
     }
   ]

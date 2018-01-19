@@ -1,17 +1,8 @@
 import { registerExamples } from './register';
+import { data as personData, schema as personSchema } from './person';
 
-export const schema = {
-  'type': 'object',
-  'properties': {
-    'name': {
-      'type': 'string'
-    },
-    'birthDate': {
-      'type': 'string',
-      'format': 'date'
-    }
-  }
-};
+export const schema = personSchema;
+
 export const uischemaVertical = {
   'type': 'VerticalLayout',
   'elements': [
@@ -32,85 +23,85 @@ export const uischemaVertical = {
   ]
 };
 export const uischemaHorizontal = {
-  'type': 'HorizontalLayout',
-  'elements': [
+  type: 'HorizontalLayout',
+  elements: [
     {
-      'type': 'Control',
-      'label': 'Name',
-      'scope': {
-        '$ref': '#/properties/name'
+      type: 'Control',
+      label: 'Name',
+      scope: {
+        $ref: '#/properties/name'
       }
     },
     {
-      'type': 'Control',
-      'label': 'Birth Date',
-      'scope': {
-        '$ref': '#/properties/birthDate'
+      type: 'Control',
+      label: 'Birth Date',
+      scope: {
+        $ref: '#/properties/birthDate'
       }
     }
   ]
 };
 export const uischemaGroup = {
-  'type': 'Group',
-  'label': 'My Group',
-  'elements': [
+  type: 'Group',
+  label: 'My Group',
+  elements: [
     {
-      'type': 'Control',
-      'label': 'Name',
-      'scope': {
-        '$ref': '#/properties/name'
+      type: 'Control',
+      label: 'Name',
+      scope: {
+        $ref: '#/properties/name'
       }
     },
     {
-      'type': 'Control',
-      'label': 'Birth Date',
-      'scope': {
-        '$ref': '#/properties/birthDate'
+      type: 'Control',
+      label: 'Birth Date',
+      scope: {
+        $ref: '#/properties/birthDate'
       }
     }
   ]
 };
 export const uischemaComplex = {
-  'type': 'Group',
-  'label': 'My Group',
-  'elements': [
+  type: 'Group',
+  label: 'My Group',
+  elements: [
     {
-      'type': 'HorizontalLayout',
-      'elements': [
+      type: 'HorizontalLayout',
+      elements: [
         {
-          'type': 'VerticalLayout',
-          'elements': [
+          type: 'VerticalLayout',
+          elements: [
             {
-              'type': 'Control',
-              'label': 'Name',
-              'scope': {
-                '$ref': '#/properties/name'
+              type: 'Control',
+              label: 'Name',
+              scope: {
+                $ref: '#/properties/name'
               }
             },
             {
-              'type': 'Control',
-              'label': 'Birth Date',
-              'scope': {
-                '$ref': '#/properties/birthDate'
+              type: 'Control',
+              label: 'Birth Date',
+              scope: {
+                $ref: '#/properties/birthDate'
               }
             }
           ]
         },
         {
-          'type': 'VerticalLayout',
-          'elements': [
+          type: 'VerticalLayout',
+          elements: [
             {
-              'type': 'Control',
-              'label': 'Name',
-              'scope': {
-                '$ref': '#/properties/name'
+              type: 'Control',
+              label: 'Name',
+              scope: {
+                $ref: '#/properties/name'
               }
             },
             {
-              'type': 'Control',
-              'label': 'Birth Date',
-              'scope': {
-                '$ref': '#/properties/birthDate'
+              type: 'Control',
+              label: 'Birth Date',
+              scope: {
+                $ref: '#/properties/birthDate'
               }
             }
           ]
@@ -119,10 +110,8 @@ export const uischemaComplex = {
     }
   ]
 };
-export const data = {
-  name: 'John Doe',
-  birthDate: '1985-06-02'
-};
+export const data = personData;
+
 registerExamples([
   {
     name: 'layout-vertical',

@@ -1,11 +1,10 @@
 import { registerExamples } from './register';
+import { data as personData } from './person';
 
 export const schema = undefined;
 export const uischema = undefined;
-export const data = {
-  name: 'John Doe',
-  age: 36
-};
+export const data = personData;
+
 registerExamples([
   {
     name: 'generate',
