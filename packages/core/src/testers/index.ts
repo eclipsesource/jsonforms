@@ -27,7 +27,7 @@ export const isControl = (uischema: any): uischema is ControlElement =>
  * @param {(JsonSchema) => boolean} predicate the predicate that should be
  *        applied to the resolved sub-schema
  */
-export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Tester =>
+export const boundSchemaMatches = (predicate: (schema: JsonSchema) => boolean): Tester =>
   (uischema: UISchemaElement, schema: JsonSchema): boolean => {
     if (_.isEmpty(uischema) || !isControl(uischema)) {
       return false;
@@ -77,7 +77,7 @@ export const schemaSubPathMatches =
  *
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
-export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(schema =>
+export const boundSchemaTypeIs = (expectedType: string): Tester => boundSchemaMatches(schema =>
   !_.isEmpty(schema) && schema.type === expectedType
 );
 
@@ -90,7 +90,7 @@ export const schemaTypeIs = (expectedType: string): Tester => schemaMatches(sche
  *
  * @param {string} expectedFormat the expected format of the resolved sub-schema
  */
-export const formatIs = (expectedFormat: string): Tester => schemaMatches(schema =>
+export const formatIs = (expectedFormat: string): Tester => boundSchemaMatches(schema =>
   !_.isEmpty(schema)
   && schema.format === expectedFormat
   && schema.type === 'string'
@@ -195,7 +195,7 @@ export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
  * Default tester for boolean.
  * @type {RankedTester}
  */
-export const isBooleanControl = and(uiTypeIs('Control'), schemaTypeIs('boolean'));
+export const isBooleanControl = and(uiTypeIs('Control'), boundSchemaTypeIs('boolean'));
 
 /**
  * Tests whether the given UI schema is of type Control and if the schema
@@ -211,7 +211,7 @@ export const isDateControl = and(uiTypeIs('Control'), formatIs('date'));
  */
 export const isEnumControl = and(
   uiTypeIs('Control'),
-  schemaMatches(schema => schema.hasOwnProperty('enum'))
+  boundSchemaMatches(schema => schema.hasOwnProperty('enum'))
 );
 
 /**
@@ -221,7 +221,7 @@ export const isEnumControl = and(
  */
 export const isIntegerControl = and(
   uiTypeIs('Control'),
-  schemaTypeIs('integer')
+  boundSchemaTypeIs('integer')
 );
 
 /**
@@ -231,7 +231,7 @@ export const isIntegerControl = and(
  */
 export const isNumberControl = and(
   uiTypeIs('Control'),
-  schemaTypeIs('number')
+  boundSchemaTypeIs('number')
 );
 
 /**
@@ -241,7 +241,7 @@ export const isNumberControl = and(
  */
 export const isStringControl = and(
   uiTypeIs('Control'),
-  schemaTypeIs('string')
+  boundSchemaTypeIs('string')
 );
 
 /**
@@ -268,7 +268,7 @@ export const isTimeControl = and(uiTypeIs('Control'), formatIs('time'));
  */
 export const isArrayObjectControl = and(
   uiTypeIs('Control'),
-  schemaMatches(schema =>
+  boundSchemaMatches(schema =>
     !_.isEmpty(schema)
     && schema.type === 'array'
     && !_.isEmpty(schema.items)

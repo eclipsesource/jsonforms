@@ -1,20 +1,20 @@
 import test from 'ava';
 import {
   and,
+  boundSchemaMatches,
+  boundSchemaTypeIs,
   formatIs,
   isArrayObjectControl,
   optionIs,
   or,
   refEndIs,
   refEndsWith,
-  schemaMatches,
-  schemaTypeIs,
   uiTypeIs
 } from '../src/testers';
 import { JsonSchema } from '../src/models/jsonSchema';
 import { ControlElement, LabelElement } from '../src/models/uischema';
 
-test('schemaTypeIs should check type sub-schema of control', t => {
+test('boundSchemaTypeIs should check type sub-schema of control', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -27,11 +27,11 @@ test('schemaTypeIs should check type sub-schema of control', t => {
       $ref: '#/properties/foo'
     }
   };
-  t.true(schemaTypeIs('string')(uischema, schema));
-  t.false(schemaTypeIs('integer')(uischema, schema));
+  t.true(boundSchemaTypeIs('string')(uischema, schema));
+  t.false(boundSchemaTypeIs('integer')(uischema, schema));
 });
 
-test('schemaTypeIs should return false for non-control UI schema elements', t => {
+test('boundSchemaTypeIs should return false for non-control UI schema elements', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -42,10 +42,10 @@ test('schemaTypeIs should return false for non-control UI schema elements', t =>
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaTypeIs('integer')(label, schema));
+  t.false(boundSchemaTypeIs('integer')(label, schema));
 });
 
-test('schemaTypeIs should return false for control pointing to invalid sub-schema', t => {
+test('boundSchemaTypeIs should return false for control pointing to invalid sub-schema', t => {
   const uischema: ControlElement = {
     type: 'Control',
     scope: {
@@ -58,7 +58,7 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
       foo: { type: 'string' }
     }
   };
-  t.false(schemaTypeIs('string')(uischema, schema));
+  t.false(boundSchemaTypeIs('string')(uischema, schema));
 });
 
 test('formatIs should check the format of a resolved sub-schema', t => {
@@ -113,7 +113,7 @@ test('optionIs should return false for UI schema elements without options field'
   t.false(optionIs('answer', 42)(control, undefined));
 });
 
-test('schemaMatches should check type sub-schema of control via predicate', t => {
+test('boundSchemaMatches should check type sub-schema of control via predicate', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -126,10 +126,10 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
       $ref: '#/properties/foo'
     }
   };
-  t.true(schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema));
+  t.true(boundSchemaMatches(subSchema => subSchema.type === 'string')(uischema, schema));
 });
 
-test('schemaMatches should return false for non-control UI schema elements', t => {
+test('boundSchemaMatches should return false for non-control UI schema elements', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -140,10 +140,10 @@ test('schemaMatches should return false for non-control UI schema elements', t =
     type: 'Label',
     text: 'some text'
   };
-  t.false(schemaMatches(() => false)(label, schema));
+  t.false(boundSchemaMatches(() => false)(label, schema));
 });
 
-test('schemaMatches should return false for control pointing to invalid subschema', t => {
+test('boundSchemaMatches should return false for control pointing to invalid subschema', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -156,7 +156,7 @@ test('schemaMatches should return false for control pointing to invalid subschem
       $ref: '#/properties/bar'
     }
   };
-  t.false(schemaMatches(() => false)(uischema, schema));
+  t.false(boundSchemaMatches(() => false)(uischema, schema));
 });
 
 test('refEndsWith checks whether the ref of a control ends with a certain string', t => {
@@ -209,7 +209,7 @@ test('and should allow to compose multiple testers', t => {
     }
   };
   t.true(and(
-    schemaTypeIs('string'),
+    boundSchemaTypeIs('string'),
     refEndIs('foo')
   )(uischema, schema));
 });
@@ -228,7 +228,7 @@ test('or should allow to compose multiple testers', t => {
     }
   };
   t.true(or(
-    schemaTypeIs('integer'),
+    boundSchemaTypeIs('integer'),
     optionIs('slider', true)
   )(uischema, schema));
 });
