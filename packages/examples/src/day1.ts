@@ -16,11 +16,14 @@ export const schema = {
   required: ['name']
 };
 
+export const uischema = undefined;
+
 export const data = {
   name: 'Send email to Adrian',
   description: 'Confirm if you have passed the subject\nHereby ...',
   done: true,
 };
+
 registerExamples([
   {
     name: 'day1',
