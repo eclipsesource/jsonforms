@@ -553,3 +553,183 @@ test('description undefined', t => {
     TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, '');
 });
+
+test('display error message for required field, displayError undefined', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string'
+            }
+        },
+        'required': ['name']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        }
+    };
+    const data = {};
+    const store = initJsonFormsStore({data, schema, uischema, styles: t.context.styles});
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const validation = findRenderedDOMElementWithClass(tree, 'validation');
+    store.dispatch(validate());
+    t.is(validation.textContent, 'is a required property');
+});
+
+test('hide error message for required field, displayError false', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string'
+            }
+        },
+        'required': ['name']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        },
+        options: {
+            displayError: false
+        }
+    };
+    const data = {};
+    const store = initJsonFormsStore({data, schema, uischema, styles: t.context.styles});
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const validation = findRenderedDOMElementWithClass(tree, 'validation');
+    store.dispatch(validate());
+    t.is(validation.textContent, '');
+});
+
+test('display error message for required field, displayError true', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string'
+            }
+        },
+        'required': ['name']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        },
+        options: {
+            displayError: true
+        }
+    };
+    const data = {};
+    const store = initJsonFormsStore({data, schema, uischema, styles: t.context.styles});
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const validation = findRenderedDOMElementWithClass(tree, 'validation');
+    store.dispatch(validate());
+    t.is(validation.textContent, 'is a required property');
+});
+
+test('no error message, displayError true', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string'
+            }
+        },
+        'required': ['name']
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        },
+        options: {
+            displayError: true
+        }
+    };
+    const data = {
+      name: 'foobar'
+    };
+    const store = initJsonFormsStore({data, schema, uischema, styles: t.context.styles});
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const validation = findRenderedDOMElementWithClass(tree, 'validation');
+    store.dispatch(validate());
+    t.is(validation.textContent, '');
+});
+
+test('no error message, displayError undefined', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string'
+            }
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        }
+    };
+    const data = {};
+    const store = initJsonFormsStore({data, schema, uischema, styles: t.context.styles});
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const validation = findRenderedDOMElementWithClass(tree, 'validation');
+    store.dispatch(validate());
+    t.is(validation.textContent, '');
+});
+
+test('no error message for required field, displayError false', t => {
+    const schema: JsonSchema = {
+        type: 'object',
+        properties: {
+            name: {
+                type: 'string'
+            }
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: {
+            $ref: '#/properties/name'
+        },
+        options: {
+            displayError: false
+        }
+    };
+    const data = {};
+    const store = initJsonFormsStore({data, schema, uischema, styles: t.context.styles});
+    const tree = renderIntoDocument(
+        <Provider store={store}>
+            <InputControl schema={schema} uischema={uischema}/>
+        </Provider>
+    );
+    const validation = findRenderedDOMElementWithClass(tree, 'validation');
+    store.dispatch(validate());
+    t.is(validation.textContent, '');
+});

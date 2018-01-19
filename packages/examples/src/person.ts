@@ -45,6 +45,13 @@ export const schema = {
       },
       required: ['age', 'height']
     },
+    vegetarian: {
+      type: 'boolean'
+    },
+    birthDate: {
+      type: 'string',
+      format: 'date'
+    },
     occupation: {
       type: 'string'
     },
@@ -75,7 +82,10 @@ export const uischema = {
           label: {
             text: 'Age'
           },
-          scope: '#/properties/personalData/properties/age'
+          scope: '#/properties/personalData/properties/age',
+          options: {
+            displayError: true
+          }
         },
         {
           type: 'Control',
