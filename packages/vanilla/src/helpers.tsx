@@ -13,14 +13,12 @@ import {
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from './reducers';
 
-export type ClassNames = string[] | ((...args: any[]) => string[]);
-
 /**
  * A style associates a name with a list of CSS class names.
  */
 export interface StyleDef {
   name: string;
-  classNames: ClassNames;
+  classNames: string[];
 }
 
 export const renderChildren = (

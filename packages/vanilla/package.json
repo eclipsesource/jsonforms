@@ -2,16 +2,16 @@
   "name": "@jsonforms/vanilla-renderers",
   "version": "2.0.0-beta.6",
   "description": "Default Renderer Set for JSON Forms",
-  "main": "dist/ts-build/index.js",
-  "typings": "dist/ts-build/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf lib",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "doc": "echo 'TODO: implement documentation generation'",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Vanilla Renderers' --mode file --out docs src",
     "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "dependencies": {

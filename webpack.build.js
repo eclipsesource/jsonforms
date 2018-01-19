@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
     entry: './src/index.ts',
     output: {
-      path: path.resolve("./", "dist"),
+      path: path.resolve("./", "lib"),
       filename: "jsonforms.js",
       library: "JSONForms",
       libraryTarget: 'umd',
