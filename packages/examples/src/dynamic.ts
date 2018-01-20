@@ -1,5 +1,6 @@
-import { Actions, getSchema, getUiSchema, JsonFormsElement } from '@jsonforms/core';
+import { Actions, getSchema, getUiSchema } from '@jsonforms/core';
 import { registerExamples } from './register';
+import { JsonFormsElement } from '@jsonforms/webcomponent';
 
 const setup = (div: HTMLDivElement) => {
   const button = document.createElement('button');

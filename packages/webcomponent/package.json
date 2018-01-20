@@ -1,7 +1,7 @@
 {
-  "name": "@jsonforms/core",
+  "name": "@jsonforms/webcomponent",
   "version": "2.0.0-beta.6",
-  "description": "Core module of JSON Forms",
+  "description": "Webcomponnet module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
@@ -13,17 +13,17 @@
     "src": "src",
     "test": "test"
   },
-  "main": "./lib/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
-    "clean": "rm -rf lib coverage .nyc_output 2> /dev/null",
+    "clean": "rm -rf dist coverage .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src",
+    "doc": "echo 'TODO: implement documentation generation'",
     "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "ava": {
@@ -34,14 +34,14 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "ajv": "^4.11.2",
-    "lodash": "^4.17.4",
+    "@jsonforms/core": "^2.0.0-beta.5",
+    "@webcomponents/webcomponentsjs": "^1.0.20",
+    "es6-shim": "^0.35.3",
+    "json-refs": "^2.1.6",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0",
-    "uuid": "^3.1.0"
+    "redux": "^3.7.2"
   },
   "devDependencies": {
     "document-register-element": "^1.7.0",

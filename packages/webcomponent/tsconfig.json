@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "exclude":[
+    "node_modules"
+  ],
+  "files": [
+    "./src/index.ts"
+  ]
+}

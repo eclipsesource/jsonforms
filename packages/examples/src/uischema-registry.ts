@@ -3,8 +3,8 @@ import {
   getSchema,
   getUiSchema,
   JsonForms,
-  JsonFormsElement
 } from '@jsonforms/core';
+import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { registerExamples } from './register';
 
 export const uischema = {
