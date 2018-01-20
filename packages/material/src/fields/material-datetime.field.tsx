@@ -12,6 +12,10 @@ import { connect } from 'react-redux';
 import { DateTimePicker } from 'material-ui-pickers';
 import * as moment from 'moment'
 import 'moment/locale/de';
+import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
+import DateRangeIcon from 'material-ui-icons/DateRange';
+import AccessTimeIcon from 'material-ui-icons/AccessTime';
  
 moment.locale('de');
 
@@ -42,8 +46,10 @@ export const MaterialDateTimeField = (props: FieldProps) => {
           disabled={!enabled}
           autoFocus={uischema.options && uischema.options.focus}
           fullWidth={true}
-          leftArrowIcon='keyboard_arrow_left'
-          rightArrowIcon='keyboard_arrow_right'
+          leftArrowIcon={<KeyboardArrowLeftIcon />}
+          rightArrowIcon={<KeyboardArrowRightIcon />}
+          dateRangeIcon={<DateRangeIcon />}
+          timeIcon={<AccessTimeIcon />}
           onClear={() =>
               handleChange(path, '')
           }
