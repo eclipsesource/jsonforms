@@ -6,5 +6,6 @@ export interface ExampleDescription {
   data: any;
   schema: JsonSchema;
   uiSchema: UISchemaElement;
+  config?: any;
   setupCallback?(div: HTMLDivElement): void;
 }

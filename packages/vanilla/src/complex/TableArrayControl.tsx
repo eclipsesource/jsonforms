@@ -50,6 +50,7 @@ class TableArrayControl extends Renderer<TableProps, void> {
       uischema,
       resolvedSchema,
       path,
+      config,
       data,
       visible,
       errors,
@@ -116,6 +117,7 @@ class TableArrayControl extends Renderer<TableProps, void> {
                               schema={resolvedSchema}
                               uischema={createControlElement(prop)}
                               path={childPath}
+                              config={config}
                             />
                           </td>
                         );

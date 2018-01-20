@@ -25,6 +25,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
       label,
       uischema,
       schema,
+      config,
       visible,
       required,
       parentPath
@@ -47,7 +48,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
         <label htmlFor={id} className={classNames.label}>
           {computeLabel(label, required)}
         </label>
-      <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
+      <DispatchField uischema={uischema} schema={schema} path={parentPath} config={config}/>
         <div className={divClassNames}>
           {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         </div>

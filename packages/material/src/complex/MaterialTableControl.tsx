@@ -64,7 +64,7 @@ const TableWithContent = tableProps => {
     );
   });
 };
-const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSchema}) => {
+const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSchema, config}) => {
   const cellErrors = errors
                         .filter(error => error.dataPath === cellPath)
                         .map(error => error.message);
@@ -85,6 +85,7 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSche
             schema={resolvedSchema}
             uischema={createControlElement(cellProperty)}
             path={rowPath}
+            config={config}
           />
         </Grid>
       </Grid>

@@ -15,16 +15,16 @@ import { connect } from 'react-redux';
 import Input from 'material-ui/Input';
 
 export const MaterialTextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, isValid, path, handleChange } = props;
+  const { data, className, id, enabled, uischema, schema, isValid, path, handleChange, config } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
-  let config;
-  if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
+  let configuration;
+  if (config.restrict) {
+    configuration = {'maxLength': maxLength};
   } else {
-    config = {};
+    configuration = {};
   }
-  const trim = uischema.options && uischema.options.trim;
+  const trim = config.trim;
   const onChange = ev => handleChange(path, ev.target.value);
 
   return (
@@ -38,7 +38,7 @@ export const MaterialTextField = (props: FieldProps) => {
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
       fullWidth={!trim || maxLength === undefined}
-      inputProps={config}
+      inputProps={configuration}
       error={!isValid}
     />
   );

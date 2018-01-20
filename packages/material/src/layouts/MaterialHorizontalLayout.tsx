@@ -18,14 +18,15 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 export const horizontalLayoutTester: RankedTester = rankWith(2, uiTypeIs('HorizontalLayout'));
 
 export const MaterialHorizontalLayoutRenderer = (
-  { schema, uischema, path, visible }: RendererProps) => {
+  { schema, uischema, path, visible, config }: RendererProps) => {
   const horizontalLayout = uischema as HorizontalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: horizontalLayout.elements,
     schema,
     path,
     direction: 'row',
-    visible
+    visible,
+    config
   };
 
   return <MaterialLayoutRenderer {...childProps}/>;

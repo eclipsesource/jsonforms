@@ -17,7 +17,7 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
 export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
-    const { uischema, schema, path, visible } = props;
+    const { uischema, schema, path, visible, config } = props;
 
     const groupLayout = uischema as GroupLayout;
 
@@ -26,7 +26,8 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
         schema,
         path,
         direction: 'column',
-        visible
+        visible,
+        config
     };
 
     return (

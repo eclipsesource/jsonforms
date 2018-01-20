@@ -21,6 +21,7 @@ export const VerticalLayoutRenderer  = (
     schema,
     uischema,
     path,
+    config,
     visible,
     getStyle,
     getStyleAsClassName
@@ -38,7 +39,7 @@ export const VerticalLayoutRenderer  = (
       className={layoutClassName}
       visible={visible}
     >
-      {renderChildren(verticalLayout, schema, childClassNames, path)}
+      {renderChildren(verticalLayout, schema, childClassNames, path, config)}
     </JsonFormsLayout>
   );
 };

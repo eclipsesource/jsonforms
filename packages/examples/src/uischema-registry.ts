@@ -2,6 +2,7 @@ import {
   Actions,
   getSchema,
   getUiSchema,
+  getConfig,
   JsonForms,
 } from '@jsonforms/core';
 import { JsonFormsElement } from '@jsonforms/webcomponent';
@@ -28,6 +29,7 @@ const resetServices = () => {
     data,
     schema: getSchema(currentState),
     uischema: getUiSchema(currentState),
+    config: getConfig(currentState),
     styles: currentState.styles
   });
 };
@@ -55,6 +57,7 @@ registerExamples([
     label: 'UI Schema Registry',
     schema: undefined,
     uiSchema: undefined,
+    config: undefined,
     data: data,
     setupCallback: setup
   }

@@ -25,7 +25,8 @@ export const renderChildren = (
   layout: Layout,
   schema: JsonSchema,
   classNames: string,
-  path: string
+  path: string,
+  config: any
 ) => {
 
   if (_.isEmpty(layout.elements)) {
@@ -39,6 +40,7 @@ export const renderChildren = (
           uischema={child}
           schema={schema}
           path={path}
+          config={config}
         />
       </div>
     );
@@ -47,7 +49,7 @@ export const renderChildren = (
 
 export const mapStateToVanillaControlProps = (state, ownProps) => {
   const props = mapStateToControlProps(state, ownProps);
-  const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
+  const trim = ownProps.config.trim;
   const controlElement = ownProps.uischema as ControlElement;
   const isValid = _.isEmpty(props.errors);
   const styles = getStyle(state)('control');

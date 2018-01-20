@@ -18,7 +18,8 @@ const ArrayControlRenderer  =
      path,
      addItem,
      getStyle,
-     getStyleAsClassName
+     getStyleAsClassName,
+     config
   }: ArrayControlRendererProps) => {
 
     const controlElement = uischema as ControlElement;
@@ -46,6 +47,7 @@ const ArrayControlRenderer  =
         path={path}
         resolvedSchema={resolvedSchema}
         onAdd={addItem(path)}
+        config={config}
       />
     );
   };

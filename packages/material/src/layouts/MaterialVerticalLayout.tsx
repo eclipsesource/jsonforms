@@ -18,14 +18,15 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
 export const MaterialVerticalLayoutRenderer  = (
-  { schema, uischema, path, visible }: RendererProps) => {
+  { schema, uischema, path, visible, config }: RendererProps) => {
   const verticalLayout = uischema as VerticalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: verticalLayout.elements,
     schema,
     path,
     direction: 'column',
-    visible
+    visible,
+    config
   };
 
   return <MaterialLayoutRenderer {...childProps}/>;

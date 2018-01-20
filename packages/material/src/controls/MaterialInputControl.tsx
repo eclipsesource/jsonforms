@@ -30,10 +30,11 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath
+      parentPath,
+      config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = uischema.options && uischema.options.trim;
+    const trim = config.trim;
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
@@ -53,7 +54,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         <InputLabel htmlFor={id} error={!isValid}>
           {computeLabel(label, required)}
         </InputLabel>
-        <DispatchField uischema={uischema} schema={schema} path={parentPath} />
+        <DispatchField uischema={uischema} schema={schema} path={parentPath} config={config} />
         <FormHelperText error={!isValid}>
           {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         </FormHelperText>

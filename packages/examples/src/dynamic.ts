@@ -1,4 +1,4 @@
-import { Actions, getSchema, getUiSchema } from '@jsonforms/core';
+import { Actions, getConfig, getSchema, getUiSchema } from '@jsonforms/core';
 import { registerExamples } from './register';
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 
@@ -13,6 +13,7 @@ const setup = (div: HTMLDivElement) => {
       data: { id: 'aaa' },
       schema: getSchema(currentState),
       uischema: getUiSchema(currentState),
+      config: getConfig(currentState),
       styles: currentState.styles
     });
   };
@@ -25,6 +26,7 @@ registerExamples([
     label: 'Dynamic Change',
     schema: undefined,
     uiSchema: undefined,
+    config: undefined,
     data: {name: 'bla'},
     setupCallback: setup
   }

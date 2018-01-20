@@ -32,6 +32,7 @@ export const changeExample = (selectedExample: string, additionalState: Addition
     data: example.data,
     schema: example.schema,
     uischema: example.uiSchema,
+    config: example.config,
     ...additionalState,
   };
 

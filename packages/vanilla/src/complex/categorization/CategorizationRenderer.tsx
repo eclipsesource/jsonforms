@@ -53,6 +53,7 @@ class CategorizationRenderer extends Renderer<VanillaRendererProps, Categorizati
             category={selectedCategory}
             schema={this.props.schema}
             path={this.props.path}
+            config={this.props.config}
           />
         </div>
       </div>

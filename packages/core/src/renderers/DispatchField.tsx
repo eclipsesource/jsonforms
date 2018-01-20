@@ -12,6 +12,7 @@ export interface DispatchFieldProps extends FieldProps {
 const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
   const uischema = dispatchFieldProps.uischema;
   const schema = dispatchFieldProps.schema;
+  const config = dispatchFieldProps.config;
   const field = _.maxBy(dispatchFieldProps.fields, r => r.tester(uischema, schema));
 
   if (field === undefined || field.tester(uischema, schema) === -1) {
@@ -23,6 +24,7 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
       <Field
         schema={schema}
         uischema={uischema}
+        config={config}
         path={dispatchFieldProps.path}
       />
     );

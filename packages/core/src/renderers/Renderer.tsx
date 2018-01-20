@@ -29,6 +29,11 @@ export interface RendererProps {
    * it is the case with nested controls.
    */
   path?: string;
+
+  /**
+   * Optional configuration.
+   */
+  config?: any;
 }
 
 export class Renderer<P extends RendererProps, S> extends React.Component<P, S> {
