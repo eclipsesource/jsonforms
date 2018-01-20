@@ -1,5 +1,6 @@
 import { JsonSchema, Scopable } from '../';
-export { createLabelDescriptionFrom, translateLabel } from './label';
+export { createLabelDescriptionFrom } from './label';
+export { translate } from './i18n';
 
 export const convertToValidClassName = (s: string): string =>
   s.replace('#', 'root')

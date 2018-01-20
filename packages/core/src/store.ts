@@ -1,12 +1,4 @@
-<<<<<<< HEAD
 import { Store } from 'redux';
-=======
-import thunk from 'redux-thunk';
-import { jsonformsReducer } from './reducers';
-import { applyMiddleware, createStore, Store } from 'redux';
-import { JsonForms } from './core';
-import { INIT, SET_LOCALE, VALIDATE } from './actions';
->>>>>>> set locale default value
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaElement } from './models/uischema';
 
