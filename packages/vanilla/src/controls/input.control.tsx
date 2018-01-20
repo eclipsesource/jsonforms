@@ -49,7 +49,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
         </label>
       <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
         <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : showDescription?description:null}
+          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         </div>
       </div>
     );
