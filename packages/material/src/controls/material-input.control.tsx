@@ -29,7 +29,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath 
+      parentPath
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
@@ -61,7 +61,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       </FormControl>
     );
   }
-};
+}
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 export default registerStartupRenderer(
   inputControlTester,

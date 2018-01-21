@@ -1,18 +1,14 @@
 import * as React from 'react';
 import {
-  and,
   ControlElement,
   FieldProps,
+  isRangeControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
-  or,
   RankedTester,
   rankWith,
   registerStartupInput,
-  resolveSchema,
-  schemaMatches,
-  schemaTypeIs,
-  uiTypeIs
+  resolveSchema
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -27,13 +23,14 @@ const MaterialSliderField = (props: FieldProps) => {
   return (
     <Input
       type='range'
-      value={data || ''}
+      value={data || (resolvedSchema.maximum - resolvedSchema.minimum) / 2}
       onChange={ev => handleChange(path, Number(ev.currentTarget.value))}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       inputProps={config}
+      endAdornment={<label style={{marginLeft: '0.5em'}}>{data}</label>}
     />
   );
 };
@@ -42,13 +39,7 @@ const MaterialSliderField = (props: FieldProps) => {
  * Matrial tester for slider controls.
  * @type {RankedTester}
  */
-export const sliderFieldTester: RankedTester = rankWith(4, and(
-     uiTypeIs('Control'),
-     or(schemaTypeIs('number'), schemaTypeIs('integer')),
-     schemaMatches(schema =>
-       schema.hasOwnProperty('maximum') && schema.hasOwnProperty('minimum')
-     )
- ));
+export const sliderFieldTester: RankedTester = rankWith(4, isRangeControl);
 
 export default registerStartupInput(
   sliderFieldTester,

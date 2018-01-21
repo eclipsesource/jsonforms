@@ -91,6 +91,9 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/personalData/properties/drivingSkill'
+          },
+          options: {
+            slider: true
         },
       ]
     },

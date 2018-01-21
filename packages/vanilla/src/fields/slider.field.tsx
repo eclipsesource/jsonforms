@@ -1,19 +1,15 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
-  and,
   ControlElement,
   FieldProps,
+  isRangeControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
-  or,
   RankedTester,
   rankWith,
   registerStartupInput,
-  resolveSchema,
-  schemaMatches,
-  schemaTypeIs,
-  uiTypeIs
+  resolveSchema
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -23,11 +19,12 @@ const SliderField = (props: FieldProps) => {
   const resolvedSchema = resolveSchema(schema, controlElement.scope);
 
   return (
+  <div style={{display: 'flex'}}>
     <input
       type='range'
       max={resolvedSchema.maximum}
       min={resolvedSchema.minimum}
-      value={data || ''}
+      value={data || (resolvedSchema.maximum - resolvedSchema.minimum) / 2}
       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
         handleChange(path, Number(ev.currentTarget.value))
       }
@@ -35,21 +32,14 @@ const SliderField = (props: FieldProps) => {
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
+      style={{flex: '1'}}
     />
+    <label style={{marginLeft: '0.5em'}}>{data}</label>
+  </div>
   );
 };
 
-/**
- * Default tester for slider controls.
- * @type {RankedTester}
- */
-export const sliderFieldTester: RankedTester = rankWith(4, and(
-     uiTypeIs('Control'),
-     or(schemaTypeIs('number'), schemaTypeIs('integer')),
-     schemaMatches(schema =>
-       schema.hasOwnProperty('maximum') && schema.hasOwnProperty('minimum')
-     )
- ));
+export const sliderFieldTester: RankedTester = rankWith(4, isRangeControl);
 
 export default registerStartupInput(
   sliderFieldTester,
