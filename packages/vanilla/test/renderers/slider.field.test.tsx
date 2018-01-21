@@ -264,10 +264,61 @@ test('tester with correct schema type,but missing minimum', t => {
   );
 });
 
-test('tester with matching schema type (number)', t => {
+test('tester with matching schema type (number) without options', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
+  };
+  t.is(
+    sliderFieldTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            maximum: 10,
+            minimum: 2
+          }
+        }
+      }
+    ),
+    -1
+  );
+});
+
+test('tester with matching schema type (integer) without options', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.is(
+    sliderFieldTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'integer',
+            maximum: 10,
+            minimum: 2
+          }
+        }
+      }
+    ),
+    -1
+  );
+});
+
+test('tester with matching schema type (number) with options', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/foo'
+    },
+    options: {
+      slider: true
+    }
   };
   t.is(
     sliderFieldTester(
@@ -287,10 +338,13 @@ test('tester with matching schema type (number)', t => {
   );
 });
 
-test('tester with matching schema type (integer)', t => {
+test('tester with matching schema type (integer) with options', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: { $ref: '#/properties/foo' },
+    options: {
+      slider: true
+    }
   };
   t.is(
     sliderFieldTester(
