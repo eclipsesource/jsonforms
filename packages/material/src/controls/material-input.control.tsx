@@ -6,6 +6,7 @@ import {
   ControlProps,
   ControlState,
   DispatchField,
+  formatErrorMessage,
   isControl,
   isDescriptionHidden,
   mapStateToControlProps,
@@ -54,7 +55,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         </InputLabel>
         <DispatchField uischema={uischema} schema={schema} path={parentPath} />
         <FormHelperText error={!isValid}>
-          {!isValid ? errors : showDescription ? description : null}
+          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         </FormHelperText>
       </FormControl>
     );
