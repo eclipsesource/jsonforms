@@ -7,7 +7,7 @@ import {
   ControlState,
   isDateControl,
   isTimeControl,
-  mapDispatchToFieldProps,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   or,
   RankedTester,
@@ -66,5 +66,5 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
 export const nativeControlTester: RankedTester = rankWith(2, or(isDateControl, isTimeControl));
 export default registerStartupRenderer(
   nativeControlTester,
-  connect(mapStateToControlProps, mapDispatchToFieldProps)(MaterialNativeControl)
+  connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialNativeControl)
 );
