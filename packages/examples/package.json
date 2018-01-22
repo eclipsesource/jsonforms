@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.6",
   "description": "JSON Forms usage examples",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -16,35 +16,21 @@
     "src": "src",
     "test": "wct-test"
   },
-  "main": "dist/ts-build/index.js",
-  "typings": "dist/ts-build/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/ts-build/index.d.ts",
   "scripts": {
     "bundle": "webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf lib",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
-    "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "echo 'Nothing to do for `examples` package'",
-    "test-coverage": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "wct": "wct wct-test",
-    "doc": "echo 'TODO: implement documentation generation'",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --out docs src",
     "preparePublish": "npm run doc && npm run build && npm run test"
   },
-  "ava": {
-    "verbose": true,
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
-  },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-beta.2",
-    "@jsonforms/material-renderers": "^2.0.0-beta.2",
-    "@jsonforms/vanilla-renderers": "^2.0.0-beta.2",
+    "@jsonforms/core": "^2.0.0-beta.6",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
-  },
-  "devDependencies": {
   }
 }

@@ -23,3 +23,7 @@ export const renderIntoDocument = (element: any): any =>
 export const click = TestUtils.Simulate.click;
 
 export const change = TestUtils.Simulate.change;
+
+export const focus = TestUtils.Simulate.focus;
+
+export const blur = TestUtils.Simulate.blur;

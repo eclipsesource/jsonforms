@@ -4,8 +4,8 @@ import {
   and,
   ControlElement,
   FieldProps,
-  handleChange,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   or,
   RankedTester,
   rankWith,
@@ -18,7 +18,7 @@ import {
 import { connect } from 'react-redux';
 
 const SliderField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema } = props;
+  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
   const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
 
@@ -28,7 +28,7 @@ const SliderField = (props: FieldProps) => {
     min={resolvedSchema.minimum}
     value={data || ''}
     onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-      handleChange(props, Number(ev.currentTarget.value))
+      handleChange(path, Number(ev.currentTarget.value))
     }
     className={className}
     id={id}
@@ -51,5 +51,5 @@ export const sliderFieldTester: RankedTester = rankWith(4, and(
 
 export default registerStartupInput(
   sliderFieldTester,
-  connect(mapStateToInputProps)(SliderField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(SliderField)
 );

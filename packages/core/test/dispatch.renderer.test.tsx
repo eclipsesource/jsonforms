@@ -18,7 +18,7 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from '../../vanilla/test/helpers/react-test';
+} from '../../test/helpers/react-test';
 
 class CustomRenderer1 extends Renderer<RendererProps, any> {
   render() {
@@ -60,7 +60,11 @@ test('DispatchRenderer should report about missing renderer', t => {
   const data = { foo: 'John Doe' };
   const uischema = { type: 'Foo' };
   const schema: JsonSchema = { type: 'object', properties: { foo: { type: 'string'} } };
-  const store = initJsonFormsStore(data, schema, uischema);
+  const store = initJsonFormsStore({
+    data,
+    schema,
+    uischema
+  });
   const div = _.head(
     scryRenderedDOMElementsWithTag(
       renderIntoDocument(
@@ -75,7 +79,11 @@ test('DispatchRenderer should report about missing renderer', t => {
 });
 
 test('DispatchRenderer should pick most applicable renderer', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
   store.dispatch(registerRenderer(() => 5, CustomRenderer1));
   const tree = renderIntoDocument(
@@ -90,7 +98,11 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
   const tester1 = () => 9;
   const tester2 = () => 8;
   const tester3 = () => 10;
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   store.dispatch(registerRenderer(tester1, CustomRenderer1));
   store.dispatch(registerRenderer(tester2, CustomRenderer2));
   store.dispatch(registerRenderer(tester3, CustomRenderer3));
@@ -105,7 +117,11 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
 });
 
 test('deregister an unregistered renderer should be a no-op', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
   store.dispatch(registerRenderer(() => 5, CustomRenderer2));
   const tester = () => 10;

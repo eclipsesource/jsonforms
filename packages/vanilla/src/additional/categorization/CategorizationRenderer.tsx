@@ -3,22 +3,20 @@ import { connect } from 'react-redux';
 import {
   Categorization,
   Category,
-  JsonForms,
-  mapStateToLayoutProps,
   Renderer,
-  RendererProps,
 } from '@jsonforms/core';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
+import { mapStateToVanillaLayoutProps, VanillaRendererProps } from '../../helpers';
 
 export interface CategorizationState {
   selectedCategory: Category;
 }
 
-class CategorizationRenderer extends Renderer<RendererProps, CategorizationState> {
+class CategorizationRenderer extends Renderer<VanillaRendererProps, CategorizationState> {
 
-  onCategorySelected = (category) => () => {
+  onCategorySelected = category => () => {
     return this.setState({selectedCategory: category});
   }
 
@@ -26,12 +24,14 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
    * @inheritDoc
    */
   render() {
-    const { uischema, visible } = this.props;
+    const { uischema, visible, getStyleAsClassName  } = this.props;
     const categorization = uischema as Categorization;
-    const classNames = JsonForms.stylingRegistry.getAsClassName('categorization');
-    const masterClassNames = JsonForms.stylingRegistry.getAsClassName('categorization.master');
-    const detailClassNames = JsonForms.stylingRegistry.getAsClassName('categorization.detail');
+    const classNames = getStyleAsClassName('categorization');
+    const masterClassNames = getStyleAsClassName('categorization.master');
+    const detailClassNames = getStyleAsClassName('categorization.detail');
     const selectedCategory = this.findCategory(categorization);
+    const subcategoriesClassName = getStyleAsClassName('category.subcategories');
+    const groupClassName = getStyleAsClassName('category.group');
 
     return (
       <div
@@ -44,6 +44,8 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
             selectedCategory={selectedCategory}
             depth={0}
             onSelect={this.onCategorySelected}
+            subcategoriesClassName={subcategoriesClassName}
+            groupClassName={groupClassName}
           />
         </div>
         <div className={detailClassNames}>
@@ -72,4 +74,4 @@ class CategorizationRenderer extends Renderer<RendererProps, CategorizationState
   }
 }
 
-export default connect(mapStateToLayoutProps)(CategorizationRenderer);
+export default connect(mapStateToVanillaLayoutProps)(CategorizationRenderer);

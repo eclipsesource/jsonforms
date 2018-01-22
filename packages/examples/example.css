@@ -5,6 +5,7 @@
   --jsf-modest-bg-highlight-color: silver;
   --jsf-validation-color: red;
   --jsf-main-fg-color: black;
+  --jsf-description-color: #939393;
   background-color: var(--jsf-main-bg-color);
   color: var(--jsf-main-fg-color);
 }
@@ -75,7 +76,7 @@ input {
 .horizontal-layout {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
 }
 .horizontal-layout[hidden] {
   display: none;
@@ -316,4 +317,18 @@ jsonforms-tree > dialog > .content {
 }
 .array-table-layout td > * {
   flex:1;
+}
+.control > .input-description {
+  color: var(--jsf-description-color);
+  margin: 0;
+  font-size: 0.75rem;
+  text-align: left;
+  margin-top: 8px;
+  min-height: 1em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1em;
+  -webkit-margin-before: 1em;
+  -webkit-margin-after: 1em;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
 }

@@ -3,8 +3,8 @@ import {
   and,
   ControlElement,
   FieldProps,
-  handleChange,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   or,
   RankedTester,
   rankWith,
@@ -19,28 +19,30 @@ import { connect } from 'react-redux';
 import Input from 'material-ui/Input';
 
 const MaterialSliderField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema } = props;
+  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
   const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
   const config = {'max': resolvedSchema.maximum, 'min': resolvedSchema.minimum};
 
-  return <Input
-    type='range'
-    value={data || ''}
-    onChange={ev => handleChange(props, Number(ev.currentTarget.value))}
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-    inputProps={config}
-  />;
+  return (
+    <Input
+      type='range'
+      value={data || ''}
+      onChange={ev => handleChange(path, Number(ev.currentTarget.value))}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      inputProps={config}
+    />
+  );
 };
 
 /**
  * Matrial tester for slider controls.
  * @type {RankedTester}
  */
-export const materialSliderFieldTester: RankedTester = rankWith(4, and(
+export const sliderFieldTester: RankedTester = rankWith(4, and(
      uiTypeIs('Control'),
      or(schemaTypeIs('number'), schemaTypeIs('integer')),
      schemaMatches(schema =>
@@ -49,6 +51,6 @@ export const materialSliderFieldTester: RankedTester = rankWith(4, and(
  ));
 
 export default registerStartupInput(
-  materialSliderFieldTester,
-  connect(mapStateToInputProps)(MaterialSliderField)
+  sliderFieldTester,
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialSliderField)
 );

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
   FieldProps,
-  handleChange,
   isNumberControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -12,19 +12,22 @@ import {
 import { connect } from 'react-redux';
 
 const NumberField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema } = props;
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-  return <input type='number'
-       step='0.1'
-       value={data || ''}
-       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-         handleChange(props, Number(ev.currentTarget.value))
-       }
-       className={className}
-       id={id}
-       disabled={!enabled}
-       autoFocus={uischema.options && uischema.options.focus}
-  />;
+  return (
+    <input
+      type='number'
+      step='0.1'
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+        handleChange(path, Number(ev.currentTarget.value))
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
 
 /**
@@ -35,5 +38,5 @@ export const numberFieldTester: RankedTester = rankWith(2, isNumberControl);
 
 export default registerStartupInput(
   numberFieldTester,
-  connect(mapStateToInputProps)(NumberField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(NumberField)
 );

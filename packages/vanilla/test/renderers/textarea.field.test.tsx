@@ -1,4 +1,4 @@
-import '../helpers/setup';
+import '../../../test/helpers/setup';
 import * as React from 'react';
 import test from 'ava';
 import {
@@ -6,7 +6,6 @@ import {
   getData,
   HorizontalLayout,
   initJsonFormsStore,
-  JsonForms,
   JsonSchema,
   update
 } from '@jsonforms/core';
@@ -17,21 +16,8 @@ import {
   findRenderedDOMElementWithTag,
   renderIntoDocument,
   scryRenderedDOMElementsWithTag
-} from '../helpers/binding';
+} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
-
-test.before(() => {
-  JsonForms.stylingRegistry.registerMany([
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    }
-  ]);
-});
 
 test.beforeEach(t => {
   t.context.data = {'name': 'Foo'};
@@ -50,6 +36,16 @@ test.beforeEach(t => {
       $ref: '#/properties/name'
     }
   };
+  t.context.styles = [
+    {
+      name: 'control',
+      classNames: ['control']
+    },
+    {
+      name: 'control.validation',
+      classNames: ['validation']
+    }
+  ];
 });
 test.failing('autofocus on first element', t => {
     const schema: JsonSchema = {
@@ -88,11 +84,11 @@ test.failing('autofocus on first element', t => {
         'firstName': 'Foo',
         'lastName': 'Boo'
     };
-    const store = initJsonFormsStore(
-        data,
-        schema,
-        uischema
-    );
+    const store = initJsonFormsStore({
+      data,
+      schema,
+      uischema
+    });
     const tree = renderIntoDocument(
         <Provider store={store}>
           <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
@@ -113,7 +109,11 @@ test('autofocus active', t => {
             focus: true
         }
     };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
+    const store = initJsonFormsStore({
+      data: t.context.data,
+      schema: t.context.schema,
+      uischema
+    });
     const tree = renderIntoDocument(
         <Provider store={store}>
           <TextAreaField schema={t.context.schema} uischema={uischema}/>
@@ -124,40 +124,48 @@ test('autofocus active', t => {
 });
 
 test('autofocus inactive', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/name'
-        },
-        options: {
-            focus: false
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <TextAreaField schema={t.context.schema} uischema={uischema}/>
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
-    t.false(input.autofocus);
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    },
+    options: {
+      focus: false
+    }
+  };
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema
+  });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <TextAreaField schema={t.context.schema} uischema={uischema}/>
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
+  t.false(input.autofocus);
 });
 
 test('autofocus inactive by default', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: {
-            $ref: '#/properties/name'
-        }
-    };
-    const store = initJsonFormsStore(t.context.data, t.context.schema, uischema);
-    const tree = renderIntoDocument(
-        <Provider store={store}>
-          <TextAreaField schema={t.context.schema} uischema={uischema}/>
-        </Provider>
-    );
-    const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
-    t.false(input.autofocus);
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: {
+      $ref: '#/properties/name'
+    }
+  };
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema
+  });
+  const tree = renderIntoDocument(
+    <Provider store={store}>
+      <TextAreaField schema={t.context.schema} uischema={uischema}/>
+    </Provider>
+  );
+  const input = findRenderedDOMElementWithTag(tree, 'textarea') as HTMLInputElement;
+  t.false(input.autofocus);
 });
 
 test('tester', t => {
@@ -169,7 +177,11 @@ test('tester', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <TextAreaField store={store} dataSchema={t.context.schema} uischema={t.context.uischema}/>
   );
@@ -178,7 +190,11 @@ test('render', t => {
 });
 
 test('update via input event', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -192,7 +208,11 @@ test('update via input event', t => {
 });
 
 test.cb('update via action', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -202,12 +222,16 @@ test.cb('update via action', t => {
   store.dispatch(update('name', () => 'Bar'));
   setTimeout(() => {
     t.is(textarea.value, 'Bar');
-    t.end()
-  }, 100);
+    t.end();
+  },         100);
 });
 
 test('update with undefined value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -219,7 +243,11 @@ test('update with undefined value', t => {
 });
 
 test('update with null value', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -231,7 +259,11 @@ test('update with null value', t => {
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -243,7 +275,11 @@ test('update with wrong ref', t => {
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -255,7 +291,11 @@ test('update with null ref', t => {
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
@@ -267,11 +307,11 @@ test('update with undefined ref', t => {
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore(
-    t.context.data,
-    t.context.schema,
-    t.context.uischema
-  );
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
@@ -282,7 +322,11 @@ test('disable', t => {
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore(t.context.data, t.context.schema, t.context.uischema);
+  const store = initJsonFormsStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
   const tree = renderIntoDocument(
     <Provider store={store}>
       <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>

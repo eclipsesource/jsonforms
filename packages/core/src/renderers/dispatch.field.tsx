@@ -24,8 +24,6 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
         schema={schema}
         uischema={uischema}
         path={dispatchFieldProps.path}
-        data={dispatchFieldProps.data}
-        class
       />
     );
   }

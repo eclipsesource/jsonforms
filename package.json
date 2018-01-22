@@ -1,7 +1,7 @@
 {
 	"scripts": {
 		"lerna": "lerna",
-		"publishNpmAndGithub": "lerna run preparePublish && lerna publish"
+		"publishNpmAndGithub": "lerna run clean && lerna run preparePublish && lerna publish"
 	},
 	"devDependencies": {
 		"@types/react": "^16.0.27",
@@ -10,8 +10,12 @@
 		"cross-env": "^5.1.1",
 		"lerna": "^2.5.1",
 		"nyc": "^11.3.0",
+		"source-map-loader": "^0.2.3",
+		"ts-loader": "^3.2.0",
 		"tslint": "^5.8.0",
+		"tslint-loader": "^3.5.3",
 		"tslint-react": "^3.2.0",
+		"typedoc": "^0.9.0",
 		"typescript": "^2.6.2",
 		"webpack": "^3.10.0"
 	}

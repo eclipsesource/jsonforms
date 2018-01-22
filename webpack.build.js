@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
     entry: './src/index.ts',
     output: {
-      path: path.resolve("./", "dist"),
+      path: path.resolve("./", "lib"),
       filename: "jsonforms.js",
       library: "JSONForms",
       libraryTarget: 'umd',
@@ -39,7 +39,7 @@ module.exports = {
         },
         { enforce: 'pre', test: /\.ts$/, exclude: /node_modules/, loader: 'tslint-loader',
           options: {
-            configuration: require('tslint.json'),
+            configuration: require('./tslint.json'),
             failOnHint: false,
             typeCheck: true
           }

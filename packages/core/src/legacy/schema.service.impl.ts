@@ -115,9 +115,6 @@ const getReference = (href: string, variable: string, variableWrapped: string) =
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: {[id: string]: JsonSchema} = {};
   constructor(private rootSchema: JsonSchema) {
-    if (_.isEmpty(rootSchema.id)) {
-      rootSchema.id = '#generatedRootID';
-    }
     this.selfContainedSchemas[rootSchema.id] = this.rootSchema;
   }
   getContainmentProperties(schema: JsonSchema): ContainmentProperty[] {

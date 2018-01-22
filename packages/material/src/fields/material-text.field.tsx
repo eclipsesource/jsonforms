@@ -2,9 +2,9 @@ import * as React from 'react';
 import {
   ControlElement,
   FieldProps,
-  handleChange,
   isStringControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput,
@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import Input from 'material-ui/Input';
 
 export const MaterialTextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, isValid } = props;
+  const { data, className, id, enabled, uischema, schema, isValid, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
   let config;
@@ -25,7 +25,7 @@ export const MaterialTextField = (props: FieldProps) => {
     config = {};
   }
   const trim = uischema.options && uischema.options.trim;
-  const onChange = ev => handleChange(props, ev.target.value);
+  const onChange = ev => handleChange(path, ev.target.value);
 
   return (
     <Input
@@ -37,7 +37,7 @@ export const MaterialTextField = (props: FieldProps) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim}
+      fullWidth={!trim || maxLength === undefined}
       inputProps={config}
       error={!isValid}
     />
@@ -50,5 +50,5 @@ export const MaterialTextField = (props: FieldProps) => {
 export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 export default registerStartupInput(
   textFieldTester,
-  connect(mapStateToInputProps)(MaterialTextField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialTextField)
 );

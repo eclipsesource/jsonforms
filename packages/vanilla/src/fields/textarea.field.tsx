@@ -2,9 +2,9 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
   FieldProps,
-  handleChange,
   isMultiLineControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput
@@ -12,12 +12,12 @@ import {
 import { connect } from 'react-redux';
 
 export const TextAreaField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema } = props;
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return <textarea
        value={data || ''}
        onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
-         handleChange(props, ev.currentTarget.value)
+         handleChange(path, ev.currentTarget.value)
        }
        className={className}
        id={id}
@@ -34,5 +34,5 @@ export const textAreaFieldTester: RankedTester = rankWith(2, isMultiLineControl)
 
 export default registerStartupInput(
   textAreaFieldTester,
-  connect(mapStateToInputProps)(TextAreaField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(TextAreaField)
 );

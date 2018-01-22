@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.6",
   "description": "Core module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -18,13 +18,13 @@
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
-    "clean": "rm -rf dist coverage .nyc_output 2> /dev/null",
+    "clean": "rm -rf lib coverage .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "echo 'TODO: implement documentation generation'",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src",
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "ava": {
     "verbose": true,
@@ -36,7 +36,6 @@
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "ajv": "^4.11.2",
-    "dot-prop-immutable": "^1.3.1",
     "es6-shim": "^0.35.3",
     "json-refs": "^2.1.6",
     "lodash": "^4.17.4",

@@ -1,11 +1,8 @@
 import * as _ from 'lodash';
-import { UISchemaElement } from './models/uischema';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaRegistry, UISchemaRegistryImpl } from './legacy/uischema.registry';
-import { StylingRegistry, StylingRegistryImpl } from './legacy/styling.registry';
 import { SchemaService } from './legacy/schema.service';
 import { SchemaServiceImpl } from './legacy/schema.service.impl';
-import { Store } from 'redux';
 
 /**
  * Represents a JSONForms service.
@@ -36,35 +33,21 @@ export class JsonFormsConfig {
 }
 
 /**
- * Encapsulates instantiation logic of a JSONForms service.
- */
-export interface JsonFormsServiceConstructable {
-  /**
-   * Constructor logic.
-   *
-   * @param {store}
-   * @param {JsonSchema} dataSchema the JSON schema describing the data
-   * @param {UISchemaElement} uiSchema the UI schema to be rendered
-   */
-  new(store: Store<any>, dataSchema: JsonSchema, uiSchema: UISchemaElement): JsonFormService;
-}
-
-/**
  * Global JSONForms object that holds services and registries.
  */
-export class JsonForms {
-  private static _config = new JsonFormsConfig();
-  private static _schemaService;
-  public static renderers = [];
-  public static fields = [];
-  public static jsonFormsServices: JsonFormsServiceConstructable[] = [];
-  public static uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
-  public static stylingRegistry: StylingRegistry = new StylingRegistryImpl();
-  public static modelMapping;
-  public static set schema(schema: JsonSchema) {
-    JsonForms._schemaService = new SchemaServiceImpl(schema);
+export class JsonFormsGlobal {
+  private _config = new JsonFormsConfig();
+  private _schemaService;
+  public renderers = [];
+  public fields = [];
+  public reducers: {[key: string]: any} = {};
+  public uischemaRegistry: UISchemaRegistry = new UISchemaRegistryImpl();
+  public modelMapping;
+  public set schema(schema: JsonSchema) {
+    this._schemaService = new SchemaServiceImpl(schema);
   }
-  public static get schemaService(): SchemaService {
+
+  public get schemaService(): SchemaService {
     if (this._schemaService === undefined) {
       console.error('Schema service has not been initialized');
     }
@@ -72,7 +55,7 @@ export class JsonForms {
     return this._schemaService;
   }
 
-  public static get config(): JsonFormsConfig {
+  public get config(): JsonFormsConfig {
     return this._config;
   }
 
@@ -85,7 +68,7 @@ export class JsonForms {
    * @param schemaId The id of the JsonSchema defining the type to filter for
    * @return The filtered data objects or all objects if there is no applicable mapping
    */
-  static filterObjectsByType = (objects: Object[], schemaId: string): Object[] => {
+  filterObjectsByType = (objects: Object[], schemaId: string): Object[] => {
     return objects.filter(value => {
       const valueSchemaId = JsonForms.getSchemaIdForObject(value);
       if (valueSchemaId === null) {
@@ -105,7 +88,7 @@ export class JsonForms {
    * @param object The object whose type is determined
    * @return The schema id of the object or null if it could not be determined
    */
-  static getSchemaIdForObject = (object: Object): string => {
+  getSchemaIdForObject = (object: Object): string => {
     if (JsonForms.modelMapping !== undefined && !_.isEmpty(object)) {
       const mappingAttribute = JsonForms.modelMapping.attribute;
       if (!_.isEmpty(mappingAttribute)) {
@@ -119,3 +102,6 @@ export class JsonForms {
     return null;
   }
 }
+
+const JsonForms = new JsonFormsGlobal();
+export { JsonForms} ;

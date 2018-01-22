@@ -1,36 +1,66 @@
 import * as React from 'react';
 import {
   computeLabel,
-  ControlProps,
+  Control,
+  ControlElement,
+  ControlState,
   DispatchField,
   formatErrorMessage,
   isControl,
-  mapStateToControlProps,
+  isDescriptionHidden,
   RankedTester,
   rankWith,
-  registerStartupRenderer
+  registerStartupRenderer,
+  resolveSchema
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
+import { mapStateToVanillaControlProps, VanillaControlProps } from '../helpers';
 
-export const InputControl =
-  ({ classNames, id, errors, label, uischema, schema, visible, required }: ControlProps) => {
-  const isValid = errors.length === 0;
-  const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
+export class InputControl extends Control<VanillaControlProps, ControlState> {
+  render() {
+    const {
+      classNames,
+      id,
+      errors,
+      label,
+      uischema,
+      schema,
+      visible,
+      required,
+      parentPath
+    } = this.props;
 
-  return (
-    <div className={classNames.wrapper} hidden={!visible}>
-      <label htmlFor={id} className={classNames.label}>
-        {computeLabel(label, required)}
-      </label>
-      <DispatchField uischema={uischema} schema={schema}/>
-      <div className={divClassNames}>
-        {!isValid ? formatErrorMessage(errors) : ''}
+    const isValid = errors.length === 0;
+    const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
+    const controlElement = uischema as ControlElement;
+    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
+
+    return (
+      <div
+        className={classNames.wrapper}
+        hidden={!visible}
+        onFocus={() => this.onFocus()}
+        onBlur={() => this.onBlur()}
+      >
+        <label htmlFor={id} className={classNames.label}>
+          {computeLabel(label, required)}
+        </label>
+      <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
+        <div
+          className={divClassNames}
+          hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}
+        >
+          {!isValid ? formatErrorMessage(errors) : description}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
+
 export const inputControlTester: RankedTester = rankWith(1, isControl);
+
 export default registerStartupRenderer(
   inputControlTester,
-  connect(mapStateToControlProps)(InputControl)
+  connect(mapStateToVanillaControlProps)(InputControl)
 );

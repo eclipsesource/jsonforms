@@ -1,4 +1,4 @@
-import {  JsonFormsElement } from '@jsonforms/core';
+import { JsonFormsElement } from '@jsonforms/core';
 import { ExampleDescription } from './example';
 
 declare let exampleDivId;
@@ -6,11 +6,15 @@ declare let viewDivId;
 
 const knownExamples: {[key: string]: ExampleDescription} = {};
 
+export interface AdditionalState {
+  [x: string]: any;
+}
+
 export const registerExamples = (examples: ExampleDescription[]): void => {
   examples.forEach(example => knownExamples[example.name] = example);
 };
 
-export const changeExample = (selectedExample: string) => {
+export const changeExample = (selectedExample: string, additionalState: AdditionalState) => {
   let body = document.getElementById(viewDivId);
   if (body.firstChild !== null && body.firstChild.childNodes.length !== 0) {
     body.removeChild(body.firstChild);
@@ -24,18 +28,17 @@ export const changeExample = (selectedExample: string) => {
   }
 
   const jsonForms = document.createElement('json-forms') as JsonFormsElement;
-  jsonForms.data = example.data;
-  if (example.uiSchema !== undefined) {
-    jsonForms.uiSchema = example.uiSchema;
-  }
-  if (example.schema !== undefined) {
-    jsonForms.dataSchema = example.schema;
-  }
+  jsonForms.state = {
+    data: example.data,
+    schema: example.schema,
+    uischema: example.uiSchema,
+    ...additionalState,
+  };
 
   body.appendChild(jsonForms);
 };
 
-export const createExampleSelection = (): HTMLSelectElement => {
+export const createExampleSelection = (additionalState?: AdditionalState): HTMLSelectElement => {
   const examplesDiv = document.getElementById(exampleDivId);
   const labelExample = document.createElement('label');
   labelExample.textContent = 'Example:';
@@ -52,10 +55,10 @@ export const createExampleSelection = (): HTMLSelectElement => {
     select.appendChild(option);
   });
   select.onchange = () => {
-    changeExample(select.value);
+    changeExample(select.value, additionalState);
   };
   examplesDiv.appendChild(select);
-  changeExample(select.value);
+  changeExample(select.value, additionalState);
 
   return select;
 };

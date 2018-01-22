@@ -3,9 +3,9 @@ import { SyntheticEvent } from 'react';
 import {
   ControlElement,
   FieldProps,
-  handleChange,
   isStringControl,
-  mapStateToInputProps,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
   RankedTester,
   rankWith,
   registerStartupInput,
@@ -14,22 +14,25 @@ import {
 import { connect } from 'react-redux';
 
 const TextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema } = props;
+  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
 
-  return <input type='text'
-       value={data || ''}
-       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-         handleChange(props, ev.currentTarget.value)
-       }
-       className={className}
-       id={id}
-       disabled={!enabled}
-       autoFocus={uischema.options && uischema.options.focus}
-       maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
-       size={uischema.options && uischema.options.trim ? maxLength : undefined}
-     />;
+  return (
+    <input
+      type='text'
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+        handleChange(path, ev.currentTarget.value)
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
+      size={uischema.options && uischema.options.trim ? maxLength : undefined}
+    />
+  );
 };
 
 /**
@@ -40,5 +43,5 @@ export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 
 export default registerStartupInput(
   textFieldTester,
-  connect(mapStateToInputProps)(TextField)
+  connect(mapStateToFieldProps, mapDispatchToFieldProps)(TextField)
 );
