@@ -1,9 +1,8 @@
-import Card from 'material-ui/Card';
-import CardHeader from 'material-ui/Card';
 import * as React from 'react';
+import * as _ from 'lodash';
+import { Card, CardContent, CardHeader } from 'material-ui';
 import {
     GroupLayout,
-    JsonForms,
     mapStateToLayoutProps,
     RankedTester,
     rankWith,
@@ -21,7 +20,6 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     const { uischema, schema, path, visible } = props;
 
     const groupLayout = uischema as GroupLayout;
-    const classNames = JsonForms.stylingRegistry.getAsClassName('group-layout');
 
     const childProps: MaterialLayoutRendererProps = {
         elements: groupLayout.elements,
@@ -32,14 +30,16 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     };
 
     return (
-        <Card className={classNames} style={{marginBottom: '10px' }}>
-            !_.isEmpty(groupLayout.label) ?
-                <CardHeader>
-                    {groupLayout.label}
-                </CardHeader>
-            <MaterialLayoutRenderer {...childProps}/>;
+        <Card style={{ marginBottom: '10px' }}>
+          {
+            !_.isEmpty(groupLayout.label) &&
+            <CardHeader title={groupLayout.label}/>
+          }
+          <CardContent>
+            <MaterialLayoutRenderer {...childProps}/>
+          </CardContent>
         </Card>
-        );
+    );
 };
 
 export default registerStartupRenderer(

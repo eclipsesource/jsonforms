@@ -6,7 +6,6 @@ import {
     UISchemaElement,
   } from '@jsonforms/core';
 import Grid from 'material-ui/Grid';
-import { RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 
 const renderChildren = (
     elements: UISchemaElement[],
