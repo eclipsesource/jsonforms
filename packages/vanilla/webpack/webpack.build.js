@@ -7,6 +7,7 @@ module.exports = merge(baseConfig, {
         library: "JSONFormsVanilla"
       },
       externals: {
-          '@jsonforms/core': 'JSONFormsCore'
+          '@jsonforms/core': 'JSONFormsCore',
+          '@jsonforms/webcomponent': 'JSONFormsWebcomponent'
     },
 });
