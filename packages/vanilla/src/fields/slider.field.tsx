@@ -24,7 +24,7 @@ const SliderField = (props: FieldProps) => {
       type='range'
       max={resolvedSchema.maximum}
       min={resolvedSchema.minimum}
-      value={data || (resolvedSchema.maximum - resolvedSchema.minimum) / 2}
+      value={data || resolvedSchema.default}
       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
         handleChange(path, Number(ev.currentTarget.value))
       }
@@ -34,7 +34,7 @@ const SliderField = (props: FieldProps) => {
       autoFocus={uischema.options && uischema.options.focus}
       style={{flex: '1'}}
     />
-    <label style={{marginLeft: '0.5em'}}>{data}</label>
+    <label style={{marginLeft: '0.5em'}}>{data || resolvedSchema.default}</label>
   </div>
   );
 };

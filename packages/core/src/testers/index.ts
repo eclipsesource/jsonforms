@@ -289,7 +289,8 @@ export const isRangeControl = and(
   uiTypeIs('Control'),
   or(schemaTypeIs('number'), schemaTypeIs('integer')),
   schemaMatches(schema =>
-    schema.hasOwnProperty('maximum') && schema.hasOwnProperty('minimum')
-  ),
-  optionIs('slider', true)
+    schema.hasOwnProperty('maximum') &&
+    schema.hasOwnProperty('minimum') &&
+    schema.hasOwnProperty('default')
+  )
 );

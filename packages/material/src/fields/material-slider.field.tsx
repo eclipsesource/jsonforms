@@ -23,14 +23,14 @@ const MaterialSliderField = (props: FieldProps) => {
   return (
     <Input
       type='range'
-      value={data || (resolvedSchema.maximum - resolvedSchema.minimum) / 2}
+      value={data || resolvedSchema.default}
       onChange={ev => handleChange(path, Number(ev.currentTarget.value))}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       inputProps={config}
-      endAdornment={<label style={{marginLeft: '0.5em'}}>{data}</label>}
+      endAdornment={<label style={{marginLeft: '0.5em'}}>{data || resolvedSchema.default}</label>}
     />
   );
 };

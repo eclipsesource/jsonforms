@@ -27,7 +27,8 @@ test.beforeEach(t => {
       foo: {
         type: 'number',
         maximum: 10,
-        minimum: 2
+        minimum: 2,
+        default: 6
       },
     },
   };
@@ -264,7 +265,7 @@ test('tester with correct schema type,but missing minimum', t => {
   );
 });
 
-test('tester with matching schema type (number) without options', t => {
+test('tester with matching schema type (number) without default', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -287,7 +288,7 @@ test('tester with matching schema type (number) without options', t => {
   );
 });
 
-test('tester with matching schema type (integer) without options', t => {
+test('tester with matching schema type (integer) without default', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -310,14 +311,11 @@ test('tester with matching schema type (integer) without options', t => {
   );
 });
 
-test('tester with matching schema type (number) with options', t => {
+test('tester with matching schema type (number) with default', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: {
       $ref: '#/properties/foo'
-    },
-    options: {
-      slider: true
     }
   };
   t.is(
@@ -329,7 +327,8 @@ test('tester with matching schema type (number) with options', t => {
           foo: {
             type: 'number',
             maximum: 10,
-            minimum: 2
+            minimum: 2,
+            default: 3
           }
         }
       }
@@ -338,13 +337,10 @@ test('tester with matching schema type (number) with options', t => {
   );
 });
 
-test('tester with matching schema type (integer) with options', t => {
+test('tester with matching schema type (integer) with default', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' },
-    options: {
-      slider: true
-    }
+    scope: { $ref: '#/properties/foo' }
   };
   t.is(
     sliderFieldTester(
@@ -355,7 +351,8 @@ test('tester with matching schema type (integer) with options', t => {
           foo: {
             type: 'integer',
             maximum: 10,
-            minimum: 2
+            minimum: 2,
+            default: 4
           }
         }
       }
@@ -371,7 +368,8 @@ test('render', t => {
       foo: {
         type: 'number',
         maximum: 10,
-        minimum: 2
+        minimum: 2,
+        default: 6
       }
     }
   };
