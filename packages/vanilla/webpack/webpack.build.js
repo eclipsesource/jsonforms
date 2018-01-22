@@ -4,9 +4,9 @@ const baseConfig = require('../../../webpack/webpack.build.base.js');
 module.exports = merge(baseConfig, {
     output: {
         filename: "jsonforms-vanilla.js",
-        library: "JSONForms-Vanilla"
+        library: "JSONFormsVanilla"
       },
       externals: {
-          '@jsonforms/core': 'JSONForms-Core'
+          '@jsonforms/core': 'JSONFormsCore'
     },
 });
