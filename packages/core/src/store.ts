@@ -1,7 +1,6 @@
 import thunk from 'redux-thunk';
 import { jsonformsReducer } from './reducers';
-import { applyMiddleware, createStore } from 'redux';
-import { JsonFormsStore } from './json-forms';
+import { applyMiddleware, createStore, Store } from 'redux';
 import { JsonForms } from './core';
 import { INIT, VALIDATE } from './actions';
 import { JsonSchema } from './models/jsonSchema';
@@ -18,7 +17,8 @@ export const createJsonFormsStore = (initialState: JsonFormsState): JsonFormsSto
 
   return store as JsonFormsStore;
 };
-
+export interface JsonFormsStore extends Store<any> {
+}
 export interface JsonFormsState {
   common: {
     data: any;
