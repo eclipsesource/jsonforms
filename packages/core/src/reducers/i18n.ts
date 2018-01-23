@@ -1,7 +1,9 @@
 import { SET_LOCALE, SET_TRANSLATIONS } from '../actions';
 
 export const i18nReducer = (
-  state = {},
+  state = {
+    locale: navigator.languages[0]
+  },
   action) => {
   switch (action.type) {
     case SET_TRANSLATIONS:
@@ -12,7 +14,7 @@ export const i18nReducer = (
     case SET_LOCALE:
       return {
         ...state,
-        locale: action.locale
+        locale: action.locale === undefined ? navigator.languages[0] : action.locale
       };
     default:
       return state;

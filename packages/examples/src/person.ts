@@ -80,9 +80,7 @@ export const uischema = {
         {
           type: 'Control',
           label: '%height',
-          scope: {
-            $ref: '#/properties/personalData/properties/height'
-          }
+          scope: '#/properties/personalData/properties/height'
         },
         {
           type: 'Control',
@@ -93,7 +91,10 @@ export const uischema = {
         },
         {
           type: 'Control',
-          scope: '#/properties/personalData/properties/drivingSkill'
+          scope: '#/properties/personalData/properties/drivingSkill',
+          label: {
+            text: '%drivingskill'
+          }
         },
       ]
     },
@@ -103,32 +104,24 @@ export const uischema = {
         {
           type: 'Control',
           label: '%nationality',
-          scope: {
-            $ref: '#/properties/nationality'
-          }
+          scope: '#/properties/nationality'
         },
         {
           type: 'Control',
           label: '%height',
-          scope: {
-            $ref: '#/properties/personalData/properties/height'
-          }
+          scope: '#/properties/personalData/properties/height'
         },
         {
           type: 'Control',
           label: '%occupation',
-          scope: {
-            $ref: '#/properties/occupation'
-          },
+          scope: '#/properties/occupation',
           suggestion: ['Accountant', 'Engineer', 'Freelancer',
             'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
         },
         {
           type: 'Control',
           label: '%birthday',
-          scope: {
-            $ref: '#/properties/birthDate'
-          }
+          scope: '#/properties/birthDate'
         }
       ]
     },
@@ -138,6 +131,7 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/postalCode',
+          label: '%postalcode',
           options: {
             trim: true,
             restrict: true
@@ -164,14 +158,18 @@ const translations = {
     nationality: 'Nationality',
     occupation: 'Occupation',
     birthday: 'Birthday',
+    postalcode: 'Postal Code',
+    drivingskill: 'Driving skill'
   },
   'de-DE': {
     name: 'Name',
     height: 'Höhe',
     age: 'Alter',
     nationality: 'Staatsangehörigkeit',
-    occupation: 'Besetzung',
+    occupation: 'Tätigkeit',
     birthday: 'Geburtstag',
+    postalcode: 'Postleitzahl',
+    drivingskill: 'Fahrkönnen'
   }
 };
 
