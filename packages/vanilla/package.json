@@ -5,9 +5,9 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config ../../webpack.build.js --env=production --display-error-details",
+    "bundle": "../../node_modules/.bin/webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
-    "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "dev": "../../node_modules/.bin/webpack --config ./webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rm -rf lib",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",

@@ -19,7 +19,7 @@
   "main": "lib/index.js",
   "typings": "lib/ts-build/index.d.ts",
   "scripts": {
-    "bundle": "webpack --config ../../webpack.build.js --env=production --display-error-details",
+    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf lib",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
