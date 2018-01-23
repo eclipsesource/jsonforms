@@ -30,7 +30,7 @@ input {
   display: flex;
   flex:1;
   flex-direction: column;
-  margin: 0.5em 1em;
+  margin: 0.25em 1em;
 }
 .control.trim {
   display: inline-flex;
@@ -48,7 +48,16 @@ input {
   color: var(--jsf-main-fg-color);
 }
 .control > .validation:empty {margin-left: 0;}
+.control > .input-description, .control > .validation {
+  font-size: 0.75rem;
+  text-align: left;
+  margin-top: 0.5em;
+  min-height: 1em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1em;
+}
 .control > .validation {color: var(--jsf-validation-color);}
+.control > .input-description {color: var(--jsf-description-color);}
 .control > .input {
   border-style: solid;
   border-width: thin;
@@ -317,18 +326,4 @@ jsonforms-tree > dialog > .content {
 }
 .array-table-layout td > * {
   flex:1;
-}
-.control > .input-description {
-  color: var(--jsf-description-color);
-  margin: 0;
-  font-size: 0.75rem;
-  text-align: left;
-  margin-top: 8px;
-  min-height: 1em;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  line-height: 1em;
-  -webkit-margin-before: 1em;
-  -webkit-margin-after: 1em;
-  -webkit-margin-start: 0px;
-  -webkit-margin-end: 0px;
 }

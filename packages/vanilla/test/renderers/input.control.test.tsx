@@ -474,7 +474,6 @@ test('show description on focus', t => {
   const description =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
-  t.false(description.hidden);
 });
 
 test('hide description when input field is not focused', t => {
@@ -499,7 +498,7 @@ test('hide description when input field is not focused', t => {
     </Provider>
   );
   const description = findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
-  t.true(description.hidden);
+  t.is(description.textContent, '');
 });
 
 test('hide description on blur', t => {
@@ -528,11 +527,10 @@ test('hide description on blur', t => {
   const description =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
-  t.false(description.hidden);
   blur(control);
   const hiddenDescription =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
-  t.true(hiddenDescription.hidden);
+  t.is(hiddenDescription.textContent, '');
 });
 
 test('description undefined', t => {
@@ -557,5 +555,5 @@ test('description undefined', t => {
   );
   const description =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
-  t.true(description.hidden);
+  t.is(description.textContent, '');
 });
