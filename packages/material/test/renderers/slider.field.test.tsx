@@ -253,9 +253,7 @@ test('tester with correct schema type,but missing minimum', t => {
 test('tester with matching schema type (number) without default', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -301,9 +299,7 @@ test('tester with matching schema type (integer) without default', t => {
 test('tester with matching schema type (number) with default', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
