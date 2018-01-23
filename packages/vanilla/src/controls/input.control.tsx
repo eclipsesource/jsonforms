@@ -33,7 +33,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
 
     return (

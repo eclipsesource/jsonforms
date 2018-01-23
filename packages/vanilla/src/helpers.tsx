@@ -53,7 +53,7 @@ export const mapStateToVanillaControlProps = (state, ownProps) => {
   const styles = getStyle(state)('control');
   let classNames: string[] = !_.isEmpty(controlElement.scope) ?
     styles.concat(
-      [`${convertToValidClassName(controlElement.scope.$ref)}`]
+      [`${convertToValidClassName(controlElement.scope)}`]
     ) : [''];
 
   if (trim) {

@@ -14,9 +14,7 @@ export const uischema = {
     {
       type: 'Control',
       label: 'Name',
-      scope: {
-        $ref: '#/properties/name'
-      }
+      scope: '#/properties/name'
     }
   ]
 };

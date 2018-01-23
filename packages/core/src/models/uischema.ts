@@ -40,26 +40,23 @@ export enum RuleEffect {
  * Represents a condition to be evaluated.
  */
 export interface Condition {
-    /**
-     * A string describing the type of condition
-     */
-    type: string; // TODO needed?
+  /**
+   * The type of condition.
+   */
+  type: string;
 }
 
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition {
-    /**
-     * The sub schema the condition is bound to.
-     */
-    scope: {
-        $ref: string;
-    };
-    /**
-     * The expected value when evaluating the condition
-     */
-    expectedValue: any;
+export interface LeafCondition extends Condition, Scopable {
+
+  type: 'LEAF';
+
+  /**
+   * The expected value when evaluating the condition
+   */
+  expectedValue: any;
 }
 
 /**
@@ -147,12 +144,9 @@ export interface LabelElement extends UISchemaElement {
 
 export interface Scopable {
   /**
-   * The scope that determines to which part of the schema the control
-   * should be bound to. The $ref property is just a regular JSON pointer.
+   * The scope that determines to which part this element should be bound to.
    */
-  scope: {
-      $ref: string;
-  };
+  scope: string;
 }
 
 /**

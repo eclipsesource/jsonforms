@@ -71,7 +71,7 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSche
   const createControlElement = (key: string): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: { $ref: `#/properties/${key}` }
+      scope: `#/properties/${key}`
     });
 
   return (

@@ -32,7 +32,7 @@ import {
   composeWithUi, toDataPath,
   toDataPathSegments
 } from './path.util';
-const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope.$ref).join('.');
+const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope).join('.');
 
 const Paths = {
   compose: composePaths,

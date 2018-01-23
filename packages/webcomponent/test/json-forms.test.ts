@@ -17,9 +17,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
 });
 

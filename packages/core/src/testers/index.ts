@@ -15,7 +15,7 @@ export type Tester = (uischema: UISchemaElement, schema: JsonSchema) => boolean;
 export type RankedTester = (uischema: UISchemaElement, schema: JsonSchema) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
-  !_.isEmpty(uischema) && uischema.scope !== undefined && uischema.scope.$ref !== undefined;
+  !_.isEmpty(uischema) && uischema.scope !== undefined && uischema.scope !== undefined;
 
 /**
  * Only applicable for Controls.
@@ -32,7 +32,7 @@ export const schemaMatches = (predicate: (schema: JsonSchema) => boolean): Teste
     if (_.isEmpty(uischema) || !isControl(uischema)) {
       return false;
     }
-    const schemaPath = uischema.scope.$ref;
+    const schemaPath = uischema.scope;
     if (_.isEmpty(schemaPath)) {
       return false;
     }
@@ -53,7 +53,7 @@ export const schemaSubPathMatches =
       if (_.isEmpty(uischema) || !isControl(uischema)) {
         return false;
       }
-      const schemaPath = uischema.scope.$ref;
+      const schemaPath = uischema.scope;
       if (_.isEmpty(schemaPath)) {
         return false;
       }
@@ -123,32 +123,32 @@ export const optionIs = (optionName: string, optionValue: any): Tester =>
 /**
  * Only applicable for Controls.
  *
- * Checks whether the scope $ref of a control ends with the expected string.
+ * Checks whether the scope of a control ends with the expected string.
  *
- * @param {string} expected the expected ending of the $ref value
+ * @param {string} expected the expected ending of the reference
  */
-export const refEndsWith = (expected: string): Tester =>
+export const scopeEndsWith = (expected: string): Tester =>
   (uischema: UISchemaElement): boolean => {
     if (_.isEmpty(expected) || !isControl(uischema)) {
       return false;
     }
 
-    return _.endsWith(uischema.scope.$ref, expected);
+    return _.endsWith(uischema.scope, expected);
   };
 
 /**
  * Only applicable for Controls.
  *
- * Checks whether the last segment of the scope $ref matches the expected string.
+ * Checks whether the last segment of the scope matches the expected string.
  *
- * @param {string} expected the expected ending of the $ref value
+ * @param {string} expected the expected ending of the reference
  */
-export const refEndIs = (expected: string): Tester =>
+export const scopeEndIs = (expected: string): Tester =>
   (uischema: UISchemaElement): boolean => {
     if (_.isEmpty(expected) || !isControl(uischema)) {
       return false;
     }
-    const schemaPath = uischema.scope.$ref;
+    const schemaPath = uischema.scope;
 
     return !_.isEmpty(schemaPath) && _.last(schemaPath.split('/')) === expected;
   };

@@ -20,21 +20,23 @@ import { connect } from 'react-redux';
 const SliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
-  const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+  const resolvedSchema = resolveSchema(schema, controlElement.scope);
 
-  return <input
-    type='range'
-    max={resolvedSchema.maximum}
-    min={resolvedSchema.minimum}
-    value={data || ''}
-    onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-      handleChange(path, Number(ev.currentTarget.value))
-    }
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-  />;
+  return (
+    <input
+      type='range'
+      max={resolvedSchema.maximum}
+      min={resolvedSchema.minimum}
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+        handleChange(path, Number(ev.currentTarget.value))
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
 
 /**

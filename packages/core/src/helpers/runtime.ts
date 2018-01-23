@@ -29,8 +29,7 @@ export const evalVisibility = (uischema: UISchemaElement, data: any) => {
     return true;
   }
   const condition = uischema.rule.condition as LeafCondition;
-  const ref = condition.scope.$ref;
-  const value = resolveData(data, toDataPath(ref));
+  const value = resolveData(data, toDataPath(condition.scope));
   const equals = value === condition.expectedValue;
 
   switch (uischema.rule.effect) {
@@ -48,10 +47,8 @@ export const evalEnablement = (uischema: UISchemaElement, data: any) => {
     return true;
   }
 
-  // TODO condition evaluation should be done somewhere else
   const condition = uischema.rule.condition as LeafCondition;
-  const ref = condition.scope.$ref;
-  const value = resolveData(data, toDataPath(ref));
+  const value = resolveData(data, toDataPath(condition.scope));
   const equals = value === condition.expectedValue;
 
   switch (uischema.rule.effect) {

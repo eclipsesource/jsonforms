@@ -15,7 +15,7 @@ import { SyntheticEvent } from 'react';
 
 const EnumField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
-  const options = resolveSchema(schema, (uischema as ControlElement).scope.$ref).enum;
+  const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
 
   return (
     <select

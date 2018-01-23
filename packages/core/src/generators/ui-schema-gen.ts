@@ -40,9 +40,7 @@ const deriveType = (jsonSchema: JsonSchema): string => {
 const createControlElement = (label: string, ref: string): ControlElement => ({
     type: 'Control',
     label: label,
-    scope: {
-        $ref: ref
-    }
+    scope: ref,
 });
 
 const isLayout = (uischema: UISchemaElement): uischema is Layout =>

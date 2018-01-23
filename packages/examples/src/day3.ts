@@ -23,15 +23,11 @@ export const uischema = {
     ...day2UiSchema.elements,
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/dueDate'
-      }
+      scope: '#/properties/dueDate'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/rating'
-      }
+      scope: '#/properties/rating'
     }
   ]
 };

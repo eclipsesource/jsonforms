@@ -31,9 +31,7 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/comments'
-      }
+      scope: '#/properties/comments'
     }
   ]
 };

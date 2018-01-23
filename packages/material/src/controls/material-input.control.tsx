@@ -34,7 +34,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
     const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
     let style = {};
     if (!visible) {

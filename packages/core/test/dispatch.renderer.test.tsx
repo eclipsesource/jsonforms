@@ -42,9 +42,7 @@ test.beforeEach(t => {
   t.context.data = { foo: 'John Doe' };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.context.schema = {
     type: 'object',

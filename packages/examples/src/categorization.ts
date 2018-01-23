@@ -16,9 +16,7 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/name'
-              }
+              scope: '#/properties/name'
             }
           ]
         },
@@ -28,15 +26,11 @@ export const uischema = {
           elements: [
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/nationality'
-              }
+              scope: '#/properties/nationality'
             },
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/vegetarian'
-              }
+              scope: '#/properties/vegetarian'
             }
           ]
         }
@@ -48,15 +42,11 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/name'
-          }
+          scope: '#/properties/name'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/birthDate'
-          }
+          scope: '#/properties/birthDate'
         }
       ]
     },
@@ -66,15 +56,11 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/birthDate'
-          }
+          scope: '#/properties/birthDate'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/vegetarian'
-          }
+          scope: '#/properties/vegetarian'
         }
       ]
     }

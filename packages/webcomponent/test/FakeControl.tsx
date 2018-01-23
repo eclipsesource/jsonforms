@@ -23,7 +23,7 @@ const FakeControl = (props: ControlProps) => {
   const controlElement = uischema as ControlElement;
 
   return (
-    <div className={convertToValidClassName(controlElement.scope.$ref)}/>
+    <div className={convertToValidClassName(controlElement.scope)}/>
   );
 };
 

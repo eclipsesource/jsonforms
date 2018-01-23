@@ -32,9 +32,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo',
-    },
+    scope: '#/properties/foo'
   };
 });
 test.failing('autofocus on first element', t => {
@@ -47,18 +45,14 @@ test.failing('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/firstNumberField'
-    },
+    scope: '#/properties/firstNumberField',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/secondNumberField'
-    },
+    scope: '#/properties/secondNumberField',
     options: {
       focus: true
     }
@@ -94,9 +88,7 @@ test.failing('autofocus on first element', t => {
 test('autofocus active', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     options: {
       focus: true
     }
@@ -118,9 +110,7 @@ test('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     options: {
       focus: false
     }
@@ -142,9 +132,7 @@ test('autofocus inactive', t => {
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   const store = initJsonFormsStore({
     data: t.context.data,
@@ -170,9 +158,7 @@ test('tester', t => {
 test('tester with wrong schema type', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     numberFieldTester(
@@ -193,9 +179,7 @@ test('tester with wrong schema type', t => {
 test('tester with wrong schema type, but sibling has correct one', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     numberFieldTester(
@@ -219,9 +203,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
 test('tester with machting schema type', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     numberFieldTester(

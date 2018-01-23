@@ -41,7 +41,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/test' }
+    scope: '#/properties/test'
   };
   t.context.data = {
     test: [{ x: 1, y: 3 }]
@@ -114,7 +114,7 @@ test('render empty data', t => {
   t.context.uischema = {
     label: false,
     type: 'Control',
-    scope: { $ref: '#/properties/test' }
+    scope: '#/properties/test'
   };
   const store = initJsonFormsStore({
     data: {},
@@ -232,7 +232,7 @@ test('tester', t =>  t.is(tableArrayTester({type: 'Foo'}, null), -1));
 test('tester with recursive document ref only', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#' }
+    scope: '#'
   };
   t.is(tableArrayTester(control, undefined), -1);
 });
@@ -240,9 +240,7 @@ test('tester with recursive document ref only', t => {
 test(' tester with prop of wrong type', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/x'
-    }
+    scope: '#/properties/x'
   };
   t.is(
     tableArrayTester(
@@ -261,7 +259,7 @@ test(' tester with prop of wrong type', t => {
 test('tester with correct prop type, but without items', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     tableArrayTester(
@@ -280,7 +278,7 @@ test('tester with correct prop type, but without items', t => {
 test('tester with correct prop type, but different item types', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     tableArrayTester(
@@ -305,7 +303,7 @@ test('tester with correct prop type, but different item types', t => {
 test('tester with primitive item type', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     tableArrayTester(
@@ -327,7 +325,7 @@ test('tester with primitive item type', t => {
 test('tester', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/test' }
+    scope: '#/properties/test'
   };
 
   t.is(tableArrayTester(uischema, t.context.schema), 3);
@@ -456,15 +454,15 @@ test.skip('validation of nested schema', t => {
   };
   const firstControl: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' }
+    scope: '#/properties/name'
   };
   const secondControl: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/personalData/properties/middleName' }
+    scope: '#/properties/personalData/properties/middleName'
   };
   const thirdControl: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/personalData/properties/lastName' }
+    scope: '#/properties/personalData/properties/lastName'
   };
   const uischema: HorizontalLayout = {
     type: 'HorizontalLayout',

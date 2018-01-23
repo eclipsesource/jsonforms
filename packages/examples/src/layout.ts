@@ -4,21 +4,17 @@ import { data as personData, schema as personSchema } from './person';
 export const schema = personSchema;
 
 export const uischemaVertical = {
-  'type': 'VerticalLayout',
-  'elements': [
+  type: 'VerticalLayout',
+  elements: [
     {
-      'type': 'Control',
-      'label': 'Name',
-      'scope': {
-        '$ref': '#/properties/name'
-      }
+      type: 'Control',
+      label: 'Name',
+      scope: '#/properties/name'
     },
     {
-      'type': 'Control',
-      'label': 'Birth Date',
-      'scope': {
-        '$ref': '#/properties/birthDate'
-      }
+      type: 'Control',
+      label: 'Birth Date',
+      scope: '#/properties/birthDate'
     }
   ]
 };
@@ -28,16 +24,12 @@ export const uischemaHorizontal = {
     {
       type: 'Control',
       label: 'Name',
-      scope: {
-        $ref: '#/properties/name'
-      }
+      scope: '#/properties/name'
     },
     {
       type: 'Control',
       label: 'Birth Date',
-      scope: {
-        $ref: '#/properties/birthDate'
-      }
+      scope: '#/properties/birthDate'
     }
   ]
 };
@@ -48,16 +40,12 @@ export const uischemaGroup = {
     {
       type: 'Control',
       label: 'Name',
-      scope: {
-        $ref: '#/properties/name'
-      }
+      scope: '#/properties/name'
     },
     {
       type: 'Control',
       label: 'Birth Date',
-      scope: {
-        $ref: '#/properties/birthDate'
-      }
+      scope: '#/properties/birthDate'
     }
   ]
 };
@@ -74,16 +62,12 @@ export const uischemaComplex = {
             {
               type: 'Control',
               label: 'Name',
-              scope: {
-                $ref: '#/properties/name'
-              }
+              scope: '#/properties/name'
             },
             {
               type: 'Control',
               label: 'Birth Date',
-              scope: {
-                $ref: '#/properties/birthDate'
-              }
+              scope: '#/properties/birthDate'
             }
           ]
         },
@@ -93,16 +77,12 @@ export const uischemaComplex = {
             {
               type: 'Control',
               label: 'Name',
-              scope: {
-                $ref: '#/properties/name'
-              }
+              scope: '#/properties/name'
             },
             {
               type: 'Control',
               label: 'Birth Date',
-              scope: {
-                $ref: '#/properties/birthDate'
-              }
+              scope: '#/properties/birthDate'
             }
           ]
         }
