@@ -189,13 +189,12 @@ test('render with data and translation object', t => {
   jsonForms.state = {
     data: t.context.data,
     uischema: t.context.uischema,
-    styles: vanillaStyles,
     translations: t.context.translations
   };
   jsonForms.connectedCallback();
 
   t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'control root_properties_name');
+  t.is(jsonForms.children.item(0).className, 'root_properties_name');
   t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
   t.is(jsonForms.store.getState().i18n.locale, navigator.languages[0]);
 });
@@ -205,14 +204,13 @@ test('render with data, translation object and locale', t => {
   jsonForms.state = {
     data: t.context.data,
     uischema: t.context.uischema,
-    styles: vanillaStyles,
     translations: t.context.translations,
     locale: t.context.locale
   };
   jsonForms.connectedCallback();
 
   t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'control root_properties_name');
+  t.is(jsonForms.children.item(0).className, 'root_properties_name');
   t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
   t.is(jsonForms.store.getState().i18n.locale, t.context.locale);
 });

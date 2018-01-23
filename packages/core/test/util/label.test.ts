@@ -99,9 +99,7 @@ test('control with label object, full', t => {
 test('control with label, with translation object', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: {
       text: '%foo'
     }
@@ -117,9 +115,7 @@ test('control with label, with translation object', t => {
 test('control with label, without translation object', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: {
       text: '%foo'
     }
