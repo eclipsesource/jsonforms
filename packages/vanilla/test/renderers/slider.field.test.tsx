@@ -27,7 +27,8 @@ test.beforeEach(t => {
       foo: {
         type: 'number',
         maximum: 10,
-        minimum: 2
+        minimum: 2,
+        default: 6
       },
     },
   };
@@ -264,7 +265,7 @@ test('tester with correct schema type,but missing minimum', t => {
   );
 });
 
-test('tester with matching schema type (number)', t => {
+test('tester with matching schema type (number) without default', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -283,11 +284,11 @@ test('tester with matching schema type (number)', t => {
         }
       }
     ),
-    4
+    -1
   );
 });
 
-test('tester with matching schema type (integer)', t => {
+test('tester with matching schema type (integer) without default', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -306,6 +307,54 @@ test('tester with matching schema type (integer)', t => {
         }
       }
     ),
+    -1
+  );
+});
+
+test('tester with matching schema type (number) with default', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.is(
+    sliderFieldTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            maximum: 10,
+            minimum: 2,
+            default: 3
+          }
+        }
+      }
+    ),
+    4
+  );
+});
+
+test('tester with matching schema type (integer) with default', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.is(
+    sliderFieldTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'integer',
+            maximum: 10,
+            minimum: 2,
+            default: 4
+          }
+        }
+      }
+    ),
     4
   );
 });
@@ -317,7 +366,8 @@ test('render', t => {
       foo: {
         type: 'number',
         maximum: 10,
-        minimum: 2
+        minimum: 2,
+        default: 6
       }
     }
   };

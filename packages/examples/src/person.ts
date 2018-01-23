@@ -39,7 +39,8 @@ export const schema = {
         drivingSkill: {
           type: 'number',
           maximum: 10,
-          minimum: 1
+          minimum: 1,
+          default: 7
         }
       },
       required: ['age', 'height']

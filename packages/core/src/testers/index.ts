@@ -278,3 +278,19 @@ export const isArrayObjectControl = and(
     schema.type === 'object'
   )
 );
+
+/**
+ * Tests whether a given UI schema is of type Control and
+ * whether the schema defines a numerical range.
+ * Furthermore it checks that the Control has the option 'slider' set to 'true'.
+ * @type {Tester}
+ */
+export const isRangeControl = and(
+  uiTypeIs('Control'),
+  or(schemaTypeIs('number'), schemaTypeIs('integer')),
+  schemaMatches(schema =>
+    schema.hasOwnProperty('maximum') &&
+    schema.hasOwnProperty('minimum') &&
+    schema.hasOwnProperty('default')
+  )
+);
