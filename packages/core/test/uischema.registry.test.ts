@@ -6,9 +6,7 @@ import { ControlElement, GroupLayout, Layout, VerticalLayout } from '../src/mode
 
 const nameControl: ControlElement =  {
     type: 'Control',
-    scope: {
-        $ref: '#/properties/name'
-    },
+    scope: '#/properties/name',
     label: 'My Name'
 };
 

@@ -26,21 +26,15 @@ export const uischema = {
     ...day3UiSchema.elements,
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/recurrence'
-      }
+      scope: '#/properties/recurrence'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/recurrenceInterval'
-      },
+      scope: '#/properties/recurrenceInterval',
       rule: {
           effect: 'HIDE',
           condition: {
-              scope: {
-                  $ref: '#/properties/recurrence'
-              },
+              scope: '#/properties/recurrence',
               expectedValue: 'Never'
           }
       }

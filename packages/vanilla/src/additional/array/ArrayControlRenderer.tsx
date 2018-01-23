@@ -23,11 +23,11 @@ const ArrayControlRenderer  =
 
     const controlElement = uischema as ControlElement;
     const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
-    const resolvedSchema = Resolve.schema(schema, controlElement.scope.$ref + '/items');
+    const resolvedSchema = Resolve.schema(schema, controlElement.scope + '/items');
     const label = labelDescription.show ? labelDescription.text : '';
 
     const controlClassName =
-      `control ${(Helpers.convertToValidClassName(controlElement.scope.$ref))}`;
+      `control ${(Helpers.convertToValidClassName(controlElement.scope))}`;
     const fieldSetClassName = getStyle('array.layout');
     const buttonClassName = getStyle('array.button');
     const childrenClassName = getStyleAsClassName('array.children');

@@ -21,7 +21,7 @@ import Input from 'material-ui/Input';
 const MaterialSliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
-  const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+  const resolvedSchema = resolveSchema(schema, controlElement.scope);
   const config = {'max': resolvedSchema.maximum, 'min': resolvedSchema.minimum};
 
   return (

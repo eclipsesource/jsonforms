@@ -31,9 +31,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
 });
 
@@ -47,18 +45,14 @@ test('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/firstStringField'
-    },
+    scope: '#/properties/firstStringField',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/secondStringField'
-    },
+    scope: '#/properties/secondStringField',
     options: {
       focus: true
     }
@@ -94,7 +88,7 @@ test('tester', t => {
   t.is(inputControlTester(null, undefined), -1);
   t.is(inputControlTester({type: 'Foo'}, undefined), -1);
   t.is(inputControlTester({type: 'Control'}, undefined), -1);
-  const control: ControlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}};
+  const control: ControlElement = { type: 'Control', scope: '#/properties/foo' };
   t.is(inputControlTester(control, undefined), 1);
 });
 
@@ -130,9 +124,7 @@ test('render', t => {
 test('render without label', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: false
   };
   const store = initJsonFormsStore({
@@ -285,21 +277,15 @@ test('validation of nested schema', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/personalData/properties/middleName'
-    }
+    scope: '#/properties/personalData/properties/middleName'
   };
   const thirdControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/personalData/properties/lastName'
-    }
+    scope: '#/properties/personalData/properties/lastName'
   };
   const uischema: HorizontalLayout = {
     type: 'HorizontalLayout',
@@ -342,9 +328,7 @@ test('required field is marked', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/dateField'
-    }
+    scope: '#/properties/dateField'
   };
 
   const store = initJsonFormsStore({
@@ -373,9 +357,7 @@ test('not required', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/dateField'
-    }
+    scope: '#/properties/dateField'
   };
 
   const store = initJsonFormsStore({

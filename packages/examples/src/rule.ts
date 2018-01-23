@@ -22,30 +22,22 @@ export const uischema = {
     {
       type: 'Control',
       label: 'Name',
-      scope: {
-        $ref: '#/properties/name'
-      }
+      scope: '#/properties/name'
     },
     {
       type: 'Control',
       label: 'Is Alive?',
-      scope: {
-        $ref: '#/properties/alive'
-      }
+      scope: '#/properties/alive'
     },
     {
       type: 'Control',
       label: 'Kind of dead',
-      scope: {
-        $ref: '#/properties/kindOfDead'
-      },
+      scope: '#/properties/kindOfDead',
       rule: {
         effect: 'SHOW',
         condition: {
           type: 'LEAF' ,
-          scope: {
-            $ref: '#/properties/alive'
-          },
+          scope: '#/properties/alive',
           expectedValue: false
         }
       }

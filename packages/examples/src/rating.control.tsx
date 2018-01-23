@@ -6,7 +6,7 @@ import {
   mapStateToControlProps,
   RankedTester,
   rankWith,
-  refEndsWith
+  scopeEndsWith
 } from '@jsonforms/core';
 import { Rating } from './Rating';
 import { connect } from 'react-redux';
@@ -15,7 +15,8 @@ import { connect } from 'react-redux';
  * Default tester for integer controls.
  * @type {RankedTester}
  */
-export const ratingControlTester: RankedTester = rankWith(Number.MAX_VALUE, refEndsWith('rating'));
+export const ratingControlTester: RankedTester =
+  rankWith(Number.MAX_VALUE, scopeEndsWith('rating'));
 
 export class RatingControl extends Control<ControlProps, ControlState> {
 

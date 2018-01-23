@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 const TextField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
-  const maxLength = resolveSchema(schema, controlElement.scope.$ref).maxLength;
+  const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
 
   return (
     <input

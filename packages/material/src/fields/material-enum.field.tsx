@@ -17,7 +17,7 @@ import { MenuItem } from 'material-ui/Menu';
 
 export const MaterialEnumField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
-  const options = resolveSchema(schema, (uischema as ControlElement).scope.$ref).enum;
+  const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
 
   return (
     <Select

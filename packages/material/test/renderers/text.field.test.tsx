@@ -49,9 +49,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
 });
 test.failing('autofocus on first element', t => {
@@ -64,12 +62,12 @@ test.failing('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/firstName' },
+    scope: '#/properties/firstName',
     options: { focus: true }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/lastName' },
+    scope: '#/properties/lastName',
     options: {
       focus: true
     }
@@ -96,7 +94,7 @@ test.failing('autofocus on first element', t => {
 test('autofocus active', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: { focus: true }
   };
   const store = initJsonFormsStore({
@@ -116,7 +114,7 @@ test('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: { focus: false }
   };
   const store = initJsonFormsStore({
@@ -136,7 +134,7 @@ test('autofocus inactive', t => {
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' }
+    scope: '#/properties/name'
   };
   const store = initJsonFormsStore({
     data: t.context.data,
@@ -335,7 +333,7 @@ test('enabled by default', t => {
 test('use maxLength for attributes size and maxlength', t => {
   const uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: {
       trim: true,
       restrict: true
@@ -359,7 +357,7 @@ test('use maxLength for attributes size and maxlength', t => {
 test('use maxLength for attribute size only', t => {
   const uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: { trim: true }
   };
   const store = initJsonFormsStore({
@@ -380,7 +378,7 @@ test('use maxLength for attribute size only', t => {
 test('use maxLength for attribute maxlength only', t => {
   const uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: { restrict: true }
   };
   const store = initJsonFormsStore({
@@ -417,7 +415,7 @@ test('do not use maxLength', t => {
 test('maxLength not specified, attributes should have default values (trim && restrict)', t => {
   const uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: {
       trim: true,
       restrict: true
@@ -441,7 +439,7 @@ test('maxLength not specified, attributes should have default values (trim && re
 test('maxLength not specified, attributes should have default values (trim)', t => {
   const uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: { trim: true }
   };
   const store = initJsonFormsStore({
@@ -462,7 +460,7 @@ test('maxLength not specified, attributes should have default values (trim)', t 
 test('maxLength not specified, attributes should have default values (restrict)', t => {
   const uischema = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' },
+    scope: '#/properties/name',
     options: { restrict: true }
   };
   const store = initJsonFormsStore({

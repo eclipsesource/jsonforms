@@ -67,40 +67,30 @@ export const uischema = {
             text: 'Name',
             show: true
           },
-          scope: {
-            $ref: '#/properties/name'
-          }
+          scope: '#/properties/name'
         },
         {
           type: 'Control',
           label: {
             text: 'Age'
           },
-          scope: {
-            $ref: '#/properties/personalData/properties/age'
-          }
+          scope: '#/properties/personalData/properties/age'
         },
         {
           type: 'Control',
           label: 'Height',
-          scope: {
-            $ref: '#/properties/personalData/properties/height'
-          }
+          scope: '#/properties/personalData/properties/height'
         },
         {
           type: 'Control',
           label: {
             text: 'Age'
           },
-          scope: {
-            $ref: '#/properties/personalData/properties/age'
-          }
+          scope: '#/properties/personalData/properties/age'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/personalData/properties/drivingSkill'
-          }
+          scope: '#/properties/personalData/properties/drivingSkill'
         },
       ]
     },
@@ -110,32 +100,25 @@ export const uischema = {
         {
           type: 'Control',
           label: 'Nationality',
-          scope: {
-            $ref: '#/properties/nationality'
-          }
+          scope: '#/properties/nationality'
+
         },
         {
           type: 'Control',
           label: 'Height',
-          scope: {
-            $ref: '#/properties/personalData/properties/height'
-          }
+          scope: '#/properties/personalData/properties/height'
         },
         {
           type: 'Control',
           label: 'Occupation',
-          scope: {
-            $ref: '#/properties/occupation'
-          },
+          scope: '#/properties/occupation',
           suggestion: ['Accountant', 'Engineer', 'Freelancer',
             'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
         },
         {
           type: 'Control',
           label: 'Birthday',
-          scope: {
-            $ref: '#/properties/birthDate'
-          }
+          scope: '#/properties/birthDate'
         }
       ]
     },
@@ -144,9 +127,7 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/postalCode'
-          },
+          scope: '#/properties/postalCode',
           options: {
             trim: true,
             restrict: true

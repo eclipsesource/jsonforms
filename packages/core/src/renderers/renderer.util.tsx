@@ -110,9 +110,9 @@ export const mapStateToControlProps = (state, ownProps) => {
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
-  const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
+  const id = controlElement.scope || '';
   const required =
-      controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
+      controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const inputs = state.inputs;
 
   return {
@@ -135,13 +135,12 @@ export const mapDispatchToControlProps = dispatch => ({
   }
 });
 
-
 export const mapStateToTableControlProps = (state, ownProps) => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
 
   const childErrors = subErrorsAt(path)(getValidation(state));
   const controlElement = ownProps.uischema as ControlElement;
-  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope.$ref + '/items');
+  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
   return {
     ...props,

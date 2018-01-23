@@ -8,22 +8,16 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: {
-        '$ref': '#/properties/name'
-      }
+      scope: '#/properties/name'
     },
     {
       type: 'Control',
       label: false,
-      scope: {
-        $ref: '#/properties/done'
-      }
+      scope: '#/properties/done'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/description'
-      },
+      scope: '#/properties/description',
       options: {
           multi: true
       }

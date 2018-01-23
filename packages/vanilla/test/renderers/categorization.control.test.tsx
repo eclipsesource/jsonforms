@@ -216,9 +216,7 @@ test('render', t => {
   };
   const nameControl = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   const innerCat: Categorization = {
     type: 'Categorization',
@@ -298,9 +296,7 @@ test('render on click', t => {
   const data = {'name': 'Foo'};
   const nameControl: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   const innerCategorization: Categorization = {
     type: 'Categorization',

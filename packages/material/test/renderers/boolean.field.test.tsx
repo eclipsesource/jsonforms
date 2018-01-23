@@ -31,9 +31,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.context.styles = [
     {
@@ -56,18 +54,14 @@ test.failing('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/firstBooleanField'
-    },
+    scope: '#/properties/firstBooleanField',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/secondBooleanField'
-    },
+    scope: '#/properties/secondBooleanField',
     options: {
       focus: true
     }
@@ -101,9 +95,7 @@ test.failing('autofocus on first element', t => {
 test.failing('autofocus active', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     options: {
       focus: true
     }
@@ -125,9 +117,7 @@ test.failing('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     options: {
       focus: false
     }
@@ -149,9 +139,7 @@ test('autofocus inactive', t => {
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo',
   };
   const store = initJsonFormsStore({
     data: t.context.data,
@@ -177,9 +165,7 @@ test('tester', t => {
 test('tester with wrong prop type', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo',
   };
   t.is(
     booleanFieldTester(
@@ -193,9 +179,7 @@ test('tester with wrong prop type', t => {
 test('tester with wrong prop type, but sibling has correct one', t => {
   const control = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     booleanFieldTester(
@@ -219,9 +203,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 test('tester with matching prop type', t => {
   const control = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     booleanFieldTester(

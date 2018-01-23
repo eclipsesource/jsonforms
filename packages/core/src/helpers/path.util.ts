@@ -56,7 +56,7 @@ export const toDataPath = (schemaPath: string): string => {
 };
 
 export const composeWithUi = (scopableUi: Scopable, path: string) => {
-  const segments = toDataPathSegments(scopableUi.scope.$ref);
+  const segments = toDataPathSegments(scopableUi.scope);
 
   return _.isEmpty(segments) ? path : compose(path, segments.join('.'));
 };

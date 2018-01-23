@@ -5,20 +5,16 @@ import { evalEnablement, evalVisibility } from '../src/helpers/runtime';
 
 test('evalVisibility show valid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.SHOW,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.SHOW,
+            condition: leafCondition
         }
     };
     const data = {
@@ -30,20 +26,16 @@ test('evalVisibility show valid case', t => {
 
 test('evalVisibility show invalid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.SHOW,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.SHOW,
+            condition: leafCondition
         }
     };
     const data = {
@@ -55,16 +47,12 @@ test('evalVisibility show invalid case', t => {
 test('evalVisibility hide valid case', t => {
     const leafCondition: LeafCondition = {
         'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
+        'scope': '#/properties/ruleValue',
         'expectedValue': 'bar'
       };
     const uischema: ControlElement = {
         'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
+        'scope': '#/properties/value',
         'rule': {
             'effect': RuleEffect.HIDE,
             'condition': leafCondition
@@ -79,20 +67,16 @@ test('evalVisibility hide valid case', t => {
 
 test('evalVisibility hide invalid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.HIDE,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.HIDE,
+            condition: leafCondition
         }
     };
     const data = {
@@ -104,20 +88,16 @@ test('evalVisibility hide invalid case', t => {
 
 test('evalEnablement enable valid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.ENABLE,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.ENABLE,
+            condition: leafCondition
         }
     };
     const data = {
@@ -129,20 +109,16 @@ test('evalEnablement enable valid case', t => {
 
 test('evalEnablement enable invalid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.ENABLE,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.ENABLE,
+            condition: leafCondition
         }
     };
     const data = {
@@ -153,20 +129,16 @@ test('evalEnablement enable invalid case', t => {
 });
 test('evalEnablement disable valid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.DISABLE,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.DISABLE,
+            condition: leafCondition
         }
     };
     const data = {
@@ -178,20 +150,16 @@ test('evalEnablement disable valid case', t => {
 
 test('evalEnablement disable invalid case', t => {
     const leafCondition: LeafCondition = {
-        'type': 'LEAF' ,
-        'scope': {
-          '$ref': '#/properties/ruleValue'
-        },
-        'expectedValue': 'bar'
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue',
+        expectedValue: 'bar'
       };
     const uischema: ControlElement = {
-        'type': 'Control',
-        'scope': {
-            '$ref': '#/properties/value'
-        },
-        'rule': {
-            'effect': RuleEffect.DISABLE,
-            'condition': leafCondition
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.DISABLE,
+            condition: leafCondition
         }
     };
     const data = {
