@@ -30,7 +30,7 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
 };
 
 const mapStateToProps = state => ({
-  fields: state.fields || []
+  fields: state.jsonforms.fields || []
 });
 
 export const DispatchField = connect(mapStateToProps)(Dispatch);

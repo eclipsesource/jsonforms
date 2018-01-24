@@ -1,18 +1,15 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
 import {
   Categorization,
   ControlElement,
-  initJsonFormsStore,
   JsonSchema,
   Layout
 } from '@jsonforms/core';
-import { renderIntoDocument } from '../../../test/helpers/binding';
-import { click, findRenderedDOMElementWithClass, } from '../../../test/helpers/react-test';
-import CategorizationRenderer from '../../src/additional/categorization';
-import { categorizationTester } from '../../src/additional/categorization/tester';
+import * as TestUtils from 'react-dom/test-utils';
+import CategorizationRenderer, { categorizationTester } from '../../src/additional/categorization';
 
 test.beforeEach(t => {
   t.context.data = { };
@@ -248,7 +245,7 @@ test('render', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={schema}
@@ -258,8 +255,14 @@ test('render', t => {
   );
 
   // master tree
-  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
-  const master = findRenderedDOMElementWithClass(tree, 'jsf-categorization-master');
+  const div = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'jsf-categorization'
+  ) as HTMLDivElement;
+  const master = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'jsf-categorization-master'
+  );
   const ul = master.children[0];
   const liA = ul.children[0];
   const spanA = liA.children[0];
@@ -338,7 +341,7 @@ test('render on click', t => {
     styles: t.context.styles
   });
 
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={t.context.schema}
@@ -347,7 +350,10 @@ test('render on click', t => {
     </Provider>
   );
 
-  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
+  const div = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'jsf-categorization'
+  ) as HTMLDivElement;
   const master = div.children[0] as HTMLDivElement;
   const ul = master.children[0];
   const liB = ul.children[1] as HTMLLIElement;
@@ -362,17 +368,17 @@ test('render on click', t => {
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 1);
-  click(liB);
+  TestUtils.Simulate.click(liB);
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 2);
 
-  click(liC);
+  TestUtils.Simulate.click(liC);
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 0);
 
-  click(liD);
+  TestUtils.Simulate.click(liD);
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 0);
@@ -397,7 +403,7 @@ test('hide', t => {
     styles: t.context.styles
   });
 
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={t.context.schema}
@@ -407,7 +413,10 @@ test('hide', t => {
     </Provider>
   );
 
-  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
+  const div = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'jsf-categorization'
+  ) as HTMLDivElement;
   t.true(div.hidden);
 });
 
@@ -429,7 +438,7 @@ test('showed by default', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={t.context.schema}
@@ -438,6 +447,9 @@ test('showed by default', t => {
     </Provider>
   );
 
-  const div = findRenderedDOMElementWithClass(tree, 'jsf-categorization') as HTMLDivElement;
+  const div = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'jsf-categorization'
+  ) as HTMLDivElement;
   t.false(div.hidden);
 });

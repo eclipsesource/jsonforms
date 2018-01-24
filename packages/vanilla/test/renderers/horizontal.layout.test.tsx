@@ -1,14 +1,12 @@
+import { initJsonFormsStore } from '@jsonforms/test';
+import * as TestUtils from 'react-dom/test-utils';
 import * as React from 'react';
-import '../../../test/helpers/setup';
 import test from 'ava';
 import {
   HorizontalLayout,
-  initJsonFormsStore,
   UISchemaElement
 } from '@jsonforms/core';
-import { renderIntoDocument } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
-import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/horizontal.layout';
@@ -43,13 +41,13 @@ test('render with undefined elements', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
   );
 
-  const horizontalLayout = findRenderedDOMElementWithClass(tree, 'horizontal-layout');
+  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 0);
 });
@@ -65,12 +63,12 @@ test('render with null elements', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const horizontalLayout = findRenderedDOMElementWithClass(tree, 'horizontal-layout');
+  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 0);
 });
@@ -89,12 +87,12 @@ test('render with children', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const horizontalLayout = findRenderedDOMElementWithClass(tree, 'horizontal-layout');
+  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 2);
 });
@@ -106,7 +104,7 @@ test('hide', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer
         uischema={t.context.uischema}
@@ -114,7 +112,7 @@ test('hide', t => {
       />
     </Provider>
   );
-  const horizontalLayout = findRenderedDOMElementWithClass(
+  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree, 'horizontal-layout'
   ) as HTMLDivElement;
   t.true(horizontalLayout.hidden);
@@ -127,12 +125,12 @@ test('show by default', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={t.context.uischema}/>
     </Provider>
   );
-  const horizontalLayout = findRenderedDOMElementWithClass(
+  const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree, 'horizontal-layout'
   ) as HTMLDivElement;
   t.false(horizontalLayout.hidden);

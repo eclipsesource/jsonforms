@@ -22,6 +22,7 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
+    "@jsonforms/test": "^2.0.0-beta.6",
     "ava": "^0.24.0",
     "copy-webpack-plugin": "^4.2.3",
     "document-register-element": "^1.7.0",

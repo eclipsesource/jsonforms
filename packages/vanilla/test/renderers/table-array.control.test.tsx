@@ -1,4 +1,4 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
@@ -6,21 +6,13 @@ import {
   ControlElement,
   getData,
   HorizontalLayout,
-  initJsonFormsStore,
   update,
   validate
 } from '@jsonforms/core';
 import TableArrayControl, { tableArrayTester, } from '../../src/additional/table-array.control';
 import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
-import {
-  click,
-  findRenderedDOMElementWithClass,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument,
-  scryRenderedDOMElementsWithClass,
-  scryRenderedDOMElementsWithTag
-} from '../../../test/helpers/binding';
 import '../../src';
+import * as TestUtils from 'react-dom/test-utils';
 
 test.beforeEach(t => {
 
@@ -60,13 +52,13 @@ test('render two children', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const header = findRenderedDOMElementWithTag(tree, 'header') as HTMLInputElement;
+  const header = TestUtils.findRenderedDOMComponentWithTag(tree, 'header') as HTMLInputElement;
   const legendChildren = header.children;
 
   const label = legendChildren.item(0);
@@ -77,7 +69,7 @@ test('render two children', t => {
   t.is(button.tagName, 'BUTTON');
   t.is(button.innerHTML, 'Add to Test');
 
-  const table = findRenderedDOMElementWithTag(tree, 'table') as HTMLInputElement;
+  const table = TestUtils.findRenderedDOMComponentWithTag(tree, 'table') as HTMLInputElement;
   const tableChildren = table.children;
   t.is(tableChildren.length, 2);
   const tHead = tableChildren.item(0);
@@ -102,7 +94,7 @@ test('render two children', t => {
   t.is(bodyRow.tagName, 'TR');
   t.is(bodyRow.children.length, 2);
 
-  const tds = scryRenderedDOMElementsWithTag(tree, 'td');
+  const tds = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'td');
   t.is(tds.length, 2);
   t.is(tds[0].children.length, 1);
   t.is(tds[0].children[0].id, '#/properties/x');
@@ -121,13 +113,13 @@ test('render empty data', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const header = findRenderedDOMElementWithTag(tree, 'header') as HTMLInputElement;
+  const header = TestUtils.findRenderedDOMComponentWithTag(tree, 'header') as HTMLInputElement;
   const legendChildren = header.children;
   const label = legendChildren.item(0) as HTMLLabelElement;
   t.is(label.tagName, 'LABEL');
@@ -137,7 +129,7 @@ test('render empty data', t => {
   t.is(button.tagName, 'BUTTON');
   t.is(button.textContent, 'Add to Test');
 
-  const table = findRenderedDOMElementWithTag(tree, 'table') as HTMLTableElement;
+  const table = TestUtils.findRenderedDOMComponentWithTag(tree, 'table') as HTMLTableElement;
   const tableChildren = table.children;
   t.is(tableChildren.length, 2);
 
@@ -174,17 +166,17 @@ test('render new child (empty init data)', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'root_properties_test');
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
 
-  const button = findRenderedDOMElementWithTag(tree, 'button') as HTMLButtonElement;
-  click(button);
+  const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
+  TestUtils.Simulate.click(button);
   t.is(getData(store.getState()).test.length, 1);
 });
 
@@ -194,14 +186,14 @@ test('render new child', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const button = findRenderedDOMElementWithTag(tree, 'button') as HTMLButtonElement;
-  click(button);
+  const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
+  TestUtils.Simulate.click(button);
   t.is(getData(store.getState()).test.length, 2);
 });
 
@@ -211,13 +203,13 @@ test('update via action', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const children = findRenderedDOMElementWithTag(tree, 'tbody');
+  const children = TestUtils.findRenderedDOMComponentWithTag(tree, 'tbody');
   t.is(children.childNodes.length, 1);
 
   store.dispatch(update('test', () => [{x: 1, y: 3}, {x: 2, y: 3}]));
@@ -338,7 +330,7 @@ test('hide', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl
         schema={t.context.schema}
@@ -347,7 +339,7 @@ test('hide', t => {
       />
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
 
@@ -358,12 +350,12 @@ test('show by default', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
 
@@ -373,12 +365,12 @@ test('single error', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 2));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be array');
@@ -390,12 +382,12 @@ test('multiple errors', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be array');
@@ -407,12 +399,12 @@ test('empty errors by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.textContent, '');
 });
 
@@ -422,12 +414,12 @@ test('reset validation message', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be array');
@@ -476,12 +468,12 @@ test.skip('validation of nested schema', t => {
     schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const validation = scryRenderedDOMElementsWithClass(tree, 'validation');
+  const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
   store.dispatch(validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');

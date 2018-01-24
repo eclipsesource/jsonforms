@@ -4,8 +4,7 @@ import { ControlElement, UISchemaElement } from '../models/uischema';
 import { RankedTester } from '../testers';
 import { JsonForms } from '../core';
 import { JsonSchema } from '../models/jsonSchema';
-import { getData, getValidation } from '../reducers';
-import { errorAt } from '../reducers/validation';
+import { getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
   isEnabled,
@@ -55,7 +54,7 @@ export const mapStateToFieldProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, state);
-  const errors = errorAt(path)(getValidation(state)).map(error => error.message);
+  const errors = getErrorAt(path)(state).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';

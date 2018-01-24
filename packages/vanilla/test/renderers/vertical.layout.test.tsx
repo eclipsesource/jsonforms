@@ -1,17 +1,15 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import test from 'ava';
 import {
-  initJsonFormsStore,
   UISchemaElement,
   VerticalLayout
 } from '@jsonforms/core';
 import VerticalLayoutRenderer, {
   verticalLayoutTester
 } from '../../src/layouts/vertical.layout';
-import { findRenderedDOMElementWithClass, renderIntoDocument } from '../../../test/helpers/binding';
-
+import * as TestUtils from 'react-dom/test-utils';
 
 const styles = [
   {
@@ -37,13 +35,13 @@ test('render with undefined elements', t => {
     uischema,
     styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
   );
 
-  t.not(findRenderedDOMElementWithClass(tree, 'vertical-layout'), undefined);
+  t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
 });
 
 test('render with null elements', t => {
@@ -57,13 +55,13 @@ test('render with null elements', t => {
     uischema,
     styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
   );
 
-  t.not(findRenderedDOMElementWithClass(tree, 'vertical-layout'), undefined);
+  t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
 });
 
 test('render with children', t => {
@@ -77,12 +75,12 @@ test('render with children', t => {
     uischema,
     styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const verticalLayout = findRenderedDOMElementWithClass(tree, 'vertical-layout');
+  const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout');
 
   t.is(verticalLayout.tagName, 'DIV');
   t.is(verticalLayout.children.length, 2);
@@ -100,7 +98,7 @@ test('hide', t => {
     styles
   });
 
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer
         uischema={uischema}
@@ -108,7 +106,10 @@ test('hide', t => {
       />
     </Provider>
   );
-  const verticalLayout = findRenderedDOMElementWithClass(tree, 'vertical-layout') as HTMLDivElement;
+  const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'vertical-layout'
+  ) as HTMLDivElement;
   t.true(verticalLayout.hidden);
 });
 
@@ -124,11 +125,14 @@ test('show by default', t => {
     styles
   });
 
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const verticalLayout = findRenderedDOMElementWithClass(tree, 'vertical-layout') as HTMLDivElement;
+  const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'vertical-layout'
+  ) as HTMLDivElement;
   t.false(verticalLayout.hidden);
 });
