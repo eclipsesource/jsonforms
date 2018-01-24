@@ -17,7 +17,7 @@ declare -a EXT_LIST=(ts:c tsx:c)
 
 function print_usage {
   show_status usage "$0 [all|git-dirty] [-h|--header=/path/to/header] [-p|--path=/path/to/src]"
-  show_status usage "Example: $0 all --header ./LICENSE --path=/lib # Will add header from LICENSE file and it to all supported file types in /lib directory"
+  show_status usage "Example: $0 all --header=./LICENSE --path=/lib # Will add header from LICENSE file and it to all supported file types in /lib directory"
 }
 
 function show_status {
