@@ -1,3 +1,3 @@
-export * from './group.layout';
+export * from './MaterialGroupLayout';
 export * from './MaterialHorizontalLayout';
 export * from './MaterialVerticalLayout';

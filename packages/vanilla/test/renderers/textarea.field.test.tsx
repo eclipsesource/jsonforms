@@ -32,9 +32,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   t.context.styles = [
     {
@@ -57,18 +55,14 @@ test.failing('autofocus on first element', t => {
     };
     const firstControlElement: ControlElement = {
         type: 'Control',
-        scope: {
-            $ref: '#/properties/firstName'
-        },
+        scope: '#/properties/firstName',
         options: {
             focus: true
         }
     };
     const secondControlElement: ControlElement = {
         type: 'Control',
-        scope: {
-            $ref: '#/properties/lastName'
-        },
+        scope: '#/properties/lastName',
         options: {
             focus: true
         }
@@ -102,9 +96,7 @@ test.failing('autofocus on first element', t => {
 test('autofocus active', t => {
     const uischema: ControlElement = {
         type: 'Control',
-        scope: {
-            $ref: '#/properties/name'
-        },
+        scope: '#/properties/name',
         options: {
             focus: true
         }
@@ -126,9 +118,7 @@ test('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    },
+    scope: '#/properties/name',
     options: {
       focus: false
     }
@@ -150,9 +140,7 @@ test('autofocus inactive', t => {
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   const store = initJsonFormsStore({
     data: t.context.data,

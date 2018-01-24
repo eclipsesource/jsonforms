@@ -1,9 +1,9 @@
 import { registerExamples } from './register';
 import {
-  JsonFormsElement,
   registerRenderer,
   unregisterRenderer
 } from '@jsonforms/core';
+import { JsonFormsElement } from '@jsonforms/webcomponent';
 import ConnectedRatingControl, { ratingControlTester } from './rating.control';
 import {
   data as day5Data,

@@ -9,38 +9,28 @@ export const uischema = {
     {
       type: 'Control',
       label: false,
-      scope: {
-        $ref: '#/properties/done'
-      }
+      scope: '#/properties/done'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/name'
-      }
+      scope: '#/properties/name'
     },
     {
       type: 'HorizontalLayout',
       elements: [
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/dueDate'
-          }
+          scope: '#/properties/dueDate'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/rating'
-          }
+          scope: '#/properties/rating'
         }
       ]
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/description'
-      },
+      scope: '#/properties/description',
       options: {
           multi: true
       }
@@ -50,21 +40,15 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/recurrence'
-          }
+          scope: '#/properties/recurrence'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/recurrenceInterval'
-          },
+          scope: '#/properties/recurrenceInterval',
           rule: {
               effect: 'HIDE',
               condition: {
-                  scope: {
-                      $ref: '#/properties/recurrence'
-                  },
+                  scope: '#/properties/recurrence',
                   expectedValue: 'Never'
               }
           }
@@ -84,21 +68,15 @@ export const categoryUiSchema = {
         {
           type: 'Control',
           label: false,
-          scope: {
-            $ref: '#/properties/done'
-          }
+          scope: '#/properties/done'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/name'
-          }
+          scope: '#/properties/name'
         },
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/description'
-          },
+          scope: '#/properties/description',
           options: {
               'multi': true
           }
@@ -114,15 +92,11 @@ export const categoryUiSchema = {
           elements: [
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/dueDate'
-              }
+              scope: '#/properties/dueDate'
             },
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/rating'
-              }
+              scope: '#/properties/rating'
             }
           ]
         },
@@ -131,21 +105,15 @@ export const categoryUiSchema = {
           elements: [
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/recurrence'
-              }
+              scope: '#/properties/recurrence'
             },
             {
               type: 'Control',
-              scope: {
-                $ref: '#/properties/recurrenceInterval'
-              },
+              scope: '#/properties/recurrenceInterval',
               rule: {
                   effect: 'HIDE',
                   condition: {
-                      scope: {
-                          $ref: '#/properties/recurrence'
-                      },
+                      scope: '#/properties/recurrence',
                       expectedValue: 'Never'
                   }
               }

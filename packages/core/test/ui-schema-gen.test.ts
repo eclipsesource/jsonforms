@@ -26,9 +26,7 @@ test('generate ui schema for schema with one property', t => {
     const control = {
         type: 'Control',
         label: 'Name',
-        scope: {
-            $ref: '#/properties/name'
-        }
+        scope: '#/properties/name'
     };
     const uischema: Layout = {
         type: 'VerticalLayout',
@@ -44,9 +42,7 @@ test('generate ui schema for schema without object root', t => {
     const control: ControlElement = {
         label: '',
         type: 'Control',
-        scope: {
-            $ref: '#'
-        }
+        scope: '#'
     };
     const uischema: Layout = {
         type: 'VerticalLayout',
@@ -66,9 +62,7 @@ test('generate ui schema for schema with unspecified object root', t => {
     const controlElement = {
         type: 'Control',
         label: 'Age',
-        scope: {
-            $ref: '#/properties/age'
-        }
+        scope: '#/properties/age'
     };
     const uischema: Layout = {
         type: 'VerticalLayout',
@@ -97,9 +91,7 @@ test(`nested object attributes`, t => {
     const idControl: ControlElement = {
         type: 'Control',
         label: 'Id',
-        scope: {
-            $ref: '#/properties/id'
-        }
+        scope: '#/properties/id'
     };
     const privateLabel: LabelElement = {
         type: 'Label',
@@ -108,9 +100,7 @@ test(`nested object attributes`, t => {
     const nameControl: ControlElement = {
         type: 'Control',
         label: 'Name',
-        scope: {
-            $ref: '#/properties/private/properties/name'
-        }
+        scope: '#/properties/private/properties/name'
     };
     const nestedLayout: VerticalLayout = {
         type: 'VerticalLayout',
@@ -144,16 +134,12 @@ test(`don't ignore non-json-schema id attributes`, t => {
     const idControl: ControlElement =  {
         type: 'Control',
         label: 'Id',
-        scope: {
-            $ref: '#/properties/id'
-        }
+        scope: '#/properties/id'
     };
     const nameControl: ControlElement = {
         type: 'Control',
         label: 'Name',
-        scope: {
-            $ref: '#/properties/name'
-        }
+        scope: '#/properties/name'
     };
     const uischema: Layout = {
         type: 'VerticalLayout',
@@ -227,84 +213,62 @@ test('generate ui schema for schema with multiple properties', t => {
         ]
     };
     const uischema: Layout = {
-        'type': 'VerticalLayout',
-        'elements': [
+        type: 'VerticalLayout',
+        elements: [
             {
-                'type': 'Control',
-                'label': 'Id',
-                'scope': {
-                    '$ref': '#/properties/id'
-                }
+                type: 'Control',
+                label: 'Id',
+                scope: '#/properties/id'
             },
             {
-                'type': 'Control',
-                'label': 'Last Name',
-                'scope': {
-                    '$ref': '#/properties/lastName'
-                }
+                type: 'Control',
+                label: 'Last Name',
+                scope: '#/properties/lastName'
             },
             {
-                'type': 'Control',
-                'label': 'Email',
-                'scope': {
-                    '$ref': '#/properties/email'
-                }
+                type: 'Control',
+                label: 'Email',
+                scope: '#/properties/email'
             },
             {
-                'type': 'Control',
-                'label': 'First Name',
-                'scope': {
-                    '$ref': '#/properties/firstName'
-                }
+                type: 'Control',
+                label: 'First Name',
+                scope: '#/properties/firstName'
             },
             {
-                'type': 'Control',
-                'label': 'Gender',
-                'scope': {
-                    '$ref': '#/properties/gender'
-                }
+                type: 'Control',
+                label: 'Gender',
+                scope: '#/properties/gender'
             },
             {
-                'type': 'Control',
-                'label': 'Active',
-                'scope': {
-                    '$ref': '#/properties/active'
-                }
+                type: 'Control',
+                label: 'Active',
+                scope: '#/properties/active'
             },
             {
-                'type': 'Control',
-                'label': 'Registration Time',
-                'scope': {
-                    '$ref': '#/properties/registrationTime'
-                }
+                type: 'Control',
+                label: 'Registration Time',
+                scope: '#/properties/registrationTime'
             },
             {
-                'type': 'Control',
-                'label': 'Weight',
-                'scope': {
-                    '$ref': '#/properties/weight'
-                }
+                type: 'Control',
+                label: 'Weight',
+                scope: '#/properties/weight'
             },
             {
-                'type': 'Control',
-                'label': 'Height',
-                'scope': {
-                    '$ref': '#/properties/height'
-                }
+                type: 'Control',
+                label: 'Height',
+                scope: '#/properties/height'
             },
             {
-                'type': 'Control',
-                'label': 'Nationality',
-                'scope': {
-                    '$ref': '#/properties/nationality'
-                }
+                type: 'Control',
+                label: 'Nationality',
+                scope: '#/properties/nationality'
             },
             {
-                'type': 'Control',
-                'label': 'Birth Date',
-                'scope': {
-                    '$ref': '#/properties/birthDate'
-                }
+                type: 'Control',
+                label: 'Birth Date',
+                scope: '#/properties/birthDate'
             },
         ] as ControlElement[]
     };
@@ -328,9 +292,7 @@ test('generate named array control', t => {
     const control: ControlElement = {
         label: 'Comments',
         type: 'Control',
-        scope: {
-            $ref: '#/properties/comments'
-        }
+        scope: '#/properties/comments'
     };
     const uischema: Layout = {
         'type': 'VerticalLayout',
@@ -351,9 +313,7 @@ test('generate unnamed array control', t => {
     const control: ControlElement = {
         label: '',
         type: 'Control',
-        scope: {
-            '$ref': '#'
-        }
+        scope: '#'
     };
     const uischema: Layout = {
         type: 'VerticalLayout',
@@ -373,9 +333,7 @@ test('generate unnamed array control w/o type', t => {
     const control = {
         label: '',
         type: 'Control',
-        scope: {
-            $ref: '#'
-        }
+        scope: '#'
     };
     const uischema: Layout = {
         type: 'VerticalLayout',

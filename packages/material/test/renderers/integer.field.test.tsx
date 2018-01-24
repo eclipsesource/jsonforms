@@ -32,9 +32,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo',
-    },
+    scope: '#/properties/foo'
   };
 });
 test.failing('autofocus on first element', t => {
@@ -47,18 +45,14 @@ test.failing('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/firstIntegerField'
-    },
+    scope: '#/properties/firstIntegerField',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/secondIntegerField'
-    },
+    scope: '#/properties/secondIntegerField',
     options: {
       focus: true
     }
@@ -71,8 +65,8 @@ test.failing('autofocus on first element', t => {
     ]
   };
   const data = {
-    'firstIntegerField': 10,
-    'secondIntegerField': 12
+    firstIntegerField: 10,
+    secondIntegerField: 12
   };
   const store = initJsonFormsStore({
     data,
@@ -94,9 +88,7 @@ test.failing('autofocus on first element', t => {
 test('autofocus active', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     options: {
       focus: true
     }
@@ -118,9 +110,7 @@ test('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     options: {
       focus: false
     }
@@ -142,9 +132,7 @@ test('autofocus inactive', t => {
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo',
   };
   const store = initJsonFormsStore({
     data: t.context.data,
@@ -163,19 +151,17 @@ test('autofocus inactive by default', t => {
 test('tester', t => {
   t.is(integerFieldTester(undefined, undefined), -1);
   t.is(integerFieldTester(null, undefined), -1);
-  t.is(integerFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(integerFieldTester({type: 'Control'}, undefined), -1);
+  t.is(integerFieldTester({ type: 'Foo' }, undefined), -1);
+  t.is(integerFieldTester({ type: 'Control' }, undefined), -1);
 
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.is(
     integerFieldTester(
       controlElement,
-      {type: 'object', properties: {foo: {type: 'string'}}}
+      { type: 'object', properties: {foo: {type: 'string'}} }
     ),
     -1
   );

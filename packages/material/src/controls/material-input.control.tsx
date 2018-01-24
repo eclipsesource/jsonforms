@@ -6,6 +6,7 @@ import {
   ControlProps,
   ControlState,
   DispatchField,
+  formatErrorMessage,
   isControl,
   isDescriptionHidden,
   mapStateToControlProps,
@@ -29,17 +30,18 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath 
+      parentPath
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
     const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
     let style = {};
     if (!visible) {
       style = {display: 'none'};
     }
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
       <FormControl
@@ -52,16 +54,13 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
           {computeLabel(label, required)}
         </InputLabel>
         <DispatchField uischema={uischema} schema={schema} path={parentPath} />
-        <FormHelperText
-          error={!isValid}
-          hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}
-        >
-          {!isValid ? errors : description}
+        <FormHelperText error={!isValid}>
+          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         </FormHelperText>
       </FormControl>
     );
   }
-};
+}
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 export default registerStartupRenderer(
   inputControlTester,

@@ -6,9 +6,7 @@ import { createLabelDescriptionFrom } from '../src/helpers/label';
 test('control relative', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '/properties/foo'
-    }
+    scope: '/properties/foo'
   };
   const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
@@ -18,9 +16,7 @@ test('control relative', t => {
 test('control without label string, camel split', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/fooBarBaz'
-    }
+    scope: '#/properties/fooBarBaz'
   };
   const labelObject = createLabelDescriptionFrom(controlElement);
   t.is(labelObject.show, true);
@@ -30,9 +26,7 @@ test('control without label string, camel split', t => {
 test('control with label string', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: 'bar'
   };
   const labelObject = createLabelDescriptionFrom(controlElement);
@@ -43,9 +37,7 @@ test('control with label string', t => {
 test('control with label boolean', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: true
   };
   const labelObject = createLabelDescriptionFrom(controlElement);
@@ -56,9 +48,7 @@ test('control with label boolean', t => {
 test('control with label object, empty', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: {}
   };
   const labelObject = createLabelDescriptionFrom(controlElement);
@@ -69,9 +59,7 @@ test('control with label object, empty', t => {
 test('control with label object, text-only', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: {
       text: 'mega bar'
     }
@@ -84,9 +72,7 @@ test('control with label object, text-only', t => {
 test('control with label object, visible-only', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: {
       show: true
     }
@@ -99,9 +85,7 @@ test('control with label object, visible-only', t => {
 test('control with label object, full', t => {
   const controlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: {
       show: false,
       text: 'mega bar'

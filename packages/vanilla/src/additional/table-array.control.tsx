@@ -64,11 +64,11 @@ class TableArrayControl extends Renderer<TableProps, void> {
     const labelClass = getStyleAsClassName('array-table.label');
     const buttonClass = getStyleAsClassName('array-table.button');
     const controlClass = [getStyleAsClassName('array-table'),
-      convertToValidClassName(controlElement.scope.$ref)].join(' ');
+      convertToValidClassName(controlElement.scope)].join(' ');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: { $ref: `#/properties/${key}` }
+      scope: `#/properties/${key}`
     });
     const labelObject = createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;

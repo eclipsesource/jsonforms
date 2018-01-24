@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { Store } from 'redux';
 import * as ReactDOM from 'react-dom';
 import * as JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
-import './renderers';
-import { JsonForms } from './core';
-import { JsonSchema } from './models/jsonSchema';
-import DispatchRenderer from './renderers/dispatch-renderer';
-import { initJsonFormsStore, JsonFormsInitialState } from './store';
+import { DispatchRenderer, initJsonFormsStore, JsonForms,
+    JsonFormsInitialState, JsonFormsStore, JsonSchema } from '@jsonforms/core';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -32,8 +28,6 @@ const CustomElement = (config: CustomElementConfig) => cls => {
 };
 
 // TODO: Type parameter
-export interface JsonFormsStore extends Store<any> {
-}
 
 /**
  * HTML element that represents the entry point
@@ -44,7 +38,7 @@ export interface JsonFormsStore extends Store<any> {
 export class JsonFormsElement extends HTMLElement {
 
   private allowDynamicUpdate = false;
-  private _store: Store<any>;
+  private _store: JsonFormsStore;
 
   /**
    * Constructor.

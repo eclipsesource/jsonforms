@@ -35,9 +35,7 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.context.styles = [
     {
@@ -65,18 +63,14 @@ test('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/firstBooleanField'
-    },
+    scope: '#/properties/firstBooleanField',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/secondBooleanField'
-    },
+    scope: 'properties/secondBooleanField',
     options: {
       focus: true
     }
@@ -113,7 +107,7 @@ test('tester', t => {
   t.is(inputControlTester(null, undefined), -1);
   t.is(inputControlTester({type: 'Foo'}, undefined), -1);
   t.is(inputControlTester({type: 'Control'}, undefined), -1);
-  const control: ControlElement = {type: 'Control', scope: {$ref: '#/properties/foo'}};
+  const control: ControlElement = { type: 'Control', scope: '#/properties/foo' };
   t.is(inputControlTester(control, undefined), 1);
 });
 
@@ -150,9 +144,7 @@ test('render', t => {
 test('render without label', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    },
+    scope: '#/properties/foo',
     label: false
   };
   const store = initJsonFormsStore({
@@ -314,21 +306,15 @@ test('validation of nested schema', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/personalData/properties/middleName'
-    }
+    scope: '#/properties/personalData/properties/middleName'
   };
   const thirdControlElement: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/personalData/properties/lastName'
-    }
+    scope: '#/properties/personalData/properties/lastName'
   };
   const uischema: HorizontalLayout = {
     type: 'HorizontalLayout',
@@ -372,9 +358,7 @@ test('required field is marked', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/dateField'
-    }
+    scope: '#/properties/dateField'
   };
   const store = initJsonFormsStore({
     data: {},
@@ -402,9 +386,7 @@ test('not required', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/dateField'
-    }
+    scope: '#/properties/dateField'
   };
   const store = initJsonFormsStore({ data: {}, schema, uischema });
   const tree = renderIntoDocument(
@@ -428,7 +410,7 @@ test('required field is marked', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/dateField' }
+    scope: '#/properties/dateField'
   };
 
   const store = initJsonFormsStore({ data: {}, schema, uischema });
@@ -453,9 +435,7 @@ test('not required', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/dateField'
-    }
+    scope: '#/properties/dateField'
   };
 
   const store = initJsonFormsStore({ data: {}, schema, uischema });
@@ -480,7 +460,7 @@ test('show description on focus', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' }
+    scope: '#/properties/name'
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
@@ -494,7 +474,6 @@ test('show description on focus', t => {
   const description =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
-  t.false(description.hidden);
 });
 
 test('hide description when input field is not focused', t => {
@@ -509,9 +488,7 @@ test('hide description when input field is not focused', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/name'
-    }
+    scope: '#/properties/name'
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
@@ -521,7 +498,7 @@ test('hide description when input field is not focused', t => {
     </Provider>
   );
   const description = findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
-  t.true(description.hidden);
+  t.is(description.textContent, '');
 });
 
 test('hide description on blur', t => {
@@ -536,7 +513,7 @@ test('hide description on blur', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' }
+    scope: '#/properties/name'
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
@@ -550,11 +527,10 @@ test('hide description on blur', t => {
   const description =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
-  t.false(description.hidden);
   blur(control);
   const hiddenDescription =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
-  t.true(hiddenDescription.hidden);
+  t.is(hiddenDescription.textContent, '');
 });
 
 test('description undefined', t => {
@@ -568,7 +544,7 @@ test('description undefined', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/name' }
+    scope: '#/properties/name'
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
@@ -579,5 +555,5 @@ test('description undefined', t => {
   );
   const description =
     findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
-  t.true(description.hidden);
+  t.is(description.textContent, '');
 });

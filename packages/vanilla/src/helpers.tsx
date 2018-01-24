@@ -1,23 +1,49 @@
+import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ControlElement,
   ControlProps,
   convertToValidClassName,
+  DispatchRenderer,
+  JsonSchema,
+  Layout,
   mapStateToControlProps,
   mapStateToLayoutProps,
   RendererProps
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from './reducers';
 
-export type ClassNames = string[] | ((...args: any[]) => string[]);
-
 /**
  * A style associates a name with a list of CSS class names.
  */
 export interface StyleDef {
   name: string;
-  classNames: ClassNames;
+  classNames: string[];
 }
+
+export const renderChildren = (
+  layout: Layout,
+  schema: JsonSchema,
+  classNames: string,
+  path: string
+) => {
+
+  if (_.isEmpty(layout.elements)) {
+    return [];
+  }
+
+  return layout.elements.map((child, index) => {
+    return (
+      <div className={classNames} key={`${path}-${index}`}>
+        <DispatchRenderer
+          uischema={child}
+          schema={schema}
+          path={path}
+        />
+      </div>
+    );
+  });
+};
 
 export const mapStateToVanillaControlProps = (state, ownProps) => {
   const props = mapStateToControlProps(state, ownProps);
@@ -27,7 +53,7 @@ export const mapStateToVanillaControlProps = (state, ownProps) => {
   const styles = getStyle(state)('control');
   let classNames: string[] = !_.isEmpty(controlElement.scope) ?
     styles.concat(
-      [`${convertToValidClassName(controlElement.scope.$ref)}`]
+      [`${convertToValidClassName(controlElement.scope)}`]
     ) : [''];
 
   if (trim) {

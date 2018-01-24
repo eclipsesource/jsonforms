@@ -16,19 +16,20 @@
     "src": "src",
     "test": "wct-test"
   },
-  "main": "dist/ts-build/index.js",
-  "typings": "dist/ts-build/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/ts-build/index.d.ts",
   "scripts": {
-    "bundle": "webpack --config ../../webpack.build.js --env=production --display-error-details",
+    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf lib",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
-    "doc": "echo 'TODO: implement documentation generation'",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --out docs src",
     "preparePublish": "npm run doc && npm run build && npm run test"
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-beta.6",
+    "@jsonforms/webcomponent": "^2.0.0-beta.6",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"

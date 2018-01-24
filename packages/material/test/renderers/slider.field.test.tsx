@@ -27,15 +27,14 @@ test.beforeEach(t => {
       foo: {
         type: 'number',
         maximum: 10,
-        minimum: 2
+        minimum: 2,
+        default: 6
       },
     },
   };
   t.context.uischema = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo',
-    }
+    scope: '#/properties/foo',
   };
 });
 
@@ -49,12 +48,12 @@ test.failing('autofocus on first element', t => {
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/firstSliderField' },
+    scope: '#/properties/firstSliderField' ,
     options: { focus: true }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/secondSliderField' },
+    scope: '#/properties/secondSliderField',
     options: { focus: true }
   };
   const uischema: HorizontalLayout = {
@@ -86,7 +85,7 @@ test.failing('autofocus on first element', t => {
 test('autofocus active', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' },
+    scope: '#/properties/foo',
     options: { focus: true }
   };
   const store = initJsonFormsStore({
@@ -106,7 +105,7 @@ test('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' },
+    scope: '#/properties/foo',
     options: { focus: false }
   };
   const store = initJsonFormsStore({
@@ -126,7 +125,7 @@ test('autofocus inactive', t => {
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   const store = initJsonFormsStore({
     data: t.context.data,
@@ -152,7 +151,7 @@ test('tester', t => {
 test('tester with wrong schema type', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -171,7 +170,7 @@ test('tester with wrong schema type', t => {
 test('tester with wrong schema type, but sibling has correct one', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -191,7 +190,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
 test('tester with correct schema type, but missing maximum and minimum fields', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -210,7 +209,7 @@ test('tester with correct schema type, but missing maximum and minimum fields', 
 test('tester with correct schema type, but missing maximum', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -232,7 +231,7 @@ test('tester with correct schema type, but missing maximum', t => {
 test('tester with correct schema type,but missing minimum', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -251,10 +250,10 @@ test('tester with correct schema type,but missing minimum', t => {
   );
 });
 
-test('tester with matching schema type (number)', t => {
+test('tester with matching schema type (number) without default', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -270,14 +269,14 @@ test('tester with matching schema type (number)', t => {
         }
       }
     ),
-    4
+    -1
   );
 });
 
-test('tester with matching schema type (integer)', t => {
+test('tester with matching schema type (integer) without default', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: { $ref: '#/properties/foo' }
+    scope: '#/properties/foo'
   };
   t.is(
     sliderFieldTester(
@@ -293,6 +292,54 @@ test('tester with matching schema type (integer)', t => {
         }
       }
     ),
+    -1
+  );
+});
+
+test('tester with matching schema type (number) with default', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.is(
+    sliderFieldTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            maximum: 10,
+            minimum: 2,
+            default: 6
+          }
+        }
+      }
+    ),
+    4
+  );
+});
+
+test('tester with matching schema type (integer) with default', t => {
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.is(
+    sliderFieldTester(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'integer',
+            maximum: 10,
+            minimum: 2,
+            default: 6
+          }
+        }
+      }
+    ),
     4
   );
 });
@@ -304,7 +351,8 @@ test('render', t => {
       foo: {
         type: 'number',
         maximum: 10,
-        minimum: 2
+        minimum: 2,
+        default: 6
       }
     }
   };

@@ -9,9 +9,8 @@ import {
   Resolve
 } from '../helpers';
 import { RankedTester } from '../testers';
-import { ControlElement, Layout } from '../models/uischema';
+import { ControlElement } from '../models/uischema';
 import * as React from 'react';
-import DispatchRenderer from './dispatch-renderer';
 import { errorAt, subErrorsAt } from '../reducers/validation';
 import { getData, getValidation } from '../reducers';
 import { Renderer, RendererProps } from './renderer';
@@ -57,30 +56,6 @@ export const mapStateToLayoutProps = (state, ownProps) => {
     visible,
     path: ownProps.path,
   };
-};
-
-export const renderChildren = (
-  layout: Layout,
-  schema: JsonSchema,
-  classNames: string,
-  path: string
-) => {
-
-  if (_.isEmpty(layout.elements)) {
-    return [];
-  }
-
-  return layout.elements.map((child, index) => {
-    return (
-      <div className={classNames} key={`${path}-${index}`}>
-        <DispatchRenderer
-          uischema={child}
-          schema={schema}
-          path={path}
-        />
-      </div>
-    );
-  });
 };
 
 // tslint:disable:variable-name
@@ -135,9 +110,9 @@ export const mapStateToControlProps = (state, ownProps) => {
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = errorAt(path)(getValidation(state)).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
-  const id = _.has(controlElement.scope, '$ref') ? controlElement.scope.$ref : '';
+  const id = controlElement.scope || '';
   const required =
-      controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope.$ref);
+      controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const inputs = state.inputs;
 
   return {
@@ -160,13 +135,12 @@ export const mapDispatchToControlProps = dispatch => ({
   }
 });
 
-
 export const mapStateToTableControlProps = (state, ownProps) => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
 
   const childErrors = subErrorsAt(path)(getValidation(state));
   const controlElement = ownProps.uischema as ControlElement;
-  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope.$ref + '/items');
+  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
   return {
     ...props,

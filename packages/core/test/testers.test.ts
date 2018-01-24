@@ -5,8 +5,8 @@ import {
   isArrayObjectControl,
   optionIs,
   or,
-  refEndIs,
-  refEndsWith,
+  scopeEndIs,
+  scopeEndsWith,
   schemaMatches,
   schemaTypeIs,
   uiTypeIs
@@ -23,9 +23,7 @@ test('schemaTypeIs should check type sub-schema of control', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.true(schemaTypeIs('string')(uischema, schema));
   t.false(schemaTypeIs('integer')(uischema, schema));
@@ -48,9 +46,7 @@ test('schemaTypeIs should return false for non-control UI schema elements', t =>
 test('schemaTypeIs should return false for control pointing to invalid sub-schema', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    }
+    scope: '#/properties/bar'
   };
   const schema: JsonSchema = {
     type: 'object',
@@ -64,9 +60,7 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
 test('formatIs should check the format of a resolved sub-schema', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   const schema: JsonSchema = {
     type: 'object',
@@ -83,9 +77,7 @@ test('formatIs should check the format of a resolved sub-schema', t => {
 test('uiTypeIs', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    }
+    scope: '#/properties/bar'
   };
   t.true(uiTypeIs('Control')(control, undefined));
 });
@@ -93,9 +85,7 @@ test('uiTypeIs', t => {
 test('optionIs should check for options', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    },
+    scope: '#/properties/bar',
     options: {
       answer: 42
     }
@@ -106,9 +96,7 @@ test('optionIs should check for options', t => {
 test('optionIs should return false for UI schema elements without options field', t => {
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    }
+    scope: '#/properties/bar'
   };
   t.false(optionIs('answer', 42)(control, undefined));
 });
@@ -122,9 +110,7 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.true(schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema));
 });
@@ -152,39 +138,33 @@ test('schemaMatches should return false for control pointing to invalid subschem
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    }
+    scope: '#/properties/bar',
   };
   t.false(schemaMatches(() => false)(uischema, schema));
 });
 
-test('refEndsWith checks whether the ref of a control ends with a certain string', t => {
+test('scopeEndsWith checks whether the ref of a control ends with a certain string', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    }
+    scope: '#/properties/bar'
   };
-  t.true(refEndsWith('properties/bar')(uischema, undefined));
+  t.true(scopeEndsWith('properties/bar')(uischema, undefined));
 });
 
-test('refEndsWith should return false for non-control UI schema elements', t => {
+test('scopeEndsWith should return false for non-control UI schema elements', t => {
   const label: LabelElement = {
     type: 'Label',
     text: 'some text'
   };
-  t.false(refEndsWith('properties/bar')(label, undefined));
+  t.false(scopeEndsWith('properties/bar')(label, undefined));
 });
 
 test('refEndIs checks whether the last segment a control ref equals a certain string', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/bar'
-    }
+    scope: '#/properties/bar'
   };
-  t.true(refEndIs('bar')(uischema, undefined));
+  t.true(scopeEndIs('bar')(uischema, undefined));
 });
 
 test('refEndIs should return false for non-control UI schema elements', t => {
@@ -192,7 +172,7 @@ test('refEndIs should return false for non-control UI schema elements', t => {
     type: 'Label',
     text: 'some text'
   };
-  t.false(refEndIs('bar')(label, undefined));
+  t.false(scopeEndIs('bar')(label, undefined));
 });
 
 test('and should allow to compose multiple testers', t => {
@@ -204,13 +184,11 @@ test('and should allow to compose multiple testers', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.true(and(
     schemaTypeIs('string'),
-    refEndIs('foo')
+    scopeEndIs('foo')
   )(uischema, schema));
 });
 
@@ -223,9 +201,7 @@ test('or should allow to compose multiple testers', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.true(or(
     schemaTypeIs('integer'),
@@ -236,9 +212,7 @@ test('tester isArrayObjectControl', t => {
   t.false(isArrayObjectControl({type: 'Foo'}, null));
   const control: ControlElement = {
     type: 'Control',
-    scope: {
-      $ref: '#/properties/foo'
-    }
+    scope: '#/properties/foo'
   };
   t.false(isArrayObjectControl(control, undefined), 'No Schema not checked!');
 

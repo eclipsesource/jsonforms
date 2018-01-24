@@ -5,7 +5,7 @@ import { ControlElement, LabelDescription } from '../models/uischema';
 const deriveLabel = (controlElement: ControlElement): string => {
 
   if (controlElement.scope !== undefined) {
-    const ref = controlElement.scope.$ref;
+    const ref = controlElement.scope;
     const label = ref.substr(ref.lastIndexOf('/') + 1);
 
     return _.startCase(label);

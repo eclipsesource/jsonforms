@@ -33,8 +33,9 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope.$ref);
+    const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
       <div
@@ -47,11 +48,8 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
           {computeLabel(label, required)}
         </label>
       <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
-        <div
-          className={divClassNames}
-          hidden={isValid && isDescriptionHidden(visible, description, this.state.isFocused)}
-        >
-          {!isValid ? formatErrorMessage(errors) : description}
+        <div className={divClassNames}>
+          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         </div>
       </div>
     );
