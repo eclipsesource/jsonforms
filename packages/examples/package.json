@@ -21,7 +21,7 @@
   "scripts": {
     "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --out docs src",
