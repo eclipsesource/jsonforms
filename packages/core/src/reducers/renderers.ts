@@ -1,4 +1,4 @@
-import { JsonFormsRendererConstructable } from '../renderers/renderer.util';
+import { JsonFormsRendererConstructable } from '../util/renderer';
 import { RankedTester } from '../testers';
 import { ADD_RENDERER, REMOVE_RENDERER } from '../actions';
 

@@ -9,7 +9,7 @@ import {
 } from './schema.service';
 import * as uuid from 'uuid';
 import { JsonForms } from '../core';
-import { findAllRefs, resolveSchema } from '../helpers/resolvers';
+import { findAllRefs, resolveSchema } from '../util/resolvers';
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;

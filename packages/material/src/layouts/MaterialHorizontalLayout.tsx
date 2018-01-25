@@ -9,7 +9,7 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from './layout.util';
+import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 /**
  * Default tester for a horizontal layout.

@@ -9,14 +9,14 @@ import * as day6 from './day6';
 import * as dates from './dates';
 import * as dyanmic from './dynamic';
 import * as generateSchema from './generate';
-import * as generateUISchema from './generate-ui';
+import * as generateUISchema from './generateUI';
 import * as layout from './layout';
 import * as person from './person';
 import * as rule from './rule';
 import * as resolve from './resolve';
 import * as uischemaRegistry from './uischema-registry';
 import Rating from './Rating';
-import { RatingControl, ratingControlTester } from './rating.control';
+import { RatingControl, ratingControlTester } from './RatingControl';
 
 export {
   array,

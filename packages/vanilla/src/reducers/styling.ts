@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { JsonForms } from '@jsonforms/core/lib/core';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
-import { StyleDef } from '../helpers';
+import { StyleDef } from '../util';
 
 const removeStyle = (styles: StyleDef[], name) => {
   const copy = styles.slice();

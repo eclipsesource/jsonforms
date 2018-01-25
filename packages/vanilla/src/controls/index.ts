@@ -1,1 +1,1 @@
-export * from './input.control';
+export * from './InputControl';

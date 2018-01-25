@@ -1,5 +1,5 @@
 export * from './core';
-export * from './helpers';
+export * from './util';
 export * from './legacy/schema.service';
 
 export * from './models/jsonSchema';
@@ -20,7 +20,7 @@ export { Test };
 import {
   convertToValidClassName,
   createLabelDescriptionFrom
-} from './helpers';
+} from './util';
 import { ControlElement, LabelDescription } from './models/uischema';
 
 const Helpers: {
@@ -32,3 +32,6 @@ const Helpers: {
 };
 
 export { Helpers };
+
+export * from './util';
+export * from './generators';
