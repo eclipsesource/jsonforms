@@ -97,7 +97,7 @@ test('DispatchRenderer should report about missing renderer', t => {
       ),
       'div'
     )
-  );
+  ) as HTMLDivElement;
   t.is(div.textContent, 'No applicable renderer found.');
 });
 
