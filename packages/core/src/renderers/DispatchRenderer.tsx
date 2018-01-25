@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import { RankedTester } from '../testers';
 import { RendererProps } from './Renderer';
-import { getSchema, getUiSchema } from '../reducers';
+import { getConfig, getSchema, getUiSchema } from '../reducers';
 
 export interface DispatchRendererProps extends RendererProps {
   renderers?: { tester: RankedTester, renderer: any }[];
 }
 
-const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) => {
+const Dispatch = ({ uischema, schema, config, path, renderers }: DispatchRendererProps) => {
   const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
   if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
     return <UnknownRenderer type={'renderer'}/>;
@@ -21,6 +21,7 @@ const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) 
       <Render
         uischema={uischema}
         schema={schema}
+        config={config}
         path={path}
         renderers={renderers}
       />
@@ -31,7 +32,8 @@ const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) 
 const mapStateToProps = (state, ownProps) => ({
   renderers: state.jsonforms.renderers || [],
   schema: ownProps.schema || getSchema(state),
-  uischema: ownProps.uischema || getUiSchema(state)
+  uischema: ownProps.uischema || getUiSchema(state),
+  config: ownProps.config || getConfig(state)
 });
 
 export const DispatchRenderer = connect(

@@ -32,6 +32,7 @@ export interface FieldProps {
    * it is the case with nested controls.
    */
   path?: string;
+  config?: any;
   data: any;
   className?: string;
   id: string;

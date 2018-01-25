@@ -5,9 +5,10 @@ export interface CategoryProps {
   category: Category;
   schema: JsonSchema;
   path: string;
+  config: any;
 }
 
-export const SingleCategory = ({ category, schema, path }: CategoryProps) => (
+export const SingleCategory = ({ category, schema, path, config }: CategoryProps) => (
   // TODO: add selected style
   <div id='categorization.detail'>
     {
@@ -18,6 +19,7 @@ export const SingleCategory = ({ category, schema, path }: CategoryProps) => (
             uischema={child}
             schema={schema}
             path={path}
+            config={config}
           />
         )
       )

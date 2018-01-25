@@ -10,7 +10,8 @@ import Grid from 'material-ui/Grid';
 const renderChildren = (
     elements: UISchemaElement[],
     schema: JsonSchema,
-    path: string
+    path: string,
+    config: any
   ) => {
 
     return elements.map((child, index) =>
@@ -20,6 +21,7 @@ const renderChildren = (
             uischema={child}
             schema={schema}
             path={path}
+            config={config}
           />
         </Grid>
       )
@@ -31,16 +33,17 @@ export interface MaterialLayoutRendererProps {
     path: string;
     visible: boolean;
     direction: 'row'|'column';
+    config: any;
 }
 export const MaterialLayoutRenderer = (
-    {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
+    {visible, elements, schema, path, direction, config}: MaterialLayoutRendererProps) => {
         if (_.isEmpty(elements)) {
             return null;
         }
         else {
             return (
                 <Grid container hidden={{ xsUp: !visible }} direction={direction}>
-                    {renderChildren(elements, schema, path)}
+                    {renderChildren(elements, schema, path, config)}
                 </Grid>
             );
         }

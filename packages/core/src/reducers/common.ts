@@ -5,7 +5,8 @@ export const commonStateReducer = (
   state = {
     data: {},
     schema: {},
-    uischema: {}
+    uischema: {},
+    config: {}
   },
   action) => {
 
@@ -14,7 +15,8 @@ export const commonStateReducer = (
       return {
         data: action.data,
         schema: action.schema,
-        uischema: action.uischema
+        uischema: action.uischema,
+        config: action.config
       };
     case UPDATE_DATA: {
       if (action.path === undefined || action.path === null) {
@@ -27,14 +29,16 @@ export const commonStateReducer = (
           return {
             data: state.data,
             uischema: state.uischema,
-            schema: state.schema
+            schema: state.schema,
+            config: state.config
           };
         }
 
         return {
           data: result,
           uischema: state.uischema,
-          schema: state.schema
+          schema: state.schema,
+          config: state.config
         };
       } else {
         const oldData = _.get(state.data, action.path);
@@ -44,7 +48,8 @@ export const commonStateReducer = (
         return {
           data: newState,
           uischema: state.uischema,
-          schema: state.schema
+          schema: state.schema,
+          config: state.config
         };
       }
     }
@@ -56,3 +61,4 @@ export const commonStateReducer = (
 export const extractData = state => state.data;
 export const extractSchema = state => state.schema;
 export const extractUiSchema = state => state.uischema;
+export const extractConfig = state => state.config;

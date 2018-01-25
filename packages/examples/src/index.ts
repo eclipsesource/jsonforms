@@ -12,6 +12,8 @@ import * as generateSchema from './generate';
 import * as generateUISchema from './generateUI';
 import * as layout from './layout';
 import * as person from './person';
+import * as configDefault from './configDefault';
+import * as configCustom from './configCustom';
 import * as rule from './rule';
 import * as resolve from './resolve';
 import * as uischemaRegistry from './uischema-registry';
@@ -31,6 +33,8 @@ export {
   generateUISchema,
   layout,
   person,
+  configDefault,
+  configCustom,
   rule,
   dates,
   dyanmic,

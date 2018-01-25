@@ -39,6 +39,11 @@ export interface ControlProps extends RendererProps {
   enabled: boolean;
 
   /**
+   * Optional configuration.
+   */
+  config: any;
+
+  /**
    * The label for the rendered element.
    */
   label: string;

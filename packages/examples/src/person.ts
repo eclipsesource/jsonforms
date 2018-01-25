@@ -128,11 +128,7 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/postalCode',
-          options: {
-            trim: true,
-            restrict: true
-          }
+          scope: '#/properties/postalCode'
         }
       ]
     }

@@ -22,6 +22,7 @@ export const GroupLayoutRenderer = (
     schema,
     uischema,
     path,
+    config,
     visible,
     getStyle,
     getStyleAsClassName
@@ -44,7 +45,7 @@ export const GroupLayoutRenderer = (
             {group.label}
           </legend> : ''
       }
-      {renderChildren(group, schema, childClassNames, path)}
+      {renderChildren(group, schema, childClassNames, path, config)}
     </fieldset>
   );
 };

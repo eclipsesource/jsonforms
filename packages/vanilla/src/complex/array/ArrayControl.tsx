@@ -6,7 +6,7 @@ import {
 } from '@jsonforms/core';
 
 export const ArrayControl  =
-  ({ classNames, data, label, path, resolvedSchema, onAdd }) => {
+  ({ classNames, data, label, path, resolvedSchema, onAdd, config }) => {
 
     return (
       <div className={classNames.wrapper}>
@@ -35,6 +35,7 @@ export const ArrayControl  =
                     uischema={generatedUi}
                     path={childPath}
                     key={childPath}
+                    config={config}
                   />
                 );
               }) : <p>No data</p>

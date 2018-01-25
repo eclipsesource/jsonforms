@@ -2,7 +2,7 @@ import { combineReducers, Reducer } from 'redux';
 import { errorAt, subErrorsAt, validationReducer } from './validation';
 import { rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
-import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
+import { commonStateReducer, extractConfig, extractData, extractSchema, extractUiSchema } from './common';
 import { JsonForms } from '../core';
 import { JsonFormsState } from '../store';
 export {
@@ -26,6 +26,7 @@ export const jsonformsReducer = (): Reducer<JsonFormsState> =>
 export const getData = state => extractData(state.jsonforms.common);
 export const getSchema = state => extractSchema(state.jsonforms.common);
 export const getUiSchema = state => extractUiSchema(state.jsonforms.common);
+export const getConfig = state => extractConfig(state.common);
 
 export const getErrorAt = instancePath => state => {
   return errorAt(instancePath)(state.jsonforms.validation);

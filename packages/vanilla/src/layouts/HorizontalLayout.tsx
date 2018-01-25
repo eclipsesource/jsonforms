@@ -23,6 +23,7 @@ const HorizontalLayoutRenderer = (
     schema,
     uischema,
     path,
+    config,
     visible,
     getStyle,
     getStyleAsClassName,
@@ -40,7 +41,7 @@ const HorizontalLayoutRenderer = (
       className={layoutClassName}
       visible={visible}
     >
-      {renderChildren(horizontalLayout, schema, childClassNames, path)}
+      {renderChildren(horizontalLayout, schema, childClassNames, path, config)}
     </JsonFormsLayout>
   );
 };
