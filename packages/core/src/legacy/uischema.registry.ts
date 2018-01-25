@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { generateDefaultUISchema } from '../generators/ui-schema-gen';
+import { generateDefaultUISchema } from '../generators/uischema';
 import { JsonSchema } from '../models/jsonSchema';
 import { UISchemaElement } from '../models/uischema';
 

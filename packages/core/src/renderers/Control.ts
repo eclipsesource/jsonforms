@@ -1,4 +1,4 @@
-import { Renderer, RendererProps } from './renderer';
+import { Renderer, RendererProps } from './Renderer';
 
 /**
  * Props of a renderer.

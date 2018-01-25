@@ -1,3 +1,3 @@
-export * from './material-boolean.control';
-export * from './material-input.control';
-export * from './material-native.control';
+export * from './MaterialBooleanControl';
+export * from './MaterialInputControl';
+export * from './MaterialNativeControl';

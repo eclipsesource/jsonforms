@@ -1,10 +1,7 @@
 import { JsonSchema, UISchemaElement } from '../';
 
-export * from './schema-gen';
-export * from './ui-schema-gen';
-
-import { generateJsonSchema } from './schema-gen';
-import { generateDefaultUISchema } from './ui-schema-gen';
+import { generateJsonSchema } from './schema';
+import { generateDefaultUISchema } from './uischema';
 
 const Generate: {
   jsonSchema(instance: Object, options?: any): JsonSchema;
@@ -16,3 +13,5 @@ const Generate: {
 
 export { Generate };
 export default Generate;
+export { generateJsonSchema };
+export { generateDefaultUISchema };

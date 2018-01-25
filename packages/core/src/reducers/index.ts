@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from 'redux';
 import { errorAt, subErrorsAt, validationReducer } from './validation';
 import { rendererReducer } from './renderers';
-import { fieldReducer } from './inputs';
+import { fieldReducer } from './fields';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 import { JsonForms } from '../core';
 import { JsonFormsState } from '../store';

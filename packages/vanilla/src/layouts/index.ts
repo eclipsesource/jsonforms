@@ -1,3 +1,3 @@
-export * from './group.layout';
-export * from './horizontal.layout';
-export * from './vertical.layout';
+export * from './GroupLayout';
+export * from './HorizontalLayout';
+export * from './VerticalLayout';
