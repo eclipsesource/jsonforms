@@ -3,18 +3,15 @@ import { getData } from '../reducers/index';
 import { JsonFormsRendererConstructable } from '../util/renderer';
 import { RankedTester } from '../testers';
 
-export const INIT = 'INIT';
-export const UPDATE_DATA = 'UPDATE';
-export const UPDATE_UI = 'UPDATE_UI';
-export const VALIDATE = 'VALIDATE';
-export const SHOW = 'SHOW';
-export const HIDE = 'HIDE';
-export const ENABLE = 'ENABLE';
-export const DISABLE = 'DISABLE';
-export const ADD_RENDERER = 'ADD_RENDERER';
-export const REMOVE_RENDERER = 'REMOVE_RENDERER';
-export const ADD_FIELD = 'ADD_FIELD';
-export const REMOVE_FIELD = 'REMOVE_FIELD';
+const NAMESPACE = 'jsonforms';
+
+export const INIT = `${NAMESPACE}/INIT`;
+export const UPDATE_DATA = `${NAMESPACE}/UPDATE`;
+export const VALIDATE = `${NAMESPACE}/VALIDATE`;
+export const ADD_RENDERER = `${NAMESPACE}/ADD_RENDERER`;
+export const REMOVE_RENDERER = `${NAMESPACE}/REMOVE_RENDERER`;
+export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
+export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
 
 // TODO: fix typings
 export const update =
