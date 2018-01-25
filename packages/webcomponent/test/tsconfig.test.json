@@ -1,15 +1,18 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../dist/ts-build/test",
-    "target": "es6"
+    "outDir": "../dist/test",
+    "target": "es6",
+    "inlineSourceMap": true
   },
   "include": [
-    "**/*.tsx",
-    "**/*.ts"
+    "**/*.ts",
+    "**/*.tsx"
   ],
-  "exclude": [
+  "exclude":[
+    "node_modules"
   ],
-  "types": [
+  "files": [
+    "../src/index.ts"
   ]
 }

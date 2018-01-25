@@ -1,0 +1,11 @@
+{
+   "lines": 40,
+   "include": [
+      "dist/**/*.js"
+   ],
+   "exclude": [
+      "**/*.test.js"
+   ],
+   "all": true,
+   "check-coverage": true
+}
