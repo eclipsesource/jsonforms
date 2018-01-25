@@ -11,8 +11,7 @@ import {
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
 import * as React from 'react';
-import { errorAt, subErrorsAt } from '../reducers/validation';
-import { getData, getValidation } from '../reducers';
+import { getData, getErrorAt, getSubErrorsAt } from '../reducers';
 import { Renderer, RendererProps } from './renderer';
 import { update } from '../actions';
 
@@ -108,12 +107,12 @@ export const mapStateToControlProps = (state, ownProps) => {
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const errors = errorAt(path)(getValidation(state)).map(error => error.message);
+  const errors = getErrorAt(path)(state).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
-  const inputs = state.inputs;
+  const fields = state.jsonforms.fields;
 
   return {
     data: Resolve.data(getData(state), path),
@@ -124,7 +123,7 @@ export const mapStateToControlProps = (state, ownProps) => {
     id,
     path,
     parentPath: ownProps.path,
-    inputs,
+    fields,
     required
   };
 };
@@ -138,7 +137,7 @@ export const mapDispatchToControlProps = dispatch => ({
 export const mapStateToTableControlProps = (state, ownProps) => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
 
-  const childErrors = subErrorsAt(path)(getValidation(state));
+  const childErrors = getSubErrorsAt(path)(state);
   const controlElement = ownProps.uischema as ControlElement;
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 

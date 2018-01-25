@@ -1,23 +1,17 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import {
   ControlElement,
   getData,
   HorizontalLayout,
-  initJsonFormsStore,
   JsonSchema,
   update
 } from '@jsonforms/core';
 import TextField, { textFieldTester, } from '../../src/fields/material-text.field';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import {
-  change,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument,
-  scryRenderedDOMElementsWithTag
-} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
+import * as TestUtils from 'react-dom/test-utils';
 
 const defaultMaxLength = 524288;
 
@@ -81,12 +75,12 @@ test.failing('autofocus on first element', t => {
     schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
 });
@@ -102,12 +96,12 @@ test('autofocus active', t => {
     schema: t.context.minLengthSchema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
 
@@ -122,12 +116,12 @@ test('autofocus inactive', t => {
     schema: t.context.minLengthSchema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.not(document.activeElement, input);
 });
 
@@ -141,12 +135,12 @@ test('autofocus inactive by default', t => {
     schema: t.context.minLengthSchema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.not(document.activeElement, input);
 });
 
@@ -170,13 +164,13 @@ test('render', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, 'Foo');
 });
 
@@ -186,15 +180,15 @@ test('update via input event', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   input.value = 'Bar';
-  change(input);
+  TestUtils.Simulate.change(input);
   t.is(getData(store.getState()).name, 'Bar');
 });
 
@@ -204,12 +198,12 @@ test.cb('update via action', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => 'Bar'));
   setTimeout(
     () => {
@@ -226,12 +220,12 @@ test('update with undefined value', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => undefined));
   t.is(input.value, '');
 });
@@ -242,12 +236,12 @@ test('update with null value', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => null));
   t.is(input.value, '');
 });
@@ -258,12 +252,12 @@ test('update with wrong ref', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('firstname', () => 'Bar'));
   t.is(input.value, 'Foo');
 });
@@ -274,12 +268,12 @@ test('update with null ref', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => 'Bar'));
   t.is(input.value, 'Foo');
 });
@@ -290,12 +284,12 @@ test('update with undefined ref', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(undefined, () => 'Bar'));
   t.is(input.value, 'Foo');
 });
@@ -306,12 +300,12 @@ test('disable', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.true(input.disabled);
 });
 
@@ -321,12 +315,12 @@ test('enabled by default', t => {
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });
 
@@ -344,12 +338,12 @@ test('use maxLength for attributes size and maxlength', t => {
     schema: t.context.maxLengthSchema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.maxLengthSchema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -365,12 +359,12 @@ test('use maxLength for attribute size only', t => {
     schema: t.context.maxLengthSchema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.maxLengthSchema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -386,12 +380,12 @@ test('use maxLength for attribute maxlength only', t => {
     schema: t.context.maxLengthSchema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.maxLengthSchema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -402,12 +396,12 @@ test('do not use maxLength', t => {
     schema: t.context.maxLengthSchema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -426,12 +420,12 @@ test('maxLength not specified, attributes should have default values (trim && re
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -447,12 +441,12 @@ test('maxLength not specified, attributes should have default values (trim)', t 
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -468,12 +462,12 @@ test('maxLength not specified, attributes should have default values (restrict)'
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });
@@ -484,12 +478,12 @@ test('if maxLength is not specified, attributes should have default values', t =
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
 });

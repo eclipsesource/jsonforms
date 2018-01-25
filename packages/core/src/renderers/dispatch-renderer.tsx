@@ -29,7 +29,7 @@ const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) 
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  renderers: state.renderers || [],
+  renderers: state.jsonforms.renderers || [],
   schema: ownProps.schema || getSchema(state),
   uischema: ownProps.uischema || getUiSchema(state)
 });
@@ -38,5 +38,3 @@ export const DispatchRenderer = connect(
   mapStateToProps,
   null
 )(Dispatch);
-
-export default DispatchRenderer;

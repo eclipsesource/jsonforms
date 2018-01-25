@@ -37,7 +37,6 @@
     "ajv": "^4.11.2",
     "lodash": "^4.17.4",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
@@ -46,6 +45,7 @@
   "devDependencies": {
     "document-register-element": "^1.7.0",
     "jsdom": "^11.5.1",
-    "jsdom-global": "^3.0.2"
+    "jsdom-global": "^3.0.2",
+    "react-dom": "^16.2.0"
   }
 }

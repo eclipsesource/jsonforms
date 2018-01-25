@@ -1,9 +1,19 @@
 import * as React from 'react';
+import thunk from 'redux-thunk';
 import * as ReactDOM from 'react-dom';
 import * as JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
-import { DispatchRenderer, initJsonFormsStore, JsonForms,
-    JsonFormsInitialState, JsonFormsStore, JsonSchema } from '@jsonforms/core';
+import {
+  DispatchRenderer,
+  generateDefaultUISchema,
+  generateJsonSchema,
+  JsonForms,
+  JsonFormsInitialState,
+  jsonformsReducer,
+  JsonFormsStore,
+  JsonSchema
+} from '@jsonforms/core';
+import { applyMiddleware, createStore } from 'redux';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -60,21 +70,34 @@ export class JsonFormsElement extends HTMLElement {
    * @param {Object} initialState initial state describing what is to be rendered
    */
   set state(initialState: JsonFormsInitialState) {
-    if (initialState.schema) {
-      JsonRefs
-        .resolveRefs(initialState.schema, {includeInvalid: true})
-        .then(result => {
-          const resolvedSchema = result.resolved;
-          this._store = initJsonFormsStore({
-            ...initialState,
+
+    const dataSchema = initialState.schema || generateJsonSchema(initialState.data);
+
+    const setupStore = schema => createStore(
+      jsonformsReducer(),
+      {
+        jsonforms: {
+          common: {
             data: initialState.data,
-            schema: resolvedSchema,
-            uischema: initialState.uischema,
-          });
+            schema,
+            uischema: initialState.uischema || generateDefaultUISchema(dataSchema)
+          },
+          renderers: JsonForms.renderers,
+          fields: JsonForms.fields,
+        }
+      },
+      applyMiddleware(thunk),
+    );
+
+    if (dataSchema) {
+      JsonRefs
+        .resolveRefs(dataSchema, {includeInvalid: true})
+        .then(result => {
+          this._store = setupStore(result.resolved);
           this.render();
         });
     } else {
-      this._store = initJsonFormsStore(initialState);
+      this._store = setupStore(initialState.schema);
       this.render();
     }
   }
@@ -91,7 +114,7 @@ export class JsonFormsElement extends HTMLElement {
       return;
     }
 
-    this.instantiateSchemaIfNeeded(this._store.getState().common.schema);
+    this.instantiateSchemaIfNeeded(this._store.getState().jsonforms.common.schema);
     const storeId = new Date().toISOString();
 
     ReactDOM.render(
@@ -100,7 +123,7 @@ export class JsonFormsElement extends HTMLElement {
       </Provider>,
       this
     );
-  }
+  };
 
   private instantiateSchemaIfNeeded(schema: JsonSchema): void {
     let parent = this.parentNode;
@@ -111,5 +134,5 @@ export class JsonFormsElement extends HTMLElement {
       parent = parent.parentNode;
     }
     JsonForms.schema = schema;
-  }
+  };
 }

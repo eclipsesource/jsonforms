@@ -1,23 +1,17 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import {
   ControlElement,
   getData,
   HorizontalLayout,
-  initJsonFormsStore,
   JsonSchema,
   update
 } from '@jsonforms/core';
 import SliderField, { sliderFieldTester } from '../../src/fields/material-slider.field';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import {
-  change,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument,
-  scryRenderedDOMElementsWithTag
-} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
+import * as TestUtils from 'react-dom/test-utils';
 
 test.beforeEach(t => {
   t.context.data = {'foo': 5};
@@ -71,13 +65,13 @@ test.failing('autofocus on first element', t => {
     schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
 
-  const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
 });
@@ -93,12 +87,12 @@ test('autofocus active', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
 
@@ -113,12 +107,12 @@ test('autofocus inactive', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -132,12 +126,12 @@ test('autofocus inactive by default', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -361,13 +355,13 @@ test('render', t => {
     schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.type, 'range');
   t.is(input.value, '5');
 });
@@ -378,14 +372,14 @@ test('update via input event', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   input.value = '3';
-  change(input);
+  TestUtils.Simulate.change(input);
   t.is(getData(store.getState()).foo, 3);
 });
 
@@ -395,12 +389,12 @@ test('update via action', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, '3');
   store.dispatch(update('foo', () => 4));
   setTimeout(() => t.is(input.value, 'Bar'), 4);
@@ -412,12 +406,12 @@ test.failing('update with undefined value', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
   t.is(input.value, '');
 });
@@ -428,12 +422,12 @@ test.failing('update with null value', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => null));
   t.is(input.value, '');
 });
@@ -444,12 +438,12 @@ test('update with wrong ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 11));
   t.is(input.value, '5');
 });
@@ -460,12 +454,12 @@ test('update with null ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => 3));
   t.is(input.value, '5');
 });
@@ -476,13 +470,13 @@ test('update with undefined ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   store.dispatch(update(undefined, () => 13));
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, '5');
 });
 
@@ -492,12 +486,12 @@ test('disable', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.true(input.disabled);
 });
 
@@ -507,11 +501,11 @@ test('enabled by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <SliderField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });

@@ -1,23 +1,17 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import {
   ControlElement,
   getData,
   HorizontalLayout,
-  initJsonFormsStore,
   JsonSchema,
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import DateField, { dateFieldTester } from '../../src/fields/material-date.field';
-import {
-  change,
-  findRenderedDOMElementWithTag,
-  renderIntoDocument,
-  scryRenderedDOMElementsWithTag
-} from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
+import * as TestUtils from 'react-dom/test-utils';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': '1980-04-04' };
@@ -73,12 +67,12 @@ test.failing('autofocus on first element', t => {
     schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
 });
@@ -95,13 +89,13 @@ test('autofocus active', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
 
@@ -117,13 +111,13 @@ test('autofocus inactive', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -137,12 +131,12 @@ test('autofocus inactive by default', t => {
     schema: t.context.schema,
     uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -210,14 +204,14 @@ test('render', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.type, 'date');
   t.is(input.value, '1980-04-04');
 });
@@ -227,15 +221,15 @@ test.cb('update via event', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   input.value = '1961-04-12';
-  change(input);
+  TestUtils.Simulate.change(input);
   setTimeout(
     () => {
       t.is(getData(store.getState()).foo, '1961-04-12');
@@ -250,13 +244,13 @@ test.cb('update via action', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => '1961-04-12'));
   setTimeout(
     () => {
@@ -272,13 +266,13 @@ test('update with null value', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => null));
   t.is(input.value, '');
 });
@@ -288,13 +282,13 @@ test('update with undefined value', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
   t.is(input.value, '');
 });
@@ -304,13 +298,13 @@ test('update with wrong ref', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 'Bar'));
   t.is(input.value, '1980-04-04');
 });
@@ -320,13 +314,13 @@ test('update with null ref', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => '1961-04-12'));
   t.is(input.value, '1980-04-04');
 });
@@ -336,13 +330,13 @@ test('update with undefined ref', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(undefined, () => '1961-04-12'));
   t.is(input.value, '1980-04-04');
 });
@@ -352,13 +346,13 @@ test('disable', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.true(input.disabled);
 });
 
@@ -367,12 +361,12 @@ test('enabled by default', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
-  })
-  const tree = renderIntoDocument(
+  });
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DateField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });

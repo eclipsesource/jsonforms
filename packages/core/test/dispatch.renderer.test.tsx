@@ -7,18 +7,42 @@ global.requestAnimationFrame = cb => setTimeout(cb, 0);
 import * as React from 'react';
 import { test } from 'ava';
 import * as _ from 'lodash';
+import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
 import { JsonSchema } from '../src/models/jsonSchema';
-import { initJsonFormsStore } from '../src/store';
 import { Renderer, RendererProps } from '../src/renderers/renderer';
-import DispatchRenderer from '../src/renderers/dispatch-renderer';
+import { DispatchRenderer } from '../src/renderers/dispatch-renderer';
 import '../src/renderers';
 import { registerRenderer, unregisterRenderer } from '../src/actions';
-import {
-  findRenderedDOMElementWithTag,
-  renderIntoDocument,
-  scryRenderedDOMElementsWithTag
-} from '../../test/helpers/react-test';
+import * as TestUtils from 'react-dom/test-utils';
+
+import { JsonForms, JsonFormsInitialState, JsonFormsStore } from '../src';
+import { jsonformsReducer } from '../src/reducers';
+
+export const initJsonFormsStore = ({
+                                     data,
+                                     schema,
+                                     uischema,
+                                     ...props
+                                   }: JsonFormsInitialState): JsonFormsStore => {
+  return createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data,
+          schema,
+          uischema
+        },
+        renderers: JsonForms.renderers,
+        fields: JsonForms.fields,
+        ...props
+      }
+    },
+    applyMiddleware(thunk)
+  );
+};
 
 class CustomRenderer1 extends Renderer<RendererProps, any> {
   render() {
@@ -63,16 +87,17 @@ test('DispatchRenderer should report about missing renderer', t => {
     schema,
     uischema
   });
+
   const div = _.head(
-    scryRenderedDOMElementsWithTag(
-      renderIntoDocument(
+    TestUtils.scryRenderedDOMComponentsWithTag(
+      TestUtils.renderIntoDocument(
         <Provider store={store}>
           <DispatchRenderer uischema={uischema} schema={schema} />
         </Provider>
       ),
       'div'
     )
-  );
+  ) as HTMLDivElement;
   t.is(div.textContent, 'No applicable renderer found.');
 });
 
@@ -84,13 +109,13 @@ test('DispatchRenderer should pick most applicable renderer', t => {
   });
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
   store.dispatch(registerRenderer(() => 5, CustomRenderer1));
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema} />
     </Provider>
   );
 
-  t.not(findRenderedDOMElementWithTag(tree, 'h1'), undefined);
+  t.not(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1'), undefined);
 });
 test('Dispatch renderer should not consider any de-registered renderers', t => {
   const tester1 = () => 9;
@@ -105,13 +130,13 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
   store.dispatch(registerRenderer(tester2, CustomRenderer2));
   store.dispatch(registerRenderer(tester3, CustomRenderer3));
   store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
   <Provider store={store}>
     <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema}/>
   </Provider>
 );
 
-  t.not(findRenderedDOMElementWithTag(tree, 'h1'), undefined);
+  t.not(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1'), undefined);
 });
 
 test('deregister an unregistered renderer should be a no-op', t => {
@@ -123,7 +148,7 @@ test('deregister an unregistered renderer should be a no-op', t => {
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
   store.dispatch(registerRenderer(() => 5, CustomRenderer2));
   const tester = () => 10;
-  const nrOfRenderers = store.getState().renderers.length;
+  const nrOfRenderers = store.getState().jsonforms.renderers.length;
   store.dispatch(unregisterRenderer(tester, CustomRenderer3));
-  t.is(store.getState().renderers.length, nrOfRenderers);
+  t.is(store.getState().jsonforms.renderers.length, nrOfRenderers);
 });

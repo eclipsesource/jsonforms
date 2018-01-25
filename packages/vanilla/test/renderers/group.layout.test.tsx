@@ -1,14 +1,10 @@
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
-import '../../../test/helpers/setup';
 import test from 'ava';
-import {
-  GroupLayout,
-  initJsonFormsStore
-} from '@jsonforms/core';
-import { renderIntoDocument } from '../../../test/helpers/binding';
+import { GroupLayout } from '@jsonforms/core';
 import { Provider } from 'react-redux';
-import { findRenderedDOMElementWithClass } from '../../../test/helpers/react-test';
 import GroupLayoutRenderer, { groupTester } from '../../src/layouts/group.layout';
+import * as TestUtils from 'react-dom/test-utils';
 
 test.beforeEach(t => {
   t.context.uischema = {
@@ -42,12 +38,12 @@ test('render with label', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
+  const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.className, 'group-layout');
   t.is(groupLayout.children.length, 1);
@@ -67,12 +63,12 @@ test('render with null elements', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
+  const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.children.length, 0);
 });
@@ -91,12 +87,12 @@ test('render with children', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
     </Provider>
   );
-  const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout');
+  const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.children.length, 2);
 });
@@ -108,7 +104,7 @@ test('hide', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer
         uischema={t.context.uischema}
@@ -116,7 +112,10 @@ test('hide', t => {
       />
     </Provider>
   );
-  const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout') as HTMLDivElement;
+  const groupLayout = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'group-layout'
+  ) as HTMLDivElement;
   t.true(groupLayout.hidden);
 });
 
@@ -127,11 +126,14 @@ test('show by default', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <GroupLayoutRenderer uischema={t.context.uischema} />
     </Provider>
   );
-  const groupLayout = findRenderedDOMElementWithClass(tree, 'group-layout') as HTMLDivElement;
+  const groupLayout = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'group-layout'
+  ) as HTMLDivElement;
   t.false(groupLayout.hidden);
 });

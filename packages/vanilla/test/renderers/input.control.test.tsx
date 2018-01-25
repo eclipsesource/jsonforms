@@ -1,4 +1,4 @@
-import '../../../test/helpers/setup';
+import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import '../../src/fields';
@@ -6,22 +6,15 @@ import {
   ControlElement,
   DispatchRenderer,
   HorizontalLayout,
-  initJsonFormsStore,
   JsonSchema,
   update,
   validate
 } from '@jsonforms/core';
-import { renderIntoDocument, scryRenderedDOMElementsWithTag } from '../../../test/helpers/binding';
 import { Provider } from 'react-redux';
 import '../../src';
 import HorizontalLayoutRenderer from '../../src/layouts/horizontal.layout';
 import InputControl, { inputControlTester } from '../../src/controls/input.control';
-import {
-  blur,
-  findRenderedDOMElementWithClass,
-  findRenderedDOMElementWithTag,
-  focus, scryRenderedDOMElementsWithClass,
-} from '../../../test/helpers/react-test';
+import * as TestUtils from 'react-dom/test-utils';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': true };
@@ -92,12 +85,12 @@ test('autofocus on first element', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
-  const inputs = scryRenderedDOMElementsWithTag(tree, 'input');
+  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
 });
@@ -118,25 +111,25 @@ test('render', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'control');
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
   t.not(control, undefined);
   t.is(control.childNodes.length, 3);
-  t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
+  t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_foo'), undefined);
 
-  const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.textContent, 'Foo');
 
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.not(input, undefined);
   t.not(input, null);
 
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
 });
@@ -153,26 +146,26 @@ test('render without label', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
 
-  const control = findRenderedDOMElementWithClass(tree, 'control');
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
   t.not(control, undefined);
   t.is(control.childNodes.length, 3);
-  t.not(findRenderedDOMElementWithClass(tree, 'root_properties_foo'), undefined);
-  /*t.not(findRenderedDOMElementWithClass(tree, 'valid'), undefined);*/
+  t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_foo'), undefined);
+  /*t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'valid'), undefined);*/
 
-  const label = findRenderedDOMElementWithTag(tree, 'label') as HTMLLabelElement;
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.textContent, '');
 
-  const input = findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.not(input, undefined);
   t.not(input, null);
 
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.tagName, 'DIV');
   t.is((validation as HTMLDivElement).children.length, 0);
 });
@@ -184,7 +177,7 @@ test('hide', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl
         data={t.context.data}
@@ -195,7 +188,7 @@ test('hide', t => {
       />
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
 
@@ -206,12 +199,12 @@ test('show by default', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLElement;
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
 
@@ -221,12 +214,12 @@ test('single error', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('foo', () => 2));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be boolean');
@@ -238,12 +231,12 @@ test('multiple errors', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('foo', () => 3));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be boolean');
@@ -255,12 +248,12 @@ test('empty errors by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.textContent, '');
 });
 
@@ -270,12 +263,12 @@ test('reset validation message', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
-  const validation = findRenderedDOMElementWithClass(tree, 'validation');
+  const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('foo', () => 3));
   store.dispatch(update('foo', () => true));
   store.dispatch(validate());
@@ -334,12 +327,12 @@ test('validation of nested schema', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const validation = scryRenderedDOMElementsWithClass(tree, 'validation');
+  const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
   store.dispatch(validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
@@ -365,12 +358,12 @@ test('required field is marked', t => {
     schema,
     uischema,
   });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const label = findRenderedDOMElementWithTag(tree, 'label');
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field*');
 });
 
@@ -389,12 +382,12 @@ test('not required', t => {
     scope: '#/properties/dateField'
   };
   const store = initJsonFormsStore({ data: {}, schema, uischema });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const label = findRenderedDOMElementWithTag(tree, 'label');
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field');
 });
 test('required field is marked', t => {
@@ -414,12 +407,12 @@ test('required field is marked', t => {
   };
 
   const store = initJsonFormsStore({ data: {}, schema, uischema });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const label = findRenderedDOMElementWithTag(tree, 'label');
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field*');
 });
 
@@ -439,12 +432,12 @@ test('not required', t => {
   };
 
   const store = initJsonFormsStore({ data: {}, schema, uischema });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const label = findRenderedDOMElementWithTag(tree, 'label');
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field');
 });
 
@@ -464,15 +457,15 @@ test('show description on focus', t => {
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
-  focus(control);
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
+  TestUtils.Simulate.focus(control);
   const description =
-    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+    TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
 });
 
@@ -492,12 +485,15 @@ test('hide description when input field is not focused', t => {
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
-  const description = findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+  const description = TestUtils.findRenderedDOMComponentWithClass(
+    tree,
+    'input-description'
+  ) as HTMLDivElement;
   t.is(description.textContent, '');
 });
 
@@ -517,19 +513,19 @@ test('hide description on blur', t => {
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
-  const control = findRenderedDOMElementWithClass(tree, 'control') as HTMLDivElement;
-  focus(control);
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
+  TestUtils.Simulate.focus(control);
   const description =
-    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+    TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, 'Enter your first name');
-  blur(control);
+  TestUtils.Simulate.blur(control);
   const hiddenDescription =
-    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+    TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(hiddenDescription.textContent, '');
 });
 
@@ -548,12 +544,12 @@ test('description undefined', t => {
   };
   const data = { isFocused: false };
   const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
-  const tree = renderIntoDocument(
+  const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
     </Provider>
   );
   const description =
-    findRenderedDOMElementWithClass(tree, 'input-description') as HTMLDivElement;
+    TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, '');
 });
