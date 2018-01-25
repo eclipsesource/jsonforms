@@ -103,8 +103,8 @@ export const isDescriptionHidden = (visible, description, isFocused) => {
 
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state.jsonforms);
-  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state.jsonforms);
+  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = getErrorAt(path)(state).map(error => error.message);

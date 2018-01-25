@@ -16,8 +16,6 @@ export interface JsonFormsState {
     // allow additional state for JSONForms
     [x: string]: any;
   };
-  // any other reducers
-  [y: string]: any;
 }
 
 export interface JsonFormsInitialState {
