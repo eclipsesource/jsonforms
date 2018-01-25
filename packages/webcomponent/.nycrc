@@ -1,0 +1,13 @@
+{
+   "lines": 70,
+   "include": [
+     "dist/**/*.js"
+   ],
+   "exclude": [
+      "**/*.test.js",
+      "**/*/FakeControl.js",
+      "**/*/FakeLayout.js"
+   ],
+   "all": true,
+   "check-coverage": true
+}
