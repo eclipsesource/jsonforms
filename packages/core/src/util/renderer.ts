@@ -10,7 +10,6 @@ import {
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
-import * as React from 'react';
 import { getData, getErrorAt, getSubErrorsAt } from '../reducers';
 import { Renderer, RendererProps } from '../renderers/Renderer';
 import { update } from '../actions';
@@ -31,22 +30,6 @@ export interface JsonFormsRendererConstructable {
   new(props: RendererProps): Renderer<RendererProps, any>;
 }
 
-/**
- * Renderer annotation that defines the renderer as a custom elemeent
- * and registers it with the renderer service.
- *
- * @param {JsonFormsRendererConfig} config the renderer config to be registered
- * @constructor
- */
-// Used as annotation
-// tslint:disable:variable-name
-export const JsonFormsRenderer =
-    (config: JsonFormsRendererConfig) =>
-      (cls: JsonFormsRendererConstructable) => {
-        registerStartupRenderer(config.tester, cls);
-      };
-// tslint:enable:variable-name
-
 export const mapStateToLayoutProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
@@ -55,20 +38,6 @@ export const mapStateToLayoutProps = (state, ownProps) => {
     visible,
     path: ownProps.path,
   };
-};
-
-// tslint:disable:variable-name
-export const JsonFormsLayout = ({ className, children, visible }) => {
-// tslint:enable:variable-name
-
-  return (
-    <div
-      className={className}
-      hidden={visible === undefined || visible === null ? false : !visible}
-    >
-      {children}
-    </div>
-  );
 };
 
 export const registerStartupRenderer = (tester: RankedTester, renderer: any) => {
