@@ -47,6 +47,6 @@
     "jsdom": "^11.5.1",
     "jsdom-global": "^3.0.2",
     "react-dom": "^16.2.0",
-    "redux-mock-store": "^1.4.0"
+    "redux-mock-store": "1.4.0"
   }
 }
