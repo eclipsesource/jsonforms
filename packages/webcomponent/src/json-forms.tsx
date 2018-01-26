@@ -11,7 +11,8 @@ import {
   JsonFormsInitialState,
   jsonformsReducer,
   JsonFormsStore,
-  JsonSchema
+  JsonSchema,
+  SET_LOCALE
 } from '@jsonforms/core';
 import { applyMiddleware, createStore } from 'redux';
 
@@ -84,6 +85,10 @@ export class JsonFormsElement extends HTMLElement {
           },
           renderers: JsonForms.renderers,
           fields: JsonForms.fields,
+          i18n: {
+            translations: initialState.translations,
+            locale: initialState.locale
+          }
         }
       },
       applyMiddleware(thunk),
@@ -94,6 +99,10 @@ export class JsonFormsElement extends HTMLElement {
         .resolveRefs(dataSchema, {includeInvalid: true})
         .then(result => {
           this._store = setupStore(result.resolved);
+          this._store.dispatch({
+            type: SET_LOCALE,
+            locale: initialState.locale
+          });
           this.render();
         });
     } else {

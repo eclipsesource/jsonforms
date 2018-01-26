@@ -53,6 +53,8 @@ export interface ControlProps extends RendererProps {
    */
   required: boolean;
 
+  description: string;
+
   /**
    * Update handler that emits a data change
    *

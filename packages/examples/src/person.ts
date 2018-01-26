@@ -6,7 +6,7 @@ export const personCoreSchema = {
     name: {
       type: 'string',
       minLength: 3,
-      description: 'Please enter your full name.'
+      description: '%namedescription'
     },
     vegetarian: {
       type: 'boolean'
@@ -65,7 +65,7 @@ export const uischema = {
         {
           type: 'Control',
           label: {
-            text: 'Name',
+            text: '%name',
             show: true
           },
           scope: '#/properties/name'
@@ -73,25 +73,28 @@ export const uischema = {
         {
           type: 'Control',
           label: {
-            text: 'Age'
+            text: '%age'
           },
           scope: '#/properties/personalData/properties/age'
         },
         {
           type: 'Control',
-          label: 'Height',
+          label: '%height',
           scope: '#/properties/personalData/properties/height'
         },
         {
           type: 'Control',
           label: {
-            text: 'Age'
+            text: '%age'
           },
           scope: '#/properties/personalData/properties/age'
         },
         {
           type: 'Control',
-          scope: '#/properties/personalData/properties/drivingSkill'
+          scope: '#/properties/personalData/properties/drivingSkill',
+          label: {
+            text: '%drivingskill'
+          }
         },
       ]
     },
@@ -100,25 +103,24 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          label: 'Nationality',
+          label: '%nationality',
           scope: '#/properties/nationality'
-
         },
         {
           type: 'Control',
-          label: 'Height',
+          label: '%height',
           scope: '#/properties/personalData/properties/height'
         },
         {
           type: 'Control',
-          label: 'Occupation',
+          label: '%occupation',
           scope: '#/properties/occupation',
           suggestion: ['Accountant', 'Engineer', 'Freelancer',
             'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
         },
         {
           type: 'Control',
-          label: 'Birthday',
+          label: '%birthday',
           scope: '#/properties/birthDate'
         }
       ]
@@ -129,6 +131,7 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/postalCode',
+          label: '%postalcode',
           options: {
             trim: true,
             restrict: true
@@ -147,12 +150,38 @@ export const data = {
   postalCode: '12345'
 };
 
+const translations = {
+  'en-US': {
+    name: 'Name',
+    height: 'Height',
+    age: 'Age',
+    nationality: 'Nationality',
+    occupation: 'Occupation',
+    birthday: 'Birthday',
+    postalcode: 'Postal Code',
+    drivingskill: 'Driving skill',
+    namedescription: 'Please enter your full name.'
+  },
+  'de-DE': {
+    name: 'Name',
+    height: 'Höhe',
+    age: 'Alter',
+    nationality: 'Staatsangehörigkeit',
+    occupation: 'Tätigkeit',
+    birthday: 'Geburtstag',
+    postalcode: 'Postleitzahl',
+    drivingskill: 'Fahrkönnen',
+    namedescription: 'Bitte tragen Sie Ihren vollen Namen ein.'
+  }
+};
+
 registerExamples([
   {
     name: 'person',
     label: 'Person',
     data,
     schema,
-    uiSchema: uischema
+    uiSchema: uischema,
+    translations
   }
 ]);

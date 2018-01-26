@@ -6,12 +6,13 @@ import {
   createLabelDescriptionFrom,
   isEnabled,
   isVisible,
-  Resolve
+  Resolve,
+  translate
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
 import * as React from 'react';
-import { getData, getErrorAt, getSubErrorsAt } from '../reducers';
+import { getData, getErrorAt, getSubErrorsAt, getTranslations } from '../reducers';
 import { Renderer, RendererProps } from '../renderers/Renderer';
 import { update } from '../actions';
 
@@ -105,7 +106,9 @@ export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
+  const translations = getTranslations(state);
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
+  labelDesc.text = translate(translations, labelDesc.text);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = getErrorAt(path)(state).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
@@ -113,6 +116,9 @@ export const mapStateToControlProps = (state, ownProps) => {
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const fields = state.jsonforms.fields;
+  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
+  const description =
+      resolvedSchema.description === undefined ? '' : translate(translations, resolvedSchema.description);
 
   return {
     data: Resolve.data(getData(state), path),
@@ -124,7 +130,8 @@ export const mapStateToControlProps = (state, ownProps) => {
     path,
     parentPath: ownProps.path,
     fields,
-    required
+    required,
+    description
   };
 };
 
