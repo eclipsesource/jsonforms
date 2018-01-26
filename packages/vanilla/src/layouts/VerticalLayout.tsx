@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  JsonFormsLayout,
   RankedTester,
   rankWith,
   registerStartupRenderer,
@@ -9,6 +8,7 @@ import {
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import { mapStateToVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../util';
+import { JsonFormsLayout } from './JsonFormsLayout';
 
 /**
  * Default tester for a vertical layout.

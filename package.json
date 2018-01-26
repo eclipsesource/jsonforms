@@ -9,7 +9,7 @@
 		"babel-loader": "^7.1.2",
 		"cross-env": "^5.1.1",
 		"lerna": "^2.5.1",
-		"nyc": "^11.3.0",
+		"nyc": "^11.4.1",
 		"source-map-loader": "^0.2.3",
 		"ts-loader": "^3.2.0",
 		"tslint": "^5.8.0",
