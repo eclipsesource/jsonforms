@@ -6,7 +6,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
@@ -32,7 +32,7 @@ const TimeField = (props: FieldProps) => {
  */
 export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
 
-export default registerStartupInput(
+export default registerStartupField(
   timeFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(TimeField)
 );

@@ -7,7 +7,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
+  registerStartupField,
   resolveSchema,
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
@@ -48,7 +48,7 @@ export const MaterialEnumField = (props: FieldProps) => {
  * @type {RankedTester}
  */
 export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
-export default registerStartupInput(
+export default registerStartupField(
   enumFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialEnumField)
 );

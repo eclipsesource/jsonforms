@@ -6,7 +6,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -35,7 +35,7 @@ export const MaterialNumberField = (props: FieldProps) => {
  * @type {RankedTester}
  */
 export const numberFieldTester: RankedTester = rankWith(2, isNumberControl);
-export default registerStartupInput(
+export default registerStartupField(
     numberFieldTester,
     connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialNumberField)
 );

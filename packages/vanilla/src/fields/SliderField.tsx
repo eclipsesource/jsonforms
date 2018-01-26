@@ -8,7 +8,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput,
+  registerStartupField,
   resolveSchema
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
@@ -41,7 +41,7 @@ const SliderField = (props: FieldProps) => {
 
 export const sliderFieldTester: RankedTester = rankWith(4, isRangeControl);
 
-export default registerStartupInput(
+export default registerStartupField(
   sliderFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(SliderField)
 );

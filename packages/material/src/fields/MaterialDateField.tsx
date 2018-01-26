@@ -6,7 +6,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -29,7 +29,7 @@ export const MaterialDateField = (props: FieldProps) => {
   );
 };
 export const dateFieldTester: RankedTester = rankWith(2, isDateControl);
-export default registerStartupInput(
+export default registerStartupField(
   dateFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateField)
 );
