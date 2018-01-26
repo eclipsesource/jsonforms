@@ -17,6 +17,7 @@ export const initJsonFormsStore = ({
                                      data,
                                      schema,
                                      uischema,
+                                     config,
                                      ...props
                                    }: JsonFormsInitialState): JsonFormsStore => {
   const store = createStore(
@@ -26,7 +27,8 @@ export const initJsonFormsStore = ({
         common: {
           data,
           schema,
-          uischema
+          uischema,
+          config
         },
         renderers: JsonForms.renderers,
         fields: JsonForms.fields,
@@ -41,7 +43,8 @@ export const initJsonFormsStore = ({
     type: INIT,
     schema,
     data,
-    uischema
+    uischema,
+    config
   });
 
   return store;

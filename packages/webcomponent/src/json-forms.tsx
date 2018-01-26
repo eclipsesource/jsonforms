@@ -80,7 +80,8 @@ export class JsonFormsElement extends HTMLElement {
           common: {
             data: initialState.data,
             schema,
-            uischema: initialState.uischema || generateDefaultUISchema(dataSchema)
+            uischema: initialState.uischema || generateDefaultUISchema(dataSchema),
+            config: initialState.config
           },
           renderers: JsonForms.renderers,
           fields: JsonForms.fields,

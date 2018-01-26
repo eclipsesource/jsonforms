@@ -10,6 +10,7 @@ export interface JsonFormsState {
       data: any;
       schema?: JsonSchema;
       uischema?: UISchemaElement;
+      config?: any;
     };
     renderers?: any[];
     fields?: any[];
@@ -22,6 +23,7 @@ export interface JsonFormsInitialState {
   data: any;
   schema?: JsonSchema;
   uischema?: UISchemaElement;
+  config?: any;
   // allow additional state
   [x: string]: any;
 }
