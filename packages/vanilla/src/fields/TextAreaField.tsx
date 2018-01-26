@@ -7,7 +7,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -32,7 +32,7 @@ export const TextAreaField = (props: FieldProps) => {
  */
 export const textAreaFieldTester: RankedTester = rankWith(2, isMultiLineControl);
 
-export default registerStartupInput(
+export default registerStartupField(
   textAreaFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(TextAreaField)
 );

@@ -42,7 +42,7 @@ export interface FieldProps {
 
   handleChange(string, any): (void);
 }
-export const registerStartupInput = (tester: RankedTester, field: any) => {
+export const registerStartupField = (tester: RankedTester, field: any) => {
   JsonForms.fields.push({
     tester,
     field

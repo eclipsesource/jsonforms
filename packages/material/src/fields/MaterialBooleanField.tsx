@@ -6,7 +6,7 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 
@@ -28,7 +28,7 @@ export const MaterialBooleanField = (props: FieldProps) => {
 };
 
 export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
-export default registerStartupInput(
+export default registerStartupField(
   booleanFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialBooleanField)
 );
