@@ -1,6 +1,5 @@
 export * from './core';
 export * from './util';
-export * from './legacy/schema.service';
 
 export * from './models/jsonSchema';
 export * from './store';
