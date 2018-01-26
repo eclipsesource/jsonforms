@@ -28,9 +28,13 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
         direction: 'column',
         visible
     };
+    const style: {[x: string]: any} = { marginBottom: '10px' };
+    if (!visible) {
+        style.display = 'none';
+    }
 
     return (
-        <Card style={{ marginBottom: '10px' }}>
+        <Card style={style}>
           {
             !_.isEmpty(groupLayout.label) &&
             <CardHeader title={groupLayout.label}/>
