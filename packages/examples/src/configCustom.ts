@@ -18,9 +18,7 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: {
-            $ref: '#/properties/postalCode'
-          }
+          scope: '#/properties/postalCode'
         }
       ]
     }

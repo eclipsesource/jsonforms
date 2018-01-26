@@ -6,6 +6,7 @@ import { RankedTester } from '../testers';
 export const INIT = 'INIT';
 export const UPDATE_DATA = 'UPDATE';
 export const UPDATE_UI = 'UPDATE_UI';
+export const UPDATE_CONFIG = 'UPDATE_CONFIG';
 export const VALIDATE = 'VALIDATE';
 export const SHOW = 'SHOW';
 export const HIDE = 'HIDE';
