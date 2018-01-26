@@ -1,9 +1,14 @@
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import { NOT_APPLICABLE } from '../legacy/uischema.registry';
 import { resolveSchema } from '../util/resolvers';
 
+/**
+ * Constant that indicates that a tester is not capable of handling
+ * a combination of schema/data.
+ * @type {number}
+ */
+export const NOT_APPLICABLE = -1;
 /**
  * A tester is a function that receives an UI schema and a JSON schema and returns a boolean.
  */

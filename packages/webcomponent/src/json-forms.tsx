@@ -13,7 +13,6 @@ import {
   JsonFormsInitialState,
   jsonformsReducer,
   JsonFormsStore,
-  JsonSchema,
   VALIDATE
 } from '@jsonforms/core';
 import { applyMiddleware, createStore } from 'redux';
@@ -130,7 +129,6 @@ export class JsonFormsElement extends HTMLElement {
       return;
     }
 
-    this.instantiateSchemaIfNeeded(this._store.getState().jsonforms.common.schema);
     const storeId = new Date().toISOString();
 
     ReactDOM.render(
@@ -139,16 +137,5 @@ export class JsonFormsElement extends HTMLElement {
       </Provider>,
       this
     );
-  }
-
-  private instantiateSchemaIfNeeded(schema: JsonSchema): void {
-    let parent = this.parentNode;
-    while (parent !== document.body && parent !== null) {
-      if (parent.nodeName === 'JSON-FORMS') {
-        return;
-      }
-      parent = parent.parentNode;
-    }
-    JsonForms.schema = schema;
   }
 }

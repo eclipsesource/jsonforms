@@ -14,7 +14,6 @@ import * as layout from './layout';
 import * as person from './person';
 import * as rule from './rule';
 import * as resolve from './resolve';
-import * as uischemaRegistry from './uischema-registry';
 import Rating from './Rating';
 import { RatingControl, ratingControlTester } from './RatingControl';
 
@@ -35,7 +34,6 @@ export {
   dates,
   dyanmic,
   resolve,
-  uischemaRegistry,
   Rating,
   RatingControl,
   ratingControlTester
