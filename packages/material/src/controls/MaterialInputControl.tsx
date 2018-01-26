@@ -37,9 +37,9 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
-    let style = {};
+    const style: {[x: string]: any} = {};
     if (!visible) {
-      style = {display: 'none'};
+      style.display = 'none';
     }
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
