@@ -25,33 +25,23 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/address/properties/street_address'
-      }
+      scope: '#/properties/address/properties/street_address'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/address/properties/city'
-      }
+      scope: '#/properties/address/properties/city'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/address/properties/state'
-      }
+      scope: '#/properties/address/properties/state'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/address/properties/coord/properties/latitude'
-      }
+      scope: '#/properties/address/properties/coord/properties/latitude'
     },
     {
       type: 'Control',
-      scope: {
-        $ref: '#/properties/address/properties/coord/properties/longitude'
-      }
+      scope: '#/properties/address/properties/coord/properties/longitude'
     }
   ]
 };

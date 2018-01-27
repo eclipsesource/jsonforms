@@ -7,11 +7,13 @@ import {
   DispatchRenderer,
   generateDefaultUISchema,
   generateJsonSchema,
+  INIT,
   JsonForms,
   JsonFormsInitialState,
   jsonformsReducer,
   JsonFormsStore,
-  JsonSchema
+  JsonSchema,
+  VALIDATE
 } from '@jsonforms/core';
 import { applyMiddleware, createStore } from 'redux';
 
@@ -73,33 +75,44 @@ export class JsonFormsElement extends HTMLElement {
 
     const dataSchema = initialState.schema || generateJsonSchema(initialState.data);
 
-    const setupStore = schema => createStore(
-      jsonformsReducer(),
-      {
+    const setupStore = schema => {
+      const state = {
         jsonforms: {
           common: {
             data: initialState.data,
             schema,
-            uischema: initialState.uischema || generateDefaultUISchema(dataSchema)
+            uischema: initialState.uischema || generateDefaultUISchema(schema)
           },
           renderers: JsonForms.renderers,
           fields: JsonForms.fields,
         }
-      },
-      applyMiddleware(thunk),
-    );
+      };
+      const store = createStore(
+        jsonformsReducer(),
+        state,
+        applyMiddleware(thunk),
+      );
+      store.dispatch({
+        type: INIT,
+        data: state.jsonforms.common.data,
+        schema,
+        uischema: state.jsonforms.common.uischema
+      });
 
-    if (dataSchema) {
-      JsonRefs
-        .resolveRefs(dataSchema, {includeInvalid: true})
-        .then(result => {
-          this._store = setupStore(result.resolved);
-          this.render();
-        });
-    } else {
-      this._store = setupStore(initialState.schema);
-      this.render();
-    }
+      store.dispatch({
+        type: VALIDATE,
+        data: state.jsonforms.common.data
+      });
+
+      return store;
+    };
+
+    JsonRefs
+      .resolveRefs(dataSchema, {includeInvalid: true})
+      .then(result => {
+        this._store = setupStore(result.resolved);
+        this.render();
+      });
   }
 
   get store() {
@@ -123,7 +136,7 @@ export class JsonFormsElement extends HTMLElement {
       </Provider>,
       this
     );
-  };
+  }
 
   private instantiateSchemaIfNeeded(schema: JsonSchema): void {
     let parent = this.parentNode;
@@ -134,5 +147,5 @@ export class JsonFormsElement extends HTMLElement {
       parent = parent.parentNode;
     }
     JsonForms.schema = schema;
-  };
+  }
 }
