@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as _ from 'lodash';
 import thunk from 'redux-thunk';
 import * as ReactDOM from 'react-dom';
 import * as JsonRefs from 'json-refs';
@@ -74,6 +75,7 @@ export class JsonFormsElement extends HTMLElement {
   set state(initialState: JsonFormsInitialState) {
 
     const dataSchema = initialState.schema || generateJsonSchema(initialState.data);
+    const additionalState = _.omit(initialState, ['data', 'schema', 'uischema']);
 
     const setupStore = schema => {
       const state = {
@@ -85,6 +87,7 @@ export class JsonFormsElement extends HTMLElement {
           },
           renderers: JsonForms.renderers,
           fields: JsonForms.fields,
+          ...additionalState
         }
       };
       const store = createStore(
