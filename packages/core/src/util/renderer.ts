@@ -71,9 +71,9 @@ export const isDescriptionHidden = (visible, description, isFocused) => {
   !isFocused;
 };
 
-export const isErrorVisible = (isValid: boolean, required: boolean, uischema: UISchemaElement) => {
-  if (uischema.options && uischema.options.hasOwnProperty('displayError')) {
-    return !isValid && required && uischema.options.displayError;
+export const isErrorVisible = (isValid: boolean, errors: string[], uischema: UISchemaElement) => {
+  if (uischema.options && uischema.options.hasOwnProperty('displayError') && _.includes(errors, 'is a required property')) {
+    return !isValid && uischema.options.displayError;
   }
   return !isValid;
 };

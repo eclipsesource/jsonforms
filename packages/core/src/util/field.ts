@@ -11,7 +11,7 @@ import {
   isVisible,
   Resolve
 } from '../util';
-import { mapDispatchToControlProps } from './renderer';
+import { isErrorVisible, mapDispatchToControlProps } from './renderer';
 
 export interface JsonFormsFieldConstructable {
   new(props: FieldProps): Component<FieldProps, any>;
@@ -55,7 +55,7 @@ export const mapStateToFieldProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, state);
   const errors = getErrorAt(path)(state).map(error => error.message);
-  const isValid = _.isEmpty(errors);
+  const isValid = !isErrorVisible(_.isEmpty(errors), errors, ownProps.uischema);
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');

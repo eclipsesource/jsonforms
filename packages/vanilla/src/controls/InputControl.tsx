@@ -32,7 +32,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
     } = this.props;
 
     let isValid = errors.length === 0;
-    isValid = !isErrorVisible(isValid, required, uischema);
+    isValid = !isErrorVisible(isValid, errors, uischema);
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);

@@ -34,7 +34,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       parentPath
     } = this.props;
     let isValid = errors.length === 0;
-    isValid = !isErrorVisible(isValid, required, uischema);
+    isValid = !isErrorVisible(isValid, errors, uischema);
     const trim = uischema.options && uischema.options.trim;
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);

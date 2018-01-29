@@ -60,7 +60,7 @@ export const schema = {
       maxLength: 5
     }
   },
-  required: ['occupation', 'nationality']
+  required: ['name', 'occupation', 'nationality']
 };
 
 export const uischema = {
@@ -75,17 +75,17 @@ export const uischema = {
             text: 'Name',
             show: true
           },
-          scope: '#/properties/name'
+          scope: '#/properties/name',
+          options: {
+             displayError: true
+          }
         },
         {
           type: 'Control',
           label: {
             text: 'Age'
           },
-          scope: '#/properties/personalData/properties/age',
-          options: {
-            displayError: true
-          }
+          scope: '#/properties/personalData/properties/age'
         },
         {
           type: 'Control',
@@ -150,7 +150,6 @@ export const uischema = {
 };
 
 export const data = {
-  name: 'John Doe',
   vegetarian: false,
   birthDate: '1985-06-02',
   personalData: {},
