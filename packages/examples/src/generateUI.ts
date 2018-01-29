@@ -1,7 +1,7 @@
 import { registerExamples } from './register';
-import { data as personData,  } from './person';
+import {data as personData, personCoreSchema } from './person';
 
-export const schema = undefined;
+export const schema = personCoreSchema;
 export const uischema = undefined;
 export const data = personData;
 
