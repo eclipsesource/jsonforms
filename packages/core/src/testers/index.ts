@@ -193,7 +193,12 @@ export const rankWith = (rank: number, tester: Tester) =>
 
 export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
   (uischema: UISchemaElement, schema: JsonSchema): number => {
-    return rankedTester(uischema, schema) + by;
+    const rank = rankedTester(uischema, schema);
+    if (rank === NOT_APPLICABLE) {
+      return NOT_APPLICABLE;
+    }
+
+    return rank + by;
   };
 
 /**
