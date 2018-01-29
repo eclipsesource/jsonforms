@@ -106,7 +106,7 @@ test('autofocus active', t => {
       <DateTimeField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
 
@@ -128,7 +128,7 @@ test('autofocus inactive', t => {
       <DateTimeField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -147,7 +147,7 @@ test('autofocus inactive by default', t => {
       <DateTimeField schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
@@ -222,7 +222,7 @@ test('render', t => {
     </Provider>
   );
 
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.type, 'datetime-local');
   t.is(input.value, '1980-04-04T13:37');
 });
@@ -238,7 +238,7 @@ test.cb('update via event', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   input.value = '1961-04-12T20:15';
   TestUtils.Simulate.change(input);
   setTimeout(
@@ -261,7 +261,7 @@ test.cb('update via action', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => '1961-04-12T20:15:00.000Z'));
   setTimeout(
     () => {
@@ -283,7 +283,7 @@ test('update with null value', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => null));
   t.is(input.value, '');
 });
@@ -299,7 +299,7 @@ test('update with undefined value', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
   t.is(input.value, '');
 });
@@ -315,7 +315,7 @@ test('update with wrong ref', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 'Bar'));
   t.is(input.value, '1980-04-04T13:37');
 });
@@ -331,7 +331,7 @@ test('update with null ref', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => '1961-04-12T20:15:00.000Z'));
   t.is(input.value, '1980-04-04T13:37');
 });
@@ -347,7 +347,7 @@ test('update with undefined ref', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(undefined, () => '1961-04-12T20:15:00.000Z'));
   t.is(input.value, '1980-04-04T13:37');
 });
@@ -363,7 +363,7 @@ test('disable', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.true(input.disabled);
 });
 
@@ -378,6 +378,6 @@ test('enabled by default', t => {
       <DateTimeField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
-  const input = TestUtils.findRenderedDOMElementWithTag(tree, 'input') as HTMLInputElement;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });
