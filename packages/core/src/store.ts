@@ -1,6 +1,7 @@
 import { Store } from 'redux';
 import { JsonSchema } from './models/jsonSchema';
 import { UISchemaElement } from './models/uischema';
+import { ValidationState } from './reducers/validation';
 
 export interface JsonFormsStore extends Store<any> {
 }
@@ -11,6 +12,7 @@ export interface JsonFormsState {
       schema?: JsonSchema;
       uischema?: UISchemaElement;
     };
+    validation?: ValidationState,
     renderers?: any[];
     fields?: any[];
     // allow additional state for JSONForms
