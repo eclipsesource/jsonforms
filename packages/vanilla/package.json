@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "2.0.0-rc.0",
+  "version": "2.0.0-rc.1",
   "description": "Default Renderer Set for JSON Forms",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -17,14 +17,14 @@
     "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-rc.0",
-    "@jsonforms/webcomponent": "^2.0.0-rc.0",
+    "@jsonforms/core": "^2.0.0-rc.1",
+    "@jsonforms/webcomponent": "^2.0.0-rc.1",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "@jsonforms/test": "^2.0.0-rc.0",
+    "@jsonforms/test": "^2.0.0-rc.1",
     "ava": "^0.24.0",
     "copy-webpack-plugin": "^4.2.3",
     "document-register-element": "^1.7.0",
