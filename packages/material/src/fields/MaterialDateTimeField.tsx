@@ -11,23 +11,13 @@ import {
 import { connect } from 'react-redux';
 import { DateTimePicker } from 'material-ui-pickers';
 import * as moment from 'moment'
-import 'moment/locale/de';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
 import DateRangeIcon from 'material-ui-icons/DateRange';
 import AccessTimeIcon from 'material-ui-icons/AccessTime';
- 
-moment.locale('de');
 
 export const MaterialDateTimeField = (props: FieldProps) => {
   const { data, id, enabled, uischema, path, handleChange } = props;
-
-  // TODO: move this to internationalization file
-  const german = {
-      format: 'DD.MM.YYYY HH:mm',
-      cancelLabel: 'ABBRECHEN',
-      clearLabel: 'LÖSCHEN'
-  };
 
   let inputProps = {};
 
@@ -38,10 +28,7 @@ export const MaterialDateTimeField = (props: FieldProps) => {
             handleChange(path, datetime ? moment(datetime).format() : '')
           }
           id={id}
-          format={german.format}
-          ampm={false}
-          cancelLabel={german.cancelLabel}
-          clearLabel={german.clearLabel}
+          format='MM/DD/YYYY h:mm a'
           clearable={true}
           disabled={!enabled}
           autoFocus={uischema.options && uischema.options.focus}

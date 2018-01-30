@@ -214,7 +214,7 @@ test('render', t => {
 
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.type, 'text');
-  t.is(input.value, '04.04.1980 13:37');
+  t.is(input.value, '04/04/1980 1:37 pm');
 });
 
 test.cb('update via event', t => {
@@ -229,7 +229,7 @@ test.cb('update via event', t => {
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '12.04.1961 20:15';
+  input.value = '04/12/1961 8:15 pm';
   TestUtils.Simulate.change(input);
   setTimeout(
     () => {
@@ -255,7 +255,7 @@ test.cb('update via action', t => {
   store.dispatch(update('foo', () => moment('1961-04-12 20:15').format()));
   setTimeout(
     () => {
-      t.is(input.value, '12.04.1961 20:15');
+      t.is(input.value, '04/12/1961 8:15 pm');
       t.end();
     },
     100
@@ -307,7 +307,7 @@ test('update with wrong ref', t => {
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 'Bar'));
-  t.is(input.value, '04.04.1980 13:37');
+  t.is(input.value, '04/04/1980 1:37 pm');
 });
 
 test('update with null ref', t => {
@@ -323,7 +323,7 @@ test('update with null ref', t => {
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => '12.04.1961 20:15'));
-  t.is(input.value, '04.04.1980 13:37');
+  t.is(input.value, '04/04/1980 1:37 pm');
 });
 
 test('update with undefined ref', t => {
@@ -339,7 +339,7 @@ test('update with undefined ref', t => {
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(undefined, () => '12.04.1961 20:15'));
-  t.is(input.value, '04.04.1980 13:37');
+  t.is(input.value, '04/04/1980 1:37 pm');
 });
 
 test('disable', t => {
