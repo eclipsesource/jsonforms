@@ -7,13 +7,20 @@ import {
   createLabelDescriptionFrom,
   isEnabled,
   isVisible,
-  Resolve,
+  Resolve
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
-import { getData, getErrorAt, getPropsTransformer, getSubErrorsAt } from '../reducers';
-import { Renderer, RendererProps } from '../renderers/Renderer';
+import {
+  getData,
+  getErrorAt,
+  getPropsTransformer,
+  getSubErrorsAt
+} from '../reducers';
 import { update } from '../actions';
+import { DispatchPropsOfControl, Renderer, StatePropsOfControl } from '../renderers';
+import { UISchemaElement } from '../models/uischema';
+import { ErrorObject } from 'ajv';
 
 /**
  * A renderer config that is used during renderer registration.
@@ -26,12 +33,42 @@ export interface JsonFormsRendererConfig {
     tester: RankedTester;
 }
 
-export interface JsonFormsRendererConstructable {
-  // TODO: any state?
-  new(props: RendererProps): Renderer<RendererProps, any>;
+/**
+ * State props of a layout;
+ */
+export interface StatePropsOfLayout {
+  /**
+   * All available renderers.
+   */
+  renderers: Renderer[];
+  /**
+   * Whether the layout is visible.
+   */
+  visible: boolean;
+
+  /**
+   * Instacne path that is passed to the child elements.
+   */
+  path: string;
+
+  /**
+   * The corresponding UI schema.
+   */
+  uischema: UISchemaElement;
+
+  /**
+   * The JSON schema that is passed to the child elements.
+   */
+  schema: JsonSchema;
 }
 
-export const mapStateToLayoutProps = (state, ownProps) => {
+/**
+ * Map state to layout props.
+ * @param state JSONForms state tree
+ * @param ownProps any own props
+ * @returns {StatePropsOfLayout}
+ */
+export const mapStateToLayoutProps = (state, ownProps): StatePropsOfLayout => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
@@ -51,6 +88,7 @@ export const registerStartupRenderer = (tester: RankedTester, renderer: any) => 
 
   return renderer;
 };
+
 const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
      const pathSegments = schemaPath.split('/');
      const lastSegment = pathSegments[pathSegments.length - 1];
@@ -63,17 +101,42 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
          && nextHigherSchema.required.indexOf(lastSegment) !== -1;
  };
 
+/**
+ * Adds an asterisk to the given label string based
+ * on the required parameter.
+ *
+ * @param {string} label the label string
+ * @param {boolean} required whether the label belongs to a control which is required
+ * @returns {string} the label string
+ */
 export const computeLabel = (label: string, required: boolean): string => {
    return required ? label + '*' : label;
  };
 
-export const isDescriptionHidden = (visible, description, isFocused) => {
+/**
+ * Whether an element's description should be hidden.
+ *
+ * @param visible whether an element is visible
+ * @param description the element's description
+ * @param isFocused whether the element is focused
+ *
+ * @returns {boolean} true, if the description is to be hidden, false otherwise
+ */
+export const isDescriptionHidden =
+  (visible: boolean, description: string, isFocused: boolean): boolean => {
+
   return  description === undefined ||
   (description !== undefined && !visible) ||
   !isFocused;
 };
 
-export const mapStateToControlProps = (state, ownProps) => {
+/**
+ * Map state to control props.
+ * @param state the store's state
+ * @param ownProps any own props
+ * @returns {StatePropsOfControl} state props for a control
+ */
+export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
@@ -84,7 +147,6 @@ export const mapStateToControlProps = (state, ownProps) => {
   const id = controlElement.scope || '';
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
-  const fields = state.jsonforms.fields;
 
   return {
     data: Resolve.data(getData(state), path),
@@ -95,19 +157,44 @@ export const mapStateToControlProps = (state, ownProps) => {
     id,
     path,
     parentPath: ownProps.path,
-    fields,
     required,
     uischema: ownProps.uischema,
     schema: ownProps.schema
   };
 };
 
-export const mapDispatchToControlProps = dispatch => ({
+/**
+ *
+ * Map dispatch to control props.
+ *
+ * @param dispatch the store's dispatch method
+ * @returns {DispatchPropsOfControl} dispatch props for a control
+ */
+export const mapDispatchToControlProps = (dispatch): DispatchPropsOfControl => ({
   handleChange(path, value) {
     dispatch(update(path, () => value));
   }
 });
 
+/**
+ * State-based props of a table control.
+ */
+export interface StatePropsOfTable extends StatePropsOfControl {
+  // not sure whether we want to expose ajv API
+  childErrors: ErrorObject[];
+  resolvedSchema: JsonSchema;
+}
+
+/**
+ * JSONForms specific connect function. This is a wrapper
+ * around redux's connect function that executes any registered
+ * prop transformers on the result of the given mapStateToProps
+ * function before passing them to the actual connect function.
+ *
+ * @param {(state, ownProps) => any} mapStateToProps
+ * @param {(dispatch, ownProps) => any} mapDispatchToProps
+ * @returns {(Component) => any} function expecting a Renderer Component to be connected
+ */
 export const connectToJsonForms = (
   mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
   mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
@@ -124,7 +211,14 @@ export const connectToJsonForms = (
   )(Component);
 };
 
-export const mapStateToTableControlProps = (state, ownProps) => {
+/**
+ * Map state to table props
+ *
+ * @param state the store's state
+ * @param ownProps any element's own props
+ * @returns {StatePropsOfTable} state props for a table control
+ */
+export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
 
   const childErrors = getSubErrorsAt(path)(state);
@@ -138,7 +232,29 @@ export const mapStateToTableControlProps = (state, ownProps) => {
     resolvedSchema
   };
 };
-export const mapDispatchToTableControlProps = dispatch => ({
+
+/**
+ * Dispatch props of a table control
+ */
+export interface DispatchPropsOfTable {
+  addItem(path: string): void;
+  removeItems(path: string, toDelete: any[]);
+}
+
+/**
+ * Props of a table.
+ */
+export interface TableControlProps extends StatePropsOfTable, DispatchPropsOfTable {
+
+}
+
+/**
+ * Map dispatch to table control props
+ *
+ * @param dispatch the store's dispatch method
+ * @returns {DispatchPropsOfTable} dispatch props for a table control
+ */
+export const mapDispatchToTableControlProps = (dispatch): DispatchPropsOfTable => ({
   addItem: (path: string) => () => {
     dispatch(
       update(

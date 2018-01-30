@@ -15,9 +15,21 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
+/**
+ * The validation substate.
+ */
 export interface ValidationState {
+  /**
+   * All errors.
+   */
   errors: ErrorObject[];
+  /**
+   * The validator function in use.
+   */
   validator: ValidateFunction;
+  /**
+   * The schema to validate against.
+   */
   schema: JsonSchema;
 }
 

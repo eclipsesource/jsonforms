@@ -114,6 +114,9 @@ export const findAllRefs =
     return result;
   };
 
+/**
+ * Map for storing refs and the respective schemas they are pointing to.
+ */
 export interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }

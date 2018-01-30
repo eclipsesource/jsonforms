@@ -8,8 +8,10 @@ import {
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { addVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../util';
+import { addVanillaLayoutProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
+import { VanillaLayoutProps } from '../index';
+import { renderChildren } from './util';
 
 /**
  * Default tester for a vertical layout.
@@ -25,7 +27,7 @@ export const VerticalLayoutRenderer  = (
     visible,
     getStyle,
     getStyleAsClassName
-  }: VanillaRendererProps) => {
+  }: VanillaLayoutProps) => {
 
   const verticalLayout = uischema as VerticalLayout;
   const elementsSize = verticalLayout.elements ? verticalLayout.elements.length : 0;
@@ -44,10 +46,10 @@ export const VerticalLayoutRenderer  = (
   );
 };
 
-export default registerStartupRenderer(
-  verticalLayoutTester,
-  connectToJsonForms(
-    addVanillaLayoutProps(mapStateToLayoutProps),
-    null
-  )(VerticalLayoutRenderer)
-);
+const ConnectedVerticalLayoutRenderer = connectToJsonForms(
+  addVanillaLayoutProps(mapStateToLayoutProps),
+  null
+)(VerticalLayoutRenderer);
+
+registerStartupRenderer(verticalLayoutTester, ConnectedVerticalLayoutRenderer);
+export default ConnectedVerticalLayoutRenderer;

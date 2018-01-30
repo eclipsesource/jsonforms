@@ -9,7 +9,9 @@ import {
   registerStartupRenderer,
   uiTypeIs,
 } from '@jsonforms/core';
-import { addVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../util';
+import { addVanillaLayoutProps } from '../util';
+import { VanillaLayoutProps } from '../index';
+import { renderChildren } from './util';
 
 /**
  * Default tester for a group layout.
@@ -26,7 +28,7 @@ export const GroupLayoutRenderer = (
     visible,
     getStyle,
     getStyleAsClassName
-  }: VanillaRendererProps) => {
+  }: VanillaLayoutProps) => {
   const group = uischema as GroupLayout;
   const elementsSize = group.elements ? group.elements.length : 0;
   const classNames = getStyleAsClassName('group-layout');
@@ -50,10 +52,11 @@ export const GroupLayoutRenderer = (
   );
 };
 
-export default registerStartupRenderer(
-  groupTester,
-  connectToJsonForms(
-    addVanillaLayoutProps(mapStateToLayoutProps),
-    null
-  )(GroupLayoutRenderer)
-);
+const ConnectedGroupLayout =  connectToJsonForms(
+  addVanillaLayoutProps(mapStateToLayoutProps),
+  null
+)(GroupLayoutRenderer);
+
+registerStartupRenderer(groupTester, ConnectedGroupLayout);
+
+export default ConnectedGroupLayout;

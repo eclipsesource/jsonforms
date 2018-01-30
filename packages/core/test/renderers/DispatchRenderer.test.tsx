@@ -10,15 +10,40 @@ import * as _ from 'lodash';
 import { applyMiddleware, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { JsonSchema } from '../../src';
-import { Renderer, RendererProps } from '../../src/renderers';
+import { JsonSchema, UISchemaElement } from '../../src';
+import { RendererProps, StatelessRenderer } from '../../src/renderers';
 import { DispatchRenderer } from '../../src/renderers';
 import '../../src/renderers';
 import { registerRenderer, unregisterRenderer } from '../../src/actions';
 import * as TestUtils from 'react-dom/test-utils';
 
-import { JsonForms, JsonFormsInitialState, JsonFormsStore } from '../../src';
+import { JsonForms, JsonFormsStore } from '../../src';
 import { jsonformsReducer } from '../../src/reducers';
+
+/**
+ * Describes the initial state of the JSON Form's store.
+ */
+export interface JsonFormsInitialState {
+  /**
+   * Data instance to be rendered.
+   */
+  data: any;
+
+  /**
+   * JSON Schema describing the data to be rendered.
+   */
+  schema?: JsonSchema;
+
+  /**
+   * UI Schema describing the UI to be rendered.
+   */
+  uischema?: UISchemaElement;
+
+  /**
+   * Any additional state.
+   */
+  [x: string]: any;
+}
 
 export const initJsonFormsStore = ({
                                      data,
@@ -44,23 +69,9 @@ export const initJsonFormsStore = ({
   );
 };
 
-class CustomRenderer1 extends Renderer<RendererProps, any> {
-  render() {
-    return (<h1>test</h1>);
-  }
-}
-
-class CustomRenderer2 extends Renderer<RendererProps, any> {
-  render() {
-    return (<h2>test</h2>);
-  }
-}
-
-class CustomRenderer3 extends Renderer<RendererProps, any> {
-  render() {
-    return (<h3>test</h3>);
-  }
-}
+const CustomRenderer1: StatelessRenderer<RendererProps> = () => (<h1>test</h1>);
+const CustomRenderer2: StatelessRenderer<RendererProps> = () => (<h2>test</h2>);
+const CustomRenderer3: StatelessRenderer<RendererProps> = () => (<h3>test</h3>);
 
 test.beforeEach(t => {
   t.context.data = { foo: 'John Doe' };

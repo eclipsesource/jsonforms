@@ -3,30 +3,51 @@ import { JsonSchema } from './models/jsonSchema';
 import { UISchemaElement } from './models/uischema';
 import { ValidationState } from './reducers/validation';
 
-export interface JsonFormsStore extends Store<any> {
+/**
+ * JSONForms store.
+ */
+export interface JsonFormsStore extends Store<JsonFormsState> {
 }
 
+/**
+ * The state shape of JSONForms.
+ */
 export interface JsonFormsState {
+  /**
+   * Represents JSONForm's substate.
+   */
   jsonforms: {
-    common: {
+    /**
+     * Substate for storing common data.
+     */
+    common?: {
+      /**
+       * The actual data to be rendered.
+       */
       data: any;
+      /**
+       * JSON schema describing the data.
+       */
       schema?: JsonSchema;
+      /**
+       * The UI schema describing the form to be rendered.
+       */
       uischema?: UISchemaElement;
     };
+    /**
+     * Contains the current validation state.
+     */
     validation?: ValidationState,
+    /**
+     * Contains all available renderers.
+     */
     renderers?: any[];
+    /**
+     * Contains all available field renderers.
+     */
     fields?: any[];
     // allow additional state for JSONForms
     [x: string]: any;
   };
 }
 
-export interface JsonFormsInitialState {
-  data: any;
-  schema?: JsonSchema;
-  uischema?: UISchemaElement;
-  translations?: any;
-  locale?: String;
-  // allow additional state
-  [x: string]: any;
-}

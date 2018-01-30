@@ -1,8 +1,20 @@
 import * as React from 'react';
-import {Component} from "react";
+import { Component } from 'react';
 
-export class UnknownRenderer extends Component<any, any> {
+/**
+ * Props of an {@link UnknownRenderer}
+ */
+export interface UnknownRendererProps {
+  /**
+   * The type for which no renderer has been found.
+   */
+  type: 'renderer' | 'field';
+}
 
+/**
+ * A renderer that will be used in case no other renderer is applicable.
+ */
+export class UnknownRenderer extends Component<UnknownRendererProps, any> {
   render() {
     return (
       <div style={{color: 'red'}}>

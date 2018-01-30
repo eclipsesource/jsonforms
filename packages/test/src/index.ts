@@ -6,12 +6,38 @@ global.requestAnimationFrame = cb => setTimeout(cb, 0);
 import {
   INIT,
   JsonForms,
-  JsonFormsInitialState,
-  jsonformsReducer
+  jsonformsReducer,
+  JsonSchema,
+  UISchemaElement
 } from '@jsonforms/core';
 import { applyMiddleware, createStore, Store } from 'redux';
 import { JsonFormsState } from '@jsonforms/core';
 import thunk from 'redux-thunk';
+
+/**
+ * Describes the initial state of the JSON Form's store.
+ */
+export interface JsonFormsInitialState {
+  /**
+   * Data instance to be rendered.
+   */
+  data: any;
+
+  /**
+   * JSON Schema describing the data to be rendered.
+   */
+  schema?: JsonSchema;
+
+  /**
+   * UI Schema describing the UI to be rendered.
+   */
+  uischema?: UISchemaElement;
+
+  /**
+   * Any additional state.
+   */
+  [x: string]: any;
+}
 
 export const initJsonFormsStore = ({
                                      data,

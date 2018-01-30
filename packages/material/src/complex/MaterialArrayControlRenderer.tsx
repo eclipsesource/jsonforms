@@ -1,12 +1,10 @@
 import * as React from 'react';
 
-import { ErrorObject } from 'ajv';
 import {
-  ControlProps,
-  JsonSchema,
   mapDispatchToTableControlProps,
   mapStateToTableControlProps,
-  Renderer,
+  RendererComponent,
+  TableControlProps
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import { TableToolbar } from './TableToolbar';
@@ -20,7 +18,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import Grid from 'material-ui/Grid';
 
-export class MaterialArrayControlRenderer extends Renderer<TableProps, TableState> {
+export class MaterialArrayControlRenderer extends RendererComponent<TableControlProps, TableState> {
   constructor(props) {
     super(props);
 
@@ -126,12 +124,6 @@ export class MaterialArrayControlRenderer extends Renderer<TableProps, TableStat
   private isSelected = child => this.state.selected.indexOf(child) !== -1;
 }
 
-export interface TableProps extends ControlProps {
-  childErrors: ErrorObject[];
-  resolvedSchema: JsonSchema;
-  addItem(path: string): () => void;
-  removeItems(path: string, toDelete: any[]): () => void;
-}
 export interface TableState {
   selected: any[];
   openConfirmDelete: boolean;

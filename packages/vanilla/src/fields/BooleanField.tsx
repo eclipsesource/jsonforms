@@ -9,9 +9,9 @@ import {
   registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { SyntheticEvent } from 'react';
+import { StatelessComponent, SyntheticEvent } from 'react';
 
-const BooleanFd = (props: FieldProps) => {
+const BooleanFd: StatelessComponent<FieldProps> = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (

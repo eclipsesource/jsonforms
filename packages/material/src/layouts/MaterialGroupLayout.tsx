@@ -46,7 +46,13 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     );
 };
 
-export default registerStartupRenderer(
-    withIncreasedRank(1, groupTester),
-    connect(mapStateToLayoutProps)(MaterializedGroupLayoutRenderer)
+const ConnectedMaterializedGroupLayoutRenderer = connect(
+  mapStateToLayoutProps
+)(MaterializedGroupLayoutRenderer);
+
+registerStartupRenderer(
+  withIncreasedRank(1, groupTester),
+  ConnectedMaterializedGroupLayoutRenderer
 );
+
+export default ConnectedMaterializedGroupLayoutRenderer;

@@ -10,7 +10,8 @@ import {
   update
 } from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
-import { VanillaControlProps } from '../../util';
+import { VanillaControlProps } from '../../index';
+import { addVanillaControlProps } from '../../util';
 
 export interface ArrayControlRendererProps extends VanillaControlProps {
   addItem(path: string);
@@ -76,4 +77,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connectToJsonForms(mapStateToControlProps, mapDispatchToProps)(ArrayControlRenderer);
+const ConnectedArrayControlRenderer = connectToJsonForms(
+  addVanillaControlProps(mapStateToControlProps),
+  mapDispatchToProps
+)(ArrayControlRenderer);
+
+export default ConnectedArrayControlRenderer;

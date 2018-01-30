@@ -3,10 +3,16 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import { RankedTester } from '../testers';
-import { RendererProps } from './Renderer';
 import { getSchema, getUiSchema } from '../reducers';
+import { StatePropsOfScopedRenderer } from './common';
 
-export interface DispatchRendererProps extends RendererProps {
+/**
+ * Props of the {@link DispatchRenderer}.
+ */
+export interface DispatchRendererProps extends StatePropsOfScopedRenderer {
+  /**
+   * All renderers that are considered by the dispatch renderer.
+   */
   renderers?: { tester: RankedTester, renderer: any }[];
 }
 

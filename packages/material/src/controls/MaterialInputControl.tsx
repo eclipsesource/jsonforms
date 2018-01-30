@@ -21,7 +21,6 @@ import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
-
   render() {
     const {
       id,
@@ -63,7 +62,6 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
   }
 }
 export const inputControlTester: RankedTester = rankWith(1, isControl);
-export default registerStartupRenderer(
-  inputControlTester,
-  connectToJsonForms(mapStateToControlProps)(MaterialInputControl)
-);
+const ConnectedMaterialInputControl = connectToJsonForms(mapStateToControlProps)(MaterialInputControl)
+registerStartupRenderer(inputControlTester, ConnectedMaterialInputControl);
+export default ConnectedMaterialInputControl;
