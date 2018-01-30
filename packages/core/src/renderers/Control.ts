@@ -1,47 +1,10 @@
-import { Renderer, RendererProps } from './Renderer';
+import { RendererComponent } from './Renderer';
+import { StatePropsOfScopedRenderer } from './common';
 
 /**
- * Props of a renderer.
+ * State-based props of a Control
  */
-export interface ControlProps extends RendererProps {
-
-  /**
-   * The data to be rendered.
-   */
-  data: any;
-
-  /**
-   * The absolute path to the value being rendered.
-   * A path is a sequence of property names separated by dots,
-   * e.g. for accessing the value of b in the object
-   * { foo: { a: { b: 42 } } }, one would use foo.a.b.
-   */
-  path: string;
-
-  /**
-   * Path of the parent renderer, if any.
-   */
-  parentPath?: string;
-
-  /**
-   * An unique ID that can be used to identify the rendered element.
-   */
-  id: string;
-
-  /**
-   * Determines whether the rendered element should be visible.
-   */
-  visible: boolean;
-
-  /**
-   * Determines whether the rendered element should be enabeld.
-   */
-  enabled: boolean;
-
-  /**
-   * The label for the rendered element.
-   */
-  label: string;
+export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
 
   /**
    * Any validation errors that are caused by the data to be rendered.
@@ -49,25 +12,60 @@ export interface ControlProps extends RendererProps {
   errors: any[];
 
   /**
+   * The label for the rendered element.
+   */
+  label: string;
+
+  /**
    * Whether the rendered data is required.
    */
   required: boolean;
+}
+
+/**
+ * Dispatch-based props of a Control.
+ */
+export interface DispatchPropsOfControl {
 
   /**
    * Update handler that emits a data change
    *
    * @param {string} path the path to the data to be updated
-   * @param value the new value
+   * @param {any} value the new value that should be written to the given path
    */
   handleChange(path: string, value: any);
 }
 
+/**
+ * Props of a Control.
+ */
+export interface ControlProps extends StatePropsOfControl, DispatchPropsOfControl {
+
+}
+
+/**
+ * The state of a control.
+ */
 export interface ControlState {
+  /**
+   * The current value.
+   */
   value: any;
+
+  /**
+   * Whether the control is focused.
+   */
   isFocused: boolean;
 }
 
-export class Control<P extends ControlProps, S extends ControlState> extends Renderer<P, S> {
+/**
+ * A controlled component convenience wrapper that additionally manages a focused state.
+ *
+ * @template P control specific properties
+ * @template S the state managed by the control
+ */
+export class Control<P extends ControlProps, S extends ControlState>
+  extends RendererComponent<P, S> {
 
   constructor(props: P) {
     super(props);
@@ -85,15 +83,26 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
     }
   }
 
+  /**
+   * Propagates a value change.
+   *
+   * @param value the updated value
+   */
   handleChange(value) {
     this.setState({ value });
     this.updateData(value);
   }
 
+  /**
+   * Set the focused state to true.
+   */
   onFocus() {
     this.setState({ isFocused:  true });
   }
 
+  /**
+   * Set the focused state to false.
+   */
   onBlur() {
     this.setState({ isFocused:  false });
   }

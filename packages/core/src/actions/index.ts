@@ -1,7 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { getData } from '../reducers/index';
-import { JsonFormsRendererConstructable } from '../util/renderer';
 import { RankedTester } from '../testers';
+import { Renderer } from '../renderers';
 
 const NAMESPACE = 'jsonforms';
 
@@ -41,7 +41,7 @@ export const validate = () => (dispatch, getState) => {
 
 export const registerRenderer = (
   tester: RankedTester,
-  renderer: JsonFormsRendererConstructable
+  renderer: Renderer
 ) => ({
   type: ADD_RENDERER,
   tester,
@@ -50,7 +50,7 @@ export const registerRenderer = (
 
 export const unregisterRenderer = (
   tester: RankedTester,
-  renderer: JsonFormsRendererConstructable
+  renderer: Renderer
 ) => ({
   type: REMOVE_RENDERER,
   tester,

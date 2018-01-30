@@ -64,7 +64,12 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
   }
 }
 export const nativeControlTester: RankedTester = rankWith(2, or(isDateControl, isTimeControl));
-export default registerStartupRenderer(
-  nativeControlTester,
-  connectToJsonForms(mapStateToControlProps, mapDispatchToControlProps)(MaterialNativeControl)
-);
+
+const ConnectedMaterialNativeControl = connectToJsonForms(
+  mapStateToControlProps,
+  mapDispatchToControlProps
+)(MaterialNativeControl);
+
+registerStartupRenderer(nativeControlTester, ConnectedMaterialNativeControl);
+
+export default ConnectedMaterialNativeControl;

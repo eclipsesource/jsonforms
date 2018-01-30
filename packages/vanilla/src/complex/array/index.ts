@@ -11,7 +11,9 @@ export {
   ArrayControlRenderer
 };
 
-export default registerStartupRenderer(
+registerStartupRenderer(
   rankWith(2, isArrayObjectControl),
   ArrayControlRenderer
 );
+
+export default ArrayControlRenderer;

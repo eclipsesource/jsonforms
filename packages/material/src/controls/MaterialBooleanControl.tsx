@@ -28,7 +28,10 @@ export const MaterialBooleanControl =
     );
   };
 
-export default registerStartupRenderer(
-  rankWith(2, isBooleanControl),
-  connectToJsonForms(mapStateToControlProps)(MaterialBooleanControl)
-);
+const ConnectedMaterialBooleanControl = connectToJsonForms(
+  mapStateToControlProps
+)(MaterialBooleanControl);
+
+registerStartupRenderer(rankWith(2, isBooleanControl), ConnectedMaterialBooleanControl);
+
+export default ConnectedMaterialBooleanControl;

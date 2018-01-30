@@ -31,7 +31,8 @@ export const MaterialHorizontalLayoutRenderer = (
   return <MaterialLayoutRenderer {...childProps}/>;
 };
 
-export default registerStartupRenderer(
-  horizontalLayoutTester,
-  connect(mapStateToLayoutProps)(MaterialHorizontalLayoutRenderer)
-);
+const ConnectedMaterialHorizontalLayoutRendered = connect(
+  mapStateToLayoutProps
+)(MaterialHorizontalLayoutRenderer);
+registerStartupRenderer(horizontalLayoutTester, ConnectedMaterialHorizontalLayoutRendered);
+export default ConnectedMaterialHorizontalLayoutRendered;

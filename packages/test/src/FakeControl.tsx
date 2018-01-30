@@ -27,7 +27,8 @@ const FakeControl = (props: ControlProps) => {
   );
 };
 
-export default registerStartupRenderer(
-    fakeControlTester,
-    connectToJsonForms(mapStateToControlProps, null)(FakeControl)
-);
+const ConnectedFakeControl = connectToJsonForms(mapStateToControlProps, null)(FakeControl);
+
+registerStartupRenderer(fakeControlTester, ConnectedFakeControl);
+
+export default ConnectedFakeControl;

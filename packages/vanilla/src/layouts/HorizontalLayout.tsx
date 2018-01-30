@@ -8,8 +8,10 @@ import {
   registerStartupRenderer,
   uiTypeIs,
 } from '@jsonforms/core';
-import { addVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../util';
+import { addVanillaLayoutProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
+import { VanillaLayoutProps } from '../index';
+import { renderChildren } from './util';
 
 /**
  * Default tester for a horizontal layout.
@@ -18,7 +20,7 @@ import { JsonFormsLayout } from './JsonFormsLayout';
 export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
 
 const HorizontalLayoutRenderer = (
-  props: VanillaRendererProps) => {
+  props: VanillaLayoutProps) => {
 
   const {
     schema,
@@ -46,10 +48,10 @@ const HorizontalLayoutRenderer = (
   );
 };
 
-export default registerStartupRenderer(
-  horizontalLayoutTester,
-  connectToJsonForms(
-    addVanillaLayoutProps(mapStateToLayoutProps),
-    null
-  )(HorizontalLayoutRenderer)
-);
+const ConnectedHorizontalLayout = connectToJsonForms(
+  addVanillaLayoutProps(mapStateToLayoutProps),
+  null
+)(HorizontalLayoutRenderer);
+
+registerStartupRenderer(horizontalLayoutTester, ConnectedHorizontalLayout);
+export default ConnectedHorizontalLayout;

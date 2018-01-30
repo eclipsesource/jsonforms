@@ -5,7 +5,9 @@ import {
 } from '@jsonforms/core';
 import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
 
-export default registerStartupRenderer(
+registerStartupRenderer(
     rankWith(3, isArrayObjectControl),
     MaterialArrayControlRenderer
 );
+
+export default MaterialArrayControlRenderer;

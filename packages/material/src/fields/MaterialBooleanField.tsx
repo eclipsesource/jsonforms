@@ -28,7 +28,12 @@ export const MaterialBooleanField = (props: FieldProps) => {
 };
 
 export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
-export default registerStartupField(
-  booleanFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialBooleanField)
-);
+
+const ConnectedMaterialBooleanField = connect(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(MaterialBooleanField);
+
+registerStartupField(booleanFieldTester, ConnectedMaterialBooleanField);
+
+export default ConnectedMaterialBooleanField;

@@ -1,6 +1,34 @@
 import { JsonSchema, Scopable } from '../';
+import { resolveData, resolveSchema } from './resolvers';
+import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
+import { isEnabled, isVisible } from './runtime';
+import { DispatchPropsOfControl } from '../renderers';
+import { StatePropsOfScopedRenderer } from '../renderers/common';
+
 export { createLabelDescriptionFrom } from './label';
 
+/**
+ * State props of a field.
+ */
+export interface StatePropsOfField extends StatePropsOfScopedRenderer {
+  className?: string;
+  isValid: boolean;
+}
+
+/**
+ * Props of a field.
+ */
+export interface FieldProps extends StatePropsOfField, DispatchPropsOfControl {
+
+}
+
+/**
+ * Escape the given string such that it can be used as a class name,
+ * i.e. hashes and slashes will be replaced.
+ *
+ * @param {string} s the string that should be converted to a valid class name
+ * @returns {string} the escaped string
+ */
 export const convertToValidClassName = (s: string): string =>
   s.replace('#', 'root')
    .replace(new RegExp('/', 'g'), '_');
@@ -13,9 +41,9 @@ export const formatErrorMessage = errors => {
   return errors.join('\n');
 };
 
-// Resolve --
-// do not export findAllRefs and ReferenceSchemaMap
-import { resolveData, resolveSchema } from './resolvers';
+/**
+ * Convenience wrapper around resolveData and resolveSchema.
+ */
 const Resolve: {
   schema(schema: JsonSchema, schemaPath: string): JsonSchema;
   data(data, path): any
@@ -27,11 +55,6 @@ export { resolveData, resolveSchema } from './resolvers';
 export { Resolve };
 
 // Paths --
-import {
-  compose as composePaths,
-  composeWithUi, toDataPath,
-  toDataPathSegments
-} from './path';
 const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope).join('.');
 
 const Paths = {
@@ -41,7 +64,6 @@ const Paths = {
 export { composePaths, composeWithUi, Paths, toDataPath };
 
 // Runtime --
-import { isEnabled, isVisible } from './runtime';
 const Runtime = {
   isEnabled,
   isVisible,

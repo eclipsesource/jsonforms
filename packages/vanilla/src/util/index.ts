@@ -1,15 +1,10 @@
-import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ControlElement,
-  ControlProps,
   convertToValidClassName,
-  DispatchRenderer,
-  JsonSchema,
-  Layout,
-  RendererProps
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from '../reducers';
+import { VanillaControlStateProps, VanillaLayoutProps } from '../index';
 
 /**
  * A style associates a name with a list of CSS class names.
@@ -19,32 +14,17 @@ export interface StyleDef {
   classNames: string[] | ((args: any[]) => string[]);
 }
 
-export const renderChildren = (
-  layout: Layout,
-  schema: JsonSchema,
-  classNames: string,
-  path: string
-) => {
+/**
+ * Add vanilla props to the return value of calling the given
+ * mapStateToProps function.
+ *
+ * @param mapStateToProps existing mapStateToProps function
+ * @returns {VanillaControlStateProps} vanilla-specific control props
+ */
+export const addVanillaControlProps = (mapStateToProps: (s, p) => any) =>
+  (state, ownProps): VanillaControlStateProps => {
 
-  if (_.isEmpty(layout.elements)) {
-    return [];
-  }
-
-  return layout.elements.map((child, index) => {
-    return (
-      <div className={classNames} key={`${path}-${index}`}>
-        <DispatchRenderer
-          uischema={child}
-          schema={schema}
-          path={path}
-        />
-      </div>
-    );
-  });
-};
-
-export const addVanillaControlProps = (mapper: (s, p) => any) => (state, ownProps) => {
-  const props = mapper(state, ownProps);
+  const props = mapStateToProps(state, ownProps);
   const trim = props.uischema.options && props.uischema.options.trim;
   const controlElement = props.uischema as ControlElement;
   const isValid = _.isEmpty(props.errors);
@@ -74,8 +54,17 @@ export const addVanillaControlProps = (mapper: (s, p) => any) => (state, ownProp
   };
 };
 
-export const addVanillaLayoutProps = (mapper: (s, p) => any) => (state, ownProps) => {
-  const props = mapper(state, ownProps);
+/**
+ * Add vanilla props to the return value of calling the given
+ * mapStateToProps function.
+ *
+ * @param mapStateToProps an existing mapStateToProps function for retrieving layout props
+ * @returns {VanillaLayoutProps} vanilla specific layout props
+ */
+export const addVanillaLayoutProps = (mapStateToProps: (s, p) => any) =>
+  (state, ownProps): VanillaLayoutProps => {
+
+  const props = mapStateToProps(state, ownProps);
 
   return {
     ...props,
@@ -84,22 +73,11 @@ export const addVanillaLayoutProps = (mapper: (s, p) => any) => (state, ownProps
   };
 };
 
-export interface VanillaControlProps extends ControlProps {
-  classNames: {
-    wrapper: string;
-    input: string;
-    label: string;
-    description: string;
-  };
-  getStyle(string: string, ...args: any[]): string[];
-  getStyleAsClassName(string: string): string;
-}
-
-export interface VanillaRendererProps extends RendererProps {
-  getStyle(string: string, ...args: any[]): string[];
-  getStyleAsClassName(string: string): string;
-}
-
+/**
+ * Pre-defined vanilla styles.
+ *
+ * @type {{name: string; classNames: string[]}[]}
+ */
 export const vanillaStyles = [
   {
     name: 'control',

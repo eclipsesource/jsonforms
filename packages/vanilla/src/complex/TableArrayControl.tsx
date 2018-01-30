@@ -13,7 +13,7 @@ import {
   Paths,
   RankedTester,
   registerStartupRenderer,
-  Renderer,
+  RendererComponent,
   Test,
 } from '@jsonforms/core';
 import { addVanillaControlProps } from '../util';
@@ -42,7 +42,7 @@ export interface TableProps extends ControlProps {
   getStyleAsClassName(style: string): string;
 }
 
-class TableArrayControl extends Renderer<TableProps, void> {
+class TableArrayControl extends RendererComponent<TableProps, void> {
 
   render() {
     const {
@@ -133,10 +133,14 @@ class TableArrayControl extends Renderer<TableProps, void> {
   }
 }
 
-export default registerStartupRenderer(
-  tableArrayTester,
-  connectToJsonForms(
+const ConnectedTableArrayControl  = connectToJsonForms(
     addVanillaControlProps(mapStateToTableControlProps),
     mapDispatchToTableControlProps
   )(TableArrayControl)
+
+registerStartupRenderer(
+  tableArrayTester,
+  ConnectedTableArrayControl
 );
+
+export default ConnectedTableArrayControl;

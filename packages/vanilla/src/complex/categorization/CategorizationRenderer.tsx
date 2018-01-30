@@ -4,18 +4,19 @@ import {
   Category,
   connectToJsonForms,
   mapStateToLayoutProps,
-  Renderer,
+  RendererComponent
 } from '@jsonforms/core';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
-import { addVanillaLayoutProps, VanillaRendererProps } from '../../util';
+import { addVanillaLayoutProps } from '../../util';
+import { VanillaLayoutProps } from '../../index';
 
 export interface CategorizationState {
   selectedCategory: Category;
 }
 
-class CategorizationRenderer extends Renderer<VanillaRendererProps, CategorizationState> {
+class CategorizationRenderer extends RendererComponent<VanillaLayoutProps, CategorizationState> {
 
   onCategorySelected = category => () => {
     return this.setState({selectedCategory: category});
@@ -75,7 +76,8 @@ class CategorizationRenderer extends Renderer<VanillaRendererProps, Categorizati
   }
 }
 
-export default connectToJsonForms(
+const ConnectedCategorizationRenderer = connectToJsonForms(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(CategorizationRenderer);
+export default ConnectedCategorizationRenderer;

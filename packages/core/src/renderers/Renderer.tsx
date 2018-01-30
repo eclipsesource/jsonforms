@@ -2,7 +2,10 @@ import * as React from 'react';
 import { JsonSchema } from '../models/jsonSchema';
 import { UISchemaElement } from '../models/uischema';
 
-export interface RendererProps {
+/**
+ * State-based props of a {@link Renderer}.
+ */
+export interface StatePropsOfRenderer {
   /**
    * The UI schema to be rendered.
    */
@@ -31,8 +34,34 @@ export interface RendererProps {
   path?: string;
 }
 
-export class Renderer<P extends RendererProps, S> extends React.Component<P, S> {
+/**
+ * Props of a {@link Renderer}.
+ */
+export interface RendererProps extends StatePropsOfRenderer { }
+
+/**
+ * Convenience wrapper around React's Component for constraining props.
+ *
+ * @template P type of any renderer props
+ * @template S state of the Renderer
+ */
+export class RendererComponent<P extends RendererProps, S = {}> extends React.Component<P, S> {
   constructor(props: P) {
     super(props);
   }
 }
+
+/**
+ * Stateless Renderer.
+ *
+ * @template P type of any renderer props
+ */
+export interface StatelessRenderer<P extends RendererProps> extends React.StatelessComponent<P> {
+
+}
+
+/**
+ * Represents a Renderer, which might either be a component or a function.
+ */
+export type Renderer =
+  RendererComponent<RendererProps & any, {}> | StatelessRenderer<RendererProps & any>;

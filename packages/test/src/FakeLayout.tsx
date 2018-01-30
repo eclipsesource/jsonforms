@@ -49,7 +49,8 @@ const FakeLayout = (props: RendererProps) => {
   );
 };
 
-export default registerStartupRenderer(
-    fakeLayoutTester,
-    connectToJsonForms(mapStateToLayoutProps, null)(FakeLayout)
-);
+const ConnectedFakeLayout = connectToJsonForms(mapStateToLayoutProps, null)(FakeLayout);
+
+registerStartupRenderer(fakeLayoutTester, ConnectedFakeLayout);
+
+export default ConnectedFakeLayout;

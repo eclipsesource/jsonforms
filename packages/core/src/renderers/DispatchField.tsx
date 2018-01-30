@@ -5,7 +5,13 @@ import { UnknownRenderer } from './UnknownRenderer';
 import { RankedTester } from '../testers';
 import { FieldProps } from '../util';
 
+/**
+ * Props of the {@link DispatchField} renderer.
+ */
 export interface DispatchFieldProps extends FieldProps {
+  /**
+   * The available field renderers.
+   */
   fields?: { tester: RankedTester, field: any }[];
 }
 

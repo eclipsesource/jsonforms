@@ -34,7 +34,7 @@ export const uischema = {
       label: 'Kind of dead',
       scope: '#/properties/kindOfDead',
       rule: {
-        effect: 'SHOW',
+        effect: 'DISABLE',
         condition: {
           type: 'LEAF' ,
           scope: '#/properties/alive',

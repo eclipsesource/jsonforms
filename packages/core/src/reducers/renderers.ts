@@ -1,9 +1,9 @@
-import { JsonFormsRendererConstructable } from '../util/renderer';
 import { RankedTester } from '../testers';
 import { ADD_RENDERER, REMOVE_RENDERER } from '../actions';
+import { Renderer } from '../renderers';
 
 export const rendererReducer = (
-  state: { tester: RankedTester, renderer: JsonFormsRendererConstructable }[] = [],
+  state: { tester: RankedTester, renderer: Renderer }[] = [],
   {type, tester, renderer}) => {
   switch (type) {
     case ADD_RENDERER:

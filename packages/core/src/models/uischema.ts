@@ -142,6 +142,10 @@ export interface LabelElement extends UISchemaElement {
   text: string;
 }
 
+/**
+ * Interface for describing an UI schema element that is referencing
+ * a subschema. The value of the scope must be a JSON Pointer.
+ */
 export interface Scopable {
   /**
    * The scope that determines to which part this element should be bound to.

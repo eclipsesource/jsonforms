@@ -1,47 +1,24 @@
-import { Component } from 'react';
 import * as _ from 'lodash';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import { ControlElement } from '../models/uischema';
 import { RankedTester } from '../testers';
 import { JsonForms } from '../core';
-import { JsonSchema } from '../models/jsonSchema';
 import { getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
+  StatePropsOfField,
   isEnabled,
   isVisible,
   Resolve
 } from '../util';
 import { mapDispatchToControlProps } from './renderer';
+import { DispatchPropsOfControl } from '../renderers';
 
-export interface JsonFormsFieldConstructable {
-  new(props: FieldProps): Component<FieldProps, any>;
-}
-export interface FieldProps {
-  /**
-   * The UI schema to be rendered.
-   */
-  uischema: UISchemaElement;
-
-  /**
-   * The JSON schema that describes the data.
-   */
-  schema: JsonSchema;
-  /**
-   * Optional instance path. Necessary when the actual data
-   * path can not be inferred via the UI schema element as
-   * it is the case with nested controls.
-   */
-  path?: string;
-  data: any;
-  className?: string;
-  id: string;
-  visible?: boolean;
-  enabled: boolean;
-  dispatch: any;
-  isValid: boolean;
-
-  handleChange(string, any): (void);
-}
+/**
+ * Registers the given field renderer when a JSON Forms store is created.
+ * @param {RankedTester} tester
+ * @param field the field to be registered
+ * @returns {any}
+ */
 export const registerStartupField = (tester: RankedTester, field: any) => {
   JsonForms.fields.push({
     tester,
@@ -50,7 +27,15 @@ export const registerStartupField = (tester: RankedTester, field: any) => {
 
   return field;
 };
-export const mapStateToFieldProps = (state, ownProps) => {
+
+/**
+ * Map state to field props.
+ *
+ * @param state JSONForms state tree
+ * @param ownProps any own props
+ * @returns {StatePropsOfField} state props of a field
+ */
+export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, state);
@@ -72,4 +57,11 @@ export const mapStateToFieldProps = (state, ownProps) => {
     schema: ownProps.schema
   };
 };
-export const mapDispatchToFieldProps = mapDispatchToControlProps;
+
+/**
+ * Synonym for mapDispatchToControlProps.
+ *
+ * @type {(dispatch) => {handleChange(path, value): void}}
+ */
+export const mapDispatchToFieldProps: (dispatch) => DispatchPropsOfControl =
+  mapDispatchToControlProps;
