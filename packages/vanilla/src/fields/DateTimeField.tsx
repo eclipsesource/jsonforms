@@ -6,7 +6,7 @@ import {
   mapDispatchToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
@@ -36,7 +36,7 @@ const DateTimeField = (props: FieldProps) => {
  */
 export const datetimeFieldTester: RankedTester = rankWith(2, isDateTimeControl);
 
-export default registerStartupInput(
+export default registerStartupField(
   datetimeFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(DateTimeField)
 );

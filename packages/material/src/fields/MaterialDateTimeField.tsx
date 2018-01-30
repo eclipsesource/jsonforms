@@ -6,7 +6,7 @@ import {
   mapDispatchToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupInput
+  registerStartupField
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import { DateTimePicker } from 'material-ui-pickers';
@@ -58,7 +58,7 @@ export const MaterialDateTimeField = (props: FieldProps) => {
   );
 };
 export const datetimeFieldTester: RankedTester = rankWith(2, isDateTimeControl);
-export default registerStartupInput(
+export default registerStartupField(
   datetimeFieldTester,
   connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateTimeField)
 );
