@@ -7,3 +7,4 @@ export * from './SliderField';
 export * from './TextField';
 export * from './TextAreaField';
 export * from './TimeField';
+export * from './NumberFormatField';

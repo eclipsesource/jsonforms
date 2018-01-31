@@ -14,6 +14,7 @@ export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
 export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
 export const SET_TRANSLATIONS = `${NAMESPACE}/SET_TRANSLATIONS`;
 export const SET_LOCALE = `${NAMESPACE}/SET_LOCALE`;
+export const SET_NUMBER_FORMAT = `${NAMESPACE}/SET_NUMBER_FORMAT`;
 
 // TODO: fix typings
 export const update =
@@ -70,5 +71,12 @@ export const setLocale = locale => dispatch => {
   dispatch({
     type: SET_LOCALE,
     locale,
+  });
+};
+
+export const setNumberFormat = format => dispatch => {
+  dispatch({
+    type: SET_NUMBER_FORMAT,
+    format
   });
 };

@@ -75,7 +75,15 @@ export class JsonFormsElement extends HTMLElement {
   set state(initialState: JsonFormsInitialState) {
 
     const dataSchema = initialState.schema || generateJsonSchema(initialState.data);
-    const additionalState = _.omit(initialState, ['data', 'schema', 'uischema', 'translations', 'locale']);
+    const additionalState = _.omit(initialState, [
+                                                  'data',
+                                                  'schema',
+                                                  'uischema',
+                                                  'translations',
+                                                  'locale',
+                                                  'numberFormat'
+                                                 ]
+    );
 
     const setupStore = schema => {
       const state = {
@@ -89,7 +97,8 @@ export class JsonFormsElement extends HTMLElement {
           fields: JsonForms.fields,
           i18n: {
             translations: initialState.translations,
-            locale: initialState.locale
+            locale: initialState.locale,
+            numberFormat: initialState.numberFormat
           },
           ...additionalState
         }

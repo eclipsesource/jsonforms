@@ -34,6 +34,12 @@ test.beforeEach(t => {
     }
   };
   t.context.locale = 'de-DE';
+  t.context.numberFormat = {
+    'de-DE': {
+      '.': '',
+      ',': '.'
+    }
+  };
 });
 
 test.cb('render with data set', t => {
@@ -221,6 +227,29 @@ test.cb('render with data,translation object and locale value', t => {
       t.is(jsonForms.children.item(0).className, 'layout');
       t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
       t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.end();
+    },
+    100
+  );
+});
+
+test.cb('render with data,locale value and number format', t => {
+  t.plan(4);
+  const jsonForms = new JsonFormsElement();
+  jsonForms.state = {
+    data: t.context.data,
+    translations: t.context.translations,
+    locale: t.context.locale,
+    numberFormat: t.context.numberFormat
+  };
+
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.numberFormat, t.context.numberFormat);
       t.end();
     },
     100

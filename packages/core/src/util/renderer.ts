@@ -71,6 +71,19 @@ export const isDescriptionHidden = (visible, description, isFocused) => {
   !isFocused;
 };
 
+export const convertStringToFloat = (data, numberFormat) => {
+  const regExp = new RegExp(/\.|,/g, 'gi');
+
+  return parseFloat(data.replace(regExp, matched => {
+    return numberFormat[matched];
+  }));
+};
+
+export const formatNumber = (data, locale, numberFormat): string => {
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 10 })
+                              .format(convertStringToFloat(data, numberFormat));
+};
+
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
