@@ -184,33 +184,45 @@ test.cb('Connect JSON Forms element and cause data change', t => {
   );
 });
 
-test('render with data and translation object', t => {
+test.cb('render with data and translation object', t => {
+  t.plan(4);
   const jsonForms = new JsonFormsElement();
   jsonForms.state = {
     data: t.context.data,
-    uischema: t.context.uischema,
     translations: t.context.translations
   };
-  jsonForms.connectedCallback();
 
-  t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'root_properties_name');
-  t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
-  t.is(jsonForms.store.getState().i18n.locale, navigator.languages[0]);
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, navigator.languages[0]);
+      t.end();
+    },
+    100
+  );
 });
 
-test('render with data, translation object and locale', t => {
+test.cb('render with data,translation object and locale value', t => {
+  t.plan(4);
   const jsonForms = new JsonFormsElement();
   jsonForms.state = {
     data: t.context.data,
-    uischema: t.context.uischema,
     translations: t.context.translations,
     locale: t.context.locale
   };
-  jsonForms.connectedCallback();
 
-  t.is(jsonForms.children.length, 1);
-  t.is(jsonForms.children.item(0).className, 'root_properties_name');
-  t.deepEqual(jsonForms.store.getState().i18n.translations, t.context.translations);
-  t.is(jsonForms.store.getState().i18n.locale, t.context.locale);
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.end();
+    },
+    100
+  );
 });

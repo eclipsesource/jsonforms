@@ -6,7 +6,8 @@ import {
   createLabelDescriptionFrom,
   isEnabled,
   isVisible,
-  Resolve
+  Resolve,
+  translateLabel
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';

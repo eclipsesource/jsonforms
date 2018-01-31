@@ -8,7 +8,8 @@ import {
   JsonForms,
   JsonFormsInitialState,
   jsonformsReducer,
-  JsonFormsStore
+  JsonFormsStore,
+  SET_LOCALE
 } from '@jsonforms/core';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
@@ -18,7 +19,7 @@ export const initJsonFormsStore = ({
                                      schema,
                                      uischema,
                                      translations,
-                                     locale = navigator.languages[0],
+                                     locale,
                                      ...props
                                    }: JsonFormsInitialState): JsonFormsStore => {
   const store = createStore(
@@ -48,6 +49,11 @@ export const initJsonFormsStore = ({
     schema,
     data,
     uischema
+  });
+
+  store.dispatch({
+    type: SET_LOCALE,
+    locale
   });
 
   return store;

@@ -35,4 +35,4 @@ export const getErrorAt = instancePath => state => {
 };
 export const getSubErrorsAt = instancePath => state => subErrorsAt(instancePath)(state.jsonforms.validation);
 
-export const getTranslations = state => fetchTranslation(state.i18n);
+export const getTranslations = state => fetchTranslation(state.jsonforms.i18n);

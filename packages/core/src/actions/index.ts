@@ -12,8 +12,8 @@ export const ADD_RENDERER = `${NAMESPACE}/ADD_RENDERER`;
 export const REMOVE_RENDERER = `${NAMESPACE}/REMOVE_RENDERER`;
 export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
 export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
-export const SET_TRANSLATIONS = 'SET_TRANSLATIONS';
-export const SET_LOCALE = 'SET_LOCALE';
+export const SET_TRANSLATIONS = `${NAMESPACE}/SET_TRANSLATIONS`;
+export const SET_LOCALE = `${NAMESPACE}/SET_LOCALE`;
 
 // TODO: fix typings
 export const update =
