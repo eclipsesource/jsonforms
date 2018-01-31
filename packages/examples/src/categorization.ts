@@ -7,36 +7,6 @@ export const uischema = {
   type: 'Categorization',
   elements: [
     {
-      type: 'Categorization',
-      label: 'Sub',
-      elements: [
-        {
-          type: 'Category',
-          label: 'SubPrivate',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/name'
-            }
-          ]
-        },
-        {
-          type: 'Category',
-          label: 'Additional',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/nationality'
-            },
-            {
-              type: 'Control',
-              scope: '#/properties/vegetarian'
-            }
-          ]
-        }
-      ]
-    },
-    {
       type: 'Category',
       label: 'Private',
       elements: [
