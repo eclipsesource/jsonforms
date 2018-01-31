@@ -304,3 +304,14 @@ export const isRangeControl = and(
     schema.hasOwnProperty('default')
   )
 );
+
+/**
+ * Tests whether the given UI schema is of type Control, if the schema
+ * is of type string and has option format
+ * @type {Tester}
+ */
+export const isFomattedNumberControl = and(
+  uiTypeIs('Control'),
+  schemaTypeIs('string'),
+  optionIs('format', true)
+);

@@ -1,6 +1,6 @@
 import test from 'ava';
 import * as _ from 'lodash';
-import { mapDispatchToControlProps, mapStateToControlProps } from '../../src/util';
+import { convertStringToFloat, mapDispatchToControlProps, mapStateToControlProps } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { UPDATE_DATA } from '../../src/actions';
@@ -48,6 +48,9 @@ const createState = uischema => ({
     },
     validation: {
       errors: []
+    },
+    i18n: {
+      locale: 'en-US'
     }
   }
 });
@@ -233,4 +236,16 @@ test('mapDispatchToControlProps', t => {
   t.is(updateAction['type'], UPDATE_DATA);
   t.is(updateAction['path'], 'foo');
   t.is(updateAction['updater'](), 42);
+});
+
+test('convert formatted number into float number', t => {
+  const numberFormat = {
+    '.': '',
+    ',': '.'
+  };
+
+  t.is(convertStringToFloat('1231', numberFormat), 1231);
+  t.is(convertStringToFloat('123.123', numberFormat), 123123);
+  t.is(convertStringToFloat('123,123', numberFormat), 123.123);
+  t.is(convertStringToFloat('123.123,123', numberFormat), 123123.123);
 });

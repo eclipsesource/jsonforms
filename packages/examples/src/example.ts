@@ -6,5 +6,8 @@ export interface ExampleDescription {
   data: any;
   schema: JsonSchema;
   uiSchema: UISchemaElement;
+  translations?: any;
+  locale?: String;
+  numberFormat?: any;
   setupCallback?(div: HTMLDivElement): void;
 }
