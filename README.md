@@ -1,8 +1,13 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-# Usage
-We're updating our usage instructions right now! Stay tuned!
+# Getting started
+1. Clone the seed app with `git clone https://github.com/eclipsesource/jsonforms-react-seed.git`
+2. Install dependencies with `npm install`
+3. Run the app with `npm run start`
+
+For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
+For a more detailed tutorial about the usage of JSON Forms, please see [this tutorial](http://jsonforms.io/docs/tutorial).
 
 # Developers Documentation
 
