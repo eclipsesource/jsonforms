@@ -15,6 +15,10 @@ export interface JsonFormsState {
     validation?: ValidationState,
     renderers?: any[];
     fields?: any[];
+    i18n: {
+      translations?: any;
+      locale?: String;
+    };
     // allow additional state for JSONForms
     [x: string]: any;
   };
@@ -24,6 +28,8 @@ export interface JsonFormsInitialState {
   data: any;
   schema?: JsonSchema;
   uischema?: UISchemaElement;
+  translations?: any;
+  locale?: String;
   // allow additional state
   [x: string]: any;
 }

@@ -13,6 +13,7 @@ import {
   JsonFormsInitialState,
   jsonformsReducer,
   JsonFormsStore,
+  SET_LOCALE,
   VALIDATE
 } from '@jsonforms/core';
 import { applyMiddleware, createStore } from 'redux';
@@ -74,7 +75,7 @@ export class JsonFormsElement extends HTMLElement {
   set state(initialState: JsonFormsInitialState) {
 
     const dataSchema = initialState.schema || generateJsonSchema(initialState.data);
-    const additionalState = _.omit(initialState, ['data', 'schema', 'uischema']);
+    const additionalState = _.omit(initialState, ['data', 'schema', 'uischema', 'translations', 'locale']);
 
     const setupStore = schema => {
       const state = {
@@ -86,6 +87,10 @@ export class JsonFormsElement extends HTMLElement {
           },
           renderers: JsonForms.renderers,
           fields: JsonForms.fields,
+          i18n: {
+            translations: initialState.translations,
+            locale: initialState.locale
+          },
           ...additionalState
         }
       };
@@ -104,6 +109,11 @@ export class JsonFormsElement extends HTMLElement {
       store.dispatch({
         type: VALIDATE,
         data: state.jsonforms.common.data
+      });
+
+      store.dispatch({
+        type: SET_LOCALE,
+        locale: state.jsonforms.i18n.locale
       });
 
       return store;

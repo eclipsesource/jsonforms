@@ -25,6 +25,15 @@ test.beforeEach(t => {
     type: 'Control',
     scope: '#/properties/name'
   };
+  t.context.translations = {
+    'en-US': {
+      name: 'foo'
+    },
+    'de-DE': {
+      name: 'bar'
+    }
+  };
+  t.context.locale = 'de-DE';
 });
 
 test.cb('render with data set', t => {
@@ -170,6 +179,49 @@ test.cb('Connect JSON Forms element and cause data change', t => {
         },
         100
       );
+    },
+    100
+  );
+});
+
+test.cb('render with data and translation object', t => {
+  t.plan(4);
+  const jsonForms = new JsonFormsElement();
+  jsonForms.state = {
+    data: t.context.data,
+    translations: t.context.translations
+  };
+
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, navigator.languages[0]);
+      t.end();
+    },
+    100
+  );
+});
+
+test.cb('render with data,translation object and locale value', t => {
+  t.plan(4);
+  const jsonForms = new JsonFormsElement();
+  jsonForms.state = {
+    data: t.context.data,
+    translations: t.context.translations,
+    locale: t.context.locale
+  };
+
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.end();
     },
     100
   );
