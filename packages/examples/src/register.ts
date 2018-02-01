@@ -32,7 +32,9 @@ export const changeExample = (selectedExample: string, additionalState: Addition
     data: example.data,
     schema: example.schema,
     uischema: example.uiSchema,
-    ...additionalState,
+    translations: example.translations,
+    locale: example.locale,
+    ...additionalState
   };
 
   body.appendChild(jsonForms);

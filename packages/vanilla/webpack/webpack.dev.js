@@ -7,7 +7,7 @@ module.exports = merge(baseConfig, {
         new copyWebpackPlugin([
             { from: '../examples/example.css' },
             { from: './example/example.dark.css' },
-            { from: '../examples/vendor/native-shim.js'  },
+            { from: '../examples/vendor/native-shim.js'  }
         ])
     ],
 });
