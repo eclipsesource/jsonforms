@@ -2,6 +2,15 @@ import { RendererComponent } from './Renderer';
 import { StatePropsOfScopedRenderer } from './common';
 import { JsonSchema } from '../models/jsonSchema';
 
+export interface Labels {
+  default: string;
+  [additonalLabels: string]: string;
+}
+
+export const isPlainLabel = (label: string | Labels): label is string => {
+  return typeof label === 'string';
+};
+
 /**
  * State-based props of a Control
  */
@@ -15,7 +24,7 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
   /**
    * The label for the rendered element.
    */
-  label: string;
+  label: string | Labels;
 
   /**
    * Description of input field
@@ -37,7 +46,6 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
  * Dispatch-based props of a Control.
  */
 export interface DispatchPropsOfControl {
-
   /**
    * Update handler that emits a data change
    *

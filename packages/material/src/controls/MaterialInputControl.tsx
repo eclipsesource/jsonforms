@@ -9,6 +9,7 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
+  isPlainLabel,
   mapStateToControlProps,
   RankedTester,
   rankWith,
@@ -46,7 +47,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         onBlur={this.onBlur}
       >
         <InputLabel htmlFor={id} error={!isValid}>
-          {computeLabel(label, required)}
+          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
         </InputLabel>
         <DispatchField uischema={uischema} schema={schema} path={parentPath} />
         <FormHelperText error={!isValid}>

@@ -1,4 +1,6 @@
 import * as _ from 'lodash';
+import * as moment from 'moment';
+import { isPlainLabel, Labels } from '@jsonforms/core';
 import { getLocale, getTranslations, i18nReducer } from './reducers';
 
 export interface Translations {
@@ -30,14 +32,24 @@ export const toNumber = (value: string): number => {
   return Number(value.replace(new RegExp('\\' + separator, 'g'), ''));
 };
 
-export const translateLabel: (translations: Translations,
-                              label: string) => string =
-  (translations, label) => {
+const translate = (translations: Translations, label: string): string => {
 
-    if (translations && _.startsWith(label, '%')) {
-      const labelKey = label.substr(1, label.length);
+  if (translations && _.startsWith(label, '%')) {
+    const labelKey = label.substr(1, label.length);
 
-      return translations[labelKey] ? translations[labelKey] : label;
+    return translations[labelKey] ? translations[labelKey] : label;
+  }
+
+  return label;
+};
+
+export const translateLabel =
+  (translations: Translations, label: string | Labels): (string | Labels) => {
+
+    if (isPlainLabel(label)) {
+      return translate(translations, label);
+    } else {
+      return _.mapValues(label, l => translate(translations, l)) as Labels;
     }
 
     return label;
@@ -46,6 +58,7 @@ export const translateLabel: (translations: Translations,
 export const translateProps = (state, props) => {
   const label = translateLabel(getTranslations(state), props.label);
   const description = translateLabel(getTranslations(state), props.description);
+  const localLocale = moment().locale(getLocale(state));
 
   if (props.scopedSchema && props.scopedSchema.type === 'number') {
     return {
@@ -53,7 +66,9 @@ export const translateProps = (state, props) => {
       label,
       description,
       toFormatted: fromNumber(getLocale(state)),
-      fromFormatted: toNumber
+      fromFormatted: toNumber,
+      locale: getLocale(state),
+      localLocale
     };
   }
 
@@ -62,7 +77,9 @@ export const translateProps = (state, props) => {
     label,
     description,
     toFormatted: x => x,
-    fromFormatted: x => x
+    fromFormatted: x => x,
+    locale: getLocale(state),
+    localLocale
   };
 };
 

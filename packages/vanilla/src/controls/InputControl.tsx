@@ -33,6 +33,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const labelText = typeof label === 'string' ? label : label.default;
 
     return (
       <div
@@ -42,7 +43,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
         onBlur={this.onBlur}
       >
         <label htmlFor={id} className={classNames.label}>
-          {computeLabel(label, required)}
+          {computeLabel(labelText, required)}
         </label>
       <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
         <div className={divClassNames}>

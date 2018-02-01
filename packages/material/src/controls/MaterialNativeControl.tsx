@@ -9,6 +9,7 @@ import {
   formatErrorMessage,
   isDateControl,
   isDescriptionHidden,
+  isPlainLabel,
   isTimeControl,
   mapDispatchToControlProps,
   mapStateToControlProps,
@@ -50,7 +51,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     return (
       <TextField
         id={id}
-        label={computeLabel(label, required)}
+        label={computeLabel(isPlainLabel(label) ? label : label.default, required}
         type={fieldType}
         error={!isValid}
         style={style}

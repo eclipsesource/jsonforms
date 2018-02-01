@@ -37,6 +37,7 @@
     "@jsonforms/core": "^2.0.0-rc.2",
     "es6-shim": "^0.35.3",
     "json-refs": "^2.1.6",
+    "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

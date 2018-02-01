@@ -6,6 +6,7 @@ import {
   ControlProps,
   ControlState,
   isDateTimeControl,
+  isPlainLabel,
   mapDispatchToControlProps,
   mapStateToControlProps,
   RankedTester,
@@ -44,7 +45,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     return (
       <DateTimePicker
         id={id}
-        label={computeLabel(label, required)}
+        label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
         error={!isValid}
         style={style}
         fullWidth={!trim}
@@ -64,9 +65,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
         rightArrowIcon={<KeyboardArrowRightIcon />}
         dateRangeIcon={<DateRangeIcon />}
         timeIcon={<AccessTimeIcon />}
-        onClear={() =>
-          handleChange(path, '')
-        }
+        onClear={() => handleChange(path, '')}
         InputProps={inputProps}
       />
     );
