@@ -13,7 +13,8 @@ export const personCoreSchema = {
     },
     birthDate: {
       type: 'string',
-      format: 'date'
+      format: 'date',
+      description: 'Please enter your birth date.'
     },
     nationality: {
       type: 'string',
@@ -159,7 +160,9 @@ const translations = {
     occupation: 'Occupation',
     birthday: 'Birthday',
     postalcode: 'Postal Code',
-    drivingskill: 'Driving skill'
+    drivingskill: 'Driving skill',
+    cancelLabel: 'Cancel',
+    clearLabel: 'Clear'
   },
   'de-DE': {
     name: 'Name',
@@ -169,7 +172,9 @@ const translations = {
     occupation: 'Tätigkeit',
     birthday: 'Geburtstag',
     postalcode: 'Postleitzahl',
-    drivingskill: 'Fahrkönnen'
+    drivingskill: 'Fahrkönnen',
+    cancelLabel: 'Stornieren',
+    clearLabel: 'Löschen'
   }
 };
 

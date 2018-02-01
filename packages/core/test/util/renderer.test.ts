@@ -237,3 +237,11 @@ test('mapDispatchToControlProps', t => {
   t.is(updateAction['path'], 'foo');
   t.is(updateAction['updater'](), 42);
 });
+
+test('mapStateToControlProps - id', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const props = mapStateToControlProps(createState(coreUISchema), ownProps);
+  t.is(props.locale, 'en-US');
+});
