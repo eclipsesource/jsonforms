@@ -34,6 +34,16 @@ test.beforeEach(t => {
     }
   };
   t.context.locale = 'de-DE';
+  t.context.numberSeparators = {
+    'en-US': {
+      decimalSeparator: '.',
+      thousandsSeparator: ','
+    },
+    'de-DE': {
+      decimalSeparator: ',',
+      thousandsSeparator: '.'
+    }
+  };
 });
 
 test.cb('render with data set', t => {
@@ -221,6 +231,52 @@ test.cb('render with data,translation object and locale value', t => {
       t.is(jsonForms.children.item(0).className, 'layout');
       t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
       t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.end();
+    },
+    100
+  );
+});
+
+test.cb('render with data,translation object and locale value', t => {
+  t.plan(4);
+  const jsonForms = new JsonFormsElement();
+  jsonForms.state = {
+    data: t.context.data,
+    translations: t.context.translations,
+    locale: t.context.locale
+  };
+
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.end();
+    },
+    100
+  );
+});
+
+test.cb('render with data,translation object, locale value and number separators', t => {
+  t.plan(5);
+  const jsonForms = new JsonFormsElement();
+  jsonForms.state = {
+    data: t.context.data,
+    translations: t.context.translations,
+    locale: t.context.locale,
+    numberSeparators: t.context.numberSeparators
+  };
+
+  setTimeout(
+    () => {
+      jsonForms.connectedCallback();
+      t.is(jsonForms.children.length, 1);
+      t.is(jsonForms.children.item(0).className, 'layout');
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
+      t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
+      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.numberSeparators, t.context.numberSeparators);
       t.end();
     },
     100

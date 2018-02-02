@@ -8,5 +8,6 @@ export interface ExampleDescription {
   uiSchema: UISchemaElement;
   translations?: any;
   locale?: String;
+  numberSeparators?: any;
   setupCallback?(div: HTMLDivElement): void;
 }

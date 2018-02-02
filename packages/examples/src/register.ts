@@ -34,6 +34,7 @@ export const changeExample = (selectedExample: string, additionalState: Addition
     uischema: example.uiSchema,
     translations: example.translations,
     locale: example.locale,
+    numberSeparators: example.numberSeparators,
     ...additionalState
   };
 

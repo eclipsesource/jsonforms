@@ -1,4 +1,4 @@
-import { SET_LOCALE, SET_TRANSLATIONS } from '../actions';
+import { SET_NUMBER_SEPARATORS, SET_LOCALE, SET_TRANSLATIONS } from '../actions';
 
 export const i18nReducer = (
   state = {
@@ -16,6 +16,11 @@ export const i18nReducer = (
         ...state,
         locale: action.locale === undefined ? navigator.languages[0] : action.locale
       };
+    case SET_NUMBER_SEPARATORS:
+      return {
+        ...state,
+        numberSeparators: action.numberSeparators
+      };
     default:
       return state;
   }
@@ -24,3 +29,9 @@ export const i18nReducer = (
 export const fetchTranslation = state => {
   return state.translations ? state.translations[state.locale] : undefined;
 };
+
+export const fetchNumberSeparators = state => {
+   return state.numberSeparators ? state.numberSeparators[state.locale] : undefined;
+};
+
+export const fetchLocale = state => state.locale;

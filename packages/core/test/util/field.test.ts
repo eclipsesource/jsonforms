@@ -42,6 +42,15 @@ const createState = uischema => ({
     },
     validation: {
       errors: []
+    },
+    i18n: {
+      locale: 'de-DE',
+      numberSeparators: {
+        'de-DE': {
+          decimalSeparator: ',',
+          thousandsSeparator: '.'
+        }
+      }
     }
   }
 });
@@ -181,4 +190,20 @@ test('mapStateToFieldProps - id', t => {
   };
   const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
+});
+
+test('mapStateToFieldProps - locale', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
+  t.is(props.locale, 'de-DE');
+});
+
+test('mapStateToFieldProps - numberFormat', t => {
+  const ownProps = {
+    uischema: coreUISchema
+  };
+  const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
+  t.deepEqual(props.numberSeparators, {decimalSeparator: ',', thousandsSeparator: '.'});
 });
