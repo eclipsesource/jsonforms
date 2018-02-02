@@ -67,7 +67,9 @@ export const mapStateToFieldProps = (state, ownProps) => {
     enabled,
     id,
     path,
-    isValid
+    isValid,
+    uischema: ownProps.uischema,
+    schema: ownProps.schema
   };
 };
 export const mapDispatchToFieldProps = mapDispatchToControlProps;

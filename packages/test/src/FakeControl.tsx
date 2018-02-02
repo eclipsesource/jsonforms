@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
  * Default tester for a horizontal layout.
  * @type {RankedTester}
  */
-export const fakeTester: RankedTester = rankWith(2, isControl);
+export const fakeControlTester: RankedTester = rankWith(2, isControl);
 
 const FakeControl = (props: ControlProps) => {
 
@@ -28,6 +28,6 @@ const FakeControl = (props: ControlProps) => {
 };
 
 export default registerStartupRenderer(
-    fakeTester,
+    fakeControlTester,
     connect(mapStateToControlProps, null)(FakeControl)
 );

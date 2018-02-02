@@ -7,22 +7,19 @@ import {
   INIT,
   JsonForms,
   JsonFormsInitialState,
-  jsonformsReducer,
-  JsonFormsStore,
-  SET_LOCALE
+  jsonformsReducer
 } from '@jsonforms/core';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, Store } from 'redux';
+import { JsonFormsState } from '@jsonforms/core';
 import thunk from 'redux-thunk';
 
 export const initJsonFormsStore = ({
                                      data,
                                      schema,
                                      uischema,
-                                     translations,
-                                     locale,
                                      ...props
-                                   }: JsonFormsInitialState): JsonFormsStore => {
-  const store = createStore(
+                                   }: JsonFormsInitialState): Store<JsonFormsState> => {
+  const store: Store<JsonFormsState> = createStore(
     jsonformsReducer(),
     {
       jsonforms: {
@@ -33,10 +30,6 @@ export const initJsonFormsStore = ({
         },
         renderers: JsonForms.renderers,
         fields: JsonForms.fields,
-        i18n: {
-          translations,
-          locale
-        },
         ...props
       }
     },
@@ -51,10 +44,10 @@ export const initJsonFormsStore = ({
     uischema
   });
 
-  store.dispatch({
-    type: SET_LOCALE,
-    locale
-  });
-
   return store;
 };
+
+import FakeLayout, { fakeLayoutTester } from './FakeLayout';
+import FakeControl, { fakeControlTester } from './FakeControl';
+
+export { FakeControl, FakeLayout, fakeLayoutTester, fakeControlTester };

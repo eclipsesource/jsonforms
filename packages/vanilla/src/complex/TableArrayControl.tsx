@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
+  connectToJsonForms,
   ControlElement,
   ControlProps,
   DispatchField,
@@ -15,8 +16,7 @@ import {
   Renderer,
   Test,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
-import { getStyleAsClassName as findStyleAsClassName } from '../reducers';
+import { addVanillaControlProps } from '../util';
 
 const {
   createLabelDescriptionFrom,
@@ -133,16 +133,10 @@ class TableArrayControl extends Renderer<TableProps, void> {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const props = mapStateToTableControlProps(state, ownProps);
-
-  return {
-    ...props,
-    getStyleAsClassName: findStyleAsClassName(state),
-  };
-};
-
 export default registerStartupRenderer(
   tableArrayTester,
-  connect(mapStateToProps, mapDispatchToTableControlProps)(TableArrayControl)
+  connectToJsonForms(
+    addVanillaControlProps(mapStateToTableControlProps),
+    mapDispatchToTableControlProps
+  )(TableArrayControl)
 );

@@ -1,15 +1,17 @@
 import '@jsonforms/test';
 import test from 'ava';
-import { JsonFormsElement } from '../src/json-forms';
-import './FakeControl';
-import './FakeLayout';
 import {
   ControlElement,
   generateDefaultUISchema,
   generateJsonSchema,
   getSchema,
   getUiSchema,
+  jsonformsReducer,
 } from '@jsonforms/core';
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
+import { FakeControl, fakeControlTester, FakeLayout, fakeLayoutTester } from '@jsonforms/test';
+import { JsonFormsElement } from '../src/json-forms';
 
 test.beforeEach(t => {
   t.context.data = { name: 'foo' };
@@ -25,25 +27,27 @@ test.beforeEach(t => {
     type: 'Control',
     scope: '#/properties/name'
   };
-  t.context.translations = {
-    'en-US': {
-      name: 'foo'
-    },
-    'de-DE': {
-      name: 'bar'
-    }
-  };
-  t.context.locale = 'de-DE';
+  t.context.renderers = [
+    { tester: fakeControlTester, renderer: FakeControl },
+    { tester: fakeLayoutTester, renderer: FakeLayout }
+  ];
 });
 
 test.cb('render with data set', t => {
   const jsonForms = new JsonFormsElement();
   const jsonSchema = generateJsonSchema(t.context.data);
-  jsonForms.state = {
-    data: t.context.data,
-    schema: jsonSchema,
-    uischema: generateDefaultUISchema(jsonSchema),
-  };
+  jsonForms.store = createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data: t.context.data,
+        },
+        renderers: t.context.renderers
+      }
+    },
+    applyMiddleware(thunk)
+  );
   jsonForms.connectedCallback();
 
   setTimeout(
@@ -61,10 +65,20 @@ test.cb('render with data set', t => {
 test.cb('render with data and data schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
-  jsonForms.state = {
-    data: t.context.data,
-    schema: t.context.schema,
-  };
+  jsonForms.store = createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data: t.context.data,
+          schema: t.context.schema
+        },
+        renderers: t.context.renderers
+      }
+    },
+    applyMiddleware(thunk)
+  );
+
   setTimeout(
     () => {
       jsonForms.connectedCallback();
@@ -88,10 +102,19 @@ test.cb('render with data and UI schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
   const uischema: ControlElement = t.context.uischema;
-  jsonForms.state = {
-    data: t.context.data,
-    uischema: t.context.uischema,
-  };
+  jsonForms.store = createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data: t.context.data,
+          uischema: t.context.uischema
+        },
+        renderers: t.context.renderers
+      }
+    },
+    applyMiddleware(thunk)
+  );
   jsonForms.connectedCallback();
   setTimeout(
     () => {
@@ -108,12 +131,20 @@ test.cb('render with data and UI schema set', t => {
 test.cb('render with data, data schema and UI schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
-  jsonForms.state = {
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  };
-
+  jsonForms.store = createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data: t.context.data,
+          schema: t.context.schema,
+          uischema: t.context.uischema
+        },
+        renderers: t.context.renderers
+      }
+    },
+    applyMiddleware(thunk)
+  );
   setTimeout(
     () => {
       jsonForms.connectedCallback();
@@ -130,11 +161,20 @@ test.cb('render with data, data schema and UI schema set', t => {
 test.cb('render with data schema and UI schema set', t => {
   t.plan(3);
   const jsonForms = new JsonFormsElement();
-  jsonForms.state = {
-    data: undefined,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  };
+  jsonForms.store = createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data: undefined,
+          schema: t.context.schema,
+          uischema: t.context.uischema
+        },
+        renderers: t.context.renderers
+      }
+    },
+    applyMiddleware(thunk)
+  );
   setTimeout(
     () => {
       jsonForms.connectedCallback();
@@ -147,13 +187,22 @@ test.cb('render with data schema and UI schema set', t => {
     100
   );
 });
-
-test.cb('Connect JSON Forms element and cause data change', t => {
+//
+test.cb('Connect JSON Forms element and cause re-init store', t => {
   t.plan(6);
   const jsonForms = new JsonFormsElement();
-  jsonForms.state = {
-    data: t.context.data,
-  };
+  jsonForms.store = createStore(
+    jsonformsReducer(),
+    {
+      jsonforms: {
+        common: {
+          data: t.context.data,
+        },
+        renderers: t.context.renderers
+      }
+    },
+    applyMiddleware(thunk)
+  );
   jsonForms.connectedCallback();
 
   setTimeout(
@@ -163,12 +212,21 @@ test.cb('Connect JSON Forms element and cause data change', t => {
       t.is(verticalLayout1.className, 'layout');
       t.is(verticalLayout1.children.length, 1);
 
-      jsonForms.state = {
-        data: {
-          firstname: 'bar',
-          lastname: 'foo'
+      jsonForms.store = createStore(
+        jsonformsReducer(),
+        {
+          jsonforms: {
+            common: {
+              data: {
+                firstname: 'bar',
+                lastname: 'foo'
+              }
+            },
+            renderers: t.context.renderers
+          }
         },
-      };
+        applyMiddleware(thunk)
+      );
       setTimeout(
         () => {
           t.is(jsonForms.children.length, 1);
@@ -179,49 +237,6 @@ test.cb('Connect JSON Forms element and cause data change', t => {
         },
         100
       );
-    },
-    100
-  );
-});
-
-test.cb('render with data and translation object', t => {
-  t.plan(4);
-  const jsonForms = new JsonFormsElement();
-  jsonForms.state = {
-    data: t.context.data,
-    translations: t.context.translations
-  };
-
-  setTimeout(
-    () => {
-      jsonForms.connectedCallback();
-      t.is(jsonForms.children.length, 1);
-      t.is(jsonForms.children.item(0).className, 'layout');
-      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
-      t.is(jsonForms.store.getState().jsonforms.i18n.locale, navigator.languages[0]);
-      t.end();
-    },
-    100
-  );
-});
-
-test.cb('render with data,translation object and locale value', t => {
-  t.plan(4);
-  const jsonForms = new JsonFormsElement();
-  jsonForms.state = {
-    data: t.context.data,
-    translations: t.context.translations,
-    locale: t.context.locale
-  };
-
-  setTimeout(
-    () => {
-      jsonForms.connectedCallback();
-      t.is(jsonForms.children.length, 1);
-      t.is(jsonForms.children.item(0).className, 'layout');
-      t.deepEqual(jsonForms.store.getState().jsonforms.i18n.translations, t.context.translations);
-      t.is(jsonForms.store.getState().jsonforms.i18n.locale, t.context.locale);
-      t.end();
     },
     100
   );

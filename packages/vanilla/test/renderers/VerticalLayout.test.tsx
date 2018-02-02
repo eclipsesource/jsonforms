@@ -1,15 +1,11 @@
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import test from 'ava';
-import {
-  UISchemaElement,
-  VerticalLayout
-} from '@jsonforms/core';
-import VerticalLayoutRenderer, {
-  verticalLayoutTester
-} from '../../src/layouts/VerticalLayout';
+import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
+import VerticalLayoutRenderer, { verticalLayoutTester } from '../../src/layouts/VerticalLayout';
 import * as TestUtils from 'react-dom/test-utils';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 const styles = [
   {
@@ -29,11 +25,10 @@ test('render with undefined elements', t => {
   const uischema: UISchemaElement = {
     type: 'VerticalLayout'
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
-    styles
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -49,7 +44,7 @@ test('render with null elements', t => {
     type: 'VerticalLayout',
     elements: null
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
@@ -69,7 +64,7 @@ test('render with children', t => {
     type: 'VerticalLayout',
     elements: [ {type: 'Control'}, {type: 'Control'} ]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
@@ -91,7 +86,7 @@ test('hide', t => {
     type: 'VerticalLayout',
     elements: [{ type: 'Control' }],
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
@@ -118,11 +113,11 @@ test('show by default', t => {
     type: 'VerticalLayout',
     elements: [{ type: 'Control' }],
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
-    styles
+    styles,
   });
 
   const tree = TestUtils.renderIntoDocument(

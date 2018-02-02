@@ -1,4 +1,4 @@
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
@@ -13,6 +13,8 @@ import TableArrayControl, { tableArrayTester, } from '../../src/complex/TableArr
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
 import * as TestUtils from 'react-dom/test-utils';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
+import IntegerField, { integerFieldTester } from '../../src/fields/IntegerField';
 
 test.beforeEach(t => {
 
@@ -47,10 +49,13 @@ test.beforeEach(t => {
 });
 
 test('render two children', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    fields: [
+      { tester: integerFieldTester, field: IntegerField }
+    ]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -108,7 +113,7 @@ test('render empty data', t => {
     type: 'Control',
     scope: '#/properties/test'
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -161,7 +166,7 @@ test('render empty data', t => {
 });
 
 test('render new child (empty init data)', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: { test: [] },
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -181,7 +186,7 @@ test('render new child (empty init data)', t => {
 });
 
 test('render new child', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -198,7 +203,7 @@ test('render new child', t => {
 });
 
 test('update via action', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -324,7 +329,7 @@ test('tester', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
@@ -344,7 +349,7 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
@@ -360,7 +365,7 @@ test('show by default', t => {
 });
 
 test('single error', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -377,7 +382,7 @@ test('single error', t => {
 });
 
 test('multiple errors', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -394,7 +399,7 @@ test('multiple errors', t => {
 });
 
 test('empty errors by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -409,7 +414,7 @@ test('empty errors by default', t => {
 });
 
 test('reset validation message', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -460,7 +465,7 @@ test.skip('validation of nested schema', t => {
     type: 'HorizontalLayout',
     elements: [firstControl, secondControl, thirdControl]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {
       name: 'John Doe',
       personalData: {}

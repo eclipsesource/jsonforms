@@ -2,15 +2,9 @@ import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import '../../src/fields';
-import {
-  ControlElement,
-  HorizontalLayout,
-  JsonSchema,
-  update,
-  validate
-} from '@jsonforms/core';
-import InputControl, { inputControlTester } from '../../src/controls/MaterialInputControl';
+import { Actions, ControlElement, HorizontalLayout, JsonSchema, validate } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
+import InputControl, { inputControlTester } from '../../src/controls/MaterialInputControl';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -67,6 +61,7 @@ test('autofocus on first element', t => {
     data,
     schema,
     uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -194,7 +189,7 @@ test('single error', t => {
   );
 
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  store.dispatch(update('foo', () => 2));
+  store.dispatch(Actions.update('foo', () => 2));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be string');
 });
@@ -211,7 +206,7 @@ test('multiple errors', t => {
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  store.dispatch(update('foo', () => 3));
+  store.dispatch(Actions.update('foo', () => 3));
   store.dispatch(validate());
   t.is(validation.textContent, 'should be string');
 });
@@ -243,8 +238,8 @@ test('reset validation message', t => {
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  store.dispatch(update('foo', () => 3));
-  store.dispatch(update('foo', () => 'bar'));
+  store.dispatch(Actions.update('foo', () => 3));
+  store.dispatch(Actions.update('foo', () => 'bar'));
   store.dispatch(validate());
   t.is(validation.textContent, '');
 });
@@ -299,6 +294,7 @@ test('validation of nested schema', t => {
     data,
     schema,
     uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl} ]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>

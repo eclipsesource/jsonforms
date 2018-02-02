@@ -1,13 +1,14 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
+  mapStateToLayoutProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
-import { mapStateToVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../util';
+import { addVanillaLayoutProps, renderChildren, VanillaRendererProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
 
 /**
@@ -45,5 +46,8 @@ export const VerticalLayoutRenderer  = (
 
 export default registerStartupRenderer(
   verticalLayoutTester,
-  connect(mapStateToVanillaLayoutProps)(VerticalLayoutRenderer)
+  connectToJsonForms(
+    addVanillaLayoutProps(mapStateToLayoutProps),
+    null
+  )(VerticalLayoutRenderer)
 );

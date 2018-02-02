@@ -1,4 +1,4 @@
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import {
@@ -8,6 +8,7 @@ import {
 import { Provider } from 'react-redux';
 import LabelRenderer, { labelRendererTester } from '../../src/complex/LabelRenderer';
 import * as TestUtils from 'react-dom/test-utils';
+import {initJsonFormsVanillaStore} from "../vanillaStore";
 
 test.beforeEach(t => {
   t.context.data =  {'name': 'Foo'};
@@ -30,7 +31,7 @@ test('tester', t => {
 
 test('render with undefined text', t => {
   const uischema: UISchemaElement = { type: 'Label' };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
@@ -55,7 +56,7 @@ test('render with null text', t => {
     type: 'Label',
     text: null
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
@@ -76,7 +77,7 @@ test('render with null text', t => {
 });
 
 test('render with text', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
@@ -97,7 +98,7 @@ test('render with text', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -116,7 +117,7 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema

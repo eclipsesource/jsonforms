@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   computeLabel,
+  connectToJsonForms,
   Control,
   ControlElement,
   ControlState,
@@ -8,13 +9,13 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
+  mapStateToControlProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
-import { mapStateToVanillaControlProps, VanillaControlProps } from '../util';
+import { addVanillaControlProps, VanillaControlProps } from '../util';
 
 export class InputControl extends Control<VanillaControlProps, ControlState> {
   render() {
@@ -60,5 +61,5 @@ export const inputControlTester: RankedTester = rankWith(1, isControl);
 
 export default registerStartupRenderer(
   inputControlTester,
-  connect(mapStateToVanillaControlProps)(InputControl)
+  connectToJsonForms(addVanillaControlProps(mapStateToControlProps))(InputControl)
 );

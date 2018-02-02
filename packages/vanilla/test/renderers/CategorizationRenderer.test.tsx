@@ -1,4 +1,4 @@
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
@@ -10,6 +10,7 @@ import {
 } from '@jsonforms/core';
 import * as TestUtils from 'react-dom/test-utils';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.data = { };
@@ -239,7 +240,7 @@ test('render', t => {
     ]
   };
 
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema,
     uischema,
@@ -334,7 +335,7 @@ test('render on click', t => {
       },
     ]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data,
     schema: t.context.schema,
     uischema,
@@ -396,7 +397,7 @@ test('hide', t => {
       }
     ]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
@@ -432,7 +433,7 @@ test('showed by default', t => {
       }
     ]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,

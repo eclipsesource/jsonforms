@@ -49,4 +49,3 @@ export const stylingReducer = (state: StyleDef[]  = [], action) => {
   }
 };
 
-JsonForms.reducers.styles = stylingReducer;

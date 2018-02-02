@@ -1,22 +1,19 @@
 import * as React from 'react';
-import * as _ from 'lodash';
-import thunk from 'redux-thunk';
 import * as ReactDOM from 'react-dom';
 import * as JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
 import {
   DispatchRenderer,
-  generateDefaultUISchema,
-  generateJsonSchema,
+  Generate,
+  getData,
+  getSchema,
+  getUiSchema,
   INIT,
-  JsonForms,
-  JsonFormsInitialState,
-  jsonformsReducer,
+  JsonFormsState,
   JsonFormsStore,
-  SET_LOCALE,
   VALIDATE
 } from '@jsonforms/core';
-import { applyMiddleware, createStore } from 'redux';
+import { Store } from 'redux';
 
 /**
  * Configuration element that associated a custom element with a selector string.
@@ -69,60 +66,40 @@ export class JsonFormsElement extends HTMLElement {
   }
 
   /**
-   * Set the data to be rendered.
-   * @param {Object} initialState initial state describing what is to be rendered
+   * Set the store to be used by the element
+   *
+   * @package
+   * @param {Object} store the store containing the jsonforms state and reducer
    */
-  set state(initialState: JsonFormsInitialState) {
-
-    const dataSchema = initialState.schema || generateJsonSchema(initialState.data);
-    const additionalState = _.omit(initialState, ['data', 'schema', 'uischema', 'translations', 'locale']);
-
-    const setupStore = schema => {
-      const state = {
-        jsonforms: {
-          common: {
-            data: initialState.data,
-            schema,
-            uischema: initialState.uischema || generateDefaultUISchema(schema)
-          },
-          renderers: JsonForms.renderers,
-          fields: JsonForms.fields,
-          i18n: {
-            translations: initialState.translations,
-            locale: initialState.locale
-          },
-          ...additionalState
-        }
-      };
-      const store = createStore(
-        jsonformsReducer(),
-        state,
-        applyMiddleware(thunk),
-      );
+  set store(store: Store<JsonFormsState>) {
+    const setupStore = (schema, uischema, d) => {
       store.dispatch({
         type: INIT,
-        data: state.jsonforms.common.data,
+        data: d,
         schema,
-        uischema: state.jsonforms.common.uischema
+        uischema: uischema || Generate.uiSchema(schema)
       });
 
       store.dispatch({
         type: VALIDATE,
-        data: state.jsonforms.common.data
-      });
-
-      store.dispatch({
-        type: SET_LOCALE,
-        locale: state.jsonforms.i18n.locale
+        data: d
       });
 
       return store;
     };
 
+    const data = getData(store.getState()) || {};
+
     JsonRefs
-      .resolveRefs(dataSchema, {includeInvalid: true})
-      .then(result => {
-        this._store = setupStore(result.resolved);
+      .resolveRefs(
+        getSchema(store.getState()) || Generate.jsonSchema(data),
+        { includeInvalid: true }
+      ).then(result => {
+        this._store = setupStore(
+          result.resolved,
+          getUiSchema(store.getState()),
+          data
+        );
         this.render();
       });
   }

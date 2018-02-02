@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   computeLabel,
   Control,
   ControlElement,
@@ -15,7 +16,6 @@ import {
   registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import TextField from 'material-ui/TextField';
 
@@ -66,5 +66,5 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
 export const nativeControlTester: RankedTester = rankWith(2, or(isDateControl, isTimeControl));
 export default registerStartupRenderer(
   nativeControlTester,
-  connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialNativeControl)
+  connectToJsonForms(mapStateToControlProps, mapDispatchToControlProps)(MaterialNativeControl)
 );
