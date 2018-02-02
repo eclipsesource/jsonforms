@@ -6,16 +6,21 @@ import { transformPropsReducer } from './transformProps';
 import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
 import { JsonFormsState } from '../store';
 
+export {
+  validationReducer,
+  rendererReducer,
+  fieldReducer,
+  commonStateReducer
+};
+
 export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsState> =>
-  combineReducers({
-    jsonforms: combineReducers({
-      common: commonStateReducer,
-      validation: validationReducer,
-      renderers: rendererReducer,
-      fields: fieldReducer,
-      transformProps: transformPropsReducer,
-      ...additionalReducers
-    })
+  combineReducers<JsonFormsState>({
+    common: commonStateReducer,
+    validation: validationReducer,
+    renderers: rendererReducer,
+    fields: fieldReducer,
+    transformProps: transformPropsReducer,
+    ...additionalReducers
   });
 
 export const getData = state => extractData(state.jsonforms.common);

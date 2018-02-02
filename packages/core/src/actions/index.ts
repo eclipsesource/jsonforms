@@ -2,6 +2,8 @@ import { ThunkAction } from 'redux-thunk';
 import { getData } from '../reducers/index';
 import { RankedTester } from '../testers';
 import { Renderer } from '../renderers';
+import { JsonSchema, UISchemaElement } from '../';
+import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
 const NAMESPACE = 'jsonforms';
 
@@ -12,6 +14,18 @@ export const ADD_RENDERER = `${NAMESPACE}/ADD_RENDERER`;
 export const REMOVE_RENDERER = `${NAMESPACE}/REMOVE_RENDERER`;
 export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
 export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
+
+export const init = (
+  data: any,
+  schema: JsonSchema = generateJsonSchema(data),
+  uischema: UISchemaElement = generateDefaultUISchema(schema)
+) =>
+    ({
+      type: INIT,
+      data,
+      schema,
+      uischema
+    });
 
 // TODO: fix typings
 export const update =

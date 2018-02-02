@@ -1,7 +1,7 @@
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { ExampleDescription } from './example';
 import { JsonForms, jsonformsReducer } from '@jsonforms/core';
-import { applyMiddleware, createStore, Reducer } from 'redux';
+import { applyMiddleware, combineReducers, createStore, Reducer } from 'redux';
 import thunk from 'redux-thunk';
 import { i18nReducer, translateProps } from '@jsonforms/i18n';
 
@@ -50,11 +50,14 @@ export const changeExample = (selectedExample: string, ...additionalStoreParams:
   );
 
   jsonForms.store = createStore(
-    jsonformsReducer(
-      {
-        i18n: i18nReducer,
-        ...additionalReducers
-      },
+    combineReducers({
+        jsonforms: jsonformsReducer(
+          {
+            i18n: i18nReducer,
+            ...additionalReducers
+          },
+        )
+      }
     ),
     {
       jsonforms: {

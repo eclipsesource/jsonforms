@@ -15,6 +15,13 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
+const sanitizeErrors = (validator, data) =>
+  validate(validator, data).map(error => {
+    error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
+
+    return error;
+  });
+
 /**
  * The validation substate.
  */
@@ -43,23 +50,24 @@ export const validationReducer = (
 
   switch (action.type) {
     // TODO: review use of actions
-    case INIT:
+    case INIT: {
+      const v = ajv.compile(action.schema);
+      const e = sanitizeErrors(v, action.data);
+
       return {
         ...state,
         schema: action.schema,
-        validator: ajv.compile(action.schema)
+        validator: v,
+        errors: e
       };
+    }
     case VALIDATE:
       let validator = state.validator;
       if (validator === undefined) {
         validator = ajv.compile(state.schema);
       }
 
-      const errors = validate(validator, action.data).map(error => {
-        error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
-
-        return error;
-      });
+      const errors = sanitizeErrors(validator, action.data);
 
       return {
         ...state,

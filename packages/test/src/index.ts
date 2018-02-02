@@ -7,11 +7,11 @@ import {
   INIT,
   JsonForms,
   jsonformsReducer,
+  JsonFormsState,
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import { applyMiddleware, createStore, Store } from 'redux';
-import { JsonFormsState } from '@jsonforms/core';
+import { applyMiddleware, combineReducers, createStore, Store} from 'redux';
 import thunk from 'redux-thunk';
 
 /**
@@ -46,7 +46,7 @@ export const initJsonFormsStore = ({
                                      ...props
                                    }: JsonFormsInitialState): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
-    jsonformsReducer(),
+    combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         common: {

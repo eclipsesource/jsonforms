@@ -25,29 +25,13 @@ export interface JsonFormsState {
        * The actual data to be rendered.
        */
       data: any;
-      /**
-       * JSON schema describing the data.
-       */
       schema?: JsonSchema;
-      /**
-       * The UI schema describing the form to be rendered.
-       */
       uischema?: UISchemaElement;
     };
-    /**
-     * Contains the current validation state.
-     */
     validation?: ValidationState,
-    /**
-     * Contains all available renderers.
-     */
     renderers?: any[];
-    /**
-     * Contains all available field renderers.
-     */
     fields?: any[];
     // allow additional state for JSONForms
-    [x: string]: any;
+    [additionalState: string]: any;
   };
 }
-

@@ -7,7 +7,7 @@ global.requestAnimationFrame = cb => setTimeout(cb, 0);
 import * as React from 'react';
 import { test } from 'ava';
 import * as _ from 'lodash';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { JsonSchema, UISchemaElement } from '../../src';
@@ -52,7 +52,7 @@ export const initJsonFormsStore = ({
                                      ...props
                                    }: JsonFormsInitialState): JsonFormsStore => {
   return createStore(
-    jsonformsReducer(),
+    combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         common: {
