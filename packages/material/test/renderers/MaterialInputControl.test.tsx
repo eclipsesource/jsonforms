@@ -369,3 +369,213 @@ test('not required', t => {
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field');
 });
+
+test('translate description, translation object defined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        description: '%description'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name'
+  };
+  const translations = {
+    'en-US': {
+      'description': 'Enter your first name'
+    }
+  };
+  const data = { isFocused: false };
+  const store = initJsonFormsStore({
+      data,
+      schema,
+      uischema,
+      translations
+    }
+  );
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+  TestUtils.Simulate.focus(control);
+  const description =
+    TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p')[0] as HTMLElement;
+  t.is(description.textContent, 'Enter your first name');
+});
+
+test('translate label, translation object defined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name',
+    label: {
+      text: '%name'
+    }
+  };
+  const translations = {
+    'en-US': {
+      'name': 'Name'
+    }
+  };
+  const store = initJsonFormsStore({
+      data: {},
+      schema,
+      uischema,
+      translations
+    }
+  );
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
+  t.is(label.textContent, 'Name');
+});
+
+test('translate description fails, translation object undefined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        description: '%description'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name'
+  };
+  const data = { isFocused: false };
+  const store = initJsonFormsStore({ data, schema, uischema });
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+  TestUtils.Simulate.focus(control);
+  const description =
+    TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p')[0] as HTMLElement;
+  t.is(description.textContent, '%description');
+});
+
+test('translate label fails, translation object undefined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name',
+    label: {
+      text: '%name'
+    }
+  };
+  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
+  t.is(label.textContent, '%name');
+});
+
+test('translate description, translation object and locale defined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        description: '%description'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name'
+  };
+  const translations = {
+    'de-DE': {
+      'description': 'Geben Sie Ihren Vornamen ein'
+    }
+  };
+  const locale = 'de-DE';
+  const data = { isFocused: false };
+  const store = initJsonFormsStore({
+      data,
+      schema,
+      uischema,
+      translations,
+      locale
+    }
+  );
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+  TestUtils.Simulate.focus(control);
+  const description =
+    TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p')[0] as HTMLElement;
+  t.is(description.textContent, 'Geben Sie Ihren Vornamen ein');
+});
+
+test('translate label, translation object and locale defined', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string'
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name',
+    label: {
+      text: '%name'
+    }
+  };
+  const translations = {
+    'de-DE': {
+      'name': 'Name'
+    }
+  };
+  const locale = 'de-DE';
+  const store = initJsonFormsStore({
+      data: {},
+      schema,
+      uischema,
+      translations,
+      locale
+    }
+  );
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
+  t.is(label.textContent, 'Name');
+});
