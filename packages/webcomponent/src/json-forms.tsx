@@ -3,15 +3,14 @@ import * as ReactDOM from 'react-dom';
 import * as JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
 import {
+  Actions,
   DispatchRenderer,
   Generate,
   getData,
   getSchema,
   getUiSchema,
-  INIT,
   JsonFormsState,
-  JsonFormsStore,
-  VALIDATE
+  JsonFormsStore
 } from '@jsonforms/core';
 import { Store } from 'redux';
 
@@ -73,17 +72,7 @@ export class JsonFormsElement extends HTMLElement {
    */
   set store(store: Store<JsonFormsState>) {
     const setupStore = (schema, uischema, d) => {
-      store.dispatch({
-        type: INIT,
-        data: d,
-        schema,
-        uischema: uischema || Generate.uiSchema(schema)
-      });
-
-      store.dispatch({
-        type: VALIDATE,
-        data: d
-      });
+      store.dispatch(Actions.init(d, schema, uischema));
 
       return store;
     };

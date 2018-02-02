@@ -1,4 +1,4 @@
-import { applyMiddleware, createStore, Store } from 'redux';
+import { applyMiddleware, combineReducers, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
 import { Actions, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { vanillaStyles } from '../src/util';
@@ -11,15 +11,10 @@ export const initJsonFormsVanillaStore = ({
   ...other
 }): Store<JsonFormsState> => {
 
-  const store = createStore(
-    jsonformsReducer({ styles: stylingReducer }),
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer({ styles: stylingReducer }) }),
     {
       jsonforms: {
-        common: {
-          data,
-          schema,
-          uischema
-        },
         styles: vanillaStyles,
         ...other
       }
@@ -27,14 +22,11 @@ export const initJsonFormsVanillaStore = ({
     applyMiddleware(thunk)
   );
 
-  store.dispatch({
-    type: Actions.INIT,
-    schema,
+  store.dispatch(Actions.init(
     data,
+    schema,
     uischema
-  });
-
-  store.dispatch(Actions.validate());
+  ));
 
   return store;
 };

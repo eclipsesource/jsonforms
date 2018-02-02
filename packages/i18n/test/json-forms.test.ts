@@ -1,8 +1,8 @@
 import '@jsonforms/test';
 import test from 'ava';
 import { JsonFormsElement } from '@jsonforms/webcomponent';
-import { fakeLayoutTester, FakeLayout } from '@jsonforms/test';
-import { applyMiddleware, createStore } from 'redux';
+import { FakeLayout, fakeLayoutTester } from '@jsonforms/test';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { jsonformsReducer } from '@jsonforms/core';
 import { i18nReducer } from '../src/reducers';
 import thunk from 'redux-thunk';
@@ -36,7 +36,7 @@ test.cb('render with data and translation object', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
   jsonForms.store = createStore(
-    jsonformsReducer({ i18n: i18nReducer }),
+    combineReducers({ jsonforms: jsonformsReducer({ i18n: i18nReducer }) }),
     {
       jsonforms: {
         common: {
@@ -70,7 +70,7 @@ test.cb('render with data,translation object and locale value', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
   jsonForms.store = createStore(
-    jsonformsReducer({ i18n: i18nReducer }),
+    combineReducers({ jsonforms: jsonformsReducer({ i18n: i18nReducer }) }),
     {
       jsonforms: {
         common: {
