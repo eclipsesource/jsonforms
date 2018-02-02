@@ -18,6 +18,11 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
   label: string;
 
   /**
+   * Description of input field
+   */
+  description?: string;
+
+  /**
    * Whether the rendered data is required.
    */
   required: boolean;

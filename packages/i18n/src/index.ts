@@ -45,11 +45,13 @@ export const translateLabel: (translations: Translations,
 
 export const translateProps = (state, props) => {
   const label = translateLabel(getTranslations(state), props.label);
+  const description = translateLabel(getTranslations(state), props.description);
 
   if (props.scopedSchema && props.scopedSchema.type === 'number') {
     return {
       ...props,
       label,
+      description,
       toFormatted: fromNumber(getLocale(state)),
       fromFormatted: toNumber
     };
@@ -58,6 +60,7 @@ export const translateProps = (state, props) => {
   return {
     ...props,
     label,
+    description,
     toFormatted: x => x,
     fromFormatted: x => x
   };
