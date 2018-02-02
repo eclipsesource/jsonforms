@@ -7,7 +7,6 @@ import {
   DispatchField,
   formatErrorMessage,
   Helpers,
-  JsonSchema,
   mapDispatchToTableControlProps,
   mapStateToTableControlProps,
   Paths,
@@ -35,7 +34,6 @@ const {
 export const tableArrayControlTester: RankedTester = rankWith(3, isArrayObjectControl);
 
 export interface TableProps extends ControlProps {
-  resolvedSchema: JsonSchema;
   addItem(path: string): () => void;
   removeItems(path: string, toDelete: any[]): () => void;
   getStyleAsClassName(style: string): string;
@@ -47,7 +45,7 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
     const {
       addItem,
       uischema,
-      resolvedSchema,
+      scopedSchema,
       path,
       data,
       visible,
@@ -88,9 +86,9 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
           <thead>
           <tr>
             {
-              _(resolvedSchema.properties)
+              _(scopedSchema.properties)
                 .keys()
-                .filter(prop => resolvedSchema.properties[prop].type !== 'array')
+                .filter(prop => scopedSchema.properties[prop].type !== 'array')
                 .map(prop => <th key={prop}>{prop}</th>)
                 .value()
             }
@@ -105,14 +103,14 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
               return (
                 <tr key={childPath}>
                   {
-                    _.chain(resolvedSchema.properties)
+                    _.chain(scopedSchema.properties)
                       .keys()
-                      .filter(prop => resolvedSchema.properties[prop].type !== 'array')
+                      .filter(prop => scopedSchema.properties[prop].type !== 'array')
                       .map((prop, idx) => {
                         return (
                           <td key={Paths.compose(childPath, idx.toString())}>
                             <DispatchField
-                              schema={resolvedSchema}
+                              schema={scopedSchema}
                               uischema={createControlElement(prop)}
                               path={childPath}
                             />

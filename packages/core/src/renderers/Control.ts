@@ -1,5 +1,6 @@
 import { RendererComponent } from './Renderer';
 import { StatePropsOfScopedRenderer } from './common';
+import { JsonSchema } from '../models/jsonSchema';
 
 /**
  * State-based props of a Control
@@ -20,6 +21,11 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
    * Whether the rendered data is required.
    */
   required: boolean;
+
+  /**
+   * The schema that corresponds to the data the control is bound to.
+   */
+  scopedSchema: JsonSchema;
 }
 
 /**

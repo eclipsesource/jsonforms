@@ -51,6 +51,9 @@ export const schema = {
     postalCode: {
       type: 'string',
       maxLength: 5
+    },
+    income: {
+      type: 'number',
     }
   },
   required: ['occupation', 'nationality']
@@ -103,6 +106,17 @@ export const uischema = {
           scope: '#/properties/occupation',
           suggestion: ['Accountant', 'Engineer', 'Freelancer',
             'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
+        },
+        {
+          type: 'Control',
+          label: {
+            text: '%income',
+            show: true
+          },
+          scope: '#/properties/income',
+          options: {
+            format: true
+          }
         }
       ]
     }
@@ -114,7 +128,8 @@ export const data = {
   vegetarian: false,
   birthDate: '1985-06-02',
   personalData: {},
-  postalCode: '12345'
+  postalCode: '12345',
+  income: 100000023
 };
 
 const translations = {

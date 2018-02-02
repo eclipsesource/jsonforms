@@ -1,4 +1,5 @@
 import { StatePropsOfRenderer } from './Renderer';
+import { JsonSchema } from '../models/jsonSchema';
 
 /**
  * State-based properties for UI schema elements that have a scope.
@@ -22,6 +23,11 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
    * Path of the parent renderer, if any.
    */
   parentPath?: string;
+
+  /**
+   * The sub-schema that describes the data this element is bound to.
+   */
+  scopedSchema: JsonSchema;
 
   /**
    * An unique ID that can be used to identify the rendered element.

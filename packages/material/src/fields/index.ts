@@ -3,6 +3,9 @@ import MaterialDateField, { materialDateFieldTester } from './MaterialDateField'
 import MaterialEnumField, { materialEnumFieldTester } from './MaterialEnumField';
 import MaterialIntegerField, { materialIntegerFieldTester } from './MaterialIntegerField';
 import MaterialNumberField, { materialNumberFieldTester } from './MaterialNumberField';
+import MaterialNumberFormatField, {
+  materialNumberFormatFieldTester
+} from './MaterialNumberFormatField';
 import MaterialSliderField, { materialSliderFieldTester } from './MaterialSliderField';
 import MaterialTextField, { materialTextFieldTester } from './MaterialTextField';
 import MaterialTimeField, { materialTimeFieldTester } from './MaterialTimeField';
@@ -18,6 +21,8 @@ export {
   materialIntegerFieldTester,
   MaterialNumberField,
   materialNumberFieldTester,
+  MaterialNumberFormatField,
+  materialNumberFormatFieldTester,
   MaterialSliderField,
   materialSliderFieldTester,
   MaterialTextField,
