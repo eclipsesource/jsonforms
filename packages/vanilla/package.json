@@ -18,7 +18,6 @@
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.1",
-    "@jsonforms/webcomponent": "^2.0.0-rc.1",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
