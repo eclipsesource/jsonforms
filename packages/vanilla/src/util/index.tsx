@@ -18,7 +18,7 @@ import { getStyle, getStyleAsClassName } from '../reducers';
  */
 export interface StyleDef {
   name: string;
-  classNames: string[];
+  classNames: string[] | ((args: any[]) => string[]);
 }
 
 export const renderChildren = (

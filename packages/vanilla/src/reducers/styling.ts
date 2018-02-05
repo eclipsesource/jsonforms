@@ -17,14 +17,13 @@ const registerStyle = (styles: StyleDef[], { name, classNames }) => {
   return copy;
 };
 
-export const findStyle = (styles: StyleDef[]) =>
-  (style: string, ...args: any[]) => {
+export const findStyle = (styles: StyleDef[]) => (style: string, ...args: any[]): string[] => {
 
   const foundStyle = _.find(styles, s => s.name === style);
   if (!_.isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
     return foundStyle.classNames(args);
   } else if (!_.isEmpty(foundStyle)) {
-    return foundStyle.classNames;
+    return foundStyle.classNames as string[];
   }
 
   return [];
@@ -50,4 +49,4 @@ export const stylingReducer = (state: StyleDef[]  = [], action) => {
   }
 };
 
-JsonForms.reducers['styles'] = stylingReducer;
+JsonForms.reducers.styles = stylingReducer;
