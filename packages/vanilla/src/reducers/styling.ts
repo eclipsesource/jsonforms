@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { JsonForms } from '@jsonforms/core/lib/core';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
 import { StyleDef } from '../util';
 
