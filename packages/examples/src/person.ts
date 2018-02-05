@@ -6,7 +6,7 @@ export const personCoreSchema = {
     name: {
       type: 'string',
       minLength: 3,
-      description: 'Please enter your full name.'
+      description: '%namedescription'
     },
     vegetarian: {
       type: 'boolean'
@@ -159,7 +159,8 @@ const translations = {
     occupation: 'Occupation',
     birthday: 'Birthday',
     postalcode: 'Postal Code',
-    drivingskill: 'Driving skill'
+    drivingskill: 'Driving skill',
+    namedescription: 'Please enter your full name.'
   },
   'de-DE': {
     name: 'Name',
@@ -169,7 +170,8 @@ const translations = {
     occupation: 'Tätigkeit',
     birthday: 'Geburtstag',
     postalcode: 'Postleitzahl',
-    drivingskill: 'Fahrkönnen'
+    drivingskill: 'Fahrkönnen',
+    namedescription: 'Bitte tragen Sie Ihren vollen Namen ein.'
   }
 };
 
