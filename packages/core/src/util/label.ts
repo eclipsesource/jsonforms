@@ -55,11 +55,18 @@ export const createLabelDescriptionFrom = (withLabel: ControlElement): LabelDesc
   }
 };
 
-export const translateLabel = (translations, label: LabelDescription): LabelDescription => {
-  if (translations && _.startsWith(label.text, '%')) {
-    const labelKey = label.text.substr(1, label.text.length);
-    label.text = translations[labelKey] ? translations[labelKey] : label.text;
-  }
+export interface Translations {
+  [key: string]: string;
+}
 
-  return label;
-};
+export const translateLabel: (translations: Translations,
+                              label: LabelDescription) => LabelDescription =
+  (translations, label) => {
+
+    if (translations && _.startsWith(label.text, '%')) {
+      const labelKey = label.text.substr(1, label.text.length);
+      label.text = translations[labelKey] ? translations[labelKey] : label.text;
+    }
+
+    return label;
+  };
