@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   ControlProps,
   convertToValidClassName,
@@ -9,7 +10,6 @@ import {
   rankWith,
   registerStartupRenderer
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 /**
  * Default tester for a horizontal layout.
@@ -29,5 +29,5 @@ const FakeControl = (props: ControlProps) => {
 
 export default registerStartupRenderer(
     fakeControlTester,
-    connect(mapStateToControlProps, null)(FakeControl)
+    connectToJsonForms(mapStateToControlProps, null)(FakeControl)
 );

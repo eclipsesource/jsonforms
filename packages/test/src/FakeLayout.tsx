@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   DispatchRenderer,
   Layout,
   mapStateToLayoutProps,
@@ -9,12 +10,11 @@ import {
   RendererProps,
   Test,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 const {
   or,
   uiTypeIs
-} = Test
+} = Test;
 
 /**
  * Default tester for a horizontal layout.
@@ -51,5 +51,5 @@ const FakeLayout = (props: RendererProps) => {
 
 export default registerStartupRenderer(
     fakeLayoutTester,
-    connect(mapStateToLayoutProps, null)(FakeLayout)
+    connectToJsonForms(mapStateToLayoutProps, null)(FakeLayout)
 );
