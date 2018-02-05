@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import {
   Categorization,
   Category,
+  connectToJsonForms,
+  mapStateToLayoutProps,
   Renderer,
 } from '@jsonforms/core';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
-import { mapStateToVanillaLayoutProps, VanillaRendererProps } from '../../util';
+import { addVanillaLayoutProps, VanillaRendererProps } from '../../util';
 
 export interface CategorizationState {
   selectedCategory: Category;
@@ -74,4 +75,7 @@ class CategorizationRenderer extends Renderer<VanillaRendererProps, Categorizati
   }
 }
 
-export default connect(mapStateToVanillaLayoutProps)(CategorizationRenderer);
+export default connectToJsonForms(
+  addVanillaLayoutProps(mapStateToLayoutProps),
+  null
+)(CategorizationRenderer);

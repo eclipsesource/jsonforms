@@ -1,10 +1,16 @@
 import * as _ from 'lodash';
 import * as React from 'react';
-import { connect } from 'react-redux';
 
-import { ControlElement, Helpers, Resolve, update } from '@jsonforms/core';
+import {
+  connectToJsonForms,
+  ControlElement,
+  Helpers,
+  mapStateToControlProps,
+  Resolve,
+  update
+} from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
-import { mapStateToVanillaControlProps, VanillaControlProps } from '../../util';
+import { VanillaControlProps } from '../../util';
 
 export interface ArrayControlRendererProps extends VanillaControlProps {
   addItem(path: string);
@@ -70,7 +76,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToVanillaControlProps,
-  mapDispatchToProps)
-(ArrayControlRenderer);
+export default connectToJsonForms(mapStateToControlProps, mapDispatchToProps)(ArrayControlRenderer);

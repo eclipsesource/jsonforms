@@ -1,20 +1,22 @@
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
-import '../../src/fields';
 import {
+  Actions,
   ControlElement,
   DispatchRenderer,
   HorizontalLayout,
   JsonSchema,
-  update,
-  validate
 } from '@jsonforms/core';
 import { Provider } from 'react-redux';
 import '../../src';
-import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
+import HorizontalLayoutRenderer, {
+  horizontalLayoutTester
+} from '../../src/layouts/HorizontalLayout';
 import InputControl, { inputControlTester } from '../../src/controls/InputControl';
+import BooleanField, { booleanFieldTester } from '../../src/fields/BooleanField';
 import * as TestUtils from 'react-dom/test-utils';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': true };
@@ -30,20 +32,6 @@ test.beforeEach(t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.context.styles = [
-    {
-      name: 'control',
-      classNames: ['control']
-    },
-    {
-      name: 'control.validation',
-      classNames: ['validation']
-    },
-    {
-      name: 'input-description',
-      classNames: ['input-description']
-    }
-  ];
 });
 
 test('autofocus on first element', t => {
@@ -79,11 +67,17 @@ test('autofocus on first element', t => {
     'firstBooleanField': true,
     'secondBooleanField': false
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data,
     schema,
     uischema,
-    styles: t.context.styles
+    renderers: [
+      { tester: inputControlTester, renderer: InputControl },
+      { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
+    ],
+    fields: [
+      { tester: booleanFieldTester, field: BooleanField }
+    ]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -105,15 +99,16 @@ test('tester', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    styles: t.context.styles
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <InputControl uischema={t.context.uischema} schema={t.context.schema} />
     </Provider>
   );
 
@@ -140,11 +135,12 @@ test('render without label', t => {
     scope: '#/properties/foo',
     label: false
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
-    styles: t.context.styles
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -171,11 +167,11 @@ test('render without label', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    styles: t.context.styles
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -193,11 +189,11 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    styles: t.context.styles
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -209,10 +205,11 @@ test('show by default', t => {
 });
 
 test('single error', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -220,16 +217,17 @@ test('single error', t => {
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
-  store.dispatch(update('foo', () => 2));
-  store.dispatch(validate());
+  store.dispatch(Actions.update('foo', () => 2));
+  store.dispatch(Actions.validate());
   t.is(validation.textContent, 'should be boolean');
 });
 
 test('multiple errors', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -237,16 +235,17 @@ test('multiple errors', t => {
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
-  store.dispatch(update('foo', () => 3));
-  store.dispatch(validate());
+  store.dispatch(Actions.update('foo', () => 3));
+  store.dispatch(Actions.validate());
   t.is(validation.textContent, 'should be boolean');
 });
 
 test('empty errors by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -258,10 +257,11 @@ test('empty errors by default', t => {
 });
 
 test('reset validation message', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -269,9 +269,9 @@ test('reset validation message', t => {
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
-  store.dispatch(update('foo', () => 3));
-  store.dispatch(update('foo', () => true));
-  store.dispatch(validate());
+  store.dispatch(Actions.update('foo', () => 3));
+  store.dispatch(Actions.update('foo', () => true));
+  store.dispatch(Actions.validate());
   t.is(validation.textContent, '');
 });
 
@@ -321,11 +321,11 @@ test('validation of nested schema', t => {
     name: 'John Doe',
     personalData: {}
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data,
     schema,
     uischema,
-    styles: t.context.styles
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -333,7 +333,7 @@ test('validation of nested schema', t => {
     </Provider>
   );
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
-  store.dispatch(validate());
+  store.dispatch(Actions.validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');
@@ -353,10 +353,11 @@ test('required field is marked', t => {
     type: 'Control',
     scope: '#/properties/dateField'
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema,
     uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -381,7 +382,12 @@ test('not required', t => {
     type: 'Control',
     scope: '#/properties/dateField'
   };
-  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const store = initJsonFormsVanillaStore({
+    data: {},
+    schema,
+    uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -406,7 +412,12 @@ test('required field is marked', t => {
     scope: '#/properties/dateField'
   };
 
-  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const store = initJsonFormsVanillaStore({
+    data: {},
+    schema,
+    uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -431,7 +442,12 @@ test('not required', t => {
     scope: '#/properties/dateField'
   };
 
-  const store = initJsonFormsStore({ data: {}, schema, uischema });
+  const store = initJsonFormsVanillaStore({
+    data: {},
+    schema,
+    uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -456,7 +472,12 @@ test('show description on focus', t => {
     scope: '#/properties/name'
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
+  const store = initJsonFormsVanillaStore({
+    data,
+    schema,
+    uischema,
+    renderers: [{tester: inputControlTester, renderer: InputControl}]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -484,7 +505,12 @@ test('hide description when input field is not focused', t => {
     scope: '#/properties/name'
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
+  const store = initJsonFormsVanillaStore({
+    data,
+    schema,
+    uischema,
+    renderers: [{tester: inputControlTester, renderer: InputControl}]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
@@ -512,7 +538,12 @@ test('hide description on blur', t => {
     scope: '#/properties/name'
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
+  const store = initJsonFormsVanillaStore({
+    data,
+    schema,
+    uischema,
+    renderers: [{tester: inputControlTester, renderer: InputControl}]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />
@@ -543,7 +574,12 @@ test('description undefined', t => {
     scope: '#/properties/name'
   };
   const data = { isFocused: false };
-  const store = initJsonFormsStore({ data, schema, uischema, styles: t.context.styles });
+  const store = initJsonFormsVanillaStore({
+    data,
+    schema,
+    uischema,
+    renderers: [{tester: inputControlTester, renderer: InputControl}]
+  });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <DispatchRenderer />

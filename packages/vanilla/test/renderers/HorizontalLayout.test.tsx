@@ -1,4 +1,4 @@
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as TestUtils from 'react-dom/test-utils';
 import * as React from 'react';
 import test from 'ava';
@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/HorizontalLayout';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.uischema = {
@@ -35,7 +36,7 @@ test('render with undefined elements', t => {
   const uischema: UISchemaElement = {
     type: 'HorizontalLayout'
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
@@ -57,7 +58,7 @@ test('render with null elements', t => {
     type: 'HorizontalLayout',
     elements: null
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
@@ -81,7 +82,7 @@ test('render with children', t => {
       { type: 'Control' }
     ]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema,
@@ -98,7 +99,7 @@ test('render with children', t => {
 });
 
 test('hide', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema: t.context.uischema,
@@ -119,7 +120,7 @@ test('hide', t => {
 });
 
 test('show by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: {},
     schema: {},
     uischema: t.context.uischema,

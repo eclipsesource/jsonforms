@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   ControlProps,
   convertToValidClassName,
@@ -9,13 +10,12 @@ import {
   rankWith,
   registerStartupRenderer
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 /**
  * Default tester for a horizontal layout.
  * @type {RankedTester}
  */
-export const fakeTester: RankedTester = rankWith(2, isControl);
+export const fakeControlTester: RankedTester = rankWith(2, isControl);
 
 const FakeControl = (props: ControlProps) => {
 
@@ -28,6 +28,6 @@ const FakeControl = (props: ControlProps) => {
 };
 
 export default registerStartupRenderer(
-    fakeTester,
-    connect(mapStateToControlProps, null)(FakeControl)
+    fakeControlTester,
+    connectToJsonForms(mapStateToControlProps, null)(FakeControl)
 );

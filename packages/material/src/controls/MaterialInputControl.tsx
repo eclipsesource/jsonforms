@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   computeLabel,
+  connectToJsonForms,
   Control,
   ControlElement,
   ControlProps,
@@ -15,12 +16,12 @@ import {
   registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
+
   render() {
     const {
       id,
@@ -64,5 +65,5 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 export default registerStartupRenderer(
   inputControlTester,
-  connect(mapStateToControlProps)(MaterialInputControl)
+  connectToJsonForms(mapStateToControlProps)(MaterialInputControl)
 );

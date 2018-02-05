@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlProps,
   isBooleanControl,
   mapStateToControlProps,
   rankWith,
   registerStartupRenderer
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import { FormControlLabel } from 'material-ui/Form';
 
@@ -30,5 +30,5 @@ export const MaterialBooleanControl =
 
 export default registerStartupRenderer(
   rankWith(2, isBooleanControl),
-  connect(mapStateToControlProps)(MaterialBooleanControl)
+  connectToJsonForms(mapStateToControlProps)(MaterialBooleanControl)
 );

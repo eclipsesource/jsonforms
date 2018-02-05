@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { connect } from 'react-redux';
 import { JsonSchema } from '../models/jsonSchema';
 import { JsonForms } from '../core';
 import {
@@ -7,11 +8,10 @@ import {
   isEnabled,
   isVisible,
   Resolve,
-  translateLabel
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
-import { getData, getErrorAt, getSubErrorsAt, getTranslations } from '../reducers';
+import { getData, getErrorAt, getPropsTransformer, getSubErrorsAt } from '../reducers';
 import { Renderer, RendererProps } from '../renderers/Renderer';
 import { update } from '../actions';
 
@@ -38,6 +38,8 @@ export const mapStateToLayoutProps = (state, ownProps) => {
     renderers: state.renderers,
     visible,
     path: ownProps.path,
+    uischema: ownProps.uischema,
+    schema: ownProps.schema
   };
 };
 
@@ -75,7 +77,7 @@ export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
-  const labelDesc = translateLabel(getTranslations(state), createLabelDescriptionFrom(ownProps.uischema));
+  const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = getErrorAt(path)(state).map(error => error.message);
   const controlElement = ownProps.uischema as ControlElement;
@@ -94,7 +96,9 @@ export const mapStateToControlProps = (state, ownProps) => {
     path,
     parentPath: ownProps.path,
     fields,
-    required
+    required,
+    uischema: ownProps.uischema,
+    schema: ownProps.schema
   };
 };
 
@@ -103,6 +107,22 @@ export const mapDispatchToControlProps = dispatch => ({
     dispatch(update(path, () => value));
   }
 });
+
+export const connectToJsonForms = (
+  mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
+  mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
+
+  return connect(
+    (state, ownProps) =>
+      (getPropsTransformer(state) || []).reduce(
+        (props, materializer) => {
+          return _.merge(props, materializer(state, props));
+        },
+        mapStateToProps(state, ownProps)
+      ),
+    mapDispatchToProps
+  )(Component);
+};
 
 export const mapStateToTableControlProps = (state, ownProps) => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);

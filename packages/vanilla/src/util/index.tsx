@@ -7,8 +7,6 @@ import {
   DispatchRenderer,
   JsonSchema,
   Layout,
-  mapStateToControlProps,
-  mapStateToLayoutProps,
   RendererProps
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from '../reducers';
@@ -45,10 +43,10 @@ export const renderChildren = (
   });
 };
 
-export const mapStateToVanillaControlProps = (state, ownProps) => {
-  const props = mapStateToControlProps(state, ownProps);
-  const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
-  const controlElement = ownProps.uischema as ControlElement;
+export const addVanillaControlProps = (mapper: (s, p) => any) => (state, ownProps) => {
+  const props = mapper(state, ownProps);
+  const trim = props.uischema.options && props.uischema.options.trim;
+  const controlElement = props.uischema as ControlElement;
   const isValid = _.isEmpty(props.errors);
   const styles = getStyle(state)('control');
   let classNames: string[] = !_.isEmpty(controlElement.scope) ?
@@ -76,6 +74,16 @@ export const mapStateToVanillaControlProps = (state, ownProps) => {
   };
 };
 
+export const addVanillaLayoutProps = (mapper: (s, p) => any) => (state, ownProps) => {
+  const props = mapper(state, ownProps);
+
+  return {
+    ...props,
+    getStyleAsClassName:  getStyleAsClassName(state),
+    getStyle:  getStyle(state),
+  };
+};
+
 export interface VanillaControlProps extends ControlProps {
   classNames: {
     wrapper: string;
@@ -92,16 +100,6 @@ export interface VanillaRendererProps extends RendererProps {
   getStyleAsClassName(string: string): string;
 }
 
-export const mapStateToVanillaLayoutProps = (state, ownProps) => {
-  const props = mapStateToLayoutProps(state, ownProps);
-
-  return {
-    ...props,
-    getStyleAsClassName:  getStyleAsClassName(state),
-    getStyle:  getStyle(state),
-  };
-};
-
 export const vanillaStyles = [
   {
     name: 'control',
@@ -110,10 +108,6 @@ export const vanillaStyles = [
   {
     name: 'control.trim',
     classNames: ['trim']
-  },
-  {
-    name: 'control.label',
-    classNames: ['control']
   },
   {
     name: 'control.input',

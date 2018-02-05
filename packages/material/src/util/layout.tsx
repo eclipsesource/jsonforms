@@ -11,10 +11,9 @@ const renderChildren = (
     elements: UISchemaElement[],
     schema: JsonSchema,
     path: string
-  ) => {
-
-    return elements.map((child, index) =>
-    (
+  ) =>
+  elements.map((child, index) =>
+      (
         <Grid item key={`${path}-${index}`} xs>
           <DispatchRenderer
             uischema={child}
@@ -23,8 +22,8 @@ const renderChildren = (
           />
         </Grid>
       )
-    );
-  };
+  );
+
 export interface MaterialLayoutRendererProps {
     elements: UISchemaElement[];
     schema: JsonSchema;
@@ -33,15 +32,15 @@ export interface MaterialLayoutRendererProps {
     direction: 'row'|'column';
 }
 export const MaterialLayoutRenderer = (
-    {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
-        if (_.isEmpty(elements)) {
-            return null;
-        }
-        else {
-            return (
-                <Grid container hidden={{ xsUp: !visible }} direction={direction}>
-                    {renderChildren(elements, schema, path)}
-                </Grid>
-            );
-        }
-    };
+  {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
+
+  if (_.isEmpty(elements)) {
+    return null;
+  } else {
+    return (
+      <Grid container hidden={{ xsUp: !visible }} direction={direction}>
+        {renderChildren(elements, schema, path)}
+      </Grid>
+    );
+  }
+};

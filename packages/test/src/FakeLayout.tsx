@@ -1,20 +1,33 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   DispatchRenderer,
   Layout,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
   registerStartupRenderer,
-  RendererProps
+  RendererProps,
+  Test,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
+
+const {
+  or,
+  uiTypeIs
+} = Test;
 
 /**
  * Default tester for a horizontal layout.
  * @type {RankedTester}
  */
-export const fakeTester: RankedTester = rankWith(1, () => true);
+export const fakeLayoutTester: RankedTester = rankWith(
+  1,
+  or(
+    uiTypeIs('VerticalLayout'),
+    uiTypeIs('HorizontalLayout'),
+    uiTypeIs('Group')
+  )
+);
 
 const FakeLayout = (props: RendererProps) => {
   const {uischema, schema, path} = props;
@@ -37,6 +50,6 @@ const FakeLayout = (props: RendererProps) => {
 };
 
 export default registerStartupRenderer(
-    fakeTester,
-    connect(mapStateToLayoutProps, null)(FakeLayout)
+    fakeLayoutTester,
+    connectToJsonForms(mapStateToLayoutProps, null)(FakeLayout)
 );
