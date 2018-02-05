@@ -71,6 +71,54 @@ export const isDescriptionHidden = (visible, description, isFocused) => {
   !isFocused;
 };
 
+/**
+ * Number is formatted based on the current locale value.
+ * If user enters a decimal point, the corresponding decimal separator is added as the last
+ * character of the locale string
+ *
+ * @param {string} data
+ * @param {string} locale
+ * @param {string} decimalSeparator
+ * @returns {string}
+ */
+export const convertNumberToLocaleString =
+  (data: string, locale: string, decimalSeparator: string) : string => {
+  let localeString = '';
+  if (data !== '' && data !== undefined && data !== null) {
+    if (_.last(data) === '.') {
+      localeString =
+        new Intl.NumberFormat(locale, { maximumFractionDigits: 10 }).format(parseFloat(data));
+      localeString += decimalSeparator;
+    } else {
+      localeString =
+        new Intl.NumberFormat(locale, { maximumFractionDigits: 10 }).format(parseFloat(data));
+    }
+  }
+
+  return localeString;
+};
+
+/**
+ * It coverts the given string number by the user to a valid string number before updating state
+ * Local thousands separators are removed, local decimal separators are replaced with '.'
+ *
+ * @param ev
+ * @param numberSeparators
+ * @returns {string}
+ */
+
+export const convertLocaleStringToValidStringNumber = (ev, numberSeparators: any): string => {
+  const numberSeparatorRegex = new RegExp(/\.|,/g, 'gi');
+  const numberFormat = {};
+  numberFormat[numberSeparators.decimalSeparator] = '.';
+  numberFormat[numberSeparators.thousandsSeparator] = '';
+  const validStringNumber = ev.currentTarget.value.replace(numberSeparatorRegex, matched => {
+    return numberFormat[matched];
+  });
+
+  return validStringNumber;
+};
+
 export const mapStateToControlProps = (state, ownProps) => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
