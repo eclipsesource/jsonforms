@@ -42,6 +42,10 @@ const createState = uischema => ({
     },
     validation: {
       errors: []
+    },
+    config: {
+      restrict: false,
+      trim: false
     }
   }
 });

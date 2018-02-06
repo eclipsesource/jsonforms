@@ -141,11 +141,7 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/postalCode',
-          label: '%postalcode',
-          options: {
-            trim: true,
-            restrict: true
-          }
+          label: '%postalcode'
         }
       ]
     }
