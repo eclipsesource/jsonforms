@@ -8,6 +8,7 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
+  isErrorVisible,
   RankedTester,
   rankWith,
   registerStartupRenderer,
@@ -30,7 +31,8 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
       parentPath
     } = this.props;
 
-    const isValid = errors.length === 0;
+    let isValid = errors.length === 0;
+    isValid = !isErrorVisible(isValid, errors, uischema);
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);

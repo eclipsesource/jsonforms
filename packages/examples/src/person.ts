@@ -46,6 +46,13 @@ export const schema = {
       },
       required: ['age', 'height']
     },
+    vegetarian: {
+      type: 'boolean'
+    },
+    birthDate: {
+      type: 'string',
+      format: 'date'
+    },
     occupation: {
       type: 'string'
     },
@@ -54,7 +61,7 @@ export const schema = {
       maxLength: 5
     }
   },
-  required: ['occupation', 'nationality']
+  required: ['name', 'occupation', 'nationality']
 };
 
 export const uischema = {
@@ -69,7 +76,10 @@ export const uischema = {
             text: '%name',
             show: true
           },
-          scope: '#/properties/name'
+          scope: '#/properties/name',
+          options: {
+             displayError: true
+          }
         },
         {
           type: 'Control',
@@ -144,7 +154,6 @@ export const uischema = {
 };
 
 export const data = {
-  name: 'John Doe',
   vegetarian: false,
   birthDate: '1985-06-02',
   personalData: {},

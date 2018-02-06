@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
+import { UISchemaElement } from '../models/uischema';
 import { JsonForms } from '../core';
 import {
   composeWithUi,
@@ -69,6 +70,13 @@ export const isDescriptionHidden = (visible, description, isFocused) => {
   return  description === undefined ||
   (description !== undefined && !visible) ||
   !isFocused;
+};
+
+export const isErrorVisible = (isValid: boolean, errors: string[], uischema: UISchemaElement) => {
+  if (uischema.options && uischema.options.hasOwnProperty('displayError') && _.includes(errors, 'is a required property')) {
+    return !isValid && uischema.options.displayError;
+  }
+  return !isValid;
 };
 
 export const mapStateToControlProps = (state, ownProps) => {
