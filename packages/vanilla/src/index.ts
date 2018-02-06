@@ -11,7 +11,7 @@ import {
   BooleanField,
   booleanFieldTester,
   DateField,
-  dateFieldTester,
+  dateFieldTester, dateTimeFieldTester,
   EnumField,
   enumFieldTester,
   IntegerField,
@@ -52,6 +52,7 @@ import {
   VerticalLayout,
   verticalLayoutTester
 } from './layouts';
+import DateTimeField from "./fields/DateTimeField";
 
 /**
  * Additional renderer props specific to vanilla renderers.
@@ -119,6 +120,7 @@ export const vanillaRenderers = [
 export const vanillaFields: { tester: RankedTester; field: ComponentType<FieldProps> }[] = [
   { tester: booleanFieldTester, field: BooleanField },
   { tester: dateFieldTester, field: DateField },
+  { tester: dateTimeFieldTester, field: DateTimeField },
   { tester: enumFieldTester, field: EnumField },
   { tester: integerFieldTester, field: IntegerField },
   { tester: numberFieldTester, field: NumberField },

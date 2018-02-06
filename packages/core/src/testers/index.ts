@@ -273,6 +273,13 @@ export const isTimeControl = and(uiTypeIs('Control'), formatIs('time'));
 
 /**
  * Tests whether the given UI schema is of type Control and if the schema
+ * has a 'date-time' format.
+ * @type {Tester}
+ */
+export const isDateTimeControl = and(uiTypeIs('Control'), formatIs('date-time'));
+
+/**
+ * Tests whether the given UI schema is of type Control and if the schema
  * is an array of objects.
  * @type {Tester}
  */

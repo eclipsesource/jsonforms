@@ -1,5 +1,6 @@
 import BooleanField, { booleanFieldTester } from './BooleanField';
 import DateField, { dateFieldTester } from './DateField';
+import DateTimeField, { dateTimeFieldTester } from './DateTimeField';
 import EnumField, { enumFieldTester } from './EnumField';
 import IntegerField, { integerFieldTester } from './IntegerField';
 import NumberField, { numberFieldTester } from './NumberField';
@@ -13,6 +14,8 @@ export {
   booleanFieldTester,
   DateField,
   dateFieldTester,
+  DateTimeField,
+  dateTimeFieldTester,
   EnumField,
   enumFieldTester,
   IntegerField,

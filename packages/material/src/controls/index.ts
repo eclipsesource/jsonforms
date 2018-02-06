@@ -1,6 +1,7 @@
 import MaterialBooleanControl, { materialBooleanControlTester } from './MaterialBooleanControl';
 import MaterialInputControl, { materialInputControlTester } from './MaterialInputControl';
 import MaterialNativeControl, { materialNativeControlTester } from './MaterialNativeControl';
+import MaterialDateTimeControl, { materialDateTimeControlTester } from './MaterialDateTimeControl';
 
 export {
   MaterialBooleanControl,
@@ -8,5 +9,7 @@ export {
   MaterialInputControl,
   materialInputControlTester,
   MaterialNativeControl,
-  materialNativeControlTester
+  materialNativeControlTester,
+  MaterialDateTimeControl,
+  materialDateTimeControlTester
 };
