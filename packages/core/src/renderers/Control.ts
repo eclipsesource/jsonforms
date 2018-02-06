@@ -54,6 +54,17 @@ export interface ControlProps extends RendererProps {
   required: boolean;
 
   /**
+   * Default or given locale value.
+   */
+  locale: string;
+
+  /**
+   * Translations for internationalization
+   */
+
+  translations: any;
+
+  /**
    * Update handler that emits a data change
    *
    * @param {string} path the path to the data to be updated
