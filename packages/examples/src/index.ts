@@ -16,6 +16,7 @@ import * as rule from './rule';
 import * as resolve from './resolve';
 import Rating from './Rating';
 import { RatingControl, ratingControlTester } from './RatingControl';
+import * as config from './config';
 
 export {
   array,
@@ -36,5 +37,6 @@ export {
   resolve,
   Rating,
   RatingControl,
-  ratingControlTester
+  ratingControlTester,
+  config
 };

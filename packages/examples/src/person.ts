@@ -47,6 +47,13 @@ export const schema = {
       },
       required: ['age', 'height']
     },
+    vegetarian: {
+      type: 'boolean'
+    },
+    birthDate: {
+      type: 'string',
+      format: 'date'
+    },
     occupation: {
       type: 'string'
     },

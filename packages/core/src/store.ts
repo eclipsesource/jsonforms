@@ -29,6 +29,7 @@ export interface JsonFormsState {
       uischema?: UISchemaElement;
       errors?: ErrorObject[]
     };
+    config?: any;
     renderers?: any[];
     fields?: any[];
     // allow additional state for JSONForms
