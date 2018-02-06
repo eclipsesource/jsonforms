@@ -3,6 +3,8 @@ import { MaterialArrayControlRenderer, materialArrayControlTester } from './comp
 import {
   MaterialBooleanControl,
   materialBooleanControlTester,
+  MaterialDateTimeControl,
+  materialDateTimeControlTester,
   MaterialInputControl,
   materialInputControlTester,
   MaterialNativeControl,
@@ -47,6 +49,7 @@ export const materialRenderers = [
   { tester: materialBooleanControlTester, renderer: MaterialBooleanControl },
   { tester: materialNativeControlTester, renderer: MaterialNativeControl },
   { tester: materialInputControlTester, renderer: MaterialInputControl },
+  { tester: materialDateTimeControlTester, renderer: MaterialDateTimeControl },
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
   { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },

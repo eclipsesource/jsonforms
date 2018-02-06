@@ -1,4 +1,6 @@
 import { registerExamples } from './register';
+import * as moment from 'moment';
+
 const schema = {
   type: 'object',
   properties: {
@@ -9,10 +11,17 @@ const schema = {
     time: {
       type: 'string',
       format: 'time'
+    },
+    datetime: {
+      type: 'string',
+      format: 'date-time'
     }
   }
 };
 const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
   type: 'HorizontalLayout',
   elements: [
     {
@@ -24,10 +33,22 @@ const uischema = {
       scope: '#/properties/time'
     }
   ]
+    },
+    {
+  type: 'HorizontalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/datetime'
+    }
+  ]
+    }
+  ]
 };
 const data = {
   date: new Date().toISOString().substr(0, 10),
-  time: '13:37'
+  time: '13:37',
+  datetime: moment().format()
 };
 registerExamples([
   {
