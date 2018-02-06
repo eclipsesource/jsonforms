@@ -9,6 +9,7 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
+  isErrorVisible,
   mapStateToControlProps,
   RankedTester,
   rankWith,
@@ -32,7 +33,8 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       required,
       parentPath
     } = this.props;
-    const isValid = errors.length === 0;
+    let isValid = errors.length === 0;
+    isValid = !isErrorVisible(isValid, errors, uischema);
     const trim = uischema.options && uischema.options.trim;
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);
