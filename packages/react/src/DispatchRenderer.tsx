@@ -2,18 +2,7 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
-import { RankedTester } from '../testers';
-import { getSchema, getUiSchema } from '../reducers';
-import { StatePropsOfScopedRenderer } from './common';
-/**
- * Props of the {@link DispatchRenderer}.
- */
-export interface DispatchRendererProps extends StatePropsOfScopedRenderer {
-  /**
-   * All renderers that are considered by the dispatch renderer.
-   */
-  renderers?: { tester: RankedTester, renderer: any }[];
-}
+import { DispatchRendererProps, mapStateToDispatchRendererProps } from '@jsonforms/core';
 
 const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) => {
   const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));

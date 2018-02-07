@@ -2,10 +2,9 @@ import * as React from 'react';
 import {
   Categorization,
   Category,
-  mapStateToLayoutProps,
-  RendererComponent
+  mapStateToLayoutProps
 } from '@jsonforms/core';
-import { connectToJsonForms, Renderer } from '@jsonforms/react';
+import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';

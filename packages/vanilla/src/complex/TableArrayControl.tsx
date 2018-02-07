@@ -10,10 +10,9 @@ import {
   mapStateToTableControlProps,
   Paths,
   RankedTester,
-  RendererComponent,
   Test,
 } from '@jsonforms/core';
-import { connectToJsonForms, DispatchField, Renderer } from '@jsonforms/react';
+import { connectToJsonForms, DispatchField, RendererComponent } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 
 const {

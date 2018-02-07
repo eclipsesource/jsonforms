@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
-import { JsonSchema } from '../models/jsonSchema';
 import { getConfig, getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
@@ -9,9 +8,26 @@ import {
   Resolve,
   StatePropsOfField
 } from '../util';
-import { mapDispatchToControlProps } from './renderer';
-import { DispatchPropsOfControl } from '../renderers';
+import {
+  DispatchPropsOfControl,
+  mapDispatchToControlProps,
+  StatePropsOfScopedRenderer
+} from './renderer';
 
+/**
+ * State props of a field.
+ */
+export interface StatePropsOfField extends StatePropsOfScopedRenderer {
+  className?: string;
+  isValid: boolean;
+}
+
+/**
+ * Props of a field.
+ */
+export interface FieldProps extends StatePropsOfField, DispatchPropsOfControl {
+
+}
 /**
 
 export interface DispatchFieldProps extends FieldProps {

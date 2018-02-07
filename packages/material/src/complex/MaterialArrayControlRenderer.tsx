@@ -6,7 +6,7 @@ import {
   mapStateToTableControlProps,
   TableControlProps
 } from '@jsonforms/core';
-import { Renderer } from '@jsonforms/react';
+import { RendererComponent } from '@jsonforms/react';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
 import Button from 'material-ui/Button';

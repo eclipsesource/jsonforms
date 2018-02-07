@@ -2,25 +2,8 @@ import { JsonSchema, Scopable } from '../';
 import { resolveData, resolveSchema } from './resolvers';
 import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
-import { DispatchPropsOfControl } from '../renderers';
-import { StatePropsOfScopedRenderer } from '../renderers/common';
 
 export { createLabelDescriptionFrom } from './label';
-
-/**
- * State props of a field.
- */
-export interface StatePropsOfField extends StatePropsOfScopedRenderer {
-  className?: string;
-  isValid: boolean;
-}
-
-/**
- * Props of a field.
- */
-export interface FieldProps extends StatePropsOfField, DispatchPropsOfControl {
-
-}
 
 /**
  * Escape the given string such that it can be used as a class name,

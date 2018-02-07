@@ -34,7 +34,8 @@ export class JsonFormsOutlet implements OnInit {
     const state$ = this.ngRedux.select().map(state =>
        mapStateToDispatchRendererProps(state, {uischema: this.uischema})
     );
-    state$.subscribe(({renderers, schema, uischema}: DispatchRendererProps) => {
+    state$.subscribe(props => {
+      const {renderers, schema, uischema} = props as DispatchRendererProps;
       const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
       let bestComponent: Type<any> = UnknownRenderer;
       if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {

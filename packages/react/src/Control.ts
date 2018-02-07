@@ -1,7 +1,14 @@
-import { Renderer } from './Renderer';
+import { RendererComponent } from './Renderer';
 import { ControlProps, ControlState } from '@jsonforms/core';
 
-export class Control<P extends ControlProps, S extends ControlState> extends Renderer<P, S> {
+/**
+ * A controlled component convenience wrapper that additionally manages a focused state.
+ *
+ * @template P control specific properties
+ * @template S the state managed by the control
+ */
+export class Control<P extends ControlProps, S extends ControlState>
+  extends RendererComponent<P, S> {
 
   constructor(props: P) {
     super(props);
@@ -19,15 +26,26 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
     }
   }
 
+  /**
+   * Propagates a value change.
+   *
+   * @param value the updated value
+   */
   handleChange(value) {
     this.setState({ value });
     this.updateData(value);
   }
 
+  /**
+   * Set the focused state to true.
+   */
   onFocus() {
     this.setState({ isFocused:  true });
   }
 
+  /**
+   * Set the focused state to false.
+   */
   onBlur() {
     this.setState({ isFocused:  false });
   }

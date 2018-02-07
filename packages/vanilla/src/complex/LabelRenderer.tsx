@@ -7,11 +7,12 @@ import {
   RankedTester,
   rankWith,
   RendererProps,
-  StatelessRenderer,
+  RendererProps,
   uiTypeIs,
 } from '@jsonforms/core';
 import { getStyle as findStyle, getStyleAsClassName as findStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
+import { StatelessRenderer } from '@jsonforms/react';
 
 /**
  * Default tester for a label.

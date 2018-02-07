@@ -4,7 +4,6 @@ import {
   convertToValidClassName,
   getConfig
 } from '@jsonforms/core';
-import { DispatchRenderer } from '@jsonforms/react';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaControlStateProps, VanillaLayoutProps } from '../index';
 
