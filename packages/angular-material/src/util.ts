@@ -5,7 +5,7 @@ import {
     mapDispatchToControlProps,
     mapStateToControlProps,
     mapStateToLayoutProps,
-    RendererProps
+    StatePropsOfLayout
 } from '@jsonforms/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
@@ -15,13 +15,14 @@ export const connectControlToJsonForms =
     store.select().map(state => {
         const props = mapStateToControlProps(state, ownProps);
         const dispatch = mapDispatchToControlProps(store.dispatch);
+        const result: ControlProps =  {...props, ...dispatch};
 
-        return {...props, ...dispatch};
+        return result;
     });
 export const connectLayoutToJsonForms =
-(store: NgRedux<JsonFormsState>, ownProps: any): Observable<RendererProps> =>
+(store: NgRedux<JsonFormsState>, ownProps: any): Observable<StatePropsOfLayout> =>
     store.select().map(state => {
         const props = mapStateToLayoutProps(state, ownProps);
 
-        return {...props};
+        return props;
     });

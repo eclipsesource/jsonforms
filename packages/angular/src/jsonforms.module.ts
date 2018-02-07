@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NgReduxModule } from '@angular-redux/store';
 
 import { JsonFormsOutlet } from './jsonforms.component';
@@ -11,7 +10,7 @@ import { UnknownRenderer } from './unknown.component';
   entryComponents: [
     UnknownRenderer
   ],
-  imports: [CommonModule, NgReduxModule],
+  imports: [NgReduxModule],
   exports: [JsonFormsOutlet],
   providers: [],
 })

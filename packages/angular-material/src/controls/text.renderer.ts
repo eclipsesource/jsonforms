@@ -3,14 +3,16 @@ import {
     computeLabel,
     formatErrorMessage,
     isControl,
+    JsonFormsState,
     RankedTester,
     rankWith,
-    registerStartupRenderer,
+    registerStartupRenderer
   } from '@jsonforms/core';
 
 import { NgRedux } from '@angular-redux/store';
-import { connectControlToJsonForms, JsonFormsBaseRenderer } from '../../src';
+import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { Subscription } from 'rxjs/Subscription';
+import { connectControlToJsonForms } from '../util';
 
 @Component({
     selector: 'TextControlRenderer',
@@ -31,7 +33,7 @@ export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit
 
     private subscription: Subscription;
 
-    constructor(private ngRedux: NgRedux<any>) {
+    constructor(private ngRedux: NgRedux<JsonFormsState>) {
         super();
     }
 
@@ -51,7 +53,7 @@ export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit
 
 }
 export const TextControlRendererTester: RankedTester = rankWith(1, isControl);
-export default registerStartupRenderer(
+registerStartupRenderer(
     TextControlRendererTester,
     TextControlRenderer
   );

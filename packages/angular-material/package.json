@@ -1,7 +1,7 @@
 {
-  "name": "@jsonforms/angular",
+  "name": "@jsonforms/angular-material",
   "version": "2.0.0-rc.1",
-  "description": "Angular module of JSON Forms",
+  "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
@@ -37,10 +37,17 @@
   "dependencies": {
     "@angular-redux/store": "^7.1.0",
     "@angular/common": "^5.2.4",
+    "@angular/compiler": "^5.2.4",
     "@angular/core": "^5.2.4",
+    "@angular/platform-browser": "^5.2.4",
+    "@angular/platform-browser-dynamic": "^5.2.4",
     "@jsonforms/core": "^2.0.0-rc.1",
+    "@jsonforms/angular": "^2.0.0-rc.1",
+    "core-js": "^2.5.3",
     "redux": "^3.7.2",
-    "rxjs": "^5.5.6"
+    "redux-thunk": "^2.2.0",
+    "rxjs": "^5.5.6",
+    "zone.js": "^0.8.20"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.2.3",
