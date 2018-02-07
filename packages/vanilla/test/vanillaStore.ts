@@ -1,5 +1,4 @@
-import { applyMiddleware, combineReducers, createStore, Store } from 'redux';
-import thunk from 'redux-thunk';
+import { combineReducers, createStore, Store } from 'redux';
 import { Actions, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { vanillaStyles } from '../src/util';
 import { stylingReducer } from '../src/reducers';
@@ -18,8 +17,7 @@ export const initJsonFormsVanillaStore = ({
         styles: vanillaStyles,
         ...other
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
 
   store.dispatch(Actions.init(
