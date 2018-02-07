@@ -12,6 +12,7 @@ import {
   JsonFormsState,
   JsonFormsStore
 } from '@jsonforms/core';
+import {DispatchRenderer} from '@jsonforms/react';
 import { Store } from 'redux';
 
 /**

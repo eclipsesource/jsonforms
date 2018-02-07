@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   ControlElement,
   ControlProps,
   convertToValidClassName,
@@ -9,6 +8,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 
 /**
  * Default tester for a horizontal layout.

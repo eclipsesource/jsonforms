@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   HorizontalLayout,
   mapStateToLayoutProps,
   RankedTester,
@@ -8,6 +7,7 @@ import {
   uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
+import { connectToJsonForms } from '@jsonforms/react';
 import { JsonFormsLayout } from './JsonFormsLayout';
 import { VanillaLayoutProps } from '../index';
 import { renderChildren } from './util';

@@ -1,11 +1,8 @@
 import * as React from 'react';
 import {
   computeLabel,
-  connectToJsonForms,
-  Control,
   ControlProps,
   ControlState,
-  DispatchField,
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
@@ -14,6 +11,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
 
 import { InputLabel } from 'material-ui/Input';
 import { FormControl, FormHelperText } from 'material-ui/Form';

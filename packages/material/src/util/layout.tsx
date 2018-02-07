@@ -5,6 +5,7 @@ import {
     JsonSchema,
     UISchemaElement,
   } from '@jsonforms/core';
+import { DispatchRenderer } from '@jsonforms/react';
 import Grid from 'material-ui/Grid';
 
 const renderChildren = (

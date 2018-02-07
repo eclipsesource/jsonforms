@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   computeLabel,
   connectToJsonForms,
-  Control,
   ControlProps,
   ControlState,
   formatErrorMessage,
@@ -16,7 +15,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-
+import { connectToJsonForms, Control } from '@jsonforms/react';
 import TextField from 'material-ui/TextField';
 
 export class MaterialNativeControl extends Control<ControlProps, ControlState> {

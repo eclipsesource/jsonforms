@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
+import { JsonSchema } from '../models/jsonSchema';
 import { getConfig, getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
@@ -12,6 +13,13 @@ import { mapDispatchToControlProps } from './renderer';
 import { DispatchPropsOfControl } from '../renderers';
 
 /**
+
+export interface DispatchFieldProps extends FieldProps {
+  fields?: { tester: RankedTester, field: any }[];
+}
+export const mapStateToDispatchFieldProps = state => ({
+  fields: state.jsonforms.fields || []
+});
  * Map state to field props.
  *
  * @param state JSONForms state tree

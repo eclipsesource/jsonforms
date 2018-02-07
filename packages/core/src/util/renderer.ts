@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import { connect } from 'react-redux';
 import { JsonSchema } from '../models/jsonSchema';
 import {
   composeWithUi,
@@ -9,7 +8,7 @@ import {
   Resolve
 } from '../util';
 import { RankedTester } from '../testers';
-import { ControlElement } from '../models/uischema';
+import { ControlElement, UISchemaElement } from '../models/uischema';
 import {
   getConfig,
   getData,
@@ -22,17 +21,95 @@ import { DispatchPropsOfControl, Renderer, StatePropsOfControl } from '../render
 import { UISchemaElement } from '../models/uischema';
 import { ErrorObject } from 'ajv';
 
-/**
- * A renderer config that is used during renderer registration.
- */
-export interface JsonFormsRendererConfig {
-    /**
-     * The tester that that determines how applicable
-     * the renderer is.
-     */
-    tester: RankedTester;
-}
+export interface RendererProps {
+  /**
+   * The UI schema to be rendered.
+   */
+  uischema: UISchemaElement;
 
+  /**
+   * The JSON schema that describes the data.
+   */
+  schema: JsonSchema;
+
+  /**
+   * Whether the rendered element should be visible.
+   */
+  visible?: boolean;
+
+  /**
+   * Whether the rendered element should be enabled.
+   */
+  enabled?: boolean;
+
+  /**
+   * Optional instance path. Necessary when the actual data
+   * path can not be inferred via the UI schema element as
+   * it is the case with nested controls.
+   */
+  path?: string;
+}
+/**
+ * Props of a renderer.
+ */
+export interface ControlProps extends RendererProps {
+
+  /**
+   * The data to be rendered.
+   */
+  data: any;
+
+  /**
+   * The absolute path to the value being rendered.
+   * A path is a sequence of property names separated by dots,
+   * e.g. for accessing the value of b in the object
+   * { foo: { a: { b: 42 } } }, one would use foo.a.b.
+   */
+  path: string;
+
+  /**
+   * Path of the parent renderer, if any.
+   */
+  parentPath?: string;
+
+  /**
+   * An unique ID that can be used to identify the rendered element.
+   */
+  id: string;
+
+  /**
+   * Determines whether the rendered element should be visible.
+   */
+  visible: boolean;
+
+  /**
+   * Determines whether the rendered element should be enabeld.
+   */
+  enabled: boolean;
+
+  /**
+   * The label for the rendered element.
+   */
+  label: string;
+
+  /**
+   * Any validation errors that are caused by the data to be rendered.
+   */
+  errors: any[];
+
+  /**
+   * Whether the rendered data is required.
+   */
+  required: boolean;
+
+  /**
+   * Update handler that emits a data change
+   *
+   * @param {string} path the path to the data to be updated
+   * @param value the new value
+   */
+  handleChange(path: string, value: any);
+}
 /**
  * State props of a layout;
  */
@@ -61,6 +138,20 @@ export interface StatePropsOfLayout {
    */
   schema: JsonSchema;
 }
+export interface ControlState {
+  value: any;
+  isFocused: boolean;
+}
+
+export interface DispatchRendererProps extends RendererProps {
+  renderers?: { tester: RankedTester, renderer: any }[];
+}
+
+export const mapStateToDispatchRendererProps = (state, ownProps) => ({
+  renderers: state.jsonforms.renderers || [],
+  schema: ownProps.schema || getSchema(state),
+  uischema: ownProps.uischema || getUiSchema(state)
+});
 
 /**
  * Map state to layout props.

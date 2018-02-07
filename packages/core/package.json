@@ -36,8 +36,6 @@
   "dependencies": {
     "ajv": "^4.11.2",
     "lodash": "4.17.4",
-    "react": "^16.2.0",
-    "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "uuid": "^3.1.0"
   },

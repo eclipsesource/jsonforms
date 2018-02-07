@@ -1,10 +1,8 @@
-import { ComponentType } from 'react';
 import { RankedTester } from '../testers';
 import { ADD_FIELD, REMOVE_FIELD } from '../actions';
-import { FieldProps } from '../util';
 
 export const fieldReducer = (
-  state: { tester: RankedTester, field: ComponentType<FieldProps> }[] = [],
+  state: { tester: RankedTester, field: any }[] = [],
   { type, tester, field }) => {
   switch (type) {
     case ADD_FIELD:

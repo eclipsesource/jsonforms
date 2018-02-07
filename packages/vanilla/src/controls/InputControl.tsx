@@ -1,10 +1,7 @@
 import * as React from 'react';
 import {
   computeLabel,
-  connectToJsonForms,
-  Control,
   ControlState,
-  DispatchField,
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
@@ -13,6 +10,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
 import { VanillaControlProps } from '../index';
 import { addVanillaControlProps } from '../util';
 
