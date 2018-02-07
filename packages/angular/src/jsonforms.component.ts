@@ -1,34 +1,54 @@
-import { Component, InjectionToken, Input, OnInit, Type } from 'angular/core';
-import { NgComponentOutlet } from '@angular/common';
-import { JsonFormsInitialState, RankedTester } from '@jsonforms/core';
-import { UnknownRenderer } from './Unknown.component';
+import * as _ from 'lodash';
+import {
+  ComponentFactoryResolver,
+  Directive,
+  Input,
+  OnInit,
+  Type,
+  ViewContainerRef
+} from '@angular/core';
+import {
+  DispatchRendererProps,
+  mapStateToDispatchRendererProps,
+  UISchemaElement
+} from '@jsonforms/core';
+import { NgRedux } from '@angular-redux/store';
+import 'rxjs/add/operator/map';
+import { UnknownRenderer } from './unknown.component';
+import { JsonFormsBaseRenderer } from './base.renderer';
 
-export const FORM_RENDERER = new InjectionToken<RendererDefinition>('RendererDefinition');
-export interface RendererDefinition {
-  renderer: Type;
-  tester: RankedTester;
-}
-
-@Component({
+@Directive({
   selector: 'jsonforms-outlet',
-  template: '<ng-container *ngComponentOutlet="bestComponent"></ng-container>'
 })
 export class JsonFormsOutlet implements OnInit {
-  @Input('state') private _state: JsonFormsInitialState;
-  private bestComponent: Type;
 
-  constructor(@Inject(FORM_RENDERER) private _renderers: RendererDefinition[]) {
-    // bla
+  @Input() uischema: UISchemaElement;
+
+  constructor(
+    private viewContainerRef: ViewContainerRef,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private ngRedux: NgRedux<any> ) {
   }
 
   ngOnInit(): void {
-    const renderer = this._renderers
-      .map(r => this.mapToValue(r))
-      .reduce((acc, r) => r.value > acc.value ? r : acc, {renderer: UnknownRenderer, value: 0});
-    this.bestComponent = renderer.renderer;
+    const state$ = this.ngRedux.select().map(state =>
+       mapStateToDispatchRendererProps(state, {uischema: this.uischema})
+    );
+    state$.subscribe(({renderers, schema, uischema}: DispatchRendererProps) => {
+      const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+      let bestComponent: Type<any> = UnknownRenderer;
+      if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
+        bestComponent = renderer.renderer;
+      }
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+      this.viewContainerRef.clear();
 
+      const componentRef = this.viewContainerRef.createComponent(componentFactory);
+      if (componentRef.instance instanceof JsonFormsBaseRenderer) {
+        const instance = (componentRef.instance as JsonFormsBaseRenderer);
+        instance.uischema = uischema;
+      }
+    });
   }
-  private mapToValue (r: RendererDefinition): {renderer: Type, value: number} {
-    return {renderer: r.renderer, value: r.tester(this._state.uischema, this._state.schema) };
-  }
+
 }

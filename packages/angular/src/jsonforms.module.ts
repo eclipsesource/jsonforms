@@ -1,14 +1,19 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgReduxModule } from '@angular-redux/store';
 
-import { TextControlRenderer } from './text.renderer';
-import { FORM_RENDERER, JsonFormsOutlet } from './jsonforms.component';
+import { JsonFormsOutlet } from './jsonforms.component';
+import { UnknownRenderer } from './unknown.component';
 @NgModule({
   declarations: [
-    JsonFormsOutlet
+    JsonFormsOutlet, UnknownRenderer
   ],
-  imports: [
+  entryComponents: [
+    UnknownRenderer
   ],
-  exports: [],
-  providers: [{provide: FORM_RENDERER, multi: true, useClass: TextControlRenderer }, ],
+  imports: [CommonModule, NgReduxModule],
+  exports: [JsonFormsOutlet],
+  providers: [],
 })
-export class JsonFormsModule { }
+export class JsonFormsModule {
+}

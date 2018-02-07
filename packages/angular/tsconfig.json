@@ -2,8 +2,7 @@
   "extends": "../../tsconfig.base",
   "compilerOptions": {
     "outDir": "./lib",
-    "sourceMap": true,
-    "experimentalDecorators": true
+    "sourceMap": true
   },
   "exclude":[
     "node_modules"
