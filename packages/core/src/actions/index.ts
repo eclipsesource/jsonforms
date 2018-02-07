@@ -1,5 +1,3 @@
-import { ThunkAction } from 'redux-thunk';
-import { getData } from '../reducers/index';
 import { RankedTester } from '../testers';
 import { Renderer } from '../renderers';
 import { JsonSchema, UISchemaElement } from '../';
@@ -29,29 +27,11 @@ export const init = (
 
 // TODO: fix typings
 export const update =
-  (path: string, updater: (any) => any): ThunkAction<void, any, void> =>
-    (dispatch, getState) => {
-      dispatch(
-        {
-          type: UPDATE_DATA,
-          path,
-          updater
-        }
-      );
-      dispatch(
-        {
-          type: VALIDATE,
-          data: getData(getState())
-        }
-      );
-    };
-
-export const validate = () => (dispatch, getState) => {
-  dispatch({
-    type: VALIDATE,
-    data: getData(getState())
-  });
-};
+  (path: string, updater: (any) => any) => ({
+      type: UPDATE_DATA,
+      path,
+      updater
+    });
 
 export const registerRenderer = (
   tester: RankedTester,

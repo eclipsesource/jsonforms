@@ -6,8 +6,7 @@ import {
   ControlElement,
   getData,
   HorizontalLayout,
-  update,
-  validate
+  update
 } from '@jsonforms/core';
 import TableArrayControl, { tableArrayTester, } from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
@@ -377,7 +376,6 @@ test('single error', t => {
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 2));
-  store.dispatch(validate());
   t.is(validation.textContent, 'should be array');
 });
 
@@ -394,7 +392,6 @@ test('multiple errors', t => {
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
-  store.dispatch(validate());
   t.is(validation.textContent, 'should be array');
 });
 
@@ -426,10 +423,8 @@ test('reset validation message', t => {
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
-  store.dispatch(validate());
   t.is(validation.textContent, 'should be array');
   store.dispatch(update('test', () => []));
-  store.dispatch(validate());
   t.is(validation.textContent, '');
 });
 // must be thought through as to where to show validation errors
@@ -479,7 +474,6 @@ test.skip('validation of nested schema', t => {
     </Provider>
   );
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
-  store.dispatch(validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');

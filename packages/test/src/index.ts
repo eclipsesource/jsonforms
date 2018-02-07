@@ -11,8 +11,7 @@ import {
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import { applyMiddleware, combineReducers, createStore, Store} from 'redux';
-import thunk from 'redux-thunk';
+import { combineReducers, createStore, Store } from 'redux';
 
 /**
  * Describes the initial state of the JSON Form's store.
@@ -49,7 +48,7 @@ export const initJsonFormsStore = ({
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data,
           schema,
           uischema
@@ -58,8 +57,7 @@ export const initJsonFormsStore = ({
         fields: JsonForms.fields,
         ...props
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
 
   // necessary for validation to work

@@ -1,8 +1,7 @@
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { ExampleDescription } from './example';
 import { JsonForms, jsonformsReducer } from '@jsonforms/core';
-import { applyMiddleware, combineReducers, createStore, Reducer } from 'redux';
-import thunk from 'redux-thunk';
+import { combineReducers, createStore, Reducer } from 'redux';
 import { i18nReducer, translateProps } from '@jsonforms/i18n';
 
 declare let exampleDivId;
@@ -61,7 +60,7 @@ export const changeExample = (selectedExample: string, ...additionalStoreParams:
     ),
     {
       jsonforms: {
-        common: {
+        core: {
           data: example.data,
           schema: example.schema,
           uischema: example.uiSchema
@@ -75,8 +74,7 @@ export const changeExample = (selectedExample: string, ...additionalStoreParams:
         fields: JsonForms.fields,
         ...additionalInitState
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
 
   body.appendChild(jsonForms);

@@ -218,7 +218,6 @@ test('single error', t => {
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 2));
-  store.dispatch(Actions.validate());
   t.is(validation.textContent, 'should be boolean');
 });
 
@@ -236,7 +235,6 @@ test('multiple errors', t => {
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 3));
-  store.dispatch(Actions.validate());
   t.is(validation.textContent, 'should be boolean');
 });
 
@@ -271,7 +269,6 @@ test('reset validation message', t => {
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 3));
   store.dispatch(Actions.update('foo', () => true));
-  store.dispatch(Actions.validate());
   t.is(validation.textContent, '');
 });
 
@@ -333,7 +330,6 @@ test('validation of nested schema', t => {
     </Provider>
   );
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
-  store.dispatch(Actions.validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');

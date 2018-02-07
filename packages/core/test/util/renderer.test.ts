@@ -2,10 +2,9 @@ import test from 'ava';
 import * as _ from 'lodash';
 import { mapDispatchToControlProps, mapStateToControlProps } from '../../src/util';
 import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
 import { UPDATE_DATA } from '../../src/actions';
 
-const middlewares = [thunk];
+const middlewares = [];
 const mockStore = configureStore(middlewares);
 
 const hideRule = {
@@ -33,7 +32,7 @@ const coreUISchema = {
 
 const createState = uischema => ({
   jsonforms: {
-    common: {
+    core: {
       schema: {
         type: 'object',
         properties: {
@@ -44,9 +43,7 @@ const createState = uischema => ({
       data: {
         firstName: 'Homer'
       },
-      uischema
-    },
-    validation: {
+      uischema,
       errors: []
     },
     i18n: {
@@ -102,7 +99,7 @@ test('mapStateToControlProps - visible via state ', t => {
     uischema
   };
   const clonedState = _.cloneDeep(createState(uischema));
-  clonedState.jsonforms.common.data.firstName = 'Lisa';
+  clonedState.jsonforms.core.data.firstName = 'Lisa';
   const props = mapStateToControlProps(clonedState, ownProps);
   t.true(props.visible);
 });
@@ -154,7 +151,7 @@ test('mapStateToControlProps - enabled via state ', t => {
     uischema
   };
   const clonedState = _.cloneDeep(createState(uischema));
-  clonedState.jsonforms.common.data.firstName = 'Lisa';
+  clonedState.jsonforms.core.data.firstName = 'Lisa';
   const props = mapStateToControlProps(clonedState, ownProps);
   t.true(props.enabled);
 });
@@ -211,7 +208,7 @@ test('mapStateToControlProps - errors', t => {
     uischema: coreUISchema
   };
   const clonedState = _.cloneDeep(createState(coreUISchema));
-  clonedState.jsonforms.validation.errors = [{
+  clonedState.jsonforms.core.errors = [{
     dataPath: 'firstName',
     message: 'Duff beer'
   }];

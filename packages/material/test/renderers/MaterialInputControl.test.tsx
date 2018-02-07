@@ -2,7 +2,7 @@ import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import '../../src/fields';
-import { Actions, ControlElement, HorizontalLayout, JsonSchema, validate } from '@jsonforms/core';
+import { Actions, ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import InputControl, { inputControlTester } from '../../src/controls/MaterialInputControl';
 import { Provider } from 'react-redux';
@@ -190,7 +190,6 @@ test('single error', t => {
 
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
   store.dispatch(Actions.update('foo', () => 2));
-  store.dispatch(validate());
   t.is(validation.textContent, 'should be string');
 });
 
@@ -207,7 +206,6 @@ test('multiple errors', t => {
   );
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
   store.dispatch(Actions.update('foo', () => 3));
-  store.dispatch(validate());
   t.is(validation.textContent, 'should be string');
 });
 
@@ -240,7 +238,6 @@ test('reset validation message', t => {
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
   store.dispatch(Actions.update('foo', () => 3));
   store.dispatch(Actions.update('foo', () => 'bar'));
-  store.dispatch(validate());
   t.is(validation.textContent, '');
 });
 
@@ -302,7 +299,6 @@ test('validation of nested schema', t => {
     </Provider>
   );
   const validation = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p');
-  store.dispatch(validate());
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');

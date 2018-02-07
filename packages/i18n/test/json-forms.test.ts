@@ -2,10 +2,9 @@ import '@jsonforms/test';
 import test from 'ava';
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { FakeLayout, fakeLayoutTester } from '@jsonforms/test';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { combineReducers, createStore } from 'redux';
 import { jsonformsReducer } from '@jsonforms/core';
 import { i18nReducer } from '../src/reducers';
-import thunk from 'redux-thunk';
 
 test.beforeEach(t => {
   t.context.data = { name: 'foo' };
@@ -39,7 +38,7 @@ test.cb('render with data and translation object', t => {
     combineReducers({ jsonforms: jsonformsReducer({ i18n: i18nReducer }) }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
           schema: t.context.schema
         },
@@ -49,8 +48,7 @@ test.cb('render with data and translation object', t => {
         },
         renderers: [{ tester: fakeLayoutTester, renderer: FakeLayout }]
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
 
   setTimeout(
@@ -73,7 +71,7 @@ test.cb('render with data,translation object and locale value', t => {
     combineReducers({ jsonforms: jsonformsReducer({ i18n: i18nReducer }) }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
         },
         i18n: {
@@ -82,8 +80,7 @@ test.cb('render with data,translation object and locale value', t => {
         },
         renderers: [{ tester: fakeLayoutTester, renderer: FakeLayout }]
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
 
   setTimeout(

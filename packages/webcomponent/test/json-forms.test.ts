@@ -8,8 +8,7 @@ import {
   getUiSchema,
   jsonformsReducer,
 } from '@jsonforms/core';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import { combineReducers, createStore } from 'redux';
 import { FakeControl, fakeControlTester, FakeLayout, fakeLayoutTester } from '@jsonforms/test';
 import { JsonFormsElement } from '../src/json-forms';
 
@@ -40,13 +39,12 @@ test.cb('render with data set', t => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
         },
         renderers: t.context.renderers
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
   jsonForms.connectedCallback();
 
@@ -69,14 +67,13 @@ test.cb('render with data and data schema set', t => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
           schema: t.context.schema
         },
         renderers: t.context.renderers
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
 
   setTimeout(
@@ -106,14 +103,13 @@ test.cb('render with data and UI schema set', t => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
           uischema: t.context.uischema
         },
         renderers: t.context.renderers
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
   jsonForms.connectedCallback();
   setTimeout(
@@ -135,15 +131,14 @@ test.cb('render with data, data schema and UI schema set', t => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
           schema: t.context.schema,
           uischema: t.context.uischema
         },
         renderers: t.context.renderers
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
   setTimeout(
     () => {
@@ -165,15 +160,14 @@ test.cb('render with data schema and UI schema set', t => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: undefined,
           schema: t.context.schema,
           uischema: t.context.uischema
         },
         renderers: t.context.renderers
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
   setTimeout(
     () => {
@@ -195,13 +189,12 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        common: {
+        core: {
           data: t.context.data,
         },
         renderers: t.context.renderers
       }
-    },
-    applyMiddleware(thunk)
+    }
   );
   jsonForms.connectedCallback();
 
@@ -216,7 +209,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
         combineReducers({ jsonforms: jsonformsReducer() }),
         {
           jsonforms: {
-            common: {
+            core: {
               data: {
                 firstname: 'bar',
                 lastname: 'foo'
@@ -224,8 +217,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
             },
             renderers: t.context.renderers
           }
-        },
-        applyMiddleware(thunk)
+        }
       );
       setTimeout(
         () => {

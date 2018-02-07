@@ -27,7 +27,7 @@ const coreUISchema = {
 
 const createState = uischema => ({
   jsonforms: {
-    common: {
+    core: {
       schema: {
         type: 'object',
         properties: {
@@ -38,11 +38,9 @@ const createState = uischema => ({
       data: {
         firstName: 'Homer'
       },
-      uischema
-    },
-    validation: {
+      uischema,
       errors: []
-    }
+    },
   }
 });
 
@@ -93,7 +91,7 @@ test('mapStateToFieldProps - visible via state ', t => {
     uischema
   };
   const clonedState = _.cloneDeep(createState(uischema));
-  clonedState.jsonforms.common.data.firstName = 'Lisa';
+  clonedState.jsonforms.core.data.firstName = 'Lisa';
   const props = mapStateToFieldProps(clonedState, ownProps);
   t.true(props.visible);
 });
@@ -145,7 +143,7 @@ test('mapStateToFieldProps - enabled via state ', t => {
     uischema
   };
   const clonedState = _.cloneDeep(createState(uischema));
-  clonedState.jsonforms.common.data.firstName = 'Lisa';
+  clonedState.jsonforms.core.data.firstName = 'Lisa';
   const props = mapStateToFieldProps(clonedState, ownProps);
   t.true(props.enabled);
 });

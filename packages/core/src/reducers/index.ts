@@ -1,36 +1,40 @@
 import { combineReducers, Reducer } from 'redux';
-import { errorAt, subErrorsAt, validationReducer } from './validation';
 import { rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { transformPropsReducer } from './transformProps';
-import { commonStateReducer, extractData, extractSchema, extractUiSchema } from './common';
+import {
+  coreReducer,
+  errorAt,
+  extractData,
+  extractSchema,
+  extractUiSchema,
+  subErrorsAt
+} from './core';
 import { JsonFormsState } from '../store';
 
 export {
-  validationReducer,
   rendererReducer,
   fieldReducer,
-  commonStateReducer
+  coreReducer
 };
 
 export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsState> =>
   combineReducers<JsonFormsState>({
-    common: commonStateReducer,
-    validation: validationReducer,
+    core: coreReducer,
     renderers: rendererReducer,
     fields: fieldReducer,
     transformProps: transformPropsReducer,
     ...additionalReducers
   });
 
-export const getData = state => extractData(state.jsonforms.common);
-export const getSchema = state => extractSchema(state.jsonforms.common);
-export const getUiSchema = state => extractUiSchema(state.jsonforms.common);
+export const getData = state => extractData(state.jsonforms.core);
+export const getSchema = state => extractSchema(state.jsonforms.core);
+export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
 
 export const getErrorAt = instancePath => state => {
-  return errorAt(instancePath)(state.jsonforms.validation);
+  return errorAt(instancePath)(state.jsonforms.core);
 };
 export const getSubErrorsAt = instancePath => state =>
-  subErrorsAt(instancePath)(state.jsonforms.validation);
+  subErrorsAt(instancePath)(state.jsonforms.core);
 
 export const getPropsTransformer = state => state.jsonforms.transformProps;
