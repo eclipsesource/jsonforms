@@ -8,7 +8,7 @@ import {
   HorizontalLayout,
   update
 } from '@jsonforms/core';
-import TableArrayControl, { tableArrayTester, } from '../../src/complex/TableArrayControl';
+import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
 import * as TestUtils from 'react-dom/test-utils';
@@ -223,14 +223,14 @@ test('update via action', t => {
   t.is(children.childNodes.length, 2);
 });
 
-test('tester', t =>  t.is(tableArrayTester({type: 'Foo'}, null), -1));
+test('tester', t =>  t.is(tableArrayControlTester({type: 'Foo'}, null), -1));
 
 test('tester with recursive document ref only', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#'
   };
-  t.is(tableArrayTester(control, undefined), -1);
+  t.is(tableArrayControlTester(control, undefined), -1);
 });
 
 test(' tester with prop of wrong type', t => {
@@ -239,7 +239,7 @@ test(' tester with prop of wrong type', t => {
     scope: '#/properties/x'
   };
   t.is(
-    tableArrayTester(
+    tableArrayControlTester(
       control,
       {
         type: 'object',
@@ -258,7 +258,7 @@ test('tester with correct prop type, but without items', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    tableArrayTester(
+    tableArrayControlTester(
       control,
       {
         type: 'object',
@@ -277,7 +277,7 @@ test('tester with correct prop type, but different item types', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    tableArrayTester(
+    tableArrayControlTester(
       control,
       {
         type: 'object',
@@ -302,7 +302,7 @@ test('tester with primitive item type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    tableArrayTester(
+    tableArrayControlTester(
       control,
       {
         type: 'object',
@@ -324,7 +324,7 @@ test('tester', t => {
     scope: '#/properties/test'
   };
 
-  t.is(tableArrayTester(uischema, t.context.schema), 3);
+  t.is(tableArrayControlTester(uischema, t.context.schema), 3);
 });
 
 test('hide', t => {

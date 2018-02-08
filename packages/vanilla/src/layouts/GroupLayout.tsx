@@ -6,7 +6,6 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
@@ -56,7 +55,5 @@ const ConnectedGroupLayout =  connectToJsonForms(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(GroupLayoutRenderer);
-
-registerStartupRenderer(groupTester, ConnectedGroupLayout);
 
 export default ConnectedGroupLayout;

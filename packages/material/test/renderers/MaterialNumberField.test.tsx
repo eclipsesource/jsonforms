@@ -8,7 +8,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import NumberField, { numberFieldTester } from '../../src/fields/MaterialNumberField';
+import NumberField, { materialNumberFieldTester } from '../../src/fields/MaterialNumberField';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -143,10 +143,10 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(numberFieldTester(undefined, undefined), -1);
-  t.is(numberFieldTester(null, undefined), -1);
-  t.is(numberFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(numberFieldTester({type: 'Control'}, undefined), -1);
+  t.is(materialNumberFieldTester(undefined, undefined), -1);
+  t.is(materialNumberFieldTester(null, undefined), -1);
+  t.is(materialNumberFieldTester({type: 'Foo'}, undefined), -1);
+  t.is(materialNumberFieldTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong schema type', t => {
@@ -155,7 +155,7 @@ test('tester with wrong schema type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    numberFieldTester(
+    materialNumberFieldTester(
       control,
       {
         type: 'object',
@@ -176,7 +176,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    numberFieldTester(
+    materialNumberFieldTester(
       control,
       {
         type: 'object',
@@ -200,7 +200,7 @@ test('tester with machting schema type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    numberFieldTester(
+    materialNumberFieldTester(
       control,
       {
         type: 'object',

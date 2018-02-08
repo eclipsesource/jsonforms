@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isIntegerControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
-  rankWith,
-  registerStartupField
+  rankWith
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 const IntegerField  = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
@@ -35,7 +34,7 @@ const IntegerField  = (props: FieldProps) => {
  */
 export const integerFieldTester: RankedTester = rankWith(2, isIntegerControl);
 
-export default registerStartupField(
-  integerFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(IntegerField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(IntegerField);

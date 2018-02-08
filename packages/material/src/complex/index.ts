@@ -1,13 +1,9 @@
 import {
-    isArrayObjectControl,
-    rankWith,
-    registerStartupRenderer,
+  isArrayObjectControl,
+  RankedTester,
+  rankWith,
 } from '@jsonforms/core';
 import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
 
-registerStartupRenderer(
-    rankWith(3, isArrayObjectControl),
-    MaterialArrayControlRenderer
-);
-
-export default MaterialArrayControlRenderer;
+export const materialArrayControlTester: RankedTester = rankWith(3, isArrayObjectControl);
+export { MaterialArrayControlRenderer };

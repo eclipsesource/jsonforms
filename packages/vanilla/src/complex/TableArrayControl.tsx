@@ -12,7 +12,6 @@ import {
   mapStateToTableControlProps,
   Paths,
   RankedTester,
-  registerStartupRenderer,
   RendererComponent,
   Test,
 } from '@jsonforms/core';
@@ -33,7 +32,7 @@ const {
  * option is set.
  * @type {RankedTester}
  */
-export const tableArrayTester: RankedTester = rankWith(3, isArrayObjectControl);
+export const tableArrayControlTester: RankedTester = rankWith(3, isArrayObjectControl);
 
 export interface TableProps extends ControlProps {
   resolvedSchema: JsonSchema;
@@ -136,11 +135,6 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
 const ConnectedTableArrayControl  = connectToJsonForms(
     addVanillaControlProps(mapStateToTableControlProps),
     mapDispatchToTableControlProps
-  )(TableArrayControl)
-
-registerStartupRenderer(
-  tableArrayTester,
-  ConnectedTableArrayControl
-);
+  )(TableArrayControl);
 
 export default ConnectedTableArrayControl;

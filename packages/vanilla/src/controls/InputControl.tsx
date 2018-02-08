@@ -12,7 +12,6 @@ import {
   mapStateToControlProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
 import { VanillaControlProps } from '../index';
@@ -63,10 +62,5 @@ export const inputControlTester: RankedTester = rankWith(1, isControl);
 export const ConnectedInputControl = connectToJsonForms(
   addVanillaControlProps(mapStateToControlProps)
 )(InputControl);
-
-registerStartupRenderer(
-  inputControlTester,
-  ConnectedInputControl
-);
 
 export default ConnectedInputControl;

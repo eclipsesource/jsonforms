@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   FieldProps,
   isEnumControl,
@@ -7,10 +8,8 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField,
   resolveSchema,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';
@@ -47,8 +46,5 @@ export const MaterialEnumField = (props: FieldProps) => {
  * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
-export default registerStartupField(
-  enumFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialEnumField)
-);
+export const materialEnumFieldTester: RankedTester = rankWith(2, isEnumControl);
+export default connectToJsonForms(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialEnumField)

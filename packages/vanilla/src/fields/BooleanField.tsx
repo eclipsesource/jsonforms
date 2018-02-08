@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isBooleanControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { StatelessComponent, SyntheticEvent } from 'react';
 
 const BooleanFd: StatelessComponent<FieldProps> = (props: FieldProps) => {
@@ -34,8 +33,7 @@ const BooleanFd: StatelessComponent<FieldProps> = (props: FieldProps) => {
  * @type {RankedTester}
  */
 export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
-export const BooleanField = registerStartupField(
-  booleanFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(BooleanFd)
-);
-export default BooleanField;
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(BooleanFd);

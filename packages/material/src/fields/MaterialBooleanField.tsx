@@ -1,15 +1,13 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isBooleanControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
-  rankWith,
-  registerStartupField
+  rankWith
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
-
 import Checkbox from 'material-ui/Checkbox';
 
 export const MaterialBooleanField = (props: FieldProps) => {
@@ -27,13 +25,9 @@ export const MaterialBooleanField = (props: FieldProps) => {
   );
 };
 
-export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
+export const materialBooleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
 
-const ConnectedMaterialBooleanField = connect(
+export default connectToJsonForms(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialBooleanField);
-
-registerStartupField(booleanFieldTester, ConnectedMaterialBooleanField);
-
-export default ConnectedMaterialBooleanField;

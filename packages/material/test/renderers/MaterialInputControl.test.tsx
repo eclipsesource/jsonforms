@@ -1,12 +1,21 @@
 import { initJsonFormsStore } from '@jsonforms/test';
-import * as React from 'react';
 import test from 'ava';
-import '../../src/fields';
-import { Actions, ControlElement, HorizontalLayout, JsonSchema } from '@jsonforms/core';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import InputControl, { inputControlTester } from '../../src/controls/MaterialInputControl';
+import * as React from 'react';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import {
+  Actions,
+  ControlElement,
+  HorizontalLayout,
+  JsonSchema
+} from '@jsonforms/core';
+import { testRenderers } from '@jsonforms/test';
+import '../../src/fields';
+import MaterialInputControl, {
+  materialInputControlTester
+} from '../../src/controls/MaterialInputControl';
+import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
+import { materialFields, materialRenderers } from '../../src';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': 'bar' };
@@ -61,11 +70,12 @@ test('autofocus on first element', t => {
     data,
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: materialRenderers,
+    fields: materialFields
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <MaterialHorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
@@ -74,12 +84,12 @@ test('autofocus on first element', t => {
 });
 
 test('tester', t => {
-  t.is(inputControlTester(undefined, undefined), -1);
-  t.is(inputControlTester(null, undefined), -1);
-  t.is(inputControlTester({type: 'Foo'}, undefined), -1);
-  t.is(inputControlTester({type: 'Control'}, undefined), -1);
+  t.is(materialInputControlTester(undefined, undefined), -1);
+  t.is(materialInputControlTester(null, undefined), -1);
+  t.is(materialInputControlTester({type: 'Foo'}, undefined), -1);
+  t.is(materialInputControlTester({type: 'Control'}, undefined), -1);
   const control: ControlElement = { type: 'Control', scope: '#/properties/foo' };
-  t.is(inputControlTester(control, undefined), 1);
+  t.is(materialInputControlTester(control, undefined), 1);
 });
 
 test('render', t => {
@@ -87,10 +97,13 @@ test('render', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
+    renderers: testRenderers,
+    fields: materialFields
   });
+
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -120,11 +133,13 @@ test('render without label', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema
+    uischema,
+    renderers: testRenderers,
+    fields: materialFields
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
 
@@ -153,7 +168,11 @@ test('hide', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema} visible={false}/>
+      <MaterialInputControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        visible={false}
+      />
     </Provider>
   );
   const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
@@ -169,7 +188,7 @@ test('show by default', t => {
 
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
@@ -184,7 +203,7 @@ test('single error', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
@@ -201,7 +220,7 @@ test('multiple errors', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
@@ -217,7 +236,7 @@ test('empty errors by default', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
@@ -232,7 +251,7 @@ test('reset validation message', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
@@ -291,11 +310,11 @@ test('validation of nested schema', t => {
     data,
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl} ]
+    renderers: [{ tester: materialInputControlTester, renderer: MaterialInputControl} ]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <MaterialHorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
   );
   const validation = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p');
@@ -326,7 +345,7 @@ test('required field is marked', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema}/>
+      <MaterialInputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
@@ -355,7 +374,7 @@ test('not required', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema}/>
+      <MaterialInputControl schema={schema} uischema={uischema}/>
     </Provider>
   );
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');

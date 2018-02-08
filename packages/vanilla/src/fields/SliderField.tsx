@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   FieldProps,
   isRangeControl,
@@ -8,10 +9,8 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 const SliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
@@ -41,7 +40,7 @@ const SliderField = (props: FieldProps) => {
 
 export const sliderFieldTester: RankedTester = rankWith(4, isRangeControl);
 
-export default registerStartupField(
-  sliderFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(SliderField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(SliderField);

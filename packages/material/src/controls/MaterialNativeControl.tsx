@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   computeLabel,
+  connectToJsonForms,
   Control,
   ControlElement,
   ControlProps,
@@ -13,7 +13,6 @@ import {
   or,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
 
@@ -53,23 +52,23 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
         error={!isValid}
         style={style}
         fullWidth={!trim}
-        onFocus={() => this.onFocus()}
-        onBlur={() => this.onBlur()}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
         helperText={!isValid ? errors : description}
-        InputLabelProps={{shrink: true, }}
+        InputLabelProps={{shrink: true}}
         value={data}
         onChange={onChange}
       />
     );
   }
 }
-export const nativeControlTester: RankedTester = rankWith(2, or(isDateControl, isTimeControl));
 
-const ConnectedMaterialNativeControl = connectToJsonForms(
+export const materialNativeControlTester: RankedTester = rankWith(
+  2,
+  or(isDateControl, isTimeControl)
+);
+
+export default connectToJsonForms(
   mapStateToControlProps,
   mapDispatchToControlProps
 )(MaterialNativeControl);
-
-registerStartupRenderer(nativeControlTester, ConnectedMaterialNativeControl);
-
-export default ConnectedMaterialNativeControl;

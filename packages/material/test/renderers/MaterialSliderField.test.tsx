@@ -8,7 +8,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import SliderField, { sliderFieldTester } from '../../src/fields/MaterialSliderField';
+import SliderField, { materialSliderFieldTester } from '../../src/fields/MaterialSliderField';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -136,10 +136,10 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(sliderFieldTester(undefined, undefined), -1);
-  t.is(sliderFieldTester(null, undefined), -1);
-  t.is(sliderFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(sliderFieldTester({type: 'Control'}, undefined), -1);
+  t.is(materialSliderFieldTester(undefined, undefined), -1);
+  t.is(materialSliderFieldTester(null, undefined), -1);
+  t.is(materialSliderFieldTester({type: 'Foo'}, undefined), -1);
+  t.is(materialSliderFieldTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong schema type', t => {
@@ -148,7 +148,7 @@ test('tester with wrong schema type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -167,7 +167,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -187,7 +187,7 @@ test('tester with correct schema type, but missing maximum and minimum fields', 
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -206,7 +206,7 @@ test('tester with correct schema type, but missing maximum', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -228,7 +228,7 @@ test('tester with correct schema type,but missing minimum', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -250,7 +250,7 @@ test('tester with matching schema type (number) without default', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -273,7 +273,7 @@ test('tester with matching schema type (integer) without default', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -296,7 +296,7 @@ test('tester with matching schema type (number) with default', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',
@@ -320,7 +320,7 @@ test('tester with matching schema type (integer) with default', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    sliderFieldTester(
+    materialSliderFieldTester(
       control,
       {
         type: 'object',

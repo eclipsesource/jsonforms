@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   FieldProps,
   isStringControl,
@@ -8,10 +9,8 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 const TextField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
@@ -41,7 +40,7 @@ const TextField = (props: FieldProps) => {
  */
 export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 
-export default registerStartupField(
-  textFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(TextField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(TextField);

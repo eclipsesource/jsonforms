@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   FieldProps,
   isEnumControl,
@@ -7,10 +8,8 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const EnumField = (props: FieldProps) => {
@@ -48,7 +47,7 @@ const EnumField = (props: FieldProps) => {
  */
 export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 
-export default registerStartupField(
-  enumFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(EnumField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(EnumField);

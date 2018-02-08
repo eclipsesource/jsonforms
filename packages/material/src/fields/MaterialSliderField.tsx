@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   FieldProps,
   isRangeControl,
@@ -7,10 +8,8 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import Input from 'material-ui/Input';
 
@@ -39,9 +38,8 @@ const MaterialSliderField = (props: FieldProps) => {
  * Matrial tester for slider controls.
  * @type {RankedTester}
  */
-export const sliderFieldTester: RankedTester = rankWith(4, isRangeControl);
-
-export default registerStartupField(
-  sliderFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialSliderField)
-);
+export const materialSliderFieldTester: RankedTester = rankWith(4, isRangeControl);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(MaterialSliderField);

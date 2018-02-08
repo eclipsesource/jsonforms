@@ -1,30 +1,31 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isTimeControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const TimeField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-  return <input
-    type='time'
-    value={data || ''}
-    onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-      handleChange(path, ev.currentTarget.value)
-    }
-    className={className}
-    id={id}
-    disabled={!enabled}
-    autoFocus={uischema.options && uischema.options.focus}
-  />;
+  return (
+    <input
+      type='time'
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+        handleChange(path, ev.currentTarget.value)
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
 /**
  * Default tester for date controls.
@@ -32,7 +33,7 @@ const TimeField = (props: FieldProps) => {
  */
 export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
 
-export default registerStartupField(
-  timeFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(TimeField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(TimeField);

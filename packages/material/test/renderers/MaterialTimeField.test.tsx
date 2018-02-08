@@ -9,7 +9,7 @@ import {
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import TimeField, { timeFieldTester } from '../../src/fields/MaterialTimeField';
+import TimeField, { materialTimeFieldTester } from '../../src/fields/MaterialTimeField';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -142,15 +142,15 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(timeFieldTester(undefined, undefined), -1);
-  t.is(timeFieldTester(null, undefined), -1);
-  t.is(timeFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(timeFieldTester({ type: 'Control' }, undefined), -1);
+  t.is(materialTimeFieldTester(undefined, undefined), -1);
+  t.is(materialTimeFieldTester(null, undefined), -1);
+  t.is(materialTimeFieldTester({ type: 'Foo' }, undefined), -1);
+  t.is(materialTimeFieldTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-    timeFieldTester(
+    materialTimeFieldTester(
       t.context.uischmea,
       {
         type: 'object',
@@ -165,7 +165,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-    timeFieldTester(
+    materialTimeFieldTester(
       t.context.uischema,
       {
         type: 'object',
@@ -184,7 +184,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with correct prop type', t => {
   t.is(
-    timeFieldTester(
+    materialTimeFieldTester(
       t.context.uischema,
       {
         type: 'object',

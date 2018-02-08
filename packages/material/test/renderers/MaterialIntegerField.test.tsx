@@ -8,7 +8,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import IntegerField, { integerFieldTester } from '../../src/fields/MaterialIntegerField';
+import IntegerField, { materialIntegerFieldTester } from '../../src/fields/MaterialIntegerField';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -143,31 +143,31 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(integerFieldTester(undefined, undefined), -1);
-  t.is(integerFieldTester(null, undefined), -1);
-  t.is(integerFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(integerFieldTester({ type: 'Control' }, undefined), -1);
+  t.is(materialIntegerFieldTester(undefined, undefined), -1);
+  t.is(materialIntegerFieldTester(null, undefined), -1);
+  t.is(materialIntegerFieldTester({ type: 'Foo' }, undefined), -1);
+  t.is(materialIntegerFieldTester({ type: 'Control' }, undefined), -1);
 
   const controlElement: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
   t.is(
-    integerFieldTester(
+    materialIntegerFieldTester(
       controlElement,
       { type: 'object', properties: {foo: {type: 'string'}} }
     ),
     -1
   );
   t.is(
-    integerFieldTester(
+    materialIntegerFieldTester(
       controlElement,
       {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}
     ),
     -1
   );
   t.is(
-    integerFieldTester(
+    materialIntegerFieldTester(
       controlElement,
       {type: 'object', properties: {foo: {type: 'integer'}}}),
     2

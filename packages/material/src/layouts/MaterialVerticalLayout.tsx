@@ -1,21 +1,20 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   RendererProps,
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 /**
  * Default tester for a vertical layout.
  * @type {RankedTester}
  */
-export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
+export const materialVerticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
 export const MaterialVerticalLayoutRenderer  = (
   { schema, uischema, path, visible }: RendererProps) => {
@@ -31,8 +30,6 @@ export const MaterialVerticalLayoutRenderer  = (
   return <MaterialLayoutRenderer {...childProps}/>;
 };
 
-const ConnectedMaterialLayoutRenderer = connect(
+export default connectToJsonForms(
   mapStateToLayoutProps
 )(MaterialVerticalLayoutRenderer);
-registerStartupRenderer(verticalLayoutTester, ConnectedMaterialLayoutRenderer);
-export default ConnectedMaterialLayoutRenderer;

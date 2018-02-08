@@ -8,7 +8,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import TextField, { textFieldTester, } from '../../src/fields/MaterialTextField';
+import TextField, { materialTextFieldTester, } from '../../src/fields/MaterialTextField';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -145,11 +145,11 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(textFieldTester(undefined, undefined), -1);
-  t.is(textFieldTester(null, undefined), -1);
-  t.is(textFieldTester({type: 'Foo'}, undefined), -1);
+  t.is(materialTextFieldTester(undefined, undefined), -1);
+  t.is(materialTextFieldTester(null, undefined), -1);
+  t.is(materialTextFieldTester({type: 'Foo'}, undefined), -1);
   // scope is missing
-  t.is(textFieldTester({type: 'Control'}, undefined), -1);
+  t.is(materialTextFieldTester({type: 'Control'}, undefined), -1);
 });
 
 test('render', t => {

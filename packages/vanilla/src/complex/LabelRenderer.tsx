@@ -1,18 +1,17 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
+  connectToJsonForms,
   isVisible,
   LabelElement,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
+  RendererProps,
   StatelessRenderer,
   uiTypeIs,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { getStyle as findStyle, getStyleAsClassName as findStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
-import { RendererProps } from '../../../core/src/renderers/Renderer';
 
 /**
  * Default tester for a label.
@@ -49,11 +48,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const ConntectedLabelRenderer = connect(mapStateToProps, null)(LabelRenderer);
-
-registerStartupRenderer(
-  labelRendererTester,
-  ConntectedLabelRenderer
-);
-
-export default ConntectedLabelRenderer;
+export default connectToJsonForms(mapStateToProps, null)(LabelRenderer);
