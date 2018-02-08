@@ -9,14 +9,13 @@ import { test } from 'ava';
 import * as _ from 'lodash';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { JsonSchema, UISchemaElement } from '../../src';
+import { JsonForms, JsonFormsInit, JsonSchema, UISchemaElement} from '../../src';
 import { RendererProps, StatelessRenderer } from '../../src/renderers';
-import { DispatchRenderer } from '../../src/renderers';
 import '../../src/renderers';
 import { registerRenderer, unregisterRenderer } from '../../src/actions';
 import * as TestUtils from 'react-dom/test-utils';
 
-import { JsonForms, JsonFormsStore } from '../../src';
+import { JsonFormsStore } from '../../src';
 import { jsonformsReducer } from '../../src/reducers';
 
 /**
@@ -59,8 +58,8 @@ export const initJsonFormsStore = ({
           schema,
           uischema
         },
-        renderers: JsonForms.renderers,
-        fields: JsonForms.fields,
+        renderers: JsonFormsInit.renderers,
+        fields: JsonFormsInit.fields,
         ...props
       }
     }
@@ -87,7 +86,7 @@ test.beforeEach(t => {
   };
 });
 
-test('DispatchRenderer should report about missing renderer', t => {
+test('JsonForms renderer should report about missing renderer', t => {
   const data = { foo: 'John Doe' };
   const uischema = { type: 'Foo' };
   const schema: JsonSchema = { type: 'object', properties: { foo: { type: 'string'} } };
@@ -101,7 +100,7 @@ test('DispatchRenderer should report about missing renderer', t => {
     TestUtils.scryRenderedDOMComponentsWithTag(
       TestUtils.renderIntoDocument(
         <Provider store={store}>
-          <DispatchRenderer uischema={uischema} schema={schema} />
+          <JsonForms uischema={uischema} schema={schema} />
         </Provider>
       ),
       'div'
@@ -110,7 +109,7 @@ test('DispatchRenderer should report about missing renderer', t => {
   t.is(div.textContent, 'No applicable renderer found.');
 });
 
-test('DispatchRenderer should pick most applicable renderer', t => {
+test('JsonForms renderer should pick most applicable renderer', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
@@ -120,13 +119,14 @@ test('DispatchRenderer should pick most applicable renderer', t => {
   store.dispatch(registerRenderer(() => 5, CustomRenderer1));
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema} />
+      <JsonForms uischema={t.context.uischema} schema={t.context.schema} />
     </Provider>
   );
 
   t.not(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1'), undefined);
 });
-test('Dispatch renderer should not consider any de-registered renderers', t => {
+
+test('JsonForms renderer should not consider any de-registered renderers', t => {
   const tester1 = () => 9;
   const tester2 = () => 8;
   const tester3 = () => 10;
@@ -141,7 +141,7 @@ test('Dispatch renderer should not consider any de-registered renderers', t => {
   store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
   const tree = TestUtils.renderIntoDocument(
   <Provider store={store}>
-    <DispatchRenderer uischema={t.context.uischema} schema={t.context.schema}/>
+    <JsonForms uischema={t.context.uischema} schema={t.context.schema}/>
   </Provider>
 );
 

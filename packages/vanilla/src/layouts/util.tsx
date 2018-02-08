@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { DispatchRenderer, JsonSchema, Layout } from '@jsonforms/core';
+import { JsonForms, JsonSchema, Layout } from '@jsonforms/core';
 
 export interface RenderChildrenProps {
   layout: Layout;
@@ -22,7 +22,7 @@ export const renderChildren = (
   return layout.elements.map((child, index) => {
     return (
       <div className={className} key={`${path}-${index}`}>
-        <DispatchRenderer
+        <JsonForms
           uischema={child}
           schema={schema}
           path={path}

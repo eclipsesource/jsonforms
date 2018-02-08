@@ -1,6 +1,6 @@
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { ExampleDescription } from './example';
-import { JsonForms, jsonformsReducer } from '@jsonforms/core';
+import { JsonFormsInit, jsonformsReducer } from '@jsonforms/core';
 import { combineReducers, createStore, Reducer } from 'redux';
 import { i18nReducer, translateProps } from '@jsonforms/i18n';
 
@@ -70,8 +70,8 @@ export const changeExample = (selectedExample: string, ...additionalStoreParams:
           locale: example.locale || navigator.language
         },
         transformProps: [translateProps],
-        renderers: JsonForms.renderers,
-        fields: JsonForms.fields,
+        renderers: JsonFormsInit.renderers,
+        fields: JsonFormsInit.fields,
         ...additionalInitState
       }
     }

@@ -15,5 +15,5 @@ export class JsonFormsGlobal {
   public fields = [];
 }
 
-const JsonForms = new JsonFormsGlobal();
-export { JsonForms} ;
+const JsonFormsInit = new JsonFormsGlobal();
+export { JsonFormsInit} ;

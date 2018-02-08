@@ -4,8 +4,8 @@ import test from 'ava';
 import {
   Actions,
   ControlElement,
-  DispatchRenderer,
   HorizontalLayout,
+  JsonForms,
   JsonSchema,
 } from '@jsonforms/core';
 import { Provider } from 'react-redux';
@@ -81,7 +81,7 @@ test('autofocus on first element', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <JsonForms />
     </Provider>
   );
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
@@ -144,7 +144,7 @@ test('render without label', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <JsonForms />
     </Provider>
   );
 
@@ -247,7 +247,7 @@ test('empty errors by default', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <JsonForms />
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -263,7 +263,7 @@ test('reset validation message', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <JsonForms />
     </Provider>
   );
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -542,7 +542,7 @@ test('hide description on blur', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <JsonForms />
     </Provider>
   );
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
@@ -578,7 +578,7 @@ test('description undefined', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DispatchRenderer />
+      <JsonForms />
     </Provider>
   );
   const description =

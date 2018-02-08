@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
 import { RankedTester } from '../testers';
-import { JsonForms } from '../core';
+import { JsonFormsInit } from '../core';
 import { getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
@@ -20,7 +20,7 @@ import { DispatchPropsOfControl } from '../renderers';
  * @returns {any}
  */
 export const registerStartupField = (tester: RankedTester, field: any) => {
-  JsonForms.fields.push({
+  JsonFormsInit.fields.push({
     tester,
     field
   });

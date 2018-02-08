@@ -2,9 +2,10 @@
   "name": "@jsonforms/test",
   "private": true,
   "version": "2.0.0-rc.1",
-  "description": "Test helper for JSON Forms",
+  "description": "Test utilities for JSON Forms",
   "scripts": {
     "build": "../../node_modules/.bin/tsc",
+    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "test": "echo 'Nothing to do for `test` package'"
   },
   "main": "lib/index.js",

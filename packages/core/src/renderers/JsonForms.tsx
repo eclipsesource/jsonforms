@@ -7,16 +7,16 @@ import { getSchema, getUiSchema } from '../reducers';
 import { StatePropsOfScopedRenderer } from './common';
 
 /**
- * Props of the {@link DispatchRenderer}.
+ * Props of the {@link JsonForms} renderer.
  */
-export interface DispatchRendererProps extends StatePropsOfScopedRenderer {
+export interface JsonFormsProps extends StatePropsOfScopedRenderer {
   /**
    * All renderers that are considered by the dispatch renderer.
    */
   renderers?: { tester: RankedTester, renderer: any }[];
 }
 
-const Dispatch = ({ uischema, schema, path, renderers }: DispatchRendererProps) => {
+const JsonFormsDispatchRenderer = ({ uischema, schema, path, renderers }: JsonFormsProps) => {
   const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
   if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
     return <UnknownRenderer type={'renderer'}/>;
@@ -40,7 +40,7 @@ const mapStateToProps = (state, ownProps) => ({
   uischema: ownProps.uischema || getUiSchema(state)
 });
 
-export const DispatchRenderer = connect(
+export const JsonForms = connect(
   mapStateToProps,
   null
-)(Dispatch);
+)(JsonFormsDispatchRenderer);

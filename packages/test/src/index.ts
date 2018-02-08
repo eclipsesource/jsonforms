@@ -5,7 +5,7 @@ installCE(global, 'force');
 global.requestAnimationFrame = cb => setTimeout(cb, 0);
 import {
   INIT,
-  JsonForms,
+  JsonFormsInit,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
@@ -44,6 +44,7 @@ export const initJsonFormsStore = ({
                                      uischema,
                                      ...props
                                    }: JsonFormsInitialState): Store<JsonFormsState> => {
+
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -53,8 +54,8 @@ export const initJsonFormsStore = ({
           schema,
           uischema
         },
-        renderers: JsonForms.renderers,
-        fields: JsonForms.fields,
+        renderers: JsonFormsInit.renderers,
+        fields: JsonFormsInit.fields,
         ...props
       }
     }
