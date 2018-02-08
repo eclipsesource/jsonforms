@@ -79,28 +79,19 @@ export const uischema = {
         },
         {
           type: 'Control',
-          label: '%height',
-          scope: '#/properties/personalData/properties/height'
-        },
-        {
-          type: 'Control',
-          label: {
-            text: '%age'
-          },
-          scope: '#/properties/personalData/properties/age'
-        },
-        {
-          type: 'Control',
-          scope: '#/properties/personalData/properties/drivingSkill',
-          label: {
-            text: '%drivingskill'
-          }
+          label: '%birthday',
+          scope: '#/properties/birthDate'
         },
       ]
     },
     {
       type: 'HorizontalLayout',
       elements: [
+        {
+          type: 'Control',
+          label: '%height',
+          scope: '#/properties/personalData/properties/height'
+        },
         {
           type: 'Control',
           label: '%nationality',
@@ -108,34 +99,10 @@ export const uischema = {
         },
         {
           type: 'Control',
-          label: '%height',
-          scope: '#/properties/personalData/properties/height'
-        },
-        {
-          type: 'Control',
           label: '%occupation',
           scope: '#/properties/occupation',
           suggestion: ['Accountant', 'Engineer', 'Freelancer',
             'Journalism', 'Physician', 'Student', 'Teacher', 'Other']
-        },
-        {
-          type: 'Control',
-          label: '%birthday',
-          scope: '#/properties/birthDate'
-        }
-      ]
-    },
-    {
-      type: 'HorizontalLayout',
-      elements: [
-        {
-          type: 'Control',
-          scope: '#/properties/postalCode',
-          label: '%postalcode',
-          options: {
-            trim: true,
-            restrict: true
-          }
         }
       ]
     }
