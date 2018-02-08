@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isIntegerControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
-  rankWith,
-  registerStartupField
+  rankWith
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import Input from 'material-ui/Input';
 
@@ -30,8 +29,8 @@ export const MaterialIntegerField = (props: FieldProps) => {
     />
   );
 };
-export const integerFieldTester: RankedTester = rankWith(2, isIntegerControl);
-export default registerStartupField(
-    integerFieldTester,
-    connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialIntegerField)
-);
+export const materialIntegerFieldTester: RankedTester = rankWith(2, isIntegerControl);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(MaterialIntegerField);

@@ -1,32 +1,15 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
-import { RankedTester } from '../testers';
-import { JsonFormsInit } from '../core';
 import { getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
-  StatePropsOfField,
   isEnabled,
   isVisible,
-  Resolve
+  Resolve,
+  StatePropsOfField
 } from '../util';
 import { mapDispatchToControlProps } from './renderer';
 import { DispatchPropsOfControl } from '../renderers';
-
-/**
- * Registers the given field renderer when a JSON Forms store is created.
- * @param {RankedTester} tester
- * @param field the field to be registered
- * @returns {any}
- */
-export const registerStartupField = (tester: RankedTester, field: any) => {
-  JsonFormsInit.fields.push({
-    tester,
-    field
-  });
-
-  return field;
-};
 
 /**
  * Map state to field props.

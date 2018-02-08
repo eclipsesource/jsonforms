@@ -8,7 +8,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import BooleanField, { booleanFieldTester } from '../../src/fields/MaterialBooleanField';
+import BooleanField, { materialBooleanFieldTester } from '../../src/fields/MaterialBooleanField';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -150,10 +150,10 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(booleanFieldTester(undefined, undefined), -1);
-  t.is(booleanFieldTester(null, undefined), -1);
-  t.is(booleanFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(booleanFieldTester({type: 'Control'}, undefined), -1);
+  t.is(materialBooleanFieldTester(undefined, undefined), -1);
+  t.is(materialBooleanFieldTester(null, undefined), -1);
+  t.is(materialBooleanFieldTester({type: 'Foo'}, undefined), -1);
+  t.is(materialBooleanFieldTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
@@ -162,7 +162,7 @@ test('tester with wrong prop type', t => {
     scope: '#/properties/foo',
   };
   t.is(
-    booleanFieldTester(
+    materialBooleanFieldTester(
       control,
       {type: 'object', properties: {foo: {type: 'string'}}}
     ),
@@ -176,7 +176,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    booleanFieldTester(
+    materialBooleanFieldTester(
       control,
       {
         type: 'object',
@@ -200,7 +200,7 @@ test('tester with matching prop type', t => {
     scope: '#/properties/foo'
   };
   t.is(
-    booleanFieldTester(
+    materialBooleanFieldTester(
       control,
       {
         type: 'object',

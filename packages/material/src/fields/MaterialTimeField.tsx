@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isTimeControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import Input from 'material-ui/Input';
 
@@ -28,8 +27,8 @@ export const MaterialTimeField = (props: FieldProps) => {
     />
     );
 };
-export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
-export default registerStartupField(
-  timeFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialTimeField)
-);
+export const materialTimeFieldTester: RankedTester = rankWith(2, isTimeControl);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(MaterialTimeField);

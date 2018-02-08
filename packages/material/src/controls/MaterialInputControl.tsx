@@ -13,7 +13,6 @@ import {
   mapStateToControlProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   resolveSchema
 } from '@jsonforms/core';
 
@@ -47,8 +46,8 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       <FormControl
         style={style}
         fullWidth={!trim}
-        onFocus={() => this.onFocus()}
-        onBlur={() => this.onBlur()}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
       >
         <InputLabel htmlFor={id} error={!isValid}>
           {computeLabel(label, required)}
@@ -61,7 +60,5 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     );
   }
 }
-export const inputControlTester: RankedTester = rankWith(1, isControl);
-const ConnectedMaterialInputControl = connectToJsonForms(mapStateToControlProps)(MaterialInputControl)
-registerStartupRenderer(inputControlTester, ConnectedMaterialInputControl);
-export default ConnectedMaterialInputControl;
+export const materialInputControlTester: RankedTester = rankWith(1, isControl);
+export default connectToJsonForms(mapStateToControlProps)(MaterialInputControl);

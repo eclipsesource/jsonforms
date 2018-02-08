@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isDateControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 
 const DateField = (props: FieldProps) => {
@@ -34,7 +33,7 @@ const DateField = (props: FieldProps) => {
  */
 export const dateFieldTester: RankedTester = rankWith(2, isDateControl);
 
-export default registerStartupField(
-  dateFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(DateField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(DateField);

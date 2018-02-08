@@ -1,14 +1,13 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isNumberControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import Input from 'material-ui/Input';
 
@@ -34,8 +33,8 @@ export const MaterialNumberField = (props: FieldProps) => {
  * Default tester for number controls.
  * @type {RankedTester}
  */
-export const numberFieldTester: RankedTester = rankWith(2, isNumberControl);
-export default registerStartupField(
-    numberFieldTester,
-    connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialNumberField)
-);
+export const materialNumberFieldTester: RankedTester = rankWith(2, isNumberControl);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(MaterialNumberField);

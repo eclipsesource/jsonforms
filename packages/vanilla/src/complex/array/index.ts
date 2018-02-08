@@ -1,7 +1,7 @@
 import {
   isArrayObjectControl,
+  RankedTester,
   rankWith,
-  registerStartupRenderer,
 } from '@jsonforms/core';
 import ArrayControlRenderer from './ArrayControlRenderer';
 import { ArrayControl } from './ArrayControl';
@@ -11,9 +11,6 @@ export {
   ArrayControlRenderer
 };
 
-registerStartupRenderer(
-  rankWith(2, isArrayObjectControl),
-  ArrayControlRenderer
-);
+export const arrayControlTester: RankedTester = rankWith(2, isArrayObjectControl);
 
 export default ArrayControlRenderer;

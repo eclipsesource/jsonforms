@@ -1,4 +1,3 @@
-export * from './core';
 export * from './util';
 
 export * from './models/jsonSchema';
@@ -24,8 +23,8 @@ import { ControlElement, LabelDescription } from './models/uischema';
 
 const Helpers: {
   createLabelDescriptionFrom(withLabel: ControlElement): LabelDescription;
-  convertToValidClassName(s: string): string } = {
-
+  convertToValidClassName(s: string): string
+} = {
   createLabelDescriptionFrom,
   convertToValidClassName
 };

@@ -2,16 +2,15 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { Card, CardContent, CardHeader } from 'material-ui';
 import {
-    GroupLayout,
-    mapStateToLayoutProps,
-    RankedTester,
-    rankWith,
-    registerStartupRenderer,
-    RendererProps,
-    uiTypeIs,
-    withIncreasedRank
+  connectToJsonForms,
+  GroupLayout,
+  mapStateToLayoutProps,
+  RankedTester,
+  rankWith,
+  RendererProps,
+  uiTypeIs,
+  withIncreasedRank
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
@@ -35,10 +34,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
 
     return (
         <Card style={style}>
-          {
-            !_.isEmpty(groupLayout.label) &&
-            <CardHeader title={groupLayout.label}/>
-          }
+          { !_.isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/> }
           <CardContent>
             <MaterialLayoutRenderer {...childProps}/>
           </CardContent>
@@ -46,13 +42,8 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     );
 };
 
-const ConnectedMaterializedGroupLayoutRenderer = connect(
+export default connectToJsonForms(
   mapStateToLayoutProps
 )(MaterializedGroupLayoutRenderer);
 
-registerStartupRenderer(
-  withIncreasedRank(1, groupTester),
-  ConnectedMaterializedGroupLayoutRenderer
-);
-
-export default ConnectedMaterializedGroupLayoutRenderer;
+export const materialGroupTester: RankedTester = withIncreasedRank(1, groupTester);

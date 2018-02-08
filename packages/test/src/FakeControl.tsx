@@ -7,8 +7,7 @@ import {
   isControl,
   mapStateToControlProps,
   RankedTester,
-  rankWith,
-  registerStartupRenderer
+  rankWith
 } from '@jsonforms/core';
 
 /**
@@ -28,7 +27,5 @@ const FakeControl = (props: ControlProps) => {
 };
 
 const ConnectedFakeControl = connectToJsonForms(mapStateToControlProps, null)(FakeControl);
-
-registerStartupRenderer(fakeControlTester, ConnectedFakeControl);
 
 export default ConnectedFakeControl;

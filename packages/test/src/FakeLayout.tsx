@@ -6,7 +6,6 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   RendererProps,
   Test,
 } from '@jsonforms/core';
@@ -50,7 +49,5 @@ const FakeLayout = (props: RendererProps) => {
 };
 
 const ConnectedFakeLayout = connectToJsonForms(mapStateToLayoutProps, null)(FakeLayout);
-
-registerStartupRenderer(fakeLayoutTester, ConnectedFakeLayout);
 
 export default ConnectedFakeLayout;

@@ -4,8 +4,8 @@ import {
   ControlProps,
   isBooleanControl,
   mapStateToControlProps,
-  rankWith,
-  registerStartupRenderer
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
 
 import { FormControlLabel } from 'material-ui/Form';
@@ -32,6 +32,5 @@ const ConnectedMaterialBooleanControl = connectToJsonForms(
   mapStateToControlProps
 )(MaterialBooleanControl);
 
-registerStartupRenderer(rankWith(2, isBooleanControl), ConnectedMaterialBooleanControl);
-
+export const materialBooleanControlTester: RankedTester = rankWith(2, isBooleanControl);
 export default ConnectedMaterialBooleanControl;

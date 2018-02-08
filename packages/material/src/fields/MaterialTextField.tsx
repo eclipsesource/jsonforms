@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   ControlElement,
   FieldProps,
   isStringControl,
@@ -7,10 +8,8 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField,
   resolveSchema
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 import Input from 'material-ui/Input';
 
@@ -47,8 +46,8 @@ export const MaterialTextField = (props: FieldProps) => {
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const textFieldTester: RankedTester = rankWith(1, isStringControl);
-export default registerStartupField(
-  textFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialTextField)
-);
+export const materialTextFieldTester: RankedTester = rankWith(1, isStringControl);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(MaterialTextField);

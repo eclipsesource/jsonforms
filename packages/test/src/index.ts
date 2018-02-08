@@ -4,8 +4,7 @@ declare let global;
 installCE(global, 'force');
 global.requestAnimationFrame = cb => setTimeout(cb, 0);
 import {
-  INIT,
-  JsonFormsInit,
+  Actions,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
@@ -49,25 +48,13 @@ export const initJsonFormsStore = ({
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
-        core: {
-          data,
-          schema,
-          uischema
-        },
-        renderers: JsonFormsInit.renderers,
-        fields: JsonFormsInit.fields,
+        renderers: testRenderers,
         ...props
       }
     }
   );
 
-  // necessary for validation to work
-  store.dispatch({
-    type: INIT,
-    schema,
-    data,
-    uischema
-  });
+  store.dispatch(Actions.init(data, schema, uischema));
 
   return store;
 };
@@ -76,3 +63,8 @@ import FakeLayout, { fakeLayoutTester } from './FakeLayout';
 import FakeControl, { fakeControlTester } from './FakeControl';
 
 export { FakeControl, FakeLayout, fakeLayoutTester, fakeControlTester };
+
+export const testRenderers = [
+  { tester: fakeLayoutTester, renderer: FakeLayout },
+  { tester: fakeControlTester, renderer: FakeControl }
+];

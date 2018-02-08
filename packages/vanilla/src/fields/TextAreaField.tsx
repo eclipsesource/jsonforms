@@ -1,29 +1,30 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
+  connectToJsonForms,
   FieldProps,
   isMultiLineControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  registerStartupField
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 
 export const TextAreaField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-  return <textarea
-       value={data || ''}
-       onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
-         handleChange(path, ev.currentTarget.value)
-       }
-       className={className}
-       id={id}
-       disabled={!enabled}
-       autoFocus={uischema.options && uischema.options.focus}
-     />;
+  return (
+    <textarea
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
+        handleChange(path, ev.currentTarget.value)
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
 
 /**
@@ -32,7 +33,7 @@ export const TextAreaField = (props: FieldProps) => {
  */
 export const textAreaFieldTester: RankedTester = rankWith(2, isMultiLineControl);
 
-export default registerStartupField(
-  textAreaFieldTester,
-  connect(mapStateToFieldProps, mapDispatchToFieldProps)(TextAreaField)
-);
+export default connectToJsonForms(
+  mapStateToFieldProps,
+  mapDispatchToFieldProps
+)(TextAreaField);

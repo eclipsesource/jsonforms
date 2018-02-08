@@ -1,21 +1,23 @@
 import * as React from 'react';
 import {
+  connectToJsonForms,
   HorizontalLayout,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   RendererProps,
   uiTypeIs
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 /**
  * Default tester for a horizontal layout.
  * @type {RankedTester}
  */
-export const horizontalLayoutTester: RankedTester = rankWith(2, uiTypeIs('HorizontalLayout'));
+export const materialHorizontalLayoutTester: RankedTester = rankWith(
+  2,
+  uiTypeIs('HorizontalLayout')
+);
 
 export const MaterialHorizontalLayoutRenderer = (
   { schema, uischema, path, visible }: RendererProps) => {
@@ -31,8 +33,7 @@ export const MaterialHorizontalLayoutRenderer = (
   return <MaterialLayoutRenderer {...childProps}/>;
 };
 
-const ConnectedMaterialHorizontalLayoutRendered = connect(
+const ConnectedMaterialHorizontalLayoutRendered = connectToJsonForms(
   mapStateToLayoutProps
 )(MaterialHorizontalLayoutRenderer);
-registerStartupRenderer(horizontalLayoutTester, ConnectedMaterialHorizontalLayoutRendered);
 export default ConnectedMaterialHorizontalLayoutRendered;

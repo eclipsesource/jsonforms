@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import {
+  connectToJsonForms,
   mapDispatchToTableControlProps,
   mapStateToTableControlProps,
   RendererComponent,
   TableControlProps
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
 import Button from 'material-ui/Button';
@@ -129,7 +129,7 @@ export interface TableState {
   openConfirmDelete: boolean;
 }
 
-export default connect(
+export default connectToJsonForms(
   mapStateToTableControlProps,
-  mapDispatchToTableControlProps)
-(MaterialArrayControlRenderer);
+  mapDispatchToTableControlProps
+)(MaterialArrayControlRenderer);

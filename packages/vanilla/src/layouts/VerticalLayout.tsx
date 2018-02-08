@@ -4,7 +4,6 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  registerStartupRenderer,
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
@@ -51,5 +50,4 @@ const ConnectedVerticalLayoutRenderer = connectToJsonForms(
   null
 )(VerticalLayoutRenderer);
 
-registerStartupRenderer(verticalLayoutTester, ConnectedVerticalLayoutRenderer);
 export default ConnectedVerticalLayoutRenderer;

@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { JsonSchema } from '../models/jsonSchema';
-import { JsonFormsInit } from '../core';
 import {
   composeWithUi,
   createLabelDescriptionFrom,
@@ -78,15 +77,6 @@ export const mapStateToLayoutProps = (state, ownProps): StatePropsOfLayout => {
     uischema: ownProps.uischema,
     schema: ownProps.schema
   };
-};
-
-export const registerStartupRenderer = (tester: RankedTester, renderer: any) => {
-  JsonFormsInit.renderers.push({
-    tester,
-    renderer
-  });
-
-  return renderer;
 };
 
 const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {

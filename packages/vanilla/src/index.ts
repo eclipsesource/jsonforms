@@ -1,8 +1,57 @@
 import {
   DispatchPropsOfControl,
+  FieldProps,
+  RankedTester,
   StatePropsOfControl,
   StatePropsOfRenderer
 } from '@jsonforms/core';
+import { ComponentType } from 'react';
+
+import {
+  BooleanField,
+  booleanFieldTester,
+  DateField,
+  dateFieldTester,
+  EnumField,
+  enumFieldTester,
+  IntegerField,
+  integerFieldTester,
+  NumberField,
+  numberFieldTester,
+  SliderField,
+  sliderFieldTester,
+  TextAreaField,
+  textAreaFieldTester,
+  TextField,
+  textFieldTester,
+  TimeField,
+  timeFieldTester
+} from './fields';
+
+import {
+  InputControl,
+  inputControlTester
+} from './controls';
+
+import {
+  ArrayControl,
+  arrayControlTester,
+  Categorization,
+  categorizationTester,
+  LabelRenderer,
+  labelRendererTester,
+  TableArrayControl,
+  tableArrayControlTester
+} from './complex';
+
+import {
+  GroupLayout,
+  groupTester,
+  HorizontalLayout,
+  horizontalLayoutTester,
+  VerticalLayout,
+  verticalLayoutTester
+} from './layouts';
 
 /**
  * Additional renderer props specific to vanilla renderers.
@@ -51,7 +100,30 @@ export interface VanillaLayoutProps extends StatePropsOfRenderer, VanillaRendere
 
 }
 
-export * from './complex';
 export * from './controls';
-export * from './layouts';
+export * from './complex';
 export * from './fields';
+export * from './layouts';
+
+export const vanillaRenderers = [
+  { tester: inputControlTester, renderer: InputControl },
+  { tester: arrayControlTester, renderer: ArrayControl },
+  { tester: labelRendererTester, renderer: LabelRenderer },
+  { tester: categorizationTester, renderer: Categorization },
+  { tester: tableArrayControlTester, renderer: TableArrayControl },
+  { tester: groupTester, renderer: GroupLayout },
+  { tester: verticalLayoutTester, renderer: VerticalLayout },
+  { tester: horizontalLayoutTester, renderer: HorizontalLayout }
+];
+
+export const vanillaFields: { tester: RankedTester; field: ComponentType<FieldProps> }[] = [
+  { tester: booleanFieldTester, field: BooleanField },
+  { tester: dateFieldTester, field: DateField },
+  { tester: enumFieldTester, field: EnumField },
+  { tester: integerFieldTester, field: IntegerField },
+  { tester: numberFieldTester, field: NumberField },
+  { tester: sliderFieldTester, field: SliderField },
+  { tester: textAreaFieldTester, field: TextAreaField },
+  { tester: textFieldTester, field: TextField },
+  { tester: timeFieldTester, field: TimeField }
+];

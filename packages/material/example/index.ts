@@ -1,5 +1,9 @@
 import { createExampleSelection } from '../../examples/src/register';
+import { materialFields, materialRenderers } from '../src';
 
 window.onload = () => {
-  createExampleSelection();
+  createExampleSelection(
+    materialRenderers,
+    materialFields
+  );
 };

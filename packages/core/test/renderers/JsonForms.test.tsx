@@ -9,7 +9,7 @@ import { test } from 'ava';
 import * as _ from 'lodash';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { JsonForms, JsonFormsInit, JsonSchema, UISchemaElement} from '../../src';
+import { JsonForms, JsonSchema, UISchemaElement } from '../../src';
 import { RendererProps, StatelessRenderer } from '../../src/renderers';
 import '../../src/renderers';
 import { registerRenderer, unregisterRenderer } from '../../src/actions';
@@ -58,8 +58,6 @@ export const initJsonFormsStore = ({
           schema,
           uischema
         },
-        renderers: JsonFormsInit.renderers,
-        fields: JsonFormsInit.fields,
         ...props
       }
     }
