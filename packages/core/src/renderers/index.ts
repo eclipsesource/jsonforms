@@ -1,4 +1,4 @@
 export * from './Control';
-export * from './DispatchRenderer';
+export * from './JsonForms';
 export * from './DispatchField';
 export * from './Renderer';

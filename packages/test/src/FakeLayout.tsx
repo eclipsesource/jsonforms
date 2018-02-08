@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   connectToJsonForms,
-  DispatchRenderer,
+  JsonForms,
   Layout,
   mapStateToLayoutProps,
   RankedTester,
@@ -34,7 +34,7 @@ const FakeLayout = (props: RendererProps) => {
   const layout = uischema as Layout;
 
   const children = layout.elements.map((e, idx) => (
-    <DispatchRenderer
+    <JsonForms
       uischema={e}
       schema={schema}
       path={path}

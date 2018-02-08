@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-    DispatchRenderer,
+    JsonForms,
     JsonSchema,
     UISchemaElement,
   } from '@jsonforms/core';
@@ -15,7 +15,7 @@ const renderChildren = (
   elements.map((child, index) =>
       (
         <Grid item key={`${path}-${index}`} xs>
-          <DispatchRenderer
+          <JsonForms
             uischema={child}
             schema={schema}
             path={path}

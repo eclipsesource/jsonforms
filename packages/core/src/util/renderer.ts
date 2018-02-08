@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { JsonSchema } from '../models/jsonSchema';
-import { JsonForms } from '../core';
+import { JsonFormsInit } from '../core';
 import {
   composeWithUi,
   createLabelDescriptionFrom,
@@ -81,7 +81,7 @@ export const mapStateToLayoutProps = (state, ownProps): StatePropsOfLayout => {
 };
 
 export const registerStartupRenderer = (tester: RankedTester, renderer: any) => {
-  JsonForms.renderers.push({
+  JsonFormsInit.renderers.push({
     tester,
     renderer
   });

@@ -1,1 +1,1 @@
-export {JsonFormsElement} from './json-forms';
+export {JsonFormsElement} from './JsonFormsElement';

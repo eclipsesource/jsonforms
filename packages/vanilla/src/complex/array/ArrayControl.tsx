@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {
-  Generate,
   composePaths,
-  DispatchRenderer
+  Generate,
+  JsonForms,
 } from '@jsonforms/core';
 
 export const ArrayControl  =
@@ -30,7 +30,7 @@ export const ArrayControl  =
                 const childPath = composePaths(path, index + '');
 
                 return (
-                  <DispatchRenderer
+                  <JsonForms
                     schema={resolvedSchema}
                     uischema={generatedUi}
                     path={childPath}

@@ -4,11 +4,11 @@ import * as JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
 import {
   Actions,
-  DispatchRenderer,
   Generate,
   getData,
   getSchema,
   getUiSchema,
+  JsonForms,
   JsonFormsState,
   JsonFormsStore
 } from '@jsonforms/core';
@@ -109,7 +109,7 @@ export class JsonFormsElement extends HTMLElement {
 
     ReactDOM.render(
       <Provider store={this._store} key={`${storeId}-store`}>
-        <DispatchRenderer />
+        <JsonForms />
       </Provider>,
       this
     );

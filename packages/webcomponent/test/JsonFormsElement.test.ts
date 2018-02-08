@@ -10,7 +10,7 @@ import {
 } from '@jsonforms/core';
 import { combineReducers, createStore } from 'redux';
 import { FakeControl, fakeControlTester, FakeLayout, fakeLayoutTester } from '@jsonforms/test';
-import { JsonFormsElement } from '../src/json-forms';
+import { JsonFormsElement } from '../src/JsonFormsElement';
 
 test.beforeEach(t => {
   t.context.data = { name: 'foo' };
