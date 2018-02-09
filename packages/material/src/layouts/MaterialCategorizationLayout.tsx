@@ -2,19 +2,18 @@ import * as React from 'react';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import {
-    and,
-    Categorization,
-    mapStateToLayoutProps,
-    RankedTester,
-    rankWith,
-    registerStartupRenderer,
-    Renderer,
-    RendererProps,
-    Tester,
-    UISchemaElement,
-    uiTypeIs
+  and,
+  Categorization,
+  connectToJsonForms,
+  mapStateToLayoutProps,
+  RankedTester,
+  rankWith,
+  RendererComponent,
+  RendererProps,
+  Tester,
+  UISchemaElement,
+  uiTypeIs
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 const isSingleLevelCategorization: Tester = and(
@@ -26,13 +25,13 @@ const isSingleLevelCategorization: Tester = and(
     }
 );
 
-export const categorizationTester: RankedTester = rankWith(1, isSingleLevelCategorization);
+export const materialCategorizationTester: RankedTester = rankWith(1, isSingleLevelCategorization);
 export interface CategorizationState {
     value: number;
   }
 
 export class MaterialCategorizationLayoutRenderer
-    extends Renderer<RendererProps, CategorizationState> {
+    extends RendererComponent<RendererProps, CategorizationState> {
     constructor(props) {
       super(props);
 
@@ -77,7 +76,6 @@ export class MaterialCategorizationLayoutRenderer
     }
 }
 
-export default registerStartupRenderer(
-    categorizationTester,
-    connect(mapStateToLayoutProps)(MaterialCategorizationLayoutRenderer)
-);
+export default connectToJsonForms(
+  mapStateToLayoutProps
+)(MaterialCategorizationLayoutRenderer);
