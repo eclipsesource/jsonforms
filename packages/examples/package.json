@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "JSON Forms usage examples",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -28,9 +28,9 @@
     "preparePublish": "npm run doc && npm run build && npm run test"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-rc.1",
-    "@jsonforms/i18n": "^2.0.0-rc.1",
-    "@jsonforms/webcomponent": "^2.0.0-rc.1",
+    "@jsonforms/core": "^2.0.0-rc.2",
+    "@jsonforms/i18n": "^2.0.0-rc.2",
+    "@jsonforms/webcomponent": "^2.0.0-rc.2",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
