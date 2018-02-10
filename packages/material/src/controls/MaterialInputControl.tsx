@@ -12,7 +12,7 @@ import {
   isPlainLabel,
   mapStateToControlProps,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
 
 import { InputLabel } from 'material-ui/Input';
@@ -29,10 +29,11 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath
+      parentPath,
+      config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = uischema.options && uischema.options.trim;
+    const trim = config.trim;
     const style: {[x: string]: any} = {};
     if (!visible) {
       style.display = 'none';

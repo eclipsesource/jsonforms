@@ -14,7 +14,7 @@ import {
   mapStateToControlProps,
   or,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
 
 import TextField from 'material-ui/TextField';
@@ -25,17 +25,17 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       id,
       errors,
       label,
-      uischema,
       scopedSchema,
       description,
       visible,
       required,
       path,
       handleChange,
-      data
+      data,
+      config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = uischema.options && uischema.options.trim;
+    const trim = config.trim;
     let style = {};
     if (!visible) {
       style = {display: 'none'};

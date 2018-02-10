@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import {
   ControlElement,
   convertToValidClassName,
+  getConfig
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaControlStateProps, VanillaLayoutProps } from '../index';
@@ -25,7 +26,8 @@ export const addVanillaControlProps = (mapStateToProps: (s, p) => any) =>
   (state, ownProps): VanillaControlStateProps => {
 
   const props = mapStateToProps(state, ownProps);
-  const trim = props.uischema.options && props.uischema.options.trim;
+  const config = getConfig(state);
+  const trim = config.trim;
   const controlElement = props.uischema as ControlElement;
   const isValid = _.isEmpty(props.errors);
   const styles = getStyle(state)('control');

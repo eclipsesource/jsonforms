@@ -32,10 +32,11 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
       required,
       path,
       handleChange,
-      data
+      data,
+      config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = uischema.options && uischema.options.trim;
+    const trim = config.trim;
     let style = {};
     if (!visible) {
       style = {display: 'none'};

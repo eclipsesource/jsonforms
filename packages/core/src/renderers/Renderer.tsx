@@ -32,6 +32,11 @@ export interface StatePropsOfRenderer {
    * it is the case with nested controls.
    */
   path?: string;
+
+  /**
+   * Any configuration options for the element.
+   */
+  config?: any;
 }
 
 /**

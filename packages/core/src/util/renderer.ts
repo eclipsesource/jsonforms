@@ -11,6 +11,7 @@ import {
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
 import {
+  getConfig,
   getData,
   getErrorAt,
   getPropsTransformer,
@@ -139,6 +140,7 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
   const description = resolvedSchema !== undefined ? resolvedSchema.description : '';
+  const config = getConfig(state);
 
   return {
     data: Resolve.data(getData(state), path),
@@ -153,7 +155,8 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
     required,
     scopedSchema: resolvedSchema,
     uischema: ownProps.uischema,
-    schema: ownProps.schema
+    schema: ownProps.schema,
+    config
   };
 };
 
@@ -221,7 +224,7 @@ export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable 
     ...props,
     scopedSchema: resolvedSchema,
     path,
-    childErrors,
+    childErrors
   };
 };
 

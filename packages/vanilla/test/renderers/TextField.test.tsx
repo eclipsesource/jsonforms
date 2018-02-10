@@ -401,7 +401,7 @@ test('use maxLength for attribute max length only', t => {
   t.is(input.size, defaultSize);
 });
 
-test('use maxLength by default', t => {
+test('do not use maxLength by default', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
@@ -413,8 +413,8 @@ test('use maxLength by default', t => {
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 5);
-  t.is(input.size, 5);
+  t.is(input.maxLength, defaultMaxLength);
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (trim && restrict)', t => {

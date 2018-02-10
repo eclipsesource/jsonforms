@@ -2,7 +2,7 @@ import { combineReducers, Reducer } from 'redux';
 import { rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { transformPropsReducer } from './transformProps';
-import { configReducer, extractConfig } from './config';
+import { configReducer } from './config';
 import {
   coreReducer,
   errorAt,
@@ -40,4 +40,4 @@ export const getSubErrorsAt = instancePath => state =>
   subErrorsAt(instancePath)(state.jsonforms.core);
 
 export const getPropsTransformer = state => state.jsonforms.transformProps;
-export const getConfig = state => extractConfig(state.jsonforms.config);
+export const getConfig = state => state.jsonforms.config;
