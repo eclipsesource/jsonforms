@@ -45,8 +45,8 @@ export const mapStateToDispatchFieldProps = state => ({
  * Map state to field props.
  *
  * @param state JSONForms state tree
- * @param ownProps any; own; props
- * @returns {StatePropsOfField;} state; props; of; a; field
+ * @param ownProps any own props
+ * @returns {StatePropsOfField} state props of a field
  */
 export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
