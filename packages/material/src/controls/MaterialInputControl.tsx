@@ -31,11 +31,12 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath
+      parentPath,
+      config
     } = this.props;
     let isValid = errors.length === 0;
     isValid = !isErrorVisible(isValid, errors, uischema);
-    const trim = uischema.options && uischema.options.trim;
+    const trim = config.trim;
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;

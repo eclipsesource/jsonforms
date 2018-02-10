@@ -51,6 +51,10 @@ const createState = uischema => ({
     },
     i18n: {
       locale: 'en-US'
+    },
+    config: {
+      restrict: 'false',
+      trim: 'false'
     }
   }
 });

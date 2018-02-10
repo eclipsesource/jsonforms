@@ -5,6 +5,7 @@ import {
   ControlProps,
   convertToValidClassName,
   DispatchRenderer,
+  getConfig,
   JsonSchema,
   Layout,
   mapStateToControlProps,
@@ -47,7 +48,8 @@ export const renderChildren = (
 
 export const mapStateToVanillaControlProps = (state, ownProps) => {
   const props = mapStateToControlProps(state, ownProps);
-  const trim = ownProps.uischema.options && ownProps.uischema.options.trim;
+  const config = getConfig(state);
+  const trim = config.trim;
   const controlElement = ownProps.uischema as ControlElement;
   const isValid = _.isEmpty(props.errors);
   const styles = getStyle(state)('control');
