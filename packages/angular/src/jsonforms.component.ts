@@ -48,6 +48,7 @@ export class JsonFormsOutlet implements OnInit {
       if (componentRef.instance instanceof JsonFormsBaseRenderer) {
         const instance = (componentRef.instance as JsonFormsBaseRenderer);
         instance.uischema = uischema;
+        instance.schema = schema;
       }
     });
   }

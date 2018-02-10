@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit  } from '@angular/core';
 import {
     computeLabel,
+    ControlElement,
     formatErrorMessage,
     isControl,
     JsonFormsState,
     RankedTester,
     rankWith,
-    registerStartupRenderer
+    registerStartupRenderer,
+    resolveSchema
   } from '@jsonforms/core';
 
 import { NgRedux } from '@angular-redux/store';
@@ -17,19 +19,21 @@ import { connectControlToJsonForms } from '../util';
 @Component({
     selector: 'TextControlRenderer',
     template: `
-        <div>
-            <label>{{computedLabel}}</label>
-            <input type="text" (change)="onChange($event)" [value]="value"/>
-            <div>{{errors}}</div>
-        </div>
+        <mat-form-field>
+            <mat-label>{{computedLabel}}</mat-label>
+            <input matInput type="text" (change)="onChange($event)"
+                [value]="value" placeholder="{{description}}">
+            <mat-error>{{errors}}</mat-error>
+        </mat-form-field>
+
     `
 })
 export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
-
     onChange;
     computedLabel: string;
     errors: string;
     value: any;
+    description: string;
 
     private subscription: Subscription;
 
@@ -42,8 +46,16 @@ export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit
         this.subscription = state$.subscribe(state => {
             this.onChange = ev => state.handleChange(state.path, ev.target.value);
             this.computedLabel = computeLabel(state.label, state.required);
+            // const isValid = state.errors.length === 0;
+            // if (!isValid) {
+            //     this.formField.underlineRef.controls.setErrors({'incorrect': true});
+            // }
             this.errors = formatErrorMessage(state.errors);
             this.value = state.data;
+            const controlElement = state.uischema as ControlElement;
+            const resolvedSchema = resolveSchema(state.schema, controlElement.scope);
+            this.description = resolvedSchema.description === undefined ?
+                '' : resolvedSchema.description;
         });
     }
 

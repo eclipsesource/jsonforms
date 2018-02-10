@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 const path = require("path");
 const merge = require('webpack-merge');
+var copyWebpackPlugin = require("copy-webpack-plugin");
 const baseConfig = require('../../../webpack/webpack.base.js');
 
 module.exports = merge(baseConfig, {
@@ -19,7 +20,11 @@ module.exports = merge(baseConfig, {
         contentBase: './example'
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new copyWebpackPlugin([
+            { from: 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
+        ])
+        
     ],
     module: {
       rules: [
