@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
 const DEFAULT_MAX_LENGTH = 524288;
+const defaultSize = 20;
 
 test.beforeEach(t => {
   t.context.data =  { 'name': 'Foo' };
@@ -327,17 +328,16 @@ test('enabled by default', t => {
 test('use maxLength for attributes size and maxlength', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: true
+    scope: '#/properties/name',
+    options: {
+      trim: true,
+      restrict: true
+    }
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema,
-    config
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -347,22 +347,19 @@ test('use maxLength for attributes size and maxlength', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, 5);
 });
 
 test('use maxLength for attribute size only', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: false,
-    trim: true
+    scope: '#/properties/name',
+    options: { trim: true }
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema,
-    config
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -372,22 +369,19 @@ test('use maxLength for attribute size only', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, DEFAULT_MAX_LENGTH);
   t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, 5);
 });
 
 test('use maxLength for attribute maxlength only', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: false
+    scope: '#/properties/name',
+    options: { restrict: true }
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema,
-    config
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -397,38 +391,39 @@ test('use maxLength for attribute maxlength only', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('do not use maxLength by default', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema: t.context.uischema,
+    uischema: t.context.uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={t.context.uischema}/>
+      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 524288);
+  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (trim && restrict)', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: true
+    scope: '#/properties/name',
+    options: {
+      trim: true,
+      restrict: true
+    }
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema,
-    config
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -438,22 +433,19 @@ test('maxLength not specified, attributes should have default values (trim && re
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, DEFAULT_MAX_LENGTH);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (trim)', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: false,
-    trim: true
+    scope: '#/properties/name',
+    options: { trim: true }
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema,
-    config
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -463,22 +455,19 @@ test('maxLength not specified, attributes should have default values (trim)', t 
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, DEFAULT_MAX_LENGTH);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (restrict)', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name'
-  };
-  const config = {
-    restrict: true,
-    trim: false
+    scope: '#/properties/name',
+    options: { restrict: true }
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema,
-    config
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -488,6 +477,7 @@ test('maxLength not specified, attributes should have default values (restrict)'
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, DEFAULT_MAX_LENGTH);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('if maxLength is not specified, attributes should have default values', t => {
@@ -504,4 +494,5 @@ test('if maxLength is not specified, attributes should have default values', t =
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, DEFAULT_MAX_LENGTH);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
