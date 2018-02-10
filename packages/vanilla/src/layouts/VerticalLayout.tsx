@@ -30,8 +30,8 @@ export const VerticalLayoutRenderer  = (
 
   const verticalLayout = uischema as VerticalLayout;
   const elementsSize = verticalLayout.elements ? verticalLayout.elements.length : 0;
-  const layoutClassName = getStyleAsClassName('vertical-layout');
-  const childClassNames = getStyle('vertical-layout-item', elementsSize)
+  const layoutClassName = getStyleAsClassName('vertical.layout');
+  const childClassNames = getStyle('vertical.layout.item', elementsSize)
     .concat(['vertical-layout-item'])
     .join(' ');
 

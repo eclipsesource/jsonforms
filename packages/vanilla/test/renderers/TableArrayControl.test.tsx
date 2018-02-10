@@ -41,7 +41,7 @@ test.beforeEach(t => {
   };
   t.context.styles = [
     {
-      name: 'array-table',
+      name: 'array.table',
       classNames: ['array-table-layout', 'control']
     }
   ];

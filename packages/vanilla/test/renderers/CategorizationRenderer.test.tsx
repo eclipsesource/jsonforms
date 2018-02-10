@@ -34,23 +34,23 @@ test.beforeEach(t => {
   t.context.styles = [
     {
       name: 'categorization',
-      classNames: ['jsf-categorization']
+      classNames: ['categorization']
     },
     {
       name: 'categorization.master',
-      classNames: ['jsf-categorization-master']
+      classNames: ['categorization-master']
     },
     {
       name: 'category.group',
-      classNames: ['jsf-category-group']
+      classNames: ['category-group']
     },
     {
       name: 'category.subcategories',
-      classNames: ['jsf-category-subcategories']
+      classNames: ['category-subcategories']
     },
     {
       name: 'categorization.detail',
-      classNames: ['jsf-categorization-detail']
+      classNames: ['categorization-detail']
     }
   ];
 });
@@ -258,11 +258,11 @@ test('render', t => {
   // master tree
   const div = TestUtils.findRenderedDOMComponentWithClass(
     tree,
-    'jsf-categorization'
+    'categorization'
   ) as HTMLDivElement;
   const master = TestUtils.findRenderedDOMComponentWithClass(
     tree,
-    'jsf-categorization-master'
+    'categorization-master'
   );
   const ul = master.children[0];
   const liA = ul.children[0];
@@ -275,22 +275,22 @@ test('render', t => {
   // detail
   const detail = div.children[1] as HTMLDivElement;
 
-  t.is(div.className, 'jsf-categorization');
+  t.is(div.className, 'categorization');
   t.is(div.childNodes.length, 2);
-  t.is(master.className, 'jsf-categorization-master');
+  t.is(master.className, 'categorization-master');
   t.is(master.children.length, 1);
   t.is(ul.children.length, 2);
-  t.is(liA.className, 'jsf-category-group');
+  t.is(liA.className, 'category-group');
   t.is(liA.children.length, 2);
   t.is(spanA.textContent, 'Bar');
-  t.is(innerUlA.className, 'jsf-category-subcategories');
+  t.is(innerUlA.className, 'category-subcategories');
   t.is(innerUlA.children.length, 1);
   t.is(innerLiA.children.length, 1);
   t.is(innerSpanA.textContent, 'A');
-  t.not(liB.className, 'jsf-category-group');
+  t.not(liB.className, 'category-group');
   t.is(liB.children.length, 1);
   t.is(spanB.textContent, 'B');
-  t.is(detail.className, 'jsf-categorization-detail');
+  t.is(detail.className, 'categorization-detail');
   t.is(detail.children.length, 1);
   t.is(detail.children.item(0).tagName, 'DIV');
   t.is(detail.children.item(0).children.length, 1);
@@ -353,7 +353,7 @@ test('render on click', t => {
 
   const div = TestUtils.findRenderedDOMComponentWithClass(
     tree,
-    'jsf-categorization'
+    'categorization'
   ) as HTMLDivElement;
   const master = div.children[0] as HTMLDivElement;
   const ul = master.children[0];
@@ -362,7 +362,7 @@ test('render on click', t => {
   const liD = ul.children[3] as HTMLLIElement;
   const detail = div.children[1] as HTMLDivElement;
 
-  t.is(div.className, 'jsf-categorization');
+  t.is(div.className, 'categorization');
   t.is(div.childNodes.length, 2);
   t.is(master.children.length, 1);
   t.is(ul.children.length, 4);
@@ -416,7 +416,7 @@ test('hide', t => {
 
   const div = TestUtils.findRenderedDOMComponentWithClass(
     tree,
-    'jsf-categorization'
+    'categorization'
   ) as HTMLDivElement;
   t.true(div.hidden);
 });
@@ -450,7 +450,7 @@ test('showed by default', t => {
 
   const div = TestUtils.findRenderedDOMComponentWithClass(
     tree,
-    'jsf-categorization'
+    'categorization'
   ) as HTMLDivElement;
   t.false(div.hidden);
 });

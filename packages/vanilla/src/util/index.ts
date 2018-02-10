@@ -38,7 +38,7 @@ export const addVanillaControlProps = (mapStateToProps: (s, p) => any) =>
     classNames = classNames.concat(getStyle(state)('control.trim'));
   }
   const labelClass = getStyleAsClassName(state)('control.label');
-  const descriptionClassName = getStyleAsClassName(state)('input-description');
+  const descriptionClassName = getStyleAsClassName(state)('input.description');
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
 
   return {
@@ -97,19 +97,19 @@ export const vanillaStyles = [
   },
   {
     name: 'categorization',
-    classNames: ['jsf-categorization']
+    classNames: ['categorization']
   },
   {
     name: 'categorization.master',
-    classNames: ['jsf-categorization-master']
+    classNames: ['categorization-master']
   },
   {
     name: 'categorization.detail',
-    classNames: ['jsf-categorization-detail']
+    classNames: ['categorization-detail']
   },
   {
     name: 'category.group',
-    classNames: ['jsf-category-group']
+    classNames: ['category-group']
   },
   {
     name: 'array.layout',
@@ -120,23 +120,23 @@ export const vanillaStyles = [
     classNames: ['children']
   },
   {
-    name: 'group-layout',
+    name: 'group.layout',
     classNames: ['group-layout']
   },
   {
-    name: 'horizontal-layout',
+    name: 'horizontal.layout',
     classNames: ['horizontal-layout']
   },
   {
-    name: 'vertical-layout',
+    name: 'vertical.layout',
     classNames: ['vertical-layout']
   },
   {
-    name: 'array-table',
+    name: 'array.table',
     classNames: ['array-table-layout', 'control']
   },
   {
-    name: 'input-description',
+    name: 'input.description',
     classNames: ['input-description']
   }
 ];

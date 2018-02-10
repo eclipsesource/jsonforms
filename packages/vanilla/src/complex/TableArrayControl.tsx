@@ -57,10 +57,10 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
     } = this.props;
 
     const controlElement = uischema as ControlElement;
-    const tableClass = getStyleAsClassName('array-table.table');
-    const labelClass = getStyleAsClassName('array-table.label');
-    const buttonClass = getStyleAsClassName('array-table.button');
-    const controlClass = [getStyleAsClassName('array-table'),
+    const tableClass = getStyleAsClassName('array.table.table');
+    const labelClass = getStyleAsClassName('array.table.label');
+    const buttonClass = getStyleAsClassName('array.table.button');
+    const controlClass = [getStyleAsClassName('array.table'),
       convertToValidClassName(controlElement.scope)].join(' ');
     const createControlElement = (key: string): ControlElement => ({
       type: 'Control',

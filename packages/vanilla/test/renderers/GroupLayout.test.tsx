@@ -14,7 +14,7 @@ test.beforeEach(t => {
   };
   t.context.styles = [
     {
-      name: 'group-layout',
+      name: 'group.layout',
       classNames: ['group-layout']
     }
   ];
