@@ -6,7 +6,7 @@ JSONForms uses HTML custom elements and eliminates the need to write HTML templa
 # Vanilla Renderers Package
 This is the JSONForms Vanilla Renderers Package. This package only contains renderers and must be combined with the [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core).
 
-You can combine the [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core) with other renderers too, for example with the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
+You can combine the [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core) with other renderers too, for example with the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers).
 
 Check https://www.npmjs.com/search?q=%40jsonforms for all published JSONForms packages.
 
