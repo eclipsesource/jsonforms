@@ -19,7 +19,7 @@ test.beforeEach(t => {
   };
   t.context.styles = [
     {
-      name: 'horizontal-layout',
+      name: 'horizontal.layout',
       classNames: ['horizontal-layout']
     }
   ];

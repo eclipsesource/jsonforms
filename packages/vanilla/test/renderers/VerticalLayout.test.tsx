@@ -9,7 +9,7 @@ import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 const styles = [
   {
-    name: 'vertical-layout',
+    name: 'vertical.layout',
     classNames: ['vertical-layout']
   }
 ];

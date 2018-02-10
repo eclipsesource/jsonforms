@@ -30,8 +30,8 @@ export const GroupLayoutRenderer = (
   }: VanillaLayoutProps) => {
   const group = uischema as GroupLayout;
   const elementsSize = group.elements ? group.elements.length : 0;
-  const classNames = getStyleAsClassName('group-layout');
-  const childClassNames = getStyle('group-layout-item', elementsSize)
+  const classNames = getStyleAsClassName('group.layout');
+  const childClassNames = getStyle('group.layout.item', elementsSize)
     .concat(['group-layout-item'])
     .join(' ');
 

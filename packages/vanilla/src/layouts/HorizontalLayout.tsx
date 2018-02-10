@@ -32,8 +32,8 @@ const HorizontalLayoutRenderer = (
 
   const horizontalLayout = uischema as HorizontalLayout;
   const elementsSize = horizontalLayout.elements ? horizontalLayout.elements.length : 0;
-  const layoutClassName = getStyleAsClassName('horizontal-layout');
-  const childClassNames = getStyle('horizontal-layout-item', elementsSize)
+  const layoutClassName = getStyleAsClassName('horizontal.layout');
+  const childClassNames = getStyle('horizontal.layout.item', elementsSize)
     .concat(['horizontal-layout-item'])
     .join(' ');
 

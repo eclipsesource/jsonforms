@@ -107,38 +107,38 @@ input {
   font-weight: bold;
   color: var(--jsf-main-fg-color);
 }
-.jsf-categorization {
+.categorization {
   display: flex;
   flex-direction: row;
 }
-.jsf-categorization[hidden] {
+.categorization[hidden] {
   display: none;
 }
-.jsf-categorization > * {
+.categorization > * {
   border-style: solid;
   border-width: thin;
   border-color: var(--jsf-border-color);
   border-radius: 0.2em;
 }
-.jsf-categorization > *:first-child {
+.categorization > *:first-child {
   margin-right: 0.25em;
 }
-.jsf-categorization > .jsf-categorization-master {flex: 1;}
-.jsf-categorization > .jsf-categorization-master ul {
+.categorization > .categorization-master {flex: 1;}
+.categorization > .categorization-master ul {
   list-style-type: none;
   font-weight: normal;
 }
-.jsf-categorization > .jsf-categorization-master ul > li > span {
+.categorization > .categorization-master ul > li > span {
   cursor: pointer;
   display: block;
   color: var(--jsf-main-fg-color);
 }
-.jsf-categorization > .jsf-categorization-master ul > li > span:hover {font-weight: bold;}
-.jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > ul {padding-left: 0.5em;}
-.jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span {cursor: default;}
-.jsf-categorization > .jsf-categorization-master ul > li.jsf-category-group > span:hover {font-weight: normal;}
-.jsf-categorization > .jsf-categorization-master ul > li.selected > span {font-weight: bold;}
-.jsf-categorization > .jsf-categorization-detail {flex: 3;}
+.categorization > .categorization-master ul > li > span:hover {font-weight: bold;}
+.categorization > .categorization-master ul > li.category-group > ul {padding-left: 0.5em;}
+.categorization > .categorization-master ul > li.category-group > span {cursor: default;}
+.categorization > .categorization-master ul > li.category-group > span:hover {font-weight: normal;}
+.categorization > .categorization-master ul > li.selected > span {font-weight: bold;}
+.categorization > .categorization-detail {flex: 3;}
 .jsf-treeMasterDetail {
   display: flex;
   flex-direction: column;
