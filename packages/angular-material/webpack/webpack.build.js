@@ -3,11 +3,11 @@ const baseConfig = require('../../../webpack/webpack.build.base.js');
 
 module.exports = merge(baseConfig, {
     output: {
-        filename: "jsonforms-material.js",
-        library: "JSONFormsMaterial"
+        filename: "jsonforms-angular-material.js",
+        library: "JSONFormsAngularMaterial"
       },
       externals: {
           '@jsonforms/core': 'JSONFormsCore',
-          '@jsonforms/webcomponent': 'JSONFormsWebcomponent'
+          '@jsonforms/angular': 'JSONFormsAngular'
     },
 });
