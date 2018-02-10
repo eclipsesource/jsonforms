@@ -31,7 +31,9 @@ export const MaterialTextField = (props: FieldProps) => {
   } else {
     inputProps = {};
   }
-  const trim = config.trim;
+  if (config.trim && maxLength !== undefined) {
+    inputProps.size = maxLength;
+  }
   const onChange = ev => handleChange(path, ev.target.value);
 
   return (
@@ -44,7 +46,7 @@ export const MaterialTextField = (props: FieldProps) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim || maxLength === undefined}
+      fullWidth={!config.trim || maxLength === undefined}
       inputProps={inputProps}
       error={!isValid}
     />
