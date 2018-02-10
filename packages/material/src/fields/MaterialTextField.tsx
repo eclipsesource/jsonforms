@@ -25,6 +25,9 @@ export const MaterialTextField = (props: FieldProps) => {
     config = {};
   }
   const trim = uischema.options && uischema.options.trim;
+  if (trim && maxLength !== undefined) {
+    config.size = maxLength;
+  }
   const onChange = ev => handleChange(path, ev.target.value);
 
   return (

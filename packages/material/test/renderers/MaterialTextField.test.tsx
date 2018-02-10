@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
 const defaultMaxLength = 524288;
+const defaultSize = 20;
 
 test.beforeEach(t => {
   t.context.data =  { 'name': 'Foo' };
@@ -346,6 +347,7 @@ test('use maxLength for attributes size and maxlength', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, 5);
 });
 
 test('use maxLength for attribute size only', t => {
@@ -367,6 +369,7 @@ test('use maxLength for attribute size only', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, 5);
 });
 
 test('use maxLength for attribute maxlength only', t => {
@@ -388,6 +391,7 @@ test('use maxLength for attribute maxlength only', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('do not use maxLength', t => {
@@ -404,6 +408,7 @@ test('do not use maxLength', t => {
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (trim && restrict)', t => {
@@ -428,6 +433,7 @@ test('maxLength not specified, attributes should have default values (trim && re
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (trim)', t => {
@@ -449,6 +455,7 @@ test('maxLength not specified, attributes should have default values (trim)', t 
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values (restrict)', t => {
@@ -470,6 +477,7 @@ test('maxLength not specified, attributes should have default values (restrict)'
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
 
 test('if maxLength is not specified, attributes should have default values', t => {
@@ -486,4 +494,5 @@ test('if maxLength is not specified, attributes should have default values', t =
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
+  t.is(input.size, defaultSize);
 });
