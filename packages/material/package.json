@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.2",
-    "@jsonforms/react": "^2.0.0-rc.1",
+    "@jsonforms/react": "^2.0.0-rc.2",
     "material-ui": "1.0.0-beta.25",
     "material-ui-icons": "^1.0.0-beta.17",
     "material-ui-pickers": "1.0.0-beta.12",

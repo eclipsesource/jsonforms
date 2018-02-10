@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -38,7 +38,7 @@
     "@angular-redux/store": "^7.1.0",
     "@angular/common": "^5.2.4",
     "@angular/core": "^5.2.4",
-    "@jsonforms/core": "^2.0.0-rc.1",
+    "@jsonforms/core": "^2.0.0-rc.2",
     "redux": "^3.7.2",
     "rxjs": "^5.5.6"
   },

@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   isStringControl,
   mapDispatchToFieldProps,
@@ -8,7 +7,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-
+import { connectToJsonForms } from '@jsonforms/react';
 import Input from 'material-ui/Input';
 
 export const MaterialTextField = (props: FieldProps) => {

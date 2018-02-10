@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
 import { getConfig, getData, getErrorAt } from '../reducers';
+import { RankedTester } from '../testers';
 import {
   composeWithUi,
   isEnabled,
@@ -29,18 +30,23 @@ export interface FieldProps extends StatePropsOfField, DispatchPropsOfControl {
 
 }
 /**
-
+ * Registers the given field renderer when a JSON Forms store is created.
+ * @param {RankedTester} tester
+ * @param field the field to be registered
+ * @returns {any}
+ */
 export interface DispatchFieldProps extends FieldProps {
   fields?: { tester: RankedTester, field: any }[];
 }
 export const mapStateToDispatchFieldProps = state => ({
   fields: state.jsonforms.fields || []
 });
+/**
  * Map state to field props.
  *
  * @param state JSONForms state tree
- * @param ownProps any own props
- * @returns {StatePropsOfField} state props of a field
+ * @param ownProps any; own; props
+ * @returns {StatePropsOfField;} state; props; of; a; field
  */
 export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);

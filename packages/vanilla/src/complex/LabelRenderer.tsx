@@ -1,18 +1,16 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  connectToJsonForms,
   isVisible,
   LabelElement,
   RankedTester,
   rankWith,
   RendererProps,
-  RendererProps,
   uiTypeIs,
 } from '@jsonforms/core';
 import { getStyle as findStyle, getStyleAsClassName as findStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
-import { StatelessRenderer } from '@jsonforms/react';
+import { connectToJsonForms, StatelessRenderer } from '@jsonforms/react';
 
 /**
  * Default tester for a label.

@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/react",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -34,7 +34,7 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-rc.1",
+    "@jsonforms/core": "^2.0.0-rc.2",
     "lodash": "4.17.4",
     "react": "^16.2.0",
     "react-redux": "^5.0.6"
@@ -44,6 +44,7 @@
     "jsdom": "^11.5.1",
     "jsdom-global": "^3.0.2",
     "react-dom": "^16.2.0",
+    "redux": "^3.7.2",
     "redux-mock-store": "1.4.0"
   }
 }

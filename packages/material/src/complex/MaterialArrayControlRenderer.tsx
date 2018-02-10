@@ -1,12 +1,11 @@
 import * as React from 'react';
 
 import {
-  connectToJsonForms,
   mapDispatchToTableControlProps,
   mapStateToTableControlProps,
   TableControlProps
 } from '@jsonforms/core';
-import { RendererComponent } from '@jsonforms/react';
+import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
 import Button from 'material-ui/Button';

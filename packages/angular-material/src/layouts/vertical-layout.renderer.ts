@@ -3,7 +3,6 @@ import {
     JsonFormsState,
     RankedTester,
     rankWith,
-    registerStartupRenderer,
     StatePropsOfLayout,
     uiTypeIs
   } from '@jsonforms/core';
@@ -44,7 +43,3 @@ export class VerticalLayoutRenderer extends JsonFormsBaseRenderer implements OnI
 
 }
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
-registerStartupRenderer(
-    verticalLayoutTester,
-    VerticalLayoutRenderer
-  );

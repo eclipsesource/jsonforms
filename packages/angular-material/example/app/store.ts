@@ -1,6 +1,6 @@
 import { combineReducers, createStore } from 'redux';
-import { ControlElement, JsonForms, jsonformsReducer, JsonFormsStore } from '@jsonforms/core';
-
+import { ControlElement, jsonformsReducer, JsonFormsStore } from '@jsonforms/core';
+import { angularMaterialRenderers } from '../../src/index';
 export const schema = {
     type: 'object',
     properties: {
@@ -30,8 +30,8 @@ export const store: JsonFormsStore = createStore(
   combineReducers({ jsonforms: jsonformsReducer() }),
   {
     jsonforms: {
-      renderers: JsonForms.renderers,
-      fields: JsonForms.fields,
+      renderers: angularMaterialRenderers,
+      fields: [],
     }
   }
 );

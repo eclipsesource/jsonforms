@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -45,8 +45,8 @@
     "@angular/material": "^5.2.0",
     "@angular/platform-browser": "^5.2.4",
     "@angular/platform-browser-dynamic": "^5.2.4",
-    "@jsonforms/angular": "^2.0.0-rc.1",
-    "@jsonforms/core": "^2.0.0-rc.1",
+    "@jsonforms/angular": "^2.0.0-rc.2",
+    "@jsonforms/core": "^2.0.0-rc.2",
     "core-js": "^2.5.3",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",

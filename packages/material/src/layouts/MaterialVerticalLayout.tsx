@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
@@ -8,6 +7,7 @@ import {
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 /**

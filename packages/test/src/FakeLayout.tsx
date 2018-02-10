@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  JsonForms,
   Layout,
   mapStateToLayoutProps,
   RankedTester,
@@ -8,7 +7,7 @@ import {
   RendererProps,
   Test,
 } from '@jsonforms/core';
-import { connectToJsonForms, DispatchRenderer } from '@jsonforms/react';
+import { connectToJsonForms, JsonForms } from '@jsonforms/react';
 
 const {
   or,

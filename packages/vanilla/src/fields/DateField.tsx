@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   isDateControl,
   mapDispatchToFieldProps,
@@ -9,6 +8,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { SyntheticEvent } from 'react';
+import { connectToJsonForms } from '@jsonforms/react';
 
 const DateField = (props: FieldProps) => {
     const { data, className, id, enabled, uischema, path, handleChange } = props;

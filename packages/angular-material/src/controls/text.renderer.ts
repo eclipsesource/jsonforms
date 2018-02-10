@@ -7,7 +7,6 @@ import {
     JsonFormsState,
     RankedTester,
     rankWith,
-    registerStartupRenderer,
     resolveSchema
   } from '@jsonforms/core';
 
@@ -65,7 +64,3 @@ export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit
 
 }
 export const TextControlRendererTester: RankedTester = rankWith(1, isControl);
-registerStartupRenderer(
-    TextControlRendererTester,
-    TextControlRenderer
-  );

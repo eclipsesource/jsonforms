@@ -4,16 +4,15 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import {
   and,
   Categorization,
-  connectToJsonForms,
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  RendererComponent,
   RendererProps,
   Tester,
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
+import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 const isSingleLevelCategorization: Tester = and(
