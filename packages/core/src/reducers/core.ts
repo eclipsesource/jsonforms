@@ -24,7 +24,7 @@ const sanitizeErrors = (validator, data) =>
 
 export const coreReducer = (
   state = {
-    data: {},
+    data: {} as any,
     schema: {},
     uischema: {},
     errors: [] as ErrorObject[],
@@ -72,9 +72,9 @@ export const coreReducer = (
           errors
         };
       } else {
-        const oldData = _.get(state.data, action.path);
+        const oldData: any = _.get(state.data, action.path);
         const newData = action.updater(oldData);
-        const newState = _.set(_.cloneDeep(state.data), action.path, newData);
+        const newState: any = _.set(_.cloneDeep(state.data), action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
@@ -98,7 +98,7 @@ export const errorAt = instancePath => (state): any[] => {
   return _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
 };
 export const subErrorsAt = instancePath => (state): any[] => {
-  const path = instancePath + '.';
+  const path = `${instancePath}.`;
 
   return _.filter(state.errors, (error: ErrorObject) => error.dataPath.startsWith(path));
 };

@@ -47,4 +47,3 @@ export const stylingReducer = (state: StyleDef[]  = [], action) => {
       return state;
   }
 };
-

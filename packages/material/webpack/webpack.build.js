@@ -5,9 +5,9 @@ module.exports = merge(baseConfig, {
     output: {
         filename: "jsonforms-material.js",
         library: "JSONFormsMaterial"
-      },
-      externals: {
-          '@jsonforms/core': 'JSONFormsCore',
-          '@jsonforms/webcomponent': 'JSONFormsWebcomponent'
+    },
+    externals: {
+        '@jsonforms/core': 'JSONFormsCore',
+        '@jsonforms/webcomponent': 'JSONFormsWebcomponent'
     },
 });

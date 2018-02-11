@@ -13,7 +13,6 @@ const setup = (div: HTMLDivElement) => {
       data: { id: 'aaa' },
       schema: getSchema(currentState),
       uischema: getUiSchema(currentState),
-      styles: currentState['styles']
     });
   };
   div.appendChild(button);

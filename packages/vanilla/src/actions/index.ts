@@ -17,4 +17,3 @@ export const registerStyles = (styleDefs: { name: string, classNames: string[] }
   type: REGISTER_STYLES,
   styles: styleDefs
 });
-

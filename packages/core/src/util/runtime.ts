@@ -5,24 +5,6 @@ import { LeafCondition, RuleEffect, UISchemaElement } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
 
-export const isVisible = (props, state) => {
-
-  if (props.uischema.rule) {
-    return evalVisibility(props.uischema, getData(state));
-  }
-
-  return true;
-};
-
-export const isEnabled = (props, state) => {
-
-  if (props.uischema.rule) {
-    return evalEnablement(props.uischema, getData(state));
-  }
-
-  return true;
-};
-
 export const evalVisibility = (uischema: UISchemaElement, data: any) => {
   // TODO condition evaluation should be done somewhere else
   if (!_.has(uischema, 'rule.condition')) {
@@ -36,8 +18,8 @@ export const evalVisibility = (uischema: UISchemaElement, data: any) => {
     case RuleEffect.HIDE: return !equals;
     case RuleEffect.SHOW: return equals;
     default:
-      // visible by default
-      return true;
+    // visible by default
+    return true;
   }
 };
 
@@ -55,7 +37,25 @@ export const evalEnablement = (uischema: UISchemaElement, data: any) => {
     case RuleEffect.DISABLE: return !equals;
     case RuleEffect.ENABLE: return equals;
     default:
-      // enabled by default
-      return true;
+    // enabled by default
+    return true;
   }
+};
+
+export const isVisible = (props, state) => {
+
+  if (props.uischema.rule) {
+    return evalVisibility(props.uischema, getData(state));
+  }
+
+  return true;
+};
+
+export const isEnabled = (props, state) => {
+
+  if (props.uischema.rule) {
+    return evalEnablement(props.uischema, getData(state));
+  }
+
+  return true;
 };
