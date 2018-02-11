@@ -67,7 +67,7 @@
         "no-void-expression": true,
         "radix": true,
         "restrict-plus-operands": true,
-        "strict-boolean-expressions": true,
+        "strict-boolean-expressions": [true, "allow-null-union", "allow-undefined-union", "allow-string", "allow-number", "allow-mix"],
         "switch-default": true,
         "triple-equals": [
             true,

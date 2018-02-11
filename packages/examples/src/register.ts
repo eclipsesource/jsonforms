@@ -42,9 +42,10 @@ export const changeExample =
         if (x.reducer) {
           acc[x.name] = x.reducer;
         }
+
         return acc;
       },
-      {}
+      {} as any
     );
     const additionalInitState = additionalStoreParams.reduce(
       (acc, x) => {
@@ -52,7 +53,7 @@ export const changeExample =
 
         return acc;
       },
-      {}
+      {} as any
     );
 
     jsonForms.store = createStore(

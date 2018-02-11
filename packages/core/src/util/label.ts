@@ -54,4 +54,3 @@ export const createLabelDescriptionFrom = (withLabel: ControlElement): LabelDesc
     };
   }
 };
-
