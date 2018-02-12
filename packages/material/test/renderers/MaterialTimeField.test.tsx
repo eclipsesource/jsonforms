@@ -9,7 +9,7 @@ import {
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import TimeField, { timeFieldTester } from '../../src/fields/MaterialTimeField';
+import MaterialTimeControl, { timeControlTester } from '../../src/controls/MaterialTimeControl';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -26,28 +26,28 @@ test.beforeEach(t => {
   };
   t.context.uischema = {
     type: 'Control',
-    scope: '#/properties/foo'
+    scope: '#/properties/foo',
   };
+  t.context.locale = 'en-US';
 });
-
-test.failing('autofocus on first element', t => {
+test('autofocus on first element', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      firstDate: { type: 'string', format: 'date' },
-      secondDate: { type: 'string', format: 'date' }
+      firstTime: { type: 'string', format: 'time' },
+      secondTime: { type: 'string', format: 'time' }
     }
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/firstDate',
+    scope: '#/properties/firstTime',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/secondDate',
+    scope: '#/properties/secondTime',
     options: {
       focus: true
     }
@@ -60,8 +60,8 @@ test.failing('autofocus on first element', t => {
     ]
   };
   const data = {
-    'firstDate': '1980-04-04',
-    'secondDate': '1980-04-04'
+    'firstTime': '13:37',
+    'secondTime': '13:37'
   };
   const store = initJsonFormsStore({
     data,
@@ -93,7 +93,7 @@ test('autofocus active', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -115,7 +115,7 @@ test('autofocus inactive', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -130,11 +130,11 @@ test('autofocus inactive by default', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -142,15 +142,15 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(timeFieldTester(undefined, undefined), -1);
-  t.is(timeFieldTester(null, undefined), -1);
-  t.is(timeFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(timeFieldTester({ type: 'Control' }, undefined), -1);
+  t.is(timeControlTester(undefined, undefined), -1);
+  t.is(timeControlTester(null, undefined), -1);
+  t.is(timeControlTester({ type: 'Foo' }, undefined), -1);
+  t.is(timeControlTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-    timeFieldTester(
+    timeControlTester(
       t.context.uischmea,
       {
         type: 'object',
@@ -165,7 +165,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-    timeFieldTester(
+    timeControlTester(
       t.context.uischema,
       {
         type: 'object',
@@ -173,7 +173,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
           foo: { type: 'string' },
           bar: {
             type: 'string',
-            format: 'time'
+            format: 'time',
           },
         },
       },
@@ -184,7 +184,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with correct prop type', t => {
   t.is(
-    timeFieldTester(
+    timeControlTester(
       t.context.uischema,
       {
         type: 'object',
@@ -196,7 +196,7 @@ test('tester with correct prop type', t => {
         },
       },
     ),
-    2,
+    4,
   );
 });
 
@@ -204,61 +204,77 @@ test('render', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
-  });
+    uischema: t.context.uischema,
+    locale: t.context.locale
+});
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
 
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.type, 'time');
-  t.is(input.value, '13:37');
+  t.is(input.type, 'text');
+  t.is(input.value, '1:37 PM');
 });
 
 test.cb('update via event', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '20:15';
+  input.value = '3:29 AM';
   TestUtils.Simulate.change(input);
-  setTimeout(() => {t.is(getData(store.getState()).foo, '20:15'); t.end(); }, 100);
+  setTimeout(
+    () => {
+      t.is(getData(store.getState()).foo, '03:29');
+      t.end();
+    },
+    100
+  );
 });
 
 test.cb('update via action', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => '20:15'));
-  setTimeout(() => {t.is(input.value, '20:15'); t.end(); }, 100);
+  store.dispatch(update('foo', () => '3:29'));
+  setTimeout(
+    () => {
+      t.is(input.value, '3:29 AM');
+      t.end();
+    },
+    100
+  );
 });
 
 test('update with null value', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -270,11 +286,12 @@ test('update with undefined value', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -286,48 +303,51 @@ test('update with wrong ref', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 'Bar'));
-  t.is(input.value, '13:37');
+  t.is(input.value, '1:37 PM');
 });
 
 test('update with null ref', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => '20:15'));
-  t.is(input.value, '13:37');
+  store.dispatch(update(null, () => '3:29'));
+  t.is(input.value, '1:37 PM');
 });
 
 test('update with undefined ref', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema: t.context.uischema
+    uischema: t.context.uischema,
+    locale: t.context.locale
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(undefined, () => '20:15'));
-  t.is(input.value, '13:37');
+  store.dispatch(update(undefined, () => '3:29'));
+  t.is(input.value, '1:37 PM');
 });
 
 test('disable', t => {
@@ -338,7 +358,7 @@ test('disable', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -353,7 +373,7 @@ test('enabled by default', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
+      <MaterialTimeControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
