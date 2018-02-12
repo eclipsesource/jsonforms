@@ -77,18 +77,12 @@ export class Control<P extends ControlProps, S extends ControlState>
     // tslint:enable:no-object-literal-type-assertion
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.data !== prevProps.data) {
-      this.setState({ value: this.props.data });
-    }
-  }
-
   /**
    * Propagates a value change.
    *
    * @param value the updated value
    */
-  handleChange(value) {
+  handleChange = value => {
     this.setState({ value });
     this.updateData(value);
   }
@@ -96,18 +90,18 @@ export class Control<P extends ControlProps, S extends ControlState>
   /**
    * Set the focused state to true.
    */
-  onFocus() {
+  onFocus = () => {
     this.setState({ isFocused:  true });
   }
 
   /**
    * Set the focused state to false.
    */
-  onBlur() {
+  onBlur = () => {
     this.setState({ isFocused:  false });
   }
 
-  private updateData(value) {
+  private updateData = value => {
     this.props.handleChange(this.props.path, value);
   }
 }
