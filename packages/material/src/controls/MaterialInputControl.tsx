@@ -35,10 +35,12 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       config
     } = this.props;
     let isValid = errors.length === 0;
-    isValid = !isErrorVisible(isValid, errors, uischema);
-    const trim = config.trim;
+    isValid = !isErrorVisible(isValid, errors, uischema)
     const controlElement = uischema as ControlElement;
     const resolvedSchema = resolveSchema(schema, controlElement.scope);
+    const maxLength = resolvedSchema.maxLength;
+    const trim = uischema.options && uischema.options.trim
+      || config.trim && maxLength !== undefined;
     const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
     const style: {[x: string]: any} = {};
     if (!visible) {
