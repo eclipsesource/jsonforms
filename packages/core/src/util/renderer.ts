@@ -12,7 +12,7 @@ import {
 } from '../util';
 import { RankedTester } from '../testers';
 import { ControlElement } from '../models/uischema';
-import { getData, getErrorAt, getSubErrorsAt, getTranslations } from '../reducers';
+import { getConfig, getData, getErrorAt, getSubErrorsAt, getTranslations } from '../reducers';
 import { Renderer, RendererProps } from '../renderers/Renderer';
 import { update } from '../actions';
 
@@ -91,6 +91,7 @@ export const mapStateToControlProps = (state, ownProps) => {
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const fields = state.jsonforms.fields;
+  const config = getConfig(state);
 
   return {
     data: Resolve.data(getData(state), path),
@@ -102,7 +103,8 @@ export const mapStateToControlProps = (state, ownProps) => {
     path,
     parentPath: ownProps.path,
     fields,
-    required
+    required,
+    config
   };
 };
 

@@ -19,6 +19,7 @@ export interface JsonFormsState {
       translations?: any;
       locale?: String;
     };
+    config?: any;
     // allow additional state for JSONForms
     [x: string]: any;
   };
@@ -30,6 +31,7 @@ export interface JsonFormsInitialState {
   uischema?: UISchemaElement;
   translations?: any;
   locale?: String;
+  config?: any;
   // allow additional state
   [x: string]: any;
 }

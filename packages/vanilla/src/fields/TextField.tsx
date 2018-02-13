@@ -14,7 +14,8 @@ import {
 import { connect } from 'react-redux';
 
 const TextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
+  const { data, className, id, enabled, uischema, schema, path, handleChange,
+    config } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
 
@@ -29,8 +30,8 @@ const TextField = (props: FieldProps) => {
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
-      size={uischema.options && uischema.options.trim ? maxLength : undefined}
+      maxLength={config.restrict ? maxLength : undefined}
+      size={config.trim ? maxLength : undefined}
     />
   );
 };
