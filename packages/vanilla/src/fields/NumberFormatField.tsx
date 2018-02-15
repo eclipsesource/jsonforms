@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   connectToJsonForms,
-  ControlElement,
   FieldProps,
   Formatted,
   isNumberFormatControl,
@@ -9,7 +8,6 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 
 const NumberFormatField = (props: FieldProps & Formatted<number>) => {
@@ -18,19 +16,17 @@ const NumberFormatField = (props: FieldProps & Formatted<number>) => {
     id,
     enabled,
     uischema,
-    schema,
     path,
     handleChange,
+    scopedSchema
   } = props;
-  const controlElement = uischema as ControlElement;
-  const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
+  const maxLength = scopedSchema.maxLength;
   const formattedNumber: string = props.toFormatted(props.data);
 
   const onChange = ev => {
     const validStringNumber = props.fromFormatted(ev.currentTarget.value);
     handleChange(path, validStringNumber);
   };
-
 
   return (
     <input

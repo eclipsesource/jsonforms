@@ -52,7 +52,7 @@ import {
   VerticalLayout,
   verticalLayoutTester
 } from './layouts';
-import DateTimeField from "./fields/DateTimeField";
+import DateTimeField from './fields/DateTimeField';
 
 /**
  * Additional renderer props specific to vanilla renderers.

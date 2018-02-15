@@ -31,7 +31,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
     } = this.props;
 
     const isValid = errors.length === 0;
-    const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
+    const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'}`;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (

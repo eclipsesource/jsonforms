@@ -2,20 +2,17 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
   connectToJsonForms,
-  ControlElement,
   FieldProps,
   isStringControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 
 const TextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
-  const controlElement = uischema as ControlElement;
-  const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
+  const { data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
+  const maxLength = scopedSchema.maxLength;
 
   return (
     <input

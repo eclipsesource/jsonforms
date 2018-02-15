@@ -3,7 +3,6 @@ import {
   computeLabel,
   connectToJsonForms,
   Control,
-  ControlElement,
   ControlProps,
   ControlState,
   formatErrorMessage,
@@ -15,7 +14,6 @@ import {
   or,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 
 import TextField from 'material-ui/TextField';
@@ -27,7 +25,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       errors,
       label,
       uischema,
-      schema,
+      scopedSchema,
       visible,
       required,
       path,
@@ -36,15 +34,13 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
-    const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope);
-    const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
+    const description = scopedSchema.description === undefined ? '' : scopedSchema.description;
     let style = {};
     if (!visible) {
       style = {display: 'none'};
     }
     const onChange = ev => handleChange(path, ev.target.value);
-    const fieldType = resolvedSchema.format;
+    const fieldType = scopedSchema.format;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
