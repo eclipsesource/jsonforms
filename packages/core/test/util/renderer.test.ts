@@ -2,7 +2,7 @@ import test from 'ava';
 import * as _ from 'lodash';
 import { mapDispatchToControlProps, mapStateToControlProps } from '../../src/util';
 import configureStore from 'redux-mock-store';
-import { UPDATE_DATA } from '../../src/actions';
+import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
@@ -228,9 +228,8 @@ test('mapDispatchToControlProps', t => {
   const store = mockStore(createState(coreUISchema));
   const props = mapDispatchToControlProps(store.dispatch);
   props.handleChange('foo', 42);
-  const updateAction = _.head(store.getActions());
-  // TODO: can we the action somehow?
-  t.is(updateAction['type'], UPDATE_DATA);
-  t.is(updateAction['path'], 'foo');
-  t.is(updateAction['updater'](), 42);
+  const updateAction = _.head<any>(store.getActions()) as UpdateAction;
+  t.is(updateAction.type, UPDATE_DATA);
+  t.is(updateAction.path, 'foo');
+  t.is(updateAction.updater(), 42);
 });

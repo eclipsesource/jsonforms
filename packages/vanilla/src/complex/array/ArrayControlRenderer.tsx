@@ -29,7 +29,7 @@ const ArrayControlRenderer  =
 
     const controlElement = uischema as ControlElement;
     const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
-    const resolvedSchema = Resolve.schema(schema, controlElement.scope + '/items');
+    const resolvedSchema = Resolve.schema(schema, `${controlElement.scope}/items`);
     const label = labelDescription.show ? labelDescription.text : '';
 
     const controlClassName =

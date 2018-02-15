@@ -8,7 +8,7 @@ import {
 import { Provider } from 'react-redux';
 import LabelRenderer, { labelRendererTester } from '../../src/complex/LabelRenderer';
 import * as TestUtils from 'react-dom/test-utils';
-import {initJsonFormsVanillaStore} from "../vanillaStore";
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.data =  {'name': 'Foo'};

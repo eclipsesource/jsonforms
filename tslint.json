@@ -1,21 +1,23 @@
 {
     "extends": ["tslint-react"],
     "rules": {
-
+        "jsx-no-multiline-js": false,
+        "jsx-no-lambda": false,
+        "jsx-boolean-value": false,
         "adjacent-overload-signatures": true,
         "member-ordering": [
-          true,
-          {
-            "order": [
-              "static-field",
-              "static-method",
-              "instance-field",
-              "constructor",
-              "public-instance-method",
-              "protected-instance-method",
-              "private-instance-method"
-            ]
-          }
+            true,
+            {
+                "order": [
+                    "static-field",
+                    "static-method",
+                    "instance-field",
+                    "constructor",
+                    "public-instance-method",
+                    "protected-instance-method",
+                    "private-instance-method"
+                ]
+            }
         ],
         "no-inferrable-types": true,
         "no-internal-module": true,
@@ -108,8 +110,6 @@
                 }
             }
         ],
-
-
         "align": [
             true,
             "arguments", "parameters", "statements"
@@ -132,7 +132,7 @@
         "import-spacing": true,
         "interface-over-type-literal": false,
         "jsdoc-format": true,
-        "newline-before-return": true,
+        "newline-before-return": false,
         "new-parens": true,
         "no-angle-bracket-type-assertion": true,
         "no-boolean-literal-compare": true,

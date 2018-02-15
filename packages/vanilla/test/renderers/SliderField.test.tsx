@@ -132,10 +132,7 @@ test('autofocus inactive', t => {
 });
 
 test('autofocus inactive by default', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const uischema: ControlElement = t.context.uischema;
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
@@ -158,10 +155,7 @@ test('tester', t => {
 });
 
 test('tester with wrong schema type', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -177,10 +171,7 @@ test('tester with wrong schema type', t => {
 });
 
 test('tester with wrong schema type, but sibling has correct one', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -197,10 +188,7 @@ test('tester with wrong schema type, but sibling has correct one', t => {
 });
 
 test('tester with correct schema type, but missing maximum and minimum fields', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -216,10 +204,7 @@ test('tester with correct schema type, but missing maximum and minimum fields', 
 });
 
 test('tester with correct schema type, but missing maximum', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -237,11 +222,8 @@ test('tester with correct schema type, but missing maximum', t => {
   );
 });
 
-test('tester with correct schema type,but missing minimum', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+test('tester with correct schema type, but missing minimum', t => {
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -260,10 +242,7 @@ test('tester with correct schema type,but missing minimum', t => {
 });
 
 test('tester with matching schema type (number) without default', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -283,10 +262,7 @@ test('tester with matching schema type (number) without default', t => {
 });
 
 test('tester with matching schema type (integer) without default', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -306,10 +282,7 @@ test('tester with matching schema type (integer) without default', t => {
 });
 
 test('tester with matching schema type (number) with default', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,
@@ -330,10 +303,7 @@ test('tester with matching schema type (number) with default', t => {
 });
 
 test('tester with matching schema type (integer) with default', t => {
-  const control: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+  const control: ControlElement = t.context.uischema;
   t.is(
     sliderFieldTester(
       control,

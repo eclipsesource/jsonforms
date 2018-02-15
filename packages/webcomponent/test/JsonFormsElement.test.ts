@@ -7,6 +7,7 @@ import {
   getSchema,
   getUiSchema,
   jsonformsReducer,
+  JsonFormsState
 } from '@jsonforms/core';
 import { combineReducers, createStore } from 'redux';
 import { FakeControl, fakeControlTester, FakeLayout, fakeLayoutTester } from '@jsonforms/test';
@@ -36,7 +37,7 @@ test.cb('render with data set', t => {
   const jsonForms = new JsonFormsElement();
   const jsonSchema = generateJsonSchema(t.context.data);
   jsonForms.store = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         core: {
@@ -64,7 +65,7 @@ test.cb('render with data and data schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
   jsonForms.store = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         core: {
@@ -100,7 +101,7 @@ test.cb('render with data and UI schema set', t => {
   const jsonForms = new JsonFormsElement();
   const uischema: ControlElement = t.context.uischema;
   jsonForms.store = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         core: {
@@ -128,7 +129,7 @@ test.cb('render with data, data schema and UI schema set', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
   jsonForms.store = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         core: {
@@ -157,7 +158,7 @@ test.cb('render with data schema and UI schema set', t => {
   t.plan(3);
   const jsonForms = new JsonFormsElement();
   jsonForms.store = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         core: {
@@ -186,7 +187,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
   t.plan(6);
   const jsonForms = new JsonFormsElement();
   jsonForms.store = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     {
       jsonforms: {
         core: {
@@ -206,7 +207,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
       t.is(verticalLayout1.children.length, 1);
 
       jsonForms.store = createStore(
-        combineReducers({ jsonforms: jsonformsReducer() }),
+        combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
         {
           jsonforms: {
             core: {
