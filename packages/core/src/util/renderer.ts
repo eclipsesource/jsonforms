@@ -212,11 +212,14 @@ export const connectToJsonForms = (
  */
 export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
+  const controlElement = ownProps.uischema as ControlElement;
+  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
   const childErrors = getSubErrorsAt(path)(state);
 
   return {
     ...props,
+    scopedSchema: resolvedSchema,
     path,
     childErrors,
   };
