@@ -24,7 +24,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 
 export interface DateControl {
-  localLocale?: Moment;
+  momentLocale?: Moment;
 }
 
 export class MaterialDateControl extends Control<ControlProps & DateControl, ControlState> {
@@ -41,7 +41,7 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
       path,
       handleChange,
       data,
-      localLocale
+      momentLocale
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
@@ -55,7 +55,7 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
     }
     const inputProps = {};
     const localeDateTimeFormat =
-      localLocale ? `${localLocale.localeData().longDateFormat('L')}`
+      momentLocale ? `${momentLocale.localeData().longDateFormat('L')}`
       : 'YYYY-MM-DD';
 
     let labelText;

@@ -58,7 +58,7 @@ export const translateLabel =
 export const translateProps = (state, props) => {
   const label = translateLabel(getTranslations(state), props.label);
   const description = translateLabel(getTranslations(state), props.description);
-  const localLocale = moment().locale(getLocale(state));
+  const momentLocale = moment().locale(getLocale(state));
 
   if (props.scopedSchema && props.scopedSchema.type === 'number') {
     return {
@@ -68,7 +68,7 @@ export const translateProps = (state, props) => {
       toFormatted: fromNumber(getLocale(state)),
       fromFormatted: toNumber,
       locale: getLocale(state),
-      localLocale
+      momentLocale
     };
   }
 
@@ -79,7 +79,7 @@ export const translateProps = (state, props) => {
     toFormatted: x => x,
     fromFormatted: x => x,
     locale: getLocale(state),
-    localLocale
+    momentLocale
   };
 };
 

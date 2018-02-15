@@ -51,7 +51,7 @@ test('mapStateToControlProps', t => {
   const defaultProps = mapStateToControlProps(defaultState, ownProps);
   // tslint:disable:no-string-literal
   t.is(defaultProps['locale'], undefined);
-  t.is(defaultProps['localLocale'], undefined);
+  t.is(defaultProps['momentLocale'], undefined);
   // tslint:enable:no-string-literal
 
   const state = {
@@ -64,5 +64,5 @@ test('mapStateToControlProps', t => {
   };
   const props = translateProps(state, mapStateToControlProps(state, ownProps));
   t.is(props.locale, 'de-DE');
-  t.not(props.localLocale, undefined);
+  t.not(props.momentLocale, undefined);
 });
