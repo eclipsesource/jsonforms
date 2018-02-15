@@ -36,6 +36,7 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
     id,
     path,
     isValid,
+    scopedSchema: Resolve.schema(ownProps.schema, controlElement.scope),
     uischema: ownProps.uischema,
     schema: ownProps.schema
   };

@@ -4,6 +4,7 @@ import DateTimeField, { dateTimeFieldTester } from './DateTimeField';
 import EnumField, { enumFieldTester } from './EnumField';
 import IntegerField, { integerFieldTester } from './IntegerField';
 import NumberField, { numberFieldTester } from './NumberField';
+import NumberFormatField, { numberFormatFieldTester } from './NumberFormatField';
 import SliderField, { sliderFieldTester } from './SliderField';
 import TextField, { textFieldTester } from './TextField';
 import TextAreaField, { textAreaFieldTester } from './TextAreaField';
@@ -22,6 +23,8 @@ export {
   integerFieldTester,
   NumberField,
   numberFieldTester,
+  NumberFormatField,
+  numberFormatFieldTester,
   SliderField,
   sliderFieldTester,
   TextField,
