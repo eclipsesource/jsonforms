@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as _ from 'lodash';
 import {
   composePaths,
   Generate,
@@ -24,7 +25,7 @@ export const ArrayControl  =
           </legend>
           <div className={classNames.children}>
             {
-              data ? data.map((_child, index) => {
+              data ? _.range(0, data.length).map(index => {
 
                 const generatedUi = Generate.uiSchema(resolvedSchema, 'HorizontalLayout');
                 const childPath = composePaths(path, index + '');
