@@ -5,10 +5,10 @@ export interface Formatted<A> {
   /**
    * Format the given value
    *
-   * @param {A} a the value to be formatted
+   * @param {A} value the value to be formatted
    * @returns {string} the formatted string
    */
-  toFormatted(a: A): string;
+  toFormatted(value: A): string;
 
   /**
    * Retrieve a value from a given string.
