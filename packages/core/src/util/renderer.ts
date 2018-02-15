@@ -138,9 +138,11 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
+  const description = resolvedSchema !== undefined ? resolvedSchema.description : '';
 
   return {
     data: Resolve.data(getData(state), path),
+    description,
     errors,
     label,
     visible,
@@ -174,7 +176,6 @@ export const mapDispatchToControlProps = (dispatch): DispatchPropsOfControl => (
 export interface StatePropsOfTable extends StatePropsOfControl {
   // not sure whether we want to expose ajv API
   childErrors: ErrorObject[];
-  scopedSchema: JsonSchema;
 }
 
 /**
@@ -190,7 +191,6 @@ export interface StatePropsOfTable extends StatePropsOfControl {
 export const connectToJsonForms = (
   mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
   mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
-
 
   return connect(
     (state, ownProps) =>
@@ -212,16 +212,16 @@ export const connectToJsonForms = (
  */
 export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable => {
   const {path, ...props} = mapStateToControlProps(state, ownProps);
-
-  const childErrors = getSubErrorsAt(path)(state);
   const controlElement = ownProps.uischema as ControlElement;
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
+  const childErrors = getSubErrorsAt(path)(state);
+
   return {
     ...props,
+    scopedSchema: resolvedSchema,
     path,
     childErrors,
-    scopedSchema: resolvedSchema
   };
 };
 
