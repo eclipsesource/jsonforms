@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   connectToJsonForms,
-  ControlElement,
   FieldProps,
   Formatted,
   isNumberFormatControl,
@@ -9,7 +8,6 @@ import {
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 import Input from 'material-ui/Input';
 
@@ -19,13 +17,12 @@ const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
     id,
     enabled,
     uischema,
-    schema,
     isValid,
     path,
-    handleChange
+    handleChange,
+    scopedSchema
   } = props;
-  const controlElement = uischema as ControlElement;
-  const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
+  const maxLength = scopedSchema.maxLength;
   let config;
   if (uischema.options && uischema.options.restrict) {
     config = {'maxLength': maxLength};

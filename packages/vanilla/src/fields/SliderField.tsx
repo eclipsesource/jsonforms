@@ -2,28 +2,24 @@ import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
   connectToJsonForms,
-  ControlElement,
   FieldProps,
   isRangeControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 
 const SliderField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
-  const controlElement = uischema as ControlElement;
-  const resolvedSchema = resolveSchema(schema, controlElement.scope);
+  const { data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
 
   return (
   <div style={{display: 'flex'}}>
     <input
       type='range'
-      max={resolvedSchema.maximum}
-      min={resolvedSchema.minimum}
-      value={data || resolvedSchema.default}
+      max={scopedSchema.maximum}
+      min={scopedSchema.minimum}
+      value={data || scopedSchema.default}
       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
         handleChange(path, Number(ev.currentTarget.value))
       }
@@ -33,7 +29,7 @@ const SliderField = (props: FieldProps) => {
       autoFocus={uischema.options && uischema.options.focus}
       style={{flex: '1'}}
     />
-    <label style={{marginLeft: '0.5em'}}>{data || resolvedSchema.default}</label>
+    <label style={{marginLeft: '0.5em'}}>{data || scopedSchema.default}</label>
   </div>
   );
 };

@@ -1,20 +1,18 @@
 import * as React from 'react';
 import {
   connectToJsonForms,
-  ControlElement,
   FieldProps,
   isEnumControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 import { SyntheticEvent } from 'react';
 
 const EnumField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
-  const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
+  const { data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
+  const options = scopedSchema.enum;
 
   return (
     <select

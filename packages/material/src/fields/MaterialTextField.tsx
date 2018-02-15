@@ -1,22 +1,20 @@
 import * as React from 'react';
 import {
   connectToJsonForms,
-  ControlElement,
   FieldProps,
   isStringControl,
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 
 import Input from 'material-ui/Input';
 
 export const MaterialTextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, schema, isValid, path, handleChange } = props;
-  const controlElement = uischema as ControlElement;
-  const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
+  const { data, className, id, enabled, uischema, isValid,
+      path, handleChange, scopedSchema } = props;
+  const maxLength = scopedSchema.maxLength;
   let config;
   if (uischema.options && uischema.options.restrict) {
     config = {'maxLength': maxLength};

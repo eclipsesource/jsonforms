@@ -53,7 +53,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
         helperText={!isValid ? errors : description}
         InputLabelProps={{shrink: true, }}
         value={data || null}
-        onChange={ datetime => 
+        onChange={ datetime =>
           handleChange(path, datetime ? moment(datetime).format() : '')
         }
         format='MM/DD/YYYY h:mm a'
