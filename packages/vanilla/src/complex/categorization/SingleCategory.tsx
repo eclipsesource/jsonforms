@@ -14,7 +14,7 @@ export const SingleCategory = ({ category, schema, path }: CategoryProps) => (
       (category.elements || []).map((child, index) =>
         (
           <JsonForms
-            key={path + index.toString()}
+            key={`${path}-${index}`}
             uischema={child}
             schema={schema}
             path={path}

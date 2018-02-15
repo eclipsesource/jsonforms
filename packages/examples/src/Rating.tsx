@@ -22,7 +22,7 @@ export class Rating extends Component<RatingProps, RatingState> {
     };
   }
 
-  handleMouseOver(idx) {
+  handleMouseOver(idx: number) {
     this.setState({
       hoverAt: idx + 1
     });
@@ -34,7 +34,7 @@ export class Rating extends Component<RatingProps, RatingState> {
     });
   }
 
-  handleClick(idx) {
+  handleClick(idx: number) {
     this.setState({
       rating: idx + 1
     });
@@ -43,21 +43,29 @@ export class Rating extends Component<RatingProps, RatingState> {
   render() {
     const { onClick } = this.props;
 
-    return (<div>
+    return (
+      <div>
         {
           _.range(0, 5).map(i => {
             const rating = this.state.hoverAt != null ? this.state.hoverAt : this.state.rating;
 
-            return <span onMouseOver={() => this.handleMouseOver(i)}
-                         onMouseOut={() => this.handleMouseOut()}
-                         onClick={() => {
-                           this.handleClick(i);
-                           onClick({ value: i + 1});
-                         }}
-                         key={`${this.props.id}_${i}`}
-            >
-              {i < rating ? '\u2605' : '\u2606'}
-            </span>;
+            return (
+              <span
+                onMouseOver={() => {
+                  this.handleMouseOver(i);
+                }}
+                onMouseOut={() => {
+                  this.handleMouseOut();
+                }}
+                onClick={() => {
+                  this.handleClick(i);
+                  onClick({ value: i + 1});
+                }}
+                key={`${this.props.id}_${i}`}
+              >
+                {i < rating ? '\u2605' : '\u2606'}
+              </span>
+            );
           })
         }
       </div>

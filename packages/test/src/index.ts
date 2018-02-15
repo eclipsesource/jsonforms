@@ -11,6 +11,8 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import { combineReducers, createStore, Store } from 'redux';
+import FakeLayout, { fakeLayoutTester } from './FakeLayout';
+import FakeControl, { fakeControlTester } from './FakeControl';
 
 /**
  * Describes the initial state of the JSON Form's store.
@@ -37,6 +39,11 @@ export interface JsonFormsInitialState {
   [x: string]: any;
 }
 
+export const testRenderers = [
+  { tester: fakeLayoutTester, renderer: FakeLayout },
+  { tester: fakeControlTester, renderer: FakeControl }
+];
+
 export const initJsonFormsStore = ({
                                      data,
                                      schema,
@@ -59,12 +66,4 @@ export const initJsonFormsStore = ({
   return store;
 };
 
-import FakeLayout, { fakeLayoutTester } from './FakeLayout';
-import FakeControl, { fakeControlTester } from './FakeControl';
-
 export { FakeControl, FakeLayout, fakeLayoutTester, fakeControlTester };
-
-export const testRenderers = [
-  { tester: fakeLayoutTester, renderer: FakeLayout },
-  { tester: fakeControlTester, renderer: FakeControl }
-];

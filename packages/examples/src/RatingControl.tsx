@@ -25,7 +25,13 @@ export class RatingControl extends Control<ControlProps, ControlState> {
    */
   render() {
     return (
-      <Rating value={this.props.data} onClick={ev => this.onClick(ev)} id={this.props.id} />
+      <Rating
+        value={this.props.data}
+        onClick={ev => {
+          this.onClick(ev);
+        }}
+        id={this.props.id}
+      />
     );
   }
 

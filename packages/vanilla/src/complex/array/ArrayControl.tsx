@@ -28,7 +28,7 @@ export const ArrayControl  =
               data ? _.range(0, data.length).map(index => {
 
                 const generatedUi = Generate.uiSchema(resolvedSchema, 'HorizontalLayout');
-                const childPath = composePaths(path, index + '');
+                const childPath = composePaths(path, `${index}`);
 
                 return (
                   <JsonForms

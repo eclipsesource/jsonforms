@@ -100,7 +100,7 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
               <tr><td>No data</td></tr> : data.map((_child, index) => {
-              const childPath = Paths.compose(path, index + '');
+              const childPath = Paths.compose(path, `${index}`);
 
               return (
                 <tr key={childPath}>

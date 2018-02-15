@@ -84,7 +84,7 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
 
   private select = (_event, child) => {
     const selected = this.state.selected.filter(s => this.props.data.indexOf(s) !== -1);
-    const selectedIndex = selected.indexOf(child);
+    const selectedIndex: number = selected.indexOf(child);
     let newSelected = [];
 
     if (selectedIndex === -1) {

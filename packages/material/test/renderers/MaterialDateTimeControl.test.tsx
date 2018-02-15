@@ -133,7 +133,7 @@ test('autofocus inactive by default', t => {
       data: t.context.data,
       schema: t.context.schema,
       uischema
-    })
+    });
     const tree = TestUtils.renderIntoDocument(
         <Provider store={store}>
           <MaterialDateTimeControl schema={t.context.schema} uischema={uischema}/>
@@ -352,7 +352,11 @@ test('disable', t => {
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <MaterialDateTimeControl schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <MaterialDateTimeControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        enabled={false}
+      />
     </Provider>
   );
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

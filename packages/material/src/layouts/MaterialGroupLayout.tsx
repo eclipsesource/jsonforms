@@ -34,7 +34,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
 
     return (
         <Card style={style}>
-          { !_.isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/> }
+          {!_.isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
           <CardContent>
             <MaterialLayoutRenderer {...childProps}/>
           </CardContent>

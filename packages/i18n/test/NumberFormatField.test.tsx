@@ -21,7 +21,6 @@ export const initJsonFormsStore = ({
                                      ...props
                                    }): Store<JsonFormsState> => {
 
-
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer({ i18n: i18nReducer}) }),
     {

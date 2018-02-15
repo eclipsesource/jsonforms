@@ -1,6 +1,6 @@
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { ExampleDescription } from './example';
-import { jsonformsReducer, RankedTester } from '@jsonforms/core';
+import { jsonformsReducer, JsonFormsState, RankedTester } from '@jsonforms/core';
 import { combineReducers, createStore, Reducer } from 'redux';
 import { i18nReducer, translateProps } from '@jsonforms/i18n';
 
@@ -57,7 +57,7 @@ export const changeExample =
     );
 
     jsonForms.store = createStore(
-      combineReducers({
+      combineReducers<JsonFormsState>({
         jsonforms: jsonformsReducer(
           {
             i18n: i18nReducer,
