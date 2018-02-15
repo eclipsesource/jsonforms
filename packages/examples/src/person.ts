@@ -1,4 +1,5 @@
 import { registerExamples } from './register';
+import 'moment/locale/de';
 
 export const personCoreSchema = {
   type: 'object',
@@ -13,7 +14,8 @@ export const personCoreSchema = {
     },
     birthDate: {
       type: 'string',
-      format: 'date'
+      format: 'date',
+      description: 'Please enter your birth date.'
     },
     nationality: {
       type: 'string',
@@ -145,6 +147,8 @@ const translations = {
     namedescription: 'Please enter your full name.'
   },
   'de-DE': {
+    cancel: 'Stornieren',
+    clear: 'Löschen',
     name: 'Name',
     height: 'Höhe',
     age: 'Alter',

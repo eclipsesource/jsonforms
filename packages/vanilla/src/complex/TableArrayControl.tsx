@@ -7,6 +7,7 @@ import {
   DispatchField,
   formatErrorMessage,
   Helpers,
+  isPlainLabel,
   mapDispatchToTableControlProps,
   mapStateToTableControlProps,
   Paths,
@@ -68,12 +69,13 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
     const labelObject = createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
+    const labelText = isPlainLabel(label) ? label : label.default;
 
     return (
       <div className={controlClass} hidden={!visible}>
         <header>
           <label className={labelClass}>
-            {label}
+            {labelText}
           </label>
           <button className={buttonClass} onClick={addItem(path)}>
             Add to {labelObject.text}
