@@ -6,7 +6,9 @@ import {
   ControlElement,
   ControlProps,
   ControlState,
+  formatErrorMessage,
   isDateControl,
+  isDescriptionHidden,
   isTimeControl,
   mapDispatchToControlProps,
   mapStateToControlProps,
@@ -43,6 +45,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     }
     const onChange = ev => handleChange(path, ev.target.value);
     const fieldType = resolvedSchema.format;
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
       <TextField
@@ -54,7 +57,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
         fullWidth={!trim}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
-        helperText={!isValid ? errors : description}
+        helperText={!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
         InputLabelProps={{shrink: true}}
         value={data}
         onChange={onChange}

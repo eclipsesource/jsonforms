@@ -176,7 +176,6 @@ export const mapDispatchToControlProps = (dispatch): DispatchPropsOfControl => (
 export interface StatePropsOfTable extends StatePropsOfControl {
   // not sure whether we want to expose ajv API
   childErrors: ErrorObject[];
-  resolvedSchema: JsonSchema;
 }
 
 /**
@@ -196,9 +195,8 @@ export const connectToJsonForms = (
   return connect(
     (state, ownProps) =>
       (getPropsTransformer(state) || []).reduce(
-        (props, materializer) => {
-          return _.merge(props, materializer(state, props));
-        },
+        (props, materializer) =>
+          _.merge(props, materializer(state, props)),
         mapStateToProps(state, ownProps)
       ),
     mapDispatchToProps
@@ -216,14 +214,11 @@ export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable 
   const {path, ...props} = mapStateToControlProps(state, ownProps);
 
   const childErrors = getSubErrorsAt(path)(state);
-  const controlElement = ownProps.uischema as ControlElement;
-  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
 
   return {
     ...props,
     path,
     childErrors,
-    resolvedSchema
   };
 };
 
