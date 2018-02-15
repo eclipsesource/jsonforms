@@ -1,4 +1,5 @@
 import { registerExamples } from './register';
+import 'moment/locale/de';
 
 export const personCoreSchema = {
   type: 'object',
@@ -147,7 +148,7 @@ const translations = {
   },
   'de-DE': {
     cancel: 'Stornieren',
-    clear: 'Löschen'
+    clear: 'Löschen',
     name: 'Name',
     height: 'Höhe',
     age: 'Alter',

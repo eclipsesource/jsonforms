@@ -51,8 +51,6 @@ export const translateLabel =
     } else {
       return _.mapValues(label, l => translate(translations, l)) as Labels;
     }
-
-    return label;
   };
 
 export const translateProps = (state, props) => {

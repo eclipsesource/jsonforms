@@ -51,7 +51,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     return (
       <TextField
         id={id}
-        label={computeLabel(isPlainLabel(label) ? label : label.default, required}
+        label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
         type={fieldType}
         error={!isValid}
         style={style}

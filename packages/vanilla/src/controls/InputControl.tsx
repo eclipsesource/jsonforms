@@ -8,6 +8,7 @@ import {
   formatErrorMessage,
   isControl,
   isDescriptionHidden,
+  isPlainLabel,
   mapStateToControlProps,
   RankedTester,
   rankWith,
@@ -33,7 +34,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-    const labelText = typeof label === 'string' ? label : label.default;
+    const labelText = isPlainLabel(label) ? label : label.default;
 
     return (
       <div

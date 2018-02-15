@@ -4,7 +4,6 @@ import {
   computeLabel,
   connectToJsonForms,
   Control,
-  ControlElement,
   ControlProps,
   ControlState,
   isDateControl,
@@ -14,7 +13,6 @@ import {
   mapStateToControlProps,
   RankedTester,
   rankWith,
-  resolveSchema,
   StatePropsOfControl
 } from '@jsonforms/core';
 import { DatePicker } from 'material-ui-pickers';
@@ -30,11 +28,11 @@ export interface DateControl {
 export class MaterialDateControl extends Control<ControlProps & DateControl, ControlState> {
   render() {
     const {
+      description,
       id,
       errors,
       label,
       uischema,
-      schema,
       visible,
       enabled,
       required,
@@ -45,9 +43,6 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
-    const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope);
-    const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
     let style = {};
     if (!visible) {
