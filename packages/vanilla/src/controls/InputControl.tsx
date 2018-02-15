@@ -3,7 +3,6 @@ import {
   computeLabel,
   connectToJsonForms,
   Control,
-  ControlElement,
   ControlState,
   DispatchField,
   formatErrorMessage,
@@ -12,7 +11,6 @@ import {
   mapStateToControlProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 import { VanillaControlProps } from '../index';
 import { addVanillaControlProps } from '../util';
@@ -21,6 +19,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
   render() {
     const {
       classNames,
+      description,
       id,
       errors,
       label,
@@ -33,17 +32,14 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
 
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? ' ' + classNames.description : ' validation_error');
-    const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope);
-    const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
       <div
         className={classNames.wrapper}
         hidden={!visible}
-        onFocus={() => this.onFocus()}
-        onBlur={() => this.onBlur()}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
       >
         <label htmlFor={id} className={classNames.label}>
           {computeLabel(label, required)}

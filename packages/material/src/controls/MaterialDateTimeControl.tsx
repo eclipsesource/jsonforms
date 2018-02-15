@@ -3,7 +3,6 @@ import {
   computeLabel,
   connectToJsonForms,
   Control,
-  ControlElement,
   ControlProps,
   ControlState,
   isDateTimeControl,
@@ -11,7 +10,6 @@ import {
   mapStateToControlProps,
   RankedTester,
   rankWith,
-  resolveSchema
 } from '@jsonforms/core';
 import { DateTimePicker } from 'material-ui-pickers';
 import * as moment from 'moment';
@@ -24,10 +22,10 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
   render() {
     const {
       id,
+      description,
       errors,
       label,
       uischema,
-      schema,
       visible,
       enabled,
       required,
@@ -37,9 +35,6 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
-    const controlElement = uischema as ControlElement;
-    const resolvedSchema = resolveSchema(schema, controlElement.scope);
-    const description = resolvedSchema.description === undefined ? '' : resolvedSchema.description;
     let style = {};
     if (!visible) {
       style = {display: 'none'};
