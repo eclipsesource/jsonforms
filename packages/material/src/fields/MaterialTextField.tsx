@@ -12,8 +12,17 @@ import {
 import Input from 'material-ui/Input';
 
 export const MaterialTextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, isValid,
-      path, handleChange, scopedSchema } = props;
+  const {
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    isValid,
+    path,
+    handleChange,
+    scopedSchema
+  } = props;
   const maxLength = scopedSchema.maxLength;
   let config;
   if (uischema.options && uischema.options.restrict) {

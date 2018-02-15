@@ -26,6 +26,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       label,
       uischema,
       scopedSchema,
+      description,
       visible,
       required,
       path,
@@ -34,7 +35,6 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     } = this.props;
     const isValid = errors.length === 0;
     const trim = uischema.options && uischema.options.trim;
-    const description = scopedSchema.description === undefined ? '' : scopedSchema.description;
     let style = {};
     if (!visible) {
       style = {display: 'none'};
