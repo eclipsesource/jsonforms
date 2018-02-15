@@ -21,7 +21,7 @@ export const compose = (path1: string, path2: string) => {
  * at the '/' character and removing all schema-specific keywords.
  *
  * The returned value can be used to de-reference a root object by folding over it
- * and derefercing the single segments to obtain a new object.
+ * and de-referencing the single segments to obtain a new object.
  *
  *
  * @param {string} schemaPath the schema path to be converted
@@ -30,17 +30,9 @@ export const compose = (path1: string, path2: string) => {
 export const toDataPathSegments = (schemaPath: string): string[] => {
   const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
-  if (startFromRoot) {
-    return segments.filter((_segment, index) => {
-      if (index === 0) {
-        return false;
-      } else {
-        return index % 2 !== 1;
-      }
-    });
-  }
+  const startIndex =  startFromRoot ? 2 : 1;
 
-  return segments.filter((_segment, index) => index % 2 !== 0);
+  return _.range(startIndex, segments.length, 2).map(idx => segments[idx]);
 };
 
 /**
