@@ -1,4 +1,4 @@
-# Migrating from JSON Forms 1.x (AngluarJS)
+# Migrating from JSON Forms 1.x (AngularJS 1.x)
 The complexity of the migration of an existing JSON Forms 1.x application, which is based on AngularJS, to JSON Forms 2.x depends on the feature set you use.
 
 ## Architectural changes in JSON Forms 2.x
