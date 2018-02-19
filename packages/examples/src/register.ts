@@ -75,6 +75,7 @@ export const changeExample =
           },
           renderers,
           fields,
+          config: example.config,
           i18n: {
             translations: example.translations,
             locale: example.locale || navigator.language,

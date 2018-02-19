@@ -40,8 +40,8 @@ const translations = {
 };
 
 const config = {
-  restrict: false,
-  trim: false
+  restrict: true,
+  trim: true
 };
 
 registerExamples([

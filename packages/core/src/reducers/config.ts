@@ -2,13 +2,8 @@ import * as _ from 'lodash';
 import { SET_CONFIG } from '../actions';
 import { configDefault } from '../configDefault';
 
-const applyDefaultConfiguration = (config?: any) => {
-  if (config) {
-    return _.merge(configDefault, config);
-  }
-
-  return configDefault;
-};
+const applyDefaultConfiguration = (config: any = {}) =>
+  _.merge(configDefault, config);
 
 export const configReducer = (
   state = applyDefaultConfiguration(),
