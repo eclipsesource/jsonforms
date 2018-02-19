@@ -259,10 +259,9 @@ export const mapDispatchToTableControlProps = (dispatch): DispatchPropsOfTable =
             return [{}];
           }
 
-          const clone = _.clone(array);
-          clone.push({});
+          array.push({});
 
-          return clone;
+          return array;
         }
       )
     );

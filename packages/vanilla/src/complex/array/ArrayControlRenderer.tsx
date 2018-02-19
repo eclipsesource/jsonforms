@@ -1,13 +1,12 @@
-import * as _ from 'lodash';
 import * as React from 'react';
 
 import {
   connectToJsonForms,
   ControlElement,
   Helpers,
+  mapDispatchToTableControlProps,
   mapStateToControlProps,
   Resolve,
-  update
 } from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
 import { VanillaControlProps } from '../../index';
@@ -57,29 +56,9 @@ const ArrayControlRenderer  =
     );
   };
 
-const mapDispatchToProps = dispatch => ({
-  addItem: (path: string) => () => {
-    dispatch(
-      update(
-        path,
-        array => {
-          if (array === undefined || array === null) {
-            return [{}];
-          }
-
-          const clone = _.clone(array);
-          clone.push({});
-
-          return clone;
-        }
-      )
-    );
-  }
-});
-
 const ConnectedArrayControlRenderer = connectToJsonForms(
   addVanillaControlProps(mapStateToControlProps),
-  mapDispatchToProps
+  mapDispatchToTableControlProps
 )(ArrayControlRenderer);
 
 export default ConnectedArrayControlRenderer;
