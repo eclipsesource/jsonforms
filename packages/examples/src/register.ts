@@ -77,7 +77,7 @@ export const changeExample =
           fields,
           i18n: {
             translations: example.translations,
-            locale: example.locale || navigator.language,
+            locale: example.locale || navigator.languages[0],
           },
           transformProps: [translateProps],
           ...additionalInitState
