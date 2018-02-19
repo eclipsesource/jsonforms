@@ -319,6 +319,6 @@ export const isRangeControl = and(
  */
 export const isNumberFormatControl = and(
   uiTypeIs('Control'),
-  schemaTypeIs('number'),
+  schemaTypeIs('integer'),
   optionIs('format', true)
 );
