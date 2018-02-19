@@ -140,7 +140,11 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
   const description = resolvedSchema !== undefined ? resolvedSchema.description : '';
-  const config = getConfig(state);
+  const defaultConfig = _.cloneDeep(getConfig(state));
+  const config = _.merge(
+    defaultConfig,
+    controlElement.options
+  );
 
   return {
     data: Resolve.data(getData(state), path),

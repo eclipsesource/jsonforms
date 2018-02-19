@@ -27,7 +27,11 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
-  const config = getConfig(state);
+  const defaultConfig = _.cloneDeep(getConfig(state));
+  const config = _.merge(
+    defaultConfig,
+    ownProps.uischema.options
+  );
 
   return {
     data: Resolve.data(getData(state), path),
