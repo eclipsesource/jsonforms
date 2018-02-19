@@ -10,14 +10,14 @@ import {
 } from '@jsonforms/core';
 import { ValidationIcon } from './ValidationIcon';
 
-const generateCells = (Cell, resolvedSchema, rowPath, cellErrors?) =>
-  Object.keys(resolvedSchema.properties)
-    .filter(prop => resolvedSchema.properties[prop].type !== 'array')
+const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) =>
+  Object.keys(scopedSchema.properties)
+    .filter(prop => scopedSchema.properties[prop].type !== 'array')
     .map(prop => {
       const cellPath = Paths.compose(rowPath, prop);
       const props = {
         cellProperty: prop,
-        resolvedSchema,
+        scopedSchema,
         rowPath,
         cellPath,
         errors: cellErrors
@@ -35,7 +35,27 @@ const EmptyTable = () => (
 const TableHeaderCell = ({cellProperty}) =>
   <TableCell >{cellProperty}</TableCell>;
 
-const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSchema}) => {
+const TableWithContent = tableProps => {
+  const {data, path, scopedSchema, childErrors, select, isSelected} = tableProps;
+
+  return data.map((child, index) => {
+    const childPath = Paths.compose(path, index + '');
+
+    return (
+      <TableRow
+        key={childPath}
+        hover
+        selected={isSelected(child)}
+      >
+        <TableCell padding='checkbox'>
+          <Checkbox checked={isSelected(child)} onChange={e => select(e, child)}/>
+        </TableCell>
+        {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
+      </TableRow>
+    );
+  });
+};
+const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema}) => {
   const cellErrors = errors
     .filter(error => error.dataPath === cellPath)
     .map(error => error.message);
@@ -53,7 +73,7 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSche
         </Grid>
         <Grid item xs>
           <DispatchField
-            schema={resolvedSchema}
+            schema={scopedSchema}
             uischema={createControlElement(cellProperty)}
             path={rowPath}
           />
@@ -64,7 +84,7 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, resolvedSche
 };
 
 const TableWithContent = tableProps => {
-  const {data, path, resolvedSchema, childErrors, select, isSelected} = tableProps;
+  const {data, path, scopedSchema, childErrors, select, isSelected} = tableProps;
 
   return data.map((child, index) => {
     const childPath = Paths.compose(path, `${index}`);
@@ -78,14 +98,14 @@ const TableWithContent = tableProps => {
         <TableCell padding='checkbox'>
           <Checkbox checked={isSelected(child)} onChange={e => select(e, child)}/>
         </TableCell>
-        {generateCells(TableContentCell, resolvedSchema, childPath, childErrors)}
+        {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
       </TableRow>
     );
   });
 };
 
 export const MaterialTableControl = props =>  {
-    const { data, path, resolvedSchema, numSelected, selectAll } = props;
+    const { data, path, scopedSchema, numSelected, selectAll } = props;
     const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
     const rowCount = data ? data.length : 0;
 
@@ -100,7 +120,7 @@ export const MaterialTableControl = props =>  {
                   onChange={selectAll}
                 />
               </TableCell>
-              {generateCells(TableHeaderCell, resolvedSchema, path)}
+              {generateCells(TableHeaderCell, scopedSchema, path)}
             </TableRow>
           </TableHead>
           <TableBody>
