@@ -13,6 +13,8 @@ import {
   materialNativeControlTester,
 } from './controls';
 import {
+  MaterialCategorizationLayout,
+  materialCategorizationTester,
   MaterialGroupLayout,
   materialGroupTester,
   MaterialHorizontalLayout,
@@ -58,7 +60,8 @@ export const materialRenderers = [
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
   { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },
-  { tester: materialVerticalLayoutTester, renderer: MaterialVerticalLayout }
+  { tester: materialVerticalLayoutTester, renderer: MaterialVerticalLayout },
+  { tester: materialCategorizationTester, renderer: MaterialCategorizationLayout }
 ];
 
 export const materialFields: { tester: RankedTester, field: ComponentType<FieldProps> }[] = [

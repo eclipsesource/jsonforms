@@ -19,9 +19,9 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 const isSingleLevelCategorization: Tester = and(
     uiTypeIs('Categorization'),
     (uischema: UISchemaElement): boolean => {
-        const categorization = uischema as Categorization;
+      const categorization = uischema as Categorization;
 
-        return categorization.elements.reduce((acc, e) => acc && e.type === 'Category', true);
+      return categorization.elements.reduce((acc, e) => acc && e.type === 'Category', true);
     }
 );
 
