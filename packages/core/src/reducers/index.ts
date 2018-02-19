@@ -2,6 +2,7 @@ import { combineReducers, Reducer } from 'redux';
 import { rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { transformPropsReducer } from './transformProps';
+import { configReducer } from './config';
 import {
   coreReducer,
   errorAt,
@@ -24,6 +25,7 @@ export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsStat
     renderers: rendererReducer,
     fields: fieldReducer,
     transformProps: transformPropsReducer,
+    config: configReducer,
     ...additionalReducers
   });
 
@@ -38,3 +40,4 @@ export const getSubErrorsAt = instancePath => state =>
   subErrorsAt(instancePath)(state.jsonforms.core);
 
 export const getPropsTransformer = state => state.jsonforms.transformProps;
+export const getConfig = state => state.jsonforms.config;

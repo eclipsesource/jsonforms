@@ -39,6 +39,10 @@ export interface JsonFormsState {
       errors?: ErrorObject[]
     };
     /**
+     * Global configuration options.
+     */
+    config?: any;
+    /**
      * All available renderers.
      */
     renderers?: any[];

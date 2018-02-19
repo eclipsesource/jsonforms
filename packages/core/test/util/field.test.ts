@@ -40,7 +40,7 @@ const createState = uischema => ({
       },
       uischema,
       errors: []
-    },
+    }
   }
 });
 

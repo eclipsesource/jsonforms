@@ -329,16 +329,17 @@ test('enabled by default', t => {
 test('use maxLength for attributes size and maxlength', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name',
-    options: {
-      trim: true,
-      restrict: true
-    }
+    scope: '#/properties/name'
+  };
+  const config = {
+    restrict: true,
+    trim: true
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema
+    uischema,
+    config
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -353,13 +354,17 @@ test('use maxLength for attributes size and maxlength', t => {
 test('use maxLength for attribute size only', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name',
-    options: { trim: true }
+    scope: '#/properties/name'
+  };
+  const config = {
+    restrict: false,
+    trim: true
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema
+    uischema,
+    config
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -374,13 +379,17 @@ test('use maxLength for attribute size only', t => {
 test('use maxLength for attribute max length only', t => {
   const uischema = {
     type: 'Control',
-    scope:   '#/properties/name',
-    options: { restrict: true }
+    scope:   '#/properties/name'
+  };
+  const config = {
+    restrict: true,
+    trim: false
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
-    uischema
+    uischema,
+    config
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -392,7 +401,7 @@ test('use maxLength for attribute max length only', t => {
   t.is(input.size, defaultSize);
 });
 
-test('do not use maxLength', t => {
+test('do not use maxLength by default', t => {
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
@@ -411,16 +420,17 @@ test('do not use maxLength', t => {
 test('maxLength not specified, attributes should have default values (trim && restrict)', t => {
   const uischema = {
     type: 'Control',
-    scope: '#/properties/name',
-    options: {
-      trim: true,
-      restrict: true
-    }
+    scope: '#/properties/name'
+  };
+  const config = {
+    restrict: true,
+    trim: true
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema
+    uischema,
+    config
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -435,13 +445,17 @@ test('maxLength not specified, attributes should have default values (trim && re
 test('maxLength not specified, attributes should have default values (trim)', t => {
   const uischema = {
     type: 'Control',
-    scope:   '#/properties/name',
-    options: { trim: true }
+    scope:   '#/properties/name'
+  };
+  const config = {
+    restrict: false,
+    trim: true
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema
+    uischema,
+    config
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -456,13 +470,17 @@ test('maxLength not specified, attributes should have default values (trim)', t 
 test('maxLength not specified, attributes should have default values (restrict)', t => {
   const uischema = {
     type: 'Control',
-    scope:   '#/properties/name',
-    options: { restrict: true }
+    scope:   '#/properties/name'
+  };
+  const config = {
+    restrict: true,
+    trim: false
   };
   const store = initJsonFormsStore({
     data: t.context.data,
     schema: t.context.schema,
-    uischema
+    uischema,
+    config
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>

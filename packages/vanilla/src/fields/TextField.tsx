@@ -7,11 +7,11 @@ import {
   mapDispatchToFieldProps,
   mapStateToFieldProps,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
 
 const TextField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
+  const { config, data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
   const maxLength = scopedSchema.maxLength;
 
   return (
@@ -25,8 +25,8 @@ const TextField = (props: FieldProps) => {
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
-      size={uischema.options && uischema.options.trim ? maxLength : undefined}
+      maxLength={config.restrict ? maxLength : undefined}
+      size={config.trim ? maxLength : undefined}
     />
   );
 };

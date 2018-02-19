@@ -12,6 +12,7 @@ export const ADD_RENDERER = `${NAMESPACE}/ADD_RENDERER`;
 export const REMOVE_RENDERER = `${NAMESPACE}/REMOVE_RENDERER`;
 export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
 export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
+export const SET_CONFIG = `${NAMESPACE}/SET_CONFIG`;
 
 export interface UpdateAction {
   type: 'jsonforms/UPDATE';
@@ -55,3 +56,10 @@ export const unregisterRenderer = (
   tester,
   renderer
 });
+
+export const setConfig = config => dispatch => {
+  dispatch({
+    type: SET_CONFIG,
+    config,
+  });
+};

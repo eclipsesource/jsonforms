@@ -14,6 +14,7 @@ import Input from 'material-ui/Input';
 export const MaterialTextField = (props: FieldProps) => {
   const {
     data,
+    config,
     className,
     id,
     enabled,
@@ -24,13 +25,13 @@ export const MaterialTextField = (props: FieldProps) => {
     scopedSchema
   } = props;
   const maxLength = scopedSchema.maxLength;
-  let config;
-  if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
+  let inputProps;
+  if (config.restrict) {
+    inputProps = {'maxLength': maxLength};
   } else {
-    config = {};
+    inputProps = {};
   }
-  const trim = uischema.options && uischema.options.trim;
+  const trim = config.trim;
   const onChange = ev => handleChange(path, ev.target.value);
 
   return (
@@ -44,7 +45,7 @@ export const MaterialTextField = (props: FieldProps) => {
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
       fullWidth={!trim || maxLength === undefined}
-      inputProps={config}
+      inputProps={inputProps}
       error={!isValid}
     />
   );

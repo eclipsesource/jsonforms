@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
-import { getData, getErrorAt } from '../reducers';
+import { getConfig, getData, getErrorAt } from '../reducers';
 import {
   composeWithUi,
   isEnabled,
@@ -27,6 +27,11 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
+  const defaultConfig = _.cloneDeep(getConfig(state));
+  const config = _.merge(
+    defaultConfig,
+    ownProps.uischema.options
+  );
 
   return {
     data: Resolve.data(getData(state), path),
@@ -38,7 +43,8 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
     isValid,
     scopedSchema: Resolve.schema(ownProps.schema, controlElement.scope),
     uischema: ownProps.uischema,
-    schema: ownProps.schema
+    schema: ownProps.schema,
+    config
   };
 };
 
