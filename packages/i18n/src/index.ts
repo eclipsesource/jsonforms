@@ -46,6 +46,10 @@ const translate = (translations: Translations, label: string): string => {
 export const translateLabel =
   (translations: Translations, label: string | Labels): (string | Labels) => {
 
+    if (label === undefined || label === null) {
+      return undefined;
+    }
+
     if (isPlainLabel(label)) {
       return translate(translations, label);
     } else {

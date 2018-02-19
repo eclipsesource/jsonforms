@@ -35,26 +35,6 @@ const EmptyTable = () => (
 const TableHeaderCell = ({cellProperty}) =>
   <TableCell >{cellProperty}</TableCell>;
 
-const TableWithContent = tableProps => {
-  const {data, path, scopedSchema, childErrors, select, isSelected} = tableProps;
-
-  return data.map((child, index) => {
-    const childPath = Paths.compose(path, index + '');
-
-    return (
-      <TableRow
-        key={childPath}
-        hover
-        selected={isSelected(child)}
-      >
-        <TableCell padding='checkbox'>
-          <Checkbox checked={isSelected(child)} onChange={e => select(e, child)}/>
-        </TableCell>
-        {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
-      </TableRow>
-    );
-  });
-};
 const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema}) => {
   const cellErrors = errors
     .filter(error => error.dataPath === cellPath)
