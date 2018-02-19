@@ -56,8 +56,8 @@ jsonForms.store = createStore(
                 schema,
                 uischema
             },
-            materialRenderers,
-            materialFields
+            renderers: materialRenderers,
+            fields: materialFields
         }
     }
 );
