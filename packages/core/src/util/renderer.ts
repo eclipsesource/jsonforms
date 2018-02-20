@@ -181,7 +181,7 @@ export interface ControlState {
   isFocused: boolean;
 }
 
-export interface DispatchRendererProps extends RendererProps {
+export interface JsonFormsProps extends StatePropsOfScopedRenderer {
   renderers?: { tester: RankedTester, renderer: any }[];
 }
 /**
