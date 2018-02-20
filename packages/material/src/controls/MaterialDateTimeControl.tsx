@@ -1,8 +1,6 @@
 import * as React from 'react';
 import {
   computeLabel,
-  connectToJsonForms,
-  Control,
   ControlProps,
   ControlState,
   isDateTimeControl,
@@ -12,6 +10,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { connectToJsonForms, Control } from '@jsonforms/react';
 import { DateTimePicker } from 'material-ui-pickers';
 import * as moment from 'moment';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';

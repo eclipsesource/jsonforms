@@ -8,10 +8,10 @@ import {
   getData,
   getSchema,
   getUiSchema,
-  JsonForms,
   JsonFormsState,
   JsonFormsStore
 } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 import { Store } from 'redux';
 
 /**

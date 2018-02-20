@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   isBooleanControl,
   mapDispatchToFieldProps,
@@ -8,6 +7,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 import { StatelessComponent, SyntheticEvent } from 'react';
 
 const BooleanFd: StatelessComponent<FieldProps> = (props: FieldProps) => {

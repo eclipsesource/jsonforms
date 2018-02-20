@@ -2,18 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
-import { RankedTester } from '../testers';
-import { FieldProps } from '../util';
-
+import { DispatchFieldProps, mapStateToDispatchFieldProps } from '@jsonforms/core';
 /**
  * Props of the {@link DispatchField} renderer.
  */
-export interface DispatchFieldProps extends FieldProps {
   /**
    * The available field renderers.
    */
-  fields?: { tester: RankedTester, field: any }[];
-}
 
 const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
   const uischema = dispatchFieldProps.uischema;
@@ -35,8 +30,4 @@ const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
   }
 };
 
-const mapStateToProps = state => ({
-  fields: state.jsonforms.fields || []
-});
-
-export const DispatchField = connect(mapStateToProps)(Dispatch);
+export const DispatchField = connect(mapStateToDispatchFieldProps)(Dispatch);

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   isStringControl,
   mapDispatchToFieldProps,
@@ -9,6 +8,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 
 const TextField = (props: FieldProps) => {
   const { config, data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;

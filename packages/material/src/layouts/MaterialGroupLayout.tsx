@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { Card, CardContent, CardHeader } from 'material-ui';
 import {
-  connectToJsonForms,
   GroupLayout,
   mapStateToLayoutProps,
   RankedTester,
@@ -11,6 +10,7 @@ import {
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));

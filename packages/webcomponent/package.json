@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.2",
+    "@jsonforms/react": "^2.0.0-rc.2",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "es6-shim": "^0.35.3",
     "json-refs": "^2.1.6",

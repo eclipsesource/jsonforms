@@ -1,10 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import {
-  composePaths,
-  Generate,
-  JsonForms,
-} from '@jsonforms/core';
+import { composePaths, Generate } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 
 export const ArrayControl  =
   ({ classNames, data, label, path, resolvedSchema, onAdd }) => {

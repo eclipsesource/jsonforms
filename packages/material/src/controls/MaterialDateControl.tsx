@@ -2,8 +2,6 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   computeLabel,
-  connectToJsonForms,
-  Control,
   ControlProps,
   ControlState,
   isDateControl,
@@ -15,6 +13,7 @@ import {
   rankWith,
   StatePropsOfControl
 } from '@jsonforms/core';
+import { connectToJsonForms, Control } from '@jsonforms/react';
 import { DatePicker } from 'material-ui-pickers';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
