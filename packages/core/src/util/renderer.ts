@@ -13,15 +13,26 @@ import {
   getConfig,
   getData,
   getErrorAt,
-  getPropsTransformer,
-  getSubErrorsAt
+  getSchema,
+  getSubErrorsAt,
+  getUiSchema
 } from '../reducers';
 import { update } from '../actions';
-import { DispatchPropsOfControl, Renderer, StatePropsOfControl } from '../renderers';
-import { UISchemaElement } from '../models/uischema';
 import { ErrorObject } from 'ajv';
 
-export interface RendererProps {
+export interface Labels {
+  default: string;
+  [additonalLabels: string]: string;
+}
+
+export const isPlainLabel = (label: string | Labels): label is string => {
+  return typeof label === 'string';
+};
+
+/**
+ * State-based props of a {@link Renderer}.
+ */
+export interface StatePropsOfRenderer {
   /**
    * The UI schema to be rendered.
    */
@@ -48,11 +59,17 @@ export interface RendererProps {
    * it is the case with nested controls.
    */
   path?: string;
+
+  /**
+   * Any configuration options for the element.
+   */
+  config?: any;
 }
+
 /**
- * Props of a renderer.
+ * State-based properties for UI schema elements that have a scope.
  */
-export interface ControlProps extends RendererProps {
+export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
 
   /**
    * The data to be rendered.
@@ -60,7 +77,7 @@ export interface ControlProps extends RendererProps {
   data: any;
 
   /**
-   * The absolute path to the value being rendered.
+   * The absolute dot-separated path to the value being rendered.
    * A path is a sequence of property names separated by dots,
    * e.g. for accessing the value of b in the object
    * { foo: { a: { b: 42 } } }, one would use foo.a.b.
@@ -73,24 +90,24 @@ export interface ControlProps extends RendererProps {
   parentPath?: string;
 
   /**
+   * The sub-schema that describes the data this element is bound to.
+   */
+  scopedSchema: JsonSchema;
+
+  /**
    * An unique ID that can be used to identify the rendered element.
    */
   id: string;
+}
+/**
+ * Props of a {@link Renderer}.
+ */
+export interface RendererProps extends StatePropsOfRenderer { }
 
-  /**
-   * Determines whether the rendered element should be visible.
-   */
-  visible: boolean;
-
-  /**
-   * Determines whether the rendered element should be enabeld.
-   */
-  enabled: boolean;
-
-  /**
-   * The label for the rendered element.
-   */
-  label: string;
+/**
+ * State-based props of a Control
+ */
+export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
 
   /**
    * Any validation errors that are caused by the data to be rendered.
@@ -98,18 +115,29 @@ export interface ControlProps extends RendererProps {
   errors: any[];
 
   /**
+   * The label for the rendered element.
+   */
+  label: string | Labels;
+
+  /**
+   * Description of input field
+   */
+  description?: string;
+
+  /**
    * Whether the rendered data is required.
    */
   required: boolean;
 
   /**
-   * Update handler that emits a data change
-   *
-   * @param {string} path the path to the data to be updated
-   * @param value the new value
+   * The schema that corresponds to the data the control is bound to.
    */
-  handleChange(path: string, value: any);
+  scopedSchema: JsonSchema;
 }
+/**
+ * Props of a Control.
+ */
+export interface ControlProps extends StatePropsOfControl, DispatchPropsOfControl {}
 /**
  * State props of a layout;
  */
@@ -117,7 +145,7 @@ export interface StatePropsOfLayout {
   /**
    * All available renderers.
    */
-  renderers: Renderer[];
+  renderers: any[];
   /**
    * Whether the layout is visible.
    */
@@ -138,13 +166,35 @@ export interface StatePropsOfLayout {
    */
   schema: JsonSchema;
 }
+/**
+ * The state of a control.
+ */
 export interface ControlState {
+  /**
+   * The current value.
+   */
   value: any;
+
+  /**
+   * Whether the control is focused.
+   */
   isFocused: boolean;
 }
 
 export interface DispatchRendererProps extends RendererProps {
   renderers?: { tester: RankedTester, renderer: any }[];
+}
+/**
+ * Dispatch-based props of a Control.
+ */
+export interface DispatchPropsOfControl {
+  /**
+   * Update handler that emits a data change
+   *
+   * @param {string} path the path to the data to be updated
+   * @param {any} value the new value that should be written to the given path
+   */
+  handleChange(path: string, value: any);
 }
 
 export const mapStateToDispatchRendererProps = (state, ownProps) => ({
@@ -275,31 +325,6 @@ export interface StatePropsOfTable extends StatePropsOfControl {
   // not sure whether we want to expose ajv API
   childErrors: ErrorObject[];
 }
-
-/**
- * JSONForms specific connect function. This is a wrapper
- * around redux's connect function that executes any registered
- * prop transformers on the result of the given mapStateToProps
- * function before passing them to the actual connect function.
- *
- * @param {(state, ownProps) => any} mapStateToProps
- * @param {(dispatch, ownProps) => any} mapDispatchToProps
- * @returns {(Component) => any} function expecting a Renderer Component to be connected
- */
-export const connectToJsonForms = (
-  mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
-  mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
-
-  return connect(
-    (state, ownProps) =>
-      (getPropsTransformer(state) || []).reduce(
-        (props, materializer) =>
-          _.merge(props, materializer(state, props)),
-        mapStateToProps(state, ownProps)
-      ),
-    mapDispatchToProps
-  )(Component);
-};
 
 /**
  * Map state to table props

@@ -4,6 +4,7 @@ import {
     ControlElement,
     formatErrorMessage,
     isControl,
+    isPlainLabel,
     JsonFormsState,
     RankedTester,
     rankWith,
@@ -20,8 +21,12 @@ import { connectControlToJsonForms } from '../util';
     template: `
         <mat-form-field>
             <mat-label>{{computedLabel}}</mat-label>
-            <input matInput type="text" (change)="onChange($event)"
-                [value]="value" placeholder="{{description}}">
+            <input
+                matInput
+                type="text"
+                (change)="onChange($event)"
+                [value]="value" placeholder="{{description}}"
+            >
             <mat-error>{{errors}}</mat-error>
         </mat-form-field>
 
@@ -44,7 +49,9 @@ export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit
         const state$ = connectControlToJsonForms(this.ngRedux, this.getOwnProps());
         this.subscription = state$.subscribe(state => {
             this.onChange = ev => state.handleChange(state.path, ev.target.value);
-            this.computedLabel = computeLabel(state.label, state.required);
+            this.computedLabel = computeLabel(
+                isPlainLabel(state.label) ? state.label : state.label.default, state.required);
+            // TODO initial try did not work, needs more time to fix
             // const isValid = state.errors.length === 0;
             // if (!isValid) {
             //     this.formField.underlineRef.controls.setErrors({'incorrect': true});

@@ -22,9 +22,8 @@ export const connectToJsonForms = (
   return connect(
     (state, ownProps) =>
       (getPropsTransformer(state) || []).reduce(
-        (props, materializer) => {
-          return _.merge(props, materializer(state, props));
-        },
+        (props, materializer) =>
+          _.merge(props, materializer(state, props)),
         mapStateToProps(state, ownProps)
       ),
     mapDispatchToProps

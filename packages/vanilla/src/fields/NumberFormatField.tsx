@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   Formatted,
   isNumberFormatControl,
@@ -9,6 +8,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 
 const NumberFormatField = (props: FieldProps & Formatted<number>) => {
   const {

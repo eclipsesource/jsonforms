@@ -8,7 +8,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
-  JsonFormsProps,
+  DispatchRendererProps,
   mapStateToDispatchRendererProps,
   UISchemaElement
 } from '@jsonforms/core';
@@ -35,7 +35,7 @@ export class JsonFormsOutlet implements OnInit {
        mapStateToDispatchRendererProps(state, {uischema: this.uischema})
     );
     state$.subscribe(props => {
-      const {renderers, schema, uischema} = props as JsonFormsProps;
+      const {renderers, schema, uischema} = props as DispatchRendererProps;
       const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
       let bestComponent: Type<any> = UnknownRenderer;
       if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {

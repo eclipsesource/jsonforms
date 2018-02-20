@@ -8,7 +8,6 @@ module.exports = merge(baseConfig, {
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',
-        //'./src/index.ts',
         './example/main.ts'
     ],
     output: {

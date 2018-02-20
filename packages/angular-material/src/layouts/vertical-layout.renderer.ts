@@ -15,14 +15,14 @@ import { connectLayoutToJsonForms } from '../util';
 @Component({
     selector: 'VerticalLayoutRenderer',
     template: `
-        <div *ngFor="let uischema of state.uischema.elements">
+        <div *ngFor="let uischema of stateProps.uischema.elements">
             <jsonforms-outlet [uischema]="uischema"></jsonforms-outlet>
         </div>
     `
 })
 export class VerticalLayoutRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
-    state: StatePropsOfLayout;
+    stateProps: StatePropsOfLayout;
 
     private subscription: Subscription;
 
@@ -33,7 +33,7 @@ export class VerticalLayoutRenderer extends JsonFormsBaseRenderer implements OnI
     ngOnInit() {
         const state$ = connectLayoutToJsonForms(this.ngRedux, this.getOwnProps());
         this.subscription = state$.subscribe(state => {
-            this.state = state;
+            this.stateProps = state;
         });
     }
 
