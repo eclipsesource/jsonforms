@@ -5,9 +5,9 @@ import Grid from 'material-ui/Grid';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import {
     ControlElement,
-    DispatchField,
     Paths
 } from '@jsonforms/core';
+import { DispatchField } from '@jsonforms/react';
 import { ValidationIcon } from './ValidationIcon';
 
 const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) =>

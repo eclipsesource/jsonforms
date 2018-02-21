@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-import { JsonForms, JsonSchema, Layout } from '@jsonforms/core';
-
+import { JsonSchema, Layout } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 export interface RenderChildrenProps {
   layout: Layout;
   schema: JsonSchema;

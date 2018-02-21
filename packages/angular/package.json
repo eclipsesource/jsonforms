@@ -1,0 +1,46 @@
+{
+  "name": "@jsonforms/angular",
+  "version": "2.0.0-rc.2",
+  "description": "Angular module of JSON Forms",
+  "repository": "https://github.com/eclipsesource/jsonforms",
+  "bugs": "https://github.com/eclipsesource/jsonforms/issues",
+  "homepage": "http://jsonforms.io/",
+  "license": "MIT",
+  "private": true,
+  "directories": {
+    "src": "src",
+    "test": "test"
+  },
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
+    "build": "../../node_modules/.bin/tsc",
+    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
+    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "report": "../../node_modules/.bin/nyc report --reporter=html",
+    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
+    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src",
+    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
+  },
+  "ava": {
+    "verbose": true,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
+  "dependencies": {
+    "@angular-redux/store": "^7.1.0",
+    "@angular/common": "^5.2.4",
+    "@angular/core": "^5.2.4",
+    "@jsonforms/core": "^2.0.0-rc.2",
+    "redux": "^3.7.2",
+    "rxjs": "^5.5.6"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.2.3",
+    "webpack-dev-server": "^2.9.5"
+  }
+}

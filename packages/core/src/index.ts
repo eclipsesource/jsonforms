@@ -5,7 +5,6 @@ export * from './store';
 export * from './actions';
 import * as Actions from './actions';
 export { Actions };
-export *  from './renderers';
 export * from './reducers';
 export * from './generators';
 

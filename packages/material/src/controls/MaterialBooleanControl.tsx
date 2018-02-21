@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   ControlProps,
   isBooleanControl,
   mapStateToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 
 import { FormControlLabel } from 'material-ui/Form';
 

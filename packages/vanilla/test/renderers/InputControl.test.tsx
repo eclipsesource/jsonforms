@@ -5,9 +5,9 @@ import {
   Actions,
   ControlElement,
   HorizontalLayout,
-  JsonForms,
   JsonSchema,
 } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import '../../src';
 import HorizontalLayoutRenderer, {

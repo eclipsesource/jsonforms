@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-    JsonForms,
     JsonSchema,
     UISchemaElement,
   } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 import Grid from 'material-ui/Grid';
 
 const renderChildren = (

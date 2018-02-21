@@ -30,6 +30,7 @@
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.3",
     "@jsonforms/i18n": "^2.0.0-rc.3",
+    "@jsonforms/react": "^2.0.0-rc.3",
     "@jsonforms/webcomponent": "^2.0.0-rc.3",
     "moment": "^2.20.1",
     "react": "^16.2.0",

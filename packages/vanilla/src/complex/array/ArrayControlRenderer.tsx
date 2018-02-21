@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import {
-  connectToJsonForms,
   ControlElement,
   Helpers,
   mapDispatchToTableControlProps,
   mapStateToControlProps,
   Resolve,
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 import { ArrayControl } from './ArrayControl';
 import { VanillaControlProps } from '../../index';
 import { addVanillaControlProps } from '../../util';

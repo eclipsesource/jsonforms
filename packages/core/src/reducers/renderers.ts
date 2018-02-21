@@ -1,9 +1,8 @@
 import { RankedTester } from '../testers';
 import { ADD_RENDERER, REMOVE_RENDERER } from '../actions';
-import { Renderer } from '../renderers';
 
 export const rendererReducer = (
-  state: { tester: RankedTester, renderer: Renderer }[] = [],
+  state: { tester: RankedTester, renderer: any }[] = [],
   {type, tester, renderer}) => {
   switch (type) {
     case ADD_RENDERER:

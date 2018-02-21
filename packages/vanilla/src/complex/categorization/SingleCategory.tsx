@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Category, JsonForms, JsonSchema } from '@jsonforms/core';
+import { Category, JsonSchema } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 
 export interface CategoryProps {
   category: Category;

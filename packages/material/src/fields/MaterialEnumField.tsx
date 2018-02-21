@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   isEnumControl,
   mapDispatchToFieldProps,
@@ -8,6 +7,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 
 import Select from 'material-ui/Select';
 import { MenuItem } from 'material-ui/Menu';

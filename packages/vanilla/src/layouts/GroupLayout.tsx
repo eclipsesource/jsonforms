@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  connectToJsonForms,
   GroupLayout,
   mapStateToLayoutProps,
   RankedTester,
@@ -9,6 +8,7 @@ import {
   uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
+import { connectToJsonForms } from '@jsonforms/react';
 import { VanillaLayoutProps } from '../index';
 import { renderChildren } from './util';
 

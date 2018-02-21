@@ -1,10 +1,8 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  connectToJsonForms,
   ControlElement,
   ControlProps,
-  DispatchField,
   formatErrorMessage,
   Helpers,
   isPlainLabel,
@@ -12,9 +10,9 @@ import {
   mapStateToTableControlProps,
   Paths,
   RankedTester,
-  RendererComponent,
   Test,
 } from '@jsonforms/core';
+import { connectToJsonForms, DispatchField, RendererComponent } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 
 const {

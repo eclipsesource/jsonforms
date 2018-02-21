@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
 import {
-  connectToJsonForms,
   FieldProps,
   isMultiLineControl,
   mapDispatchToFieldProps,
@@ -9,6 +8,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { connectToJsonForms } from '@jsonforms/react';
 
 export const TextAreaField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;

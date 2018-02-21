@@ -1,5 +1,4 @@
 import { RankedTester } from '../testers';
-import { Renderer } from '../renderers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 
@@ -41,7 +40,7 @@ export const update =
 
 export const registerRenderer = (
   tester: RankedTester,
-  renderer: Renderer
+  renderer: any
 ) => ({
   type: ADD_RENDERER,
   tester,
@@ -50,7 +49,7 @@ export const registerRenderer = (
 
 export const unregisterRenderer = (
   tester: RankedTester,
-  renderer: Renderer
+  renderer: any
 ) => ({
   type: REMOVE_RENDERER,
   tester,

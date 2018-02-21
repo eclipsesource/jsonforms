@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Control,
   ControlProps,
   ControlState,
   mapStateToControlProps,
@@ -8,6 +7,7 @@ import {
   rankWith,
   scopeEndsWith
 } from '@jsonforms/core';
+import { Control } from '@jsonforms/react';
 import { Rating } from './Rating';
 import { connect } from 'react-redux';
 
