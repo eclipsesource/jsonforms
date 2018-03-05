@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "2.0.0-rc.2",
+  "version": "2.0.0-rc.3",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
