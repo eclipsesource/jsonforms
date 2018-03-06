@@ -1,498 +1,444 @@
-import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import {
+  Actions,
   ControlElement,
   getData,
   HorizontalLayout,
+  jsonformsReducer,
+  JsonFormsState,
   JsonSchema,
+  NOT_APPLICABLE,
   update
 } from '@jsonforms/core';
 import TextField, { materialTextFieldTester, } from '../../src/fields/MaterialTextField';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import { materialFields, materialRenderers } from '../../src';
+import { combineReducers, createStore, Store } from 'redux';
 
 const DEFAULT_MAX_LENGTH = 524288;
-const defaultSize = 20;
+const DEFAULT_SIZE = 20;
 
-test.beforeEach(t => {
-  t.context.data =  { 'name': 'Foo' };
-  t.context.minLengthSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        minLength: 3
+const data =  { 'name': 'Foo' };
+const minLengthSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      minLength: 3
+    }
+  }
+};
+const maxLengthSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+      maxLength: 5
+    }
+  }
+};
+const schema = {
+  type: 'object',
+  properties: {
+    name: { type: 'string' }
+  }
+};
+const uischema = {
+  type: 'Control',
+  scope: '#/properties/name'
+};
+
+const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    {
+      jsonforms: {
+        renderers: materialRenderers,
+        fields: materialFields,
       }
     }
-  };
-  t.context.maxLengthSchema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        maxLength: 5
+  );
+
+  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
+  return store;
+};
+
+describe('Material text field tester', () => {
+  it('should fail', () =>  {
+    expect(materialTextFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+  });
+});
+
+describe('Material text field', () => {
+  test.skip('should autofocus first element', () =>  {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstName: { type: 'string' },
+        lastName: { type: 'string' }
       }
-    }
-  };
-  t.context.schema = {
-    type: 'object',
-    properties: {
-      name: { type: 'string' }
-    }
-  };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-});
-test.failing('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstName: { type: 'string' },
-      lastName: { type: 'string' }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstName',
-    options: { focus: true }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/lastName',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [firstControlElement, secondControlElement]
-  };
-  const store = initJsonFormsStore({
-    data: { firstName: 'Foo', lastName: 'Boo' },
-    schema,
-    uischema
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstName',
+      options: { focus: true }
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/lastName',
+      options: {
+        focus: true
+      }
+    };
+    const layout: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [firstControlElement, secondControlElement]
+    };
+    const store = initJsonFormsStore(
+      { firstName: 'Foo', lastName: 'Boo' },
+      jsonSchema,
+      layout
+    );
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    expect(document.activeElement).not.toBe(inputs[0]);
+    expect(document.activeElement).toBe(inputs[1]);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-    </Provider>
-  );
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
 
-test('autofocus active', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { focus: true }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema
+  it('should autofocus via option', () =>  {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { focus: true }
+    };
+    const store = initJsonFormsStore(data, minLengthSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(document.activeElement).toBe(input);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(document.activeElement, input);
-});
 
-test('autofocus inactive', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { focus: false }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema
+  it('should not autofocus via option', () =>  {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { focus: false }
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(document.activeElement).not.toBe(input);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.not(document.activeElement, input);
-});
 
-test('autofocus inactive by default', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema
+  it('should not autofocus by default', () =>  {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const store = initJsonFormsStore(data, minLengthSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(document.activeElement).not.toBe(input);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.not(document.activeElement, input);
-});
 
-test('tester', t => {
-  t.is(materialTextFieldTester(undefined, undefined), -1);
-  t.is(materialTextFieldTester(null, undefined), -1);
-  t.is(materialTextFieldTester({type: 'Foo'}, undefined), -1);
-  // scope is missing
-  t.is(materialTextFieldTester({type: 'Control'}, undefined), -1);
-});
+  it('should render', () =>  {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        name: { type: 'string' }
+      }
+    };
+    const store = initJsonFormsStore({ 'name': 'Foo' }, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={jsonSchema} uischema={uischema}/>
+      </Provider>
+    );
 
-test('render', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      name: { type: 'string' }
-    }
-  };
-  const store = initJsonFormsStore({
-    data: { 'name': 'Foo' },
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.value).toBe('Foo');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.value, 'Foo');
-});
+  it('should update via input event', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
 
-test('update via input event', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    input.value = 'Bar';
+    TestUtils.Simulate.change(input);
+    expect(getData(store.getState()).name).toBe('Bar');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  input.value = 'Bar';
-  TestUtils.Simulate.change(input);
-  t.is(getData(store.getState()).name, 'Bar');
-});
-
-test.cb('update via action', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should update via action', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('name', () => 'Bar'));
+    expect(input.value).toBe('Bar');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('name', () => 'Bar'));
-  setTimeout(
-    () => {
-      t.is(input.value, 'Bar');
-      t.end();
-    },
-    100
-  );
-});
 
-test('update with undefined value', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should update with undefined value', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('name', () => undefined));
+    expect(input.value).toBe('');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('name', () => undefined));
-  t.is(input.value, '');
-});
 
-test('update with null value', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should update with null value', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('name', () => null));
+    expect(input.value).toBe('');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('name', () => null));
-  t.is(input.value, '');
-});
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should not update if wrong ref', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('firstname', () => 'Bar'));
+    expect(input.value).toBe('Foo');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('firstname', () => 'Bar'));
-  t.is(input.value, 'Foo');
-});
 
-test('update with null ref', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should not update if null ref', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update(null, () => 'Bar'));
+    expect(input.value).toBe('Foo');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => 'Bar'));
-  t.is(input.value, 'Foo');
-});
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should not update if undefined ref', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update(undefined, () => 'Bar'));
+    expect(input.value).toBe('Foo');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(undefined, () => 'Bar'));
-  t.is(input.value, 'Foo');
-});
 
-test('disable', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('can be disabled', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema} enabled={false}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.disabled).toBeTruthy();
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} enabled={false}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.minLengthSchema,
-    uischema: t.context.uischema
+  it('should be enabled by default', () =>  {
+    const store = initJsonFormsStore(data, minLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={minLengthSchema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.disabled).toBeFalsy();
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.disabled);
-});
 
-test('use maxLength for attributes size and maxlength', t => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: {
-      trim: true,
-      restrict: true
-    }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema
+  it('should use maxLength for size and maxlength attributes', () =>  {
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: {
+        trim: true,
+        restrict: true
+      }
+    };
+    const store = initJsonFormsStore(data, maxLengthSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={maxLengthSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(5);
+    expect(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'))
+      .not.toBe('100%');
+    expect(input.size).toBe(5);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 5);
-  t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, 5);
-});
 
-test('use maxLength for attribute size only', t => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { trim: true }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema
+  it('should use maxLength for size attribute', () =>  {
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { trim: true }
+    };
+    const store = initJsonFormsStore(data, maxLengthSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={maxLengthSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).not.toBe('100%');
+    expect(input.size).toBe(5);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
-  t.not(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, 5);
-});
 
-test('use maxLength for attribute maxlength only', t => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { restrict: true }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema
+  it('should use maxLength for maxlength attribute', () =>  {
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { restrict: true }
+    };
+    const store = initJsonFormsStore(data, maxLengthSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={maxLengthSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(5);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).toBe('100%');
+    expect(input.size).toBe(DEFAULT_SIZE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, 5);
-  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, defaultSize);
-});
 
-test('do not use maxLength by default', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.maxLengthSchema,
-    uischema: t.context.uischema
+  it('should not use maxLength by default', () =>  {
+    const store = initJsonFormsStore(data, maxLengthSchema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).toBe('100%');
+    expect(input.size).toBe(DEFAULT_SIZE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
-  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values (trim && restrict)', t => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: {
-      trim: true,
-      restrict: true
-    }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+  it('should have default values for trim and restrict', () =>  {
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: {
+        trim: true,
+        restrict: true
+      }
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={schema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).toBe('100%');
+    expect(input.size).toBe(DEFAULT_SIZE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
-  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values (trim)', t => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { trim: true }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+  it('should have a default value for trim', () =>  {
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { trim: true }
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={schema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).toBe('100%');
+    expect(input.size).toBe(DEFAULT_SIZE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
-  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, defaultSize);
-});
 
-test('maxLength not specified, attributes should have default values (restrict)', t => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/name',
-    options: { restrict: true }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
+  it('should have default values for restrict', () =>  {
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name',
+      options: { restrict: true }
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={schema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).toBe('100%');
+    expect(input.size).toBe(DEFAULT_SIZE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
-  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, defaultSize);
-});
 
-test('if maxLength is not specified, attributes should have default values', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should have default values for attributes', () =>  {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TextField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
+    expect(
+      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+    ).toBe('100%');
+    expect(input.size).toBe(DEFAULT_SIZE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.maxLength, DEFAULT_MAX_LENGTH);
-  t.is(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'), '100%');
-  t.is(input.size, defaultSize);
 });

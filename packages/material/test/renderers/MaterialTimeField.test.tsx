@@ -1,361 +1,329 @@
-import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
-import test from 'ava';
 import {
+  Actions,
   ControlElement,
   getData,
   HorizontalLayout,
+  jsonformsReducer,
+  JsonFormsState,
   JsonSchema,
+  NOT_APPLICABLE,
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import TimeField, { materialTimeFieldTester } from '../../src/fields/MaterialTimeField';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import { combineReducers, createStore, Store } from 'redux';
+import { materialFields, materialRenderers } from '../../src';
 
-test.beforeEach(t => {
-  t.context.data = { 'foo': '13:37' };
-  t.context.schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string',
-        format: 'time'
-      },
+const data = { 'foo': '13:37' };
+
+const schema = {
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'string',
+      format: 'time'
     },
-  };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-});
+  },
+};
 
-test.failing('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstDate: { type: 'string', format: 'date' },
-      secondDate: { type: 'string', format: 'date' }
+const uischema = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
+
+const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    {
+      jsonforms: {
+        renderers: materialRenderers,
+        fields: materialFields,
+      }
     }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstDate',
-    options: {
-      focus: true
-    }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/secondDate',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [
-      firstControlElement,
-      secondControlElement
-    ]
-  };
-  const data = {
-    'firstDate': '1980-04-04',
-    'secondDate': '1980-04-04'
-  };
-  const store = initJsonFormsStore({
-    data,
-    schema,
-    uischema
+  );
+
+  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
+  return store;
+};
+
+describe('Material time field tester', () => {
+
+  it('should fail', () => {
+    expect(materialTimeFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeFieldTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeFieldTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-    </Provider>
-  );
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
 
-test('autofocus active', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      focus: true
-    }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(document.activeElement, input);
-});
-
-test('autofocus inactive', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {
-      focus: false
-    }
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.autofocus);
-});
-
-test('autofocus inactive by default', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.autofocus);
-});
-
-test('tester', t => {
-  t.is(materialTimeFieldTester(undefined, undefined), -1);
-  t.is(materialTimeFieldTester(null, undefined), -1);
-  t.is(materialTimeFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(materialTimeFieldTester({ type: 'Control' }, undefined), -1);
-});
-
-test('tester with wrong prop type', t => {
-  t.is(
-    materialTimeFieldTester(
-      t.context.uischmea,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-        },
-      },
-    ),
-    -1,
-  );
-});
-
-test('tester with wrong prop type, but sibling has correct one', t => {
-  t.is(
-    materialTimeFieldTester(
-      t.context.uischema,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: {
-            type: 'string',
-            format: 'time'
+  it('should fail with wrong prop type', () => {
+    expect(
+      materialTimeFieldTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
           },
         },
-      },
-    ),
-    -1,
-  );
-});
+      )
+    ).toBe(NOT_APPLICABLE);
+  });
 
-test('tester with correct prop type', t => {
-  t.is(
-    materialTimeFieldTester(
-      t.context.uischema,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string',
-            format: 'time',
+  it('should fail if only sibling prop has correct type', () => {
+    expect(
+      materialTimeFieldTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+            bar: {
+              type: 'string',
+              format: 'time'
+            },
           },
         },
+      )
+    ).toBe(NOT_APPLICABLE);
+  });
+
+  it('should succeed with correct prop type', () => {
+    expect(
+      materialTimeFieldTester(
+        uischema,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+              format: 'time',
+            },
+          },
+        },
+      )
+    ).toBe(2);
+  });
+});
+
+describe('Material time field', () => {
+  test.skip('should autofocus first element', () => {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstDate: { type: 'string', format: 'date' },
+        secondDate: { type: 'string', format: 'date' }
+      }
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstDate',
+      options: {
+        focus: true
+      }
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/secondDate',
+      options: {
+        focus: true
+      }
+    };
+    const layout: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [
+        firstControlElement,
+        secondControlElement
+      ]
+    };
+    const store = initJsonFormsStore(
+      {
+        'firstDate': '1980-04-04',
+        'secondDate': '1980-04-04'
       },
-    ),
-    2,
-  );
-});
-
-test('render', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+      jsonSchema,
+      layout
+    );
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout} />
+      </Provider>
+    );
+    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    expect(document.activeElement).not.toBe(inputs[0]);
+    expect(document.activeElement).toBe(inputs[1]);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
 
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.is(input.type, 'time');
-  t.is(input.value, '13:37');
-});
-
-test.cb('update via event', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should autofocus via option', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        focus: true
+      }
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(document.activeElement).toBe(input);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  input.value = '20:15';
-  TestUtils.Simulate.change(input);
-  setTimeout(() => {t.is(getData(store.getState()).foo, '20:15'); t.end(); }, 100);
-});
 
-test.cb('update via action', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should not autofocus via option', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      options: {
+        focus: false
+      }
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.autofocus).toBeFalsy();
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => '20:15'));
-  setTimeout(() => {t.is(input.value, '20:15'); t.end(); }, 100);
-});
 
-test('update with null value', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should not autofocus by default', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.autofocus).toBeFalsy();
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => null));
-  t.is(input.value, '');
-});
 
-test('update with undefined value', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('foo', () => undefined));
-  t.is(input.value, '');
-});
+  it('should render', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
 
-test('update with wrong ref', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.type).toBe('time');
+    expect(input.value).toBe('13:37');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update('bar', () => 'Bar'));
-  t.is(input.value, '13:37');
-});
 
-test('update with null ref', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should update via event', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    input.value = '20:15';
+    TestUtils.Simulate.change(input);
+    expect(getData(store.getState()).foo).toBe('20:15');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(null, () => '20:15'));
-  t.is(input.value, '13:37');
-});
 
-test('update with undefined ref', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should update via action', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('foo', () => '20:15'));
+    expect(input.value).toBe('20:15');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  store.dispatch(update(undefined, () => '20:15'));
-  t.is(input.value, '13:37');
-});
 
-test('disable', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('should update with null value', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('foo', () => null));
+    expect(input.value).toBe('');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.true(input.disabled);
-});
 
-test('enabled by default', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+  it('update with undefined value', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('foo', () => undefined));
+    expect(input.value).toBe('');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.false(input.disabled);
+
+  it('should update with wrong ref', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update('bar', () => 'Bar'));
+    expect(input.value).toBe('13:37');
+  });
+
+  it('should update with null ref', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update(null, () => '20:15'));
+    expect(input.value).toBe('13:37');
+  });
+
+  it('should update with undefined ref', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    store.dispatch(update(undefined, () => '20:15'));
+    expect(input.value).toBe('13:37');
+  });
+
+  it('can be disabled', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema} enabled={false}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.disabled).toBeTruthy();
+  });
+
+  it('should be enabled by default', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <TimeField schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.disabled).toBeFalsy();
+  });
 });

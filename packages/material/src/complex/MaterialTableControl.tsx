@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import * as _ from 'lodash';
 import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
@@ -33,7 +33,7 @@ const EmptyTable = () => (
 );
 
 const TableHeaderCell = ({cellProperty}) =>
-  <TableCell >{cellProperty}</TableCell>;
+  <TableCell >{_.capitalize(cellProperty)}</TableCell>;
 
 const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema}) => {
   const cellErrors = errors
@@ -66,17 +66,18 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema
 const TableWithContent = tableProps => {
   const {data, path, scopedSchema, childErrors, select, isSelected} = tableProps;
 
-  return data.map((child, index) => {
+  return data.map((_child, index) => {
     const childPath = Paths.compose(path, `${index}`);
+    const selected = isSelected(index);
 
     return (
       <TableRow
         key={childPath}
         hover
-        selected={isSelected(child)}
+        selected={selected}
       >
         <TableCell padding='checkbox'>
-          <Checkbox checked={isSelected(child)} onChange={e => select(e, child)}/>
+          <Checkbox checked={selected} onChange={e => select(e, index)}/>
         </TableCell>
         {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
       </TableRow>

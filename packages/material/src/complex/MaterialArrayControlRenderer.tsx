@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import * as _ from 'lodash';
 import {
   mapDispatchToTableControlProps,
   mapStateToTableControlProps,
@@ -20,17 +20,15 @@ import Grid from 'material-ui/Grid';
 export class MaterialArrayControlRenderer extends RendererComponent<TableControlProps, TableState> {
   constructor(props) {
     super(props);
-
     this.state = {
-      selected: [],
+      selected: _.fill(Array(this.props.data.length), false),
       openConfirmDelete: false
     };
   }
 
   render() {
     const { visible } = this.props;
-
-    const numSelected = this.state.selected ? this.state.selected.length : 0;
+    const numSelected = this.state.selected ? _.filter(this.state.selected, v => v).length : 0;
     const tableProps = {
       selectAll: this.selectAll,
       select: this.select,
@@ -44,6 +42,7 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
       numSelected,
       ...this.props
     };
+    const selectedCount = _.filter(this.state.selected, v => v).length;
 
     return (
       <Grid container direction='column' hidden={{ xsUp: !visible }} spacing={0}>
@@ -65,7 +64,7 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
           </DialogTitle>
           <DialogContent>
             <DialogContentText id='alert-dialog-confirmdelete-description'>
-              Are you sure you want to delete the {this.state.selected.length} selected objects?
+              Are you sure you want to delete the {selectedCount} selected objects?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -81,33 +80,18 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     );
   }
 
-  private select = (_event, child) => {
-    const selected = this.state.selected.filter(s => this.props.data.indexOf(s) !== -1);
-    const selectedIndex: number = selected.indexOf(child);
-    let newSelected = [];
+  private select = (_event, index) => {
+    const copy = this.state.selected.slice();
+    copy[index] = !copy[index];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, child);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    this.setState({ selected: newSelected });
+    this.setState({ selected: copy });
   }
   private selectAll = (_event, checked) => {
     if (checked) {
-      this.setState({ selected: this.props.data });
-
+      this.setState({ selected: _.fill(Array(this.props.data.length), true) });
       return;
     }
-    this.setState({ selected: [] });
+    this.setState({selected: _.fill(Array(this.props.data.length), false)});
   }
   private closeConfirmDeleteDialog = () => {
     this.setState({ openConfirmDelete: false });
@@ -116,15 +100,34 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     this.setState({ openConfirmDelete: true });
   }
   private confirmDelete = () => {
-    this.props.removeItems(this.props.path, this.state.selected)();
+    const selectedIndices = this.state.selected;
+    const toDelete = selectedIndices.reduce(
+      (acc, value, index) => {
+        if (value) {
+          acc.push(this.props.data[index]);
+        }
+        return acc;
+      },
+      []
+    );
+    this.props.removeItems(this.props.path, toDelete)();
     this.closeConfirmDeleteDialog();
-    this.setState({selected: []});
+    this.setState({selected: _.fill(new Array(this.props.data.length), false)});
   }
-  private isSelected = child => this.state.selected.indexOf(child) !== -1;
+  private isSelected = index => {
+    return this.state.selected[index];
+  }
 }
 
 export interface TableState {
-  selected: any[];
+  /**
+   * Represents the selected entries of the array.
+   */
+  selected: boolean[];
+
+  /**
+   * Determines whether the confirm deletion dialog is opened.
+   */
   openConfirmDelete: boolean;
 }
 
