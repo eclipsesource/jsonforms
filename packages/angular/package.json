@@ -24,6 +24,12 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src",
     "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
   },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "ava": {
     "verbose": true,
     "require": [

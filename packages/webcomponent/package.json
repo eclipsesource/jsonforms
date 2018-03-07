@@ -33,6 +33,12 @@
     ],
     "babel": "inherit"
   },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.3",
     "@jsonforms/react": "^2.0.0-rc.3",

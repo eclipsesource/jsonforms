@@ -43,5 +43,11 @@
       "babel-register"
     ],
     "babel": "inherit"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   }
 }
