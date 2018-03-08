@@ -3,10 +3,10 @@
 
 JSONForms uses HTML custom elements and eliminates the need to write HTML templates in order to create forms by leveraging the capabilities of JSON and JSON schema.
 
-# Core Package
-This is the JSONForms core package which does not contain any renderers by itself.
+# WebComponent Package
+This is the JSONForms WebComponent package which does not contain any renderers by itself.
 
-You can combine the core package with any renderer you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
+You can combine the WebComponent package with any react-based renderer set you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers). You will also need the [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core) package.
 
 See the [Example Package](https://www.npmjs.com/package/@jsonforms/examples) on how to integrate JSONForms with your application.
 

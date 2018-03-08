@@ -32,6 +32,12 @@
     ],
     "babel": "inherit"
   },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "dependencies": {
     "ajv": "^4.11.2",
     "lodash": "4.17.4",

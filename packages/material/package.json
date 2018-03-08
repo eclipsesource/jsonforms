@@ -19,8 +19,8 @@
     "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava ",
+    "test": "jest --no-cache",
+    "test-cov": "jest --no-cache",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
@@ -30,6 +30,29 @@
       "babel-register"
     ],
     "babel": "inherit"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js|ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/test/**/*.test.tsx"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.3",
@@ -47,11 +70,14 @@
     "ava": "^0.24.0",
     "copy-webpack-plugin": "^4.2.3",
     "document-register-element": "^1.7.0",
+    "jest": "^22.4.2",
     "jsdom": "^11.5.1",
     "jsdom-global": "^3.0.2",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
+    "redux-mock-store": "^1.5.1",
     "source-map-loader": "^0.2.3",
+    "ts-jest": "^22.4.1",
     "ts-loader": "^3.2.0",
     "tslint-loader": "^3.5.3",
     "webpack-dev-server": "^2.9.5"

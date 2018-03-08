@@ -23,6 +23,12 @@
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src"
   },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "ava": {
     "verbose": true,
     "require": [
@@ -34,7 +40,7 @@
     "@angular-redux/store": "^7.1.0",
     "@angular/common": "^5.2.4",
     "@angular/core": "^5.2.4",
-    "@jsonforms/core": "^2.0.0-rc.2",
+    "@jsonforms/core": "^2.0.0-rc.3",
     "redux": "^3.7.2",
     "rxjs": "^5.5.6"
   },

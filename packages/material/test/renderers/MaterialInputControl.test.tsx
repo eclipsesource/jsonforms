@@ -1,5 +1,3 @@
-import { initJsonFormsStore } from '@jsonforms/test';
-import test from 'ava';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -7,376 +5,349 @@ import {
   Actions,
   ControlElement,
   HorizontalLayout,
-  JsonSchema
+  jsonformsReducer,
+  JsonFormsState,
+  JsonSchema,
+  NOT_APPLICABLE
 } from '@jsonforms/core';
-import { testRenderers } from '@jsonforms/test';
 import '../../src/fields';
 import MaterialInputControl, {
   materialInputControlTester
 } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { materialFields, materialRenderers } from '../../src';
+import { combineReducers, createStore, Store } from 'redux';
 
-test.beforeEach(t => {
-  t.context.data = { 'foo': 'bar' };
-  t.context.schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string'
+const data = { 'foo': 'bar' };
+const schema = {
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'string'
+    }
+  }
+};
+const uischema = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
+
+const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    {
+      jsonforms: {
+        renderers: materialRenderers,
+        fields: materialFields,
       }
     }
-  };
-  t.context.uischema = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-});
-
-test('autofocus on first element', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      firstStringField: { type: 'string' },
-      secondStringField: { type: 'string' }
-    }
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/firstStringField',
-    options: {
-      focus: true
-    }
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/secondStringField',
-    options: {
-      focus: true
-    }
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [
-      firstControlElement,
-      secondControlElement
-    ]
-  };
-  const data = {
-    'firstStringField': true,
-    'secondStringField': false
-  };
-  const store = initJsonFormsStore({
-    data,
-    schema,
-    uischema,
-    renderers: materialRenderers,
-    fields: materialFields
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialHorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-    </Provider>
-  );
-  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-  t.not(document.activeElement, inputs[0]);
-  t.is(document.activeElement, inputs[1]);
-});
-
-test('tester', t => {
-  t.is(materialInputControlTester(undefined, undefined), -1);
-  t.is(materialInputControlTester(null, undefined), -1);
-  t.is(materialInputControlTester({type: 'Foo'}, undefined), -1);
-  t.is(materialInputControlTester({type: 'Control'}, undefined), -1);
-  const control: ControlElement = { type: 'Control', scope: '#/properties/foo' };
-  t.is(materialInputControlTester(control, undefined), 1);
-});
-
-test('render', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-    renderers: testRenderers,
-    fields: materialFields
-  });
-
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
   );
 
-  const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
-  t.not(control, undefined);
-  t.is(control.childNodes.length, 3);
+  store.dispatch(Actions.init(testData, testSchema, testUiSchema));
+  return store;
+};
 
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
-  t.is(label.textContent, 'Foo');
-
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.not(input, undefined);
-  t.not(input, null);
-
-  const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  t.is(validation.tagName, 'P');
-  t.not(validation.className.indexOf('MuiFormHelperText-root'), -1);
-  t.is((validation as HTMLParagraphElement).children.length, 0);
-});
-
-test('render without label', t => {
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    label: false
-  };
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema,
-    renderers: testRenderers,
-    fields: materialFields
+describe('Material input control tester', () => {
+  it('should fail', () => {
+    expect(materialInputControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialInputControlTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialInputControlTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialInputControlTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={uischema}/>
-    </Provider>
-  );
-
-  const div = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
-  t.not(div, undefined);
-  t.is(div.childNodes.length, 3);
-
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
-  t.is(label.textContent, '');
-
-  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-  t.not(input, undefined);
-  t.not(input, null);
-
-  const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  t.is(validation.tagName, 'P');
-  t.not(validation.className.indexOf('MuiFormHelperText-root'), -1);
-  t.is((validation as HTMLParagraphElement).children.length, 0);
+  it('should succeed', () => {
+    const control: ControlElement = {type: 'Control', scope: '#/properties/foo'};
+    expect(materialInputControlTester(control, undefined)).toBe(1);
+  })
 });
 
-test('hide', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        visible={false}
-      />
-    </Provider>
-  );
-  const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
-  t.is(getComputedStyle(control).display, 'none');
-});
+describe('Material input control', () => {
 
-test('show by default', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  });
-
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
-  t.false(control.hidden);
-});
-
-test('single error', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-
-  const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  store.dispatch(Actions.update('foo', () => 2));
-  t.is(validation.textContent, 'should be string');
-});
-
-test('multiple errors', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  store.dispatch(Actions.update('foo', () => 3));
-  t.is(validation.textContent, 'should be string');
-});
-
-test('empty errors by default', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  t.is(validation.textContent, '');
-});
-
-test('reset validation message', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema,
-  });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={t.context.schema} uischema={t.context.uischema}/>
-    </Provider>
-  );
-  const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
-  store.dispatch(Actions.update('foo', () => 3));
-  store.dispatch(Actions.update('foo', () => 'bar'));
-  t.is(validation.textContent, '');
-});
-
-test('validation of nested schema', t => {
-  const schema = {
-    'type': 'object',
-    'properties': {
-      'name': {
-        'type': 'string'
+  it('should autofocus the first element', () => {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        firstStringField: {type: 'string'},
+        secondStringField: {type: 'string'}
+      }
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/firstStringField',
+      options: {
+        focus: true
+      }
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/secondStringField',
+      options: {
+        focus: true
+      }
+    };
+    const layout: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [
+        firstControlElement,
+        secondControlElement
+      ]
+    };
+    const store = initJsonFormsStore(
+      {
+        'firstStringField': true,
+        'secondStringField': false
       },
-      'personalData': {
-        'type': 'object',
-        'properties': {
-          'middleName': {
-            'type': 'string'
-          },
-          'lastName': {
-            'type': 'string'
-          }
+      schema,
+      uischema
+    );
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialHorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
+      </Provider>
+    );
+    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    expect(document.activeElement).not.toBe(inputs[0]);
+    expect(document.activeElement).toBe(inputs[1]);
+  });
+
+  it('render', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+
+    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
+    expect(control).toBeDefined();
+    expect(control.childNodes.length).toBe(3);
+
+    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
+    expect(label.textContent).toBe('Foo');
+
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input).toBeDefined();
+    expect(input).not.toBeNull();
+
+    const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
+    expect(validation.tagName).toBe('P');
+    expect(validation.className.indexOf('MuiFormHelperText-root')).not.toBe(-1);
+    expect((validation as HTMLParagraphElement).children.length).toBe(0);
+  });
+
+  it('should render without label', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo',
+      label: false
+    };
+    const store = initJsonFormsStore(data, schema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={control}/>
+      </Provider>
+    );
+
+    const div = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
+    expect(div).toBeDefined();
+    expect(div.childNodes.length).toBe(3);
+
+    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
+    expect(label.textContent).toBe('');
+
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input).toBeDefined();
+    expect(input).not.toBeNull();
+
+    const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
+    expect(validation.tagName).toBe('P');
+    expect(validation.className.indexOf('MuiFormHelperText-root')).not.toBe(-1);
+    expect((validation as HTMLParagraphElement).children.length).toBe(0);
+  });
+
+  it('can be hidden', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </Provider>
+    );
+    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+    expect(getComputedStyle(control).display).toBe('none');
+  });
+
+  it('should be shown by default', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+    expect(control.hidden).toBeFalsy();
+  });
+
+  it('should display a single error', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+
+    const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
+    store.dispatch(Actions.update('foo', () => 2));
+    expect(validation.textContent).toBe('should be string');
+  });
+
+  it('should display multiple errors', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
+    store.dispatch(Actions.update('foo', () => 3));
+    expect(validation.textContent).toBe('should be string');
+  });
+
+  it('should not show any errors', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
+    expect(validation.textContent).toBe('');
+  });
+
+  it('should handle validation updates', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
+    store.dispatch(Actions.update('foo', () => 3));
+    store.dispatch(Actions.update('foo', () => 'bar'));
+    expect(validation.textContent).toBe('');
+  });
+
+  it('should handle validation with nested schemas', () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
         },
-        'required': ['middleName', 'lastName']
-      }
-    },
-    'required': ['name']
-  };
-  const firstControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/name'
-  };
-  const secondControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/personalData/properties/middleName'
-  };
-  const thirdControlElement: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/personalData/properties/lastName'
-  };
-  const uischema: HorizontalLayout = {
-    type: 'HorizontalLayout',
-    elements: [
-      firstControlElement,
-      secondControlElement,
-      thirdControlElement
-    ]
-  };
-  const data = {
-    name: 'John Doe',
-    personalData: {}
-  };
-  const store = initJsonFormsStore({
-    data,
-    schema,
-    uischema,
-    renderers: [{ tester: materialInputControlTester, renderer: MaterialInputControl} ]
+        personalData: {
+          type: 'object',
+          properties: {
+            middleName: {
+              type: 'string'
+            },
+            lastName: {
+              type: 'string'
+            }
+          },
+          required: ['middleName', 'lastName']
+        }
+      },
+      required: ['name']
+    };
+    const firstControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const secondControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/personalData/properties/middleName'
+    };
+    const thirdControlElement: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/personalData/properties/lastName'
+    };
+    const layout: HorizontalLayout = {
+      type: 'HorizontalLayout',
+      elements: [
+        firstControlElement,
+        secondControlElement,
+        thirdControlElement
+      ]
+    };
+    const store = initJsonFormsStore(
+      {
+        name: 'John Doe',
+        personalData: {}
+      },
+      jsonSchema,
+      layout
+    );
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialHorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
+      </Provider>
+    );
+    const validation = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p');
+    expect(validation[0].textContent).toBe('');
+    expect(validation[1].textContent).toBe('is a required property');
+    expect(validation[2].textContent).toBe('is a required property');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialHorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-    </Provider>
-  );
-  const validation = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p');
-  t.is(validation[0].textContent, '');
-  t.is(validation[1].textContent, 'is a required property');
-  t.is(validation[2].textContent, 'is a required property');
-});
-test('required field is marked', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateField: {
-        type: 'string',
-        format: 'date'
-      }
-    },
-    required: ['dateField']
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateField'
-  };
 
-  const store = initJsonFormsStore({
-    data: {},
-    schema,
-    uischema,
+  it('should display a marker for a required prop', () => {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        dateField: {
+          type: 'string',
+          format: 'date'
+        }
+      },
+      required: ['dateField']
+    };
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/dateField'
+    };
+
+    const store = initJsonFormsStore({}, jsonSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+      </Provider>
+    );
+    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
+    expect(label.textContent).toBe('Date Field*');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={schema} uischema={uischema}/>
-    </Provider>
-  );
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Field*');
-});
 
-test('not required', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      dateField: {
-        type: 'string',
-        format: 'date'
+  it('should not display a marker for a non-required prop', () => {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        dateField: {
+          type: 'string',
+          format: 'date'
+        }
       }
-    }
-  };
-  const uischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/dateField'
-  };
+    };
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/dateField'
+    };
 
-  const store = initJsonFormsStore({
-    data: {},
-    schema,
-    uischema,
+    const store = initJsonFormsStore({}, jsonSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+      </Provider>
+    );
+    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
+    expect(label.textContent).toBe('Date Field');
   });
-  const tree = TestUtils.renderIntoDocument(
-    <Provider store={store}>
-      <MaterialInputControl schema={schema} uischema={uischema}/>
-    </Provider>
-  );
-  const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Field');
 });

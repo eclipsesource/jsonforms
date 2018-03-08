@@ -10,7 +10,7 @@ install:
 script:
   - lerna run build
   - lerna run bundle
-  - lerna run test
+  - lerna run test-cov
 
 after_success:
-    - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
+    - 'npm run merge-report && cat coverage/lcov.info | ./node_modules/.bin/coveralls'

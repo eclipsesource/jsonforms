@@ -32,3 +32,5 @@ Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.s
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
 
+# Migration
+If you are already using JSONForms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
