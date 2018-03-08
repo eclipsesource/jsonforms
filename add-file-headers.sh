@@ -9,7 +9,7 @@
 #
 
 MODE="undefined"
-HEADER_FILE=""
+HEADER_FILE="LICENSE"
 SRC_PATH="/dev/null"
 INDENT=2 # two spaces 
 
