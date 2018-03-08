@@ -47,6 +47,11 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/dist/"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
     ]
   },
   "dependencies": {

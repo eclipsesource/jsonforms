@@ -6,7 +6,7 @@ export const personCoreSchema = {
     name: {
       type: 'string',
       minLength: 3,
-      description: '%namedescription'
+      description: 'Please enter your name'
     },
     vegetarian: {
       type: 'boolean'

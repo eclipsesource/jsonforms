@@ -47,6 +47,24 @@ export const registerRenderer = (
   renderer
 });
 
+export const registerField = (
+  tester: RankedTester,
+  field: any
+) => ({
+  type: ADD_FIELD,
+  tester,
+  field
+});
+
+export const unregisterField = (
+  tester: RankedTester,
+  field: any
+) => ({
+  type: REMOVE_FIELD,
+  tester,
+  field
+});
+
 export const unregisterRenderer = (
   tester: RankedTester,
   renderer: any
