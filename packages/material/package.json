@@ -47,6 +47,7 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/dist/"
+    ]
   },
   "nyc": {
     "reporter": [
