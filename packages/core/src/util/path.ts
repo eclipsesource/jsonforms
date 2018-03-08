@@ -28,6 +28,7 @@ export const compose = (path1: string, path2: string) => {
  * @returns {string[]} an array containing only non-schema-specific segments
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
+
   const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
   const startIndex =  startFromRoot ? 2 : 1;
@@ -47,8 +48,12 @@ export const toDataPath = (schemaPath: string): string => {
   return toDataPathSegments(schemaPath).join('.');
 };
 
-export const composeWithUi = (scopableUi: Scopable, path: string) => {
+export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   const segments = toDataPathSegments(scopableUi.scope);
+
+  if (_.isEmpty(segments) && path === undefined) {
+    return '';
+  }
 
   return _.isEmpty(segments) ? path : compose(path, segments.join('.'));
 };
