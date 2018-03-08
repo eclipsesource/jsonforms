@@ -1,8 +1,5 @@
 import { registerExamples } from './register';
-import {
-  registerRenderer,
-  unregisterRenderer
-} from '@jsonforms/core';
+import { Actions } from '@jsonforms/core';
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import ConnectedRatingControl, { ratingControlTester } from './RatingControl';
 import {
@@ -17,17 +14,17 @@ export const data = day5Data;
 
 const setup = (div: HTMLDivElement) => {
   const buttonRegister = document.createElement('button');
-  buttonRegister.innerText = 'Register Custom Control';
+  buttonRegister.innerText = 'Register Custom Field';
   buttonRegister.onclick = () => {
     const jsonForms =  document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-    jsonForms.store.dispatch(registerRenderer(ratingControlTester, ConnectedRatingControl));
+    jsonForms.store.dispatch(Actions.registerField(ratingControlTester, ConnectedRatingControl));
   };
   div.appendChild(buttonRegister);
   const buttonUnregister = document.createElement('button');
-  buttonUnregister.innerText = 'Unregister Custom Control';
+  buttonUnregister.innerText = 'Unregister Custom Field';
   buttonUnregister.onclick = () => {
     const jsonForms =  document.getElementsByTagName('json-forms')[0] as JsonFormsElement;
-    jsonForms.store.dispatch(unregisterRenderer(ratingControlTester, ConnectedRatingControl));
+    jsonForms.store.dispatch(Actions.unregisterField(ratingControlTester, ConnectedRatingControl));
   };
   div.appendChild(buttonUnregister);
 };
