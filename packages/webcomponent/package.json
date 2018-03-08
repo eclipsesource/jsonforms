@@ -23,8 +23,7 @@
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Web Component Wrapper' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src",
-    "preparePublish": "npm run doc && npm run build && npm run bundle && npm run test"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Web Component Wrapper' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
     "verbose": true,

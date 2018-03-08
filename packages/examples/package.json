@@ -19,13 +19,11 @@
   "main": "lib/index.js",
   "typings": "lib/ts-build/index.d.ts",
   "scripts": {
-    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src",
-    "preparePublish": "npm run doc && npm run build && npm run test"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0-rc.3",
