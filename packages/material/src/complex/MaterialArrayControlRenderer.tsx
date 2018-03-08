@@ -21,7 +21,7 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
   constructor(props) {
     super(props);
     this.state = {
-      selected: _.fill(Array(this.props.data.length), false),
+      selected: this.createSelection(false),
       openConfirmDelete: false
     };
   }
@@ -88,10 +88,10 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
   }
   private selectAll = (_event, checked) => {
     if (checked) {
-      this.setState({ selected: _.fill(Array(this.props.data.length), true) });
+      this.setState({ selected: this.createSelection(true) });
       return;
     }
-    this.setState({selected: _.fill(Array(this.props.data.length), false)});
+    this.setState({selected: this.createSelection(false) });
   }
   private closeConfirmDeleteDialog = () => {
     this.setState({ openConfirmDelete: false });
@@ -112,11 +112,12 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     );
     this.props.removeItems(this.props.path, toDelete)();
     this.closeConfirmDeleteDialog();
-    this.setState({selected: _.fill(new Array(this.props.data.length), false)});
+    this.setState({ selected: this.createSelection(false) });
   }
   private isSelected = index => {
     return this.state.selected[index];
   }
+  private createSelection = (selected: boolean) => _.fill(Array(this.props.data.length), selected);
 }
 
 export interface TableState {
