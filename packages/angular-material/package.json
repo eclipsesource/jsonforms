@@ -32,6 +32,12 @@
     ],
     "babel": "inherit"
   },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
+  },
   "dependencies": {
     "@angular-redux/store": "^7.1.0",
     "@angular/animations": "^5.2.4",

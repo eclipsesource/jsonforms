@@ -1,13 +1,16 @@
 {
 	"scripts": {
 		"lerna": "lerna",
-		"publishNpmAndGithub": "lerna run clean && lerna run preparePublish && lerna publish"
+		"publishNpmAndGithub": "lerna run clean && lerna run preparePublish && lerna publish",
+		"merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'"
 	},
 	"devDependencies": {
 		"@types/react": "^16.0.27",
 		"ava": "^0.24.0",
 		"babel-loader": "^7.1.2",
+		"coveralls": "^3.0.0",
 		"cross-env": "^5.1.1",
+		"lcov-result-merger": "^2.0.0",
 		"lerna": "^2.5.1",
 		"nyc": "^11.4.1",
 		"source-map-loader": "^0.2.3",
