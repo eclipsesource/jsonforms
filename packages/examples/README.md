@@ -6,7 +6,7 @@ JSONForms uses HTML custom elements and eliminates the need to write HTML templa
 # Examples Package
 This is the examples package which demonstrates how to integrate JSONForms with your application.
 
-You can combine the [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core) with any renderers you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
+You can combine the [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core) with any react-based renderer set you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
 
 Check https://www.npmjs.com/search?q=%40jsonforms for all published JSONForms packages.
 
@@ -18,3 +18,4 @@ Our current roadmap is available [here](https://github.com/eclipsesource/jsonfor
 
 # Development
 JSONForms is developed by [EclipseSource](https://eclipsesource.com).
+We are always very happy to have contributions, whether for trivial cleanups or big new features.
