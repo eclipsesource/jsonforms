@@ -20,6 +20,7 @@ Our current roadmap is available [here](https://github.com/eclipsesource/jsonfor
 
 # Development
 JSONForms is developed by [EclipseSource](https://eclipsesource.com).
+We are always very happy to have contributions, whether for trivial cleanups or big new features.
 
 # Migration
 If you are already using JSONForms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).

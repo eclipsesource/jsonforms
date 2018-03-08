@@ -6,7 +6,7 @@ JSONForms uses HTML custom elements and eliminates the need to write HTML templa
 # React Package
 This is the JSONForms react package which provides the necessary bindings for React.
 
-You can combine the react package with any renderer you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
+You can combine the react package with any react-based renderer set you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
 
 See the [Example Package](https://www.npmjs.com/package/@jsonforms/examples) on how to integrate JSONForms with your application.
 
@@ -20,6 +20,7 @@ Our current roadmap is available [here](https://github.com/eclipsesource/jsonfor
 
 # Development
 JSONForms is developed by [EclipseSource](https://eclipsesource.com).
+We are always very happy to have contributions, whether for trivial cleanups or big new features.
 
 # Migration
 If you are already using JSONForms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
