@@ -27,6 +27,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 // import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
 import { MasterDetailLayout } from '../master-detail-layout';
+import { getUiSchemata } from '../reducers';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -105,6 +106,7 @@ export interface TreeProps extends ControlProps {
   resolvedRootData: any;
   addToRoot: any;
   schemaService: SchemaService;
+  uiSchemata?;
 }
 
 export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
@@ -171,7 +173,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, schema, resolvedSchema, visible, path, rootData, addToRoot, schemaService } = this.props;
+    const { uischema, schema, resolvedSchema, visible, path, rootData, addToRoot, schemaService, uiSchemata } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -181,6 +183,12 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
       onSelect: this.setSelection,
       onAdd: this.openDialog,
     };
+
+    let detailSchema;
+    if (this.state.selected && this.state.selected.schema && this.state.selected.schema.id) {
+      const uiSchema = uiSchemata[this.state.selected.schema.id];
+      detailSchema = uiSchema ? uiSchema : generateDefaultUISchema(this.state.selected.schema);
+    }
 
     return (
       <div hidden={!visible} className={'jsf-treeMasterDetail'}>
@@ -216,7 +224,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                 <JsonForms
                   schema={this.state.selected.schema}
                   path={this.state.selected.path}
-                  uischema={generateDefaultUISchema(this.state.selected.schema)}
+                  uischema={detailSchema}
                 /> : 'Select an item'
             }
           </div>
@@ -243,6 +251,7 @@ const mapStateToProps = (state, ownProps) => {
   const visible = _.has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
   const rootData = getData(state);
+  const uiSchemata = getUiSchemata(state);
 
   return {
     rootData: getData(state),
@@ -253,7 +262,8 @@ const mapStateToProps = (state, ownProps) => {
     resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope),
     path,
     visible,
-    enabled
+    enabled,
+    uiSchemata
   };
 };
 

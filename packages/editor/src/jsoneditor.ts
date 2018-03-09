@@ -19,7 +19,7 @@ import { getData } from '@jsonforms/core';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { MasterDetail } from './MasterDetail';
-
+import { addUiSchema, editorReducer } from './reducers/index';
 export * from './toolbar';
 export * from './editor';
 export * from './editor-config';
@@ -34,12 +34,7 @@ export * from './editor-config';
  */
 export class JsonEditor extends HTMLElement implements Editor {
   public static rootData;
-  static uiSchemata: { [schemaId: string]: UISchemaElement } = {};
-
-  static getUiSchema(schemaId: string): UISchemaElement {
-    return JsonEditor.uiSchemata[schemaId];
-
-  }
+  private uiSchemata: { [schemaId: string]: UISchemaElement } = {};
 
   store: Store<any>;
   private connected = false;
@@ -49,6 +44,11 @@ export class JsonEditor extends HTMLElement implements Editor {
 
   constructor() {
     super();
+  }
+
+  getUiSchema(schemaId: string): UISchemaElement {
+    return this.uiSchemata[schemaId];
+
   }
 
   connectedCallback(): void {
@@ -219,8 +219,17 @@ export class JsonEditor extends HTMLElement implements Editor {
    * @param {string} schemaId The id of the type's JsonSchema that the UI Schema is registered for
    * @param {UISchemaElement} uiSchema The UI Schema to use when rendering instances of the schema
    */
-  registerDetailSchema(_schemaId: string, _uiSchema: UISchemaElement) {
-    // FIXME implement UI Schema registry
+  registerDetailSchema(schemaId: string, uiSchema: UISchemaElement) {
+    this.uiSchemata[schemaId] = uiSchema;
+    // if (this.store === undefined || this.store === null) {
+    //   console.warn(`Could not register the given UI Schema with ID ${schemaId} ` +
+    //                `because the editor's store has not been initialized`,
+    //                uiSchema);
+
+    //   return;
+    // }
+
+    // this.store.dispatch(addUiSchema(schemaId, uiSchema));
   }
 
   private render(): void {
@@ -251,6 +260,10 @@ export class JsonEditor extends HTMLElement implements Editor {
     if (this.store === undefined) {
       this.store = this.initStore(this.data, this.schema, uischema);
     }
+
+    Object.keys(this.uiSchemata).forEach(schemaId =>
+      this.store.dispatch(addUiSchema(schemaId, this.uiSchemata[schemaId])));
+
     const schemaService = new SchemaServiceImpl(this.editorContext);
 
     ReactDOM.unmountComponentAtNode(this.container);
@@ -267,13 +280,13 @@ export class JsonEditor extends HTMLElement implements Editor {
 
   private initStore(data, schema, uischema): Store<any> {
     const store = createStore(
-      combineReducers({ jsonforms: jsonformsReducer() }),
+      combineReducers({ jsonforms: jsonformsReducer({ editor: editorReducer }) }),
       {
-        jsonforms: {
-          renderers: materialRenderers,
-          fields: materialFields,
+          jsonforms: {
+            renderers: materialRenderers,
+            fields: materialFields,
+          }
         }
-      }
     );
 
     store.dispatch(Actions.init(data, schema, uischema));
