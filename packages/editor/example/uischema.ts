@@ -7,16 +7,12 @@ export const attributeView = {
     'elements': [
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/name'
-      }
+      'scope': '#/properties/name'
     },
     {
       'type': 'Control',
       'label': 'E Type',
-      'scope': {
-        '$ref': '#/properties/eType'
-       },
+      'scope': '#/properties/eType',
        'options': {
          'id': 'eAttribute'
        }
@@ -27,16 +23,12 @@ export const attributeView = {
       {
         'type': 'Control',
         'label': 'Lower Bound',
-        'scope': {
-        '$ref': '#/properties/lowerBound'
-        }
+        'scope': '#/properties/lowerBound'
       },
       {
         'type': 'Control',
         'label': 'Upper Bound',
-        'scope': {
-        '$ref': '#/properties/upperBound'
-        }
+        'scope': '#/properties/upperBound'
       }
       ]
     }
@@ -48,51 +40,35 @@ export const attributeView = {
     'elements': [
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/unsettable'
-      }
+      'scope': '#/properties/unsettable'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/ordered'
-      }
+      'scope': '#/properties/ordered'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/unique'
-      }
+      'scope': '#/properties/unique'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/changeable'
-      }
+      'scope': '#/properties/changeable'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/volatile'
-      }
+      'scope': '#/properties/volatile'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/transient'
-      }
+      'scope': '#/properties/transient'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/defaultValueLiteral'
-      }
+      'scope': '#/properties/defaultValueLiteral'
     },
     {
       'type': 'Control',
-      'scope': {
-      '$ref': '#/properties/derived'
-      }
+      'scope': '#/properties/derived'
     }
     ]
   }
@@ -104,21 +80,15 @@ export const datatypeView = {
   'elements': [
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/name'
-      }
+      'scope': '#/properties/name'
     },
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/serializable'
-      }
+      'scope': '#/properties/serializable'
     },
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/instanceClassName'
-      }
+      'scope': '#/properties/instanceClassName'
     }
   ]
 };
@@ -128,9 +98,7 @@ export const enumView = {
   'elements': [
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/name'
-      }
+      'scope': '#/properties/name'
     }
   ]
 };
@@ -140,21 +108,15 @@ export const ePackageView = {
   'elements': [
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/name'
-      }
+      'scope': '#/properties/name'
     },
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/nsURI'
-      }
+      'scope': '#/properties/nsURI'
     },
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/nsPrefix'
-      }
+      'scope': '#/properties/nsPrefix'
     }
   ]
 };
@@ -168,15 +130,11 @@ export const eReferenceView = {
       'elements': [
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/name'
-          }
+          'scope': '#/properties/name'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/eType'
-          },
+          'scope': '#/properties/eType',
           'options': {
             'id': 'eReference'
           }
@@ -186,23 +144,17 @@ export const eReferenceView = {
           'elements': [
             {
               'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/lowerBound'
-              }
+              'scope': '#/properties/lowerBound'
             },
             {
               'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/upperBound'
-              }
+              'scope': '#/properties/upperBound'
             }
           ]
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/containment'
-          }
+          'scope': '#/properties/containment'
         }
       ]
     },
@@ -212,75 +164,51 @@ export const eReferenceView = {
       'elements': [
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/changeable'
-          }
+          'scope': '#/properties/changeable'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/unsettable'
-          }
+          'scope': '#/properties/unsettable'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/ordered'
-          }
+          'scope': '#/properties/ordered'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/unique'
-          }
+          'scope': '#/properties/unique'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/eOpposite'
-          }
+          'scope': '#/properties/eOpposite'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/container'
-          }
+          'scope': '#/properties/container'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/defaultValueLiteral'
-          }
+          'scope': '#/properties/defaultValueLiteral'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/derived'
-          }
+          'scope': '#/properties/derived'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/eKeys'
-          }
+          'scope': '#/properties/eKeys'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/resolveProxies'
-          }
+          'scope': '#/properties/resolveProxies'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/transient'
-          }
+          'scope': '#/properties/transient'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/volatile'
-          }
+          'scope': '#/properties/volatile'
         }
       ]
     }
@@ -296,27 +224,19 @@ export const eClassView = {
       'elements': [
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/name'
-          }
+          'scope': '#/properties/name'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/secondName'
-          }
+          'scope': '#/properties/secondName'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/abstract'
-          }
+          'scope': '#/properties/abstract'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/interface'
-          }
+          'scope': '#/properties/interface'
         }
       ]
     },
@@ -326,15 +246,11 @@ export const eClassView = {
       'elements': [
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/instanceTypeName'
-          }
+          'scope': '#/properties/instanceTypeName'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/eSuperTypes'
-          }
+          'scope': '#/properties/eSuperTypes'
         }
       ]
     }
@@ -350,15 +266,11 @@ export const eOperationView = {
       'elements': [
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/name'
-          }
+          'scope': '#/properties/name'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/eType'
-          },
+          'scope': '#/properties/eType',
           'options': {
             'id': 'eReference'
           }
@@ -368,15 +280,11 @@ export const eOperationView = {
           'elements': [
             {
               'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/lowerBound'
-              }
+              'scope': '#/properties/lowerBound'
             },
             {
               'type': 'Control',
-              'scope': {
-                '$ref': '#/properties/upperBound'
-              }
+              'scope': '#/properties/upperBound'
             }
           ]
         }
@@ -388,27 +296,19 @@ export const eOperationView = {
       'elements': [
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/ordered'
-          }
+          'scope': '#/properties/ordered'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/required'
-          }
+          'scope': '#/properties/required'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/unique'
-          }
+          'scope': '#/properties/unique'
         },
         {
           'type': 'Control',
-          'scope': {
-            '$ref': '#/properties/many'
-          }
+          'scope': '#/properties/many'
         }
       ]
     }
@@ -420,9 +320,7 @@ export const annotationView = {
   'elements': [
     {
       'type': 'Control',
-      'scope': {
-        '$ref': '#/properties/source'
-      }
+      'scope': '#/properties/source'
     }
   ]
 };
