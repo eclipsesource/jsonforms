@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/react",
-  "version": "2.0.0-rc.3",
+  "version": "2.0.0-rc.4",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -39,7 +39,7 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0-rc.3",
+    "@jsonforms/core": "^2.0.0-rc.4",
     "lodash": "4.17.4",
     "react": "^16.2.0",
     "react-redux": "^5.0.6"
