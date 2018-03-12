@@ -15,7 +15,7 @@ import * as JsonRefs from 'json-refs';
 import { EditorContext } from './editor-context';
 import { SchemaServiceImpl } from './services/schema.service.impl';
 // import { store } from './store';
-import { getData } from '@jsonforms/core';
+import { getData, getUiSchema } from '@jsonforms/core';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { MasterDetail } from './MasterDetail';
@@ -83,7 +83,12 @@ export class JsonEditor extends HTMLElement implements Editor {
   set data(data: object) {
     this.editorContext.data = data;
     JsonEditor.rootData = data;
-    // FIXME set data to store
+    if (!_.isEmpty(this.store)) {
+      this.store.dispatch(
+        Actions.init(data,
+                     this.schema,
+                     getUiSchema(this.store.getState())));
+    }
     this.render();
   }
 
