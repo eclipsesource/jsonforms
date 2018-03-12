@@ -15,7 +15,7 @@ For a more detailed tutorial about the usage of JSON Forms, please see [this tut
 * Install [node.js](https://nodejs.org/)(version > 4.x.x)
 * Clone this repository
 * Install dependencies: `npm install`
-* Hook up dependencies between packages: `lerna bootstrap`
+* Hook up dependencies between packages: `lerna bootstrap --hoist`
 
 ## Build & Testing
 * Build (all packages): `lerna run build`
