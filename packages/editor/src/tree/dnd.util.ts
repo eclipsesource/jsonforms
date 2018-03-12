@@ -1,6 +1,7 @@
 import { JsonSchema, update } from '@jsonforms/core';
 import { ContainmentProperty } from '../services/schema.service';
 import * as _ from 'lodash';
+import { indexFromPath, parentPath } from '../helpers/util';
 
 export const Types = {
     TREE_DND: 'tree-master-detail-DnD'
@@ -53,22 +54,6 @@ export interface DropResult {
      */
     moveTarget?: string;
 }
-
-/**
- * Extract the array index from the given path.
- */
-export const indexFromPath = (path: string): number => {
-    return parseInt(_.last(path.split('.')), 10);
-};
-
-/**
- * Gets the parent path from the given path by cutting of the last segment
- *
- * @param path The path to get the parent path from
- */
-export const parentPath = (path: string): string => {
-    return path.substring(0, path.lastIndexOf('.'));
-};
 
 /**
  * Moves the given data from the oldPath to the newPath by deleting the data object at the old path

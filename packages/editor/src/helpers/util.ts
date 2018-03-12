@@ -22,3 +22,19 @@ export const resolveLocalData = (rootData: Object, path: string): Object => {
 
     return resolvedData;
   };
+
+/**
+ * Extract the array index from the given path.
+ */
+export const indexFromPath = (path: string): number => {
+  return parseInt(_.last(path.split('.')), 10);
+};
+
+/**
+ * Gets the parent path from the given path by cutting of the last segment
+ *
+ * @param path The path to get the parent path from
+ */
+export const parentPath = (path: string): string => {
+  return path.substring(0, path.lastIndexOf('.'));
+};

@@ -21,9 +21,9 @@ import {
   canDropDraggedItem,
   DragInfo,
   DropResult,
-  indexFromPath,
   moveListItem,
   Types } from './dnd.util';
+import { indexFromPath } from '../helpers/util';
 
 const getNamingFunction =
   (schema: JsonSchema, uischema: UISchemaElement) => (element: Object): string => {
@@ -145,13 +145,18 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
 
   const parentPath = _.initial(ownProps.path.split('.')).join('.');
+  const index = indexFromPath(ownProps.path);
 
   return {
-    remove(data) {
+    remove() {
       dispatch(
         update(
           parentPath,
-          array => _.filter(array.slice(), el => !_.isEqual(el, data))
+          array => {
+            const clone = _.clone(array);
+            clone.splice(index, 1);
+            return clone;
+          }
         )
       );
     },
