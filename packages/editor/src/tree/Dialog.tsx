@@ -15,7 +15,8 @@ const Dialog = (
     schema,
     closeDialog,
     dialogProps,
-    schemaService
+    schemaService,
+    setSelection
   }) => (
   <dialog id='dialog' {...dialogProps}>
     <label>
@@ -41,6 +42,7 @@ const Dialog = (
                   {}
                 );
                 add(path, prop, newData);
+                setSelection(prop.schema, newData, path)();
                 closeDialog();
               }}
             >

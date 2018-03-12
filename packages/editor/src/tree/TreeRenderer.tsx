@@ -238,6 +238,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                 closeDialog={this.closeDialog}
                 dialogProps={dialogProps}
                 schemaService={schemaService}
+                setSelection={this.setSelection}
               />
           }
         </div>
