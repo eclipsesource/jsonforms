@@ -1,5 +1,5 @@
-import { StringMap, ModelMapping } from "./jsoneditor";
-import { JsonSchema } from "@jsonforms/core";
+import { ModelMapping, StringMap } from './jsoneditor';
+import { JsonSchema } from '@jsonforms/core';
 
 export class EditorContext {
     public static DATA = 'data';
@@ -39,7 +39,6 @@ export class EditorContext {
         return this._dataSchema;
     }
 
-    
     set imageProvider(imageProvider: StringMap) {
         this._imageProvider = imageProvider;
         this.notifyChangeListeners(EditorContext.IMAGE_PROVIDER, imageProvider);
@@ -67,7 +66,7 @@ export class EditorContext {
     set modelMapping(modelMapping: ModelMapping) {
         this._modelMapping = modelMapping;
         this.notifyChangeListeners(EditorContext.MODEL_MAPPING, modelMapping);
-        
+
     }
     get modelMapping(): ModelMapping {
         return this._modelMapping;

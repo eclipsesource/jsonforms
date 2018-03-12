@@ -12,6 +12,14 @@ export interface AddUiSchemaAction {
 
 const extractUiSchemata = state => state.uiSchemata;
 
+/**
+ * Creates an action to add a detail UI schema for the editor.
+ * If there already is a UI Schema for the given schema id,
+ * it is overwritten with the given one.
+ *
+ * @param schemaId The JSON Schema's id for which the UI Schema will be used
+ * @param uiSchema The UI Schema defining the rendered detail view
+ */
 export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
     return {
         type: ADD_UI_SCHEMA,

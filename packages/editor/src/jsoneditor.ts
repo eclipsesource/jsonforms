@@ -1,21 +1,20 @@
+import * as JsonRefs from 'json-refs';
 import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
-import { combineReducers, createStore, Store } from 'redux';
 import {
   Actions,
+  getData,
+  getUiSchema,
   jsonformsReducer,
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import { ModelMapping } from './editor-config';
+import { EditorConfiguration, ModelMapping } from './editor-config';
 import { Editor } from './editor';
 import * as _ from 'lodash';
-import { EditorConfiguration } from './editor-config';
 import { Resources } from './resources/resources';
-import * as JsonRefs from 'json-refs';
+import { combineReducers, createStore, Store } from 'redux';
 import { EditorContext } from './editor-context';
 import { SchemaServiceImpl } from './services/schema.service.impl';
-// import { store } from './store';
-import { getData, getUiSchema } from '@jsonforms/core';
 import * as ReactDOM from 'react-dom';
 import * as React from 'react';
 import { MasterDetail } from './MasterDetail';
@@ -33,10 +32,11 @@ export * from './editor-config';
  * naming property, and defining a mapping between an object's property and its type.
  */
 export class JsonEditor extends HTMLElement implements Editor {
+  // Needed for references; probably could be omitted when refactoring the schema service impl
   public static rootData;
-  private uiSchemata: { [schemaId: string]: UISchemaElement } = {};
 
-  store: Store<any>;
+  private uiSchemata: { [schemaId: string]: UISchemaElement } = {};
+  private store: Store<any>;
   private connected = false;
   private _editorContext: EditorContext;
   private schemaPromise;
@@ -219,22 +219,12 @@ export class JsonEditor extends HTMLElement implements Editor {
    * A registered UI Schema is used when rendering a suitable object
    * that was selected in the containment tree.
    * The UI Schema specifies rendered controls, layouts, and additional rendering information.
-   * Thereby, the UI Schema is the same as the UI Schemata used in JsonForms 2.
    *
    * @param {string} schemaId The id of the type's JsonSchema that the UI Schema is registered for
    * @param {UISchemaElement} uiSchema The UI Schema to use when rendering instances of the schema
    */
   registerDetailSchema(schemaId: string, uiSchema: UISchemaElement) {
     this.uiSchemata[schemaId] = uiSchema;
-    // if (this.store === undefined || this.store === null) {
-    //   console.warn(`Could not register the given UI Schema with ID ${schemaId} ` +
-    //                `because the editor's store has not been initialized`,
-    //                uiSchema);
-
-    //   return;
-    // }
-
-    // this.store.dispatch(addUiSchema(schemaId, uiSchema));
   }
 
   private render(): void {

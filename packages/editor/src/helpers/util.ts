@@ -14,11 +14,11 @@ export const resolveLocalData = (rootData: Object, path: string): Object => {
       }
       if (_.isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
         console.error(`The local path '${path}' cannot be resolved in the given data:`, rootData);
-  
+
         return null;
       }
       resolvedData = resolvedData[segment];
     }
-  
+
     return resolvedData;
   };
