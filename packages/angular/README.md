@@ -3,16 +3,12 @@
 
 JSONForms uses HTML custom elements and eliminates the need to write HTML templates in order to create forms by leveraging the capabilities of JSON and JSON schema.
 
-# Core Package
-This is the JSONForms core package. This package provides basic functionality needed to render forms and is based on [Redux](https://redux.js.org/).
+# Angular Package
+This is the JSONForms angular package which provides the necessary bindings for Angular. It uses [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core).
 
-In order to use JSONForms Core you need to decide which UI framework you would like to use.
+You can combine the angular package with any angular-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular-material).
 
-JSONForms currently supports [React](https://www.npmjs.com/package/@jsonforms/react). A proof of concept exists for [Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
-
-See the [Example Package](https://www.npmjs.com/package/@jsonforms/examples) on how to integrate JSONForms with your application.
-
-Check https://www.npmjs.com/search?q=%40jsonforms for all published JSONForms packages.
+**This is a proof of concept currently and will evolve in the future.**
 
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
