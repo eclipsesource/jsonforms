@@ -1,3 +1,10 @@
+# Deprecation Notice
+
+This package demonstrates the feasibility of implementing JSONForms with inferno. Since this is mostly a prototype and is no longer maintained, we would like to recommend using JSONForms 2+ to you.
+
+Please check out [jsonforms.io](jsonforms.io) for more information. Users of JSONForms 1 may want to also take a look at the [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+
+
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
@@ -80,28 +87,10 @@ The whole document may for example now look like this:
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
-Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=jsonforms2)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=jsonforms2&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=jsonforms2)
-
-## Deployment
- * Locally login as one of the (npm) owners of the package ([npm doc](https://docs.npmjs.com/cli/adduser))
- * Make sure your workspace looks exactly the way you want to release it. (Files specified in [.npmignore](https://github.com/eclipsesource/jsonforms/blob/master/.npmignore) are normally ignored by npm, but this functionality is buggy. Therefore to be sure you should still remove all unwanted files before deploying.)
- * Run either ```npm run publish-patch```,```npm run publish-minor``` or ```npm run publish-major```.
-
-The script does the following:
-* Build JSONForms
-* Execute tests
-* Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json)
-* Commit version bump to the current branch
-* Checkout a new temporary deploy-branch
-* Commit ```dist/**/*``` directory
-* Create a new version tag
-* Push the version tag to 'upstream'
-* Release the workspace to [npmjs](https://www.npmjs.com/)
-
-If any of the steps fail the script will abort. If the script was successful you should create a pull-request with the version bump commit to 'upstream'.
+Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=inferno)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=inferno&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=inferno)
 
 # License
-The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/inferno/LICENSE) for more information.
 
 # Roadmap
 Our current roadmap is available [here](https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md).
