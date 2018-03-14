@@ -1,3 +1,10 @@
+# Deprecation Notice
+
+This is the original version of the project. While there is nothing wrong in using it, we would like to recommend using JSONForms 2+ to you. It contains major improvements to ease development, improve modularity and to remove the dependency on AngularJS. Of course JSONForms 2.x can still be used with Angular, but in addition you can now also use it with React or even standalone.
+
+Please check out [jsonforms.io](jsonforms.io) for more information. Users of JSONForms 1 may want to also take a look at the [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+
+
 # JSONForms - More Forms. Less Code
 ### Complex AngularJS Forms in the blink of an eye
 
@@ -31,7 +38,7 @@ create forms by leveraging the capabilities of JSON and JSON schema.
 JSON Forms ships with predefined styles based on Bootstrap and Material Design, see the [Styling](http://jsonforms-beta.de/#/docs/styling) section of the documentation.
     
 # Documentation and more information
-For documentation, examples and more information, please see [jsonforms.io](http://jsonforms.io/).
+For documentation, examples and more information, please see [jsonforms.io](jsonforms.io).
 
 # Developers Documentation
 
@@ -74,28 +81,10 @@ npm run start-placeholder
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
-Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=master)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=master&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=master)
-
-## Deployment
- * Locally login as one of the (npm) owners of the package ([npm doc](https://docs.npmjs.com/cli/adduser))
- * Make sure your workspace looks exactly the way you want to release it. (Files specified in [.npmignore](https://github.com/eclipsesource/jsonforms/blob/master/.npmignore) are normally ignored by npm, but this functionality is buggy. Therefore to be sure you should still remove all unwanted files before deploying.)
- * Run either ```npm run publish-patch```,```npm run publish-minor``` or ```npm run publish-major```.
-
-The script does the following:
-* Build all JSONForms alternatives
-* Execute tests
-* Increase version in [package.json](https://github.com/eclipsesource/jsonforms/blob/master/package.json)
-* Commit version bump to the current branch
-* Checkout a new temporary deploy-branch
-* Commit ```dist/jsonforms.js``` file
-* Create a new version tag
-* Push the version tag to 'upstream'
-* Release the workspace to [npmjs](https://www.npmjs.com/)
-
-If any of the steps fail the script will abort. If the script was successful you should create a pull-request with the version bump commit to 'upstream'.
+Current status: [![Build Status](https://travis-ci.org/eclipsesource/jsonforms.svg?branch=jsonforms-1)](https://travis-ci.org/eclipsesource/jsonforms) [![Coverage Status](https://coveralls.io/repos/eclipsesource/jsonforms/badge.svg?branch=jsonforms-1&service=github)](https://coveralls.io/github/eclipsesource/jsonforms?branch=jsonforms-1)
 
 # License
-The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
+The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/jsonforms-1/LICENSE) for more information.
 
 # Roadmap
 Our current roadmap is available [here](https://github.com/eclipsesource/jsonforms/blob/master/ROADMAP.md).
