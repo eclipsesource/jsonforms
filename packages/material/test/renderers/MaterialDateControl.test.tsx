@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -127,7 +127,7 @@ describe('Material date control tester', () => {
 
 describe('Material date control', () => {
 
-  test.skip('should autofocus first element', () => {
+  it('should autofocus first element', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
@@ -225,7 +225,7 @@ describe('Material date control', () => {
     expect(input.autofocus).toBeFalsy();
   });
 
-  test('should render', () => {
+  it('should render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -275,7 +275,7 @@ describe('Material date control', () => {
     expect(input.value).toBe('');
   });
 
-  test('should update with undefined value', () => {
+  it('should update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -299,7 +299,7 @@ describe('Material date control', () => {
     expect(input.value).toBe('1980-06-04');
   });
 
-  test('should not update with null ref', () => {
+  it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -311,7 +311,7 @@ describe('Material date control', () => {
     expect(input.value).toBe('1980-06-04');
   });
 
-  test('should not update with undefined ref', () => {
+  it('should not update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -323,7 +323,7 @@ describe('Material date control', () => {
     expect(input.value).toBe('1980-06-04');
   });
 
-  test('can be disabled', () => {
+  it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -334,7 +334,7 @@ describe('Material date control', () => {
     expect(input.disabled).toBeTruthy();
   });
 
-  test('should be enabled by default', () => {
+  it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
