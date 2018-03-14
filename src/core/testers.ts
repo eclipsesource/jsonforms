@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, Scopable, UISchemaElement } from '../models/uischema';
+import { ControlElement, UISchemaElement } from '../models/uischema';
 import { resolveSchema } from '../path.util';
 import { NOT_APPLICABLE } from './uischema.registry';
 
@@ -16,7 +16,6 @@ export type RankedTester = (uischema: UISchemaElement, schema: JsonSchema) => nu
 
 export const isControl = (uischema: any): uischema is ControlElement =>
   !_.isEmpty(uischema) && uischema.scope !== undefined;
-
 
 /**
  * Only applicable for Controls.

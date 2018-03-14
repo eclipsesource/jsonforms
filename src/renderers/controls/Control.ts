@@ -28,6 +28,7 @@ export class Control<P extends ControlProps, S extends ControlState> extends Ren
 
   constructor(props: P) {
     super(props);
+    // tslint:disable:no-object-literal-type-assertion
     this.state = {
       value: props.data ? props.data : ''
     } as Readonly<S>;
