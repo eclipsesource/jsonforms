@@ -1,0 +1,1 @@
+{"version":3,"file":"generate-schema.data.js","sourceRoot":"","sources":["../../../examples/data/generate-schema.data.ts"],"names":[],"mappings":";AAAA;kBAAe,OAAO,CAAC,MAAM,CAAC,oCAAoC,EAAE,EAAE,CAAC;KACpE,KAAK,CAAC,wBAAwB,EAAE,SAAS,CAAC;KAC1C,KAAK,CAAC,0BAA0B,EAAE,SAAS,CAAC;KAC5C,KAAK,CAAC,sBAAsB,EAC3B;IACE,IAAI,EAAE,UAAU;IAChB,GAAG,EAAE,EAAE;CACR,CACF;KACF,IAAI,CAAC"}
