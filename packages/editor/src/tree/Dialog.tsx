@@ -4,7 +4,9 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
+  getData,
   Paths,
+  Resolve,
   update
 } from '@jsonforms/core';
 
@@ -16,7 +18,8 @@ const Dialog = (
     closeDialog,
     dialogProps,
     schemaService,
-    setSelection
+    setSelection,
+    rootData
   }) => (
   <dialog id='dialog' {...dialogProps}>
     <label>
@@ -41,8 +44,14 @@ const Dialog = (
                   },
                   {}
                 );
+
+                const arrayPath = Paths.compose(path, prop.property);
+                const array = Resolve.data(rootData, arrayPath) as any[];
+                const selectionIndex = _.isEmpty(array) ? 0 : array.length;
+                const selectionPath = Paths.compose(arrayPath, selectionIndex.toString());
+
                 add(path, prop, newData);
-                setSelection(prop.schema, newData, path)();
+                setSelection(prop.schema, newData, selectionPath)();
                 closeDialog();
               }}
             >
@@ -59,6 +68,12 @@ const Dialog = (
     </button>
   </dialog>
 );
+
+const mapStateToProps = state => {
+  return {
+    rootData: getData(state)
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
     add(path, prop, newData) {
@@ -79,6 +94,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Dialog);
