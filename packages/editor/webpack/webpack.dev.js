@@ -30,10 +30,10 @@ module.exports = {
     new copyWebpackPlugin([
       {from: '../examples/vendor/native-shim.js', to: 'assets/native-shim.js' },
       {from: '../examples/example.css', to: 'assets/jsonforms-example.css'},
-      {from: './node_modules/materialize-css/dist/css/materialize.css', to: 'assets/materialize.css' },
-      {from: './node_modules/materialize-css/dist/js/materialize.js', to: 'assets/materialize.js' },
-      {from: './node_modules/materialize-css/dist/fonts', to: 'fonts'},
-      {from: './node_modules/jquery/dist/jquery.js', to: 'assets/jquery.js' },
+      {from: '../../node_modules/materialize-css/dist/css/materialize.css', to: 'assets/materialize.css' },
+      {from: '../../node_modules/materialize-css/dist/js/materialize.js', to: 'assets/materialize.js' },
+      {from: '../../node_modules/materialize-css/dist/fonts', to: 'fonts'},
+      {from: '../../node_modules/jquery/dist/jquery.js', to: 'assets/jquery.js' },
       {from: './jsoneditor.css', to: 'assets/jsoneditor.css' },
       {from: './jsoneditor.materialize.css', to: 'assets/jsoneditor.materialize.css' }
     ])
