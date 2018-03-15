@@ -13,6 +13,7 @@ import { DropTarget, DropTargetMonitor } from 'react-dnd';
 import {
   canDropDraggedItem,
   CSS,
+  CSS_DELAY,
   DragInfo,
   DropResult,
   mapDispatchToTreeListProps,
@@ -82,56 +83,87 @@ export const ExpandArray = (
 
 export interface ExpandArrayContainerProps extends ExpandArrayProps {
   connectDropTarget?: any;
+  /** True if drag and drop is currently in progress. */
+  isDragging?: boolean;
+  /** The dragged element is over this expanded array excluding nested arrays. */
   isOver?: boolean;
+  /** Whether this list is a valid drop target for the currently dragged element. */
   validDropTarget?: boolean;
   moveListItem?(data: any, oldPath: string, newPath: string): boolean;
 }
 
-// TODO: update selected element once selection has been changed
-export const ExpandArrayContainer = (
-  {
-    rootData,
-    containmentProps,
-    path,
-    uischema,
-    schemaService,
-    selection,
-    handlers,
-    // Drag and Drop Parameters
-    connectDropTarget,
-    isOver, // hover over the list excluding nested lists
-    // isOverNested, // hover over a nested listed but not this one
-    validDropTarget,
-  }: ExpandArrayContainerProps
-) => {
+export interface ExandArrayContainerState {
+  /**
+   * Defines whether CSS to highlight the list being a valid or invalid drop target should be shown.
+   * This is necessary to prevent a Chrome bug that may cancel drag and drop prematurely
+   * if the DOM is changed during the 'begin drag' event of HTML5.
+   */
+  setCss: boolean;
+}
 
-  if (_.isEmpty(containmentProps)) {
-    return undefined;
+export class ExpandArrayContainer extends React.Component<ExpandArrayContainerProps,
+                                                          ExandArrayContainerState> {
+
+  constructor(props) {
+    super(props);
+    this.state = { setCss: false };
   }
-  let className = '';
-  if (validDropTarget) {
-    className = CSS.DND_VALID_TARGET;
-    if (isOver) {
-      className = `${className} ${CSS.DND_CURRENT_TARGET}`;
+
+  componentWillReceiveProps(nextProps: ExpandArrayContainerProps) {
+    if (this.props.isDragging && !nextProps.isDragging) {
+      this.setState( { setCss: false });
+    } else if (!this.props.isDragging && nextProps.isDragging) {
+      setTimeout(() => this.setState({ setCss: true }), CSS_DELAY);
     }
-  } else if (isOver) {
-    className = `${CSS.DND_INVALID_TARGET} ${CSS.DND_CURRENT_TARGET}`;
   }
 
-  return connectDropTarget(
-    <ul key={_.head(containmentProps).property} className={className}>
-      <ExpandArray
-        containmentProps={containmentProps}
-        path={path}
-        rootData={rootData}
-        selection={selection}
-        handlers={handlers}
-        uischema={uischema}
-        schemaService={schemaService}
-      />
-    </ul>
-  );
-};
+  render() {
+    const {
+      rootData,
+      containmentProps,
+      path,
+      uischema,
+      schemaService,
+      selection,
+      handlers,
+      // Drag and Drop Parameters
+      connectDropTarget,
+      isOver,
+      validDropTarget,
+    }: ExpandArrayContainerProps = this.props;
+
+    if (_.isEmpty(containmentProps)) {
+      return undefined;
+    }
+
+    let className = '';
+    // Only apply D&D CSS if the flag has been set
+    if (this.state.setCss) {
+      if (validDropTarget) {
+        className = CSS.DND_VALID_TARGET;
+        if (isOver) {
+          className = `${className} ${CSS.DND_CURRENT_TARGET}`;
+        }
+      } else if (isOver) {
+        className = `${CSS.DND_INVALID_TARGET} ${CSS.DND_CURRENT_TARGET}`;
+      }
+    }
+
+    return connectDropTarget(
+      <ul key={_.head(containmentProps).property} className={className}>
+        <ExpandArray
+          containmentProps={containmentProps}
+          path={path}
+          rootData={rootData}
+          selection={selection}
+          handlers={handlers}
+          uischema={uischema}
+          schemaService={schemaService}
+        />
+      </ul>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   rootData: getData(state)
@@ -140,12 +172,12 @@ const mapStateToProps = state => ({
 /**
  * Injects drag and drop related properties into an expanded array
  */
-const collect = (dndConnect, monitor) => {
+const collect = (dndConnect, monitor: DropTargetMonitor) => {
   return {
     connectDropTarget: dndConnect.dropTarget(),
     isOver: monitor.isOver({ shallow: true }),
-    // isOverNested: !monitor.isOver( {shallow: true } && monitor.isOver({ shallow: false }),
-    validDropTarget: monitor.canDrop()
+    validDropTarget: monitor.canDrop(),
+    isDragging: monitor.getItem() !== null
   };
 };
 

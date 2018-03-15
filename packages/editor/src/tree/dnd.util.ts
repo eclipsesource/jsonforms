@@ -7,6 +7,12 @@ export const Types = {
     TREE_DND: 'tree-master-detail-DnD'
 };
 
+/**
+ * The delay in milliseconds before D&D related CSS (e.g. highlighting valid drop targets) is
+ * applied.
+ */
+export const CSS_DELAY = 30;
+
 export const CSS = {
     DND_VALID_TARGET: 'jsf-editor-dnd-target-valid',
     DND_INVALID_TARGET: 'jsf-editor-dnd-target-invalid',
