@@ -1,7 +1,7 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-JSONForms uses HTML custom elements and eliminates the need to write HTML templates in order to create forms by leveraging the capabilities of JSON and JSON schema.
+JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # Angular Material Renderers Package
 This is the JSONForms Angular Material Renderers Package. This package only contains renderers and must be combined with  [JSONForms Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
