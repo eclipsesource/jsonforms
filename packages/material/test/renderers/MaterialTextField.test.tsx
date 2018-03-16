@@ -96,7 +96,7 @@ describe('Material text field tester', () => {
     expect(materialTextFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
     expect(materialTextFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
   });
-  it('should succeed with wrong schema type', () => {
+  it('should fail with wrong schema type', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo'
