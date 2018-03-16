@@ -39,6 +39,7 @@ export interface MasterProps {
     onAdd: any;
     onRemove?: any;
     onSelect: any;
+    resetSelection: any;
   };
   uischema: UISchemaElement;
   schemaService: SchemaService;
@@ -142,8 +143,8 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
     }
   }
 
-  setSelection = (schema, data, path) => {
-    return () => this.setState({
+  setSelection = (schema, data, path) => () => {
+    this.setState({
       selected: {
         schema,
         data,
@@ -173,15 +174,22 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, schema, resolvedSchema, visible, path, rootData, addToRoot, schemaService, uiSchemata } = this.props;
+    const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot, schemaService, uiSchemata } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
     };
-    const resolvedRootData = Resolve.data(rootData, path);
+
+    let resetSelection;
+    if (resolvedSchema.items !== undefined) {
+      resetSelection = this.setSelection(resolvedSchema.items, resolvedRootData[0], Paths.compose(path, '0'));
+    } else {
+      resetSelection = this.setSelection(resolvedSchema, resolvedRootData, path);
+    }
     const handlers = {
       onSelect: this.setSelection,
       onAdd: this.openDialog,
+      resetSelection: resetSelection
     };
 
     let detailSchema;

@@ -25,6 +25,14 @@ import {
   Types } from './dnd.util';
 import { indexFromPath } from '../helpers/util';
 
+/**
+ * The delay (in milliseconds) between removing this object list item's data from the store
+ * and resetting the selection.
+ * This is necessary because without a delay the resetted selection is overwritten
+ * by the on click handler of this object list item which sets the selection to this item.
+ */
+const RESET_SELECTION_DELAY = 40;
+
 const getNamingFunction =
   (schema: JsonSchema, uischema: UISchemaElement) => (element: Object): string => {
     if (uischema.options !== undefined) {
@@ -166,6 +174,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   const data = resolveData(stateProps.rootData, ownProps.path);
+  let resetSelection = ownProps.handlers.resetSelection;
+  resetSelection = resetSelection ? resetSelection : () => undefined;
 
   return {
     ...stateProps,
@@ -175,7 +185,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     handlers: {
       ...ownProps.handlers,
       onRemove() {
-        return dispatchProps.remove(data);
+        const result = dispatchProps.remove(data);
+        // Need to reset the selection with a delay because otherwise it gets overwritten
+        // by the on click handler of the item also setting the selection.
+        setTimeout(resetSelection, RESET_SELECTION_DELAY);
+        return result;
       }
     }
   };
