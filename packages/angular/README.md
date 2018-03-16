@@ -4,9 +4,9 @@
 JSONForms uses HTML custom elements and eliminates the need to write HTML templates in order to create forms by leveraging the capabilities of JSON and JSON schema.
 
 # Angular Package
-This is the JSONForms angular package which provides the necessary bindings for Angular. It uses [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core).
+This is the JSONForms Angular package which provides the necessary bindings for Angular. It uses [JSONForms Core](https://www.npmjs.com/package/@jsonforms/core).
 
-You can combine the angular package with any angular-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular-material).
+You can combine the Angular package with any angular-based renderer set you want, for example the [Material Renderers](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular-material).
 
 **This is a proof of concept currently and will evolve in the future.**
 
