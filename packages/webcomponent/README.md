@@ -4,7 +4,7 @@
 JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # WebComponent Package
-This is the JSONForms WebComponent package which does not contain any renderers by itself.
+This is the JSONForms WebComponent package which does not contain any renderers by itself but only a webcomponent wrapper for react-based renderer sets. This wrapper allows you to reuse the renderers in a web component based application.
 
 You can combine the WebComponent package with any react-based renderer set you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers). You will also need the [JSONForms React](https://www.npmjs.com/package/@jsonforms/react) package.
 
