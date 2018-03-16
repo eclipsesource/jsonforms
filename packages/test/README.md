@@ -7,8 +7,8 @@ JSONForms uses HTML custom elements and eliminates the need to write HTML templa
 This is the JSONForms test package. It can be used for testing packages which do not care about a specific renderer set being used, e.g. the i18n or the webcomponent package.
 
 This package provides:
-* FakeLayout which wraps all children into a `div` with the className `layout`.
-* FakeControl which sets the scope of the control as its className
+* `FakeLayout` which wraps all children into a `div` with the className `layout`.
+* `FakeControl` which sets the scope of the control as its className
 
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
