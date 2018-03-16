@@ -3,12 +3,10 @@
 
 JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
-# Core Package
-This is the JSONForms core package. This package provides basic functionality needed to render forms and is based on [Redux](https://redux.js.org/).
+# I18n Package
+This is the JSONForms i18n package. This package provides reducers and actions to support i18n.
 
-In order to use JSONForms Core you need to decide which UI framework you would like to use.
-
-JSONForms currently supports [React](https://www.npmjs.com/package/@jsonforms/react). A proof of concept exists for [Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
+You can combine this package with any renderer you want, for example the [Material Renderers](https://www.npmjs.com/package/@jsonforms/material-renderers) or the [Vanilla Renderers](https://www.npmjs.com/package/@jsonforms/vanilla-renderers).
 
 See the [Example Package](https://www.npmjs.com/package/@jsonforms/examples) on how to integrate JSONForms with your application.
 
