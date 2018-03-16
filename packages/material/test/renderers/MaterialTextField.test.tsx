@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -96,10 +96,72 @@ describe('Material text field tester', () => {
     expect(materialTextFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
     expect(materialTextFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
   });
+  it('should fail with wrong schema type', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      materialTextFieldTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number'
+            }
+          }
+        }
+      )
+    ).toBe(NOT_APPLICABLE);
+  });
+
+  it('should fail if only sibling has correct type', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      materialTextFieldTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'number'
+            },
+            bar: {
+              type: 'string'
+            }
+          }
+        }
+      )
+    ).toBe(NOT_APPLICABLE);
+  });
+
+  it('should succeed with matching prop type', () => {
+    const control: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    expect(
+      materialTextFieldTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string'
+            }
+          }
+        }
+      )
+    ).toBe(1);
+  });
 });
 
 describe('Material text field', () => {
-  test.skip('should autofocus first element', () =>  {
+  it('should autofocus first element', () =>  {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
@@ -130,7 +192,7 @@ describe('Material text field', () => {
     );
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>
     );
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');

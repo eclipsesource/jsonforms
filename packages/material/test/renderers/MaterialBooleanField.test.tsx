@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -125,7 +125,7 @@ describe('Material boolean field tester', () => {
 
 describe('Material boolean field', () => {
 
-  test.skip('should autofocus first element', () => {
+  it('should autofocus first element', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
@@ -173,7 +173,7 @@ describe('Material boolean field', () => {
   });
 
   // seems to be broken in material-ui
-  test.skip('should autofocus via option', () => {
+  it('should autofocus via option', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/foo',
@@ -264,7 +264,7 @@ describe('Material boolean field', () => {
     expect(getData(store.getState()).foo).toBeFalsy();
   });
 
-  test.skip('should update with undefined value', () => {
+  it('should update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -273,10 +273,10 @@ describe('Material boolean field', () => {
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
-    expect(input.value).toBe('');
+    expect(input.checked).toBeFalsy();
   });
 
-  test.skip('should update with null value', () => {
+  it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -285,7 +285,7 @@ describe('Material boolean field', () => {
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
-    expect(input.value).toBe('');
+    expect(input.checked).toBeFalsy();
   });
 
   it('should not update with wrong ref', () => {

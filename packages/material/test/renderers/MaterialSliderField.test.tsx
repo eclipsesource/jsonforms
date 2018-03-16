@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -250,7 +250,7 @@ describe('Material slider tester', () => {
 });
 
 describe('Material slider field', () => {
-  test.skip('should autofocus first element', () => {
+  it('should autofocus first element', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
@@ -391,8 +391,7 @@ describe('Material slider field', () => {
     expect(input.value).toBe('4');
   });
 
-  // FIXME this moves the slider and changes the value
-  test.skip('should not update with undefined value', () => {
+  it('should not update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -401,11 +400,10 @@ describe('Material slider field', () => {
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
-    expect(input.value).toBe('');
+    expect(input.value).toBe(schema.properties.foo.default.toString());
   });
 
-  // FIXME this moves the slider and changes the value
-  test.skip('should not update with null value', () => {
+  it('should not update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
@@ -414,7 +412,7 @@ describe('Material slider field', () => {
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
-    expect(input.value).toBe('');
+    expect(input.value).toBe(schema.properties.foo.default.toString());
   });
 
   it('should not update with wrong ref', () => {
