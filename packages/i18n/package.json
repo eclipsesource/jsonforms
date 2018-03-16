@@ -5,10 +5,8 @@
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
+  "private": true,
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
   "directories": {
     "src": "src",
     "test": "test"
