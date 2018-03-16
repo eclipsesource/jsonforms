@@ -1,7 +1,7 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-JSONForms uses HTML custom elements and eliminates the need to write HTML templates in order to create forms by leveraging the capabilities of JSON and JSON schema.
+JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # Vanilla Renderers Package
 This is the JSONForms Vanilla Renderers Package. This package only contains renderers and must be combined with [JSONForms React](https://www.npmjs.com/package/@jsonforms/react).
