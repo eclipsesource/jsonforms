@@ -1,7 +1,5 @@
 import { JsonSchema } from '@jsonforms/core';
 import '../src/jsoneditor';
-import './ereference.renderer';
-import './eattribute.renderer';
 import { JsonEditor } from '../src/jsoneditor';
 import { Editor } from '../src/editor';
 import { editorConfig } from './ecore-config';
