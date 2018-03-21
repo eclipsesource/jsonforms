@@ -137,7 +137,7 @@
         "no-angle-bracket-type-assertion": true,
         "no-boolean-literal-compare": true,
         "no-consecutive-blank-lines": [true],
-        "no-trailing-whitespace": true,
+        "no-trailing-whitespace": [ true,  "ignore-comments" ],
         "no-unnecessary-initializer": true,
         "object-literal-key-quotes": [
             true,
