@@ -22,24 +22,35 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatCheckboxModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { JsonFormsModule } from '@jsonforms/angular';
+import { BooleanControlRenderer } from './controls/boolean.renderer';
 import { TextControlRenderer } from './controls/text.renderer';
 import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
 @NgModule({
   imports: [
-    CommonModule, JsonFormsModule, MatFormFieldModule, MatInputModule, BrowserAnimationsModule
+    CommonModule,
+    JsonFormsModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatInputModule,
+    BrowserAnimationsModule
   ],
   declarations: [
-    TextControlRenderer, VerticalLayoutRenderer
+    BooleanControlRenderer,
+    TextControlRenderer,
+    VerticalLayoutRenderer
   ],
   entryComponents: [
-    TextControlRenderer, VerticalLayoutRenderer
-  ]
+    BooleanControlRenderer,
+    TextControlRenderer,
+    VerticalLayoutRenderer
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class JsonFormsAngularMaterialModule {
 }
