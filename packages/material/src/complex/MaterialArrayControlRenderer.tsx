@@ -141,7 +141,9 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
   private isSelected = index => {
     return this.state.selected[index];
   }
-  private createSelection = (selected: boolean) => _.fill(Array(this.props.data.length), selected);
+  private createSelection = (selected: boolean) => this.props.data ?
+                                                     _.fill(Array(this.props.data.length), selected)
+                                                     : []
 }
 
 export interface TableState {
