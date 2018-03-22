@@ -23,14 +23,14 @@
   THE SOFTWARE.
 */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
+import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
+import { DevToolsExtension, NgRedux } from '@angular-redux/store';
 import { Actions, JsonFormsState } from '@jsonforms/core';
 import { AppComponent } from './app.component';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
-import { data, schema, store, uischema } from './store';
+import { data, initialState, rootReducer, schema, uischema } from './store';
 
 @NgModule({
   declarations: [
@@ -41,11 +41,28 @@ import { data, schema, store, uischema } from './store';
     JsonFormsModule,
     JsonFormsAngularMaterialModule
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    ngRedux.provideStore(store);
+  constructor(
+    ngRedux: NgRedux<JsonFormsState>,
+    devTools: DevToolsExtension
+  ) {
+    let enhancers = [];
+    // ... add whatever other enhancers you want.
+
+    // You probably only want to expose this tool in devMode.
+    if (isDevMode() && devTools.isEnabled()) {
+      enhancers = [ ...enhancers, devTools.enhancer() ];
+    }
+
+    ngRedux.configureStore(
+      rootReducer,
+      initialState,
+      [],
+      enhancers
+    );
     ngRedux.dispatch(Actions.init(
       data,
       schema,

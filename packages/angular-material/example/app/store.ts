@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { combineReducers, createStore } from 'redux';
-import { ControlElement, jsonformsReducer, JsonFormsStore } from '@jsonforms/core';
+import { combineReducers, Reducer } from 'redux';
+import { jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
 export const schema = {
     type: 'object',
@@ -42,7 +42,29 @@ export const schema = {
     required: ['name']
   };
 
-export const uischema: ControlElement = undefined;
+export const uischema = {
+  type: 'VerticalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/name'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/description',
+      options: {
+        'multi': true
+      }
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/done',
+      options: {
+        align: 'end'
+      }
+    },
+  ]
+};
 
 export const data = {
     name: 'Send email to Adrian',
@@ -50,12 +72,16 @@ export const data = {
     done: true,
   };
 
-export const store: JsonFormsStore = createStore(
-  combineReducers({ jsonforms: jsonformsReducer() }),
-  {
-    jsonforms: {
-      renderers: angularMaterialRenderers,
-      fields: [],
-    }
+export const rootReducer: Reducer<JsonFormsState> =
+  combineReducers({ jsonforms: jsonformsReducer() });
+
+export const initialState: any = {
+  jsonforms: {
+    renderers: angularMaterialRenderers,
+    fields: [],
   }
-);
+};
+
+// export const store: JsonFormsStore = createStore(
+
+// );
