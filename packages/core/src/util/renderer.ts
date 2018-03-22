@@ -46,7 +46,7 @@ import { ErrorObject } from 'ajv';
 
 export interface Labels {
   default: string;
-  [additonalLabels: string]: string;
+  [additionalLabels: string]: string;
 }
 
 export const isPlainLabel = (label: string | Labels): label is string => {
@@ -176,7 +176,7 @@ export interface StatePropsOfLayout {
   visible: boolean;
 
   /**
-   * Instacne path that is passed to the child elements.
+   * Instance path that is passed to the child elements.
    */
   path: string;
 
