@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component, OnDestroy, OnInit  } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatInput } from '@angular/material';
 import {
     computeLabel,
     ControlElement,
@@ -34,7 +35,6 @@ import {
     rankWith,
     resolveSchema
   } from '@jsonforms/core';
-
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { Subscription } from 'rxjs/Subscription';
@@ -44,24 +44,27 @@ import { connectControlToJsonForms } from '../util';
     selector: 'TextControlRenderer',
     template: `
         <mat-form-field>
-            <mat-label>{{computedLabel}}</mat-label>
+            <mat-label>{{ computedLabel }}</mat-label>
             <input
                 matInput
                 type="text"
                 (change)="onChange($event)"
-                [value]="value" placeholder="{{description}}"
+                [value]="value"
+                placeholder="{{ description }}"
+                [disabled]="disabled"
             >
-            <mat-error>{{errors}}</mat-error>
+            <mat-error>{{ errors }}</mat-error>
         </mat-form-field>
-
     `
 })
 export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
-    onChange;
+    onChange: (event?: any) => void;
     computedLabel: string;
     errors: string;
     value: any;
     description: string;
+    disabled: boolean;
+    @ViewChild(MatInput) textInput: MatInput;
 
     private subscription: Subscription;
 
@@ -73,15 +76,19 @@ export class TextControlRenderer extends JsonFormsBaseRenderer implements OnInit
         const state$ = connectControlToJsonForms(this.ngRedux, this.getOwnProps());
         this.subscription = state$.subscribe(state => {
             this.onChange = ev => state.handleChange(state.path, ev.target.value);
+
             this.computedLabel = computeLabel(
                 isPlainLabel(state.label) ? state.label : state.label.default, state.required);
-            // TODO initial try did not work, needs more time to fix
-            // const isValid = state.errors.length === 0;
-            // if (!isValid) {
-            //     this.formField.underlineRef.controls.setErrors({'incorrect': true});
-            // }
+
+            const isValid = state.errors.length === 0;
+            if (!isValid) {
+                this.textInput.errorState = true;
+            }
+
             this.errors = formatErrorMessage(state.errors);
             this.value = state.data;
+            this.disabled = !state.enabled;
+
             const controlElement = state.uischema as ControlElement;
             const resolvedSchema = resolveSchema(state.schema, controlElement.scope);
             this.description = resolvedSchema.description === undefined ?

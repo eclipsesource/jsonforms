@@ -31,6 +31,7 @@ import {
     RankedTester,
     rankWith,
   } from '@jsonforms/core';
+import { MatCheckboxChange } from '@angular/material';
 
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
@@ -50,8 +51,7 @@ import { connectControlToJsonForms } from '../util';
     `
 })
 export class BooleanControlRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
-    onChange;
-    onIndeterminateChange;
+    onChange: (event?: MatCheckboxChange) => void;
     label: string;
     align: string;
     errors: string;

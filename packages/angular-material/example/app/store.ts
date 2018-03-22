@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { combineReducers, Reducer } from 'redux';
-import { jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import { ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
 export const schema = {
     type: 'object',
@@ -42,29 +42,7 @@ export const schema = {
     required: ['name']
   };
 
-export const uischema = {
-  type: 'VerticalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/name'
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/description',
-      options: {
-        'multi': true
-      }
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/done',
-      options: {
-        align: 'end'
-      }
-    },
-  ]
-};
+export const uischema: ControlElement = undefined;
 
 export const data = {
     name: 'Send email to Adrian',
@@ -81,7 +59,3 @@ export const initialState: any = {
     fields: [],
   }
 };
-
-// export const store: JsonFormsStore = createStore(
-
-// );
