@@ -47,7 +47,7 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 export class JsonFormsOutlet implements OnInit {
 
   @Input() uischema: UISchemaElement;
-
+  private subscription;
   constructor(
     private viewContainerRef: ViewContainerRef,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -55,10 +55,11 @@ export class JsonFormsOutlet implements OnInit {
   }
 
   ngOnInit(): void {
-    const state$ = this.ngRedux.select().map(state =>
-       mapStateToDispatchRendererProps(state, {uischema: this.uischema})
+    const state$ = this.ngRedux.select(state =>
+      mapStateToDispatchRendererProps(state, {uischema: this.uischema}),
+                                       (x, y) => _.isEqual(x, y)
     );
-    state$.subscribe(props => {
+    this.subscription = state$.subscribe(props => {
       const {renderers, schema, uischema} = props as JsonFormsProps;
       const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
       let bestComponent: Type<any> = UnknownRenderer;
@@ -75,6 +76,10 @@ export class JsonFormsOutlet implements OnInit {
         instance.schema = schema;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }
