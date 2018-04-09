@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import {
   getData,
   Paths,
-  resolveData,
-  UISchemaElement
+  resolveData
 } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
 import { DropTarget, DropTargetMonitor } from 'react-dnd';
@@ -19,6 +18,8 @@ import {
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
 import { ContainmentProperty, SchemaService } from '../services/schema.service';
+import { matchContainmentProperty } from '../helpers/containment.util';
+import { getModelMapping } from '../reducers';
 
 export interface ExpandArrayProps {
   rootData: any;
@@ -27,7 +28,7 @@ export interface ExpandArrayProps {
   selection: any;
   schemaService: SchemaService;
   handlers: any;
-  uischema: UISchemaElement;
+  modelMapping: any;
 }
 /**
  * Expands the given data array by expanding every element.
@@ -46,7 +47,7 @@ export const ExpandArray = (
     selection,
     schemaService,
     handlers,
-    uischema
+    modelMapping
   }: ExpandArrayProps
 ) => {
 
@@ -59,7 +60,7 @@ export const ExpandArray = (
   return (
     data.map((element, index) => {
       const composedPath = Paths.compose(path, index.toString());
-      const property = schemaService.matchContainmentProperty(element, containmentProps);
+      const property = matchContainmentProperty(element, containmentProps, modelMapping);
 
       if (property === undefined || data === null) {
         return <li>No ContainmentProperty</li>;
@@ -72,7 +73,6 @@ export const ExpandArray = (
           schema={property.schema}
           selection={selection}
           handlers={handlers}
-          uischema={uischema}
           schemaService={schemaService}
           parentProperties={containmentProps}
         />
@@ -122,10 +122,10 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
       rootData,
       containmentProps,
       path,
-      uischema,
       schemaService,
       selection,
       handlers,
+      modelMapping,
       // Drag and Drop Parameters
       connectDropTarget,
       isOver,
@@ -157,8 +157,8 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
           rootData={rootData}
           selection={selection}
           handlers={handlers}
-          uischema={uischema}
           schemaService={schemaService}
+          modelMapping={modelMapping}
         />
       </ul>
     );
@@ -166,7 +166,8 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
 }
 
 const mapStateToProps = state => ({
-  rootData: getData(state)
+  rootData: getData(state),
+  modelMapping: getModelMapping(state)
 });
 
 /**

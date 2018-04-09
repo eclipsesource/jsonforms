@@ -27,7 +27,6 @@ export const ExpandRootArray = (
     path,
     selection,
     handlers,
-    uischema,
     schemaService
   }
 ) => {
@@ -47,7 +46,6 @@ export const ExpandRootArray = (
           schema={schema}
           selection={selection}
           handlers={handlers}
-          uischema={uischema}
           schemaService={schemaService}
           isRoot={true}
         />

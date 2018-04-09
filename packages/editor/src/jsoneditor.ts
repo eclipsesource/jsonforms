@@ -165,6 +165,7 @@ export class JsonEditor extends HTMLElement implements Editor {
     } else {
       this.editorContext.data = {};
     }
+    this.render();
   }
 
   /**
@@ -244,17 +245,15 @@ export class JsonEditor extends HTMLElement implements Editor {
 
     const uischema = {
       'type': 'MasterDetailLayout',
-      'scope': '#',
-      'options': {
-        'labelProvider': this.editorContext.labelProvider,
-        'imageProvider': this.editorContext.imageProvider,
-        'modelMapping': this.editorContext.modelMapping
-      }
+      'scope': '#'
     };
 
-    if (this.store === undefined) {
-      this.store = this.initStore(this.data, this.schema, uischema);
-    }
+    // if (this.store === undefined) {
+    this.store = this.initStore(this.data, this.schema, uischema,
+                                this.editorContext.imageProvider,
+                                this.editorContext.labelProvider,
+                                this.editorContext.modelMapping);
+    // }
 
     Object.keys(this.uiSchemata).forEach(schemaId =>
       this.store.dispatch(addUiSchema(schemaId, this.uiSchemata[schemaId])));
@@ -273,13 +272,19 @@ export class JsonEditor extends HTMLElement implements Editor {
     ReactDOM.render(masterDetailComponent, this.container);
   }
 
-  private initStore(data, schema, uischema): Store<any> {
+  private initStore(
+    data, schema, uischema, imageMapping?, labelMapping?, modelMapping?): Store<any> {
     const store = createStore(
       combineReducers({ jsonforms: jsonformsReducer({ editor: editorReducer }) }),
       {
           jsonforms: {
             renderers: materialRenderers,
             fields: materialFields,
+            editor: {
+              imageMapping,
+              labelMapping,
+              modelMapping
+            }
           }
         }
     );

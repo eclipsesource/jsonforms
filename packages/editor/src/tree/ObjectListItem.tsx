@@ -7,7 +7,6 @@ import {
   JsonSchema,
   Paths,
   resolveData,
-  UISchemaElement,
   update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
@@ -24,6 +23,7 @@ import {
   moveListItem,
   Types } from './dnd.util';
 import { indexFromPath } from '../helpers/util';
+import { getImageMapping, getLabelMapping } from '../reducers';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -34,12 +34,9 @@ import { indexFromPath } from '../helpers/util';
 const RESET_SELECTION_DELAY = 40;
 
 const getNamingFunction =
-  (schema: JsonSchema, uischema: UISchemaElement) => (element: Object): string => {
-    if (uischema.options !== undefined) {
-      const labelProvider = uischema.options.labelProvider;
-      if (labelProvider !== undefined && labelProvider[schema.id] !== undefined) {
-        return element[labelProvider[schema.id]];
-      }
+  (schema: JsonSchema, labelMapping) => (element: Object): string => {
+    if (!_.isEmpty(labelMapping) && labelMapping[schema.id] !== undefined) {
+      return element[labelMapping[schema.id]];
     }
 
     const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
@@ -53,7 +50,6 @@ const getNamingFunction =
 export interface ObjectListItemProps {
   path: string;
   schema: JsonSchema;
-  uischema: UISchemaElement;
   rootData: any;
   data: any;
   selection: any;
@@ -63,18 +59,21 @@ export interface ObjectListItemProps {
     onSelect: any;
   };
   schemaService: SchemaService;
+  imageMapping?: any;
+  labelMapping?: any;
 }
 
 const ObjectListItem = (
   {
     path,
     schema,
-    uischema,
     rootData,
     data,
     handlers,
     selection,
-    schemaService
+    schemaService,
+    imageMapping,
+    labelMapping
   }: ObjectListItemProps) => {
 
   const pathSegments = path.split('.');
@@ -90,8 +89,7 @@ const ObjectListItem = (
     <li className={liClasses} key={path}>
       <div>
         {
-          _.has(uischema.options, 'imageProvider') ?
-            <span className={`icon ${uischema.options.imageProvider[schema.id]}`} /> : ''
+          !_.isEmpty(imageMapping) ? <span className={`icon ${imageMapping[schema.id]}`} /> : ''
         }
 
         <span
@@ -99,7 +97,7 @@ const ObjectListItem = (
           onClick={handlers.onSelect(schema, data, path)}
         >
           <span>
-            {getNamingFunction(schema, uischema)(data)}
+            {getNamingFunction(schema, labelMapping)(data)}
           </span>
           {
             schemaService.hasContainmentProperties(schema) ?
@@ -131,7 +129,6 @@ const ObjectListItem = (
             path={Paths.compose(path, groupKey)}
             schema={schema}
             selection={selection}
-            uischema={uischema}
             handlers={handlers}
             schemaService={schemaService}
           />
@@ -146,7 +143,9 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     index: index,
-    rootData: getData(state)
+    rootData: getData(state),
+    imageMapping: getImageMapping(state),
+    labelMapping: getLabelMapping(state)
   };
 };
 
@@ -213,12 +212,13 @@ const ObjectListItemDnd = (
   {
     path,
     schema,
-    uischema,
     rootData,
     data,
     handlers,
     selection,
     schemaService,
+    imageMapping,
+    labelMapping,
     isRoot,
     // isDragging,
     connectDragSource,
@@ -229,12 +229,13 @@ const ObjectListItemDnd = (
     <ObjectListItem
       path={path}
       schema={schema}
-      uischema={uischema}
       rootData={rootData}
       data={data}
       handlers={handlers}
       selection={selection}
       schemaService={schemaService}
+      imageMapping={imageMapping}
+      labelMapping={labelMapping}
     />
   );
   if (isRoot === true) {
