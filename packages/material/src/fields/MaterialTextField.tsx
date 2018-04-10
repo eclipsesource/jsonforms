@@ -18,13 +18,19 @@ export const MaterialTextField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, schema, isValid, path, handleChange } = props;
   const controlElement = uischema as ControlElement;
   const maxLength = resolveSchema(schema, controlElement.scope).maxLength;
-  let config;
+  let config = {};
   if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
-  } else {
-    config = {};
+    config = {
+      maxLength: maxLength
+    };
   }
   const trim = uischema.options && uischema.options.trim;
+  if (trim) {
+    config = {
+      ...config,
+      size: maxLength
+    };
+  }
   const onChange = ev => handleChange(path, ev.target.value);
 
   return (
