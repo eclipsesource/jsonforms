@@ -297,9 +297,9 @@ export const isArrayObjectControl = and(
 );
 
 /**
- * Tests whether a given UI schema is of type Control and
- * whether the schema defines a numerical range.
- * Furthermore it checks that the Control has the option 'slider' set to 'true'.
+ * Tests whether a given UI schema is of type Control, if the schema
+ * is of type number or integer and
+ * whether the schema defines a numerical range with a default value.
  * @type {Tester}
  */
 export const isRangeControl = and(

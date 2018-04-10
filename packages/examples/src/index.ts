@@ -14,6 +14,8 @@ import * as layout from './layout';
 import * as person from './person';
 import * as rule from './rule';
 import * as resolve from './resolve';
+import * as text from './text';
+import * as numbers from './numbers';
 import Rating from './Rating';
 import { RatingControl, ratingControlTester } from './RatingControl';
 
@@ -36,5 +38,7 @@ export {
   resolve,
   Rating,
   RatingControl,
-  ratingControlTester
+  ratingControlTester,
+  text,
+  numbers
 };
