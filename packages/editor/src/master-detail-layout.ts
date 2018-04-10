@@ -10,6 +10,4 @@ export interface MasterDetailLayout extends UISchemaElement, Scopable {
    * An optional label that will be associated with the control
    */
   label?: string | boolean | LabelDescription;
-
-  options?: any;
 }

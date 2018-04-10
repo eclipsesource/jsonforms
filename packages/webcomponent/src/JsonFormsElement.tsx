@@ -70,6 +70,8 @@ const CustomElement = (config: CustomElementConfig) => cls => {
 })
 export class JsonFormsElement extends HTMLElement {
 
+  private InnerComponent: any = JsonForms;
+  private innerComponentParameters: any = {};
   private allowDynamicUpdate = false;
   private _store: JsonFormsStore;
 
@@ -121,6 +123,11 @@ export class JsonFormsElement extends HTMLElement {
     return this._store;
   }
 
+  setInnerComponent(InnerComponent: any, parameters = {}) {
+    this.InnerComponent = InnerComponent;
+    this.innerComponentParameters = parameters;
+  }
+
   private render(): void {
     if (!this.allowDynamicUpdate) {
       return;
@@ -133,9 +140,10 @@ export class JsonFormsElement extends HTMLElement {
 
     ReactDOM.render(
       <Provider store={this._store} key={`${storeId}-store`}>
-        <JsonForms />
+        <this.InnerComponent {...this.innerComponentParameters} />
       </Provider>,
       this
     );
   }
+
 }

@@ -37,3 +37,12 @@ export const matchContainmentProperty =
     return _.head(filtered);
   }
 };
+
+export interface StringMap {
+  [property: string]: string;
+}
+
+export interface ModelMapping {
+  attribute: string;
+  mapping: StringMap;
+}

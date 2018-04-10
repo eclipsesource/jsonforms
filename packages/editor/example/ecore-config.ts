@@ -1,5 +1,3 @@
-import { EditorConfiguration } from '../src/editor-config';
-import { ecoreSchema } from './schema';
 import {
   annotationView,
   attributeView,
@@ -51,19 +49,13 @@ export const modelMapping = {
   }
 };
 
-export const editorConfig: EditorConfiguration = {
-  dataSchema: ecoreSchema,
-  imageMapping: imageProvider,
-  labelMapping: labelProvider,
-  modelMapping: modelMapping,
-  detailSchemata: {
-    '#annotation': annotationView,
-    '#attribute': attributeView,
-    '#class': eClassView,
-    '#datatype': datatypeView,
-    '#enum': enumView,
-    '#operation': eOperationView,
-    '#package': ePackageView,
-    '#reference': eReferenceView,
-  }
+export const detailSchemata = {
+  '#annotation': annotationView,
+  '#attribute': attributeView,
+  '#class': eClassView,
+  '#datatype': datatypeView,
+  '#enum': enumView,
+  '#operation': eOperationView,
+  '#package': ePackageView,
+  '#reference': eReferenceView,
 };

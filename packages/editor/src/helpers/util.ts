@@ -1,4 +1,15 @@
 import * as _ from 'lodash';
+import {
+  combineReducers,
+  createStore,
+  Store
+} from 'redux';
+import {
+  Actions,
+  jsonformsReducer
+} from '@jsonforms/core';
+import { editorReducer } from '../reducers/index';
+
 /**
  * Resolves the given local data path against the root data.
  *
@@ -37,4 +48,51 @@ export const indexFromPath = (path: string): number => {
  */
 export const parentPath = (path: string): string => {
   return path.substring(0, path.lastIndexOf('.'));
+};
+
+// TODO instead of this method with lots of parameters use a fluent pattern
+//      that allows to configure each parameter with a separate method call.
+/**
+ * Inits a store for a json editor
+ *
+ * @param data The initial data
+ * @param schema The root JSON Schema
+ * @param uischema The UI Schema
+ * @param fields The renderer fields (e.g. vanilla or material)
+ * @param renderers The renderer set (e.g. vanilla or material)
+ * @param imageMapping The image mapping for the tree's icons
+ * @param labelMapping The label mapping for the labels shown in the tree
+ * @param modelMapping The model mapping
+ * @param uiSchemata The object containing the UI Schemata for the data types displayed by the
+ *                   editor. The keys are the schema ids and the values the actual UI Schemata
+ */
+export const createEditorStore = (
+  data = {},
+  schema,
+  uischema,
+  fields,
+  renderers,
+  imageMapping?,
+  labelMapping?,
+  modelMapping?,
+  uiSchemata = {}): Store<any> => {
+  const store = createStore(
+    combineReducers({ jsonforms: jsonformsReducer({ editor: editorReducer }) }),
+    {
+        jsonforms: {
+          renderers,
+          fields,
+          editor: {
+            imageMapping,
+            labelMapping,
+            modelMapping,
+            uiSchemata
+          }
+        }
+      }
+  );
+
+  store.dispatch(Actions.init(data, schema, uischema));
+
+  return store;
 };

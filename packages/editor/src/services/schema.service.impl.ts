@@ -15,7 +15,7 @@ import { findAllRefs } from '@jsonforms/core/lib/util/resolvers';
 import { resolveLocalData } from '../helpers/util';
 import { RS_PROTOCOL } from '../resources/resource-set';
 import { Resources } from '../resources/resources';
-import { JsonEditor, ModelMapping } from '../jsoneditor';
+import { ModelMapping } from '../helpers/containment.util';
 import { EditorContext } from '../editor-context';
 
 const ajv = new AJV({ jsonPointers: true });
@@ -124,7 +124,8 @@ const getReferenceTargetData = (href: string): Object => {
     return null;
   } else if (_.startsWith(href, '#') || (href.match(/\{.*\}/) !== null)) {
     // local data
-    rootData = JsonEditor.rootData;
+    // FIXME get the editor's root data.E.g. from a static variable or the store or a parameter
+    rootData = {};
     localTemplatePath = href;
   } else {
     console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
@@ -337,7 +338,6 @@ const getSchemaIdForObject = (object: Object, modelMapping: ModelMapping): strin
 
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: { [id: string]: JsonSchema } = {};
-  // private _identifyingProperty: string;
 
   constructor(private editorContext: EditorContext) {
     if (_.isEmpty(editorContext.dataSchema.id)) {

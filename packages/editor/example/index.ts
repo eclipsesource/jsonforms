@@ -1,29 +1,32 @@
-/* tslint:disable:no-invalid-this */
-import '../src/jsoneditor';
-import './ecore-editor';
+import '../src/ide';
+import { JsonEditorIde } from '../src/ide';
+import { createEditorStore } from '../src/helpers/util';
+import { detailSchemata, imageProvider, labelProvider, modelMapping } from './ecore-config';
+import { ecoreSchema } from './schema';
+import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
 import {
-  configureDownloadButton,
-  configureExportButton,
-  configureUploadButton,
-  createExportDataDialog
-} from '../src/toolbar';
-import { EcoreEditor } from './ecore-editor';
+  annotationView,
+  attributeView,
+  datatypeView,
+  eClassView,
+  enumView,
+  eOperationView,
+  ePackageView,
+  eReferenceView
+} from './uischema';
 
 window.onload = () => {
-  const editor = document.createElement('ecore-editor') as EcoreEditor;
-  const exportDialog = createExportDataDialog();
-  document.body.appendChild(exportDialog);
+  const ide = document.createElement('json-editor-ide') as JsonEditorIde;
 
-  const exportButton = document.getElementById('export-data-button') as HTMLButtonElement;
-  configureExportButton(editor, exportButton, exportDialog);
+  const uischema = {
+    'type': 'MasterDetailLayout',
+    'scope': '#'
+  };
 
-  // button triggering the hidden input element - only activate after schemas was loaded
-  const uploadButton = document.getElementById('upload-data-button') as HTMLButtonElement;
-  configureUploadButton(editor, uploadButton);
+  const store = createEditorStore({}, ecoreSchema, uischema, materialFields, materialRenderers,
+                                  imageProvider, labelProvider, modelMapping, detailSchemata);
 
-  // configure button to download model data.
-  const downloadButton = document.getElementById('download-data-button') as HTMLButtonElement;
-  configureDownloadButton(editor, downloadButton);
+  ide.store = store;
 
-  document.getElementById('editor').appendChild(editor);
+  document.getElementById('editor').appendChild(ide);
 };

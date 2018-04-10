@@ -7,6 +7,6 @@
     "node_modules"
   ],
   "files": [
-    "./src/jsoneditor.ts"
+    "./src/index.ts"
   ]
 }
