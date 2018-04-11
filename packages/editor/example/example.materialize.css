@@ -1,5 +1,6 @@
 /*
- * Materialize that we need as long as the Editor is not a React Component and uses Material UI.
+ * Materialize that provides styling for buttons and the navigation bar.
+ * This is needed as long as the demo and ide features are not a React Components and use Material UI.
  *
  * Taken from Materialize v0.100.2 (http://materializecss.com)
  * Copyright 2014-2017 Materialize

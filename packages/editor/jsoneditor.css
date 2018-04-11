@@ -1,12 +1,8 @@
 :root {
-    /*--jsf-main-bg-color: white;*/
     --jsf-modest-bg-color: #ee6e73;
     --jsf-border-color: lightgray;
     --jsf-modest-bg-highlight-color: #26a69a;
     --jsf-validation-color: #F44336;
-    /*--jsf-main-fg-color: black;*/
-    /*background-color: var(--jsf-main-bg-color);*/
-    /*color: var(--jsf-main-fg-color);*/
 }
 
 #toolbar {
@@ -231,22 +227,8 @@ jsf-treeMasterDetail {
   width: -webkit-fill-available;
   margin-top: 20px;
 }
-/*temporary fix*/
-/*.tree-master li > div {
-  min-height: 1.25em;
-}
-.tree-master li::after {
-  top:-0.625em;
-}
-
-.label .jse-tree-element-text {
-  float: left;
-  min-width: 2em;
-  min-height: 1em;
-}*/
 
 /* Drag and Drop */
-
 /* Create border for possible drag and drop drop-zones */
 
 .jsf-editor-dnd-target-valid,

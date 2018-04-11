@@ -22,17 +22,16 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js"]
   },
   devServer: {
-    contentBase: ['./src','./icons', './example'],
+    contentBase: ['./src','./example/icons', './example'],
     port: 8080
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new copyWebpackPlugin([
       {from: '../examples/vendor/native-shim.js', to: 'assets/native-shim.js' },
-      {from: '../examples/example.css', to: 'assets/jsonforms-example.css'},
-      // {from: '../../node_modules/materialize-css/dist/fonts', to: 'fonts'},
+      // {from: '../examples/example.css', to: 'assets/jsonforms-example.css'},
       {from: './jsoneditor.css', to: 'assets/jsoneditor.css' },
-      {from: './jsoneditor.materialize.css', to: 'assets/jsoneditor.materialize.css' }
+      {from: './example/example.materialize.css', to: 'assets/example.materialize.css' }
     ])
   ],
   module: {

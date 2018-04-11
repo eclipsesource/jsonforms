@@ -5,17 +5,18 @@ JSONForms eliminates the tedious task of writing fully-featued forms by hand by 
 
 # Editor Package
 This repository contains a re-usable tree component that renders a tree-master-detail JSON editor.
-Furthermore, the repository contains an IDE webcomponent that additionally configures 3 buttons to access the data shown in the tree:
+The repository contains an IDE webcomponent that additionally configures 3 buttons to access the data shown in the tree:
 - A download button
 - An export button that shows the data in a dialog
 - A load button that opens a native file selection dialog to load a file from the user's harddrive
+
+Additionally, the package contains a small runtime demo showing an editor for users and tasks.
 
 ## Build
 Run `npm install` to install dependencies.
 Run `npm run build` to build the module. The build results are located in `/dist/`.
 
 ## Run Demo
-If not already done, run `npm install` to install dependencies.
 Run `npm run dev` to start the standalone editor. It is available at http://localhost:8080/
 
 # License
