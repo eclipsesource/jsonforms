@@ -123,6 +123,13 @@ export class JsonFormsElement extends HTMLElement {
     return this._store;
   }
 
+  /**
+   * Set the inner component used by this json forms element.
+   * By default the JsonForms component is used.
+   *
+   * @param InnerComponent The component to use instead of JsonForms
+   * @param parameters The parameters used when instantiating the given component
+   */
   setInnerComponent(InnerComponent: any, parameters = {}) {
     this.InnerComponent = InnerComponent;
     this.innerComponentParameters = parameters;
