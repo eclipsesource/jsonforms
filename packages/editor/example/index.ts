@@ -13,7 +13,7 @@ window.onload = () => {
     'scope': '#'
   };
 
-  const store = createEditorStore({ '_type': 'root' }, taskSchema, uischema, materialFields,
+  const store = createEditorStore({}, taskSchema, uischema, materialFields,
                                   materialRenderers, imageProvider, labelProvider, modelMapping,
                                   detailSchemata);
 

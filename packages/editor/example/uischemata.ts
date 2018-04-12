@@ -52,5 +52,3 @@ export const taskView = {
     }
   ]
 };
-
-export const rootView = {};

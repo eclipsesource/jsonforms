@@ -80,7 +80,6 @@ export const configureDownloadButton = (editor: Editor, downloadButton: HTMLElem
     a.href = URL.createObjectURL(file);
     a.download = 'download.json';
     a.click();
-    // TODO a.remove() ?
   };
 };
 

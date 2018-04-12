@@ -16,13 +16,13 @@ export const matchContainmentProperty =
   if (properties.length === 1) {
     return properties[0];
   }
-  if (!_.isEmpty(  modelMapping) &&
-    !_.isEmpty(  modelMapping.mapping)) {
+  if (!_.isEmpty(modelMapping) &&
+    !_.isEmpty(modelMapping.mapping)) {
     const filtered = properties.filter(property => {
       // only use filter criterion if the checked value has the mapped attribute
-      if (data[  modelMapping.attribute]) {
+      if (data[modelMapping.attribute]) {
         return property.schema.id ===   modelMapping.
-          mapping[data[  modelMapping.attribute]];
+          mapping[data[modelMapping.attribute]];
       }
 
       // NOTE if mapped attribute is not present do not filter out property

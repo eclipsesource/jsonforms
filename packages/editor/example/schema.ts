@@ -1,22 +1,22 @@
 export const taskSchema = {
   'type': 'object',
-  'id': '#rootcontainer',
-  'additionalProperties': false,
+  'id': '#userGroup',
   'properties': {
     '_type': {
       'type': 'string',
-      'default': 'root'
+      'default': 'userGroup'
     },
-    'content': {
+    'label': {
+      'type': 'string'
+    },
+    'users': {
       'type': 'array',
       'items': {
-        'anyOf': [
-          { '$ref': '#/definitions/userGroup' },
-          { '$ref': '#/definitions/user'}
-        ]
+        '$ref': '#/definitions/user'
       }
     }
   },
+  'additionalProperties': false,
   'definitions': {
     'task': {
       'type': 'object',
@@ -78,26 +78,6 @@ export const taskSchema = {
         }
       },
       'required': [ 'name' ],
-      'additionalProperties': false
-    },
-    'userGroup': {
-      'type': 'object',
-      'id': '#userGroup',
-      'properties': {
-        '_type': {
-          'type': 'string',
-          'default': 'userGroup'
-        },
-        'label': {
-          'type': 'string'
-        },
-        'users': {
-          'type': 'array',
-          'items': {
-            '$ref': '#/definitions/user'
-          }
-        }
-      },
       'additionalProperties': false
     }
   }

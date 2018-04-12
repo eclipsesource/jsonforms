@@ -1,10 +1,9 @@
-import { rootView, taskView, userGroupView, userView } from './uischemata';
+import { taskView, userGroupView, userView } from './uischemata';
 
 export const labelProvider = {
   '#user': 'name',
   '#userGroup': 'label',
   '#task': 'name',
-  '#rootcontainer': '_type'
 };
 
 export const imageProvider = {
@@ -26,5 +25,4 @@ export const detailSchemata = {
   '#task': taskView,
   '#user': userView,
   '#userGroup': userGroupView,
-  '#rootcontainer': rootView
 };
