@@ -5,9 +5,15 @@ export const schema = {
   properties: {
     price: {
       type: 'number',
-      maximum: 300,
+      maximum: 100,
       minimum: 1,
       default: 50
+    },
+    age: {
+      type: 'integer'
+    },
+    height: {
+      type: 'number'
     }
   },
 };
@@ -25,6 +31,14 @@ export const uischema = {
             text: 'Price'
           }
         },
+        {
+          type: 'Control',
+          scope: '#/properties/age'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/height'
+        }
       ]
     },
   ]

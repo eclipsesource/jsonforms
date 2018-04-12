@@ -3,17 +3,17 @@ import { registerExamples } from './register';
 export const schema = {
   type: 'object',
   properties: {
-    address: {
+    zipCode: {
       type: 'string',
-      maxLength: 29
+      maxLength: 5
     },
-    addressWithoutTrim: {
+    zipCodeWithoutTrim: {
       type: 'string',
-      maxLength: 29
+      maxLength: 5
     },
-    addressWithoutRestrict: {
+    zipCodeWithoutRestrict: {
       type: 'string',
-      maxLength: 29
+      maxLength: 5
     }
   }
 };
@@ -26,8 +26,8 @@ export const uischema = {
       elements: [
         {
           type: 'Control',
-          scope: '#/properties/address',
-          label: 'Address',
+          scope: '#/properties/zipCode',
+          label: 'ZIP Code (with trim and restrict options)',
           options: {
             trim: true,
             restrict: true
@@ -35,8 +35,8 @@ export const uischema = {
         },
         {
           type: 'Control',
-          scope: '#/properties/addressWithoutTrim',
-          label: 'Address (without trimming)',
+          scope: '#/properties/zipCodeWithoutTrim',
+          label: 'ZIP Code (without trimming)',
           options: {
             trim: false,
             restrict: true
@@ -44,8 +44,8 @@ export const uischema = {
         },
         {
           type: 'Control',
-          scope: '#/properties/addressWithoutRestrict',
-          label: 'Address (without restricting)',
+          scope: '#/properties/zipCodeWithoutRestrict',
+          label: 'ZIP Code (without restricting)',
           options: {
             trim: true,
             restrict: false
@@ -57,9 +57,9 @@ export const uischema = {
 };
 
 export const data = {
-  address: 'Arcisstrasse 21, 80333 Munich',
-  addressWithoutTrim: 'Arcisstrasse 21, 80333 Munich, Germany',
-  addressWithoutRestrict: 'Arcisstrasse 21, 80333 Munich, Germany'
+  zipCode: '12345',
+  zipCodeWithoutTrim: '12345678',
+  zipCodeWithoutRestrict: '12345678'
 };
 
 registerExamples([
