@@ -6,7 +6,9 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^22.2.0",
-		"@types/react": "^16.0.27",
+		"@types/lodash": "^4.14.104",
+		"@types/react": "^16.0.40",
+		"@types/react-dnd": "^2.0.36",
 		"ava": "^0.24.0",
 		"babel-loader": "^7.1.2",
 		"coveralls": "^3.0.0",
