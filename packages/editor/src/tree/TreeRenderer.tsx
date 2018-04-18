@@ -298,7 +298,9 @@ const mapDispatchToProps = dispatch => ({
 
 const DnDTreeMasterDetail =
   DragDropContext(HTML5Backend)(TreeMasterDetail);
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DnDTreeMasterDetail);
+
+export const TreeRenderer = connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(DnDTreeMasterDetail);
+export default TreeRenderer;
