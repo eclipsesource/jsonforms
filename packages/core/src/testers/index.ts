@@ -309,7 +309,7 @@ export const isDateTimeControl = and(uiTypeIs('Control'), formatIs('date-time'))
  * is an array of objects.
  * @type {Tester}
  */
-export const isArrayObjectControl = and(
+export const isObjectArrayControl = and(
   uiTypeIs('Control'),
   schemaMatches(schema =>
     !_.isEmpty(schema)
@@ -317,8 +317,26 @@ export const isArrayObjectControl = and(
     && !_.isEmpty(schema.items)
     && !Array.isArray(schema.items) // we don't care about tuples
   ),
-  schemaSubPathMatches('items', schema =>
-    schema.type === 'object'
+  schemaSubPathMatches('items', schema => schema.type === 'object')
+);
+
+/**
+ * Synonym for isObjectArrayControl
+ */
+export const isArrayObjectControl = isObjectArrayControl;
+
+/**
+ * Tests whether the given UI schema is of type Control and if the schema
+ * is an array of a primitive type.
+ * @type {Tester}
+ */
+export const isPrimitiveArrayControl = and(
+  uiTypeIs('Control'),
+  schemaMatches(schema =>
+    !_.isEmpty(schema)
+    && schema.type === 'array'
+    && !_.isEmpty(schema.items)
+    && !Array.isArray(schema.items) // we don't care about tuples
   )
 );
 

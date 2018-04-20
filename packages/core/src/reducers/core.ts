@@ -76,7 +76,7 @@ export const coreReducer = (
         return state;
       } else if (action.path === '') {
         // empty path is ok
-        const result = action.updater(state.data);
+        const result = action.updater(_.cloneDeep(state.data));
 
         if (result === undefined || result === null) {
           return {

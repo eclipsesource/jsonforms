@@ -53,25 +53,22 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
   render() {
     const { visible } = this.props;
     const numSelected = this.state.selected ? _.filter(this.state.selected, v => v).length : 0;
+
     const tableProps = {
       selectAll: this.selectAll,
       select: this.select,
       isSelected: this.isSelected,
       numSelected,
+      openConfirmDeleteDialog: this.openConfirmDeleteDialog,
       ...this.props
     };
 
-    const toolbarProps = {
-      openConfirmDeleteDialog: this.openConfirmDeleteDialog,
-      numSelected,
-      ...this.props
-    };
     const selectedCount = _.filter(this.state.selected, v => v).length;
 
     return (
       <Grid container direction='column' hidden={{ xsUp: !visible }} spacing={0}>
-        <Grid item>
-          <TableToolbar {...toolbarProps}/>
+        <Grid item hidden={{ xsUp: this.props.scopedSchema.type !== 'object' }}>
+          <TableToolbar {...tableProps} />
         </Grid>
         <Grid item>
           <MaterialTableControl {...tableProps}/>

@@ -26,7 +26,8 @@ import test from 'ava';
 import {
   and,
   formatIs,
-  isArrayObjectControl,
+  isPrimitiveArrayControl,
+  isObjectArrayControl,
   isBooleanControl,
   isDateControl,
   isEnumControl,
@@ -246,30 +247,54 @@ test('or should allow to compose multiple testers', t => {
     optionIs('slider', true)
   )(uischema, schema));
 });
-test('tester isArrayObjectControl', t => {
-  t.false(isArrayObjectControl({type: 'Foo'}, null));
+
+test('tester isPrimitiveArrayControl', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.false(isArrayObjectControl(control, undefined), 'No Schema not checked!');
+  t.true(
+    isPrimitiveArrayControl(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: {type: 'integer'}
+          }
+        }
+      }
+    ),
+    'Array Schema Type with wrong item type not checked!'
+  );
+});
+
+
+test('tester isObjectArrayControl', t => {
+  t.false(isObjectArrayControl({type: 'Foo'}, null));
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.false(isObjectArrayControl(control, undefined), 'No Schema not checked!');
 
   t.false(
-    isArrayObjectControl(
+    isObjectArrayControl(
       control,
       {type: 'object', properties: {bar: {type: 'integer'}}}
     ),
     'Wrong Schema Type not checked!'
   );
   t.false(
-    isArrayObjectControl(
+    isObjectArrayControl(
       control,
       {type: 'object', properties: {foo: {type: 'array'}}}
     ),
     'Array Schema Type without items not checked!'
   );
   t.false(
-    isArrayObjectControl(
+    isObjectArrayControl(
       control,
       {
         type: 'object',
@@ -287,7 +312,7 @@ test('tester isArrayObjectControl', t => {
     'Array Schema Type with tuples not checked!'
   );
   t.false(
-    isArrayObjectControl(
+    isObjectArrayControl(
       control,
       {
         type: 'object',
@@ -316,7 +341,7 @@ test('tester isArrayObjectControl', t => {
       }
     }
   };
-  t.true(isArrayObjectControl(control, schema));
+  t.true(isObjectArrayControl(control, schema));
 });
 
 test('isBooleanControl', t => {

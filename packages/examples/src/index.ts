@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as array from './arrays';
+import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as day1 from './day1';
 import * as day2 from './day2';
@@ -45,6 +46,7 @@ import * as text from './text';
 import * as numbers from './numbers';
 
 export {
+  stringArray,
   array,
   categorization,
   day1,

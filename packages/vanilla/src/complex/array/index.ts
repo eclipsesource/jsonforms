@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import {
-  isArrayObjectControl,
+  isObjectArrayControl,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -35,6 +35,6 @@ export {
   ArrayControlRenderer
 };
 
-export const arrayControlTester: RankedTester = rankWith(2, isArrayObjectControl);
+export const arrayControlTester: RankedTester = rankWith(2, isObjectArrayControl);
 
 export default ArrayControlRenderer;
