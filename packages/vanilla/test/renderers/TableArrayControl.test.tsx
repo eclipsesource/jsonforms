@@ -24,6 +24,7 @@
 */
 import '@jsonforms/test';
 import * as React from 'react';
+import * as _ from 'lodash';
 import test from 'ava';
 import { Provider } from 'react-redux';
 import {
@@ -105,7 +106,8 @@ test('render two children', t => {
   t.is(tHead.children.length, 1);
   const headRow = tHead.children.item(0);
   t.is(headRow.tagName, 'TR');
-  t.is(headRow.children.length, 2);
+  // two data columns + validation column
+  t.is(headRow.children.length, 3);
 
   const headColumn1 = headRow.children.item(0);
   t.is(headColumn1.tagName, 'TH');
@@ -120,10 +122,11 @@ test('render two children', t => {
   t.is(tBody.children.length, 1);
   const bodyRow = tBody.children.item(0);
   t.is(bodyRow.tagName, 'TR');
-  t.is(bodyRow.children.length, 2);
+  // two data columns + validation column
+  t.is(bodyRow.children.length, 3);
 
   const tds = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'td');
-  t.is(tds.length, 2);
+  t.is(tds.length, 3);
   t.is(tds[0].children.length, 1);
   t.is(tds[0].children[0].id, '#/properties/x');
   t.is(tds[1].children.length, 1);
@@ -167,7 +170,8 @@ test('render empty data', t => {
 
   const headRow = tHead.children.item(0);
   t.is(headRow.tagName, 'TR');
-  t.is(headRow.children.length, 2);
+  // two data columns + validation column
+  t.is(headRow.children.length, 3);
 
   const headColumn1 = headRow.children.item(0);
   t.is(headColumn1.tagName, 'TH');
@@ -208,6 +212,46 @@ test('render new child (empty init data)', t => {
   t.is(getData(store.getState()).test.length, 1);
 });
 
+test('render new child (undefined data)', t => {
+  const store = initJsonFormsVanillaStore({
+    data: { test: undefined },
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+    </Provider>
+  );
+
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
+  t.not(control, undefined);
+
+  const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
+  TestUtils.Simulate.click(button);
+  t.is(getData(store.getState()).test.length, 1);
+});
+
+test('render new child (null data)', t => {
+  const store = initJsonFormsVanillaStore({
+    data: { test: null },
+    schema: t.context.schema,
+    uischema: t.context.uischema
+  });
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+    </Provider>
+  );
+
+  const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
+  t.not(control, undefined);
+
+  const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
+  TestUtils.Simulate.click(button);
+  t.is(getData(store.getState()).test.length, 1);
+});
+
 test('render new child', t => {
   const store = initJsonFormsVanillaStore({
     data: t.context.data,
@@ -223,6 +267,39 @@ test('render new child', t => {
   const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
   TestUtils.Simulate.click(button);
   t.is(getData(store.getState()).test.length, 2);
+});
+
+test('render primitives ', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      test: {
+        type: 'array',
+        items: {
+          type: 'string',
+          maxLength: 3
+        }
+      }
+    }
+  };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/test'
+  };
+  const store = initJsonFormsVanillaStore({
+    data: { test: ['foo', 'bars'] },
+    schema,
+    uischema
+  });
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <TableArrayControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
+  const lastRow = _.last(rows) as HTMLTableRowElement;
+  t.is(lastRow.children.item(1).textContent, 'should NOT be longer than 3 characters');
+  t.is(rows.length, 3);
 });
 
 test('update via action', t => {
@@ -338,7 +415,7 @@ test('tester with primitive item type', t => {
         }
       }
     ),
-    -1
+    3
   );
 });
 

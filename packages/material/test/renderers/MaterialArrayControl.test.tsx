@@ -93,6 +93,36 @@ describe('Material array control', () => {
     expect(rows.length).toBe(3);
   });
 
+  it('should render primitives', () => {
+    const store = initJsonFormsStore();
+    // re-init
+    const data = { test: ["foo", "bar"] };
+    const schema = {
+      type: 'object',
+      properties: {
+        test: {
+          type: 'array',
+          items: { type: 'string' }
+        }
+      }
+    };
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/test'
+    };
+    store.dispatch(Actions.init(data, schema, uischema));
+
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+
+    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
+    // header + 2 data entries
+    expect(rows.length).toBe(3);
+  });
+
   it('should delete an item', () => {
     const store = initJsonFormsStore();
     const tree = TestUtils.renderIntoDocument(
@@ -137,6 +167,7 @@ describe('Material array control', () => {
     // select all
     TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
 
+    expect(cboxes.length).toBe(5);
     expect(_.filter(cboxes, cbox => cbox.checked).length).toBe(4);
     TestUtils.Simulate.change(currentlyChecked, {'target': {'checked': false}});
     // keep select all state

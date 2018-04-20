@@ -28,27 +28,51 @@ import Checkbox from 'material-ui/Checkbox';
 import Grid from 'material-ui/Grid';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import {
-    ControlElement,
-    Paths
+  ControlElement,
+  Paths
 } from '@jsonforms/core';
 import { DispatchField } from '@jsonforms/react';
 import { ValidationIcon } from './ValidationIcon';
+import { TableToolbar } from './TableToolbar';
 
-const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) =>
-  Object.keys(scopedSchema.properties)
-    .filter(prop => scopedSchema.properties[prop].type !== 'array')
-    .map(prop => {
-      const cellPath = Paths.compose(rowPath, prop);
-      const props = {
-        cellProperty: prop,
-        scopedSchema,
-        rowPath,
-        cellPath,
-        errors: cellErrors
-      };
+const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) => {
+  if (scopedSchema.type === 'object') {
+    return Object.keys(scopedSchema.properties)
+      .filter(prop => scopedSchema.properties[prop].type !== 'array')
+      .map(prop => {
+        const cellPath = Paths.compose(rowPath, prop);
+        const props = {
+          cellProperty: prop,
+          scopedSchema,
+          rowPath,
+          cellPath,
+          errors: cellErrors
+        };
 
-      return <Cell key={cellPath} {...props}/>;
-    });
+        return <Cell key={cellPath} {...props} />;
+      });
+  } else {
+    /*primitives*/
+    const cellPath = rowPath;
+    const props = {
+      scopedSchema,
+      rowPath,
+      cellPath,
+      errors: cellErrors
+    };
+
+    return <Cell key={cellPath} {...props}/>;
+  }
+};
+
+const generateHeaderCellForPrimitives = toolbarProps => {
+
+  return (
+    <TableCell>
+      <TableToolbar {...toolbarProps} />
+    </TableCell>
+  );
+};
 
 const EmptyTable = () => (
   <TableRow>
@@ -66,7 +90,7 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema
   const createControlElement = (key: string): ControlElement => ({
     type: 'Control',
     label: false,
-    scope: `#/properties/${key}`
+    scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
   });
 
   return (
@@ -113,6 +137,7 @@ export const MaterialTableControl = props =>  {
     const { data, path, scopedSchema, numSelected, selectAll } = props;
     const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
     const rowCount = data ? data.length : 0;
+    const toolbarProps = { numSelected, ...props };
 
     return (
         <Table>
@@ -125,7 +150,9 @@ export const MaterialTableControl = props =>  {
                   onChange={selectAll}
                 />
               </TableCell>
-              {generateCells(TableHeaderCell, scopedSchema, path)}
+            {scopedSchema.type === 'object' ?
+              generateCells(TableHeaderCell, scopedSchema, path) :
+              generateHeaderCellForPrimitives(toolbarProps)}
             </TableRow>
           </TableHead>
           <TableBody>

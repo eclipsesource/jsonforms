@@ -24,7 +24,11 @@
 */
 import test from 'ava';
 import * as _ from 'lodash';
-import { mapDispatchToControlProps, mapStateToControlProps } from '../../src/util';
+import {
+  createDefaultValue,
+  mapDispatchToControlProps,
+  mapStateToControlProps
+} from '../../src/util';
 import configureStore from 'redux-mock-store';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 
@@ -256,4 +260,39 @@ test('mapDispatchToControlProps', t => {
   t.is(updateAction.type, UPDATE_DATA);
   t.is(updateAction.path, 'foo');
   t.is(updateAction.updater(), 42);
+});
+
+test('createDefaultValue', t => {
+  t.true(
+    _.isDate(createDefaultValue(
+      {
+        type: 'string',
+        format: 'date'
+      }
+    ))
+  );
+  t.true(
+    _.isDate(
+      createDefaultValue({
+        type: 'string',
+        format: 'date-time'
+      })
+    )
+  );
+  t.true(
+    _.isDate(createDefaultValue(
+      {
+        type: 'string',
+        format: 'time'
+      }
+    ))
+  );
+  t.is(createDefaultValue({ type: 'string' }), '');
+  t.is(createDefaultValue({ type: 'number' }), 0);
+  t.falsy(createDefaultValue({ type: 'boolean' }));
+  t.is(createDefaultValue({ type: 'integer' }), 0);
+  t.deepEqual(createDefaultValue({ type: 'array' }), []);
+  t.is(createDefaultValue({ type: 'null' }), null);
+  t.deepEqual(createDefaultValue({ type: 'object' }), {});
+  t.deepEqual(createDefaultValue({ type: 'something' }), {});
 });

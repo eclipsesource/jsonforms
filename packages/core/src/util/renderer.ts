@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import * as _ from 'lodash';
-import { JsonSchema } from '../models/jsonSchema';
 import {
   composeWithUi,
   createLabelDescriptionFrom,
@@ -32,6 +31,7 @@ import {
   Resolve
 } from '../util';
 import { RankedTester } from '../testers';
+import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import {
   getConfig,
@@ -376,7 +376,7 @@ export const mapStateToTableControlProps = (state, ownProps): StatePropsOfTable 
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfTable {
-  addItem(path: string): void;
+  addItem(path: string): () => void;
   removeItems(path: string, toDelete: any[]);
 }
 
@@ -388,23 +388,55 @@ export interface TableControlProps extends StatePropsOfTable, DispatchPropsOfTab
 }
 
 /**
+ * Create a default value based on the given scheam.
+ * @param schema the schema for which to create a default value.
+ * @returns {any}
+ */
+export const createDefaultValue = schema => {
+    switch (schema.type) {
+        case 'string':
+            if (schema.format === 'date-time'
+                || schema.format === 'date'
+                || schema.format === 'time') {
+                return new Date();
+            }
+            return '';
+        case 'integer':
+        case 'number':
+            return 0;
+        case 'boolean':
+            return false;
+        case 'array':
+            return [];
+        case 'null':
+            return null;
+        default:
+            return {};
+    }
+};
+
+/**
  * Map dispatch to table control props
  *
  * @param dispatch the store's dispatch method
+ * @param ownProps own properties
  * @returns {DispatchPropsOfTable} dispatch props for a table control
  */
-export const mapDispatchToTableControlProps = (dispatch): DispatchPropsOfTable => ({
+export const mapDispatchToTableControlProps = (dispatch, ownProps): DispatchPropsOfTable => ({
   addItem: (path: string) => () => {
     dispatch(
       update(
         path,
         array => {
+          const schemaPath = ownProps.uischema.scope + '/items';
+          const resolvedSchema = Resolve.schema(ownProps.schema, schemaPath);
+          const newValue = createDefaultValue(resolvedSchema);
+
           if (array === undefined || array === null) {
-            return [{}];
+            return [newValue];
           }
 
-          array.push({});
-
+          array.push(newValue);
           return array;
         }
       )
@@ -415,10 +447,8 @@ export const mapDispatchToTableControlProps = (dispatch): DispatchPropsOfTable =
       update(
         path,
         array => {
-          const clone = _.clone(array);
-          toDelete.forEach(s => clone.splice(clone.indexOf(s), 1));
-
-          return clone;
+          toDelete.forEach(s => array.splice(array.indexOf(s), 1));
+          return array;
         }
       )
     );

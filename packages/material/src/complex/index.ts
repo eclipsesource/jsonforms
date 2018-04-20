@@ -23,11 +23,16 @@
   THE SOFTWARE.
 */
 import {
-  isArrayObjectControl,
+  isObjectArrayControl,
+  isPrimitiveArrayControl,
+  or,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
 import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
 
-export const materialArrayControlTester: RankedTester = rankWith(3, isArrayObjectControl);
+export const materialArrayControlTester: RankedTester = rankWith(
+  3,
+  or(isObjectArrayControl, isPrimitiveArrayControl)
+);
 export { MaterialArrayControlRenderer };

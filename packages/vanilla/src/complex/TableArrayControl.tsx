@@ -26,7 +26,6 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
   ControlElement,
-  ControlProps,
   formatErrorMessage,
   Helpers,
   isPlainLabel,
@@ -34,6 +33,7 @@ import {
   mapStateToTableControlProps,
   Paths,
   RankedTester,
+  TableControlProps,
   Test,
 } from '@jsonforms/core';
 import { connectToJsonForms, DispatchField, RendererComponent } from '@jsonforms/react';
@@ -45,7 +45,9 @@ const {
 } = Helpers;
 
 const {
-  isArrayObjectControl,
+  or,
+  isObjectArrayControl,
+  isPrimitiveArrayControl,
   rankWith
 } = Test;
 
@@ -54,15 +56,16 @@ const {
  * option is set.
  * @type {RankedTester}
  */
-export const tableArrayControlTester: RankedTester = rankWith(3, isArrayObjectControl);
+export const tableArrayControlTester: RankedTester = rankWith(
+    3,
+    or(isObjectArrayControl, isPrimitiveArrayControl)
+);
 
-export interface TableProps extends ControlProps {
-  addItem(path: string): () => void;
-  removeItems(path: string, toDelete: any[]): () => void;
+export interface VanillaTableProps extends TableControlProps {
   getStyleAsClassName(style: string): string;
 }
 
-class TableArrayControl extends RendererComponent<TableProps, void> {
+class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
 
   render() {
     const {
@@ -75,6 +78,7 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
       errors,
       label,
       getStyleAsClassName,
+      childErrors
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -83,10 +87,10 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
     const buttonClass = getStyleAsClassName('array.table.button');
     const controlClass = [getStyleAsClassName('array.table'),
       convertToValidClassName(controlElement.scope)].join(' ');
-    const createControlElement = (key: string): ControlElement => ({
+    const createControlElement = (key = ''): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: `#/properties/${key}`
+      scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
     });
     const labelObject = createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;
@@ -110,42 +114,71 @@ class TableArrayControl extends RendererComponent<TableProps, void> {
           <thead>
           <tr>
             {
-              _(scopedSchema.properties)
-                .keys()
-                .filter(prop => scopedSchema.properties[prop].type !== 'array')
-                .map(prop => <th key={prop}>{prop}</th>)
-                .value()
+              scopedSchema.properties ?
+                _(scopedSchema.properties)
+                  .keys()
+                  .filter(prop => scopedSchema.properties[prop].type !== 'array')
+                  .map(prop => <th key={prop}>{prop}</th>)
+                  .value()
+                : <th>Items</th>
             }
+            <th>
+              Valid
+            </th>
           </tr>
           </thead>
           <tbody>
           {
             (!data || !Array.isArray(data) || data.length === 0) ?
-              <tr><td>No data</td></tr> : data.map((_child, index) => {
-              const childPath = Paths.compose(path, `${index}`);
+              <tr><td>No data</td></tr> :
+              data.map((_child, index) => {
+                const childPath = Paths.compose(path, `${index}`);
+                const errorsPerEntry = _.filter(
+                  childErrors,
+                  error => error.dataPath.startsWith(childPath)
+                );
 
-              return (
-                <tr key={childPath}>
-                  {
-                    _.chain(scopedSchema.properties)
-                      .keys()
-                      .filter(prop => scopedSchema.properties[prop].type !== 'array')
-                      .map((prop, idx) => {
-                        return (
-                          <td key={Paths.compose(childPath, idx.toString())}>
-                            <DispatchField
-                              schema={scopedSchema}
-                              uischema={createControlElement(prop)}
-                              path={childPath}
-                            />
-                          </td>
-                        );
-                      })
-                      .value()
-                  }
-                </tr>
-              );
-            })
+                return (
+                  <tr key={childPath}>
+                    {
+                      scopedSchema.properties ?
+                        _.chain(scopedSchema.properties)
+                          .keys()
+                          .filter(prop => scopedSchema.properties[prop].type !== 'array')
+                          .map(prop => {
+                            const childPropPath = Paths.compose(childPath, prop.toString());
+
+                            return (
+                              <td key={childPropPath}>
+                                <DispatchField
+                                  schema={scopedSchema}
+                                  uischema={createControlElement(prop)}
+                                  path={childPath}
+                                />
+                              </td>
+                            );
+                          })
+                          .value() :
+                        <td key={Paths.compose(childPath, index.toString())}>
+                          <DispatchField
+                            schema={scopedSchema}
+                            uischema={createControlElement()}
+                            path={childPath}
+                          />
+                        </td>
+                    }
+                    <td>
+                      {
+                        errorsPerEntry ?
+                          <span style={{ color: 'red'}}>
+                            {_.join(errorsPerEntry.map(e => e.message), ' and ')}
+                          </span> :
+                          <span>OK</span>
+                      }
+                    </td>
+                  </tr>
+                );
+              })
           }
           </tbody>
         </table>
