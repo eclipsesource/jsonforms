@@ -8,7 +8,7 @@ import {
   configureExportButton,
   configureUploadButton,
   createExportDataDialog
-} from '../src/toolbar';
+} from './toolbar';
 import { SchemaServiceImpl } from './services/schema.service.impl';
 import { EditorContext } from './editor-context';
 import '@jsonforms/webcomponent';

@@ -52,11 +52,10 @@ export const ExpandArray = (
 ) => {
 
   const data = resolveData(rootData, path);
-  if (data === undefined || data === null) {
+  if (data === undefined || data === null || _.isString(data)) {
     // return 'No data';
     return '';
   }
-
   return (
     data.map((element, index) => {
       const composedPath = Paths.compose(path, index.toString());
