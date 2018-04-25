@@ -109,7 +109,7 @@ const addReference = (schema: JsonSchema, identifyingProperty: string, propName:
  *
  * @return the resolved data containing the reference targets; {null} if the href cannot be resolved
  */
-const getReferenceTargetData = (href: string): Object => {
+const getReferenceTargetData = (data: Object, href: string): Object => {
   let rootData: Object;
   let localTemplatePath: string;
   if (_.startsWith(href, RS_PROTOCOL)) {
@@ -124,8 +124,7 @@ const getReferenceTargetData = (href: string): Object => {
     return null;
   } else if (_.startsWith(href, '#') || (href.match(/\{.*\}/) !== null)) {
     // local data
-    // FIXME get the editor's root data.E.g. from a static variable or the store or a parameter
-    rootData = {};
+    rootData = data;
     localTemplatePath = href;
   } else {
     console.error(`'${href}' is not a supported URI to specify reference targets in a link block.`);
@@ -142,13 +141,13 @@ const getReferenceTargetData = (href: string): Object => {
 };
 
 // reference resolvement for id based references
-const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Object },
+const resolveRef = (schema: JsonSchema, findTargets: (data: Object) => { [key: string]: Object },
                     propName: string) => (data: Object): { [key: string]: Object } => {
     if (_.isEmpty(data)) {
       return {};
     }
     // get all objects that could be referenced.
-    const candidates = findTargets();
+    const candidates = findTargets(data);
     const result = {};
     if (_.isEmpty(schema.properties[propName].type)) {
       throw Error(`The schema of the property '${propName}' does not specify a schema type.`);
@@ -182,8 +181,8 @@ const resolveRef = (schema: JsonSchema, findTargets: () => { [key: string]: Obje
 
 const getFindReferenceTargetsFunction =
   (href: string, schemaId: string, idProp: string, modelMapping?: ModelMapping) =>
-    (): { [key: string]: Object } => {
-      const candidates = getReferenceTargetData(href) as Object[];
+    (data: Object): { [key: string]: Object } => {
+      const candidates = getReferenceTargetData(data, href) as Object[];
       if (!_.isEmpty(candidates)) {
         const result = {};
         for (const candidate of filterObjectsByType(candidates, schemaId, modelMapping)) {
@@ -261,7 +260,7 @@ const addPathBasedRef = (schema: JsonSchema, propName: string) =>
 
 const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Object)
   : { [key: string]: Object } => {
-  const targetData = getReferenceTargetData(href);
+  const targetData = getReferenceTargetData(data, href);
   const paths = data[pathProperty];
   const result = {};
   if (Array.isArray(paths)) {
@@ -276,9 +275,9 @@ const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Objec
   return result;
 };
 
-const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => ()
+const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema) => (data: Object)
   : { [key: string]: Object } => {
-  const targetData = getReferenceTargetData(href);
+  const targetData = getReferenceTargetData(data, href);
 
   if (href.indexOf('#') > -1) {
     return collectionHelperMap('', targetData, targetSchema);
@@ -347,7 +346,8 @@ export class SchemaServiceImpl implements SchemaService {
   }
 
   getContainmentProperties(schema: JsonSchema): ContainmentProperty[] {
-    return this.getContainment('root', 'root', schema, schema, false, null, null, null);
+    return this.getContainment('root', 'root', schema,
+                               this.editorContext.dataSchema, false, null, null, null);
   }
   hasContainmentProperties(schema: JsonSchema): boolean {
     return this.getContainmentProperties(schema).length !== 0;
@@ -406,7 +406,7 @@ export class SchemaServiceImpl implements SchemaService {
         const variableWrapped = href.match(/\{.*\}/)[0];
         const variable = variableWrapped.substring(1, variableWrapped.length - 1);
 
-        let findRefTargets: () => { [key: string]: Object };
+        let findRefTargets: (data: Object) => { [key: string]: Object };
         let resolveReference: (data: Object) => { [key: string]: Object };
         let addToReference: (data: Object, toAdd: object) => void;
         let idBased: boolean;
