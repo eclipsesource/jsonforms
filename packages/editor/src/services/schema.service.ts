@@ -90,7 +90,7 @@ export interface ReferenceProperty extends Property {
    *         and values are the actual data objects. If there are no available reference targets,
    *         an empty object is returned.
    */
-  findReferenceTargets(): { [key: string]: Object };
+  findReferenceTargets(data: Object): { [key: string]: Object };
 }
 
 export class ContainmentPropertyImpl implements ContainmentProperty {
@@ -137,7 +137,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
     private key: string,
     private name: string,
     private idBased: boolean,
-    private findFunction: () => { [key: string]: Object },
+    private findFunction: (data: Object) => { [key: string]: Object },
     private addFunction: (data: object, valueToAdd: object) => void,
     private getFunction: (data: object) => { [key: string]: Object }
   ) {}
@@ -170,8 +170,8 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   isIdBased(): boolean {
     return this.idBased;
   }
-  findReferenceTargets(): {[key: string]: Object} {
-    return this.findFunction();
+  findReferenceTargets(data: Object): {[key: string]: Object} {
+    return this.findFunction(data);
   }
 }
 
