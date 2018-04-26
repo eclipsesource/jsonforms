@@ -10,6 +10,13 @@ import {
 } from '@jsonforms/core';
 import { editorReducer } from '../reducers/index';
 
+export interface LabelDefinition {
+  /** A constant label value displayed for every object for which this label definition applies. */
+  constant?: string;
+  /** The property name that is used to get a variable part of an object's label. */
+  property?: string;
+}
+
 /**
  * Resolves the given local data path against the root data.
  *

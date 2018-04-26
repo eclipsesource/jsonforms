@@ -22,7 +22,7 @@ import {
   DropResult,
   moveListItem,
   Types } from './dnd.util';
-import { indexFromPath } from '../helpers/util';
+import { indexFromPath, LabelDefinition } from '../helpers/util';
 import { getImageMapping, getLabelMapping } from '../reducers';
 
 /**
@@ -35,8 +35,26 @@ const RESET_SELECTION_DELAY = 40;
 
 const getNamingFunction =
   (schema: JsonSchema, labelMapping) => (element: Object): string => {
+
     if (!_.isEmpty(labelMapping) && labelMapping[schema.id] !== undefined) {
-      return element[labelMapping[schema.id]];
+
+      if (typeof labelMapping[schema.id] === 'string') {
+        // To be backwards compatible: a simple string is assumed to be a property name
+        return element[labelMapping[schema.id]];
+      }
+      if (typeof labelMapping[schema.id] === 'object') {
+        const info =  labelMapping[schema.id] as LabelDefinition;
+        let label;
+        if (info.constant !== undefined) {
+          label = info.constant;
+        }
+        if (!_.isEmpty(info.property) && !_.isEmpty(element[info.property])) {
+          label = _.isEmpty(label) ? element[info.property] : `${label} ${element[info.property]}`;
+        }
+        if (label !== undefined) {
+          return label;
+        }
+      }
     }
 
     const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
@@ -89,8 +107,7 @@ const ObjectListItem = (
     <li className={liClasses} key={path}>
       <div>
         {
-          !_.isEmpty(imageMapping) ? <span className={`icon ${imageMapping[schema.id]}`} /> : ''
-        }
+          !_.isEmpty(imageMapping) ? <span className={`icon ${imageMapping[schema.id]}`} /> : ''}
 
         <span
           className='label'
