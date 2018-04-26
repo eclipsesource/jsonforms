@@ -46,9 +46,8 @@
   },
   "devDependencies": {
     "document-register-element": "^1.7.0",
-    "jsdom": "^11.5.1",
+    "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
-    "react-dom": "^16.2.0",
     "redux-mock-store": "1.4.0"
   }
 }

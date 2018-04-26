@@ -53,7 +53,7 @@ export const MaterialLabelRenderer: StatelessRenderer<RendererProps> =
       style.display = 'none';
     }
     return (
-      <Typography type='title' style={style}>
+      <Typography variant='title' style={style}>
         {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
       </Typography>
     );

@@ -37,10 +37,12 @@ import {
 import { connectToJsonForms, Control } from '@jsonforms/react';
 import { DateTimePicker } from 'material-ui-pickers';
 import * as moment from 'moment';
-import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
-import DateRangeIcon from 'material-ui-icons/DateRange';
-import AccessTimeIcon from 'material-ui-icons/AccessTime';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 
 export class MaterialDateTimeControl extends Control<ControlProps, ControlState> {
   render() {
@@ -67,31 +69,33 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     const inputProps = {};
 
     return (
-      <DateTimePicker
-        id={id}
-        label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
-        error={!isValid}
-        style={style}
-        fullWidth={!trim}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-        helperText={!isValid ? errors : description}
-        InputLabelProps={{shrink: true, }}
-        value={data || null}
-        onChange={ datetime =>
-          handleChange(path, datetime ? moment(datetime).format() : '')
-        }
-        format='MM/DD/YYYY h:mm a'
-        clearable={true}
-        disabled={!enabled}
-        autoFocus={uischema.options && uischema.options.focus}
-        leftArrowIcon={<KeyboardArrowLeftIcon />}
-        rightArrowIcon={<KeyboardArrowRightIcon />}
-        dateRangeIcon={<DateRangeIcon />}
-        timeIcon={<AccessTimeIcon />}
-        onClear={() => handleChange(path, '')}
-        InputProps={inputProps}
-      />
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <DateTimePicker
+          id={id}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          error={!isValid}
+          style={style}
+          fullWidth={!trim}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          helperText={!isValid ? errors : description}
+          InputLabelProps={{shrink: true, }}
+          value={data || null}
+          onChange={ datetime =>
+            handleChange(path, datetime ? moment(datetime).format() : '')
+          }
+          format='MM/DD/YYYY h:mm a'
+          clearable={true}
+          disabled={!enabled}
+          autoFocus={uischema.options && uischema.options.focus}
+          leftArrowIcon={<KeyboardArrowLeftIcon />}
+          rightArrowIcon={<KeyboardArrowRightIcon />}
+          dateRangeIcon={<DateRangeIcon />}
+          timeIcon={<AccessTimeIcon />}
+          onClear={() => handleChange(path, '')}
+          InputProps={inputProps}
+        />
+      </MuiPickersUtilsProvider>
     );
   }
 }
