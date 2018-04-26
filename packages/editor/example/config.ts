@@ -1,23 +1,50 @@
 import { taskView, userGroupView, userView } from './uischemata';
 
 export const labelProvider = {
-  '#user': 'name',
-  '#userGroup': 'label',
-  '#task': 'name',
+  '#root': 'label',
+  '#elements': '',
+  '#horizontallayout': '',
+  '#verticallayout': '',
+  '#categorization': '',
+  '#control': 'label',
+  '#category': 'label',
+  '#group': 'label',
+  '#rule': '',
+  '#scope': '',
+  '#labelObject': '',
+  '#options': '',
 };
 
 export const imageProvider = {
-  '#task': 'task',
-  '#user': 'user',
-  '#userGroup': 'userGroup'
+  '#root': 'task',
+  '#elements': 'task',
+  '#categorization': 'task',
+  '#control': 'task',
+  '#category': 'task',
+  '#group': 'task',
+  '#rule': 'task',
+  '#scope': 'task',
+  '#labelObject': 'task',
+  '#options': 'task',
+  '#horizontallayout': 'task',
+  '#verticallayout': 'task',
 };
 
 export const modelMapping = {
-  'attribute': '_type',
+  'attribute': 'type',
   'mapping': {
-    'task': '#task',
-    'user': '#user',
-    'userGroup': '#userGroup'
+    'root': '#root',
+    'elements': '#elements',
+    'horizontallayout': '#horizontallayout',
+    'verticallayout': '#verticallayout',
+    'categorization': '#categorization',
+    'control': '#control',
+    'category': '#category',
+    'group': '#group',
+    'rule': '#rule',
+    'scope': '#scope',
+    'labelObject': '#labelObject',
+    'options': '#options'
   }
 };
 

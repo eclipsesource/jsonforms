@@ -8,11 +8,12 @@ import {
   configureExportButton,
   configureUploadButton,
   createExportDataDialog
-} from '../src/toolbar';
+} from './toolbar';
 import { SchemaServiceImpl } from './services/schema.service.impl';
 import { EditorContext } from './editor-context';
 import '@jsonforms/webcomponent';
 import { getIdentifyingProperty, getModelMapping } from './reducers';
+import * as JsonRefs from 'json-refs';
 
 export class JsonEditorIde extends HTMLElement implements Editor {
   private connected: boolean;
@@ -61,33 +62,41 @@ export class JsonEditorIde extends HTMLElement implements Editor {
       this.editor = document.createElement('json-forms') as JsonFormsElement;
       this.appendChild(this.editor);
     }
-    this.editor.setInnerComponent(
-      TreeRenderer,
-      {
-        uischema: getUiSchema(this._store.getState()),
-        schema: getSchema(this._store.getState()),
-        schemaService
+
+    JsonRefs.resolveRefs(getSchema(this._store.getState()))
+      .then( resolvedSchema => {
+        this.editor.setInnerComponent(
+          TreeRenderer,
+          {
+            uischema: getUiSchema(this._store.getState()),
+            schema: getSchema(this._store.getState()),
+            schemaService,
+            resolved: resolvedSchema.resolved
+          });
+        this.editor.store = this._store;
+
+        const exportButton = document.getElementById('export-data-button') as HTMLButtonElement;
+        if (exportButton !== null) {
+          const exportDialog = createExportDataDialog();
+          document.body.appendChild(exportDialog);
+          configureExportButton(this, exportButton, exportDialog);
+        }
+
+        // button triggering the hidden input element - only activate after schemas was loaded
+        const uploadButton = document.getElementById('upload-data-button') as HTMLButtonElement;
+        if (uploadButton !== null) {
+          configureUploadButton(this, uploadButton);
+        }
+
+        // configure button to download model data.
+        const downloadButton = document.getElementById('download-data-button') as HTMLButtonElement;
+        if (downloadButton !== null) {
+          configureDownloadButton(this, downloadButton);
+        }
+      },
+             err => {
+        console.log(err.stack);
       });
-    this.editor.store = this._store;
-
-    const exportButton = document.getElementById('export-data-button') as HTMLButtonElement;
-    if (exportButton !== null) {
-      const exportDialog = createExportDataDialog();
-      document.body.appendChild(exportDialog);
-      configureExportButton(this, exportButton, exportDialog);
-    }
-
-    // button triggering the hidden input element - only activate after schemas was loaded
-    const uploadButton = document.getElementById('upload-data-button') as HTMLButtonElement;
-    if (uploadButton !== null) {
-      configureUploadButton(this, uploadButton);
-    }
-
-    // configure button to download model data.
-    const downloadButton = document.getElementById('download-data-button') as HTMLButtonElement;
-    if (downloadButton !== null) {
-      configureDownloadButton(this, downloadButton);
-    }
   }
 }
 

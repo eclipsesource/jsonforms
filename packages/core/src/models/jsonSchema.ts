@@ -174,4 +174,5 @@ export interface JsonSchema {
   not?: JsonSchema;
 
   format?: string;
+  const?: any;
 }
