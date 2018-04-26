@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,6 +45,11 @@ const deriveType = (jsonSchema: JsonSchema): string => {
         !_.isEmpty(jsonSchema.type) &&
         typeof jsonSchema.type === 'string') {
         return jsonSchema.type;
+    }
+    if (!_.isEmpty(jsonSchema) &&
+        !_.isEmpty(jsonSchema.type) &&
+        _.isArray(jsonSchema.type)) {
+        return _.head(jsonSchema.type);
     }
     if (!_.isEmpty(jsonSchema) &&
         (!_.isEmpty(jsonSchema.properties) || !_.isEmpty(jsonSchema.additionalProperties))) {
@@ -107,7 +112,9 @@ const addLabel = (layout: Layout, labelName: string) => {
 
 const generateUISchema =
     (jsonSchema: JsonSchema, schemaElements: UISchemaElement[],
-     currentRef: string, schemaName: string, layoutType: string): UISchemaElement => {
+     currentRef: string, schemaName: string, layoutType: string, definitions?: JsonSchema,
+     relativePath?: string)
+      : UISchemaElement => {
 
     const type = deriveType(jsonSchema);
 
@@ -121,12 +128,22 @@ const generateUISchema =
             if (!_.isEmpty(jsonSchema.properties)) {
                 // traverse properties
                 const nextRef: string = currentRef + '/properties';
+                const nextRelativePath: string = relativePath + '/properties';
                 Object.keys(jsonSchema.properties).map(propName => {
-                    const value = jsonSchema.properties[propName];
+                    let value = jsonSchema.properties[propName];
+                    relativePath = `${nextRelativePath}/${propName}`;
+                    let ref = `${nextRef}/${propName}`;
+                    if (value.$ref !== undefined &&
+                        definitions !== undefined &&
+                        !_.isEmpty(definitions)) {
+                        const path = value.$ref.substring(value.$ref.lastIndexOf('/') + 1);
+                        value = definitions[path];
+                        ref = `#/definitions/${propName}`;
+                    }
                     generateUISchema(
                         value,
                         layout.elements,
-                        `${nextRef}/${propName}`, propName, layoutType
+                        ref, propName, layoutType, definitions, relativePath
                     );
                 });
             }
@@ -144,7 +161,7 @@ const generateUISchema =
         case 'boolean':
             const controlObject: ControlElement = createControlElement(
                 _.startCase(schemaName),
-                currentRef
+                relativePath ? relativePath : currentRef
             );
             schemaElements.push(controlObject);
 
@@ -165,5 +182,8 @@ const generateUISchema =
 export const generateDefaultUISchema =
     (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
         wrapInLayoutIfNecessary(
-            generateUISchema(jsonSchema, [], prefix, '', layoutType),
+            generateUISchema(jsonSchema, [], prefix, '', layoutType,
+            jsonSchema !== undefined && !_.isEmpty(jsonSchema) &&
+            jsonSchema.definitions ? jsonSchema.definitions : undefined,
+                             prefix),
             layoutType);

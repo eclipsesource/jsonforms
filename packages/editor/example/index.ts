@@ -1,7 +1,7 @@
 import '../src/ide';
 import { JsonEditorIde } from '../src/ide';
 import { createEditorStore } from '../src/helpers/util';
-import { detailSchemata, imageProvider, labelProvider, modelMapping } from './config';
+import { imageProvider, labelProvider, modelMapping } from './config';
 import { taskSchema } from './schema';
 import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
 
@@ -14,8 +14,7 @@ window.onload = () => {
   };
 
   const store = createEditorStore({}, taskSchema, uischema, materialFields,
-                                  materialRenderers, imageProvider, labelProvider, modelMapping,
-                                  detailSchemata);
+                                  materialRenderers, imageProvider, labelProvider, modelMapping);
 
   ide.store = store;
 
