@@ -52,7 +52,7 @@
   "devDependencies": {
     "@jsonforms/test": "^2.0.0",
     "document-register-element": "^1.7.0",
-    "jsdom": "^11.5.1",
+    "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2"
   }
 }
