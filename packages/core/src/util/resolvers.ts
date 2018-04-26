@@ -120,8 +120,12 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
   const invalidSegment =
     pathSegment => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce(
-    (curSchema, pathSegment) =>
-      invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment],
+    (curSchema, pathSegment) => {
+      curSchema = curSchema.$ref === undefined
+        ? curSchema
+        : resolveSchema(schema, curSchema.$ref);
+      return invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment];
+    },
     schema
   );
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
