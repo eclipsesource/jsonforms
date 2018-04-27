@@ -36,7 +36,11 @@ const deepCopy = <T>(object: T): T => {
  */
 const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
   // use AJV to validate data against targetSchema and return result
-  return ajv.validate(targetSchema, data);
+  const valid = ajv.validate(targetSchema, data);
+  if (_.isBoolean(valid)) {
+    return valid;
+  }
+  return false;
 };
 
 const addToArray =
