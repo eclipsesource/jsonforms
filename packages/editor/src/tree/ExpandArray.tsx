@@ -52,7 +52,7 @@ export const ExpandArray = (
 ) => {
 
   const data = resolveData(rootData, path);
-  if (data === undefined || data === null || _.isString(data)) {
+  if (data === undefined || data === null) {
     // return 'No data';
     return '';
   }

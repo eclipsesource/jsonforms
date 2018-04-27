@@ -1,3 +1,4 @@
+/* ts-lint:disable:max-file-line-count */
 import {
   SchemaService
 } from '../../src/services/schema.service';
@@ -303,122 +304,7 @@ describe('Schema Service Containment Property Tests', () => {
     expect(properties[1].schema).toMatchObject(bCopy);
     done();
   });
-  test('support for array references', done => {
-    // TODO: links property is unknown
-    // tslint:disable:no-object-literal-type-assertion
-    const schema: JsonSchema = {
-      definitions: {
-        class: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string'
-            },
-            name: {
-              type: 'string'
-            },
-            associations: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  id: {
-                    type: 'integer',
-                    minimum: 0
-                  }
-                },
-                links: [{
-                  rel: 'full',
-                  href: '#/classes/{id}',
-                  targetSchema: {$ref: '#/definitions/class'}
-                }]
-              }
-            }
-          }
-        }
-      },
-      type: 'object',
-      properties: {
-        name: {
-          type: 'string'
-        },
-        classes: {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/class'
-          }
-        }
-      }
-    } as JsonSchema;
-    // tslint:enable:no-object-literal-type-assertion
-    editorContext.dataSchema = schema;
-    const service: SchemaService = new SchemaServiceImpl(editorContext);
-    const properties =
-      service.getReferenceProperties(
-        schema.definitions.class.properties.associations.items as JsonSchema);
-    expect(properties.length).toEqual(1);
-    expect(properties[0].label).toEqual('id');
-    const selfContainedClassSchema = JSON.parse(
-      JSON.stringify(schema.definitions.class as JsonSchema)
-    );
-    selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
-    expect(properties[0].targetSchema).toMatchObject(selfContainedClassSchema);
-    done();
-  });
 
-  test('support for object references', done => {
-    // tslint:disable:no-object-literal-type-assertion
-    const schema: JsonSchema = {
-      definitions: {
-        class: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string'
-            },
-            association: {
-              type: 'object',
-              properties: {
-                id: {
-                  type: 'integer',
-                  minimum: 0
-                }
-              },
-              links: [{
-                rel: 'full',
-                href: '#/classes/{id}',
-                targetSchema: {$ref: '#/definitions/class'}
-              }]
-            }
-          }
-        }
-      },
-      type: 'object',
-      properties: {
-        name: {
-          type: 'string'
-        },
-        classes: {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/class'
-          }
-        }
-      }
-    } as JsonSchema;
-    // tslint:enable:no-object-literal-type-assertion
-    editorContext.dataSchema = schema;
-    const service: SchemaService = new SchemaServiceImpl(editorContext);
-    const properties =
-      service.getReferenceProperties(schema.definitions.class.properties.association);
-    expect(properties.length).toEqual(1);
-    expect(properties[0].label).toEqual('id');
-
-    const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
-    selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
-    expect(properties[0].targetSchema).toMatchObject(selfContainedClassSchema);
-    done();
-  });
   test('support object with array $ref', done => {
     const schema: JsonSchema = {
       definitions: {

@@ -335,16 +335,86 @@ const getSchemaIdForObject = (object: Object, modelMapping: ModelMapping): strin
   return null;
 };
 
+/**
+ * Interface for describing result of an extracted schema ref
+ */
 interface SchemaRef {
   uri: string;
-  def: JsonSchema;
-  uriDetails: any;
-  type: string;
 }
 
+/**
+ * Interface wraps SchemaRef
+ */
 interface SchemaRefs {
   [id: string]: SchemaRef;
 }
+
+/**
+ * Finding required definitions from parentSchema by using schema refs
+ *
+ * @param parentSchema The root schema
+ * @param allRefs All the refs of root schema
+ * @param schemaRefs The current schema refs
+ * @param extractedReferences Contains the definition attributes for the current schema
+ */
+const findReferencePaths = (parentSchema: JsonSchema,
+                            allRefs: SchemaRefs,
+                            schemaRefs: SchemaRefs,
+                            extractedReferences: { [id: string]: string }
+): SchemaRefs => {
+  return _.reduce(schemaRefs, (prev, schemaRefValue)  => {
+    let refs = _.pickBy(prev, _.flip(key => _.startsWith(key, schemaRefValue.uri)));
+    if (extractedReferences[schemaRefValue.uri]) {
+      refs = undefined;
+    }
+    if (!extractedReferences[schemaRefValue.uri]) {
+      extractedReferences[schemaRefValue.uri] = schemaRefValue.uri;
+      prev = _.omitBy(prev, value => value.uri === schemaRefValue.uri);
+    }
+    if (refs !== undefined) {
+      findReferencePaths(parentSchema, prev, refs, extractedReferences);
+    }
+    return prev;
+  },              allRefs);
+};
+
+/**
+ * Calculate references that are used in parentSchema and add copy them into schema
+ * @param {JsonSchema} parentSchema
+ * @param {JsonSchema} schema
+ * @returns {JsonSchema}
+ */
+export const calculateSchemaReferences = (parentSchema: JsonSchema,
+                                          schema: JsonSchema): JsonSchema => {
+  const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true});
+  const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true});
+  const extractedReferences = {};
+  findReferencePaths(parentSchema, allRefs, schemaRefs, extractedReferences);
+  const refList = _.values(extractedReferences) as string[];
+  if (!_.isEmpty(refList)) {
+    _.each(refList, ref => {
+      const propertyRoot = ref.substring((ref.indexOf('/') + 1), (ref.lastIndexOf('/')));
+      const property = ref.substring((ref.lastIndexOf('/') + 1));
+      if (parentSchema[propertyRoot] && parentSchema[propertyRoot][property]) {
+        if (schema[propertyRoot]) {
+          schema[propertyRoot] = {
+            ...schema[propertyRoot], ...{
+              [property]: parentSchema[propertyRoot][property]
+            }
+          };
+        } else {
+          schema = {
+            ...schema, ...{
+              [propertyRoot]: { [property]: parentSchema[propertyRoot][property] }
+            }
+          };
+        }
+      }
+    });
+  }
+
+  return schema;
+};
 
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: { [id: string]: JsonSchema } = {};
@@ -373,15 +443,7 @@ export class SchemaServiceImpl implements SchemaService {
     if (this.selfContainedSchemas.hasOwnProperty(schema.id)) {
       return this.selfContainedSchemas[schema.id];
     }
-    const definitionList = this.calculateDefinitions(parentSchema, schema);
-    if (parentSchema.definitions !== undefined) {
-      if (!_.isEmpty(definitionList)) {
-        const definitions = {
-          definitions: _.pick(parentSchema.definitions, definitionList),
-        };
-        schema = { ...schema, ...definitions};
-      }
-    }
+    schema = { ...schema, ...calculateSchemaReferences(parentSchema, schema) };
     this.selfContainedSchemas[schema.id] = schema;
 
     return schema;
@@ -473,48 +535,6 @@ export class SchemaServiceImpl implements SchemaService {
     }
 
     return [];
-  }
-
-  /**
-   * Makes the given JsonSchema self-contained. This means all referenced definitions
-   * are contained in the schema's definitions block and references equal to
-   * outerReference are set to root ('#').
-   *
-   * @param parentSchema The root schema
-   * @param allRefs All the refs of root schema
-   * @param schemaRefs The current schema refs
-   * @param containmentUriDefinitions Contains the definition attributes for the current schema
-   */
-
-  private retrieveDefinitions = (parentSchema: JsonSchema,
-                                 allRefs: SchemaRefs,
-                                 schemaRefs: SchemaRefs,
-                                 containmentUriDefinitions: { [id: string]: string }
-                                 ): SchemaRefs => {
-    return _.reduce(schemaRefs, (prev, schemaRefValue, _schemaRefKey)  => {
-      let refs = _.pickBy(prev, (_value, key) => _.startsWith(key, schemaRefValue.uri));
-      if (containmentUriDefinitions[schemaRefValue.uri]) {
-        refs = undefined;
-      }
-      if (!containmentUriDefinitions[schemaRefValue.uri]) {
-        containmentUriDefinitions[schemaRefValue.uri] =
-          schemaRefValue.uri.substring(schemaRefValue.uri.lastIndexOf('/') + 1);
-        prev = _.omitBy(prev, (value, _key) => value.uri === schemaRefValue.uri);
-      }
-      if (refs !== undefined) {
-        this.retrieveDefinitions(parentSchema, prev, refs, containmentUriDefinitions);
-      }
-      return prev;
-    },              allRefs);
-  }
-
-  private calculateDefinitions = (parentSchema: JsonSchema, schema: JsonSchema): string[] => {
-    const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true});
-    const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true});
-    const containmentUriDefinitions = {};
-    this.retrieveDefinitions(parentSchema, allRefs, schemaRefs, containmentUriDefinitions);
-
-    return _.values(containmentUriDefinitions);
   }
 
   private getContainment(key: string, name: string, schema: JsonSchema, rootSchema: JsonSchema,
