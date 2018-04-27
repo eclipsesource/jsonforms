@@ -39,11 +39,10 @@
     ]
   },
   "dependencies": {
-    "ajv": "^4.11.2",
-    "json-refs": "^3.0.4",
-    "lodash": "^4.17.4",
+    "ajv": "^6.4.0",
+    "lodash": "4.17.4",
     "redux": "^3.7.2",
-    "uuid": "^3.2.1"
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "document-register-element": "^1.7.0",
