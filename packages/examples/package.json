@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.0",
-    "@jsonforms/i18n": "^2.0.0",
     "@jsonforms/react": "^2.0.0",
     "@jsonforms/webcomponent": "^2.0.0",
     "moment": "^2.22.1",
