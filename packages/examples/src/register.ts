@@ -26,7 +26,6 @@ import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { ExampleDescription } from './example';
 import { jsonformsReducer, JsonFormsState, RankedTester } from '@jsonforms/core';
 import { combineReducers, createStore, Reducer } from 'redux';
-import { i18nReducer, translateProps } from '@jsonforms/i18n';
 
 declare let exampleDivId;
 declare let viewDivId;
@@ -84,7 +83,6 @@ export const changeExample =
       combineReducers<JsonFormsState>({
         jsonforms: jsonformsReducer(
           {
-            i18n: i18nReducer,
             ...additionalReducers
           },
         )
@@ -100,11 +98,6 @@ export const changeExample =
           renderers,
           fields,
           config: example.config,
-          i18n: {
-            translations: example.translations,
-            locale: example.locale || navigator.languages[0],
-          },
-          transformProps: [translateProps],
           ...additionalInitState
         }
       }

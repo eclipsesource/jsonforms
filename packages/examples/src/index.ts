@@ -34,7 +34,6 @@ import * as dates from './dates';
 import * as dyanmic from './dynamic';
 import * as generateSchema from './generate';
 import * as generateUISchema from './generateUI';
-import * as i18n from './i18n';
 import * as layout from './layout';
 import * as person from './person';
 import * as rule from './rule';
@@ -56,7 +55,6 @@ export {
   day6,
   generateSchema,
   generateUISchema,
-  i18n,
   layout,
   person,
   rule,
