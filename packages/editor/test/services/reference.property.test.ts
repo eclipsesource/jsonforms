@@ -131,7 +131,7 @@ const editorContext: EditorContext = {
 
 describe('Schema Service Reference Tests', () => {
 
-  test('reference object properties add', done => {
+  test('reference object properties add', () => {
     const schema: JsonSchema = referenceObjectSchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -143,9 +143,9 @@ describe('Schema Service Reference Tests', () => {
     // tslint:disable:no-string-literal
     expect(data.classes[1]['association']).toEqual('c1');
     // tslint:enable:no-string-literal
-    done();
   });
-  test.skip('reference object properties get', done => {
+
+  test.skip('reference object properties get', () => {
     const schema: JsonSchema = referenceObjectSchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -159,10 +159,9 @@ describe('Schema Service Reference Tests', () => {
     expect(keys.length).toEqual(1);
     expect(keys[0]).toEqual('c1');
     expect(getData[keys[0]]).toEqual(data.classes[0]);
-    done();
   });
 
-  test('reference array properties add to undefined', done => {
+  test('reference array properties add to undefined', () => {
     const schema: JsonSchema = referenceArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -177,9 +176,9 @@ describe('Schema Service Reference Tests', () => {
     // tslint:enable:no-string-literal
     expect(associations.length).toEqual(1);
     expect(associations[0]).toEqual('c1');
-    done();
   });
-  test('reference array properties add to defined', done => {
+
+  test('reference array properties add to defined', () => {
     const schema: JsonSchema = referenceArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -194,9 +193,9 @@ describe('Schema Service Reference Tests', () => {
     // tslint:enable:no-string-literal
     expect(associations.length).toEqual(1);
     expect(associations[0]).toEqual('c1');
-    done();
   });
-  test.skip('reference array properties get', done => {
+
+  test.skip('reference array properties get', () => {
     const schema: JsonSchema = referenceArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -210,9 +209,9 @@ describe('Schema Service Reference Tests', () => {
     expect(keys.length).toEqual(1);
     expect(keys[0]).toEqual('c1');
     expect(getData[keys[0]]).toMatchObject(data.classes[0]);
-    done();
   });
-  test.skip('reference array properties get multiple', done => {
+
+  test.skip('reference array properties get multiple', () => {
     const schema: JsonSchema = referenceArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -229,9 +228,9 @@ describe('Schema Service Reference Tests', () => {
     expect(keys[1]).toEqual('c3');
     expect(getData[keys[0]]).toMatchObject(data.classes[0]);
     expect(getData[keys[1]]).toMatchObject(data.classes[2]);
-    done();
   });
-  test.skip(`reference properties get - linking property's schema without type`, done => {
+
+  test.skip(`reference properties get - linking property's schema without type`, () => {
     const schema = {
       definitions: {
         class: {
@@ -271,10 +270,9 @@ describe('Schema Service Reference Tests', () => {
     JsonForms.rootData = data;
     expect(property.getData(data.classes[1]))
       .toThrowError(`The schema of the property 'association' does not specify a schema type.`);
-    done();
   });
 
-  test.skip('reference property find reference targets', done => {
+  test.skip('reference property find reference targets', () => {
     const schema = referenceFindSchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -293,9 +291,9 @@ describe('Schema Service Reference Tests', () => {
     expect(keys[1]).toEqual('c2');
     expect(targets[keys[0]]).toMatchObject(data.classes[0]);
     expect(targets[keys[1]]).toMatchObject(data.classes[1]);
-    done();
   });
-  test('reference property find reference targets - target container undefined', done => {
+
+  test('reference property find reference targets - target container undefined', () => {
     const schema = referenceFindSchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -308,10 +306,10 @@ describe('Schema Service Reference Tests', () => {
     JsonForms.rootData = data;
     const targets = property.findReferenceTargets();
     expect(targets).toMatchObject({});
-    done();
   });
+
   test.skip('reference property find reference targets - targets are subset of available objects.',
-            done => {
+            () => {
       const schema = {
         definitions: {
           class: {
@@ -402,10 +400,9 @@ describe('Schema Service Reference Tests', () => {
       expect(keys[1]).toEqual('c2');
       expect(targets[keys[0]]).toMatchObject(data.objects[0]);
       expect(targets[keys[1]]).toMatchObject(data.objects[1]);
-      done();
     });
 
-  test('property type check', done => {
+  test('property type check', () => {
     // tslint:disable:no-object-literal-type-assertion
     const schema: JsonSchema = {
       definitions: {
@@ -447,10 +444,9 @@ describe('Schema Service Reference Tests', () => {
     const containmentProperty = service.getContainmentProperties(schema)[0];
     expect(isReferenceProperty(containmentProperty)).toBe(false);
     expect(isContainmentProperty(containmentProperty)).toBe(true);
-    done();
   });
 
-  test('support for array references', done => {
+  test('support for array references', () => {
     // TODO: links property is unknown
     // tslint:disable:no-object-literal-type-assertion
     const schema: JsonSchema = {
@@ -510,10 +506,9 @@ describe('Schema Service Reference Tests', () => {
     );
     selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
     expect(properties[0].targetSchema).toMatchObject(selfContainedClassSchema);
-    done();
   });
 
-  test('support for object references', done => {
+  test('support for object references', () => {
     // tslint:disable:no-object-literal-type-assertion
     const schema: JsonSchema = {
       definitions: {
@@ -564,7 +559,5 @@ describe('Schema Service Reference Tests', () => {
     const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
     selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
     expect(properties[0].targetSchema).toMatchObject(selfContainedClassSchema);
-    done();
   });
-
 });

@@ -356,13 +356,15 @@ interface SchemaRefs {
  * @param allRefs All the refs of root schema
  * @param schemaRefs The current schema refs
  * @param extractedReferences Contains the definition attributes for the current schema
+ * @returns SchemaRefs all the required reference paths for subschema
  */
 const findReferencePaths = (parentSchema: JsonSchema,
                             allRefs: SchemaRefs,
                             schemaRefs: SchemaRefs,
                             extractedReferences: { [id: string]: string }
 ): SchemaRefs => {
-  return _.reduce(schemaRefs, (prev, schemaRefValue)  => {
+  return _.reduce(
+    schemaRefs, (prev, schemaRefValue)  => {
     let refs = _.pickBy(prev, _.flip(key => _.startsWith(key, schemaRefValue.uri)));
     if (extractedReferences[schemaRefValue.uri]) {
       refs = undefined;
@@ -375,14 +377,17 @@ const findReferencePaths = (parentSchema: JsonSchema,
       findReferencePaths(parentSchema, prev, refs, extractedReferences);
     }
     return prev;
-  },              allRefs);
+  },
+    allRefs
+  );
 };
 
 /**
  * Calculate references that are used in parentSchema and add copy them into schema
- * @param {JsonSchema} parentSchema
- * @param {JsonSchema} schema
- * @returns {JsonSchema}
+ *
+ * @param parentSchema root schema which is used to find all the schema refs
+ * @param schema current subschema without resolved references
+ * @returns JsonSchema current subschema with resolved references
  */
 export const calculateSchemaReferences = (parentSchema: JsonSchema,
                                           schema: JsonSchema): JsonSchema => {

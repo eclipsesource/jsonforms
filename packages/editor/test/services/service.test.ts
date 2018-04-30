@@ -3,7 +3,7 @@ import { JsonSchema } from '@jsonforms/core';
 import * as _ from 'lodash';
 
 describe('Schema Service Tests', () => {
-  test('calculating schema with references', done => {
+  test('calculating schema with references', () => {
     const parentSchema: JsonSchema = {
       'type': 'object',
       'id': '#root',
@@ -51,7 +51,6 @@ describe('Schema Service Tests', () => {
           'properties': {
             'type': {
               'type': 'string',
-              'const': 'Control',
               'default': 'Control'
             },
             'label': {
@@ -74,7 +73,6 @@ describe('Schema Service Tests', () => {
           'properties': {
             'type': {
               'type': 'string',
-              'const': 'HorizontalLayout',
               'default': 'HorizontalLayout'
             },
             'elements': {
@@ -91,7 +89,6 @@ describe('Schema Service Tests', () => {
           'properties': {
             'type': {
               'type': 'string',
-              'const': 'VerticalLayout',
               'default': 'VerticalLayout'
             },
             'elements': {
@@ -119,8 +116,7 @@ describe('Schema Service Tests', () => {
               'type': 'object',
               'properties': {
                 'type': {
-                  'type': 'string',
-                  'const': 'LEAF'
+                  'type': 'string'
                 },
                 'scope': {
                   '$ref': '#/definitions/scope'
@@ -176,10 +172,9 @@ describe('Schema Service Tests', () => {
       definitions: _.pick(parentSchema.definitions, ['scope', 'options', 'rule'])
     }};
     expect(calculatedSchemaReferences).toMatchObject(expectedSchema);
-    done();
   });
 
-  test('calculating schema without references', done => {
+  test('calculating schema without references', () => {
     const parentSchema = {
       type: 'object',
       properties: {
@@ -199,10 +194,9 @@ describe('Schema Service Tests', () => {
     };
     const calculatedSchemaReferences = calculateSchemaReferences(parentSchema, schema);
     expect(calculatedSchemaReferences).toMatchObject(schema);
-    done();
   });
 
-  test('calculating schema with missing reference definition', done => {
+  test('calculating schema with missing reference definition', () => {
     const parentSchema: JsonSchema = {
       'type': 'object',
       'id': '#root',
@@ -237,10 +231,9 @@ describe('Schema Service Tests', () => {
     };
     const calculatedSchemaReferences = calculateSchemaReferences(parentSchema, schema);
     expect(calculatedSchemaReferences).toMatchObject(schema);
-    done();
   });
 
-  test('calculating schema with references by using another keyword for definition', done => {
+  test('calculating schema with references by using another keyword for definition', () => {
     const parentSchema = {
       'type': 'object',
       'id': '#root',
@@ -330,6 +323,5 @@ describe('Schema Service Tests', () => {
       defs: _.pick(parentSchema.defs, ['scope'])
     }};
     expect(calculatedSchemaReferences).toMatchObject(expectedSchema);
-    done();
   });
 });

@@ -36,7 +36,7 @@ const editorContext: EditorContext = {
 };
 
 describe('Schema Service Containment Property Tests', () => {
-  test('array with array ', done => {
+  test('array with array ', () => {
     const schema: JsonSchema = {
       type: 'array',
       items: {
@@ -54,9 +54,9 @@ describe('Schema Service Containment Property Tests', () => {
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(1);
     expect(properties[0].schema).toMatchObject((schema.items as JsonSchema).items);
-    done();
   });
-  test('array with objects ', done => {
+
+  test('array with objects ', () => {
     const schema = {
       type: 'array',
       items: {
@@ -70,9 +70,9 @@ describe('Schema Service Containment Property Tests', () => {
     const service: SchemaService = new SchemaServiceImpl(editorContext);
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(1);
-    done();
   });
-  test('object with object array ', done => {
+
+  test('object with object array ', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -80,9 +80,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(properties.length).toEqual(1);
     expect(properties[0].label).toEqual('foo');
     expect(properties[0].schema).toMatchObject(schema.properties.foo.items);
-    done();
   });
-  test('object with simple array ', done => {
+
+  test('object with simple array ', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -96,9 +96,9 @@ describe('Schema Service Containment Property Tests', () => {
     const service: SchemaService = new SchemaServiceImpl(editorContext);
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(0);
-    done();
   });
-  test('object with tuple array ', done => {
+
+  test('object with tuple array ', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -125,9 +125,9 @@ describe('Schema Service Containment Property Tests', () => {
     const service: SchemaService = new SchemaServiceImpl(editorContext);
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(0);
-    done();
   });
-  test('object with simple properties ', done => {
+
+  test('object with simple properties ', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -141,9 +141,9 @@ describe('Schema Service Containment Property Tests', () => {
     const service: SchemaService = new SchemaServiceImpl(editorContext);
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(0);
-    done();
   });
-  test('object with object property', done => {
+
+  test('object with object property', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -159,9 +159,9 @@ describe('Schema Service Containment Property Tests', () => {
     const service: SchemaService = new SchemaServiceImpl(editorContext);
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(0);
-    done();
   });
-  test('support multiple same $ref', done => {
+
+  test('support multiple same $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -187,10 +187,9 @@ describe('Schema Service Containment Property Tests', () => {
     const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
     expect(properties[0].schema).toMatchObject(personCopy);
     expect(properties[1].schema).toMatchObject(personCopy);
-    done();
   });
 
-  test('support multiple different $ref', done => {
+  test('support multiple different $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -224,9 +223,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(properties[1].label).toEqual('robot');
     expect(properties[0].schema).toMatchObject(personCopy);
     expect(properties[1].schema).toMatchObject(robotCopy);
-    done();
   });
-  test('support root anyOf', done => {
+
+  test('support root anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
         a: {type: 'object'},
@@ -241,9 +240,9 @@ describe('Schema Service Containment Property Tests', () => {
     const service: SchemaService = new SchemaServiceImpl(editorContext);
     const properties = service.getContainmentProperties(schema);
     expect(properties.length).toEqual(0);
-    done();
   });
-  test('support array with anyOf', done => {
+
+  test('support array with anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
         a: {type: 'object', properties: {foo: {type: 'string'}}},
@@ -269,9 +268,9 @@ describe('Schema Service Containment Property Tests', () => {
     bCopy.id = '#' + (schema.items as JsonSchema).anyOf[1].$ref;
     expect(properties[0].schema).toMatchObject(aCopy);
     expect(properties[1].schema).toMatchObject(bCopy);
-    done();
   });
-  test('support object with array with anyOf', done => {
+
+  test('support object with array with anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
         a: {type: 'object', properties: {foo: {type: 'string'}}},
@@ -302,10 +301,9 @@ describe('Schema Service Containment Property Tests', () => {
     bCopy.id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[1].$ref;
     expect(properties[0].schema).toMatchObject(aCopy);
     expect(properties[1].schema).toMatchObject(bCopy);
-    done();
   });
 
-  test('support object with array $ref', done => {
+  test('support object with array $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         root: {
@@ -331,10 +329,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(properties.length).toEqual(1);
     expect(properties[0].label).toEqual('root');
     expect(properties[0].schema).toMatchObject(schema.definitions.root.items as JsonSchema);
-    done();
   });
 
-  test('containment properties add when array not defined', done => {
+  test('containment properties add when array not defined', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -347,10 +344,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo !== undefined).toBe(true);
     expect(data.foo.length).toEqual(1);
     expect(data.foo[0]).toEqual(valueToAdd);
-    done();
   });
 
-  test('containment properties add when array not defined and generate ID', done => {
+  test('containment properties add when array not defined and generate ID', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -379,11 +375,10 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo !== undefined).toBe(true);
     expect(data.foo.length).toEqual(1);
     expect(data.foo[0].id !== undefined).toBe(true);
-    done();
   });
 
   test('containment properties add when array not defined and do not overwrite existing ID',
-       done => {
+       () => {
     const schema = {
       type: 'object',
       properties: {
@@ -414,10 +409,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo.length).toEqual(1);
     expect(data.foo[0].bar).toEqual(`Hey Mum, look, it's an idea`);
     expect(data.foo[0]._id).toEqual('TEST-ID');
-    done();
   });
 
-  test('containment properties add when array defined', done => {
+  test('containment properties add when array defined', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -428,10 +422,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo !== undefined).toBe(true);
     expect(data.foo.length).toEqual(2);
     expect(data.foo[1]).toEqual(valueToAdd);
-    done();
   });
 
-  test('containment properties add default with existing neighbour', done => {
+  test('containment properties add default with existing neighbour', () => {
     // expectation default === add after neighbour
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
@@ -447,10 +440,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(firstValue);
     expect(data.foo[1]).toEqual(valueToAdd);
     expect(data.foo[2]).toEqual(lastValue);
-    done();
   });
 
-  test('containment properties add after existing neighbour(not last in array)', done => {
+  test('containment properties add after existing neighbour(not last in array)', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -465,9 +457,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(firstValue);
     expect(data.foo[1]).toEqual(valueToAdd);
     expect(data.foo[2]).toEqual(lastValue);
-    done();
   });
-  test('containment properties add after existing neighbour(last in array)', done => {
+
+  test('containment properties add after existing neighbour(last in array)', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -482,9 +474,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(firstValue);
     expect(data.foo[1]).toEqual(lastValue);
     expect(data.foo[2]).toEqual(valueToAdd);
-    done();
   });
-  test('containment properties add after non-existant neighbour', done => {
+
+  test('containment properties add after non-existant neighbour', () => {
     // expectation: value is added at the end
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
@@ -501,9 +493,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(firstValue);
     expect(data.foo[1]).toEqual(lastValue);
     expect(data.foo[2]).toEqual(valueToAdd);
-    done();
   });
-  test('containment properties add before existing neighbour(not first in array)', done => {
+
+  test('containment properties add before existing neighbour(not first in array)', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -518,9 +510,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(firstValue);
     expect(data.foo[1]).toEqual(valueToAdd);
     expect(data.foo[2]).toEqual(lastValue);
-    done();
   });
-  test('containment properties add before existing neighbour(first in array)', done => {
+
+  test('containment properties add before existing neighbour(first in array)', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -535,9 +527,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(valueToAdd);
     expect(data.foo[1]).toEqual(firstValue);
     expect(data.foo[2]).toEqual(lastValue);
-    done();
   });
-  test('containment properties add before non-existant neighbour', done => {
+
+  test('containment properties add before non-existant neighbour', () => {
     // expectation: value is added at the end
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
@@ -554,9 +546,9 @@ describe('Schema Service Containment Property Tests', () => {
     expect(data.foo[0]).toEqual(firstValue);
     expect(data.foo[1]).toEqual(lastValue);
     expect(data.foo[2]).toEqual(valueToAdd);
-    done();
   });
-  test('containment properties get when array not defined', done => {
+
+  test('containment properties get when array not defined', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -564,9 +556,9 @@ describe('Schema Service Containment Property Tests', () => {
     const data = {};
     const getData = property.getData(data);
     expect(getData === undefined).toBe(true);
-    done();
   });
-  test('containment properties get when array defined', done => {
+
+  test('containment properties get when array defined', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -574,9 +566,8 @@ describe('Schema Service Containment Property Tests', () => {
     const data = {foo: [{bar: 'initial'}]};
     const getData = property.getData(data);
     expect(getData).toEqual(data.foo);
-    done();
   });
-  test('containment properties delete when array not defined', done => {
+  test('containment properties delete when array not defined', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -585,9 +576,9 @@ describe('Schema Service Containment Property Tests', () => {
     const valueToDelete = {bar: 'undefined array'};
     property.deleteFromData(data)(valueToDelete);
     expect(data !== undefined).toBe(true);
-    done();
   });
-  test('containment properties delete when array defined', done => {
+
+  test('containment properties delete when array defined', () => {
     const schema = fooBarArraySchema;
     editorContext.dataSchema = schema;
     const service: SchemaService = new SchemaServiceImpl(editorContext);
@@ -598,10 +589,9 @@ describe('Schema Service Containment Property Tests', () => {
     property.deleteFromData(data)(initialData1);
     expect(data.foo.length).toEqual(1);
     expect(data.foo[0].bar).toEqual('stay');
-    done();
   });
 
-  test('self contained child schemata: cross recursion', done => {
+  test('self contained child schemata: cross recursion', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -637,10 +627,9 @@ describe('Schema Service Containment Property Tests', () => {
     personCopy.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
     personCopy.definitions = JSON.parse(JSON.stringify(schema.definitions));
     expect(properties[0].schema).toMatchObject(personCopy);
-    done();
   });
 // real world examples
-  test('support easy uml schema with arrays', done => {
+  test('support easy uml schema with arrays', () => {
     const schema: JsonSchema = {
       type: 'object',
       properties: {
@@ -688,6 +677,5 @@ describe('Schema Service Containment Property Tests', () => {
     expect(propertiesClasses[0].label).toEqual('attributes');
     expect(propertiesClasses[0].schema)
       .toMatchObject((schema.properties.classes.items as JsonSchema).properties.attributes.items);
-    done();
   });
 });
