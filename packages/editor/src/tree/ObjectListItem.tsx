@@ -79,6 +79,7 @@ export interface ObjectListItemProps {
   schemaService: SchemaService;
   imageMapping?: any;
   labelMapping?: any;
+  filterPredicate?: any;
 }
 
 const ObjectListItem = (
@@ -91,7 +92,8 @@ const ObjectListItem = (
     selection,
     schemaService,
     imageMapping,
-    labelMapping
+    labelMapping,
+    filterPredicate
   }: ObjectListItemProps) => {
 
   const pathSegments = path.split('.');
@@ -148,6 +150,7 @@ const ObjectListItem = (
             selection={selection}
             handlers={handlers}
             schemaService={schemaService}
+            filterPredicate={filterPredicate}
           />
       )
     }
@@ -239,7 +242,8 @@ const ObjectListItemDnd = (
     isRoot,
     // isDragging,
     connectDragSource,
-    connectDropTarget
+    connectDropTarget,
+    filterPredicate
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -253,6 +257,7 @@ const ObjectListItemDnd = (
       schemaService={schemaService}
       imageMapping={imageMapping}
       labelMapping={labelMapping}
+      filterPredicate={filterPredicate}
     />
   );
   if (isRoot === true) {

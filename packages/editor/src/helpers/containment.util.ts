@@ -12,29 +12,15 @@ import { ContainmentProperty } from '../services/schema.service';
  */
 // TODO type model mapping
 export const matchContainmentProperty =
-  (data: Object, properties: ContainmentProperty[], modelMapping: any) => {
-  if (properties.length === 1) {
-    return properties[0];
-  }
-  if (!_.isEmpty(modelMapping) &&
-    !_.isEmpty(modelMapping.mapping)) {
-    const filtered = properties.filter(property => {
-      // only use filter criterion if the checked value has the mapped attribute
-      if (data[modelMapping.attribute]) {
-        return property.schema.id === modelMapping.mapping[data[modelMapping.attribute]];
-      }
-
-      // NOTE if mapped attribute is not present do not filter out property
-      return true;
-    });
+  (data: Object, properties: ContainmentProperty[], filterPredicate: any) => {
     // TODO improve handling
+    const filtered = properties.filter(filterPredicate(data));
     if (filtered.length > 1) {
       console.warn('More than one matching containment property was found for the given data',
                    data);
     }
 
     return _.head(filtered);
-  }
 };
 
 export interface StringMap {

@@ -13,7 +13,7 @@ import * as uuid from 'uuid';
 import { resolveLocalData } from '../helpers/util';
 import { RS_PROTOCOL } from '../resources/resource-set';
 import { Resources } from '../resources/resources';
-import { ModelMapping } from '../helpers/containment.util';
+import { ModelMapping } from '../editor-context';
 import { EditorContext } from '../editor-context';
 import * as JsonRefs from 'json-refs';
 import { createAjv } from '@jsonforms/core/lib/util/validator';
