@@ -19,17 +19,44 @@
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc && ncp ./jsoneditor.css lib/jsoneditor.css",
-    "clean": "rm -rf lib",
+    "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "test": "jest --no-cache",
+    "test-cov": "jest --no-cache",
+    "report": "../../node_modules/.bin/nyc report --reporter=html",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Editor' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js|ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/test/**/*.test.ts"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   },
   "dependencies": {
     "@jsonforms/core": "2.0.0",
     "@jsonforms/react": "2.0.0",
     "@jsonforms/webcomponent": "2.0.0",
     "ajv": "^4.11.2",
-    "json-refs": "^2.1.6",
+    "json-refs": "^2.1.7",
     "lodash": "^4.17.4",
     "react": "^16.2.0",
     "react-dnd": "^2.5.4",
@@ -43,7 +70,9 @@
     "@jsonforms/vanilla-renderers": "2.0.0",
     "awesome-typescript-loader": "^3.1.3",
     "copy-webpack-plugin": "^4.0.1",
+    "jest": "^22.4.2",
     "ncp": "^2.0.0",
+    "ts-jest": "^22.4.1",
     "webpack-dev-server": "^2.7.1"
   }
 }

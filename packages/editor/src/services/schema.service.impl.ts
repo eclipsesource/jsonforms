@@ -11,12 +11,12 @@ import {
   SchemaService
 } from './schema.service';
 import * as uuid from 'uuid';
-import { findAllRefs } from '@jsonforms/core/lib/util/resolvers';
 import { resolveLocalData } from '../helpers/util';
 import { RS_PROTOCOL } from '../resources/resource-set';
 import { Resources } from '../resources/resources';
 import { ModelMapping } from '../helpers/containment.util';
 import { EditorContext } from '../editor-context';
+import * as JsonRefs from 'json-refs';
 
 const ajv = new AJV({ jsonPointers: true });
 
@@ -335,6 +335,92 @@ const getSchemaIdForObject = (object: Object, modelMapping: ModelMapping): strin
   return null;
 };
 
+/**
+ * Interface for describing result of an extracted schema ref
+ */
+interface SchemaRef {
+  uri: string;
+}
+
+/**
+ * Interface wraps SchemaRef
+ */
+interface SchemaRefs {
+  [id: string]: SchemaRef;
+}
+
+/**
+ * Finding required definitions from parentSchema by using schema refs
+ *
+ * @param parentSchema The root schema
+ * @param allRefs All the refs of root schema
+ * @param schemaRefs The current schema refs
+ * @param extractedReferences Contains the definition attributes for the current schema
+ * @returns SchemaRefs all the required reference paths for subschema
+ */
+const findReferencePaths = (parentSchema: JsonSchema,
+                            allRefs: SchemaRefs,
+                            schemaRefs: SchemaRefs,
+                            extractedReferences: { [id: string]: string }
+): SchemaRefs => {
+  return _.reduce(
+    schemaRefs, (prev, schemaRefValue)  => {
+    let refs = _.pickBy(prev, _.flip(key => _.startsWith(key, schemaRefValue.uri)));
+    if (extractedReferences[schemaRefValue.uri]) {
+      refs = undefined;
+    }
+    if (!extractedReferences[schemaRefValue.uri]) {
+      extractedReferences[schemaRefValue.uri] = schemaRefValue.uri;
+      prev = _.omitBy(prev, value => value.uri === schemaRefValue.uri);
+    }
+    if (refs !== undefined) {
+      findReferencePaths(parentSchema, prev, refs, extractedReferences);
+    }
+    return prev;
+  },
+    allRefs
+  );
+};
+
+/**
+ * Calculate references that are used in parentSchema and add copy them into schema
+ *
+ * @param parentSchema root schema which is used to find all the schema refs
+ * @param schema current subschema without resolved references
+ * @returns JsonSchema current subschema with resolved references
+ */
+export const calculateSchemaReferences = (parentSchema: JsonSchema,
+                                          schema: JsonSchema): JsonSchema => {
+  const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true});
+  const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true});
+  const extractedReferences = {};
+  findReferencePaths(parentSchema, allRefs, schemaRefs, extractedReferences);
+  const refList = _.values(extractedReferences) as string[];
+  if (!_.isEmpty(refList)) {
+    _.each(refList, ref => {
+      const propertyRoot = ref.substring((ref.indexOf('/') + 1), (ref.lastIndexOf('/')));
+      const property = ref.substring((ref.lastIndexOf('/') + 1));
+      if (parentSchema[propertyRoot] && parentSchema[propertyRoot][property]) {
+        if (schema[propertyRoot]) {
+          schema[propertyRoot] = {
+            ...schema[propertyRoot], ...{
+              [property]: parentSchema[propertyRoot][property]
+            }
+          };
+        } else {
+          schema = {
+            ...schema, ...{
+              [propertyRoot]: { [property]: parentSchema[propertyRoot][property] }
+            }
+          };
+        }
+      }
+    });
+  }
+
+  return schema;
+};
+
 export class SchemaServiceImpl implements SchemaService {
   private selfContainedSchemas: { [id: string]: JsonSchema } = {};
 
@@ -349,6 +435,7 @@ export class SchemaServiceImpl implements SchemaService {
     return this.getContainment('root', 'root', schema,
                                this.editorContext.dataSchema, false, null, null, null);
   }
+
   hasContainmentProperties(schema: JsonSchema): boolean {
     return this.getContainmentProperties(schema).length !== 0;
   }
@@ -361,7 +448,7 @@ export class SchemaServiceImpl implements SchemaService {
     if (this.selfContainedSchemas.hasOwnProperty(schema.id)) {
       return this.selfContainedSchemas[schema.id];
     }
-    this.selfContainSchema(schema, schema, refPath);
+    schema = { ...schema, ...calculateSchemaReferences(parentSchema, schema) };
     this.selfContainedSchemas[schema.id] = schema;
 
     return schema;
@@ -544,59 +631,5 @@ export class SchemaServiceImpl implements SchemaService {
     }
 
     return [];
-  }
-
-  /**
-   * Makes the given JsonSchema self-contained. This means all referenced definitions
-   * are contained in the schema's definitions block and references equal to
-   * outerReference are set to root ('#').
-   *
-   * @param schema The current schema to make self contained
-   * @param outerSchema The root schema to which missing definitions are added
-   * @param outerReference The reference which is considered to be self ('#')
-   * @param includedDefs The list of definitions which were already added to the outer schema
-   */
-  private selfContainSchema(schema: JsonSchema, outerSchema: JsonSchema,
-                            outerReference: string, includedDefs: string[] = ['#']): void {
-    // Step 1: get all used references
-    const allInnerRefs = findAllRefs(schema);
-    Object.keys(allInnerRefs).forEach(innerRef => {
-      const resolved = resolveSchema(this.editorContext.dataSchema, innerRef);
-      // Step 2: recognize refs to outer self and set to '#'
-      if (innerRef === outerReference || resolved.id === schema.id) {
-        if (allInnerRefs[innerRef] !== undefined) {
-          if (!_.isEmpty(allInnerRefs[innerRef].$ref)) {
-            allInnerRefs[innerRef].$ref = '#';
-          }
-        }
-
-        return;
-      }
-      // Step 3: add definitions for non-existant refs to definitions block
-      if (includedDefs.indexOf(innerRef) > -1) {
-        // definition was already added to schema
-        return;
-      }
-      if (!_.isEmpty(resolved.anyOf)) {
-        resolved.anyOf.forEach(inner => {
-          this.copyAndResolveInner(inner, innerRef, outerSchema, outerReference, includedDefs);
-        });
-      } else {
-        this.copyAndResolveInner(resolved, innerRef, outerSchema, outerReference, includedDefs);
-      }
-    });
-  }
-  private copyAndResolveInner(resolved: JsonSchema, innerRef: string, outerSchema: JsonSchema,
-                              outerReference: string, includedDefs: string[]) {
-    // get a copy of the referenced type's schema
-    const definitionSchema = deepCopy(resolved);
-    if (outerSchema.definitions === undefined || outerSchema.definitions === null) {
-      outerSchema.definitions = {};
-    }
-    const defName = innerRef.substr(innerRef.lastIndexOf('/') + 1);
-    outerSchema.definitions[defName] = definitionSchema;
-    includedDefs.push(innerRef);
-
-    this.selfContainSchema(definitionSchema, outerSchema, outerReference, includedDefs);
   }
 }

@@ -56,7 +56,6 @@ export const ExpandArray = (
     // return 'No data';
     return '';
   }
-
   return (
     data.map((element, index) => {
       const composedPath = Paths.compose(path, index.toString());
