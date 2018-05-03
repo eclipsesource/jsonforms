@@ -108,6 +108,7 @@ export interface TreeProps extends ControlProps {
   addToRoot: any;
   schemaService: SchemaService;
   uiSchemata?;
+  resolved: any;
 }
 
 export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
@@ -268,7 +269,7 @@ const mapStateToProps = (state, ownProps) => {
     uischema: ownProps.uischema,
     schema: ownProps.schema,
     schemaService: ownProps.schemaService,
-    resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope),
+    resolvedSchema: Resolve.schema(ownProps.resolved, ownProps.uischema.scope),
     path,
     visible,
     enabled,

@@ -86,10 +86,12 @@ export const schemaSubPathMatches =
       if (_.isEmpty(schemaPath)) {
         return false;
       }
-      let currentDataSchema: JsonSchema = resolveSchema(schema, `${schemaPath}/${subPath}`);
+      let currentDataSchema: JsonSchema = resolveSchema(schema, `${schemaPath}`);
       while (!_.isEmpty(currentDataSchema.$ref)) {
         currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
       }
+      currentDataSchema = currentDataSchema[subPath] as JsonSchema;
+
       if (currentDataSchema === undefined) {
         return false;
       }
