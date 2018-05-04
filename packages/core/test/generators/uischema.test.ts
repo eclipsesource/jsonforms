@@ -170,8 +170,8 @@ test('generate ui schema for Control element by resolving refs', t => {
       ruleLayout
     ]
   };
-  const uiSchema = generateDefaultUISchema(schema);
-  t.deepEqual(uiSchema, uischema);
+  const generatedUiSchema = generateDefaultUISchema(schema);
+  t.deepEqual(generatedUiSchema, uischema);
 });
 
 test('generate ui schema for schema w/o properties', t => {

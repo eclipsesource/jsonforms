@@ -38,6 +38,15 @@ const createLayout = (layoutType: string): Layout => ({
 });
 
 /**
+ * Checks if the type of jsonSchema is a union of multiple types
+ *
+ * @param {JsonSchema} jsonSchema
+ * @returns {boolean}
+ */
+const isUnionType = (jsonSchema: JsonSchema): boolean =>
+  !_.isEmpty(jsonSchema) && !_.isEmpty(jsonSchema.type) && _.isArray(jsonSchema.type);
+
+/**
  * Derives the type of the jsonSchema element
  */
 const deriveType = (jsonSchema: JsonSchema): string => {
@@ -46,9 +55,7 @@ const deriveType = (jsonSchema: JsonSchema): string => {
         typeof jsonSchema.type === 'string') {
         return jsonSchema.type;
     }
-    if (!_.isEmpty(jsonSchema) &&
-        !_.isEmpty(jsonSchema.type) &&
-        _.isArray(jsonSchema.type)) {
+    if (isUnionType(jsonSchema)) {
         return _.head(jsonSchema.type);
     }
     if (!_.isEmpty(jsonSchema) &&
@@ -183,7 +190,7 @@ export const generateDefaultUISchema =
     (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
         wrapInLayoutIfNecessary(
             generateUISchema(jsonSchema, [], prefix, '', layoutType,
-            jsonSchema !== undefined && !_.isEmpty(jsonSchema) &&
-            jsonSchema.definitions ? jsonSchema.definitions : undefined,
+                             jsonSchema !== undefined && !_.isEmpty(jsonSchema) &&
+                             jsonSchema.definitions ? jsonSchema.definitions : undefined,
                              prefix),
             layoutType);

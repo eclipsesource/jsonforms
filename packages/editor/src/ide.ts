@@ -64,7 +64,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
     }
 
     JsonRefs.resolveRefs(getSchema(this._store.getState()))
-      .then( resolvedSchema => {
+      .then(
+        resolvedSchema => {
         this.editor.setInnerComponent(
           TreeRenderer,
           {
@@ -94,7 +95,7 @@ export class JsonEditorIde extends HTMLElement implements Editor {
           configureDownloadButton(this, downloadButton);
         }
       },
-             err => {
+        err => {
         console.log(err.stack);
       });
   }
