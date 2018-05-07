@@ -26,6 +26,7 @@ import * as _ from 'lodash';
 
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, LabelElement, Layout, UISchemaElement } from '../models/uischema';
+import { resolveSchema } from "../util/resolvers";
 
 /**
  * Creates a new ILayout.
@@ -119,8 +120,7 @@ const addLabel = (layout: Layout, labelName: string) => {
 
 const generateUISchema =
     (jsonSchema: JsonSchema, schemaElements: UISchemaElement[],
-     currentRef: string, schemaName: string, layoutType: string, definitions?: JsonSchema,
-     relativePath?: string)
+     currentRef: string, schemaName: string, layoutType: string, rootSchema?: JsonSchema)
       : UISchemaElement => {
 
     const type = deriveType(jsonSchema);
@@ -135,22 +135,16 @@ const generateUISchema =
             if (!_.isEmpty(jsonSchema.properties)) {
                 // traverse properties
                 const nextRef: string = currentRef + '/properties';
-                const nextRelativePath: string = relativePath + '/properties';
                 Object.keys(jsonSchema.properties).map(propName => {
                     let value = jsonSchema.properties[propName];
-                    relativePath = `${nextRelativePath}/${propName}`;
-                    let ref = `${nextRef}/${propName}`;
-                    if (value.$ref !== undefined &&
-                        definitions !== undefined &&
-                        !_.isEmpty(definitions)) {
-                        const path = value.$ref.substring(value.$ref.lastIndexOf('/') + 1);
-                        value = definitions[path];
-                        ref = `#/definitions/${propName}`;
+                    const ref = `${nextRef}/${propName}`;
+                    if (value.$ref !== undefined) {
+                        value = resolveSchema(rootSchema, value.$ref);
                     }
                     generateUISchema(
                         value,
                         layout.elements,
-                        ref, propName, layoutType, definitions, relativePath
+                        ref, propName, layoutType, rootSchema
                     );
                 });
             }
@@ -168,7 +162,7 @@ const generateUISchema =
         case 'boolean':
             const controlObject: ControlElement = createControlElement(
                 _.startCase(schemaName),
-                relativePath ? relativePath : currentRef
+                currentRef
             );
             schemaElements.push(controlObject);
 
@@ -189,8 +183,5 @@ const generateUISchema =
 export const generateDefaultUISchema =
     (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
         wrapInLayoutIfNecessary(
-            generateUISchema(jsonSchema, [], prefix, '', layoutType,
-                             jsonSchema !== undefined && !_.isEmpty(jsonSchema) &&
-                             jsonSchema.definitions ? jsonSchema.definitions : undefined,
-                             prefix),
+            generateUISchema(jsonSchema, [], prefix, '', layoutType, jsonSchema),
             layoutType);
