@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,153 @@ import test from 'ava';
 import { generateDefaultUISchema } from '../../src/generators/uischema';
 import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement, LabelElement, Layout, VerticalLayout } from '../../src/models/uischema';
+
+test('generate ui schema for Control element by resolving refs', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      type: {
+        type: 'string',
+        const: 'Control',
+        default: 'Control'
+      },
+      label: {
+        type: 'string'
+      },
+      scope: {
+        $ref: '#/definitions/scope'
+      },
+      rule: {
+        $ref: '#/definitions/rule'
+      }
+    },
+    required: [
+      'type',
+      'scope'
+    ],
+    definitions: {
+      scope: {
+        type: 'string',
+        pattern: '^#\\/properties\\/{1}'
+      },
+      rule: {
+        type: 'object',
+        properties: {
+          effect: {
+            type: 'string',
+            enum: [
+              'HIDE',
+              'SHOW',
+              'DISABLE',
+              'ENABLE'
+            ]
+          },
+          condition: {
+            type: 'object',
+            properties: {
+              type: {
+                type: 'string',
+                const: 'LEAF'
+              },
+              scope: {
+                $ref: '#/definitions/scope'
+              },
+              expectedValue: {
+                type: [
+                  'string',
+                  'integer',
+                  'number',
+                  'boolean'
+                ]
+              }
+            },
+            required: [
+              'type',
+              'scope',
+              'expectedValue'
+            ]
+          }
+        },
+        required: [
+          'effect',
+          'condition'
+        ]
+      }
+    }
+  };
+  const ruleLabel: LabelElement = {
+    type: 'Label',
+    text: 'Rule'
+  };
+  const conditionLabel: LabelElement = {
+    type: 'Label',
+    text: 'Condition'
+  };
+  const typeControl: ControlElement = {
+    type: 'Control',
+    label: 'Type',
+    scope: '#/properties/type'
+  };
+  const labelControl: ControlElement = {
+    type: 'Control',
+    label: 'Label',
+    scope: '#/properties/label'
+  };
+  const scopeControl: ControlElement = {
+    type: 'Control',
+    label: 'Scope',
+    scope: '#/properties/scope'
+  };
+  const effectControl: ControlElement = {
+    type: 'Control',
+    label: 'Effect',
+    scope: '#/properties/rule/properties/effect'
+  };
+
+  const conditionTypeControl: ControlElement = {
+    type: 'Control',
+    label: 'Type',
+    scope: '#/properties/rule/properties/condition/properties/type'
+  };
+  const conditionScopeControl: ControlElement = {
+    type: 'Control',
+    label: 'Scope',
+    scope: '#/properties/rule/properties/condition/properties/scope'
+  };
+  const conditionExpectedValueControl: ControlElement = {
+    type: 'Control',
+    label: 'Expected Value',
+    scope: '#/properties/rule/properties/condition/properties/expectedValue'
+  };
+  const conditionLayout: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [
+      conditionLabel,
+      conditionTypeControl,
+      conditionScopeControl,
+      conditionExpectedValueControl
+    ]
+  };
+  const ruleLayout: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [
+      ruleLabel,
+      effectControl,
+      conditionLayout
+    ]
+  };
+  const uischema: VerticalLayout = {
+    type: 'VerticalLayout',
+    elements: [
+      typeControl,
+      labelControl,
+      scopeControl,
+      ruleLayout
+    ]
+  };
+  const generatedUiSchema = generateDefaultUISchema(schema);
+  t.deepEqual(generatedUiSchema, uischema);
+});
 
 test('generate ui schema for schema w/o properties', t => {
     const schema: JsonSchema = {

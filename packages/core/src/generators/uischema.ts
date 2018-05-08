@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,6 +26,7 @@ import * as _ from 'lodash';
 
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, LabelElement, Layout, UISchemaElement } from '../models/uischema';
+import { resolveSchema } from "../util/resolvers";
 
 /**
  * Creates a new ILayout.
@@ -38,6 +39,15 @@ const createLayout = (layoutType: string): Layout => ({
 });
 
 /**
+ * Checks if the type of jsonSchema is a union of multiple types
+ *
+ * @param {JsonSchema} jsonSchema
+ * @returns {boolean}
+ */
+const isUnionType = (jsonSchema: JsonSchema): boolean =>
+  !_.isEmpty(jsonSchema) && !_.isEmpty(jsonSchema.type) && _.isArray(jsonSchema.type);
+
+/**
  * Derives the type of the jsonSchema element
  */
 const deriveType = (jsonSchema: JsonSchema): string => {
@@ -45,6 +55,9 @@ const deriveType = (jsonSchema: JsonSchema): string => {
         !_.isEmpty(jsonSchema.type) &&
         typeof jsonSchema.type === 'string') {
         return jsonSchema.type;
+    }
+    if (isUnionType(jsonSchema)) {
+        return _.head(jsonSchema.type);
     }
     if (!_.isEmpty(jsonSchema) &&
         (!_.isEmpty(jsonSchema.properties) || !_.isEmpty(jsonSchema.additionalProperties))) {
@@ -107,7 +120,8 @@ const addLabel = (layout: Layout, labelName: string) => {
 
 const generateUISchema =
     (jsonSchema: JsonSchema, schemaElements: UISchemaElement[],
-     currentRef: string, schemaName: string, layoutType: string): UISchemaElement => {
+     currentRef: string, schemaName: string, layoutType: string, rootSchema?: JsonSchema)
+      : UISchemaElement => {
 
     const type = deriveType(jsonSchema);
 
@@ -122,11 +136,15 @@ const generateUISchema =
                 // traverse properties
                 const nextRef: string = currentRef + '/properties';
                 Object.keys(jsonSchema.properties).map(propName => {
-                    const value = jsonSchema.properties[propName];
+                    let value = jsonSchema.properties[propName];
+                    const ref = `${nextRef}/${propName}`;
+                    if (value.$ref !== undefined) {
+                        value = resolveSchema(rootSchema, value.$ref);
+                    }
                     generateUISchema(
                         value,
                         layout.elements,
-                        `${nextRef}/${propName}`, propName, layoutType
+                        ref, propName, layoutType, rootSchema
                     );
                 });
             }
@@ -165,5 +183,5 @@ const generateUISchema =
 export const generateDefaultUISchema =
     (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
         wrapInLayoutIfNecessary(
-            generateUISchema(jsonSchema, [], prefix, '', layoutType),
+            generateUISchema(jsonSchema, [], prefix, '', layoutType, jsonSchema),
             layoutType);
