@@ -70,9 +70,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
           TreeRenderer,
           {
             uischema: getUiSchema(this._store.getState()),
-            schema: getSchema(this._store.getState()),
-            schemaService,
-            resolved: resolvedSchema.resolved
+            schema: resolvedSchema.resolved,
+            schemaService
           });
         this.editor.store = this._store;
 
