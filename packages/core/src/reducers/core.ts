@@ -23,13 +23,11 @@
   THE SOFTWARE.
 */
 import * as _ from 'lodash';
-import * as AJV from 'ajv';
-import { INIT, UPDATE_DATA } from '../actions';
 import { ErrorObject, ValidateFunction } from 'ajv';
+import { INIT, UPDATE_DATA } from '../actions';
+import { createAjv } from '../util/validator';
 
-const ajv = new AJV({ allErrors: true, jsonPointers: true, errorDataPath: 'property' });
-ajv.addFormat('time', '^([0-1][0-9]|2[0-3]):[0-5][0-9]$');
-
+const ajv = createAjv();
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   const valid = validator(data);
   if (valid) {

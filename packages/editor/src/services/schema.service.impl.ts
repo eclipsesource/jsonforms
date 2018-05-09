@@ -1,5 +1,4 @@
 /* tslint:disable:max-file-line-count */
-import * as AJV from 'ajv';
 import * as _ from 'lodash';
 import { JsonSchema } from '@jsonforms/core';
 import { resolveSchema } from '@jsonforms/core';
@@ -17,8 +16,9 @@ import { Resources } from '../resources/resources';
 import { ModelMapping } from '../helpers/containment.util';
 import { EditorContext } from '../editor-context';
 import * as JsonRefs from 'json-refs';
+import { createAjv } from '@jsonforms/core/lib/util/validator';
 
-const ajv = new AJV({ jsonPointers: true });
+const ajv = createAjv();
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
