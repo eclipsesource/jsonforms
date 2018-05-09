@@ -22,18 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
 import {
-    getPropsTransformer,
     mapDispatchToControlProps,
     mapStateToControlProps
     } from '@jsonforms/core';
 import { connect } from 'react-redux';
 /**
  * JSONForms specific connect function. This is a wrapper
- * around redux's connect function that executes any registered
- * prop transformers on the result of the given mapStateToProps
- * function before passing them to the actual connect function.
+ * around redux's connect function and is provided for convenience
+ * reasons.
  *
  * @param {(state, ownProps) => any} mapStateToProps
  * @param {(dispatch, ownProps) => any} mapDispatchToProps
@@ -44,12 +41,19 @@ export const connectToJsonForms = (
   mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
 
   return connect(
-    (state, ownProps) =>
-      (getPropsTransformer(state) || []).reduce(
-        (props, materializer) =>
-          _.merge(props, materializer(state, props)),
-        mapStateToProps(state, ownProps)
-      ),
+    (state, ownProps) => {
+      const props = mapStateToProps(state, ownProps);
+      if (props.scopedSchema !== undefined &&
+        (props.scopedSchema.type === 'integer' || props.scopedSchema.type === 'number')) {
+        return {
+          ...props,
+          toFormatted: n => n === null || n === undefined ? '' : n.toString(),
+          fromFormatted: s => Number(s)
+        };
+      }
+
+      return props;
+    },
     mapDispatchToProps
   )(Component);
 };
