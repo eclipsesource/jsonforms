@@ -58,7 +58,7 @@
     "@jsonforms/core": "^2.0.0",
     "@jsonforms/react": "^2.0.0",
     "@material-ui/icons": "^1.0.0-beta.43",
-    "material-ui": "^1.0.0-beta.43",
+    "material-ui": "1.0.0-beta.45",
     "material-ui-pickers": "^1.0.0-rc.6",
     "moment": "^2.20.1",
     "react": "^16.2.0",
@@ -68,7 +68,7 @@
     "@jsonforms/test": "^2.0.0",
     "@jsonforms/webcomponent": "^2.0.0",
     "ava": "^0.24.0",
-    "copy-webpack-plugin": "^4.2.3",
+    "copy-webpack-plugin": "^4.5.1",
     "document-register-element": "^1.7.0",
     "jest": "^22.4.2",
     "jsdom": "^11.9.0",
@@ -80,6 +80,6 @@
     "ts-jest": "^22.4.4",
     "ts-loader": "^3.2.0",
     "tslint-loader": "^3.5.3",
-    "webpack-dev-server": "^2.9.5"
+    "webpack-dev-server": "^2.11.2"
   }
 }

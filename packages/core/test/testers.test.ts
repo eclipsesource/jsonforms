@@ -266,10 +266,24 @@ test('tester isPrimitiveArrayControl', t => {
         }
       }
     ),
-    'Array Schema Type with wrong item type not checked!'
+    `Primitive array tester was not triggered for 'integer' schema type`
+  );
+  t.false(
+    isPrimitiveArrayControl(
+      control,
+      {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'array',
+            items: {type: 'object'}
+          }
+        }
+      }
+    ),
+    `Primitive array tester was not triggered for 'object' schema type`
   );
 });
-
 
 test('tester isObjectArrayControl', t => {
   t.false(isObjectArrayControl({type: 'Foo'}, null));

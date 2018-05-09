@@ -26,7 +26,7 @@ import * as _ from 'lodash';
 
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, LabelElement, Layout, UISchemaElement } from '../models/uischema';
-import { resolveSchema } from "../util/resolvers";
+import { resolveSchema } from '../util/resolvers';
 
 /**
  * Creates a new ILayout.
@@ -85,7 +85,7 @@ const isLayout = (uischema: UISchemaElement): uischema is Layout =>
 
 /**
  * Wraps the given {@code uiSchema} in a Layout if there is none already.
- * @param uiSchema The ui schema to wrap in a layout.
+ * @param uischema The ui schema to wrap in a layout.
  * @param layoutType The type of the layout to create.
  * @returns the wrapped uiSchema.
  */

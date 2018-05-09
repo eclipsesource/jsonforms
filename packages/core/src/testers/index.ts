@@ -337,6 +337,10 @@ export const isPrimitiveArrayControl = and(
     && schema.type === 'array'
     && !_.isEmpty(schema.items)
     && !Array.isArray(schema.items) // we don't care about tuples
+  ),
+  schemaSubPathMatches(
+    'items',
+    schema => _.includes(['integer', 'number', 'boolean', 'string'], schema.type)
   )
 );
 
