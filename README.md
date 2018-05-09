@@ -1,6 +1,6 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
-
+TESTCHANGE
 # Getting started
 1. Clone the seed app with `git clone https://github.com/eclipsesource/jsonforms-react-seed.git`
 2. Install dependencies with `npm install`
