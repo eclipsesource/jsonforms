@@ -43,6 +43,7 @@ import {
 } from '../reducers';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
+import { generateDefaultUISchema } from '../generators';
 
 export interface Labels {
   default: string;
@@ -221,11 +222,22 @@ export interface DispatchPropsOfControl {
   handleChange(path: string, value: any);
 }
 
-export const mapStateToDispatchRendererProps = (state, ownProps) => ({
-  renderers: state.jsonforms.renderers || [],
-  schema: ownProps.schema || getSchema(state),
-  uischema: ownProps.uischema || getUiSchema(state)
-});
+export const mapStateToDispatchRendererProps = (state, ownProps) => {
+  let uischema = ownProps.uischema;
+  if (uischema === undefined) {
+    if (ownProps.schema) {
+      uischema = generateDefaultUISchema(ownProps.schema);
+    } else {
+      uischema = getUiSchema(state);
+    }
+  }
+
+  return {
+    renderers: state.jsonforms.renderers || [],
+    schema: ownProps.schema || getSchema(state),
+    uischema
+  };
+};
 
 /**
  * Map state to layout props.
