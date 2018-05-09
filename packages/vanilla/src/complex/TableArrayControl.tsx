@@ -87,7 +87,7 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
     const buttonClass = getStyleAsClassName('array.table.button');
     const controlClass = [getStyleAsClassName('array.table'),
       convertToValidClassName(controlElement.scope)].join(' ');
-    const createControlElement = (key = ''): ControlElement => ({
+    const createControlElement = (key?: string): ControlElement => ({
       type: 'Control',
       label: false,
       scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
@@ -170,7 +170,7 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
                     <td>
                       {
                         errorsPerEntry ?
-                          <span style={{ color: 'red'}}>
+                          <span className={getStyleAsClassName('array.validation.error')}>
                             {_.join(errorsPerEntry.map(e => e.message), ' and ')}
                           </span> :
                           <span>OK</span>
