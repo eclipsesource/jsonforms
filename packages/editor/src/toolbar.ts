@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import * as Ajv from 'ajv';
+import { createAjv } from '@jsonforms/core/lib/util/validator';
 import { Editor } from './editor';
 
 /**
@@ -32,7 +32,7 @@ const fileInputHandler = editor => evt => {
       return;
     }
     if (!_.isEmpty(readData)) {
-      const ajv = new Ajv();
+      const ajv = createAjv()
       const valid = ajv.validate(editor.schema, readData);
       if (valid) {
         editor.data = readData;
