@@ -23,9 +23,8 @@
   THE SOFTWARE.
 */
 import * as _ from 'lodash';
-import * as moment from 'moment';
 import { isPlainLabel, Labels } from '@jsonforms/core';
-import { getLocale, getTranslations, i18nReducer } from './reducers';
+import { i18nReducer } from './reducers';
 
 export interface Translations {
   [key: string]: string;
@@ -80,33 +79,5 @@ export const translateLabel =
       return _.mapValues(label, l => translate(translations, l)) as Labels;
     }
   };
-
-export const translateProps = (state, props) => {
-  const label = translateLabel(getTranslations(state), props.label);
-  const description = translateLabel(getTranslations(state), props.description);
-  const momentLocale = moment().locale(getLocale(state));
-
-  if (props.scopedSchema && props.scopedSchema.type === 'number') {
-    return {
-      ...props,
-      label,
-      description,
-      toFormatted: fromNumber(getLocale(state)),
-      fromFormatted: toNumber,
-      locale: getLocale(state),
-      momentLocale
-    };
-  }
-
-  return {
-    ...props,
-    label,
-    description,
-    toFormatted: x => x,
-    fromFormatted: x => x,
-    locale: getLocale(state),
-    momentLocale
-  };
-};
 
 export { i18nReducer };
