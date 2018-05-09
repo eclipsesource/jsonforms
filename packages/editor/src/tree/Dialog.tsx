@@ -9,6 +9,9 @@ import {
   Resolve,
   update
 } from '@jsonforms/core';
+import {
+  getContainersProperties
+} from '../reducers';
 
 const Dialog = (
   {
@@ -19,59 +22,69 @@ const Dialog = (
     dialogProps,
     schemaService,
     setSelection,
-    rootData
-  }) => (
-  <dialog id='dialog' {...dialogProps}>
-    <label>
-      Select item to create
-    </label>
-    <div className='dialog-content content'>
-      {
-        schemaService.getContainmentProperties(schema)
-          .map(prop =>
-            <button
-              className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
-              key={`${prop.label}-button`}
-              onClick={() => {
-                const newData = _.keys(prop.schema.properties).reduce(
-                  (d, key) => {
-                    if (prop.schema.properties[key].default) {
-                      d[key] = prop.schema.properties[key].default;
-                    }
+    rootData,
+    containersProperties
+  }) => {
+  let containerProps;
+  if (containersProperties !== undefined && containersProperties[schema.id]) {
+    containerProps = containersProperties[schema.id];
+  } else {
+    containerProps = schemaService.getContainerProperties(schema);
+  }
+  return (
+    <dialog id='dialog' {...dialogProps}>
+      <label>
+        Select item to create
+      </label>
+      <div className='dialog-content content'>
+        {
+          containerProps
+            .map(prop =>
+              <button
+                className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
+                key={`${prop.label}-button`}
+                onClick={() => {
+                  const newData = _.keys(prop.schema.properties).reduce(
+                    (d, key) => {
+                      if (prop.schema.properties[key].default) {
+                        d[key] = prop.schema.properties[key].default;
+                      }
 
-                    // FIXME generate id if identifying property is set in editor to allow id refs
-                    return d;
-                  },
-                  {}
-                );
+                      // FIXME generate id if identifying property is set in editor to allow id refs
+                      return d;
+                    },
+                    {}
+                  );
 
-                const arrayPath = Paths.compose(path, prop.property);
-                const array = Resolve.data(rootData, arrayPath) as any[];
-                const selectionIndex = _.isEmpty(array) ? 0 : array.length;
-                const selectionPath = Paths.compose(arrayPath, selectionIndex.toString());
+                  const arrayPath = Paths.compose(path, prop.property);
+                  const array = Resolve.data(rootData, arrayPath) as any[];
+                  const selectionIndex = _.isEmpty(array) ? 0 : array.length;
+                  const selectionPath = Paths.compose(arrayPath, selectionIndex.toString());
 
-                add(path, prop, newData);
-                setSelection(prop.schema, newData, selectionPath)();
-                closeDialog();
-              }}
-            >
-              {prop.label}
-            </button>
-          )
-      }
-    </div>
-    <button
-      className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-close'
-      onClick={closeDialog}
-    >
-      Close
-    </button>
-  </dialog>
-);
+                  add(path, prop, newData);
+                  setSelection(prop.schema, newData, selectionPath)();
+                  closeDialog();
+                }}
+              >
+                {prop.label}
+              </button>
+            )
+        }
+      </div>
+      <button
+        className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-close'
+        onClick={closeDialog}
+      >
+        Close
+      </button>
+    </dialog>
+  );
+};
 
 const mapStateToProps = state => {
   return {
-    rootData: getData(state)
+    rootData: getData(state),
+    containersProperties: getContainersProperties(state)
   };
 };
 

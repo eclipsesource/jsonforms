@@ -17,12 +17,12 @@ import {
   DropResult,
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
-import { ContainmentProperty, SchemaService } from '../services/schema.service';
+import { Property, SchemaService } from '../services/schema.service';
 import { matchContainmentProperty } from '../helpers/containment.util';
 
 export interface ExpandArrayProps {
   rootData: any;
-  containmentProps: ContainmentProperty[];
+  containmentProps: Property[];
   path: string;
   selection: any;
   schemaService: SchemaService;
@@ -35,7 +35,7 @@ export interface ExpandArrayProps {
  * a suitable delete function for the expanded elements is created.
  *
  * @param data the array to expand
- * @param property the {@link ContainmentProperty} defining the property that the array belongs to
+ * @param property the {@link Property} defining the property that the array belongs to
  * @param parentPath the instance path where data can be obtained from
  */
 export const ExpandArray = (

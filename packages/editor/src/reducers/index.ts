@@ -1,7 +1,11 @@
 import * as _ from 'lodash';
 import { ModelMapping } from '../editor-context';
+import { Property } from '../services/schema.service';
 
 export const ADD_UI_SCHEMA: 'jsonforms/editor/ADD_UISCHEMA' = 'jsonforms/editor/ADD_UISCHEMA';
+export const ADD_CONTAINER_PROPERTIES:
+  'jsonforms/editor/ADD_CONTAINER_PROPERTIES' =
+  'jsonforms/editor/ADD_CONTAINER_PROPERTIES';
 
 export const getUiSchemata = state => extractUiSchemata(state.jsonforms.editor);
 export const getImageMapping = state => extractImageMapping(state.jsonforms.editor);
@@ -9,11 +13,17 @@ export const getLabelMapping = state => extractLabelMapping(state.jsonforms.edit
 export const getModelMapping = state => extractModelMapping(state.jsonforms.editor);
 export const getResources = state => extractResources(state.jsonforms.editor);
 export const getIdentifyingProperty = state => extractIdentifyingProperty(state.jsonforms.editor);
+export const getContainersProperties = state => extractContainersProperties(state.jsonforms.editor);
 
 export interface AddUiSchemaAction {
     type: 'jsonforms/editor/ADD_UISCHEMA';
     schemaId: string;
     uiSchema: any;
+}
+
+export interface AddContainerPropertiesAction {
+  type: 'jsonforms/editor/ADD_CONTAINER_PROPERTIES';
+  containerProperties: { [schemaId: string]: Property[] };
 }
 
 const extractUiSchemata = state => state.uiSchemata;
@@ -22,6 +32,7 @@ const extractLabelMapping = state => state.labelMapping;
 const extractModelMapping = state => state.modelMapping;
 const extractResources = state => state.resources;
 const extractIdentifyingProperty = state => state.identifyingProperty;
+const extractContainersProperties = state => state.containersProperties;
 
 // TODO Add action to add a resource when referencing is implemented
 
@@ -39,6 +50,23 @@ export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
         schemaId: schemaId,
         uiSchema: uiSchema
     };
+};
+
+/**
+ * Creates an action to add a calculated container properties for the given schema id
+ * If there already are container properties for the given schema id
+ * it is overwritten with the given one
+ *
+ * @param {[p: string]: Property[]} container
+ * @returns {AddContainerPropertiesAction}
+ */
+export const addContainerProperties =
+  (containerProperties: { [schemaId: string]: Property[] }):
+    AddContainerPropertiesAction => {
+  return {
+    type: ADD_CONTAINER_PROPERTIES,
+    containerProperties: containerProperties
+  };
 };
 
 export interface EditorState {
@@ -89,11 +117,17 @@ export interface EditorState {
      * a data element's unique ID when id-based referencing is used.
      */
     identifyingProperty?: string;
+
+    /**
+     * Stores calculated container properties for a given schema
+     */
+    containersProperties: { [schemaId: string]: Property[] };
 }
 
 export const editorReducer = (
     state: EditorState = {
-        uiSchemata: {}
+        uiSchemata: {},
+        containersProperties: {}
     },
     action): EditorState => {
     switch (action.type) {
@@ -113,7 +147,23 @@ export const editorReducer = (
                 labelMapping: state.labelMapping,
                 modelMapping: state.modelMapping,
                 resources: state.resources,
-                identifyingProperty: state.identifyingProperty
+                identifyingProperty: state.identifyingProperty,
+                containersProperties: state.containersProperties
+            };
+        case ADD_CONTAINER_PROPERTIES:
+            if (_.isEmpty(action.containerProperties) ||
+                action.containerProperties === undefined ||
+                action.containerProperties === null) {
+                return state;
+            }
+            return {
+              uiSchemata: state.uiSchemata,
+              imageMapping: state.imageMapping,
+              labelMapping: state.labelMapping,
+              modelMapping: state.modelMapping,
+              resources: state.resources,
+              identifyingProperty: state.identifyingProperty,
+              containersProperties: { ...state.containersProperties, ...action.containerProperties }
             };
         default:
             return state;

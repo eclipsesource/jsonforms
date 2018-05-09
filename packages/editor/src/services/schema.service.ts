@@ -18,36 +18,7 @@ export interface Property {
    */
   readonly schema: JsonSchema;
 }
-/**
- * A ContainmentProperty extends the Property and provides methods
- * which allow to modify containment data.
- * @see Property
- */
-export interface ContainmentProperty extends Property {
-  /**
-   * This allows to add data to the containment.
-   * @param data The object to add to
-   * @return a function that expects the element to be added and optionally the value next to which
-   *         the new value is added. insertAfter defines whether the new value should be added
-   *         after or before the neighbourValue. If no neighbour value is provided or it does not
-   *         exist in the containment, the valueToAdd is inserted at the end.
-   */
-  addToData(data: Object): (valueToAdd: object, neighbourValue?: object,
-                            insertAfter?: boolean) => void;
-  /**
-   * This allows to delete data from the containment.
-   * The result is a function accepting the value to delete.
-   * @param data The object to delete from
-   * @return function accepting the value to delete
-   */
-  deleteFromData(data: Object): (valueToDelete: object) => void;
-  /**
-   * This allows to retrieve the data of the containment.
-   * @param data The object the containment is in
-   * @return The containment value (e.g. an array)
-   */
-  getData(data: Object): Object;
-}
+
 /**
  * A ReferenceProperty extends the Property and provides methods
  * which allow to modify reference data.
@@ -93,15 +64,10 @@ export interface ReferenceProperty extends Property {
   findReferenceTargets(data: Object): { [key: string]: Object };
 }
 
-export class ContainmentPropertyImpl implements ContainmentProperty {
+export class PropertyImpl implements Property {
   constructor(private innerSchema: JsonSchema,
               private key: string,
-              private name: string,
-              private addFunction: (data: object) => (valueToAdd: object,
-                                                      neighbourValue?: object,
-                                                      insertAfter?: boolean) => void,
-              private deleteFunction: (data: object) => (valueToDelete: object) => void,
-              private getFunction: (data: object) => Object) {}
+              private name: string) {}
   get label(): string {
     return _.find(
       [
@@ -118,16 +84,6 @@ export class ContainmentPropertyImpl implements ContainmentProperty {
   }
   get property(): string {
     return this.key;
-  }
-  addToData(data: object): (valueToAdd: object, neighbourValue?: object, insertAfter?: boolean)
-      => void {
-    return this.addFunction(data);
-  }
-  deleteFromData(data: object): (valueToDelete: object) => void {
-    return this.deleteFunction(data);
-  }
-  getData(data: object): Object {
-    return this.getFunction(data);
   }
 }
 export class ReferencePropertyImpl implements ReferenceProperty {
@@ -175,9 +131,6 @@ export class ReferencePropertyImpl implements ReferenceProperty {
   }
 }
 
-export const isContainmentProperty = (property: Property): property is ContainmentProperty => {
-  return property instanceof ContainmentPropertyImpl;
-};
 export const isReferenceProperty = (property: Property): property is ReferenceProperty => {
   return property instanceof ReferencePropertyImpl;
 };
@@ -187,19 +140,19 @@ export const isReferenceProperty = (property: Property): property is ReferencePr
  */
 export interface SchemaService {
   /**
-   * Retrieves an array of containment properties based on the provided schema.
-   * @param schema The schema to check for containments
-   * @return The array of {@link ContainmentProperty} or empty if no containments are available
-   * @see ContainmentProperty
+   * Retrieves an array of container properties based on the provided schema.
+   * @param schema The schema to check for container properties
+   * @return The array of {@link Property} or empty if no container properties are available
+   * @see Property
    */
-  getContainmentProperties(schema: JsonSchema): ContainmentProperty[];
+  getContainerProperties(schema: JsonSchema): Property[];
   /**
-   * Checks whether a containment properties are available in the provided schema.
-   * @param schema The schema to check for containments
-   * @return true if containment properties are available, false otherwise
-   * @see {@link getContainmentProperties}
+   * Checks whether container properties are available in the provided schema.
+   * @param schema The schema to check for container properties
+   * @return true if container properties are available, false otherwise
+   * @see {@link getContainerProperties}
    */
-  hasContainmentProperties(schema: JsonSchema): boolean;
+  hasContainerProperties(schema: JsonSchema): boolean;
   /**
    * Retieves a self contained schema.
    * @param parentSchema The schema to use for resolvement

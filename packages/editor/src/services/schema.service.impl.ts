@@ -3,13 +3,12 @@ import * as _ from 'lodash';
 import { JsonSchema } from '@jsonforms/core';
 import { resolveSchema } from '@jsonforms/core';
 import {
-  ContainmentProperty,
-  ContainmentPropertyImpl,
+  Property,
+  PropertyImpl,
   ReferenceProperty,
   ReferencePropertyImpl,
   SchemaService
 } from './schema.service';
-import * as uuid from 'uuid';
 import { resolveLocalData } from '../helpers/util';
 import { RS_PROTOCOL } from '../resources/resource-set';
 import { Resources } from '../resources/resources';
@@ -43,52 +42,6 @@ const checkData = (data: Object, targetSchema: JsonSchema): boolean => {
   return false;
 };
 
-const addToArray =
-  (key: string, identifyingProperty?: string) =>
-    (data: Object) =>
-      (valueToAdd: object, neighbourValue?: object, insertAfter = true) => {
-        if (data[key] === undefined) {
-          data[key] = [];
-        }
-        if (!_.isEmpty(identifyingProperty) && _.isEmpty(valueToAdd[identifyingProperty])) {
-          valueToAdd[identifyingProperty] = uuid.v4();
-        }
-        const childArray = data[key];
-        if (neighbourValue !== undefined && neighbourValue !== null) {
-          const index = childArray.indexOf(neighbourValue) as number;
-          if (insertAfter) {
-            if (index >= 0 && index < (childArray.length - 1)) {
-              childArray.splice(index + 1, 0, valueToAdd);
-
-              return;
-            }
-            console.warn('Could not add the new value after the given neighbour value. ' +
-              'The new value was added at the end.');
-          } else {
-            if (index >= 0) {
-              childArray.splice(index, 0, valueToAdd);
-
-              return;
-            }
-            console.warn('The given neighbour value could not be found. ' +
-              'The new value was added at the end.');
-          }
-        }
-        // default behavior: add at the end
-        childArray.push(valueToAdd);
-
-      };
-const deleteFromArray = (key: string) => (data: object) => (valueToDelete: object) => {
-  const childArray = data[key];
-  if (!childArray) {
-    return;
-  }
-  const indexToDelete = childArray.indexOf(valueToDelete);
-  childArray.splice(indexToDelete, 1);
-};
-const getArray = (key: string) => (data: object) => {
-  return data[key];
-};
 const addReference = (schema: JsonSchema, identifyingProperty: string, propName: string) =>
   (data: Object, toAdd: object) => {
 
@@ -435,14 +388,15 @@ export class SchemaServiceImpl implements SchemaService {
     this.selfContainedSchemas[editorContext.dataSchema.id] = this.editorContext.dataSchema;
   }
 
-  getContainmentProperties(schema: JsonSchema): ContainmentProperty[] {
-    return this.getContainment('root', 'root', schema,
-                               this.editorContext.dataSchema, false, null, null, null);
+  getContainerProperties(schema: JsonSchema): Property[] {
+    return this.getContainerProperty('root', 'root', schema,
+                                     this.editorContext.dataSchema, false);
   }
 
-  hasContainmentProperties(schema: JsonSchema): boolean {
-    return this.getContainmentProperties(schema).length !== 0;
+  hasContainerProperties(schema: JsonSchema): boolean {
+    return this.getContainerProperties(schema).length !== 0;
   }
+
   getSelfContainedSchema(parentSchema: JsonSchema, refPath: string): JsonSchema {
     let schema = resolveSchema(parentSchema, refPath);
     schema = deepCopy(schema);
@@ -546,33 +500,27 @@ export class SchemaServiceImpl implements SchemaService {
     return [];
   }
 
-  private getContainment(key: string, name: string, schema: JsonSchema, rootSchema: JsonSchema,
-                         isInContainment: boolean,
-                         addFunction: (data: object) => (valueToAdd: object,
-                                                         neighbourValue?: object,
-                                                         insertAfter?: boolean) => void,
-                         deleteFunction: (data: object) => (valueToDelete: object) => void,
-                         getFunction: (data: object) => Object,
-                         internal = false
-  ): ContainmentProperty[] {
+  private getContainerProperty(key: string,
+                               name: string,
+                               schema: JsonSchema,
+                               rootSchema: JsonSchema,
+                               isInContainment: boolean,
+                               internal = false
+  ): Property[] {
     if (schema.$ref !== undefined) {
-      return this.getContainment(
+      return this.getContainerProperty(
         key,
         schema.$ref === '#' ? undefined : schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
         this.getSelfContainedSchema(rootSchema, schema.$ref),
         rootSchema,
         isInContainment,
-        addFunction,
-        deleteFunction,
-        getFunction,
         internal
       );
     }
     if (isObject(schema)) {
       if (isInContainment) {
 
-        return [new ContainmentPropertyImpl(schema, key, name, addFunction, deleteFunction,
-                                            getFunction)];
+        return [new PropertyImpl(schema, key, name)];
       }
       if (internal) {
         // If internal is true the schema service does not need to resolve further,
@@ -585,15 +533,12 @@ export class SchemaServiceImpl implements SchemaService {
         .reduce(
         (prev, cur) =>
           prev.concat(
-            this.getContainment(
+            this.getContainerProperty(
               cur,
               cur,
               schema.properties[cur],
               rootSchema,
               false,
-              addFunction,
-              deleteFunction,
-              getFunction,
               true
             )
           ),
@@ -601,15 +546,12 @@ export class SchemaServiceImpl implements SchemaService {
         );
     }
     if (isArray(schema) && !Array.isArray(schema.items)) {
-      return this.getContainment(
+      return this.getContainerProperty(
         key,
         name,
         schema.items,
         rootSchema,
         true,
-        addToArray(key, this.editorContext.identifyingProperty),
-        deleteFromArray(key),
-        getArray(key),
         internal
       );
     }
@@ -618,15 +560,12 @@ export class SchemaServiceImpl implements SchemaService {
         .reduce(
         (prev, cur) =>
           prev.concat(
-            this.getContainment(
+            this.getContainerProperty(
               key,
               undefined,
               cur,
               rootSchema,
               isInContainment,
-              addFunction,
-              deleteFunction,
-              getFunction,
               internal
             )
           ),

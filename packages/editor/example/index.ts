@@ -29,7 +29,7 @@ window.onload = () => {
 
   const store = createEditorStore({}, taskSchema, uischema, materialFields,
                                   materialRenderers, imageProvider, labelProvider, modelMapping,
-                                  detailSchemata);
+                                  detailSchemata, {});
 
   ide.filterPredicate = filterPredicate;
   ide.store = store;

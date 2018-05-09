@@ -440,10 +440,8 @@ describe('Schema Service Reference Tests', () => {
     const refProperty =
       service.getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
     expect(isReferenceProperty(refProperty)).toBe(true);
-    expect(isContainmentProperty(refProperty)).toBe(false);
-    const containmentProperty = service.getContainmentProperties(schema)[0];
+    const containmentProperty = service.getContainerProperties(schema)[0];
     expect(isReferenceProperty(containmentProperty)).toBe(false);
-    expect(isContainmentProperty(containmentProperty)).toBe(true);
   });
 
   test('support for array references', () => {

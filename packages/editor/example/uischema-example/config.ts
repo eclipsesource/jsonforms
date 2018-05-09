@@ -47,3 +47,24 @@ export const modelMapping = {
 };
 
 export const detailSchemata = {};
+
+export const importedUISchemaModel = {
+  type: 'HorizontalLayout',
+  elements: [
+    {
+      type: 'VerticalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/name',
+          label: 'Name'
+        },
+        {
+          type: 'Control',
+          label: 'Birthday',
+          scope: '#/properties/birthday'
+        }
+      ]
+    }
+  ]
+};

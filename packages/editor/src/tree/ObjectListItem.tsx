@@ -10,7 +10,7 @@ import {
   update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
-import { ContainmentProperty, SchemaService } from '../services/schema.service';
+import { Property, SchemaService } from '../services/schema.service';
 import {
   DragSource,
   DragSourceMonitor,
@@ -23,7 +23,12 @@ import {
   moveListItem,
   Types } from './dnd.util';
 import { indexFromPath, LabelDefinition } from '../helpers/util';
-import { getImageMapping, getLabelMapping } from '../reducers';
+import {
+  addContainerProperties,
+  getContainersProperties,
+  getImageMapping,
+  getLabelMapping
+} from '../reducers';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -80,6 +85,8 @@ export interface ObjectListItemProps {
   imageMapping?: any;
   labelMapping?: any;
   filterPredicate?: any;
+  containersProperties?: any;
+  addProperty?: any;
 }
 
 const ObjectListItem = (
@@ -93,16 +100,23 @@ const ObjectListItem = (
     schemaService,
     imageMapping,
     labelMapping,
-    filterPredicate
+    filterPredicate,
+    containersProperties,
+    addProperty
   }: ObjectListItemProps) => {
-
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
   const liClasses = selection === data ? 'selected' : '';
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
-  const containmentProps = schemaService.getContainmentProperties(schema);
-  const groupedProps = _.groupBy(containmentProps, property => property.property);
+  let containerProps;
+  if (containersProperties !== undefined && containersProperties[schema.id]) {
+    containerProps = containersProperties[schema.id];
+  } else {
+    containerProps = schemaService.getContainerProperties(schema);
+    addProperty({ [schema.id]: containerProps });
+  }
+  const groupedProps = _.groupBy(containerProps, property => property.property);
 
   // TODO: key should be set in caller
   return (
@@ -119,7 +133,7 @@ const ObjectListItem = (
             {getNamingFunction(schema, labelMapping)(data)}
           </span>
           {
-            schemaService.hasContainmentProperties(schema) ?
+            !_.isEmpty(containerProps) ?
               (
                 <span
                   className='add'
@@ -160,12 +174,14 @@ const ObjectListItem = (
 
 const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
+  const containersProperties = getContainersProperties(state);
 
   return {
     index: index,
     rootData: getData(state),
     imageMapping: getImageMapping(state),
-    labelMapping: getLabelMapping(state)
+    labelMapping: getLabelMapping(state),
+    containersProperties
   };
 };
 
@@ -187,7 +203,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         )
       );
     },
-    moveListItem: moveListItem(dispatch)
+    moveListItem: moveListItem(dispatch),
+    addProperty(containerProperty) {
+      dispatch(addContainerProperties(containerProperty));
+    }
   };
 };
 
@@ -221,7 +240,7 @@ export interface ObjectListItemDndProps extends ObjectListItemProps {
    * The Containment Properties of the parent list containing this item.
    * Will be needed to determine whether another list item can be dropped next to this one.
    */
-  parentProperties?: ContainmentProperty[];
+  parentProperties?: Property[];
   // Drag and Drop:
   isDragging: boolean;
   connectDragSource;
@@ -243,7 +262,9 @@ const ObjectListItemDnd = (
     // isDragging,
     connectDragSource,
     connectDropTarget,
-    filterPredicate
+    filterPredicate,
+    containersProperties,
+    addProperty
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -258,6 +279,8 @@ const ObjectListItemDnd = (
       imageMapping={imageMapping}
       labelMapping={labelMapping}
       filterPredicate={filterPredicate}
+      containersProperties={containersProperties}
+      addProperty={addProperty}
     />
   );
   if (isRoot === true) {
