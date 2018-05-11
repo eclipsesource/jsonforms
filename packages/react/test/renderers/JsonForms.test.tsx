@@ -45,7 +45,6 @@ import {
 import * as TestUtils from 'react-dom/test-utils';
 
 import { JsonForms, StatelessRenderer } from '../../src';
-
 /**
  * Describes the initial state of the JSON Form's store.
  */

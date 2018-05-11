@@ -27,10 +27,13 @@ import * as _ from 'lodash';
 import {
   createDefaultValue,
   mapDispatchToControlProps,
-  mapStateToControlProps
+  mapStateToControlProps,
+  mapStateToDispatchRendererProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
+import { generateDefaultUISchema } from '../../src/generators';
+import { ControlElement } from '../../src';
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
@@ -53,7 +56,7 @@ const disableRule = {
   }
 };
 
-const coreUISchema = {
+const coreUISchema: ControlElement = {
   type: 'Control',
   scope: '#/properties/firstName',
 };
@@ -73,9 +76,6 @@ const createState = uischema => ({
       },
       uischema,
       errors: []
-    },
-    i18n: {
-      locale: 'en-US'
     }
   }
 });
@@ -295,4 +295,56 @@ test('createDefaultValue', t => {
   t.is(createDefaultValue({ type: 'null' }), null);
   t.deepEqual(createDefaultValue({ type: 'object' }), {});
   t.deepEqual(createDefaultValue({ type: 'something' }), {});
+});
+
+test(`mapStateToDispatchRendererProps should generate UI schema given ownProps schema`, t => {
+  const store = mockStore(createState(coreUISchema));
+  const schema = {
+    type: 'object',
+    properties: {
+      bar: {
+        type: 'number'
+      }
+    }
+  };
+
+  const props = mapStateToDispatchRendererProps(
+    store.getState(),
+    { schema }
+  );
+  t.deepEqual(props.uischema, generateDefaultUISchema(schema));
+});
+
+test(`mapStateToDispatchRendererProps should use registered UI schema given no ownProps`, t => {
+  const store = mockStore(createState(coreUISchema));
+  const props = mapStateToDispatchRendererProps(
+    store.getState(),
+    {}
+  );
+  t.deepEqual(props.uischema, coreUISchema);
+});
+
+test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps`, t => {
+  const store = mockStore(createState(coreUISchema));
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      },
+      bar: {
+        type: 'number'
+      }
+    }
+  };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+
+  const props = mapStateToDispatchRendererProps(
+    store.getState(),
+    { schema, uischema }
+  );
+  t.deepEqual(props.uischema, uischema);
 });
