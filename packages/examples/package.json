@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "JSON Forms usage examples",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -26,9 +26,9 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.0",
-    "@jsonforms/react": "^2.0.0",
-    "@jsonforms/webcomponent": "^2.0.0",
+    "@jsonforms/core": "^2.0.1",
+    "@jsonforms/react": "^2.0.1",
+    "@jsonforms/webcomponent": "^2.0.1",
     "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-redux": "^5.0.6",
