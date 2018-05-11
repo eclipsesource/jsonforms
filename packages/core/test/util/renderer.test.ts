@@ -27,7 +27,8 @@ import * as _ from 'lodash';
 import {
   createDefaultValue,
   mapDispatchToControlProps,
-  mapStateToControlProps, mapStateToDispatchRendererProps
+  mapStateToControlProps,
+  mapStateToDispatchRendererProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
@@ -321,4 +322,29 @@ test(`mapStateToDispatchRendererProps should use registered UI schema given no o
     {}
   );
   t.deepEqual(props.uischema, coreUISchema);
+});
+
+test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps`, t => {
+  const store = mockStore(createState(coreUISchema));
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      },
+      bar: {
+        type: 'number'
+      }
+    }
+  };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+
+  const props = mapStateToDispatchRendererProps(
+    store.getState(),
+    { schema, uischema }
+  );
+  t.deepEqual(props.uischema, uischema);
 });
