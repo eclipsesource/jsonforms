@@ -1,7 +1,7 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
+JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # Material Renderers Package
 This is the JSONForms Material Renderers Package. This package only contains renderers and must be combined with [JSONForms React](https://www.npmjs.com/package/@jsonforms/react).
