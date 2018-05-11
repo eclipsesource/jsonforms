@@ -1,12 +1,12 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
+JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # Angular Material Renderers Package
-This is the JSONForms Angular Material Renderers Package. This package only contains renderers and must be combined with  [JSONForms Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
+**NOTE**: This is a **private** package as it is still work-in-progress.
 
-**This is a proof of concept currently and will evolve in the future.**
+This is the JSONForms Angular Material renderers package. This package only contains renderers and must be combined with  [JSONForms Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
 
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.

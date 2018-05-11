@@ -1,7 +1,7 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
+JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # Test Package
 This is the JSONForms test package. It can be used for testing packages which do not care about a specific renderer set being used, e.g. the i18n or the webcomponent package.

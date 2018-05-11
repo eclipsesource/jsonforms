@@ -1,7 +1,7 @@
 # JSONForms - More Forms. Less Code
 ### Complex Forms in the blink of an eye
 
-JSONForms eliminates the tedious task of writing fully-featued forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
+JSONForms eliminates the tedious task of writing fully-featured forms by hand by leveraging the capabilities of JSON, JSON Schema and Javascript.
 
 # I18n Package
 This is the JSONForms i18n package. This package provides reducers and actions to support i18n.
