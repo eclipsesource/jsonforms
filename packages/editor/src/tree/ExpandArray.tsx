@@ -17,7 +17,7 @@ import {
   DropResult,
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
-import { Property, SchemaService } from '../services/schema.service';
+import { Property } from '../services/container.service';
 import { matchContainmentProperty } from '../helpers/containment.util';
 
 export interface ExpandArrayProps {
@@ -25,7 +25,6 @@ export interface ExpandArrayProps {
   containmentProps: Property[];
   path: string;
   selection: any;
-  schemaService: SchemaService;
   handlers: any;
   filterPredicate: any;
 }
@@ -44,7 +43,6 @@ export const ExpandArray = (
     containmentProps,
     path,
     selection,
-    schemaService,
     handlers,
     filterPredicate
   }: ExpandArrayProps
@@ -71,7 +69,6 @@ export const ExpandArray = (
           schema={property.schema}
           selection={selection}
           handlers={handlers}
-          schemaService={schemaService}
           parentProperties={containmentProps}
           filterPredicate={filterPredicate}
         />
@@ -121,7 +118,6 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
       rootData,
       containmentProps,
       path,
-      schemaService,
       selection,
       handlers,
       // Drag and Drop Parameters
@@ -156,7 +152,6 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
           rootData={rootData}
           selection={selection}
           handlers={handlers}
-          schemaService={schemaService}
           filterPredicate={filterPredicate}
         />
       </ul>

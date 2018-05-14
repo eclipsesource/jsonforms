@@ -26,8 +26,7 @@ export const ExpandRootArray = (
     schema,
     path,
     selection,
-    handlers,
-    schemaService
+    handlers
   }
 ) => {
 
@@ -46,7 +45,6 @@ export const ExpandRootArray = (
           schema={schema}
           selection={selection}
           handlers={handlers}
-          schemaService={schemaService}
           isRoot={true}
         />
       );
@@ -61,8 +59,7 @@ export const ExpandRootArrayContainer = (
     rootData,
     selection,
     uischema,
-    handlers,
-    schemaService
+    handlers
   }
 ) => {
 
@@ -74,7 +71,6 @@ export const ExpandRootArrayContainer = (
       selection={selection}
       handlers={handlers}
       uischema={uischema}
-      schemaService={schemaService}
     />
   );
 };

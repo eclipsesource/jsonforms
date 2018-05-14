@@ -9,10 +9,7 @@ import {
   configureUploadButton,
   createExportDataDialog
 } from './toolbar';
-import { SchemaServiceImpl } from './services/schema.service.impl';
-import { EditorContext } from './editor-context';
 import '@jsonforms/webcomponent';
-import { getIdentifyingProperty, getModelMapping } from './reducers';
 import * as JsonRefs from 'json-refs';
 
 export class JsonEditorIde extends HTMLElement implements Editor {
@@ -54,15 +51,6 @@ export class JsonEditorIde extends HTMLElement implements Editor {
       return;
     }
 
-    // FIXME we still need an editor context for the schema service
-    const editorContext: EditorContext = {
-      dataSchema: getSchema(this._store.getState()),
-      modelMapping: getModelMapping(this._store.getState()),
-      identifyingProperty: getIdentifyingProperty(this._store.getState())
-    };
-
-    const schemaService = new SchemaServiceImpl(editorContext);
-
     if (this.editor === undefined || this.editor === null) {
       this.editor = document.createElement('json-forms') as JsonFormsElement;
       this.appendChild(this.editor);
@@ -76,7 +64,6 @@ export class JsonEditorIde extends HTMLElement implements Editor {
           {
             uischema: getUiSchema(this._store.getState()),
             schema: resolvedSchema.resolved,
-            schemaService,
             filterPredicate: this._filterPredicate
           });
         this.editor.store = this._store;

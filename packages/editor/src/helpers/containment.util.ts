@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Property } from '../services/schema.service';
+import { Property } from '../services/container.service';
 
 /**
  * Determines the container Property of the given data object by using the model mapping.

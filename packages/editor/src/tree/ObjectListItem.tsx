@@ -4,13 +4,14 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
   getData,
+  getSchema,
   JsonSchema,
   Paths,
   resolveData,
   update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
-import { Property, SchemaService } from '../services/schema.service';
+import { getContainerProperties, Property } from '../services/container.service';
 import {
   DragSource,
   DragSourceMonitor,
@@ -27,7 +28,7 @@ import {
   addContainerProperties,
   getContainersProperties,
   getImageMapping,
-  getLabelMapping
+  getLabelMapping,
 } from '../reducers';
 
 /**
@@ -81,12 +82,12 @@ export interface ObjectListItemProps {
     onAdd: any;
     onSelect: any;
   };
-  schemaService: SchemaService;
   imageMapping?: any;
   labelMapping?: any;
   filterPredicate?: any;
   containersProperties?: any;
   addProperty?: any;
+  rootSchema: JsonSchema;
 }
 
 const ObjectListItem = (
@@ -97,12 +98,12 @@ const ObjectListItem = (
     data,
     handlers,
     selection,
-    schemaService,
     imageMapping,
     labelMapping,
     filterPredicate,
     containersProperties,
-    addProperty
+    addProperty,
+    rootSchema
   }: ObjectListItemProps) => {
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
@@ -113,7 +114,7 @@ const ObjectListItem = (
   if (containersProperties !== undefined && containersProperties[schema.id]) {
     containerProps = containersProperties[schema.id];
   } else {
-    containerProps = schemaService.getContainerProperties(schema);
+    containerProps = getContainerProperties(schema, rootSchema);
     addProperty({ [schema.id]: containerProps });
   }
   const groupedProps = _.groupBy(containerProps, property => property.property);
@@ -163,7 +164,6 @@ const ObjectListItem = (
             schema={schema}
             selection={selection}
             handlers={handlers}
-            schemaService={schemaService}
             filterPredicate={filterPredicate}
           />
       )
@@ -181,6 +181,7 @@ const mapStateToProps = (state, ownProps) => {
     rootData: getData(state),
     imageMapping: getImageMapping(state),
     labelMapping: getLabelMapping(state),
+    rootSchema: getSchema(state),
     containersProperties
   };
 };
@@ -255,7 +256,6 @@ const ObjectListItemDnd = (
     data,
     handlers,
     selection,
-    schemaService,
     imageMapping,
     labelMapping,
     isRoot,
@@ -264,7 +264,8 @@ const ObjectListItemDnd = (
     connectDropTarget,
     filterPredicate,
     containersProperties,
-    addProperty
+    addProperty,
+    rootSchema
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -275,12 +276,12 @@ const ObjectListItemDnd = (
       data={data}
       handlers={handlers}
       selection={selection}
-      schemaService={schemaService}
       imageMapping={imageMapping}
       labelMapping={labelMapping}
       filterPredicate={filterPredicate}
       containersProperties={containersProperties}
       addProperty={addProperty}
+      rootSchema={rootSchema}
     />
   );
   if (isRoot === true) {

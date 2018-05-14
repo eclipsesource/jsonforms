@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
   getData,
+  getSchema,
   Paths,
   Resolve,
   update
@@ -12,6 +13,7 @@ import {
 import {
   getContainersProperties
 } from '../reducers';
+import { getContainerProperties, getPropertyLabel } from '../services/container.service';
 
 const Dialog = (
   {
@@ -20,16 +22,16 @@ const Dialog = (
     schema,
     closeDialog,
     dialogProps,
-    schemaService,
     setSelection,
     rootData,
-    containersProperties
+    containersProperties,
+    rootSchema
   }) => {
   let containerProps;
   if (containersProperties !== undefined && containersProperties[schema.id]) {
     containerProps = containersProperties[schema.id];
   } else {
-    containerProps = schemaService.getContainerProperties(schema);
+    containerProps = getContainerProperties(schema, rootSchema);
   }
   return (
     <dialog id='dialog' {...dialogProps}>
@@ -42,7 +44,7 @@ const Dialog = (
             .map(prop =>
               <button
                 className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
-                key={`${prop.label}-button`}
+                key={`${getPropertyLabel(prop)}-button`}
                 onClick={() => {
                   const newData = _.keys(prop.schema.properties).reduce(
                     (d, key) => {
@@ -84,7 +86,8 @@ const Dialog = (
 const mapStateToProps = state => {
   return {
     rootData: getData(state),
-    containersProperties: getContainersProperties(state)
+    containersProperties: getContainersProperties(state),
+    rootSchema: getSchema(state),
   };
 };
 
