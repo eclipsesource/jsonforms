@@ -57,11 +57,11 @@
   "dependencies": {
     "@jsonforms/core": "^2.0.1",
     "@jsonforms/react": "^2.0.1",
-    "@material-ui/icons": "^1.0.0-beta.43",
+    "@material-ui/icons": "1.0.0-beta.43",
     "material-ui": "1.0.0-beta.45",
-    "material-ui-pickers": "^1.0.0-rc.6",
+    "material-ui-pickers": "1.0.0-rc.3",
     "moment": "^2.20.1",
-    "react": "^16.2.0",
+    "react": "16.3.2",
     "redux": "^3.7.2"
   },
   "devDependencies": {
@@ -73,7 +73,7 @@
     "jest": "^22.4.2",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
-    "react-dom": "^16.2.0",
+    "react-dom": "16.3.2",
     "react-redux": "^5.0.6",
     "redux-mock-store": "1.4.0",
     "source-map-loader": "^0.2.3",
