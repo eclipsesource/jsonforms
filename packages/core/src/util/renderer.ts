@@ -133,7 +133,7 @@ export interface RendererProps extends StatePropsOfRenderer { }
  * State-based props of a Control
  */
 export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
-
+  fields?: { tester: RankedTester, field: any }[];
   /**
    * Any validation errors that are caused by the data to be rendered.
    */
@@ -337,7 +337,8 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
     scopedSchema: resolvedSchema,
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    config
+    config,
+    fields: state.jsonforms.fields
   };
 };
 

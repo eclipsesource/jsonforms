@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import * as _ from 'lodash';
 import {
   computeLabel,
   ControlProps,
@@ -52,7 +53,8 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       visible,
       required,
       parentPath,
-      config
+      config,
+      fields
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
@@ -61,23 +63,27 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       style.display = 'none';
     }
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-
-    return (
-      <FormControl
-        style={style}
-        fullWidth={!trim}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-      >
-        <InputLabel htmlFor={id} error={!isValid}>
-          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
-        </InputLabel>
-        <DispatchField uischema={uischema} schema={schema} path={parentPath} />
-        <FormHelperText error={!isValid}>
-          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-        </FormHelperText>
-      </FormControl>
-    );
+    const field = _.maxBy(fields, r => r.tester(uischema, schema));
+    if (field === undefined || field.tester(uischema, schema) === -1) {
+      return null;
+    } else {
+      return (
+        <FormControl
+          style={style}
+          fullWidth={!trim}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+        >
+          <InputLabel htmlFor={id} error={!isValid}>
+            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          </InputLabel>
+          <DispatchField uischema={uischema} schema={schema} path={parentPath} />
+          <FormHelperText error={!isValid}>
+            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          </FormHelperText>
+        </FormControl>
+      );
+    }
   }
 }
 export const materialInputControlTester: RankedTester = rankWith(1, isControl);
