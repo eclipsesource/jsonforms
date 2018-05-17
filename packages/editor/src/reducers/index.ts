@@ -1,6 +1,8 @@
 import * as _ from 'lodash';
+import { JsonSchema } from '@jsonforms/core';
 
 export const ADD_UI_SCHEMA: 'jsonforms/editor/ADD_UISCHEMA' = 'jsonforms/editor/ADD_UISCHEMA';
+export const ADD_MODEL_SCHEMA: 'jsonforms/editor/ADD_MODEL_SCHEMA' = 'jsonforms/editor/ADD_MODEL_SCHEMA';
 
 export const getUiSchemata = state => extractUiSchemata(state.jsonforms.editor);
 export const getImageMapping = state => extractImageMapping(state.jsonforms.editor);
@@ -8,11 +10,17 @@ export const getLabelMapping = state => extractLabelMapping(state.jsonforms.edit
 export const getModelMapping = state => extractModelMapping(state.jsonforms.editor);
 export const getResources = state => extractResources(state.jsonforms.editor);
 export const getIdentifyingProperty = state => extractIdentifyingProperty(state.jsonforms.editor);
+export const getModelSchema = state => extractModelSchema(state.jsonforms.editor);
 
 export interface AddUiSchemaAction {
     type: 'jsonforms/editor/ADD_UISCHEMA';
     schemaId: string;
     uiSchema: any;
+}
+
+export interface AddModelSchemaAction {
+     type: 'jsonforms/editor/ADD_MODEL_SCHEMA';
+     modelSchema: any;
 }
 
 const extractUiSchemata = state => state.uiSchemata;
@@ -21,6 +29,7 @@ const extractLabelMapping = state => state.labelMapping;
 const extractModelMapping = state => state.modelMapping;
 const extractResources = state => state.resources;
 const extractIdentifyingProperty = state => state.identifyingProperty;
+const extractModelSchema = state => state.modelSchema;
 
 // TODO Add action to add a resource when referencing is implemented
 
@@ -38,6 +47,13 @@ export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
         schemaId: schemaId,
         uiSchema: uiSchema
     };
+};
+
+export const addModelSchema = (modelSchema): AddModelSchemaAction => {
+  return {
+    type: ADD_MODEL_SCHEMA,
+    modelSchema: modelSchema
+  };
 };
 
 export interface EditorState {
@@ -88,6 +104,11 @@ export interface EditorState {
      * a data element's unique ID when id-based referencing is used.
      */
     identifyingProperty?: string;
+
+    /**
+     * The data schema that can be used alongside the generated UIschema
+     */
+    modelSchema?: JsonSchema;
 }
 
 export const editorReducer = (
@@ -107,12 +128,16 @@ export const editorReducer = (
                                        state.uiSchemata,
                                        { [action.schemaId]: action.uiSchema });
             return {
-                uiSchemata: uiSchemata,
-                imageMapping: state.imageMapping,
-                labelMapping: state.labelMapping,
-                modelMapping: state.modelMapping,
-                resources: state.resources,
-                identifyingProperty: state.identifyingProperty
+                ...state,
+                uiSchemata: uiSchemata
+            };
+        case ADD_MODEL_SCHEMA:
+            if (action.modelSchema === undefined || action.modelSchema === null) {
+                return state;
+            }
+            return {
+                ...state,
+                modelSchema: action.modelSchema
             };
         default:
             return state;

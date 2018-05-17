@@ -27,7 +27,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 // import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
 import { MasterDetailLayout } from '../master-detail-layout';
-import { getUiSchemata } from '../reducers';
+import { getModelSchema, getUiSchemata } from '../reducers';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -108,6 +108,7 @@ export interface TreeProps extends ControlProps {
   addToRoot: any;
   schemaService: SchemaService;
   uiSchemata?;
+  modelSchema?: any;
 }
 
 export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
@@ -174,7 +175,8 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot, schemaService, uiSchemata } = this.props;
+    const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData,
+            addToRoot, schemaService, uiSchemata } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -272,7 +274,8 @@ const mapStateToProps = (state, ownProps) => {
     path,
     visible,
     enabled,
-    uiSchemata
+    uiSchemata,
+    modelSchema: getModelSchema(state)
   };
 };
 

@@ -12,4 +12,9 @@ export interface Editor {
    * The {@link JsonSchema} describing the data edited in the editor.
    */
   readonly schema: JsonSchema;
+
+  /**
+   * The data schema used alongside the UISchema
+   */
+  modelSchema: JsonSchema;
 }
