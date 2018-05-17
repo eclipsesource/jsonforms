@@ -310,7 +310,7 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
   const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  isEnabled(ownProps, state);
   const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const errors = getErrorAt(path)(state).map(error => error.message);
+  const errors = _.union(getErrorAt(path)(state).map(error => error.message));
   const controlElement = ownProps.uischema as ControlElement;
   const id = controlElement.scope || '';
   const required =
