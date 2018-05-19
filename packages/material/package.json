@@ -57,9 +57,9 @@
   "dependencies": {
     "@jsonforms/core": "^2.0.1",
     "@jsonforms/react": "^2.0.1",
-    "@material-ui/icons": "1.0.0-beta.43",
-    "material-ui": "1.0.0-beta.45",
-    "material-ui-pickers": "1.0.0-rc.3",
+    "@material-ui/icons": "1.0.0",
+    "@material-ui/core": "1.0.0",
+    "material-ui-pickers": "1.0.0-rc.9",
     "moment": "^2.20.1",
     "react": "16.3.2",
     "redux": "^3.7.2"
