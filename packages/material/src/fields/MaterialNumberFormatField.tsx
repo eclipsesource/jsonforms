@@ -33,7 +33,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
-import Input from 'material-ui/Input';
+import Input from '@material-ui/core/Input';
 
 const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
   const {
