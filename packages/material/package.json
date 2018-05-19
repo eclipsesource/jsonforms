@@ -23,6 +23,8 @@
     "test-cov": "jest --no-cache",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+  }, "publishConfig" : {
+    "registry" : "https://nexus.streamweaver.com/repository/npm-private"
   },
   "ava": {
     "verbose": true,
