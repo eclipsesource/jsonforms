@@ -39,7 +39,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { connectToJsonForms, Control } from '@jsonforms/react';
-import TextField from 'material-ui/TextField';
+import TextField from '@material-ui/core/TextField';
 
 export class MaterialNativeControl extends Control<ControlProps, ControlState> {
   render() {

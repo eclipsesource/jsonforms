@@ -24,9 +24,9 @@
 */
 import * as React from 'react';
 
-import Badge from 'material-ui/Badge';
+import Badge from '@material-ui/core/Badge';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import Tooltip from 'material-ui/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export const ValidationIcon = ({id, errorMessages}) => (
     <Tooltip
