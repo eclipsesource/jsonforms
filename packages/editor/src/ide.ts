@@ -76,7 +76,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
           {
             uischema: getUiSchema(this._store.getState()),
             schema: resolvedSchema.resolved,
-            schemaService
+            schemaService,
+            filterPredicate: this._filterPredicate
           });
         this.editor.store = this._store;
 
