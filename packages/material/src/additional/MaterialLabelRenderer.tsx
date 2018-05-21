@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms, StatelessRenderer } from '@jsonforms/react';
 
-import Typography from 'material-ui/Typography';
+import Typography from '@material-ui/core/Typography';
 
 /**
  * Default tester for a label.

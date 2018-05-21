@@ -32,7 +32,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
-import Input from 'material-ui/Input';
+import Input from '@material-ui/core/Input';
 
 const MaterialSliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange, scopedSchema } = props;

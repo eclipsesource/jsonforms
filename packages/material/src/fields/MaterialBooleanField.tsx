@@ -32,7 +32,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
-import Checkbox from 'material-ui/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 
 export const MaterialBooleanField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;

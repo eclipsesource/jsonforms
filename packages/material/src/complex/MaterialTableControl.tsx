@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,9 +24,9 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import Checkbox from 'material-ui/Checkbox';
-import Grid from 'material-ui/Grid';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Checkbox from '@material-ui/core/Checkbox';
+import {Grid, Hidden} from '@material-ui/core';
+import {Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import {
   ControlElement,
   Paths
@@ -96,9 +96,11 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema
   return (
     <TableCell>
       <Grid container alignItems='center' justify='center' spacing={0}>
-        <Grid item xs={1} hidden={{smUp: cellErrors.length === 0}}>
-          <ValidationIcon id={`tooltip-${cellPath}`} errorMessages={cellErrors}/>
-        </Grid>
+        <Hidden smUp={cellErrors.length === 0}>
+          <Grid item xs={1}>
+            <ValidationIcon id={`tooltip-${cellPath}`} errorMessages={cellErrors}/>
+          </Grid>
+        </Hidden>
         <Grid item xs>
           <DispatchField
             schema={scopedSchema}

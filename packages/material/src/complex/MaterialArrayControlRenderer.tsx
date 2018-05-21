@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,14 +32,16 @@ import {
 import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
-import Button from 'material-ui/Button';
-import Dialog, {
+import Button from '@material-ui/core/Button';
+import {
+  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from 'material-ui/Dialog';
-import Grid from 'material-ui/Grid';
+  Hidden
+} from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 
 export class MaterialArrayControlRenderer extends RendererComponent<TableControlProps, TableState> {
   constructor(props) {
@@ -66,38 +68,42 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     const selectedCount = _.filter(this.state.selected, v => v).length;
 
     return (
-      <Grid container direction='column' hidden={{ xsUp: !visible }} spacing={0}>
-        <Grid item hidden={{ xsUp: this.props.scopedSchema.type !== 'object' }}>
-          <TableToolbar {...tableProps} />
+      <Hidden xsUp={!visible}>
+        <Grid container direction='column' spacing={0}>
+          <Hidden xsUp={this.props.scopedSchema.type !== 'object' }>
+            <Grid item>
+              <TableToolbar {...tableProps} />
+            </Grid>
+          </Hidden>
+          <Grid item>
+            <MaterialTableControl {...tableProps}/>
+          </Grid>
+          <Dialog
+            open={this.state.openConfirmDelete}
+            keepMounted
+            onClose={this.closeConfirmDeleteDialog}
+            aria-labelledby='alert-dialog-confirmdelete-title'
+            aria-describedby='alert-dialog-confirmdelete-description'
+          >
+            <DialogTitle id='alert-dialog-confirmdelete-title'>
+              {'Confirm Deletion'}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id='alert-dialog-confirmdelete-description'>
+                Are you sure you want to delete the {selectedCount} selected objects?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.closeConfirmDeleteDialog} color='primary'>
+                No
+              </Button>
+              <Button onClick={this.confirmDelete} color='primary'>
+                Yes
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Grid>
-        <Grid item>
-          <MaterialTableControl {...tableProps}/>
-        </Grid>
-        <Dialog
-          open={this.state.openConfirmDelete}
-          keepMounted
-          onClose={this.closeConfirmDeleteDialog}
-          aria-labelledby='alert-dialog-confirmdelete-title'
-          aria-describedby='alert-dialog-confirmdelete-description'
-        >
-          <DialogTitle id='alert-dialog-confirmdelete-title'>
-            {'Confirm Deletion'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id='alert-dialog-confirmdelete-description'>
-              Are you sure you want to delete the {selectedCount} selected objects?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.closeConfirmDeleteDialog} color='primary'>
-              No
-            </Button>
-            <Button onClick={this.confirmDelete} color='primary'>
-              Yes
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Grid>
+      </Hidden>
     );
   }
 
