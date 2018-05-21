@@ -26,6 +26,7 @@ import * as _ from 'lodash';
 import { ErrorObject, ValidateFunction } from 'ajv';
 import { INIT, UPDATE_DATA } from '../actions';
 import { createAjv } from '../util/validator';
+import { JsonSchema, UISchemaElement } from '..';
 
 const ajv = createAjv();
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
@@ -44,14 +45,26 @@ const sanitizeErrors = (validator, data) =>
     return error;
   });
 
+const alwaysValid: ValidateFunction = () => true;
+
+type CoreReducerState = {
+  data: any,
+  schema: JsonSchema,
+  uischema: UISchemaElement,
+  errors?: ErrorObject[],
+  validator?: ValidateFunction
+};
+
+const initState = {
+  data: {} as any,
+  schema: {},
+  uischema: undefined,
+  errors: [],
+  validator: alwaysValid
+};
+
 export const coreReducer = (
-  state = {
-    data: {} as any,
-    schema: {},
-    uischema: {},
-    errors: [] as ErrorObject[],
-    validator: () => true,
-  },
+  state: CoreReducerState = initState,
   action) => {
 
   switch (action.type) {

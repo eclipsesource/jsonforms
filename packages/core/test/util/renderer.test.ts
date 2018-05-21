@@ -31,9 +31,9 @@ import {
   mapStateToDispatchRendererProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
-import { UPDATE_DATA, UpdateAction } from '../../src/actions';
+import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
 import { generateDefaultUISchema } from '../../src/generators';
-import { ControlElement } from '../../src';
+import { ControlElement, coreReducer } from '../../src';
 
 const middlewares = [];
 const mockStore = configureStore(middlewares);
@@ -242,6 +242,28 @@ test('mapStateToControlProps - errors', t => {
   }];
   const props = mapStateToControlProps(clonedState, ownProps);
   t.is(props.errors[0], 'Duff beer');
+});
+
+test('mapStateToControlProps - no duplicate error messages', t => {
+  const schema = {
+    type: 'object',
+    properties: {
+      firstName: {
+        anyOf: [
+          {type: 'string', minLength: 5},
+          {type: 'string', enum: ['foo', 'bar']}
+        ]
+      }
+    }
+  };
+  const initCoreState = coreReducer(undefined, init({}, schema, coreUISchema));
+  const updateCoreState = coreReducer(initCoreState, update('firstName', () => true));
+  const props = mapStateToControlProps(
+    { jsonforms: { core: updateCoreState } },
+    { uischema: coreUISchema }
+  );
+  // 'should be string' should only appear once
+  t.is(props.errors.length, 3);
 });
 
 test('mapStateToControlProps - id', t => {
