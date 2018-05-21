@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,9 +29,15 @@ import { LeafCondition, RuleEffect, UISchemaElement } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
 
+const isRuleDefined = (uischema: UISchemaElement): boolean =>
+  !_.has(uischema, 'rule.condition') || !_.has(uischema, 'rule.condition.type') ||
+  !_.has(uischema, 'rule.condition.scope') ||
+  !_.has(uischema, 'rule.condition.expectedValue');
+
 export const evalVisibility = (uischema: UISchemaElement, data: any) => {
   // TODO condition evaluation should be done somewhere else
-  if (!_.has(uischema, 'rule.condition')) {
+  if (isRuleDefined(uischema)) {
+
     return true;
   }
   const condition = uischema.rule.condition as LeafCondition;
@@ -49,7 +55,8 @@ export const evalVisibility = (uischema: UISchemaElement, data: any) => {
 
 export const evalEnablement = (uischema: UISchemaElement, data: any) => {
 
-  if (!_.has(uischema, 'rule.condition')) {
+  if (isRuleDefined(uischema)) {
+
     return true;
   }
 
