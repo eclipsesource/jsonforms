@@ -12,7 +12,12 @@ import {
 import { SchemaServiceImpl } from './services/schema.service.impl';
 import { EditorContext } from './editor-context';
 import '@jsonforms/webcomponent';
-import { getIdentifyingProperty, getModelMapping } from './reducers';
+import {
+  addModelSchema,
+  getIdentifyingProperty,
+  getModelMapping,
+  getModelSchema
+} from './reducers';
 import * as JsonRefs from 'json-refs';
 
 export class JsonEditorIde extends HTMLElement implements Editor {
@@ -42,6 +47,14 @@ export class JsonEditorIde extends HTMLElement implements Editor {
 
   get schema() {
     return getSchema(this._store.getState());
+  }
+
+  set modelSchema(data: Object) {
+    this._store.dispatch(addModelSchema(data));
+  }
+
+  get modelSchema() {
+    return getModelSchema(this._store.getState());
   }
 
   private render(): void {
