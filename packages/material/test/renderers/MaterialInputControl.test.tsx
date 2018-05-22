@@ -374,4 +374,26 @@ describe('Material input control', () => {
     const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
     expect(label.textContent).toBe('Date Field');
   });
+
+  it('should display a password field if the password option is set', () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        password: { type: 'string' }
+      }
+    };
+    const control = {
+      type: 'Control',
+      scope: '#/properties/password',
+      options: { format: 'password' }
+    };
+    const store = initJsonFormsStore({}, jsonSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+      </Provider>
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input');
+    expect(input.type).toBe('password');
+  });
 });
