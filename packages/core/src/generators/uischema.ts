@@ -129,24 +129,23 @@ const generateUISchema =
         case 'object':
             const layout: Layout = createLayout(layoutType);
             schemaElements.push(layout);
-
             addLabel(layout, schemaName);
 
             if (!_.isEmpty(jsonSchema.properties)) {
-                // traverse properties
-                const nextRef: string = currentRef + '/properties';
-                Object.keys(jsonSchema.properties).map(propName => {
-                    let value = jsonSchema.properties[propName];
-                    const ref = `${nextRef}/${propName}`;
-                    if (value.$ref !== undefined) {
-                        value = resolveSchema(rootSchema, value.$ref);
-                    }
-                    generateUISchema(
-                        value,
-                        layout.elements,
-                        ref, propName, layoutType, rootSchema
-                    );
-                });
+              // traverse properties
+              const nextRef: string = currentRef + '/properties';
+              Object.keys(jsonSchema.properties).map(propName => {
+                let value = jsonSchema.properties[propName];
+                const ref = `${nextRef}/${propName}`;
+                if (value.$ref !== undefined) {
+                  value = resolveSchema(rootSchema, value.$ref);
+                }
+                generateUISchema(
+                  value,
+                  layout.elements,
+                  ref, propName, layoutType, rootSchema
+                );
+              });
             }
 
             return layout;
