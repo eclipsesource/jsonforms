@@ -29,7 +29,7 @@ import {
     UISchemaElement,
   } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
-import {Grid, Hidden} from '@material-ui/core';
+import { Grid, Hidden } from '@material-ui/core';
 
 const renderChildren = (
     elements: UISchemaElement[],
@@ -63,7 +63,7 @@ export const MaterialLayoutRenderer = (
   } else {
     return (
       <Hidden xsUp={!visible}>
-        <Grid container direction={direction}>
+        <Grid container direction={direction} spacing={direction === 'row' ? 16 : 0}>
           {renderChildren(elements, schema, path)}
         </Grid>
       </Hidden>
