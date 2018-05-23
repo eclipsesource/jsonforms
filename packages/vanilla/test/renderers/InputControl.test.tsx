@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,6 +39,8 @@ import HorizontalLayoutRenderer, {
 } from '../../src/layouts/HorizontalLayout';
 import InputControl, { inputControlTester } from '../../src/controls/InputControl';
 import BooleanField, { booleanFieldTester } from '../../src/fields/BooleanField';
+import TextField, { textFieldTester } from '../../src/fields/TextField';
+import DateField, { dateFieldTester } from '../../src/fields/DateField';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
@@ -195,7 +197,8 @@ test('hide', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -217,7 +220,8 @@ test('show by default', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -233,7 +237,8 @@ test('single error', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -250,7 +255,8 @@ test('multiple errors', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -267,7 +273,8 @@ test('empty errors by default', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -283,7 +290,8 @@ test('reset validation message', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -346,7 +354,8 @@ test('validation of nested schema', t => {
     data,
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: textFieldTester, field: TextField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -377,7 +386,8 @@ test('required field is marked', t => {
     data: {},
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: dateFieldTester, field: DateField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -406,7 +416,8 @@ test('not required', t => {
     data: {},
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: dateFieldTester, field: DateField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -436,7 +447,8 @@ test('required field is marked', t => {
     data: {},
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: dateFieldTester, field: DateField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -466,7 +478,8 @@ test('not required', t => {
     data: {},
     schema,
     uischema,
-    renderers: [{ tester: inputControlTester, renderer: InputControl }]
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: dateFieldTester, field: DateField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -496,7 +509,8 @@ test('show description on focus', t => {
     data,
     schema,
     uischema,
-    renderers: [{tester: inputControlTester, renderer: InputControl}]
+    renderers: [{tester: inputControlTester, renderer: InputControl}],
+    fields: [{ tester: textFieldTester, field: TextField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -529,7 +543,8 @@ test('hide description when input field is not focused', t => {
     data,
     schema,
     uischema,
-    renderers: [{tester: inputControlTester, renderer: InputControl}]
+    renderers: [{tester: inputControlTester, renderer: InputControl}],
+    fields: [{ tester: textFieldTester, field: TextField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -562,7 +577,8 @@ test('hide description on blur', t => {
     data,
     schema,
     uischema,
-    renderers: [{tester: inputControlTester, renderer: InputControl}]
+    renderers: [{tester: inputControlTester, renderer: InputControl}],
+    fields: [{ tester: textFieldTester, field: TextField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -598,7 +614,8 @@ test('description undefined', t => {
     data,
     schema,
     uischema,
-    renderers: [{tester: inputControlTester, renderer: InputControl}]
+    renderers: [{tester: inputControlTester, renderer: InputControl}],
+    fields: [{ tester: textFieldTester, field: TextField }]
   });
   const tree = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -608,4 +625,38 @@ test('description undefined', t => {
   const description =
     TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, '');
+});
+
+test('undefined input control', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      expectedValue: {
+        type: [
+          'string',
+          'integer',
+          'number',
+          'boolean'
+        ]
+      }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/expectedValue'
+  };
+  const store = initJsonFormsVanillaStore({
+    data: {},
+    schema,
+    uischema,
+    renderers: [{ tester: inputControlTester, renderer: InputControl }],
+    fields: [{ tester: textFieldTester, field: TextField }]
+  });
+  const tree = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <InputControl schema={schema} uischema={uischema}/>
+    </Provider>
+  );
+  const control = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'control');
+  t.is(control.length, 0);
 });
