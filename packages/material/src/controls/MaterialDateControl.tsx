@@ -100,7 +100,7 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
           error={!isValid}
           style={style}
           fullWidth={!trim}
-          helperText={!isValid ? errors : showDescription ? description : null}
+          helperText={!isValid ? errors : showDescription ? description : ' '}
           InputLabelProps={{shrink: true}}
           value={data || null}
           onChange={ datetime =>
