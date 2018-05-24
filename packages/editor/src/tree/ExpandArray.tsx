@@ -17,7 +17,7 @@ import {
   DropResult,
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
-import { Property } from '../services/container.service';
+import { Property } from '../services/property.util';
 import { matchContainmentProperty } from '../helpers/containment.util';
 
 export interface ExpandArrayProps {

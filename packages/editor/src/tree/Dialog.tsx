@@ -10,29 +10,23 @@ import {
   Resolve,
   update
 } from '@jsonforms/core';
-import {
-  getContainersProperties
-} from '../reducers';
-import { getContainerProperties, getPropertyLabel } from '../services/container.service';
+import { findPropertyLabel, retrieveContainerProperties } from '../services/property.util';
+import { getContainerProperties } from '../reducers';
 
 const Dialog = (
   {
     add,
     path,
-    schema,
     closeDialog,
     dialogProps,
     setSelection,
     rootData,
-    containersProperties,
-    rootSchema
+    /**
+     * Self contained schemas of the corresponding schema
+     */
+    containerProperties
   }) => {
-  let containerProps;
-  if (containersProperties !== undefined && containersProperties[schema.id]) {
-    containerProps = containersProperties[schema.id];
-  } else {
-    containerProps = getContainerProperties(schema, rootSchema);
-  }
+
   return (
     <dialog id='dialog' {...dialogProps}>
       <label>
@@ -40,11 +34,11 @@ const Dialog = (
       </label>
       <div className='dialog-content content'>
         {
-          containerProps
+          containerProperties
             .map(prop =>
               <button
                 className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
-                key={`${getPropertyLabel(prop)}-button`}
+                key={`${findPropertyLabel(prop)}-button`}
                 onClick={() => {
                   const newData = _.keys(prop.schema.properties).reduce(
                     (d, key) => {
@@ -83,10 +77,17 @@ const Dialog = (
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
+  const containerProps = getContainerProperties(state);
+  let containerProperties;
+  if (_.has(containerProps, ownProps.schema.id)) {
+    containerProperties = containerProps[ownProps.schema.id];
+  } else {
+    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
+  }
   return {
     rootData: getData(state),
-    containersProperties: getContainersProperties(state),
+    containerProperties,
     rootSchema: getSchema(state),
   };
 };

@@ -1,5 +1,5 @@
 import { JsonSchema } from '@jsonforms/core';
-import { getSelfContainedSchema, Property } from './container.service';
+import { makeSelfContainedSchema, Property } from './property.util';
 import { EditorContext } from '../editor-context';
 import { Resources } from '../resources/resources';
 import { ModelMapping } from '../helpers/containment.util';
@@ -374,7 +374,7 @@ export const getReferenceProperties = (schema: JsonSchema,
                                        editorContext: EditorContext): ReferenceProperty[] => {
   if (schema.$ref !== undefined) {
     return getReferenceProperties(
-      getSelfContainedSchema(editorContext.dataSchema, schema.$ref),
+      makeSelfContainedSchema(editorContext.dataSchema, schema.$ref),
       editorContext);
   }
   // tslint:disable:no-string-literal
@@ -392,8 +392,8 @@ export const getReferenceProperties = (schema: JsonSchema,
       let targetSchema;
       // TODO what if schema is url but not resolved?
       if (link.targetSchema.$ref !== undefined) {
-        targetSchema = getSelfContainedSchema(editorContext.dataSchema,
-                                              link.targetSchema.$ref);
+        targetSchema = makeSelfContainedSchema(editorContext.dataSchema,
+                                               link.targetSchema.$ref);
       } else if (link.targetSchema.resource !== undefined) {
         const resSchema = Resources.resourceSet.getResource(link.targetSchema.resource);
         if (resSchema === undefined) {

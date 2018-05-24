@@ -11,7 +11,7 @@ import {
   update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
-import { getContainerProperties, Property } from '../services/container.service';
+import { Property, retrieveContainerProperties } from '../services/property.util';
 import {
   DragSource,
   DragSourceMonitor,
@@ -25,8 +25,7 @@ import {
   Types } from './dnd.util';
 import { indexFromPath, LabelDefinition } from '../helpers/util';
 import {
-  addContainerProperties,
-  getContainersProperties,
+  getContainerProperties,
   getImageMapping,
   getLabelMapping,
 } from '../reducers';
@@ -85,9 +84,10 @@ export interface ObjectListItemProps {
   imageMapping?: any;
   labelMapping?: any;
   filterPredicate?: any;
-  containersProperties?: any;
-  addProperty?: any;
-  rootSchema: JsonSchema;
+  /**
+   * Self contained schemas of the corresponding schema
+   */
+  containerProperties?: any;
 }
 
 const ObjectListItem = (
@@ -101,23 +101,14 @@ const ObjectListItem = (
     imageMapping,
     labelMapping,
     filterPredicate,
-    containersProperties,
-    addProperty,
-    rootSchema
+    containerProperties
   }: ObjectListItemProps) => {
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
   const liClasses = selection === data ? 'selected' : '';
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
-  let containerProps;
-  if (containersProperties !== undefined && containersProperties[schema.id]) {
-    containerProps = containersProperties[schema.id];
-  } else {
-    containerProps = getContainerProperties(schema, rootSchema);
-    addProperty({ [schema.id]: containerProps });
-  }
-  const groupedProps = _.groupBy(containerProps, property => property.property);
+  const groupedProps = _.groupBy(containerProperties, property => property.property);
 
   // TODO: key should be set in caller
   return (
@@ -134,7 +125,7 @@ const ObjectListItem = (
             {getNamingFunction(schema, labelMapping)(data)}
           </span>
           {
-            !_.isEmpty(containerProps) ?
+            !_.isEmpty(containerProperties) ?
               (
                 <span
                   className='add'
@@ -174,7 +165,13 @@ const ObjectListItem = (
 
 const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
-  const containersProperties = getContainersProperties(state);
+  const containerProps = getContainerProperties(state);
+  let containerProperties;
+  if (_.has(containerProps, ownProps.schema.id)) {
+    containerProperties = containerProps[ownProps.schema.id];
+  } else {
+    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
+  }
 
   return {
     index: index,
@@ -182,7 +179,7 @@ const mapStateToProps = (state, ownProps) => {
     imageMapping: getImageMapping(state),
     labelMapping: getLabelMapping(state),
     rootSchema: getSchema(state),
-    containersProperties
+    containerProperties
   };
 };
 
@@ -204,10 +201,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         )
       );
     },
-    moveListItem: moveListItem(dispatch),
-    addProperty(containerProperty) {
-      dispatch(addContainerProperties(containerProperty));
-    }
+    moveListItem: moveListItem(dispatch)
   };
 };
 
@@ -263,9 +257,7 @@ const ObjectListItemDnd = (
     connectDragSource,
     connectDropTarget,
     filterPredicate,
-    containersProperties,
-    addProperty,
-    rootSchema
+    containerProperties
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -279,9 +271,7 @@ const ObjectListItemDnd = (
       imageMapping={imageMapping}
       labelMapping={labelMapping}
       filterPredicate={filterPredicate}
-      containersProperties={containersProperties}
-      addProperty={addProperty}
-      rootSchema={rootSchema}
+      containerProperties={containerProperties}
     />
   );
   if (isRoot === true) {

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import { ModelMapping } from '../editor-context';
-import { Property } from '../services/schema.service';
+import { Property } from '../services/property.util';
 
 export const ADD_UI_SCHEMA: 'jsonforms/editor/ADD_UISCHEMA' = 'jsonforms/editor/ADD_UISCHEMA';
 export const ADD_CONTAINER_PROPERTIES:
@@ -13,7 +13,7 @@ export const getLabelMapping = state => extractLabelMapping(state.jsonforms.edit
 export const getModelMapping = state => extractModelMapping(state.jsonforms.editor);
 export const getResources = state => extractResources(state.jsonforms.editor);
 export const getIdentifyingProperty = state => extractIdentifyingProperty(state.jsonforms.editor);
-export const getContainersProperties = state => extractContainersProperties(state.jsonforms.editor);
+export const getContainerProperties = state => extractContainerProperties(state.jsonforms.editor);
 
 export interface AddUiSchemaAction {
     type: 'jsonforms/editor/ADD_UISCHEMA';
@@ -32,7 +32,7 @@ const extractLabelMapping = state => state.labelMapping;
 const extractModelMapping = state => state.modelMapping;
 const extractResources = state => state.resources;
 const extractIdentifyingProperty = state => state.identifyingProperty;
-const extractContainersProperties = state => state.containersProperties;
+const extractContainerProperties = state => state.containerProperties;
 
 // TODO Add action to add a resource when referencing is implemented
 
@@ -57,7 +57,8 @@ export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
  * If there already are container properties for the given schema id
  * it is overwritten with the given one
  *
- * @param {[p: string]: Property[]} container
+ * @param {JsonSchema} schema
+ * @param {[schemaId: string]: Property[]} containerProperties
  * @returns {AddContainerPropertiesAction}
  */
 export const addContainerProperties =
@@ -121,13 +122,13 @@ export interface EditorState {
     /**
      * Stores calculated container properties for a given schema
      */
-    containersProperties: { [schemaId: string]: Property[] };
+    containerProperties: { [schemaId: string]: Property[] };
 }
 
 export const editorReducer = (
     state: EditorState = {
         uiSchemata: {},
-        containersProperties: {}
+        containerProperties: {}
     },
     action): EditorState => {
     switch (action.type) {
@@ -142,28 +143,13 @@ export const editorReducer = (
                                        state.uiSchemata,
                                        { [action.schemaId]: action.uiSchema });
             return {
-                uiSchemata: uiSchemata,
-                imageMapping: state.imageMapping,
-                labelMapping: state.labelMapping,
-                modelMapping: state.modelMapping,
-                resources: state.resources,
-                identifyingProperty: state.identifyingProperty,
-                containersProperties: state.containersProperties
+                ...state,
+                uiSchemata: uiSchemata
             };
         case ADD_CONTAINER_PROPERTIES:
-            if (_.isEmpty(action.containerProperties) ||
-                action.containerProperties === undefined ||
-                action.containerProperties === null) {
-                return state;
-            }
             return {
-              uiSchemata: state.uiSchemata,
-              imageMapping: state.imageMapping,
-              labelMapping: state.labelMapping,
-              modelMapping: state.modelMapping,
-              resources: state.resources,
-              identifyingProperty: state.identifyingProperty,
-              containersProperties: { ...state.containersProperties, ...action.containerProperties }
+              ...state,
+              containerProperties: action.containerProperties
             };
         default:
             return state;

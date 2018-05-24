@@ -6,7 +6,7 @@ import {
 } from 'redux';
 import {
   Actions,
-  jsonformsReducer
+  jsonformsReducer,
 } from '@jsonforms/core';
 import { editorReducer } from '../reducers/index';
 
@@ -84,7 +84,7 @@ export const createEditorStore = (
   labelMapping?,
   modelMapping?,
   uiSchemata = {},
-  containersProperties = {}): Store<any> => {
+  containerProperties = {}): Store<any> => {
   const store = createStore(
     combineReducers({ jsonforms: jsonformsReducer({ editor: editorReducer }) }),
     {
@@ -96,7 +96,7 @@ export const createEditorStore = (
             labelMapping,
             modelMapping,
             uiSchemata,
-            containersProperties
+            containerProperties
           }
         }
       }

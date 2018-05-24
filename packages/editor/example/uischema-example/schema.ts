@@ -127,7 +127,10 @@ export const taskSchema = {
           'default': 'Categorization'
         },
         'elements': {
-          '$ref': '#/definitions/category'
+          'type': 'array',
+          'items': {
+            '$ref': '#/definitions/category'
+          }
         }
       },
       'required': [

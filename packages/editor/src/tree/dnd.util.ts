@@ -1,5 +1,5 @@
 import { JsonSchema, update } from '@jsonforms/core';
-import { Property } from '../services/container.service';
+import { Property } from '../services/property.util';
 import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
 

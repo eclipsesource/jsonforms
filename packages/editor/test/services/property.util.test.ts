@@ -1,9 +1,9 @@
 /* ts-lint:disable:max-file-line-count */
 import {
-  calculateSchemaReferences,
-  getContainerProperties,
-  getPropertyLabel
-} from '../../src/services/container.service';
+  findPropertyLabel,
+  makeSchemaSelfContained,
+  retrieveContainerProperties
+} from '../../src/services/property.util';
 import { JsonSchema } from '@jsonforms/core';
 import * as _ from 'lodash';
 
@@ -25,8 +25,8 @@ beforeEach(() => {
   };
 });
 
-describe('Container Tests', () => {
-  test('array with array ', () => {
+describe('Container Properties Tests', () => {
+  test('expect to retrieve property from a nested array object, non primitive items', () => {
     const schema: JsonSchema = {
       type: 'array',
       items: {
@@ -40,12 +40,12 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(1);
     expect(properties[0].schema).toMatchObject((schema.items as JsonSchema).items);
   });
 
-  test('array with objects ', () => {
+  test('expect to retrieve property from array object, non primitive items', () => {
     const schema = {
       type: 'array',
       items: {
@@ -56,20 +56,20 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(1);
   });
 
-  test('object with object array ', () => {
+  test('expect to retrieve property from object with array object, non primitive items', () => {
     const schema = fooBarArraySchema;
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(1);
-    expect(getPropertyLabel(properties[0])).toEqual('foo');
+    expect(findPropertyLabel(properties[0])).toEqual('foo');
     expect(properties[0].schema).toMatchObject(schema.properties.foo.items);
   });
 
-  test('object with simple array ', () => {
+  test('expect to have 0 properties from array objects, primitive items', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -80,11 +80,11 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(0);
   });
 
-  test('object with tuple array ', () => {
+  test('expect to have 0 properties from object with tuple array', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -108,11 +108,11 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(0);
   });
 
-  test('object with simple properties ', () => {
+  test('expect to have 0 properties from object with primitives types', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -123,11 +123,11 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(0);
   });
 
-  test('object with object property', () => {
+  test('expect to have 0 properties from object without array object', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -140,11 +140,11 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(0);
   });
 
-  test('support multiple same $ref', () => {
+  test('expect to have properties from objects with same $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -162,16 +162,16 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(2);
-    expect(getPropertyLabel(properties[0])).toEqual('person');
-    expect(getPropertyLabel(properties[1])).toEqual('person');
+    expect(findPropertyLabel(properties[0])).toEqual('person');
+    expect(findPropertyLabel(properties[1])).toEqual('person');
     const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
     expect(properties[0].schema).toMatchObject(personCopy);
     expect(properties[1].schema).toMatchObject(personCopy);
   });
 
-  test('support multiple different $ref', () => {
+  test('expect to have properties from objects with different $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -194,19 +194,19 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(2);
     const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
     personCopy.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
     const robotCopy = JSON.parse(JSON.stringify(schema.definitions.robot));
     robotCopy.id = '#' + (schema.properties.robots.items as JsonSchema).$ref;
-    expect(getPropertyLabel(properties[0])).toEqual('person');
-    expect(getPropertyLabel(properties[1])).toEqual('robot');
+    expect(findPropertyLabel(properties[0])).toEqual('person');
+    expect(findPropertyLabel(properties[1])).toEqual('robot');
     expect(properties[0].schema).toMatchObject(personCopy);
     expect(properties[1].schema).toMatchObject(robotCopy);
   });
 
-  test('support root anyOf', () => {
+  test('expect to have 0 properties object with no array object', () => {
     const schema: JsonSchema = {
       definitions: {
         a: {type: 'object'},
@@ -218,11 +218,11 @@ describe('Container Tests', () => {
       ]
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(0);
   });
 
-  test('support array with anyOf', () => {
+  test('expect to have properties from array object by using keyword anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
         a: {type: 'object', properties: {foo: {type: 'string'}}},
@@ -237,10 +237,10 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(2);
-    expect(getPropertyLabel(properties[0])).toEqual('a');
-    expect(getPropertyLabel(properties[1])).toEqual('b');
+    expect(findPropertyLabel(properties[0])).toEqual('a');
+    expect(findPropertyLabel(properties[1])).toEqual('b');
     const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
     aCopy.id = '#' + (schema.items as JsonSchema).anyOf[0].$ref;
     const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
@@ -249,7 +249,7 @@ describe('Container Tests', () => {
     expect(properties[1].schema).toMatchObject(bCopy);
   });
 
-  test('support object with array with anyOf', () => {
+  test('expect to retrieve properties from object with array object by using keyword anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
         a: {type: 'object', properties: {foo: {type: 'string'}}},
@@ -269,10 +269,10 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(2);
-    expect(getPropertyLabel(properties[0])).toEqual('a');
-    expect(getPropertyLabel(properties[1])).toEqual('b');
+    expect(findPropertyLabel(properties[0])).toEqual('a');
+    expect(findPropertyLabel(properties[1])).toEqual('b');
     const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
     aCopy.id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[0].$ref;
     const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
@@ -281,7 +281,7 @@ describe('Container Tests', () => {
     expect(properties[1].schema).toMatchObject(bCopy);
   });
 
-  test('support object with array $ref', () => {
+  test('expect to retrieve properties from object that references to an array object', () => {
     const schema: JsonSchema = {
       definitions: {
         root: {
@@ -302,13 +302,13 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(1);
-    expect(getPropertyLabel(properties[0])).toEqual('root');
+    expect(findPropertyLabel(properties[0])).toEqual('root');
     expect(properties[0].schema).toMatchObject(schema.definitions.root.items as JsonSchema);
   });
 
-  test('self contained child schemata: cross recursion', () => {
+  test('expect to create self contained child schemata: cross recursion', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -336,16 +336,16 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(1);
-    expect(getPropertyLabel(properties[0])).toEqual('person');
+    expect(findPropertyLabel(properties[0])).toEqual('person');
     const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
     personCopy.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
     personCopy.definitions = JSON.parse(JSON.stringify(schema.definitions));
     expect(properties[0].schema).toMatchObject(personCopy);
   });
 // real world examples
-  test('support easy uml schema with arrays', () => {
+  test('support easy uml schema with array objects', () => {
     const schema: JsonSchema = {
       type: 'object',
       properties: {
@@ -381,16 +381,16 @@ describe('Container Tests', () => {
       }
     };
 
-    const properties = getContainerProperties(schema, schema);
+    const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(1);
-    expect(getPropertyLabel(properties[0])).toEqual('classes');
+    expect(findPropertyLabel(properties[0])).toEqual('classes');
     expect(properties[0].schema)
       .toMatchObject(schema.properties.classes.items as JsonSchema);
     const propertiesClasses =
-      getContainerProperties(schema.properties.classes.items as JsonSchema,
-                             schema);
+      retrieveContainerProperties(schema.properties.classes.items as JsonSchema,
+                                  schema);
     expect(propertiesClasses.length).toEqual(1);
-    expect(getPropertyLabel(propertiesClasses[0])).toEqual('attributes');
+    expect(findPropertyLabel(propertiesClasses[0])).toEqual('attributes');
     expect(propertiesClasses[0].schema)
       .toMatchObject((schema.properties.classes.items as JsonSchema).properties.attributes.items);
   });
@@ -559,7 +559,7 @@ describe('Container Tests', () => {
         }
       }
     };
-    const calculatedSchemaReferences = calculateSchemaReferences(parentSchema, schema);
+    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
     const expectedSchema = { ...schema, ...{
       definitions: _.pick(parentSchema.definitions, ['scope', 'options', 'rule'])
     }};
@@ -584,7 +584,7 @@ describe('Container Tests', () => {
         bar: {type: 'string'}
       }
     };
-    const calculatedSchemaReferences = calculateSchemaReferences(parentSchema, schema);
+    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
     expect(calculatedSchemaReferences).toMatchObject(schema);
   });
 
@@ -621,7 +621,7 @@ describe('Container Tests', () => {
         }
       }
     };
-    const calculatedSchemaReferences = calculateSchemaReferences(parentSchema, schema);
+    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
     expect(calculatedSchemaReferences).toMatchObject(schema);
   });
 
@@ -710,7 +710,7 @@ describe('Container Tests', () => {
         }
       }
     };
-    const calculatedSchemaReferences = calculateSchemaReferences(parentSchema, schema);
+    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
     const expectedSchema = { ...schema, ...{
       defs: _.pick(parentSchema.defs, ['scope'])
     }};
