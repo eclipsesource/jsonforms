@@ -60,6 +60,14 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     if (!visible) {
       style.display = 'none';
     }
+    const inputLabelStyle: {[x: string]: any} = {
+      'white-space': 'nowrap',
+      'overflow' : 'hidden',
+      'text-overflow': 'ellipsis',
+      // magic width as the label is transformed to 75% of its size
+      'width': '125%'
+    };
+
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
@@ -69,7 +77,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         onFocus={this.onFocus}
         onBlur={this.onBlur}
       >
-        <InputLabel htmlFor={id} error={!isValid}>
+        <InputLabel htmlFor={id} error={!isValid} style={inputLabelStyle}>
           {computeLabel(isPlainLabel(label) ? label : label.default, required)}
         </InputLabel>
         <DispatchField uischema={uischema} schema={schema} path={parentPath} />
