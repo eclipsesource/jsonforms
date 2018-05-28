@@ -19,6 +19,7 @@ export class JsonEditorIde extends HTMLElement implements Editor {
   private connected: boolean;
   private _store: Store<any>;
   private editor: JsonFormsElement;
+  private _filterPredicate: any;
 
   connectedCallback(): void {
     this.connected = true;
@@ -42,6 +43,10 @@ export class JsonEditorIde extends HTMLElement implements Editor {
 
   get schema() {
     return getSchema(this._store.getState());
+  }
+
+  set filterPredicate(filterPredicate: any) {
+    this._filterPredicate = filterPredicate;
   }
 
   private render(): void {
@@ -71,7 +76,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
           {
             uischema: getUiSchema(this._store.getState()),
             schema: resolvedSchema.resolved,
-            schemaService
+            schemaService,
+            filterPredicate: this._filterPredicate
           });
         this.editor.store = this._store;
 

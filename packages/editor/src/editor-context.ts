@@ -7,3 +7,12 @@ export interface EditorContext {
     identifyingProperty: string;
     modelMapping: ModelMapping;
 }
+
+export interface StringMap {
+    [property: string]: string;
+}
+
+export interface ModelMapping {
+    attribute: string;
+    mapping: StringMap;
+}

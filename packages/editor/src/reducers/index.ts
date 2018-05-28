@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { ModelMapping } from '../editor-context';
 
 export const ADD_UI_SCHEMA: 'jsonforms/editor/ADD_UISCHEMA' = 'jsonforms/editor/ADD_UISCHEMA';
 
@@ -118,8 +119,3 @@ export const editorReducer = (
             return state;
     }
 };
-
-export interface ModelMapping {
-    attribute: string;
-    mapping: { [schemaId: string]: string };
-}

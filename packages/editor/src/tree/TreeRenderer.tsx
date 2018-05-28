@@ -43,6 +43,7 @@ export interface MasterProps {
   };
   uischema: UISchemaElement;
   schemaService: SchemaService;
+  filterPredicate: any;
 }
 
 const Master = (
@@ -53,7 +54,8 @@ const Master = (
     handlers,
     uischema,
     rootData,
-    schemaService
+    schemaService,
+    filterPredicate
   }: MasterProps) => {
   if (schema.items !== undefined) {
     return (
@@ -66,6 +68,7 @@ const Master = (
           handlers={handlers}
           uischema={uischema}
           schemaService={schemaService}
+          filterPredicate={filterPredicate}
         />
       </ul>
     );
@@ -81,6 +84,7 @@ const Master = (
         handlers={handlers}
         schemaService={schemaService}
         isRoot={true}
+        filterPredicate={filterPredicate}
       />
     </ul>
   );
@@ -108,6 +112,7 @@ export interface TreeProps extends ControlProps {
   addToRoot: any;
   schemaService: SchemaService;
   uiSchemata?;
+  filterPredicate: any;
 }
 
 export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
@@ -174,7 +179,8 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
   }
 
   render() {
-    const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot, schemaService, uiSchemata } = this.props;
+    const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot,
+            schemaService, uiSchemata, filterPredicate } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -224,6 +230,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
               selection={this.state.selected.data}
               rootData={rootData}
               schemaService={schemaService}
+              filterPredicate={filterPredicate}
             />
           </div>
           <div className='jsf-treeMasterDetail-detail'>
@@ -272,7 +279,8 @@ const mapStateToProps = (state, ownProps) => {
     path,
     visible,
     enabled,
-    uiSchemata
+    uiSchemata,
+    filterPredicate: ownProps.filterPredicate
   };
 };
 

@@ -19,7 +19,6 @@ import {
   Types } from './dnd.util';
 import { ContainmentProperty, SchemaService } from '../services/schema.service';
 import { matchContainmentProperty } from '../helpers/containment.util';
-import { getModelMapping } from '../reducers';
 
 export interface ExpandArrayProps {
   rootData: any;
@@ -28,7 +27,7 @@ export interface ExpandArrayProps {
   selection: any;
   schemaService: SchemaService;
   handlers: any;
-  modelMapping: any;
+  filterPredicate: any;
 }
 /**
  * Expands the given data array by expanding every element.
@@ -47,7 +46,7 @@ export const ExpandArray = (
     selection,
     schemaService,
     handlers,
-    modelMapping
+    filterPredicate
   }: ExpandArrayProps
 ) => {
 
@@ -59,7 +58,7 @@ export const ExpandArray = (
   return (
     data.map((element, index) => {
       const composedPath = Paths.compose(path, index.toString());
-      const property = matchContainmentProperty(element, containmentProps, modelMapping);
+      const property = matchContainmentProperty(element, containmentProps, filterPredicate);
 
       if (property === undefined || data === null) {
         return <li>No ContainmentProperty</li>;
@@ -74,6 +73,7 @@ export const ExpandArray = (
           handlers={handlers}
           schemaService={schemaService}
           parentProperties={containmentProps}
+          filterPredicate={filterPredicate}
         />
       );
     })
@@ -124,11 +124,11 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
       schemaService,
       selection,
       handlers,
-      modelMapping,
       // Drag and Drop Parameters
       connectDropTarget,
       isOver,
       validDropTarget,
+      filterPredicate
     }: ExpandArrayContainerProps = this.props;
 
     if (_.isEmpty(containmentProps)) {
@@ -157,7 +157,7 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
           selection={selection}
           handlers={handlers}
           schemaService={schemaService}
-          modelMapping={modelMapping}
+          filterPredicate={filterPredicate}
         />
       </ul>
     );
@@ -165,8 +165,7 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
 }
 
 const mapStateToProps = state => ({
-  rootData: getData(state),
-  modelMapping: getModelMapping(state)
+  rootData: getData(state)
 });
 
 /**
