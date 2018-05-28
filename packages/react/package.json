@@ -41,14 +41,14 @@
   "dependencies": {
     "@jsonforms/core": "^2.0.1",
     "lodash": "^4.17.4",
-    "react": "^16.2.0",
+    "react": "^16.3.2",
     "react-redux": "^5.0.6"
   },
   "devDependencies": {
     "document-register-element": "^1.7.0",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.3.2",
     "redux": "^3.7.2",
     "redux-mock-store": "1.4.0"
   }

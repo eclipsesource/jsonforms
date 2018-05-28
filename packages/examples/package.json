@@ -30,7 +30,7 @@
     "@jsonforms/react": "^2.0.1",
     "@jsonforms/webcomponent": "^2.0.1",
     "moment": "^2.20.1",
-    "react": "^16.2.0",
+    "react": "^16.3.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   }

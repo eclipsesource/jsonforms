@@ -41,8 +41,8 @@
     "es6-shim": "^0.35.3",
     "json-refs": "^3.0.4",
     "moment": "^2.20.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2"
   },
