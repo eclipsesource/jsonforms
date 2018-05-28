@@ -3,7 +3,7 @@
 
 # Getting started
 1. Clone the seed app with `git clone https://github.com/eclipsesource/jsonforms-react-seed.git`
-2. Install dependencies with `npm install`
+2. Install dependencies with `npm ci` (or `npm install` when using an older version)
 3. Run the app with `npm run start`
 
 For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
@@ -12,11 +12,11 @@ For a more detailed tutorial about the usage of JSON Forms, please see [this tut
 # Developers Documentation
 
 ## First time setup
-* Install [node.js](https://nodejs.org/)(version > 4.x.x)
+* Install [node.js](https://nodejs.org/) (version >= 6.x.x)
+* Update npm (version >= 5.8.0)
 * Clone this repository
-* Install dependencies: `npm install`
-* Hook up dependencies between packages: `lerna bootstrap --hoist`  
-  or `npx lerna bootstrap --hoist` (if npm >= 5.2.0 and don't want to globally install `lerna`)
+* Install dependencies: `npm ci`
+* Hook up dependencies between packages: `npx lerna bootstrap --hoist --npm-ci-mode`
 
 ## Build & Testing
 * Build (all packages): `lerna run build`
