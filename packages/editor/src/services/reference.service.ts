@@ -2,7 +2,7 @@ import { JsonSchema } from '@jsonforms/core';
 import { makeSelfContainedSchema, Property } from './property.util';
 import { EditorContext } from '../editor-context';
 import { Resources } from '../resources/resources';
-import { ModelMapping } from '../helpers/containment.util';
+import { ModelMapping } from '../helpers/container.util';
 import { resolveLocalData } from '../helpers/util';
 import { RS_PROTOCOL } from '../resources/resource-set';
 import * as AJV from 'ajv';

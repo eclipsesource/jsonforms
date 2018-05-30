@@ -389,49 +389,6 @@ describe('Schema Service Reference Tests', () => {
       expect(targets[keys[1]]).toMatchObject(data.objects[1]);
     });
 
-  /*test('property type check', () => {
-    // tslint:disable:no-object-literal-type-assertion
-    const schema: JsonSchema = {
-      definitions: {
-        class: {
-          type: 'object',
-          properties: {
-            id: {
-              type: 'string'
-            },
-            association: {
-              type: 'integer',
-              minimum: 0
-            }
-          },
-          links: [{
-            rel: 'full',
-            href: '#/classes/{association}',
-            targetSchema: {$ref: '#/definitions/class'}
-          }]
-        }
-      },
-      type: 'object',
-      properties: {
-        classes: {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/class'
-          }
-        }
-      }
-    } as JsonSchema;
-    // tslint:enable:no-object-literal-type-assertion
-    editorContext.dataSchema = schema;
-    const refProperty =
-      getReferenceProperties(schema.properties.classes.items as JsonSchema)[0];
-    expect(isReferenceProperty(refProperty)).toBe(true);
-    expect(isContainmentProperty(refProperty)).toBe(false);
-    const containmentProperty = service.getContainmentProperties(schema)[0];
-    expect(isReferenceProperty(containmentProperty)).toBe(false);
-    expect(isContainmentProperty(containmentProperty)).toBe(true);
-  });*/
-
   test('support for array references', () => {
     // TODO: links property is unknown
     // tslint:disable:no-object-literal-type-assertion

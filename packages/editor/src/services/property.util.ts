@@ -161,12 +161,9 @@ const calculateLabel = (id: string): string => (
 );
 
 /**
- * Constructing container properties of a given schema. A container means
- * a given property can hold a set of its sub-properties. This allows to create
- * a hierarchy of elements. If the given schema isn't a array type of object, it is
- * not considered as a container. Since only array elements can be added into the
- * parent property, all other properties that don't contain array type of object
- * are discarded.
+ * Returns a flattened list of container properties.
+ * A property is being considered a container property if it is an array of objects,
+ * meaning that all its children are non-primitive.
  *
  * @param {string} property The schema key from which this property was created.
  * @param {string} label The name of the schema the property describes.
@@ -270,10 +267,9 @@ export const retrieveContainerProperties = (schema: JsonSchema,
 };
 
 /**
- * If a property object is type of array, this means
- * current property is a container and all the elements in the array become its children.
- * These children can have their own sub elements.
- * Starting from the root schema, all containers and their properties are calculated
+ * Returns a flattened map of sub schema ID to container properties.
+ * A property is being considered a container property if it is an array of objects,
+ * meaning that all its children are non-primitive
  *
  * @param schema The root schema
  * @param containerProperties All the available containers in the given schema

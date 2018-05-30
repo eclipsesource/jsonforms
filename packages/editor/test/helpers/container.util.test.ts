@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { matchContainerProperty } from '../../src/helpers/containment.util';
+import { matchContainerProperty } from '../../src/helpers/container.util';
 import { Property } from '../../src/services/property.util';
 import { JsonSchema } from '@jsonforms/core';
 
@@ -71,7 +71,7 @@ describe('Containment Util Tests', () => {
     const containerProperties: Property[] = [firstProperty];
 
     const prop = matchContainerProperty({type: 'robot'}, containerProperties, matchingStrategy);
-    expect(prop).toEqual(undefined);
+    expect(prop).toBeUndefined();
   });
 
   test('return the first property if there are more than 1 match ', () => {

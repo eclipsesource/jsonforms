@@ -18,7 +18,7 @@ import {
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
 import { Property } from '../services/property.util';
-import { matchContainerProperty } from '../helpers/containment.util';
+import { matchContainerProperty } from '../helpers/container.util';
 
 export interface ExpandArrayProps {
   rootData: any;
