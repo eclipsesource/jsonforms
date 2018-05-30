@@ -18,7 +18,7 @@ import {
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
 import { Property } from '../services/property.util';
-import { matchContainmentProperty } from '../helpers/containment.util';
+import { matchContainerProperty } from '../helpers/containment.util';
 
 export interface ExpandArrayProps {
   rootData: any;
@@ -34,7 +34,10 @@ export interface ExpandArrayProps {
  * a suitable delete function for the expanded elements is created.
  *
  * @param data the array to expand
- * @param property the {@link Property} defining the property that the array belongs to
+ * @param {@link Property} property It describes a single property.
+ *                                  It is used to match a given data element with a schema by searching
+ *                                  a list of properties.
+ *
  * @param parentPath the instance path where data can be obtained from
  */
 export const ExpandArray = (
@@ -56,7 +59,7 @@ export const ExpandArray = (
   return (
     data.map((element, index) => {
       const composedPath = Paths.compose(path, index.toString());
-      const property = matchContainmentProperty(element, containmentProps, filterPredicate);
+      const property = matchContainerProperty(element, containmentProps, filterPredicate);
 
       if (property === undefined || data === null) {
         return <li>No ContainmentProperty</li>;

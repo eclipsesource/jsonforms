@@ -6,7 +6,7 @@ import { taskSchema } from './schema';
 import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
 import * as _ from 'lodash';
 import { findAllContainerProperties, Property } from '../src/services/property.util';
-import { addContainerProperties } from '../src/reducers';
+import { setContainerProperties } from '../src/reducers';
 
 window.onload = () => {
   const ide = document.createElement('json-editor-ide') as JsonEditorIde;
@@ -34,7 +34,7 @@ window.onload = () => {
 
   ide.filterPredicate = filterPredicate;
 
-  store.dispatch(addContainerProperties(findAllContainerProperties(taskSchema, taskSchema)));
+  store.dispatch(setContainerProperties(findAllContainerProperties(taskSchema, taskSchema)));
 
   ide.store = store;
 

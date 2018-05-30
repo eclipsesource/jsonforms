@@ -72,7 +72,7 @@ export const parentPath = (path: string): string => {
  * @param modelMapping The model mapping
  * @param uiSchemata The object containing the UI Schemata for the data types displayed by the
  *                   editor. The keys are the schema ids and the values the actual UI Schemata
- * @param containersProperties Calculated properties of containers
+ * @param containerProperties Calculated properties for the given schema
  */
 export const createEditorStore = (
   data = {},

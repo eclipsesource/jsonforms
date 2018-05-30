@@ -1,4 +1,4 @@
-export const taskSchema = {
+export const UIMetaSchema = {
   'type': 'object',
   'id': '#root',
   'properties': {

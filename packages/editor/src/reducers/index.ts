@@ -3,9 +3,9 @@ import { ModelMapping } from '../editor-context';
 import { Property } from '../services/property.util';
 
 export const ADD_UI_SCHEMA: 'jsonforms/editor/ADD_UISCHEMA' = 'jsonforms/editor/ADD_UISCHEMA';
-export const ADD_CONTAINER_PROPERTIES:
-  'jsonforms/editor/ADD_CONTAINER_PROPERTIES' =
-  'jsonforms/editor/ADD_CONTAINER_PROPERTIES';
+export const SET_CONTAINER_PROPERTIES:
+  'jsonforms/editor/SET_CONTAINER_PROPERTIES' =
+  'jsonforms/editor/SET_CONTAINER_PROPERTIES';
 
 export const getUiSchemata = state => extractUiSchemata(state.jsonforms.editor);
 export const getImageMapping = state => extractImageMapping(state.jsonforms.editor);
@@ -21,8 +21,8 @@ export interface AddUiSchemaAction {
     uiSchema: any;
 }
 
-export interface AddContainerPropertiesAction {
-  type: 'jsonforms/editor/ADD_CONTAINER_PROPERTIES';
+export interface SetContainerPropertiesAction {
+  type: 'jsonforms/editor/SET_CONTAINER_PROPERTIES';
   containerProperties: { [schemaId: string]: Property[] };
 }
 
@@ -53,19 +53,19 @@ export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
 };
 
 /**
- * Creates an action to add a calculated container properties for the given schema id
+ * Creates an action to set calculated container properties for the given schema id
  * If there already are container properties for the given schema id
- * it is overwritten with the given one
+ * they are overwritten with the given one
  *
  * @param {JsonSchema} schema
  * @param {[schemaId: string]: Property[]} containerProperties
- * @returns {AddContainerPropertiesAction}
+ * @returns {SetContainerPropertiesAction}
  */
-export const addContainerProperties =
+export const setContainerProperties =
   (containerProperties: { [schemaId: string]: Property[] }):
-    AddContainerPropertiesAction => {
+    SetContainerPropertiesAction => {
   return {
-    type: ADD_CONTAINER_PROPERTIES,
+    type: SET_CONTAINER_PROPERTIES,
     containerProperties: containerProperties
   };
 };
@@ -146,7 +146,7 @@ export const editorReducer = (
                 ...state,
                 uiSchemata: uiSchemata
             };
-        case ADD_CONTAINER_PROPERTIES:
+        case SET_CONTAINER_PROPERTIES:
             return {
               ...state,
               containerProperties: action.containerProperties

@@ -176,7 +176,8 @@ const calculateLabel = (id: string): string => (
  *                                Properties that are described in array are considered as
  *                                they are in a container.
  * @param {boolean} hasOnlyOwnChildren To accept only corresponding children of a property
- * @returns {Property[]}
+ * @returns {@link Property[]} An array of properties where each property describes
+ *                             a self-contained schema for the corresponding schema
  */
 export const findContainerProperties = (property: string,
                                         label: string,
@@ -298,10 +299,8 @@ export const findAllContainerProperties =
           },
           containerProperties
         );
-      } else {
-        return containerProperties;
       }
-    } else {
-      return containerProperties;
     }
+
+    return containerProperties;
 };

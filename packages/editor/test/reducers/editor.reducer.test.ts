@@ -1,5 +1,5 @@
 import { createEditorStore } from '../../src/helpers/util';
-import { addContainerProperties, getContainerProperties } from '../../src/reducers';
+import { getContainerProperties, setContainerProperties } from '../../src/reducers';
 import { findAllContainerProperties } from '../../src/services/property.util';
 
 const taskSchema = {
@@ -246,10 +246,10 @@ const expectedProps = {
 };
 
 describe('Editor Reducers Tests', () => {
-  test('Add the container properties of the given schema into store by dispatching action', () => {
+  test('Set the container properties of the given schema into store by dispatching action', () => {
     const store = createEditorStore({}, taskSchema, {}, {}, {}, {}, {}, {}, {}, {});
     const props = findAllContainerProperties(taskSchema, taskSchema);
-    store.dispatch(addContainerProperties(props));
+    store.dispatch(setContainerProperties(props));
 
     expect(expectedProps).toMatchObject(getContainerProperties(store.getState()));
   });

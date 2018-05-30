@@ -11,7 +11,7 @@ import { Property } from '../services/property.util';
  * @return The matching {@link Property}
  */
 // TODO type model mapping
-export const matchContainmentProperty =
+export const matchContainerProperty =
   (data: Object, properties: Property[], filterPredicate: any) => {
     // TODO improve handling
     const filtered = properties.filter(filterPredicate(data));

@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
-import { matchContainmentProperty } from '../../src/helpers/containment.util';
-import { ContainmentProperty, ContainmentPropertyImpl } from '../../src/services/schema.service';
+import { matchContainerProperty } from '../../src/helpers/containment.util';
+import { Property } from '../../src/services/property.util';
 import { JsonSchema } from '@jsonforms/core';
 
 const modelMapping = {
@@ -11,7 +11,7 @@ const modelMapping = {
   }
 };
 const matchingStrategy = (data: Object) => {
-  return (property: ContainmentProperty): boolean => {
+  return (property: Property): boolean => {
     if (!_.isEmpty(modelMapping) &&
       !_.isEmpty(modelMapping.mapping)) {
       if (data[modelMapping.attribute]) {
@@ -34,15 +34,22 @@ describe('Containment Util Tests', () => {
         }
       }
     };
-    const containmentProperties: ContainmentProperty[] = [
-      new ContainmentPropertyImpl({...innerSchema, ...{id: '#person'}},
-        'root', 'person', null, null, null),
-      new ContainmentPropertyImpl({...innerSchema, ...{id: '#robot'}},
-        'root', 'robot', null, null, null)
-    ];
-    let prop = matchContainmentProperty({type: 'robot'}, containmentProperties, matchingStrategy);
+    const firstProperty: Property =  {
+      property: 'person',
+      label: 'root',
+      schema: { ...innerSchema, ...{id: '#person'} }
+    };
+    const secondProperty: Property =  {
+      property: 'robot',
+      label: 'root',
+      schema: { ...innerSchema, ...{id: '#robot'} }
+    };
+
+    const containerProperties: Property[] = [firstProperty, secondProperty];
+
+    let prop = matchContainerProperty({type: 'robot'}, containerProperties, matchingStrategy);
     expect(prop.schema).toMatchObject({...innerSchema, ...{id: '#robot'}});
-    prop = matchContainmentProperty({type: 'person'}, containmentProperties, matchingStrategy);
+    prop = matchContainerProperty({type: 'person'}, containerProperties, matchingStrategy);
     expect(prop.schema).toMatchObject({...innerSchema, ...{id: '#person'}});
   });
 
@@ -55,17 +62,22 @@ describe('Containment Util Tests', () => {
         }
       }
     };
-    const containmentProperties: ContainmentProperty[] = [
-      new ContainmentPropertyImpl({...innerSchema, ...{id: '#person'}},
-        'root', 'person', null, null, null)
-    ];
-    const prop = matchContainmentProperty({type: 'robot'}, containmentProperties, matchingStrategy);
+    const firstProperty: Property =  {
+      property: 'person',
+      label: 'root',
+      schema: { ...innerSchema, ...{id: '#person'} }
+    };
+
+    const containerProperties: Property[] = [firstProperty];
+
+    const prop = matchContainerProperty({type: 'robot'}, containerProperties, matchingStrategy);
     expect(prop).toEqual(undefined);
   });
 
   test('return the first property if there are more than 1 match ', () => {
     const firstInnerSchema: JsonSchema = {
       type: 'object',
+      id: '#robot',
       properties: {
         type: {
           type: 'string'
@@ -77,19 +89,26 @@ describe('Containment Util Tests', () => {
     };
     const secondInnerSchema: JsonSchema = {
       type: 'object',
+      id: '#robot',
       properties: {
         type: {
           type: 'string'
         }
       }
     };
-    const containmentProperties: ContainmentProperty[] = [
-      new ContainmentPropertyImpl({...firstInnerSchema, ...{id: '#robot'}},
-        'root', 'robot', null, null, null),
-      new ContainmentPropertyImpl({...secondInnerSchema, ...{id: '#robot'}},
-        'root', 'robot', null, null, null)
-    ];
-    const prop = matchContainmentProperty({type: 'robot'}, containmentProperties, matchingStrategy);
-    expect(prop.schema).toEqual({...firstInnerSchema, ...{id: '#robot'}});
+    const firstProperty: Property =  {
+      property: 'robot',
+      label: 'root',
+      schema: firstInnerSchema
+    };
+    const secondProperty: Property =  {
+      property: 'robot',
+      label: 'root',
+      schema: secondInnerSchema
+    };
+
+    const containerProperties: Property[] = [firstProperty, secondProperty];
+    const prop = matchContainerProperty({type: 'robot'}, containerProperties, matchingStrategy);
+    expect(prop.schema).toEqual(firstInnerSchema);
   });
 });
