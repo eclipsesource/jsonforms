@@ -23,12 +23,12 @@
   THE SOFTWARE.
 */
 
-import { JsonSchema } from '../models/jsonSchema';
+import { JsonSchema4 } from '../models/jsonSchema4';
 
 const ADDITIONAL_PROPERTIES = 'additionalProperties';
 const REQUIRED_PROPERTIES   = 'required';
 
-type Properties = {[property: string]: JsonSchema};
+type Properties = {[property: string]: JsonSchema4};
 
 const distinct = (array: any[], discriminator: (item: any) => string): any[] => {
     const known = {};
@@ -51,12 +51,12 @@ class Gen {
 
     }
 
-    schemaObject = (data: Object): JsonSchema => {
-        const props = this.properties(data);
-        const schema: JsonSchema = {
-            'type': 'object',
-            'properties': props,
-            'additionalProperties': this.findOption(props)(ADDITIONAL_PROPERTIES)
+    schemaObject = (data: Object): JsonSchema4 => {
+        const props: Properties = this.properties(data);
+        const schema: JsonSchema4 = {
+            type: 'object',
+            properties: props,
+            additionalProperties: this.findOption(props)(ADDITIONAL_PROPERTIES)
         };
         const required = this.findOption(props)(REQUIRED_PROPERTIES);
         if (required.length > 0) {
@@ -81,7 +81,7 @@ class Gen {
             );
     }
 
-    property = (data: any): JsonSchema => {
+    property = (data: any): JsonSchema4 => {
         switch (typeof data) {
             case 'string':
                 return { 'type': 'string' };
@@ -104,7 +104,7 @@ class Gen {
         }
     }
 
-    schemaObjectOrArray = (data: any): JsonSchema => {
+    schemaObjectOrArray = (data: any): JsonSchema4 => {
         if (data instanceof Array) {
             return this.schemaArray(data as any[]);
         } else {
@@ -112,7 +112,7 @@ class Gen {
         }
     }
 
-    schemaArray = (data: any[]): JsonSchema => {
+    schemaArray = (data: any[]): JsonSchema4 => {
         if (data.length > 0) {
             const allProperties = data.map(this.property);
             const uniqueProperties = distinct(allProperties, prop => JSON.stringify(prop));
@@ -144,9 +144,9 @@ class Gen {
  * @param {any} options any additional options that may alter the generated JSON schema
  * @returns {JsonSchema} the generated schema
  */
-export const generateJsonSchema = (instance: Object, options: any = {}): JsonSchema => {
+export const generateJsonSchema = (instance: Object, options: any = {}): JsonSchema4 => {
 
-    const findOption = (props: Properties) => (optionName: string) => {
+    const findOption = (props: Properties) => (optionName: string): boolean  | string[] => {
             switch (optionName) {
                 case ADDITIONAL_PROPERTIES:
                     if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {

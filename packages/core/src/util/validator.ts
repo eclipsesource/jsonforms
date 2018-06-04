@@ -3,7 +3,7 @@ import { Draft4 } from '../models/draft4';
 
 export const createAjv = () => {
   const ajv = new AJV({
-    schemaId: 'id',
+    schemaId: 'auto',
     allErrors: true,
     jsonPointers: true,
     errorDataPath: 'property'

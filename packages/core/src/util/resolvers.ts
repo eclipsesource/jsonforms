@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import * as _ from 'lodash';
-
-import { JsonSchema } from '../models/jsonSchema';
+import { JsonSchema } from '..';
 
 /**
  * Map for storing refs and the respective schemas they are pointing to.
@@ -79,14 +78,16 @@ export const findAllRefs =
     if (isArray(schema)) {
       if (Array.isArray(schema.items)) {
         if (resolveTuples) {
-          schema.items.forEach(child => findAllRefs(child, result));
+          const items: JsonSchema[] = schema.items;
+          items.forEach(child => findAllRefs(child, result));
         }
       } else {
         findAllRefs(schema.items, result);
       }
     }
     if (Array.isArray(schema.anyOf)) {
-      schema.anyOf.forEach(child => findAllRefs(child, result));
+      const anyOf: JsonSchema[] = schema.anyOf;
+      anyOf.forEach(child => findAllRefs(child, result));
     }
     if (schema.$ref !== undefined) {
       result[schema.$ref] = schema;

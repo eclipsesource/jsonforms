@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   getData,
   getSchema,
-  JsonSchema,
+  JsonSchema4,
   Paths,
   resolveData,
   update
@@ -39,7 +39,7 @@ import {
 const RESET_SELECTION_DELAY = 40;
 
 const getNamingFunction =
-  (schema: JsonSchema, labelMapping) => (element: Object): string => {
+  (schema: JsonSchema4, labelMapping) => (element: Object): string => {
 
     if (!_.isEmpty(labelMapping) && labelMapping[schema.id] !== undefined) {
 
@@ -72,7 +72,7 @@ const getNamingFunction =
 
 export interface ObjectListItemProps {
   path: string;
-  schema: JsonSchema;
+  schema: JsonSchema4;
   rootData: any;
   data: any;
   selection: any;

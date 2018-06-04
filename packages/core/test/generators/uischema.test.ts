@@ -24,8 +24,8 @@
 */
 import test from 'ava';
 import { generateDefaultUISchema } from '../../src/generators/uischema';
-import { JsonSchema } from '../../src/models/jsonSchema';
 import { ControlElement, LabelElement, Layout, VerticalLayout } from '../../src/models/uischema';
+import { JsonSchema } from '../../src';
 
 test('generate ui schema for Control element by resolving refs', t => {
   const schema: JsonSchema = {

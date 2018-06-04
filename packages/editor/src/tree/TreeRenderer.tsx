@@ -8,7 +8,7 @@ import {
   ControlState,
   generateDefaultUISchema,
   getData,
-  JsonSchema,
+  JsonSchema4,
   Paths,
   Resolve,
   Runtime,
@@ -29,7 +29,7 @@ import { MasterDetailLayout } from '../master-detail-layout';
 import { getUiSchemata } from '../reducers';
 
 export interface MasterProps {
-  schema: JsonSchema;
+  schema: JsonSchema4;
   path: string;
   rootData: any;
   selection: any;
@@ -59,7 +59,7 @@ const Master = (
       <ul>
         <ExpandRootArray
           rootData={rootData}
-          schema={schema.items as JsonSchema}
+          schema={schema.items}
           path={path}
           selection={selection}
           handlers={handlers}
@@ -85,17 +85,17 @@ const Master = (
   );
 };
 
-const isNotTuple = (schema: JsonSchema) => !Array.isArray(schema.items);
+const isNotTuple = (schema: JsonSchema4) => !Array.isArray(schema.items);
 
 export interface TreeMasterDetailState extends ControlState {
   selected: {
-    schema: JsonSchema,
+    schema: JsonSchema4,
     data: any,
     path: string
   };
   dialog: {
     open: boolean,
-    schema: JsonSchema,
+    schema: JsonSchema4,
     path: string
   };
 }
