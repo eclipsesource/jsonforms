@@ -6,7 +6,7 @@ import {
 } from 'redux';
 import {
   Actions,
-  jsonformsReducer
+  jsonformsReducer,
 } from '@jsonforms/core';
 import { editorReducer } from '../reducers/index';
 
@@ -72,6 +72,7 @@ export const parentPath = (path: string): string => {
  * @param modelMapping The model mapping
  * @param uiSchemata The object containing the UI Schemata for the data types displayed by the
  *                   editor. The keys are the schema ids and the values the actual UI Schemata
+ * @param containerProperties Calculated properties for the given schema
  */
 export const createEditorStore = (
   data = {},
@@ -82,7 +83,8 @@ export const createEditorStore = (
   imageMapping?,
   labelMapping?,
   modelMapping?,
-  uiSchemata = {}): Store<any> => {
+  uiSchemata = {},
+  containerProperties = {}): Store<any> => {
   const store = createStore(
     combineReducers({ jsonforms: jsonformsReducer({ editor: editorReducer }) }),
     {
@@ -93,7 +95,8 @@ export const createEditorStore = (
             imageMapping,
             labelMapping,
             modelMapping,
-            uiSchemata
+            uiSchemata,
+            containerProperties
           }
         }
       }

@@ -22,7 +22,6 @@ import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import ExpandRootArray from './ExpandRootArray';
 import Dialog from './Dialog';
-import { SchemaService } from '../services/schema.service';
 import HTML5Backend from 'react-dnd-html5-backend';
 // import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
@@ -42,7 +41,6 @@ export interface MasterProps {
     resetSelection: any;
   };
   uischema: UISchemaElement;
-  schemaService: SchemaService;
   filterPredicate: any;
 }
 
@@ -54,7 +52,6 @@ const Master = (
     handlers,
     uischema,
     rootData,
-    schemaService,
     filterPredicate
   }: MasterProps) => {
   if (schema.items !== undefined) {
@@ -67,7 +64,6 @@ const Master = (
           selection={selection}
           handlers={handlers}
           uischema={uischema}
-          schemaService={schemaService}
           filterPredicate={filterPredicate}
         />
       </ul>
@@ -82,7 +78,6 @@ const Master = (
         uischema={uischema}
         selection={selection}
         handlers={handlers}
-        schemaService={schemaService}
         isRoot={true}
         filterPredicate={filterPredicate}
       />
@@ -110,7 +105,6 @@ export interface TreeProps extends ControlProps {
   rootData: any;
   resolvedRootData: any;
   addToRoot: any;
-  schemaService: SchemaService;
   uiSchemata?;
   filterPredicate: any;
 }
@@ -180,7 +174,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
 
   render() {
     const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot,
-            schemaService, uiSchemata, filterPredicate } = this.props;
+            uiSchemata, filterPredicate } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -229,7 +223,6 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
               handlers={handlers}
               selection={this.state.selected.data}
               rootData={rootData}
-              schemaService={schemaService}
               filterPredicate={filterPredicate}
             />
           </div>
@@ -252,7 +245,6 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
                 schema={this.state.dialog.schema}
                 closeDialog={this.closeDialog}
                 dialogProps={dialogProps}
-                schemaService={schemaService}
                 setSelection={this.setSelection}
               />
           }
@@ -274,7 +266,6 @@ const mapStateToProps = (state, ownProps) => {
     resolvedRootData: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    schemaService: ownProps.schemaService,
     resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope),
     path,
     visible,

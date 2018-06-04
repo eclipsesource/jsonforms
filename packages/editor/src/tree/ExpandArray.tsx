@@ -17,15 +17,14 @@ import {
   DropResult,
   mapDispatchToTreeListProps,
   Types } from './dnd.util';
-import { ContainmentProperty, SchemaService } from '../services/schema.service';
-import { matchContainmentProperty } from '../helpers/containment.util';
+import { Property } from '../services/property.util';
+import { matchContainerProperty } from '../helpers/container.util';
 
 export interface ExpandArrayProps {
   rootData: any;
-  containmentProps: ContainmentProperty[];
+  containmentProps: Property[];
   path: string;
   selection: any;
-  schemaService: SchemaService;
   handlers: any;
   filterPredicate: any;
 }
@@ -35,7 +34,10 @@ export interface ExpandArrayProps {
  * a suitable delete function for the expanded elements is created.
  *
  * @param data the array to expand
- * @param property the {@link ContainmentProperty} defining the property that the array belongs to
+ * @param {@link Property} property It describes a single property.
+ *                                  It is used to match a given data element with a schema by searching
+ *                                  a list of properties.
+ *
  * @param parentPath the instance path where data can be obtained from
  */
 export const ExpandArray = (
@@ -44,7 +46,6 @@ export const ExpandArray = (
     containmentProps,
     path,
     selection,
-    schemaService,
     handlers,
     filterPredicate
   }: ExpandArrayProps
@@ -58,7 +59,7 @@ export const ExpandArray = (
   return (
     data.map((element, index) => {
       const composedPath = Paths.compose(path, index.toString());
-      const property = matchContainmentProperty(element, containmentProps, filterPredicate);
+      const property = matchContainerProperty(element, containmentProps, filterPredicate);
 
       if (property === undefined || data === null) {
         return <li>No ContainmentProperty</li>;
@@ -71,7 +72,6 @@ export const ExpandArray = (
           schema={property.schema}
           selection={selection}
           handlers={handlers}
-          schemaService={schemaService}
           parentProperties={containmentProps}
           filterPredicate={filterPredicate}
         />
@@ -121,7 +121,6 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
       rootData,
       containmentProps,
       path,
-      schemaService,
       selection,
       handlers,
       // Drag and Drop Parameters
@@ -156,7 +155,6 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
           rootData={rootData}
           selection={selection}
           handlers={handlers}
-          schemaService={schemaService}
           filterPredicate={filterPredicate}
         />
       </ul>

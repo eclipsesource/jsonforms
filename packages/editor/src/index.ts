@@ -8,5 +8,5 @@ export * from './reducers/index';
 
 // TODO remove the following exports when they are not needed anymore
 export * from './editor-context';
-export * from './services/schema.service';
-export * from './services/schema.service.impl';
+export * from './services/property.util';
+export * from './services/reference.service';

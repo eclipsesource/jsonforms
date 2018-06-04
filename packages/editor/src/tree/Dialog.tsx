@@ -5,73 +5,90 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
   getData,
+  getSchema,
   Paths,
   Resolve,
   update
 } from '@jsonforms/core';
+import { findPropertyLabel, retrieveContainerProperties } from '../services/property.util';
+import { getContainerProperties } from '../reducers';
 
 const Dialog = (
   {
     add,
     path,
-    schema,
     closeDialog,
     dialogProps,
-    schemaService,
     setSelection,
-    rootData
-  }) => (
-  <dialog id='dialog' {...dialogProps}>
-    <label>
-      Select item to create
-    </label>
-    <div className='dialog-content content'>
-      {
-        schemaService.getContainmentProperties(schema)
-          .map(prop =>
-            <button
-              className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
-              key={`${prop.label}-button`}
-              onClick={() => {
-                const newData = _.keys(prop.schema.properties).reduce(
-                  (d, key) => {
-                    if (prop.schema.properties[key].default) {
-                      d[key] = prop.schema.properties[key].default;
-                    }
+    rootData,
+    /**
+     * Self contained schemas of the corresponding schema
+     */
+    containerProperties
+  }) => {
 
-                    // FIXME generate id if identifying property is set in editor to allow id refs
-                    return d;
-                  },
-                  {}
-                );
+  return (
+    <dialog id='dialog' {...dialogProps}>
+      <label>
+        Select item to create
+      </label>
+      <div className='dialog-content content'>
+        {
+          containerProperties
+            .map(prop =>
+              <button
+                className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-button'
+                key={`${findPropertyLabel(prop)}-button`}
+                onClick={() => {
+                  const newData = _.keys(prop.schema.properties).reduce(
+                    (d, key) => {
+                      if (prop.schema.properties[key].default) {
+                        d[key] = prop.schema.properties[key].default;
+                      }
 
-                const arrayPath = Paths.compose(path, prop.property);
-                const array = Resolve.data(rootData, arrayPath) as any[];
-                const selectionIndex = _.isEmpty(array) ? 0 : array.length;
-                const selectionPath = Paths.compose(arrayPath, selectionIndex.toString());
+                      // FIXME generate id if identifying property is set in editor to allow id refs
+                      return d;
+                    },
+                    {}
+                  );
 
-                add(path, prop, newData);
-                setSelection(prop.schema, newData, selectionPath)();
-                closeDialog();
-              }}
-            >
-              {prop.label}
-            </button>
-          )
-      }
-    </div>
-    <button
-      className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-close'
-      onClick={closeDialog}
-    >
-      Close
-    </button>
-  </dialog>
-);
+                  const arrayPath = Paths.compose(path, prop.property);
+                  const array = Resolve.data(rootData, arrayPath) as any[];
+                  const selectionIndex = _.isEmpty(array) ? 0 : array.length;
+                  const selectionPath = Paths.compose(arrayPath, selectionIndex.toString());
 
-const mapStateToProps = state => {
+                  add(path, prop, newData);
+                  setSelection(prop.schema, newData, selectionPath)();
+                  closeDialog();
+                }}
+              >
+                {prop.label}
+              </button>
+            )
+        }
+      </div>
+      <button
+        className='btn button waves-effect waves-light jsf-treeMasterDetail-dialog-close'
+        onClick={closeDialog}
+      >
+        Close
+      </button>
+    </dialog>
+  );
+};
+
+const mapStateToProps = (state, ownProps) => {
+  const containerProps = getContainerProperties(state);
+  let containerProperties;
+  if (_.has(containerProps, ownProps.schema.id)) {
+    containerProperties = containerProps[ownProps.schema.id];
+  } else {
+    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
+  }
   return {
-    rootData: getData(state)
+    rootData: getData(state),
+    containerProperties,
+    rootSchema: getSchema(state),
   };
 };
 

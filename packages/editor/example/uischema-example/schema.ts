@@ -1,4 +1,4 @@
-export const taskSchema = {
+export const UIMetaSchema = {
   'type': 'object',
   'id': '#root',
   'properties': {
@@ -127,7 +127,10 @@ export const taskSchema = {
           'default': 'Categorization'
         },
         'elements': {
-          '$ref': '#/definitions/category'
+          'type': 'array',
+          'items': {
+            '$ref': '#/definitions/category'
+          }
         }
       },
       'required': [

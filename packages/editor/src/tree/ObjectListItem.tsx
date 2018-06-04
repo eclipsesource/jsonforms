@@ -4,13 +4,14 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
   getData,
+  getSchema,
   JsonSchema,
   Paths,
   resolveData,
   update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
-import { ContainmentProperty, SchemaService } from '../services/schema.service';
+import { Property, retrieveContainerProperties } from '../services/property.util';
 import {
   DragSource,
   DragSourceMonitor,
@@ -23,7 +24,11 @@ import {
   moveListItem,
   Types } from './dnd.util';
 import { indexFromPath, LabelDefinition } from '../helpers/util';
-import { getImageMapping, getLabelMapping } from '../reducers';
+import {
+  getContainerProperties,
+  getImageMapping,
+  getLabelMapping,
+} from '../reducers';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -76,10 +81,13 @@ export interface ObjectListItemProps {
     onAdd: any;
     onSelect: any;
   };
-  schemaService: SchemaService;
   imageMapping?: any;
   labelMapping?: any;
   filterPredicate?: any;
+  /**
+   * Self contained schemas of the corresponding schema
+   */
+  containerProperties?: any;
 }
 
 const ObjectListItem = (
@@ -90,19 +98,17 @@ const ObjectListItem = (
     data,
     handlers,
     selection,
-    schemaService,
     imageMapping,
     labelMapping,
-    filterPredicate
+    filterPredicate,
+    containerProperties
   }: ObjectListItemProps) => {
-
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
   const liClasses = selection === data ? 'selected' : '';
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
-  const containmentProps = schemaService.getContainmentProperties(schema);
-  const groupedProps = _.groupBy(containmentProps, property => property.property);
+  const groupedProps = _.groupBy(containerProperties, property => property.property);
 
   // TODO: key should be set in caller
   return (
@@ -119,7 +125,7 @@ const ObjectListItem = (
             {getNamingFunction(schema, labelMapping)(data)}
           </span>
           {
-            schemaService.hasContainmentProperties(schema) ?
+            !_.isEmpty(containerProperties) ?
               (
                 <span
                   className='add'
@@ -149,7 +155,6 @@ const ObjectListItem = (
             schema={schema}
             selection={selection}
             handlers={handlers}
-            schemaService={schemaService}
             filterPredicate={filterPredicate}
           />
       )
@@ -160,12 +165,21 @@ const ObjectListItem = (
 
 const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
+  const containerProps = getContainerProperties(state);
+  let containerProperties;
+  if (_.has(containerProps, ownProps.schema.id)) {
+    containerProperties = containerProps[ownProps.schema.id];
+  } else {
+    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
+  }
 
   return {
     index: index,
     rootData: getData(state),
     imageMapping: getImageMapping(state),
-    labelMapping: getLabelMapping(state)
+    labelMapping: getLabelMapping(state),
+    rootSchema: getSchema(state),
+    containerProperties
   };
 };
 
@@ -221,7 +235,7 @@ export interface ObjectListItemDndProps extends ObjectListItemProps {
    * The Containment Properties of the parent list containing this item.
    * Will be needed to determine whether another list item can be dropped next to this one.
    */
-  parentProperties?: ContainmentProperty[];
+  parentProperties?: Property[];
   // Drag and Drop:
   isDragging: boolean;
   connectDragSource;
@@ -236,14 +250,14 @@ const ObjectListItemDnd = (
     data,
     handlers,
     selection,
-    schemaService,
     imageMapping,
     labelMapping,
     isRoot,
     // isDragging,
     connectDragSource,
     connectDropTarget,
-    filterPredicate
+    filterPredicate,
+    containerProperties
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -254,10 +268,10 @@ const ObjectListItemDnd = (
       data={data}
       handlers={handlers}
       selection={selection}
-      schemaService={schemaService}
       imageMapping={imageMapping}
       labelMapping={labelMapping}
       filterPredicate={filterPredicate}
+      containerProperties={containerProperties}
     />
   );
   if (isRoot === true) {

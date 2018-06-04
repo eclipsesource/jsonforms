@@ -1,5 +1,5 @@
 import { JsonSchema, update } from '@jsonforms/core';
-import { ContainmentProperty } from '../services/schema.service';
+import { Property } from '../services/property.util';
 import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
 
@@ -133,7 +133,7 @@ export const mapDispatchToTreeListProps = dispatch => ({
  * @param listProperties The ContainmentProperties that the list can supports
  * @param dragInfo The DragInfo describing the dragged item
  */
-export const canDropDraggedItem = (listProperties: ContainmentProperty[], dragInfo: DragInfo) => {
+export const canDropDraggedItem = (listProperties: Property[], dragInfo: DragInfo) => {
     if (_.isEmpty(dragInfo.schema.id)) {
         // Cannot determine if this is a valid drop point without schema id
         console.warn(`The given schema for the data at path '${dragInfo.originalPath}'` +

@@ -4,8 +4,9 @@ import { createEditorStore } from '../src/helpers/util';
 import { detailSchemata, imageProvider, labelProvider, modelMapping } from './config';
 import { taskSchema } from './schema';
 import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
-import { ContainmentProperty } from '../src/services/schema.service';
 import * as _ from 'lodash';
+import { findAllContainerProperties, Property } from '../src/services/property.util';
+import { setContainerProperties } from '../src/reducers';
 
 window.onload = () => {
   const ide = document.createElement('json-editor-ide') as JsonEditorIde;
@@ -16,7 +17,7 @@ window.onload = () => {
   };
 
   const filterPredicate = (data: Object) => {
-    return (property: ContainmentProperty): boolean => {
+    return (property: Property): boolean => {
       if (!_.isEmpty(modelMapping) &&
         !_.isEmpty(modelMapping.mapping)) {
         if (data[modelMapping.attribute]) {
@@ -29,9 +30,12 @@ window.onload = () => {
 
   const store = createEditorStore({}, taskSchema, uischema, materialFields,
                                   materialRenderers, imageProvider, labelProvider, modelMapping,
-                                  detailSchemata);
+                                  detailSchemata, {});
 
   ide.filterPredicate = filterPredicate;
+
+  store.dispatch(setContainerProperties(findAllContainerProperties(taskSchema, taskSchema)));
+
   ide.store = store;
 
   document.getElementById('editor').appendChild(ide);
