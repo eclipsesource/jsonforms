@@ -1,4 +1,4 @@
-import { JsonSchema, update } from '@jsonforms/core';
+import { JsonSchema4, update } from '@jsonforms/core';
 import { Property } from '../services/property.util';
 import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
@@ -34,7 +34,7 @@ export interface DragInfo {
      */
     currentPath: string;
     /** The JsonSchema defining the dragged data object */
-    schema: JsonSchema;
+    schema: JsonSchema4;
     /** The data object itself */
     data: any;
 }

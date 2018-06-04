@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
-import { JsonSchema } from '@jsonforms/core';
+import { JsonSchema4 } from '@jsonforms/core';
 import { resolveSchema } from '@jsonforms/core';
 import * as JsonRefs from 'json-refs';
 
-const isObject = (schema: JsonSchema): boolean => {
+const isObject = (schema: JsonSchema4): boolean => {
   return schema.properties !== undefined;
 };
-const isArray = (schema: JsonSchema): boolean => {
+const isArray = (schema: JsonSchema4): boolean => {
   return schema.items !== undefined;
 };
 const deepCopy = <T>(object: T): T => {
@@ -29,7 +29,7 @@ export interface Property {
   /**
    * The schema is the JsonSchema this property describes.
    */
-  schema: JsonSchema;
+  schema: JsonSchema4;
 }
 
 /**
@@ -72,7 +72,7 @@ export const findPropertyLabel = (property: Property): string => {
  * @param extractedReferences Contains the definition attributes for the current schema
  * @returns SchemaRefs all the required reference paths for subschema
  */
-const findReferences = (parentSchema: JsonSchema,
+const findReferences = (parentSchema: JsonSchema4,
                         allRefs: SchemaRefs,
                         schemaRefs: SchemaRefs,
                         extractedReferences: { [id: string]: string }
@@ -102,8 +102,8 @@ const findReferences = (parentSchema: JsonSchema,
  * @param schema current subschema without resolved references
  * @returns JsonSchema current subschema with resolved references
  */
-export const makeSchemaSelfContained = (parentSchema: JsonSchema,
-                                        schema: JsonSchema): JsonSchema => {
+export const makeSchemaSelfContained = (parentSchema: JsonSchema4,
+                                        schema: JsonSchema4): JsonSchema4 => {
   const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true});
   const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true});
   let extractedReferences;
@@ -140,8 +140,8 @@ export const makeSchemaSelfContained = (parentSchema: JsonSchema,
  * @param refPath The path to resolve
  * @return a JsonSchema that is self-contained
  */
-export const makeSelfContainedSchema = (parentSchema: JsonSchema, refPath: string): JsonSchema => {
-  let schema = resolveSchema(parentSchema, refPath);
+export const makeSelfContainedSchema = (parentSchema: JsonSchema4, refPath: string): JsonSchema4 => {
+  let schema: JsonSchema4 = resolveSchema(parentSchema, refPath) as JsonSchema4;
   schema = deepCopy(schema);
   if (_.isEmpty(schema.id)) {
     schema.id = '#' + refPath;
@@ -178,8 +178,8 @@ const calculateLabel = (id: string): string => (
  */
 export const findContainerProperties = (property: string,
                                         label: string,
-                                        schema: JsonSchema,
-                                        rootSchema: JsonSchema,
+                                        schema: JsonSchema4,
+                                        rootSchema: JsonSchema4,
                                         isInContainer: boolean,
                                         hasOnlyOwnChildren = false): Property[] => {
   if (schema.$ref !== undefined) {
@@ -261,8 +261,7 @@ export const findContainerProperties = (property: string,
  * @return The array of {@link Property} or empty if no properties are available
  * @see Property
  */
-export const retrieveContainerProperties = (schema: JsonSchema,
-                                            rootSchema: JsonSchema) => {
+export const retrieveContainerProperties = (schema: JsonSchema4, rootSchema: JsonSchema4) => {
   return findContainerProperties('root', 'root', schema, rootSchema, false);
 };
 
@@ -277,8 +276,8 @@ export const retrieveContainerProperties = (schema: JsonSchema,
  * @returns {{[p: string]: Property[]}}
  */
 export const findAllContainerProperties =
-  (schema: JsonSchema,
-   rootSchema: JsonSchema,
+  (schema: JsonSchema4,
+   rootSchema: JsonSchema4,
    containerProperties: { [schemaId: string]: Property[] } = {}):
     { [schemaId: string]: Property[] } => {
 
