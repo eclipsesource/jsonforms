@@ -10,3 +10,4 @@ docs
 .vscode/
 
 .coveralls.yml
+packages/example/build

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "firstarray": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "objectarrayofstrings": {
+            "type": "object",
+            "properties": {
+              "choices": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "name": { "type": "string" }
+        }
+      }
+    }
+  }
+}
