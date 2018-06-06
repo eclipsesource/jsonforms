@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,25 +22,46 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import MaterialGroupLayout, { materialGroupTester } from './MaterialGroupLayout';
-import MaterialHorizontalLayout, {
-  materialHorizontalLayoutTester
-} from './MaterialHorizontalLayout';
-import MaterialVerticalLayout, { materialVerticalLayoutTester } from './MaterialVerticalLayout';
-import MaterialCategorizationLayout, {
-  materialCategorizationTester
-} from './MaterialCategorizationLayout';
-import MaterialArrayLayout, { materialArrayLayoutTester } from './MaterialArrayLayoutRenderer';
+import * as React from 'react';
+import * as _ from 'lodash';
+import { composePaths } from '@jsonforms/core';
+import { JsonForms } from '@jsonforms/react';
 
-export {
-  materialArrayLayoutTester,
-  MaterialArrayLayout,
-  MaterialCategorizationLayout,
-  materialCategorizationTester,
-  MaterialGroupLayout,
-  materialGroupTester,
-  MaterialHorizontalLayout,
-  materialHorizontalLayoutTester,
-  MaterialVerticalLayout,
-  materialVerticalLayoutTester
-};
+export const MaterialArrayLayout =
+  ({ data, label, path, resolvedSchema, onAdd, controlElement, findUISchema }) => {
+
+    return (
+      <div>
+        <fieldset>
+          <legend>
+            <button
+              onClick={onAdd}
+            >
+              +
+            </button>
+            <label>
+              {label}
+            </label>
+          </legend>
+          <div>
+            {
+              data ? _.range(0, data.length).map(index => {
+
+                const uischema = findUISchema(resolvedSchema, controlElement.scope, path);
+                const childPath = composePaths(path, `${index}`);
+
+                return (
+                  <JsonForms
+                    schema={resolvedSchema}
+                    uischema={uischema}
+                    path={childPath}
+                    key={childPath}
+                  />
+                );
+              }) : <p>No data</p>
+            }
+          </div>
+        </fieldset>
+      </div>
+    );
+  };
