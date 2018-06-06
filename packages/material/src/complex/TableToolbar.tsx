@@ -79,14 +79,16 @@ export const TableToolbar = (
             </Grid>
             <Grid item>
               <Tooltip title='Delete'>
-                <Button
-                  variant='fab'
-                  aria-label={`Delete`}
-                  disabled={numSelected === 0}
-                  onClick={openConfirmDeleteDialog}
-                >
-                  <DeleteIcon />
-                </Button>
+                <div>
+                  <Button
+                    variant='fab'
+                    aria-label={`Delete`}
+                    disabled={numSelected === 0}
+                    onClick={openConfirmDeleteDialog}
+                  >
+                    <DeleteIcon />
+                  </Button>
+                </div>
               </Tooltip>
             </Grid>
           </Grid>
