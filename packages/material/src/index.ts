@@ -38,6 +38,8 @@ import {
   materialNativeControlTester,
 } from './controls';
 import {
+  MaterialArrayLayout,
+  materialArrayLayoutTester,
   MaterialCategorizationLayout,
   materialCategorizationTester,
   MaterialGroupLayout,
@@ -45,7 +47,7 @@ import {
   MaterialHorizontalLayout,
   materialHorizontalLayoutTester,
   MaterialVerticalLayout,
-  materialVerticalLayoutTester
+  materialVerticalLayoutTester,
 } from './layouts';
 import {
   MaterialBooleanField,
@@ -87,6 +89,7 @@ export const materialRenderers = [
   { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },
   { tester: materialVerticalLayoutTester, renderer: MaterialVerticalLayout },
   { tester: materialCategorizationTester, renderer: MaterialCategorizationLayout },
+  { tester: materialArrayLayoutTester, renderer: MaterialArrayLayout },
   // additional
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
 ];

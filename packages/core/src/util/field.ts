@@ -24,7 +24,7 @@
 */
 import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
-import { getConfig, getData, getErrorAt } from '../reducers';
+import { findUISchema, getConfig, getData, getErrorAt } from '../reducers';
 import { RankedTester } from '../testers';
 import {
   composeWithUi,
@@ -98,7 +98,8 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
     scopedSchema: Resolve.schema(ownProps.schema, controlElement.scope),
     uischema: ownProps.uischema,
     schema: ownProps.schema,
-    config
+    config,
+    findUISchema: findUISchema(state)
   };
 };
 

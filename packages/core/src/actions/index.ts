@@ -25,6 +25,7 @@
 import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
+import { UISchemaTester } from '../reducers/uischemas';
 
 const NAMESPACE = 'jsonforms';
 
@@ -36,6 +37,8 @@ export const REMOVE_RENDERER = `${NAMESPACE}/REMOVE_RENDERER`;
 export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
 export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
 export const SET_CONFIG = `${NAMESPACE}/SET_CONFIG`;
+export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
+export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 
 export interface UpdateAction {
   type: 'jsonforms/UPDATE';
@@ -103,4 +106,38 @@ export const setConfig = config => dispatch => {
     type: SET_CONFIG,
     config,
   });
+};
+
+export interface AddUISchemaAction {
+  type: 'jsonforms/ADD_UI_SCHEMA';
+  tester: UISchemaTester;
+  uischema: UISchemaElement;
+}
+
+export const registerUISchema = (
+  tester: UISchemaTester,
+  uischema: UISchemaElement
+): AddUISchemaAction => {
+  return {
+    type: ADD_UI_SCHEMA,
+    tester,
+    uischema
+  };
+};
+
+export interface RemoveUISchemaAction {
+  type: 'jsonforms/REMOVE_UI_SCHEMA';
+  tester: UISchemaTester;
+  uischema: UISchemaElement;
+}
+
+export const unregisterUISchema = (
+  tester: UISchemaTester,
+  uischema: UISchemaElement
+): RemoveUISchemaAction => {
+  return {
+    type: REMOVE_UI_SCHEMA,
+    tester,
+    uischema
+  };
 };

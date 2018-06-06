@@ -35,6 +35,8 @@ import {
   subErrorsAt
 } from './core';
 import { JsonFormsState } from '../store';
+import { findMatchingUISchema, uischemaRegistryReducer } from './uischemas';
+import { JsonSchema } from '..';
 
 export {
   rendererReducer,
@@ -48,12 +50,21 @@ export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsStat
     renderers: rendererReducer,
     fields: fieldReducer,
     config: configReducer,
+    uischemas: uischemaRegistryReducer,
     ...additionalReducers
   });
 
 export const getData = state => extractData(state.jsonforms.core);
 export const getSchema = state => extractSchema(state.jsonforms.core);
 export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
+
+export const findUISchema = state => (schema: JsonSchema, schemaPath: string, path: string) => {
+    const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(schema, schemaPath, path);
+    if (uiSchema === undefined) {
+      return getUiSchema(state);
+    }
+    return uiSchema;
+  };
 
 export const getErrorAt = instancePath => state => {
   return errorAt(instancePath)(state.jsonforms.core);

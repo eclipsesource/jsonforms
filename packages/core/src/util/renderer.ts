@@ -34,6 +34,7 @@ import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import {
+  findUISchema,
   getConfig,
   getData,
   getErrorAt,
@@ -123,6 +124,8 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
    * An unique ID that can be used to identify the rendered element.
    */
   id: string;
+
+  findUISchema(schema: JsonSchema, schemaPath: string, path: string);
 }
 /**
  * Props of a {@link Renderer}.
@@ -336,6 +339,7 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
     required,
     scopedSchema: resolvedSchema,
     uischema: ownProps.uischema,
+    findUISchema: findUISchema(state),
     schema: ownProps.schema,
     config
   };
