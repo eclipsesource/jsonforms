@@ -28,7 +28,7 @@ import {
   Helpers
 } from '@jsonforms/core';
 import Button from '@material-ui/core/Button';
-import {Grid, Hidden} from '@material-ui/core';
+import { Grid, Hidden } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -53,7 +53,7 @@ export const TableToolbar = (
   const allErrors = [].concat(errors).concat(childErrors.map(e => e.message));
 
   return (
-    <Toolbar hidden={true}>
+    <Toolbar>
       <Grid container alignItems='center' justify='space-between'>
         <Grid item>
           <Typography variant='title'>{label}</Typography>
