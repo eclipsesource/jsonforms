@@ -26,7 +26,10 @@ export const ExpandRootArray = (
     schema,
     path,
     selection,
-    handlers
+    handlers,
+    filterPredicate,
+    namingPredicate,
+    imageGetterPredicate
   }
 ) => {
 
@@ -46,6 +49,9 @@ export const ExpandRootArray = (
           selection={selection}
           handlers={handlers}
           isRoot={true}
+          filterPredicate={filterPredicate}
+          namingPredicate={namingPredicate}
+          imageGetterPredicate={imageGetterPredicate}
         />
       );
     });
@@ -59,7 +65,10 @@ export const ExpandRootArrayContainer = (
     rootData,
     selection,
     uischema,
-    handlers
+    handlers,
+    filterPredicate,
+    namingPredicate,
+    imageGetterPredicate
   }
 ) => {
 
@@ -71,6 +80,9 @@ export const ExpandRootArrayContainer = (
       selection={selection}
       handlers={handlers}
       uischema={uischema}
+      filterPredicate={filterPredicate}
+      namingPredicate={namingPredicate}
+      imageGetterPredicate={imageGetterPredicate}
     />
   );
 };

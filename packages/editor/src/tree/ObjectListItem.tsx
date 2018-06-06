@@ -23,11 +23,9 @@ import {
   DropResult,
   moveListItem,
   Types } from './dnd.util';
-import { indexFromPath, LabelDefinition } from '../helpers/util';
+import { indexFromPath } from '../helpers/util';
 import {
   getContainerProperties,
-  getImageMapping,
-  getLabelMapping,
 } from '../reducers';
 
 /**
@@ -37,38 +35,6 @@ import {
  * by the on click handler of this object list item which sets the selection to this item.
  */
 const RESET_SELECTION_DELAY = 40;
-
-const getNamingFunction =
-  (schema: JsonSchema4, labelMapping) => (element: Object): string => {
-
-    if (!_.isEmpty(labelMapping) && labelMapping[schema.id] !== undefined) {
-
-      if (typeof labelMapping[schema.id] === 'string') {
-        // To be backwards compatible: a simple string is assumed to be a property name
-        return element[labelMapping[schema.id]];
-      }
-      if (typeof labelMapping[schema.id] === 'object') {
-        const info =  labelMapping[schema.id] as LabelDefinition;
-        let label;
-        if (info.constant !== undefined) {
-          label = info.constant;
-        }
-        if (!_.isEmpty(info.property) && !_.isEmpty(element[info.property])) {
-          label = _.isEmpty(label) ? element[info.property] : `${label} ${element[info.property]}`;
-        }
-        if (label !== undefined) {
-          return label;
-        }
-      }
-    }
-
-    const namingKeys = Object.keys(schema.properties).filter(key => key === 'id' || key === 'name');
-    if (namingKeys.length !== 0) {
-      return element[namingKeys[0]];
-    }
-
-    return JSON.stringify(element);
-  };
 
 export interface ObjectListItemProps {
   path: string;
@@ -81,13 +47,13 @@ export interface ObjectListItemProps {
     onAdd: any;
     onSelect: any;
   };
-  imageMapping?: any;
-  labelMapping?: any;
-  filterPredicate?: any;
+  filterPredicate: any;
   /**
    * Self contained schemas of the corresponding schema
    */
   containerProperties?: any;
+  namingPredicate: any;
+  imageGetterPredicate: any;
 }
 
 const ObjectListItem = (
@@ -98,10 +64,10 @@ const ObjectListItem = (
     data,
     handlers,
     selection,
-    imageMapping,
-    labelMapping,
     filterPredicate,
-    containerProperties
+    containerProperties,
+    namingPredicate,
+    imageGetterPredicate
   }: ObjectListItemProps) => {
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
@@ -109,20 +75,20 @@ const ObjectListItem = (
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
   const groupedProps = _.groupBy(containerProperties, property => property.property);
+  const imageClass = imageGetterPredicate(schema.id);
 
   // TODO: key should be set in caller
   return (
     <li className={liClasses} key={path}>
       <div>
-        {
-          !_.isEmpty(imageMapping) ? <span className={`icon ${imageMapping[schema.id]}`} /> : ''}
+        {imageClass !== '' ? <span className={imageClass} /> : ''}
 
         <span
           className='label'
           onClick={handlers.onSelect(schema, data, path)}
         >
           <span>
-            {getNamingFunction(schema, labelMapping)(data)}
+            {namingPredicate(schema)(data)}
           </span>
           {
             !_.isEmpty(containerProperties) ?
@@ -156,6 +122,8 @@ const ObjectListItem = (
             selection={selection}
             handlers={handlers}
             filterPredicate={filterPredicate}
+            namingPredicate={namingPredicate}
+            imageGetterPredicate={imageGetterPredicate}
           />
       )
     }
@@ -176,8 +144,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     index: index,
     rootData: getData(state),
-    imageMapping: getImageMapping(state),
-    labelMapping: getLabelMapping(state),
     rootSchema: getSchema(state),
     containerProperties
   };
@@ -250,14 +216,14 @@ const ObjectListItemDnd = (
     data,
     handlers,
     selection,
-    imageMapping,
-    labelMapping,
     isRoot,
     // isDragging,
     connectDragSource,
     connectDropTarget,
     filterPredicate,
-    containerProperties
+    containerProperties,
+    namingPredicate,
+    imageGetterPredicate
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -268,10 +234,10 @@ const ObjectListItemDnd = (
       data={data}
       handlers={handlers}
       selection={selection}
-      imageMapping={imageMapping}
-      labelMapping={labelMapping}
       filterPredicate={filterPredicate}
       containerProperties={containerProperties}
+      namingPredicate={namingPredicate}
+      imageGetterPredicate={imageGetterPredicate}
     />
   );
   if (isRoot === true) {

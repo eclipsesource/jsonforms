@@ -42,6 +42,8 @@ export interface MasterProps {
   };
   uischema: UISchemaElement;
   filterPredicate: any;
+  namingPredicate: any;
+  imageGetterPredicate: any;
 }
 
 const Master = (
@@ -52,7 +54,9 @@ const Master = (
     handlers,
     uischema,
     rootData,
-    filterPredicate
+    filterPredicate,
+    namingPredicate,
+    imageGetterPredicate
   }: MasterProps) => {
   if (schema.items !== undefined) {
     return (
@@ -65,6 +69,8 @@ const Master = (
           handlers={handlers}
           uischema={uischema}
           filterPredicate={filterPredicate}
+          namingPredicate={namingPredicate}
+          imageGetterPredicate={imageGetterPredicate}
         />
       </ul>
     );
@@ -80,6 +86,8 @@ const Master = (
         handlers={handlers}
         isRoot={true}
         filterPredicate={filterPredicate}
+        namingPredicate={namingPredicate}
+        imageGetterPredicate={imageGetterPredicate}
       />
     </ul>
   );
@@ -107,6 +115,8 @@ export interface TreeProps extends ControlProps {
   addToRoot: any;
   uiSchemata?;
   filterPredicate: any;
+  namingPredicate: any;
+  imageGetterPredicate: any;
 }
 
 export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
@@ -174,7 +184,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
 
   render() {
     const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot,
-            uiSchemata, filterPredicate } = this.props;
+            uiSchemata, filterPredicate, namingPredicate, imageGetterPredicate } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -224,6 +234,8 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
               selection={this.state.selected.data}
               rootData={rootData}
               filterPredicate={filterPredicate}
+              namingPredicate={namingPredicate}
+              imageGetterPredicate={imageGetterPredicate}
             />
           </div>
           <div className='jsf-treeMasterDetail-detail'>
@@ -271,7 +283,9 @@ const mapStateToProps = (state, ownProps) => {
     visible,
     enabled,
     uiSchemata,
-    filterPredicate: ownProps.filterPredicate
+    filterPredicate: ownProps.filterPredicate,
+    namingPredicate: ownProps.namingPredicate,
+    imageGetterPredicate: ownProps.imageGetterPredicate
   };
 };
 
