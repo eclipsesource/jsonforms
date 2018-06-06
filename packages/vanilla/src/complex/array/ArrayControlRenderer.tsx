@@ -27,9 +27,11 @@ import * as React from 'react';
 import {
   ControlElement,
   Helpers,
+  JsonSchema,
   mapDispatchToTableControlProps,
   mapStateToControlProps,
   Resolve,
+  UISchemaElement
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 import { ArrayControl } from './ArrayControl';
@@ -38,6 +40,7 @@ import { addVanillaControlProps } from '../../util';
 
 export interface ArrayControlRendererProps extends VanillaControlProps {
   addItem(path: string);
+  findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
 }
 
 const ArrayControlRenderer  =
@@ -46,6 +49,7 @@ const ArrayControlRenderer  =
      uischema,
      data,
      path,
+     findUISchema,
      addItem,
      getStyle,
      getStyleAsClassName
@@ -76,6 +80,8 @@ const ArrayControlRenderer  =
         path={path}
         resolvedSchema={resolvedSchema}
         onAdd={addItem(path)}
+        controlElement={controlElement}
+        findUISchema={findUISchema}
       />
     );
   };
