@@ -24,11 +24,11 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import { composePaths, Generate } from '@jsonforms/core';
+import { composePaths } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 
 export const ArrayControl  =
-  ({ classNames, data, label, path, resolvedSchema, onAdd }) => {
+  ({ classNames, data, label, path, resolvedSchema, onAdd, controlElement, findUISchema }) => {
 
     return (
       <div className={classNames.wrapper}>
@@ -48,13 +48,13 @@ export const ArrayControl  =
             {
               data ? _.range(0, data.length).map(index => {
 
-                const generatedUi = Generate.uiSchema(resolvedSchema, 'HorizontalLayout');
+                const uischema = findUISchema(resolvedSchema, controlElement.scope, path);
                 const childPath = composePaths(path, `${index}`);
 
                 return (
                   <JsonForms
                     schema={resolvedSchema}
-                    uischema={generatedUi}
+                    uischema={uischema}
                     path={childPath}
                     key={childPath}
                   />
