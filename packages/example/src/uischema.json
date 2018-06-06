@@ -1,0 +1,10 @@
+{
+  "type": "HorizontalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "label": "1",
+      "scope": "#/properties/firstarray"
+    }
+  ]
+}
