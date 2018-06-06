@@ -61,11 +61,11 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       style.display = 'none';
     }
     const inputLabelStyle: {[x: string]: any} = {
-      'white-space': 'nowrap',
-      'overflow' : 'hidden',
-      'text-overflow': 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow : 'hidden',
+      textOverflow: 'ellipsis',
       // magic width as the label is transformed to 75% of its size
-      'width': '125%'
+      width: '125%'
     };
 
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
