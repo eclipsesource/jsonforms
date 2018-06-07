@@ -42,8 +42,11 @@ import {
 import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
 
-export interface MaterialArrayLayoutRendererProps extends StatePropsOfControl, DispatchPropsOfControl {
+export interface MaterialArrayLayoutRendererProps
+  extends StatePropsOfControl, DispatchPropsOfControl {
+
   addItem(path: string);
+  findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
 }
 
 const traverse = (any, pred) => {
