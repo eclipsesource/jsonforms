@@ -9,9 +9,7 @@ module.exports = merge(baseConfig, {
   },
   plugins: [
     new copyWebpackPlugin([
-      {from: '../examples/vendor/native-shim.js'},
-      {from: './jsoneditor.css'},
-      {from: './example/example.materialize.css'}
+      {from: './jsoneditor.css'}
     ])
   ]
 });

@@ -21,7 +21,7 @@ import {
 import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import ExpandRootArray from './ExpandRootArray';
-import Dialog from './Dialog';
+import EditorDialog from './EditorDialog';
 import HTML5Backend from 'react-dnd-html5-backend';
 // import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
@@ -252,7 +252,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
         <div>
           {
             this.state.dialog.open &&
-              <Dialog
+              <EditorDialog
                 path={this.state.dialog.path}
                 schema={this.state.dialog.schema}
                 closeDialog={this.closeDialog}

@@ -5,14 +5,9 @@
     --jsf-validation-color: #F44336;
 }
 
-#toolbar {
-    padding-right: 1em;
-    padding-left: 1em;
-}
-
 #editor {
     margin: auto;
-    width: 75%;
+    width: 100%;
 }
 
 .array-button {
@@ -33,44 +28,6 @@ fieldset {
 
 fieldset legend label {
     font-size: 1em;
-}
-
-/* dialog */
-.export-data-dialog {
-  border-width: medium;
-  border-radius: 8px;
-  border-color: var(--jsf-border-color);
-}
-.export-data-dialog-textarea {
-  width: 400px;
-  height: 250px;
-  white-space: pre;
-  overflow-wrap: normal;
-  overflow-x: scroll;
-}
-.export-data-dialog-buttons {
-  display: flex;
-  flex-direction: row;
-}
-.export-data-dialog-buttons > * {
-  width: -webkit-fill-available;
-}
-.export-data-dialog-buttons > *:first-child {
-  margin-right: 5px;
-}
-.export-data-dialog-buttons > *:last-child {
-  margin-left: 5px;
-}
-.export-data-dialog-content {
-  display: flex;
-  flex-direction: column;
-}
-.export-data-dialog-content > * {
-  margin-top: 1em;
-}
-.export-data-dialog-title {
-  margin-top: 0;
-  font-size: large
 }
 
 jsf-treeMasterDetail {
@@ -198,34 +155,6 @@ jsf-treeMasterDetail {
 }
 .jsf-treeMasterDetail-master > ul > li:only-child {
     padding-left: 0.25em;
-}
-
-/* tree master detail create dialog */
-.jsf-treeMasterDetail-dialog {
-  border-width: medium;
-  border-radius: 8px;
-  border-color: lightgrey
-}
-.jsf-treeMasterDetail-dialog-title {
-  font-size: large;
-}
-.jsf-treeMasterDetail-dialog-content {
-    display: flex;
-    flex-direction: column;
-}
-.jsf-treeMasterDetail-dialog-button,
-.jsf-treeMasterDetail-dialog-createbutton {
-  margin-bottom: 5px
-}
-.jsf-treeMasterDetail-dialog-button {
-  width: -webkit-fill-available;
-  margin-top: 10px;
-  margin-bottom: 0;
-}
-
-.jsf-treeMasterDetail-dialog-close {
-  width: -webkit-fill-available;
-  margin-top: 20px;
 }
 
 /* Drag and Drop */

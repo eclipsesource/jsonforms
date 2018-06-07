@@ -1,5 +1,4 @@
-export * from './ide';
-export * from './toolbar';
+export * from './EditorIde';
 export * from './master-detail-layout';
 export * from './editor';
 export * from './tree/TreeRenderer';
