@@ -128,16 +128,13 @@ export const registerUISchema = (
 export interface RemoveUISchemaAction {
   type: 'jsonforms/REMOVE_UI_SCHEMA';
   tester: UISchemaTester;
-  uischema: UISchemaElement;
 }
 
 export const unregisterUISchema = (
-  tester: UISchemaTester,
-  uischema: UISchemaElement
+  tester: UISchemaTester
 ): RemoveUISchemaAction => {
   return {
     type: REMOVE_UI_SCHEMA,
     tester,
-    uischema
   };
 };

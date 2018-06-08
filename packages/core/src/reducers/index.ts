@@ -36,7 +36,7 @@ import {
 } from './core';
 import { JsonFormsState } from '../store';
 import { findMatchingUISchema, uischemaRegistryReducer } from './uischemas';
-import { JsonSchema, UISchemaElement } from '..';
+import { Generate, JsonSchema, UISchemaElement } from '..';
 
 export {
   rendererReducer,
@@ -62,7 +62,7 @@ export const findUISchema = state =>
   (schema: JsonSchema, schemaPath: string, path: string): UISchemaElement => {
     const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(schema, schemaPath, path);
     if (uiSchema === undefined) {
-      return getUiSchema(state);
+      return Generate.uiSchema(schema);
     }
     return uiSchema;
   };

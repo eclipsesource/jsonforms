@@ -7,7 +7,8 @@ import {
   UISchemaTester
 } from '../../src/reducers/uischemas';
 import { registerUISchema, unregisterUISchema } from '../../src/actions';
-import { findUISchema } from '../../src/reducers';
+import { findUISchema, getSchema } from '../../src/reducers';
+import Generate from '../../src/generators';
 
 test('init state empty', t => {
   t.deepEqual(uischemaRegistryReducer(undefined, { type: 'whatever' }), []);
@@ -39,7 +40,7 @@ test('remove ui schema', t => {
         uischema: control
       }
     ],
-    unregisterUISchema(tester, control)
+    unregisterUISchema(tester)
   );
   t.is(after.length, 0);
 });
@@ -75,47 +76,27 @@ test('findMatchingUISchema', t => {
   );
 });
 
-test('findUISchema returns default if no matching UI schema has been found', t => {
-
-  const testerA: UISchemaTester = (_schema, schemaPath) => _.endsWith(schemaPath, 'foo') ? 1 : 0;
-  const testerB: UISchemaTester = (_schema, schemaPath) => _.endsWith(schemaPath, 'bar') ? 1 : 0;
-  const controlA = {
-    type: 'Control',
-    scope: '#/definitions/foo'
-  };
-  const controlB = {
-    type: 'Control',
-    scope: '#/definitions/bar'
-  };
-  const before = [
-    {
-      tester: testerA,
-      uischema: controlA
-    },
-    {
-      tester: testerB,
-      uischema: controlB
-    }
-  ];
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/any'
-  };
-
+test('findUISchema returns generated UI schema if no match has been found', t => {
   const middlewares = [];
   const mockStore = configureStore(middlewares);
   const store = mockStore({
     jsonforms: {
       core: {
-        uischema
+        schema: {
+          definitions: {
+            baz: {
+              type: 'number'
+            }
+          }
+        }
       },
-      uischemas: before
+      uischemas: []
     }
   });
 
   t.deepEqual(
-    findUISchema(store.getState())(undefined, '#/defintions/baz', undefined),
-    uischema
+    findUISchema(store.getState())(getSchema(store.getState()), '#/definitions/baz', undefined),
+    Generate.uiSchema(getSchema(store.getState()))
   );
 });
 

@@ -45,8 +45,7 @@ store.dispatch(Actions.registerRenderer(ratingControlTester, RatingControl));
 
 store.dispatch(Actions.registerUISchema(
   (jsonSchema, schemaPath) => {
-
-    return _.has(jsonSchema, 'properties.objectarrayofstrings') ? 9 : NOT_APPLICABLE
+    return schemaPath === '#/properties/firstarray' ? 2 : NOT_APPLICABLE;
   },
   {
     type: 'VerticalLayout',
