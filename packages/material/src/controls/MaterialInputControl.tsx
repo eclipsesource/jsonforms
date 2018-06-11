@@ -74,6 +74,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
     const field = _.maxBy(fields, r => r.tester(uischema, schema));
     if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
+      console.warn('No applicable field found.');
       return null;
     } else {
 
