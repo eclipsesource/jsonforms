@@ -17,8 +17,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
   private _store: Store<any>;
   private editor: JsonFormsElement;
   private _filterPredicate: any;
-  private _namingPredicate: any;
-  private _imageGetterPredicate: any;
+  private _labelProvider: any;
+  private _imageProvider: any;
 
   connectedCallback(): void {
     this.connected = true;
@@ -45,7 +45,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
   }
 
   /**
-   * Filtering selected list item from available items
+   * Set the predicate function that is used by the array renderer
+   * to filter container properties
    * @param filterPredicate
    */
   set filterPredicate(filterPredicate: any) {
@@ -54,20 +55,19 @@ export class JsonEditorIde extends HTMLElement implements Editor {
 
   /**
    * Calculating name for the selected list item
-   * @param namingPredicate
+   * @param labelProvider
    */
-  set namingPredicate(namingPredicate: any) {
-    this._namingPredicate = namingPredicate;
+  set labelProvider(labelProvider: any) {
+    this._labelProvider = labelProvider;
   }
 
   /**
    * Calculating class name to provide image to list item
-   * @param imageGetterPredicate
+   * @param imageProvider
    */
-  set imageGetterPredicate(imageGetterPredicate: any) {
-    this._imageGetterPredicate = imageGetterPredicate;
+  set imageProvider(imageProvider: any) {
+    this._imageProvider = imageProvider;
   }
-
 
   private render(): void {
     if (!this.connected || this._store === undefined) {
@@ -88,8 +88,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
             uischema: getUiSchema(this._store.getState()),
             schema: resolvedSchema.resolved,
             filterPredicate: this._filterPredicate,
-            namingPredicate: this._namingPredicate,
-            imageGetterPredicate: this._imageGetterPredicate
+            labelProvider: this._labelProvider,
+            imageProvider: this._imageProvider
           });
         this.editor.store = this._store;
 

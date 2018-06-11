@@ -28,8 +28,8 @@ export const ExpandRootArray = (
     selection,
     handlers,
     filterPredicate,
-    namingPredicate,
-    imageGetterPredicate
+    labelProvider,
+    imageProvider
   }
 ) => {
 
@@ -50,8 +50,8 @@ export const ExpandRootArray = (
           handlers={handlers}
           isRoot={true}
           filterPredicate={filterPredicate}
-          namingPredicate={namingPredicate}
-          imageGetterPredicate={imageGetterPredicate}
+          labelProvider={labelProvider}
+          imageProvider={imageProvider}
         />
       );
     });
@@ -67,8 +67,8 @@ export const ExpandRootArrayContainer = (
     uischema,
     handlers,
     filterPredicate,
-    namingPredicate,
-    imageGetterPredicate
+    labelProvider,
+    imageProvider
   }
 ) => {
 
@@ -81,8 +81,8 @@ export const ExpandRootArrayContainer = (
       handlers={handlers}
       uischema={uischema}
       filterPredicate={filterPredicate}
-      namingPredicate={namingPredicate}
-      imageGetterPredicate={imageGetterPredicate}
+      labelProvider={labelProvider}
+      imageProvider={imageProvider}
     />
   );
 };

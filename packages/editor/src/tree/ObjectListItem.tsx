@@ -52,8 +52,8 @@ export interface ObjectListItemProps {
    * Self contained schemas of the corresponding schema
    */
   containerProperties?: any;
-  namingPredicate: any;
-  imageGetterPredicate: any;
+  labelProvider: any;
+  imageProvider: any;
 }
 
 const ObjectListItem = (
@@ -66,8 +66,8 @@ const ObjectListItem = (
     selection,
     filterPredicate,
     containerProperties,
-    namingPredicate,
-    imageGetterPredicate
+    labelProvider,
+    imageProvider
   }: ObjectListItemProps) => {
   const pathSegments = path.split('.');
   const parentPath = _.initial(pathSegments).join('.');
@@ -75,7 +75,7 @@ const ObjectListItem = (
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
   const groupedProps = _.groupBy(containerProperties, property => property.property);
-  const imageClass = imageGetterPredicate(schema.id);
+  const imageClass = imageProvider(schema.id);
 
   // TODO: key should be set in caller
   return (
@@ -88,7 +88,7 @@ const ObjectListItem = (
           onClick={handlers.onSelect(schema, data, path)}
         >
           <span>
-            {namingPredicate(schema)(data)}
+            {labelProvider(schema)(data)}
           </span>
           {
             !_.isEmpty(containerProperties) ?
@@ -122,8 +122,8 @@ const ObjectListItem = (
             selection={selection}
             handlers={handlers}
             filterPredicate={filterPredicate}
-            namingPredicate={namingPredicate}
-            imageGetterPredicate={imageGetterPredicate}
+            labelProvider={labelProvider}
+            imageProvider={imageProvider}
           />
       )
     }
@@ -222,8 +222,8 @@ const ObjectListItemDnd = (
     connectDropTarget,
     filterPredicate,
     containerProperties,
-    namingPredicate,
-    imageGetterPredicate
+    labelProvider,
+    imageProvider
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
@@ -236,8 +236,8 @@ const ObjectListItemDnd = (
       selection={selection}
       filterPredicate={filterPredicate}
       containerProperties={containerProperties}
-      namingPredicate={namingPredicate}
-      imageGetterPredicate={imageGetterPredicate}
+      labelProvider={labelProvider}
+      imageProvider={imageProvider}
     />
   );
   if (isRoot === true) {

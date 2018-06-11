@@ -27,8 +27,8 @@ export interface ExpandArrayProps {
   selection: any;
   handlers: any;
   filterPredicate: any;
-  namingPredicate: any;
-  imageGetterPredicate: any;
+  labelProvider: any;
+  imageProvider: any;
 }
 /**
  * Expands the given data array by expanding every element.
@@ -50,8 +50,8 @@ export const ExpandArray = (
     selection,
     handlers,
     filterPredicate,
-    namingPredicate,
-    imageGetterPredicate
+    labelProvider,
+    imageProvider
   }: ExpandArrayProps
 ) => {
 
@@ -78,8 +78,8 @@ export const ExpandArray = (
           handlers={handlers}
           parentProperties={containmentProps}
           filterPredicate={filterPredicate}
-          namingPredicate={namingPredicate}
-          imageGetterPredicate={imageGetterPredicate}
+          labelProvider={labelProvider}
+          imageProvider={imageProvider}
         />
       );
     })
@@ -134,8 +134,8 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
       isOver,
       validDropTarget,
       filterPredicate,
-      namingPredicate,
-      imageGetterPredicate
+      labelProvider,
+      imageProvider
     }: ExpandArrayContainerProps = this.props;
 
     if (_.isEmpty(containmentProps)) {
@@ -164,8 +164,8 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
           selection={selection}
           handlers={handlers}
           filterPredicate={filterPredicate}
-          namingPredicate={namingPredicate}
-          imageGetterPredicate={imageGetterPredicate}
+          labelProvider={labelProvider}
+          imageProvider={imageProvider}
         />
       </ul>
     );

@@ -29,7 +29,7 @@ window.onload = () => {
     };
   };
 
-  const getNamingFunction =
+  const calculateLabel =
     (schema: JsonSchema4) => (element: Object): string => {
 
       if (!_.isEmpty(labelProvider) && labelProvider[schema.id] !== undefined) {
@@ -65,7 +65,7 @@ window.onload = () => {
       return JSON.stringify(element);
     };
 
-  const imageGetterPredicate = (schemaId: string) =>
+  const imageGetter = (schemaId: string) =>
     !_.isEmpty(imageProvider) ? `icon ${imageProvider[schemaId]}` : '';
 
   const store = createEditorStore({}, taskSchema, uischema, materialFields,
@@ -74,9 +74,9 @@ window.onload = () => {
 
   ide.filterPredicate = filterPredicate;
 
-  ide.namingPredicate = getNamingFunction;
+  ide.labelProvider = calculateLabel;
 
-  ide.imageGetterPredicate = imageGetterPredicate;
+  ide.imageProvider = imageGetter;
 
   store.dispatch(setContainerProperties(findAllContainerProperties(taskSchema, taskSchema)));
 
