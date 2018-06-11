@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import * as _ from 'lodash';
 import {
   computeLabel,
   ControlProps,
@@ -32,6 +33,7 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   mapStateToControlProps,
+  NOT_APPLICABLE,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
@@ -52,7 +54,8 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       visible,
       required,
       parentPath,
-      config
+      config,
+      fields
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
@@ -69,23 +72,29 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     };
 
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const field = _.maxBy(fields, r => r.tester(uischema, schema));
+    if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
+      console.warn('No applicable field found.');
+      return null;
+    } else {
 
-    return (
-      <FormControl
-        style={style}
-        fullWidth={!trim}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-      >
-        <InputLabel htmlFor={id} error={!isValid} style={inputLabelStyle}>
-          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
-        </InputLabel>
-        <DispatchField uischema={uischema} schema={schema} path={parentPath} />
-        <FormHelperText error={!isValid}>
-          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-        </FormHelperText>
-      </FormControl>
-    );
+      return (
+        <FormControl
+          style={style}
+          fullWidth={!trim}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+        >
+          <InputLabel htmlFor={id} error={!isValid} style={inputLabelStyle}>
+            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          </InputLabel>
+          <DispatchField uischema={uischema} schema={schema} path={parentPath} />
+          <FormHelperText error={!isValid}>
+            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          </FormHelperText>
+        </FormControl>
+      );
+    }
   }
 }
 export const materialInputControlTester: RankedTester = rankWith(1, isControl);

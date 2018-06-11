@@ -379,13 +379,13 @@ describe('Material input control', () => {
     const jsonSchema = {
       type: 'object',
       properties: {
-        password: { type: 'string' }
+        password: {type: 'string'}
       }
     };
     const control = {
       type: 'Control',
       scope: '#/properties/password',
-      options: { format: 'password' }
+      options: {format: 'password'}
     };
     const store = initJsonFormsStore({}, jsonSchema, control);
     const tree = TestUtils.renderIntoDocument(
@@ -395,5 +395,34 @@ describe('Material input control', () => {
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input');
     expect(input.type).toBe('password');
+  });
+
+  it('should render null for undefined input control', () => {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        expectedValue: {
+          type: [
+            'string',
+            'integer',
+            'number',
+            'boolean'
+          ]
+        }
+      }
+    };
+
+    const control = {
+      type: 'Control',
+      scope: '#/properties/expectedValue'
+    };
+    const store = initJsonFormsStore({}, jsonSchema, control);
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+      </Provider>
+    );
+    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+    expect(control).toBe(undefined);
   });
 });

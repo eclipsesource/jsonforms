@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,12 +31,14 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   mapStateToControlProps,
+  NOT_APPLICABLE,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
 import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
 import { VanillaControlProps } from '../index';
 import { addVanillaControlProps } from '../util';
+import * as _ from 'lodash';
 
 export class InputControl extends Control<VanillaControlProps, ControlState> {
   render() {
@@ -50,30 +52,36 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath
+      parentPath,
+      fields
     } = this.props;
 
     const isValid = errors.length === 0;
     const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'}`;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
     const labelText = isPlainLabel(label) ? label : label.default;
-
-    return (
-      <div
-        className={classNames.wrapper}
-        hidden={!visible}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-      >
-        <label htmlFor={id} className={classNames.label}>
-          {computeLabel(labelText, required)}
-        </label>
-      <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
-        <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+    const field = _.maxBy(fields, r => r.tester(uischema, schema));
+    if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
+      console.warn('No applicable field found.');
+      return null;
+    } else {
+      return (
+        <div
+          className={classNames.wrapper}
+          hidden={!visible}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+        >
+          <label htmlFor={id} className={classNames.label}>
+            {computeLabel(labelText, required)}
+          </label>
+          <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
+          <div className={divClassNames}>
+            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
