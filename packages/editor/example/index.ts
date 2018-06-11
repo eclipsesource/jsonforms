@@ -1,4 +1,4 @@
-import { createEditorStore, LabelDefinition } from '../src/helpers/util';
+import { LabelDefinition } from '../src/helpers/util';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
@@ -102,7 +102,6 @@ const store: Store<any> = createStore(
     ...jsonforms
   }
 );
-
 
 JsonRefs.resolveRefs(taskSchema)
   .then(

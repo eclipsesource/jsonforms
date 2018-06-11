@@ -2,7 +2,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import * as _ from 'lodash';
-import * as AJV from 'ajv';
 import { StyleRulesCallback, withStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,8 +12,9 @@ import FolderOpen from '@material-ui/icons/FolderOpen';
 import ImportExport from '@material-ui/icons/ImportExport';
 import ModelSchemaDialog from './dialogs/ModelSchemaDialog';
 import { Actions, getData, getSchema } from '@jsonforms/core';
+import { createAjv } from '@jsonforms/core/lib/util/validator';
 
-const ajv = new AJV({allErrors: true, verbose: true});
+const ajv = createAjv();
 
 const styles: StyleRulesCallback<'root' | 'flex' | 'rightIcon' | 'button'> = theme => ({
   root: {
@@ -46,12 +46,13 @@ interface EditorBarState {
 class EditorBar extends
   React.Component<EditorBarProps & WithStyles<'root' | 'flex' | 'rightIcon' | 'button'>,
                   EditorBarState> {
-  componentWillMount() {
-    this.setState({
+  constructor(props) {
+    super(props);
+    this.state = {
       exportDialog: {
         open: false
       }
-    });
+    };
   }
 
   handleExportDialogOpen = () => {

@@ -31,17 +31,14 @@ interface ModelSchemaDialogProps {
 
 class ModelSchemaDialog extends
   React.Component<ModelSchemaDialogProps & WithStyles<'textarea'>, {}> {
-  private textInput;
-  componentWillMount() {
-    this.textInput = null;
-  }
+  private textInput = React.createRef<HTMLInputElement>();
 
   handleCancel = () => {
     this.props.onClose();
   }
 
   handleCopy = () => {
-    this.textInput.select();
+    this.textInput.current.select();
     document.execCommand('copy');
   }
 
@@ -66,7 +63,7 @@ class ModelSchemaDialog extends
             inputProps={{
               readOnly: true
             }}
-            inputRef={input => this.textInput = input}
+            inputRef={this.textInput}
           />
         </DialogContent>
         <DialogActions>
