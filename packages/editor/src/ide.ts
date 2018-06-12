@@ -17,6 +17,8 @@ export class JsonEditorIde extends HTMLElement implements Editor {
   private _store: Store<any>;
   private editor: JsonFormsElement;
   private _filterPredicate: any;
+  private _labelProvider: any;
+  private _imageProvider: any;
 
   connectedCallback(): void {
     this.connected = true;
@@ -42,8 +44,29 @@ export class JsonEditorIde extends HTMLElement implements Editor {
     return getSchema(this._store.getState());
   }
 
+  /**
+   * Set the predicate function that is used by the array renderer
+   * to filter container properties
+   * @param filterPredicate
+   */
   set filterPredicate(filterPredicate: any) {
     this._filterPredicate = filterPredicate;
+  }
+
+  /**
+   * Calculating name for the selected list item
+   * @param labelProvider
+   */
+  set labelProvider(labelProvider: any) {
+    this._labelProvider = labelProvider;
+  }
+
+  /**
+   * Calculating class name to provide image to list item
+   * @param imageProvider
+   */
+  set imageProvider(imageProvider: any) {
+    this._imageProvider = imageProvider;
   }
 
   private render(): void {
@@ -64,7 +87,9 @@ export class JsonEditorIde extends HTMLElement implements Editor {
           {
             uischema: getUiSchema(this._store.getState()),
             schema: resolvedSchema.resolved,
-            filterPredicate: this._filterPredicate
+            filterPredicate: this._filterPredicate,
+            labelProvider: this._labelProvider,
+            imageProvider: this._imageProvider
           });
         this.editor.store = this._store;
 
