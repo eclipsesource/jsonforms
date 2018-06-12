@@ -24,10 +24,10 @@
 */
 import * as React from 'react';
 import {
-  FieldProps,
+  EnumFieldProps,
   isEnumControl,
   mapDispatchToFieldProps,
-  mapStateToFieldProps,
+  defaultMapStateToEnumFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -36,9 +36,8 @@ import { connectToJsonForms } from '@jsonforms/react';
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
 
-export const MaterialEnumField = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange, scopedSchema } = props;
-  const options = scopedSchema.enum;
+export const MaterialEnumField = (props: EnumFieldProps) => {
+  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
     <Select
@@ -69,4 +68,7 @@ export const MaterialEnumField = (props: FieldProps) => {
  * @type {RankedTester}
  */
 export const materialEnumFieldTester: RankedTester = rankWith(2, isEnumControl);
-export default connectToJsonForms(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialEnumField);
+export default connectToJsonForms(
+  defaultMapStateToEnumFieldProps,
+  mapDispatchToFieldProps)
+(MaterialEnumField);

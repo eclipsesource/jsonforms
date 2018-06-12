@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,7 +24,10 @@
 */
 import test from 'ava';
 import * as _ from 'lodash';
-import { mapStateToFieldProps } from '../../src/util';
+import {
+  defaultMapStateToEnumFieldProps,
+  mapStateToFieldProps
+} from '../../src/util';
 
 const hideRule = {
   effect: 'HIDE',
@@ -56,7 +59,11 @@ const createState = uischema => ({
         type: 'object',
         properties: {
           firstName: { type: 'string' },
-          lastName: { type: 'string' }
+          lastName: { type: 'string' },
+          nationality: {
+            type: 'string',
+            enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+          }
         }
       },
       data: {
@@ -203,4 +210,28 @@ test('mapStateToFieldProps - id', t => {
   };
   const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
+});
+
+test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
+  const uiSchema = {
+    type: 'Control',
+    scope: '#/properties/nationality',
+  };
+  const ownProps = {
+    schema: {
+      type: 'object',
+      properties: {
+        firstName: { type: 'string' },
+        lastName: { type: 'string' },
+        nationality: {
+          type: 'string',
+          enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+        }
+      }
+    },
+    uischema: uiSchema
+  };
+
+  const props = defaultMapStateToEnumFieldProps(createState(uiSchema), ownProps);
+  t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
 });
