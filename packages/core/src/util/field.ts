@@ -127,7 +127,8 @@ export const defaultMapStateToEnumFieldProps = (state, ownProps): StatePropsOfEn
 
   return {
     ...props,
-    options: ownProps.options !== undefined ? ownProps.options : props.scopedSchema.enum
+    options: ownProps.options !== undefined ? ownProps.options : props.scopedSchema.enum,
+    data: ownProps.data !== undefined ? ownProps.data : props.data
   };
 };
 
@@ -138,3 +139,18 @@ export const defaultMapStateToEnumFieldProps = (state, ownProps): StatePropsOfEn
  */
 export const mapDispatchToFieldProps: (dispatch) => DispatchPropsOfControl =
   mapDispatchToControlProps;
+
+/**
+ * Default map dispatch to enum field props to customize handleChange action
+ *
+ * @param dispatch
+ * @param ownProps
+ */
+export const defaultMapDispatchToEnumFieldProps = (dispatch, ownProps) => {
+  const dispatchControlProps: DispatchPropsOfControl = mapDispatchToControlProps(dispatch);
+
+  return {
+    handleChange: ownProps.handleChange !== undefined ?
+      ownProps.handleChange : dispatchControlProps.handleChange
+  };
+};
