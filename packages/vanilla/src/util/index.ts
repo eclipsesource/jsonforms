@@ -154,6 +154,10 @@ export const vanillaStyles = [
     classNames: ['horizontal-layout']
   },
   {
+    name: 'horizontal.layout.item',
+    classNames: numberOfChildren => ['horizontal-layout-' + numberOfChildren[0]]
+  },
+  {
     name: 'vertical.layout',
     classNames: ['vertical-layout']
   },
