@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/vanilla-renderers",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Default Renderer Set for JSON Forms",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -16,14 +16,14 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Vanilla Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.1",
-    "@jsonforms/react": "^2.0.1",
+    "@jsonforms/core": "^2.0.2",
+    "@jsonforms/react": "^2.0.2",
     "react": "^16.3.2",
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "@jsonforms/test": "^2.0.1",
-    "@jsonforms/webcomponent": "^2.0.1",
+    "@jsonforms/test": "^2.0.2",
+    "@jsonforms/webcomponent": "^2.0.2",
     "ava": "^0.25.0",
     "copy-webpack-plugin": "^4.5.1",
     "document-register-element": "^1.7.0",

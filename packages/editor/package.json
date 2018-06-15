@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/editor",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Editor package for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -52,9 +52,9 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.1",
-    "@jsonforms/react": "^2.0.1",
-    "@jsonforms/webcomponent": "^2.0.1",
+    "@jsonforms/core": "^2.0.2",
+    "@jsonforms/react": "^2.0.2",
+    "@jsonforms/webcomponent": "^2.0.2",
     "@material-ui/core": "^1.2.1",
     "@material-ui/icons": "^1.0.0",
     "ajv": "^6.4.0",
@@ -70,8 +70,8 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "@jsonforms/material-renderers": "^2.0.1",
-    "@jsonforms/vanilla-renderers": "^2.0.1",
+    "@jsonforms/material-renderers": "^2.0.2",
+    "@jsonforms/vanilla-renderers": "^2.0.2",
     "@types/lodash": "^4.14.104",
     "@types/node": "^8.0.0",
     "awesome-typescript-loader": "^3.1.3",
