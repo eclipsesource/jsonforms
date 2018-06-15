@@ -129,6 +129,8 @@ export * from './controls';
 export * from './complex';
 export * from './fields';
 export * from './layouts';
+export * from './reducers';
+export * from './util';
 
 export const vanillaRenderers = [
   { tester: inputControlTester, renderer: InputControl },
