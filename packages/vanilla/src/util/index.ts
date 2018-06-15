@@ -36,7 +36,7 @@ import { VanillaControlStateProps, VanillaLayoutProps } from '../index';
  */
 export interface StyleDef {
   name: string;
-  classNames: string[] | ((args: any[]) => string[]);
+  classNames: string[] | ((...args: any[]) => string[]);
 }
 
 /**
@@ -155,7 +155,7 @@ export const vanillaStyles = [
   },
   {
     name: 'horizontal.layout.item',
-    classNames: numberOfChildren => ['horizontal-layout-' + numberOfChildren[0]]
+    classNames: ([size, _else]) => [`horizontal-layout-${size}`]
   },
   {
     name: 'vertical.layout',
