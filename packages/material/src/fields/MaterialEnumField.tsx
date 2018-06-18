@@ -24,10 +24,10 @@
 */
 import * as React from 'react';
 import {
+  defaultMapDispatchToControlProps,
+  defaultMapStateToEnumFieldProps,
   EnumFieldProps,
   isEnumControl,
-  mapDispatchToFieldProps,
-  defaultMapStateToEnumFieldProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
@@ -70,5 +70,5 @@ export const MaterialEnumField = (props: EnumFieldProps) => {
 export const materialEnumFieldTester: RankedTester = rankWith(2, isEnumControl);
 export default connectToJsonForms(
   defaultMapStateToEnumFieldProps,
-  mapDispatchToFieldProps)
+  defaultMapDispatchToControlProps)
 (MaterialEnumField);

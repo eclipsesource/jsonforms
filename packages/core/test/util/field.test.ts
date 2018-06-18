@@ -25,9 +25,15 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {
+  defaultMapDispatchToControlProps,
   defaultMapStateToEnumFieldProps,
   mapStateToFieldProps
 } from '../../src/util';
+import { UPDATE_DATA, UpdateAction } from '../../src/actions';
+import configureStore from 'redux-mock-store';
+
+const middlewares = [];
+const mockStore = configureStore(middlewares);
 
 const hideRule = {
   effect: 'HIDE',
@@ -234,4 +240,61 @@ test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
 
   const props = defaultMapStateToEnumFieldProps(createState(uiSchema), ownProps);
   t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
+  t.is(props.data, undefined);
+});
+
+test('mapStateToFieldProps - set data of enum field', t => {
+  const uiSchema = {
+    type: 'Control',
+    scope: '#/properties/nationality',
+  };
+  const ownProps = {
+    data: {
+      nationality: 'JP'
+    },
+    schema: {
+      type: 'object',
+      properties: {
+        firstName: { type: 'string' },
+        lastName: { type: 'string' },
+        nationality: {
+          type: 'string',
+          enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+        }
+      }
+    },
+    uischema: uiSchema
+  };
+
+  const props = mapStateToFieldProps(createState(uiSchema), ownProps);
+  t.is(props.data, 'JP');
+});
+
+test('defaultMapDispatchToControlProps, initialized with custom handleChange', t => {
+  const uiSchema = {
+    type: 'Control',
+    scope: '#/properties/nationality',
+  };
+  const ownProps = {
+    handleChange: () => {
+      return 'Custom handleChange';
+    }
+  };
+  const store = mockStore(createState(uiSchema));
+  const props = defaultMapDispatchToControlProps(store.dispatch, ownProps);
+  t.is(props.handleChange(), 'Custom handleChange');
+});
+
+test('defaultMapDispatchToControlProps, with default handleChange', t => {
+  const uiSchema = {
+    type: 'Control',
+    scope: '#/properties/nationality',
+  };
+  const store = mockStore(createState(uiSchema));
+  const props = defaultMapDispatchToControlProps(store.dispatch, {});
+  props.handleChange('nationality', 'DE');
+  const updateAction = _.head<any>(store.getActions()) as UpdateAction;
+  t.is(updateAction.type, UPDATE_DATA);
+  t.is(updateAction.path, 'nationality');
+  t.is(updateAction.updater(), 'DE');
 });
