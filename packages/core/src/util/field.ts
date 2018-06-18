@@ -141,12 +141,10 @@ export const mapDispatchToFieldProps: (dispatch) => DispatchPropsOfControl =
   mapDispatchToControlProps;
 
 /**
- * Default map dispatch to enum field props to customize handleChange action
+ * Default dispatch to control props which can be customized to set handleChange action
  *
- * @param dispatch
- * @param ownProps
  */
-export const defaultMapDispatchToEnumFieldProps = (dispatch, ownProps) => {
+export const defaultMapDispatchToControlProps = (dispatch, ownProps) => {
   const dispatchControlProps: DispatchPropsOfControl = mapDispatchToControlProps(dispatch);
 
   return {

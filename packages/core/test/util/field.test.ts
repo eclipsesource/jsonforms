@@ -25,8 +25,8 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {
+  defaultMapDispatchToControlProps,
   defaultMapStateToEnumFieldProps,
-  defaultMapDispatchToEnumFieldProps,
   mapStateToFieldProps
 } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
@@ -242,7 +242,7 @@ test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
   t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
 });
 
-test('defaultMapDispatchToEnumFieldProps, initialized with custom handleChange', t => {
+test('defaultMapDispatchToControlProps, initialized with custom handleChange', t => {
   const uiSchema = {
     type: 'Control',
     scope: '#/properties/nationality',
@@ -253,17 +253,17 @@ test('defaultMapDispatchToEnumFieldProps, initialized with custom handleChange',
     }
   };
   const store = mockStore(createState(uiSchema));
-  const props = defaultMapDispatchToEnumFieldProps(store.dispatch, ownProps);
+  const props = defaultMapDispatchToControlProps(store.dispatch, ownProps);
   t.is(props.handleChange(), 'Custom handleChange');
 });
 
-test('defaultMapDispatchToEnumFieldProps, with default handleChange', t => {
+test('defaultMapDispatchToControlProps, with default handleChange', t => {
   const uiSchema = {
     type: 'Control',
     scope: '#/properties/nationality',
   };
   const store = mockStore(createState(uiSchema));
-  const props = defaultMapDispatchToEnumFieldProps(store.dispatch, {});
+  const props = defaultMapDispatchToControlProps(store.dispatch, {});
   props.handleChange('nationality', 'DE');
   const updateAction = _.head<any>(store.getActions()) as UpdateAction;
   t.is(updateAction.type, UPDATE_DATA);

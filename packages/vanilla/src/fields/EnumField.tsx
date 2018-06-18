@@ -24,7 +24,7 @@
 */
 import * as React from 'react';
 import {
-  defaultMapDispatchToEnumFieldProps,
+  defaultMapDispatchToControlProps,
   defaultMapStateToEnumFieldProps,
   EnumFieldProps,
   isEnumControl,
@@ -70,5 +70,5 @@ export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 
 export default connectToJsonForms(
   defaultMapStateToEnumFieldProps,
-  defaultMapDispatchToEnumFieldProps
+  defaultMapDispatchToControlProps
 )(EnumField);
