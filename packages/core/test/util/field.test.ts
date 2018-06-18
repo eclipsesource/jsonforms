@@ -240,6 +240,34 @@ test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
 
   const props = defaultMapStateToEnumFieldProps(createState(uiSchema), ownProps);
   t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
+  t.is(props.data, undefined);
+});
+
+test('mapStateToEnumFieldProps - set data of enum field', t => {
+  const uiSchema = {
+    type: 'Control',
+    scope: '#/properties/nationality',
+  };
+  const ownProps = {
+    data: {
+      nationality: 'JP'
+    },
+    schema: {
+      type: 'object',
+      properties: {
+        firstName: { type: 'string' },
+        lastName: { type: 'string' },
+        nationality: {
+          type: 'string',
+          enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
+        }
+      }
+    },
+    uischema: uiSchema
+  };
+
+  const props = defaultMapStateToEnumFieldProps(createState(uiSchema), ownProps);
+  t.is(props.data.nationality, 'JP');
 });
 
 test('defaultMapDispatchToControlProps, initialized with custom handleChange', t => {
