@@ -102,7 +102,9 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   );
 
   return {
-    data: Resolve.data(getData(state), path),
+    data: ownProps.data !== undefined ?
+      Resolve.data(ownProps.data, path) :
+      Resolve.data(getData(state), path),
     className: inputClassName.join(' '),
     visible,
     enabled,
@@ -128,7 +130,6 @@ export const defaultMapStateToEnumFieldProps = (state, ownProps): StatePropsOfEn
   return {
     ...props,
     options: ownProps.options !== undefined ? ownProps.options : props.scopedSchema.enum,
-    data: ownProps.data !== undefined ? ownProps.data : props.data
   };
 };
 
