@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 
-const IntegerField  = (props: FieldProps) => {
+export const IntegerField  = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (

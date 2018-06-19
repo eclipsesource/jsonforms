@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 
-const NumberFormatField = (props: FieldProps & Formatted<number>) => {
+export const NumberFormatField = (props: FieldProps & Formatted<number>) => {
   const {
     className,
     id,

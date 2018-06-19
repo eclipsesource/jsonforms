@@ -34,7 +34,7 @@ import {
 import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
 
-const EnumField = (props: EnumFieldProps) => {
+export const EnumField = (props: EnumFieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (

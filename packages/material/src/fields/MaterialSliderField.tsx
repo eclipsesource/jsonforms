@@ -34,7 +34,7 @@ import {
 import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
-const MaterialSliderField = (props: FieldProps) => {
+export const MaterialSliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange, scopedSchema } = props;
   const config = {'max': scopedSchema.maximum, 'min': scopedSchema.minimum};
 

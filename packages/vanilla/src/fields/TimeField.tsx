@@ -34,7 +34,7 @@ import {
 import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
 
-const TimeField = (props: FieldProps) => {
+export const TimeField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (

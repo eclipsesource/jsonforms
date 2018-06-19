@@ -34,7 +34,7 @@ import {
 import { SyntheticEvent } from 'react';
 import { connectToJsonForms } from '@jsonforms/react';
 
-const DateField = (props: FieldProps) => {
+export const DateField = (props: FieldProps) => {
     const { data, className, id, enabled, uischema, path, handleChange } = props;
 
     return (
