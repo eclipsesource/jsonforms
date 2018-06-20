@@ -27,6 +27,10 @@ import { indexFromPath } from '../helpers/util';
 import {
   getContainerProperties,
 } from '../reducers';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
+import Typography from '@material-ui/core/Typography';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -87,28 +91,30 @@ const ObjectListItem = (
           className='label'
           onClick={handlers.onSelect(schema, data, path)}
         >
-          <span>
-            {labelProvider(schema)(data)}
-          </span>
+          <Typography>
+              {labelProvider(schema)(data)}
+          </Typography>
           {
             !_.isEmpty(containerProperties) ?
               (
-                <span
+                <IconButton
                   className='add'
+                  aria-label='Add'
                   onClick={handlers.onAdd(schema, path)}
                 >
-                  {'\u2795'}
-                </span>
+                  <AddIcon />
+                </IconButton>
               ) : ''
           }
           {
             (hasParent || _.isArray(scopedData)) &&
-            <span
+            <IconButton
               className='remove'
+              aria-label='Remove'
               onClick={handlers.onRemove}
             >
-              {'\u274C'}
-            </span>
+              <DeleteIcon />
+            </IconButton>
           }
         </span>
       </div>
