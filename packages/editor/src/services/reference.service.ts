@@ -1,4 +1,4 @@
-import { JsonSchema4 } from '@jsonforms/core';
+import { JsonSchema7 } from '@jsonforms/core';
 import { makeSelfContainedSchema, Property } from './property.util';
 import { EditorContext } from '../editor-context';
 import { Resources } from '../resources/resources';
@@ -18,7 +18,7 @@ export interface ReferenceProperty extends Property {
   /**
    * The schema of the referenced elements.
    */
-  readonly targetSchema: JsonSchema4;
+  readonly targetSchema: JsonSchema7;
   /**
    * This allows to set the reference.
    *
@@ -57,8 +57,8 @@ export interface ReferenceProperty extends Property {
 
 export class ReferencePropertyImpl implements ReferenceProperty {
   constructor(
-    private innerSchema: JsonSchema4,
-    private innerTargetSchema: JsonSchema4,
+    private innerSchema: JsonSchema7,
+    private innerTargetSchema: JsonSchema7,
     private key: string,
     private name: string,
     private idBased: boolean,
@@ -71,19 +71,19 @@ export class ReferencePropertyImpl implements ReferenceProperty {
       [
         this.innerSchema.title,
         this.name,
-        this.innerSchema.id,
+        this.innerSchema.$id,
         this.key
       ],
       n => !_.isEmpty(n)
     );
   }
-  get schema(): JsonSchema4 {
+  get schema(): JsonSchema7 {
     return this.innerSchema;
   }
   get property(): string {
     return this.key;
   }
-  get targetSchema(): JsonSchema4 {
+  get targetSchema(): JsonSchema7 {
     return this.innerTargetSchema;
   }
   addToData(data: object, valueToAdd: Object): void {
@@ -104,7 +104,7 @@ export class ReferencePropertyImpl implements ReferenceProperty {
  *
  * @return true if the data adheres to the schema, false otherwise
  */
-const checkData = (data: Object, targetSchema: JsonSchema4): boolean => {
+const checkData = (data: Object, targetSchema: JsonSchema7): boolean => {
   // use AJV to validate data against targetSchema and return result
   const valid = ajv.validate(targetSchema, data);
   if (_.isBoolean(valid)) {
@@ -113,7 +113,7 @@ const checkData = (data: Object, targetSchema: JsonSchema4): boolean => {
   return false;
 };
 
-const addReference = (schema: JsonSchema4, identifyingProperty: string, propName: string) =>
+const addReference = (schema: JsonSchema7, identifyingProperty: string, propName: string) =>
   (data: Object, toAdd: object) => {
 
     const refValue = toAdd[identifyingProperty];
@@ -169,7 +169,7 @@ const getReferenceTargetData = (data: Object, href: string): Object => {
 };
 
 // reference resolvement for id based references
-export const resolveRef = (schema: JsonSchema4,
+export const resolveRef = (schema: JsonSchema7,
                            findTargets: (data: Object) => { [key: string]: Object },
                            propName: string) => (data: Object): { [key: string]: Object } => {
   if (_.isEmpty(data)) {
@@ -235,7 +235,7 @@ export const getFindReferenceTargetsFunction =
  * The result is an object mapping from the found paths to the target data object
  * found at the path.
  */
-const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema4)
+const collectionHelperMap = (currentPath: string, data: Object, targetSchema: JsonSchema7)
   : { [key: string]: Object } => {
   const result = {};
   if (checkData(data, targetSchema)) {
@@ -267,7 +267,7 @@ const collectionHelperMap = (currentPath: string, data: Object, targetSchema: Js
 /**
  * Adds the reference path given in toAdd to the data's reference property.
  */
-const addPathBasedRef = (schema: JsonSchema4, propName: string) =>
+const addPathBasedRef = (schema: JsonSchema7, propName: string) =>
   (data: Object, toAdd: object) => {
     if (typeof toAdd !== 'string') {
       console.error(`Path based reference values must be of type string. The given value was of`
@@ -304,7 +304,7 @@ const resolvePathBasedRef = (href: string, pathProperty: string) => (data: Objec
   return result;
 };
 
-const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema4) => (data: Object)
+const getPathBasedRefTargets = (href: string, targetSchema: JsonSchema7) => (data: Object)
   : { [key: string]: Object } => {
   const targetData = getReferenceTargetData(data, href);
 
@@ -370,7 +370,7 @@ const getSchemaIdForObject = (object: Object, modelMapping: ModelMapping): strin
  * @return The array of {@link ReferenceProperty} or empty if no references are available
  * @see ReferenceProperty
  */
-export const getReferenceProperties = (schema: JsonSchema4,
+export const getReferenceProperties = (schema: JsonSchema7,
                                        editorContext: EditorContext): ReferenceProperty[] => {
   if (schema.$ref !== undefined) {
     return getReferenceProperties(
@@ -417,13 +417,13 @@ export const getReferenceProperties = (schema: JsonSchema4,
       let idBased: boolean;
 
       // assume targetSchema is resolved
-      if (!_.isEmpty(editorContext.identifyingProperty) && !_.isEmpty(targetSchema.id)
+      if (!_.isEmpty(editorContext.identifyingProperty) && !_.isEmpty(targetSchema.$id)
         && !_.isEmpty(targetSchema.properties)
         && !_.isEmpty(targetSchema.properties[editorContext.identifyingProperty])) {
         // use id based referencing & reuse existing code for now
         // TODO reuse of existing id behavior sub-optimal (does not search cascaded)
         idBased = true;
-        const schemaId = targetSchema.id as string;
+        const schemaId = targetSchema.$id as string;
         findRefTargets = getFindReferenceTargetsFunction(href, schemaId,
                                                          editorContext.identifyingProperty,
                                                          editorContext.modelMapping);

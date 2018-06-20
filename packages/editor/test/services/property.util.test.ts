@@ -148,7 +148,7 @@ describe('Container Properties Tests', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
-          id: '#id',
+          $id: '#id',
           type: 'object',
           properties: {
             name: {type: 'string'}
@@ -183,7 +183,7 @@ describe('Container Properties Tests', () => {
         robot: {
           type: 'object',
           properties: {
-            id: {type: 'string'}
+            $id: {type: 'string'}
           }
         }
       },
@@ -197,9 +197,9 @@ describe('Container Properties Tests', () => {
     const properties = retrieveContainerProperties(schema, schema);
     expect(properties.length).toEqual(2);
     const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
-    personCopy.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
+    personCopy.$id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
     const robotCopy = JSON.parse(JSON.stringify(schema.definitions.robot));
-    robotCopy.id = '#' + (schema.properties.robots.items as JsonSchema).$ref;
+    robotCopy.$id = '#' + (schema.properties.robots.items as JsonSchema).$ref;
     expect(findPropertyLabel(properties[0])).toEqual('person');
     expect(findPropertyLabel(properties[1])).toEqual('robot');
     expect(properties[0].schema).toMatchObject(personCopy);
@@ -242,9 +242,9 @@ describe('Container Properties Tests', () => {
     expect(findPropertyLabel(properties[0])).toEqual('a');
     expect(findPropertyLabel(properties[1])).toEqual('b');
     const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
-    aCopy.id = '#' + (schema.items as JsonSchema).anyOf[0].$ref;
+    aCopy.$id = '#' + (schema.items as JsonSchema).anyOf[0].$ref;
     const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
-    bCopy.id = '#' + (schema.items as JsonSchema).anyOf[1].$ref;
+    bCopy.$id = '#' + (schema.items as JsonSchema).anyOf[1].$ref;
     expect(properties[0].schema).toMatchObject(aCopy);
     expect(properties[1].schema).toMatchObject(bCopy);
   });
@@ -274,9 +274,9 @@ describe('Container Properties Tests', () => {
     expect(findPropertyLabel(properties[0])).toEqual('a');
     expect(findPropertyLabel(properties[1])).toEqual('b');
     const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
-    aCopy.id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[0].$ref;
+    aCopy.$id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[0].$ref;
     const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
-    bCopy.id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[1].$ref;
+    bCopy.$id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[1].$ref;
     expect(properties[0].schema).toMatchObject(aCopy);
     expect(properties[1].schema).toMatchObject(bCopy);
   });
@@ -340,7 +340,7 @@ describe('Container Properties Tests', () => {
     expect(properties.length).toEqual(1);
     expect(findPropertyLabel(properties[0])).toEqual('person');
     const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
-    personCopy.id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
+    personCopy.$id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
     personCopy.definitions = JSON.parse(JSON.stringify(schema.definitions));
     expect(properties[0].schema).toMatchObject(personCopy);
   });
@@ -398,7 +398,7 @@ describe('Container Properties Tests', () => {
   test('calculating schema with references', () => {
     const parentSchema: JsonSchema = {
       'type': 'object',
-      'id': '#root',
+      '$id': '#root',
       'properties': {
         'type': {
           'type': 'string',
@@ -422,7 +422,7 @@ describe('Container Properties Tests', () => {
       'definitions': {
         'elements': {
           'type': 'array',
-          'id': '#elements',
+          '$id': '#elements',
           'items': {
             'anyOf': [
               {
@@ -439,7 +439,7 @@ describe('Container Properties Tests', () => {
         },
         'control': {
           'type': 'object',
-          'id': '#control',
+          '$id': '#control',
           'properties': {
             'type': {
               'type': 'string',
@@ -461,7 +461,7 @@ describe('Container Properties Tests', () => {
         },
         'horizontallayout': {
           'type': 'object',
-          'id': '#horizontallayout',
+          '$id': '#horizontallayout',
           'properties': {
             'type': {
               'type': 'string',
@@ -477,7 +477,7 @@ describe('Container Properties Tests', () => {
         },
         'verticallayout': {
           'type': 'object',
-          'id': '#verticallayout',
+          '$id': '#verticallayout',
           'properties': {
             'type': {
               'type': 'string',
@@ -493,7 +493,7 @@ describe('Container Properties Tests', () => {
         },
         'rule': {
           'type': 'object',
-          'id': '#rule',
+          '$id': '#rule',
           'properties': {
             'effect': {
               'type': 'string',
@@ -527,18 +527,18 @@ describe('Container Properties Tests', () => {
         },
         'scope': {
           'type': 'string',
-          'id': '#scope',
+          '$id': '#scope',
           'pattern': '^#\\/properties\\/{1}'
         },
         'options': {
           'type': 'object',
-          'id': '#options'
+          '$id': '#options'
         }
       }
     };
     const schema = {
       'type': 'object',
-      'id': '#control',
+      '$id': '#control',
       'properties': {
         'type': {
           'type': 'string',
@@ -591,7 +591,7 @@ describe('Container Properties Tests', () => {
   test('calculating schema with missing reference definition', () => {
     const parentSchema: JsonSchema = {
       'type': 'object',
-      'id': '#root',
+      '$id': '#root',
       'properties': {
         'type': {
           'type': 'string'
@@ -606,7 +606,7 @@ describe('Container Properties Tests', () => {
     };
     const schema = {
       'type': 'object',
-      'id': '#control',
+      '$id': '#control',
       'properties': {
         'type': {
           'type': 'string',
@@ -628,7 +628,7 @@ describe('Container Properties Tests', () => {
   test('calculating schema with references by using another keyword for definitions block', () => {
     const parentSchema = {
       'type': 'object',
-      'id': '#root',
+      '$id': '#root',
       'properties': {
         'type': {
           'type': 'string'
@@ -643,7 +643,7 @@ describe('Container Properties Tests', () => {
       'defs': {
         'elements': {
           'type': 'array',
-          'id': '#elements',
+          '$id': '#elements',
           'items': {
             'anyOf': [
               {
@@ -657,7 +657,7 @@ describe('Container Properties Tests', () => {
         },
         'control': {
           'type': 'object',
-          'id': '#control',
+          '$id': '#control',
           'properties': {
             'type': {
               'type': 'string',
@@ -674,7 +674,7 @@ describe('Container Properties Tests', () => {
         },
         'horizontallayout': {
           'type': 'object',
-          'id': '#horizontallayout',
+          '$id': '#horizontallayout',
           'properties': {
             'type': {
               'type': 'string',
@@ -688,14 +688,14 @@ describe('Container Properties Tests', () => {
         },
         'scope': {
           'type': 'string',
-          'id': '#scope',
+          '$id': '#scope',
           'pattern': '^#\\/properties\\/{1}'
         }
       }
     };
     const schema = {
       'type': 'object',
-      'id': '#control',
+      '$id': '#control',
       'properties': {
         'type': {
           'type': 'string',

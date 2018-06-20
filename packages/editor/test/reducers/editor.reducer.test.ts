@@ -4,7 +4,7 @@ import { findAllContainerProperties } from '../../src/services/property.util';
 
 const taskSchema = {
   'type': 'object',
-  'id': '#userGroup',
+  '$id': '#userGroup',
   'properties': {
     '_type': {
       'type': 'string',
@@ -24,7 +24,7 @@ const taskSchema = {
   'definitions': {
     'task': {
       'type': 'object',
-      'id': '#task',
+      '$id': '#task',
       'properties': {
         'type': {
           'type': 'string',
@@ -45,7 +45,7 @@ const taskSchema = {
     },
     'user': {
       'type': 'object',
-      'id': '#user',
+      '$id': '#user',
       'properties': {
         'type': {
           'type': 'string',
@@ -78,7 +78,7 @@ const expectedProps = {
       'label': 'user',
       'schema': {
         'type': 'object',
-        'id': '#user',
+        '$id': '#user',
         'properties': {
           'type': {
             'type': 'string',
@@ -105,7 +105,7 @@ const expectedProps = {
         'definitions': {
           'task': {
             'type': 'object',
-            'id': '#task',
+            '$id': '#task',
             'properties': {
               'type': {
                 'type': 'string',
@@ -137,7 +137,7 @@ const expectedProps = {
       'label': 'task',
       'schema': {
         'type': 'object',
-        'id': '#task',
+        '$id': '#task',
         'properties': {
           'type': {
             'type': 'string',
@@ -161,7 +161,7 @@ const expectedProps = {
         'definitions': {
           'task': {
             'type': 'object',
-            'id': '#task',
+            '$id': '#task',
             'properties': {
               'type': {
                 'type': 'string',
@@ -193,7 +193,7 @@ const expectedProps = {
       'label': 'task',
       'schema': {
         'type': 'object',
-        'id': '#task',
+        '$id': '#task',
         'properties': {
           'type': {
             'type': 'string',
@@ -217,7 +217,7 @@ const expectedProps = {
         'definitions': {
           'task': {
             'type': 'object',
-            'id': '#task',
+            '$id': '#task',
             'properties': {
               'type': {
                 'type': 'string',

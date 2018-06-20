@@ -7,7 +7,7 @@ import { taskSchema } from './schema';
 import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
 import * as _ from 'lodash';
 import { findAllContainerProperties, Property } from '../src/services/property.util';
-import { JsonSchema4 } from '@jsonforms/core';
+import { JsonSchema7 } from '@jsonforms/core';
 import { editorReducer, setContainerProperties } from '../src/reducers';
 import * as JsonRefs from 'json-refs';
 import {
@@ -27,7 +27,7 @@ const filterPredicate = (data: Object) => {
     if (!_.isEmpty(modelMapping) &&
       !_.isEmpty(modelMapping.mapping)) {
       if (data[modelMapping.attribute]) {
-        return property.schema.id === modelMapping.mapping[data[modelMapping.attribute]];
+        return property.schema.$id === modelMapping.mapping[data[modelMapping.attribute]];
       }
       return true;
     }
@@ -35,16 +35,16 @@ const filterPredicate = (data: Object) => {
 };
 
 const calculateLabel =
-  (schema: JsonSchema4) => (element: Object): string => {
+  (schema: JsonSchema7) => (element: Object): string => {
 
-    if (!_.isEmpty(labelProvider) && labelProvider[schema.id] !== undefined) {
+    if (!_.isEmpty(labelProvider) && labelProvider[schema.$id] !== undefined) {
 
-      if (typeof labelProvider[schema.id] === 'string') {
+      if (typeof labelProvider[schema.$id] === 'string') {
         // To be backwards compatible: a simple string is assumed to be a property name
-        return element[labelProvider[schema.id]];
+        return element[labelProvider[schema.$id]];
       }
-      if (typeof labelProvider[schema.id] === 'object') {
-        const info =  labelProvider[schema.id] as LabelDefinition;
+      if (typeof labelProvider[schema.$id] === 'object') {
+        const info =  labelProvider[schema.$id] as LabelDefinition;
         let label;
         if (info.constant !== undefined) {
           label = info.constant;
@@ -62,7 +62,10 @@ const calculateLabel =
 
     const namingKeys = Object
       .keys(schema.properties)
-      .filter(key => key === 'id' || key === 'name');
+      .filter(key => {
+        console.log(key);
+        return key === '$id' || key === 'name';
+      });
     if (namingKeys.length !== 0) {
       return element[namingKeys[0]];
     }

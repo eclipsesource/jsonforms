@@ -1,6 +1,7 @@
 export const taskSchema = {
+  '$schema': 'http://json-schema.org/draft-07/schema',
   'type': 'object',
-  'id': '#userGroup',
+  '$id': '#userGroup',
   'properties': {
     '_type': {
       'type': 'string',
@@ -20,7 +21,7 @@ export const taskSchema = {
   'definitions': {
     'task': {
       'type': 'object',
-      'id': '#task',
+      '$id': '#task',
       'properties': {
         '_type': {
           'type': 'string',
@@ -53,7 +54,7 @@ export const taskSchema = {
     },
     'user': {
       'type': 'object',
-      'id': '#user',
+      '$id': '#user',
       'properties': {
         '_type': {
           'type': 'string',

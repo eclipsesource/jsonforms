@@ -106,8 +106,8 @@ class EditorDialog extends React.Component<EditorDialogProps, {}> {
 const mapStateToProps = (state, ownProps) => {
   const containerProps = getContainerProperties(state);
   let containerProperties;
-  if (_.has(containerProps, ownProps.schema.id)) {
-    containerProperties = containerProps[ownProps.schema.id];
+  if (_.has(containerProps, ownProps.schema.$id)) {
+    containerProperties = containerProps[ownProps.schema.$id];
   } else {
     containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
   }

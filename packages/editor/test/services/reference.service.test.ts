@@ -1,7 +1,7 @@
 import {
   getReferenceProperties
 } from '../../src/services/reference.service';
-import { JsonSchema } from '@jsonforms/core';
+import { JsonSchema7 } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import { EditorContext } from '../../src/editor-context';
 
@@ -14,7 +14,7 @@ beforeEach(() => {
       class: {
         type: 'object',
         properties: {
-          id: {
+          $id: {
             type: 'string'
           },
           association: {
@@ -43,7 +43,7 @@ beforeEach(() => {
       class: {
         type: 'object',
         properties: {
-          id: {
+          $id: {
             type: 'string'
           },
           associations: {
@@ -75,7 +75,7 @@ beforeEach(() => {
       class: {
         type: 'object',
         properties: {
-          id: {
+          $id: {
             type: 'string'
           },
           association: {
@@ -91,7 +91,7 @@ beforeEach(() => {
       element : {
         type: 'object',
         properties: {
-          id: {
+          $id: {
             type: 'string'
           }
         }
@@ -123,17 +123,17 @@ const editorContext: EditorContext = {
       'person': '#person'
     }
   },
-  identifyingProperty: 'id'
+  identifyingProperty: '$id'
 };
 
 describe('Schema Service Reference Tests', () => {
 
   test('reference object properties add', () => {
-    const schema: JsonSchema = referenceObjectSchema;
+    const schema: JsonSchema7 = referenceObjectSchema;
     editorContext.dataSchema = schema;
     const property = getReferenceProperties(schema.definitions.class, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2'}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2'}]};
     JsonForms.rootData = data;
     property.addToData(data.classes[1], data.classes[0]);
     // tslint:disable:no-string-literal
@@ -142,12 +142,12 @@ describe('Schema Service Reference Tests', () => {
   });
 
   test.skip('reference object properties get', () => {
-    const schema: JsonSchema = referenceObjectSchema;
+    const schema: JsonSchema7 = referenceObjectSchema;
     editorContext.dataSchema = schema;
     const property =
-      getReferenceProperties(schema.properties.classes.items as JsonSchema, editorContext)[0];
+      getReferenceProperties(schema.properties.classes.items as JsonSchema7, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2', association: 'c1'}]};
     JsonForms.rootData = data;
     const getData = property.getData(data.classes[1]);
     const keys = Object.keys(getData);
@@ -157,12 +157,12 @@ describe('Schema Service Reference Tests', () => {
   });
 
   test('reference array properties add to undefined', () => {
-    const schema: JsonSchema = referenceArraySchema;
+    const schema: JsonSchema7 = referenceArraySchema;
     editorContext.dataSchema = schema;
     const property =
       getReferenceProperties(schema.definitions.class, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2'}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2'}]};
     JsonForms.rootData = data;
     property.addToData(data.classes[1], data.classes[0]);
     // tslint:disable:no-string-literal
@@ -173,12 +173,12 @@ describe('Schema Service Reference Tests', () => {
   });
 
   test('reference array properties add to defined', () => {
-    const schema: JsonSchema = referenceArraySchema;
+    const schema: JsonSchema7 = referenceArraySchema;
     editorContext.dataSchema = schema;
     const property =
       getReferenceProperties(schema.definitions.class, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2', associations: []}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2', associations: []}]};
     JsonForms.rootData = data;
     property.addToData(data.classes[1], data.classes[0]);
     // tslint:disable:no-string-literal
@@ -189,12 +189,12 @@ describe('Schema Service Reference Tests', () => {
   });
 
   test.skip('reference array properties get', () => {
-    const schema: JsonSchema = referenceArraySchema;
+    const schema: JsonSchema7 = referenceArraySchema;
     editorContext.dataSchema = schema;
     const property =
       getReferenceProperties(schema.definitions.class, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2', associations: ['c1']}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2', associations: ['c1']}]};
     JsonForms.rootData = data;
     const getData = property.getData(data.classes[1]);
     const keys = Object.keys(getData);
@@ -204,13 +204,13 @@ describe('Schema Service Reference Tests', () => {
   });
 
   test.skip('reference array properties get multiple', () => {
-    const schema: JsonSchema = referenceArraySchema;
+    const schema: JsonSchema7 = referenceArraySchema;
     editorContext.dataSchema = schema;
     const property =
       getReferenceProperties(schema.definitions.class, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2', associations: ['c1', 'c3']}, {id: 'c3'},
-      {id: 'c4'}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2', associations: ['c1', 'c3']}, {$id: 'c3'},
+      {$id: 'c4'}]};
     JsonForms.rootData = data;
     const getData = property.getData(data.classes[1]);
     const keys = Object.keys(getData);
@@ -227,7 +227,7 @@ describe('Schema Service Reference Tests', () => {
         class: {
           type: 'object',
           properties: {
-            id: {
+            $id: {
               type: 'string'
             },
             association: {
@@ -254,9 +254,9 @@ describe('Schema Service Reference Tests', () => {
 
     editorContext.dataSchema = schema;
     const property =
-      getReferenceProperties(schema.properties.classes.items as JsonSchema, editorContext)[0];
+      getReferenceProperties(schema.properties.classes.items as JsonSchema7, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
-    const data = {classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}]};
+    const data = {classes: [{$id: 'c1'}, {$id: 'c2', association: 'c1'}]};
     JsonForms.rootData = data;
     expect(property.getData(data.classes[1]))
       .toThrowError(`The schema of the property 'association' does not specify a schema type.`);
@@ -266,11 +266,11 @@ describe('Schema Service Reference Tests', () => {
     const schema = referenceFindSchema;
     editorContext.dataSchema = schema;
     const property =
-      getReferenceProperties(schema.properties.classes.items as JsonSchema, editorContext)[0];
+      getReferenceProperties(schema.properties.classes.items as JsonSchema7, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
     const data = {
-      classes: [{id: 'c1'}, {id: 'c2', association: 'c1'}],
-      elements: [{id: 'e1'}]
+      classes: [{$id: 'c1'}, {$id: 'c2', association: 'c1'}],
+      elements: [{$id: 'e1'}]
     };
     JsonForms.rootData = data;
     const targets = property.findReferenceTargets();
@@ -286,10 +286,10 @@ describe('Schema Service Reference Tests', () => {
     const schema = referenceFindSchema;
     editorContext.dataSchema = schema;
     const property =
-      getReferenceProperties(schema.properties.classes.items as JsonSchema, editorContext)[0];
+      getReferenceProperties(schema.properties.classes.items as JsonSchema7, editorContext)[0];
     expect(property.isIdBased()).toBe(true);
     const data = {
-      elements: [{id: 'e1'}]
+      elements: [{$id: 'e1'}]
     };
     JsonForms.rootData = data;
     const targets = property.findReferenceTargets();
@@ -302,9 +302,9 @@ describe('Schema Service Reference Tests', () => {
         definitions: {
           class: {
             type: 'object',
-            id: '#class',
+            $id: '#class',
             properties: {
-              id: {
+              $id: {
                 type: 'string'
               },
               association: {
@@ -323,9 +323,9 @@ describe('Schema Service Reference Tests', () => {
           },
           element : {
             type: 'object',
-            id: '#element',
+            $id: '#element',
             properties: {
-              id: {
+              $id: {
                 type: 'string'
               },
               type: {
@@ -368,14 +368,14 @@ describe('Schema Service Reference Tests', () => {
           'element': '#element'
         }
       };
-      const property = getReferenceProperties(schema.definitions.class as JsonSchema, context)[0];
+      const property = getReferenceProperties(schema.definitions.class as JsonSchema7, context)[0];
       expect(property.isIdBased()).toBe(true);
       const data = {
         objects: [
-          {id: 'c1', type: 'class'},
-          {id: 'e1', type: 'element'},
-          {id: 'c2', type: 'class'},
-          {id: 'e2', type: 'element'}
+          {$id: 'c1', type: 'class'},
+          {$id: 'e1', type: 'element'},
+          {$id: 'c2', type: 'class'},
+          {$id: 'e2', type: 'element'}
         ]
       };
       JsonForms.rootData = data;
@@ -392,12 +392,12 @@ describe('Schema Service Reference Tests', () => {
   test('support for array references', () => {
     // TODO: links property is unknown
     // tslint:disable:no-object-literal-type-assertion
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         class: {
           type: 'object',
           properties: {
-            id: {
+            $id: {
               type: 'string'
             },
             name: {
@@ -408,14 +408,14 @@ describe('Schema Service Reference Tests', () => {
               items: {
                 type: 'object',
                 properties: {
-                  id: {
+                  $id: {
                     type: 'integer',
                     minimum: 0
                   }
                 },
                 links: [{
                   rel: 'full',
-                  href: '#/classes/{id}',
+                  href: '#/classes/{$id}',
                   targetSchema: {$ref: '#/definitions/class'}
                 }]
               }
@@ -435,42 +435,42 @@ describe('Schema Service Reference Tests', () => {
           }
         }
       }
-    } as JsonSchema;
+    } as JsonSchema7;
     // tslint:enable:no-object-literal-type-assertion
     editorContext.dataSchema = schema;
     const properties =
       getReferenceProperties(
-        schema.definitions.class.properties.associations.items as JsonSchema, editorContext);
+        schema.definitions.class.properties.associations.items as JsonSchema7, editorContext);
     expect(properties.length).toEqual(1);
-    expect(properties[0].label).toEqual('id');
+    expect(properties[0].label).toEqual('$id');
     const selfContainedClassSchema = JSON.parse(
-      JSON.stringify(schema.definitions.class as JsonSchema)
+      JSON.stringify(schema.definitions.class as JsonSchema7)
     );
-    selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
+    selfContainedClassSchema.$id = '#' + (schema.properties.classes.items as JsonSchema7).$ref;
     expect(properties[0].targetSchema).toMatchObject(selfContainedClassSchema);
   });
 
   test('support for object references', () => {
     // tslint:disable:no-object-literal-type-assertion
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         class: {
           type: 'object',
           properties: {
-            id: {
+            $id: {
               type: 'string'
             },
             association: {
               type: 'object',
               properties: {
-                id: {
+                $id: {
                   type: 'integer',
                   minimum: 0
                 }
               },
               links: [{
                 rel: 'full',
-                href: '#/classes/{id}',
+                href: '#/classes/{$id}',
                 targetSchema: {$ref: '#/definitions/class'}
               }]
             }
@@ -489,16 +489,16 @@ describe('Schema Service Reference Tests', () => {
           }
         }
       }
-    } as JsonSchema;
+    } as JsonSchema7;
     // tslint:enable:no-object-literal-type-assertion
     editorContext.dataSchema = schema;
     const properties =
       getReferenceProperties(schema.definitions.class.properties.association, editorContext);
     expect(properties.length).toEqual(1);
-    expect(properties[0].label).toEqual('id');
+    expect(properties[0].label).toEqual('$id');
 
     const selfContainedClassSchema = JSON.parse(JSON.stringify(schema.definitions.class));
-    selfContainedClassSchema.id = '#' + (schema.properties.classes.items as JsonSchema).$ref;
+    selfContainedClassSchema.$id = '#' + (schema.properties.classes.items as JsonSchema7).$ref;
     expect(properties[0].targetSchema).toMatchObject(selfContainedClassSchema);
   });
 });

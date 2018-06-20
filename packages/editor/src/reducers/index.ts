@@ -57,7 +57,6 @@ export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
  * If there already are container properties for the given schema id
  * they are overwritten with the given one
  *
- * @param {JsonSchema} schema
  * @param {[schemaId: string]: Property[]} containerProperties
  * @returns {SetContainerPropertiesAction}
  */
