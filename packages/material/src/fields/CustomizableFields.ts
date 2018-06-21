@@ -22,42 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import {
-  FieldProps,
-  isBooleanControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
-} from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
-import { StatelessComponent, SyntheticEvent } from 'react';
-
-export const BooleanField: StatelessComponent<FieldProps> = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-
-  return (
-    <input
-      type='checkbox'
-      checked={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.checked)
-      }
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-    />
-  );
-};
-
-/**
- * Default tester for boolean controls.
- * @type {RankedTester}
- */
-export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
-export default connectToJsonForms(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(BooleanField);
+export { MaterialBooleanField } from './MaterialBooleanField';
+export { MaterialDateField } from './MaterialDateField';
+export { MaterialEnumField } from './MaterialEnumField';
+export { MaterialIntegerField } from './MaterialIntegerField';
+export { MaterialNumberField } from './MaterialNumberField';
+export { MaterialNumberFormatField } from './MaterialNumberFormatField';
+export { MaterialSliderField } from './MaterialSliderField';
+export { MaterialTextField } from './MaterialTextField';
+export { MaterialTimeField } from './MaterialTimeField';

@@ -35,7 +35,7 @@ import {
 import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
-const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
+export const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
   const {
     className,
     id,

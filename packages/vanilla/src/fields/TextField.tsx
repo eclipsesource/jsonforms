@@ -34,8 +34,18 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 
-const TextField = (props: FieldProps) => {
-  const { config, data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
+export const TextField = (props: FieldProps) => {
+  const {
+    config,
+    data,
+    className,
+    id,
+    enabled,
+    uischema,
+    scopedSchema,
+    path,
+    handleChange
+  } = props;
   const maxLength = scopedSchema.maxLength;
 
   return (

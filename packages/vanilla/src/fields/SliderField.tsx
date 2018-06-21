@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 
-const SliderField = (props: FieldProps) => {
+export const SliderField = (props: FieldProps) => {
   const { data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
 
   return (

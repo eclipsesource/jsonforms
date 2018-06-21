@@ -34,7 +34,7 @@ import {
 import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
 
-const DateTimeField = (props: FieldProps) => {
+export const DateTimeField = (props: FieldProps) => {
     const { data, className, id, enabled, uischema, path, handleChange } = props;
     const toISOString = (inputDateTime: string) => {
         return (inputDateTime === '' ? '' : inputDateTime + ':00.000Z');
