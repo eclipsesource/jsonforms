@@ -1,6 +1,6 @@
 export const UIMetaSchema = {
   'type': 'object',
-  'id': '#root',
+  '$id': '#root',
   'properties': {
     'type': {
       'type': 'string',
@@ -24,7 +24,7 @@ export const UIMetaSchema = {
   'definitions': {
     'elements': {
       'type': 'array',
-      'id': '#elements',
+      '$id': '#elements',
       'items': {
         'anyOf': [
           {
@@ -50,7 +50,7 @@ export const UIMetaSchema = {
     },
     'control': {
       'type': 'object',
-      'id': '#control',
+      '$id': '#control',
       'properties': {
         'type': {
           'type': 'string',
@@ -77,7 +77,7 @@ export const UIMetaSchema = {
     },
     'horizontallayout': {
       'type': 'object',
-      'id': '#horizontallayout',
+      '$id': '#horizontallayout',
       'properties': {
         'type': {
           'type': 'string',
@@ -98,7 +98,7 @@ export const UIMetaSchema = {
     },
     'verticallayout': {
       'type': 'object',
-      'id': '#verticallayout',
+      '$id': '#verticallayout',
       'properties': {
         'type': {
           'type': 'string',
@@ -119,7 +119,7 @@ export const UIMetaSchema = {
     },
     'categorization': {
       'type': 'object',
-      'id': '#categorization',
+      '$id': '#categorization',
       'properties': {
         'type': {
           'type': 'string',
@@ -140,7 +140,7 @@ export const UIMetaSchema = {
     },
     'category': {
       'type': 'object',
-      'id': '#category',
+      '$id': '#category',
       'properties': {
         'label': {
           'type': 'string'
@@ -164,7 +164,7 @@ export const UIMetaSchema = {
     },
     'group': {
       'type': 'object',
-      'id': '#group',
+      '$id': '#group',
       'properties': {
         'type': {
           'type': 'string',
@@ -186,7 +186,7 @@ export const UIMetaSchema = {
     },
     'rule': {
       'type': 'object',
-      'id': '#rule',
+      '$id': '#rule',
       'properties': {
         'effect': {
           'type': 'string',
@@ -230,12 +230,12 @@ export const UIMetaSchema = {
     },
     'scope': {
       'type': 'string',
-      'id': '#scope',
+      '$id': '#scope',
       'pattern': '^#\\/properties\\/{1}'
     },
     'options': {
       'type': 'object',
-      'id': '#options',
+      '$id': '#options',
       'additionalProperties': true
     }
   },

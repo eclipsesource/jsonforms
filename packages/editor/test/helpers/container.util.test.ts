@@ -15,7 +15,7 @@ const matchingStrategy = (data: Object) => {
     if (!_.isEmpty(modelMapping) &&
       !_.isEmpty(modelMapping.mapping)) {
       if (data[modelMapping.attribute]) {
-        return property.schema.id === modelMapping.
+        return property.schema.$id === modelMapping.
           mapping[_.toLower(data[modelMapping.attribute])];
       }
 
@@ -37,20 +37,20 @@ describe('Containment Util Tests', () => {
     const firstProperty: Property =  {
       property: 'person',
       label: 'root',
-      schema: { ...innerSchema, ...{id: '#person'} }
+      schema: { ...innerSchema, ...{$id: '#person'} }
     };
     const secondProperty: Property =  {
       property: 'robot',
       label: 'root',
-      schema: { ...innerSchema, ...{id: '#robot'} }
+      schema: { ...innerSchema, ...{$id: '#robot'} }
     };
 
     const containerProperties: Property[] = [firstProperty, secondProperty];
 
     let prop = matchContainerProperty({type: 'robot'}, containerProperties, matchingStrategy);
-    expect(prop.schema).toMatchObject({...innerSchema, ...{id: '#robot'}});
+    expect(prop.schema).toMatchObject({...innerSchema, ...{$id: '#robot'}});
     prop = matchContainerProperty({type: 'person'}, containerProperties, matchingStrategy);
-    expect(prop.schema).toMatchObject({...innerSchema, ...{id: '#person'}});
+    expect(prop.schema).toMatchObject({...innerSchema, ...{$id: '#person'}});
   });
 
   test('return empty array if there is no match ', () => {
@@ -65,7 +65,7 @@ describe('Containment Util Tests', () => {
     const firstProperty: Property =  {
       property: 'person',
       label: 'root',
-      schema: { ...innerSchema, ...{id: '#person'} }
+      schema: { ...innerSchema, ...{$id: '#person'} }
     };
 
     const containerProperties: Property[] = [firstProperty];
@@ -77,7 +77,7 @@ describe('Containment Util Tests', () => {
   test('return the first property if there are more than 1 match ', () => {
     const firstInnerSchema: JsonSchema = {
       type: 'object',
-      id: '#robot',
+      $id: '#robot',
       properties: {
         type: {
           type: 'string'
@@ -89,7 +89,7 @@ describe('Containment Util Tests', () => {
     };
     const secondInnerSchema: JsonSchema = {
       type: 'object',
-      id: '#robot',
+      $id: '#robot',
       properties: {
         type: {
           type: 'string'

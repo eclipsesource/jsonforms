@@ -1,9 +1,9 @@
-import { JsonSchema4 } from '@jsonforms/core';
+import { JsonSchema7 } from '@jsonforms/core';
 import { ModelMapping } from './helpers/container.util';
 
 // TODO remove when it is no longer needed by the schema service impl: Besides that it is obsolete
 export interface EditorContext {
-    dataSchema: JsonSchema4;
+    dataSchema: JsonSchema7;
     identifyingProperty: string;
     modelMapping: ModelMapping;
 }

@@ -8,7 +8,7 @@ import {
   ControlState,
   generateDefaultUISchema,
   getData,
-  JsonSchema4,
+  JsonSchema7,
   Paths,
   Resolve,
   Runtime,
@@ -29,7 +29,7 @@ import { MasterDetailLayout } from '../master-detail-layout';
 import { getUiSchemata } from '../reducers';
 
 export interface MasterProps {
-  schema: JsonSchema4;
+  schema: JsonSchema7;
   path: string;
   rootData: any;
   selection: any;
@@ -93,17 +93,17 @@ const Master = (
   );
 };
 
-const isNotTuple = (schema: JsonSchema4) => !Array.isArray(schema.items);
+const isNotTuple = (schema: JsonSchema7) => !Array.isArray(schema.items);
 
 export interface TreeMasterDetailState extends ControlState {
   selected: {
-    schema: JsonSchema4,
+    schema: JsonSchema7,
     data: any,
     path: string
   };
   dialog: {
     open: boolean,
-    schema: JsonSchema4,
+    schema: JsonSchema7,
     path: string
   };
 }
@@ -203,8 +203,8 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
     };
 
     let detailSchema;
-    if (this.state.selected && this.state.selected.schema && this.state.selected.schema.id) {
-      const uiSchema = uiSchemata[this.state.selected.schema.id];
+    if (this.state.selected && this.state.selected.schema && this.state.selected.schema.$id) {
+      const uiSchema = uiSchemata[this.state.selected.schema.$id];
       detailSchema = uiSchema ? uiSchema : generateDefaultUISchema(this.state.selected.schema);
     }
 

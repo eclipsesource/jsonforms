@@ -1,4 +1,4 @@
-import { JsonSchema4, update } from '@jsonforms/core';
+import { JsonSchema7, update } from '@jsonforms/core';
 import { Property } from '../services/property.util';
 import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
@@ -34,7 +34,7 @@ export interface DragInfo {
      */
     currentPath: string;
     /** The JsonSchema defining the dragged data object */
-    schema: JsonSchema4;
+    schema: JsonSchema7;
     /** The data object itself */
     data: any;
 }
@@ -134,7 +134,7 @@ export const mapDispatchToTreeListProps = dispatch => ({
  * @param dragInfo The DragInfo describing the dragged item
  */
 export const canDropDraggedItem = (listProperties: Property[], dragInfo: DragInfo) => {
-    if (_.isEmpty(dragInfo.schema.id)) {
+    if (_.isEmpty(dragInfo.schema.$id)) {
         // Cannot determine if this is a valid drop point without schema id
         console.warn(`The given schema for the data at path '${dragInfo.originalPath}'` +
                      ` does not have an ID. No drag and drop is possible`,
@@ -143,7 +143,7 @@ export const canDropDraggedItem = (listProperties: Property[], dragInfo: DragInf
         return false;
     }
     const matchingProps = listProperties
-        .filter(prop => prop.schema.id === dragInfo.schema.id);
+        .filter(prop => prop.schema.$id === dragInfo.schema.$id);
 
     return matchingProps.length > 0;
 };

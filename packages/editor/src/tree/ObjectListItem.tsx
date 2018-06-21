@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   getData,
   getSchema,
-  JsonSchema4,
+  JsonSchema7,
   Paths,
   resolveData,
   update
@@ -38,7 +38,7 @@ const RESET_SELECTION_DELAY = 40;
 
 export interface ObjectListItemProps {
   path: string;
-  schema: JsonSchema4;
+  schema: JsonSchema7;
   rootData: any;
   data: any;
   selection: any;
@@ -75,7 +75,7 @@ const ObjectListItem = (
   const hasParent = !_.isEmpty(parentPath);
   const scopedData = resolveData(rootData, parentPath);
   const groupedProps = _.groupBy(containerProperties, property => property.property);
-  const imageClass = imageProvider(schema.id);
+  const imageClass = imageProvider(schema.$id);
 
   // TODO: key should be set in caller
   return (
@@ -135,8 +135,8 @@ const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
   const containerProps = getContainerProperties(state);
   let containerProperties;
-  if (_.has(containerProps, ownProps.schema.id)) {
-    containerProperties = containerProps[ownProps.schema.id];
+  if (_.has(containerProps, ownProps.schema.$id)) {
+    containerProperties = containerProps[ownProps.schema.$id];
   } else {
     containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
   }
