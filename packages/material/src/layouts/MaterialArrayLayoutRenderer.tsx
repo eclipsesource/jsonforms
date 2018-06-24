@@ -23,12 +23,12 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import * as _ from 'lodash';
 
 import {
   ControlElement,
   DispatchPropsOfControl,
   Helpers,
+  isObjectArrayWithNesting,
   JsonSchema,
   mapDispatchToTableControlProps,
   mapStateToControlProps,
@@ -36,8 +36,7 @@ import {
   rankWith,
   Resolve,
   StatePropsOfControl,
-  UISchemaElement,
-  uiTypeIs
+  UISchemaElement
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
@@ -49,19 +48,7 @@ export interface MaterialArrayLayoutRendererProps
   findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
 }
 
-const traverse = (any, pred) => {
-  if (pred(any)) {
-    return true;
-  } else if (_.isArray(any)) {
-    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
-  } else if (_.isObject(any)) {
-    return _.reduce(_.toPairs(any), (acc, [_key, val]) => acc || traverse(val, pred), false);
-  }
-
-  return false;
-};
-
-const MaterialArrayLayoutRenderer  =
+export const MaterialArrayLayoutRenderer  =
   ({
      schema,
      uischema,
@@ -97,15 +84,4 @@ const ConnectedMaterialArrayLayoutRenderer = connectToJsonForms(
 export default ConnectedMaterialArrayLayoutRenderer;
 ConnectedMaterialArrayLayoutRenderer.displayName = 'MaterialArrayLayoutRenderer';
 
-export const materialArrayLayoutTester: RankedTester = rankWith(
-  4,
-  (uischema: UISchemaElement, schema: JsonSchema): boolean => {
-    if (!uiTypeIs('Control')(uischema, schema)) {
-      return false;
-    }
-    const schemaPath = (uischema as ControlElement).scope;
-    const resolvedSchema = Resolve.schema(schema, schemaPath);
-    return _.has(resolvedSchema, 'items') &&
-      traverse(resolvedSchema.items, val => val !== schema && _.has(val, 'items'));
-  }
-);
+export const materialArrayLayoutTester: RankedTester = rankWith(4, isObjectArrayWithNesting);

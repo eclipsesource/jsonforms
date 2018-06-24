@@ -33,6 +33,7 @@ import {
   isMultiLineControl,
   isNumberControl,
   isObjectArrayControl,
+  isObjectArrayWithNesting,
   isPrimitiveArrayControl,
   isStringControl,
   isTimeControl,
@@ -581,4 +582,61 @@ test('tester isMultiLineControl', t => {
       { type: 'object', properties: { foo: { type: 'string' } } }
     )
   );
+});
+
+test('tester isObjectArrayWithNesting', t => {
+  const schema = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          maxLength: 3
+        },
+        done: {
+          type: 'boolean'
+        }
+      }
+    }
+  };
+
+  const nestedSchema = {
+    type: 'array',
+    items: {
+      ...schema
+    }
+  };
+
+  const uischema = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const nestedSchema2 = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        objectarrayofstrings: {
+          type: 'object',
+          properties: {
+            choices: {
+              type: 'array',
+              items: {
+                type: 'string'
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+  t.false(isObjectArrayWithNesting(undefined, undefined));
+  t.false(isObjectArrayWithNesting(null, undefined));
+  t.false(isObjectArrayWithNesting({ type: 'Foo' }, undefined));
+  t.false(isObjectArrayWithNesting({ type: 'Control' }, undefined));
+  t.false(isObjectArrayWithNesting(uischema, schema));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchema));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchema2));
 });
