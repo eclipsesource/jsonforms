@@ -320,6 +320,28 @@ export const isObjectArrayControl = and(
   schemaSubPathMatches('items', schema => schema.type === 'object')
 );
 
+export const isObjectArrayWithNesting =
+  (uischema: UISchemaElement, schema: JsonSchema): boolean => {
+    if (!uiTypeIs('Control')(uischema, schema)) {
+      return false;
+    }
+    const schemaPath = (uischema as ControlElement).scope;
+    const resolvedSchema = resolveSchema(schema, schemaPath);
+    return _.has(resolvedSchema, 'items') &&
+      traverse(resolvedSchema.items, val => val !== schema && _.has(val, 'items'));
+  };
+const traverse = (any, pred) => {
+  if (pred(any)) {
+    return true;
+  } else if (_.isArray(any)) {
+    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
+  } else if (_.isObject(any)) {
+    return _.reduce(_.toPairs(any), (acc, [_key, val]) => acc || traverse(val, pred), false);
+  }
+
+  return false;
+};
+
 /**
  * Synonym for isObjectArrayControl
  */

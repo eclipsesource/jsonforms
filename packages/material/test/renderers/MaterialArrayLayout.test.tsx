@@ -22,13 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Actions, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import {
+  Actions,
+  ControlElement,
+  Generate,
+  jsonformsReducer,
+  JsonFormsState
+} from '@jsonforms/core';
 import * as React from 'react';
 import { Provider } from 'react-redux';
+import * as TestUtils from 'react-dom/test-utils';
 
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
-import { materialArrayLayoutTester } from '../../src/layouts';
+import { MaterialArrayLayout, materialArrayLayoutTester } from '../../src/layouts';
 
 export const initJsonFormsStore = (): Store<JsonFormsState> => {
 
@@ -109,5 +116,17 @@ describe('Material array layout', () => {
     expect(materialArrayLayoutTester(uischema, schema)).toBe(-1);
     expect(materialArrayLayoutTester(uischema, nestedSchema)).toBe(4);
     expect(materialArrayLayoutTester(uischema, nestedSchema2)).toBe(4);
+  });
+  it('should render two by two children', () => {
+    const store = initJsonFormsStore();
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialArrayLayout schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+
+    const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    // 2 data entries with each having 2 controls
+    expect(controls.length).toBe(4);
   });
 });
