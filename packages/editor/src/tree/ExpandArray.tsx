@@ -11,7 +11,6 @@ import ObjectListItem from './ObjectListItem';
 import { DropTarget, DropTargetMonitor } from 'react-dnd';
 import {
   canDropDraggedItem,
-  CSS,
   CSS_DELAY,
   DragInfo,
   DropResult,
@@ -19,6 +18,12 @@ import {
   Types } from './dnd.util';
 import { Property } from '../services/property.util';
 import { matchContainerProperty } from '../helpers/container.util';
+import {
+  StyleRulesCallback,
+  withStyles,
+  WithStyles
+} from '@material-ui/core/styles';
+import { compose } from 'recompose';
 
 export interface ExpandArrayProps {
   rootData: any;
@@ -94,6 +99,7 @@ export interface ExpandArrayContainerProps extends ExpandArrayProps {
   isOver?: boolean;
   /** Whether this list is a valid drop target for the currently dragged element. */
   validDropTarget?: boolean;
+  classes?: any;
   moveListItem?(data: any, oldPath: string, newPath: string): boolean;
 }
 
@@ -106,8 +112,26 @@ export interface ExandArrayContainerState {
   setCss: boolean;
 }
 
-export class ExpandArrayContainer extends React.Component<ExpandArrayContainerProps,
-                                                          ExandArrayContainerState> {
+const styles: StyleRulesCallback<'currentTarget' | 'validTarget' | 'invalidTarget'> = () => ({
+  currentTarget: {
+    borderWidth:  'medium'
+  },
+  validTarget: {
+    borderStyle: 'dashed',
+    borderWidth: 'thin',
+    borderColor: 'rgb(88, 199, 23)',
+    minHeight: '1em'
+  },
+  invalidTarget: {
+    borderStyle: 'dashed',
+    borderWidth: 'thin',
+    borderColor: 'rgb(189, 0, 0)'
+  }
+});
+class ExpandArrayContainer extends
+  React.Component<ExpandArrayContainerProps &
+                  WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>,
+                  ExandArrayContainerState> {
 
   constructor(props) {
     super(props);
@@ -135,7 +159,8 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
       validDropTarget,
       filterPredicate,
       labelProvider,
-      imageProvider
+      imageProvider,
+      classes
     }: ExpandArrayContainerProps = this.props;
 
     if (_.isEmpty(containmentProps)) {
@@ -146,12 +171,12 @@ export class ExpandArrayContainer extends React.Component<ExpandArrayContainerPr
     // Only apply D&D CSS if the flag has been set
     if (this.state.setCss) {
       if (validDropTarget) {
-        className = CSS.DND_VALID_TARGET;
+        className = classes.validTarget;
         if (isOver) {
-          className = `${className} ${CSS.DND_CURRENT_TARGET}`;
+          className = `${className} ${classes.currentTarget}`;
         }
       } else if (isOver) {
-        className = `${CSS.DND_INVALID_TARGET} ${CSS.DND_CURRENT_TARGET}`;
+        className = `${classes.invalidTarget} ${classes.currentTarget}`;
       }
     }
 
@@ -227,8 +252,11 @@ const arrayDropTarget = {
   }
 };
 
-const DnDExandArrayContainer =
-  DropTarget(Types.TREE_DND, arrayDropTarget, collect)(ExpandArrayContainer);
+const DnDExandArrayContainer = compose(
+  withStyles(styles, { name: 'ExpandArrayContainer' }),
+  DropTarget(Types.TREE_DND, arrayDropTarget, collect)
+)(ExpandArrayContainer);
+
 export default connect(
   mapStateToProps,
   mapDispatchToTreeListProps

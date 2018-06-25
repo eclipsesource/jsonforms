@@ -27,6 +27,12 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { MasterDetailLayout } from '../master-detail-layout';
 import { getUiSchemata } from '../reducers';
+import {
+  StyleRulesCallback,
+  withStyles,
+  WithStyles
+} from '@material-ui/core/styles';
+import { compose } from 'recompose';
 
 export interface MasterProps {
   schema: JsonSchema7;
@@ -95,6 +101,58 @@ const Master = (
 
 const isNotTuple = (schema: JsonSchema7) => !Array.isArray(schema.items);
 
+const styles: StyleRulesCallback<'jsfTreeMasterDetail' |
+                                 'jsfTreeMasterDetailContent' |
+                                 'jsfTreeMasterDetailMaster' |
+                                 'jsfTreeMasterDetailDetail'> = () => ({
+  jsfTreeMasterDetailContent: {},
+  jsfTreeMasterDetail: {
+    display: 'flex',
+    flexDirection: 'column', // tslint:disable-next-line:object-literal-key-quotes
+    '& $jsfTreeMasterDetailContent': {
+      display: 'flex',
+      flexDirection: 'row'
+    }
+  },
+  jsfTreeMasterDetailMaster: {
+    flex: 1,
+    padding: '0.5em',
+    borderStyle: 'solid',
+    borderWidth: 'thin',
+    borderColor: 'lightgrey',
+    borderRadius: '0.2em', // tslint:disable-next-line:object-literal-key-quotes
+    '& ul': {
+      listStyleType: 'none',
+      margin: 0,
+      padding: 0,
+      position: 'relative',
+      overflow: 'hidden', // tslint:disable-next-line:object-literal-key-quotes
+      '&:after': {
+        content: '""',
+        position: 'absolute',
+        left: '0.2em',
+        borderLeft: '1px solid lightgrey',
+        height: '0.6em',
+        bottom: '0'
+      }, // tslint:disable-next-line:object-literal-key-quotes
+      '&:last-child::after': {
+        display: 'none'
+      }
+    }
+  },
+  jsfTreeMasterDetailDetail: {
+    flex: 3,
+    padding: '0.5em',
+    borderStyle: 'solid',
+    borderWidth: 'thin',
+    borderColor: 'lightgrey',
+    borderRadius: '0.2em', // tslint:disable-next-line:object-literal-key-quotes
+    '&:first-child': {
+      marginRight: '0.25em'
+    }
+  }
+});
+
 export interface TreeMasterDetailState extends ControlState {
   selected: {
     schema: JsonSchema7,
@@ -119,7 +177,13 @@ export interface TreeProps extends ControlProps {
   imageProvider: any;
 }
 
-export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> {
+export class TreeMasterDetail extends Control
+  <TreeProps &
+    WithStyles<'jsfTreeMasterDetail' |
+               'jsfTreeMasterDetailContent' |
+               'jsfTreeMasterDetailMaster' |
+               'jsfTreeMasterDetailDetail'>,
+    TreeMasterDetailState> {
 
   componentWillMount() {
     const { uischema, resolvedRootData, resolvedSchema } = this.props;
@@ -184,7 +248,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
 
   render() {
     const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot,
-            uiSchemata, filterPredicate, labelProvider, imageProvider } = this.props;
+            uiSchemata, filterPredicate, labelProvider, imageProvider, classes } = this.props;
     const controlElement = uischema as MasterDetailLayout;
     const dialogProps = {
       open: this.state.dialog.open
@@ -209,23 +273,22 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
     }
 
     return (
-      <div hidden={!visible} className={'jsf-treeMasterDetail'}>
-        <div className={'jsf-treeMasterDetail-header'}>
+      <div hidden={!visible} className={classes.jsfTreeMasterDetail}>
+        <div>
           <label>
             {typeof controlElement.label === 'string' ? controlElement.label : ''}
           </label>
           {
             Array.isArray(resolvedRootData) &&
             <button
-              className='jsf-treeMasterDetail-add'
               onClick={addToRoot(schema, path)}
             >
               Add to root
             </button>
           }
         </div>
-        <div className='jsf-treeMasterDetail-content'>
-          <div className='jsf-treeMasterDetail-master'>
+        <div className={classes.jsfTreeMasterDetailContent}>
+          <div className={classes.jsfTreeMasterDetailMaster}>
             <Master
               uischema={uischema}
               schema={resolvedSchema}
@@ -238,7 +301,7 @@ export class TreeMasterDetail extends Control<TreeProps, TreeMasterDetailState> 
               imageProvider={imageProvider}
             />
           </div>
-          <div className='jsf-treeMasterDetail-detail'>
+          <div className={classes.jsfTreeMasterDetailDetail}>
             {
               this.state.selected ?
                 <JsonForms
@@ -309,8 +372,10 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const DnDTreeMasterDetail =
-  DragDropContext(HTML5Backend)(TreeMasterDetail);
+const DnDTreeMasterDetail = compose(
+  withStyles(styles, { name: 'TreeMasterDetail' }),
+  DragDropContext(HTML5Backend)
+)(TreeMasterDetail);
 
 export const TreeRenderer = connect(
     mapStateToProps,

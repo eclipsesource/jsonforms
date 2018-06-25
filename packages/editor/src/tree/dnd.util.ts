@@ -13,12 +13,6 @@ export const Types = {
  */
 export const CSS_DELAY = 30;
 
-export const CSS = {
-    DND_VALID_TARGET: 'jsf-editor-dnd-target-valid',
-    DND_INVALID_TARGET: 'jsf-editor-dnd-target-invalid',
-    DND_CURRENT_TARGET: 'jsf-editor-dnd-current-target'
-};
-
 /**
  * Information about a currently dragged data object.
  */

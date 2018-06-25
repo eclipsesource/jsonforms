@@ -1,4 +1,5 @@
 // tslint:disable:jsx-no-multiline-js
+
 import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
@@ -31,6 +32,12 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
+import {
+  StyleRulesCallback,
+  withStyles,
+  WithStyles
+} from '@material-ui/core/styles';
+import { compose } from 'recompose';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -39,6 +46,96 @@ import Typography from '@material-ui/core/Typography';
  * by the on click handler of this object list item which sets the selection to this item.
  */
 const RESET_SELECTION_DELAY = 40;
+
+const styles:
+  StyleRulesCallback<'listItem' |
+                     'withoutBorders' |
+                     'itemContainer' |
+                     'label' |
+                     'actionButton' |
+                     'selected'> = theme => ({
+  listItem: {
+    minHeight: '1em',
+    position: 'relative',
+    paddingLeft: '1.5em', // tslint:disable-next-line:object-literal-key-quotes
+    '&:before': {
+      content: '""',
+      position: 'absolute',
+      left: '0.2em',
+      borderTop: '1px solid lightgrey',
+      top: '0.5em',
+      width: '1em'
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:after': {
+      content: '""',
+      position: 'absolute',
+      left: '0.2em',
+      borderLeft: '1px solid lightgrey',
+      top: '-0.5em',
+      height: '100%'
+    }
+  },
+  withoutBorders: { // tslint:disable-next-line:object-literal-key-quotes
+    '&:last-child:after': {
+      display: 'none'
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:only-child': {
+      paddingLeft: '0.25em'
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:only-child:before': {
+      display: 'none'
+    }
+  },
+  itemContainer: {
+    display: 'flex',
+    flexDirection: 'row', // tslint:disable-next-line:object-literal-key-quotes
+    '& .icon': {
+      flexBasis: '1em',
+      minHeight: '1em',
+      marginRight: '0.25em',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center'
+    }
+  },
+  label: {
+    display: 'flex',
+    flex: 1,
+    marginRight: '1em',
+    minHeight: '1.5em',
+    alignItems: 'center', // tslint:disable-next-line:object-literal-key-quotes
+    '& span:first-child:empty': {
+      background: '#ffff00',
+      maxHeight: '1.5em'
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:hover': {
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      color: 'white',
+      opacity: 0.9,
+      backgroundColor: theme.palette.secondary.main,
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:hover $actionButton': {
+      display: 'flex',
+      justifyContent: 'center', // tslint:disable-next-line:object-literal-key-quotes
+      '&:hover': {
+        color: 'white',
+        backgroundColor: theme.palette.secondary.dark,
+        borderRadius: '50%'
+      }
+    }
+  },
+  actionButton: {
+    display: 'none',
+    cursor: 'pointer',
+    marginLeft: '0.25em',
+    fontWeight: 'normal',
+    width: 'inherit',
+    height: 'inherit'
+  },
+  selected: {
+    fontWeight: 'bold'
+  }
+});
 
 export interface ObjectListItemProps {
   path: string;
@@ -60,82 +157,87 @@ export interface ObjectListItemProps {
   imageProvider: any;
 }
 
-const ObjectListItem = (
-  {
-    path,
-    schema,
-    rootData,
-    data,
-    handlers,
-    selection,
-    filterPredicate,
-    containerProperties,
-    labelProvider,
-    imageProvider
-  }: ObjectListItemProps) => {
-  const pathSegments = path.split('.');
-  const parentPath = _.initial(pathSegments).join('.');
-  const liClasses = selection === data ? 'selected' : '';
-  const hasParent = !_.isEmpty(parentPath);
-  const scopedData = resolveData(rootData, parentPath);
-  const groupedProps = _.groupBy(containerProperties, property => property.property);
-  const imageClass = imageProvider(schema.$id);
+class ObjectListItem extends React.Component
+  <ObjectListItemProps &
+    WithStyles<'listItem' |
+               'withoutBorders' |
+               'itemContainer' |
+               'label' |
+               'actionButton' |
+               'selected'>, {}> {
 
-  // TODO: key should be set in caller
-  return (
-    <li className={liClasses} key={path}>
-      <div>
-        {imageClass !== '' ? <span className={imageClass} /> : ''}
+  render() {
+    const { path, schema, rootData, data, handlers, selection,
+            filterPredicate, containerProperties, labelProvider,
+            imageProvider, classes } = this.props;
+    const pathSegments = path.split('.');
+    const parentPath = _.initial(pathSegments).join('.');
+    const labelClass = selection === data ? classes.selected : '';
+    const hasParent = !_.isEmpty(parentPath);
+    const liClass =
+      !hasParent ? [classes.listItem, classes.withoutBorders].join(' ') : classes.listItem;
+    const scopedData = resolveData(rootData, parentPath);
+    const groupedProps = _.groupBy(containerProperties, property => property.property);
+    const imageClass = imageProvider(schema.$id);
+    // TODO: key should be set in caller
+    return (
+      <li
+        className={liClass}
+        key={path}
+      >
+        <div className={classes.itemContainer}>
+          {imageClass !== '' ? <span className={imageClass} /> : ''}
 
-        <span
-          className='label'
-          onClick={handlers.onSelect(schema, data, path)}
-        >
-          <Typography>
+          <span
+            className={classes.label}
+            onClick={handlers.onSelect(schema, data, path)}
+          >
+          <Typography className={labelClass}>
               {labelProvider(schema)(data)}
           </Typography>
-          {
-            !_.isEmpty(containerProperties) ?
-              (
-                <IconButton
-                  className='add'
-                  aria-label='Add'
-                  onClick={handlers.onAdd(schema, path)}
-                >
-                  <AddIcon />
-                </IconButton>
-              ) : ''
-          }
-          {
-            (hasParent || _.isArray(scopedData)) &&
-            <IconButton
-              className='remove'
-              aria-label='Remove'
-              onClick={handlers.onRemove}
-            >
-              <DeleteIcon />
-            </IconButton>
-          }
-        </span>
-      </div>
-      {
-        Object.keys(groupedProps).map(groupKey =>
-          <ExpandArray
-            key={groupKey}
-            containmentProps={groupedProps[groupKey]}
-            path={Paths.compose(path, groupKey)}
-            schema={schema}
-            selection={selection}
-            handlers={handlers}
-            filterPredicate={filterPredicate}
-            labelProvider={labelProvider}
-            imageProvider={imageProvider}
-          />
-      )
-    }
-    </li>
-  );
-};
+            {
+              !_.isEmpty(containerProperties) ?
+                (
+                  <IconButton
+                    className={classes.actionButton}
+                    aria-label='Add'
+                    onClick={handlers.onAdd(schema, path)}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                ) : ''
+            }
+            {
+              (hasParent || _.isArray(scopedData)) &&
+              <IconButton
+                className={classes.actionButton}
+                aria-label='Remove'
+                onClick={handlers.onRemove}
+              >
+                <DeleteIcon />
+              </IconButton>
+            }
+          </span>
+        </div>
+        {
+          Object.keys(groupedProps).map(groupKey =>
+            <ExpandArray
+              key={groupKey}
+              containmentProps={groupedProps[groupKey]}
+              path={Paths.compose(path, groupKey)}
+              schema={schema}
+              selection={selection}
+              handlers={handlers}
+              filterPredicate={filterPredicate}
+              labelProvider={labelProvider}
+              imageProvider={imageProvider}
+            />
+          )
+        }
+      </li>
+    );
+  }
+}
 
 const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
@@ -200,6 +302,10 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   };
 };
 
+const ListItem = compose(
+  withStyles(styles, { name: 'ObjectListItem' }),
+)(ObjectListItem);
+
 export interface ObjectListItemDndProps extends ObjectListItemProps {
   moveListItem: any;
   isRoot?: boolean;
@@ -229,11 +335,11 @@ const ObjectListItemDnd = (
     filterPredicate,
     containerProperties,
     labelProvider,
-    imageProvider
+    imageProvider,
   }: ObjectListItemDndProps
 ) => {
   const listItem = (
-    <ObjectListItem
+    <ListItem
       path={path}
       schema={schema}
       rootData={rootData}
