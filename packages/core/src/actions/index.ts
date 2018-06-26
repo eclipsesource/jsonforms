@@ -27,16 +27,14 @@ import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { UISchemaTester } from '../reducers/uischemas';
 
-const NAMESPACE = 'jsonforms';
-
-export const INIT = `${NAMESPACE}/INIT`;
+export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
-export const VALIDATE = `${NAMESPACE}/VALIDATE`;
-export const ADD_RENDERER = `${NAMESPACE}/ADD_RENDERER`;
-export const REMOVE_RENDERER = `${NAMESPACE}/REMOVE_RENDERER`;
-export const ADD_FIELD = `${NAMESPACE}/ADD_FIELD`;
-export const REMOVE_FIELD = `${NAMESPACE}/REMOVE_FIELD`;
-export const SET_CONFIG = `${NAMESPACE}/SET_CONFIG`;
+export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
+export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
+export const REMOVE_RENDERER : 'jsonforms/REMOVE_RENDERER' = 'jsonforms/REMOVE_RENDERER';
+export const ADD_FIELD : 'jsonforms/ADD_FIELD' = 'jsonforms/ADD_FIELD';
+export const REMOVE_FIELD: 'jsonforms/REMOVE_FIELD' = 'jsonforms/REMOVE_FIELD';
+export const SET_CONFIG : 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
 export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 
