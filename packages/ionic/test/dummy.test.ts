@@ -22,7 +22,5 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export * from './base.renderer';
-export * from './control';
-export * from './jsonforms.component';
-export * from './jsonforms.module';
+import test from 'ava';
+test.todo('dummy');
