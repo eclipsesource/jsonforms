@@ -27,12 +27,14 @@ import {
   ComponentFactoryResolver,
   Directive,
   Input,
+  OnDestroy,
   OnInit,
   Type,
   ViewContainerRef
 } from '@angular/core';
 import {
   JsonFormsProps,
+  JsonSchema,
   mapStateToDispatchRendererProps,
   UISchemaElement
 } from '@jsonforms/core';
@@ -44,10 +46,14 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 @Directive({
   selector: 'jsonforms-outlet',
 })
-export class JsonFormsOutlet implements OnInit {
+export class JsonFormsOutlet implements OnInit, OnDestroy {
 
+  @Input() path: string;
   @Input() uischema: UISchemaElement;
+  @Input() schema: UISchemaElement;
+
   private subscription;
+
   constructor(
     private viewContainerRef: ViewContainerRef,
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -60,11 +66,19 @@ export class JsonFormsOutlet implements OnInit {
                                        (x, y) => _.isEqual(x, y)
     );
     this.subscription = state$.subscribe(props => {
-      const {renderers, schema, uischema} = props as JsonFormsProps;
+      const { renderers } = props as JsonFormsProps;
+      const schema : JsonSchema = this.schema || props.schema;
+      const uischema = this.uischema || props.uischema;
+
       const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
       let bestComponent: Type<any> = UnknownRenderer;
       if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
         bestComponent = renderer.renderer;
+      }
+      if (bestComponent === UnknownRenderer) {
+        console.warn('No renderer found for:');
+        console.warn('\tSchema', JSON.stringify(schema, null, 2));
+        console.warn('\tUI Schema', JSON.stringify(uischema, null, 2));
       }
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory(bestComponent);
       this.viewContainerRef.clear();
@@ -74,6 +88,7 @@ export class JsonFormsOutlet implements OnInit {
         const instance = (componentRef.instance as JsonFormsBaseRenderer);
         instance.uischema = uischema;
         instance.schema = schema;
+        instance.path = this.path;
       }
     });
   }
