@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TreeRenderer } from './tree/TreeRenderer';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
   palette: {
@@ -11,26 +11,27 @@ const theme = createMuiTheme({
   }
 });
 
-const EditorIde = props => {
-  const { uischema, schema, filterPredicate, labelProvider, imageProvider} = props;
-  const editor: {[x: string]: any} = {
+const styles = {
+  editor: {
     margin: 'auto',
     width: '100%'
-  };
+  },
+};
+
+const EditorIde = props => {
+  const { classes, uischema, schema, filterPredicate, labelProvider, imageProvider} = props;
   return (
     <MuiThemeProvider theme={theme}>
-      <div>
         <TreeRenderer
-          className={editor}
+          className={classes.editor}
           uischema={uischema}
           schema={schema}
           filterPredicate={filterPredicate}
           labelProvider={labelProvider}
           imageProvider={imageProvider}
         />
-      </div>
     </MuiThemeProvider>
   );
 };
 
-export default EditorIde;
+export default withStyles(styles)(EditorIde);

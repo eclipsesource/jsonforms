@@ -101,20 +101,20 @@ const Master = (
 
 const isNotTuple = (schema: JsonSchema7) => !Array.isArray(schema.items);
 
-const styles: StyleRulesCallback<'jsfTreeMasterDetail' |
-                                 'jsfTreeMasterDetailContent' |
-                                 'jsfTreeMasterDetailMaster' |
-                                 'jsfTreeMasterDetailDetail'> = () => ({
-  jsfTreeMasterDetailContent: {},
-  jsfTreeMasterDetail: {
+const styles: StyleRulesCallback<'treeMasterDetailContent' |
+                                 'treeMasterDetail' |
+                                 'treeMasterDetailMaster' |
+                                 'treeMasterDetailDetail'> = () => ({
+  treeMasterDetailContent: {},
+  treeMasterDetail: {
     display: 'flex',
     flexDirection: 'column', // tslint:disable-next-line:object-literal-key-quotes
-    '& $jsfTreeMasterDetailContent': {
+    '& $treeMasterDetailContent': {
       display: 'flex',
       flexDirection: 'row'
     }
   },
-  jsfTreeMasterDetailMaster: {
+  treeMasterDetailMaster: {
     flex: 1,
     padding: '0.5em',
     borderStyle: 'solid',
@@ -140,7 +140,7 @@ const styles: StyleRulesCallback<'jsfTreeMasterDetail' |
       }
     }
   },
-  jsfTreeMasterDetailDetail: {
+  treeMasterDetailDetail: {
     flex: 3,
     padding: '0.5em',
     borderStyle: 'solid',
@@ -179,10 +179,10 @@ export interface TreeProps extends ControlProps {
 
 export class TreeMasterDetail extends Control
   <TreeProps &
-    WithStyles<'jsfTreeMasterDetail' |
-               'jsfTreeMasterDetailContent' |
-               'jsfTreeMasterDetailMaster' |
-               'jsfTreeMasterDetailDetail'>,
+    WithStyles<'treeMasterDetailContent' |
+               'treeMasterDetail'|
+               'treeMasterDetailMaster' |
+               'treeMasterDetailDetail'>,
     TreeMasterDetailState> {
 
   componentWillMount() {
@@ -273,7 +273,7 @@ export class TreeMasterDetail extends Control
     }
 
     return (
-      <div hidden={!visible} className={classes.jsfTreeMasterDetail}>
+      <div hidden={!visible} className={classes.treeMasterDetail}>
         <div>
           <label>
             {typeof controlElement.label === 'string' ? controlElement.label : ''}
@@ -287,8 +287,8 @@ export class TreeMasterDetail extends Control
             </button>
           }
         </div>
-        <div className={classes.jsfTreeMasterDetailContent}>
-          <div className={classes.jsfTreeMasterDetailMaster}>
+        <div className={classes.treeMasterDetailContent}>
+          <div className={classes.treeMasterDetailMaster}>
             <Master
               uischema={uischema}
               schema={resolvedSchema}
@@ -301,7 +301,7 @@ export class TreeMasterDetail extends Control
               imageProvider={imageProvider}
             />
           </div>
-          <div className={classes.jsfTreeMasterDetailDetail}>
+          <div className={classes.treeMasterDetailDetail}>
             {
               this.state.selected ?
                 <JsonForms
