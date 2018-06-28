@@ -1,6 +1,3 @@
-.icon {
-  background-repeat: no-repeat;
-}
 .icon.user {
   background-image: url('./User.png');
 }
