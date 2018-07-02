@@ -2,6 +2,8 @@ import { JsonSchema } from '@jsonforms/core';
 
 /**
  * Interface defining a minimal interface for a JsonSchema-based editor.
+ *
+ * @deprecated
  */
 export interface Editor {
   /**

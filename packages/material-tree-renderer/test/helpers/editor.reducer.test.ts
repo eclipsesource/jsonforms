@@ -1,6 +1,44 @@
-import { createEditorStore } from '../../src/helpers/util';
-import { getContainerProperties, setContainerProperties } from '../../src/reducers';
+import { Actions, jsonformsReducer } from '@jsonforms/core';
+import {
+  getContainerProperties,
+  setContainerProperties,
+  treeWithDetailReducer
+} from '../../src/reducers';
 import { findAllContainerProperties } from '../../src/services/property.util';
+import { combineReducers, createStore, Store } from 'redux';
+
+export const createEditorStore = (
+  data = {},
+  schema,
+  uischema,
+  fields,
+  renderers,
+  imageMapping?,
+  labelMapping?,
+  modelMapping?,
+  uiSchemata = {},
+  containerProperties = {}): Store<any> => {
+  const store = createStore(
+    combineReducers({ jsonforms: jsonformsReducer({ treeWithDetail: treeWithDetailReducer }) }),
+    {
+      jsonforms: {
+        renderers,
+        fields,
+        treeWithDetail: {
+          imageMapping,
+          labelMapping,
+          modelMapping,
+          uiSchemata,
+          containerProperties
+        }
+      }
+    }
+  );
+
+  store.dispatch(Actions.init(data, schema, uischema));
+
+  return store;
+};
 
 const taskSchema = {
   'type': 'object',
