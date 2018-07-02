@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "echo 'Nothing to do'",
     "eject": "react-scripts eject"
   }
 }
