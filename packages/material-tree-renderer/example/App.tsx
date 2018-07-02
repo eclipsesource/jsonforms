@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import EditorIde from '../src/EditorIde';
+import EditorIde from '../src/ThemedTreeWithDetail';
 import EditorBar from './app-bar/EditorBar';
 import {
   getData,

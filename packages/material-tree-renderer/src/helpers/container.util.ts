@@ -7,10 +7,9 @@ import { Property } from '../services/property.util';
  *
  * @param data The data object to match
  * @param properties The array of properties of root schema
- * @param modelMapping The model mapping used to filter properties of the given data
+ * @param filterPredicate used to filter properties of the given data
  * @return The matching {@link Property}
  */
-// TODO type model mapping
 export const matchContainerProperty =
   (data: Object, properties: Property[], filterPredicate: any) => {
     // TODO improve handling

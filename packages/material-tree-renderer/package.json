@@ -1,7 +1,7 @@
 {
-  "name": "@jsonforms/editor",
+  "name": "@jsonforms/material-tree-renderer",
   "version": "2.0.2",
-  "description": "Editor package for JSON Forms",
+  "description": "Material-based tree renderer for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
@@ -26,7 +26,7 @@
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Editor' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Material Tree Renderer' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -54,7 +54,6 @@
   "dependencies": {
     "@jsonforms/core": "^2.0.2",
     "@jsonforms/react": "^2.0.2",
-    "@jsonforms/webcomponent": "^2.0.2",
     "@material-ui/core": "^1.2.1",
     "@material-ui/icons": "^1.0.0",
     "ajv": "^6.4.0",
@@ -71,7 +70,6 @@
   },
   "devDependencies": {
     "@jsonforms/material-renderers": "^2.0.2",
-    "@jsonforms/vanilla-renderers": "^2.0.2",
     "@types/lodash": "^4.14.104",
     "@types/node": "^8.0.0",
     "awesome-typescript-loader": "^3.1.3",

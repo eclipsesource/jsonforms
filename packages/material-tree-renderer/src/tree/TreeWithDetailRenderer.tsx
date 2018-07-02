@@ -14,18 +14,15 @@ import {
   Runtime,
   UISchemaElement,
 } from '@jsonforms/core';
-import {
-  Control,
-  JsonForms
-} from '@jsonforms/react';
+import { Control, JsonForms } from '@jsonforms/react';
 import { connect } from 'react-redux';
 import ObjectListItem from './ObjectListItem';
 import ExpandRootArray from './ExpandRootArray';
-import EditorDialog from './EditorDialog';
+import AddItemDialog from './AddItemDialog';
 import HTML5Backend from 'react-dnd-html5-backend';
 // import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
-import { MasterDetailLayout } from '../master-detail-layout';
+import { TreeWithDetail } from '../TreeWithDetail';
 import { getUiSchemata } from '../reducers';
 import {
   StyleRulesCallback,
@@ -187,7 +184,7 @@ export class TreeMasterDetail extends Control
 
   componentWillMount() {
     const { uischema, resolvedRootData, resolvedSchema } = this.props;
-    const controlElement = uischema as MasterDetailLayout;
+    const controlElement = uischema as TreeWithDetail;
     this.setState({
       dialog: {
         open: false,
@@ -249,7 +246,7 @@ export class TreeMasterDetail extends Control
   render() {
     const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot,
             uiSchemata, filterPredicate, labelProvider, imageProvider, classes } = this.props;
-    const controlElement = uischema as MasterDetailLayout;
+    const controlElement = uischema as TreeWithDetail;
     const dialogProps = {
       open: this.state.dialog.open
     };
@@ -315,7 +312,7 @@ export class TreeMasterDetail extends Control
         <div>
           {
             this.state.dialog.open &&
-              <EditorDialog
+              <AddItemDialog
                 path={this.state.dialog.path}
                 schema={this.state.dialog.schema}
                 closeDialog={this.closeDialog}
@@ -377,8 +374,8 @@ const DnDTreeMasterDetail = compose(
   DragDropContext(HTML5Backend)
 )(TreeMasterDetail);
 
-export const TreeRenderer = connect(
+export const TreeWithDetailRenderer = connect(
     mapStateToProps,
     mapDispatchToProps
   )(DnDTreeMasterDetail);
-export default TreeRenderer;
+export default TreeWithDetailRenderer;

@@ -22,7 +22,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-export interface EditorDialogProps {
+export interface AddItemDialogProps {
   rootData: any;
   containerProperties: any;
   rootSchema: any;
@@ -34,7 +34,7 @@ export interface EditorDialogProps {
   add?: any;
 }
 
-class EditorDialog extends React.Component<EditorDialogProps, {}> {
+class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
 
   render() {
     const {
@@ -142,4 +142,4 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(AddItemDialog);

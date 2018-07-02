@@ -1,7 +1,7 @@
-export * from './EditorIde';
-export * from './master-detail-layout';
+export * from './ThemedTreeWithDetail';
+export * from './TreeWithDetail';
 export * from './editor';
-export * from './tree/TreeRenderer';
+export * from './tree/TreeWithDetailRenderer';
 export * from './helpers/util';
 export * from './reducers/index';
 

@@ -2,27 +2,30 @@ import * as _ from 'lodash';
 import { ModelMapping } from '../editor-context';
 import { Property } from '../services/property.util';
 
-export const ADD_UI_SCHEMA: 'jsonforms/editor/ADD_UISCHEMA' = 'jsonforms/editor/ADD_UISCHEMA';
+export const ADD_UI_SCHEMA: 'jsonforms/treeWithDetail/ADD_UISCHEMA' =
+  'jsonforms/treeWithDetail/ADD_UISCHEMA';
 export const SET_CONTAINER_PROPERTIES:
-  'jsonforms/editor/SET_CONTAINER_PROPERTIES' =
-  'jsonforms/editor/SET_CONTAINER_PROPERTIES';
+  'jsonforms/treeWithDetail/SET_CONTAINER_PROPERTIES' =
+  'jsonforms/treeWithDetail/SET_CONTAINER_PROPERTIES';
 
-export const getUiSchemata = state => extractUiSchemata(state.jsonforms.editor);
-export const getImageMapping = state => extractImageMapping(state.jsonforms.editor);
-export const getLabelMapping = state => extractLabelMapping(state.jsonforms.editor);
-export const getModelMapping = state => extractModelMapping(state.jsonforms.editor);
-export const getResources = state => extractResources(state.jsonforms.editor);
-export const getIdentifyingProperty = state => extractIdentifyingProperty(state.jsonforms.editor);
-export const getContainerProperties = state => extractContainerProperties(state.jsonforms.editor);
+export const getUiSchemata = state => extractUiSchemata(state.jsonforms.treeWithDetail);
+export const getImageMapping = state => extractImageMapping(state.jsonforms.treeWithDetail);
+export const getLabelMapping = state => extractLabelMapping(state.jsonforms.treeWithDetail);
+export const getModelMapping = state => extractModelMapping(state.jsonforms.treeWithDetail);
+export const getResources = state => extractResources(state.jsonforms.treeWithDetail);
+export const getIdentifyingProperty = state =>
+  extractIdentifyingProperty(state.jsonforms.treeWithDetail);
+export const getContainerProperties = state =>
+  extractContainerProperties(state.jsonforms.treeWithDetail);
 
 export interface AddUiSchemaAction {
-    type: 'jsonforms/editor/ADD_UISCHEMA';
+    type: 'jsonforms/treeWithDetail/ADD_UISCHEMA';
     schemaId: string;
     uiSchema: any;
 }
 
 export interface SetContainerPropertiesAction {
-  type: 'jsonforms/editor/SET_CONTAINER_PROPERTIES';
+  type: 'jsonforms/treeWithDetail/SET_CONTAINER_PROPERTIES';
   containerProperties: { [schemaId: string]: Property[] };
 }
 
@@ -37,7 +40,7 @@ const extractContainerProperties = state => state.containerProperties;
 // TODO Add action to add a resource when referencing is implemented
 
 /**
- * Creates an action to add a detail UI schema for the editor.
+ * Creates an action to add a detail UI schema for the Tree with detail.
  * If there already is a UI Schema for the given schema id,
  * it is overwritten with the given one.
  *
@@ -57,7 +60,7 @@ export const addUiSchema = (schemaId: string, uiSchema): AddUiSchemaAction => {
  * If there already are container properties for the given schema id
  * they are overwritten with the given one
  *
- * @param {[schemaId: string]: Property[]} containerProperties
+ * @param containerProperties
  * @returns {SetContainerPropertiesAction}
  */
 export const setContainerProperties =
@@ -69,10 +72,10 @@ export const setContainerProperties =
   };
 };
 
-export interface EditorState {
+export interface TreeWithDetailState {
     uiSchemata?: { [uiSchemaId: string]: any };
     /**
-     * Configures the image mappings for the types defined in the editor's schema.
+     * Configures the image mappings for the types defined in the treeWithDetail's schema.
      * An image mapping maps from a schema id to the schema's image name.
      *  This name is used to resolve the css style that configure a label
      * for instances of the type in the containment tree.
@@ -80,7 +83,7 @@ export interface EditorState {
      */
     imageMapping?: { [schemaId: string]: string };
     /**
-     * Configures the label mappings for the types defined in the editor's schema.
+     * Configures the label mappings for the types defined in the treeWithDetail's schema.
      * A label mapping maps from a schema id to a property defined in this schema.
      * This property defines the name of a rendered object in the containment tree.
      * Both the id and the property name are configured as Strings.
@@ -124,12 +127,12 @@ export interface EditorState {
     containerProperties: { [schemaId: string]: Property[] };
 }
 
-export const editorReducer = (
-    state: EditorState = {
+export const treeWithDetailReducer = (
+    state: TreeWithDetailState = {
         uiSchemata: {},
         containerProperties: {}
     },
-    action): EditorState => {
+    action): TreeWithDetailState => {
     switch (action.type) {
         case ADD_UI_SCHEMA:
             if (_.isEmpty(action.schemaId)) {
