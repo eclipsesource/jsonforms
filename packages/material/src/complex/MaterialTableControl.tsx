@@ -32,7 +32,7 @@ import {
   Paths
 } from '@jsonforms/core';
 import { DispatchField } from '@jsonforms/react';
-import { ValidationIcon } from './ValidationIcon';
+import ValidationIcon from './ValidationIcon';
 import { TableToolbar } from './TableToolbar';
 
 const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) => {
@@ -98,7 +98,10 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema
       <Grid container alignItems='center' justify='center' spacing={0}>
         <Hidden smUp={cellErrors.length === 0}>
           <Grid item xs={1}>
-            <ValidationIcon id={`tooltip-${cellPath}`} errorMessages={cellErrors}/>
+            <ValidationIcon
+              id={`tooltip-${cellPath}`}
+              errorMessages={cellErrors}
+            />
           </Grid>
         </Hidden>
         <Grid item xs>

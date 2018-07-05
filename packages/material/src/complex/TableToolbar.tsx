@@ -34,7 +34,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { ValidationIcon } from './ValidationIcon';
+import ValidationIcon from './ValidationIcon';
 
 export const TableToolbar = (
   {
