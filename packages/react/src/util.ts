@@ -23,10 +23,36 @@
   THE SOFTWARE.
 */
 import {
-    mapDispatchToControlProps,
-    mapStateToControlProps
-    } from '@jsonforms/core';
+  mapDispatchToControlProps,
+  mapStateToControlProps,
+  UISchemaElement
+} from '@jsonforms/core';
 import { connect } from 'react-redux';
+
+const idMappings: Map<UISchemaElement, string> = new Map<UISchemaElement, string>();
+const getID = (element: UISchemaElement, proposedID: string) => {
+  if (!idMappings.has(element)) {
+    let tries = 0;
+    while (!isUniqueID(proposedID, tries)) {
+      tries++;
+    }
+    const newID = createID(proposedID, tries);
+    idMappings.set(element, newID);
+  }
+  return idMappings.get(element);
+};
+const isUniqueID = (idBase: string, iteration: number) => {
+  const newID = createID(idBase, iteration);
+  for (const value of Array.from(idMappings.values())) {
+    if (value === newID) {
+      return false;
+    }
+  }
+  return true;
+};
+const createID = (idBase: string, iteration: number) =>
+  iteration !== 0 ? idBase + iteration : idBase;
+
 /**
  * JSONForms specific connect function. This is a wrapper
  * around redux's connect function and is provided for convenience
@@ -40,20 +66,31 @@ export const connectToJsonForms = (
   mapStateToProps: (state, ownProps) => any = mapStateToControlProps,
   mapDispatchToProps: (dispatch, ownProps) => any = mapDispatchToControlProps) => Component => {
 
-  return connect(
-    (state, ownProps) => {
-      const props = mapStateToProps(state, ownProps);
-      if (props.scopedSchema !== undefined &&
-        (props.scopedSchema.type === 'integer' || props.scopedSchema.type === 'number')) {
+    return connect(
+      (state, ownProps) => {
+        let props = mapStateToProps(state, ownProps);
+        // Make sure IDs are unique
+        if (props.scopedSchema !== undefined) {
+          props = {
+            ...props,
+            id: getID(props.uischema, props.id)
+          };
+        }
+        if (props.scopedSchema !== undefined &&
+          (props.scopedSchema.type === 'integer' || props.scopedSchema.type === 'number')) {
+          return {
+            ...props,
+            id: getID(props.uischema, props.id),
+            toFormatted: n => n === null || n === undefined ? '' : n.toString(),
+            fromFormatted: s => Number(s)
+          };
+        }
+
         return {
           ...props,
-          toFormatted: n => n === null || n === undefined ? '' : n.toString(),
-          fromFormatted: s => Number(s)
+          id: getID(props.uischema, props.id),
         };
-      }
-
-      return props;
-    },
-    mapDispatchToProps
-  )(Component);
-};
+      },
+      mapDispatchToProps
+    )(Component);
+  };
