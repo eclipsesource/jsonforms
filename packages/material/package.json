@@ -14,15 +14,15 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
-    "build": "../../node_modules/.bin/tsc",
-    "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
+    "bundle": "webpack --config ./webpack/webpack.build.js --env=production --display-error-details",
+    "build": "tsc",
+    "dev": "webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "jest --no-cache",
     "test-cov": "jest --no-cache",
-    "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "report": "nyc report --reporter=html",
+    "doc": "typedoc --name 'JSON Forms Material Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
     "verbose": true,

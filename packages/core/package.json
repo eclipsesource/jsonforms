@@ -16,14 +16,14 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
-    "build": "../../node_modules/.bin/tsc",
+    "bundle": "webpack --config ./webpack.build.js --env=production --display-error-details",
+    "build": "tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
-    "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "report": "nyc report --reporter=html",
+    "test": "tsc --project test/tsconfig.test.json && ava",
+    "test-cov": "tsc --project test/tsconfig.test.json && nyc ava",
+    "doc": "typedoc --name 'JSON Forms Core' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "ava": {
     "verbose": true,
