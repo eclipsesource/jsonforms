@@ -30,7 +30,6 @@ import MaterialNumberField, { materialNumberFieldTester } from './MaterialNumber
 import MaterialNumberFormatField, {
   materialNumberFormatFieldTester
 } from './MaterialNumberFormatField';
-import MaterialSliderField, { materialSliderFieldTester } from './MaterialSliderField';
 import MaterialTextField, { materialTextFieldTester } from './MaterialTextField';
 import MaterialTimeField, { materialTimeFieldTester } from './MaterialTimeField';
 
@@ -47,8 +46,6 @@ export {
   materialNumberFieldTester,
   MaterialNumberFormatField,
   materialNumberFormatFieldTester,
-  MaterialSliderField,
-  materialSliderFieldTester,
   MaterialTextField,
   materialTextFieldTester,
   MaterialTimeField,
