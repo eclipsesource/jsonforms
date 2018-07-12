@@ -25,48 +25,70 @@
 import * as _ from 'lodash';
 // TODO: pass in uischema and data instead of props and state
 import { getData } from '../reducers';
-import { LeafCondition, RuleEffect, UISchemaElement } from '../models/uischema';
+import {
+  Condition,
+  LeafCondition,
+  RuleEffect,
+  SchemaBasedCondition,
+  UISchemaElement
+} from '../models/uischema';
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
+import { createAjv } from './validator';
 
-const isRuleDefined = (uischema: UISchemaElement): boolean =>
-  !_.has(uischema, 'rule.condition') || !_.has(uischema, 'rule.condition.type') ||
+const ajv = createAjv();
+
+const ruleIsMissingProperties = (uischema: UISchemaElement): boolean =>
+  !_.has(uischema, 'rule.condition') ||
   !_.has(uischema, 'rule.condition.scope') ||
-  !_.has(uischema, 'rule.condition.expectedValue');
+  (!_.has(uischema, 'rule.condition.expectedValue') && !_.has(uischema, 'rule.condition.schema'));
 
-export const evalVisibility = (uischema: UISchemaElement, data: any) => {
-  // TODO condition evaluation should be done somewhere else
-  if (isRuleDefined(uischema)) {
+const isLeafCondition = (condition: Condition): condition is LeafCondition =>
+  condition.type === 'LEAF';
 
+const isSchemaCondition = (condition: Condition): condition is SchemaBasedCondition =>
+  condition.type === undefined;
+
+const isConditionFulfilled = (uischema: UISchemaElement, data: any) => {
+  if (ruleIsMissingProperties(uischema)) {
     return true;
   }
-  const condition = uischema.rule.condition as LeafCondition;
-  const value = resolveData(data, toDataPath(condition.scope));
-  const equals = value === condition.expectedValue;
+
+  const condition = uischema.rule.condition;
+
+  if (isLeafCondition(condition)) {
+    const value = resolveData(data, toDataPath(condition.scope));
+    return value === condition.expectedValue;
+  } else if (isSchemaCondition(condition)) {
+    const value = resolveData(data, toDataPath(condition.scope));
+    return  ajv.validate(condition.schema, value);
+  } else {
+    // unknown condition
+    return true;
+  }
+};
+
+export const evalVisibility = (uischema: UISchemaElement, data: any) => {
+  const fulfilled = isConditionFulfilled(uischema, data);
 
   switch (uischema.rule.effect) {
-    case RuleEffect.HIDE: return !equals;
-    case RuleEffect.SHOW: return equals;
+    case RuleEffect.HIDE:
+      return !fulfilled;
+    case RuleEffect.SHOW:
+      return fulfilled;
     default:
-    // visible by default
-    return true;
+      // visible by default
+      return true;
   }
 };
 
 export const evalEnablement = (uischema: UISchemaElement, data: any) => {
 
-  if (isRuleDefined(uischema)) {
-
-    return true;
-  }
-
-  const condition = uischema.rule.condition as LeafCondition;
-  const value = resolveData(data, toDataPath(condition.scope));
-  const equals = value === condition.expectedValue;
+  const fulfilled = isConditionFulfilled(uischema, data);
 
   switch (uischema.rule.effect) {
-    case RuleEffect.DISABLE: return !equals;
-    case RuleEffect.ENABLE: return equals;
+    case RuleEffect.DISABLE: return !fulfilled;
+    case RuleEffect.ENABLE: return fulfilled;
     default:
     // enabled by default
     return true;

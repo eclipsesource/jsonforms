@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import test from 'ava';
-import { ControlElement, LeafCondition, RuleEffect } from '../../src';
+import { ControlElement, LeafCondition, RuleEffect, SchemaBasedCondition } from '../../src';
 import { evalEnablement, evalVisibility } from '../../src/util/runtime';
 
 test('evalVisibility show valid case', t => {
@@ -45,6 +45,52 @@ test('evalVisibility show valid case', t => {
         ruleValue: 'bar'
     };
     t.is(evalVisibility(uischema, data), true);
+});
+
+test('evalVisibility show valid case based on schema condition', t => {
+  const condition: SchemaBasedCondition = {
+    scope: '#/properties/ruleValue',
+    schema: {
+        const: 'bar'
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.SHOW,
+      condition
+    }
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar'
+  };
+  t.is(evalVisibility(uischema, data), true);
+});
+
+test.only('evalVisibility show valid case based on schema condition and enum', t => {
+  const condition: SchemaBasedCondition = {
+    scope: '#/properties/ruleValue',
+    schema: {
+      enum: ['bar', 'baz']
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.SHOW,
+      condition
+    }
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar'
+  };
+  t.is(evalVisibility(uischema, data), true);
+  t.is(evalVisibility(uischema, { ...data, ruleValue: 'baz', }), true);
+  t.is(evalVisibility(uischema, { ...data, ruleValue: 'foo'}), false);
 });
 
 test('evalVisibility show invalid case', t => {
@@ -190,4 +236,28 @@ test('evalEnablement disable invalid case', t => {
         ruleValue: 'foobar'
     };
     t.is(evalEnablement(uischema, data), true);
+});
+
+test('evalEnablement disable invalid case based on schema condition', t => {
+  const condition: SchemaBasedCondition = {
+    scope: '#/properties/ruleValue',
+    schema: {
+      enum: ['bar', 'baz']
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/value',
+    rule: {
+      effect: RuleEffect.DISABLE,
+      condition
+    }
+  };
+  const data = {
+    value: 'foo',
+    ruleValue: 'bar'
+  };
+  t.is(evalEnablement(uischema, data), true);
+  t.is(evalEnablement(uischema, {...data, ruleValue: 'baz'}), true);
+  t.is(evalEnablement(uischema, {...data, ruleValue: 'foo'}), false);
 });

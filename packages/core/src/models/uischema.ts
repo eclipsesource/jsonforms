@@ -22,6 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import {JsonSchema} from './jsonSchema';
+
 /**
  * Interface for describing an UI schema element that is referencing
  * a subschema. The value of the scope must be a JSON Pointer.
@@ -78,7 +80,7 @@ export interface Condition {
   /**
    * The type of condition.
    */
-  type: string;
+  type?: string;
 }
 
 /**
@@ -92,6 +94,10 @@ export interface LeafCondition extends Condition, Scopable {
    * The expected value when evaluating the condition
    */
   expectedValue: any;
+}
+
+export interface SchemaBasedCondition extends Condition, Scopable {
+  schema: JsonSchema;
 }
 
 /**
