@@ -47,7 +47,7 @@ const isLeafCondition = (condition: Condition): condition is LeafCondition =>
   condition.type === 'LEAF';
 
 const isSchemaCondition = (condition: Condition): condition is SchemaBasedCondition =>
-  condition.type === undefined;
+  _.has(condition, 'schema');
 
 const isConditionFulfilled = (uischema: UISchemaElement, data: any) => {
   if (ruleIsMissingProperties(uischema)) {
@@ -72,26 +72,21 @@ export const evalVisibility = (uischema: UISchemaElement, data: any) => {
   const fulfilled = isConditionFulfilled(uischema, data);
 
   switch (uischema.rule.effect) {
-    case RuleEffect.HIDE:
-      return !fulfilled;
-    case RuleEffect.SHOW:
-      return fulfilled;
-    default:
-      // visible by default
-      return true;
+    case RuleEffect.HIDE: return !fulfilled;
+    case RuleEffect.SHOW: return fulfilled;
+    // visible by default
+    default: return true;
   }
 };
 
 export const evalEnablement = (uischema: UISchemaElement, data: any) => {
-
   const fulfilled = isConditionFulfilled(uischema, data);
 
   switch (uischema.rule.effect) {
     case RuleEffect.DISABLE: return !fulfilled;
     case RuleEffect.ENABLE: return fulfilled;
-    default:
     // enabled by default
-    return true;
+    default: return true;
   }
 };
 
