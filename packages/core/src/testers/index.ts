@@ -379,7 +379,8 @@ export const isRangeControl = and(
     schema.hasOwnProperty('maximum') &&
     schema.hasOwnProperty('minimum') &&
     schema.hasOwnProperty('default')
-  )
+  ),
+  optionIs('slider', true)
 );
 
 /**

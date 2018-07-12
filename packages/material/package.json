@@ -58,6 +58,7 @@
     "@jsonforms/core": "^2.0.2",
     "@jsonforms/react": "^2.0.2",
     "@material-ui/core": "^1.2.1",
+    "@material-ui/lab": "^1.0.0-alpha.5",
     "@material-ui/icons": "^1.0.0",
     "material-ui-pickers": "1.0.0-rc.9",
     "moment": "^2.20.1",

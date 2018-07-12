@@ -28,6 +28,5 @@ export { MaterialEnumField } from './MaterialEnumField';
 export { MaterialIntegerField } from './MaterialIntegerField';
 export { MaterialNumberField } from './MaterialNumberField';
 export { MaterialNumberFormatField } from './MaterialNumberFormatField';
-export { MaterialSliderField } from './MaterialSliderField';
 export { MaterialTextField } from './MaterialTextField';
 export { MaterialTimeField } from './MaterialTimeField';

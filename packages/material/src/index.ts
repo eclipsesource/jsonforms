@@ -36,6 +36,8 @@ import {
   materialInputControlTester,
   MaterialNativeControl,
   materialNativeControlTester,
+  MaterialSliderControl,
+  materialSliderControlTester
 } from './controls';
 import {
   MaterialArrayLayout,
@@ -62,8 +64,6 @@ import {
   materialNumberFieldTester,
   MaterialNumberFormatField,
   materialNumberFormatFieldTester,
-  MaterialSliderField,
-  materialSliderFieldTester,
   MaterialTextField,
   materialTextFieldTester,
   MaterialTimeField,
@@ -84,6 +84,7 @@ export const materialRenderers = [
   { tester: materialInputControlTester, renderer: MaterialInputControl },
   { tester: materialDateTimeControlTester, renderer: MaterialDateTimeControl },
   { tester: materialDateControlTester, renderer: MaterialDateControl },
+  { tester: materialSliderControlTester, renderer: MaterialSliderControl},
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
   { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },
@@ -101,7 +102,6 @@ export const materialFields: { tester: RankedTester, field: ComponentType<FieldP
   { tester: materialIntegerFieldTester, field: MaterialIntegerField },
   { tester: materialNumberFieldTester, field: MaterialNumberField },
   { tester: materialNumberFormatFieldTester, field: MaterialNumberFormatField },
-  { tester: materialSliderFieldTester, field: MaterialSliderField },
   { tester: materialTextFieldTester, field: MaterialTextField },
   { tester: materialTimeFieldTester, field: MaterialTimeField },
 ];

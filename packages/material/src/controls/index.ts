@@ -27,6 +27,7 @@ import MaterialInputControl, { materialInputControlTester } from './MaterialInpu
 import MaterialNativeControl, { materialNativeControlTester } from './MaterialNativeControl';
 import MaterialDateControl, { materialDateControlTester } from './MaterialDateControl';
 import MaterialDateTimeControl, { materialDateTimeControlTester } from './MaterialDateTimeControl';
+import MaterialSliderControl, { materialSliderControlTester } from './MaterialSliderControl';
 
 export {
   MaterialBooleanControl,
@@ -38,5 +39,7 @@ export {
   MaterialDateControl,
   materialDateControlTester,
   MaterialDateTimeControl,
-  materialDateTimeControlTester
+  materialDateTimeControlTester,
+  MaterialSliderControl,
+  materialSliderControlTester
 };
