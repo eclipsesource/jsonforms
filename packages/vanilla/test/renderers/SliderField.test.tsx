@@ -307,6 +307,7 @@ test('tester with matching schema type (integer) without default', t => {
 
 test('tester with matching schema type (number) with default', t => {
   const control: ControlElement = t.context.uischema;
+  control.options = { slider: true };
   t.is(
     sliderFieldTester(
       control,
@@ -328,6 +329,7 @@ test('tester with matching schema type (number) with default', t => {
 
 test('tester with matching schema type (integer) with default', t => {
   const control: ControlElement = t.context.uischema;
+  control.options = { slider: true };
   t.is(
     sliderFieldTester(
       control,
