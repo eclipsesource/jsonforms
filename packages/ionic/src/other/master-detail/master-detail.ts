@@ -32,19 +32,15 @@ export class MasterDetailComponent extends JsonFormsControl {
   @ViewChild('masterNav') masterNav: Nav;
   @ViewChild('detailNav') detailNav: Nav;
 
-  masterPage: any;
-  detailPage: any;
-
-  private masterDetailService: MasterDetailNavService;
   private masterItems: any[];
 
   constructor(
     private parentNav: Nav,
     private platform: Platform,
-    ngRedux: NgRedux<JsonFormsState>
+    ngRedux: NgRedux<JsonFormsState>,
+    private masterDetailService: MasterDetailNavService
   ) {
     super(ngRedux);
-    this.masterDetailService = new MasterDetailNavService()
   }
 
   ngOnInit() {
