@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-renderers",
-  "version": "2.0.2",
+  "version": "2.0.6-rc.0",
   "description": "Material Renderer Set for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -55,19 +55,19 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.2",
-    "@jsonforms/react": "^2.0.2",
+    "@jsonforms/core": "^2.0.6-rc.0",
+    "@jsonforms/react": "^2.0.6-rc.0",
     "@material-ui/core": "^1.2.1",
-    "@material-ui/lab": "^1.0.0-alpha.5",
     "@material-ui/icons": "^1.0.0",
+    "@material-ui/lab": "^1.0.0-alpha.5",
     "material-ui-pickers": "1.0.0-rc.9",
     "moment": "^2.20.1",
     "react": "^16.3.2",
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "@jsonforms/test": "^2.0.2",
-    "@jsonforms/webcomponent": "^2.0.2",
+    "@jsonforms/test": "^2.0.6-rc.0",
+    "@jsonforms/webcomponent": "^2.0.6-rc.0",
     "ava": "^0.25.0",
     "copy-webpack-plugin": "^4.5.1",
     "document-register-element": "^1.7.0",
