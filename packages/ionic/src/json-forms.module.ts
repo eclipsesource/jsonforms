@@ -19,6 +19,7 @@ import { PlaceholderPage } from './other/master-detail/pages/placeholder/placeho
 import { MasterPage } from './other/master-detail/pages/master/master';
 import { DetailPage } from './other/master-detail/pages/detail/detail';
 import { LabelRenderer } from './other/label/label';
+import { MasterDetailNavService } from './other/master-detail/master-detail-nav.service';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { LabelRenderer } from './other/label/label';
     LabelRenderer
   ],
   providers: [
+    MasterDetailNavService
   ]
 })
 export class JsonFormsIonicModule {}

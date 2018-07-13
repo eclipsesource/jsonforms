@@ -1,3 +1,4 @@
+
 export { booleanControlTester, BooleanControlRenderer } from './controls/boolean/boolean-control';
 export { stringControlTester, StringControlRenderer } from './controls/string/string-control';
 export { numberControlTester, NumberControlRenderer } from './controls/number/number-control';
@@ -20,3 +21,4 @@ export { masterDetailTester, MasterDetailComponent } from './other/master-detail
 export { labelTester, LabelRenderer } from './other/label/label';
 
 export { JsonFormsIonicModule } from './json-forms.module';
+export { MasterDetailNavService } from './other/master-detail/master-detail-nav.service';
