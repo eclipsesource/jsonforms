@@ -27,41 +27,28 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-  ControlElement,
   JsonFormsProps,
   mapStateToDispatchRendererProps,
-  UISchemaElement
+  removeId
 } from '@jsonforms/core';
 
-const idMappings: Map<UISchemaElement, string> = new Map<UISchemaElement, string>();
-const getID = (element: UISchemaElement, proposedID: string) => {
-  /*
-  if (!idMappings.has(element)) {
-    */
-    let tries = 0;
-    while (!isUniqueID(proposedID, tries)) {
-      tries++;
-    }
-    const newID = createID(proposedID, tries);
-    idMappings.set(element, newID);
-    return newID;
-  //}
-  //return idMappings.get(element);
-};
-const isUniqueID = (idBase: string, iteration: number) => {
-  const newID = createID(idBase, iteration);
-  for (const value of Array.from(idMappings.values())) {
-    if (value === newID) {
-      return false;
+class JsonFormsDispatchRenderer extends React.Component<JsonFormsProps, { id: string }> {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.id
+    };
+  }
+
+  componentWillUnmount() {
+    if (this.state.id) {
+      removeId(this.props.uischema);
     }
   }
-  return true;
-};
-const createID = (idBase: string, iteration: number) =>
-  iteration !== 0 ? idBase + iteration : idBase;
 
-const JsonFormsDispatchRenderer =
-  ({ uischema, schema, path, renderers }: JsonFormsProps) => {
+  render() {
+    const { uischema, schema, path, renderers } = this.props as JsonFormsProps;
     const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
     if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
       return <UnknownRenderer type={'renderer'} />;
@@ -69,15 +56,13 @@ const JsonFormsDispatchRenderer =
       const Render = renderer.renderer;
 
       if (uischema.type !== undefined && uischema.type === 'Control') {
-        const control = uischema as ControlElement;
-        const id = getID(uischema, control.scope);
         return (
           <Render
             uischema={uischema}
             schema={schema}
             path={path}
             renderers={renderers}
-            id={id}
+            id={this.state.id}
           />
         );
       }
@@ -91,7 +76,8 @@ const JsonFormsDispatchRenderer =
         />
       );
     }
-  };
+  }
+}
 
 export const JsonForms = connect(
   mapStateToDispatchRendererProps,
