@@ -38,6 +38,14 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/height'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/price',
+          label: {
+            text: 'Price with Slider'
+          },
+          options: { slider: true }
         }
       ]
     },

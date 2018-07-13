@@ -28,9 +28,9 @@ import {
   ControlProps,
   ControlState,
   formatErrorMessage,
-  isRangeControl,
   isDescriptionHidden,
   isPlainLabel,
+  isRangeControl,
   mapStateToControlProps,
   RankedTester,
   rankWith
@@ -59,65 +59,65 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
-    const style: {[x: string]: any} = {};
+    const style: { [x: string]: any } = {};
     if (!visible) {
       style.display = 'none';
     }
-    const labelStyle: {[x: string]: any} = {
+    const labelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
-      overflow : 'hidden',
+      overflow: 'hidden',
       textOverflow: 'ellipsis',
       width: '100%'
     };
-    const rangeContainerStyle: {[x: string]: any} = {
+    const rangeContainerStyle: { [x: string]: any } = {
       display: 'flex'
     };
-    const rangeItemStyle: {[x: string]: any} = {
+    const rangeItemStyle: { [x: string]: any } = {
       flexGrow: '1'
     };
-    const sliderStyle: {[x: string]: any} = {
+    const sliderStyle: { [x: string]: any } = {
       marginTop: '7px'
     };
 
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-      return (
+    return (
 
-        <FormControl
-          style={style}
-          fullWidth={!trim}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-        >
-          <Typography id={id} style={labelStyle} variant="caption">
-            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+      <FormControl
+        style={style}
+        fullWidth={!trim}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+      >
+        <Typography id={id} style={labelStyle} variant='caption'>
+          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+        </Typography>
+        <div style={rangeContainerStyle}>
+          <Typography style={rangeItemStyle} variant='caption' align='left'>
+            {scopedSchema.minimum}
           </Typography>
-          <div style={rangeContainerStyle}>
-            <Typography style={rangeItemStyle} variant="caption" align="left">
-              {scopedSchema.minimum}
-            </Typography>
-            <Typography style={rangeItemStyle} variant="caption" align="right">
-              {scopedSchema.maximum}
-            </Typography>
-          </div>
-          <Slider
-            style={sliderStyle}
-            min={scopedSchema.minimum}
-            max={scopedSchema.maximum}
-            value={Number(data || scopedSchema.default)}
-            onChange={(_ev, value) => {
-                handleChange(path, Number(value));
-              }
-            }
-            id={id}
-            disabled={!enabled}
-            autoFocus={uischema.options && uischema.options.focus}
-            step={scopedSchema.multipleOf || 1}
-          />
-          <FormHelperText error={!isValid}>
-            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-          </FormHelperText>
-        </FormControl>
-      );
+          <Typography style={rangeItemStyle} variant='caption' align='right'>
+            {scopedSchema.maximum}
+          </Typography>
+        </div>
+        <Slider
+          style={sliderStyle}
+          min={scopedSchema.minimum}
+          max={scopedSchema.maximum}
+          value={Number(data || scopedSchema.default)}
+          onChange={(_ev, value) => {
+            handleChange(path, Number(value));
+          }
+          }
+          id={id}
+          disabled={!enabled}
+          autoFocus={uischema.options && uischema.options.focus}
+          step={scopedSchema.multipleOf || 1}
+        />
+        <FormHelperText error={!isValid}>
+          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+        </FormHelperText>
+      </FormControl>
+    );
   }
 }
 export const materialSliderControlTester: RankedTester = rankWith(4, isRangeControl);
