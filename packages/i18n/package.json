@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/i18n",
-  "version": "2.0.6-rc.0",
+  "version": "2.0.6-rc.1",
   "description": "i18n module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -37,7 +37,7 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.6-rc.0",
+    "@jsonforms/core": "^2.0.6-rc.1",
     "es6-shim": "^0.35.3",
     "json-refs": "^3.0.4",
     "moment": "^2.20.1",
@@ -47,9 +47,9 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
-    "@jsonforms/test": "^2.0.6-rc.0",
-    "@jsonforms/vanilla-renderers": "^2.0.6-rc.0",
-    "@jsonforms/webcomponent": "^2.0.6-rc.0",
+    "@jsonforms/test": "^2.0.6-rc.1",
+    "@jsonforms/vanilla-renderers": "^2.0.6-rc.1",
+    "@jsonforms/webcomponent": "^2.0.6-rc.1",
     "document-register-element": "^1.7.0",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2"
