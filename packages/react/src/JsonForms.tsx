@@ -26,26 +26,72 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
-import { JsonFormsProps, mapStateToDispatchRendererProps } from '@jsonforms/core';
+import {
+  ControlElement,
+  JsonFormsProps,
+  mapStateToDispatchRendererProps,
+  UISchemaElement
+} from '@jsonforms/core';
+
+const idMappings: Map<UISchemaElement, string> = new Map<UISchemaElement, string>();
+const getID = (element: UISchemaElement, proposedID: string) => {
+  /*
+  if (!idMappings.has(element)) {
+    */
+    let tries = 0;
+    while (!isUniqueID(proposedID, tries)) {
+      tries++;
+    }
+    const newID = createID(proposedID, tries);
+    idMappings.set(element, newID);
+    return newID;
+  //}
+  //return idMappings.get(element);
+};
+const isUniqueID = (idBase: string, iteration: number) => {
+  const newID = createID(idBase, iteration);
+  for (const value of Array.from(idMappings.values())) {
+    if (value === newID) {
+      return false;
+    }
+  }
+  return true;
+};
+const createID = (idBase: string, iteration: number) =>
+  iteration !== 0 ? idBase + iteration : idBase;
 
 const JsonFormsDispatchRenderer =
   ({ uischema, schema, path, renderers }: JsonFormsProps) => {
-  const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-  if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
-    return <UnknownRenderer type={'renderer'}/>;
-  } else {
-    const Render = renderer.renderer;
+    const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+    if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
+      return <UnknownRenderer type={'renderer'} />;
+    } else {
+      const Render = renderer.renderer;
 
-    return (
-      <Render
-        uischema={uischema}
-        schema={schema}
-        path={path}
-        renderers={renderers}
-      />
-    );
-  }
-};
+      if (uischema.type !== undefined && uischema.type === 'Control') {
+        const control = uischema as ControlElement;
+        const id = getID(uischema, control.scope);
+        return (
+          <Render
+            uischema={uischema}
+            schema={schema}
+            path={path}
+            renderers={renderers}
+            id={id}
+          />
+        );
+      }
+
+      return (
+        <Render
+          uischema={uischema}
+          schema={schema}
+          path={path}
+          renderers={renderers}
+        />
+      );
+    }
+  };
 
 export const JsonForms = connect(
   mapStateToDispatchRendererProps,
