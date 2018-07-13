@@ -1,12 +1,12 @@
 {
   "name": "jsonforms-react-seed",
-  "version": "2.0.6-rc.1",
+  "version": "2.0.6-rc.2",
   "private": true,
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.49",
-    "@jsonforms/core": "^2.0.6-rc.1",
-    "@jsonforms/material-renderers": "^2.0.6-rc.1",
-    "@jsonforms/react": "^2.0.6-rc.1",
+    "@jsonforms/core": "^2.0.6-rc.2",
+    "@jsonforms/material-renderers": "^2.0.6-rc.2",
+    "@jsonforms/react": "^2.0.6-rc.2",
     "@material-ui/core": "^1.0.0",
     "lodash": "^4.17.10",
     "react": "^16.2.0",
