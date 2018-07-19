@@ -10,7 +10,7 @@ This is the JSONForms Angular Material renderers package. This package only cont
 
 # Get started
 1. Clone and setup repo as descriped [in the JSON Forms Readme](https://github.com/eclipsesource/jsonforms)
-2. `cd` to packages/<this package>
+2. `cd` to `packages/<this package>`
 3. Run `npm run dev`
 
 # License
