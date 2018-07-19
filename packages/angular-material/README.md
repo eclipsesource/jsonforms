@@ -8,6 +8,11 @@ JSONForms eliminates the tedious task of writing fully-featured forms by hand by
 
 This is the JSONForms Angular Material renderers package. This package only contains renderers and must be combined with  [JSONForms Angular](https://github.com/eclipsesource/jsonforms/blob/master/packages/angular).
 
+# Get started
+1. Clone and setup repo as descriped [in the JSON Forms Readme](https://github.com/eclipsesource/jsonforms)
+2. `cd` to packages/<this package>
+3. Run `npm run dev`
+
 # License
 The JSONForms project is licensed under the MIT License. See the [LICENSE file](https://github.com/eclipsesource/jsonforms/blob/master/LICENSE) for more information.
 
