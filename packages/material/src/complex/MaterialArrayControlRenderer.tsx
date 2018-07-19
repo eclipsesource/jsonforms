@@ -70,13 +70,13 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     return (
       <Hidden xsUp={!visible}>
         <Grid container direction='column' spacing={0}>
-          <Hidden xsUp={this.props.scopedSchema.type !== 'object' }>
+          <Hidden xsUp={this.props.scopedSchema.type !== 'object'}>
             <Grid item>
               <TableToolbar {...tableProps} />
             </Grid>
           </Hidden>
           <Grid item>
-            <MaterialTableControl {...tableProps}/>
+            <MaterialTableControl {...tableProps} />
           </Grid>
           <Dialog
             open={this.state.openConfirmDelete}
@@ -118,7 +118,7 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
       this.setState({ selected: this.createSelection(true) });
       return;
     }
-    this.setState({selected: this.createSelection(false) });
+    this.setState({ selected: this.createSelection(false) });
   }
   private closeConfirmDeleteDialog = () => {
     this.setState({ openConfirmDelete: false });
@@ -142,11 +142,14 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     this.setState({ selected: this.createSelection(false) });
   }
   private isSelected = index => {
+    if (this.state.selected.length <= index) {
+      return false;
+    }
     return this.state.selected[index];
   }
   private createSelection = (selected: boolean) => this.props.data ?
-                                                     _.fill(Array(this.props.data.length), selected)
-                                                     : []
+    _.fill(Array(this.props.data.length), selected)
+    : []
 }
 
 export interface TableState {

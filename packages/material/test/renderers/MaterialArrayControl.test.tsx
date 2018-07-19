@@ -96,7 +96,7 @@ describe('Material array control', () => {
   it('should render primitives', () => {
     const store = initJsonFormsStore();
     // re-init
-    const data = { test: ["foo", "bar"] };
+    const data = { test: ['foo', 'bar'] };
     const schema = {
       type: 'object',
       properties: {
@@ -172,5 +172,44 @@ describe('Material array control', () => {
     TestUtils.Simulate.change(currentlyChecked, {'target': {'checked': false}});
     // keep select all state
     expect(_.filter(cboxes, cbox => cbox.checked).length).toBe(3);
+  });
+
+  it('added items are also selected when selecting all', () => {
+    const store = initJsonFormsStore();
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+    let inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    let cboxes = _.filter(
+      inputs,
+      i => i.type === 'checkbox'
+    );
+    // 1 select all, 2 for selecting rows, 2 from the renderer
+    expect(cboxes.length).toBe(5);
+    const buttons = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'button');
+    const addButton = buttons[0];
+    TestUtils.Simulate.click(addButton);
+
+    expect(cboxes[0].checked).toBeFalsy();
+    expect(cboxes[1].checked).toBeFalsy();
+    expect(cboxes[3].checked).toBeFalsy();
+
+    inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    cboxes = _.filter(
+      inputs,
+      i => i.type === 'checkbox'
+    );
+    // 1 select all, 3 for selecting rows, 3 from the renderer
+    expect(cboxes.length).toBe(7);
+
+    // select all
+    TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
+
+    expect(cboxes[0].checked).toBeTruthy();
+    expect(cboxes[1].checked).toBeTruthy();
+    expect(cboxes[3].checked).toBeTruthy();
+    expect(cboxes[5].checked).toBeTruthy();
   });
 });
