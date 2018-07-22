@@ -22,11 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { createExampleSelection } from '../../examples/src/register';
+import { renderExample } from '../../example/src/index';
 import { materialFields, materialRenderers } from '../src';
 
 window.onload = () => {
-  createExampleSelection(
+  renderExample(
     materialRenderers,
     materialFields
   );

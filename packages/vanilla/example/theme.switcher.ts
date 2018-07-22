@@ -25,7 +25,6 @@
 const knownThemes : {[key: string]: string} = {
   normal: 'Normal Label Top',
   dark: 'Dark label Top',
-  labelFixed: 'Label left Fixed'
 };
 const changeTheme = (style: string) => {
   document.body.className = style;

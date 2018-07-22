@@ -5,9 +5,9 @@ var copyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = merge(baseConfig, {
     plugins: [
         new copyWebpackPlugin([
-            { from: '../examples/example.css' },
+            { from: './example/example.css' },
             { from: './example/example.dark.css' },
-            { from: '../examples/vendor/native-shim.js'  }
+            { from: '../example/src/logo.svg'  },
         ])
     ],
 });

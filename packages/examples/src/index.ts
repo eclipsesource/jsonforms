@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as array from './arrays';
+import * as nestedArray from './nestedArrays';
 import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as day1 from './day1';
@@ -39,15 +40,15 @@ import * as layout from './layout';
 import * as person from './person';
 import * as rule from './rule';
 import * as resolve from './resolve';
-import Rating from './Rating';
-import { RatingControl, ratingControlTester } from './RatingControl';
 import * as config from './config';
 import * as text from './text';
 import * as numbers from './numbers';
-
+export * from './register';
+export * from './example';
 export {
   stringArray,
   array,
+  nestedArray,
   categorization,
   day1,
   day2,
@@ -63,9 +64,6 @@ export {
   dates,
   dyanmic,
   resolve,
-  Rating,
-  RatingControl,
-  ratingControlTester,
   config,
   text,
   numbers,
