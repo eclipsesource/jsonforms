@@ -26,6 +26,7 @@ import * as React from 'react';
 import {
   ControlProps,
   ControlState,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   RankedTester,
   rankWith,
@@ -55,17 +56,13 @@ export class RatingControl extends Control<ControlProps, ControlState> {
         <Rating
           value={this.props.data}
           onClick={ev => {
-            this.onClick(ev);
+            this.props.handleChange(this.props.path, Number(ev.value));
           }}
           id={this.props.id}
         />
       </div>
     );
   }
-
-  private onClick(ev) {
-    this.handleChange(ev.value);
-  }
 }
 
-export default connect(mapStateToControlProps)(RatingControl);
+export default connect(mapStateToControlProps, mapDispatchToControlProps)(RatingControl);

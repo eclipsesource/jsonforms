@@ -12,8 +12,8 @@ module.exports = merge(baseConfig, {
         './example/index.ts'
     ],
     output: {
-      publicPath: "/assets/",
-      filename: "bundle.js"
+        publicPath: "/assets/",
+        filename: "bundle.js"
     },
 
     devServer: {
@@ -23,8 +23,9 @@ module.exports = merge(baseConfig, {
         new webpack.HotModuleReplacementPlugin()
     ],
     module: {
-      rules: [
-       { test: /\.html$/, exclude: /node_modules/, loader: 'html-loader?exportAsEs6Default'}
-      ]
+        rules: [
+            { test: /\.html$/, exclude: /node_modules/, loader: 'html-loader?exportAsEs6Default' },
+            { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+        ]
     },
 });

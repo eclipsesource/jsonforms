@@ -22,12 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { createExampleSelection } from '../../examples/src/register';
 import { createThemeSelection } from './theme.switcher';
 import { stylingReducer, vanillaFields, vanillaRenderers, vanillaStyles } from '../src';
+import { renderExample } from '../../example/src/index';
 
 window.onload = () => {
-  createExampleSelection(
+  renderExample(
     vanillaRenderers,
     vanillaFields,
     {

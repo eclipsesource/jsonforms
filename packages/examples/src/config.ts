@@ -43,7 +43,7 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/postalCode',
-          label: '%postalcode'
+          label: 'Postal Code'
         }
       ]
     }
@@ -52,15 +52,6 @@ export const uischema = {
 
 export const data = {
   postalCode: '12345'
-};
-
-const translations = {
-  'en-US': {
-    postalcode: 'Postal Code'
-  },
-  'de-DE': {
-    postalcode: 'Postleitzahl'
-  }
 };
 
 const config = {
@@ -74,8 +65,7 @@ registerExamples([
     label: 'Configuration (Default)',
     data,
     schema,
-    uiSchema: uischema,
-    translations
+    uiSchema: uischema
   },
   {
     name: 'configCustom',
@@ -83,7 +73,6 @@ registerExamples([
     data,
     schema,
     uiSchema: uischema,
-    translations,
     config
   }
 ]);
