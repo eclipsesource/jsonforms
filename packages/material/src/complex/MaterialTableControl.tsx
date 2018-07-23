@@ -73,9 +73,14 @@ const generateHeaderCellForPrimitives = toolbarProps => {
     </TableCell>
   );
 };
-const getValidColumnProps = (scopedSchema: JsonSchema) =>
-  Object.keys(scopedSchema.properties)
-    .filter(prop => scopedSchema.properties[prop].type !== 'array');
+const getValidColumnProps = (scopedSchema: JsonSchema) => {
+  if (scopedSchema.type === 'object') {
+    return Object.keys(scopedSchema.properties)
+      .filter(prop => scopedSchema.properties[prop].type !== 'array');
+  }
+  /*primitives*/
+  return [''];
+};
 
 const EmptyTable = ({ numColumns }) => (
   <TableRow>

@@ -121,6 +121,50 @@ describe('Material array control', () => {
     expect(cboxes[0].checked).toBe(false);
   });
 
+  it('should render empty primitives', () => {
+    const store = initJsonFormsStore();
+    // re-init
+    const data = { test: [] };
+    const schema = {
+      type: 'object',
+      properties: {
+        test: {
+          type: 'array',
+          items: { type: 'string' }
+        }
+      }
+    };
+    const uischema = {
+      type: 'Control',
+      scope: '#/properties/test'
+    };
+    store.dispatch(Actions.init(data, schema, uischema));
+
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+      </Provider>
+    );
+
+    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
+    // header + no data row
+    expect(rows.length).toBe(2);
+    const emptyDataCol = rows[1].cells;
+    expect(emptyDataCol.length).toBe(1);
+    // selection column + 1 data column
+    expect(emptyDataCol[0].colSpan).toBe(2);
+    // assert that the select all is not checked
+    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const cboxes = _.filter(
+      inputs,
+      i => i.type === 'checkbox'
+    );
+    expect(cboxes.length).toBe(1);
+    expect(cboxes[0].checked).toBe(false);
+    TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
+    expect(cboxes[0].checked).toBe(false);
+  });
+
   it('should render primitives', () => {
     const store = initJsonFormsStore();
     // re-init
