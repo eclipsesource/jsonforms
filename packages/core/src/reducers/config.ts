@@ -27,7 +27,7 @@ import { SET_CONFIG } from '../actions';
 import { configDefault } from '../configDefault';
 
 const applyDefaultConfiguration = (config: any = {}) =>
-  _.merge(configDefault, config);
+  _.merge({}, configDefault, config);
 
 export const configReducer = (
   state = applyDefaultConfiguration(),
