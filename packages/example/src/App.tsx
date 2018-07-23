@@ -62,8 +62,7 @@ class App extends React.Component<AppProps> {
           <pre>{this.props.dataAsString}</pre>
         </div>
         <div className='demoform'>
-          {this.props.selectedExample.customReactExtension ?
-            this.props.selectedExample.customReactExtension(this.props.dispatch) : null}
+          {this.props.getExtensionComponent()}
           <JsonForms />
         </div>
       </div>

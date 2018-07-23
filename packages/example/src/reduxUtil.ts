@@ -25,51 +25,54 @@
 import { Actions, getData } from '@jsonforms/core';
 import { CHANGE_EXAMPLE, changeExample } from '@jsonforms/examples';
 import { ReactExampleDescription } from './util';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import { Reducer } from 'redux';
 
 export interface AppProps {
-    dataAsString: string;
-    examples: ReactExampleDescription[];
-    selectedExample: ReactExampleDescription;
-    dispatch;
-    changeExample(example: string): void;
-  }
+  dataAsString: string;
+  examples: ReactExampleDescription[];
+  selectedExample: ReactExampleDescription;
+  changeExample(exampleName: string): void;
+  getExtensionComponent(): React.Component;
+}
 const mapStateToProps = state => {
-    const examples = state.examples.data;
-    const selectedExample = state.examples.selectedExample || examples[0];
-    return {
-      dataAsString: JSON.stringify(getData(state), null, 2),
-      examples,
-      selectedExample
-    };
+  const examples = state.examples.data;
+  const selectedExample = state.examples.selectedExample || examples[0];
+  return {
+    dataAsString: JSON.stringify(getData(state), null, 2),
+    examples,
+    selectedExample
   };
+};
 const mapDispatchToProps = dispatch => ({
-    dispatch: dispatch,
-    changeExampleData: (example: ReactExampleDescription) => {
-      dispatch(changeExample(example));
-      dispatch(Actions.init(example.data, example.schema, example.uischema));
-      Actions.setConfig(example.config)(dispatch);
-    }
-  });
+  changeExampleData: (example: ReactExampleDescription) => {
+    dispatch(changeExample(example));
+    dispatch(Actions.init(example.data, example.schema, example.uischema));
+    Actions.setConfig(example.config)(dispatch);
+  },
+  getComponent: (example: ReactExampleDescription) =>
+    example.customReactExtension ? example.customReactExtension(dispatch) : null
+});
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-    return Object.assign({}, ownProps, {
-      ...stateProps,
-      dispatch: dispatchProps.dispatch,
-      changeExample: exampleName => dispatchProps.changeExampleData(
-        stateProps.examples.find(e => e.name === exampleName))
-    });
-  };
+  return Object.assign({}, ownProps, {
+    ...stateProps,
+    changeExample: exampleName => dispatchProps.changeExampleData(
+      stateProps.examples.find(e => e.name === exampleName)),
+    getExtensionComponent: () =>
+      dispatchProps.getComponent(stateProps.selectedExample)
+  });
+};
 export const exampleReducer = (state = [], action) => {
-    switch (action.type) {
-      case CHANGE_EXAMPLE:
-        return Object.assign({}, state, {
-          selectedExample: action.example
-        });
-      default:
-        return state;
-    }
-  };
+  switch (action.type) {
+    case CHANGE_EXAMPLE:
+      return Object.assign({}, state, {
+        selectedExample: action.example
+      });
+    default:
+      return state;
+  }
+};
 export const initializedConnect = connect(mapStateToProps, mapDispatchToProps, mergeProps);
 export interface AdditionalStoreParams {
   name: string;
