@@ -25,9 +25,7 @@
 import { renderExample } from '../../example/src/index';
 import { materialFields, materialRenderers } from '../src';
 
-window.onload = () => {
-  renderExample(
-    materialRenderers,
-    materialFields
-  );
-};
+renderExample(
+  materialRenderers,
+  materialFields
+);

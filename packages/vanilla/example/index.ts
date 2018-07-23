@@ -26,15 +26,13 @@ import { createThemeSelection } from './theme.switcher';
 import { stylingReducer, vanillaFields, vanillaRenderers, vanillaStyles } from '../src';
 import { renderExample } from '../../example/src/index';
 
-window.onload = () => {
-  renderExample(
-    vanillaRenderers,
-    vanillaFields,
-    {
-      name: 'styles',
-      reducer: stylingReducer,
-      state: vanillaStyles
-    }
-  );
-  createThemeSelection();
-};
+renderExample(
+  vanillaRenderers,
+  vanillaFields,
+  {
+    name: 'styles',
+    reducer: stylingReducer,
+    state: vanillaStyles
+  }
+);
+createThemeSelection();
