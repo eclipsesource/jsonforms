@@ -81,6 +81,6 @@ registerExamples([
     label: 'Rule',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

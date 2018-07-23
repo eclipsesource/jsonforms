@@ -79,6 +79,6 @@ registerExamples([
     label: 'Array',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   },
 ]);

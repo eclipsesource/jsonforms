@@ -39,6 +39,6 @@ registerExamples([
     label: 'Day 6',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

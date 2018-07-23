@@ -46,9 +46,9 @@ const mapStateToProps = state => {
   };
 const mapDispatchToProps = dispatch => ({
     dispatch: dispatch,
-    changeExampleData: example => {
+    changeExampleData: (example: ReactExampleDescription) => {
       dispatch(changeExample(example));
-      dispatch(Actions.init(example.data, example.schema, example.uiSchema));
+      dispatch(Actions.init(example.data, example.schema, example.uischema));
       Actions.setConfig(example.config)(dispatch);
     }
   });

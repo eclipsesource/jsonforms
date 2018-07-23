@@ -34,6 +34,6 @@ registerExamples([
     label: 'Array of Strings',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   },
 ]);

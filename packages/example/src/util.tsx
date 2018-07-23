@@ -81,7 +81,7 @@ export const enhanceExample: (examples: ExampleDescription[]) => ReactExampleDes
           customReactExtension: dispatch => (
             <div>
               <button
-                onClick={() => dispatch(Actions.init({ id: 'aaa' }, e.schema, e.uiSchema))}
+                onClick={() => dispatch(Actions.init({ id: 'aaa' }, e.schema, e.uischema))}
               >
                 Change data
               </button>

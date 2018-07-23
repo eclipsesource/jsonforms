@@ -152,6 +152,6 @@ registerExamples([
     label: 'Person',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

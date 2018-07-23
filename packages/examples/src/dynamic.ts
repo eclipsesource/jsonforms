@@ -28,7 +28,7 @@ registerExamples([
     name: 'dynamic',
     label: 'Dynamic Change',
     schema: undefined,
-    uiSchema: undefined,
+    uischema: undefined,
     data: {name: 'bla'}
   }
 ]);

@@ -84,6 +84,6 @@ registerExamples([
     label: 'Resolve Remote Schema',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

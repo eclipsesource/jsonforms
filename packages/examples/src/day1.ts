@@ -55,6 +55,6 @@ registerExamples([
     label: 'Day 1',
     data,
     schema,
-    uiSchema: undefined
+    uischema
   }
 ]);

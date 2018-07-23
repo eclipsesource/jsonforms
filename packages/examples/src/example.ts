@@ -29,7 +29,7 @@ export interface ExampleDescription {
   label: string;
   data: any;
   schema: JsonSchema;
-  uiSchema: UISchemaElement;
+  uischema: UISchemaElement;
   config?: any;
 }
 export const CHANGE_EXAMPLE: 'jsonforms-example/CHANGE' = 'jsonforms-example/CHANGE';

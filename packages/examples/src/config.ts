@@ -65,14 +65,14 @@ registerExamples([
     label: 'Configuration (Default)',
     data,
     schema,
-    uiSchema: uischema
+    uischema: uischema
   },
   {
     name: 'configCustom',
     label: 'Configuration (Custom)',
     data,
     schema,
-    uiSchema: uischema,
+    uischema,
     config
   }
 ]);

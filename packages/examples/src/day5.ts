@@ -157,13 +157,13 @@ registerExamples([
     label: 'Day 5',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   },
   {
     name: 'day5_category',
     label: 'Day 5 With Category',
     data,
     schema,
-    uiSchema: categoryUiSchema
+    uischema: categoryUiSchema
   }
 ]);

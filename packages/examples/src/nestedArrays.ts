@@ -86,7 +86,7 @@ registerExamples([
     label: 'Nested Array',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   },
 ]);
 
