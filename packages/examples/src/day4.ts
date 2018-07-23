@@ -78,6 +78,6 @@ registerExamples([
     label: 'Day 4',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

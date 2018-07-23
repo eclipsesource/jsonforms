@@ -68,7 +68,7 @@ registerExamples(
       label: 'Day 3',
       data,
       schema,
-      uiSchema: uischema
+      uischema
     }
   ]
 );

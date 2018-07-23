@@ -35,6 +35,6 @@ registerExamples([
     label: 'Generate both Schemas',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

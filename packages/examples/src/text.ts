@@ -68,6 +68,6 @@ registerExamples([
     label: 'Text',
     data,
     schema,
-    uiSchema: uischema,
+    uischema,
   }
 ]);

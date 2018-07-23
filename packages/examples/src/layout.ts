@@ -122,27 +122,27 @@ registerExamples([
     label: 'Layout Vertical',
     data,
     schema,
-    uiSchema: uischemaVertical
+    uischema: uischemaVertical
   },
   {
     name: 'layout-horizontal',
     label: 'Layout Horizontal',
     data,
     schema,
-    uiSchema: uischemaHorizontal
+    uischema: uischemaHorizontal
   },
   {
     name: 'layout-group',
     label: 'Layout Group',
     data,
     schema,
-    uiSchema: uischemaGroup
+    uischema: uischemaGroup
   },
   {
     name: 'layout-complex',
     label: 'Layout Complex',
     data,
     schema,
-    uiSchema: uischemaComplex
+    uischema: uischemaComplex
   }
 ]);

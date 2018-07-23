@@ -69,6 +69,6 @@ registerExamples([
     label: 'Categorization',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

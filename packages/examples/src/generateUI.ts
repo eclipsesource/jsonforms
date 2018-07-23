@@ -35,6 +35,6 @@ registerExamples([
     label: 'Generate UI Schema',
     data,
     schema,
-    uiSchema: uischema
+    uischema
   }
 ]);

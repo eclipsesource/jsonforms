@@ -46,26 +46,26 @@ const uischema = {
   type: 'VerticalLayout',
   elements: [
     {
-  type: 'HorizontalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/date'
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/date'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/time'
+        }
+      ]
     },
     {
-      type: 'Control',
-      scope: '#/properties/time'
-    }
-  ]
-    },
-    {
-  type: 'HorizontalLayout',
-  elements: [
-    {
-      type: 'Control',
-      scope: '#/properties/datetime'
-    }
-  ]
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/datetime'
+        }
+      ]
     }
   ]
 };
@@ -80,5 +80,6 @@ registerExamples([
     label: 'Dates',
     data,
     schema,
-    uiSchema: uischema }
+    uischema
+  }
 ]);

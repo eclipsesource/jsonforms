@@ -67,7 +67,7 @@ const setupStore = (
       }
     }
   );
-  store.dispatch(Actions.init(exampleData[0].data, exampleData[0].schema, exampleData[0].uiSchema));
+  store.dispatch(Actions.init(exampleData[0].data, exampleData[0].schema, exampleData[0].uischema));
 
   return store;
 };
