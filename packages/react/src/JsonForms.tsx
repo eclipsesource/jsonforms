@@ -26,26 +26,58 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
-import { JsonFormsProps, mapStateToDispatchRendererProps } from '@jsonforms/core';
+import {
+  JsonFormsProps,
+  mapStateToDispatchRendererProps,
+  removeId
+} from '@jsonforms/core';
 
-const JsonFormsDispatchRenderer =
-  ({ uischema, schema, path, renderers }: JsonFormsProps) => {
-  const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-  if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
-    return <UnknownRenderer type={'renderer'}/>;
-  } else {
-    const Render = renderer.renderer;
+class JsonFormsDispatchRenderer extends React.Component<JsonFormsProps, { id: string }> {
 
-    return (
-      <Render
-        uischema={uischema}
-        schema={schema}
-        path={path}
-        renderers={renderers}
-      />
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.id
+    };
   }
-};
+
+  componentWillUnmount() {
+    if (this.state.id) {
+      removeId(this.props.uischema);
+    }
+  }
+
+  render() {
+    const { uischema, schema, path, renderers } = this.props as JsonFormsProps;
+    const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+    if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
+      return <UnknownRenderer type={'renderer'} />;
+    } else {
+      const Render = renderer.renderer;
+
+      if (uischema.type !== undefined && uischema.type === 'Control') {
+        return (
+          <Render
+            uischema={uischema}
+            schema={schema}
+            path={path}
+            renderers={renderers}
+            id={this.state.id}
+          />
+        );
+      }
+
+      return (
+        <Render
+          uischema={uischema}
+          schema={schema}
+          path={path}
+          renderers={renderers}
+        />
+      );
+    }
+  }
+}
 
 export const JsonForms = connect(
   mapStateToDispatchRendererProps,

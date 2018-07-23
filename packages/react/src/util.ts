@@ -23,9 +23,9 @@
   THE SOFTWARE.
 */
 import {
-    mapDispatchToControlProps,
-    mapStateToControlProps
-    } from '@jsonforms/core';
+  mapDispatchToControlProps,
+  mapStateToControlProps
+} from '@jsonforms/core';
 import { connect } from 'react-redux';
 /**
  * JSONForms specific connect function. This is a wrapper
@@ -57,3 +57,4 @@ export const connectToJsonForms = (
     mapDispatchToProps
   )(Component);
 };
+

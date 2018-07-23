@@ -25,6 +25,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {
+  clearAllIds,
   defaultMapDispatchToControlProps,
   defaultMapStateToEnumFieldProps,
   mapStateToFieldProps
@@ -211,11 +212,12 @@ test('mapStateToFieldProps - data', t => {
 });
 
 test('mapStateToFieldProps - id', t => {
+  clearAllIds();
   const ownProps = {
     uischema: coreUISchema
   };
   const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
-  t.is(props.id, '#/properties/firstName');
+  t.is(props.id, '#/properties/firstName0');
 });
 
 test('mapStateToEnumFieldProps - set default options for dropdown list', t => {

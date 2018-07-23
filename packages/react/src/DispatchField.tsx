@@ -26,32 +26,55 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
-import { DispatchFieldProps, mapStateToDispatchFieldProps } from '@jsonforms/core';
+import { DispatchFieldProps, mapStateToDispatchFieldProps, removeId } from '@jsonforms/core';
+
 /**
- * Props of the {@link DispatchField} renderer.
+ * Dispatch renderer component for fields.
  */
-  /**
-   * The available field renderers.
-   */
+class Dispatch extends React.Component<DispatchFieldProps, { id: string }> {
 
-const Dispatch = (dispatchFieldProps: DispatchFieldProps) => {
-  const uischema = dispatchFieldProps.uischema;
-  const schema = dispatchFieldProps.schema;
-  const field = _.maxBy(dispatchFieldProps.fields, r => r.tester(uischema, schema));
-
-  if (field === undefined || field.tester(uischema, schema) === -1) {
-    return <UnknownRenderer type={'field'}/>;
-  } else {
-    const Field = field.field;
-
-    return (
-      <Field
-        schema={schema}
-        uischema={uischema}
-        path={dispatchFieldProps.path}
-      />
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: props.id
+    };
   }
-};
+
+  componentWillUnmount() {
+    if (this.state.id) {
+      removeId(this.props.uischema);
+    }
+  }
+
+  render() {
+    const { uischema, schema, path, fields } = this.props as DispatchFieldProps;
+    const field = _.maxBy(fields, r => r.tester(uischema, schema));
+
+    if (field === undefined || field.tester(uischema, schema) === -1) {
+      return <UnknownRenderer type={'field'}/>;
+    } else {
+      const Field = field.field;
+
+      if (uischema.type !== undefined && uischema.type === 'Control') {
+        return (
+          <Field
+            uischema={uischema}
+            schema={schema}
+            path={path}
+            id={this.state.id}
+          />
+        );
+      }
+
+      return (
+        <Field
+          schema={schema}
+          uischema={uischema}
+          path={path}
+        />
+      );
+    }
+  }
+}
 
 export const DispatchField = connect(mapStateToDispatchFieldProps)(Dispatch);

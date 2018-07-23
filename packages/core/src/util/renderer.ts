@@ -24,7 +24,7 @@
 */
 import * as _ from 'lodash';
 import {
-  composeWithUi,
+  composeWithUi, createId,
   createLabelDescriptionFrom,
   isEnabled,
   isVisible,
@@ -315,7 +315,7 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = _.union(getErrorAt(path)(state).map(error => error.message));
   const controlElement = ownProps.uischema as ControlElement;
-  const id = controlElement.scope || '';
+  const id = createId(controlElement, controlElement.scope);
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);

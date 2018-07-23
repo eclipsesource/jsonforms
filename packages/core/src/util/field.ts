@@ -27,7 +27,7 @@ import { ControlElement } from '../models/uischema';
 import { findUISchema, getConfig, getData, getErrorAt } from '../reducers';
 import { RankedTester } from '../testers';
 import {
-  composeWithUi,
+  composeWithUi, createId,
   isEnabled,
   isVisible,
   Resolve,
@@ -93,7 +93,7 @@ export const mapStateToFieldProps = (state, ownProps): StatePropsOfField => {
   const errors = getErrorAt(path)(state).map(error => error.message);
   const isValid = _.isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
-  const id = controlElement.scope || '';
+  const id = createId(controlElement, controlElement.scope);
   const inputClassName = ['validate'].concat(isValid ? 'valid' : 'invalid');
   const defaultConfig = _.cloneDeep(getConfig(state));
   const config = _.merge(
