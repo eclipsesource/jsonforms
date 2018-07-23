@@ -71,11 +71,12 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
           hidden={!visible}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
+          id={id}
         >
-          <label htmlFor={id} className={classNames.label}>
+          <label htmlFor={id + '-input'} className={classNames.label}>
             {computeLabel(labelText, required)}
           </label>
-          <DispatchField uischema={uischema} schema={schema} path={parentPath}/>
+          <DispatchField uischema={uischema} schema={schema} path={parentPath} id={id + '-input'}/>
           <div className={divClassNames}>
             {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
           </div>

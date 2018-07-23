@@ -95,7 +95,7 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <DatePicker
-          id={id}
+          id={id + '-input'}
           label={computeLabel(labelText, required)}
           error={!isValid}
           style={style}

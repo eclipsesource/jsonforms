@@ -25,8 +25,8 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Grid, Hidden} from '@material-ui/core';
-import {Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Grid, Hidden } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import {
   ControlElement,
   Paths

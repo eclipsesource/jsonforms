@@ -40,6 +40,7 @@ import MaterialDateTimeControl, {
 } from '../../src/controls/MaterialDateTimeControl';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import * as ReactDOM from 'react-dom';
 import * as moment from 'moment';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
@@ -129,6 +130,13 @@ describe('Material date time control tester', () => {
 
 describe('Material date time control', () => {
 
+  /** Use this container to render components */
+  const container = document.createElement('div');
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
   it('should autofocus first element', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
@@ -166,10 +174,11 @@ describe('Material date time control', () => {
       jsonSchema,
       layout
     );
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
@@ -185,10 +194,11 @@ describe('Material date time control', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
@@ -203,10 +213,11 @@ describe('Material date time control', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
@@ -218,10 +229,11 @@ describe('Material date time control', () => {
       scope: '#/properties/foo'
     };
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
@@ -229,10 +241,11 @@ describe('Material date time control', () => {
 
   it('should render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -242,10 +255,11 @@ describe('Material date time control', () => {
 
   it('should update via event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.value = '04/12/1961 8:15 pm';
@@ -255,10 +269,11 @@ describe('Material date time control', () => {
 
   it('should update via action', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => moment('1961-04-12 20:15').format()));
@@ -267,10 +282,11 @@ describe('Material date time control', () => {
 
   it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
@@ -279,10 +295,11 @@ describe('Material date time control', () => {
 
   it('should not update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
@@ -291,10 +308,11 @@ describe('Material date time control', () => {
 
   it('should not update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('bar', () => 'Bar'));
@@ -303,10 +321,11 @@ describe('Material date time control', () => {
 
   it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => '12.04.1961 20:15'));
@@ -315,10 +334,11 @@ describe('Material date time control', () => {
 
   it('should not update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(undefined, () => '12.04.1961 20:15'));
@@ -327,14 +347,15 @@ describe('Material date time control', () => {
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl
           schema={schema}
           uischema={uischema}
           enabled={false}
         />
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
@@ -342,12 +363,26 @@ describe('Material date time control', () => {
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialDateTimeControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
+  });
+
+  it('should render input id', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    const tree = ReactDOM.render(
+      <Provider store={store}>
+        <MaterialDateTimeControl schema={schema} uischema={uischema} id='#/properties/foo'/>
+      </Provider>,
+      container
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    // there is only input id at the moment
+    expect(input.id).toBe('#/properties/foo-input');
   });
 });
