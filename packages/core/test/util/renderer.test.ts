@@ -25,6 +25,7 @@
 import test from 'ava';
 import * as _ from 'lodash';
 import {
+  clearAllIds,
   createDefaultValue,
   mapDispatchToControlProps,
   mapStateToControlProps,
@@ -267,8 +268,10 @@ test('mapStateToControlProps - no duplicate error messages', t => {
 });
 
 test('mapStateToControlProps - id', t => {
+  clearAllIds();
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
+    id: '#/properties/firstName'
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
