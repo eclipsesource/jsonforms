@@ -25,6 +25,7 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import * as ReactDOM from 'react-dom';
 import {
   Actions,
   ControlElement,
@@ -86,6 +87,13 @@ describe('Material input control tester', () => {
 
 describe('Material input control', () => {
 
+  /** Use this container to render components */
+  const container = document.createElement('div');
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
   it('should autofocus the first element', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
@@ -123,10 +131,11 @@ describe('Material input control', () => {
       schema,
       uischema
     );
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialHorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
@@ -135,10 +144,11 @@ describe('Material input control', () => {
 
   it('render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
 
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
@@ -165,10 +175,11 @@ describe('Material input control', () => {
       label: false
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
 
     const div = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
@@ -190,14 +201,15 @@ describe('Material input control', () => {
 
   it('can be hidden', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl
           schema={schema}
           uischema={uischema}
           visible={false}
         />
-      </Provider>
+      </Provider>,
+      container
     );
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
     expect(getComputedStyle(control).display).toBe('none');
@@ -205,10 +217,11 @@ describe('Material input control', () => {
 
   it('should be shown by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
     expect(control.hidden).toBeFalsy();
@@ -216,10 +229,11 @@ describe('Material input control', () => {
 
   it('should display a single error', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
 
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
@@ -229,10 +243,11 @@ describe('Material input control', () => {
 
   it('should display multiple errors', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     store.dispatch(Actions.update('foo', () => 3));
@@ -241,10 +256,11 @@ describe('Material input control', () => {
 
   it('should not show any errors', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     expect(validation.textContent).toBe('');
@@ -252,10 +268,11 @@ describe('Material input control', () => {
 
   it('should handle validation updates', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={schema} uischema={uischema}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     store.dispatch(Actions.update('foo', () => 3));
@@ -313,10 +330,11 @@ describe('Material input control', () => {
       jsonSchema,
       layout
     );
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialHorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const validation = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p');
     expect(validation[0].textContent).toBe('');
@@ -341,10 +359,11 @@ describe('Material input control', () => {
     };
 
     const store = initJsonFormsStore({}, jsonSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
     expect(label.textContent).toBe('Date Field*');
@@ -366,10 +385,11 @@ describe('Material input control', () => {
     };
 
     const store = initJsonFormsStore({}, jsonSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
     expect(label.textContent).toBe('Date Field');
@@ -388,10 +408,11 @@ describe('Material input control', () => {
       options: {format: 'password'}
     };
     const store = initJsonFormsStore({}, jsonSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input');
     expect(input.type).toBe('password');
@@ -417,12 +438,41 @@ describe('Material input control', () => {
       scope: '#/properties/expectedValue'
     };
     const store = initJsonFormsStore({}, jsonSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    const tree = ReactDOM.render(
       <Provider store={store}>
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
-      </Provider>
+      </Provider>,
+      container
     );
-    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
-    expect(control).toBe(undefined);
+    const rendered = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+    expect(rendered).toBe(undefined);
+  });
+
+  it('should render own id and create/use input id', () => {
+    const jsonSchema = {
+      type: 'object',
+      properties: {
+        name: {type: 'string'}
+      }
+    };
+    const control = {
+      type: 'Control',
+      scope: '#/properties/name'
+    };
+    const store = initJsonFormsStore({}, jsonSchema, control);
+    const tree = ReactDOM.render(
+      <Provider store={store}>
+        <MaterialInputControl schema={jsonSchema} uischema={control} id={control.scope}/>
+      </Provider>,
+      container
+    );
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    expect(input.id).toBe('#/properties/name-input');
+
+    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
+    expect(label.htmlFor).toBe('#/properties/name-input');
+
+    const rootDiv = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
+    expect(rootDiv.id).toBe('#/properties/name');
   });
 });

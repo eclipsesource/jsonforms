@@ -68,7 +68,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
 
     return (
       <TextField
-        id={id}
+        id={id + '-input'}
         label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
         type={fieldType}
         error={!isValid}
