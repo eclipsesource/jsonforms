@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { Actions, getData } from '@jsonforms/core';
+import { CHANGE_EXAMPLE, changeExample } from '@jsonforms/examples';
 import { ReactExampleDescription } from './util';
 import { connect } from 'react-redux';
 import { Reducer } from 'redux';
@@ -46,11 +47,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     dispatch: dispatch,
     changeExampleData: example => {
-      dispatch({ type: 'changeExample', selectedExample: example });
+      dispatch(changeExample(example));
       dispatch(Actions.init(example.data, example.schema, example.uiSchema));
-      if (example.config) {
-        Actions.setConfig(example.config(dispatch));
-      }
+      Actions.setConfig(example.config)(dispatch);
     }
   });
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
@@ -63,9 +62,9 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   };
 export const exampleReducer = (state = [], action) => {
     switch (action.type) {
-      case 'changeExample':
+      case CHANGE_EXAMPLE:
         return Object.assign({}, state, {
-          selectedExample: action.selectedExample
+          selectedExample: action.example
         });
       default:
         return state;
