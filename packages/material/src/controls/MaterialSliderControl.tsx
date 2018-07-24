@@ -49,7 +49,6 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       enabled,
       errors,
       label,
-      uischema,
       scopedSchema,
       handleChange,
       visible,
@@ -110,7 +109,6 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
           }
           id={id}
           disabled={!enabled}
-          autoFocus={uischema.options && uischema.options.focus}
           step={scopedSchema.multipleOf || 1}
         />
         <FormHelperText error={!isValid}>
