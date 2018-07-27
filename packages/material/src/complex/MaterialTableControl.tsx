@@ -25,10 +25,11 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Grid, Hidden} from '@material-ui/core';
-import {Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { Grid, Hidden, Typography } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import {
   ControlElement,
+  JsonSchema,
   Paths
 } from '@jsonforms/core';
 import { DispatchField } from '@jsonforms/react';
@@ -37,8 +38,7 @@ import { TableToolbar } from './TableToolbar';
 
 const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) => {
   if (scopedSchema.type === 'object') {
-    return Object.keys(scopedSchema.properties)
-      .filter(prop => scopedSchema.properties[prop].type !== 'array')
+    return getValidColumnProps(scopedSchema)
       .map(prop => {
         const cellPath = Paths.compose(rowPath, prop);
         const props = {
@@ -61,7 +61,7 @@ const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) => {
       errors: cellErrors
     };
 
-    return <Cell key={cellPath} {...props}/>;
+    return <Cell key={cellPath} {...props} />;
   }
 };
 
@@ -73,17 +73,27 @@ const generateHeaderCellForPrimitives = toolbarProps => {
     </TableCell>
   );
 };
+const getValidColumnProps = (scopedSchema: JsonSchema) => {
+  if (scopedSchema.type === 'object') {
+    return Object.keys(scopedSchema.properties)
+      .filter(prop => scopedSchema.properties[prop].type !== 'array');
+  }
+  /*primitives*/
+  return [''];
+};
 
-const EmptyTable = () => (
+const EmptyTable = ({ numColumns }) => (
   <TableRow>
-    <TableCell>No data</TableCell>
+    <TableCell colSpan={numColumns}>
+      <Typography align='center'>No data</Typography>
+    </TableCell>
   </TableRow>
 );
 
-const TableHeaderCell = ({cellProperty}) =>
+const TableHeaderCell = ({ cellProperty }) =>
   <TableCell >{_.capitalize(cellProperty)}</TableCell>;
 
-const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema}) => {
+const TableContentCell = ({ rowPath, cellProperty, cellPath, errors, scopedSchema }) => {
   const cellErrors = errors
     .filter(error => error.dataPath === cellPath)
     .map(error => error.message);
@@ -117,7 +127,7 @@ const TableContentCell = ({rowPath, cellProperty, cellPath, errors, scopedSchema
 };
 
 const TableWithContent = tableProps => {
-  const {data, path, scopedSchema, childErrors, select, isSelected} = tableProps;
+  const { data, path, scopedSchema, childErrors, select, isSelected } = tableProps;
 
   return data.map((_child, index) => {
     const childPath = Paths.compose(path, `${index}`);
@@ -130,7 +140,7 @@ const TableWithContent = tableProps => {
         selected={selected}
       >
         <TableCell padding='checkbox'>
-          <Checkbox checked={selected} onChange={e => select(e, index)}/>
+          <Checkbox checked={selected} onChange={e => select(e, index)} />
         </TableCell>
         {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
       </TableRow>
@@ -138,31 +148,33 @@ const TableWithContent = tableProps => {
   });
 };
 
-export const MaterialTableControl = props =>  {
-    const { data, path, scopedSchema, numSelected, selectAll } = props;
-    const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
-    const rowCount = data ? data.length : 0;
-    const toolbarProps = { numSelected, ...props };
+export const MaterialTableControl = props => {
+  const { data, path, scopedSchema, numSelected, selectAll } = props;
+  const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
+  const rowCount = data ? data.length : 0;
+  const toolbarProps = { numSelected, ...props };
 
-    return (
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell padding='checkbox' style={{width: '1em'}}>
-                <Checkbox
-                  indeterminate={numSelected > 0 && numSelected < rowCount}
-                  checked={numSelected === rowCount}
-                  onChange={selectAll}
-                />
-              </TableCell>
-            {scopedSchema.type === 'object' ?
-              generateCells(TableHeaderCell, scopedSchema, path) :
-              generateHeaderCellForPrimitives(toolbarProps)}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {isEmptyTable ? <EmptyTable/> : <TableWithContent {...props}/>}
-          </TableBody>
-        </Table>
-    );
+  return (
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableCell padding='checkbox' style={{ width: '1em' }}>
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={!isEmptyTable && numSelected === rowCount}
+              onChange={selectAll}
+            />
+          </TableCell>
+          {scopedSchema.type === 'object' ?
+            generateCells(TableHeaderCell, scopedSchema, path) :
+            generateHeaderCellForPrimitives(toolbarProps)}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {isEmptyTable ?
+          <EmptyTable numColumns={getValidColumnProps(scopedSchema).length + 1} /> :
+          <TableWithContent {...props} />}
+      </TableBody>
+    </Table>
+  );
 };
