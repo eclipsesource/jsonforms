@@ -8,7 +8,7 @@ import { materialFields, materialRenderers } from '@jsonforms/material-renderers
 import * as _ from 'lodash';
 import { findAllContainerProperties, Property } from '../src/services/property.util';
 import { JsonSchema7 } from '@jsonforms/core';
-import { editorReducer, setContainerProperties } from '../src/reducers';
+import { setContainerProperties, treeWithDetailReducer } from '../src/reducers';
 import * as JsonRefs from 'json-refs';
 import {
   Actions,
@@ -83,7 +83,7 @@ const jsonforms: any = {
   jsonforms: {
     renderers,
     fields,
-    editor: {
+    treeWithDetail: {
       imageMapping: imageProvider,
       labelMapping: labelProvider,
       modelMapping,
@@ -96,7 +96,7 @@ const store: Store<any> = createStore(
   combineReducers({
       jsonforms: jsonformsReducer(
         {
-          editor: editorReducer
+          treeWithDetail: treeWithDetailReducer
         }
       )
     }
