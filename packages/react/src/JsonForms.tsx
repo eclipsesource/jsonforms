@@ -28,16 +28,22 @@ import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
   createId,
+  isControl,
   JsonFormsProps,
   mapStateToDispatchRendererProps,
   removeId
 } from '@jsonforms/core';
 
-class JsonFormsDispatchRenderer extends React.Component<JsonFormsProps, { id: string }> {
+interface JsonFormsDispatchRendererState {
+  id: string;
+}
+
+class JsonFormsDispatchRenderer
+  extends React.Component<JsonFormsProps, JsonFormsDispatchRendererState> {
 
   constructor(props) {
     super(props);
-    if (this.isManageOwnID(props)) {
+    if (isControl(props.uischema)) {
       this.state = {
         id: createId(props.uischema.scope)
       };
@@ -48,12 +54,8 @@ class JsonFormsDispatchRenderer extends React.Component<JsonFormsProps, { id: st
     }
   }
 
-  isManageOwnID(props) {
-    return props.uischema.type === 'Control';
-  }
-
   componentWillUnmount() {
-    if (this.isManageOwnID(this.props)) {
+    if (isControl(this.props.uischema)) {
       removeId(this.state.id);
     }
   }

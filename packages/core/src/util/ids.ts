@@ -1,26 +1,26 @@
-const usedIDs: Set<string> = new Set<string>();
+const usedIds: Set<string> = new Set<string>();
 
-export const createId = (proposedID: string) => {
-  if (proposedID === undefined) {
+export const createId = (proposedId: string) => {
+  if (proposedId === undefined) {
     // failsafe to avoid endless loops in error cases
-    proposedID = 'undefined';
+    proposedId = 'undefined';
   }
-  let tries = 1;
-  while (!isUniqueId(proposedID, tries)) {
+  let tries = 0;
+  while (!isUniqueId(proposedId, tries)) {
     tries++;
   }
-  const newID = makeId(proposedID, tries);
-  usedIDs.add(newID);
+  const newID = makeId(proposedId, tries);
+  usedIds.add(newID);
   return newID;
 };
 
-export const removeId = id => usedIDs.delete(id);
+export const removeId = (id: string) => usedIds.delete(id);
 
 const isUniqueId = (idBase: string, iteration: number) => {
   const newID = makeId(idBase, iteration);
-  return !usedIDs.has(newID);
+  return !usedIds.has(newID);
 };
 
 const makeId = (idBase: string, iteration: number) => iteration <= 1 ? idBase : idBase + iteration;
 
-export const clearAllIds = () => usedIDs.clear();
+export const clearAllIds = () => usedIds.clear();

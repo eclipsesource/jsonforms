@@ -33,7 +33,7 @@ import { DispatchFieldProps, mapStateToDispatchFieldProps } from '@jsonforms/cor
  */
 class Dispatch extends React.Component<DispatchFieldProps> {
   render() {
-    const { uischema, schema, path, fields, id } = this.props as DispatchFieldProps;
+    const { uischema, schema, path, fields, id } = this.props;
     const field = _.maxBy(fields, r => r.tester(uischema, schema));
 
     if (field === undefined || field.tester(uischema, schema) === -1) {

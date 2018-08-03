@@ -102,19 +102,6 @@ test.beforeEach(t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.context.uischema2 = {
-    type: 'HorizontalLayout',
-    elements: [
-      {
-        type: 'Control',
-        scope: '#/properties/foo'
-      },
-      {
-        type: 'Control',
-        scope: '#/properties/foo'
-      }
-    ]
-  };
   t.context.schema = {
     type: 'object',
     properties: {
@@ -231,11 +218,25 @@ test('ids should be unique within the same form', t => {
     );
   };
 
+  const uischema2 = {
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+
   const store = initJsonFormsStore(
     {
       data: t.context.data,
       schema: t.context.schema,
-      uischema: t.context.uischema2,
+      uischema: uischema2,
       renderers: [{
         tester: rankWith(10, uiTypeIs('HorizontalLayout')),
         renderer: FakeLayout
@@ -252,7 +253,7 @@ test('ids should be unique within the same form', t => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <JsonForms uischema={t.context.uischema2} schema={t.context.schema} />
+      <JsonForms uischema={uischema2} schema={t.context.schema} />
     </Provider>,
     t.context.container
   );
