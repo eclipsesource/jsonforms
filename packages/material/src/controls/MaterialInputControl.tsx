@@ -84,11 +84,12 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
           fullWidth={!trim}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
+          id={id}
         >
-          <InputLabel htmlFor={id} error={!isValid} style={inputLabelStyle}>
+          <InputLabel htmlFor={id + '-input'} error={!isValid} style={inputLabelStyle}>
             {computeLabel(isPlainLabel(label) ? label : label.default, required)}
           </InputLabel>
-          <DispatchField uischema={uischema} schema={schema} path={parentPath} />
+          <DispatchField uischema={uischema} schema={schema} path={parentPath} id={id + '-input'} />
           <FormHelperText error={!isValid}>
             {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
           </FormHelperText>

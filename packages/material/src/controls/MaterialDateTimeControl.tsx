@@ -71,7 +71,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <DateTimePicker
-          id={id}
+          id={id + '-input'}
           label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
           error={!isValid}
           style={style}

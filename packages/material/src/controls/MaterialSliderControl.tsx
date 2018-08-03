@@ -86,8 +86,9 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
         fullWidth={!trim}
         onFocus={this.onFocus}
         onBlur={this.onBlur}
+        id={id}
       >
-        <Typography id={id} style={labelStyle} variant='caption'>
+        <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
           {computeLabel(isPlainLabel(label) ? label : label.default, required)}
         </Typography>
         <div style={rangeContainerStyle}>
@@ -107,7 +108,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
             handleChange(path, Number(value));
           }
           }
-          id={id}
+          id={id + '-input'}
           disabled={!enabled}
           step={scopedSchema.multipleOf || 1}
         />

@@ -120,11 +120,6 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
    */
   scopedSchema: JsonSchema;
 
-  /**
-   * An unique ID that can be used to identify the rendered element.
-   */
-  id: string;
-
   findUISchema(schema: JsonSchema, schemaPath: string, path: string);
 }
 /**
@@ -158,9 +153,9 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
   required: boolean;
 
   /**
-   * The schema that corresponds to the data the control is bound to.
+   * An ID that can be used to identify the rendered element. May not be unique.
    */
-  scopedSchema: JsonSchema;
+  id: string;
 }
 /**
  * Props of a Control.
@@ -315,7 +310,7 @@ export const mapStateToControlProps = (state, ownProps): StatePropsOfControl => 
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = _.union(getErrorAt(path)(state).map(error => error.message));
   const controlElement = ownProps.uischema as ControlElement;
-  const id = controlElement.scope || '';
+  const id = ownProps.id;
   const required =
       controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);

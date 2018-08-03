@@ -128,9 +128,9 @@ test('render two children', t => {
   const tds = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'td');
   t.is(tds.length, 3);
   t.is(tds[0].children.length, 1);
-  t.is(tds[0].children[0].id, '#/properties/x');
+  t.is(tds[0].children[0].id, '');
   t.is(tds[1].children.length, 1);
-  t.is(tds[1].children[0].id, '#/properties/y');
+  t.is(tds[1].children[0].id, '');
 });
 
 test('render empty data', t => {
