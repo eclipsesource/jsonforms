@@ -43,6 +43,7 @@ import * as resolve from './resolve';
 import * as config from './config';
 import * as text from './text';
 import * as numbers from './numbers';
+import * as scope from './scope';
 export * from './register';
 export * from './example';
 export {
@@ -67,4 +68,5 @@ export {
   config,
   text,
   numbers,
+  scope
 };
