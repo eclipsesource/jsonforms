@@ -1,7 +1,7 @@
 // tslint:disable:jsx-no-multiline-js
 // tslint:disable:jsx-no-lambda
+import DialogTitle from '@material-ui/core/DialogTitle';
 import * as React from 'react';
-import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
   getData,
@@ -11,10 +11,9 @@ import {
   Resolve,
   update
 } from '@jsonforms/core';
-import { findPropertyLabel, retrieveContainerProperties } from '../services/property.util';
-import { getContainerProperties } from '../reducers';
+import { findContainerProperties, findPropertyLabel } from '../services/property.util';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import * as _ from 'lodash';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
@@ -104,13 +103,7 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const containerProps = getContainerProperties(state);
-  let containerProperties;
-  if (_.has(containerProps, ownProps.schema.$id)) {
-    containerProperties = containerProps[ownProps.schema.$id];
-  } else {
-    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
-  }
+  const containerProperties = findContainerProperties(ownProps.schema, getSchema(state), false);
 
   return {
     rootData: getData(state),

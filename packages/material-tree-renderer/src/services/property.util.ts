@@ -1,16 +1,13 @@
 import * as _ from 'lodash';
-import { JsonSchema7 } from '@jsonforms/core';
+import { JsonSchema } from '@jsonforms/core';
 import { resolveSchema } from '@jsonforms/core';
 import * as JsonRefs from 'json-refs';
 
-const isObject = (schema: JsonSchema7): boolean => {
+const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
 };
-const isArray = (schema: JsonSchema7): boolean => {
+const isArray = (schema: JsonSchema): boolean => {
   return schema.items !== undefined;
-};
-const deepCopy = <T>(object: T): T => {
-  return JSON.parse(JSON.stringify(object)) as T;
 };
 
 /**
@@ -29,7 +26,7 @@ export interface Property {
   /**
    * The schema is the JsonSchema this property describes.
    */
-  schema: JsonSchema7;
+  schema: JsonSchema;
 }
 
 /**
@@ -56,7 +53,6 @@ export const findPropertyLabel = (property: Property): string => {
     [
       property.schema.title,
       property.label,
-      property.schema.$id,
       property.property
     ],
     n => !_.isEmpty(n)
@@ -72,7 +68,7 @@ export const findPropertyLabel = (property: Property): string => {
  * @param extractedReferences Contains the definition attributes for the current schema
  * @returns SchemaRefs all the required reference paths for subschema
  */
-const findReferences = (parentSchema: JsonSchema7,
+const findReferences = (parentSchema: JsonSchema,
                         allRefs: SchemaRefs,
                         schemaRefs: SchemaRefs,
                         extractedReferences: { [id: string]: string }
@@ -102,8 +98,10 @@ const findReferences = (parentSchema: JsonSchema7,
  * @param schema current subschema without resolved references
  * @returns JsonSchema current subschema with resolved references
  */
-export const makeSchemaSelfContained = (parentSchema: JsonSchema7,
-                                        schema: JsonSchema7): JsonSchema7 => {
+export const makeSchemaSelfContained = (
+  parentSchema: JsonSchema,
+  schema: JsonSchema
+): JsonSchema => {
   const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true});
   const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true});
   let extractedReferences;
@@ -140,25 +138,11 @@ export const makeSchemaSelfContained = (parentSchema: JsonSchema7,
  * @param refPath The path to resolve
  * @return a JsonSchema that is self-contained
  */
-export const makeSelfContainedSchema = (parentSchema: JsonSchema7, refPath: string): JsonSchema7 => {
-  let schema: JsonSchema7 = resolveSchema(parentSchema, refPath) as JsonSchema7;
-  schema = deepCopy(schema);
-  if (_.isEmpty(schema.$id)) {
-    schema.$id = '#' + refPath;
-  }
-  schema = { ...schema, ...makeSchemaSelfContained(parentSchema, schema) };
-
-  return schema;
+const resolveAndMakeSchemaSelfContained =
+  (parentSchema: JsonSchema, refPath: string): JsonSchema => {
+  const schema: JsonSchema = resolveSchema(parentSchema, refPath) as JsonSchema;
+  return { ...schema, ...makeSchemaSelfContained(parentSchema, schema) } as JsonSchema;
 };
-
-/**
- * Calculates label for an item which is resolved in anyOf
- * @param {string} id The schema id
- * @returns {string}
- */
-const calculateLabel = (id: string): string => (
-  _.startsWith(id, '#') ? id.substring(id.lastIndexOf('#') + 1) : id
-);
 
 /**
  * Returns a flattened list of container properties.
@@ -171,84 +155,93 @@ const calculateLabel = (id: string): string => (
  * @param {JsonSchema} rootSchema The parent schema
  * @param {boolean} isInContainer To indicate whether the schema is in a container or not
  *                                Properties that are described in array are considered as
- *                                they are in a container.
- * @param {boolean} hasOnlyOwnChildren To accept only corresponding children of a property
+ *                                being in a container.
  * @returns {@link Property[]} An array of properties where each property describes
  *                             a self-contained schema for the corresponding schema
  */
-export const findContainerProperties = (property: string,
-                                        label: string,
-                                        schema: JsonSchema7,
-                                        rootSchema: JsonSchema7,
-                                        isInContainer: boolean,
-                                        hasOnlyOwnChildren = false): Property[] => {
+const findContainerProps = (property: string,
+                            label: string,
+                            schema: JsonSchema,
+                            rootSchema: JsonSchema,
+                            isInContainer: boolean,
+                            visited: Map<string, string>,
+                            recurse: boolean): Property[] => {
+
   if (schema.$ref !== undefined) {
-    return findContainerProperties(
+    if (visited.has(label)) {
+      return [];
+    }
+    return findContainerProps(
       property,
       schema.$ref === '#' ? undefined : schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
-      makeSelfContainedSchema(rootSchema, schema.$ref),
+      resolveAndMakeSchemaSelfContained(rootSchema, schema.$ref),
       rootSchema,
       isInContainer,
-      hasOnlyOwnChildren
+      visited.set(label, schema.$ref),
+      recurse
     );
-  }
-  if (isObject(schema)) {
+  } else if (isObject(schema)) {
+    const props = [];
+
     if (isInContainer) {
       const prop: Property =  {
         property,
         label,
         schema
       };
-      return [prop];
-    }
-    if (hasOnlyOwnChildren) {
-      // All children of the property are known at this point
-      // Don't need to resolve schema further
-      return [];
+      props.push(prop);
+
+      if (!recurse) {
+        return props;
+      }
     }
 
     return Object.keys(schema.properties)
       .reduce(
         (prev, currentProp) =>
           prev.concat(
-            findContainerProperties(
+            findContainerProps(
               currentProp,
               currentProp,
               schema.properties[currentProp],
               rootSchema,
               false,
-              true
+              visited,
+              recurse
             )
           ),
-        []
+        props
       );
-  }
-  if (isArray(schema) && !Array.isArray(schema.items)) {
-    return findContainerProperties(
+  } else if (isArray(schema) && !Array.isArray(schema.items)) {
+
+    return findContainerProps(
       property,
       label,
       schema.items,
       rootSchema,
       true,
-      hasOnlyOwnChildren
+      visited,
+      recurse
     );
-  }
-  if (schema.anyOf !== undefined) {
-    return schema.anyOf
-      .reduce(
-        (prev, currentProp) =>
-          prev.concat(
-            findContainerProperties(
-              property,
-              currentProp.$id !== undefined ? calculateLabel(currentProp.$id) : undefined,
-              currentProp,
-              rootSchema,
-              isInContainer,
-              hasOnlyOwnChildren
-            )
-          ),
-        []
-      );
+  } else if (schema.anyOf !== undefined) {
+    // TODO: oneOf?
+    const init: Property[] = [];
+    return _.reduce(
+      schema.anyOf,
+      (prev: Property[], anyOfSubSchema: JsonSchema, index: number) =>
+        prev.concat(
+          findContainerProps(
+            property,
+            `${property}.anyOf.${index}`,
+            anyOfSubSchema,
+            rootSchema,
+            isInContainer,
+            visited,
+            recurse
+          )
+        ),
+      init
+    );
   }
 
   return [];
@@ -257,45 +250,13 @@ export const findContainerProperties = (property: string,
 /**
  * Retrieves an array of properties based on the provided schema.
  *
- * @param schema The schema to check for properties
+ * @param schema the schema to check for container properties
+ * @param rootSchema the root schema
+ * @param recurse whether to recurse in case properties have already been found.
+ *        Set to true for finding all valid, i.e. nested container properties
  * @return The array of {@link Property} or empty if no properties are available
  * @see Property
  */
-export const retrieveContainerProperties = (schema: JsonSchema7, rootSchema: JsonSchema7) => {
-  return findContainerProperties('root', 'root', schema, rootSchema, false);
-};
-
-/**
- * Returns a flattened map of sub schema ID to container properties.
- * A property is being considered a container property if it is an array of objects,
- * meaning that all its children are non-primitive
- *
- * @param schema The root schema
- * @param containerProperties All the available containers in the given schema
- *
- * @returns {{[p: string]: Property[]}}
- */
-export const findAllContainerProperties =
-  (schema: JsonSchema7,
-   rootSchema: JsonSchema7,
-   containerProperties: { [schemaId: string]: Property[] } = {}):
-    { [schemaId: string]: Property[] } => {
-
-    if (!_.has(containerProperties, schema.$id)) {
-      const props = retrieveContainerProperties(schema, rootSchema);
-      if (props.length !== 0) {
-        containerProperties = {
-          ...containerProperties,
-          ...{[schema.$id]: props}
-        };
-        return _.reduce(
-          props, (prev, curProp) => {
-            return findAllContainerProperties(curProp.schema, rootSchema, prev);
-          },
-          containerProperties
-        );
-      }
-    }
-
-    return containerProperties;
-};
+export const findContainerProperties =
+  (schema: JsonSchema, rootSchema: JsonSchema, recurse: boolean): Property[] =>
+    findContainerProps('root', 'root', schema, rootSchema, false, new Map(), recurse);
