@@ -1,7 +1,7 @@
 // tslint:disable:jsx-no-multiline-js
 
+import { indexFromPath } from '../helpers/util';
 import * as React from 'react';
-import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
   getData,
@@ -12,7 +12,7 @@ import {
   update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
-import { Property, retrieveContainerProperties } from '../services/property.util';
+import { findContainerProperties, Property } from '../services/property.util';
 import {
   DragSource,
   DragSourceMonitor,
@@ -24,10 +24,7 @@ import {
   DropResult,
   moveListItem,
   Types } from './dnd.util';
-import { indexFromPath } from '../helpers/util';
-import {
-  getContainerProperties,
-} from '../reducers';
+import * as _ from 'lodash';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -137,6 +134,9 @@ const styles:
   }
 });
 
+/**
+ * Represents an item within the master view.
+ */
 export interface ObjectListItemProps {
   path: string;
   schema: JsonSchema7;
@@ -178,7 +178,7 @@ class ObjectListItem extends React.Component
       !hasParent ? [classes.listItem, classes.withoutBorders].join(' ') : classes.listItem;
     const scopedData = resolveData(rootData, parentPath);
     const groupedProps = _.groupBy(containerProperties, property => property.property);
-    const imageClass = imageProvider(schema.$id);
+    const imageClass = imageProvider(schema);
     // TODO: key should be set in caller
     return (
       <li
@@ -241,13 +241,7 @@ class ObjectListItem extends React.Component
 
 const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
-  const containerProps = getContainerProperties(state);
-  let containerProperties;
-  if (_.has(containerProps, ownProps.schema.$id)) {
-    containerProperties = containerProps[ownProps.schema.$id];
-  } else {
-    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
-  }
+  const containerProperties = findContainerProperties(ownProps.schema, getSchema(state), false);
 
   return {
     index: index,

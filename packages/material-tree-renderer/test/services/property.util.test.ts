@@ -1,32 +1,14 @@
 /* ts-lint:disable:max-file-line-count */
 import {
-  findPropertyLabel,
-  makeSchemaSelfContained,
-  retrieveContainerProperties
+  findContainerProperties,
+  makeSchemaSelfContained
 } from '../../src/services/property.util';
 import { JsonSchema } from '@jsonforms/core';
 import * as _ from 'lodash';
 
-let fooBarArraySchema;
-beforeEach(() => {
-  fooBarArraySchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'array',
-        items: {
-          type: 'object',
-          properties: {
-            bar: {type: 'string'}
-          }
-        }
-      }
-    }
-  };
-});
+describe('Property util', () => {
 
-describe('Container Properties Tests', () => {
-  test('expect to retrieve property from a nested array object, non primitive items', () => {
+  test('should retrieve container property from a nested array (non primitive)', () => {
     const schema: JsonSchema = {
       type: 'array',
       items: {
@@ -34,57 +16,97 @@ describe('Container Properties Tests', () => {
         items: {
           type: 'object',
           properties: {
-            foo: {type: 'string'}
+            foo: { type: 'string' }
           }
         }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
     expect(properties.length).toEqual(1);
-    expect(properties[0].schema).toMatchObject((schema.items as JsonSchema).items);
+    expect(properties).toMatchObject([
+      {
+        property: 'root',
+        label: 'root',
+        schema: { type: 'object', properties: { foo: { type: 'string' } } }
+      }
+    ]);
   });
 
-  test('expect to retrieve property from array object, non primitive items', () => {
+  test('should retrieve container property from an array (non primitive)', () => {
     const schema = {
       type: 'array',
       items: {
         type: 'object',
         properties: {
-          foo: {type: 'string'}
+          foo: { type: 'string' }
         }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'root',
+        label: 'root',
+        schema: {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' }
+          }
+        }
+      }
+    ]);
     expect(properties.length).toEqual(1);
   });
 
-  test('expect to retrieve property from object with array object, non primitive items', () => {
-    const schema = fooBarArraySchema;
-
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(1);
-    expect(findPropertyLabel(properties[0])).toEqual('foo');
-    expect(properties[0].schema).toMatchObject(schema.properties.foo.items);
-  });
-
-  test('expect to have 0 properties from array objects, primitive items', () => {
+  test('should retrieve container property from object with array property (non primitive)', () => {
     const schema = {
       type: 'object',
       properties: {
-        strings: {type: 'array', items: {type: 'string'}},
-        numbers: {type: 'array', items: {type: 'number'}},
-        integers: {type: 'array', items: {type: 'integer'}},
-        booleans: {type: 'array', items: {type: 'boolean'}}
+        foo: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              bar: { type: 'string' }
+            }
+          }
+        }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'foo',
+        label: 'foo',
+        schema: {
+          type: 'object',
+          properties: {
+            bar: { type: 'string' }
+          }
+        }
+      }
+    ]);
+  });
+
+  test('should retrieve no container properties from object with arrays (all primitive)', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        strings: { type: 'array', items: { type: 'string' } },
+        numbers: { type: 'array', items: { type: 'number' } },
+        integers: { type: 'array', items: { type: 'integer' } },
+        booleans: { type: 'array', items: { type: 'boolean' } }
+      }
+    };
+
+    const properties = findContainerProperties(schema, schema, false);
     expect(properties.length).toEqual(0);
   });
 
-  test('expect to have 0 properties from object with tuple array', () => {
+  test('should retrieve no container properties from object with tuple array', () => {
     const schema = {
       type: 'object',
       properties: {
@@ -94,13 +116,13 @@ describe('Container Properties Tests', () => {
             {
               type: 'object',
               properties: {
-                bar: {type: 'string'}
+                bar: { type: 'string' }
               }
             },
             {
               type: 'object',
               properties: {
-                baz: {type: 'string'}
+                baz: { type: 'string' }
               }
             }
           ]
@@ -108,47 +130,46 @@ describe('Container Properties Tests', () => {
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
     expect(properties.length).toEqual(0);
   });
 
-  test('expect to have 0 properties from object with primitives types', () => {
+  test('should retrieve no container properties from object with primitive properties', () => {
     const schema = {
       type: 'object',
       properties: {
-        string: {type: 'string'},
-        number: {type: 'number'},
-        integer: {type: 'integer'},
-        boolean: {type: 'boolean'}
+        string: { type: 'string' },
+        number: { type: 'number' },
+        integer: { type: 'integer' },
+        boolean: { type: 'boolean' }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
     expect(properties.length).toEqual(0);
   });
 
-  test('expect to have 0 properties from object without array object', () => {
+  test('should retrieve no container properties from nested object with primitive properties', () => {
     const schema = {
       type: 'object',
       properties: {
         foo: {
           type: 'object',
           properties: {
-            bar: {type: 'string'}
+            bar: { type: 'string' }
           }
         }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
     expect(properties.length).toEqual(0);
   });
 
-  test('expect to have properties from objects with same $ref', () => {
+  test('should retrieve container properties from objects with same $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
-          $id: '#id',
           type: 'object',
           properties: {
             name: {type: 'string'}
@@ -162,16 +183,32 @@ describe('Container Properties Tests', () => {
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(2);
-    expect(findPropertyLabel(properties[0])).toEqual('person');
-    expect(findPropertyLabel(properties[1])).toEqual('person');
-    const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
-    expect(properties[0].schema).toMatchObject(personCopy);
-    expect(properties[1].schema).toMatchObject(personCopy);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'friends',
+        label: 'person',
+        schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+          }
+        }
+      },
+      {
+        property: 'enemies',
+        label: 'person',
+        schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' }
+          }
+        }
+      }
+    ]);
   });
 
-  test('expect to have properties from objects with different $ref', () => {
+  test('should retrieve container properties from objects with different $ref', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -183,7 +220,7 @@ describe('Container Properties Tests', () => {
         robot: {
           type: 'object',
           properties: {
-            $id: {type: 'string'}
+            name: {type: 'string'}
           }
         }
       },
@@ -194,66 +231,88 @@ describe('Container Properties Tests', () => {
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(2);
-    const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
-    personCopy.$id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
-    const robotCopy = JSON.parse(JSON.stringify(schema.definitions.robot));
-    robotCopy.$id = '#' + (schema.properties.robots.items as JsonSchema).$ref;
-    expect(findPropertyLabel(properties[0])).toEqual('person');
-    expect(findPropertyLabel(properties[1])).toEqual('robot');
-    expect(properties[0].schema).toMatchObject(personCopy);
-    expect(properties[1].schema).toMatchObject(robotCopy);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'persons',
+        label: 'person',
+        schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' }
+          }
+        }
+      },
+      {
+        property: 'robots',
+        label: 'robot',
+        schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' }
+          }
+        }
+      }
+    ]);
   });
 
-  test('expect to have 0 properties object with no array object', () => {
+  test('should retrieve no container properties object if no array object', () => {
     const schema: JsonSchema = {
       definitions: {
-        a: {type: 'object'},
-        b: {type: 'object'}
+        a: { type: 'object' },
+        b: { type: 'object' }
       },
       anyOf: [
-        {$ref: '#/definitions/a'},
-        {$ref: '#/definitions/b'}
+        { $ref: '#/definitions/a' },
+        { $ref: '#/definitions/b' }
       ]
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
+    const properties = findContainerProperties(schema, schema, false);
     expect(properties.length).toEqual(0);
   });
 
-  test('expect to have properties from array object by using keyword anyOf', () => {
+  test('should retrieve container properties from array of objects by using keyword anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
-        a: {type: 'object', properties: {foo: {type: 'string'}}},
-        b: {type: 'object', properties: {foo: {type: 'string'}}}
+        a: { type: 'object', properties: { foo: { type: 'string' } } },
+        b: { type: 'object', properties: { foo: { type: 'string' } } }
       },
       type: 'array',
       items: {
         anyOf: [
-          {$ref: '#/definitions/a'},
-          {$ref: '#/definitions/b'}
+          { $ref: '#/definitions/a' },
+          { $ref: '#/definitions/b' }
         ]
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(2);
-    expect(findPropertyLabel(properties[0])).toEqual('a');
-    expect(findPropertyLabel(properties[1])).toEqual('b');
-    const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
-    aCopy.$id = '#' + (schema.items as JsonSchema).anyOf[0].$ref;
-    const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
-    bCopy.$id = '#' + (schema.items as JsonSchema).anyOf[1].$ref;
-    expect(properties[0].schema).toMatchObject(aCopy);
-    expect(properties[1].schema).toMatchObject(bCopy);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'root',
+        label: 'a',
+        schema: {
+          type: 'object',
+          properties: { foo: { type: 'string' } },
+        }
+      },
+      {
+        property: 'root',
+        label: 'b',
+        schema: {
+          type: 'object',
+          properties: { foo: { type: 'string' } },
+        }
+      }
+    ]);
   });
 
   test('expect to retrieve properties from object with array object by using keyword anyOf', () => {
     const schema: JsonSchema = {
       definitions: {
-        a: {type: 'object', properties: {foo: {type: 'string'}}},
-        b: {type: 'object', properties: {foo: {type: 'string'}}}
+        a: { type: 'object', properties: { foo: { type: 'string' } } },
+        b: { type: 'object', properties: { foo: { type: 'string' } } }
       },
       type: 'object',
       properties: {
@@ -261,27 +320,39 @@ describe('Container Properties Tests', () => {
           type: 'array',
           items: {
             anyOf: [
-              {$ref: '#/definitions/a'},
-              {$ref: '#/definitions/b'}
+              { $ref: '#/definitions/a' },
+              { $ref: '#/definitions/b' }
             ]
           }
         }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(2);
-    expect(findPropertyLabel(properties[0])).toEqual('a');
-    expect(findPropertyLabel(properties[1])).toEqual('b');
-    const aCopy = JSON.parse(JSON.stringify(schema.definitions.a));
-    aCopy.$id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[0].$ref;
-    const bCopy = JSON.parse(JSON.stringify(schema.definitions.b));
-    bCopy.$id = '#' + (schema.properties.elements.items as JsonSchema).anyOf[1].$ref;
-    expect(properties[0].schema).toMatchObject(aCopy);
-    expect(properties[1].schema).toMatchObject(bCopy);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'elements',
+        label: 'a',
+        schema: {
+          type: 'object',
+          properties: {
+            foo: { type: 'string' }
+          }
+        }
+      },
+      {
+        property: 'elements',
+        label: 'b',
+        schema: {
+          properties: {
+            foo: { type: 'string' }
+          }
+        }
+      }
+    ]);
   });
 
-  test('expect to retrieve properties from object that references to an array object', () => {
+  test('should retrieve container properties from object that references an array object', () => {
     const schema: JsonSchema = {
       definitions: {
         root: {
@@ -302,13 +373,22 @@ describe('Container Properties Tests', () => {
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(1);
-    expect(findPropertyLabel(properties[0])).toEqual('root');
-    expect(properties[0].schema).toMatchObject(schema.definitions.root.items as JsonSchema);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'roots',
+        label: 'root',
+        schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' }
+          }
+        }
+      }
+    ]);
   });
 
-  test('expect to create self contained child schemata: cross recursion', () => {
+  test('should retrieve containers properties of objects with mutually recursive $refs', () => {
     const schema: JsonSchema = {
       definitions: {
         person: {
@@ -316,7 +396,7 @@ describe('Container Properties Tests', () => {
           properties: {
             robots: {
               type: 'array',
-              items: {$ref: '#/definitions/robot'}
+              items: { $ref: '#/definitions/robot' }
             }
           }
         },
@@ -325,27 +405,65 @@ describe('Container Properties Tests', () => {
           properties: {
             humans: {
               type: 'array',
-              items: {$ref: '#/definitions/person'}
+              items: { $ref: '#/definitions/person' }
             }
           }
         }
       },
       type: 'object',
       properties: {
-        persons: {type: 'array', items: {$ref: '#/definitions/person'}}
+        persons: { type: 'array', items: { $ref: '#/definitions/person' } }
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(1);
-    expect(findPropertyLabel(properties[0])).toEqual('person');
-    const personCopy = JSON.parse(JSON.stringify(schema.definitions.person));
-    personCopy.$id = '#' + (schema.properties.persons.items as JsonSchema).$ref;
-    personCopy.definitions = JSON.parse(JSON.stringify(schema.definitions));
-    expect(properties[0].schema).toMatchObject(personCopy);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'persons',
+        label: 'person',
+        schema: {
+          type: 'object',
+          properties: {
+            robots: {
+              type: 'array',
+              items: {
+                $ref: '#/definitions/robot'
+              }
+            }
+          },
+          definitions: {
+            robot: {
+              type: 'object',
+              properties: {
+                humans: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/person'
+                  }
+                }
+              }
+            },
+            person: {
+              type: 'object',
+              properties: {
+                robots: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/robot'
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]);
   });
-// real world examples
-  test('support easy uml schema with array objects', () => {
+
+  //
+  // real world examples --
+  //
+  test('support simple UML-like schema with array objects', () => {
     const schema: JsonSchema = {
       type: 'object',
       properties: {
@@ -381,140 +499,116 @@ describe('Container Properties Tests', () => {
       }
     };
 
-    const properties = retrieveContainerProperties(schema, schema);
-    expect(properties.length).toEqual(1);
-    expect(findPropertyLabel(properties[0])).toEqual('classes');
-    expect(properties[0].schema)
-      .toMatchObject(schema.properties.classes.items as JsonSchema);
-    const propertiesClasses =
-      retrieveContainerProperties(schema.properties.classes.items as JsonSchema,
-                                  schema);
-    expect(propertiesClasses.length).toEqual(1);
-    expect(findPropertyLabel(propertiesClasses[0])).toEqual('attributes');
-    expect(propertiesClasses[0].schema)
-      .toMatchObject((schema.properties.classes.items as JsonSchema).properties.attributes.items);
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'classes',
+        label: 'classes',
+        schema: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            attributes: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string' },
+                  type: {
+                    type: 'string',
+                    enum: ['string', 'integer']
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]);
   });
 
-  test('calculating schema with references', () => {
+  test('make UI sub schema self-contained', () => {
     const parentSchema: JsonSchema = {
-      'type': 'object',
-      '$id': '#root',
-      'properties': {
-        'type': {
-          'type': 'string',
-          'enum': [
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          enum: [
             'HorizontalLayout',
             'VerticalLayout',
             'Group',
             'Categorization'
           ]
         },
-        'label': {
-          'type': 'string'
-        },
-        'elements': {
-          '$ref': '#/definitions/elements'
-        },
-        'rule': {
-          '$ref': '#/definitions/rule'
-        }
+        label: { type: 'string' },
+        elements: { $ref: '#/definitions/elements' },
+        rule: { $ref: '#/definitions/rule' }
       },
-      'definitions': {
-        'elements': {
-          'type': 'array',
-          '$id': '#elements',
-          'items': {
-            'anyOf': [
-              {
-                '$ref': '#/definitions/control'
-              },
-              {
-                '$ref': '#/definitions/horizontallayout'
-              },
-              {
-                '$ref': '#/definitions/verticallayout'
-              }
+      definitions: {
+        elements: {
+          type: 'array',
+          items: {
+            anyOf: [
+              { $ref: '#/definitions/control' },
+              { $ref: '#/definitions/horizontallayout' },
+              { $ref: '#/definitions/verticallayout' }
             ]
           }
         },
-        'control': {
-          'type': 'object',
-          '$id': '#control',
-          'properties': {
-            'type': {
-              'type': 'string',
-              'default': 'Control'
+        control: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              default: 'Control'
             },
-            'label': {
-              'type': 'string'
-            },
-            'scope': {
-              '$ref': '#/definitions/scope'
-            },
-            'options': {
-              '$ref': '#/definitions/options'
-            },
-            'rule': {
-              '$ref': '#/definitions/rule'
-            }
+            label: { type: 'string' },
+            scope: { $ref: '#/definitions/scope' },
+            options: { $ref: '#/definitions/options' },
+            rule: { $ref: '#/definitions/rule' }
           },
         },
-        'horizontallayout': {
-          'type': 'object',
-          '$id': '#horizontallayout',
-          'properties': {
-            'type': {
-              'type': 'string',
-              'default': 'HorizontalLayout'
+        horizontallayout: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              default: 'HorizontalLayout'
             },
-            'elements': {
-              '$ref': '#/definitions/elements'
-            },
-            'rule': {
-              '$ref': '#/definitions/rule'
-            }
+            elements: { $ref: '#/definitions/elements' },
+            rule: { $ref: '#/definitions/rule' }
           },
         },
-        'verticallayout': {
-          'type': 'object',
-          '$id': '#verticallayout',
-          'properties': {
-            'type': {
-              'type': 'string',
-              'default': 'VerticalLayout'
+        verticallayout: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              default: 'VerticalLayout'
             },
-            'elements': {
-              '$ref': '#/definitions/elements'
-            },
-            'rule': {
-              '$ref': '#/definitions/rule'
-            }
+            elements: { $ref: '#/definitions/elements' },
+            rule: { $ref: '#/definitions/rule' }
           },
         },
-        'rule': {
-          'type': 'object',
-          '$id': '#rule',
-          'properties': {
-            'effect': {
-              'type': 'string',
-              'enum': [
+        rule: {
+          type: 'object',
+          properties: {
+            effect: {
+              type: 'string',
+              enum: [
                 'HIDE',
                 'SHOW',
                 'DISABLE',
                 'ENABLE'
               ]
             },
-            'condition': {
-              'type': 'object',
-              'properties': {
-                'type': {
-                  'type': 'string'
-                },
-                'scope': {
-                  '$ref': '#/definitions/scope'
-                },
-                'expectedValue': {
-                  'type': [
+            condition: {
+              type: 'object',
+              properties: {
+                type: { type: 'string' },
+                scope: { $ref: '#/definitions/scope' },
+                expectedValue: {
+                  type: [
                     'string',
                     'integer',
                     'number',
@@ -525,38 +619,25 @@ describe('Container Properties Tests', () => {
             }
           }
         },
-        'scope': {
-          'type': 'string',
-          '$id': '#scope',
-          'pattern': '^#\\/properties\\/{1}'
+        scope: {
+          type: 'string',
+          pattern: '^#\\/properties\\/{1}'
         },
-        'options': {
-          'type': 'object',
-          '$id': '#options'
-        }
+        options: { type: 'object' }
       }
     };
     const schema = {
-      'type': 'object',
-      '$id': '#control',
-      'properties': {
-        'type': {
-          'type': 'string',
-          'const': 'Control',
-          'default': 'Control'
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          const: 'Control',
+          default: 'Control'
         },
-        'label': {
-          'type': 'string'
-        },
-        'scope': {
-          '$ref': '#/definitions/scope'
-        },
-        'options': {
-          '$ref': '#/definitions/options'
-        },
-        'rule': {
-          '$ref': '#/definitions/rule'
-        }
+        label: { type: 'string' },
+        scope: { $ref: '#/definitions/scope' },
+        options: { $ref: '#/definitions/options'  },
+        rule: { $ref: '#/definitions/rule' }
       }
     };
     const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
@@ -566,14 +647,14 @@ describe('Container Properties Tests', () => {
     expect(calculatedSchemaReferences).toMatchObject(expectedSchema);
   });
 
-  test('calculating schema without references', () => {
+  test('make schema without references self-contained', () => {
     const parentSchema = {
       type: 'object',
       properties: {
         foo: {
           type: 'object',
           properties: {
-            bar: {type: 'string'}
+            bar: { type: 'string' }
           }
         }
       }
@@ -581,133 +662,95 @@ describe('Container Properties Tests', () => {
     const schema = {
       type: 'object',
       properties: {
-        bar: {type: 'string'}
+        bar: { type: 'string' }
       }
     };
     const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
     expect(calculatedSchemaReferences).toMatchObject(schema);
   });
 
-  test('calculating schema with missing reference definition', () => {
+  test('make schema with missing reference definition self-contained', () => {
     const parentSchema: JsonSchema = {
-      'type': 'object',
-      '$id': '#root',
-      'properties': {
-        'type': {
-          'type': 'string'
-        },
-        'label': {
-          'type': 'string'
-        },
-        'elements': {
-          '$ref': '#/definitions/elements'
-        },
+      type: 'object',
+      properties: {
+        type: { type: 'string' },
+        label: { type: 'string' },
+        elements: { $ref: '#/definitions/elements' },
       }
     };
     const schema = {
-      'type': 'object',
-      '$id': '#control',
-      'properties': {
-        'type': {
-          'type': 'string',
-          'const': 'Control',
-          'default': 'Control'
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          const: 'Control',
+          default: 'Control'
         },
-        'label': {
-          'type': 'string'
-        },
-        'scope': {
-          '$ref': '#/definitions/scope'
-        }
+        label: { type: 'string' },
+        scope: { $ref: '#/definitions/scope' }
       }
     };
     const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
     expect(calculatedSchemaReferences).toMatchObject(schema);
   });
 
-  test('calculating schema with references by using another keyword for definitions block', () => {
+  test('make schema with renamed definitions block self-contained', () => {
     const parentSchema = {
-      'type': 'object',
-      '$id': '#root',
-      'properties': {
-        'type': {
-          'type': 'string'
-        },
-        'label': {
-          'type': 'string'
-        },
-        'elements': {
-          '$ref': '#/defs/elements'
-        },
+      type: 'object',
+      properties: {
+        type: { type: 'string' },
+        label: { type: 'string' },
+        elements: { $ref: '#/defs/elements' },
       },
-      'defs': {
-        'elements': {
-          'type': 'array',
-          '$id': '#elements',
-          'items': {
-            'anyOf': [
-              {
-                '$ref': '#/defs/control'
-              },
-              {
-                '$ref': '#/defs/horizontallayout'
-              }
+      defs: {
+        elements: {
+          type: 'array',
+          items: {
+            anyOf: [
+              { $ref: '#/defs/control' },
+              { $ref: '#/defs/horizontallayout' }
             ]
           }
         },
-        'control': {
-          'type': 'object',
-          '$id': '#control',
-          'properties': {
-            'type': {
-              'type': 'string',
-              'const': 'Control',
-              'default': 'Control'
+        control: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              const: 'Control',
+              default: 'Control'
             },
-            'label': {
-              'type': 'string'
-            },
-            'scope': {
-              '$ref': '#/defs/scope'
-            }
+            label: { type: 'string' },
+            scope: { $ref: '#/defs/scope' }
           },
         },
-        'horizontallayout': {
-          'type': 'object',
-          '$id': '#horizontallayout',
-          'properties': {
-            'type': {
-              'type': 'string',
-              'const': 'HorizontalLayout',
-              'default': 'HorizontalLayout'
+        horizontallayout: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              const: 'HorizontalLayout',
+              default: 'HorizontalLayout'
             },
-            'elements': {
-              '$ref': '#/defs/elements'
-            }
+            elements: { $ref: '#/defs/elements' }
           },
         },
-        'scope': {
-          'type': 'string',
-          '$id': '#scope',
-          'pattern': '^#\\/properties\\/{1}'
+        scope: {
+          type: 'string',
+          pattern: '^#\\/properties\\/{1}'
         }
       }
     };
     const schema = {
-      'type': 'object',
-      '$id': '#control',
-      'properties': {
-        'type': {
-          'type': 'string',
-          'const': 'Control',
-          'default': 'Control'
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          const: 'Control',
+          default: 'Control'
         },
-        'label': {
-          'type': 'string'
-        },
-        'scope': {
-          '$ref': '#/defs/scope'
-        }
+        label: { type: 'string' },
+        scope: { $ref: '#/defs/scope' }
       }
     };
     const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
@@ -715,5 +758,110 @@ describe('Container Properties Tests', () => {
       defs: _.pick(parentSchema.defs, ['scope'])
     }};
     expect(calculatedSchemaReferences).toMatchObject(expectedSchema);
+  });
+
+  test('Find properties by resolving circular references in a given schema ', () => {
+    const schema: JsonSchema = {
+      type: 'object',
+      properties: {
+        type: {
+          type: 'string',
+          enum: [
+            'HorizontalLayout',
+            'VerticalLayout',
+          ]
+        },
+        label: {
+          type: 'string'
+        },
+        elements: {
+          $ref: '#/definitions/elements'
+        }
+      },
+      definitions: {
+        elements: {
+          type: 'array',
+          items: {
+            anyOf: [
+              {
+                $ref: '#/definitions/control'
+              },
+              {
+                $ref: '#/definitions/horizontallayout'
+              },
+              {
+                $ref: '#/definitions/verticallayout'
+              }
+            ]
+          }
+        },
+        control: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              const: 'Control',
+              default: 'Control'
+            },
+            label: {
+              type: 'string'
+            }
+          }
+        },
+        horizontallayout: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              const: 'HorizontalLayout',
+              default: 'HorizontalLayout'
+            },
+            elements: {
+              $ref: '#/definitions/elements'
+            }
+          }
+        },
+        verticallayout: {
+          type: 'object',
+          properties: {
+            type: {
+              type: 'string',
+              const: 'VerticalLayout',
+              default: 'VerticalLayout'
+            },
+            elements: {
+              $ref: '#/definitions/elements'
+            }
+          }
+        }
+      }
+    };
+    const properties = findContainerProperties(schema, schema, false);
+    const expectedProperties = [
+      {
+        property: 'elements',
+        label: 'control',
+        schema: schema.definitions.control
+      },
+      {
+        property: 'elements',
+        label: 'horizontallayout',
+        schema: {
+          type: 'object',
+          properties: schema.definitions.horizontallayout.properties,
+          definitions: schema.definitions
+        }
+      },
+      {
+        property: 'elements',
+        label: 'verticallayout',
+        schema: {
+          type: 'object',
+          properties: schema.definitions.verticallayout.properties,
+          definitions: schema.definitions
+        }
+      }
+    ]
+    expect(properties).toMatchObject(expectedProperties);
   });
 });
