@@ -20,6 +20,8 @@ import Dialog from '@material-ui/core/Dialog';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { ListItemIcon } from '@material-ui/core';
+import { wrapImageIfNecessary } from '../helpers/image-provider.util';
 
 export interface AddItemDialogProps {
   rootData: any;
@@ -32,6 +34,7 @@ export interface AddItemDialogProps {
   setSelection: any;
   add?: any;
   labelProvider?(schema: JsonSchema): (data?: any) => string;
+  imageProvider(JsonSchema): string;
 }
 
 class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
@@ -48,7 +51,8 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
        * Self contained schemas of the corresponding schema
        */
       containerProperties,
-        labelProvider
+      imageProvider,
+      labelProvider
     } = this.props;
 
     return (
@@ -88,7 +92,10 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
                       closeDialog();
                     }}
                   >
-                    <ListItemText
+                    <ListItemIcon>
+                        {wrapImageIfNecessary(imageProvider(prop.schema))}
+                    </ListItemIcon>
+                     <ListItemText
                         primary={`${prop.property} [${(labelProvider && labelProvider(prop.schema)()) || prop.label}]`}
                     />
                   </ListItem>

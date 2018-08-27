@@ -15,6 +15,7 @@ import { taskSchema } from './schema';
 import { Property } from '../src/services/property.util';
 import App from './App';
 import { taskView, userGroupView, userView } from './uischemata';
+import { imageProvider } from './imageProvider';
 
 const uischema = {
   'type': 'MasterDetailLayout',
@@ -78,19 +79,6 @@ const calculateLabel =
     return 'Unknown';
   };
 
-const imageGetter = (schema: JsonSchema) => {
-
-  if (isTask(schema)) {
-    return 'icon task';
-  } else if (isUserGroup(schema)) {
-    return 'icon userGroup';
-  } else if (isUser(schema)) {
-    return 'icon user';
-  }
-
-  return 'unknown';
-};
-
 const initState: any = {
   jsonforms: {
     renderers: materialRenderers,
@@ -119,7 +107,7 @@ ReactDOM.render(
       store,
       filterPredicate,
       labelProvider: calculateLabel,
-      imageProvider: imageGetter
+      imageProvider: imageProvider
     },
     null
   ),
