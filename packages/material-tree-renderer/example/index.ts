@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import {
   Actions,
   jsonformsReducer,
-  JsonSchema7,
+  JsonSchema,
   NOT_APPLICABLE,
   UISchemaElement,
   UISchemaTester
@@ -52,7 +52,7 @@ const isTask = schema => _.has(schema.properties, 'done');
 const isUser = schema => _.has(schema.properties, 'birthday');
 
 const calculateLabel =
-  (schema: JsonSchema7) => (element: any): string => {
+  (schema: JsonSchema) => (element: any): string => {
 
     if (isUserGroup(schema)) {
       return `User Group ${element.label || ''}`;
@@ -69,7 +69,7 @@ const calculateLabel =
     return 'Unknown';
   };
 
-const imageGetter = (schema: JsonSchema7) => {
+const imageGetter = (schema: JsonSchema) => {
 
   if (isTask(schema)) {
     return 'icon task';
