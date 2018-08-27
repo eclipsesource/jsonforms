@@ -35,13 +35,14 @@ import {
   subErrorsAt
 } from './core';
 import { JsonFormsState } from '../store';
-import { findMatchingUISchema, uischemaRegistryReducer } from './uischemas';
+import { findMatchingUISchema, uischemaRegistryReducer, UISchemaTester } from './uischemas';
 import { Generate, JsonSchema, UISchemaElement } from '..';
 
 export {
   rendererReducer,
   fieldReducer,
-  coreReducer
+  coreReducer,
+  UISchemaTester
 };
 
 export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsState> =>
