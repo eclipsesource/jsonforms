@@ -35,6 +35,7 @@ import {
   WithStyles
 } from '@material-ui/core/styles';
 import { compose } from 'recompose';
+import { wrapImageIfNecessary } from '../helpers/image-provider.util';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -178,7 +179,6 @@ class ObjectListItem extends React.Component
       !hasParent ? [classes.listItem, classes.withoutBorders].join(' ') : classes.listItem;
     const scopedData = resolveData(rootData, parentPath);
     const groupedProps = _.groupBy(containerProperties, property => property.property);
-    const imageClass = imageProvider(schema);
     // TODO: key should be set in caller
     return (
       <li
@@ -186,7 +186,7 @@ class ObjectListItem extends React.Component
         key={path}
       >
         <div className={classes.itemContainer}>
-          {imageClass !== '' ? <span className={imageClass} /> : ''}
+          {wrapImageIfNecessary(imageProvider(schema))}
 
           <span
             className={classes.label}
