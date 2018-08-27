@@ -91,7 +91,4 @@ const mapStateToProps = state => ({
   rootData: getData(state)
 });
 
-export default connect(
-  mapStateToProps,
-  null
-)(ExpandRootArrayContainer);
+export default connect(mapStateToProps)(ExpandRootArrayContainer);

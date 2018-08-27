@@ -70,7 +70,7 @@ export const ExpandArray = (
       const composedPath = Paths.compose(path, index.toString());
       const property = matchContainerProperty(element, containmentProps, filterPredicate);
 
-      if (property === undefined || data === null) {
+      if (property === undefined) {
         return <li>No ContainmentProperty</li>;
       }
 
