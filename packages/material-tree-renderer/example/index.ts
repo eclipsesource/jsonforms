@@ -55,15 +55,24 @@ const calculateLabel =
   (schema: JsonSchema) => (element: any): string => {
 
     if (isUserGroup(schema)) {
-      return `User Group ${element.label || ''}`;
+        if (element) {
+            return `User Group ${element.label || ''}`;
+        }
+        return `User Group`;
     }
 
     if (isTask(schema)) {
-      return `Task ${element.name || ''}`;
+        if (element) {
+            return `Task ${element.name || ''}`;
+        }
+        return `Task`;
     }
 
     if (isUser(schema)) {
-      return `User ${element.name || ''}`;
+        if (element) {
+            return `User ${element.name || ''}`;
+        }
+        return `User`;
     }
 
     return 'Unknown';

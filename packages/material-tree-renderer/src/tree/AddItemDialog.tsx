@@ -31,6 +31,7 @@ export interface AddItemDialogProps {
   dialogProps: any;
   setSelection: any;
   add?: any;
+  labelProvider?(schema: JsonSchema): (data?: any) => string;
 }
 
 class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
@@ -46,7 +47,8 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
       /**
        * Self contained schemas of the corresponding schema
        */
-      containerProperties
+      containerProperties,
+        labelProvider
     } = this.props;
 
     return (
@@ -86,7 +88,9 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
                       closeDialog();
                     }}
                   >
-                    <ListItemText primary={prop.label} />
+                    <ListItemText
+                        primary={`${prop.property} [${(labelProvider && labelProvider(prop.schema)()) || prop.label}]`}
+                    />
                   </ListItem>
                 )
             }
@@ -113,7 +117,8 @@ const mapStateToProps = (state, ownProps) => {
     schema: ownProps.schema,
     closeDialog: ownProps.closeDialog,
     dialogProps: ownProps.dialogProps,
-    setSelection: ownProps.setSelection
+    setSelection: ownProps.setSelection,
+    labelProvider: ownProps.labelProvider
   };
 };
 
