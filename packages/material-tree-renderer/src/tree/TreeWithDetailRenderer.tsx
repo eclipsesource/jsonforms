@@ -316,6 +316,7 @@ export class TreeWithDetailRenderer extends Control
               closeDialog={this.closeDialog}
               dialogProps={dialogProps}
               setSelection={this.setSelection}
+              labelProvider={labelProvider}
             />
           }
         </div>
