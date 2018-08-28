@@ -164,20 +164,21 @@ const findContainerProps = (property: string,
                             schema: JsonSchema,
                             rootSchema: JsonSchema,
                             isInContainer: boolean,
-                            visited: Map<string, string>,
+                            visited: string[],
                             recurse: boolean): Property[] => {
 
   if (schema.$ref !== undefined) {
-    if (visited.has(label)) {
+    if (visited.indexOf(schema.$ref) !== -1) {
       return [];
     }
     return findContainerProps(
       property,
+      // label,
       schema.$ref === '#' ? undefined : schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
       resolveAndMakeSchemaSelfContained(rootSchema, schema.$ref),
       rootSchema,
       isInContainer,
-      visited.set(label, schema.$ref),
+      visited.slice().concat(schema.$ref),
       recurse
     );
   } else if (isObject(schema)) {
@@ -228,11 +229,11 @@ const findContainerProps = (property: string,
     const init: Property[] = [];
     return _.reduce(
       schema.anyOf,
-      (prev: Property[], anyOfSubSchema: JsonSchema, index: number) =>
+      (prev: Property[], anyOfSubSchema: JsonSchema) =>
         prev.concat(
           findContainerProps(
             property,
-            `${property}.anyOf.${index}`,
+            label,
             anyOfSubSchema,
             rootSchema,
             isInContainer,
@@ -259,4 +260,4 @@ const findContainerProps = (property: string,
  */
 export const findContainerProperties =
   (schema: JsonSchema, rootSchema: JsonSchema, recurse: boolean): Property[] =>
-    findContainerProps('root', 'root', schema, rootSchema, false, new Map(), recurse);
+    findContainerProps('root', 'root', schema, rootSchema, false, [], recurse);

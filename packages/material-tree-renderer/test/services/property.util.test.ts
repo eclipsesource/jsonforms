@@ -352,6 +352,83 @@ describe('Property util', () => {
     ]);
   });
 
+    test('expect to retrieve properties from object with array object by using keyword anyOf twice', () => {
+        const schema: JsonSchema = {
+            definitions: {
+                a: { anyOf: [{$ref: '#/definitions/b'}] },
+                b: { type: 'object', properties: { foo: { type: 'string' } } }
+            },
+            type: 'object',
+            properties: {
+                elements: {
+                    type: 'array',
+                    items: {
+                        anyOf: [
+                            { $ref: '#/definitions/a' },
+                        ]
+                    }
+                }
+            }
+        };
+
+        const properties = findContainerProperties(schema, schema, false);
+        expect(properties).toMatchObject([
+            {
+                property: 'elements',
+                label: 'b',
+                schema: {
+                    properties: {
+                        foo: { type: 'string' }
+                    }
+                }
+            }
+        ]);
+    });
+
+    test('expect to retrieve properties from object with array object by using keyword anyOf recursive', () => {
+        const schema: JsonSchema = {
+            definitions: {
+                a: {
+                    anyOf: [
+                        {$ref: '#/definitions/b'}
+                    ]
+                },
+                b: {
+                    anyOf: [
+                        {$ref: '#/definitions/a'},
+                        {$ref: '#/definitions/c'},
+                    ],
+                    type: 'object',
+                    properties: { foo: { type: 'string' } }
+                }
+            },
+            type: 'object',
+            properties: {
+                elements: {
+                    type: 'array',
+                    items: {
+                        anyOf: [
+                            { $ref: '#/definitions/a' },
+                        ]
+                    }
+                }
+            }
+        };
+
+        const properties = findContainerProperties(schema, schema, false);
+        expect(properties).toMatchObject([
+            {
+                property: 'elements',
+                label: 'b',
+                schema: {
+                    properties: {
+                        foo: { type: 'string' }
+                    }
+                }
+            }
+        ]);
+    });
+
   test('should retrieve container properties from object that references an array object', () => {
     const schema: JsonSchema = {
       definitions: {
