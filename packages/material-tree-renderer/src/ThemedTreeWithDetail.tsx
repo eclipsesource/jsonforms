@@ -19,7 +19,7 @@ const styles = {
 };
 
 const ThemedTreeWithDetail = props => {
-  const { classes, uischema, schema, filterPredicate, labelProvider, imageProvider} = props;
+  const { classes, uischema, schema, filterPredicate, labelProviders, imageProvider} = props;
   return (
     <MuiThemeProvider theme={theme}>
         <TreeWithDetailRenderer
@@ -27,7 +27,7 @@ const ThemedTreeWithDetail = props => {
           uischema={uischema}
           schema={schema}
           filterPredicate={filterPredicate}
-          labelProvider={labelProvider}
+          labelProviders={labelProviders}
           imageProvider={imageProvider}
         />
     </MuiThemeProvider>

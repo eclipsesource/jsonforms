@@ -36,6 +36,7 @@ import {
 } from '@material-ui/core/styles';
 import { compose } from 'recompose';
 import { wrapImageIfNecessary } from '../helpers/image-provider.util';
+import { InstanceLabelProvider } from '../helpers/LabelProvider';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -153,9 +154,9 @@ export interface ObjectListItemProps {
   /**
    * Self contained schemas of the corresponding schema
    */
-  containerProperties?: any;
-  labelProvider: any;
+  containerProperties?: Property[];
   imageProvider: any;
+  labelProvider: InstanceLabelProvider;
 }
 
 class ObjectListItem extends React.Component
@@ -168,9 +169,19 @@ class ObjectListItem extends React.Component
                'selected'>, {}> {
 
   render() {
-    const { path, schema, rootData, data, handlers, selection,
-            filterPredicate, containerProperties, labelProvider,
-            imageProvider, classes } = this.props;
+    const {
+        path,
+        schema,
+        rootData,
+        data,
+        handlers,
+        selection,
+        filterPredicate,
+        containerProperties,
+        labelProvider,
+        imageProvider,
+        classes
+    } = this.props;
     const pathSegments = path.split('.');
     const parentPath = _.initial(pathSegments).join('.');
     const labelClass = selection === data ? classes.selected : '';
@@ -179,7 +190,7 @@ class ObjectListItem extends React.Component
       !hasParent ? [classes.listItem, classes.withoutBorders].join(' ') : classes.listItem;
     const scopedData = resolveData(rootData, parentPath);
     const groupedProps = _.groupBy(containerProperties, property => property.property);
-    // TODO: key should be set in caller
+
     return (
       <li
         className={liClass}
@@ -193,7 +204,7 @@ class ObjectListItem extends React.Component
             onClick={handlers.onSelect(schema, data, path)}
           >
           <Typography className={labelClass}>
-              {labelProvider(schema)(data)}
+              {labelProvider(schema, data, path)}
           </Typography>
             {
               !_.isEmpty(containerProperties) ?
@@ -241,7 +252,11 @@ class ObjectListItem extends React.Component
 
 const mapStateToProps = (state, ownProps) => {
   const index = indexFromPath(ownProps.path);
-  const containerProperties = findContainerProperties(ownProps.schema, getSchema(state), false);
+  const containerProperties: Property[] = findContainerProperties(
+      ownProps.schema,
+      getSchema(state),
+      false
+  );
 
   return {
     index: index,
