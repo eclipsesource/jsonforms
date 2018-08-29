@@ -15,14 +15,13 @@ const isArray = (schema: JsonSchema): boolean => {
  * like a label and the property key.
  */
 export interface Property {
-  /**
-   * The label is a text donating a human readable name of the schema the property describes.
-   */
+
   label: string;
-  /**
-   * The property is a text donating the schema key from which this property was created.
-   */
+
   property: string;
+
+  schemaPath: string;
+
   /**
    * The schema is the JsonSchema this property describes.
    */
@@ -161,6 +160,7 @@ const resolveAndMakeSchemaSelfContained =
  */
 const findContainerProps = (property: string,
                             label: string,
+                            schemaPath: string,
                             schema: JsonSchema,
                             rootSchema: JsonSchema,
                             isInContainer: boolean,
@@ -173,8 +173,8 @@ const findContainerProps = (property: string,
     }
     return findContainerProps(
       property,
-      // label,
       schema.$ref === '#' ? undefined : schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
+      schema.$ref,
       resolveAndMakeSchemaSelfContained(rootSchema, schema.$ref),
       rootSchema,
       isInContainer,
@@ -188,7 +188,8 @@ const findContainerProps = (property: string,
       const prop: Property =  {
         property,
         label,
-        schema
+        schema,
+        schemaPath
       };
       props.push(prop);
 
@@ -204,6 +205,7 @@ const findContainerProps = (property: string,
             findContainerProps(
               currentProp,
               currentProp,
+              `${schemaPath}.${currentProp}`,
               schema.properties[currentProp],
               rootSchema,
               false,
@@ -218,6 +220,7 @@ const findContainerProps = (property: string,
     return findContainerProps(
       property,
       label,
+      `${schemaPath}.items`,
       schema.items,
       rootSchema,
       true,
@@ -229,11 +232,12 @@ const findContainerProps = (property: string,
     const init: Property[] = [];
     return _.reduce(
       schema.anyOf,
-      (prev: Property[], anyOfSubSchema: JsonSchema) =>
+      (prev: Property[], anyOfSubSchema: JsonSchema, index: number) =>
         prev.concat(
           findContainerProps(
             property,
             label,
+            `${schemaPath}.anyOf.${index}`,
             anyOfSubSchema,
             rootSchema,
             isInContainer,
@@ -260,4 +264,4 @@ const findContainerProps = (property: string,
  */
 export const findContainerProperties =
   (schema: JsonSchema, rootSchema: JsonSchema, recurse: boolean): Property[] =>
-    findContainerProps('root', 'root', schema, rootSchema, false, [], recurse);
+    findContainerProps('root', 'root', '', schema, rootSchema, false, [], recurse);

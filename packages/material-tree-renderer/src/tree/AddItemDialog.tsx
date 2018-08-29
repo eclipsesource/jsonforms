@@ -11,7 +11,7 @@ import {
   Resolve,
   update
 } from '@jsonforms/core';
-import { findContainerProperties, findPropertyLabel } from '../services/property.util';
+import { findContainerProperties, findPropertyLabel, Property } from '../services/property.util';
 import Button from '@material-ui/core/Button';
 import * as _ from 'lodash';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,10 +22,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon } from '@material-ui/core';
 import { wrapImageIfNecessary } from '../helpers/image-provider.util';
+import { SchemaLabelProvider } from '../helpers/LabelProvider';
 
 export interface AddItemDialogProps {
   rootData: any;
-  containerProperties: any;
+  containerProperties: Property[];
   rootSchema: any;
   path: string;
   schema: JsonSchema;
@@ -33,7 +34,7 @@ export interface AddItemDialogProps {
   dialogProps: any;
   setSelection: any;
   add?: any;
-  labelProvider?(schema: JsonSchema): (data?: any) => string;
+  labelProvider?: SchemaLabelProvider;
   imageProvider(JsonSchema): string;
 }
 
@@ -96,7 +97,7 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
                         {wrapImageIfNecessary(imageProvider(prop.schema))}
                     </ListItemIcon>
                      <ListItemText
-                        primary={`${prop.property} [${(labelProvider && labelProvider(prop.schema)()) || prop.label}]`}
+                        primary={`${prop.property} [${(labelProvider && labelProvider(prop.schema, prop.schemaPath)) || prop.label}]`}
                     />
                   </ListItem>
                 )
