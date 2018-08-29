@@ -385,6 +385,50 @@ describe('Property util', () => {
         ]);
     });
 
+  test('expect to retrieve properties from object with array object ' +
+       'where anyOf contains reference and object',
+       () => {
+    const schema: JsonSchema = {
+      definitions: {
+        a: { type: 'object', properties: { foo: { type: 'string' } } }
+      },
+      type: 'object',
+      properties: {
+        elements: {
+          type: 'array',
+          items: {
+            anyOf: [
+              { $ref: '#/definitions/a' },
+              { type: 'object', properties: { bar: { type: 'string' } } }
+            ]
+          }
+        }
+      }
+    };
+
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'elements',
+        label: 'a',
+        schema: {
+          properties: {
+            foo: { type: 'string' }
+          }
+        }
+      },
+      {
+        property: 'elements',
+        label: 'elements',
+        schema: {
+          properties: {
+            bar: { type: 'string' }
+          }
+        }
+      }
+    ]);
+  });
+
     test('expect to retrieve properties from object with array object by using keyword anyOf recursive', () => {
         const schema: JsonSchema = {
             definitions: {
