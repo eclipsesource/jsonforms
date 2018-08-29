@@ -30,9 +30,15 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
+import MaterialObjectRenderer, { materialObjectControlTester } from './MaterialObjectRenderer';
+import MaterialAllOfRenderer, { materialAllOfControlTester } from './MaterialAllOfRenderer';
 
 export const materialArrayControlTester: RankedTester = rankWith(
   3,
   or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 export { MaterialArrayControlRenderer };
+export { MaterialObjectRenderer };
+export { MaterialAllOfRenderer };
+export { materialObjectControlTester };
+export { materialAllOfControlTester };

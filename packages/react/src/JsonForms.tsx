@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import * as JsonRefs from 'json-refs';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
@@ -30,12 +31,14 @@ import {
   createId,
   isControl,
   JsonFormsProps,
+  JsonSchema,
   mapStateToDispatchRendererProps,
   removeId
 } from '@jsonforms/core';
 
 interface JsonFormsDispatchRendererState {
   id: string;
+  schema: JsonSchema;
 }
 
 class JsonFormsDispatchRenderer
@@ -45,13 +48,24 @@ class JsonFormsDispatchRenderer
     super(props);
     if (isControl(props.uischema)) {
       this.state = {
-        id: createId(props.uischema.scope)
-      };
+          id: createId(props.uischema.scope),
+          schema: undefined
+    };
     } else {
-      this.state = {
-        id: undefined
-      };
+        this.state = {
+            id: undefined,
+            schema: undefined
+        };
     }
+  }
+
+  componentWillMount() {
+      JsonRefs.resolveRefs(this.props.schema).then(resolveSchema => {
+          this.setState({
+              ...this.state,
+              schema: resolveSchema.resolved
+          });
+      });
   }
 
   componentWillUnmount() {
@@ -61,22 +75,28 @@ class JsonFormsDispatchRenderer
   }
 
   render() {
-    const { uischema, schema, path, renderers } = this.props as JsonFormsProps;
-    const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-    if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
-      return <UnknownRenderer type={'renderer'} />;
-    } else {
-      const Render = renderer.renderer;
-      return (
-        <Render
-          uischema={uischema}
-          schema={schema}
-          path={path}
-          renderers={renderers}
-          id={this.state.id}
-        />
-      );
-    }
+      const { uischema, path, renderers } = this.props as JsonFormsProps;
+      const schema = this.state.schema;
+
+      if (schema === undefined) {
+          return null;
+      }
+
+      const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+      if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
+          return <UnknownRenderer type={'renderer'}/>;
+      } else {
+          const Render = renderer.renderer;
+          return (
+              <Render
+                  uischema={uischema}
+                  schema={schema}
+                  path={path}
+                  renderers={renderers}
+                  id={this.state.id}
+              />
+          );
+      }
   }
 }
 

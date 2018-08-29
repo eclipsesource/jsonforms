@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import * as allOf from './allOf';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
 import * as stringArray from './stringArray';
@@ -46,6 +47,7 @@ import * as numbers from './numbers';
 export * from './register';
 export * from './example';
 export {
+  allOf,
   stringArray,
   array,
   nestedArray,
