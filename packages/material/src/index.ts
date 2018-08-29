@@ -23,7 +23,14 @@
   THE SOFTWARE.
 */
 import { FieldProps, RankedTester } from '@jsonforms/core';
-import { MaterialArrayControlRenderer, materialArrayControlTester } from './complex';
+import {
+    materialAllOfControlTester,
+    MaterialAllOfRenderer,
+    MaterialArrayControlRenderer,
+    materialArrayControlTester,
+    materialObjectControlTester,
+    MaterialObjectRenderer
+} from './complex';
 import { MaterialLabelRenderer, materialLabelRendererTester } from './additional';
 import {
   MaterialBooleanControl,
@@ -84,7 +91,9 @@ export const materialRenderers = [
   { tester: materialInputControlTester, renderer: MaterialInputControl },
   { tester: materialDateTimeControlTester, renderer: MaterialDateTimeControl },
   { tester: materialDateControlTester, renderer: MaterialDateControl },
-  { tester: materialSliderControlTester, renderer: MaterialSliderControl},
+  { tester: materialSliderControlTester, renderer: MaterialSliderControl },
+  { tester: materialObjectControlTester, renderer: MaterialObjectRenderer },
+  { tester: materialAllOfControlTester, renderer: MaterialAllOfRenderer },
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
   { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },

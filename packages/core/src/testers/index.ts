@@ -233,6 +233,14 @@ export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
  */
 export const isBooleanControl = and(uiTypeIs('Control'), schemaTypeIs('boolean'));
 
+// TODO: rather check for properties property
+export const isObjectControl =  and(uiTypeIs('Control'), schemaTypeIs('object'));
+
+export const isAllOfControl =  and(
+    uiTypeIs('Control'),
+    schemaMatches(schema => schema.hasOwnProperty('allOf'))
+);
+
 /**
  * Tests whether the given UI schema is of type Control and if the schema
  * has a 'date' format.

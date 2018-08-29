@@ -123,6 +123,17 @@ const generateUISchema =
      currentRef: string, schemaName: string, layoutType: string, rootSchema?: JsonSchema)
       : UISchemaElement => {
 
+    if (jsonSchema.$ref !== undefined) {
+        return generateUISchema(
+            resolveSchema(rootSchema, jsonSchema.$ref),
+            schemaElements,
+            currentRef,
+            schemaName,
+            layoutType,
+            rootSchema
+        );
+    }
+
     const type = deriveType(jsonSchema);
 
     switch (type) {
@@ -181,7 +192,12 @@ const generateUISchema =
  *        of the generated UI schema
  */
 export const generateDefaultUISchema =
-    (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
+    (
+        jsonSchema: JsonSchema,
+        layoutType = 'VerticalLayout',
+        prefix = '#',
+        rootSchema = jsonSchema
+    ): UISchemaElement =>
         wrapInLayoutIfNecessary(
-            generateUISchema(jsonSchema, [], prefix, '', layoutType, jsonSchema),
+            generateUISchema(jsonSchema, [], prefix, '', layoutType, rootSchema),
             layoutType);
