@@ -57,6 +57,7 @@ export const toDataPathSegments = (schemaPath: string): string[] => {
   const segments = schemaPath
       .replace(/anyOf\/[\d]/, '')
       .replace(/allOf\/[\d]/, '')
+      .replace(/oneOf\/[\d]/, '')
       .split('/');
   return segments
       .filter(p => keywords.indexOf(p) === -1)
