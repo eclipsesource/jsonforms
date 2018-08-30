@@ -60,10 +60,20 @@ class JsonFormsDispatchRenderer
   }
 
   componentWillMount() {
-      JsonRefs.resolveRefs(this.props.schema).then(resolveSchema => {
+      this.resolveSchema(this.props.schema);
+  }
+
+  componentDidUpdate(prevProps) {
+      if (!_.isEqual(prevProps.schema, this.props.schema)) {
+          this.resolveSchema(this.props.schema);
+      }
+  }
+
+  resolveSchema = schema => {
+      JsonRefs.resolveRefs(schema).then(resolvedSchema => {
           this.setState({
               ...this.state,
-              schema: resolveSchema.resolved
+              schema: resolvedSchema.resolved
           });
       });
   }
