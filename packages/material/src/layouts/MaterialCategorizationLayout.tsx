@@ -102,7 +102,9 @@ export class MaterialCategorizationLayoutRenderer
     }
 
     private handleChange = (_event, value) => {
-        this.props.onChange(value, this.state.value);
+        if (this.props.onChange) {
+            this.props.onChange(value, this.state.value);
+        }
         const hasOwnState = this.hasOwnState();
         if (hasOwnState) {
             this.setState({ value });
