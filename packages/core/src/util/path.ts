@@ -51,17 +51,16 @@ export const compose = (path1: string, path2: string) => {
  * @param {string} schemaPath the schema path to be converted
  * @returns {string[]} an array containing only non-schema-specific segments
  */
-const keywords = ['properties', 'items', '#'];
-
 export const toDataPathSegments = (schemaPath: string): string[] => {
-  const segments = schemaPath
-      .replace(/anyOf\/[\d]/, '')
-      .replace(/allOf\/[\d]/, '')
-      .replace(/oneOf\/[\d]/, '')
-      .split('/');
-  return segments
-      .filter(p => keywords.indexOf(p) === -1)
-      .filter(s => !_.isEmpty(s));
+  const s = schemaPath
+      .replace(/anyOf\/[\d]\//, '')
+      .replace(/allOf\/[\d]\//, '')
+      .replace(/oneOf\/[\d]\//, '');
+  const segments = s.split('/');
+
+  const startFromRoot = segments[0] === '#' || segments[0] === '';
+  const startIndex =  startFromRoot ? 2 : 1;
+  return _.range(startIndex, segments.length, 2).map(idx => segments[idx]);
 };
 
 /**

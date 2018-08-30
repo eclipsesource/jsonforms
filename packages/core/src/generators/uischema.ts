@@ -123,7 +123,7 @@ const generateUISchema =
      currentRef: string, schemaName: string, layoutType: string, rootSchema?: JsonSchema)
       : UISchemaElement => {
 
-    if (jsonSchema.$ref !== undefined) {
+    if (!_.isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
         return generateUISchema(
             resolveSchema(rootSchema, jsonSchema.$ref),
             schemaElements,

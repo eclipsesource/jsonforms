@@ -44,22 +44,25 @@ interface JsonFormsDispatchRendererState {
 class JsonFormsDispatchRenderer
   extends React.Component<JsonFormsProps, JsonFormsDispatchRendererState> {
 
+    mounted = false;
+
   constructor(props) {
     super(props);
     if (isControl(props.uischema)) {
       this.state = {
           id: createId(props.uischema.scope),
-          schema: undefined
+          schema: props.schema
     };
     } else {
         this.state = {
             id: undefined,
-            schema: undefined
+            schema: props.schema
         };
     }
   }
 
   componentWillMount() {
+      this.mounted = true;
       this.resolveSchema(this.props.schema);
   }
 
@@ -70,15 +73,16 @@ class JsonFormsDispatchRenderer
   }
 
   resolveSchema = schema => {
-      JsonRefs.resolveRefs(schema).then(resolvedSchema => {
-          this.setState({
+      JsonRefs.resolveRefs(schema).then(resolvedSchema =>
+          this.mounted && this.setState({
               ...this.state,
               schema: resolvedSchema.resolved
-          });
-      });
+          })
+      );
   }
 
   componentWillUnmount() {
+    this.mounted = false;
     if (isControl(this.props.uischema)) {
       removeId(this.state.id);
     }
@@ -87,10 +91,6 @@ class JsonFormsDispatchRenderer
   render() {
       const { uischema, path, renderers } = this.props as JsonFormsProps;
       const schema = this.state.schema;
-
-      if (schema === undefined) {
-          return null;
-      }
 
       const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
       if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
