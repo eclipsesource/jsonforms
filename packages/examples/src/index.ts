@@ -24,6 +24,7 @@
 */
 import * as allOf from './allOf';
 import * as anyOf from './anyOf';
+import * as oneOf from './oneOf';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
 import * as stringArray from './stringArray';
@@ -50,6 +51,7 @@ export * from './example';
 export {
   allOf,
   anyOf,
+  oneOf,
   stringArray,
   array,
   nestedArray,

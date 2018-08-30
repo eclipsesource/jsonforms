@@ -24,7 +24,7 @@
 */
 import * as React from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import {Tabs, Tab } from '@material-ui/core';
+import { Tab, Tabs } from '@material-ui/core';
 import {
   and,
   Categorization,
@@ -53,20 +53,22 @@ export interface CategorizationState {
     value: number;
   }
 
-export class MaterialCategorizationLayoutRenderer
-    extends RendererComponent<RendererProps, CategorizationState> {
-    constructor(props) {
-      super(props);
+export interface MaterialCategorizationLayoutRendererProps extends RendererProps {
+    selected: number;
+    ownState?: boolean;
+    onChange?(selected: number, prevSelected: number): void;
+}
 
-      this.state = {
+export class MaterialCategorizationLayoutRenderer
+    extends RendererComponent<MaterialCategorizationLayoutRendererProps, CategorizationState> {
+
+    state = {
         value: 0
-      };
-    }
+    };
 
     render() {
         const { uischema, schema, path, visible } = this.props;
-        const { value } = this.state;
-
+        const value  = this.hasOwnState() ? this.state.value : this.props.selected;
         const categorization = uischema as Categorization;
 
         const childProps: MaterialLayoutRendererProps = {
@@ -94,8 +96,17 @@ export class MaterialCategorizationLayoutRenderer
             </div>
         );
     }
+
+    hasOwnState = () => {
+        return this.props.ownState !== undefined ? this.props.ownState : true;
+    }
+
     private handleChange = (_event, value) => {
-        this.setState({ value });
+        this.props.onChange(value, this.state.value);
+        const hasOwnState = this.hasOwnState();
+        if (hasOwnState) {
+            this.setState({ value });
+        }
     }
 }
 

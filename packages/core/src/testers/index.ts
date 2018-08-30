@@ -246,6 +246,11 @@ export const isAnyOfControl =  and(
     schemaMatches(schema => schema.hasOwnProperty('anyOf'))
 );
 
+export const isOneOfControl =  and(
+    uiTypeIs('Control'),
+    schemaMatches(schema => schema.hasOwnProperty('oneOf'))
+);
+
 /**
  * Tests whether the given UI schema is of type Control and if the schema
  * has a 'date' format.
