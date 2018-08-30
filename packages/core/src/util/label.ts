@@ -37,6 +37,11 @@ const deriveLabel = (controlElement: ControlElement): string => {
 
   return '';
 };
+
+export const createCleanLabel = (label: string): string => {
+  return _.startCase(label.replace('_', ' '))
+};
+
 /**
  * Return a label object based on the given control element.
  * @param {ControlElement} withLabel the UI schema to obtain a label object for

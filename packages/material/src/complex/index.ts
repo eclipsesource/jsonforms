@@ -32,6 +32,7 @@ import {
 import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
 import MaterialObjectRenderer, { materialObjectControlTester } from './MaterialObjectRenderer';
 import MaterialAllOfRenderer, { materialAllOfControlTester } from './MaterialAllOfRenderer';
+import MaterialAnyOfRenderer, { materialAnyOfControlTester } from './MaterialAnyOfRenderer';
 
 export const materialArrayControlTester: RankedTester = rankWith(
   3,
@@ -40,5 +41,7 @@ export const materialArrayControlTester: RankedTester = rankWith(
 export { MaterialArrayControlRenderer };
 export { MaterialObjectRenderer };
 export { MaterialAllOfRenderer };
+export { MaterialAnyOfRenderer };
 export { materialObjectControlTester };
 export { materialAllOfControlTester };
+export { materialAnyOfControlTester };
