@@ -65,10 +65,10 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
           <List>
             {
               containerProperties
-                .map(prop =>
+                .map((prop, index) =>
                   <ListItem
                     button
-                    key={`${findPropertyLabel(prop)}-button`}
+                    key={`${findPropertyLabel(prop)}-button-${index}`}
                     onClick={() => {
                       const newData = _.keys(prop.schema.properties).reduce(
                         (d, key) => {
