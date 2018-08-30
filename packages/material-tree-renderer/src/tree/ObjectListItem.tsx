@@ -61,7 +61,6 @@ const styles:
       content: '""',
       position: 'absolute',
       left: '0.2em',
-      borderTop: '1px solid lightgrey',
       top: '0.5em',
       width: '1em'
     }, // tslint:disable-next-line:object-literal-key-quotes
@@ -69,7 +68,6 @@ const styles:
       content: '""',
       position: 'absolute',
       left: '0.2em',
-      borderLeft: '1px solid lightgrey',
       top: '-0.5em',
       height: '100%'
     }
@@ -94,7 +92,14 @@ const styles:
       marginRight: '0.25em',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center'
-    }
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:hover': {
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      opacity: 0.9,
+      backgroundColor: theme.palette.secondary.main,
+    },
+    alignItems: 'center'
   },
   label: {
     display: 'flex',
@@ -105,13 +110,6 @@ const styles:
     '& span:first-child:empty': {
       background: '#ffff00',
       maxHeight: '1.5em'
-    }, // tslint:disable-next-line:object-literal-key-quotes
-    '&:hover': {
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      color: 'white',
-      opacity: 0.9,
-      backgroundColor: theme.palette.secondary.main,
     }, // tslint:disable-next-line:object-literal-key-quotes
     '&:hover $actionButton': {
       display: 'flex',

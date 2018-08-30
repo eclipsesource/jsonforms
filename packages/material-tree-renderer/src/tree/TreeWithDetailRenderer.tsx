@@ -104,7 +104,10 @@ const styles: StyleRulesCallback<'treeMasterDetailContent' |
     'treeMasterDetail' |
     'treeMasterDetailMaster' |
     'treeMasterDetailDetail'> = () => ({
-    treeMasterDetailContent: {},
+    treeMasterDetailContent: {
+      paddingTop: '1em',
+      paddingBottom: '1em'
+    },
     // tslint:disable-next-line: object-literal-key-quotes
     treeMasterDetail: {
         display: 'flex',
@@ -119,10 +122,9 @@ const styles: StyleRulesCallback<'treeMasterDetailContent' |
     treeMasterDetailMaster: {
         flex: 1,
         padding: '0.5em',
-        borderStyle: 'solid',
+        height: 'auto',
+        borderRight: '0.2em solid lightgrey',
         borderWidth: 'thin',
-        borderColor: 'lightgrey',
-        borderRadius: '0.2em',
         // tslint:disable-next-line:object-literal-key-quotes
         '& ul': {
             listStyleType: 'none',
@@ -135,7 +137,6 @@ const styles: StyleRulesCallback<'treeMasterDetailContent' |
                 content: '""',
                 position: 'absolute',
                 left: '0.2em',
-                borderLeft: '1px solid lightgrey',
                 height: '0.6em',
                 bottom: '0'
             }, // tslint:disable-next-line:object-literal-key-quotes
@@ -148,10 +149,8 @@ const styles: StyleRulesCallback<'treeMasterDetailContent' |
     treeMasterDetailDetail: {
         flex: 3,
         padding: '0.5em',
-        borderStyle: 'solid',
-        borderWidth: 'thin',
-        borderColor: 'lightgrey',
-        borderRadius: '0.2em', // tslint:disable-next-line:object-literal-key-quotes
+        paddingLeft: '1em',
+      // tslint:disable-next-line:object-literal-key-quotes
         '&:first-child': {
             marginRight: '0.25em'
         }
