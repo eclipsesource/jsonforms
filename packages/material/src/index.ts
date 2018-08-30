@@ -26,10 +26,12 @@ import { FieldProps, RankedTester } from '@jsonforms/core';
 import {
     materialAllOfControlTester,
     MaterialAllOfRenderer,
+    materialAnyOfControlTester,
+    MaterialAnyOfRenderer,
     MaterialArrayControlRenderer,
     materialArrayControlTester,
     materialObjectControlTester,
-    MaterialObjectRenderer
+    MaterialObjectRenderer,
 } from './complex';
 import { MaterialLabelRenderer, materialLabelRendererTester } from './additional';
 import {
@@ -94,6 +96,7 @@ export const materialRenderers = [
   { tester: materialSliderControlTester, renderer: MaterialSliderControl },
   { tester: materialObjectControlTester, renderer: MaterialObjectRenderer },
   { tester: materialAllOfControlTester, renderer: MaterialAllOfRenderer },
+  { tester: materialAnyOfControlTester, renderer: MaterialAnyOfRenderer },
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
   { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },

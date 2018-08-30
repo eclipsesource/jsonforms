@@ -27,7 +27,7 @@ import { resolveData, resolveSchema } from './resolvers';
 import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
 
-export { createLabelDescriptionFrom } from './label';
+export { createCleanLabel, createLabelDescriptionFrom } from './label';
 
 /**
  * Escape the given string such that it can be used as a class name,

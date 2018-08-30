@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as allOf from './allOf';
+import * as anyOf from './anyOf';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
 import * as stringArray from './stringArray';
@@ -48,6 +49,7 @@ export * from './register';
 export * from './example';
 export {
   allOf,
+  anyOf,
   stringArray,
   array,
   nestedArray,
