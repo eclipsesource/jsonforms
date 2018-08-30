@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-tree-renderer",
-  "version": "2.0.10",
+  "version": "2.0.11",
   "description": "Material-based tree renderer for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
