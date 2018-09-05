@@ -205,7 +205,7 @@ const findContainerProps = (property: string,
             findContainerProps(
               currentProp,
               currentProp,
-              `${schemaPath}.properties.${currentProp}`,
+              `${schemaPath.length > 0 ? schemaPath + '.' : ''}properties.${currentProp}`,
               schema.properties[currentProp],
               rootSchema,
               false,

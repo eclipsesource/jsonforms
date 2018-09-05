@@ -26,13 +26,14 @@ import { combineReducers, Reducer } from 'redux';
 import { rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { configReducer } from './config';
+import { defaultDataReducer, extractDefaultData } from './default-data';
 import {
-  coreReducer,
-  errorAt,
-  extractData,
-  extractSchema,
-  extractUiSchema,
-  subErrorsAt
+    coreReducer,
+    errorAt,
+    extractData,
+    extractSchema,
+    extractUiSchema,
+    subErrorsAt
 } from './core';
 import { JsonFormsState } from '../store';
 import { findMatchingUISchema, uischemaRegistryReducer, UISchemaTester } from './uischemas';
@@ -52,12 +53,14 @@ export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsStat
     fields: fieldReducer,
     config: configReducer,
     uischemas: uischemaRegistryReducer,
+    defaultData: defaultDataReducer,
     ...additionalReducers
   });
 
 export const getData = state => extractData(state.jsonforms.core);
 export const getSchema = state => extractSchema(state.jsonforms.core);
 export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
+export const getDefaultData = state => extractDefaultData(state.jsonforms.defaultData);
 
 export const findUISchema = state =>
   (schema: JsonSchema,
