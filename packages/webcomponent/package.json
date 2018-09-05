@@ -43,7 +43,7 @@
     "@jsonforms/react": "^2.0.8",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "es6-shim": "^0.35.3",
-    "json-refs": "^3.0.4",
+    "json-refs": "^3.0.10",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.6",
