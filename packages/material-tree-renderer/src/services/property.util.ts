@@ -101,8 +101,8 @@ export const makeSchemaSelfContained = (
   parentSchema: JsonSchema,
   schema: JsonSchema
 ): JsonSchema => {
-  const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true});
-  const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true});
+  const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true}) as SchemaRefs;
+  const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true}) as SchemaRefs;
   let extractedReferences;
   findReferences(parentSchema, allRefs, schemaRefs, extractedReferences = {});
   const refList = _.values(extractedReferences) as string[];

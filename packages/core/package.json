@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "ajv": "^6.4.0",
-    "json-refs": "^3.0.4",
+    "json-refs": "^3.0.10",
     "lodash": "^4.17.4",
     "redux": "^3.7.2",
     "uuid": "^3.2.1"
