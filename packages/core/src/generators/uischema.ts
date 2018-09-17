@@ -74,7 +74,7 @@ const deriveType = (jsonSchema: JsonSchema): string => {
 /**
  * Creates a IControlObject with the given label referencing the given ref
  */
-const createControlElement = (label: string, ref: string): ControlElement => ({
+export const createControlElement = (label: string, ref: string): ControlElement => ({
     type: 'Control',
     label: label,
     scope: ref,
