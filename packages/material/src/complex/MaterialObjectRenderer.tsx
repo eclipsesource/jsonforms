@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {
     ControlElement,
     ControlProps,
+    Generate,
     isObjectControl,
     JsonSchema,
     mapStateToControlProps,
@@ -17,13 +18,7 @@ import { MaterialLayoutRenderer } from '../util/layout';
 
 const createControls = (schema: JsonSchema, path: string): UISchemaElement[] => {
     const obj =  resolveSchema(schema, path);
-    return Object.keys(obj).map(key => {
-        return {
-            label: key,
-            type: 'Control',
-            scope: `${path}/${key}`
-        };
-    });
+    return Object.keys(obj).map(key => Generate.controlElement(key, `${path}/${key}`));
 };
 
 class MaterialObjectRenderer extends React.Component<ControlProps, any> {
