@@ -4,6 +4,7 @@ import {
     ControlElement,
     ControlProps,
     isObjectControl,
+    JsonSchema,
     mapStateToControlProps,
     RankedTester,
     rankWith,
@@ -11,10 +12,10 @@ import {
     UISchemaElement
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
-import { MaterialLayoutRenderer } from '../util/layout';
 import { Card, CardContent, CardHeader } from '@material-ui/core';
+import { MaterialLayoutRenderer } from '../util/layout';
 
-const createControl = (schema, path: string): UISchemaElement[] => {
+const createControls = (schema: JsonSchema, path: string): UISchemaElement[] => {
     const obj =  resolveSchema(schema, path);
     return Object.keys(obj).map(key => {
         return {
@@ -26,7 +27,6 @@ const createControl = (schema, path: string): UISchemaElement[] => {
 };
 
 class MaterialObjectRenderer extends React.Component<ControlProps, any> {
-
     render() {
         const {
             uischema,
@@ -36,7 +36,7 @@ class MaterialObjectRenderer extends React.Component<ControlProps, any> {
 
         const controlElement = uischema as ControlElement;
         const scope = controlElement.scope;
-        const elements: UISchemaElement[] = createControl(schema, (`${scope || '#'}/properties`));
+        const elements: UISchemaElement[] = createControls(schema, (`${scope || '#'}/properties`));
         const style: {[x: string]: any} = { marginBottom: '10px' };
         if (!visible) {
             style.display = 'none';
