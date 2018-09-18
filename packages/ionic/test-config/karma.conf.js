@@ -11,18 +11,7 @@ module.exports = function(config) {
         pattern: './test-config/karma-test-shim.js',
         watched: true
       }
-      // {
-      //   pattern: './src/assets/**/*',
-      //   watched: false,
-      //   included: false,
-      //   served: true,
-      //   nocache: false
-      // }
     ],
-
-    proxies: {
-      // '/assets/': '/base/src/assets/'
-    },
 
     preprocessors: {
       './test-config/karma-test-shim.js': ['webpack', 'sourcemap']
