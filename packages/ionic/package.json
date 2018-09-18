@@ -22,7 +22,7 @@
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Ionic' --mode file --out docs src",
-    "test": "karma start ./test-config/karma.conf.js",
+    "test": "karma start ./test-config/karma.conf.js --single-run",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
     "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
     "e2e": "npm run e2e-update && npm run e2e-test",
