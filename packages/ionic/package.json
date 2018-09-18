@@ -21,11 +21,10 @@
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Ionic' --mode file --out docs src",
     "test": "karma start ./test-config/karma.conf.js",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
-    "test-coverage": "karma start ./test-config/karma.conf.js --coverage --single-run",
+    "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
     "e2e": "npm run e2e-update && npm run e2e-test",
     "e2e-test": "protractor ./test-config/protractor.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false"
