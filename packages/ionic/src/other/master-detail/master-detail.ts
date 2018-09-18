@@ -49,7 +49,7 @@ export class MasterDetailComponent extends JsonFormsControl {
     this.masterDetailService.detailNav = this.detailNav;
     this.masterDetailService.parentNav = this.parentNav;
 
-    const state$ = this.connectControlToJsonForms(this.ngRedux, this.getOwnProps());
+    const state$ = this.ngRedux.select().map(this.mapToProps(this.getOwnProps()));
     this.subscription = state$.subscribe(state => {
 
       const controlElement = state.uischema as ControlElement;
