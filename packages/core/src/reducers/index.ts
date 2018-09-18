@@ -60,10 +60,14 @@ export const getSchema = state => extractSchema(state.jsonforms.core);
 export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
 
 export const findUISchema = state =>
-  (schema: JsonSchema, schemaPath: string, path: string): UISchemaElement => {
+  (schema: JsonSchema,
+   schemaPath: string,
+   path: string,
+   fallbackLayoutType = 'VerticalLayout'
+  ): UISchemaElement => {
     const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(schema, schemaPath, path);
     if (uiSchema === undefined) {
-      return Generate.uiSchema(schema);
+      return Generate.uiSchema(schema, fallbackLayoutType);
     }
     return uiSchema;
   };
