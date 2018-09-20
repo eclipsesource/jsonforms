@@ -11,4 +11,6 @@ H2/2018:
  
 H1/2019:
  * Eclipse Theia Integration
- * Visual Studio Code Integration POC
+ * Renderer for Angular Material
+ * Tooling: Text-based editor for JSON Schemata
+ 
