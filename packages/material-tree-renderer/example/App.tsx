@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import ThemedTreeWithDetail from '../src/ThemedTreeWithDetail';
+import { ThemedTreeWithDetail } from '../src';
 import EditorBar from './app-bar/EditorBar';
 import {
   getData,
@@ -8,7 +8,7 @@ import {
   getUiSchema
 } from '@jsonforms/core';
 
-const App = ({store, filterPredicate, labelProviders, imageProvider}) => (
+const App = ({ store, filterPredicate, labelProviders, imageProvider }) => (
   <Provider store={store}>
     <React.Fragment>
       <EditorBar
