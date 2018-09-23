@@ -49,6 +49,7 @@ import * as text from './text';
 import * as numbers from './numbers';
 import * as listWithDetail from './list-with-detail';
 import * as listWithDetailRegistered from './list-with-detail-registered';
+import * as object from './object';
 import * as i18n from './i18n';
 import * as issue_1169 from './1169';
 export * from './register';
@@ -81,6 +82,7 @@ export {
   numbers,
   listWithDetail,
   listWithDetailRegistered,
+  object,
   i18n,
   issue_1169
 };
