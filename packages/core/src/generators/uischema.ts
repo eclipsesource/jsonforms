@@ -25,7 +25,7 @@
 import * as _ from 'lodash';
 
 import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, LabelElement, Layout, UISchemaElement } from '../models/uischema';
+import { ControlElement, isGroup, LabelElement, Layout, UISchemaElement } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
 
 /**
@@ -109,12 +109,17 @@ const wrapInLayoutIfNecessary = (uischema: UISchemaElement, layoutType: string):
  */
 const addLabel = (layout: Layout, labelName: string) => {
     if (!_.isEmpty(labelName) ) {
-        // add label with name
-        const label: LabelElement = {
-            type: 'Label',
-            text: _.startCase(labelName)
-        };
-        layout.elements.push(label);
+        const fixedLabel = _.startCase(labelName);
+        if (isGroup(layout)) {
+            layout.label = fixedLabel;
+        } else {
+            // add label with name
+            const label: LabelElement = {
+                type: 'Label',
+                text: fixedLabel
+            };
+            layout.elements.push(label);
+        }
     }
 };
 

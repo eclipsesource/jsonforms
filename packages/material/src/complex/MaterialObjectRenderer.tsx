@@ -1,14 +1,20 @@
-import * as React from 'react';
 import {
     ControlProps,
     findUISchema,
-    isObjectControl, JsonFormsState,
+    GroupLayout,
+    isObjectControl,
+    JsonFormsState,
     JsonSchema,
-    mapStateToControlProps, OwnPropsOfControl,
+    mapStateToControlProps,
+    OwnPropsOfControl,
     RankedTester,
-    rankWith, UISchemaElement,
+    rankWith,
+    UISchemaElement
 } from '@jsonforms/core';
 import { connectToJsonForms, JsonForms } from '@jsonforms/react';
+import { Hidden } from '@material-ui/core';
+import * as _ from 'lodash';
+import * as React from 'react';
 
 interface MaterialObjectRendererProps extends ControlProps {
     findUiSchema(
@@ -28,20 +34,22 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
             visible,
         } = this.props;
 
-        const style: {[x: string]: any} = { marginBottom: '10px' };
-        if (!visible) {
-            style.display = 'none';
+        const detailUiSchema = findUiSchema(scopedSchema, undefined, path, 'Group');
+        if (_.isEmpty(path)) {
+            detailUiSchema.type = 'VerticalLayout';
+        } else {
+            (detailUiSchema as GroupLayout).label = _.startCase(path);
         }
 
-        const detailUiSchema = findUiSchema(scopedSchema, undefined, path, 'Group');
-
         return (
-          <JsonForms
-            visible={visible}
-            schema={scopedSchema}
-            uischema={detailUiSchema}
-            path={path}
-          />
+            <Hidden xsUp={!visible}>
+                <JsonForms
+                    visible={visible}
+                    schema={scopedSchema}
+                    uischema={detailUiSchema}
+                    path={path}
+                />
+            </Hidden>
         );
     }
 }

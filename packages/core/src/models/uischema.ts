@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {JsonSchema} from './jsonSchema';
+import { JsonSchema } from './jsonSchema';
 
 /**
  * Interface for describing an UI schema element that is referencing
@@ -105,20 +105,20 @@ export interface SchemaBasedCondition extends Condition {
  */
 export interface UISchemaElement {
 
-    /**
-     * The type of this UI schema element.
-     */
-    type: string;
+  /**
+   * The type of this UI schema element.
+   */
+  type: string;
 
-    /**
-     * An optional rule.
-     */
-    rule?: Rule;
+  /**
+   * An optional rule.
+   */
+  rule?: Rule;
 
-    /**
-     * Any additional options.
-     */
-    options?: any;
+  /**
+   * Any additional options.
+   */
+  options?: any;
 }
 
 /**
@@ -221,5 +221,7 @@ export interface Categorization extends UISchemaElement {
    * The child elements of this categorization which are either of type
    * {@link Category} or {@link Categorization}.
    */
-  elements: (Category|Categorization)[];
+  elements: (Category | Categorization)[];
 }
+
+export const isGroup = (layout: Layout): layout is GroupLayout => layout.type === 'Group';
