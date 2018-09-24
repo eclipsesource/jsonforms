@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { IonicPage, NavParams } from 'ionic-angular';
 import { AbstractDetailPage } from '../AbstractDetailPage';
 
@@ -17,8 +18,8 @@ import { AbstractDetailPage } from '../AbstractDetailPage';
 })
 export class DetailPage extends AbstractDetailPage {
 
-  schema;
-  uischema;
+  schema: JsonSchema;
+  uischema: UISchemaElement;
   path: string;
 
   constructor(public navParams: NavParams) {

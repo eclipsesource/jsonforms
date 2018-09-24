@@ -8,9 +8,9 @@ import { NgRedux } from '@angular-redux/store';
   template: `
       <ion-grid>
           <ion-row>
-              <ion-col *ngFor="let uischema of elements">
+              <ion-col *ngFor="let element of uischema?.elements">
                   <jsonforms-outlet
-                          [uischema]="uischema"
+                          [uischema]="element"
                           [schema]="schema"
                           [path]="path"
                   ></jsonforms-outlet>

@@ -1,36 +1,40 @@
-import {  Input, OnDestroy, OnInit } from '@angular/core';
-import { JsonFormsState, mapStateToLayoutProps } from '@jsonforms/core';
+import { Input, OnDestroy, OnInit } from '@angular/core';
+import { JsonFormsState, mapStateToLayoutProps, UISchemaElement } from '@jsonforms/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
+import { Subscription } from 'rxjs';
 
 export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
-  @Input() path: string;
-  protected subscription;
-  protected elements;
+    @Input() path: string;
+    elements: UISchemaElement[];
+    subscription: Subscription;
 
-  constructor(protected ngRedux: NgRedux<JsonFormsState>) {
-    super();
-  }
+    constructor(protected ngRedux: NgRedux<JsonFormsState>) {
+        super();
+    }
 
-  connectLayoutToJsonForms = (store, ownProps) => {
-    return store.select().map(state => {
-      return mapStateToLayoutProps(state, ownProps);
-    });
-  }
+    ngOnInit() {
+        const ownProps = {
+            ...this.getOwnProps(),
+            path: this.path
+        };
+        this.subscription = this.ngRedux
+            .select()
+            .map(state => mapStateToLayoutProps(state, ownProps))
+            .subscribe(props => {
+                this.uischema = props.uischema;
+                this.schema = props.schema;
+                this.mapAdditionalProps();
+            });
+    }
 
-  ngOnInit() {
-    const ownProps = {
-      ...this.getOwnProps(),
-      path: this.path
-    };
-    const state$ = this.connectLayoutToJsonForms(this.ngRedux, ownProps);
-    this.subscription = state$.subscribe(state => {
-      this.elements = state.uischema.elements;
-    });
-  }
+    // TODO: maybe we should move the subscription as this method into the base renderer?
+    mapAdditionalProps() {
+        // do nothing by default
+    }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

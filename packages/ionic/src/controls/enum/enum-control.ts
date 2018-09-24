@@ -8,7 +8,8 @@ import { JsonFormsControl } from '@jsonforms/angular';
   template: `
       <ion-item>
           <ion-label>{{label}}</ion-label>
-          <ion-select [ngModel]="value" (ionChange)="onChange($event)">
+          <ion-label stacked *ngIf="error" style="color: red">{{error}}</ion-label>
+          <ion-select [ngModel]="data" (ionChange)="onChange($event)">
               <ion-option *ngFor="let option of options" value="{{option}}">
                   {{option}}
               </ion-option>
@@ -18,14 +19,13 @@ import { JsonFormsControl } from '@jsonforms/angular';
 })
 export class EnumControlRenderer extends JsonFormsControl {
 
-  options;
+  options: any[];
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
+  mapAdditionalProps() {
     this.options = this.scopedSchema.enum;
   }
 }

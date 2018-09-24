@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { JsonFormsState, isNumberControl, RankedTester, rankWith } from '@jsonforms/core';
+import { isNumberControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 
 @Component({
@@ -8,13 +8,14 @@ import { JsonFormsControl } from '@jsonforms/angular';
   template: `
       <ion-item>
           <ion-label floating>{{label}}</ion-label>
+          <ion-label stacked *ngIf="error" style="color: red">{{error}}</ion-label>
           <ion-input
                   type="number"
                   placeholder="{{ description }}"
                   [min]="min"
                   [max]="max"
                   [step]="multipleOf"
-                  [value]="value"
+                  [value]="data"
                   (ionChange)="onChange($event)"
           >
           </ion-input>
@@ -31,11 +32,10 @@ export class NumberControlRenderer extends JsonFormsControl {
     super(ngRedux);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
-    this.min = this.scopedSchema.minimum || null;
-    this.max = this.scopedSchema.maximum || null;
-    this.multipleOf = this.scopedSchema.multipleOf || null;
+  mapAdditionalProps() {
+    this.min = this.scopedSchema.maximum;
+    this.max = this.scopedSchema.minimum;
+    this.multipleOf = this.scopedSchema.multipleOf;
   }
 }
 
