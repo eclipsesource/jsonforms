@@ -1,13 +1,14 @@
 import * as _ from 'lodash';
 import {
-  and,
-  Categorization,
-  Category,
-  JsonFormsState,
-  RankedTester,
-  rankWith,
-  StatePropsOfLayout,
-  uiTypeIs
+    and,
+    Categorization,
+    Category,
+    JsonFormsState,
+    Layout,
+    RankedTester,
+    rankWith,
+    UISchemaElement,
+    uiTypeIs
 } from '@jsonforms/core';
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
@@ -16,15 +17,15 @@ import { NgRedux } from '@angular-redux/store';
 import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 
 @Component({
-  selector: 'jsonforms-categorization-layout',
-  template: `
+    selector: 'jsonforms-categorization-layout',
+    template: `
       <ion-header>
           <ion-navbar>
               <button ion-button menuToggle="categorization-menu">
                   <ion-icon name="menu"></ion-icon>
               </button>
               <ion-title>
-                  {{label}}
+                  {{selectedCategory?.label}}
               </ion-title>
               <ion-buttons end>
                   <button ion-button *ngIf="canGoBack()" (click)="goBack()">
@@ -41,8 +42,8 @@ import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
               <ion-content>
                   <ion-list>
                       <button ion-item
-                              *ngFor="let category of categories"
-                              (click)="renderCategory(category)">
+                              *ngFor="let category of uischema?.elements"
+                              (click)="selectCategory(category)">
                           {{category.label}}
                       </button>
                   </ion-list>
@@ -54,64 +55,65 @@ import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 })
 export class CategorizationLayoutRenderer extends JsonFormsIonicLayout {
 
-  @ViewChild('categoryContent') nav: NavController;
-  categories: any[];
-  label: string;
-  stateProps: StatePropsOfLayout;
+    @ViewChild('categoryContent') nav: NavController;
+    selectedCategory: Category;
+    initialized: boolean;
 
-  constructor(ngRedux: NgRedux<JsonFormsState>) {
-    super(ngRedux);
-  }
+    constructor(ngRedux: NgRedux<JsonFormsState>) {
+        super(ngRedux);
+    }
 
-  ngOnInit() {
-    this.categories = (this.getOwnProps().uischema as Categorization).elements;
-    const firstCategory = (this.getOwnProps().uischema as Categorization).elements[0];
-    this.label = firstCategory.label;
-    const state$ = this.connectLayoutToJsonForms(this.ngRedux, this.getOwnProps());
-    this.subscription = state$.subscribe(state => {
-      this.stateProps = state;
-    });
-    this.renderCategory(firstCategory);
-  }
+    mapAdditionalProps() {
+        if (!this.initialized) {
+            const layout = this.uischema as Layout;
+            if (layout && layout.elements.length > 0) {
+                this.selectCategory(layout.elements[0] as Category);
+            }
+            this.initialized = true;
+        }
+    }
 
-  renderCategory(category) {
-    this.nav.setRoot(CategoryRenderer, { category: category });
-    this.label = category.label;
-  }
+    selectCategory(category) {
+        this.selectedCategory = category;
+        this.nav.setRoot(CategoryRenderer, { category });
+    }
 
-  canGoBack() {
-    // FIXME: addToStack allows explicit control when to display the 'Go back' button,
-    // FIXME: is there a better way to control this?
-    const count = this.nav.getViews().reduce(
-      (acc, view) => acc + (view.data.addToNavStack ? 1 : 0),
-      0
-    );
-    return count > 1;
-  }
+    canGoBack() {
+        // FIXME: addToStack allows explicit control when to display the 'Go back' button,
+        // FIXME: is there a better way to control this?
+        const count = this.nav.getViews().reduce(
+            (acc, view) => acc + (view.data.addToNavStack ? 1 : 0),
+            0
+        );
+        return count > 1;
+    }
 
-  goBack() {
-    return this.nav.pop();
-  }
+    goBack() {
+        return this.nav.pop();
+    }
 }
 
 export const isCategorization = (category: Category | Categorization): category is Categorization =>
-  category.type === 'Categorization';
+    category.type === 'Categorization';
+
+export const isCategory = (uischema: UISchemaElement): boolean =>
+    uischema.type === 'Category';
 
 export const categorizationTester: RankedTester = rankWith(
-  1,
-  and(
-    uiTypeIs('Categorization'),
-    uischema => {
-      const hasCategory = (categorization: Categorization): boolean => {
-        if (_.isEmpty(categorization.elements)) {
-          return false;
-        }
-        // all children of the categorization have to be categories
-        return categorization.elements
-          .map(elem => isCategorization(elem) ? hasCategory(elem) : elem.type === 'Category')
-          .reduce((prev, curr) => prev && curr, true);
-      };
+    1,
+    and(
+        uiTypeIs('Categorization'),
+        uischema => {
+            const hasCategory = (categorization: Categorization): boolean => {
+                if (_.isEmpty(categorization.elements)) {
+                    return false;
+                }
+                // all children of the categorization have to be categories
+                return categorization.elements
+                    .map(elem => isCategorization(elem) ? hasCategory(elem) : isCategory(elem))
+                    .reduce((prev, curr) => prev && curr, true);
+            };
 
-      return hasCategory(uischema as Categorization);
-    }
-  ));
+            return hasCategory(uischema as Categorization);
+        }
+    ));

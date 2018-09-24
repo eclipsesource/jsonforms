@@ -8,9 +8,10 @@ import { JsonFormsControl } from '@jsonforms/angular';
   template: `
       <ion-item>
           <ion-label floating>{{label}}</ion-label>
+          <ion-label stacked *ngIf="error" style="color: red">{{error}}</ion-label>
           <ion-datetime
                   displayFormat="MM/DD/YYYY"
-                  [ngModel]="value"
+                  [ngModel]="data"
                   (ionChange)="onChange($event)"
           ></ion-datetime>
       </ion-item>
