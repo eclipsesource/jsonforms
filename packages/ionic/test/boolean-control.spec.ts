@@ -67,7 +67,7 @@ describe('Boolean control', () => {
         component = fixture.componentInstance;
     });
 
-    it('should support setting the initial state', async(() => {
+    it('should support setting the initial state', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -81,10 +81,10 @@ describe('Boolean control', () => {
         });
         mockSubStore.complete();
         component.ngOnInit();
-        expect(component.value).toBe(true);
-    }));
+        expect(component.data).toBe(true);
+    });
 
-    it('should support updating the state', async(() => {
+    it('should support updating the state', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -109,11 +109,11 @@ describe('Boolean control', () => {
             }
         });
         mockSubStore2.complete();
-        component.subscribe();
-        expect(component.value).toBe(false);
-    }));
+        fixture.detectChanges();
+        expect(component.data).toBe(false);
+    });
 
-    it('should display errors', async(() => {
+    it('should display errors', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -133,6 +133,6 @@ describe('Boolean control', () => {
         component.ngOnInit();
         fixture.detectChanges();
         const booleanControl = fixture.nativeElement;
-        expect(booleanControl.getElementsByTagName("ion-label").length).toBe(2);
-    }));
+        expect(booleanControl.getElementsByTagName('ion-label').length).toBe(2);
+    });
 });
