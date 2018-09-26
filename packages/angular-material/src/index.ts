@@ -24,14 +24,16 @@
 */
 import { RankedTester } from '@jsonforms/core';
 export * from './module';
-import { BooleanControlRenderer, BooleanControlRendererTester } from './controls/boolean.renderer';
+import { BooleanControlRenderer, booleanControlTester } from './controls/boolean.renderer';
 import { TextControlRenderer, TextControlRendererTester } from './controls/text.renderer';
 import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
+
+export * from './controls';
 
 export const angularMaterialRenderers:
     { tester: RankedTester, renderer: any }[]  = [
     // controls
-    { tester: BooleanControlRendererTester, renderer: BooleanControlRenderer },
+    { tester: booleanControlTester, renderer: BooleanControlRenderer },
     { tester: TextControlRendererTester, renderer: TextControlRenderer },
     // layouts
     { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },

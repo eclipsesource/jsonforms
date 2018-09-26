@@ -23,39 +23,19 @@
   THE SOFTWARE.
 */
 import { combineReducers, Reducer } from 'redux';
-import { ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import { jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
-export const schema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        minLength: 5
-      },
-      description: {
-        type: 'string'
-      },
-      done: {
-        type: 'boolean'
-      }
-    },
-    required: ['name']
-  };
-
-export const uischema: ControlElement = undefined;
-
-export const data = {
-    name: 'Send email to Adrian',
-    description: 'Confirm if you have passed the subject\nHereby ...',
-    done: true,
-  };
+import { getExamples } from '@jsonforms/examples';
 
 export const rootReducer: Reducer<JsonFormsState> =
-  combineReducers({ jsonforms: jsonformsReducer() });
+  combineReducers({ jsonforms: jsonformsReducer(), examples: (state = []) => state });
 
 export const initialState: any = {
   jsonforms: {
     renderers: angularMaterialRenderers,
     fields: [],
+  },
+  examples: {
+    data: getExamples()
   }
 };

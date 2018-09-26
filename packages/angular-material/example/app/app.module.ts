@@ -30,16 +30,21 @@ import { AppComponent } from './app.component';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
-import { data, initialState, rootReducer, schema, uischema } from './store';
+import { MatSelectModule } from '@angular/material';
+
+import { initialState, rootReducer } from './store';
+import { ReduxComponent } from './redux.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ReduxComponent
   ],
   imports: [
     BrowserModule,
     JsonFormsModule,
-    JsonFormsAngularMaterialModule
+    JsonFormsAngularMaterialModule,
+    MatSelectModule
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -63,10 +68,11 @@ export class AppModule {
       [],
       enhancers
     );
+    const example = initialState.examples.data[0];
     ngRedux.dispatch(Actions.init(
-      data,
-      schema,
-      uischema
+      example.data,
+      example.schema,
+      example.uischema
     ));
   }
 }

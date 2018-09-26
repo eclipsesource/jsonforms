@@ -22,5 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import test from 'ava';
-test.todo('dummy');
+import { select } from '@angular-redux/store';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+
+@Component({
+    selector: 'print-redux',
+    template: `<label>{{data$ | async | json }}</label>
+  `
+})
+export class ReduxComponent {
+    @select(['jsonforms', 'core', 'data']) readonly data$: Observable<any>;
+}
