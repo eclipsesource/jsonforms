@@ -41,9 +41,11 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
         );
     }
 
+    getEventValue = event => event.value;
+
     onChange(ev) {
         const path = composeWithUi(this.uischema as ControlElement, this.path);
-        this.ngRedux.dispatch(Actions.update(path, () => ev.value));
+        this.ngRedux.dispatch(Actions.update(path, () => this.getEventValue(ev)));
         // these cause the correct update of the error underline, seems to be
         // related to ionic-team/ionic#11640
         this.form.markAsTouched();

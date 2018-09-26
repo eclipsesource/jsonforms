@@ -22,14 +22,37 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { NgRedux, select } from '@angular-redux/store';
 import { Component } from '@angular/core';
-
+import { Actions, JsonFormsState } from '@jsonforms/core';
+import { ExampleDescription } from '@jsonforms/examples';
+import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'app-root',
-  template: `<h1>{{title}}</h1>
+  template: `<h1>Angular Material Examples</h1>
+  Data: <print-redux></print-redux>
+  <div>
+  Example:
+    <select (change)="onChange($event)">
+      <option *ngFor="let example of exampleData$ | async"
+        value="{{example.name}}" label="{{example.label}}">
+      {{example.label}}
+      </option>
+    </select>
+    </div>
     <jsonforms-outlet></jsonforms-outlet>
   `
 })
 export class AppComponent {
-  title = 'Tour of Heroes';
+  @select(['examples', 'data']) readonly exampleData$: Observable<any>;
+
+  constructor(private ngRedux: NgRedux<JsonFormsState&{examples: {data: ExampleDescription[]}}>) { }
+
+  onChange = ev => {
+    const selectedExample = this.ngRedux.getState().examples.data.
+      find(e => e.name === ev.target.value);
+    this.ngRedux.dispatch(
+      Actions.init(selectedExample.data, selectedExample.schema, selectedExample.uischema)
+    );
+  }
 }
