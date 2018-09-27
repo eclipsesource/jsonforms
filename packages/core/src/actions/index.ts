@@ -26,8 +26,10 @@ import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { UISchemaTester } from '../reducers/uischemas';
+import * as AJV from 'ajv';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
+export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
 export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
 export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
 export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
@@ -47,14 +49,23 @@ export interface UpdateAction {
 export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
-  uischema: UISchemaElement = generateDefaultUISchema(schema)
+  uischema: UISchemaElement = generateDefaultUISchema(schema),
+  ajv?: AJV.Ajv
 ) =>
     ({
       type: INIT,
       data,
       schema,
-      uischema
+      uischema,
+      ajv
     });
+
+export const setAjv = (
+    ajv: AJV.Ajv
+) => ({
+    type: SET_AJV,
+    ajv
+});
 
 export const update =
   (path: string, updater: (any) => any): UpdateAction => ({
