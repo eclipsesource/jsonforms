@@ -24,7 +24,7 @@
 */
 import * as _ from 'lodash';
 import { ErrorObject, ValidateFunction } from 'ajv';
-import { INIT, UPDATE_DATA } from '../actions';
+import { INIT, SET_AJV, UPDATE_DATA } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
 
@@ -70,7 +70,8 @@ export const coreReducer = (
   switch (action.type) {
     case INIT: {
 
-      const v = ajv.compile(action.schema);
+      const thisAjv = action.ajv ? action.ajv : ajv;
+      const v = thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
 
       return {
@@ -79,6 +80,16 @@ export const coreReducer = (
         uischema: action.uischema,
         validator: v,
         errors: e
+      };
+    }
+    case SET_AJV: {
+      const currentAjv = action.ajv;
+      const validator = currentAjv.compile(state.schema);
+      const errors = sanitizeErrors(validator, state.data);
+      return {
+        ...state,
+        validator,
+        errors
       };
     }
     case UPDATE_DATA: {
