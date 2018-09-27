@@ -20,7 +20,7 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 
 export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
-    form;
+    form: FormControl;
     subscription: Subscription;
 
     data: any;
