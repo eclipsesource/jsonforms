@@ -141,7 +141,7 @@ describe('Boolean control', () => {
         mockSubStore.complete();
         fixture.detectChanges();
         component.ngOnInit();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
         expect(checkboxInstance.disabled).toBe(false);
     });
@@ -163,7 +163,7 @@ describe('Boolean control', () => {
         fixture.detectChanges();
         component.ngOnInit();
 
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
 
         const spy = spyOn(component, 'onChange');
@@ -187,15 +187,12 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore.complete();
         fixture.detectChanges();
         component.ngOnInit();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
 
-        MockNgRedux.reset();
-        const mockSubStore2 = MockNgRedux.getSelectorStub();
-        mockSubStore2.next({
+        mockSubStore.next({
             jsonforms: {
                 core: {
                     data: { foo: false },
@@ -203,9 +200,9 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore2.complete();
-        component.subscribe();
-        expect(component.value).toBe(false);
+        mockSubStore.complete();
+        fixture.detectChanges();
+        expect(component.data).toBe(false);
         expect(checkboxInstance.checked).toBe(false);
     });
     it('should update with undefined value', () => {
@@ -220,15 +217,12 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore.complete();
         fixture.detectChanges();
         component.ngOnInit();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
 
-        MockNgRedux.reset();
-        const mockSubStore2 = MockNgRedux.getSelectorStub();
-        mockSubStore2.next({
+        mockSubStore.next({
             jsonforms: {
                 core: {
                     data: { foo: undefined },
@@ -236,13 +230,12 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore2.complete();
-        component.subscribe();
+        mockSubStore.complete();
         fixture.detectChanges();
-        expect(component.value).toBe(false);
+        expect(component.data).toBe(undefined);
         expect(checkboxInstance.checked).toBe(false);
     });
-    it('should update with undefined value', () => {
+    it('should update with null value', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -254,15 +247,12 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore.complete();
         fixture.detectChanges();
         component.ngOnInit();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
 
-        MockNgRedux.reset();
-        const mockSubStore2 = MockNgRedux.getSelectorStub();
-        mockSubStore2.next({
+        mockSubStore.next({
             jsonforms: {
                 core: {
                     data: { foo: null },
@@ -270,10 +260,9 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore2.complete();
-        component.subscribe();
+        mockSubStore.complete();
         fixture.detectChanges();
-        expect(component.value).toBe(false);
+        expect(component.data).toBe(null);
         expect(checkboxInstance.checked).toBe(false);
     });
     it('should not update with wrong ref', () => {
@@ -288,15 +277,12 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore.complete();
         fixture.detectChanges();
         component.ngOnInit();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
 
-        MockNgRedux.reset();
-        const mockSubStore2 = MockNgRedux.getSelectorStub();
-        mockSubStore2.next({
+        mockSubStore.next({
             jsonforms: {
                 core: {
                     data: { foo: true, bar: false },
@@ -304,10 +290,9 @@ describe('Boolean control', () => {
                 }
             }
         });
-        mockSubStore2.complete();
-        component.subscribe();
+        mockSubStore.complete();
         fixture.detectChanges();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
     });
     it('can be disabled', () => {

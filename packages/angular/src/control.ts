@@ -11,7 +11,7 @@ import {
     mapStateToControlProps,
     Resolve
 } from '@jsonforms/core';
-import { OnDestroy, OnInit } from '@angular/core';
+import { Input, OnDestroy, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -26,9 +26,9 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     data: any;
     label: string;
     error: string | null;
-    disabled: boolean;
+    @Input() disabled: boolean;
     scopedSchema: JsonSchema;
-    id: string;
+    @Input() id: string;
 
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -58,7 +58,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
             .select()
             .map((s: JsonFormsState) => this.mapToProps(s))
             .subscribe(props => {
-                const { data, enabled, errors, label, required, schema, uischema } = props;
+                const { data, enabled, errors, label, required, schema, uischema, id } = props;
                 this.label = computeLabel(
                     isPlainLabel(label) ? label : label.default, required
                 );
@@ -67,7 +67,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
                 this.disabled = !enabled;
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.mapAdditionalProps(props);
-		this.id = props.id;
+                this.id = id;
             });
     }
 
@@ -83,6 +83,16 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+
+    protected getOwnProps() {
+        return {
+          uischema: this.uischema,
+          schema: this.schema,
+          path: this.path,
+          id: this.id,
+          enabled: !this.disabled
+        };
+      }
 
     protected mapToProps(state: JsonFormsState): ControlProps {
         const props = mapStateToControlProps(state, this.getOwnProps());
