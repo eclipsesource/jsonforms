@@ -24,7 +24,7 @@
 */
 import * as _ from 'lodash';
 import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import { Categorization, ControlElement, UISchemaElement } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
 
 /**
@@ -411,3 +411,22 @@ export const isNumberFormatControl = and(
   schemaTypeIs('integer'),
   optionIs('format', true)
 );
+
+export const isCategorization = (category: UISchemaElement): category is Categorization =>
+    category.type === 'Categorization';
+
+export const isCategory = (uischema: UISchemaElement): boolean =>
+    uischema.type === 'Category';
+
+const hasCategory = (categorization: Categorization): boolean => {
+    if (_.isEmpty(categorization.elements)) {
+        return false;
+    }
+    // all children of the categorization have to be categories
+    return categorization.elements
+        .map(elem => isCategorization(elem) ? hasCategory(elem) : isCategory(elem))
+        .reduce((prev, curr) => prev && curr, true);
+};
+
+export const categorizationHasCategory = uischema =>
+    hasCategory(uischema as Categorization);
