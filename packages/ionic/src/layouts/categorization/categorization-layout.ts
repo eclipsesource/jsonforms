@@ -1,13 +1,11 @@
-import * as _ from 'lodash';
 import {
     and,
-    Categorization,
     Category,
+    categorizationHasCategory,
     JsonFormsState,
     Layout,
     RankedTester,
     rankWith,
-    UISchemaElement,
     uiTypeIs
 } from '@jsonforms/core';
 import { Component, ViewChild } from '@angular/core';
@@ -93,27 +91,9 @@ export class CategorizationLayoutRenderer extends JsonFormsIonicLayout {
     }
 }
 
-export const isCategorization = (category: Category | Categorization): category is Categorization =>
-    category.type === 'Categorization';
-
-export const isCategory = (uischema: UISchemaElement): boolean =>
-    uischema.type === 'Category';
-
 export const categorizationTester: RankedTester = rankWith(
     1,
     and(
         uiTypeIs('Categorization'),
-        uischema => {
-            const hasCategory = (categorization: Categorization): boolean => {
-                if (_.isEmpty(categorization.elements)) {
-                    return false;
-                }
-                // all children of the categorization have to be categories
-                return categorization.elements
-                    .map(elem => isCategorization(elem) ? hasCategory(elem) : isCategory(elem))
-                    .reduce((prev, curr) => prev && curr, true);
-            };
-
-            return hasCategory(uischema as Categorization);
-        }
+        categorizationHasCategory
     ));
