@@ -9,7 +9,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
       <ion-item>
           <ion-label floating>{{label}}</ion-label>
           <!-- TODO: displays the actual error, question is where we want to actually display it -->
-          <ion-label stacked *ngIf="error" style="color: red">{{error}}</ion-label>
+          <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
           <ion-input
                   type="text"
                   (ionChange)="onChange($event)"

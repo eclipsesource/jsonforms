@@ -8,7 +8,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
   template: `
       <ion-item>
           <ion-label>{{label}}</ion-label>
-          <ion-label stacked *ngIf="error" style="color: red">{{error}}</ion-label>
+          <ion-label stacked *ngIf="error" color="errora">{{error}}</ion-label>
           <ion-select [ngModel]="data" (ionChange)="onChange($event)">
               <ion-option *ngFor="let option of options" value="{{option}}">
                   {{option}}
