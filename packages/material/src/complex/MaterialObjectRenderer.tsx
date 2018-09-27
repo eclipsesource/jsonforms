@@ -8,8 +8,7 @@ import {
     RankedTester,
     rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
-import { MaterialLayoutRenderer } from '../util/layout';
+import { connectToJsonForms, JsonForms } from '@jsonforms/react';
 
 interface MaterialObjectRendererProps extends ControlProps {
     findUiSchema(
@@ -24,7 +23,7 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
     render() {
         const {
             findUiSchema,
-            schema,
+            scopedSchema,
             path,
             visible,
         } = this.props;
@@ -34,15 +33,14 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
             style.display = 'none';
         }
 
-        const detailUiSchema = findUiSchema(schema, undefined, path, 'Group');
+        const detailUiSchema = findUiSchema(scopedSchema, undefined, path, 'Group');
 
         return (
-          <MaterialLayoutRenderer
+          <JsonForms
             visible={visible}
-            schema={schema}
-            direction={'column'}
-            elements={detailUiSchema.elements}
-            path={''}
+            schema={scopedSchema}
+            uischema={detailUiSchema}
+            path={path}
           />
         );
     }
