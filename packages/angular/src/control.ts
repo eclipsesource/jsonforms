@@ -28,6 +28,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     error: string | null;
     disabled: boolean;
     scopedSchema: JsonSchema;
+    id: string;
 
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -66,6 +67,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
                 this.disabled = !enabled;
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.mapAdditionalProps(props);
+		this.id = props.id;
             });
     }
 

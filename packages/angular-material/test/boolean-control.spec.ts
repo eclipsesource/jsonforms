@@ -22,15 +22,73 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { async, TestBed } from '@angular/core/testing';
-import { MatCheckboxModule, MatFormFieldModule } from '@angular/material';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
-import { BooleanControlRenderer } from '../src';
+import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCheckbox, MatCheckboxModule, MatError, MatFormFieldModule } from '@angular/material';
+import { By } from '@angular/platform-browser';
+import { NOT_APPLICABLE } from '@jsonforms/core';
+import { BooleanControlRenderer, booleanControlTester } from '../src';
 
+const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo'
+};
+
+describe('Material boolean field tester', () => {
+    it('should fail', () => {
+        expect(booleanControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+        expect(booleanControlTester(null, undefined)).toBe(NOT_APPLICABLE);
+        expect(booleanControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+        expect(booleanControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+        expect(
+            booleanControlTester(
+                uischema,
+                { type: 'object', properties: { foo: { type: 'string' } } }
+            )
+        ).toBe(NOT_APPLICABLE);
+        expect(
+            booleanControlTester(
+                uischema,
+                {
+                    type: 'object',
+                    properties: {
+                        foo: {
+                            type: 'string'
+                        },
+                        bar: {
+                            type: 'boolean'
+                        }
+                    }
+                }
+            )
+        ).toBe(NOT_APPLICABLE);
+    });
+
+    it('should succeed', () => {
+        expect(
+            booleanControlTester(
+                uischema,
+                {
+                    type: 'object',
+                    properties: {
+                        foo: {
+                            type: 'boolean'
+                        }
+                    }
+                }
+            )
+        ).toBe(2);
+    });
+});
 describe('Boolean control', () => {
-    let fixture;
-    let component;
+    let fixture: ComponentFixture<any>;
+    let checkboxDebugElement: DebugElement;
+    let checkboxNativeElement: HTMLElement;
+    let checkboxInstance: MatCheckbox;
+    let component: BooleanControlRenderer;
+    let labelElement: HTMLLabelElement;
 
     const data = { foo: true };
     const schema = {
@@ -41,18 +99,16 @@ describe('Boolean control', () => {
             }
         }
     };
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo'
-    };
 
-    beforeEach(async (() => {
+    const getImports = () => [
+        MatCheckboxModule,
+        MatFormFieldModule
+    ];
+
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [BooleanControlRenderer],
-            imports: [
-                MatCheckboxModule,
-                MatFormFieldModule
-            ],
+            imports: getImports(),
             providers: [
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance }
             ]
@@ -64,9 +120,13 @@ describe('Boolean control', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(BooleanControlRenderer);
         component = fixture.componentInstance;
+        checkboxDebugElement = fixture.debugElement.query(By.directive(MatCheckbox));
+        checkboxInstance = checkboxDebugElement.componentInstance;
+        checkboxNativeElement = checkboxDebugElement.nativeElement;
+        labelElement = checkboxNativeElement.querySelector('label');
     });
 
-    it('should support setting the initial state', async(() => {
+    it('should render', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -79,11 +139,15 @@ describe('Boolean control', () => {
             }
         });
         mockSubStore.complete();
+        fixture.detectChanges();
         component.ngOnInit();
-        expect(component.data).toBe(true);
-    }));
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+        expect(checkboxInstance.disabled).toBe(false);
+    });
 
-    it('should support updating the state', async(() => {
+    it('should update via input event', () => {
+
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -96,7 +160,39 @@ describe('Boolean control', () => {
             }
         });
         mockSubStore.complete();
+        fixture.detectChanges();
         component.ngOnInit();
+
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+
+        const spy = spyOn(component, 'onChange');
+        labelElement.click();
+        // trigger change detection
+        fixture.detectChanges();
+
+        expect(spy).toHaveBeenCalled();
+        expect(checkboxInstance.checked).toBe(false);
+    });
+
+    it('should support updating the state', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+
         MockNgRedux.reset();
         const mockSubStore2 = MockNgRedux.getSelectorStub();
         mockSubStore2.next({
@@ -108,11 +204,152 @@ describe('Boolean control', () => {
             }
         });
         mockSubStore2.complete();
-        fixture.detectChanges();
-        expect(component.data).toBe(false);
-    }));
+        component.subscribe();
+        expect(component.value).toBe(false);
+        expect(checkboxInstance.checked).toBe(false);
+    });
+    it('should update with undefined value', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
 
-    it('should display errors', async(() => {
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+
+        MockNgRedux.reset();
+        const mockSubStore2 = MockNgRedux.getSelectorStub();
+        mockSubStore2.next({
+            jsonforms: {
+                core: {
+                    data: { foo: undefined },
+                    schema,
+                }
+            }
+        });
+        mockSubStore2.complete();
+        component.subscribe();
+        fixture.detectChanges();
+        expect(component.value).toBe(false);
+        expect(checkboxInstance.checked).toBe(false);
+    });
+    it('should update with undefined value', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+
+        MockNgRedux.reset();
+        const mockSubStore2 = MockNgRedux.getSelectorStub();
+        mockSubStore2.next({
+            jsonforms: {
+                core: {
+                    data: { foo: null },
+                    schema,
+                }
+            }
+        });
+        mockSubStore2.complete();
+        component.subscribe();
+        fixture.detectChanges();
+        expect(component.value).toBe(false);
+        expect(checkboxInstance.checked).toBe(false);
+    });
+    it('should not update with wrong ref', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+
+        MockNgRedux.reset();
+        const mockSubStore2 = MockNgRedux.getSelectorStub();
+        mockSubStore2.next({
+            jsonforms: {
+                core: {
+                    data: { foo: true, bar: false },
+                    schema,
+                }
+            }
+        });
+        mockSubStore2.complete();
+        component.subscribe();
+        fixture.detectChanges();
+        expect(component.value).toBe(true);
+        expect(checkboxInstance.checked).toBe(true);
+    });
+    it('can be disabled', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+        component.disabled = true;
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(checkboxInstance.disabled).toBe(true);
+
+    });
+    it('id should be present in output', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+        component.id = 'myId';
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(checkboxInstance.id).toBe('myId');
+
+    });
+
+    it('should display errors', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -131,7 +368,8 @@ describe('Boolean control', () => {
         mockSubStore.complete();
         component.ngOnInit();
         fixture.detectChanges();
-        const booleanControl = fixture.nativeElement;
-        expect(booleanControl.getElementsByTagName('mat-error').length).toBe(1);
-    }));
+        const debugErrors: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatError));
+        expect(debugErrors.length).toBe(1);
+        expect(debugErrors[0].nativeElement.textContent).toBe('Hi, this is me, test error!');
+    });
 });
