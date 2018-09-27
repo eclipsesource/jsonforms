@@ -80,7 +80,7 @@ describe('Boolean control', () => {
         });
         mockSubStore.complete();
         component.ngOnInit();
-        expect(component.value).toBe(true);
+        expect(component.data).toBe(true);
     }));
 
     it('should support updating the state', async(() => {
@@ -108,8 +108,8 @@ describe('Boolean control', () => {
             }
         });
         mockSubStore2.complete();
-        component.subscribe();
-        expect(component.value).toBe(false);
+        fixture.detectChanges();
+        expect(component.data).toBe(false);
     }));
 
     it('should display errors', async(() => {

@@ -36,11 +36,11 @@ import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/co
                 matInput
                 type="text"
                 (change)="onChange($event)"
-                [value]="value"
+                [value]="data"
                 placeholder="{{ description }}"
                 [disabled]="disabled"
             >
-            <mat-error>{{ errors }}</mat-error>
+            <mat-error>{{ error }}</mat-error>
         </mat-form-field>
     `
 })

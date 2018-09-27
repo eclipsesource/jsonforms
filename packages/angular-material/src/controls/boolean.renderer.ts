@@ -33,11 +33,11 @@ import { isBooleanControl, JsonFormsState, RankedTester, rankWith } from '@jsonf
     <div>
         <mat-checkbox
             (change)="onChange($event)"
-            [checked]="value"
+            [checked]="data"
             [disabled]="disabled">
             {{ label }}
         </mat-checkbox>
-        <mat-error>{{ errors }}</mat-error>
+        <mat-error>{{ error }}</mat-error>
     </div>
     `
 })
