@@ -63,6 +63,13 @@ export const init = (
       ajv
     });
 
+export const setAjv = (
+    ajv: AJV.Ajv
+) => ({
+    type: SET_AJV,
+    ajv
+});
+
 export const registerDefaultData = (
     schemaPath: string,
     data: any
