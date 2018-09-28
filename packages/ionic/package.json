@@ -66,8 +66,8 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",
+    "@jsonforms/angular-test": "^2.0.12-rc.0",
     "@types/node": "^10.10.0",
-    "angular2-template-loader": "^0.6.2",
     "copy-webpack-plugin": "^4.5.1",
     "html-loader": "^0.5.5",
     "istanbul-instrumenter-loader": "^3.0.1",

@@ -22,117 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { async, TestBed } from '@angular/core/testing';
-import { IonicModule, Platform } from 'ionic-angular';
-import { PlatformMock } from '../test-config/mocks-ionic';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
+import { booleanTest } from '@jsonforms/angular-test';
+import { Checkbox, IonicModule, Label, Platform } from 'ionic-angular';
 import { BooleanControlRenderer } from '../src';
+import { PlatformMock } from '../test-config/mocks-ionic';
 
-describe('Boolean control', () => {
-    let fixture;
-    let component;
+const imports = [IonicModule.forRoot(BooleanControlRenderer)];
+const providers = [
+    { provide: Platform, useClass: PlatformMock },
+    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+];
+const componentUT: any = BooleanControlRenderer;
+const errorTest = {errorInstance: Label, numberOfElements: 2, indexOfElement: 1};
 
-    const data = { foo: true };
-    const schema = {
-        type: 'object',
-        properties: {
-            foo: {
-                type: 'boolean'
-            }
-        }
-    };
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo'
-    };
-
-    beforeEach(async (() => {
-        TestBed.configureTestingModule({
-            declarations: [BooleanControlRenderer],
-            imports: [
-                IonicModule.forRoot(BooleanControlRenderer)
-            ],
-            providers: [
-                { provide: Platform, useClass: PlatformMock },
-                { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-            ]
-        }).compileComponents();
-
-        MockNgRedux.reset();
-    }));
-
-    beforeEach(() => {
-        fixture = TestBed.createComponent(BooleanControlRenderer);
-        component = fixture.componentInstance;
-    });
-
-    it('should support setting the initial state', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
-        expect(component.data).toBe(true);
-    });
-
-    it('should support updating the state', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
-        MockNgRedux.reset();
-        const mockSubStore2 = MockNgRedux.getSelectorStub();
-        mockSubStore2.next({
-            jsonforms: {
-                core: {
-                    data: { foo: false },
-                    schema,
-                }
-            }
-        });
-        mockSubStore2.complete();
-        fixture.detectChanges();
-        expect(component.data).toBe(false);
-    });
-
-    it('should display errors', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                    errors: [{
-                        dataPath: 'foo',
-                        message: 'Hi, this is me, test error!'
-                    }]
-                }
-            },
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
-        fixture.detectChanges();
-        const booleanControl = fixture.nativeElement;
-        expect(booleanControl.getElementsByTagName('ion-label').length).toBe(2);
-    });
-});
+describe('Boolean control',
+         booleanTest(imports, providers, componentUT, Checkbox, errorTest, 'button'));
