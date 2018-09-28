@@ -25,6 +25,9 @@ For a more detailed tutorial about the usage of JSON Forms, please see [this tut
 * Run vanilla examples: `cd packages/vanilla && npm run dev`
 * Run material examples: `cd packages/material && npm run dev`
 
+## Dependency & Release management
+For more info about how we handle dependencies and releases in the JSON Forms project, please see our [Developer Documentation wiki page](https://github.com/eclipsesource/jsonforms/wiki/Developer-documentation). 
+
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).
 
