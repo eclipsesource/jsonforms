@@ -20,15 +20,15 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 
 export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
+    @Input() disabled: boolean;
+
     form: FormControl;
     subscription: Subscription;
-
     data: any;
     label: string;
     error: string | null;
-    @Input() disabled: boolean;
     scopedSchema: JsonSchema;
-    @Input() id: string;
+    enabled: boolean;
 
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -58,16 +58,15 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
             .select()
             .map((s: JsonFormsState) => this.mapToProps(s))
             .subscribe(props => {
-                const { data, enabled, errors, label, required, schema, uischema, id } = props;
+                const { data, enabled, errors, label, required, schema, uischema } = props;
                 this.label = computeLabel(
                     isPlainLabel(label) ? label : label.default, required
                 );
                 this.data = data;
                 this.error = errors ? errors.join('\n') : null;
-                this.disabled = !enabled;
+                this.enabled = enabled;
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.mapAdditionalProps(props);
-                this.id = id;
             });
     }
 

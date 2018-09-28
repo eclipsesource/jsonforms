@@ -34,7 +34,7 @@ import { isBooleanControl, JsonFormsState, RankedTester, rankWith } from '@jsonf
         <mat-checkbox
             (change)="onChange($event)"
             [checked]="isChecked()"
-            [disabled]="disabled"
+            [disabled]="!enabled"
             [id]="id">
             {{ label }}
         </mat-checkbox>

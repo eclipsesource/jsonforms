@@ -30,12 +30,14 @@ export class JsonFormsBaseRenderer  {
   @Input() uischema: UISchemaElement;
   @Input() schema: JsonSchema;
   @Input() path: string;
+  @Input() id: string;
 
   protected getOwnProps() {
     return {
       uischema: this.uischema,
       schema: this.schema,
-      path: this.path
+      path: this.path,
+      id: this.id
     };
   }
 }
