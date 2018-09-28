@@ -40,6 +40,9 @@ export const SET_CONFIG : 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
 export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 
+export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
+export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
+
 export interface UpdateAction {
   type: 'jsonforms/UPDATE';
   path: string;
@@ -65,6 +68,20 @@ export const setAjv = (
 ) => ({
     type: SET_AJV,
     ajv
+});
+
+export const registerDefaultData = (
+    schemaPath: string,
+    data: any
+) => ({
+    type: ADD_DEFAULT_DATA,
+    schemaPath,
+    data
+});
+
+export const unregisterDefaultData = (schemaPath: string) => ({
+    type: REMOVE_DEFAULT_DATA,
+    schemaPath
 });
 
 export const update =

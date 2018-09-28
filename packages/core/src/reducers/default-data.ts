@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,20 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { combineReducers, Reducer } from 'redux';
-import { jsonformsReducer, JsonFormsState } from '@jsonforms/core';
-import { angularMaterialRenderers } from '../../src/index';
-import { getExamples } from '@jsonforms/examples';
+import { ADD_DEFAULT_DATA, REMOVE_DEFAULT_DATA } from '../actions';
 
-export const rootReducer: Reducer<JsonFormsState> =
-  combineReducers({ jsonforms: jsonformsReducer(), examples: (state = []) => state });
-
-export const initialState: any = {
-  jsonforms: {
-    renderers: angularMaterialRenderers,
-    fields: [],
-  },
-  examples: {
-    data: getExamples()
-  }
+export const defaultDataReducer = (
+    state: { schemaPath: string, data: any }[] = [],
+    { type, schemaPath, data }) => {
+    switch (type) {
+        case ADD_DEFAULT_DATA:
+            return state.concat([{ schemaPath, data }]);
+        case REMOVE_DEFAULT_DATA:
+            return state.filter(t => t.schemaPath !== schemaPath);
+        default:
+            return state;
+    }
 };
+
+export const extractDefaultData = state => state;

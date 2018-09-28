@@ -8,8 +8,8 @@ import { JsonFormsControl } from '@jsonforms/angular';
   template: `
       <ion-item>
           <ion-label>{{label}}</ion-label>
-          <ion-label stacked *ngIf="error" style="color: red">{{error}}</ion-label>
-          <ion-checkbox [ngModel]="value" (ionChange)="onChange($event)"></ion-checkbox>
+          <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
+          <ion-checkbox [ngModel]="data" (ionChange)="onChange($event)"></ion-checkbox>
       </ion-item>
   `
 })

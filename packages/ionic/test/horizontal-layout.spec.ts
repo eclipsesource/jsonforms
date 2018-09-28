@@ -22,14 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { JsonFormsOutlet } from '@jsonforms/angular';
 import { IonicModule, Platform } from 'ionic-angular';
 import { PlatformMock } from '../test-config/mocks-ionic';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
-import { BooleanControlRenderer } from '../src';
+import { HorizontalLayoutRenderer } from '../src';
 
-describe('Boolean control', () => {
+describe('Horizontal layout', () => {
     let fixture;
     let component;
 
@@ -43,19 +44,25 @@ describe('Boolean control', () => {
         }
     };
     const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo'
+        type: 'HorizontalLayout',
+        elements: [{
+            type: 'Control',
+            scope: '#/properties/foo'
+        }]
     };
 
-    beforeEach(async (() => {
+    beforeEach((() => {
         TestBed.configureTestingModule({
-            declarations: [BooleanControlRenderer],
+            declarations: [
+                JsonFormsOutlet,
+                HorizontalLayoutRenderer
+            ],
             imports: [
-                IonicModule.forRoot(BooleanControlRenderer)
+                IonicModule.forRoot(HorizontalLayoutRenderer)
             ],
             providers: [
-                { provide: Platform, useClass: PlatformMock },
-                { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+                {provide: Platform, useClass: PlatformMock},
+                {provide: NgRedux, useFactory: MockNgRedux.getInstance}
             ]
         }).compileComponents();
 
@@ -63,28 +70,11 @@ describe('Boolean control', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(BooleanControlRenderer);
+        fixture = TestBed.createComponent(HorizontalLayoutRenderer);
         component = fixture.componentInstance;
     });
 
-    it('should support setting the initial state', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
-        expect(component.data).toBe(true);
-    });
-
-    it('should support updating the state', () => {
+    it('add elements', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -99,40 +89,17 @@ describe('Boolean control', () => {
         mockSubStore.complete();
         component.ngOnInit();
         MockNgRedux.reset();
-        const mockSubStore2 = MockNgRedux.getSelectorStub();
-        mockSubStore2.next({
-            jsonforms: {
-                core: {
-                    data: { foo: false },
-                    schema,
+        component.uischema = {
+            type: 'HorizontalLayout',
+            elements: [
+                ...uischema.elements,
+                {
+                    type: 'Control',
+                    scope: '#properties/bar'
                 }
-            }
-        });
-        mockSubStore2.complete();
+            ]
+        };
         fixture.detectChanges();
-        expect(component.data).toBe(false);
-    });
-
-    it('should display errors', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                    errors: [{
-                        dataPath: 'foo',
-                        message: 'Hi, this is me, test error!'
-                    }]
-                }
-            },
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
-        fixture.detectChanges();
-        const booleanControl = fixture.nativeElement;
-        expect(booleanControl.getElementsByTagName('ion-label').length).toBe(2);
+        expect(component.uischema.elements.length).toBe(2);
     });
 });

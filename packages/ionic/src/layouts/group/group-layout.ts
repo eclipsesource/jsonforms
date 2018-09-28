@@ -3,7 +3,6 @@ import {
   JsonFormsState,
   RankedTester,
   rankWith,
-  StatePropsOfLayout,
   uiTypeIs
 } from '@jsonforms/core';
 import { Component } from '@angular/core';
@@ -18,9 +17,9 @@ import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
               {{label}}
           </ion-card-header>
           <ion-card-content>
-              <div *ngFor="let uischema of stateProps.uischema.elements">
+              <div *ngFor="let element of uischema?.elements">
                   <jsonforms-outlet
-                          [uischema]="uischema"
+                          [uischema]="element"
                           [path]="path"
                           [schema]="schema"
                   ></jsonforms-outlet>
@@ -33,19 +32,13 @@ import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 export class GroupLayoutRenderer extends JsonFormsIonicLayout {
 
   label: string;
-  stateProps: StatePropsOfLayout;
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }
 
-  ngOnInit() {
-    const ownProps = this.getOwnProps()
-    const state$ = this.connectLayoutToJsonForms(this.ngRedux, ownProps);
-    this.subscription = state$.subscribe(state => {
-      this.stateProps = state;
-      this.label = (ownProps.uischema as GroupLayout).label;
-    });
+  mapAdditionalProps() {
+      this.label = (this.uischema as GroupLayout).label;
   }
 }
 

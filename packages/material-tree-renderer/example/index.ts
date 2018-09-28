@@ -105,6 +105,13 @@ const store: Store<any> = createStore(
 );
 
 store.dispatch(Actions.init({}, taskSchema, uischema));
+store.dispatch(
+    Actions.registerDefaultData(
+        'properties.users.items',
+        { name: 'Test user' }
+    )
+);
+
 
 detailSchemata.forEach(({ tester, uischema: detailedUiSchema }) =>
   store.dispatch(Actions.registerUISchema(tester, detailedUiSchema))

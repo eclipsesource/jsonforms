@@ -4,8 +4,8 @@ import { NavParams } from 'ionic-angular';
 @Component({
   selector: 'jsonforms-category',
   template: `
-      <div *ngFor="let uischema of elements">
-          <jsonforms-outlet [uischema]="uischema"></jsonforms-outlet>
+      <div *ngFor="let element of elements">
+          <jsonforms-outlet [uischema]="element"></jsonforms-outlet>
       </div>
   `
 })

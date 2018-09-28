@@ -23,8 +23,7 @@
   THE SOFTWARE.
 */
 import { async, TestBed } from '@angular/core/testing';
-import { IonicModule, Platform } from 'ionic-angular';
-import { PlatformMock } from '../test-config/mocks-ionic';
+import { MatCheckboxModule, MatFormFieldModule } from '@angular/material';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { BooleanControlRenderer } from '../src';
@@ -51,10 +50,10 @@ describe('Boolean control', () => {
         TestBed.configureTestingModule({
             declarations: [BooleanControlRenderer],
             imports: [
-                IonicModule.forRoot(BooleanControlRenderer)
+                MatCheckboxModule,
+                MatFormFieldModule
             ],
             providers: [
-                { provide: Platform, useClass: PlatformMock },
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance }
             ]
         }).compileComponents();
@@ -67,7 +66,7 @@ describe('Boolean control', () => {
         component = fixture.componentInstance;
     });
 
-    it('should support setting the initial state', () => {
+    it('should support setting the initial state', async(() => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -82,9 +81,9 @@ describe('Boolean control', () => {
         mockSubStore.complete();
         component.ngOnInit();
         expect(component.data).toBe(true);
-    });
+    }));
 
-    it('should support updating the state', () => {
+    it('should support updating the state', async(() => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -111,9 +110,9 @@ describe('Boolean control', () => {
         mockSubStore2.complete();
         fixture.detectChanges();
         expect(component.data).toBe(false);
-    });
+    }));
 
-    it('should display errors', () => {
+    it('should display errors', async(() => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = uischema;
 
@@ -133,6 +132,6 @@ describe('Boolean control', () => {
         component.ngOnInit();
         fixture.detectChanges();
         const booleanControl = fixture.nativeElement;
-        expect(booleanControl.getElementsByTagName('ion-label').length).toBe(2);
-    });
+        expect(booleanControl.getElementsByTagName('mat-error').length).toBe(1);
+    }));
 });
