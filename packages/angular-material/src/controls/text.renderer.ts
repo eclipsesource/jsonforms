@@ -31,14 +31,15 @@ import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/co
     selector: 'TextControlRenderer',
     template: `
         <mat-form-field>
-            <mat-label>{{ computedLabel }}</mat-label>
+            <mat-label>{{ label }}</mat-label>
             <input
                 matInput
                 type="text"
                 (change)="onChange($event)"
-                [value]="data"
+                [value]="getValue()"
                 placeholder="{{ description }}"
-                [disabled]="disabled"
+                [id]="id"
+                [formControl]="form"
             >
             <mat-error>{{ error }}</mat-error>
         </mat-form-field>
@@ -48,7 +49,7 @@ export class TextControlRenderer extends JsonFormsControl {
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
-
+    getValue = () => this.data || '';
     getEventValue = event => event.target.value;
 }
 export const TextControlRendererTester: RankedTester = rankWith(1, isControl);

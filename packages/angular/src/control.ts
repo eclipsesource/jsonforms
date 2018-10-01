@@ -47,10 +47,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     onChange(ev) {
         const path = composeWithUi(this.uischema as ControlElement, this.path);
         this.ngRedux.dispatch(Actions.update(path, () => this.getEventValue(ev)));
-        // these cause the correct update of the error underline, seems to be
-        // related to ionic-team/ionic#11640
-        this.form.markAsTouched();
-        this.form.updateValueAndValidity();
+        this.triggerValidation();
     }
 
     ngOnInit() {
@@ -65,9 +62,11 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
                 this.data = data;
                 this.error = errors ? errors.join('\n') : null;
                 this.enabled = enabled;
+                this.enabled ? this.form.enable() : this.form.disable();
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.mapAdditionalProps(props);
             });
+        this.triggerValidation();
     }
 
     validator: ValidatorFn = (_c: AbstractControl): ValidationErrors | null => {
@@ -97,5 +96,12 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
         const props = mapStateToControlProps(state, this.getOwnProps());
         const dispatch = mapDispatchToControlProps(this.ngRedux.dispatch);
         return {...props, ...dispatch};
+    }
+
+    private triggerValidation() {
+        // these cause the correct update of the error underline, seems to be
+        // related to ionic-team/ionic#11640
+        this.form.markAsTouched();
+        this.form.updateValueAndValidity();
     }
 }

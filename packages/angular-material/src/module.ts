@@ -31,6 +31,7 @@ import { JsonFormsModule } from '@jsonforms/angular';
 import { BooleanControlRenderer } from './controls/boolean.renderer';
 import { TextControlRenderer } from './controls/text.renderer';
 import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +39,8 @@ import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
     MatFormFieldModule,
     MatCheckboxModule,
     MatInputModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     BooleanControlRenderer,
