@@ -24,12 +24,11 @@
 */
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
-import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { textTest } from '@jsonforms/angular-test';
 import { NOT_APPLICABLE } from '@jsonforms/core';
-import { TextControlRenderer, TextControlRendererTester } from '../src';
-import { ReactiveFormsModule } from '@angular/forms';
+import { IonicModule, Label, Platform } from 'ionic-angular';
+import { StringControlRenderer, stringControlTester } from '../src';
+import { PlatformMock } from '../test-config/mocks-ionic';
 import { DebugElement } from '@angular/core';
 
 describe('Material text field tester', () => {
@@ -38,15 +37,15 @@ describe('Material text field tester', () => {
         scope: '#/properties/foo'
     };
     it('should fail', () => {
-        expect(TextControlRendererTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-        expect(TextControlRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
-        expect(TextControlRendererTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-        expect(TextControlRendererTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+        expect(stringControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+        expect(stringControlTester(null, undefined)).toBe(NOT_APPLICABLE);
+        expect(stringControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+        expect(stringControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
     });
 
     it('should succeed', () => {
         expect(
-            TextControlRendererTester(
+            stringControlTester(
                 uischema,
                 {
                     type: 'object',
@@ -60,12 +59,13 @@ describe('Material text field tester', () => {
         ).toBe(1);
     });
 });
-const imports = [MatFormFieldModule, MatInputModule, NoopAnimationsModule, ReactiveFormsModule];
+const imports = [IonicModule.forRoot(StringControlRenderer)];
 const providers = [
+    { provide: Platform, useClass: PlatformMock },
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];
-const componentUT: any = TextControlRenderer;
-const errorTest = { errorInstance: MatError, numberOfElements: 1, indexOfElement: 0 };
-const toSelect = (el: DebugElement) => el.nativeElement;
+const componentUT: any = StringControlRenderer;
+const errorTest = { errorInstance: Label, numberOfElements: 2, indexOfElement: 1 };
+const toSelect = (el: DebugElement) => el.componentInstance;
 describe('Text control',
-         textTest(imports, providers, componentUT, 'input', errorTest, toSelect));
+         textTest(imports, providers, componentUT, 'ion-input', errorTest, toSelect));

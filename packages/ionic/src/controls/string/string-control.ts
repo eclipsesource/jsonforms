@@ -13,8 +13,9 @@ import { JsonFormsControl } from '@jsonforms/angular';
           <ion-input
                   type="text"
                   (ionChange)="onChange($event)"
-                  [value]="data"
+                  [value]="getValue()"
                   placeholder="{{ description }}"
+                  [id]="id"
                   [formControl]="form"
           >
           </ion-input>
@@ -25,6 +26,7 @@ export class StringControlRenderer extends JsonFormsControl {
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }
+  getValue = () => this.data || '';
 }
 
 export const stringControlTester: RankedTester = rankWith(
