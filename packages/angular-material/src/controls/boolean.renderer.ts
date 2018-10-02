@@ -33,8 +33,9 @@ import { isBooleanControl, JsonFormsState, RankedTester, rankWith } from '@jsonf
     <div>
         <mat-checkbox
             (change)="onChange($event)"
-            [checked]="data"
-            [disabled]="disabled">
+            [checked]="isChecked()"
+            [disabled]="!enabled"
+            [id]="id">
             {{ label }}
         </mat-checkbox>
         <mat-error>{{ error }}</mat-error>
@@ -45,7 +46,7 @@ export class BooleanControlRenderer extends JsonFormsControl {
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
-
+    isChecked = () => this.data || false;
     getEventValue = event => event.checked;
 }
 

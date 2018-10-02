@@ -11,7 +11,7 @@ import {
     mapStateToControlProps,
     Resolve
 } from '@jsonforms/core';
-import { OnDestroy, OnInit } from '@angular/core';
+import { Input, OnDestroy, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -20,14 +20,15 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 
 export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
+    @Input() disabled: boolean;
+
     form: FormControl;
     subscription: Subscription;
-
     data: any;
     label: string;
     error: string | null;
-    disabled: boolean;
     scopedSchema: JsonSchema;
+    enabled: boolean;
 
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -63,7 +64,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
                 );
                 this.data = data;
                 this.error = errors ? errors.join('\n') : null;
-                this.disabled = !enabled;
+                this.enabled = enabled;
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.mapAdditionalProps(props);
             });
@@ -81,6 +82,16 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+
+    protected getOwnProps() {
+        return {
+          uischema: this.uischema,
+          schema: this.schema,
+          path: this.path,
+          id: this.id,
+          enabled: !this.disabled
+        };
+      }
 
     protected mapToProps(state: JsonFormsState): ControlProps {
         const props = mapStateToControlProps(state, this.getOwnProps());

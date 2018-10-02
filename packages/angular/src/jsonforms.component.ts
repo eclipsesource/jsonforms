@@ -33,6 +33,8 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {
+  createId,
+  isControl,
   JsonFormsProps,
   JsonSchema,
   mapStateToDispatchRendererProps,
@@ -69,6 +71,7 @@ export class JsonFormsOutlet implements OnInit, OnDestroy {
       const { renderers } = props as JsonFormsProps;
       const schema : JsonSchema = this.schema || props.schema;
       const uischema = this.uischema || props.uischema;
+      const id = isControl(props.uischema) ? createId(props.uischema.scope) : undefined;
 
       const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
       let bestComponent: Type<any> = UnknownRenderer;
@@ -89,6 +92,7 @@ export class JsonFormsOutlet implements OnInit, OnDestroy {
         instance.uischema = uischema;
         instance.schema = schema;
         instance.path = this.path;
+        instance.id = id;
       }
     });
   }
