@@ -22,16 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { JsonFormsModule } from '@jsonforms/angular';
-import { BooleanControlRenderer } from './controls/boolean.renderer';
-import { TextControlRenderer } from './controls/text.renderer';
-import { VerticalLayoutRenderer } from './layouts/vertical-layout.renderer';
-import { ReactiveFormsModule } from '@angular/forms';
+import { BooleanControlRenderer, TextControlRenderer } from './controls';
+import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -40,17 +40,20 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatInputModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FlexLayoutModule
   ],
   declarations: [
     BooleanControlRenderer,
     TextControlRenderer,
-    VerticalLayoutRenderer
+    VerticalLayoutRenderer,
+    HorizontalLayoutRenderer
   ],
   entryComponents: [
     BooleanControlRenderer,
     TextControlRenderer,
-    VerticalLayoutRenderer
+    VerticalLayoutRenderer,
+    HorizontalLayoutRenderer
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

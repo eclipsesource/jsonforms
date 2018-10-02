@@ -27,14 +27,19 @@ export * from './module';
 import { BooleanControlRenderer, booleanControlTester } from './controls/boolean.renderer';
 import { TextControlRenderer, TextControlRendererTester } from './controls/text.renderer';
 import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
+import {
+  HorizontalLayoutRenderer,
+  horizontalLayoutTester
+} from './layouts/horizontal-layout.renderer';
 
 export * from './controls';
 
 export const angularMaterialRenderers:
-    { tester: RankedTester, renderer: any }[]  = [
-    // controls
-    { tester: booleanControlTester, renderer: BooleanControlRenderer },
-    { tester: TextControlRendererTester, renderer: TextControlRenderer },
-    // layouts
-    { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
-  ];
+  { tester: RankedTester, renderer: any }[] = [
+  // controls
+  { tester: booleanControlTester, renderer: BooleanControlRenderer },
+  { tester: TextControlRendererTester, renderer: TextControlRenderer },
+  // layouts
+  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
+  { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
+];
