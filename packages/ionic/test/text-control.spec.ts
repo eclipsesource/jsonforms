@@ -24,24 +24,17 @@
 */
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
+import { DebugElement } from '@angular/core';
 import { textTest } from '@jsonforms/angular-test';
-import { NOT_APPLICABLE } from '@jsonforms/core';
 import { IonicModule, Label, Platform } from 'ionic-angular';
 import { StringControlRenderer, stringControlTester } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
-import { DebugElement } from '@angular/core';
 
-describe('Material text field tester', () => {
+describe('Ionic text field tester', () => {
     const uischema = {
         type: 'Control',
         scope: '#/properties/foo'
     };
-    it('should fail', () => {
-        expect(stringControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-        expect(stringControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-        expect(stringControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-        expect(stringControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
-    });
 
     it('should succeed', () => {
         expect(

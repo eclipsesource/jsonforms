@@ -1,9 +1,9 @@
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement, Type } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
-import { By } from '@angular/platform-browser';
 import { ErrorTestInformation } from './util';
 
 export const booleanTest = <C extends JsonFormsControl, I>(
@@ -34,7 +34,7 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             scope: '#/properties/foo'
         };
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [componentUT],
                 imports: imports,
@@ -42,7 +42,7 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             }).compileComponents();
 
             MockNgRedux.reset();
-        }));
+        });
 
         beforeEach(() => {
             fixture = TestBed.createComponent(componentUT);
@@ -90,9 +90,6 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             fixture.detectChanges();
             component.ngOnInit();
 
-            expect(component.data).toBe(true);
-            expect(checkboxInstance.checked).toBe(true);
-
             const spy = spyOn(component, 'onChange');
             elementToClick.click();
             // trigger change detection
@@ -116,8 +113,6 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe(true);
-            expect(checkboxInstance.checked).toBe(true);
 
             mockSubStore.next({
                 jsonforms: {
@@ -146,8 +141,6 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe(true);
-            expect(checkboxInstance.checked).toBe(true);
 
             mockSubStore.next({
                 jsonforms: {
@@ -176,8 +169,6 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe(true);
-            expect(checkboxInstance.checked).toBe(true);
 
             mockSubStore.next({
                 jsonforms: {
@@ -206,8 +197,6 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe(true);
-            expect(checkboxInstance.checked).toBe(true);
 
             mockSubStore.next({
                 jsonforms: {
@@ -222,6 +211,7 @@ export const booleanTest = <C extends JsonFormsControl, I>(
             expect(component.data).toBe(true);
             expect(checkboxInstance.checked).toBe(true);
         });
+        // store needed as we evaluate the calculated enabled value to disable/enable the control
         it('can be disabled', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
             component.uischema = uischema;
@@ -242,19 +232,9 @@ export const booleanTest = <C extends JsonFormsControl, I>(
 
         });
         it('id should be present in output', () => {
-            const mockSubStore = MockNgRedux.getSelectorStub();
             component.uischema = uischema;
             component.id = 'myId';
 
-            mockSubStore.next({
-                jsonforms: {
-                    core: {
-                        data,
-                        schema,
-                    }
-                }
-            });
-            mockSubStore.complete();
             fixture.detectChanges();
             component.ngOnInit();
             expect(checkboxNativeElement.id).toBe('myId');

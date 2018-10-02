@@ -24,25 +24,18 @@
 */
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
+import { DebugElement } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { textTest } from '@jsonforms/angular-test';
-import { NOT_APPLICABLE } from '@jsonforms/core';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
-import { ReactiveFormsModule } from '@angular/forms';
-import { DebugElement } from '@angular/core';
 
 describe('Material text field tester', () => {
     const uischema = {
         type: 'Control',
         scope: '#/properties/foo'
     };
-    it('should fail', () => {
-        expect(TextControlRendererTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-        expect(TextControlRendererTester(null, undefined)).toBe(NOT_APPLICABLE);
-        expect(TextControlRendererTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-        expect(TextControlRendererTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
-    });
 
     it('should succeed', () => {
         expect(

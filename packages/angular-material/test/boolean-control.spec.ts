@@ -26,7 +26,6 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { MatCheckbox, MatCheckboxModule, MatError, MatFormFieldModule } from '@angular/material';
 import { booleanTest } from '@jsonforms/angular-test';
-import { NOT_APPLICABLE } from '@jsonforms/core';
 import { BooleanControlRenderer, booleanControlTester } from '../src';
 
 describe('Material boolean field tester', () => {
@@ -34,34 +33,6 @@ describe('Material boolean field tester', () => {
         type: 'Control',
         scope: '#/properties/foo'
     };
-    it('should fail', () => {
-        expect(booleanControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-        expect(booleanControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-        expect(booleanControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-        expect(booleanControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
-        expect(
-            booleanControlTester(
-                uischema,
-                { type: 'object', properties: { foo: { type: 'string' } } }
-            )
-        ).toBe(NOT_APPLICABLE);
-        expect(
-            booleanControlTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'string'
-                        },
-                        bar: {
-                            type: 'boolean'
-                        }
-                    }
-                }
-            )
-        ).toBe(NOT_APPLICABLE);
-    });
 
     it('should succeed', () => {
         expect(
