@@ -26,8 +26,31 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { booleanTest } from '@jsonforms/angular-test';
 import { Checkbox, IonicModule, Label, Platform } from 'ionic-angular';
-import { BooleanControlRenderer } from '../src';
+import { BooleanControlRenderer, booleanControlTester } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
+
+describe('Ionic boolean control tester', () => {
+  const uischema = {
+      type: 'Control',
+      scope: '#/properties/foo'
+  };
+
+  it('should succeed', () => {
+      expect(
+          booleanControlTester(
+              uischema,
+              {
+                  type: 'object',
+                  properties: {
+                      foo: {
+                          type: 'boolean'
+                      }
+                  }
+              }
+          )
+      ).toBe(2);
+  });
+});
 
 const imports = [IonicModule.forRoot(BooleanControlRenderer)];
 const providers = [

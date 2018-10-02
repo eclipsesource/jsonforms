@@ -1,9 +1,9 @@
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement, Type } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
-import { By } from '@angular/platform-browser';
 import { ErrorTestInformation } from './util';
 
 export const textTest = <C extends JsonFormsControl>(
@@ -32,7 +32,7 @@ export const textTest = <C extends JsonFormsControl>(
             scope: '#/properties/foo'
         };
 
-        beforeEach(async(() => {
+        beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [componentUT],
                 imports: imports,
@@ -40,7 +40,7 @@ export const textTest = <C extends JsonFormsControl>(
             }).compileComponents();
 
             MockNgRedux.reset();
-        }));
+        });
 
         beforeEach(() => {
             fixture = TestBed.createComponent(componentUT);
@@ -86,9 +86,6 @@ export const textTest = <C extends JsonFormsControl>(
             fixture.detectChanges();
             component.ngOnInit();
 
-            expect(component.data).toBe('foo');
-            expect(textNativeElement.value).toBe('foo');
-
             const spy = spyOn(component, 'onChange');
             textNativeElement.value = 'bar';
             if (textNativeElement.dispatchEvent) {
@@ -113,8 +110,6 @@ export const textTest = <C extends JsonFormsControl>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe('foo');
-            expect(textNativeElement.value).toBe('foo');
 
             mockSubStore.next({
                 jsonforms: {
@@ -143,8 +138,6 @@ export const textTest = <C extends JsonFormsControl>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe('foo');
-            expect(textNativeElement.value).toBe('foo');
 
             mockSubStore.next({
                 jsonforms: {
@@ -173,8 +166,6 @@ export const textTest = <C extends JsonFormsControl>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe('foo');
-            expect(textNativeElement.value).toBe('foo');
 
             mockSubStore.next({
                 jsonforms: {
@@ -203,8 +194,6 @@ export const textTest = <C extends JsonFormsControl>(
             });
             fixture.detectChanges();
             component.ngOnInit();
-            expect(component.data).toBe('foo');
-            expect(textNativeElement.value).toBe('foo');
 
             mockSubStore.next({
                 jsonforms: {
@@ -219,6 +208,7 @@ export const textTest = <C extends JsonFormsControl>(
             expect(component.data).toBe('foo');
             expect(textNativeElement.value).toBe('foo');
         });
+        // store needed as we evaluate the calculated enabled value to disable/enable the control
         it('can be disabled', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
             component.uischema = uischema;
@@ -239,19 +229,9 @@ export const textTest = <C extends JsonFormsControl>(
 
         });
         it('id should be present in output', () => {
-            const mockSubStore = MockNgRedux.getSelectorStub();
             component.uischema = uischema;
             component.id = 'myId';
 
-            mockSubStore.next({
-                jsonforms: {
-                    core: {
-                        data,
-                        schema,
-                    }
-                }
-            });
-            mockSubStore.complete();
             fixture.detectChanges();
             component.ngOnInit();
             expect(textElement.nativeElement.id).toBe('myId');
