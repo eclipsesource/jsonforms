@@ -5,6 +5,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
     getData,
+    getDefaultData,
     getSchema,
     JsonSchema,
     Paths,
@@ -23,7 +24,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon } from '@material-ui/core';
 import { wrapImageIfNecessary } from '../helpers/image-provider.util';
 import { SchemaLabelProvider } from '../helpers/LabelProvider';
-import { getDefaultData } from '../../../core/src/reducers';
 
 export interface AddItemDialogProps {
     rootData: any;
