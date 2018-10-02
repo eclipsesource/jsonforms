@@ -22,34 +22,50 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { Component, OnDestroy, OnInit  } from '@angular/core';
+import {
+    JsonFormsState,
+    RankedTester,
+    rankWith,
+    StatePropsOfLayout,
+    uiTypeIs
+  } from '@jsonforms/core';
+
 import { NgRedux } from '@angular-redux/store';
-import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
-import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import { Subscription } from 'rxjs/Subscription';
+import { JsonFormsBaseRenderer } from '@jsonforms/angular';
+import { connectLayoutToJsonForms } from '../util';
 
 @Component({
-    selector: 'TextControlRenderer',
+    selector: 'HorizontalLayoutRenderer',
     template: `
-        <mat-form-field fxFlex>
-            <mat-label>{{ label }}</mat-label>
-            <input
-                matInput
-                type="text"
-                (change)="onChange($event)"
-                [value]="getValue()"
-                placeholder="{{ description }}"
-                [id]="id"
-                [formControl]="form"
-            >
-            <mat-error>{{ error }}</mat-error>
-        </mat-form-field>
+        <div fxLayout='row' fxLayoutGap='16px'>
+            <div *ngFor="let child of uischema.elements" fxFlex>
+                <jsonforms-outlet [uischema]="child" ></jsonforms-outlet>
+            </div>
+        </div>
     `
 })
-export class TextControlRenderer extends JsonFormsControl {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
+export class HorizontalLayoutRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
+
+    stateProps: StatePropsOfLayout;
+
+    private subscription: Subscription;
+
+    constructor(private ngRedux: NgRedux<JsonFormsState>) {
+        super();
     }
-    getValue = () => this.data || '';
-    getEventValue = event => event.target.value;
+
+    ngOnInit() {
+        const state$ = connectLayoutToJsonForms(this.ngRedux, this.getOwnProps());
+        this.subscription = state$.subscribe(state => {
+            this.stateProps = state;
+        });
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
+
 }
-export const TextControlRendererTester: RankedTester = rankWith(1, isControl);
+export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));

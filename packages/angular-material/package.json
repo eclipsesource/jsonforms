@@ -50,6 +50,7 @@
     "@angular/common": "^5.2.10",
     "@angular/compiler": "^5.2.10",
     "@angular/core": "^5.2.10",
+    "@angular/flex-layout":"^5.0.0-beta.15",
     "@angular/forms": "^5.2.10",
     "@angular/material": "^5.2.0",
     "@angular/platform-browser": "^5.2.10",

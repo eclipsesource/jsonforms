@@ -22,14 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component, OnDestroy, OnInit  } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
     JsonFormsState,
     RankedTester,
     rankWith,
     StatePropsOfLayout,
     uiTypeIs
-  } from '@jsonforms/core';
+} from '@jsonforms/core';
 
 import { NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -39,9 +39,11 @@ import { connectLayoutToJsonForms } from '../util';
 @Component({
     selector: 'VerticalLayoutRenderer',
     template: `
-        <div *ngFor="let uischema of stateProps.uischema.elements">
-            <jsonforms-outlet [uischema]="uischema"></jsonforms-outlet>
+    <div fxLayout='column'>
+        <div *ngFor="let child of uischema.elements" fxFlex>
+            <jsonforms-outlet [uischema]="child" ></jsonforms-outlet>
         </div>
+    </div>
     `
 })
 export class VerticalLayoutRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
