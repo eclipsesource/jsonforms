@@ -27,6 +27,7 @@ import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { UISchemaTester } from '../reducers/uischemas';
 import * as AJV from 'ajv';
+import { AnyAction, Dispatch } from 'redux';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
@@ -49,6 +50,14 @@ export interface UpdateAction {
   updater(existingData?: any): any;
 }
 
+export interface InitAction {
+    type: 'jsonforms/INIT';
+    data: any;
+    schema: JsonSchema;
+    uischema: UISchemaElement;
+    ajv?: AJV.Ajv;
+}
+
 export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
@@ -63,6 +72,12 @@ export const init = (
       ajv
     });
 
+export interface RegisterDefaultDataAction {
+    type: 'jsonforms/ADD_DEFAULT_DATA';
+    schemaPath: string;
+    data: any;
+}
+
 export const registerDefaultData = (
     schemaPath: string,
     data: any
@@ -72,10 +87,20 @@ export const registerDefaultData = (
     data
 });
 
+export interface UnregisterDefaultDataAction {
+    type: 'jsonforms/REMOVE_DEFAULT_DATA';
+    schemaPath: string;
+}
+
 export const unregisterDefaultData = (schemaPath: string) => ({
     type: REMOVE_DEFAULT_DATA,
     schemaPath
 });
+
+export interface SetAjvAction {
+    type: 'jsonforms/SET_AJV';
+    ajv: AJV.Ajv;
+}
 
 export const setAjv = (
     ajv: AJV.Ajv
@@ -85,11 +110,17 @@ export const setAjv = (
 });
 
 export const update =
-  (path: string, updater: (any) => any): UpdateAction => ({
+  (path: string, updater: (existingData: any) => any): UpdateAction => ({
     type: UPDATE_DATA,
     path,
     updater
   });
+
+export interface AddRendererAction {
+    type: 'jsonforms/ADD_RENDERER';
+    tester: RankedTester;
+    renderer: any;
+}
 
 export const registerRenderer = (
   tester: RankedTester,
@@ -100,6 +131,12 @@ export const registerRenderer = (
   renderer
 });
 
+export interface AddFieldRendererAction {
+    type: 'jsonforms/ADD_FIELD';
+    tester: RankedTester;
+    field: any;
+}
+
 export const registerField = (
   tester: RankedTester,
   field: any
@@ -108,6 +145,12 @@ export const registerField = (
   tester,
   field
 });
+
+export interface RemoveFieldRendererAction {
+    type: 'jsonforms/REMOVE_FIELD';
+    tester: RankedTester;
+    field: any;
+}
 
 export const unregisterField = (
   tester: RankedTester,
@@ -118,6 +161,12 @@ export const unregisterField = (
   field
 });
 
+export interface RemoveRendererAction {
+    type: 'jsonforms/REMOVE_RENDERER';
+    tester: RankedTester;
+    renderer: any;
+}
+
 export const unregisterRenderer = (
   tester: RankedTester,
   renderer: any
@@ -127,7 +176,12 @@ export const unregisterRenderer = (
   renderer
 });
 
-export const setConfig = config => dispatch => {
+export interface SetConfigAction {
+    type: 'jsonforms/SET_CONFIG';
+    config: any;
+}
+
+export const setConfig = (config: any) => (dispatch: Dispatch<AnyAction>) => {
   dispatch({
     type: SET_CONFIG,
     config,

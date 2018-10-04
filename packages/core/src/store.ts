@@ -23,9 +23,9 @@
   THE SOFTWARE.
 */
 import { Store } from 'redux';
-import { JsonSchema } from './models/jsonSchema';
-import { UISchemaElement } from './models/uischema';
-import { ErrorObject } from 'ajv';
+import { JsonFormsCore } from './reducers/core';
+import { JsonFormsFieldRendererRegistryEntry } from './reducers/fields';
+import { JsonFormsRendererRegistryEntry } from './reducers/renderers';
 
 /**
  * JSONForms store.
@@ -40,28 +40,14 @@ export interface JsonFormsState {
   /**
    * Represents JSONForm's sub-state.
    */
-  jsonforms: {
+  jsonforms: JsonFormsSubStates;
+}
+
+export interface JsonFormsSubStates {
     /**
      * Substate for storing mandatory sub-state.
      */
-    core?: {
-      /**
-       * The actual data to be rendered.
-       */
-      data: any;
-      /**
-       * The JSON schema describing the data.
-       */
-      schema?: JsonSchema;
-      /**
-       * The UI schema that describes the UI to be rendered.
-       */
-      uischema?: UISchemaElement;
-      /**
-       * Any errors in case the data violates the JSON schema.
-       */
-      errors?: ErrorObject[]
-    };
+    core?: JsonFormsCore;
     /**
      * Global configuration options.
      */
@@ -69,12 +55,17 @@ export interface JsonFormsState {
     /**
      * All available renderers.
      */
-    renderers?: any[];
+    renderers?: JsonFormsRendererRegistryEntry[];
     /**
      * All available field renderers.
      */
-    fields?: any[];
+    fields?: JsonFormsFieldRendererRegistryEntry[];
     // allow additional state
     [additionalState: string]: any;
+}
+
+export interface JsonFormsExtendedState<T> extends JsonFormsState {
+  jsonforms: {
+      [subState: string]: T;
   };
 }

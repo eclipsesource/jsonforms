@@ -1,12 +1,19 @@
 import * as _ from 'lodash';
-import { ADD_UI_SCHEMA, REMOVE_UI_SCHEMA } from '../actions';
+import {
+    ADD_UI_SCHEMA,
+    AddUISchemaAction,
+    REMOVE_UI_SCHEMA,
+    RemoveUISchemaAction
+} from '../actions';
 import { JsonSchema, NOT_APPLICABLE, UISchemaElement } from '..';
 
 export type UISchemaTester = (schema: JsonSchema, schemaPath: string, path: string) => number;
 
+type ValidUISchemaReducerActions = AddUISchemaAction | RemoveUISchemaAction;
+
 export const uischemaRegistryReducer = (
   state: { tester: UISchemaTester, uischema: UISchemaElement }[] = [],
-  action) => {
+  action: ValidUISchemaReducerActions) => {
   switch (action.type) {
     case ADD_UI_SCHEMA:
       return state.slice().concat({ tester: action.tester, uischema: action.uischema });

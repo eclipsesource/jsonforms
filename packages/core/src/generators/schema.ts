@@ -30,16 +30,15 @@ const REQUIRED_PROPERTIES   = 'required';
 
 type Properties = {[property: string]: JsonSchema4};
 
-const distinct = (array: any[], discriminator: (item: any) => string): any[] => {
-    const known = {};
+const distinct = (properties: any[], discriminator: (item: any) => string): JsonSchema4[] => {
+    const known: { [property: string]: boolean } = {};
 
-    return array.filter(item => {
+    return properties.filter(item => {
         const discriminatorValue = discriminator(item);
         if (known.hasOwnProperty(discriminatorValue)) {
             return false;
         } else {
             known[discriminatorValue] = true;
-
             return true;
         }
     });
@@ -66,13 +65,13 @@ class Gen {
         return schema;
     }
 
-    properties = (data: Object): Properties => {
+    properties = (data: any): Properties => {
         const emptyProps: Properties = {};
 
         return Object
             .keys(data)
             .reduce(
-                (acc, propName) => {
+                (acc: Properties, propName: string) => {
                     acc[propName] = this.property(data[propName]);
 
                     return acc;
@@ -114,7 +113,7 @@ class Gen {
 
     schemaArray = (data: any[]): JsonSchema4 => {
         if (data.length > 0) {
-            const allProperties = data.map(this.property);
+            const allProperties: JsonSchema4[] = data.map(this.property);
             const uniqueProperties = distinct(allProperties, prop => JSON.stringify(prop));
             if (uniqueProperties.length === 1) {
                 return {

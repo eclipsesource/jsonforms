@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import * as _ from 'lodash';
-import { SET_CONFIG } from '../actions';
+import { SET_CONFIG, SetConfigAction } from '../actions';
 import { configDefault } from '../configDefault';
 
 const applyDefaultConfiguration = (config: any = {}) =>
@@ -31,7 +31,7 @@ const applyDefaultConfiguration = (config: any = {}) =>
 
 export const configReducer = (
   state = applyDefaultConfiguration(),
-  action) => {
+  action: SetConfigAction) => {
     switch (action.type) {
       case SET_CONFIG:
         return applyDefaultConfiguration(action.config);

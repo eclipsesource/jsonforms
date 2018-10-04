@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, Scopable } from '../';
+import { JsonFormsState, JsonSchema, Scopable, StatePropsOfRenderer } from '../';
 import { resolveData, resolveSchema } from './resolvers';
 import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
 import { isEnabled, isVisible } from './runtime';
@@ -40,7 +40,7 @@ export const convertToValidClassName = (s: string): string =>
   s.replace('#', 'root')
    .replace(new RegExp('/', 'g'), '_');
 
-export const formatErrorMessage = errors => {
+export const formatErrorMessage = (errors: string[]) => {
   if (errors === undefined || errors === null) {
     return '';
   }
@@ -53,7 +53,7 @@ export const formatErrorMessage = errors => {
  */
 const Resolve: {
   schema(schema: JsonSchema, schemaPath: string): JsonSchema;
-  data(data, path): any
+  data(data: any, path: string): any
 } = {
   schema: resolveSchema,
   data: resolveData
@@ -72,8 +72,12 @@ export { composePaths, composeWithUi, Paths, toDataPath };
 
 // Runtime --
 const Runtime = {
-  isEnabled,
-  isVisible,
+  isEnabled(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
+      return isEnabled(props, state);
+  },
+  isVisible(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
+    return isVisible(props, state);
+  }
 };
 export { isEnabled, isVisible, Runtime };
 

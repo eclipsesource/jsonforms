@@ -35,6 +35,8 @@ import {
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
 import { createAjv } from './validator';
+import { StatePropsOfRenderer } from './renderer';
+import { JsonFormsState } from '../store';
 
 const ajv = createAjv();
 
@@ -49,7 +51,7 @@ const isLeafCondition = (condition: Condition): condition is LeafCondition =>
 const isSchemaCondition = (condition: Condition): condition is SchemaBasedCondition =>
   _.has(condition, 'schema');
 
-const isConditionFulfilled = (uischema: UISchemaElement, data: any) => {
+const isConditionFulfilled = (uischema: UISchemaElement, data: any): boolean => {
   if (ruleIsMissingProperties(uischema)) {
     return true;
   }
@@ -61,14 +63,14 @@ const isConditionFulfilled = (uischema: UISchemaElement, data: any) => {
     return value === condition.expectedValue;
   } else if (isSchemaCondition(condition)) {
     const value = resolveData(data, toDataPath(condition.scope));
-    return  ajv.validate(condition.schema, value);
+    return ajv.validate(condition.schema, value) as boolean;
   } else {
     // unknown condition
     return true;
   }
 };
 
-export const evalVisibility = (uischema: UISchemaElement, data: any) => {
+export const evalVisibility = (uischema: UISchemaElement, data: any): boolean => {
   const fulfilled = isConditionFulfilled(uischema, data);
 
   switch (uischema.rule.effect) {
@@ -90,20 +92,22 @@ export const evalEnablement = (uischema: UISchemaElement, data: any) => {
   }
 };
 
-export const isVisible = (props, state) => {
+export const isVisible =
+    (props: StatePropsOfRenderer, state: JsonFormsState): boolean => {
 
-  if (props.uischema.rule) {
-    return evalVisibility(props.uischema, getData(state));
-  }
+        if (props.uischema.rule) {
+            return evalVisibility(props.uischema, getData(state));
+        }
 
-  return true;
-};
+        return true;
+    };
 
-export const isEnabled = (props, state) => {
+export const isEnabled =
+    (props: StatePropsOfRenderer, state: JsonFormsState): boolean => {
 
-  if (props.uischema.rule) {
-    return evalEnablement(props.uischema, getData(state));
-  }
+        if (props.uischema.rule) {
+            return evalEnablement(props.uischema, getData(state));
+        }
 
-  return true;
-};
+        return true;
+    };

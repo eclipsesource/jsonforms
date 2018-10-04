@@ -1,17 +1,23 @@
 import test from 'ava';
 import * as _ from 'lodash';
+import * as Redux from 'redux';
 import configureStore from 'redux-mock-store';
 import {
   findMatchingUISchema,
   uischemaRegistryReducer,
   UISchemaTester
 } from '../../src/reducers/uischemas';
-import { registerUISchema, unregisterUISchema } from '../../src/actions';
+import { registerUISchema, RemoveUISchemaAction, unregisterUISchema } from '../../src/actions';
 import { findUISchema, getSchema } from '../../src/reducers';
 import Generate from '../../src/generators';
+import { JsonFormsState } from '../../src';
 
 test('init state empty', t => {
-  t.deepEqual(uischemaRegistryReducer(undefined, { type: 'whatever' }), []);
+  const dummyAction: RemoveUISchemaAction = {
+      type: 'jsonforms/REMOVE_UI_SCHEMA',
+      tester: undefined
+  };
+  t.deepEqual(uischemaRegistryReducer(undefined, dummyAction), []);
 });
 
 test('add ui schema', t => {
@@ -77,27 +83,29 @@ test('findMatchingUISchema', t => {
 });
 
 test('findUISchema returns generated UI schema if no match has been found', t => {
-  const middlewares = [];
-  const mockStore = configureStore(middlewares);
-  const store = mockStore({
-    jsonforms: {
-      core: {
-        schema: {
-          definitions: {
-            baz: {
-              type: 'number'
-            }
-          }
+    const middlewares: Redux.Middleware[] = [];
+    const mockStore = configureStore<JsonFormsState>(middlewares);
+    const store = mockStore({
+        jsonforms: {
+            core: {
+                schema: {
+                    definitions: {
+                        baz: {
+                            type: 'number'
+                        }
+                    }
+                },
+                data: undefined,
+                uischema: undefined
+            },
+            uischemas: []
         }
-      },
-      uischemas: []
-    }
-  });
+    });
 
-  t.deepEqual(
-    findUISchema(store.getState())(getSchema(store.getState()), '#/definitions/baz', undefined),
-    Generate.uiSchema(getSchema(store.getState()))
-  );
+    t.deepEqual(
+        findUISchema(store.getState())(getSchema(store.getState()), '#/definitions/baz', undefined),
+        Generate.uiSchema(getSchema(store.getState()))
+    );
 });
 
 test('findMatchingUISchema with highest priority', t => {

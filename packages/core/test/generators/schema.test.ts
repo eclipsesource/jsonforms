@@ -27,7 +27,7 @@ import test from 'ava';
 import { generateJsonSchema } from '../../src/generators/schema';
 
 test('default schema generation basic types', t => {
-  const instance = {
+  const instance: any = {
       boolean: false,
       number: 3.14,
       integer: 3,
@@ -65,7 +65,7 @@ test('default schema generation basic types', t => {
   });
 });
 test('default schema generation array types', t => {
-  const instance = {emptyArray: [], booleanArray: [false, false], numberArray: [3.14, 2.71],
+  const instance: any = {emptyArray: [], booleanArray: [false, false], numberArray: [3.14, 2.71],
     integerArray: [3, 2], stringArray: ['PI', 'e'], nullArray: [null, null]};
   const schema = generateJsonSchema(instance);
   t.deepEqual(schema, {
@@ -103,7 +103,7 @@ test('default schema generation array types', t => {
   });
 });
 test.failing('default schema generation tuple array types', t => {
-  const instance = {tupleArray: [3.14, 'PI']};
+  const instance: any = {tupleArray: [3.14, 'PI']};
   const schema = generateJsonSchema(instance);
   // FIXME: This assumption is the correct one, but we crteate a oneOf in this case
   t.deepEqual(schema, {
@@ -124,7 +124,7 @@ test.failing('default schema generation tuple array types', t => {
   });
 });
 test('default schema generation ', t => {
-    const instance = {
+    const instance: any = {
         'address': {
             'streetAddress': '21 2nd Street',
             'city': 'New York'
@@ -190,7 +190,7 @@ test('default schema generation ', t => {
 });
 
 test('schema generation with options ', t => {
-    const instance = {
+    const instance: any = {
         'address': {
             'streetAddress': '21 2nd Street',
             'city': 'New York'
