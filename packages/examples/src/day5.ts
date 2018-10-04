@@ -73,7 +73,7 @@ export const uischema = {
               effect: 'HIDE',
               condition: {
                   scope: '#/properties/recurrence',
-                  expectedValue: 'Never'
+                  schema: { enum: ['Never'] }
               }
           }
         }
@@ -138,7 +138,7 @@ export const categoryUiSchema = {
                   effect: 'HIDE',
                   condition: {
                       scope: '#/properties/recurrence',
-                      expectedValue: 'Never'
+                      schema: { enum: ['Never'] }
                   }
               }
             }
