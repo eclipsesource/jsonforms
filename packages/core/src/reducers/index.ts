@@ -23,10 +23,14 @@
   THE SOFTWARE.
 */
 import { combineReducers, Reducer } from 'redux';
-import { rendererReducer } from './renderers';
+import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { configReducer } from './config';
-import { defaultDataReducer, extractDefaultData } from './default-data';
+import {
+    defaultDataReducer,
+    extractDefaultData,
+    JsonFormsDefaultDataRegistryEntry
+} from './default-data';
 import {
     coreReducer,
     errorAt,
@@ -57,12 +61,15 @@ export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsStat
     ...additionalReducers
   });
 
-export const getData = state => extractData(state.jsonforms.core);
-export const getSchema = state => extractSchema(state.jsonforms.core);
-export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
-export const getDefaultData = state => extractDefaultData(state.jsonforms.defaultData);
+export const getData = (state: JsonFormsState) => extractData(state.jsonforms.core);
+export const getSchema = (state: JsonFormsState) => extractSchema(state.jsonforms.core);
+export const getUiSchema = (state: JsonFormsState) => extractUiSchema(state.jsonforms.core);
+export const getDefaultData = (state: JsonFormsState): JsonFormsDefaultDataRegistryEntry[] =>
+    extractDefaultData(state.jsonforms.defaultData);
+export const getRenderers = (state: JsonFormsState):
+    JsonFormsRendererRegistryEntry[] => state.jsonforms.renderers;
 
-export const findUISchema = state =>
+export const findUISchema = (state: JsonFormsState) =>
   (schema: JsonSchema,
    schemaPath: string,
    path: string,
@@ -75,10 +82,10 @@ export const findUISchema = state =>
     return uiSchema;
   };
 
-export const getErrorAt = instancePath => state => {
+export const getErrorAt = (instancePath: string) => (state: JsonFormsState) => {
   return errorAt(instancePath)(state.jsonforms.core);
 };
-export const getSubErrorsAt = instancePath => state =>
+export const getSubErrorsAt = (instancePath: string) => (state: JsonFormsState) =>
   subErrorsAt(instancePath)(state.jsonforms.core);
 
-export const getConfig = state => state.jsonforms.config;
+export const getConfig = (state: JsonFormsState) => state.jsonforms.config;

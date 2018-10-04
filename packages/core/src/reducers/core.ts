@@ -24,7 +24,7 @@
 */
 import * as _ from 'lodash';
 import { ErrorObject, ValidateFunction } from 'ajv';
-import { INIT, SET_AJV, UPDATE_DATA } from '../actions';
+import { INIT, InitAction, SET_AJV, SetAjvAction, UPDATE_DATA, UpdateAction } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
 
@@ -38,7 +38,7 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
-const sanitizeErrors = (validator, data) =>
+const sanitizeErrors = (validator: ValidateFunction, data: any) =>
   validate(validator, data).map(error => {
     error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
 
@@ -47,25 +47,27 @@ const sanitizeErrors = (validator, data) =>
 
 const alwaysValid: ValidateFunction = () => true;
 
-type CoreReducerState = {
-  data: any,
-  schema: JsonSchema,
-  uischema: UISchemaElement,
-  errors?: ErrorObject[],
-  validator?: ValidateFunction
-};
+export interface JsonFormsCore {
+  data: any;
+  schema: JsonSchema;
+  uischema: UISchemaElement;
+  errors?: ErrorObject[];
+  validator?: ValidateFunction;
+}
 
-const initState = {
-  data: {} as any,
+const initState: JsonFormsCore = {
+  data: {},
   schema: {},
   uischema: undefined,
   errors: [],
   validator: alwaysValid
 };
 
+type ValidCoreActions = InitAction | UpdateAction | SetAjvAction;
+
 export const coreReducer = (
-  state: CoreReducerState = initState,
-  action) => {
+  state: JsonFormsCore = initState,
+  action: ValidCoreActions) => {
 
   switch (action.type) {
     case INIT: {
@@ -137,13 +139,13 @@ export const coreReducer = (
   }
 };
 
-export const extractData = state => state.data;
-export const extractSchema = state => state.schema;
-export const extractUiSchema = state => state.uischema;
-export const errorAt = instancePath => (state): any[] => {
+export const extractData = (state: JsonFormsCore) => state.data;
+export const extractSchema = (state: JsonFormsCore) => state.schema;
+export const extractUiSchema = (state: JsonFormsCore) => state.uischema;
+export const errorAt = (instancePath: string) => (state: JsonFormsCore): any[] => {
   return _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
 };
-export const subErrorsAt = instancePath => (state): any[] => {
+export const subErrorsAt = (instancePath: string) => (state: JsonFormsCore): any[] => {
   const path = `${instancePath}.`;
 
   return _.filter(state.errors, (error: ErrorObject) => error.dataPath.startsWith(path));

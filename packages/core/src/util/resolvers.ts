@@ -94,8 +94,8 @@ export const findAllRefs =
     }
 
     // tslint:disable:no-string-literal
-    if (schema['links'] !== undefined) {
-      schema['links'].forEach(link => {
+    if (_.has(schema, 'links')) {
+      _.get(schema, 'links').forEach((link: { targetSchema: JsonSchema }) => {
         if (!_.isEmpty(link.targetSchema.$ref)) {
           result[link.targetSchema.$ref] = schema;
         } else {
@@ -119,13 +119,14 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
   }
   const validPathSegments = schemaPath.split('/');
   const invalidSegment =
-    pathSegment => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
+      (pathSegment: string) =>
+          pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce(
     (curSchema, pathSegment) => {
       curSchema = curSchema.$ref === undefined
         ? curSchema
         : resolveSchema(schema, curSchema.$ref);
-      return invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment];
+      return invalidSegment(pathSegment) ? curSchema : _.get(curSchema, pathSegment);
     },
     schema
   );

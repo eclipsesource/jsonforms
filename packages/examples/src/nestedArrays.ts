@@ -24,11 +24,13 @@
 */
 import { registerExamples } from './register';
 import {
-  Actions,
-  ControlElement,
-  NOT_APPLICABLE,
-  VerticalLayout
+    Actions,
+    ControlElement, JsonSchema,
+    NOT_APPLICABLE,
+    VerticalLayout
 } from '@jsonforms/core';
+import { AnyAction, Dispatch } from 'redux';
+
 const schema = {
   'type': 'object',
   'properties': {
@@ -90,7 +92,7 @@ registerExamples([
   },
 ]);
 
-const nestedArrayTester = (_jsonSchema, schemaPath) => {
+const nestedArrayTester = (_jsonSchema: JsonSchema, schemaPath: string) => {
   return schemaPath === '#/properties/firstarray' ? 2 : NOT_APPLICABLE;
 };
 const control1: ControlElement = {
@@ -106,9 +108,9 @@ export const nestedArrayLayout: VerticalLayout = {
   type: 'VerticalLayout',
   elements: [control1, control2]
 };
-export const registerNestedArrayUISchema = dispatch => {
+export const registerNestedArrayUISchema = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerUISchema(nestedArrayTester, nestedArrayLayout));
 };
-export const unregisterNestedArrayUISchema = dispatch => {
+export const unregisterNestedArrayUISchema = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.unregisterUISchema(nestedArrayTester));
 };

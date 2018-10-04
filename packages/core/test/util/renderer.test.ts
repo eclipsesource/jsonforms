@@ -24,23 +24,31 @@
 */
 import test from 'ava';
 import * as _ from 'lodash';
+import * as Redux from 'redux';
 import {
   clearAllIds,
   createDefaultValue,
   mapDispatchToControlProps,
   mapStateToControlProps,
-  mapStateToDispatchRendererProps
+  mapStateToJsonFormsRendererProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
 import { generateDefaultUISchema } from '../../src/generators';
-import { ControlElement, coreReducer } from '../../src';
+import {
+    ControlElement,
+    coreReducer,
+    JsonFormsState,
+    RuleEffect,
+    UISchemaElement
+} from '../../src';
+import { ErrorObject } from 'ajv';
 
-const middlewares = [];
-const mockStore = configureStore(middlewares);
+const middlewares: Redux.Middleware[] = [];
+const mockStore = configureStore<JsonFormsState>(middlewares);
 
 const hideRule = {
-  effect: 'HIDE',
+  effect: RuleEffect.HIDE,
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
@@ -49,7 +57,7 @@ const hideRule = {
 };
 
 const disableRule = {
-  effect: 'DISABLE',
+  effect: RuleEffect.DISABLE,
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
@@ -62,7 +70,7 @@ const coreUISchema: ControlElement = {
   scope: '#/properties/firstName',
 };
 
-const createState = uischema => ({
+const createState = (uischema: UISchemaElement) => ({
   jsonforms: {
     core: {
       schema: {
@@ -76,7 +84,7 @@ const createState = uischema => ({
         firstName: 'Homer'
       },
       uischema,
-      errors: []
+      errors: [] as ErrorObject[]
     }
   }
 });
@@ -233,16 +241,20 @@ test('mapStateToControlProps - data', t => {
 });
 
 test('mapStateToControlProps - errors', t => {
-  const ownProps = {
-    uischema: coreUISchema
-  };
-  const clonedState = _.cloneDeep(createState(coreUISchema));
-  clonedState.jsonforms.core.errors = [{
-    dataPath: 'firstName',
-    message: 'Duff beer'
-  }];
-  const props = mapStateToControlProps(clonedState, ownProps);
-  t.is(props.errors[0], 'Duff beer');
+    const ownProps = {
+        uischema: coreUISchema
+    };
+    const clonedState = _.cloneDeep(createState(coreUISchema));
+    const error: ErrorObject = {
+        dataPath: 'firstName',
+        message: 'Duff beer',
+        keyword: 'whatever',
+        schemaPath: '',
+        params: undefined
+    };
+    clonedState.jsonforms.core.errors = [error];
+    const props = mapStateToControlProps(clonedState, ownProps);
+    t.is(props.errors[0], 'Duff beer');
 });
 
 test('mapStateToControlProps - no duplicate error messages', t => {
@@ -333,7 +345,7 @@ test(`mapStateToDispatchRendererProps should generate UI schema given ownProps s
     }
   };
 
-  const props = mapStateToDispatchRendererProps(
+  const props = mapStateToJsonFormsRendererProps(
     store.getState(),
     { schema }
   );
@@ -342,7 +354,7 @@ test(`mapStateToDispatchRendererProps should generate UI schema given ownProps s
 
 test(`mapStateToDispatchRendererProps should use registered UI schema given no ownProps`, t => {
   const store = mockStore(createState(coreUISchema));
-  const props = mapStateToDispatchRendererProps(
+  const props = mapStateToJsonFormsRendererProps(
     store.getState(),
     {}
   );
@@ -367,7 +379,7 @@ test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps
     scope: '#/properties/foo'
   };
 
-  const props = mapStateToDispatchRendererProps(
+  const props = mapStateToJsonFormsRendererProps(
     store.getState(),
     { schema, uischema }
   );

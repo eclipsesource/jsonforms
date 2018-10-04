@@ -22,19 +22,32 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { ADD_DEFAULT_DATA, REMOVE_DEFAULT_DATA } from '../actions';
+import {
+    ADD_DEFAULT_DATA,
+    RegisterDefaultDataAction,
+    REMOVE_DEFAULT_DATA,
+    UnregisterDefaultDataAction
+} from '../actions';
+
+export interface JsonFormsDefaultDataRegistryEntry {
+    schemaPath: string;
+    data: any;
+}
+
+type ValidDefaultDataActions = RegisterDefaultDataAction | UnregisterDefaultDataAction;
 
 export const defaultDataReducer = (
-    state: { schemaPath: string, data: any }[] = [],
-    { type, schemaPath, data }) => {
-    switch (type) {
+    state: JsonFormsDefaultDataRegistryEntry[] = [],
+    action: ValidDefaultDataActions) => {
+    switch (action.type) {
         case ADD_DEFAULT_DATA:
-            return state.concat([{ schemaPath, data }]);
+            return state.concat([{ schemaPath: action.schemaPath, data: action.data }]);
         case REMOVE_DEFAULT_DATA:
-            return state.filter(t => t.schemaPath !== schemaPath);
+            return state.filter(t => t.schemaPath !== action.schemaPath);
         default:
             return state;
     }
 };
 
-export const extractDefaultData = state => state;
+export const extractDefaultData =
+    (state: JsonFormsDefaultDataRegistryEntry[]): JsonFormsDefaultDataRegistryEntry[] => state;

@@ -90,7 +90,7 @@ export const schemaSubPathMatches =
       while (!_.isEmpty(currentDataSchema.$ref)) {
         currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
       }
-      currentDataSchema = currentDataSchema[subPath] as JsonSchema;
+      currentDataSchema = _.get(currentDataSchema, subPath);
 
       if (currentDataSchema === undefined) {
         return false;
@@ -348,7 +348,8 @@ export const isObjectArrayWithNesting =
     return _.has(resolvedSchema, 'items') &&
       traverse(resolvedSchema.items, val => val !== schema && _.has(val, 'items'));
   };
-const traverse = (any, pred) => {
+
+const traverse = (any: any, pred: (obj: any) => boolean): boolean => {
   if (pred(any)) {
     return true;
   } else if (_.isArray(any)) {
@@ -428,5 +429,5 @@ const hasCategory = (categorization: Categorization): boolean => {
         .reduce((prev, curr) => prev && curr, true);
 };
 
-export const categorizationHasCategory = uischema =>
+export const categorizationHasCategory = (uischema: UISchemaElement) =>
     hasCategory(uischema as Categorization);
