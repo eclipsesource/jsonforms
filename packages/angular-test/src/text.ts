@@ -10,18 +10,20 @@ export const textTest = <C extends JsonFormsControl>(
     imports: any[],
     providers: any[],
     componentUT: Type<C>,
-    errorTestInformation: ErrorTestInformation) => () => {
+    instance: string,
+    errorTestInformation: ErrorTestInformation,
+    elementToUse: (element: DebugElement) => any) => () => {
         let fixture: ComponentFixture<any>;
-        let textNativeElement: HTMLInputElement;
-        let component: C;
         let textElement: DebugElement;
+        let textNativeElement;
+        let component: C;
 
         const data = { foo: 'foo' };
         const schema: JsonSchema = {
             type: 'object',
             properties: {
                 foo: {
-                    type: 'text'
+                    type: 'string'
                 }
             }
         };
@@ -43,8 +45,8 @@ export const textTest = <C extends JsonFormsControl>(
         beforeEach(() => {
             fixture = TestBed.createComponent(componentUT);
             component = fixture.componentInstance;
-            textElement = fixture.debugElement.query(By.css('input'));
-            textNativeElement = textElement.nativeElement;
+            textElement = fixture.debugElement.query(By.css(instance));
+            textNativeElement = elementToUse(textElement);
         });
 
         it('should render', () => {
@@ -89,7 +91,9 @@ export const textTest = <C extends JsonFormsControl>(
 
             const spy = spyOn(component, 'onChange');
             textNativeElement.value = 'bar';
-            textNativeElement.dispatchEvent(new Event('change'));
+            if (textNativeElement.dispatchEvent) {
+                textNativeElement.dispatchEvent(new Event('change'));
+            }
             // trigger change detection
             fixture.detectChanges();
             expect(spy).toHaveBeenCalled();
@@ -250,7 +254,7 @@ export const textTest = <C extends JsonFormsControl>(
             mockSubStore.complete();
             fixture.detectChanges();
             component.ngOnInit();
-            expect(textNativeElement.id).toBe('myId');
+            expect(textElement.nativeElement.id).toBe('myId');
 
         });
         it('should display errors', () => {
