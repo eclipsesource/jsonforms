@@ -23,7 +23,7 @@ export const textTest = <C extends JsonFormsControl>(
             type: 'object',
             properties: {
                 foo: {
-                    type: 'text'
+                    type: 'string'
                 }
             }
         };
