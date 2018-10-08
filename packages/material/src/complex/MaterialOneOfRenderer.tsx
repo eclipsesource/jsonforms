@@ -58,13 +58,19 @@ const createControls =
         );
     };
 
-class MaterialOneOfRenderer extends React.Component<ControlProps, any> {
+interface MaterialOneOfState {
+    open: boolean;
+    proceed: boolean;
+    selected: number;
+    newSelection?: any;
+}
 
-    state = {
+class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfState> {
+
+    state: MaterialOneOfState = {
         open: false,
         proceed: false,
         selected: 0,
-        newSelection: undefined
     };
 
     handleClose = () => {
@@ -110,7 +116,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, any> {
             <React.Fragment>
                 <MaterialCategorizationLayout
                     ownState={false}
-                    onChange={newSelection => {
+                    onChange={(newSelection: any) => {
                         if (newSelection !== this.state.selected) {
                             this.setState({
                                 proceed: false,

@@ -62,7 +62,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     if (!visible) {
       style = {display: 'none'};
     }
-    const onChange = ev => handleChange(path, ev.target.value);
+    const onChange = (ev: any) => handleChange(path, ev.target.value);
     const fieldType = scopedSchema.format;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 

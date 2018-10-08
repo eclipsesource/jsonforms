@@ -25,11 +25,11 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  mapDispatchToTableControlProps,
-  mapStateToTableControlProps,
-  TableControlProps
+    ArrayControlProps,
+    mapDispatchToArrayControlProps,
+    mapStateToArrayControlProps,
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
+import { RendererComponent } from '@jsonforms/react';
 import { TableToolbar } from './TableToolbar';
 import { MaterialTableControl } from './MaterialTableControl';
 import Button from '@material-ui/core/Button';
@@ -42,9 +42,10 @@ import {
   Hidden
 } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import { connect } from 'react-redux';
 
-export class MaterialArrayControlRenderer extends RendererComponent<TableControlProps, TableState> {
-  constructor(props) {
+export class MaterialArrayControlRenderer extends RendererComponent<ArrayControlProps, TableState> {
+  constructor(props: ArrayControlProps) {
     super(props);
     this.state = {
       selected: this.createSelection(false),
@@ -107,13 +108,13 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     );
   }
 
-  private select = (_event, index) => {
+  private select = (_event: any, index: number) => {
     const copy = this.state.selected.slice();
     copy[index] = !copy[index];
 
     this.setState({ selected: copy });
   }
-  private selectAll = (_event, checked) => {
+  private selectAll = (_event: any, checked: boolean) => {
     if (checked) {
       this.setState({ selected: this.createSelection(true) });
       return;
@@ -127,6 +128,7 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
     this.setState({ openConfirmDelete: true });
   }
   private confirmDelete = () => {
+    const { path, removeItems } = this.props;
     const selectedIndices = this.state.selected;
     const toDelete = selectedIndices.reduce(
       (acc, value, index) => {
@@ -137,11 +139,11 @@ export class MaterialArrayControlRenderer extends RendererComponent<TableControl
       },
       []
     );
-    this.props.removeItems(this.props.path, toDelete)();
+    removeItems(path, toDelete)();
     this.closeConfirmDeleteDialog();
     this.setState({ selected: this.createSelection(false) });
   }
-  private isSelected = index => {
+  private isSelected = (index: number) => {
     if (this.state.selected.length <= index) {
       return false;
     }
@@ -164,7 +166,7 @@ export interface TableState {
   openConfirmDelete: boolean;
 }
 
-export default connectToJsonForms(
-  mapStateToTableControlProps,
-  mapDispatchToTableControlProps
+export default connect(
+  mapStateToArrayControlProps,
+  mapDispatchToArrayControlProps
 )(MaterialArrayControlRenderer);

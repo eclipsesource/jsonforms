@@ -24,8 +24,9 @@
 */
 import * as React from 'react';
 import {
-  ControlElement,
-  Helpers
+    ArrayControlProps,
+    ControlElement,
+    Helpers
 } from '@jsonforms/core';
 import Button from '@material-ui/core/Button';
 import { Grid, Hidden } from '@material-ui/core';
@@ -35,6 +36,11 @@ import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ValidationIcon from './ValidationIcon';
+
+interface TableToolbarProps extends ArrayControlProps {
+    numSelected: number;
+    openConfirmDeleteDialog(): void;
+}
 
 export const TableToolbar = (
   {
@@ -46,7 +52,7 @@ export const TableToolbar = (
     openConfirmDeleteDialog,
     addItem,
     path
-  }
+  }: TableToolbarProps
 ) => {
   const controlElement = uischema as ControlElement;
   const labelObject = Helpers.createLabelDescriptionFrom(controlElement);

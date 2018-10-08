@@ -49,6 +49,8 @@ import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
 
+export { JsonFormsRendererRegistryEntry }
+
 export interface Labels {
     default: string;
     [additionalLabels: string]: string;
@@ -161,7 +163,7 @@ export interface OwnPropsOfRenderer {
 export interface OwnPropsOfControl extends OwnPropsOfRenderer {
     id?: string;
     // constraint type
-    uischema: ControlElement;
+    uischema?: ControlElement;
 }
 
 export interface OwnPropsOfEnum {
@@ -359,6 +361,7 @@ export const mapDispatchToControlProps =
 export interface StatePropsOfArrayControl extends StatePropsOfControl {
     // not sure whether we want to expose ajv API
     childErrors?: ErrorObject[];
+    findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
 }
 
 /**
@@ -370,16 +373,18 @@ export interface StatePropsOfArrayControl extends StatePropsOfControl {
  */
 export const mapStateToArrayControlProps =
     (state: JsonFormsState, ownProps: OwnPropsOfControl): StatePropsOfArrayControl => {
-        const {path, ...props} = mapStateToControlProps(state, ownProps);
-        const controlElement = ownProps.uischema as ControlElement;
-        const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope + '/items');
-
+        const { path, schema, uischema, ...props } = mapStateToControlProps(state, ownProps);
+        const controlElement = uischema as ControlElement;
+        const resolvedSchema = Resolve.schema(schema, controlElement.scope + '/items');
         const childErrors = getSubErrorsAt(path)(state);
 
         return {
             ...props,
-            scopedSchema: resolvedSchema,
             path,
+            schema,
+            uischema,
+            scopedSchema: resolvedSchema,
+            findUISchema: findUISchema(state),
             childErrors
         };
     };
@@ -388,8 +393,8 @@ export const mapStateToArrayControlProps =
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfArrayControl {
-    addItem(path: string): void;
-    removeItems(path: string, toDelete: any[]): void;
+    addItem(path: string): () => void;
+    removeItems(path: string, toDelete: any[]): () => void;
 }
 
 /**

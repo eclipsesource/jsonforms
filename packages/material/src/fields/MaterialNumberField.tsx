@@ -24,17 +24,17 @@
 */
 import * as React from 'react';
 import {
-  FieldProps,
-  isNumberControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
+    FieldProps,
+    isNumberControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith, WithClassname,
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
-export const MaterialNumberField = (props: FieldProps) => {
+export const MaterialNumberField = (props: FieldProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
   const config = {'step': '0.1'};
 

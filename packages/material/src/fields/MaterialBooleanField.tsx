@@ -24,17 +24,18 @@
 */
 import * as React from 'react';
 import {
-  FieldProps,
-  isBooleanControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith
+    FieldProps,
+    isBooleanControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith,
+    WithClassname
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 import Checkbox from '@material-ui/core/Checkbox';
 
-export const MaterialBooleanField = (props: FieldProps) => {
+export const MaterialBooleanField = (props: FieldProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
   const config = {'autoFocus': uischema.options && uischema.options.focus};
 

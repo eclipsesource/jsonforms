@@ -25,19 +25,19 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  computeLabel,
-  ControlProps,
-  ControlState,
-  isDateControl,
-  isDescriptionHidden,
-  isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
-  RankedTester,
-  rankWith,
-  StatePropsOfControl
+    computeLabel,
+    ControlProps,
+    ControlState,
+    isDateControl,
+    isDescriptionHidden,
+    isPlainLabel, JsonFormsState,
+    mapDispatchToControlProps,
+    mapStateToControlProps, OwnPropsOfControl,
+    RankedTester,
+    rankWith,
+    StatePropsOfControl
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 import { DatePicker } from 'material-ui-pickers';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -45,101 +45,112 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import { connect } from 'react-redux';
 
 export interface DateControl {
-  momentLocale?: Moment;
+    momentLocale?: Moment;
 }
 
 export class MaterialDateControl extends Control<ControlProps & DateControl, ControlState> {
-  render() {
-    const {
-      description,
-      id,
-      errors,
-      label,
-      uischema,
-      visible,
-      enabled,
-      required,
-      path,
-      handleChange,
-      data,
-      momentLocale
-    } = this.props;
-    const isValid = errors.length === 0;
-    const trim = uischema.options && uischema.options.trim;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-    let style = {};
-    if (!visible) {
-      style = {display: 'none'};
+    render() {
+        const {
+            description,
+            id,
+            errors,
+            label,
+            uischema,
+            visible,
+            enabled,
+            required,
+            path,
+            handleChange,
+            data,
+            momentLocale
+        } = this.props;
+        const isValid = errors.length === 0;
+        const trim = uischema.options && uischema.options.trim;
+        const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+        let style = {};
+        if (!visible) {
+            style = {display: 'none'};
+        }
+        const inputProps = {};
+        const localeDateTimeFormat =
+            momentLocale ? `${momentLocale.localeData().longDateFormat('L')}`
+                : 'YYYY-MM-DD';
+
+        let labelText;
+        let labelCancel;
+        let labelClear;
+
+        if (isPlainLabel(label)) {
+            labelText = label;
+            labelCancel = 'Cancel';
+            labelClear = 'Clear';
+        } else {
+            labelText = label.default;
+            labelCancel = _.startsWith(label.cancel, '%') ? 'Cancel' : label.cancel;
+            labelClear = _.startsWith(label.clear, '%') ? 'Clear' : label.clear;
+        }
+
+        return (
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+                <DatePicker
+                    id={id + '-input'}
+                    label={computeLabel(labelText, required)}
+                    error={!isValid}
+                    style={style}
+                    fullWidth={!trim}
+                    helperText={!isValid ? errors : showDescription ? description : ' '}
+                    InputLabelProps={{shrink: true}}
+                    value={data || null}
+                    onChange={ datetime =>
+                        handleChange(path, datetime ? moment(datetime).format('YYYY-MM-DD') : '')
+                    }
+                    format={localeDateTimeFormat}
+                    clearable={true}
+                    disabled={!enabled}
+                    autoFocus={uischema.options && uischema.options.focus}
+                    onClear={() => handleChange(path, '')}
+                    onFocus={this.onFocus}
+                    onBlur={this.onBlur}
+                    cancelLabel={labelCancel}
+                    clearLabel={labelClear}
+                    leftArrowIcon={<KeyboardArrowLeftIcon />}
+                    rightArrowIcon={<KeyboardArrowRightIcon />}
+                    InputProps={inputProps}
+                />
+            </MuiPickersUtilsProvider>
+        );
     }
-    const inputProps = {};
-    const localeDateTimeFormat =
-      momentLocale ? `${momentLocale.localeData().longDateFormat('L')}`
-      : 'YYYY-MM-DD';
-
-    let labelText;
-    let labelCancel;
-    let labelClear;
-
-    if (isPlainLabel(label)) {
-      labelText = label;
-      labelCancel = 'Cancel';
-      labelClear = 'Clear';
-    } else {
-      labelText = label.default;
-      labelCancel = _.startsWith(label.cancel, '%') ? 'Cancel' : label.cancel;
-      labelClear = _.startsWith(label.clear, '%') ? 'Clear' : label.clear;
-    }
-
-    return (
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <DatePicker
-          id={id + '-input'}
-          label={computeLabel(labelText, required)}
-          error={!isValid}
-          style={style}
-          fullWidth={!trim}
-          helperText={!isValid ? errors : showDescription ? description : ' '}
-          InputLabelProps={{shrink: true}}
-          value={data || null}
-          onChange={ datetime =>
-            handleChange(path, datetime ? moment(datetime).format('YYYY-MM-DD') : '')
-          }
-          format={localeDateTimeFormat}
-          clearable={true}
-          disabled={!enabled}
-          autoFocus={uischema.options && uischema.options.focus}
-          onClear={() => handleChange(path, '')}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          cancelLabel={labelCancel}
-          clearLabel={labelClear}
-          leftArrowIcon={<KeyboardArrowLeftIcon />}
-          rightArrowIcon={<KeyboardArrowRightIcon />}
-          InputProps={inputProps}
-        />
-      </MuiPickersUtilsProvider>
-    );
-  }
 }
 
-export const addLabelProps = (mapStateToProps: (s, p) => any) =>
-  (state, ownProps): StatePropsOfControl => {
-    const stateProps = mapStateToProps(state, ownProps);
+export const addLabelProps =
+    (mapStateToProps: (s: JsonFormsState, p: OwnPropsOfControl) => StatePropsOfControl) =>
+        (state: JsonFormsState, ownProps: OwnPropsOfControl): StatePropsOfDateControl => {
+            const stateProps = mapStateToProps(state, ownProps);
 
-    return {
-      ...stateProps,
-      label: {
-        default: stateProps.label,
-        cancel: '%cancel',
-        clear: '%clear'
-      },
+            return {
+                ...stateProps,
+                label: {
+                    // TODO cast
+                    default: stateProps.label as string,
+                    cancel: '%cancel',
+                    clear: '%clear'
+                },
+            };
+        };
+
+export interface StatePropsOfDateControl extends StatePropsOfControl {
+    label: {
+        default: string;
+        cancel: string;
+        clear: string;
     };
-  };
+}
 
 export const materialDateControlTester: RankedTester = rankWith(4, isDateControl);
-export default connectToJsonForms(
-  addLabelProps(mapStateToControlProps),
-  mapDispatchToControlProps
+export default connect(
+    addLabelProps(mapStateToControlProps),
+    mapDispatchToControlProps
 )(MaterialDateControl);

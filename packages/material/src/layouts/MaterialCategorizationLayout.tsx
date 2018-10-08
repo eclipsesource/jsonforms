@@ -101,7 +101,7 @@ export class MaterialCategorizationLayoutRenderer
         return this.props.ownState !== undefined ? this.props.ownState : true;
     }
 
-    private handleChange = (_event, value) => {
+    private handleChange = (_event: any, value: any) => {
         if (this.props.onChange) {
             this.props.onChange(value, this.state.value);
         }

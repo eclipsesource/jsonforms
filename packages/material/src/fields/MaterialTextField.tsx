@@ -24,17 +24,18 @@
 */
 import * as React from 'react';
 import {
-  FieldProps,
-  isStringControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
+    FieldProps,
+    isStringControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith,
+    WithClassname,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
+import { connect } from 'react-redux';
 
-export const MaterialTextField = (props: FieldProps) => {
+export const MaterialTextField = (props: FieldProps & WithClassname) => {
   const {
     data,
     config,
@@ -48,7 +49,7 @@ export const MaterialTextField = (props: FieldProps) => {
     scopedSchema
   } = props;
   const maxLength = scopedSchema.maxLength;
-  let inputProps;
+  let inputProps: any;
   if (config.restrict) {
     inputProps = {'maxLength': maxLength};
   } else {
@@ -57,7 +58,7 @@ export const MaterialTextField = (props: FieldProps) => {
   if (config.trim && maxLength !== undefined) {
     inputProps.size = maxLength;
   }
-  const onChange = ev => handleChange(path, ev.target.value);
+  const onChange = (ev: any) => handleChange(path, ev.target.value);
 
   return (
     <Input
@@ -80,7 +81,7 @@ export const MaterialTextField = (props: FieldProps) => {
  * @type {RankedTester}
  */
 export const materialTextFieldTester: RankedTester = rankWith(1, isStringControl);
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialTextField);
