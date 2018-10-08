@@ -23,10 +23,11 @@
   THE SOFTWARE.
 */
 import 'jsdom-global/register';
+// @ts-ignore
 import * as installCE from 'document-register-element/pony';
-declare let global;
+declare let global: any;
 installCE(global, 'force');
-global.requestAnimationFrame = cb => setTimeout(cb, 0);
+global.requestAnimationFrame = (cb: any) => setTimeout(cb, 0);
 import {
   Actions,
   jsonformsReducer,

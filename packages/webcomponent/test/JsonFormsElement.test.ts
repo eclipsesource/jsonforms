@@ -66,6 +66,8 @@ test.cb('render with data set', t => {
       jsonforms: {
         core: {
           data: t.context.data,
+          schema: undefined,
+          uischema: undefined
         },
         renderers: t.context.renderers
       }
@@ -94,7 +96,8 @@ test.cb('render with data and data schema set', t => {
       jsonforms: {
         core: {
           data: t.context.data,
-          schema: t.context.schema
+          schema: t.context.schema,
+          uischema: undefined
         },
         renderers: t.context.renderers
       }
@@ -130,6 +133,7 @@ test.cb('render with data and UI schema set', t => {
       jsonforms: {
         core: {
           data: t.context.data,
+          schema: undefined,
           uischema: t.context.uischema
         },
         renderers: t.context.renderers
@@ -216,6 +220,8 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
       jsonforms: {
         core: {
           data: t.context.data,
+          schema: undefined,
+          uischema: undefined
         },
         renderers: t.context.renderers
       }
@@ -238,7 +244,9 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
               data: {
                 firstname: 'bar',
                 lastname: 'foo'
-              }
+              },
+              schema: undefined,
+              uischema: undefined
             },
             renderers: t.context.renderers
           }
