@@ -11,7 +11,8 @@
     "jsx": "react",
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true
   },
   "types": ["jest"]
 }
