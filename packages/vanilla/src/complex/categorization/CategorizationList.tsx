@@ -34,7 +34,7 @@ export interface CategorizationProps {
   selectedCategory: Category;
   depth: number;
   onSelect: any;
-  subcategoriesClassName;
+  subcategoriesClassName: string;
   groupClassName: string;
 }
 

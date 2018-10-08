@@ -25,19 +25,22 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import {
-  ControlElement,
-  formatErrorMessage,
-  Helpers,
-  isPlainLabel,
-  mapDispatchToTableControlProps,
-  mapStateToTableControlProps,
-  Paths,
-  RankedTester,
-  TableControlProps,
-  Test,
+    ArrayControlProps,
+    ControlElement,
+    formatErrorMessage,
+    Helpers,
+    isPlainLabel,
+    mapDispatchToArrayControlProps,
+    mapStateToArrayControlProps,
+    Paths,
+    RankedTester,
+    StatePropsOfControl,
+    Test,
 } from '@jsonforms/core';
-import { connectToJsonForms, DispatchField, RendererComponent } from '@jsonforms/react';
+import { DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
+import { connect } from 'react-redux';
+import { VanillaRendererProps } from '../index';
 
 const {
   createLabelDescriptionFrom,
@@ -61,11 +64,7 @@ export const tableArrayControlTester: RankedTester = rankWith(
     or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-export interface VanillaTableProps extends TableControlProps {
-  getStyleAsClassName(style: string): string;
-}
-
-class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
+class TableArrayControl extends React.Component<ArrayControlProps & VanillaRendererProps, any> {
 
   render() {
     const {
@@ -133,7 +132,8 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
               <tr><td>No data</td></tr> :
               data.map((_child, index) => {
                 const childPath = Paths.compose(path, `${index}`);
-                const errorsPerEntry = _.filter(
+                // TODO
+                const errorsPerEntry: any[] = _.filter(
                   childErrors,
                   error => error.dataPath.startsWith(childPath)
                 );
@@ -151,9 +151,9 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
                             return (
                               <td key={childPropPath}>
                                 <DispatchField
-                                  schema={scopedSchema}
-                                  uischema={createControlElement(prop)}
-                                  path={childPath}
+                                    schema={scopedSchema}
+                                    uischema={createControlElement(prop)}
+                                    path={childPath}
                                 />
                               </td>
                             );
@@ -187,9 +187,7 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
   }
 }
 
-const ConnectedTableArrayControl  = connectToJsonForms(
-    addVanillaControlProps(mapStateToTableControlProps),
-    mapDispatchToTableControlProps
-  )(TableArrayControl);
-
-export default ConnectedTableArrayControl;
+export default connect(
+    addVanillaControlProps<StatePropsOfControl>(mapStateToArrayControlProps),
+    mapDispatchToArrayControlProps
+)(TableArrayControl);

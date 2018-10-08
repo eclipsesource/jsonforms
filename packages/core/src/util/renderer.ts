@@ -262,7 +262,7 @@ export interface DispatchPropsOfControl {
      * @param {string} path the path to the data to be updated
      * @param {any} value the new value that should be written to the given path
      */
-    handleChange(path: string, value: any): void;
+    handleChange?(path: string, value: any): void;
 }
 
 /**

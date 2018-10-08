@@ -81,11 +81,11 @@ test('render two children', t => {
       { tester: integerFieldTester, field: IntegerField }
     ]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const header = TestUtils.findRenderedDOMComponentWithTag(tree, 'header') as HTMLInputElement;
   const legendChildren = header.children;
@@ -144,11 +144,11 @@ test('render empty data', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const header = TestUtils.findRenderedDOMComponentWithTag(tree, 'header') as HTMLInputElement;
   const legendChildren = header.children;
@@ -198,11 +198,11 @@ test('render new child (empty init data)', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
@@ -218,11 +218,11 @@ test('render new child (undefined data)', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
@@ -238,11 +238,11 @@ test('render new child (null data)', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
@@ -258,11 +258,11 @@ test('render new child', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
   TestUtils.Simulate.click(button);
@@ -282,7 +282,7 @@ test('render primitives ', t => {
       }
     }
   };
-  const uischema = {
+  const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/test'
   };
@@ -291,11 +291,11 @@ test('render primitives ', t => {
     schema,
     uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
   const lastRow = _.last(rows) as HTMLTableRowElement;
   t.is(lastRow.children.item(1).textContent, 'should NOT be longer than 3 characters');
@@ -308,11 +308,11 @@ test('update via action', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const children = TestUtils.findRenderedDOMComponentWithTag(tree, 'tbody');
   t.is(children.childNodes.length, 1);
@@ -435,7 +435,7 @@ test('hide', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl
         schema={t.context.schema}
@@ -443,7 +443,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
@@ -455,11 +455,11 @@ test('show by default', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
@@ -470,11 +470,11 @@ test('single error', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 2));
   t.is(validation.textContent, 'should be array');
@@ -486,11 +486,11 @@ test('multiple errors', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
   t.is(validation.textContent, 'should be array');
@@ -502,11 +502,11 @@ test('empty errors by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.textContent, '');
 });
@@ -517,11 +517,11 @@ test('reset validation message', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
   t.is(validation.textContent, 'should be array');
@@ -569,11 +569,11 @@ test.skip('validation of nested schema', t => {
     schema,
     uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');

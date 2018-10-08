@@ -61,13 +61,14 @@ test('render', t => {
         uischema: t.context.uischema,
         renderers: [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }]
     });
-    const tree = TestUtils.renderIntoDocument(
+    const tree: React.Component<any> = TestUtils.renderIntoDocument(
         <Provider store={store}>
             <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
         </Provider>
-    );
+    ) as React.Component<any>;
 
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const inputs: HTMLInputElement[] =
+        TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     const radioButtons = _.filter(inputs, i => i.type === 'radio');
     t.is(radioButtons.length, 4);
     // make sure one option is selected and it is "D"
@@ -83,13 +84,14 @@ test('Radio group should have only one selected option', t => {
         uischema: t.context.uischema,
         renderers: [{ tester: rankWith(10, isEnumControl), renderer: RadioGroupControl }]
     });
-    const tree = TestUtils.renderIntoDocument(
+    const tree: React.Component<any> = TestUtils.renderIntoDocument(
         <Provider store={store}>
             <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
         </Provider>
-    );
+    ) as React.Component<any>;
 
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const inputs: HTMLInputElement[] =
+        TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     const radioButtons = _.filter(inputs, i => i.type === 'radio');
 
     // change and verify selection

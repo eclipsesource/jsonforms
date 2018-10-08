@@ -33,8 +33,9 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
 
-export const NumberFormatField = (props: FieldProps & Formatted<number>) => {
+export const NumberFormatField = (props: FieldProps & VanillaRendererProps & Formatted<number>) => {
   const {
     className,
     id,
@@ -47,7 +48,7 @@ export const NumberFormatField = (props: FieldProps & Formatted<number>) => {
   const maxLength = scopedSchema.maxLength;
   const formattedNumber: string = props.toFormatted(props.data);
 
-  const onChange = ev => {
+  const onChange = (ev: any) => {
     const validStringNumber = props.fromFormatted(ev.currentTarget.value);
     handleChange(path, validStringNumber);
   };

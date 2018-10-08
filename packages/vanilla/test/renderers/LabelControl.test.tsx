@@ -61,14 +61,14 @@ test('render with undefined text', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <LabelRenderer
         schema={t.context.schema}
         uischema={uischema}
       />
     </Provider>
-  );
+  )  as React.Component<any>;;
 
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.className, 'jsf-label');
@@ -87,14 +87,14 @@ test('render with null text', t => {
     styles: t.context.styles
   });
 
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <LabelRenderer
         schema={t.context.schema}
         uischema={uischema}
       />
     </Provider>
-  );
+  ) as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.className, 'jsf-label');
   t.is(label.textContent, '');
@@ -107,14 +107,14 @@ test('render with text', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <LabelRenderer
         schema={t.context.schema}
         uischema={t.context.uischema}
       />
     </Provider>
-  );
+  ) as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.className, 'jsf-label');
   t.is(label.childNodes.length, 1);
@@ -127,7 +127,7 @@ test('hide', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <LabelRenderer
         schema={t.context.schema}
@@ -135,7 +135,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  );
+  ) as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.true(label.hidden);
 });
@@ -146,14 +146,14 @@ test('show by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <LabelRenderer
         schema={t.context.schema}
         uischema={t.context.uischema}
       />
     </Provider>
-  );
+  ) as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.false(label.hidden);
 });

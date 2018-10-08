@@ -105,11 +105,11 @@ test('autofocus on first element', t => {
       { tester: booleanFieldTester, field: BooleanField }
     ]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  );
+  ) as React.Component<any>;
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
@@ -132,11 +132,11 @@ test('render', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl uischema={t.context.uischema} schema={t.context.schema} />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
   t.not(control, undefined);
@@ -168,11 +168,11 @@ test('render without label', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
   t.not(control, undefined);
@@ -200,17 +200,16 @@ test('hide', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl
-        data={t.context.data}
         schema={t.context.schema}
         uischema={t.context.uischema}
         path={''}
         visible={false}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
@@ -223,11 +222,11 @@ test('show by default', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
@@ -240,11 +239,11 @@ test('single error', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 2));
   t.is(validation.textContent, 'should be boolean');
@@ -258,11 +257,11 @@ test('multiple errors', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 3));
   t.is(validation.textContent, 'should be boolean');
@@ -276,11 +275,11 @@ test('empty errors by default', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.textContent, '');
 });
@@ -293,11 +292,11 @@ test('reset validation message', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: booleanFieldTester, field: BooleanField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 3));
   store.dispatch(Actions.update('foo', () => true));
@@ -357,11 +356,11 @@ test('validation of nested schema', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: textFieldTester, field: TextField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
@@ -389,11 +388,11 @@ test('required field is marked', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: dateFieldTester, field: DateField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field*');
 });
@@ -419,11 +418,11 @@ test('not required', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: dateFieldTester, field: DateField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field');
 });
@@ -450,11 +449,11 @@ test('required field is marked', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: dateFieldTester, field: DateField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field*');
 });
@@ -481,11 +480,11 @@ test('not required', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: dateFieldTester, field: DateField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Field');
 });
@@ -512,11 +511,11 @@ test('show description on focus', t => {
     renderers: [{tester: inputControlTester, renderer: InputControl}],
     fields: [{ tester: textFieldTester, field: TextField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
   TestUtils.Simulate.focus(control);
   const description =
@@ -546,11 +545,11 @@ test('hide description when input field is not focused', t => {
     renderers: [{tester: inputControlTester, renderer: InputControl}],
     fields: [{ tester: textFieldTester, field: TextField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const description = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'input-description'
@@ -580,11 +579,11 @@ test('hide description on blur', t => {
     renderers: [{tester: inputControlTester, renderer: InputControl}],
     fields: [{ tester: textFieldTester, field: TextField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
   TestUtils.Simulate.focus(control);
   const description =
@@ -617,11 +616,11 @@ test('description undefined', t => {
     renderers: [{tester: inputControlTester, renderer: InputControl}],
     fields: [{ tester: textFieldTester, field: TextField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  );
+  ) as React.Component<any>;
   const description =
     TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, '');
@@ -652,11 +651,11 @@ test('undefined input control', t => {
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
     fields: [{ tester: textFieldTester, field: TextField }]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const control = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'control');
   t.is(control.length, 0);
 });

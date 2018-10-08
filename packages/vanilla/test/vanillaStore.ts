@@ -23,7 +23,13 @@
   THE SOFTWARE.
 */
 import { combineReducers, createStore, Store } from 'redux';
-import { Actions, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import {
+    Actions,
+    jsonformsReducer,
+    JsonFormsState,
+    JsonSchema,
+    UISchemaElement
+} from '@jsonforms/core';
 import { vanillaStyles } from '../src/util';
 import { stylingReducer } from '../src/reducers';
 
@@ -32,6 +38,11 @@ export const initJsonFormsVanillaStore = ({
   schema,
   uischema,
   ...other
+}: {
+    data: any,
+    uischema: UISchemaElement,
+    schema: JsonSchema,
+    [other: string]: any
 }): Store<JsonFormsState> => {
 
   const store: Store<JsonFormsState> = createStore(

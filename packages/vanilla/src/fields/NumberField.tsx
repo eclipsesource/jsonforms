@@ -33,8 +33,9 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
 
-export const NumberField = (props: FieldProps) => {
+export const NumberField = (props: FieldProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (
