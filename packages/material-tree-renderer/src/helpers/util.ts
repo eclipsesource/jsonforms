@@ -25,7 +25,7 @@ export const resolveLocalData = (rootData: Object, path: string): Object => {
 
         return null;
       }
-      resolvedData = resolvedData[segment];
+      resolvedData = _.get(resolvedData, segment);
     }
 
     return resolvedData;
