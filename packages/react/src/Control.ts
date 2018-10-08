@@ -49,7 +49,7 @@ export class Control<P extends ControlProps, S extends ControlState>
    *
    * @param value the updated value
    */
-  handleChange = value => {
+  handleChange = (value: any) => {
     this.setState({ value });
     this.updateData(value);
   }
@@ -68,7 +68,7 @@ export class Control<P extends ControlProps, S extends ControlState>
     this.setState({ isFocused:  false });
   }
 
-  private updateData = value => {
+  private updateData = (value: any) => {
     this.props.handleChange(this.props.path, value);
   }
 }
