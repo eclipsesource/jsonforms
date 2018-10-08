@@ -55,7 +55,7 @@ export class RatingControl extends Control<ControlProps, ControlState> {
       >
         <Rating
           value={this.props.data}
-          onClick={ev => {
+          onClick={(ev: any) => {
             this.props.handleChange(this.props.path, Number(ev.value));
           }}
           id={this.props.id}

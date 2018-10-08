@@ -28,14 +28,24 @@ import './index.css';
 import App from './App';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { Actions, jsonformsReducer, RankedTester } from '@jsonforms/core';
+import {
+    Actions,
+    JsonFormsFieldRendererRegistryEntry,
+    jsonformsReducer, JsonFormsRendererRegistryEntry,
+    RankedTester
+} from '@jsonforms/core';
 import { getExamples } from '@jsonforms/examples';
 import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
 import { enhanceExample, ReactExampleDescription } from './util';
+
 const setupStore = (
-  exampleData: ReactExampleDescription[], fields, renderers, additionalStoreParams) => {
+  exampleData: ReactExampleDescription[],
+  fields: JsonFormsFieldRendererRegistryEntry[],
+  renderers: JsonFormsRendererRegistryEntry[],
+  additionalStoreParams: any
+) => {
   const additionalReducers = additionalStoreParams.reduce(
-    (acc, x) => {
+    (acc: any, x: any) => {
       if (x.reducer) {
         acc[x.name] = x.reducer;
       }
@@ -45,7 +55,7 @@ const setupStore = (
     {} as any
   );
   const additionalInitState = additionalStoreParams.reduce(
-    (acc, x) => {
+    (acc: any, x: any) => {
       acc[x.name] = x.state;
 
       return acc;
