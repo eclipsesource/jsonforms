@@ -1,7 +1,7 @@
 import {
     and,
-    Category,
     categorizationHasCategory,
+    Category,
     JsonFormsState,
     Layout,
     RankedTester,
@@ -71,7 +71,7 @@ export class CategorizationLayoutRenderer extends JsonFormsIonicLayout {
         }
     }
 
-    selectCategory(category) {
+    selectCategory(category: Category) {
         this.selectedCategory = category;
         this.nav.setRoot(CategoryRenderer, { category });
     }

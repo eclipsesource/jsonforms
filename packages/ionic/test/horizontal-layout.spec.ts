@@ -31,8 +31,8 @@ import { MockNgRedux } from '@angular-redux/store/testing';
 import { HorizontalLayoutRenderer } from '../src';
 
 describe('Horizontal layout', () => {
-    let fixture;
-    let component;
+    let fixture: any;
+    let component: any;
 
     const data = { foo: true };
     const schema = {
