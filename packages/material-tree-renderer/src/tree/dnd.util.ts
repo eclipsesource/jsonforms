@@ -2,6 +2,7 @@ import { JsonSchema7, update } from '@jsonforms/core';
 import { Property } from '../services/property.util';
 import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
+import { AnyAction, Dispatch } from 'redux';
 
 export const Types = {
   TREE_DND: 'tree-master-detail-DnD'
@@ -66,7 +67,7 @@ export interface DropResult {
  * @param oldPath the data at this path will be deleted
  * @param newPath the given data will be inserted at this path
  */
-export const moveListItem = dispatch =>
+export const moveListItem = (dispatch: Dispatch<AnyAction>) =>
   (data: any, oldPath: string, newPath: string): boolean => {
     if (newPath === oldPath) {
       // nothing needs to be moved
@@ -117,7 +118,7 @@ export const moveListItem = dispatch =>
     return true;
   };
 
-export const mapDispatchToTreeListProps = dispatch => ({
+export const mapDispatchToTreeListProps = (dispatch: Dispatch<AnyAction>) => ({
   moveListItem: moveListItem(dispatch)
 });
 

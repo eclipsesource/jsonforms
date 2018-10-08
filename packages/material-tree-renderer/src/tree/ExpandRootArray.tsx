@@ -1,12 +1,18 @@
 // tslint:disable:jsx-no-multiline-js
 import * as React from 'react';
-import { connect } from 'react-redux';
-import {
-  getData,
-  Paths,
-  resolveData
-} from '@jsonforms/core';
+import { JsonSchema7, Paths, resolveData, UISchemaElement } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
+import { WithImageProvider, WithLabelProvider } from './TreeWithDetailRenderer';
+
+interface ExpandRootArrayProps {
+    rootData: any;
+    selection: any;
+
+    path: string;
+    handlers: any;
+    filterPredicate: any;
+    schema: JsonSchema7 | JsonSchema7[];
+}
 
 /**
  * Expands the given root data array by expanding every element.
@@ -16,9 +22,6 @@ import ObjectListItem from './ObjectListItem';
  * As a difference to the ExpandArray component this component does not use containment
  * properties because it is only used for the root nodes of a tree.
  *
- * @param data the array to expand
- * @param schema the JsonSchema defining the property that the array belongs to
- * @param parentPath the instance path where data can be obtained from
  */
 export const ExpandRootArray = (
   {
@@ -30,7 +33,7 @@ export const ExpandRootArray = (
     filterPredicate,
     labelProvider,
     imageProvider
-  }
+  }: ExpandRootArrayProps & WithLabelProvider & WithImageProvider
 ) => {
 
     const data = resolveData(rootData, path);
@@ -38,7 +41,7 @@ export const ExpandRootArray = (
       return 'No data';
     }
 
-    return data.map((_element, index) => {
+    return data.map((_element: any, index: number) => {
       const composedPath = Paths.compose(path, index.toString());
 
       return (
@@ -57,6 +60,10 @@ export const ExpandRootArray = (
     });
 };
 
+export interface ExpandRootArrayContainerProps extends ExpandRootArrayProps {
+    uischema: UISchemaElement;
+}
+
 // TODO: update selected element once selection has been changed
 export const ExpandRootArrayContainer = (
   {
@@ -69,7 +76,7 @@ export const ExpandRootArrayContainer = (
     filterPredicate,
     labelProvider,
     imageProvider
-  }
+  }: ExpandRootArrayContainerProps & WithLabelProvider & WithImageProvider
 ) => {
 
   return (
@@ -86,9 +93,3 @@ export const ExpandRootArrayContainer = (
     />
   );
 };
-
-const mapStateToProps = state => ({
-  rootData: getData(state)
-});
-
-export default connect(mapStateToProps)(ExpandRootArrayContainer);

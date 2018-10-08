@@ -3,9 +3,10 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import {
-  getData,
-  Paths,
-  resolveData
+    getData,
+    JsonFormsState,
+    Paths,
+    resolveData
 } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
 import { DropTarget, DropTargetMonitor } from 'react-dnd';
@@ -27,7 +28,7 @@ import { compose } from 'recompose';
 
 export interface ExpandArrayProps {
   rootData: any;
-  containmentProps: Property[];
+  containmentProps?: Property[];
   path: string;
   selection: any;
   handlers: any;
@@ -42,8 +43,8 @@ export interface ExpandArrayProps {
  *
  * @param data the array to expand
  * @param {@link Property} property It describes a single property.
- *                                  It is used to match a given data element with a schema by searching
- *                                  a list of properties.
+ *        It is used to match a given data element with a schema by searching
+ *        a list of properties.
  *
  * @param parentPath the instance path where data can be obtained from
  */
@@ -66,7 +67,7 @@ export const ExpandArray = (
     return '';
   }
   return (
-    data.map((element, index) => {
+    data.map((element: any, index: number) => {
       const composedPath = Paths.compose(path, index.toString());
       const property = matchContainerProperty(element, containmentProps, filterPredicate);
 
@@ -128,12 +129,14 @@ const styles: StyleRulesCallback<'currentTarget' | 'validTarget' | 'invalidTarge
     borderColor: 'rgb(189, 0, 0)'
   }
 });
+
 class ExpandArrayContainer extends
   React.Component<ExpandArrayContainerProps &
                   WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>,
-                  ExandArrayContainerState> {
+                  any> {
 
-  constructor(props) {
+  constructor(props: ExpandArrayContainerProps &
+                  WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>) {
     super(props);
     this.state = { setCss: false };
   }
@@ -197,14 +200,15 @@ class ExpandArrayContainer extends
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: JsonFormsState) => ({
   rootData: getData(state)
 });
 
 /**
  * Injects drag and drop related properties into an expanded array
  */
-const collect = (dndConnect, monitor: DropTargetMonitor) => {
+    // TODO: typings
+const collect = (dndConnect: any, monitor: DropTargetMonitor) => {
   return {
     connectDropTarget: dndConnect.dropTarget(),
     isOver: monitor.isOver({ shallow: true }),
@@ -233,7 +237,7 @@ const arrayDropTarget = {
    * The most nested one is called first, return results are available
    * from the before called component.
    */
-  drop: (props, monitor: DropTargetMonitor) => {
+  drop: (props: any, monitor: DropTargetMonitor) => {
     // drop was handled by a nested list
     if (monitor.didDrop()) {
       return monitor.getDropResult();
@@ -252,7 +256,7 @@ const arrayDropTarget = {
   }
 };
 
-const DnDExandArrayContainer = compose(
+const DnDExandArrayContainer = compose<ExpandArrayContainerProps, ExpandArrayContainerProps>(
   withStyles(styles, { name: 'ExpandArrayContainer' }),
   DropTarget(Types.TREE_DND, arrayDropTarget, collect)
 )(ExpandArrayContainer);

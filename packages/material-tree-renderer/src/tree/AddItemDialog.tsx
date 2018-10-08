@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import {
     getData,
     getDefaultData,
-    getSchema,
+    getSchema, JsonFormsState,
     JsonSchema,
     Paths,
     Resolve,
@@ -24,6 +24,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { ListItemIcon } from '@material-ui/core';
 import { wrapImageIfNecessary } from '../helpers/image-provider.util';
 import { SchemaLabelProvider } from '../helpers/LabelProvider';
+import { AnyAction, Dispatch } from 'redux';
 
 export interface AddItemDialogProps {
     rootData: any;
@@ -37,7 +38,7 @@ export interface AddItemDialogProps {
     add?: any;
     labelProvider?: SchemaLabelProvider;
     defaultData: { schemaPath: string, data: any}[];
-    imageProvider(JsonSchema): string;
+    imageProvider(schema: JsonSchema): string;
 }
 
 const createData = (defaultData: any, prop: Property) => {
@@ -47,7 +48,7 @@ const createData = (defaultData: any, prop: Property) => {
 
     // default behavior is to read default property from schemas
     const predefined = _.keys(prop.schema.properties).reduce(
-        (acc, key) => {
+        (acc: any, key: string) => {
             if (prop.schema.properties[key].default) {
                 acc[key] = prop.schema.properties[key].default;
             }
@@ -62,13 +63,14 @@ const createData = (defaultData: any, prop: Property) => {
     return _.merge(foundData ? foundData.data : {}, predefined);
 };
 
-const createPropLabel = (prop, labelProvider) => {
-    let label = prop.label;
-    if (labelProvider) {
-        label = labelProvider(prop.schema, prop.schemaPath);
-    }
-    return `${prop.property} [${label}]`;
-};
+const createPropLabel =
+    (prop: Property, labelProvider: (schema: JsonSchema, path: string) => string) => {
+        let label = prop.label;
+        if (labelProvider) {
+            label = labelProvider(prop.schema, prop.schemaPath);
+        }
+        return `${prop.property} [${label}]`;
+    };
 
 class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
 
@@ -135,7 +137,8 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+// TODO
+const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
     const containerProperties = findContainerProperties(ownProps.schema, getSchema(state), false);
 
     return {
@@ -152,8 +155,8 @@ const mapStateToProps = (state, ownProps) => {
     };
 };
 
-const mapDispatchToProps = dispatch => ({
-    add(path, prop, newData) {
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
+    add(path: string, prop: Property, newData: any) {
         dispatch(
             update(
                 Paths.compose(path, prop.property),
