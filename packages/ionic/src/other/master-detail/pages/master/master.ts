@@ -6,10 +6,10 @@ import { AbstractMasterPage } from '../AbstractMasterPage';
 import { Observable } from 'rxjs';
 import { MasterItem } from '../../master-detail';
 import {
+    ControlElement,
     JsonFormsState,
     JsonSchema,
-    mapDispatchToTableControlProps,
-    UISchemaElement
+    mapDispatchToArrayControlProps
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 
@@ -36,10 +36,10 @@ import { NgRedux } from '@angular-redux/store';
 export class MasterPage extends AbstractMasterPage implements OnInit {
 
     items: Observable<MasterItem>;
-    uischema: UISchemaElement;
+    uischema: ControlElement;
     schema: JsonSchema;
     path: string;
-    addItem: (path: string) => () => void;
+    addItem: (path: string) => void;
 
     constructor(
         public navParams: NavParams,
@@ -54,18 +54,18 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
     }
 
     ngOnInit() {
-        const { addItem } = mapDispatchToTableControlProps(this.ngRedux.dispatch, {
+        const { addItem } = mapDispatchToArrayControlProps(this.ngRedux.dispatch, {
             uischema: this.uischema,
             schema: this.schema,
         });
         this.addItem = addItem;
     }
 
-    onItemSelected(item) {
+    onItemSelected(item: any) {
         this.navProxy.pushDetail(DetailPage, { addToNavStack: true, item });
     }
 
     onClick() {
-        this.addItem(this.path)();
+        this.addItem(this.path);
     }
 }

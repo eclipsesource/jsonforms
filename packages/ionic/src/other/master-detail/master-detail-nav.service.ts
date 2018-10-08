@@ -10,7 +10,7 @@ export class MasterDetailNavService {
   _parentNav: Nav;
   _isDetailVisible: boolean;
   _isViewChanging = false;
-  useParentNav;
+  useParentNav: boolean;
 
   get masterNav(): Nav {
     return this._masterNav;
@@ -48,7 +48,7 @@ export class MasterDetailNavService {
     this.masterNav.push(page, params);
   }
 
-  onDetailVisibilityChanged(isDetailVisible, parentNav: Nav) {
+  onDetailVisibilityChanged(isDetailVisible: boolean, parentNav: Nav) {
     this._isDetailVisible = isDetailVisible;
     if (this.masterNav && this.detailNav) {
       isDetailVisible ? this.showDetail(parentNav) : this.hideDetail(parentNav);

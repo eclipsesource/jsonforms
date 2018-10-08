@@ -21,7 +21,7 @@ export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnIni
         };
         this.subscription = this.ngRedux
             .select()
-            .map(state => mapStateToLayoutProps(state, ownProps))
+            .map((state: JsonFormsState) => mapStateToLayoutProps(state, ownProps))
             .subscribe(props => {
                 this.uischema = props.uischema;
                 this.schema = props.schema;

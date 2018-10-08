@@ -67,7 +67,7 @@ export class MasterDetailComponent extends JsonFormsControl {
                 const resolvedSchema = resolveSchema(schema, `${controlElement.scope}/items`);
                 const detailUISchema = controlElement.options.detail ||
                     Generate.uiSchema(resolvedSchema, 'VerticalLayout');
-                const masterItems = data.map((d, index) => {
+                const masterItems = data.map((d: any, index: number) => {
                     const labelRefInstancePath =
                         removeSchemaKeywords(controlElement.options.labelRef);
                     const masterItem: MasterItem = {
@@ -103,7 +103,7 @@ export class MasterDetailComponent extends JsonFormsControl {
             });
     }
 
-    onSplitPaneChange(event) {
+    onSplitPaneChange(event: any) {
         const isDetailVisible = event._visible;
         this.masterDetailService.onDetailVisibilityChanged(isDetailVisible, this.parentNav);
     }
