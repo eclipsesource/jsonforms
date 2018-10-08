@@ -24,23 +24,24 @@
 */
 import * as React from 'react';
 import {
-  computeLabel,
-  ControlState,
-  formatErrorMessage,
-  isControl,
-  isDescriptionHidden,
-  isPlainLabel,
-  mapStateToControlProps,
-  NOT_APPLICABLE,
-  RankedTester,
-  rankWith,
+    computeLabel, ControlProps,
+    ControlState,
+    formatErrorMessage,
+    isControl,
+    isDescriptionHidden,
+    isPlainLabel,
+    mapStateToControlProps,
+    NOT_APPLICABLE,
+    RankedTester,
+    rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
-import { VanillaControlProps } from '../index';
+import { Control, DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 import * as _ from 'lodash';
+import { VanillaRendererProps } from '../index';
+import { connect } from 'react-redux';
 
-export class InputControl extends Control<VanillaControlProps, ControlState> {
+export class InputControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
   render() {
     const {
       classNames,
@@ -76,7 +77,12 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
           <label htmlFor={id + '-input'} className={classNames.label}>
             {computeLabel(labelText, required)}
           </label>
-          <DispatchField uischema={uischema} schema={schema} path={parentPath} id={id + '-input'}/>
+          <DispatchField
+              uischema={uischema}
+              schema={schema}
+              path={parentPath}
+              id={id + '-input'}
+          />
           <div className={divClassNames}>
             {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
           </div>
@@ -88,7 +94,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
 
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 
-export const ConnectedInputControl = connectToJsonForms(
+export const ConnectedInputControl = connect(
   addVanillaControlProps(mapStateToControlProps)
 )(InputControl);
 

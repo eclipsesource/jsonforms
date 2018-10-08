@@ -172,7 +172,7 @@ test('tester with nested categorization and single category and no schema', t =>
 });
 
 test('tester with nested categorizations, but no category and no schema', t => {
-  const categorization: Layout = {
+  const categorization: any = {
     type: 'Categorization',
     elements: [
       {
@@ -190,11 +190,12 @@ test('tester with nested categorizations, but no category and no schema', t => {
 });
 
 test('tester with nested categorizations, null elements and no schema', t => {
-  const categorization = {
+  const categorization: any = {
     type: 'Categorization',
     elements: [
       {
         type: 'Categorization',
+        label: 'Test',
         elements: null
       }
     ]
@@ -209,7 +210,7 @@ test('tester with nested categorizations, null elements and no schema', t => {
 });
 
 test('tester with nested categorizations, empty elements and no schema', t => {
-  const categorization = {
+  const categorization: any = {
     type: 'Categorization',
     elements: [
       {
@@ -270,14 +271,14 @@ test('render', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={schema}
         uischema={uischema}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   // master tree
   const div = TestUtils.findRenderedDOMComponentWithClass(
@@ -366,16 +367,16 @@ test('render on click', t => {
     styles: t.context.styles
   });
 
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={t.context.schema}
         uischema={uischema}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
 
-  const div = TestUtils.findRenderedDOMComponentWithClass(
+  const div: HTMLDivElement = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'categorization'
   ) as HTMLDivElement;
@@ -428,7 +429,7 @@ test('hide', t => {
     styles: t.context.styles
   });
 
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={t.context.schema}
@@ -436,7 +437,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const div = TestUtils.findRenderedDOMComponentWithClass(
     tree,
@@ -463,16 +464,16 @@ test('showed by default', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <CategorizationRenderer
         schema={t.context.schema}
         uischema={uischema}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
 
-  const div = TestUtils.findRenderedDOMComponentWithClass(
+  const div: HTMLDivElement = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'categorization'
   ) as HTMLDivElement;

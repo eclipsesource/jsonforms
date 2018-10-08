@@ -24,17 +24,17 @@
 */
 import * as React from 'react';
 import {
-  mapStateToLayoutProps,
-  RankedTester,
-  rankWith,
-  uiTypeIs,
-  VerticalLayout,
+    mapStateToLayoutProps,
+    RankedTester,
+    rankWith, RendererProps,
+    uiTypeIs,
+    VerticalLayout,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
-import { connectToJsonForms } from '@jsonforms/react';
 import { JsonFormsLayout } from './JsonFormsLayout';
-import { VanillaLayoutProps } from '../index';
 import { renderChildren } from './util';
+import { VanillaRendererProps } from '../index';
+import { connect } from 'react-redux';
 
 /**
  * Default tester for a vertical layout.
@@ -50,7 +50,7 @@ export const VerticalLayoutRenderer  = (
     visible,
     getStyle,
     getStyleAsClassName
-  }: VanillaLayoutProps) => {
+  }: RendererProps & VanillaRendererProps) => {
 
   const verticalLayout = uischema as VerticalLayout;
   const elementsSize = verticalLayout.elements ? verticalLayout.elements.length : 0;
@@ -62,16 +62,18 @@ export const VerticalLayoutRenderer  = (
   return (
     <JsonFormsLayout
       className={layoutClassName}
+      uischema={uischema}
+      schema={schema}
       visible={visible}
+      getStyle={getStyle}
+      getStyleAsClassName={getStyleAsClassName}
     >
       {renderChildren(verticalLayout, schema, childClassNames, path)}
     </JsonFormsLayout>
   );
 };
 
-const ConnectedVerticalLayoutRenderer = connectToJsonForms(
+export default connect(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(VerticalLayoutRenderer);
-
-export default ConnectedVerticalLayoutRenderer;

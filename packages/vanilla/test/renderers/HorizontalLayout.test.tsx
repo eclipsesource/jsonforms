@@ -66,11 +66,11 @@ test('render with undefined elements', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
@@ -88,11 +88,11 @@ test('render with null elements', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 0);
@@ -112,11 +112,11 @@ test('render with children', t => {
     uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 2);
@@ -129,14 +129,14 @@ test('hide', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer
         uischema={t.context.uischema}
         visible={false}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree, 'horizontal-layout'
   ) as HTMLDivElement;
@@ -150,11 +150,11 @@ test('show by default', t => {
     uischema: t.context.uischema,
     styles: t.context.styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree, 'horizontal-layout'
   ) as HTMLDivElement;

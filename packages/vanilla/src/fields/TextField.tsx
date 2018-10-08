@@ -33,8 +33,9 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
 
-export const TextField = (props: FieldProps) => {
+export const TextField = (props: FieldProps & VanillaRendererProps) => {
   const {
     config,
     data,

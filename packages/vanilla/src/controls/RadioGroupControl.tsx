@@ -25,7 +25,7 @@
 import * as React from 'react';
 import {
     computeLabel,
-    ControlElement,
+    ControlElement, ControlProps,
     ControlState,
     formatErrorMessage,
     isDescriptionHidden,
@@ -35,10 +35,10 @@ import {
     resolveSchema
 } from '@jsonforms/core';
 import { connectToJsonForms, Control } from '@jsonforms/react';
-import { VanillaControlProps } from '../index';
 import { addVanillaControlProps } from '../util';
+import { VanillaRendererProps } from '../index';
 
-export class RadioGroupControl extends Control<VanillaControlProps, ControlState> {
+export class RadioGroupControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
 
     render() {
         const {

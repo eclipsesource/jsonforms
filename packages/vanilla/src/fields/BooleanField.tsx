@@ -33,24 +33,27 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 import { StatelessComponent, SyntheticEvent } from 'react';
+import { addVanillaFieldProps } from '../util';
+import { VanillaRendererProps } from '../index';
 
-export const BooleanField: StatelessComponent<FieldProps> = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
+export const BooleanField: StatelessComponent<FieldProps> =
+    (props: FieldProps & VanillaRendererProps) => {
+        const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-  return (
-    <input
-      type='checkbox'
-      checked={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.checked)
-      }
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-    />
-  );
-};
+        return (
+            <input
+                type='checkbox'
+                checked={data || ''}
+                onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+                    handleChange(path, ev.currentTarget.checked)
+                }
+                className={className}
+                id={id}
+                disabled={!enabled}
+                autoFocus={uischema.options && uischema.options.focus}
+            />
+        );
+    };
 
 /**
  * Default tester for boolean controls.
@@ -58,6 +61,6 @@ export const BooleanField: StatelessComponent<FieldProps> = (props: FieldProps) 
  */
 export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
 export default connectToJsonForms(
-  mapStateToFieldProps,
+  addVanillaFieldProps(mapStateToFieldProps),
   mapDispatchToFieldProps
 )(BooleanField);

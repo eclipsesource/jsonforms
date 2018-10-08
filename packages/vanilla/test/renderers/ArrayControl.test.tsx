@@ -76,11 +76,11 @@ test('render two children', t => {
       }
     ]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <ArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const controls = TestUtils.scryRenderedDOMComponentsWithClass(
     tree,

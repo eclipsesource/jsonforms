@@ -33,8 +33,9 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
+import { VanillaRendererProps } from '../index';
 
-export const TimeField = (props: FieldProps) => {
+export const TimeField = (props: FieldProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (
