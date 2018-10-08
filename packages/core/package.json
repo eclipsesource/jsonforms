@@ -39,6 +39,7 @@
     ]
   },
   "dependencies": {
+    "@types/redux-mock-store": "^1.0.0",
     "ajv": "^6.4.0",
     "json-refs": "^3.0.10",
     "lodash": "^4.17.4",
