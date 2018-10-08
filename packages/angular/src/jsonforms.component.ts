@@ -37,13 +37,15 @@ import {
   isControl,
   JsonFormsProps,
   JsonSchema,
-  mapStateToDispatchRendererProps,
+  mapStateToJsonFormsRendererProps,
   UISchemaElement
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 import 'rxjs/add/operator/map';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
+import { Subscription } from 'indefinite-observable';
+import { JsonFormsControl } from './control';
 
 @Directive({
   selector: 'jsonforms-outlet',
@@ -54,7 +56,7 @@ export class JsonFormsOutlet implements OnInit, OnDestroy {
   @Input() uischema: UISchemaElement;
   @Input() schema: UISchemaElement;
 
-  private subscription;
+  private subscription: Subscription;
 
   constructor(
     private viewContainerRef: ViewContainerRef,
@@ -63,9 +65,16 @@ export class JsonFormsOutlet implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const state$ = this.ngRedux.select(state =>
-      mapStateToDispatchRendererProps(state, {uischema: this.uischema}),
-                                       (x, y) => _.isEqual(x, y)
+    const state$ = this.ngRedux.select(
+      state =>
+          mapStateToJsonFormsRendererProps(
+              state,
+              {
+                  schema: this.schema,
+                  uischema: this.uischema
+              }
+          ),
+      (x, y) => _.isEqual(x, y)
     );
     this.subscription = state$.subscribe(props => {
       const { renderers } = props as JsonFormsProps;
@@ -92,7 +101,9 @@ export class JsonFormsOutlet implements OnInit, OnDestroy {
         instance.uischema = uischema;
         instance.schema = schema;
         instance.path = this.path;
-        instance.id = id;
+        if (componentRef.instance instanceof  JsonFormsControl) {
+            (instance as JsonFormsControl).id = id;
+        }
       }
     });
   }

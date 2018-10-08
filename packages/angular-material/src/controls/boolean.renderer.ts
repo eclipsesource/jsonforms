@@ -47,7 +47,7 @@ export class BooleanControlRenderer extends JsonFormsControl {
         super(ngRedux);
     }
     isChecked = () => this.data || false;
-    getEventValue = event => event.checked;
+    getEventValue = (event: any) => event.checked;
 }
 
 export const booleanControlTester: RankedTester = rankWith(

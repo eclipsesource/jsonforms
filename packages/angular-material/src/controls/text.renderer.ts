@@ -50,6 +50,6 @@ export class TextControlRenderer extends JsonFormsControl {
         super(ngRedux);
     }
     getValue = () => this.data || '';
-    getEventValue = event => event.target.value;
+    getEventValue = (event: any) => event.target.value;
 }
 export const TextControlRendererTester: RankedTester = rankWith(1, isControl);

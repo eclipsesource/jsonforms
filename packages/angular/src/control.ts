@@ -8,7 +8,7 @@ import {
     JsonFormsState,
     JsonSchema,
     mapDispatchToControlProps,
-    mapStateToControlProps,
+    mapStateToControlProps, OwnPropsOfControl,
     Resolve
 } from '@jsonforms/core';
 import { Input, OnDestroy, OnInit } from '@angular/core';
@@ -20,6 +20,7 @@ import { JsonFormsBaseRenderer } from './base.renderer';
 
 export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
+    @Input() id: string;
     @Input() disabled: boolean;
 
     form: FormControl;
@@ -42,9 +43,9 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
         );
     }
 
-    getEventValue = event => event.value;
+    getEventValue = (event: any) => event.value;
 
-    onChange(ev) {
+    onChange(ev: any) {
         const path = composeWithUi(this.uischema as ControlElement, this.path);
         this.ngRedux.dispatch(Actions.update(path, () => this.getEventValue(ev)));
         this.triggerValidation();
@@ -82,9 +83,9 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
         this.subscription.unsubscribe();
     }
 
-    protected getOwnProps() {
+    protected getOwnProps(): OwnPropsOfControl {
         return {
-          uischema: this.uischema,
+          uischema: this.uischema as ControlElement,
           schema: this.schema,
           path: this.path,
           id: this.id,
