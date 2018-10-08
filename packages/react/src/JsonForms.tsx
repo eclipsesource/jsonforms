@@ -32,18 +32,18 @@ import {
     isControl,
     JsonFormsProps,
     JsonSchema,
-    mapStateToDispatchRendererProps,
+    mapStateToJsonFormsRendererProps,
     removeId
 } from '@jsonforms/core';
 
-interface JsonFormsDispatchRendererState {
+interface JsonFormsRendererState {
     id: string;
     schema: JsonSchema;
     resolving: boolean;
     resolvedSchema: JsonSchema;
 }
 
-const hasRefs = schema => {
+const hasRefs = (schema: JsonSchema) => {
     if (schema !== undefined) {
         return Object.keys(JsonRefs.findRefs(schema)).length > 0;
     }
@@ -51,16 +51,21 @@ const hasRefs = schema => {
 };
 
 export class JsonFormsDispatchRenderer
-    extends React.Component<JsonFormsProps, JsonFormsDispatchRendererState> {
+    extends React.Component<JsonFormsProps, JsonFormsRendererState> {
 
-    static getDerivedStateFromProps(nextProps, prevState) {
+    static getDerivedStateFromProps(
+        nextProps: JsonFormsProps,
+        prevState: JsonFormsRendererState
+    ) {
 
         if (!_.isEqual(prevState.schema, nextProps.schema)) {
-            return {
+            const newState: JsonFormsRendererState = {
+                id: prevState.id,
                 resolvedSchema: undefined,
                 schema: nextProps.schema,
                 resolving: true,
             };
+            return newState;
         }
 
         return null;
@@ -68,7 +73,7 @@ export class JsonFormsDispatchRenderer
 
     mounted = false;
 
-    constructor(props) {
+    constructor(props: JsonFormsProps) {
         super(props);
         const isResolved = !hasRefs(props.schema);
         this.state = {
@@ -91,7 +96,7 @@ export class JsonFormsDispatchRenderer
         }
     }
 
-    resolveAndUpdateSchema = schema => {
+    resolveAndUpdateSchema = (schema: JsonSchema) => {
         JsonRefs
             .resolveRefs(schema)
             .then(resolvedSchema => {
@@ -137,6 +142,6 @@ export class JsonFormsDispatchRenderer
 }
 
 export const JsonForms = connect(
-    mapStateToDispatchRendererProps,
+    mapStateToJsonFormsRendererProps,
     null
 )(JsonFormsDispatchRenderer);
