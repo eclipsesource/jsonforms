@@ -1,3 +1,6 @@
+import { AnyAction, Dispatch } from 'redux';
+import { Translations } from '..';
+
 /*
   The MIT License
   
@@ -27,14 +30,25 @@ const NAMESPACE = 'jsonforms';
 export const SET_TRANSLATIONS = `${NAMESPACE}/SET_TRANSLATIONS`;
 export const SET_LOCALE = `${NAMESPACE}/SET_LOCALE`;
 
-export const setTranslationData = translations => dispatch => {
-  dispatch({
-    type: SET_TRANSLATIONS,
-    translations,
-  });
-};
+export interface SetTranslationAction {
+    type: 'jsonforms/SET_TRANSLATIONS';
+    translations: Translations;
+}
 
-export const setLocale = locale => dispatch => {
+export interface SetLocaleAction {
+    type: 'jsonforms/SET_LOCALE';
+    locale: string;
+}
+
+export const setTranslationData =
+    (translations: Translations) => (dispatch: Dispatch<AnyAction>) => {
+        dispatch({
+            type: SET_TRANSLATIONS,
+            translations,
+        });
+    };
+
+export const setLocale = (locale: string) => (dispatch: Dispatch<AnyAction>) => {
   dispatch({
     type: SET_LOCALE,
     locale,
