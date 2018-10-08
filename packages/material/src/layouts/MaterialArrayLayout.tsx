@@ -24,18 +24,18 @@
 */
 import * as React from 'react';
 import * as _ from 'lodash';
-import { composePaths } from '@jsonforms/core';
+import { ArrayControlProps, composePaths } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 
 export const MaterialArrayLayout =
-  ({ data, label, path, resolvedSchema, onAdd, controlElement, findUISchema }) => {
+  ({ data, label, path, scopedSchema, addItem, uischema, findUISchema }: ArrayControlProps) => {
 
     return (
       <div>
         <fieldset>
           <legend>
             <button
-              onClick={onAdd}
+              onClick={() => addItem(path)}
             >
               +
             </button>
@@ -47,13 +47,13 @@ export const MaterialArrayLayout =
             {
               data ? _.range(0, data.length).map(index => {
 
-                const uischema = findUISchema(resolvedSchema, controlElement.scope, path);
+                const foundUISchema = findUISchema(scopedSchema, uischema.scope, path);
                 const childPath = composePaths(path, `${index}`);
 
                 return (
                   <JsonForms
-                    schema={resolvedSchema}
-                    uischema={uischema}
+                    schema={scopedSchema}
+                    uischema={foundUISchema || uischema}
                     path={childPath}
                     key={childPath}
                   />

@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,18 +24,19 @@
 */
 import * as React from 'react';
 import {
-  FieldProps,
-  Formatted,
-  isNumberFormatControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
+    FieldProps,
+    Formatted,
+    isNumberFormatControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith,
+    WithClassname,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
+import { connect } from 'react-redux';
 
-export const MaterialNumberFormatField = (props: FieldProps & Formatted<number>) => {
+export const MaterialNumberFormatField = (props: FieldProps & WithClassname & Formatted<number>) => {
   const {
     className,
     id,
@@ -56,7 +57,7 @@ export const MaterialNumberFormatField = (props: FieldProps & Formatted<number>)
   const trim = uischema.options && uischema.options.trim;
   const formattedNumber = props.toFormatted(props.data);
 
-  const onChange = ev => {
+  const onChange = (ev: any) => {
     const validStringNumber = props.fromFormatted(ev.currentTarget.value);
     handleChange(path, validStringNumber);
   };
@@ -82,7 +83,7 @@ export const MaterialNumberFormatField = (props: FieldProps & Formatted<number>)
  * @type {RankedTester}
  */
 export const materialNumberFormatFieldTester: RankedTester = rankWith(4, isNumberFormatControl);
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialNumberFormatField);

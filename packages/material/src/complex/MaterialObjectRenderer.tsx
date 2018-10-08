@@ -2,11 +2,11 @@ import * as React from 'react';
 import {
     ControlProps,
     findUISchema,
-    isObjectControl,
+    isObjectControl, JsonFormsState,
     JsonSchema,
-    mapStateToControlProps,
+    mapStateToControlProps, OwnPropsOfControl,
     RankedTester,
-    rankWith,
+    rankWith, UISchemaElement,
 } from '@jsonforms/core';
 import { connectToJsonForms, JsonForms } from '@jsonforms/react';
 
@@ -16,7 +16,7 @@ interface MaterialObjectRendererProps extends ControlProps {
         schemaPath: string,
         instancePath: string,
         fallbackLayoutType: string
-    );
+    ): UISchemaElement;
 }
 
 class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps, any> {
@@ -46,7 +46,7 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
     }
 }
 
-const mapStateToObjectControlProps = (state, ownProps) => {
+const mapStateToObjectControlProps = (state: JsonFormsState, ownProps: OwnPropsOfControl) => {
     const props =  mapStateToControlProps(state, ownProps);
     return {
         ...props,

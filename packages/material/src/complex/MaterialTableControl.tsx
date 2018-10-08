@@ -28,153 +28,182 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Grid, Hidden, Typography } from '@material-ui/core';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
 import {
-  ControlElement,
-  JsonSchema,
-  Paths
+    ArrayControlProps,
+    ControlElement,
+    JsonSchema,
+    Paths
 } from '@jsonforms/core';
 import { DispatchField } from '@jsonforms/react';
 import ValidationIcon from './ValidationIcon';
 import { TableToolbar } from './TableToolbar';
 
-const generateCells = (Cell, scopedSchema, rowPath, cellErrors?) => {
-  if (scopedSchema.type === 'object') {
-    return getValidColumnProps(scopedSchema)
-      .map(prop => {
-        const cellPath = Paths.compose(rowPath, prop);
-        const props = {
-          cellProperty: prop,
-          scopedSchema,
-          rowPath,
-          cellPath,
-          errors: cellErrors
-        };
+const generateCells =
+    (Cell: any, scopedSchema: JsonSchema, rowPath: string, cellErrors?: any[]) => {
+        if (scopedSchema.type === 'object') {
+            return getValidColumnProps(scopedSchema)
+                .map(prop => {
+                    const cellPath = Paths.compose(rowPath, prop);
+                    const props = {
+                        cellProperty: prop,
+                        scopedSchema,
+                        rowPath,
+                        cellPath,
+                        errors: cellErrors
+                    };
 
-        return <Cell key={cellPath} {...props} />;
-      });
-  } else {
-    /*primitives*/
-    const cellPath = rowPath;
-    const props = {
-      scopedSchema,
-      rowPath,
-      cellPath,
-      errors: cellErrors
+                    return <Cell key={cellPath} {...props} />;
+                });
+        } else {
+            /*primitives*/
+            const cellPath = rowPath;
+            const props = {
+                scopedSchema,
+                rowPath,
+                cellPath,
+                errors: cellErrors
+            };
+
+            return <Cell key={cellPath} {...props} />;
+        }
     };
 
-    return <Cell key={cellPath} {...props} />;
-  }
-};
-
-const generateHeaderCellForPrimitives = toolbarProps => {
-
-  return (
-    <TableCell>
-      <TableToolbar {...toolbarProps} />
-    </TableCell>
-  );
-};
-const getValidColumnProps = (scopedSchema: JsonSchema) => {
-  if (scopedSchema.type === 'object') {
-    return Object.keys(scopedSchema.properties)
-      .filter(prop => scopedSchema.properties[prop].type !== 'array');
-  }
-  /*primitives*/
-  return [''];
-};
-
-const EmptyTable = ({ numColumns }) => (
-  <TableRow>
-    <TableCell colSpan={numColumns}>
-      <Typography align='center'>No data</Typography>
-    </TableCell>
-  </TableRow>
-);
-
-const TableHeaderCell = ({ cellProperty }) =>
-  <TableCell >{_.capitalize(cellProperty)}</TableCell>;
-
-const TableContentCell = ({ rowPath, cellProperty, cellPath, errors, scopedSchema }) => {
-  const cellErrors = errors
-    .filter(error => error.dataPath === cellPath)
-    .map(error => error.message);
-  const createControlElement = (key: string): ControlElement => ({
-    type: 'Control',
-    label: false,
-    scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
-  });
-
-  return (
-    <TableCell>
-      <Grid container alignItems='center' justify='center' spacing={0}>
-        <Hidden smUp={cellErrors.length === 0}>
-          <Grid item xs={1}>
-            <ValidationIcon
-              id={`tooltip-${cellPath}`}
-              errorMessages={cellErrors}
-            />
-          </Grid>
-        </Hidden>
-        <Grid item xs>
-          <DispatchField
-            schema={scopedSchema}
-            uischema={createControlElement(cellProperty)}
-            path={rowPath}
-          />
-        </Grid>
-      </Grid>
-    </TableCell>
-  );
-};
-
-const TableWithContent = tableProps => {
-  const { data, path, scopedSchema, childErrors, select, isSelected } = tableProps;
-
-  return data.map((_child, index) => {
-    const childPath = Paths.compose(path, `${index}`);
-    const selected = isSelected(index);
+const generateHeaderCellForPrimitives = (toolbarProps: any) => {
 
     return (
-      <TableRow
-        key={childPath}
-        hover
-        selected={selected}
-      >
-        <TableCell padding='checkbox'>
-          <Checkbox checked={selected} onChange={e => select(e, index)} />
+        <TableCell>
+            <TableToolbar {...toolbarProps} />
         </TableCell>
-        {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
-      </TableRow>
     );
-  });
+};
+const getValidColumnProps = (scopedSchema: JsonSchema) => {
+    if (scopedSchema.type === 'object') {
+        return Object.keys(scopedSchema.properties)
+            .filter(prop => scopedSchema.properties[prop].type !== 'array');
+    }
+    /*primitives*/
+    return [''];
 };
 
-export const MaterialTableControl = props => {
-  const { data, path, scopedSchema, numSelected, selectAll } = props;
-  const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
-  const rowCount = data ? data.length : 0;
-  const toolbarProps = { numSelected, ...props };
+export interface EmptyTableProps {
+    numColumns: number;
+}
 
-  return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell padding='checkbox' style={{ width: '1em' }}>
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={!isEmptyTable && numSelected === rowCount}
-              onChange={selectAll}
-            />
-          </TableCell>
-          {scopedSchema.type === 'object' ?
-            generateCells(TableHeaderCell, scopedSchema, path) :
-            generateHeaderCellForPrimitives(toolbarProps)}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {isEmptyTable ?
-          <EmptyTable numColumns={getValidColumnProps(scopedSchema).length + 1} /> :
-          <TableWithContent {...props} />}
-      </TableBody>
-    </Table>
-  );
+const EmptyTable = ({ numColumns }: EmptyTableProps) => (
+    <TableRow>
+        <TableCell colSpan={numColumns}>
+            <Typography align='center'>No data</Typography>
+        </TableCell>
+    </TableRow>
+);
+
+interface TableHeaderCellProps {
+    cellProperty: string;
+}
+
+const TableHeaderCell = ({ cellProperty }: TableHeaderCellProps) =>
+    <TableCell >{_.capitalize(cellProperty)}</TableCell>;
+
+interface TableContentCellProps {
+    rowPath: string;
+    cellProperty: string;
+    cellPath: string;
+    errors: any[];
+    scopedSchema: JsonSchema;
+}
+
+const TableContentCell =
+    ({ rowPath, cellProperty, cellPath, errors, scopedSchema }: TableContentCellProps) => {
+        const cellErrors = errors
+            .filter(error => error.dataPath === cellPath)
+            .map(error => error.message);
+        const createControlElement = (key: string): ControlElement => ({
+            type: 'Control',
+            label: false,
+            scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
+        });
+
+        return (
+            <TableCell>
+                <Grid container alignItems='center' justify='center' spacing={0}>
+                    <Hidden smUp={cellErrors.length === 0}>
+                        <Grid item xs={1}>
+                            <ValidationIcon
+                                id={`tooltip-${cellPath}`}
+                                errorMessages={cellErrors}
+                            />
+                        </Grid>
+                    </Hidden>
+                    <Grid item xs>
+                        <DispatchField
+                            schema={scopedSchema}
+                            uischema={createControlElement(cellProperty)}
+                            path={rowPath}
+                        />
+                    </Grid>
+                </Grid>
+            </TableCell>
+        );
+    };
+
+interface TableWithContentProps extends ArrayControlProps {
+    isSelected(index: number): boolean;
+    select(event: any, index: number): void;
+}
+
+const TableWithContent = (tableProps: TableWithContentProps) => {
+    const { data, path, scopedSchema, childErrors, select, isSelected } = tableProps;
+
+    return data.map((_child: any, index: number) => {
+        const childPath = Paths.compose(path, `${index}`);
+        const selected = isSelected(index);
+
+        return (
+            <TableRow
+                key={childPath}
+                hover
+                selected={selected}
+            >
+                <TableCell padding='checkbox'>
+                    <Checkbox checked={selected} onChange={e => select(e, index)} />
+                </TableCell>
+                {generateCells(TableContentCell, scopedSchema, childPath, childErrors)}
+            </TableRow>
+        );
+    });
+};
+
+interface MaterialArrayControlProps extends ArrayControlProps {
+    numSelected: number;
+    selectAll(ev: any, checked: boolean): void;
+}
+
+export const MaterialTableControl = (props: MaterialArrayControlProps) => {
+    const { data, path, scopedSchema, numSelected, selectAll } = props;
+    const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
+    const rowCount = data ? data.length : 0;
+    const toolbarProps = { numSelected, ...props };
+
+    return (
+        <Table>
+            <TableHead>
+                <TableRow>
+                    <TableCell padding='checkbox' style={{ width: '1em' }}>
+                        <Checkbox
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={!isEmptyTable && numSelected === rowCount}
+                            onChange={selectAll}
+                        />
+                    </TableCell>
+                    {scopedSchema.type === 'object' ?
+                        generateCells(TableHeaderCell, scopedSchema, path) :
+                        generateHeaderCellForPrimitives(toolbarProps)}
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {isEmptyTable ?
+                    <EmptyTable numColumns={getValidColumnProps(scopedSchema).length + 1} /> :
+                    <TableWithContent {...props} />}
+            </TableBody>
+        </Table>
+    );
 };

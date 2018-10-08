@@ -25,28 +25,18 @@
 import * as React from 'react';
 
 import {
-  ControlElement,
-  DispatchPropsOfControl,
-  Helpers,
-  isObjectArrayWithNesting,
-  JsonSchema,
-  mapDispatchToTableControlProps,
-  mapStateToControlProps,
-  RankedTester,
-  rankWith,
-  Resolve,
-  StatePropsOfControl,
-  UISchemaElement
+    ArrayControlProps,
+    ControlElement,
+    Helpers,
+    isObjectArrayWithNesting,
+    mapDispatchToArrayControlProps,
+    mapStateToControlProps,
+    RankedTester,
+    rankWith,
+    Resolve
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
-
-export interface MaterialArrayLayoutRendererProps
-  extends StatePropsOfControl, DispatchPropsOfControl {
-
-  addItem(path: string);
-  findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
-}
+import { connect } from 'react-redux';
 
 export const MaterialArrayLayoutRenderer  =
   ({
@@ -56,7 +46,8 @@ export const MaterialArrayLayoutRenderer  =
      path,
      findUISchema,
      addItem,
-   }: MaterialArrayLayoutRendererProps) => {
+      removeItems
+   }: ArrayControlProps) => {
 
     const controlElement = uischema as ControlElement;
     const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
@@ -68,17 +59,19 @@ export const MaterialArrayLayoutRenderer  =
         data={data}
         label={label}
         path={path}
-        resolvedSchema={resolvedSchema}
-        onAdd={addItem(path)}
-        controlElement={controlElement}
+        scopedSchema={resolvedSchema}
+        addItem={addItem}
+        removeItems={removeItems}
         findUISchema={findUISchema}
+        uischema={uischema}
+        schema={schema}
       />
     );
   };
 
-const ConnectedMaterialArrayLayoutRenderer = connectToJsonForms(
+const ConnectedMaterialArrayLayoutRenderer = connect(
   mapStateToControlProps,
-  mapDispatchToTableControlProps
+  mapDispatchToArrayControlProps
 )(MaterialArrayLayoutRenderer);
 
 export default ConnectedMaterialArrayLayoutRenderer;

@@ -87,7 +87,7 @@ export * from './controls';
 export * from './layouts';
 export * from './fields';
 
-export const materialRenderers = [
+export const materialRenderers: { tester: RankedTester, renderer: any}[] = [
   // controls
   { tester: materialArrayControlTester, renderer: MaterialArrayControlRenderer },
   { tester: materialBooleanControlTester, renderer: MaterialBooleanControl },

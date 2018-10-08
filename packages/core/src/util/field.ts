@@ -40,6 +40,8 @@ import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsFieldRendererRegistryEntry } from '../reducers/fields';
 
+export { JsonFormsFieldRendererRegistryEntry };
+
 export interface OwnPropsOfField extends OwnPropsOfControl {
     data?: any;
 }
@@ -81,15 +83,14 @@ export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {
  * @param field the field to be registered
  * @returns {any}
  */
-export interface DispatchFieldStateProps extends StatePropsOfField {
+export interface DispatchFieldStateProps extends OwnPropsOfField {
     fields?: JsonFormsFieldRendererRegistryEntry[];
 }
 
 export const mapStateToDispatchFieldProps =
     (state: JsonFormsState, ownProps: OwnPropsOfField): DispatchFieldStateProps => {
-        const props = mapStateToFieldProps(state, ownProps);
         return {
-            ...props,
+            ...ownProps,
             fields: state.jsonforms.fields || []
         };
     };
