@@ -31,7 +31,8 @@ import {
   RendererProps,
   Test,
 } from '@jsonforms/core';
-import { connectToJsonForms, JsonForms } from '@jsonforms/react';
+import { JsonForms } from '@jsonforms/react';
+import { connect } from 'react-redux';
 
 const {
   or,
@@ -71,6 +72,6 @@ const FakeLayout = (props: RendererProps) => {
   );
 };
 
-const ConnectedFakeLayout = connectToJsonForms(mapStateToLayoutProps, null)(FakeLayout);
+const ConnectedFakeLayout = connect(mapStateToLayoutProps, null)(FakeLayout);
 
 export default ConnectedFakeLayout;
