@@ -26,14 +26,15 @@ import * as React from 'react';
 import { ExampleDescription, nestedArray as NestedArrayExample } from '@jsonforms/examples';
 import ConnectedRatingControl, { ratingControlTester } from './RatingControl';
 import { Actions } from '@jsonforms/core';
+import { AnyAction, Dispatch } from 'redux';
 
 export interface ReactExampleDescription extends ExampleDescription {
-  customReactExtension?(dispatch): React.Component;
+  customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
 }
-const registerRatingControl = dispatch => {
+const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerField(ratingControlTester, ConnectedRatingControl));
 };
-const unregisterRatingControl = dispatch => {
+const unregisterRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.unregisterField(ratingControlTester, ConnectedRatingControl));
 };
 
@@ -42,7 +43,7 @@ export const enhanceExample: (examples: ExampleDescription[]) => ReactExampleDes
     switch (e.name) {
       case 'day6':
         const day6 = Object.assign({}, e, {
-          customReactExtension: dispatch => (
+          customReactExtension: (dispatch: Dispatch<AnyAction>) => (
             <div>
               <button
                 onClick={() => registerRatingControl(dispatch)}
@@ -60,7 +61,7 @@ export const enhanceExample: (examples: ExampleDescription[]) => ReactExampleDes
         return day6;
       case 'nestedArray':
         const nestedArray = Object.assign({}, e, {
-          customReactExtension: dispatch => (
+          customReactExtension: (dispatch: Dispatch<AnyAction>) => (
             <div>
               <button
                 onClick={() => NestedArrayExample.registerNestedArrayUISchema(dispatch)}
@@ -78,7 +79,7 @@ export const enhanceExample: (examples: ExampleDescription[]) => ReactExampleDes
         return nestedArray;
       case 'dynamic':
         const dynamic = Object.assign({}, e, {
-          customReactExtension: dispatch => (
+          customReactExtension: (dispatch: Dispatch<AnyAction>) => (
             <div>
               <button
                 onClick={() => dispatch(Actions.init({ id: 'aaa' }, e.schema, e.uischema))}

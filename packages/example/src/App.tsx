@@ -27,6 +27,7 @@ import * as React from 'react';
 import './App.css';
 import { JsonForms } from '@jsonforms/react';
 import { AppProps, initializedConnect } from './reduxUtil';
+
 class App extends React.Component<AppProps> {
   render() {
     return (

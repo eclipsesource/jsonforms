@@ -38,7 +38,7 @@ export interface RatingProps {
 
 export class Rating extends Component<RatingProps, RatingState> {
 
-  constructor(props) {
+  constructor(props: RatingProps) {
     super(props);
     this.state = {
       rating: props.value,
