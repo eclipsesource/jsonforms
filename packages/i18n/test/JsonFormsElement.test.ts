@@ -58,21 +58,23 @@ test.beforeEach(t => {
 test.cb('render with data and translation object', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
+  const initState: JsonFormsState = {
+      jsonforms: {
+          core: {
+              data: t.context.data,
+              schema: t.context.schema,
+              uischema: undefined
+          },
+          i18n: {
+              translations: t.context.translations,
+              locale: t.context.locale
+          },
+          renderers: [{ tester: fakeLayoutTester, renderer: FakeLayout }]
+      }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer({ i18n: i18nReducer }) }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-          schema: t.context.schema
-        },
-        i18n: {
-          translations: t.context.translations,
-          locale: t.context.locale
-        },
-        renderers: [{ tester: fakeLayoutTester, renderer: FakeLayout }]
-      }
-    }
+    initState
   );
 
   setTimeout(
@@ -91,20 +93,23 @@ test.cb('render with data and translation object', t => {
 test.cb('render with data,translation object and locale value', t => {
   t.plan(4);
   const jsonForms = new JsonFormsElement();
+  const initState: JsonFormsState =  {
+      jsonforms: {
+          core: {
+              data: t.context.data,
+              schema: undefined,
+              uischema: undefined
+          },
+          i18n: {
+              translations: t.context.translations,
+              locale: t.context.locale
+          },
+          renderers: [{ tester: fakeLayoutTester, renderer: FakeLayout }]
+      }
+  };
   jsonForms.store = createStore(
     combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer({ i18n: i18nReducer }) }),
-    {
-      jsonforms: {
-        core: {
-          data: t.context.data,
-        },
-        i18n: {
-          translations: t.context.translations,
-          locale: t.context.locale
-        },
-        renderers: [{ tester: fakeLayoutTester, renderer: FakeLayout }]
-      }
-    }
+    initState
   );
 
   setTimeout(
