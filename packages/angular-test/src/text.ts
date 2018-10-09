@@ -15,7 +15,7 @@ export const textTest = <C extends JsonFormsControl>(
     elementToUse: (element: DebugElement) => any) => () => {
         let fixture: ComponentFixture<any>;
         let textElement: DebugElement;
-        let textNativeElement;
+        let textNativeElement: any;
         let component: C;
 
         const data = { foo: 'foo' };
