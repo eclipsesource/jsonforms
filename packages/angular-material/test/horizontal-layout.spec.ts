@@ -26,7 +26,6 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet } from '@jsonforms/angular';
-import { testRenderers } from '@jsonforms/angular-test';
 import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
 import {
   HorizontalLayoutRenderer,
@@ -122,7 +121,6 @@ describe('Horizontal layout', () => {
           data: {},
           schema: {},
         },
-        renderers: testRenderers,
       }
     });
     mockSubStore.complete();
