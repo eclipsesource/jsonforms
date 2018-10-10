@@ -63,7 +63,11 @@ const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];
 const componentUT: any = TextControlRenderer;
-const errorTest: ErrorTestExpectation = { errorInstance: MatError, numberOfElements: 1, indexOfElement: 0 };
+const errorTest: ErrorTestExpectation = {
+    errorInstance: MatError,
+    numberOfElements: 1,
+    indexOfElement: 0
+};
 const toSelect = (el: DebugElement) => el.nativeElement;
 const testConfig = {imports, providers, componentUT};
 
