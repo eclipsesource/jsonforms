@@ -3,6 +3,7 @@ import { JsonFormsState, mapStateToLayoutProps, UISchemaElement } from '@jsonfor
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators/map';
 
 export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
@@ -21,7 +22,9 @@ export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnIni
         };
         this.subscription = this.ngRedux
             .select()
-            .map((state: JsonFormsState) => mapStateToLayoutProps(state, ownProps))
+            .pipe(
+                map((state: JsonFormsState) => mapStateToLayoutProps(state, ownProps))
+            )
             .subscribe(props => {
                 this.uischema = props.uischema;
                 this.schema = props.schema;
