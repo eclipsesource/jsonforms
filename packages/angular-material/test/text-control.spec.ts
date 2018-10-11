@@ -28,7 +28,12 @@ import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { textTest } from '@jsonforms/angular-test';
+import {
+    ErrorTestExpectation,
+    textBaseTest,
+    textErrorTest,
+    textInputEventTest
+} from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 
 describe('Material text field tester', () => {
@@ -58,7 +63,15 @@ const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];
 const componentUT: any = TextControlRenderer;
-const errorTest = { errorInstance: MatError, numberOfElements: 1, indexOfElement: 0 };
+const errorTest: ErrorTestExpectation = {
+    errorInstance: MatError,
+    numberOfElements: 1,
+    indexOfElement: 0
+};
 const toSelect = (el: DebugElement) => el.nativeElement;
-describe('Text control',
-         textTest(imports, providers, componentUT, 'input', errorTest, toSelect));
+const testConfig = {imports, providers, componentUT};
+
+describe('Text control Base Tests', textBaseTest(testConfig, 'input', toSelect));
+describe('Text control Input Event Tests',
+         textInputEventTest(testConfig, 'input', toSelect));
+describe('Text control Error Tests', textErrorTest(testConfig, errorTest));

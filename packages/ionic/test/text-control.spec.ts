@@ -25,7 +25,7 @@
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
-import { textTest } from '@jsonforms/angular-test';
+import { textBaseTest, textErrorTest, textInputEventTest } from '@jsonforms/angular-test';
 import { IonicModule, Label, Platform } from 'ionic-angular';
 import { StringControlRenderer, stringControlTester } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
@@ -60,5 +60,9 @@ const providers = [
 const componentUT: any = StringControlRenderer;
 const errorTest = { errorInstance: Label, numberOfElements: 2, indexOfElement: 1 };
 const toSelect = (el: DebugElement) => el.componentInstance;
-describe('Text control',
-         textTest(imports, providers, componentUT, 'ion-input', errorTest, toSelect));
+const testConfig = {imports, providers, componentUT};
+
+describe('Text control Base Tests', textBaseTest(testConfig, 'ion-input', toSelect));
+describe('Text control Input Event Tests',
+         textInputEventTest(testConfig, 'ion-input', toSelect));
+describe('Text control Error Tests', textErrorTest(testConfig, errorTest));
