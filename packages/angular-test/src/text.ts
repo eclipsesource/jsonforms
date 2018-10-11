@@ -236,7 +236,7 @@ export const textInputEventTest = <C extends JsonFormsControl>(
     elementToUse: (element: DebugElement) => any,
     testData: TestData = defaultTestData) => () => {
         let fixture: ComponentFixture<any>;
-        let textNativeElement;
+        let textNativeElement: any;
         let component: C;
 
         baseSetup(testConfig);
@@ -323,7 +323,7 @@ export const textTypeTest = <C extends JsonFormsControl>(
     testData: TestData = defaultTestData) => () => {
         let fixture: ComponentFixture<any>;
         let component: C;
-        let textNativeElement;
+        let textNativeElement: any;
 
         baseSetup(testConfig);
 
