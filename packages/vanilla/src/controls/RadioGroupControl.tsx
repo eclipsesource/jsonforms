@@ -25,7 +25,8 @@
 import * as React from 'react';
 import {
     computeLabel,
-    ControlElement, ControlProps,
+    ControlElement,
+    ControlProps,
     ControlState,
     formatErrorMessage,
     isDescriptionHidden,

@@ -28,7 +28,8 @@ import {
     GroupLayout,
     mapStateToLayoutProps,
     RankedTester,
-    rankWith, RendererProps,
+    rankWith,
+    RendererProps,
     uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
