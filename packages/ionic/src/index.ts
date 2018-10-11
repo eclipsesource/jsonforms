@@ -12,8 +12,9 @@ export {
 export { verticalLayoutTester, VerticalLayoutRenderer } from './layouts/vertical/vertical-layout';
 export {
   categorizationTester,
-  CategorizationLayoutRenderer
-} from './layouts/categorization/categorization-layout';
+  CategorizationMenuLayoutRenderer
+} from './layouts/categorization/categorization-menu-layout';
+export { CategorizationTabLayoutRenderer } from './layouts/categorization/categorization-tab-layout';
 export { CategoryRenderer } from './layouts/categorization/category/category';
 export { groupTester, GroupLayoutRenderer } from './layouts/group/group-layout';
 
