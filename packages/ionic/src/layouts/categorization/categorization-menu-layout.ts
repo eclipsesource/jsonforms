@@ -51,7 +51,7 @@ import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
       </ion-content>
   `
 })
-export class CategorizationLayoutRenderer extends JsonFormsIonicLayout {
+export class CategorizationMenuLayoutRenderer extends JsonFormsIonicLayout {
 
     @ViewChild('categoryContent') nav: NavController;
     selectedCategory: Category;

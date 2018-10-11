@@ -10,7 +10,9 @@ import { EnumControlRenderer } from './controls/enum/enum-control';
 
 import { HorizontalLayoutRenderer } from './layouts/horizontal/horizontal-layout';
 import { VerticalLayoutRenderer } from './layouts/vertical/vertical-layout';
-import { CategorizationLayoutRenderer } from './layouts/categorization/categorization-layout';
+import {
+  CategorizationMenuLayoutRenderer
+} from './layouts/categorization/categorization-menu-layout';
 import { CategoryRenderer } from './layouts/categorization/category/category';
 import { GroupLayoutRenderer } from './layouts/group/group-layout';
 
@@ -20,6 +22,9 @@ import { MasterPage } from './other/master-detail/pages/master/master';
 import { DetailPage } from './other/master-detail/pages/detail/detail';
 import { LabelRenderer } from './other/label/label';
 import { MasterDetailNavService } from './other/master-detail/master-detail-nav.service';
+import {
+  CategorizationTabLayoutRenderer
+} from './layouts/categorization/categorization-tab-layout';
 
 @NgModule({
   declarations: [
@@ -33,7 +38,8 @@ import { MasterDetailNavService } from './other/master-detail/master-detail-nav.
     // layouts
     HorizontalLayoutRenderer,
     VerticalLayoutRenderer,
-    CategorizationLayoutRenderer,
+    CategorizationTabLayoutRenderer,
+    CategorizationMenuLayoutRenderer,
     CategoryRenderer,
     GroupLayoutRenderer,
 
@@ -48,7 +54,7 @@ import { MasterDetailNavService } from './other/master-detail/master-detail-nav.
   ],
   imports: [
     IonicModule,
-    JsonFormsModule
+    JsonFormsModule,
   ],
   exports: [
 
@@ -61,8 +67,9 @@ import { MasterDetailNavService } from './other/master-detail/master-detail-nav.
     // layouts
     HorizontalLayoutRenderer,
     VerticalLayoutRenderer,
-    CategorizationLayoutRenderer,
-    CategoryRenderer
+    CategorizationMenuLayoutRenderer,
+    CategorizationTabLayoutRenderer,
+    // CategoryRenderer
   ],
   entryComponents: [
     // controls
@@ -75,7 +82,8 @@ import { MasterDetailNavService } from './other/master-detail/master-detail-nav.
     // layouts
     HorizontalLayoutRenderer,
     VerticalLayoutRenderer,
-    CategorizationLayoutRenderer,
+    CategorizationMenuLayoutRenderer,
+    CategorizationTabLayoutRenderer,
     CategoryRenderer,
     GroupLayoutRenderer,
 
