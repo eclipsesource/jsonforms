@@ -22,26 +22,33 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { RankedTester } from '@jsonforms/core';
-export * from './module';
-import { BooleanControlRenderer, booleanControlTester } from './controls/boolean.renderer';
-import { TextControlRenderer, TextControlRendererTester } from './controls/text.renderer';
-import { TextAreaRenderer, TextAreaRendererTester } from './controls/textarea.renderer';
-import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
-import {
-  HorizontalLayoutRenderer,
-  horizontalLayoutTester
-} from './layouts/horizontal-layout.renderer';
+import { NgRedux } from '@angular-redux/store';
+import { Component } from '@angular/core';
+import { JsonFormsControl } from '@jsonforms/angular';
+import { isMultiLineControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
 
-export * from './controls';
-
-export const angularMaterialRenderers:
-  { tester: RankedTester, renderer: any }[] = [
-  // controls
-  { tester: booleanControlTester, renderer: BooleanControlRenderer },
-  { tester: TextControlRendererTester, renderer: TextControlRenderer },
-  { tester: TextAreaRendererTester, renderer: TextAreaRenderer },
-  // layouts
-  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
-  { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
-];
+@Component({
+    selector: 'TextAreaRenderer',
+    template: `
+        <mat-form-field fxFlex>
+            <mat-label>{{ label }}</mat-label>
+            <textarea
+                matInput
+                (change)="onChange($event)"
+                [value]="getValue()"
+                placeholder="{{ description }}"
+                [id]="id"
+                [formControl]="form"
+            ></textarea>
+            <mat-error>{{ error }}</mat-error>
+        </mat-form-field>
+    `
+})
+export class TextAreaRenderer extends JsonFormsControl {
+    constructor(ngRedux: NgRedux<JsonFormsState>) {
+        super(ngRedux);
+    }
+    getValue = () => this.data || '';
+    getEventValue = event => event.target.value;
+}
+export const TextAreaRendererTester: RankedTester = rankWith(2, isMultiLineControl);

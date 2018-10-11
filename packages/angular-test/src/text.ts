@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
-import { baseSetup, ErrorTestExpectation, TestConfig } from './util';
+import { baseSetup, ErrorTestExpectation, TestConfig, TestData } from './util';
 
 interface ComponentResult<C extends JsonFormsControl> {
     fixture: ComponentFixture<any>;
@@ -30,8 +30,8 @@ const prepareComponent = <C extends JsonFormsControl>(
 
     return result;
 };
-const data = { foo: 'foo' };
-const schema: JsonSchema = {
+const defaultData = { foo: 'foo' };
+const defaultSchema: JsonSchema = {
     type: 'object',
     properties: {
         foo: {
@@ -39,14 +39,20 @@ const schema: JsonSchema = {
         }
     }
 };
-const uischema: ControlElement = {
+const defaultUischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
+};
+const defaultTestData: TestData = {
+    data: defaultData,
+    schema: defaultSchema,
+    uischema: defaultUischema
 };
 export const textBaseTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
-    elementToUse: (element: DebugElement) => any) => () => {
+    elementToUse: (element: DebugElement) => any,
+    testData: TestData = defaultTestData  ) => () => {
         let fixture: ComponentFixture<any>;
         let textElement: DebugElement;
         let textNativeElement: any;
@@ -64,13 +70,13 @@ export const textBaseTest = <C extends JsonFormsControl>(
 
         it('should render', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -84,13 +90,13 @@ export const textBaseTest = <C extends JsonFormsControl>(
 
         it('should support updating the state', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -101,7 +107,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
                 jsonforms: {
                     core: {
                         data: { foo: 'bar' },
-                        schema,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -112,13 +118,13 @@ export const textBaseTest = <C extends JsonFormsControl>(
         });
         it('should update with undefined value', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -129,7 +135,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
                 jsonforms: {
                     core: {
                         data: { foo: undefined },
-                        schema,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -140,13 +146,13 @@ export const textBaseTest = <C extends JsonFormsControl>(
         });
         it('should update with null value', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -157,7 +163,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
                 jsonforms: {
                     core: {
                         data: { foo: null },
-                        schema,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -168,13 +174,13 @@ export const textBaseTest = <C extends JsonFormsControl>(
         });
         it('should not update with wrong ref', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -185,7 +191,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
                 jsonforms: {
                     core: {
                         data: { foo: 'foo', bar: 'bar' },
-                        schema,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -197,14 +203,14 @@ export const textBaseTest = <C extends JsonFormsControl>(
         // store needed as we evaluate the calculated enabled value to disable/enable the control
         it('can be disabled', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
             component.disabled = true;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -215,7 +221,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
 
         });
         it('id should be present in output', () => {
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
             component.id = 'myId';
 
             fixture.detectChanges();
@@ -227,7 +233,8 @@ export const textBaseTest = <C extends JsonFormsControl>(
 export const textInputEventTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
-    elementToUse: (element: DebugElement) => any) => () => {
+    elementToUse: (element: DebugElement) => any,
+    testData: TestData = defaultTestData) => () => {
         let fixture: ComponentFixture<any>;
         let textNativeElement;
         let component: C;
@@ -244,13 +251,13 @@ export const textInputEventTest = <C extends JsonFormsControl>(
         it('should update via input event', () => {
 
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                     }
                 }
             });
@@ -271,7 +278,8 @@ export const textInputEventTest = <C extends JsonFormsControl>(
     };
 export const textErrorTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
-    errorTestInformation: ErrorTestExpectation) => () => {
+    errorTestInformation: ErrorTestExpectation,
+    testData: TestData = defaultTestData) => () => {
         let fixture: ComponentFixture<any>;
         let component: C;
 
@@ -284,13 +292,13 @@ export const textErrorTest = <C extends JsonFormsControl>(
         });
         it('should display errors', () => {
             const mockSubStore = MockNgRedux.getSelectorStub();
-            component.uischema = uischema;
+            component.uischema = testData.uischema;
 
             mockSubStore.next({
                 jsonforms: {
                     core: {
-                        data,
-                        schema,
+                        data: testData.data,
+                        schema: testData.schema,
                         errors: [{
                             dataPath: 'foo',
                             message: 'Hi, this is me, test error!'
