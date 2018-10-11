@@ -54,7 +54,7 @@ export class AppModule {
     ngRedux: NgRedux<JsonFormsState>,
     devTools: DevToolsExtension
   ) {
-    let enhancers = [];
+    let enhancers: any[] = [];
     // ... add whatever other enhancers you want.
 
     // You probably only want to expose this tool in devMode.

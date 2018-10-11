@@ -48,7 +48,7 @@ export class AppComponent {
 
   constructor(private ngRedux: NgRedux<JsonFormsState&{examples: {data: ExampleDescription[]}}>) { }
 
-  onChange = ev => {
+  onChange = (ev: any) => {
     const selectedExample = this.ngRedux.getState().examples.data.
       find(e => e.name === ev.target.value);
     this.ngRedux.dispatch(

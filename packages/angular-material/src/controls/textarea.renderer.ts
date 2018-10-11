@@ -49,6 +49,6 @@ export class TextAreaRenderer extends JsonFormsControl {
         super(ngRedux);
     }
     getValue = () => this.data || '';
-    getEventValue = event => event.target.value;
+    getEventValue = (event: any) => event.target.value;
 }
 export const TextAreaRendererTester: RankedTester = rankWith(2, isMultiLineControl);
