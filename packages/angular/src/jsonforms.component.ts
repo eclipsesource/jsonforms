@@ -101,7 +101,7 @@ export class JsonFormsOutlet implements OnInit, OnDestroy {
         instance.uischema = uischema;
         instance.schema = schema;
         instance.path = this.path;
-        if (componentRef.instance instanceof  JsonFormsControl) {
+        if (instance instanceof  JsonFormsControl) {
             (instance as JsonFormsControl).id = id;
         }
       }

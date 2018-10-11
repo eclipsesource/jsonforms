@@ -33,7 +33,9 @@ import {
     getSchema,
     getUiSchema,
     JsonFormsState,
-    JsonFormsStore, JsonSchema, UISchemaElement
+    JsonFormsStore,
+    JsonSchema,
+    UISchemaElement
 } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import { Store } from 'redux';

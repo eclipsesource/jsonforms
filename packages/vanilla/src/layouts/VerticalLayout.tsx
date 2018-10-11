@@ -26,15 +26,16 @@ import * as React from 'react';
 import {
     mapStateToLayoutProps,
     RankedTester,
-    rankWith, RendererProps,
+    rankWith,
+    RendererProps,
     uiTypeIs,
     VerticalLayout,
 } from '@jsonforms/core';
+import { connect } from 'react-redux';
 import { addVanillaLayoutProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
-import { connect } from 'react-redux';
 
 /**
  * Default tester for a vertical layout.

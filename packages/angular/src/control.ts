@@ -8,7 +8,8 @@ import {
     JsonFormsState,
     JsonSchema,
     mapDispatchToControlProps,
-    mapStateToControlProps, OwnPropsOfControl,
+    mapStateToControlProps,
+    OwnPropsOfControl,
     Resolve
 } from '@jsonforms/core';
 import { Input, OnDestroy, OnInit } from '@angular/core';
