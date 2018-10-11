@@ -316,3 +316,107 @@ export const textErrorTest = <C extends JsonFormsControl>(
                 .toBe('Hi, this is me, test error!');
         });
     };
+export const textTypeTest = <C extends JsonFormsControl>(
+    testConfig: TestConfig<C>,
+    instance: string,
+    elementToUse: (element: DebugElement) => any,
+    testData: TestData = defaultTestData) => () => {
+        let fixture: ComponentFixture<any>;
+        let component: C;
+        let textNativeElement;
+
+        baseSetup(testConfig);
+
+        beforeEach(() => {
+            const preparedComponents = prepareComponent(testConfig, instance, elementToUse);
+            fixture = preparedComponents.fixture;
+            component = preparedComponents.component;
+            textNativeElement = preparedComponents.textNativeElement;
+        });
+        it('should show password independent of schema', () => {
+            const uischema = JSON.parse(JSON.stringify(testData.uischema));
+            uischema.options = {format: 'password'};
+            const schema = JSON.parse(JSON.stringify(testData.schema));
+            schema.properties.foo.format = 'email';
+
+            const mockSubStore = MockNgRedux.getSelectorStub();
+            component.uischema = uischema;
+            component.schema = schema;
+
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data: testData.data,
+                        schema: schema
+                    }
+                },
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+            component.ngOnInit();
+            expect(textNativeElement.type).toBe('password');
+        });
+        it('should show email', () => {
+            const schema = JSON.parse(JSON.stringify(testData.schema));
+            schema.properties.foo.format = 'email';
+
+            const mockSubStore = MockNgRedux.getSelectorStub();
+            component.uischema = testData.uischema;
+            component.schema = schema;
+
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data: testData.data,
+                        schema: schema
+                    }
+                },
+            });
+            mockSubStore.complete();
+            component.ngOnInit();
+            fixture.detectChanges();
+            expect(textNativeElement.type).toBe('email');
+        });
+        it('should show tel', () => {
+            const schema = JSON.parse(JSON.stringify(testData.schema));
+            schema.properties.foo.format = 'tel';
+
+            const mockSubStore = MockNgRedux.getSelectorStub();
+            component.uischema = testData.uischema;
+            component.schema = schema;
+
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data: testData.data,
+                        schema: schema
+                    }
+                },
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+            component.ngOnInit();
+            expect(textNativeElement.type).toBe('tel');
+        });
+        it('should fallback to text', () => {
+            const schema = JSON.parse(JSON.stringify(testData.schema));
+            schema.properties.foo.format = 'foo';
+
+            const mockSubStore = MockNgRedux.getSelectorStub();
+            component.uischema = testData.uischema;
+            component.schema = schema;
+
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data: testData.data,
+                        schema: schema
+                    }
+                },
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+            component.ngOnInit();
+            expect(textNativeElement.type).toBe('text');
+        });
+    };

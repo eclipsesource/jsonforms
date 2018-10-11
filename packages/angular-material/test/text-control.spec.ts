@@ -32,7 +32,8 @@ import {
     ErrorTestExpectation,
     textBaseTest,
     textErrorTest,
-    textInputEventTest
+    textInputEventTest,
+    textTypeTest
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 
@@ -75,3 +76,4 @@ describe('Text control Base Tests', textBaseTest(testConfig, 'input', toSelect))
 describe('Text control Input Event Tests',
          textInputEventTest(testConfig, 'input', toSelect));
 describe('Text control Error Tests', textErrorTest(testConfig, errorTest));
+describe('Text control Type Tests', textTypeTest(testConfig, 'input', toSelect));
