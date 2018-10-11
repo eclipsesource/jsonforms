@@ -2,6 +2,7 @@ import { Type } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { JsonFormsControl } from '@jsonforms/angular';
+import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 
 export interface ErrorTestExpectation {
     errorInstance: Type<any>;
@@ -25,3 +26,9 @@ export const baseSetup = <C extends JsonFormsControl>(testConfig: TestConfig<C>)
         MockNgRedux.reset();
     });
 };
+
+export interface TestData {
+    data: any;
+    schema: JsonSchema;
+    uischema: UISchemaElement;
+}
