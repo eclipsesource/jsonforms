@@ -28,7 +28,7 @@ import { DebugElement } from '@angular/core';
 import { textBaseTest, textErrorTest, textInputEventTest } from '@jsonforms/angular-test';
 import { IonicModule, Label, Platform } from 'ionic-angular';
 import { StringControlRenderer, stringControlTester } from '../src';
-import { PlatformMock } from '../test-config/mocks-ionic';
+import { PlatformMock } from '../test-config/platform-mock';
 
 describe('Ionic text field tester', () => {
     const uischema = {
