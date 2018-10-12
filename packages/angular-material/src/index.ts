@@ -27,6 +27,7 @@ export * from './module';
 import { BooleanControlRenderer, booleanControlTester } from './controls/boolean.renderer';
 import { TextControlRenderer, TextControlRendererTester } from './controls/text.renderer';
 import { TextAreaRenderer, TextAreaRendererTester } from './controls/textarea.renderer';
+import { NumberControlRenderer, NumberControlRendererTester } from './controls/number.renderer';
 import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
 import {
   HorizontalLayoutRenderer,
@@ -41,6 +42,7 @@ export const angularMaterialRenderers:
   { tester: booleanControlTester, renderer: BooleanControlRenderer },
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
   { tester: TextAreaRendererTester, renderer: TextAreaRenderer },
+  { tester: NumberControlRendererTester, renderer: NumberControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },

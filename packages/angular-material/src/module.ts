@@ -29,7 +29,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
-import { BooleanControlRenderer, TextAreaRenderer, TextControlRenderer } from './controls';
+import {
+  BooleanControlRenderer,
+  NumberControlRenderer,
+  TextAreaRenderer,
+  TextControlRenderer
+} from './controls';
 import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
 
 @NgModule({
@@ -47,6 +52,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     BooleanControlRenderer,
     TextAreaRenderer,
     TextControlRenderer,
+    NumberControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
@@ -54,6 +60,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     BooleanControlRenderer,
     TextAreaRenderer,
     TextControlRenderer,
+    NumberControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
