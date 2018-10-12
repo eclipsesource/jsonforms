@@ -54,7 +54,7 @@ import {
   ],
   imports: [
     IonicModule,
-    JsonFormsModule,
+    JsonFormsModule
   ],
   exports: [
 
@@ -69,7 +69,6 @@ import {
     VerticalLayoutRenderer,
     CategorizationMenuLayoutRenderer,
     CategorizationTabLayoutRenderer,
-    // CategoryRenderer
   ],
   entryComponents: [
     // controls
