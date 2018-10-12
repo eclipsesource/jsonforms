@@ -1,27 +1,25 @@
 import {
-    and, Categorization,
+    and,
+    Categorization,
     categorizationHasCategory,
-    Category,
     JsonFormsState,
     RankedTester,
     rankWith,
     uiTypeIs
 } from '@jsonforms/core';
-import { Component, ViewChild } from '@angular/core';
-import { Tabs } from 'ionic-angular';
+import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 import { CategoryRenderer } from './category/category';
 
 @Component({
     selector: 'jsonforms-categorization-layout',
-    template: `
-      <ion-tabs #tabs *ngIf="uischema"  (ionChange)="onChange($event)">
+    template: `<ion-tabs>
         <ion-tab
-          *ngFor="let category of uischema?.elements; let i = index"
-          tabTitle="{{category.label}}"
-          [root]="renderedCategories.length > 0 ? renderedCategories[i][0] : null"
-          [rootParams]="renderedCategories.length ? renderedCategories[i][1] : null"
+          *ngFor="let category of categoryPages"
+          tabTitle="{{category.params.category.label}}"
+          [root]="category.renderer"
+          [rootParams]="category.params"
         >
         </ion-tab>
       </ion-tabs>
@@ -29,17 +27,16 @@ import { CategoryRenderer } from './category/category';
 })
 export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
 
-    @ViewChild('tabs') tabs: Tabs;
-    selectedCategory: Category;
-    renderedCategories: any[] = [];
+    categoryPages: any[] = [];
 
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
 
     mapAdditionalProps() {
+        this.categoryPages = [];
         (this.uischema as Categorization).elements.forEach(category =>
-            this.renderedCategories.push([CategoryRenderer, { category }])
+            this.categoryPages.push({ renderer: CategoryRenderer, params: { category }})
         );
     }
 }
