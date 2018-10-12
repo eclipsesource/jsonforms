@@ -30,7 +30,7 @@ import { By } from '@angular/platform-browser';
 import { IonicModule, IonicPageModule, Platform, Tab } from 'ionic-angular';
 import { JsonFormsOutlet } from '@jsonforms/angular';
 import { CategorizationTabLayoutRenderer, CategoryRenderer } from '../src';
-import { MockPlatform } from '../test-config/platform-mock';
+import { PlatformMock } from '../test-config/platform-mock';
 
 describe('Categorization tab layout', () => {
     let fixture: ComponentFixture<any>;
@@ -61,7 +61,7 @@ describe('Categorization tab layout', () => {
                 IonicPageModule.forChild(CategoryRenderer),
             ],
             providers: [
-                {provide: Platform, useClass: MockPlatform},
+                {provide: Platform, useClass: PlatformMock},
                 {provide: NgRedux, useFactory: MockNgRedux.getInstance},
             ],
         }).compileComponents();

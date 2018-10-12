@@ -25,10 +25,10 @@
 import { TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet } from '@jsonforms/angular';
 import { IonicModule, Platform } from 'ionic-angular';
-import { PlatformMock } from '../test-config/mocks-ionic';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { HorizontalLayoutRenderer } from '../src';
+import { PlatformMock } from '../test-config/platform-mock';
 
 describe('Horizontal layout', () => {
     let fixture: any;
