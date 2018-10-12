@@ -34,7 +34,7 @@ import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/co
             <mat-label>{{ label }}</mat-label>
             <input
                 matInput
-                type="text"
+                [type]="getType()"
                 (change)="onChange($event)"
                 [value]="getValue()"
                 placeholder="{{ description }}"
@@ -51,5 +51,18 @@ export class TextControlRenderer extends JsonFormsControl {
     }
     getValue = () => this.data || '';
     getEventValue = (event: any) => event.target.value;
+    getType = (): string => {
+        if (this.uischema.options && this.uischema.options.format) {
+            return this.uischema.options.format;
+        }
+        if (this.scopedSchema && this.scopedSchema.format) {
+            switch (this.scopedSchema.format) {
+                case 'email': return 'email';
+                case 'tel': return 'tel';
+                default: return 'text';
+            }
+        }
+        return 'text';
+    }
 }
 export const TextControlRendererTester: RankedTester = rankWith(1, isControl);
