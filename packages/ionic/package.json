@@ -57,6 +57,7 @@
     "@jsonforms/angular": "^2.0.12-rc.3",
     "@jsonforms/core": "^2.0.12-rc.3",
     "ionic-angular": "3.9.2",
+    "ionic-selectable": "^3.0.3",
     "ionicons": "3.0.0",
     "json-refs": "^3.0.10",
     "redux": "^3.7.2",
