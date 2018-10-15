@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
+import { IonicSelectableModule } from 'ionic-selectable';
 import { JsonFormsModule } from '@jsonforms/angular';
 
 import { BooleanCheckboxControlRenderer } from './controls/boolean/boolean-checkbox-control';
@@ -27,6 +28,7 @@ import { MasterDetailNavService } from './other/master-detail/master-detail-nav.
 import {
     CategorizationTabLayoutRenderer
 } from './layouts/categorization/categorization-tab-layout';
+import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import {
     DateControlRenderer,
     EnumControlRenderer,
     RangeControlRenderer,
+    AutoCompleteControlRenderer,
 
     // layouts
     HorizontalLayoutRenderer,
@@ -58,10 +61,12 @@ import {
   ],
   imports: [
     IonicModule,
+    IonicSelectableModule,
     JsonFormsModule
   ],
   exports: [
     IonicModule,
+    IonicSelectableModule,
     JsonFormsModule
   ],
   entryComponents: [
@@ -74,6 +79,7 @@ import {
     DateControlRenderer,
     EnumControlRenderer,
     RangeControlRenderer,
+    AutoCompleteControlRenderer,
 
     // layouts
     HorizontalLayoutRenderer,
