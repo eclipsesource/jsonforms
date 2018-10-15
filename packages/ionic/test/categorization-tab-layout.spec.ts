@@ -71,7 +71,7 @@ describe('Categorization tab layout', () => {
         component = fixture.componentInstance;
     }));
 
-    it('add elements', async(() => {
+    it('render categories initially', async(() => {
         const mockSubStore = MockNgRedux.getSelectorStub();
         component.uischema = {
             type: 'Categorization',
@@ -98,7 +98,6 @@ describe('Categorization tab layout', () => {
                 }
             }
         });
-
         mockSubStore.complete();
         fixture.detectChanges();
 
@@ -110,6 +109,86 @@ describe('Categorization tab layout', () => {
                 fixture.debugElement.queryAll(By.directive(Tab));
             expect(activateCategory.length).toBe(1);
             expect(ionTabs.length).toBe(2);
+        });
+    }));
+
+    it('add category', async(() => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = {
+            type: 'Categorization',
+            elements: [
+                {
+                    type: 'Category',
+                    label: 'foo',
+                    scope: '#/properties/foo'
+                },
+                {
+                    type: 'Control',
+                    label: 'bar',
+                    scope: '#/properties/bar'
+                }
+            ]
+        };
+
+        component.ngOnInit();
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        fixture.detectChanges();
+        fixture.whenRenderingDone().then(() => {
+            fixture.detectChanges();
+            const activateCategory: DebugElement[] =
+                fixture.debugElement.queryAll(By.directive(CategoryRenderer));
+            const ionTabs: DebugElement[] =
+                fixture.debugElement.queryAll(By.directive(Tab));
+            expect(activateCategory.length).toBe(1);
+            expect(ionTabs.length).toBe(2);
+
+            component.uischema = {
+                type: 'Categorization',
+                elements: [
+                    {
+                        type: 'Category',
+                        label: 'foo',
+                        scope: '#/properties/foo'
+                    },
+                    {
+                        type: 'Control',
+                        label: 'bar',
+                        scope: '#/properties/bar'
+                    },
+                    {
+                        type: 'Control',
+                        label: 'quux',
+                        scope: '#/properties/bar'
+                    }
+                ]
+            };
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data,
+                        schema,
+                    }
+                }
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+
+            fixture.whenRenderingDone().then(() => {
+                fixture.detectChanges();
+                const activateCategory2: DebugElement[] =
+                    fixture.debugElement.queryAll(By.directive(CategoryRenderer));
+                const ionTabs2: DebugElement[] =
+                    fixture.debugElement.queryAll(By.directive(Tab));
+                expect(activateCategory2.length).toBe(1);
+                expect(ionTabs2.length).toBe(3);
+            });
         });
     }));
 });

@@ -1,15 +1,19 @@
 import { Input, OnDestroy, OnInit } from '@angular/core';
-import { JsonFormsState, mapStateToLayoutProps, UISchemaElement } from '@jsonforms/core';
+import {
+    JsonFormsState,
+    mapStateToLayoutProps,
+    UISchemaElement
+} from '@jsonforms/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators/map';
 
 export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
     @Input() path: string;
     elements: UISchemaElement[];
     subscription: Subscription;
+    initializers: any[] = [];
 
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -18,25 +22,16 @@ export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnIni
     ngOnInit() {
         this.subscription = this.ngRedux
             .select()
-            .pipe(
-                map((state: JsonFormsState) => {
-                    const ownProps = {
-                        ...this.getOwnProps(),
-                        path: this.path
-                    };
-                    return mapStateToLayoutProps(state, ownProps);
-                })
-            )
-            .subscribe(props => {
+            .subscribe((state: JsonFormsState) => {
+                const ownProps = {
+                    ...this.getOwnProps(),
+                    path: this.path
+                };
+                const props = mapStateToLayoutProps(state, ownProps);
                 this.uischema = props.uischema;
                 this.schema = props.schema;
-                this.mapAdditionalProps();
+                this.initializers.forEach(initializer => initializer(props));
             });
-    }
-
-    // TODO: maybe we should move the subscription as this method into the base renderer?
-    mapAdditionalProps() {
-        // do nothing by default
     }
 
     ngOnDestroy() {
