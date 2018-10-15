@@ -26,12 +26,18 @@ import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSliderModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
   BooleanControlRenderer,
   NumberControlRenderer,
+  RangeControlRenderer,
   TextAreaRenderer,
   TextControlRenderer
 } from './controls';
@@ -39,12 +45,13 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
 
 @NgModule({
   imports: [
+    BrowserAnimationsModule,
     CommonModule,
     JsonFormsModule,
     MatFormFieldModule,
     MatCheckboxModule,
     MatInputModule,
-    BrowserAnimationsModule,
+    MatSliderModule,
     ReactiveFormsModule,
     FlexLayoutModule
   ],
@@ -53,6 +60,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     TextAreaRenderer,
     TextControlRenderer,
     NumberControlRenderer,
+    RangeControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
@@ -61,6 +69,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     TextAreaRenderer,
     TextControlRenderer,
     NumberControlRenderer,
+    RangeControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
