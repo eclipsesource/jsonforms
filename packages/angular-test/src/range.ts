@@ -277,7 +277,6 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
     testConfig: TestConfig<C>,
     instance: Type<I>) => () => {
         let fixture: ComponentFixture<any>;
-        let rangeNativeElement: any;
         let component: C;
 
         baseSetup(testConfig);
@@ -285,7 +284,6 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
         beforeEach(() => {
             const preparedComponents = prepareComponent(testConfig, instance);
             fixture = preparedComponents.fixture;
-            rangeNativeElement = preparedComponents.rangeElement.nativeElement;
             component = preparedComponents.component;
         });
 
@@ -308,31 +306,8 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
             component.ngOnInit();
 
             const spy = spyOn(component, 'onChange');
-            const trackElement = rangeNativeElement.querySelector('.mat-slider-wrapper');
-            const dimensions = trackElement.getBoundingClientRect();
-            const x = dimensions.left + (dimensions.width * 0.2);
-            const y = dimensions.top + (dimensions.height * 0.2);
-            const event = document.createEvent('MouseEvent');
 
-            event.initMouseEvent('click',
-                                 true, /* canBubble */
-                                 false, /* cancelable */
-                                 window, /* view */
-                                 0, /* detail */
-                                 x, /* screenX */
-                                 y, /* screenY */
-                                 x, /* clientX */
-                                 y, /* clientY */
-                                 false, /* ctrlKey */
-                                 false, /* altKey */
-                                 false, /* shiftKey */
-                                 false, /* metaKey */
-                                 0, /* button */
-                                 null /* relatedTarget */);
-            // `initMouseEvent` doesn't allow us to pass the `buttons` and
-            // defaults it to 0 which looks like a fake event.
-            Object.defineProperty(event, 'buttons', { get: () => 1 });
-            rangeNativeElement.dispatchEvent(event);
+            fixture.debugElement.query(By.css('.mat-slider-wrapper')).nativeElement.click();
 
             // trigger change detection
             fixture.detectChanges();
