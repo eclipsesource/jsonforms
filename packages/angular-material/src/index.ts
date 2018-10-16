@@ -37,6 +37,8 @@ import {
   horizontalLayoutTester
 } from './layouts/horizontal-layout.renderer';
 
+import { LabelRenderer, LabelRendererTester } from './other/label.renderer';
+
 export * from './controls';
 
 export const angularMaterialRenderers:
@@ -51,4 +53,5 @@ export const angularMaterialRenderers:
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
+  { tester: LabelRendererTester, renderer: LabelRenderer },
 ];
