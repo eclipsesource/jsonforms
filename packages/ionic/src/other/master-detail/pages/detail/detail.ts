@@ -1,32 +1,31 @@
 import { Component } from '@angular/core';
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { IonicPage, NavParams } from 'ionic-angular';
 import { AbstractDetailPage } from '../AbstractDetailPage';
 
 @IonicPage()
 @Component({
-  selector: 'jsonforms-master-detail-detail',
-  template: `
+    selector: 'jsonforms-master-detail-detail',
+    template: `
       <ion-content padding>
-          <jsonforms-outlet
-                  [schema]="schema"
-                  [uischema]="uischema"
-                  [path]="path"
-          ></jsonforms-outlet>
+          <div *ngIf="item">
+              <jsonforms-outlet
+                  [schema]="item.schema"
+                  [uischema]="item.uischema"
+                  [path]="item.path"
+              ></jsonforms-outlet>
+          </div>
+          <div *ngIf="!item">
+            Please select an item first
+          </div>
       </ion-content>
   `
 })
 export class DetailPage extends AbstractDetailPage {
 
-  schema: JsonSchema;
-  uischema: UISchemaElement;
-  path: string;
+    item: any = {};
 
-  constructor(public navParams: NavParams) {
-    super();
-    const item = navParams.get('item');
-    this.path = item.path;
-    this.schema = item.schema;
-    this.uischema = item.uischema;
-  }
+    constructor(public navParams: NavParams) {
+        super();
+        this.item = navParams.get('item');
+    }
 }

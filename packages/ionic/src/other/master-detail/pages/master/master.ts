@@ -3,7 +3,6 @@ import { IonicPage, NavParams } from 'ionic-angular';
 import { MasterDetailNavService } from '../../master-detail-nav.service';
 import { DetailPage } from '../detail/detail';
 import { AbstractMasterPage } from '../AbstractMasterPage';
-import { Observable } from 'rxjs';
 import { MasterItem } from '../../master-detail';
 import {
     ControlElement,
@@ -35,11 +34,11 @@ import { NgRedux } from '@angular-redux/store';
 })
 export class MasterPage extends AbstractMasterPage implements OnInit {
 
-    items: Observable<MasterItem>;
+    items: MasterItem;
     uischema: ControlElement;
     schema: JsonSchema;
     path: string;
-    addItem: (path: string) => void;
+    addItem: (path: string) => () => void;
 
     constructor(
         public navParams: NavParams,
@@ -66,6 +65,6 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
     }
 
     onClick() {
-        this.addItem(this.path);
+        this.addItem(this.path)();
     }
 }
