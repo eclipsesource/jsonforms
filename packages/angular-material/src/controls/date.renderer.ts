@@ -15,10 +15,10 @@ import { JsonFormsControl } from '@jsonforms/angular';
         placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"
-        [matDatepicker]="myDatepicker"
+        [matDatepicker]="datepicker"
     >
-    <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
-    <mat-datepicker #myDatepicker></mat-datepicker>
+    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+    <mat-datepicker #datepicker></mat-datepicker>
 
     <mat-error>{{ error }}</mat-error>
   </mat-form-field>

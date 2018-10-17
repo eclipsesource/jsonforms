@@ -305,18 +305,13 @@ describe('Date control Input Event Tests', () => {
         fixture.detectChanges();
         flush();
 
-        expect(component.data).toBe('2018-01-01');
-        expect(inputElement.value).toBe('1/1/2018');
-
         const cells = document.querySelectorAll('.mat-calendar-body-cell');
         const firstCell: HTMLElement = cells[1] as HTMLElement;
         firstCell.click();
         fixture.detectChanges();
         flush();
 
-        if (inputElement.dispatchEvent) {
-            inputElement.dispatchEvent(new Event('change'));
-        }
+        inputElement.dispatchEvent(new Event('change'));
         // trigger change detection
         fixture.detectChanges();
         expect(spy).toHaveBeenCalled();
