@@ -1,7 +1,7 @@
 
 import { Nav } from 'ionic-angular';
 import { AbstractDetailPage } from './pages/AbstractDetailPage';
-import { PlaceholderPage } from './pages/placeholder/placeholder';
+import { DetailPage } from './pages/detail/detail';
 
 export class MasterDetailNavService {
 
@@ -11,6 +11,7 @@ export class MasterDetailNavService {
   _isDetailVisible: boolean;
   _isViewChanging = false;
   useParentNav: boolean;
+  selectedItem: any;
 
   get masterNav(): Nav {
     return this._masterNav;
@@ -37,10 +38,11 @@ export class MasterDetailNavService {
   }
 
   pushDetail(page: any, params: any) {
+    this.selectedItem = params;
     if (this.useParentNav) {
       this.parentNav.push(page, params);
     } else {
-      this.detailNav.push(page, params);
+      this.detailNav.setRoot(DetailPage, params);
     }
   }
 
@@ -62,6 +64,9 @@ export class MasterDetailNavService {
 
     this._isViewChanging = true;
     // assumes that the master detail is at top
+    if (parentNav.length() === 0) {
+      return Promise.resolve();
+    }
     return parentNav.popToRoot()
       .then(() => {
         this._isViewChanging = false;
@@ -82,12 +87,6 @@ export class MasterDetailNavService {
     if (activeDetailView.component.prototype instanceof AbstractDetailPage) {
       return parentNav.push(activeMasterView.component, activeMasterView.data)
         .then(() => parentNav.push(activeDetailView.component, activeDetailView.data))
-        .then(() => {
-          this.useParentNav = true;
-          this._isViewChanging = false;
-        });
-    } else if (activeDetailView.component.prototype instanceof PlaceholderPage) {
-      return parentNav.push(activeMasterView.component, activeMasterView.data)
         .then(() => {
           this.useParentNav = true;
           this._isViewChanging = false;

@@ -15,10 +15,11 @@ import {
 } from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { Nav, Platform } from 'ionic-angular';
+import { NgRedux } from '@angular-redux/store';
 import { MasterDetailNavService } from './master-detail-nav.service';
 import { MasterPage } from './pages/master/master';
+import { DetailPage } from './pages/detail/detail';
 import { removeSchemaKeywords } from '../../common';
-import { NgRedux } from '@angular-redux/store';
 import { map } from 'rxjs/operators/map';
 
 export interface MasterItem {
@@ -32,17 +33,20 @@ export interface MasterItem {
 @Component({
     selector: 'jsonforms-master-detail',
     template: `
-      <ion-split-pane (ionChange)="onSplitPaneChange($event)">
-          <ion-nav [root]="masterPage" #masterNav ></ion-nav>
-          <ion-nav [root]="detailPage" #detailNav main></ion-nav>
-      </ion-split-pane>
-  `
+        <ion-split-pane (ionChange)="onSplitPaneChange($event)">
+            <ion-nav [root]="masterPage" [rootParams]="masterParams" #masterNav ></ion-nav>
+            <ion-nav [root]="detailPage" #detailNav main></ion-nav>
+        </ion-split-pane>
+    `
 })
 export class MasterDetailComponent extends JsonFormsControl {
 
     @ViewChild('masterNav') masterNav: Nav;
     @ViewChild('detailNav') detailNav: Nav;
+    masterPage: any;
+    detailPage: any;
     masterItems: MasterItem[];
+    masterParams: any;
 
     constructor(
         private parentNav: Nav,
@@ -51,6 +55,8 @@ export class MasterDetailComponent extends JsonFormsControl {
         private masterDetailService: MasterDetailNavService
     ) {
         super(ngRedux);
+        this.masterPage = MasterPage;
+        this.detailPage = DetailPage;
     }
 
     ngOnInit() {
@@ -86,15 +92,16 @@ export class MasterDetailComponent extends JsonFormsControl {
                 if (this.masterItems === undefined ||
                     this.masterItems.length !== masterItems.length) {
                     this.masterItems = masterItems;
+                    this.masterParams = {
+                        addToNavStack: true,
+                        items: this.masterItems,
+                        path: composeWithUi(this.uischema as ControlElement, this.path),
+                        uischema: this.uischema,
+                        schema: this.schema
+                    };
                     this.masterDetailService.masterNav.setRoot(
                         MasterPage,
-                        {
-                            addToNavStack: true,
-                            items: this.masterItems,
-                            path: composeWithUi(this.uischema as ControlElement, this.path),
-                            uischema: this.uischema,
-                            schema: this.schema
-                        }
+                        this.masterParams
                     );
                 }
 

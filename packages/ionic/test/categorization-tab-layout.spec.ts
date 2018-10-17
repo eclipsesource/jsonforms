@@ -30,7 +30,7 @@ import { By } from '@angular/platform-browser';
 import { IonicModule, IonicPageModule, Platform, Tab } from 'ionic-angular';
 import { JsonFormsOutlet } from '@jsonforms/angular';
 import { CategorizationTabLayoutRenderer, CategoryRenderer } from '../src';
-import { PlatformMock } from '../test-config/platform-mock';
+import { PlatformMock } from '../test-config/mocks-ionic';
 
 describe('Categorization tab layout', () => {
     let fixture: ComponentFixture<any>;

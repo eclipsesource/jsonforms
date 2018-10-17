@@ -16,6 +16,7 @@ import { Input, OnDestroy, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators/map';
 
 import { JsonFormsBaseRenderer } from './base.renderer';
 
@@ -55,7 +56,9 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     ngOnInit() {
         this.subscription = this.ngRedux
             .select()
-            .map((s: JsonFormsState) => this.mapToProps(s))
+            .pipe<ControlProps>(
+                map((s: JsonFormsState) => this.mapToProps(s))
+            )
             .subscribe(props => {
                 const { data, enabled, errors, label, required, schema, uischema } = props;
                 this.label = computeLabel(

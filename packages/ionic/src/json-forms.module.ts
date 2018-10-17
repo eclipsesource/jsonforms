@@ -17,7 +17,6 @@ import { CategoryRenderer } from './layouts/categorization/category/category';
 import { GroupLayoutRenderer } from './layouts/group/group-layout';
 
 import { MasterDetailComponent } from './other/master-detail/master-detail';
-import { PlaceholderPage } from './other/master-detail/pages/placeholder/placeholder';
 import { MasterPage } from './other/master-detail/pages/master/master';
 import { DetailPage } from './other/master-detail/pages/detail/detail';
 import { LabelRenderer } from './other/label/label';
@@ -45,7 +44,6 @@ import {
 
     // Master Detail components
     MasterDetailComponent,
-    PlaceholderPage,
     MasterPage,
     DetailPage,
 
@@ -69,6 +67,11 @@ import {
     VerticalLayoutRenderer,
     CategorizationMenuLayoutRenderer,
     CategorizationTabLayoutRenderer,
+
+    // master detail
+    MasterDetailComponent,
+    MasterPage,
+    DetailPage,
   ],
   entryComponents: [
     // controls
@@ -88,7 +91,6 @@ import {
 
     // Master Detail components
     MasterDetailComponent,
-    PlaceholderPage,
     MasterPage,
     DetailPage,
 
