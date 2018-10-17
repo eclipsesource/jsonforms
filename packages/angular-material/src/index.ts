@@ -31,6 +31,7 @@ import { TextAreaRenderer, TextAreaRendererTester } from './controls/textarea.re
 import { NumberControlRenderer, NumberControlRendererTester } from './controls/number.renderer';
 import { RangeControlRenderer, RangeControlRendererTester } from './controls/range.renderer';
 import { DateControlRenderer, DateControlRendererTester } from './controls/date.renderer';
+import { ToggleControlRenderer, ToggleControlRendererTester } from './controls/toggle.renderer';
 import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
 import {
   HorizontalLayoutRenderer,
@@ -48,6 +49,7 @@ export const angularMaterialRenderers:
   { tester: NumberControlRendererTester, renderer: NumberControlRenderer },
   { tester: RangeControlRendererTester, renderer: RangeControlRenderer },
   { tester: DateControlRendererTester, renderer: DateControlRenderer },
+  { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },

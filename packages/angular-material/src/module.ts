@@ -32,7 +32,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatNativeDateModule,
-  MatSliderModule
+  MatSliderModule,
+  MatSlideToggleModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
@@ -42,7 +43,8 @@ import {
   NumberControlRenderer,
   RangeControlRenderer,
   TextAreaRenderer,
-  TextControlRenderer
+  TextControlRenderer,
+  ToggleControlRenderer
 } from './controls';
 import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
 
@@ -55,6 +57,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     MatCheckboxModule,
     MatInputModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatNativeDateModule,
     MatDatepickerModule,
     ReactiveFormsModule,
@@ -67,6 +70,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     NumberControlRenderer,
     RangeControlRenderer,
     DateControlRenderer,
+    ToggleControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
@@ -77,6 +81,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     NumberControlRenderer,
     RangeControlRenderer,
     DateControlRenderer,
+    ToggleControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
