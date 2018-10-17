@@ -81,7 +81,9 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 
     protected getOwnProps(): OwnPropsOfControl {
