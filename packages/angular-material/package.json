@@ -58,6 +58,7 @@
     "@jsonforms/angular": "^2.0.12-rc.1",
     "@jsonforms/core": "^2.0.12-rc.1",
     "core-js": "^2.5.3",
+    "hammerjs": "2.0.8",
     "redux": "^3.7.2",
     "rxjs": "^5.5.7",
     "zone.js": "^0.8.26"
