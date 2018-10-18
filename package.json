@@ -7,7 +7,6 @@
 	"devDependencies": {
 		"@types/jest": "^23.0.0",
 		"@types/lodash": "^4.14.104",
-		"@types/node": "^8.0.0",
 		"ajv": "^6.4.0",
 		"ava": "^0.25.0",
 		"babel-loader": "^7.1.2",
