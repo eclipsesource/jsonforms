@@ -121,5 +121,5 @@ export class MasterDetailComponent extends JsonFormsControl {
 
 export const masterDetailTester: RankedTester = rankWith(
     4,
-    uiTypeIs('FlatMasterDetail')
+    uiTypeIs('ListWithDetail')
 );
