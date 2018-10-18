@@ -109,6 +109,10 @@ export const uischema = {
       ]
     },
     {
+      type: 'Label',
+      text: 'Additional Information'
+    },
+    {
       type: 'HorizontalLayout',
       elements: [
         {

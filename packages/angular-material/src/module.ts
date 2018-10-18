@@ -46,6 +46,7 @@ import {
   TextControlRenderer,
   ToggleControlRenderer
 } from './controls';
+import { LabelRenderer } from './other';
 import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
 
 @NgModule({
@@ -72,7 +73,8 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     DateControlRenderer,
     ToggleControlRenderer,
     VerticalLayoutRenderer,
-    HorizontalLayoutRenderer
+    HorizontalLayoutRenderer,
+    LabelRenderer
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -83,7 +85,8 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     DateControlRenderer,
     ToggleControlRenderer,
     VerticalLayoutRenderer,
-    HorizontalLayoutRenderer
+    HorizontalLayoutRenderer,
+    LabelRenderer
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
