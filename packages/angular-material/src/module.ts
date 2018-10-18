@@ -28,14 +28,17 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatCheckboxModule,
+  MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
+  MatNativeDateModule,
   MatSliderModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
   BooleanControlRenderer,
+  DateControlRenderer,
   NumberControlRenderer,
   RangeControlRenderer,
   TextAreaRenderer,
@@ -52,6 +55,8 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     MatCheckboxModule,
     MatInputModule,
     MatSliderModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     ReactiveFormsModule,
     FlexLayoutModule
   ],
@@ -61,6 +66,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     TextControlRenderer,
     NumberControlRenderer,
     RangeControlRenderer,
+    DateControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
@@ -70,6 +76,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     TextControlRenderer,
     NumberControlRenderer,
     RangeControlRenderer,
+    DateControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer
   ],
