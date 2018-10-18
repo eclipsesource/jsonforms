@@ -38,9 +38,16 @@ import {
   horizontalLayoutTester
 } from './layouts/horizontal-layout.renderer';
 
+import {
+  CategorizationTabLayoutRenderer,
+  categorizationTester
+} from './layouts/categorization-layout.renderer';
+
 import { LabelRenderer, LabelRendererTester } from './other/label.renderer';
 
 export * from './controls';
+export * from './layouts';
+export * from './other';
 
 export const angularMaterialRenderers:
   { tester: RankedTester, renderer: any }[] = [
@@ -55,5 +62,6 @@ export const angularMaterialRenderers:
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
+  { tester: categorizationTester, renderer: CategorizationTabLayoutRenderer },
   { tester: LabelRendererTester, renderer: LabelRenderer },
 ];

@@ -47,7 +47,11 @@ import {
   ToggleControlRenderer
 } from './controls';
 import { LabelRenderer } from './other';
-import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
+import {
+  CategorizationTabLayoutRenderer,
+  HorizontalLayoutRenderer,
+  VerticalLayoutRenderer
+} from './layouts';
 
 @NgModule({
   imports: [
@@ -74,6 +78,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     ToggleControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer,
+    CategorizationTabLayoutRenderer,
     LabelRenderer
   ],
   entryComponents: [
@@ -86,6 +91,7 @@ import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
     ToggleControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer,
+    CategorizationTabLayoutRenderer,
     LabelRenderer
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
