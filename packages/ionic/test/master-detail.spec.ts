@@ -76,7 +76,7 @@ describe('Master detail', () => {
         }
     };
     const uischema = {
-        type: 'FlatMasterDetail',
+        type: 'ListWithDetail',
         scope: '#/properties/orders',
         options: {
             labelRef: '#/items/properties/customer/properties/name',
