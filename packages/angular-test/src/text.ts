@@ -43,7 +43,7 @@ const defaultUischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
 };
-const defaultTestData: TestData = {
+export const defaultTextTestData: TestData = {
     data: defaultData,
     schema: defaultSchema,
     uischema: defaultUischema
@@ -52,7 +52,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData = defaultTestData  ) => () => {
+    testData: TestData = defaultTextTestData  ) => () => {
         let fixture: ComponentFixture<any>;
         let textElement: DebugElement;
         let textNativeElement: any;
@@ -234,7 +234,7 @@ export const textInputEventTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData = defaultTestData) => () => {
+    testData: TestData = defaultTextTestData) => () => {
         let fixture: ComponentFixture<any>;
         let textNativeElement: any;
         let component: C;
@@ -279,7 +279,7 @@ export const textInputEventTest = <C extends JsonFormsControl>(
 export const textErrorTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     errorTestInformation: ErrorTestExpectation,
-    testData: TestData = defaultTestData) => () => {
+    testData: TestData = defaultTextTestData) => () => {
         let fixture: ComponentFixture<any>;
         let component: C;
 
@@ -304,7 +304,7 @@ export const textErrorTest = <C extends JsonFormsControl>(
                             message: 'Hi, this is me, test error!'
                         }]
                     }
-                },
+                }
             });
             mockSubStore.complete();
             fixture.detectChanges();
@@ -320,7 +320,7 @@ export const textTypeTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData = defaultTestData) => () => {
+    testData: TestData = defaultTextTestData) => () => {
         let fixture: ComponentFixture<any>;
         let component: C;
         let textNativeElement: any;
