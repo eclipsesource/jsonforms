@@ -112,12 +112,9 @@ describe('Master detail', () => {
         }).compileComponents();
 
         MockNgRedux.reset();
-    }));
-
-    beforeEach(() => {
         fixture = TestBed.createComponent(MasterDetailComponent);
         component = fixture.componentInstance;
-    });
+    }));
 
     it('should render', async(() => {
         const mockSubStore = MockNgRedux.getSelectorStub();

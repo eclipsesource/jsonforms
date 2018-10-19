@@ -24,11 +24,11 @@
 */
 import { TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet } from '@jsonforms/angular';
-import { IonicModule, Platform, Nav } from 'ionic-angular';
+import { IonicModule, Platform } from 'ionic-angular';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { HorizontalLayoutRenderer } from '../src';
-import { mockNav, PlatformMock } from '../test-config/mocks-ionic';
+import { PlatformMock } from '../test-config/mocks-ionic';
 
 describe('Horizontal layout', () => {
     let fixture: any;
@@ -63,7 +63,6 @@ describe('Horizontal layout', () => {
             providers: [
                 {provide: Platform, useClass: PlatformMock},
                 {provide: NgRedux, useFactory: MockNgRedux.getInstance},
-                {provide: Nav, useFactory: mockNav }
             ]
         }).compileComponents();
 
