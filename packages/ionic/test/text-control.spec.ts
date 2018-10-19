@@ -25,10 +25,16 @@
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
-import { textBaseTest, textErrorTest, textInputEventTest } from '@jsonforms/angular-test';
+import {
+    textBaseTest,
+    textErrorTest,
+    textInputEventTest,
+    textTypeTest
+} from '@jsonforms/angular-test';
 import { IonicModule, Label, Platform } from 'ionic-angular';
 import { StringControlRenderer, stringControlTester } from '../src';
-import { PlatformMock } from '../test-config/mocks-ionic';
+import { PlatformMock } from '../test-config/platform-mock';
+import { defaultTextTestData, setupMockStore } from '@jsonforms/angular-test';
 
 describe('Ionic text field tester', () => {
     const uischema = {
@@ -66,3 +72,4 @@ describe('Text control Base Tests', textBaseTest(testConfig, 'ion-input', toSele
 describe('Text control Input Event Tests',
          textInputEventTest(testConfig, 'ion-input', toSelect));
 describe('Text control Error Tests', textErrorTest(testConfig, errorTest));
+describe('Text control type tests', textTypeTest(testConfig, 'ion-input', toSelect));
