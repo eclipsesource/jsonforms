@@ -1,6 +1,15 @@
+import * as _ from 'lodash';
 import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { isNumberControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import {
+    ControlProps,
+    isIntegerControl,
+    isNumberControl,
+    JsonFormsState,
+    or,
+    RankedTester,
+    rankWith
+} from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 
 @Component({
@@ -12,10 +21,13 @@ import { JsonFormsControl } from '@jsonforms/angular';
           <ion-input
                   type="number"
                   placeholder="{{ description }}"
+                  [id]="id"
                   [min]="min"
                   [max]="max"
-                  [step]="multipleOf"
+                  [step]="step"
                   [value]="data"
+                  [disabled]="!enabled"
+                  [readonly]="!enabled"
                   (ionChange)="onChange($event)"
           >
           </ion-input>
@@ -26,20 +38,23 @@ export class NumberControlRenderer extends JsonFormsControl {
 
   min: number;
   max: number;
-  multipleOf: number;
+  step: number;
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }
 
-  mapAdditionalProps() {
-    this.min = this.scopedSchema.maximum;
-    this.max = this.scopedSchema.minimum;
-    this.multipleOf = this.scopedSchema.multipleOf;
+  mapAdditionalProps(props: ControlProps) {
+      if (!_.isEmpty(props.scopedSchema)) {
+          const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
+          this.min = props.scopedSchema.minimum;
+          this.max = props.scopedSchema.maximum;
+          this.step = props.scopedSchema.multipleOf || defaultStep;
+      }
   }
 }
 
 export const numberControlTester: RankedTester = rankWith(
   2,
-  isNumberControl
+  or(isNumberControl, isIntegerControl)
 );
