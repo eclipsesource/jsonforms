@@ -26,28 +26,33 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
-import { HorizontalLayout, UISchemaElement } from '@jsonforms/core';
+import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MatCard, MatCardTitle } from '@angular/material';
+import { By } from '@angular/platform-browser';
 import {
-  HorizontalLayoutRenderer,
-  horizontalLayoutTester
-} from '../src/layouts/horizontal-layout.renderer';
+  GroupLayoutRenderer,
+  groupLayoutTester
+} from '../src/layouts/group-layout.renderer';
+import { DebugElement } from '@angular/core';
 
-describe('Horizontal layout tester', () => {
+describe('Group layout tester', () => {
   it('should succeed', () => {
-    expect(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined)).toBe(1);
+    expect(groupLayoutTester({ type: 'Group' }, undefined)).toBe(1);
   });
 });
-describe('Horizontal layout', () => {
+describe('Group layout', () => {
   let fixture: ComponentFixture<any>;
   let component: any;
 
   beforeEach(() => {
       TestBed.configureTestingModule({
           declarations: [
-              HorizontalLayoutRenderer,
+              GroupLayoutRenderer,
               UnknownRenderer,
-              JsonFormsOutlet
+              JsonFormsOutlet,
+              MatCard,
+              MatCardTitle
           ],
           imports: [],
           providers: [
@@ -61,16 +66,13 @@ describe('Horizontal layout', () => {
           }
       }).compileComponents();
       MockNgRedux.reset();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(HorizontalLayoutRenderer);
-    component = fixture.componentInstance;
+      fixture = TestBed.createComponent(GroupLayoutRenderer);
+      component = fixture.componentInstance;
   });
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {
-      type: 'HorizontalLayout'
+      type: 'Group'
     };
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
@@ -86,12 +88,14 @@ describe('Horizontal layout', () => {
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
-    expect(fixture.nativeElement.children[0].children.length).toBe(0);
+    const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
+    // title
+    expect(card[0].nativeElement.children.length).toBe(1);
   });
 
   it('render with null elements', () => {
-    const uischema: HorizontalLayout = {
-      type: 'HorizontalLayout',
+    const uischema: GroupLayout = {
+      type: 'Group',
       elements: null
     };
     const mockSubStore = MockNgRedux.getSelectorStub();
@@ -108,12 +112,15 @@ describe('Horizontal layout', () => {
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
-    expect(fixture.nativeElement.children[0].children.length).toBe(0);
+    const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
+    // title
+    expect(card[0].nativeElement.children.length).toBe(1);
   });
 
   it('render with children', () => {
-    const uischema: HorizontalLayout = {
-      type: 'HorizontalLayout',
+    const uischema: GroupLayout = {
+      type: 'Group',
+      label: 'foo',
       elements: [
         { type: 'Control' },
         { type: 'Control' }
@@ -133,8 +140,8 @@ describe('Horizontal layout', () => {
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
-    expect(fixture.nativeElement.children[0].children.length).toBe(2);
-    expect(fixture.nativeElement.children[0].hidden).toBe(false);
+    const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
+    // title + 2 controls
+    expect(card[0].nativeElement.children.length).toBe(3);
   });
-
 });
