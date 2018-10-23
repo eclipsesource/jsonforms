@@ -30,11 +30,11 @@ import { NgRedux } from '@angular-redux/store';
 @Component({
     selector: 'GroupLayoutRenderer',
     template: `
-    <mat-card>
-        <mat-card-title>{{uischema.label}}</mat-card-title>
-        <div *ngFor="let props of renderProps" fxFlex>
+    <mat-card fxLayout='column'>
+        <mat-card-title class='mat-title'>{{uischema.label}}</mat-card-title>
+          <div *ngFor="let props of renderProps" fxFlex>
             <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
-        </div>
+          </div>
     </mat-card>
     `
 })
