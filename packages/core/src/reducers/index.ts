@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { combineReducers, Reducer } from 'redux';
+import * as _ from 'lodash';
 import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { configReducer } from './config';
@@ -61,13 +62,13 @@ export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsStat
     ...additionalReducers
   });
 
-export const getData = (state: JsonFormsState) => extractData(state.jsonforms.core);
-export const getSchema = (state: JsonFormsState) => extractSchema(state.jsonforms.core);
-export const getUiSchema = (state: JsonFormsState) => extractUiSchema(state.jsonforms.core);
+export const getData = (state: JsonFormsState) => extractData(_.get(state, 'jsonforms.core'));
+export const getSchema = (state: JsonFormsState) => extractSchema(_.get(state, 'jsonforms.core'));
+export const getUiSchema = (state: JsonFormsState) => extractUiSchema(_.get(state, 'jsonforms.core'));
 export const getDefaultData = (state: JsonFormsState): JsonFormsDefaultDataRegistryEntry[] =>
-    extractDefaultData(state.jsonforms.defaultData);
+    extractDefaultData(_.get(state, 'jsonforms.defaultData'));
 export const getRenderers = (state: JsonFormsState):
-    JsonFormsRendererRegistryEntry[] => state.jsonforms.renderers;
+    JsonFormsRendererRegistryEntry[] => _.get(state, 'jsonforms.renderers');
 
 export const findUISchema = (state: JsonFormsState) =>
   (schema: JsonSchema,

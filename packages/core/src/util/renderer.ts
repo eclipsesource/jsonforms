@@ -485,7 +485,7 @@ export const mapStateToJsonFormsRendererProps =
         }
 
         return {
-            renderers: state.jsonforms.renderers || [],
+            renderers: _.get(state.jsonforms, 'renderers') || [],
             schema: ownProps.schema || getSchema(state),
             uischema
         };
