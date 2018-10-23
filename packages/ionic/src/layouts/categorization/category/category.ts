@@ -7,9 +7,7 @@ import { JsonFormsBaseRenderer } from '@jsonforms/angular';
   selector: 'jsonforms-category',
   template: `
       <div *ngFor="let element of elements">
-          <jsonforms-outlet
-              [render-props]="element"
-          ></jsonforms-outlet>
+          <jsonforms-outlet [renderProps]="element"></jsonforms-outlet>
       </div>
   `
 })

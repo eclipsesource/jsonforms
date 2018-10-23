@@ -27,9 +27,15 @@ import { DebugElement } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { By } from '@angular/platform-browser';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { IonicModule, IonicPageModule, Platform, Tab } from 'ionic-angular';
-import { JsonFormsOutlet } from '@jsonforms/angular';
-import { CategorizationTabLayoutRenderer, CategoryRenderer } from '../src';
+import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+import {
+    CategorizationTabLayoutRenderer,
+    CategoryRenderer,
+    StringControlRenderer,
+    stringControlTester
+} from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
 
 describe('Categorization tab layout', () => {
@@ -55,6 +61,8 @@ describe('Categorization tab layout', () => {
                 JsonFormsOutlet,
                 CategorizationTabLayoutRenderer,
                 CategoryRenderer,
+                UnknownRenderer,
+                StringControlRenderer
             ],
             imports: [
                 IonicModule.forRoot(CategorizationTabLayoutRenderer),
@@ -64,7 +72,16 @@ describe('Categorization tab layout', () => {
                 {provide: Platform, useClass: PlatformMock},
                 {provide: NgRedux, useFactory: MockNgRedux.getInstance},
             ],
-        }).compileComponents();
+        })
+            .overrideModule(BrowserDynamicTestingModule, {
+                set: {
+                    entryComponents: [
+                        StringControlRenderer,
+                        UnknownRenderer
+                    ]
+                }
+            })
+            .compileComponents();
 
         MockNgRedux.reset();
         fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
@@ -79,12 +96,18 @@ describe('Categorization tab layout', () => {
                 {
                     type: 'Category',
                     label: 'foo',
-                    scope: '#/properties/foo'
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/foo'
+                    }]
                 },
                 {
-                    type: 'Control',
+                    type: 'Category',
                     label: 'bar',
-                    scope: '#/properties/bar'
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/bar'
+                    }]
                 }
             ]
         };
@@ -95,7 +118,10 @@ describe('Categorization tab layout', () => {
                 core: {
                     data,
                     schema,
-                }
+                },
+                renderers: [
+                    { tester: stringControlTester, renderer: StringControlRenderer }
+                ]
             }
         });
         mockSubStore.complete();
@@ -120,12 +146,18 @@ describe('Categorization tab layout', () => {
                 {
                     type: 'Category',
                     label: 'foo',
-                    scope: '#/properties/foo'
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/foo'
+                    }]
                 },
                 {
                     type: 'Control',
                     label: 'bar',
-                    scope: '#/properties/bar'
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/bar'
+                    }]
                 }
             ]
         };
@@ -136,7 +168,10 @@ describe('Categorization tab layout', () => {
                 core: {
                     data,
                     schema,
-                }
+                },
+                renderers: [
+                    { tester: stringControlTester, renderer: StringControlRenderer }
+                ]
             }
         });
         fixture.detectChanges();
@@ -155,17 +190,26 @@ describe('Categorization tab layout', () => {
                     {
                         type: 'Category',
                         label: 'foo',
-                        scope: '#/properties/foo'
+                        elements: [{
+                            type: 'Control',
+                            scope: '#/properties/foo'
+                        }]
                     },
                     {
                         type: 'Control',
                         label: 'bar',
-                        scope: '#/properties/bar'
+                        elements: [{
+                            type: 'Control',
+                            scope: '#/properties/bar'
+                        }]
                     },
                     {
                         type: 'Control',
                         label: 'quux',
-                        scope: '#/properties/bar'
+                        elements: [{
+                            type: 'Control',
+                            scope: '#/properties/bar'
+                        }]
                     }
                 ]
             };
@@ -174,7 +218,10 @@ describe('Categorization tab layout', () => {
                     core: {
                         data,
                         schema,
-                    }
+                    },
+                    renderers: [
+                        { tester: stringControlTester, renderer: StringControlRenderer }
+                    ]
                 }
             });
             mockSubStore.complete();
@@ -182,11 +229,8 @@ describe('Categorization tab layout', () => {
 
             fixture.whenRenderingDone().then(() => {
                 fixture.detectChanges();
-                const activateCategory2: DebugElement[] =
-                    fixture.debugElement.queryAll(By.directive(CategoryRenderer));
                 const ionTabs2: DebugElement[] =
                     fixture.debugElement.queryAll(By.directive(Tab));
-                expect(activateCategory2.length).toBe(1);
                 expect(ionTabs2.length).toBe(3);
             });
         });
