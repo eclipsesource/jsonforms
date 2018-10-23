@@ -30,11 +30,11 @@ import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { MatCard, MatCardTitle } from '@angular/material';
 import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 import {
   GroupLayoutRenderer,
   groupLayoutTester
 } from '../src/layouts/group-layout.renderer';
-import { DebugElement } from '@angular/core';
 
 describe('Group layout tester', () => {
   it('should succeed', () => {
