@@ -49,7 +49,7 @@ import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
 
-export { JsonFormsRendererRegistryEntry }
+export { JsonFormsRendererRegistryEntry };
 
 export interface Labels {
     default: string;
@@ -221,8 +221,10 @@ export interface StatePropsOfScopedRenderer extends OwnPropsOfControl, StateProp
      * @param schema the JSON schema describing the data to be rendered
      * @param schemaPath the according schema path
      * @param path the instance path
+     * @param fallbackLayoutType the type of the layout to use
      */
-    findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
+    findUISchema(schema: JsonSchema, schemaPath: string,
+                 path: string, fallbackLayoutType?: string): UISchemaElement;
 }
 
 /**
@@ -361,7 +363,6 @@ export const mapDispatchToControlProps =
 export interface StatePropsOfArrayControl extends StatePropsOfControl {
     // not sure whether we want to expose ajv API
     childErrors?: ErrorObject[];
-    findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
 }
 
 /**
@@ -384,7 +385,6 @@ export const mapStateToArrayControlProps =
             schema,
             uischema,
             scopedSchema: resolvedSchema,
-            findUISchema: findUISchema(state),
             childErrors
         };
     };

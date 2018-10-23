@@ -22,12 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { JsonFormsModule } from '@jsonforms/angular';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatCardModule,
   MatCheckboxModule,
   MatDatepickerModule,
   MatFormFieldModule,
@@ -39,7 +39,8 @@ import {
   MatSlideToggleModule,
   MatTabsModule
 } from '@angular/material';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JsonFormsModule } from '@jsonforms/angular';
 import {
   BooleanControlRenderer,
   DateControlRenderer,
@@ -53,7 +54,8 @@ import {
   JsonFormsDetailComponent,
   LabelRenderer,
   MasterDetailService,
-  MasterListComponent
+  MasterListComponent,
+  ObjectControlRenderer
 } from './other';
 import {
   CategorizationTabLayoutRenderer,
@@ -79,6 +81,7 @@ import {
     MatListModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    MatCardModule
   ],
   declarations: [
     BooleanControlRenderer,
@@ -94,7 +97,8 @@ import {
     GroupLayoutRenderer,
     LabelRenderer,
     MasterListComponent,
-    JsonFormsDetailComponent
+    JsonFormsDetailComponent,
+    ObjectControlRenderer
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -110,7 +114,8 @@ import {
     LabelRenderer,
     CategorizationTabLayoutRenderer,
     MasterListComponent,
-    JsonFormsDetailComponent
+    JsonFormsDetailComponent,
+    ObjectControlRenderer
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

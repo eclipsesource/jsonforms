@@ -32,6 +32,7 @@ import { NumberControlRenderer, NumberControlRendererTester } from './controls/n
 import { RangeControlRenderer, RangeControlRendererTester } from './controls/range.renderer';
 import { DateControlRenderer, DateControlRendererTester } from './controls/date.renderer';
 import { ToggleControlRenderer, ToggleControlRendererTester } from './controls/toggle.renderer';
+import { ObjectControlRenderer, ObjectControlRendererTester } from './other/object.renderer';
 import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
 import {
   HorizontalLayoutRenderer,
@@ -61,6 +62,7 @@ export const angularMaterialRenderers:
   { tester: RangeControlRendererTester, renderer: RangeControlRenderer },
   { tester: DateControlRendererTester, renderer: DateControlRenderer },
   { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
+  { tester: ObjectControlRendererTester, renderer: ObjectControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
   { tester: groupLayoutTester, renderer: GroupLayoutRenderer },
