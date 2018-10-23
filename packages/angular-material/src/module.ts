@@ -24,6 +24,7 @@
 */
 import { CommonModule } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { JsonFormsModule } from '@jsonforms/angular';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -31,10 +32,10 @@ import {
   MatDatepickerModule,
   MatFormFieldModule,
   MatInputModule,
+  MatListModule,
   MatNativeDateModule,
   MatSliderModule,
-  MatSlideToggleModule,
-  MatTabsModule
+  MatSlideToggleModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
@@ -57,6 +58,7 @@ import {
   HorizontalLayoutRenderer,
   VerticalLayoutRenderer
 } from './layouts';
+import { MasterDetailService } from './other/master-detail/master-detail.service';
 
 @NgModule({
   imports: [
@@ -71,8 +73,9 @@ import {
     MatNativeDateModule,
     MatDatepickerModule,
     MatTabsModule,
+    MatListModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   declarations: [
     BooleanControlRenderer,
@@ -106,7 +109,10 @@ import {
     MasterListComponent,
     JsonFormsDetailComponent
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [
+    MasterDetailService
+  ]
 })
 export class JsonFormsAngularMaterialModule {
 }

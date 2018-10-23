@@ -13,6 +13,7 @@ import {
     toDataPath,
     uiTypeIs
 } from '@jsonforms/core';
+import { MasterDetailService } from './master-detail.service';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -24,17 +25,20 @@ export const removeSchemaKeywords = (path: string) => {
     selector: 'jsonforms-list-with-detail-master',
     template: `
     <div fxLayout='row' fxLayoutGap='16px'>
-        <ul flFlex>
-            <li *ngFor="let item of masterItems"
+        <div flFlex>
+          <mat-nav-list>
+            <mat-list-item
+                *ngFor="let item of masterItems"
                 [class.selected]="item === selectedItem"
                 (click)="onSelect(item)"
             >
-                <span class="badge">{{item.label}}</span>
-            </li>
-        </ul>
-        <jsonforms-detail
-           [item]="selectedItem"
-        ></jsonforms-detail>
+                <a matLine>{{item.label}}</a>
+            </mat-list-item>
+          </mat-nav-list>
+        </div>
+        <div flFlex>
+          <jsonforms-detail [item]="selectedItem"></jsonforms-detail>
+        </div>
     </div>`
 })
 export class MasterListComponent extends JsonFormsControl {
@@ -42,8 +46,12 @@ export class MasterListComponent extends JsonFormsControl {
     masterItems: any[];
     selectedItem: any;
 
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
+    constructor(
+        ngRedux: NgRedux<JsonFormsState>,
+        private masterDetailService: MasterDetailService
+    ) {
         super(ngRedux);
+        this.selectedItem = this.masterDetailService.getSelectedItem();
     }
 
     ngOnInit() {
@@ -58,7 +66,6 @@ export class MasterListComponent extends JsonFormsControl {
                 const resolvedSchema = resolveSchema(schema, `${controlElement.scope}/items`);
                 const detailUISchema = controlElement.options.detail ||
                     Generate.uiSchema(resolvedSchema, 'VerticalLayout');
-                console.log('resolved schema', resolvedSchema);
                 const masterItems = data.map((d: any, index: number) => {
                     const labelRefInstancePath =
                         removeSchemaKeywords(controlElement.options.labelRef);
@@ -75,19 +82,13 @@ export class MasterListComponent extends JsonFormsControl {
                 if (this.masterItems === undefined ||
                     this.masterItems.length !== masterItems.length) {
                     this.masterItems = masterItems;
-                    // this.masterParams = {
-                    //     addToNavStack: true,
-                    //     items: this.masterItems,
-                    //     path: composeWithUi(this.uischema as ControlElement, this.path),
-                    //     uischema: this.uischema,
-                    //     schema: this.schema
-                    // };
                 }
             });
     }
 
     onSelect(item: any): void {
         this.selectedItem = item;
+        this.masterDetailService.setSelectedItem(item);
     }
 }
 

@@ -44,7 +44,7 @@ import { NgRedux } from '@angular-redux/store';
 import 'rxjs/add/operator/map';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
-import { Subscription } from 'indefinite-observable';
+import { Subscription } from 'rxjs';
 import { JsonFormsControl } from './control';
 
 @Directive({
@@ -57,7 +57,8 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
     constructor(
         private viewContainerRef: ViewContainerRef,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private ngRedux: NgRedux<any> ) {
+        private ngRedux: NgRedux<any>
+    ) {
         super();
     }
 
@@ -70,9 +71,9 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
     }
 
     ngOnInit(): void {
-        this.subscription = this.ngRedux.select().subscribe((state: JsonFormsState) => {
-            this.update(state);
-        });
+        this.subscription = this.ngRedux
+            .select()
+            .subscribe((state: JsonFormsState) => this.update(state));
     }
 
     update(state: JsonFormsState) {
