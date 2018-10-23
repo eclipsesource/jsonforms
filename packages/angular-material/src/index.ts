@@ -44,6 +44,8 @@ import {
 } from './layouts/categorization-layout.renderer';
 
 import { LabelRenderer, LabelRendererTester } from './other/label.renderer';
+import { masterDetailTester, MasterListComponent } from './other/master-detail/master';
+import { GroupLayoutRenderer, groupLayoutTester } from './layouts/group-layout.renderer';
 
 export * from './controls';
 export * from './layouts';
@@ -61,7 +63,10 @@ export const angularMaterialRenderers:
   { tester: ToggleControlRendererTester, renderer: ToggleControlRenderer },
   // layouts
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
+  { tester: groupLayoutTester, renderer: GroupLayoutRenderer },
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
   { tester: categorizationTester, renderer: CategorizationTabLayoutRenderer },
   { tester: LabelRendererTester, renderer: LabelRenderer },
+  // other
+  { tester: masterDetailTester, renderer: MasterListComponent },
 ];

@@ -48,6 +48,10 @@ import {
   ToggleControlRenderer
 } from './controls';
 import { LabelRenderer } from './other';
+import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
+import { MasterListComponent } from './other/master-detail/master';
+import { JsonFormsDetailComponent } from './other/master-detail/detail';
+import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import {
   CategorizationTabLayoutRenderer,
   HorizontalLayoutRenderer,
@@ -81,7 +85,10 @@ import {
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer,
     CategorizationTabLayoutRenderer,
-    LabelRenderer
+    GroupLayoutRenderer,
+    LabelRenderer,
+    MasterListComponent,
+    JsonFormsDetailComponent
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -93,8 +100,11 @@ import {
     ToggleControlRenderer,
     VerticalLayoutRenderer,
     HorizontalLayoutRenderer,
+    GroupLayoutRenderer,
+    LabelRenderer,
     CategorizationTabLayoutRenderer,
-    LabelRenderer
+    MasterListComponent,
+    JsonFormsDetailComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
