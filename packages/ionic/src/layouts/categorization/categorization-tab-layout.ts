@@ -40,7 +40,14 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
         (props.uischema as Categorization).elements.forEach((category, index) => {
             if (this.categoryPages[index] === undefined ||
                 !_.isEqual(this.categoryPages[index].params.category, category)) {
-                this.categoryPages.push({renderer: CategoryRenderer, params: {category}});
+                this.categoryPages.push({
+                    renderer: CategoryRenderer,
+                    params: {
+                        uischema: category,
+                        schema: this.schema,
+                        path: this.path
+                    }
+                });
             }
             }
         );

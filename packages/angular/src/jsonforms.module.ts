@@ -29,7 +29,8 @@ import { JsonFormsOutlet } from './jsonforms.component';
 import { UnknownRenderer } from './unknown.component';
 @NgModule({
   declarations: [
-    JsonFormsOutlet, UnknownRenderer
+    JsonFormsOutlet,
+    UnknownRenderer
   ],
   entryComponents: [
     UnknownRenderer

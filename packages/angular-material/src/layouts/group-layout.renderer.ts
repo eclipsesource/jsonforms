@@ -23,23 +23,24 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JsonFormsState, RankedTester, rankWith, uiTypeIs, VerticalLayout } from '@jsonforms/core';
+import { GroupLayout, JsonFormsState, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { NgRedux } from '@angular-redux/store';
 
 @Component({
-    selector: 'VerticalLayoutRenderer',
+    selector: 'GroupLayoutRenderer',
     template: `
-    <div fxLayout='column'>
+    <mat-card>
+        <mat-card-title>{{uischema.label}}</mat-card-title>
         <div *ngFor="let props of renderProps" fxFlex>
             <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
         </div>
-    </div>
+    </mat-card>
     `
 })
-export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
+export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
 }
-export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
+export const groupLayoutTester: RankedTester = rankWith(1, uiTypeIs('Group'));

@@ -25,109 +25,113 @@
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JsonFormsOutlet } from '@jsonforms/angular';
+import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import {
-  VerticalLayoutRenderer,
-  verticalLayoutTester
+    VerticalLayoutRenderer,
+    verticalLayoutTester
 } from '../src/layouts/vertical-layout.renderer';
 
 describe('Vertical layout tester', () => {
-  it('should succeed', () => {
-    expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined)).toBe(1);
-  });
+    it('should succeed', () => {
+        expect(verticalLayoutTester({ type: 'VerticalLayout' }, undefined)).toBe(1);
+    });
 });
 describe('Vertical layout', () => {
-  let fixture: ComponentFixture<any>;
-  let component: any;
+    let fixture: ComponentFixture<any>;
+    let component: any;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        VerticalLayoutRenderer,
-        JsonFormsOutlet
-      ],
-      imports: [],
-      providers: [
-        { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-      ]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                VerticalLayoutRenderer,
+                UnknownRenderer,
+                JsonFormsOutlet
+            ],
+            imports: [],
+            providers: [
+                { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+            ]
+        }).overrideModule(BrowserDynamicTestingModule, {
+            set: {
+                entryComponents: [
+                    UnknownRenderer
+                ]
+            }
+        }).compileComponents();
+        MockNgRedux.reset();
+        fixture = TestBed.createComponent(VerticalLayoutRenderer);
+        component = fixture.componentInstance;
     });
-    TestBed.compileComponents();
-    MockNgRedux.reset();
-  });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(VerticalLayoutRenderer);
-    component = fixture.componentInstance;
-  });
+    it('render with undefined elements', () => {
+        const uischema: UISchemaElement = {
+            type: 'VerticalLayout'
+        };
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
 
-  it('render with undefined elements', () => {
-    const uischema: UISchemaElement = {
-      type: 'VerticalLayout'
-    };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
-
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: {},
-          schema: {},
-        }
-      }
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data: {},
+                    schema: {},
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(fixture.nativeElement.children[0].children.length).toBe(0);
     });
-    mockSubStore.complete();
-    fixture.detectChanges();
-    component.ngOnInit();
-    expect(fixture.nativeElement.children[0].children.length).toBe(0);
-  });
 
-  it('render with null elements', () => {
-    const uischema: VerticalLayout = {
-      type: 'VerticalLayout',
-      elements: null
-    };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
+    it('render with null elements', () => {
+        const uischema: VerticalLayout = {
+            type: 'VerticalLayout',
+            elements: null
+        };
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: {},
-          schema: {},
-        }
-      }
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data: {},
+                    schema: {},
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(fixture.nativeElement.children[0].children.length).toBe(0);
     });
-    mockSubStore.complete();
-    fixture.detectChanges();
-    component.ngOnInit();
-    expect(fixture.nativeElement.children[0].children.length).toBe(0);
-  });
 
-  it('render with children', () => {
-    const uischema: VerticalLayout = {
-      type: 'VerticalLayout',
-      elements: [
-        { type: 'Control' },
-        { type: 'Control' }
-      ]
-    };
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = uischema;
+    it('render with children', () => {
+        const uischema: VerticalLayout = {
+            type: 'VerticalLayout',
+            elements: [
+                { type: 'Control' },
+                { type: 'Control' }
+            ]
+        };
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
 
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data: {},
-          schema: {},
-        },
-      }
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data: {},
+                    schema: {},
+                },
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        expect(fixture.nativeElement.children[0].children.length).toBe(2);
+        expect(fixture.nativeElement.children[0].hidden).toBe(false);
     });
-    mockSubStore.complete();
-    fixture.detectChanges();
-    component.ngOnInit();
-    expect(fixture.nativeElement.children[0].children.length).toBe(2);
-    expect(fixture.nativeElement.children[0].hidden).toBe(false);
-  });
 
 });

@@ -24,21 +24,21 @@
 */
 import * as _ from 'lodash';
 import {
-  ComponentFactoryResolver,
-  Directive,
-  Input,
-  OnDestroy,
-  OnInit,
-  Type,
-  ViewContainerRef
+    ComponentFactoryResolver,
+    Directive,
+    Input,
+    OnDestroy,
+    OnInit,
+    Type,
+    ViewContainerRef
 } from '@angular/core';
 import {
-  createId,
-  isControl,
-  JsonFormsProps,
-  JsonSchema,
-  mapStateToJsonFormsRendererProps,
-  UISchemaElement
+    createId,
+    isControl,
+    JsonFormsProps, JsonFormsState,
+    JsonSchema,
+    mapStateToJsonFormsRendererProps,
+    OwnPropsOfRenderer,
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 import 'rxjs/add/operator/map';
@@ -48,68 +48,71 @@ import { Subscription } from 'indefinite-observable';
 import { JsonFormsControl } from './control';
 
 @Directive({
-  selector: 'jsonforms-outlet',
+    selector: 'jsonforms-outlet',
 })
-export class JsonFormsOutlet implements OnInit, OnDestroy {
+export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
-  @Input() path: string;
-  @Input() uischema: UISchemaElement;
-  @Input() schema: UISchemaElement;
+    private subscription: Subscription;
 
-  private subscription: Subscription;
+    constructor(
+        private viewContainerRef: ViewContainerRef,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private ngRedux: NgRedux<any> ) {
+        super();
+    }
 
-  constructor(
-    private viewContainerRef: ViewContainerRef,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private ngRedux: NgRedux<any> ) {
-  }
+    @Input()
+    set renderProps(renderProps: OwnPropsOfRenderer) {
+        this.path = renderProps.path;
+        this.schema = renderProps.schema;
+        this.uischema = renderProps.uischema;
+        this.update(this.ngRedux.getState());
+    }
 
-  ngOnInit(): void {
-    const state$ = this.ngRedux.select(
-      state =>
-          mapStateToJsonFormsRendererProps(
-              state,
-              {
-                  schema: this.schema,
-                  uischema: this.uischema
-              }
-          ),
-      (x, y) => _.isEqual(x, y)
-    );
-    this.subscription = state$.subscribe(props => {
-      const { renderers } = props as JsonFormsProps;
-      const schema : JsonSchema = this.schema || props.schema;
-      const uischema = this.uischema || props.uischema;
-      const id = isControl(props.uischema) ? createId(props.uischema.scope) : undefined;
+    ngOnInit(): void {
+        this.subscription = this.ngRedux.select().subscribe((state: JsonFormsState) => {
+            this.update(state);
+        });
+    }
 
-      const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-      let bestComponent: Type<any> = UnknownRenderer;
-      if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
-        bestComponent = renderer.renderer;
-      }
-      if (bestComponent === UnknownRenderer) {
-        console.warn('No renderer found for:');
-        console.warn('\tSchema', JSON.stringify(schema, null, 2));
-        console.warn('\tUI Schema', JSON.stringify(uischema, null, 2));
-      }
-      const componentFactory = this.componentFactoryResolver.resolveComponentFactory(bestComponent);
-      this.viewContainerRef.clear();
+    update(state: JsonFormsState) {
+        const props = mapStateToJsonFormsRendererProps(
+            state,
+            {
+                schema: this.schema,
+                uischema: this.uischema,
+                path: this.path
+            }
+        );
+        const { renderers } = props as JsonFormsProps;
+        const schema : JsonSchema = this.schema || props.schema;
+        const uischema = this.uischema || props.uischema;
+        const id = isControl(props.uischema) ? createId(props.uischema.scope) : undefined;
 
-      const componentRef = this.viewContainerRef.createComponent(componentFactory);
-      if (componentRef.instance instanceof JsonFormsBaseRenderer) {
-        const instance = (componentRef.instance as JsonFormsBaseRenderer);
-        instance.uischema = uischema;
-        instance.schema = schema;
-        instance.path = this.path;
-        if (instance instanceof  JsonFormsControl) {
-            (instance as JsonFormsControl).id = id;
+        const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+        let bestComponent: Type<any> = UnknownRenderer;
+        if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
+            bestComponent = renderer.renderer;
         }
-      }
-    });
-  }
+        const componentFactory =
+            this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+        this.viewContainerRef.clear();
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+        const componentRef = this.viewContainerRef.createComponent(componentFactory);
+        if (componentRef.instance instanceof JsonFormsBaseRenderer) {
+            const instance = (componentRef.instance as JsonFormsBaseRenderer);
+            instance.uischema = uischema;
+            instance.schema = schema;
+            instance.path = this.path;
+            if (instance instanceof  JsonFormsControl) {
+                (instance as JsonFormsControl).id = id;
+            }
+        }
+    }
 
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
 }
