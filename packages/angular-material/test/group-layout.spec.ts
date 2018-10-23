@@ -141,6 +141,9 @@ describe('Group layout', () => {
     fixture.detectChanges();
     component.ngOnInit();
     const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
+    const title: DebugElement = fixture.debugElement.query(By.directive(MatCardTitle));
+
+    expect(title.nativeElement.textContent).toBe('foo');
     // title + 2 controls
     expect(card[0].nativeElement.children.length).toBe(3);
   });

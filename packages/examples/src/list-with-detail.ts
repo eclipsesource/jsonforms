@@ -102,7 +102,7 @@ const uischema = {
                     ]
                 },
                 {
-                    type: 'VerticalLayout',
+                    type: 'Group',
                     label: 'Customer',
                     elements: [
                         {
