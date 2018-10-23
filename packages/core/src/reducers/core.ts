@@ -139,9 +139,9 @@ export const coreReducer = (
   }
 };
 
-export const extractData = (state: JsonFormsCore) => state.data;
-export const extractSchema = (state: JsonFormsCore) => state.schema;
-export const extractUiSchema = (state: JsonFormsCore) => state.uischema;
+export const extractData = (state: JsonFormsCore) => _.get(state, 'data');
+export const extractSchema = (state: JsonFormsCore) => _.get(state, 'schema');
+export const extractUiSchema = (state: JsonFormsCore) => _.get(state, 'uischema');
 export const errorAt = (instancePath: string) => (state: JsonFormsCore): any[] => {
   return _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
 };
