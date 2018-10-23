@@ -1,0 +1,104 @@
+/*
+  The MIT License
+  
+  Copyright (c) 2018 EclipseSource Munich
+  https://github.com/eclipsesource/jsonforms
+  
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+*/
+import { NgRedux } from '@angular-redux/store';
+import { Component, Input } from '@angular/core';
+import { MatAutocompleteSelectedEvent } from '@angular/material';
+import { JsonFormsControl } from '@jsonforms/angular';
+import {
+    Actions,
+    composeWithUi,
+    ControlElement,
+    JsonFormsState,
+    OwnPropsOfControl
+} from '@jsonforms/core';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators/map';
+import { startWith } from 'rxjs/operators/startWith';
+
+@Component({
+    selector: 'AutocompleteControlRenderer',
+    template: `
+        <mat-form-field fxFlex>
+            <mat-label>{{ label }}</mat-label>
+            <input
+                matInput
+                type="text"
+                (change)="onChange($event)"
+                [value]="getValue()"
+                placeholder="{{ description }}"
+                [id]="id"
+                [formControl]="form"
+                [matAutocomplete]="auto"
+            >
+            <mat-autocomplete
+                autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelect($event)">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                    {{ option }}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-error>{{ error }}</mat-error>
+        </mat-form-field>
+    `
+})
+export class AutocompleteControlRenderer extends JsonFormsControl {
+    @Input() options: string[];
+    filteredOptions: Observable<string[]>;
+
+    constructor(ngRedux: NgRedux<JsonFormsState>) {
+        super(ngRedux);
+    }
+    getValue = () => this.data || '';
+    getEventValue = (event: any) => event.target.value;
+
+    ngOnInit() {
+        super.ngOnInit();
+        this.filteredOptions = this.form.valueChanges
+            .pipe(
+                startWith(''),
+                map(val => this.filter(val))
+            );
+    }
+
+    onSelect(ev: MatAutocompleteSelectedEvent) {
+        const path = composeWithUi(this.uischema as ControlElement, this.path);
+        this.ngRedux.dispatch(Actions.update(path, () => ev.option.value));
+        this.triggerValidation();
+    }
+
+    filter(val: string): string[] {
+        return (this.options || this.scopedSchema.enum || []).filter(option =>
+            !val || option.toLowerCase().indexOf(val.toLowerCase()) === 0);
+    }
+    protected getOwnProps(): OwnPropsOfAutoComplete {
+        return {
+            ...super.getOwnProps(),
+            options: this.options
+        };
+    }
+}
+
+interface OwnPropsOfAutoComplete extends OwnPropsOfControl {
+    options: string[];
+}

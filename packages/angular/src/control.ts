@@ -111,7 +111,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
         return {...props, ...dispatch};
     }
 
-    private triggerValidation() {
+    protected triggerValidation() {
         // these cause the correct update of the error underline, seems to be
         // related to ionic-team/ionic#11640
         this.form.markAsTouched();
