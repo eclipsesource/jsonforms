@@ -15,10 +15,11 @@ import { CategoryRenderer } from './category/category';
 
 @Component({
     selector: 'jsonforms-categorization-layout',
-    template: `<ion-tabs>
+    template: `
+      <ion-tabs>
         <ion-tab
           *ngFor="let category of categoryPages; trackBy: trackByCategory"
-          tabTitle="{{category.params.category.label}}"
+          tabTitle="{{category.params.uischema.label}}"
           [root]="category.renderer"
           [rootParams]="category.params"
         >
@@ -37,24 +38,26 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
     }
 
     mapAdditionalProps = (props: any) => {
-        (props.uischema as Categorization).elements.forEach((category, index) => {
-            if (this.categoryPages[index] === undefined ||
-                !_.isEqual(this.categoryPages[index].params.category, category)) {
-                this.categoryPages.push({
-                    renderer: CategoryRenderer,
-                    params: {
-                        uischema: category,
-                        schema: this.schema,
-                        path: this.path
-                    }
-                });
-            }
+        this.categoryPages = [];
+        (props.uischema as Categorization).elements.forEach(
+            (category, index) => {
+                if (this.categoryPages[index] === undefined ||
+                    !_.isEqual(this.categoryPages[index].params.category, category)) {
+                    this.categoryPages.push({
+                        renderer: CategoryRenderer,
+                        params: {
+                            uischema: category,
+                            schema: this.schema,
+                            path: this.path
+                        }
+                    });
+                }
             }
         );
     }
 
     trackByCategory(_i: number, categoryPage: any) {
-        return categoryPage.params.category;
+        return categoryPage.params.uischema;
     }
 }
 
