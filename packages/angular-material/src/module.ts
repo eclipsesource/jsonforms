@@ -33,7 +33,8 @@ import {
   MatInputModule,
   MatNativeDateModule,
   MatSliderModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatTabsModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
@@ -65,6 +66,7 @@ import {
     MatSlideToggleModule,
     MatNativeDateModule,
     MatDatepickerModule,
+    MatTabsModule,
     ReactiveFormsModule,
     FlexLayoutModule
   ],
