@@ -37,6 +37,29 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { startWith } from 'rxjs/operators/startWith';
 
+/**
+ * To use this component you will need to add your own tester:
+ * <pre><code>
+ * ...
+ * export const AutocompleteControlRendererTester: RankedTester = rankWith(2, isEnumControl);
+ * ...
+ * </code></pre>
+ * Add the tester and renderer to JSONForms registry:
+ * <pre><code>
+ * ...
+ * { tester: AutocompleteControlRendererTester, renderer: AutocompleteControlRenderer },
+ * ...
+ * </code></pre>
+ * Furthermore you need to update your module.
+ * <pre><code>
+ * ...
+ * imports: [JsonFormsAngularMaterialModule, MatAutocompleteModule],
+ * declarations: [AutocompleteControlRenderer],
+ * entryComponents: [AutocompleteControlRenderer]
+ * ...
+ * </code></pre>
+ * 
+ */
 @Component({
     selector: 'AutocompleteControlRenderer',
     template: `
