@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -39,7 +39,7 @@ import {
   MatSlideToggleModule,
   MatTabsModule
 } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import {
   BooleanControlRenderer,
   DateControlRenderer,
@@ -49,16 +49,18 @@ import {
   TextControlRenderer,
   ToggleControlRenderer
 } from './controls';
-import { LabelRenderer } from './other';
+import {
+  JsonFormsDetailComponent,
+  LabelRenderer,
+  MasterDetailService,
+  MasterListComponent
+} from './other';
 import {
   CategorizationTabLayoutRenderer,
+  GroupLayoutRenderer,
   HorizontalLayoutRenderer,
   VerticalLayoutRenderer
 } from './layouts';
-import { MasterListComponent } from './other/master-detail/master';
-import { JsonFormsDetailComponent } from './other/master-detail/detail';
-import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
-import { MasterDetailService } from './other/master-detail/master-detail.service';
 
 @NgModule({
   imports: [
