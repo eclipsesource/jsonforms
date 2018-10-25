@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,16 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+import { ComponentFixture } from '@angular/core/testing';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import {
     VerticalLayoutRenderer,
     verticalLayoutTester
 } from '../src/layouts/vertical-layout.renderer';
+import { Subject } from 'rxjs';
 
 describe('Vertical layout tester', () => {
     it('should succeed', () => {
@@ -43,25 +41,7 @@ describe('Vertical layout', () => {
     let component: any;
 
     beforeEach(() => {
-        TestBed.configureTestingModule({
-            declarations: [
-                VerticalLayoutRenderer,
-                UnknownRenderer,
-                JsonFormsOutlet
-            ],
-            imports: [],
-            providers: [
-                { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-            ]
-        }).overrideModule(BrowserDynamicTestingModule, {
-            set: {
-                entryComponents: [
-                    UnknownRenderer
-                ]
-            }
-        }).compileComponents();
-        MockNgRedux.reset();
-        fixture = TestBed.createComponent(VerticalLayoutRenderer);
+        fixture = beforeEachLayoutTest(VerticalLayoutRenderer);
         component = fixture.componentInstance;
     });
 
@@ -69,19 +49,9 @@ describe('Vertical layout', () => {
         const uischema: UISchemaElement = {
             type: 'VerticalLayout'
         };
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data: {},
-                    schema: {},
-                }
-            }
-        });
+        const mockSubStore: Subject<any> =
+            setupMockStore(fixture, { data: {}, schema: {}, uischema });
         mockSubStore.complete();
-        fixture.detectChanges();
         component.ngOnInit();
         expect(fixture.nativeElement.children[0].children.length).toBe(0);
     });
@@ -91,19 +61,10 @@ describe('Vertical layout', () => {
             type: 'VerticalLayout',
             elements: null
         };
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
 
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data: {},
-                    schema: {},
-                }
-            }
-        });
+        const mockSubStore: Subject<any> =
+            setupMockStore(fixture, { data: {}, schema: {}, uischema });
         mockSubStore.complete();
-        fixture.detectChanges();
         component.ngOnInit();
         expect(fixture.nativeElement.children[0].children.length).toBe(0);
     });
@@ -116,19 +77,9 @@ describe('Vertical layout', () => {
                 { type: 'Control' }
             ]
         };
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data: {},
-                    schema: {},
-                },
-            }
-        });
+        const mockSubStore: Subject<any> =
+            setupMockStore(fixture, { data: {}, schema: {}, uischema });
         mockSubStore.complete();
-        fixture.detectChanges();
         component.ngOnInit();
         expect(fixture.nativeElement.children[0].children.length).toBe(2);
         expect(fixture.nativeElement.children[0].hidden).toBe(false);

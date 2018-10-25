@@ -29,7 +29,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatTab, MatTabBody, MatTabGroup, MatTabsModule } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsOutlet } from '@jsonforms/angular';
+import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CategorizationTabLayoutRenderer } from '../src';
 
 describe('Categorization tab layout', () => {
@@ -54,6 +55,7 @@ describe('Categorization tab layout', () => {
             declarations: [
                 JsonFormsOutlet,
                 CategorizationTabLayoutRenderer,
+                UnknownRenderer
             ],
             imports: [
                 MatTabsModule, NoopAnimationsModule
@@ -61,7 +63,15 @@ describe('Categorization tab layout', () => {
             providers: [
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance },
             ],
-        }).compileComponents();
+        })
+            .overrideModule(BrowserDynamicTestingModule, {
+                set: {
+                    entryComponents: [
+                        UnknownRenderer
+                    ]
+                }
+            })
+            .compileComponents();
 
         MockNgRedux.reset();
         fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
