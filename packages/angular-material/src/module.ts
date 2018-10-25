@@ -36,10 +36,10 @@ import {
   MatNativeDateModule,
   MatSidenavModule,
   MatSliderModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatTabsModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { JsonFormsModule } from '@jsonforms/angular';
 import {
   BooleanControlRenderer,
   DateControlRenderer,
@@ -50,15 +50,14 @@ import {
   ToggleControlRenderer
 } from './controls';
 import { LabelRenderer } from './other';
-import { HorizontalLayoutRenderer, VerticalLayoutRenderer } from './layouts';
-import { MasterListComponent } from './other/master-detail/master';
-import { JsonFormsDetailComponent } from './other/master-detail/detail';
-import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import {
   CategorizationTabLayoutRenderer,
   HorizontalLayoutRenderer,
   VerticalLayoutRenderer
 } from './layouts';
+import { MasterListComponent } from './other/master-detail/master';
+import { JsonFormsDetailComponent } from './other/master-detail/detail';
+import { GroupLayoutRenderer } from './layouts/group-layout.renderer';
 import { MasterDetailService } from './other/master-detail/master-detail.service';
 
 @NgModule({
