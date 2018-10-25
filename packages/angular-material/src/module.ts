@@ -34,6 +34,7 @@ import {
   MatInputModule,
   MatListModule,
   MatNativeDateModule,
+  MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule
 } from '@angular/material';
@@ -73,6 +74,7 @@ import { MasterDetailService } from './other/master-detail/master-detail.service
     MatNativeDateModule,
     MatDatepickerModule,
     MatTabsModule,
+    MatSidenavModule,
     MatListModule,
     ReactiveFormsModule,
     FlexLayoutModule,
