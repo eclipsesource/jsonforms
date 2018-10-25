@@ -23,7 +23,8 @@
   THE SOFTWARE.
 */
 import { By } from '@angular/platform-browser';
-import { MatListItem, MatListModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatListItem, MatListModule, MatSidenavModule } from '@angular/material';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -97,7 +98,9 @@ describe('Master detail', () => {
                 JsonFormsDetailComponent
             ],
             imports: [
-                MatListModule
+                MatListModule,
+                MatSidenavModule,
+                NoopAnimationsModule
             ],
             providers: [
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance },
