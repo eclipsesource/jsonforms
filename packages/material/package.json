@@ -57,10 +57,10 @@
   "dependencies": {
     "@jsonforms/core": "^2.0.12-rc.1",
     "@jsonforms/react": "^2.0.12-rc.1",
-    "@material-ui/core": "^1.2.1",
-    "@material-ui/icons": "^1.0.0",
-    "@material-ui/lab": "^1.0.0-alpha.5",
-    "material-ui-pickers": "1.0.0-rc.9",
+    "@material-ui/core": "^3.3.1",
+    "@material-ui/icons": "^3.0.1",
+    "@material-ui/lab": "^3.0.0-alpha.21",
+    "material-ui-pickers": "^1.0.0",
     "moment": "^2.20.1",
     "react": "^16.3.2",
     "redux": "^3.7.2"
