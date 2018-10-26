@@ -31,6 +31,7 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isRangeControl,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   RankedTester,
   rankWith
@@ -120,4 +121,6 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialSliderControlTester: RankedTester = rankWith(4, isRangeControl);
-export default connectToJsonForms(mapStateToControlProps)(MaterialSliderControl);
+export default connectToJsonForms(
+  mapStateToControlProps, mapDispatchToControlProps
+)(MaterialSliderControl);

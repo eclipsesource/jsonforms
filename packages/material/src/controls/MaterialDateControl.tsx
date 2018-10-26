@@ -38,12 +38,11 @@ import {
     StatePropsOfControl
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
-import { DatePicker } from 'material-ui-pickers';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import { connect } from 'react-redux';
 

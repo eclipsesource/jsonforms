@@ -127,7 +127,7 @@ class EditorBar extends
       <div className={classes.root}>
         <AppBar position='static'>
           <Toolbar>
-            <Typography variant='title' color='inherit' className={classes.flex}>
+            <Typography variant='h6' color='inherit' className={classes.flex}>
               User and Task Editor
             </Typography>
             <Button component='label' className={classes.button} color='inherit'>
