@@ -46,7 +46,8 @@ export const MaterialArrayLayoutRenderer  =
      path,
      findUISchema,
      addItem,
-      removeItems
+     removeItems,
+     errors
    }: ArrayControlProps) => {
 
     const controlElement = uischema as ControlElement;
@@ -65,6 +66,7 @@ export const MaterialArrayLayoutRenderer  =
         findUISchema={findUISchema}
         uischema={uischema}
         schema={schema}
+        errors={errors}
       />
     );
   };
