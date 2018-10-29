@@ -86,7 +86,7 @@ describe('Material Label Renderer', () => {
       </Provider>
     );
 
-    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'h2') as HTMLHeadingElement;
+    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'h6') as HTMLHeadingElement;
     expect(label.textContent).toBe('Foo');
 
   });
@@ -102,7 +102,7 @@ describe('Material Label Renderer', () => {
         />
       </Provider>
     );
-    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h2')[0] as HTMLElement;
+    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h6')[0] as HTMLElement;
     expect(getComputedStyle(control).display).toBe('none');
   });
 
@@ -113,7 +113,7 @@ describe('Material Label Renderer', () => {
         <MaterialLabelRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
-    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h2')[0] as HTMLElement;
+    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h6')[0] as HTMLElement;
     expect(control.hidden).toBeFalsy();
   });
 
