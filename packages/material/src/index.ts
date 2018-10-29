@@ -86,6 +86,7 @@ export * from './complex';
 export * from './controls';
 export * from './layouts';
 export * from './fields';
+export * from './util';
 
 export const materialRenderers: { tester: RankedTester, renderer: any}[] = [
   // controls

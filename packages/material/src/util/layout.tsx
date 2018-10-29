@@ -26,12 +26,13 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import {
     JsonSchema,
+    OwnPropsOfRenderer,
     UISchemaElement,
-  } from '@jsonforms/core';
+} from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
-const renderChildren = (
+export const renderLayoutElements = (
     elements: UISchemaElement[],
     schema: JsonSchema,
     path: string
@@ -48,11 +49,8 @@ const renderChildren = (
       )
   );
 
-export interface MaterialLayoutRendererProps {
+export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
     elements: UISchemaElement[];
-    schema: JsonSchema;
-    path: string;
-    visible: boolean;
     direction: 'row'|'column';
 }
 export const MaterialLayoutRenderer = (
@@ -64,7 +62,7 @@ export const MaterialLayoutRenderer = (
     return (
       <Hidden xsUp={!visible}>
         <Grid container direction={direction} spacing={direction === 'row' ? 16 : 0}>
-          {renderChildren(elements, schema, path)}
+          {renderLayoutElements(elements, schema, path)}
         </Grid>
       </Hidden>
     );
