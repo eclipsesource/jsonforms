@@ -92,9 +92,13 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
             labelClear = _.startsWith(label.clear, '%') ? 'Clear' : label.clear;
         }
 
+        const getValue = (event: React.FormEvent<HTMLInputElement>) =>
+            (event.target as HTMLInputElement).value;
+
         return (
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <DatePicker
+                    keyboard
                     id={id + '-input'}
                     label={computeLabel(labelText, required)}
                     error={!isValid}
@@ -106,6 +110,9 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
                     onChange={ datetime =>
                         handleChange(path, datetime ? moment(datetime).format('YYYY-MM-DD') : '')
                     }
+                    onInputChange={ ev =>
+                        handleChange(path, getValue(ev) ?
+                            moment(getValue(ev)).format('YYYY-MM-DD') : '')}
                     format={localeDateTimeFormat}
                     clearable={true}
                     disabled={!enabled}

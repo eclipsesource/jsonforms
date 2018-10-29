@@ -65,11 +65,15 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     if (!visible) {
       style = {display: 'none'};
     }
+
+    const getValue = (event: React.FormEvent<HTMLInputElement>) =>
+            (event.target as HTMLInputElement).value;
     const inputProps = {};
 
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <DateTimePicker
+          keyboard
           id={id + '-input'}
           label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
           error={!isValid}
@@ -80,9 +84,9 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
           helperText={!isValid ? errors : description}
           InputLabelProps={{shrink: true, }}
           value={data || null}
-          onChange={ datetime =>
-            handleChange(path, datetime ? moment(datetime).format() : '')
-          }
+          onChange={datetime => handleChange(path, datetime ? moment(datetime).format() : '')}
+          onInputChange={ev =>
+            handleChange(path, getValue(ev) ? moment(getValue(ev)).format() : '')}
           format='MM/DD/YYYY h:mm a'
           clearable={true}
           disabled={!enabled}
