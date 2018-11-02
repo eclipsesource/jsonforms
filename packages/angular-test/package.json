@@ -20,7 +20,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.4"
   },
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
+    "build": "tsc",
     "test": "echo 'Nothing to do'"
   }
 }
