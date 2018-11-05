@@ -30,12 +30,8 @@ import {
     additionalTestData,
     canBeDisabled,
     defaultTestData,
-    ErrorTestExpectation,
     initComponent,
     mustHaveId,
-    numberAdditionalPropsTest,
-    numberErrorTest,
-    numberInputEventTest,
     renderFloat,
     renderInteger,
     setupMockStore,
@@ -47,9 +43,9 @@ import {
 } from '@jsonforms/angular-test';
 import { NgRedux } from '@angular-redux/store';
 import { IonicModule, Label, Platform, TextInput } from 'ionic-angular';
-import { PlatformMock } from '../test-config/platform-mock';
-import { async, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
+import { PlatformMock } from '../test-config/platform-mock';
 
 describe('Number field tester', () => {
     const uischema = {
@@ -87,7 +83,7 @@ describe('Number field tester', () => {
 
 describe(
     'Ionic number control', () => {
-        let fixture;
+        let fixture: ComponentFixture<any>;
         let component: any;
         let textInput: DebugElement;
         let textInputInstance: any;
@@ -153,7 +149,7 @@ describe(
 
         // possibly related to https://github.com/ionic-team/ionic/issues/14370
         xit('should support updating with null', () => {
-            updateWithUndefined(fixture, defaultTestData, () => {
+            updateWithNull(fixture, defaultTestData, () => {
                 // not null
                 expect(textInputInstance.value).toBe(null);
             });

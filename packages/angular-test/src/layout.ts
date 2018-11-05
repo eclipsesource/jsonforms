@@ -7,19 +7,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 export const beforeEachLayoutTest =
     <LAYOUT>(
         Renderer: any,
-        additionalDeclarations: any[] = [],
-        imports: any[]= []
+        { declarations = [], imports = [], providers = []}: any = {}
     ): ComponentFixture<LAYOUT> => {
         TestBed.configureTestingModule({
             declarations: [
                 Renderer,
                 UnknownRenderer,
                 JsonFormsOutlet,
-                ...additionalDeclarations
+                ...declarations
             ],
-            imports: imports,
+            imports,
             providers: [
-                {provide: NgRedux, useFactory: MockNgRedux.getInstance}
+                { provide: NgRedux, useFactory: MockNgRedux.getInstance },
+                ...providers
             ]
         }).overrideModule(BrowserDynamicTestingModule, {
             set: {
