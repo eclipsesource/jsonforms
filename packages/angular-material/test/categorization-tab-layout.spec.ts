@@ -64,15 +64,13 @@ describe('Categorization tab layout', () => {
             providers: [
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance },
             ],
-        })
-            .overrideModule(BrowserDynamicTestingModule, {
-                set: {
-                    entryComponents: [
-                        UnknownRenderer
-                    ]
-                }
-            })
-            .compileComponents();
+        }).overrideModule(BrowserDynamicTestingModule, {
+            set: {
+                entryComponents: [
+                    UnknownRenderer
+                ]
+            }
+        }).compileComponents();
 
         MockNgRedux.reset();
         fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);

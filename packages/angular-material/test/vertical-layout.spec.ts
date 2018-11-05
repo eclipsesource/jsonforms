@@ -24,7 +24,7 @@
 */
 import { ComponentFixture } from '@angular/core/testing';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
-import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
+import { beforeEachLayoutTest, initComponent, setupMockStore } from '@jsonforms/angular-test';
 import {
     VerticalLayoutRenderer,
     verticalLayoutTester
@@ -52,8 +52,7 @@ describe('Vertical layout', () => {
         };
         const mockSubStore: Subject<any> =
             setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
+        initComponent(fixture, mockSubStore);
         expect(fixture.nativeElement.children[0].children.length).toBe(0);
         // the component is wrapped in a div
         expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
@@ -67,8 +66,7 @@ describe('Vertical layout', () => {
 
         const mockSubStore: Subject<any> =
             setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
+        initComponent(fixture, mockSubStore);
         expect(fixture.nativeElement.children[0].children.length).toBe(0);
     });
 
@@ -82,8 +80,7 @@ describe('Vertical layout', () => {
         };
         const mockSubStore: Subject<any> =
             setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
+        initComponent(fixture, mockSubStore);
         expect(fixture.nativeElement.children[0].children.length).toBe(2);
         expect(fixture.nativeElement.children[0].hidden).toBe(false);
     });

@@ -23,12 +23,14 @@
   THE SOFTWARE.
 */
 import { TestBed } from '@angular/core/testing';
-import { JsonFormsOutlet } from '@jsonforms/angular';
+import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { IonicModule, Platform } from 'ionic-angular';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { HorizontalLayoutRenderer } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
+import { initComponent, setupMockStore } from '@jsonforms/angular-test';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 
 describe('Horizontal layout', () => {
     let fixture: any;
@@ -54,6 +56,7 @@ describe('Horizontal layout', () => {
     beforeEach((() => {
         TestBed.configureTestingModule({
             declarations: [
+                UnknownRenderer,
                 JsonFormsOutlet,
                 HorizontalLayoutRenderer
             ],
@@ -64,6 +67,12 @@ describe('Horizontal layout', () => {
                 {provide: Platform, useClass: PlatformMock},
                 {provide: NgRedux, useFactory: MockNgRedux.getInstance},
             ]
+        }).overrideModule(BrowserDynamicTestingModule, {
+            set: {
+                entryComponents: [
+                    UnknownRenderer
+                ]
+            }
         }).compileComponents();
 
         MockNgRedux.reset();
@@ -72,19 +81,9 @@ describe('Horizontal layout', () => {
     }));
 
     it('add elements', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
+        const mockSubStore = setupMockStore(fixture, { data, schema, uischema });
+        initComponent(fixture, mockSubStore);
 
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
         MockNgRedux.reset();
         component.uischema = {
             type: 'HorizontalLayout',
@@ -96,6 +95,7 @@ describe('Horizontal layout', () => {
                 }
             ]
         };
+
         fixture.detectChanges();
         expect(component.uischema.elements.length).toBe(2);
     });

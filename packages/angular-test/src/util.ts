@@ -49,6 +49,11 @@ export const setupMockStore =
                 }
             }
         });
-        fixture.detectChanges();
         return mockSubStore;
     };
+
+export const initComponent = (fixture: ComponentFixture<any>, mockSubStore: Subject<any>) => {
+    mockSubStore.complete();
+    fixture.componentInstance.ngOnInit();
+    fixture.detectChanges();
+};

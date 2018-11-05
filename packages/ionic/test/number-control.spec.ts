@@ -31,6 +31,7 @@ import {
     canBeDisabled,
     defaultTestData,
     ErrorTestExpectation,
+    initComponent,
     mustHaveId,
     numberAdditionalPropsTest,
     numberErrorTest,
@@ -49,7 +50,6 @@ import { IonicModule, Label, Platform, TextInput } from 'ionic-angular';
 import { PlatformMock } from '../test-config/platform-mock';
 import { async, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
-import { Subject } from 'rxjs';
 
 describe('Number field tester', () => {
     const uischema = {
@@ -180,10 +180,7 @@ describe(
         });
 
         it('should support input event changes', async(() => {
-            const mockSubStore: Subject<any> = setupMockStore(fixture, defaultTestData);
-            mockSubStore.complete();
-            fixture.detectChanges();
-            component.ngOnInit();
+            initComponent(fixture, setupMockStore(fixture, defaultTestData));
 
             const spy = spyOn(component, 'onChange');
             textInput.componentInstance.ionChange.emit(456.456);

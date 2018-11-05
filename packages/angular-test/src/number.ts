@@ -5,7 +5,14 @@ import { By } from '@angular/platform-browser';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { Subject } from 'rxjs';
-import { baseSetup, ErrorTestExpectation, setupMockStore, TestConfig, TestData } from './util';
+import {
+    baseSetup,
+    ErrorTestExpectation,
+    initComponent,
+    setupMockStore,
+    TestConfig,
+    TestData
+} from './util';
 
 interface ComponentResult<C extends JsonFormsControl> {
     fixture: ComponentFixture<any>;
@@ -55,9 +62,7 @@ export const renderFloat = <C extends JsonFormsControl>(
     testData: TestData,
     expectations: () => any
 ) => {
-    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
-    mockSubStore.complete();
-    fixture.componentInstance.ngOnInit();
+    initComponent(fixture, setupMockStore(fixture, testData));
     expectations();
 };
 
@@ -66,9 +71,7 @@ export const renderInteger = <C extends JsonFormsControl>(
     testData: TestData,
     expectations: () => any
 ) => {
-    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
-    fixture.componentInstance.ngOnInit();
-    mockSubStore.complete();
+    initComponent(fixture, setupMockStore(fixture, testData));
     expectations();
 };
 
@@ -86,9 +89,7 @@ export const updateFloatState = <C extends JsonFormsControl>(
             }
         }
     });
-    fixture.componentInstance.ngOnInit();
-    mockSubStore.complete();
-    fixture.detectChanges();
+    initComponent(fixture, mockSubStore);
 
     expectations();
 };
@@ -107,9 +108,7 @@ export const updateWithUndefined = <C extends JsonFormsControl>(
             }
         }
     });
-    fixture.componentInstance.ngOnInit();
-    mockSubStore.complete();
-    fixture.detectChanges();
+    initComponent(fixture, mockSubStore);
     expectations();
 };
 
@@ -127,9 +126,7 @@ export const updateWithNull = <C extends JsonFormsControl>(
             }
         }
     });
-    fixture.componentInstance.ngOnInit();
-    mockSubStore.complete();
-    fixture.detectChanges();
+    initComponent(fixture, mockSubStore);
     expectations();
 };
 
@@ -147,8 +144,7 @@ export const updateWithSiblingValue = <C extends JsonFormsControl>(
             }
         }
     });
-    fixture.componentInstance.ngOnInit();
-    mockSubStore.complete();
+    initComponent(fixture, mockSubStore);
     expectations();
 };
 
@@ -160,9 +156,7 @@ export const canBeDisabled = <C extends JsonFormsControl>(
     const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
     const component = fixture.componentInstance;
     component.disabled = true;
-    component.ngOnInit();
-    mockSubStore.complete();
-    fixture.detectChanges();
+    initComponent(fixture, mockSubStore);
     expectations();
 };
 
@@ -212,9 +206,7 @@ export const showErrors = <C extends JsonFormsControl>(
             }
         },
     });
-    mockSubStore.complete();
-    fixture.detectChanges();
-    component.ngOnInit();
+    initComponent(fixture, mockSubStore);
     expectations();
 };
 
@@ -223,9 +215,7 @@ export const additionalProps = <C extends JsonFormsControl>(
     testData: TestData,
     expectations: () => any
 ) => {
-    const mockSubStore = setupMockStore(fixture, testData);
-    mockSubStore.complete();
-    fixture.componentInstance.ngOnInit();
+    initComponent(fixture, setupMockStore(fixture, testData));
     expectations();
 };
 
