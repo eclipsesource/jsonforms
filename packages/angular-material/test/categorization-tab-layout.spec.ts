@@ -32,6 +32,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { CategorizationTabLayoutRenderer } from '../src';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Categorization tab layout', () => {
     let fixture: ComponentFixture<any>;
@@ -58,7 +59,7 @@ describe('Categorization tab layout', () => {
                 UnknownRenderer
             ],
             imports: [
-                MatTabsModule, NoopAnimationsModule
+                MatTabsModule, FlexLayoutModule, NoopAnimationsModule
             ],
             providers: [
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance },
@@ -142,6 +143,8 @@ describe('Categorization tab layout', () => {
                 fixture.debugElement.queryAll(By.directive(MatTabBody));
             const activeTabOutlets = contents[0].queryAll(By.directive(JsonFormsOutlet));
             expect(activeTabOutlets.length).toBe(2);
+
+            expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
         });
     }));
 
@@ -249,6 +252,55 @@ describe('Categorization tab layout', () => {
                 expect(lastTab.isActive).toBeFalsy();
                 expect(lastTab.textLabel).toBe('quux');
             });
+        });
+    }));
+
+    // TODO: broken due to https://github.com/angular/flex-layout/issues/848
+    xit('can be hidden', async(() => {
+        const uischema = {
+            type: 'Categorization',
+            elements: [
+                {
+                    type: 'Category',
+                    label: 'foo',
+                    elements: [
+                        {
+                            type: 'Control',
+                            scope: '#/properties/foo'
+                        },
+                        {
+                            type: 'Control',
+                            scope: '#/properties/bar'
+                        }
+                    ]
+                },
+                {
+                    type: 'Category',
+                    label: 'bar',
+                    elements: [
+                        {
+                            type: 'Control',
+                            scope: '#/properties/bar'
+                        }
+                    ]
+                }
+            ]
+        };
+        component.uischema = uischema;
+        component.visible = false;
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        fixture.whenRenderingDone().then(() => {
+            expect(fixture.nativeElement.children[0].style.display).toBe('none');
         });
     }));
 });

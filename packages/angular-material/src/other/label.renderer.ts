@@ -43,7 +43,9 @@ export class LabelRenderer extends JsonFormsBaseRenderer {
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 
     mapAdditionalProps() {

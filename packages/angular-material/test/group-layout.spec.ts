@@ -30,6 +30,7 @@ import { DebugElement } from '@angular/core';
 import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
 import { GroupLayoutRenderer, groupLayoutTester } from '../src/layouts/group-layout.renderer';
 import { Subject } from 'rxjs';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Group layout tester', () => {
     it('should succeed', () => {
@@ -41,7 +42,11 @@ describe('Group layout', () => {
     let component: any;
 
     beforeEach(() => {
-        fixture = beforeEachLayoutTest(GroupLayoutRenderer, [MatCard, MatCardTitle]);
+        fixture = beforeEachLayoutTest(
+            GroupLayoutRenderer,
+            [MatCard, MatCardTitle],
+            [FlexLayoutModule]
+        );
         component = fixture.componentInstance;
     });
 
@@ -91,5 +96,23 @@ describe('Group layout', () => {
         expect(title.nativeElement.textContent).toBe('foo');
         // title + 2 controls
         expect(card[0].nativeElement.children.length).toBe(3);
+        expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
+    });
+
+    // TODO: broken due to https://github.com/angular/flex-layout/issues/848
+    xit('can be hidden', () => {
+        const uischema: GroupLayout = {
+            type: 'Group',
+            elements: [
+                { type: 'Control' },
+                { type: 'Control' }
+            ]
+        };
+        component.visible = false;
+        const mockSubStore: Subject<any> =
+            setupMockStore(fixture, { data: {}, schema: {}, uischema });
+        mockSubStore.complete();
+        component.ngOnInit();
+        expect(fixture.nativeElement.children[0].style.display).toBe('none');
     });
 });

@@ -32,6 +32,7 @@ import {
     ErrorTestExpectation
 } from '@jsonforms/angular-test';
 import { BooleanControlRenderer, booleanControlTester } from '../src';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material boolean field tester', () => {
     const uischema = {
@@ -55,7 +56,7 @@ describe('Material boolean field tester', () => {
         ).toBe(2);
     });
 });
-const imports = [MatCheckboxModule, MatFormFieldModule];
+const imports = [MatCheckboxModule, MatFormFieldModule, FlexLayoutModule];
 const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];

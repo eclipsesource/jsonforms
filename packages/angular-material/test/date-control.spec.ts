@@ -40,6 +40,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorTestExpectation } from '@jsonforms/angular-test';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { DateControlRenderer, DateControlRendererTester } from '../src';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const data = { foo: '2018-01-01' };
 const schema: JsonSchema = {
@@ -68,7 +69,8 @@ const imports = [
     MatNativeDateModule,
     MatFormFieldModule,
     NoopAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FlexLayoutModule
 ];
 const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
@@ -119,6 +121,8 @@ describe('Date control Base Tests', () => {
         // auto? shown with US layout
         expect(inputElement.value).toBe('1/1/2018');
         expect(inputElement.disabled).toBe(false);
+        // the component is wrapped in a div
+        expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
     });
 
     it('should support updating the state', () => {
@@ -251,6 +255,27 @@ describe('Date control Base Tests', () => {
         fixture.detectChanges();
         component.ngOnInit();
         expect(inputElement.disabled).toBe(true);
+
+    });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
+    it('can be disabled', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+        component.visible = false;
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data: data,
+                    schema: schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        // the component is wrapped in a div
+        expect(fixture.nativeElement.children[0].style.display).toBe('none');
 
     });
     it('id should be present in output', () => {

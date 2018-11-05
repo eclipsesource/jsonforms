@@ -5,7 +5,11 @@ import { NgRedux } from '@angular-redux/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 export const beforeEachLayoutTest =
-    <LAYOUT>(Renderer: any, additionalDeclarations: any[] = []): ComponentFixture<LAYOUT> => {
+    <LAYOUT>(
+        Renderer: any,
+        additionalDeclarations: any[] = [],
+        imports: any[]= []
+    ): ComponentFixture<LAYOUT> => {
         TestBed.configureTestingModule({
             declarations: [
                 Renderer,
@@ -13,7 +17,7 @@ export const beforeEachLayoutTest =
                 JsonFormsOutlet,
                 ...additionalDeclarations
             ],
-            imports: [],
+            imports: imports,
             providers: [
                 {provide: NgRedux, useFactory: MockNgRedux.getInstance}
             ]

@@ -36,6 +36,7 @@ import {
     numberInputEventTest
 } from '@jsonforms/angular-test';
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material number field tester', () => {
     const uischema = {
@@ -74,7 +75,13 @@ describe('Material number field tester', () => {
         ).toBe(2);
     });
 });
-const imports = [MatFormFieldModule, MatInputModule, NoopAnimationsModule, ReactiveFormsModule];
+const imports = [
+    MatFormFieldModule,
+    MatInputModule,
+    NoopAnimationsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule
+];
 const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];

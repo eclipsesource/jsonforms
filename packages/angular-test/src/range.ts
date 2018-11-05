@@ -84,6 +84,7 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
             expect(rangeElement.componentInstance.min).toBe(-42.42);
             expect(rangeElement.componentInstance.max).toBe(42.42);
             expect(rangeElement.componentInstance.disabled).toBe(false);
+            expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
         });
 
         it('should render integer', () => {
@@ -114,6 +115,8 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
             expect(rangeElement.componentInstance.min).toBe(-42);
             expect(rangeElement.componentInstance.max).toBe(42);
             expect(rangeElement.componentInstance.disabled).toBe(false);
+            // the component is wrapped in a div
+            expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
         });
 
         it('should support updating the state', () => {
@@ -251,6 +254,26 @@ export const rangeBaseTest = <C extends JsonFormsControl, I>(
             fixture.detectChanges();
             component.ngOnInit();
             expect(rangeElement.componentInstance.disabled).toBe(true);
+
+        });
+        it('can be hidden', () => {
+            const mockSubStore = MockNgRedux.getSelectorStub();
+            component.uischema = testData.uischema;
+            component.schema = testData.schema;
+            component.visible = false;
+
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data: testData.data,
+                        schema: testData.schema,
+                    }
+                }
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+            component.ngOnInit();
+            expect(fixture.nativeElement.children[0].style.display).toBe('none');
 
         });
         it('id should be present in output', () => {

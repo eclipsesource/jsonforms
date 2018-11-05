@@ -37,7 +37,7 @@ import {
 @Component({
     selector: 'NumberControlRenderer',
     template: `
-        <mat-form-field fxFlex>
+        <mat-form-field fxFlex [fxHide]="hidden">
             <mat-label>{{ label }}</mat-label>
             <input
                 matInput

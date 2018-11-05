@@ -24,7 +24,7 @@ export const removeSchemaKeywords = (path: string) => {
 @Component({
     selector: 'jsonforms-list-with-detail-master',
     template: `
-    <mat-sidenav-container class="container">
+    <mat-sidenav-container class="container" [fxHide]="hidden">
         <mat-sidenav mode="side" opened>
           <mat-nav-list>
             <mat-list-item

@@ -30,7 +30,7 @@ import { isBooleanControl, JsonFormsState, RankedTester, rankWith } from '@jsonf
 @Component({
     selector: 'BooleanControlRenderer',
     template: `
-    <div>
+    <div [fxHide]="hidden">
         <mat-checkbox
             (change)="onChange($event)"
             [checked]="isChecked()"

@@ -32,6 +32,7 @@ import { JsonFormsOutlet } from '@jsonforms/angular';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 import { MasterDetailService } from '../src/other/master-detail/master-detail.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Master detail', () => {
 
@@ -100,6 +101,7 @@ describe('Master detail', () => {
             imports: [
                 MatListModule,
                 MatSidenavModule,
+                FlexLayoutModule,
                 NoopAnimationsModule
             ],
             providers: [
@@ -132,6 +134,8 @@ describe('Master detail', () => {
         fixture.whenRenderingDone().then(() => {
             expect(component.masterItems.length).toBe(1);
             expect(fixture.debugElement.queryAll(By.directive(MatListItem)).length).toBe(1);
+             // the component is wrapped in a div
+            expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
         });
     }));
 
@@ -211,6 +215,26 @@ describe('Master detail', () => {
                         }
                     );
             });
+        });
+    }));
+
+    it('can be hidden', async(() => {
+        component.uischema = uischema;
+        component.visible = false;
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        component.ngOnInit();
+        fixture.detectChanges();
+        fixture.whenRenderingDone().then(() => {
+            expect(fixture.nativeElement.children[0].style.display).toBe('none');
         });
     }));
 });

@@ -39,6 +39,7 @@ export class LayoutRenderer<T extends Layout>
     extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
     private elements: OwnPropsOfRenderer[];
+    hidden: boolean;
     private subscription: Subscription;
 
     constructor(private ngRedux: NgRedux<JsonFormsState>) {
@@ -61,6 +62,7 @@ export class LayoutRenderer<T extends Layout>
                     schema,
                     path
                 }));
+                this.hidden = !props.visible;
             });
     }
 

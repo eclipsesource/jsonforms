@@ -166,6 +166,20 @@ export const canBeDisabled = <C extends JsonFormsControl>(
     expectations();
 };
 
+export const canBeHidden = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
+    const component = fixture.componentInstance;
+    component.visible = false;
+    component.ngOnInit();
+    mockSubStore.complete();
+    fixture.detectChanges();
+    expectations();
+};
+
 export const mustHaveId = <C extends JsonFormsControl>(
     fixture: ComponentFixture<C>,
     expectations: () => any
@@ -243,6 +257,8 @@ export const numberBaseTest = <C extends JsonFormsControl>(
             // step is of type string
             expect(numberNativeElement.step).toBe('0.1');
             expect(numberNativeElement.disabled).toBe(false);
+            // the component is wrapped in a div
+            expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
         });
     });
 
@@ -265,6 +281,8 @@ export const numberBaseTest = <C extends JsonFormsControl>(
                 // step is of type string
                 expect(numberNativeElement.step).toBe('1');
                 expect(numberNativeElement.disabled).toBe(false);
+                // the component is wrapped in a div
+                expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
             }
         );
     });
@@ -301,6 +319,13 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     it('can be disabled', () => {
         canBeDisabled(fixture, testData, () => {
             expect(numberNativeElement.disabled).toBe(true);
+        });
+    });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
+    it('can be hidden', () => {
+        canBeHidden(fixture, testData, () => {
+            // the component is wrapped in a div
+            expect(fixture.nativeElement.children[0].style.display).toBe('none');
         });
     });
 
