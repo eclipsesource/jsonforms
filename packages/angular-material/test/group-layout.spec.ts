@@ -43,8 +43,10 @@ describe('Group layout', () => {
     beforeEach(() => {
         fixture = beforeEachLayoutTest(
             GroupLayoutRenderer,
-            [MatCard, MatCardTitle],
-            [FlexLayoutModule]
+            { 
+              declarations: [MatCard, MatCardTitle],
+              imports: [FlexLayoutModule}
+            }
         );
         component = fixture.componentInstance;
     });

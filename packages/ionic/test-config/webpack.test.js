@@ -20,7 +20,7 @@ module.exports = {
       },
       {
         test: /.+\.ts$/,
-        exclude: /(index.ts|mocks.ts|\.spec\.ts|\.test\.ts$)/,
+        exclude: /(index.ts|mocks-ionic.ts|\.spec\.ts|\.test\.ts|platform-mock.ts)/,
         loader: 'istanbul-instrumenter-loader',
         enforce: 'post',
         query: {
