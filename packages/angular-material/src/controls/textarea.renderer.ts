@@ -30,7 +30,7 @@ import { isMultiLineControl, JsonFormsState, RankedTester, rankWith } from '@jso
 @Component({
     selector: 'TextAreaRenderer',
     template: `
-        <mat-form-field fxFlex>
+        <mat-form-field fxFlex [fxHide]="hidden">
             <mat-label>{{ label }}</mat-label>
             <textarea
                 matInput

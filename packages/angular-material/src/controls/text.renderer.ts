@@ -30,7 +30,7 @@ import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/co
 @Component({
     selector: 'TextControlRenderer',
     template: `
-        <mat-form-field fxFlex>
+        <mat-form-field fxFlex [fxHide]="hidden">
             <mat-label>{{ label }}</mat-label>
             <input
                 matInput

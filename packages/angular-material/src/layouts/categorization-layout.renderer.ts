@@ -12,7 +12,7 @@ import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 
 @Component({
     selector: 'jsonforms-categorization-layout',
-    template: `<mat-tab-group dynamicHeight="true">
+    template: `<mat-tab-group dynamicHeight="true" [fxHide]="hidden">
     <mat-tab *ngFor="let category of uischema.elements"
         [label]="category.label">
         <div *ngFor="let element of category.elements">

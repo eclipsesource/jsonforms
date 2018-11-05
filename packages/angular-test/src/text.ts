@@ -86,6 +86,10 @@ export const textBaseTest = <C extends JsonFormsControl>(
             expect(component.data).toBe('foo');
             expect(textNativeElement.value).toBe('foo');
             expect(textNativeElement.disabled).toBe(false);
+            // the component is wrapped in a div
+            const hasDisplayNone = 'none' === fixture.nativeElement.children[0].style.display;
+            const hasHidden = fixture.nativeElement.children[0].hidden;
+            expect(!hasDisplayNone && !hasHidden).toBeTruthy();
         });
 
         it('should support updating the state', () => {
@@ -218,6 +222,27 @@ export const textBaseTest = <C extends JsonFormsControl>(
             fixture.detectChanges();
             component.ngOnInit();
             expect(textNativeElement.disabled).toBe(true);
+
+        });
+        it('can be hidden', () => {
+            const mockSubStore = MockNgRedux.getSelectorStub();
+            component.uischema = testData.uischema;
+            component.visible = false;
+
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data: testData.data,
+                        schema: testData.schema,
+                    }
+                }
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+            component.ngOnInit();
+            const hasDisplayNone = 'none' === fixture.nativeElement.children[0].style.display;
+            const hasHidden = fixture.nativeElement.children[0].hidden;
+            expect(hasDisplayNone || hasHidden).toBeTruthy();
 
         });
         it('id should be present in output', () => {

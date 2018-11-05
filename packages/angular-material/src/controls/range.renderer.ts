@@ -30,7 +30,7 @@ import { isRangeControl, JsonFormsState, RankedTester, rankWith } from '@jsonfor
 @Component({
     selector: 'RangeControlRenderer',
     template: `
-        <div fxFlex fxLayout='column'>
+        <div fxFlex fxLayout='column' [fxHide]="hidden">
             <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{ label }}</label>
             <mat-slider
                 [value]="data || scopedSchema.default"

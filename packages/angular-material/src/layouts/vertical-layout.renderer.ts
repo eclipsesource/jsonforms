@@ -30,7 +30,7 @@ import { NgRedux } from '@angular-redux/store';
 @Component({
     selector: 'VerticalLayoutRenderer',
     template: `
-    <div fxLayout='column'>
+    <div fxLayout='column' [fxHide]="hidden">
         <div *ngFor="let props of renderProps" fxFlex>
             <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
         </div>

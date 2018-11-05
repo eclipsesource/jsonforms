@@ -36,6 +36,7 @@ import {
     textTypeTest
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material text field tester', () => {
     const uischema = {
@@ -59,7 +60,13 @@ describe('Material text field tester', () => {
         ).toBe(1);
     });
 });
-const imports = [MatFormFieldModule, MatInputModule, NoopAnimationsModule, ReactiveFormsModule];
+const imports = [
+    MatFormFieldModule,
+    MatInputModule,
+    NoopAnimationsModule,
+    ReactiveFormsModule,
+    FlexLayoutModule
+];
 const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];

@@ -23,6 +23,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
 
     @Input() id: string;
     @Input() disabled: boolean;
+    @Input() visible: boolean;
 
     form: FormControl;
     subscription: Subscription;
@@ -31,15 +32,15 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     error: string | null;
     scopedSchema: JsonSchema;
     enabled: boolean;
+    hidden: boolean;
 
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
         this.form = new FormControl(
-            null,
-
+            {value: '', disabled: true},
             {
                 updateOn: 'change',
-                validators: this.validator.bind(this)
+                validators: this.validator.bind(this),
             }
         );
     }
@@ -57,7 +58,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
             .select()
             .subscribe((state: JsonFormsState) => {
                 const props = this.mapToProps(state);
-                const { data, enabled, errors, label, required, schema, uischema } = props;
+                const { data, enabled, errors, label, required, schema, uischema, visible } = props;
                 this.label = computeLabel(
                     isPlainLabel(label) ? label : label.default, required
                 );
@@ -65,6 +66,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
                 this.error = errors ? errors.join('\n') : null;
                 this.enabled = enabled;
                 this.enabled ? this.form.enable() : this.form.disable();
+                this.hidden = !visible;
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.id = props.id;
                 this.mapAdditionalProps(props);
@@ -88,13 +90,19 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     }
 
     protected getOwnProps(): OwnPropsOfControl {
-        return {
+        const props: OwnPropsOfControl = {
           uischema: this.uischema as ControlElement,
           schema: this.schema,
           path: this.path,
-          id: this.id,
-          enabled: !this.disabled
+          id: this.id
         };
+        if (this.disabled !== undefined) {
+            props.enabled = !this.disabled;
+        }
+        if (this.visible !== undefined) {
+            props.visible = this.visible;
+        }
+        return props;
       }
 
     protected mapToProps(state: JsonFormsState): ControlProps {

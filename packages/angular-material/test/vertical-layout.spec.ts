@@ -30,6 +30,7 @@ import {
     verticalLayoutTester
 } from '../src/layouts/vertical-layout.renderer';
 import { Subject } from 'rxjs';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Vertical layout tester', () => {
     it('should succeed', () => {
@@ -41,7 +42,7 @@ describe('Vertical layout', () => {
     let component: any;
 
     beforeEach(() => {
-        fixture = beforeEachLayoutTest(VerticalLayoutRenderer);
+        fixture = beforeEachLayoutTest(VerticalLayoutRenderer, [], [FlexLayoutModule]);
         component = fixture.componentInstance;
     });
 
@@ -54,6 +55,8 @@ describe('Vertical layout', () => {
         mockSubStore.complete();
         component.ngOnInit();
         expect(fixture.nativeElement.children[0].children.length).toBe(0);
+        // the component is wrapped in a div
+        expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
     });
 
     it('render with null elements', () => {
@@ -83,6 +86,23 @@ describe('Vertical layout', () => {
         component.ngOnInit();
         expect(fixture.nativeElement.children[0].children.length).toBe(2);
         expect(fixture.nativeElement.children[0].hidden).toBe(false);
+    });
+
+    // TODO: broken due to https://github.com/angular/flex-layout/issues/848
+    xit('can be hidden', () => {
+        const uischema: VerticalLayout = {
+            type: 'VerticalLayout',
+            elements: [
+                { type: 'Control' },
+                { type: 'Control' }
+            ]
+        };
+        component.visible = false;
+        const mockSubStore: Subject<any> =
+            setupMockStore(fixture, { data: {}, schema: {}, uischema });
+        mockSubStore.complete();
+        component.ngOnInit();
+        expect(fixture.nativeElement.children[0].style.display).toBe('none');
     });
 
 });

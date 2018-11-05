@@ -30,6 +30,7 @@ import {
     HorizontalLayoutRenderer,
     horizontalLayoutTester
 } from '../src/layouts/horizontal-layout.renderer';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
@@ -41,7 +42,7 @@ describe('Horizontal layout', () => {
   let component: any;
 
   beforeEach(() => {
-      fixture = beforeEachLayoutTest(HorizontalLayoutRenderer);
+      fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, [], [FlexLayoutModule]);
       component = fixture.componentInstance;
   });
 
@@ -79,6 +80,24 @@ describe('Horizontal layout', () => {
     component.ngOnInit();
     expect(fixture.nativeElement.children[0].children.length).toBe(2);
     expect(fixture.nativeElement.children[0].hidden).toBe(false);
+    expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
+  });
+
+  // TODO: broken due to https://github.com/angular/flex-layout/issues/848
+  xit('can be hidden', () => {
+    const uischema: HorizontalLayout = {
+        type: 'HorizontalLayout',
+        elements: [
+            { type: 'Control' },
+            { type: 'Control' }
+        ]
+    };
+    component.visible = false;
+    const mockSubStore: Subject<any> =
+        setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    mockSubStore.complete();
+    component.ngOnInit();
+    expect(fixture.nativeElement.children[0].style.display).toBe('none');
   });
 
 });

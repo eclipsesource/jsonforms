@@ -66,6 +66,10 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
         expect(component.data).toBe(true);
         expect(checkboxInstance.checked).toBe(true);
         expect(checkboxInstance.disabled).toBe(false);
+        // the component is wrapped in a div
+        const hasDisplayNone = 'none' === fixture.nativeElement.children[0].style.display;
+        const hasHidden = fixture.nativeElement.children[0].hidden;
+        expect(hasDisplayNone || hasHidden).toBeFalsy();
     });
     it('should support updating the state', () => {
         const mockSubStore = MockNgRedux.getSelectorStub();
@@ -198,6 +202,28 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
         component.ngOnInit();
         expect(checkboxInstance.disabled).toBe(true);
 
+    });
+    // store needed as we evaluate the calculated enabled value to disable/enable the control
+    it('can be hidden', () => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = uischema;
+        component.visible = false;
+
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                }
+            }
+        });
+        mockSubStore.complete();
+        fixture.detectChanges();
+        component.ngOnInit();
+        // the component is wrapped in a div
+        const hasDisplayNone = 'none' === fixture.nativeElement.children[0].style.display;
+        const hasHidden = fixture.nativeElement.children[0].hidden;
+        expect(hasDisplayNone || hasHidden).toBeTruthy();
     });
     it('id should be present in output', () => {
         component.uischema = uischema;
