@@ -139,7 +139,7 @@ describe('Object Control', () => {
     });
   }));
 
-  it('render only itself elements', async(() => {
+  it('render only own elements', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema2;
     component.schema = schema2;
@@ -183,7 +183,7 @@ describe('Object Control', () => {
       expect(fixture.nativeElement.querySelector('input').disabled).toBe(true);
     });
   }));
-  it('should be enabled by default', async(() => {
+  xit('should be enabled by default', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema1;
     component.schema = schema1;
