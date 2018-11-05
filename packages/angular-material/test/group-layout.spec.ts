@@ -27,9 +27,8 @@ import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { MatCard, MatCardTitle } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { beforeEachLayoutTest, setupMockStore } from '@jsonforms/angular-test';
+import { beforeEachLayoutTest, initComponent, setupMockStore } from '@jsonforms/angular-test';
 import { GroupLayoutRenderer, groupLayoutTester } from '../src/layouts/group-layout.renderer';
-import { Subject } from 'rxjs';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Group layout tester', () => {
@@ -54,10 +53,7 @@ describe('Group layout', () => {
         const uischema: UISchemaElement = {
             type: 'Group'
         };
-        const mockSubStore: Subject<any> =
-            setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
+        initComponent(fixture, setupMockStore(fixture, { data: {}, schema: {}, uischema }));
         const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
         // title
         expect(card[0].nativeElement.children.length).toBe(1);
@@ -68,10 +64,7 @@ describe('Group layout', () => {
             type: 'Group',
             elements: null
         };
-        const mockSubStore: Subject<any> =
-            setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
+        initComponent(fixture, setupMockStore(fixture, { data: {}, schema: {}, uischema }));
         const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
         // title
         expect(card[0].nativeElement.children.length).toBe(1);
@@ -86,33 +79,12 @@ describe('Group layout', () => {
                 { type: 'Control' }
             ]
         };
-        const mockSubStore: Subject<any> =
-            setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
+        initComponent(fixture, setupMockStore(fixture, { data: {}, schema: {}, uischema }));
         const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
         const title: DebugElement = fixture.debugElement.query(By.directive(MatCardTitle));
 
         expect(title.nativeElement.textContent).toBe('foo');
         // title + 2 controls
         expect(card[0].nativeElement.children.length).toBe(3);
-        expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
-    });
-
-    // TODO: broken due to https://github.com/angular/flex-layout/issues/848
-    xit('can be hidden', () => {
-        const uischema: GroupLayout = {
-            type: 'Group',
-            elements: [
-                { type: 'Control' },
-                { type: 'Control' }
-            ]
-        };
-        component.visible = false;
-        const mockSubStore: Subject<any> =
-            setupMockStore(fixture, { data: {}, schema: {}, uischema });
-        mockSubStore.complete();
-        component.ngOnInit();
-        expect(fixture.nativeElement.children[0].style.display).toBe('none');
     });
 });

@@ -30,7 +30,7 @@ import {
     HorizontalLayoutRenderer,
     horizontalLayoutTester
 } from '../src/layouts/horizontal-layout.renderer';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { initComponent } from '@jsonforms/angular-test';
 
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
@@ -51,8 +51,7 @@ describe('Horizontal layout', () => {
       type: 'HorizontalLayout'
     };
     const mockSubStore: Subject<any> = setupMockStore(fixture, { data: {}, schema: {}, uischema });
-    mockSubStore.complete();
-    component.ngOnInit();
+    initComponent(fixture, mockSubStore);
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
 
@@ -62,8 +61,7 @@ describe('Horizontal layout', () => {
       elements: null
     };
     const mockSubStore: Subject<any> = setupMockStore(fixture, { data: {}, schema: {}, uischema });
-    mockSubStore.complete();
-    component.ngOnInit();
+    initComponent(fixture, mockSubStore);
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
 
@@ -76,28 +74,9 @@ describe('Horizontal layout', () => {
       ]
     };
     const mockSubStore: Subject<any> = setupMockStore(fixture, { data: {}, schema: {}, uischema });
-    mockSubStore.complete();
-    component.ngOnInit();
+    initComponent(fixture, mockSubStore);
     expect(fixture.nativeElement.children[0].children.length).toBe(2);
     expect(fixture.nativeElement.children[0].hidden).toBe(false);
-    expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
-  });
-
-  // TODO: broken due to https://github.com/angular/flex-layout/issues/848
-  xit('can be hidden', () => {
-    const uischema: HorizontalLayout = {
-        type: 'HorizontalLayout',
-        elements: [
-            { type: 'Control' },
-            { type: 'Control' }
-        ]
-    };
-    component.visible = false;
-    const mockSubStore: Subject<any> =
-        setupMockStore(fixture, { data: {}, schema: {}, uischema });
-    mockSubStore.complete();
-    component.ngOnInit();
-    expect(fixture.nativeElement.children[0].style.display).toBe('none');
   });
 
 });
