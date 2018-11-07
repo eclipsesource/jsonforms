@@ -26,11 +26,11 @@ import test from 'ava';
 import * as _ from 'lodash';
 import * as Redux from 'redux';
 import {
-  clearAllIds,
-  createDefaultValue,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
-  mapStateToJsonFormsRendererProps
+    clearAllIds,
+    createDefaultValue, mapDispatchToArrayControlProps,
+    mapDispatchToControlProps,
+    mapStateToControlProps,
+    mapStateToJsonFormsRendererProps, OwnPropsOfControl
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
@@ -39,10 +39,13 @@ import {
     ControlElement,
     coreReducer,
     JsonFormsState,
+    JsonSchema,
     RuleEffect,
     UISchemaElement
 } from '../../src';
+import { jsonformsReducer } from '../../src/reducers';
 import { ErrorObject } from 'ajv';
+import { combineReducers, createStore, Store } from 'redux';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -384,4 +387,83 @@ test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps
     { schema, uischema }
   );
   t.deepEqual(props.uischema, uischema);
+});
+
+test('mapDispatchToArrayControlProps should adding items to array', t => {
+    const data = ['foo'];
+    const schema: JsonSchema = {
+        type: 'array',
+        items: {
+            type: 'string'
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#'
+    };
+    const initState  = {
+      jsonforms: {
+        core: {
+          uischema,
+          schema,
+          data,
+          errors: [] as ErrorObject[]
+        }
+      }
+    };
+    const store: Store<JsonFormsState> = createStore(
+        combineReducers({ jsonforms: jsonformsReducer() }),
+        initState
+    );
+    store.dispatch(init(data, schema, uischema));
+    const ownProps: OwnPropsOfControl = {
+        schema,
+        uischema
+    };
+    const props = mapDispatchToArrayControlProps(
+        store.dispatch,
+        ownProps
+    );
+    props.addItem('')();
+    t.is(store.getState().jsonforms.core.data.length, 2);
+});
+
+test('mapDispatchToArrayControlProps should remove items from array', t => {
+    const data = ['foo', 'bar', 'quux'];
+    const schema: JsonSchema = {
+        type: 'array',
+        items: {
+            type: 'string'
+        }
+    };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#'
+    };
+    const initState  = {
+        jsonforms: {
+            core: {
+                uischema,
+                schema,
+                data,
+                errors: [] as ErrorObject[]
+            }
+        }
+    };
+    const store: Store<JsonFormsState> = createStore(
+        combineReducers({ jsonforms: jsonformsReducer() }),
+        initState
+    );
+    store.dispatch(init(data, schema, uischema));
+    const ownProps: OwnPropsOfControl = {
+        schema,
+        uischema
+    };
+    const props = mapDispatchToArrayControlProps(
+        store.dispatch,
+        ownProps
+    );
+    props.removeItems('', ['foo', 'bar'])();
+    t.is(store.getState().jsonforms.core.data.length, 1);
+    t.is(store.getState().jsonforms.core.data[0], 'quux');
 });

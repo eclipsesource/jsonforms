@@ -9,7 +9,7 @@ import {
 } from '../../src/reducers/uischemas';
 import { registerUISchema, RemoveUISchemaAction, unregisterUISchema } from '../../src/actions';
 import { findUISchema, getSchema } from '../../src/reducers';
-import Generate from '../../src/generators';
+import { Generate } from '../../src/generators';
 import { JsonFormsState } from '../../src';
 
 test('init state empty', t => {

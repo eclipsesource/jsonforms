@@ -75,9 +75,9 @@ const deriveType = (jsonSchema: JsonSchema): string => {
  * Creates a IControlObject with the given label referencing the given ref
  */
 export const createControlElement = (label: string, ref: string): ControlElement => ({
-    type: 'Control',
-    label: label === undefined ? false : label,
-    scope: ref,
+  type: 'Control',
+  label: label === undefined ? false : label,
+  scope: ref,
 });
 
 const isLayout = (uischema: UISchemaElement): uischema is Layout =>
@@ -141,7 +141,7 @@ const generateUISchema =
             const layout: Layout = createLayout(layoutType);
             schemaElements.push(layout);
 
-            if (jsonSchema.properties.size > 1) {
+            if (jsonSchema.properties && _.keys(jsonSchema.properties).length > 1) {
                 addLabel(layout, schemaName);
             }
 
