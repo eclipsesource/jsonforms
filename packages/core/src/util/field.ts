@@ -83,20 +83,22 @@ export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {
  * @param field the field to be registered
  * @returns {any}
  */
-export interface DispatchFieldStateProps extends OwnPropsOfField {
+export interface DispatchFieldStateProps extends FieldProps {
     fields?: JsonFormsFieldRendererRegistryEntry[];
 }
 
 export const mapStateToDispatchFieldProps =
     (state: JsonFormsState, ownProps: OwnPropsOfField): DispatchFieldStateProps => {
+        const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
         return {
+            ...props,
             ...ownProps,
             fields: state.jsonforms.fields || []
         };
     };
 
 export interface DispatchFieldProps extends DispatchFieldStateProps {
-
+    showError: boolean;
 }
 
 /**

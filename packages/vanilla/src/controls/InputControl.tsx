@@ -82,6 +82,7 @@ export class InputControl extends Control<ControlProps & VanillaRendererProps, C
               schema={schema}
               path={parentPath}
               id={id + '-input'}
+              showError={false}
           />
           <div className={divClassNames}>
             {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}

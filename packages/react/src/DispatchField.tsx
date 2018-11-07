@@ -28,32 +28,42 @@ import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
     DispatchFieldProps,
+    formatErrorMessage,
     mapStateToDispatchFieldProps,
 } from '@jsonforms/core';
+import { FormHelperText } from '@material-ui/core';
 
 /**
  * Dispatch renderer component for fields.
  */
 class Dispatch extends React.Component<DispatchFieldProps, any> {
-  render() {
-    const { uischema, schema, path, fields, id } = this.props;
-    const field = _.maxBy(fields, r => r.tester(uischema, schema));
+    render() {
+        const { uischema, schema, path, fields, id, errors, isValid, showError } = this.props;
+        const field = _.maxBy(fields, r => r.tester(uischema, schema));
 
-    if (field === undefined || field.tester(uischema, schema) === -1) {
-      return <UnknownRenderer type={'field'}/>;
-    } else {
-      const Field = field.field;
+        if (field === undefined || field.tester(uischema, schema) === -1) {
+            return <UnknownRenderer type={'field'}/>;
+        } else {
+            const Field = field.field;
 
-      return (
-        <Field
-          uischema={uischema}
-          schema={schema}
-          path={path}
-          id={id}
-        />
-      );
+            return (
+                <React.Fragment>
+                    <Field
+                        uischema={uischema}
+                        schema={schema}
+                        path={path}
+                        id={id}
+                    />
+                    {
+                        showError &&
+                        <FormHelperText error={!isValid}>
+                            {!isValid && formatErrorMessage(errors)}
+                        </FormHelperText>
+                    }
+                </React.Fragment>
+            );
+        }
     }
-  }
 }
 
 export const DispatchField = connect(mapStateToDispatchFieldProps)(Dispatch);

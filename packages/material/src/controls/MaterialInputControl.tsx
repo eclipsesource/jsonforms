@@ -89,7 +89,13 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
           <InputLabel htmlFor={id + '-input'} error={!isValid} style={inputLabelStyle}>
             {computeLabel(isPlainLabel(label) ? label : label.default, required)}
           </InputLabel>
-          <DispatchField uischema={uischema} schema={schema} path={parentPath} id={id + '-input'} />
+          <DispatchField
+              uischema={uischema}
+              schema={schema}
+              path={parentPath}
+              id={id + '-input'}
+              showError={false}
+          />
           <FormHelperText error={!isValid}>
             {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
           </FormHelperText>
