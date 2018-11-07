@@ -76,7 +76,7 @@ const deriveType = (jsonSchema: JsonSchema): string => {
  */
 export const createControlElement = (label: string, ref: string): ControlElement => ({
     type: 'Control',
-    label: label,
+    label: label === undefined ? false : label,
     scope: ref,
 });
 
@@ -141,7 +141,9 @@ const generateUISchema =
             const layout: Layout = createLayout(layoutType);
             schemaElements.push(layout);
 
-            addLabel(layout, schemaName);
+            if (jsonSchema.properties.size > 1) {
+                addLabel(layout, schemaName);
+            }
 
             if (!_.isEmpty(jsonSchema.properties)) {
                 // traverse properties
