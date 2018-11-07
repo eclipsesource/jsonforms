@@ -27,7 +27,7 @@ import { generateDefaultUISchema } from '../../src/generators/uischema';
 import { ControlElement, LabelElement, Layout, VerticalLayout } from '../../src/models/uischema';
 import { JsonSchema } from '../../src';
 
-test('generate ui schema for Control element by resolving refs', t => {
+test.only('generate ui schema for Control element by resolving refs', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -264,10 +264,6 @@ test(`nested object attributes`, t => {
         label: 'Id',
         scope: '#/properties/id'
     };
-    const privateLabel: LabelElement = {
-        type: 'Label',
-        text: 'Private'
-    };
     const nameControl: ControlElement = {
         type: 'Control',
         label: 'Name',
@@ -276,7 +272,6 @@ test(`nested object attributes`, t => {
     const nestedLayout: VerticalLayout = {
         type: 'VerticalLayout',
         elements: [
-            privateLabel,
             nameControl,
         ]
     };
