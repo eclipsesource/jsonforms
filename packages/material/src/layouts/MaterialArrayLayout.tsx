@@ -22,99 +22,127 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import Divider from '@material-ui/core/Divider';
 import * as React from 'react';
 import { ArrayControlProps, composePaths } from '@jsonforms/core';
 import { JsonForms } from '@jsonforms/react';
 import * as _ from 'lodash';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import { Grid, Hidden, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Avatar from '@material-ui/core/Avatar';
+import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ValidationIcon from '../complex/ValidationIcon';
 
 export const MaterialArrayLayout =
   ({
-    data,
-    label,
-    path,
-    scopedSchema,
-    addItem,
-    uischema,
-    findUISchema,
-    errors,
-    removeItems
-  }: ArrayControlProps) => {
+     data,
+     path,
+     label,
+     scopedSchema,
+     uischema,
+     errors,
+     addItem,
+     findUISchema,
+     removeItems
+   }: ArrayControlProps) => {
+
+    const firstPrimitiveProp = _.find(Object.keys(scopedSchema.properties), propName => {
+      const prop = scopedSchema.properties[propName];
+      return prop.type === 'string' ||
+        prop.type === 'number' ||
+        prop.type === 'integer';
+    });
+
     return (
-      <div>
-          <Toolbar>
-            <Grid container alignItems='center' justify='space-between'>
+      <Paper style={{ padding: 10 }}>
+        <Toolbar>
+          <Grid container alignItems='center' justify='space-between'>
+            <Grid item>
+              <Typography variant={'headline'}>{label}</Typography>
+            </Grid>
+            <Hidden smUp={errors.length === 0}>
               <Grid item>
-                <Typography variant='h6'>{label}</Typography>
+                <ValidationIcon id='tooltip-validation' errorMessages={errors}/>
               </Grid>
-              <Hidden smUp={errors.length === 0}>
+            </Hidden>
+            <Grid item>
+              <Grid container>
                 <Grid item>
-                  <ValidationIcon id='tooltip-validation' errorMessages={errors}/>
-                </Grid>
-              </Hidden>
-              <Grid item>
-                <Grid container>
-                  <Grid item>
-                    <Tooltip id='tooltip-add' title={`Add to ${label}`} placement='bottom'>
-                      <Button
-                        variant='contained'
-                        color='primary'
-                        aria-label={`Add to ${label}`}
-                        onClick={addItem(path)}
-                      >
-                        <AddIcon/>
-                      </Button>
-                    </Tooltip>
-                  </Grid>
+                  <Tooltip
+                    id='tooltip-add'
+                    title={`Add to ${label}`}
+                    placement='bottom'
+                  >
+                    <IconButton
+                      aria-label={`Add to ${label}`}
+                      onClick={addItem(path)}
+                    >
+                      <AddIcon/>
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
               </Grid>
             </Grid>
-          </Toolbar>
-          <div>
-            {
-              data ? _.range(0, data.length).map(index => {
+          </Grid>
+        </Toolbar>
+        <div>
+          {
+            data ? _.map(data, (childData, index) => {
 
-                const foundUISchema = findUISchema(scopedSchema, uischema.scope, path);
-                const childPath = composePaths(path, `${index}`);
+              const foundUISchema = findUISchema(scopedSchema, uischema.scope, path);
+              const childPath = composePaths(path, `${index}`);
+              const childLabel = childData[firstPrimitiveProp];
 
-                return (
-                  <ExpansionPanel key={index}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <Typography>
-                        {!data[index].name ? `${label}_${index}` : data[index].name}
-                      </Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <JsonForms
-                          schema={scopedSchema}
-                          uischema={foundUISchema || uischema}
-                          path={childPath}
-                          key={childPath}
-                      />
-                    </ExpansionPanelDetails>
-                    <Divider />
-                    <ExpansionPanelActions>
-                      <Button size='small' variant='contained'>
-                        <DeleteIcon onClick={removeItems(path, [data[index]])}/>
-                      </Button>
-                    </ExpansionPanelActions>
-                  </ExpansionPanel>
-                );
-              }) : <p>No data</p>
-            }
-          </div>
-      </div>
+              return (
+                <ExpansionPanel key={index}>
+                  <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                    <Grid container alignItems={'center'}>
+                      <Grid item xs={11}>
+                        <Grid container alignItems={'center'}>
+                          <Grid item xs={1}>
+                            <Avatar aria-label='Index'>
+                              {index + 1}
+                            </Avatar>
+                          </Grid>
+                          <Grid item xs={2}>
+                            {childLabel}
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={1}>
+                        <Grid container justify={'flex-end'}>
+                          <Grid item>
+                            <IconButton
+                              onClick={removeItems(path, [data[index]])}
+                              style={{ float: 'right' }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <JsonForms
+                      schema={scopedSchema}
+                      uischema={foundUISchema || uischema}
+                      path={childPath}
+                      key={childPath}
+                    />
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+              );
+            }) : <p>No data</p>
+          }
+        </div>
+      </Paper>
     );
   };
