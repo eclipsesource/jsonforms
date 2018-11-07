@@ -154,6 +154,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                                     schema={scopedSchema}
                                     uischema={createControlElement(prop)}
                                     path={childPath}
+                                    showError
                                 />
                               </td>
                             );
@@ -164,6 +165,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                             schema={scopedSchema}
                             uischema={createControlElement()}
                             path={childPath}
+                            showError
                           />
                         </td>
                     }
