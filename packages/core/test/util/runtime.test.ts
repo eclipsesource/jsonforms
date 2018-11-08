@@ -69,7 +69,7 @@ test('evalVisibility show valid case based on schema condition', t => {
   t.is(evalVisibility(uischema, data), true);
 });
 
-test.only('evalVisibility show valid case based on schema condition and enum', t => {
+test('evalVisibility show valid case based on schema condition and enum', t => {
   const condition: SchemaBasedCondition = {
     scope: '#/properties/ruleValue',
     schema: {
@@ -257,7 +257,7 @@ test('evalEnablement disable invalid case based on schema condition', t => {
     value: 'foo',
     ruleValue: 'bar'
   };
-  t.is(evalEnablement(uischema, data), true);
-  t.is(evalEnablement(uischema, {...data, ruleValue: 'baz'}), true);
-  t.is(evalEnablement(uischema, {...data, ruleValue: 'foo'}), false);
+  t.is(evalEnablement(uischema, data), false);
+  t.is(evalEnablement(uischema, {...data, ruleValue: 'baz'}), false);
+  t.is(evalEnablement(uischema, {...data, ruleValue: 'foo'}), true);
 });
