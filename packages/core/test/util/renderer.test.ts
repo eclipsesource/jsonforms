@@ -27,10 +27,12 @@ import * as _ from 'lodash';
 import * as Redux from 'redux';
 import {
     clearAllIds,
-    createDefaultValue, mapDispatchToArrayControlProps,
+    createDefaultValue,
+    mapDispatchToArrayControlProps,
     mapDispatchToControlProps,
     mapStateToControlProps,
-    mapStateToJsonFormsRendererProps, OwnPropsOfControl
+    mapStateToJsonFormsRendererProps,
+    OwnPropsOfControl
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
