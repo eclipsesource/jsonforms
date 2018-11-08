@@ -39,6 +39,7 @@ import {
   verticalLayoutTester
 } from '../src';
 import { ObjectControlRenderer, ObjectControlRendererTester } from '../src/other/object.renderer';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = { type: 'Control', scope: '#/properties/foo' };
@@ -95,7 +96,8 @@ describe('Object Control', () => {
         NoopAnimationsModule,
         MatFormFieldModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        FlexLayoutModule
       ],
       providers: [
         { provide: NgRedux, useFactory: MockNgRedux.getInstance }
