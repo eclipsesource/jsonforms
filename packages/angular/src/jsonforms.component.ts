@@ -98,9 +98,13 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
             bestComponent = renderer.renderer;
         }
 
-        if (this.componentRef === undefined) {
-            const componentFactory =
-                this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+        const componentFactory =
+            this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+        const component: ComponentRef<any> =
+            this.viewContainerRef.createComponent(componentFactory);
+
+        if (this.componentRef === undefined ||
+            this.componentRef.componentType !== component.componentType) {
             this.viewContainerRef.clear();
             this.componentRef = this.viewContainerRef.createComponent(componentFactory);
         }
