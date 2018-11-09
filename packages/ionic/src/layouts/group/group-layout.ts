@@ -1,9 +1,9 @@
 import {
-  GroupLayout,
-  JsonFormsState,
-  RankedTester,
-  rankWith,
-  uiTypeIs
+    GroupLayout, JsonFormsProps,
+    JsonFormsState,
+    RankedTester,
+    rankWith,
+    uiTypeIs
 } from '@jsonforms/core';
 import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
@@ -35,10 +35,9 @@ export class GroupLayoutRenderer extends JsonFormsIonicLayout {
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
-  }
-
-  mapAdditionalProps() {
-      this.label = (this.uischema as GroupLayout).label;
+    this.initializers.push((props: JsonFormsProps)  => {
+      this.label = (props.uischema as GroupLayout).label;
+    });
   }
 }
 
