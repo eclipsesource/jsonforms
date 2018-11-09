@@ -4,6 +4,7 @@ export { stringControlTester, StringControlRenderer } from './controls/string/st
 export { numberControlTester, NumberControlRenderer } from './controls/number/number-control';
 export { dateControlTester, DateControlRenderer } from './controls/date/date-control';
 export { enumControlTester, EnumControlRenderer } from './controls/enum/enum-control';
+export { rangeControlTester, RangeControlRenderer } from './controls/range/range-control';
 
 export {
   horizontalLayoutTester,
