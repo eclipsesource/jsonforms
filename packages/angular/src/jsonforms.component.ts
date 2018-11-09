@@ -25,6 +25,7 @@
 import * as _ from 'lodash';
 import {
     ComponentFactoryResolver,
+    ComponentRef,
     Directive,
     Input,
     OnDestroy,
@@ -38,7 +39,7 @@ import {
     JsonFormsProps, JsonFormsState,
     JsonSchema,
     mapStateToJsonFormsRendererProps,
-    OwnPropsOfRenderer,
+    OwnPropsOfRenderer
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 import 'rxjs/add/operator/map';
@@ -53,6 +54,7 @@ import { JsonFormsControl } from './control';
 export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
     private subscription: Subscription;
+    private componentRef: ComponentRef<any>;
 
     constructor(
         private viewContainerRef: ViewContainerRef,
@@ -95,13 +97,16 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
         if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
             bestComponent = renderer.renderer;
         }
-        const componentFactory =
-            this.componentFactoryResolver.resolveComponentFactory(bestComponent);
-        this.viewContainerRef.clear();
 
-        const componentRef = this.viewContainerRef.createComponent(componentFactory);
-        if (componentRef.instance instanceof JsonFormsBaseRenderer) {
-            const instance = (componentRef.instance as JsonFormsBaseRenderer);
+        if (this.componentRef === undefined) {
+            const componentFactory =
+                this.componentFactoryResolver.resolveComponentFactory(bestComponent);
+            this.viewContainerRef.clear();
+            this.componentRef = this.viewContainerRef.createComponent(componentFactory);
+        }
+
+        if (this.componentRef.instance instanceof JsonFormsBaseRenderer) {
+            const instance = (this.componentRef.instance as JsonFormsBaseRenderer);
             instance.uischema = uischema;
             instance.schema = schema;
             instance.path = this.path;
