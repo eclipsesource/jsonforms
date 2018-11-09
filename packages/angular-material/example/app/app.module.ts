@@ -27,10 +27,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
 import { Actions, JsonFormsState } from '@jsonforms/core';
 import { AppComponent } from './app.component';
-import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
-
-import { MatSelectModule } from '@angular/material';
 
 import { initialState, rootReducer } from './store';
 import { ReduxComponent } from './redux.component';
@@ -42,9 +39,7 @@ import { ReduxComponent } from './redux.component';
   ],
   imports: [
     BrowserModule,
-    JsonFormsModule,
     JsonFormsAngularMaterialModule,
-    MatSelectModule
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

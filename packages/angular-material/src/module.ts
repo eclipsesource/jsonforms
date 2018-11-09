@@ -27,100 +27,121 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
-  MatCardModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatListModule,
-  MatNativeDateModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatTabsModule
+    MatCardModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatListModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatTabsModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
-  BooleanControlRenderer,
-  DateControlRenderer,
-  NumberControlRenderer,
-  RangeControlRenderer,
-  TextAreaRenderer,
-  TextControlRenderer,
-  ToggleControlRenderer
+    BooleanControlRenderer,
+    DateControlRenderer,
+    NumberControlRenderer,
+    RangeControlRenderer,
+    TextAreaRenderer,
+    TextControlRenderer,
+    ToggleControlRenderer
 } from './controls';
 import {
-  JsonFormsDetailComponent,
-  LabelRenderer,
-  MasterDetailService,
-  MasterListComponent,
-  ObjectControlRenderer
+    JsonFormsDetailComponent,
+    LabelRenderer,
+    MasterDetailService,
+    MasterListComponent,
+    ObjectControlRenderer
 } from './other';
 import {
-  CategorizationTabLayoutRenderer,
-  GroupLayoutRenderer,
-  HorizontalLayoutRenderer,
-  VerticalLayoutRenderer
+    CategorizationTabLayoutRenderer,
+    GroupLayoutRenderer,
+    HorizontalLayoutRenderer,
+    VerticalLayoutRenderer
 } from './layouts';
 
 @NgModule({
-  imports: [
-    BrowserAnimationsModule,
-    CommonModule,
-    JsonFormsModule,
-    MatFormFieldModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatTabsModule,
-    MatSidenavModule,
-    MatListModule,
-    ReactiveFormsModule,
-    FlexLayoutModule,
-    MatCardModule
-  ],
-  declarations: [
-    BooleanControlRenderer,
-    TextAreaRenderer,
-    TextControlRenderer,
-    NumberControlRenderer,
-    RangeControlRenderer,
-    DateControlRenderer,
-    ToggleControlRenderer,
-    VerticalLayoutRenderer,
-    HorizontalLayoutRenderer,
-    CategorizationTabLayoutRenderer,
-    GroupLayoutRenderer,
-    LabelRenderer,
-    MasterListComponent,
-    JsonFormsDetailComponent,
-    ObjectControlRenderer
-  ],
-  entryComponents: [
-    BooleanControlRenderer,
-    TextAreaRenderer,
-    TextControlRenderer,
-    NumberControlRenderer,
-    RangeControlRenderer,
-    DateControlRenderer,
-    ToggleControlRenderer,
-    VerticalLayoutRenderer,
-    HorizontalLayoutRenderer,
-    GroupLayoutRenderer,
-    LabelRenderer,
-    CategorizationTabLayoutRenderer,
-    MasterListComponent,
-    JsonFormsDetailComponent,
-    ObjectControlRenderer
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [
-    MasterDetailService
-  ]
+    imports: [
+        BrowserAnimationsModule,
+        CommonModule,
+        JsonFormsModule,
+        MatFormFieldModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatSliderModule,
+        MatSlideToggleModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        MatTabsModule,
+        MatSidenavModule,
+        MatListModule,
+        ReactiveFormsModule,
+        FlexLayoutModule,
+        MatCardModule,
+        MatSelectModule
+    ],
+    declarations: [
+        BooleanControlRenderer,
+        TextAreaRenderer,
+        TextControlRenderer,
+        NumberControlRenderer,
+        RangeControlRenderer,
+        DateControlRenderer,
+        ToggleControlRenderer,
+        VerticalLayoutRenderer,
+        HorizontalLayoutRenderer,
+        CategorizationTabLayoutRenderer,
+        GroupLayoutRenderer,
+        LabelRenderer,
+        MasterListComponent,
+        JsonFormsDetailComponent,
+        ObjectControlRenderer
+    ],
+    entryComponents: [
+        BooleanControlRenderer,
+        TextAreaRenderer,
+        TextControlRenderer,
+        NumberControlRenderer,
+        RangeControlRenderer,
+        DateControlRenderer,
+        ToggleControlRenderer,
+        VerticalLayoutRenderer,
+        HorizontalLayoutRenderer,
+        GroupLayoutRenderer,
+        LabelRenderer,
+        CategorizationTabLayoutRenderer,
+        MasterListComponent,
+        JsonFormsDetailComponent,
+        ObjectControlRenderer
+    ],
+    exports: [
+        BrowserAnimationsModule,
+        CommonModule,
+        JsonFormsModule,
+        MatFormFieldModule,
+        MatCheckboxModule,
+        MatInputModule,
+        MatSliderModule,
+        MatSlideToggleModule,
+        MatNativeDateModule,
+        MatDatepickerModule,
+        MatTabsModule,
+        MatSidenavModule,
+        MatListModule,
+        ReactiveFormsModule,
+        FlexLayoutModule,
+        MatCardModule,
+        MatSelectModule
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [
+        MasterDetailService
+    ]
 })
 export class JsonFormsAngularMaterialModule {
 }

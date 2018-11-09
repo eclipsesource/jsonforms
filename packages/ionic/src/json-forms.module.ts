@@ -11,7 +11,7 @@ import { EnumControlRenderer } from './controls/enum/enum-control';
 import { HorizontalLayoutRenderer } from './layouts/horizontal/horizontal-layout';
 import { VerticalLayoutRenderer } from './layouts/vertical/vertical-layout';
 import {
-  CategorizationMenuLayoutRenderer
+    CategorizationMenuLayoutRenderer
 } from './layouts/categorization/categorization-menu-layout';
 import { CategoryRenderer } from './layouts/categorization/category/category';
 import { GroupLayoutRenderer } from './layouts/group/group-layout';
@@ -22,83 +22,68 @@ import { DetailPage } from './other/master-detail/pages/detail/detail';
 import { LabelRenderer } from './other/label/label';
 import { MasterDetailNavService } from './other/master-detail/master-detail-nav.service';
 import {
-  CategorizationTabLayoutRenderer
+    CategorizationTabLayoutRenderer
 } from './layouts/categorization/categorization-tab-layout';
 
 @NgModule({
-  declarations: [
-    // controls
-    BooleanControlRenderer,
-    StringControlRenderer,
-    NumberControlRenderer,
-    DateControlRenderer,
-    EnumControlRenderer,
+    declarations: [
+        // controls
+        BooleanControlRenderer,
+        StringControlRenderer,
+        NumberControlRenderer,
+        DateControlRenderer,
+        EnumControlRenderer,
 
-    // layouts
-    HorizontalLayoutRenderer,
-    VerticalLayoutRenderer,
-    CategorizationTabLayoutRenderer,
-    CategorizationMenuLayoutRenderer,
-    CategoryRenderer,
-    GroupLayoutRenderer,
+        // layouts
+        HorizontalLayoutRenderer,
+        VerticalLayoutRenderer,
+        CategorizationTabLayoutRenderer,
+        CategorizationMenuLayoutRenderer,
+        CategoryRenderer,
+        GroupLayoutRenderer,
 
-    // Master Detail components
-    MasterDetailComponent,
-    MasterPage,
-    DetailPage,
+        // Master Detail components
+        MasterDetailComponent,
+        MasterPage,
+        DetailPage,
 
-    // other
-    LabelRenderer
-  ],
-  imports: [
-    IonicModule,
-    JsonFormsModule
-  ],
-  exports: [
+        // other
+        LabelRenderer
+    ],
+    imports: [
+        IonicModule,
+        JsonFormsModule
+    ],
+    entryComponents: [
+        // controls
+        BooleanControlRenderer,
+        StringControlRenderer,
+        NumberControlRenderer,
+        DateControlRenderer,
+        EnumControlRenderer,
 
-    // controls
-    StringControlRenderer,
-    NumberControlRenderer,
-    DateControlRenderer,
-    EnumControlRenderer,
+        // layouts
+        HorizontalLayoutRenderer,
+        VerticalLayoutRenderer,
+        CategorizationMenuLayoutRenderer,
+        CategorizationTabLayoutRenderer,
+        CategoryRenderer,
+        GroupLayoutRenderer,
 
-    // layouts
-    HorizontalLayoutRenderer,
-    VerticalLayoutRenderer,
-    CategorizationMenuLayoutRenderer,
-    CategorizationTabLayoutRenderer,
+        // Master Detail components
+        MasterDetailComponent,
+        MasterPage,
+        DetailPage,
 
-    // master detail
-    MasterDetailComponent,
-    MasterPage,
-    DetailPage,
-  ],
-  entryComponents: [
-    // controls
-    BooleanControlRenderer,
-    StringControlRenderer,
-    NumberControlRenderer,
-    DateControlRenderer,
-    EnumControlRenderer,
-
-    // layouts
-    HorizontalLayoutRenderer,
-    VerticalLayoutRenderer,
-    CategorizationMenuLayoutRenderer,
-    CategorizationTabLayoutRenderer,
-    CategoryRenderer,
-    GroupLayoutRenderer,
-
-    // Master Detail components
-    MasterDetailComponent,
-    MasterPage,
-    DetailPage,
-
-    // other
-    LabelRenderer
-  ],
-  providers: [
-    MasterDetailNavService
-  ]
+        // other
+        LabelRenderer
+    ],
+    exports: [
+        IonicModule,
+        JsonFormsModule
+    ],
+    providers: [
+        MasterDetailNavService
+    ]
 })
 export class JsonFormsIonicModule {}
