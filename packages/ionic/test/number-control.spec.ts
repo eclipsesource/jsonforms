@@ -26,14 +26,12 @@ import { NumberControlRenderer, numberControlTester } from '../src';
 import { By } from '@angular/platform-browser';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import {
-    additionalProps,
     additionalTestData,
     canBeDisabled,
     defaultTestData,
+    initAndExpect,
     initComponent,
     mustHaveId,
-    renderFloat,
-    renderInteger,
     setupMockStore,
     showErrors,
     updateFloatState,
@@ -106,7 +104,7 @@ describe(
         });
 
         it('should render floats', () => {
-            renderFloat(fixture, defaultTestData, () => {
+            initAndExpect(fixture, defaultTestData, () => {
                 expect(textInputInstance.value).toBe(123.123);
                 expect(textInputInstance.step).toBe(0.1);
                 expect(textInputInstance.disabled).toBe(false);
@@ -114,7 +112,7 @@ describe(
         });
 
         it('should render integer', () => {
-            renderInteger(
+            initAndExpect(
                 fixture,
                 {
                     data: { foo: 123 },
@@ -193,7 +191,7 @@ describe(
         });
 
         it('should support additional props', () => {
-            additionalProps(fixture, additionalTestData, () => {
+            initAndExpect(fixture, additionalTestData, () => {
                 expect(textInput.componentInstance.step).toBe(3);
                 expect(textInput.componentInstance.min).toBe(-42.42);
                 expect(textInput.componentInstance.max).toBe(42);

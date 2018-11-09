@@ -7,11 +7,17 @@ import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { Subject } from 'rxjs';
 import {
     baseSetup,
+    canBeDisabled,
+    canBeHidden,
     ErrorTestExpectation,
-    initComponent,
+    initAndExpect,
+    initComponent, mustHaveId,
     setupMockStore,
+    showErrors,
     TestConfig,
-    TestData
+    TestData,
+    updateWithNull,
+    updateWithUndefined
 } from './util';
 
 interface ComponentResult<C extends JsonFormsControl> {
@@ -57,24 +63,6 @@ export const defaultTestData: TestData = {
     uischema: defaultUischema
 };
 
-export const renderFloat = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    initComponent(fixture, setupMockStore(fixture, testData));
-    expectations();
-};
-
-export const renderInteger = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    initComponent(fixture, setupMockStore(fixture, testData));
-    expectations();
-};
-
 export const updateFloatState = <C extends JsonFormsControl>(
     fixture: ComponentFixture<C>,
     testData: TestData,
@@ -94,42 +82,6 @@ export const updateFloatState = <C extends JsonFormsControl>(
     expectations();
 };
 
-export const updateWithUndefined = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
-    mockSubStore.next({
-        jsonforms: {
-            core: {
-                data: { foo: undefined },
-                schema: testData.schema,
-            }
-        }
-    });
-    initComponent(fixture, mockSubStore);
-    expectations();
-};
-
-export const updateWithNull = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
-    mockSubStore.next({
-        jsonforms: {
-            core: {
-                data: { foo: null },
-                schema: testData.schema,
-            }
-        }
-    });
-    initComponent(fixture, mockSubStore);
-    expectations();
-};
-
 export const updateWithSiblingValue = <C extends JsonFormsControl>(
     fixture: ComponentFixture<C>,
     testData: TestData,
@@ -145,77 +97,6 @@ export const updateWithSiblingValue = <C extends JsonFormsControl>(
         }
     });
     initComponent(fixture, mockSubStore);
-    expectations();
-};
-
-export const canBeDisabled = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
-    const component = fixture.componentInstance;
-    component.disabled = true;
-    initComponent(fixture, mockSubStore);
-    expectations();
-};
-
-export const canBeHidden = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
-    const component = fixture.componentInstance;
-    component.visible = false;
-    component.ngOnInit();
-    mockSubStore.complete();
-    fixture.detectChanges();
-    expectations();
-};
-
-export const mustHaveId = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    expectations: () => any
-) => {
-    const component = fixture.componentInstance;
-    component.id = 'myId';
-    component.ngOnInit();
-    fixture.detectChanges();
-    expectations();
-};
-
-export const showErrors = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    const component = fixture.componentInstance;
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = testData.uischema;
-
-    mockSubStore.next({
-        jsonforms: {
-            core: {
-                data: testData.data,
-                schema: testData.schema,
-                errors: [{
-                    dataPath: 'foo',
-                    message: 'Hi, this is me, test error!'
-                }]
-            }
-        },
-    });
-    initComponent(fixture, mockSubStore);
-    expectations();
-};
-
-export const additionalProps = <C extends JsonFormsControl>(
-    fixture: ComponentFixture<C>,
-    testData: TestData,
-    expectations: () => any
-) => {
-    initComponent(fixture, setupMockStore(fixture, testData));
     expectations();
 };
 
@@ -241,7 +122,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     });
 
     it('should render floats', () => {
-        renderFloat(fixture, testData, () => {
+        initAndExpect(fixture, testData, () => {
             expect(component.data).toBe(123.123);
             expect(numberNativeElement.valueAsNumber).toBe(123.123);
             // step is of type string
@@ -253,7 +134,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     });
 
     it('should render integers', () => {
-        renderInteger(
+        initAndExpect(
             fixture,
             {
                 data: {foo: 123},
@@ -431,11 +312,15 @@ export const numberAdditionalPropsTest = <C extends JsonFormsControl>(
     });
 
     it('should respect min,max,multipleOf', () => {
-        additionalProps(fixture, testData, () => {
-            // step, min and max are of type string on an input control
-            expect(numberNativeElement.step).toBe('3');
-            expect(numberNativeElement.min).toBe('-42.42');
-            expect(numberNativeElement.max).toBe('42');
-        });
+        initAndExpect(
+            fixture,
+            testData,
+            () => {
+                // step, min and max are of type string on an input control
+                expect(numberNativeElement.step).toBe('3');
+                expect(numberNativeElement.min).toBe('-42.42');
+                expect(numberNativeElement.max).toBe('42');
+            }
+        );
     });
 };

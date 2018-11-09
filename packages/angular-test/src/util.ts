@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { JsonSchema, UISchemaElement } from '@jsonforms/core';
@@ -56,4 +56,109 @@ export const initComponent = (fixture: ComponentFixture<any>, mockSubStore: Subj
     mockSubStore.complete();
     fixture.componentInstance.ngOnInit();
     fixture.detectChanges();
+};
+
+export const initAndExpect = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    initComponent(fixture, setupMockStore(fixture, testData));
+    expectations();
+};
+
+export const updateWithUndefined = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
+    mockSubStore.next({
+        jsonforms: {
+            core: {
+                data: { foo: undefined },
+                schema: testData.schema,
+            }
+        }
+    });
+    initComponent(fixture, mockSubStore);
+    expectations();
+};
+
+export const updateWithNull = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
+    mockSubStore.next({
+        jsonforms: {
+            core: {
+                data: { foo: null },
+                schema: testData.schema,
+            }
+        }
+    });
+    initComponent(fixture, mockSubStore);
+    expectations();
+};
+
+export const canBeDisabled = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
+    const component = fixture.componentInstance;
+    component.disabled = true;
+    initComponent(fixture, mockSubStore);
+    expectations();
+};
+
+export const canBeHidden = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
+    const component = fixture.componentInstance;
+    component.visible = false;
+    initComponent(fixture, mockSubStore);
+    expectations();
+};
+
+export const mustHaveId = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    expectations: () => any
+) => {
+    const component = fixture.componentInstance;
+    component.id = 'myId';
+    component.ngOnInit();
+    fixture.detectChanges();
+    expectations();
+};
+
+export const showErrors = <C extends JsonFormsControl>(
+    fixture: ComponentFixture<C>,
+    testData: TestData,
+    expectations: () => any
+) => {
+    const component = fixture.componentInstance;
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = testData.uischema;
+
+    mockSubStore.next({
+        jsonforms: {
+            core: {
+                data: testData.data,
+                schema: testData.schema,
+                errors: [{
+                    dataPath: 'foo',
+                    message: 'Hi, this is me, test error!'
+                }]
+            }
+        },
+    });
+    initComponent(fixture, mockSubStore);
+    expectations();
 };
