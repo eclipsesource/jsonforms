@@ -8,7 +8,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
   template: `
       <ion-item>
           <ion-label>{{label}}</ion-label>
-          <ion-label stacked *ngIf="error" color="errora">{{error}}</ion-label>
+          <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
           <ion-select [ngModel]="data" (ionChange)="onChange($event)">
               <ion-option *ngFor="let option of options" value="{{option}}">
                   {{option}}
@@ -28,6 +28,8 @@ export class EnumControlRenderer extends JsonFormsControl {
   mapAdditionalProps() {
     this.options = this.scopedSchema.enum;
   }
+
+  getEventValue = (ev: any) => ev;
 }
 
 export const enumControlTester: RankedTester = rankWith(
