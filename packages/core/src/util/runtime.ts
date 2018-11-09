@@ -26,11 +26,11 @@ import * as _ from 'lodash';
 // TODO: pass in uischema and data instead of props and state
 import { getData } from '../reducers';
 import {
-  Condition,
-  LeafCondition,
-  RuleEffect,
-  SchemaBasedCondition,
-  UISchemaElement
+    Condition,
+    LeafCondition,
+    RuleEffect,
+    SchemaBasedCondition,
+    UISchemaElement
 } from '../models/uischema';
 import { resolveData } from './resolvers';
 import { toDataPath } from './path';
@@ -41,72 +41,81 @@ import { JsonFormsState } from '../store';
 const ajv = createAjv();
 
 const ruleIsMissingProperties = (uischema: UISchemaElement): boolean =>
-  !_.has(uischema, 'rule.condition') ||
-  !_.has(uischema, 'rule.condition.scope') ||
-  (!_.has(uischema, 'rule.condition.expectedValue') && !_.has(uischema, 'rule.condition.schema'));
+    !_.has(uischema, 'rule.condition') ||
+    !_.has(uischema, 'rule.condition.scope') ||
+    (!_.has(uischema, 'rule.condition.expectedValue') && !_.has(uischema, 'rule.condition.schema'));
 
 const isLeafCondition = (condition: Condition): condition is LeafCondition =>
-  condition.type === 'LEAF';
+    condition.type === 'LEAF';
 
 const isSchemaCondition = (condition: Condition): condition is SchemaBasedCondition =>
-  _.has(condition, 'schema');
+    _.has(condition, 'schema');
 
-const isConditionFulfilled = (uischema: UISchemaElement, data: any): boolean => {
-  if (ruleIsMissingProperties(uischema)) {
-    return true;
-  }
-
-  const condition = uischema.rule.condition;
-
-  if (isLeafCondition(condition)) {
-    const value = resolveData(data, toDataPath(condition.scope));
-    return value === condition.expectedValue;
-  } else if (isSchemaCondition(condition)) {
-    const value = resolveData(data, toDataPath(condition.scope));
-    return ajv.validate(condition.schema, value) as boolean;
-  } else {
-    // unknown condition
-    return true;
-  }
+const getConditionScope = (uischema: UISchemaElement): string => {
+    if (ruleIsMissingProperties(uischema)) {
+        return undefined;
+    }
+    return toDataPath(uischema.rule.condition.scope);
 };
 
-export const evalVisibility = (uischema: UISchemaElement, data: any): boolean => {
-  const fulfilled = isConditionFulfilled(uischema, data);
+const isConditionFulfilled =
+    (uischema: UISchemaElement, data: any, conditionScope: string): boolean => {
+        if (ruleIsMissingProperties(uischema)) {
+            return true;
+        }
 
-  switch (uischema.rule.effect) {
-    case RuleEffect.HIDE: return !fulfilled;
-    case RuleEffect.SHOW: return fulfilled;
-    // visible by default
-    default: return true;
-  }
-};
+        const condition = uischema.rule.condition;
 
-export const evalEnablement = (uischema: UISchemaElement, data: any) => {
-  const fulfilled = isConditionFulfilled(uischema, data);
+        if (isLeafCondition(condition)) {
+            const value = resolveData(data, toDataPath(condition.scope));
+            return value === condition.expectedValue;
+        } else if (isSchemaCondition(condition)) {
+            const value = resolveData(data, conditionScope);
+            return ajv.validate(condition.schema, value) as boolean;
+        } else {
+            // unknown condition
+            return true;
+        }
+    };
 
-  switch (uischema.rule.effect) {
-    case RuleEffect.DISABLE: return !fulfilled;
-    case RuleEffect.ENABLE: return fulfilled;
-    // enabled by default
-    default: return true;
-  }
+export const evalVisibility =
+    (uischema: UISchemaElement, data: any, rulePath: string = getConditionScope(uischema)): boolean => {
+        const fulfilled = isConditionFulfilled(uischema, data, rulePath);
+
+        switch (uischema.rule.effect) {
+            case RuleEffect.HIDE: return !fulfilled;
+            case RuleEffect.SHOW: return fulfilled;
+            // visible by default
+            default: return true;
+        }
+    };
+
+export const evalEnablement = (uischema: UISchemaElement, data: any, rulePath: string = getConditionScope(uischema)) => {
+    const fulfilled = isConditionFulfilled(uischema, data, rulePath);
+
+    switch (uischema.rule.effect) {
+        case RuleEffect.DISABLE: return !fulfilled;
+        case RuleEffect.ENABLE: return fulfilled;
+        // enabled by default
+        default: return true;
+    }
 };
 
 export const isVisible =
-    (props: StatePropsOfRenderer, state: JsonFormsState): boolean => {
+    (props: StatePropsOfRenderer, state: JsonFormsState, path: string = undefined): boolean => {
 
         if (props.uischema.rule) {
-            return evalVisibility(props.uischema, getData(state));
+            return evalVisibility(props.uischema, getData(state), path);
         }
 
         return true;
     };
 
 export const isEnabled =
-    (props: StatePropsOfRenderer, state: JsonFormsState): boolean => {
+    (props: StatePropsOfRenderer, state: JsonFormsState, path: string = undefined): boolean => {
 
         if (props.uischema.rule) {
-            return evalEnablement(props.uischema, getData(state));
+            return evalEnablement(props.uischema, getData(state), path);
         }
 
         return true;
