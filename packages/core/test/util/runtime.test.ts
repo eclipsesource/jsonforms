@@ -23,7 +23,12 @@
   THE SOFTWARE.
 */
 import test from 'ava';
-import { ControlElement, LeafCondition, RuleEffect, SchemaBasedCondition } from '../../src';
+import {
+    ControlElement,
+    LeafCondition,
+    RuleEffect,
+    SchemaBasedCondition
+} from '../../src';
 import { evalEnablement, evalVisibility } from '../../src/util/runtime';
 
 test('evalVisibility show valid case', t => {

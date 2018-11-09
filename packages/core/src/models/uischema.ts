@@ -76,7 +76,7 @@ export enum RuleEffect {
 /**
  * Represents a condition to be evaluated.
  */
-export interface Condition {
+export interface Condition extends Scopable {
   /**
    * The type of condition.
    */
@@ -86,7 +86,7 @@ export interface Condition {
 /**
  * A leaf condition.
  */
-export interface LeafCondition extends Condition, Scopable {
+export interface LeafCondition extends Condition {
 
   type: 'LEAF';
 
@@ -96,7 +96,7 @@ export interface LeafCondition extends Condition, Scopable {
   expectedValue: any;
 }
 
-export interface SchemaBasedCondition extends Condition, Scopable {
+export interface SchemaBasedCondition extends Condition {
   schema: JsonSchema;
 }
 
