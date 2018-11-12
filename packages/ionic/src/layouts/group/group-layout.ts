@@ -1,5 +1,6 @@
 import {
-    GroupLayout, JsonFormsProps,
+    GroupLayout,
+    JsonFormsProps,
     JsonFormsState,
     RankedTester,
     rankWith,

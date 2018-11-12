@@ -20,7 +20,6 @@ import { MasterDetailNavService } from './master-detail-nav.service';
 import { MasterPage } from './pages/master/master';
 import { DetailPage } from './pages/detail/detail';
 import { removeSchemaKeywords } from '../../common';
-import { map } from 'rxjs/operators/map';
 
 export interface MasterItem {
     label: string;
@@ -67,10 +66,8 @@ export class MasterDetailComponent extends JsonFormsControl {
 
         this.subscription = this.ngRedux
             .select()
-            .pipe(
-                map((s: JsonFormsState) => this.mapToProps(s))
-            )
-            .subscribe(({ data, schema, uischema, }) => {
+            .subscribe((state: JsonFormsState) => {
+                const { data, schema, uischema } = this.mapToProps(state);
                 const controlElement = uischema as ControlElement;
                 const instancePath = toDataPath(`${controlElement.scope}/items`);
                 const resolvedSchema = resolveSchema(schema, `${controlElement.scope}/items`);

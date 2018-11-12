@@ -67,7 +67,7 @@ const isConditionFulfilled =
         const condition = uischema.rule.condition;
 
         if (isLeafCondition(condition)) {
-            const value = resolveData(data, toDataPath(condition.scope));
+            const value = resolveData(data, conditionScope);
             return value === condition.expectedValue;
         } else if (isSchemaCondition(condition)) {
             const value = resolveData(data, conditionScope);

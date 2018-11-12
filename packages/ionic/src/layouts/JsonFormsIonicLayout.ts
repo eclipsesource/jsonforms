@@ -35,6 +35,8 @@ export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnIni
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }
