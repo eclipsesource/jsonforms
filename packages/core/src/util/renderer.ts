@@ -306,17 +306,17 @@ export interface ControlState {
 export const mapStateToControlProps =
     (state: JsonFormsState, ownProps: OwnPropsOfControl): StatePropsOfControl => {
         const { uischema } = ownProps;
-        const path = composeWithUi(ownProps.uischema, ownProps.path);
-        const rulePath = _.has(ownProps.uischema, 'rule')
+        const path = composeWithUi(uischema, ownProps.path);
+        const rulePath = _.has(uischema, 'rule')
             && composeWithUi(uischema.rule.condition, ownProps.path);
         const visible = _.has(ownProps, 'visible') ?
             ownProps.visible : isVisible(ownProps, state, rulePath);
         const enabled = _.has(ownProps, 'enabled') ?
             ownProps.enabled  : isEnabled(ownProps, state, rulePath);
-        const labelDesc = createLabelDescriptionFrom(ownProps.uischema);
+        const labelDesc = createLabelDescriptionFrom(uischema);
         const label = labelDesc.show ? labelDesc.text : '';
         const errors = _.union(getErrorAt(path)(state).map(error => error.message));
-        const controlElement = ownProps.uischema as ControlElement;
+        const controlElement = uischema as ControlElement;
         const id = ownProps.id;
         const required =
             controlElement.scope !== undefined && isRequired(ownProps.schema, controlElement.scope);

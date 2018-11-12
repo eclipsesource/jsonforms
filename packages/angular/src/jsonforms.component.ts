@@ -54,7 +54,7 @@ import { JsonFormsControl } from './control';
 export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
     private subscription: Subscription;
-    private componentRef: ComponentRef<any>;
+    private currentComponentRef: ComponentRef<any>;
 
     constructor(
         private viewContainerRef: ViewContainerRef,
@@ -100,17 +100,16 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
 
         const componentFactory =
             this.componentFactoryResolver.resolveComponentFactory(bestComponent);
-        const component: ComponentRef<any> =
-            this.viewContainerRef.createComponent(componentFactory);
 
-        if (this.componentRef === undefined ||
-            this.componentRef.componentType !== component.componentType) {
+        if (this.currentComponentRef === undefined) {
+            this.currentComponentRef = this.viewContainerRef.createComponent(componentFactory);
+        } else if (this.currentComponentRef.componentType !== componentFactory.componentType) {
             this.viewContainerRef.clear();
-            this.componentRef = this.viewContainerRef.createComponent(componentFactory);
+            this.currentComponentRef = this.viewContainerRef.createComponent(componentFactory);
         }
 
-        if (this.componentRef.instance instanceof JsonFormsBaseRenderer) {
-            const instance = (this.componentRef.instance as JsonFormsBaseRenderer);
+        if (this.currentComponentRef.instance instanceof JsonFormsBaseRenderer) {
+            const instance = (this.currentComponentRef.instance as JsonFormsBaseRenderer);
             instance.uischema = uischema;
             instance.schema = schema;
             instance.path = this.path;
