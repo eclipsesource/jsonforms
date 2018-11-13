@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavParams } from 'ionic-angular';
-import { MasterDetailNavService } from '../../master-detail-nav.service';
-import { DetailPage } from '../detail/detail';
 import { AbstractMasterPage } from '../AbstractMasterPage';
-import { MasterItem } from '../../master-detail';
+import { MasterItem } from '../../list-with-detail-control';
 import {
     ControlElement,
     JsonFormsState,
@@ -39,10 +37,10 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
     schema: JsonSchema;
     path: string;
     addItem: (path: string) => () => void;
+    pushDetail: (params: any) => void;
 
     constructor(
         public navParams: NavParams,
-        private navProxy: MasterDetailNavService,
         private ngRedux: NgRedux<JsonFormsState>,
     ) {
         super();
@@ -50,6 +48,7 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
         this.schema = this.navParams.get('schema');
         this.uischema = this.navParams.get('uischema');
         this.path = this.navParams.get('path');
+        this.pushDetail = this.navParams.get('pushDetail');
     }
 
     ngOnInit() {
@@ -61,7 +60,7 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
     }
 
     onItemSelected(item: any) {
-        this.navProxy.pushDetail(DetailPage, { addToNavStack: true, item });
+        this.pushDetail(item);
     }
 
     onClick() {

@@ -19,7 +19,7 @@ import { CategoryRenderer } from './category/category';
       <ion-tabs>
         <ion-tab
           *ngFor="let category of categoryPages; trackBy: trackByCategory"
-          tabTitle="{{category.params.uischema.label}}"
+          tabTitle="{{category.params.category.label}}"
           [root]="category.renderer"
           [rootParams]="category.params"
         >
@@ -46,9 +46,12 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
                     this.categoryPages.push({
                         renderer: CategoryRenderer,
                         params: {
-                            uischema: category,
-                            schema: this.schema,
-                            path: this.path
+                            category: {
+                                elements: category.elements,
+                                label: category.label,
+                                schema: this.schema,
+                                path: this.path
+                            }
                         }
                     });
                 }

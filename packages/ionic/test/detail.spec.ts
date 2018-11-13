@@ -36,7 +36,7 @@ import {
     verticalLayoutTester
 } from '../src';
 import { PlatformMock, } from '../test-config/mocks-ionic';
-import { DetailPage } from '../src/other/master-detail/pages/detail/detail';
+import { DetailPage } from '../src/other/list-with-detail/pages/detail/detail';
 
 describe('Master detail', () => {
 
@@ -81,7 +81,6 @@ describe('Master detail', () => {
     };
 
     const pageData = {
-        addToNavStack: true,
         get() {
             return {
                 label: 'ACME',
