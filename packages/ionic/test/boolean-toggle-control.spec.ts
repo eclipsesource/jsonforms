@@ -27,7 +27,6 @@ import { NgRedux } from '@angular-redux/store';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import {
-    additionalTestData,
     canBeDisabled,
     defaultBooleanTestData,
     defaultBooleanTestSchema,
@@ -36,9 +35,7 @@ import {
     mustHaveId,
     setupMockStore,
     showErrors,
-    updateFloatState,
     updateWithNull,
-    updateWithSiblingValue,
     updateWithUndefined
 } from '@jsonforms/angular-test';
 import { By } from '@angular/platform-browser';

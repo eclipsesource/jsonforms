@@ -41,7 +41,6 @@ import { DetailPage } from '../src/other/master-detail/pages/detail/detail';
 describe('Master detail', () => {
 
     let fixture: ComponentFixture<any>;
-    let component: any;
 
     const data = {
         orders: [
@@ -132,7 +131,6 @@ describe('Master detail', () => {
 
         MockNgRedux.reset();
         fixture = TestBed.createComponent(DetailPage);
-        component = fixture.componentInstance;
     });
 
     it('should render detail page with inactive rule', fakeAsync(() => {
