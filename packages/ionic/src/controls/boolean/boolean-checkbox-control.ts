@@ -17,7 +17,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
       </ion-item>
   `
 })
-export class BooleanControlRenderer extends JsonFormsControl {
+export class BooleanCheckboxControlRenderer extends JsonFormsControl {
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }

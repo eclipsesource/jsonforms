@@ -18,7 +18,7 @@ const prepareComponent = <C extends JsonFormsControl, I>
 };
 
 const data = { foo: true };
-const schema: JsonSchema = {
+export const defaultBooleanTestSchema: JsonSchema = {
     type: 'object',
     properties: {
         foo: {
@@ -29,6 +29,11 @@ const schema: JsonSchema = {
 const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
+};
+export const defaultBooleanTestData = {
+    data,
+    schema: defaultBooleanTestSchema,
+    uischema
 };
 
 export const booleanBaseTest = <C extends JsonFormsControl, I>
@@ -56,7 +61,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -79,7 +84,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -90,7 +95,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data: { foo: false },
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -107,7 +112,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -118,7 +123,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data: { foo: undefined },
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -135,7 +140,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -146,7 +151,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data: { foo: null },
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -163,7 +168,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -174,7 +179,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data: { foo: true, bar: false },
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -193,7 +198,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -213,7 +218,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
             jsonforms: {
                 core: {
                     data,
-                    schema,
+                    schema: defaultBooleanTestSchema,
                 }
             }
         });
@@ -225,6 +230,7 @@ export const booleanBaseTest = <C extends JsonFormsControl, I>
         const hasHidden = fixture.nativeElement.children[0].hidden;
         expect(hasDisplayNone || hasHidden).toBeTruthy();
     });
+
     it('id should be present in output', () => {
         component.uischema = uischema;
         component.id = 'myId';
@@ -266,7 +272,7 @@ export const booleanInputEventTest = <C extends JsonFormsControl, I>
                 jsonforms: {
                     core: {
                         data,
-                        schema,
+                        schema: defaultBooleanTestSchema,
                     }
                 }
             });
@@ -305,7 +311,7 @@ export const booleanErrorTest = <C extends JsonFormsControl, I>
                 jsonforms: {
                     core: {
                         data,
-                        schema,
+                        schema: defaultBooleanTestSchema,
                         errors: [{
                             dataPath: 'foo',
                             message: 'Hi, this is me, test error!'

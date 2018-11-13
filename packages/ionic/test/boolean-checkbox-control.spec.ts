@@ -26,7 +26,7 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { booleanBaseTest, booleanErrorTest, booleanInputEventTest } from '@jsonforms/angular-test';
 import { Checkbox, IonicModule, Label, Platform } from 'ionic-angular';
-import { BooleanControlRenderer, booleanControlTester } from '../src';
+import { BooleanCheckboxControlRenderer, booleanControlTester } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
 
 describe('Ionic boolean control tester', () => {
@@ -52,12 +52,12 @@ describe('Ionic boolean control tester', () => {
   });
 });
 
-const imports = [IonicModule.forRoot(BooleanControlRenderer)];
+const imports = [IonicModule.forRoot(BooleanCheckboxControlRenderer)];
 const providers = [
     { provide: Platform, useClass: PlatformMock },
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];
-const componentUT: any = BooleanControlRenderer;
+const componentUT: any = BooleanCheckboxControlRenderer;
 const errorTest = {errorInstance: Label, numberOfElements: 2, indexOfElement: 1};
 const testConfig = {imports, providers, componentUT};
 

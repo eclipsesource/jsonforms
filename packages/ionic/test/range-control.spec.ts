@@ -33,7 +33,7 @@ import {
     showErrors,
     updateFloatState,
     updateWithNull,
-    updateWithSiblingValue,
+    updateWithSiblingNumberValue,
     updateWithUndefined
 } from '@jsonforms/angular-test';
 import { MockNgRedux } from '@angular-redux/store/testing';
@@ -201,7 +201,7 @@ describe('ionic range control', () => {
     }));
 
     it('should not update with wrong ref', async(() => {
-        updateWithSiblingValue(
+        updateWithSiblingNumberValue(
             fixture,
             {
                 ...rangeDefaultTestData,
