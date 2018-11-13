@@ -28,7 +28,7 @@ import { MockNgRedux } from '@angular-redux/store/testing';
 import {
     additionalTestData,
     canBeDisabled,
-    defaultTestData,
+    defaultNumberTestData,
     initAndExpect,
     initComponent,
     mustHaveId,
@@ -36,7 +36,7 @@ import {
     showErrors,
     updateFloatState,
     updateWithNull,
-    updateWithSiblingValue,
+    updateWithSiblingNumberValue,
     updateWithUndefined
 } from '@jsonforms/angular-test';
 import { NgRedux } from '@angular-redux/store';
@@ -104,7 +104,7 @@ describe(
         });
 
         it('should render floats', () => {
-            initAndExpect(fixture, defaultTestData, () => {
+            initAndExpect(fixture, defaultNumberTestData, () => {
                 expect(textInputInstance.value).toBe(123.123);
                 expect(textInputInstance.step).toBe(0.1);
                 expect(textInputInstance.disabled).toBe(false);
@@ -122,7 +122,7 @@ describe(
                             foo: { type: 'integer' }
                         }
                     },
-                    uischema: defaultTestData.uischema
+                    uischema: defaultNumberTestData.uischema
                 },
                 () => {
                     expect(textInputInstance.value).toBe(123);
@@ -132,14 +132,14 @@ describe(
         });
 
         it('should support updating the state', () => {
-            updateFloatState(fixture, defaultTestData, () => {
+            updateFloatState(fixture, defaultNumberTestData, () => {
                 expect(textInputInstance.value).toBe(456.456);
             });
         });
 
         // possibly related to https://github.com/ionic-team/ionic/issues/14370
         xit('should support updating with undefined', () => {
-            updateWithUndefined(fixture, defaultTestData, () => {
+            updateWithUndefined(fixture, defaultNumberTestData, () => {
                 // not undefined
                 expect(textInputInstance.value).toBe(undefined);
             });
@@ -147,14 +147,14 @@ describe(
 
         // possibly related to https://github.com/ionic-team/ionic/issues/14370
         xit('should support updating with null', () => {
-            updateWithNull(fixture, defaultTestData, () => {
+            updateWithNull(fixture, defaultNumberTestData, () => {
                 // not null
                 expect(textInputInstance.value).toBe(null);
             });
         });
 
         it('should not update with wrong ref', () => {
-            updateWithSiblingValue(fixture, defaultTestData, () => {
+            updateWithSiblingNumberValue(fixture, defaultNumberTestData, () => {
                 expect(textInputInstance.value).toBe(123.123);
             });
         });
@@ -162,7 +162,7 @@ describe(
         // store needed as we evaluate the calculated enabled value to disable/enable the control
         // also, see https://github.com/ionic-team/ionic/issues/5280
         it('can be disabled', () => {
-            canBeDisabled(fixture, defaultTestData, () => {
+            canBeDisabled(fixture, defaultNumberTestData, () => {
                 expect(textInputInstance.disabled).toBe(true);
             });
         });
@@ -174,7 +174,7 @@ describe(
         });
 
         it('should support input event changes', async(() => {
-            initComponent(fixture, setupMockStore(fixture, defaultTestData));
+            initComponent(fixture, setupMockStore(fixture, defaultNumberTestData));
 
             const spy = spyOn(component, 'onChange');
             textInput.componentInstance.ionChange.emit(456.456);
@@ -183,7 +183,7 @@ describe(
         }));
 
         it('should show errors', () => {
-            showErrors(fixture, defaultTestData, () => {
+            showErrors(fixture, defaultNumberTestData, () => {
                 const debugError: DebugElement =
                     fixture.debugElement.queryAll(By.directive(Label))[1];
                 expect(debugError.nativeElement.textContent).toBe('Hi, this is me, test error!');

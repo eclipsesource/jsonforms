@@ -57,7 +57,7 @@ const defaultUischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
 };
-export const defaultTestData: TestData = {
+export const defaultNumberTestData: TestData = {
     data: defaultData,
     schema: defaultSchema,
     uischema: defaultUischema
@@ -82,7 +82,7 @@ export const updateFloatState = <C extends JsonFormsControl>(
     expectations();
 };
 
-export const updateWithSiblingValue = <C extends JsonFormsControl>(
+export const updateWithSiblingNumberValue = <C extends JsonFormsControl>(
     fixture: ComponentFixture<C>,
     testData: TestData,
     expectations: () => any
@@ -104,7 +104,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData = defaultTestData
+    testData: TestData = defaultNumberTestData
 ) => () => {
     let fixture: ComponentFixture<any>;
     let numberElement: DebugElement;
@@ -180,7 +180,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     });
 
     it('should not update with wrong ref', () => {
-        updateWithSiblingValue(fixture, testData, () => {
+        updateWithSiblingNumberValue(fixture, testData, () => {
             expect(component.data).toBe(123.123);
             expect(numberNativeElement.valueAsNumber).toBe(123.123);
         });
@@ -210,7 +210,7 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     instance: string,
     elementToUse: (element: DebugElement) => any,
-    testData: TestData = defaultTestData) => () => {
+    testData: TestData = defaultNumberTestData) => () => {
     let fixture: ComponentFixture<any>;
     let numberNativeElement: any;
     let component: C;
@@ -255,7 +255,7 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
 export const numberErrorTest = <C extends JsonFormsControl>(
     testConfig: TestConfig<C>,
     errorTestInformation: ErrorTestExpectation,
-    testData: TestData = defaultTestData) => () => {
+    testData: TestData = defaultNumberTestData) => () => {
 
     let fixture: ComponentFixture<any>;
 
