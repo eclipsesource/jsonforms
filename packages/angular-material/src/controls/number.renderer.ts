@@ -43,7 +43,6 @@ import {
                 matInput
                 type="number"
                 (change)="onChange($event)"
-                [value]="data"
                 placeholder="{{ description }}"
                 [id]="id"
                 [formControl]="form"

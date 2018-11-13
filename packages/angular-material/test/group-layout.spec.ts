@@ -38,7 +38,6 @@ describe('Group layout tester', () => {
 });
 describe('Group layout', () => {
     let fixture: ComponentFixture<any>;
-    let component: any;
 
     beforeEach(() => {
         fixture = beforeEachLayoutTest(
@@ -48,7 +47,6 @@ describe('Group layout', () => {
               imports: [FlexLayoutModule]
             }
         );
-        component = fixture.componentInstance;
     });
 
     it('render with undefined elements', () => {

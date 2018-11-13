@@ -11,7 +11,6 @@ import { JsonFormsControl } from '@jsonforms/angular';
     <input
         matInput
         (dateChange)="onChange($event)"
-        [value]="data"
         placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"

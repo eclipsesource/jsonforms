@@ -69,7 +69,6 @@ import { startWith } from 'rxjs/operators/startWith';
                 matInput
                 type="text"
                 (change)="onChange($event)"
-                [value]="getValue()"
                 placeholder="{{ description }}"
                 [id]="id"
                 [formControl]="form"
@@ -92,7 +91,6 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
-    getValue = () => this.data || '';
     getEventValue = (event: any) => event.target.value;
 
     ngOnInit() {
