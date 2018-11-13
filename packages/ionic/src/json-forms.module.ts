@@ -19,11 +19,10 @@ import {
 import { CategoryRenderer } from './layouts/categorization/category/category';
 import { GroupLayoutRenderer } from './layouts/group/group-layout';
 
-import { MasterDetailComponent } from './other/master-detail/master-detail';
-import { MasterPage } from './other/master-detail/pages/master/master';
-import { DetailPage } from './other/master-detail/pages/detail/detail';
+import { ListWithDetailControl } from './other/list-with-detail/list-with-detail-control';
+import { MasterPage } from './other/list-with-detail/pages/master/master';
+import { DetailPage } from './other/list-with-detail/pages/detail/detail';
 import { LabelRenderer } from './other/label/label';
-import { MasterDetailNavService } from './other/master-detail/master-detail-nav.service';
 import {
     CategorizationTabLayoutRenderer
 } from './layouts/categorization/categorization-tab-layout';
@@ -48,8 +47,8 @@ import {
     CategoryRenderer,
     GroupLayoutRenderer,
 
-    // Master Detail components
-    MasterDetailComponent,
+    // ListWithDetail components
+    ListWithDetailControl,
     MasterPage,
     DetailPage,
 
@@ -83,8 +82,8 @@ import {
     CategoryRenderer,
     GroupLayoutRenderer,
 
-    // Master Detail components
-    MasterDetailComponent,
+    // ListWithDetail components
+    ListWithDetailControl,
     MasterPage,
     DetailPage,
 
@@ -92,7 +91,6 @@ import {
     LabelRenderer
   ],
   providers: [
-    MasterDetailNavService
   ]
 })
 export class JsonFormsIonicModule {}

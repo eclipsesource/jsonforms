@@ -28,10 +28,10 @@ import { MockNgRedux } from '@angular-redux/store/testing';
 import { FabButton, IonicModule, IonicPageModule, Nav, Platform } from 'ionic-angular';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet } from '@jsonforms/angular';
-import { MasterDetailComponent, MasterDetailNavService } from '../src';
+import { ListWithDetailControl } from '../src';
 import { mockNav, PlatformMock, } from '../test-config/mocks-ionic';
-import { MasterPage } from '../src/other/master-detail/pages/master/master';
-import { DetailPage } from '../src/other/master-detail/pages/detail/detail';
+import { MasterPage } from '../src/other/list-with-detail/pages/master/master';
+import { DetailPage } from '../src/other/list-with-detail/pages/detail/detail';
 
 describe('Master detail', () => {
 
@@ -94,25 +94,24 @@ describe('Master detail', () => {
         TestBed.configureTestingModule({
             declarations: [
                 JsonFormsOutlet,
-                MasterDetailComponent,
+                ListWithDetailControl,
                 MasterPage,
                 DetailPage
             ],
             imports: [
-                IonicModule.forRoot(MasterDetailComponent),
+                IonicModule.forRoot(ListWithDetailControl),
                 IonicPageModule.forChild(MasterPage),
                 IonicPageModule.forChild(DetailPage)
             ],
             providers: [
                 {provide: Platform, useClass: PlatformMock},
                 {provide: NgRedux, useFactory: MockNgRedux.getInstance},
-                {provide: Nav, useValue: mockNav()},
-                MasterDetailNavService,
+                {provide: Nav, useValue: mockNav()}
             ],
         }).compileComponents();
 
         MockNgRedux.reset();
-        fixture = TestBed.createComponent(MasterDetailComponent);
+        fixture = TestBed.createComponent(ListWithDetailControl);
         component = fixture.componentInstance;
     }));
 
@@ -185,35 +184,14 @@ describe('Master detail', () => {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-            spyOn(component.masterDetailService.detailNav, 'setRoot');
+            spyOn(component.detailNav, 'setRoot');
             const select = fixture.debugElement.query(By.css('.item')).nativeElement;
             select.click();
             fixture.detectChanges();
             fixture.whenStable().then(() => {
                 fixture.detectChanges();
                 expect(fixture.debugElement.queryAll(By.directive(DetailPage)).length).toBe(1);
-                expect(component.masterDetailService.detailNav.setRoot)
-                    .toHaveBeenCalledWith(
-                        DetailPage,
-                        {
-                            addToNavStack: true,
-                            item: {
-                                label: 'ACME',
-                                data: {
-                                    customer: { name: 'ACME' },
-                                    title: 'Carrots'
-                                },
-                                path: 'orders.0',
-                                schema: undefined,
-                                uischema: {
-                                    type: 'VerticalLayout',
-                                    elements: [{
-                                        type: 'Control',
-                                        scope: '#/properties/customer/properties/name'
-                                    }]
-                                }
-                            }
-                        });
+                expect(component.detailNav.setRoot).toHaveBeenCalled();
             });
         });
     }));

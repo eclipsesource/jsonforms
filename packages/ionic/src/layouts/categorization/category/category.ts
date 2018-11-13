@@ -18,11 +18,9 @@ export class CategoryRenderer extends JsonFormsBaseRenderer {
 
   constructor(navParams: NavParams) {
     super();
-    const category = navParams.get('uischema');
-    const path = navParams.get('path');
-    const schema = navParams.get('schema');
-    this.label = category.label;
-    this.elements = category.elements.map((el: UISchemaElement) => ({
+    const { label, elements, schema, path } = navParams.get('category');
+    this.label = label;
+    this.elements = elements.map((el: UISchemaElement) => ({
         uischema: el,
         schema,
         path

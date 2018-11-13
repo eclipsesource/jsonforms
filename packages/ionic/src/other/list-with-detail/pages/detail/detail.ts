@@ -8,6 +8,9 @@ import { AbstractDetailPage } from '../AbstractDetailPage';
     template: `
       <ion-content padding>
           <div *ngIf="item">
+              <ion-header *ngIf="!isSplit">
+                <ion-navbar></ion-navbar>
+              </ion-header>
               <jsonforms-outlet
                   [schema]="item.schema"
                   [uischema]="item.uischema"
@@ -23,9 +26,17 @@ import { AbstractDetailPage } from '../AbstractDetailPage';
 export class DetailPage extends AbstractDetailPage {
 
     item: any = {};
+    isSplit: boolean;
 
     constructor(public navParams: NavParams) {
         super();
         this.item = navParams.get('item');
+        this.isSplit = this.item && this.item.isSplit;
     }
+
+  goBack() {
+      if (this.item) {
+        this.item.goBack();
+      }
+  }
 }
