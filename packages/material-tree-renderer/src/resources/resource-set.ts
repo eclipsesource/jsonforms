@@ -33,7 +33,7 @@ export interface ResourceSet {
   /**
    * Remove all registered resources from the ResourceSet.
    */
-  clear();
+  clear(): void;
 }
 
 export class ResourceSetImpl implements ResourceSet {
