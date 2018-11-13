@@ -40,7 +40,6 @@ describe('Horizontal layout tester', () => {
 });
 describe('Horizontal layout', () => {
   let fixture: ComponentFixture<any>;
-  let component: any;
 
   beforeEach(() => {
       fixture = beforeEachLayoutTest(
@@ -49,7 +48,6 @@ describe('Horizontal layout', () => {
             imports: [FlexLayoutModule]
           }
       );
-      component = fixture.componentInstance;
   });
 
   it('render with undefined elements', () => {

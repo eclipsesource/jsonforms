@@ -36,7 +36,6 @@ import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/co
                 matInput
                 [type]="getType()"
                 (change)="onChange($event)"
-                [value]="getValue()"
                 placeholder="{{ description }}"
                 [id]="id"
                 [formControl]="form"
@@ -49,7 +48,6 @@ export class TextControlRenderer extends JsonFormsControl {
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
-    getValue = () => this.data || '';
     getEventValue = (event: any) => event.target.value;
     getType = (): string => {
         if (this.uischema.options && this.uischema.options.format) {

@@ -35,7 +35,6 @@ import { isMultiLineControl, JsonFormsState, RankedTester, rankWith } from '@jso
             <textarea
                 matInput
                 (change)="onChange($event)"
-                [value]="getValue()"
                 placeholder="{{ description }}"
                 [id]="id"
                 [formControl]="form"
@@ -48,7 +47,6 @@ export class TextAreaRenderer extends JsonFormsControl {
     constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
     }
-    getValue = () => this.data || '';
     getEventValue = (event: any) => event.target.value;
 }
 export const TextAreaRendererTester: RankedTester = rankWith(2, isMultiLineControl);

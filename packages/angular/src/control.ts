@@ -37,7 +37,10 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
     constructor(protected ngRedux: NgRedux<JsonFormsState>) {
         super();
         this.form = new FormControl(
-            {value: '', disabled: true},
+            {
+              value: '',
+              disabled: true
+            },
             {
                 updateOn: 'change',
                 validators: this.validator.bind(this),
@@ -69,6 +72,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, O
                 this.hidden = !visible;
                 this.scopedSchema = Resolve.schema(schema, (uischema as ControlElement).scope);
                 this.id = props.id;
+                this.form.setValue(data);
                 this.mapAdditionalProps(props);
             });
         this.triggerValidation();
