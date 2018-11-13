@@ -7,6 +7,7 @@ export {
     BooleanToggleControlRenderer
 } from './controls/boolean/boolean-toggle-control';
 export { stringControlTester, StringControlRenderer } from './controls/string/string-control';
+export { multilineControlTester, MultilineControlRenderer } from './controls/string/multiline-control';
 export { numberControlTester, NumberControlRenderer } from './controls/number/number-control';
 export { dateControlTester, DateControlRenderer } from './controls/date/date-control';
 export { enumControlTester, EnumControlRenderer } from './controls/enum/enum-control';

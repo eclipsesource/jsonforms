@@ -5,6 +5,7 @@ import { JsonFormsModule } from '@jsonforms/angular';
 import { BooleanCheckboxControlRenderer } from './controls/boolean/boolean-checkbox-control';
 import { BooleanToggleControlRenderer } from './controls/boolean/boolean-toggle-control';
 import { StringControlRenderer } from './controls/string/string-control';
+import { MultilineControlRenderer } from './controls/string/multiline-control';
 import { NumberControlRenderer } from './controls/number/number-control';
 import { DateControlRenderer } from './controls/date/date-control';
 import { EnumControlRenderer } from './controls/enum/enum-control';
@@ -33,6 +34,7 @@ import {
     BooleanCheckboxControlRenderer,
     BooleanToggleControlRenderer,
     StringControlRenderer,
+    MultilineControlRenderer,
     NumberControlRenderer,
     DateControlRenderer,
     EnumControlRenderer,
@@ -67,6 +69,7 @@ import {
     BooleanCheckboxControlRenderer,
     BooleanToggleControlRenderer,
     StringControlRenderer,
+    MultilineControlRenderer,
     NumberControlRenderer,
     DateControlRenderer,
     EnumControlRenderer,
