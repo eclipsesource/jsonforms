@@ -54,7 +54,6 @@ import {
 import {
     JsonFormsDetailComponent,
     LabelRenderer,
-    MasterDetailService,
     MasterListComponent,
     ObjectControlRenderer
 } from './other';
@@ -139,9 +138,7 @@ import {
         MatSelectModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    providers: [
-        MasterDetailService
-    ]
+    providers: []
 })
 export class JsonFormsAngularMaterialModule {
 }
