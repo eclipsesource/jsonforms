@@ -58,7 +58,7 @@ export const initComponent = (fixture: ComponentFixture<any>, mockSubStore: Subj
     fixture.detectChanges();
 };
 
-export const initAndExpect = <C extends JsonFormsControl>(
+export const initAndExpect = <C>(
     fixture: ComponentFixture<C>,
     testData: TestData,
     expectations: () => any
