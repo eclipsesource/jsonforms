@@ -1,30 +1,39 @@
 import { Component } from '@angular/core';
-import { JsonFormsState, LabelElement, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
+import {
+  JsonFormsProps,
+  JsonFormsState,
+  LabelElement,
+  RankedTester,
+  rankWith,
+  uiTypeIs
+} from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsIonicLayout } from '../../layouts/JsonFormsIonicLayout';
 
 @Component({
-    selector: 'label',
-    template: `
-      <div>
+  selector: 'label',
+  template: `
+      <ion-item>
+        <ion-label>
           {{label}}
-      </div>
+        </ion-label>
+      </ion-item>
   `
 })
 export class LabelRenderer extends JsonFormsIonicLayout {
 
-    label: string;
+  label: string;
 
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
-
-    mapAdditionalProps() {
-        this.label = (this.uischema as LabelElement).text;
-    }
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+    this.initializers.push((props: JsonFormsProps)  => {
+      const labelEl = (props.uischema as LabelElement);
+      this.label = labelEl.text;
+    });
+  }
 }
 
 export const labelTester: RankedTester = rankWith(
-    4,
-    uiTypeIs('Label')
+  4,
+  uiTypeIs('Label')
 );
