@@ -13,7 +13,6 @@ import {
     toDataPath,
     uiTypeIs
 } from '@jsonforms/core';
-import { MasterDetailService } from './master-detail.service';
 
 const keywords = ['#', 'properties', 'items'];
 
@@ -28,7 +27,7 @@ export const removeSchemaKeywords = (path: string) => {
         <mat-sidenav mode="side" opened>
           <mat-nav-list>
             <mat-list-item
-                *ngFor="let item of masterItems"
+                *ngFor="let item of masterItems; trackBy: trackElement"
                 [class.selected]="item === selectedItem"
                 (click)="onSelect(item)"
             >
@@ -54,13 +53,13 @@ export class MasterListComponent extends JsonFormsControl {
     masterItems: any[];
     selectedItem: any;
 
-    constructor(
-        ngRedux: NgRedux<JsonFormsState>,
-        private masterDetailService: MasterDetailService
-    ) {
+    constructor(ngRedux: NgRedux<JsonFormsState>) {
         super(ngRedux);
-        this.selectedItem = this.masterDetailService.getSelectedItem();
     }
+
+    trackElement(_index: number, element: any) {
+        return element ? element.label : null;
+      }
 
     mapAdditionalProps(props: ControlProps) {
         const { data, schema, uischema} = props;
@@ -82,15 +81,11 @@ export class MasterListComponent extends JsonFormsControl {
             return masterItem;
         });
 
-        if (this.masterItems === undefined ||
-            this.masterItems.length !== masterItems.length) {
-            this.masterItems = masterItems;
-        }
+        this.masterItems = masterItems;
     }
 
     onSelect(item: any): void {
         this.selectedItem = item;
-        this.masterDetailService.setSelectedItem(item);
     }
 }
 

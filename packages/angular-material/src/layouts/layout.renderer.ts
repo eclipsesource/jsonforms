@@ -22,25 +22,27 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { NgRedux } from '@angular-redux/store';
+import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import {
     JsonFormsState,
+    JsonSchema,
     Layout,
     mapStateToLayoutProps,
     OwnPropsOfRenderer,
-    UISchemaElement
-} from '@jsonforms/core';
+    UISchemaElement } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
-import { OnDestroy } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { NgRedux } from '@angular-redux/store';
 
 export class LayoutRenderer<T extends Layout>
     extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
 
-    private elements: OwnPropsOfRenderer[];
     hidden: boolean;
     private subscription: Subscription;
+    private elements: OwnPropsOfRenderer[];
+    private oldSchema: JsonSchema;
+    private oldUISchema: T;
+    private oldPath: string;
 
     constructor(private ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -51,17 +53,6 @@ export class LayoutRenderer<T extends Layout>
             .select()
             .subscribe((state: JsonFormsState) => {
                 const props = mapStateToLayoutProps(state, this.getOwnProps());
-                const uischema = props.uischema as T;
-                const schema = props.schema;
-                const path = props.path;
-                this.uischema = uischema;
-                this.schema = schema;
-                this.path = path;
-                this.elements = (uischema.elements || []).map((el: UISchemaElement) => ({
-                    uischema: el,
-                    schema,
-                    path
-                }));
                 this.hidden = !props.visible;
             });
     }
@@ -72,7 +63,20 @@ export class LayoutRenderer<T extends Layout>
         }
     }
 
-    get renderProps() {
+    get renderProps(): OwnPropsOfRenderer[] {
+        if (this.uischema === this.oldUISchema &&
+            this.schema === this.oldSchema &&
+            this.path === this.oldPath) {
+            return this.elements;
+        }
+        this.oldUISchema = this.uischema as T;
+        this.oldSchema = this.schema;
+        this.oldPath = this.path;
+        this.elements =  (this.oldUISchema.elements || []).map((el: UISchemaElement) => ({
+            uischema: el,
+            schema: this.oldSchema,
+            path: this.oldPath
+        }));
         return this.elements;
     }
 }

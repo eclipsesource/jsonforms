@@ -31,7 +31,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet } from '@jsonforms/angular';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
-import { MasterDetailService } from '../src/other/master-detail/master-detail.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Master detail', () => {
@@ -106,7 +105,6 @@ describe('Master detail', () => {
             ],
             providers: [
                 { provide: NgRedux, useFactory: MockNgRedux.getInstance },
-                { provide: MasterDetailService, useClass: MasterDetailService },
             ],
         }).compileComponents();
 
