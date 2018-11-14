@@ -19,11 +19,11 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
+    "build": "tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "test": "echo 'Nothing to do for `examples` package'",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
+    "doc": "typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
     "@jsonforms/core": "^2.0.12-rc.3",

@@ -4,7 +4,7 @@
   "version": "2.0.12-rc.3",
   "description": "Test utilities for JSON Forms",
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
+    "build": "tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "test": "echo 'Nothing to do for `test` package'"
   },

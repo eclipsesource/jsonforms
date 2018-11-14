@@ -20,7 +20,7 @@
     "karma-webpack": "^3.0.5"
   },
   "scripts": {
-    "build": "../../node_modules/.bin/tsc",
+    "build": "tsc",
     "test": "echo 'Nothing to do'"
   }
 }
