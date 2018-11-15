@@ -22,217 +22,258 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatListItem, MatListModule, MatSidenavModule } from '@angular/material';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import {
+  MatButtonModule,
+  MatIconModule,
+  MatListItem,
+  MatListModule,
+  MatSidenavModule
+} from '@angular/material';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { JsonFormsOutlet } from '@jsonforms/angular';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { DebugElement } from '@angular/core';
 
 describe('Master detail', () => {
 
-    let fixture: ComponentFixture<any>;
-    let component: any;
+  let fixture: ComponentFixture<any>;
+  let component: any;
 
-    const data = {
-        orders: [
-            {
-                customer: {
-                    name: 'ACME'
-                },
-                title: 'Carrots'
-            }
-        ]
-    };
-    const schema = {
-        definitions: {
-            order: {
-                type: 'object',
-                properties: {
-                    customer: {
-                        type: 'object',
-                        properties: {
-                            name: { type: 'string' }
-                        }
-                    },
-                    title: {
-                        type: 'string'
-                    }
-                }
-            }
+  const data = {
+    orders: [
+      {
+        customer: {
+          name: 'ACME'
         },
+        title: 'Carrots'
+      }
+    ]
+  };
+  const schema = {
+    definitions: {
+      order: {
         type: 'object',
         properties: {
-            orders: {
-                type: 'array',
-                items: {
-                    $ref: '#/definitions/order'
-                }
+          customer: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' }
             }
+          },
+          title: {
+            type: 'string'
+          }
         }
-    };
-    const uischema = {
-        type: 'ListWithDetail',
-        scope: '#/properties/orders',
-        options: {
-            labelRef: '#/items/properties/customer/properties/name',
-            detail: {
+      }
+    },
+    type: 'object',
+    properties: {
+      orders: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/order'
+        }
+      }
+    }
+  };
+  const uischema = {
+    type: 'ListWithDetail',
+    scope: '#/properties/orders',
+    options: {
+      labelRef: '#/items/properties/customer/properties/name',
+      detail: {
+        type: 'VerticalLayout',
+        elements: [{
+          type: 'Control',
+          scope: '#/properties/customer/properties/name'
+        }]
+      }
+    }
+  };
+
+  beforeEach((() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        JsonFormsOutlet,
+        MasterListComponent,
+        UnknownRenderer,
+        JsonFormsDetailComponent
+      ],
+      imports: [
+        MatListModule,
+        MatSidenavModule,
+        MatIconModule,
+        MatButtonModule,
+        FlexLayoutModule,
+        NoopAnimationsModule
+      ],
+      providers: [
+        { provide: NgRedux, useFactory: MockNgRedux.getInstance },
+      ],
+    }).overrideModule(BrowserDynamicTestingModule, {
+      set: {
+        entryComponents: [UnknownRenderer]
+      }
+    }).compileComponents();
+
+    MockNgRedux.reset();
+    fixture = TestBed.createComponent(MasterListComponent);
+    component = fixture.componentInstance;
+  }));
+
+  it('should render', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      expect(component.masterItems.length).toBe(1);
+      expect(fixture.debugElement.queryAll(By.directive(MatListItem)).length).toBe(1);
+      // the component is wrapped in a div
+      expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
+    });
+  }));
+
+  it('add a master item', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
+    fixture.detectChanges();
+
+    const spy = spyOn(component, 'addItem').and.returnValue(() => { /* noop */ });
+    fixture.whenStable().then(() => {
+      const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+      buttons[1].nativeElement.click();
+      fixture.detectChanges();
+      fixture.whenRenderingDone().then(() => {
+        fixture.detectChanges();
+        expect(spy).toHaveBeenCalled();
+      });
+    });
+  }));
+
+  it('remove a master item', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
+    fixture.detectChanges();
+
+    const spy = spyOn(component, 'removeItems').and.returnValue(() => { /* noop */ });
+    fixture.whenStable().then(() => {
+      const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+      buttons[0].nativeElement.click();
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        expect(spy).toHaveBeenCalled();
+      });
+    });
+  }));
+
+  it('setting detail on click', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      spyOn(component, 'onSelect');
+      const select = fixture.debugElement.query(By.directive(MatListItem)).nativeElement;
+      select.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        fixture.detectChanges();
+        expect(
+          fixture.debugElement.queryAll(By.directive(JsonFormsDetailComponent)).length
+        ).toBe(1);
+        expect(component.onSelect)
+          .toHaveBeenCalledWith(
+            {
+              label: 'ACME',
+              data: {
+                customer: { name: 'ACME' },
+                title: 'Carrots'
+              },
+              path: 'orders.0',
+              schema: undefined,
+              uischema: {
                 type: 'VerticalLayout',
                 elements: [{
-                    type: 'Control',
-                    scope: '#/properties/customer/properties/name'
+                  type: 'Control',
+                  scope: '#/properties/customer/properties/name'
                 }]
+              }
             }
+          );
+      });
+    });
+  }));
+
+  it('can be hidden', async(() => {
+    component.uischema = uischema;
+    component.visible = false;
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema,
         }
-    };
-
-    beforeEach((() => {
-        TestBed.configureTestingModule({
-            declarations: [
-                JsonFormsOutlet,
-                MasterListComponent,
-                JsonFormsDetailComponent
-            ],
-            imports: [
-                MatListModule,
-                MatSidenavModule,
-                FlexLayoutModule,
-                NoopAnimationsModule
-            ],
-            providers: [
-                { provide: NgRedux, useFactory: MockNgRedux.getInstance },
-            ],
-        }).compileComponents();
-
-        MockNgRedux.reset();
-        fixture = TestBed.createComponent(MasterListComponent);
-        component = fixture.componentInstance;
-    }));
-
-    it('should render', async(() => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        component.ngOnInit();
-        mockSubStore.complete();
-
-        fixture.detectChanges();
-        fixture.whenRenderingDone().then(() => {
-            expect(component.masterItems.length).toBe(1);
-            expect(fixture.debugElement.queryAll(By.directive(MatListItem)).length).toBe(1);
-             // the component is wrapped in a div
-            expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
-        });
-    }));
-
-    // TODO
-    xit('add a master item', async(() => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        component.ngOnInit();
-        mockSubStore.complete();
-
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-            const masterList: any = fixture.debugElement.query(By.directive(MasterListComponent));
-            spyOn(masterList.componentInstance, 'addItem').and.callThrough();
-            const addItemButton = fixture.debugElement.query(By.css('TODO')).nativeElement;
-            addItemButton.click();
-            fixture.detectChanges();
-            fixture.whenRenderingDone().then(() => {
-                fixture.detectChanges();
-                expect(masterList.componentInstance.addItem).toHaveBeenCalled();
-            });
-        });
-    }));
-
-    it('setting detail on click', async(() => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        component.ngOnInit();
-        mockSubStore.complete();
-
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-            spyOn(component, 'onSelect');
-            const select = fixture.debugElement.query(By.css('.mat-list-item')).nativeElement;
-            select.click();
-            fixture.detectChanges();
-            fixture.whenStable().then(() => {
-                fixture.detectChanges();
-                expect(
-                    fixture.debugElement.queryAll(By.directive(JsonFormsDetailComponent)).length
-                ).toBe(1);
-                expect(component.onSelect)
-                    .toHaveBeenCalledWith(
-                        {
-                            label: 'ACME',
-                            data: {
-                                customer: { name: 'ACME' },
-                                title: 'Carrots'
-                            },
-                            path: 'orders.0',
-                            schema: undefined,
-                            uischema: {
-                                type: 'VerticalLayout',
-                                elements: [{
-                                    type: 'Control',
-                                    scope: '#/properties/customer/properties/name'
-                                }]
-                            }
-                        }
-                    );
-            });
-        });
-    }));
-
-    it('can be hidden', async(() => {
-        component.uischema = uischema;
-        component.visible = false;
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        mockSubStore.complete();
-        component.ngOnInit();
-        fixture.detectChanges();
-        fixture.whenRenderingDone().then(() => {
-            expect(fixture.nativeElement.children[0].style.display).toBe('none');
-        });
-    }));
+      }
+    });
+    mockSubStore.complete();
+    component.ngOnInit();
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
+      expect(fixture.nativeElement.children[0].style.display).toBe('none');
+    });
+  }));
 });
