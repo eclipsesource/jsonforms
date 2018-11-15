@@ -1,24 +1,32 @@
 import * as React from 'react';
 
 import {
-    Categorization,
-    Category,
-    ControlElement,
-    ControlProps,
-    createCleanLabel,
-    createDefaultValue,
-    generateDefaultUISchema,
-    isOneOfControl,
-    JsonSchema,
-    mapStateToControlProps,
-    RankedTester,
-    rankWith,
-    toDataPath,
-    UISchemaElement,
+  Categorization,
+  Category,
+  ControlElement,
+  ControlProps,
+  createCleanLabel,
+  createDefaultValue,
+  generateDefaultUISchema,
+  isOneOfControl,
+  JsonSchema,
+  mapDispatchToControlProps,
+  mapStateToControlProps,
+  RankedTester,
+  rankWith,
+  toDataPath,
+  UISchemaElement,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import MaterialCategorizationLayout from '../layouts/MaterialCategorizationLayout';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from '@material-ui/core';
+import { connect } from 'react-redux';
 
 const createControls =
     (oneOf: JsonSchema[], schema: JsonSchema, scope: string): UISchemaElement => {
@@ -157,8 +165,9 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfS
     }
 }
 
-const ConnectedMaterialOneOfRenderer = connectToJsonForms(
-    mapStateToControlProps
+const ConnectedMaterialOneOfRenderer = connect(
+  mapStateToControlProps,
+  mapDispatchToControlProps
 )(MaterialOneOfRenderer);
 ConnectedMaterialOneOfRenderer.displayName = 'MaterialOneOfRenderer';
 export const materialOneOfControlTester: RankedTester = rankWith(2, isOneOfControl);
