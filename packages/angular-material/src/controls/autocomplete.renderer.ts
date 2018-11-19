@@ -30,8 +30,11 @@ import {
     Actions,
     composeWithUi,
     ControlElement,
+    isEnumControl,
     JsonFormsState,
-    OwnPropsOfControl
+    OwnPropsOfControl,
+    RankedTester,
+    rankWith
 } from '@jsonforms/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
@@ -119,6 +122,8 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
         };
     }
 }
+
+export const enumControlTester: RankedTester = rankWith(2, isEnumControl);
 
 interface OwnPropsOfAutoComplete extends OwnPropsOfControl {
     options: string[];
