@@ -27,6 +27,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
@@ -45,6 +46,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
+  AutocompleteControlRenderer,
   BooleanControlRenderer,
   DateControlRenderer,
   NumberControlRenderer,
@@ -86,7 +88,8 @@ import {
     MatCardModule,
     MatSelectModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatAutocompleteModule
   ],
   declarations: [
     BooleanControlRenderer,
@@ -103,7 +106,8 @@ import {
     LabelRenderer,
     MasterListComponent,
     JsonFormsDetailComponent,
-    ObjectControlRenderer
+    ObjectControlRenderer,
+    AutocompleteControlRenderer
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -120,7 +124,8 @@ import {
     CategorizationTabLayoutRenderer,
     MasterListComponent,
     JsonFormsDetailComponent,
-    ObjectControlRenderer
+    ObjectControlRenderer,
+    AutocompleteControlRenderer
   ],
   exports: [
     BrowserAnimationsModule,
@@ -142,6 +147,7 @@ import {
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatAutocompleteModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: []
