@@ -9,6 +9,10 @@
 For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
 For a more detailed tutorial about the usage of JSON Forms, please see [this tutorial](http://jsonforms.io/docs/tutorial).
 
+# Feedback, Help and Support
+Feel free to start a discussion by opening an issue on this repo or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
+In addition EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
 # Developers Documentation
 
 ## First time setup
