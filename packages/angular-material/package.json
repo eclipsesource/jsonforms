@@ -22,7 +22,7 @@
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
     "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Angular Material' --mode file --out docs src",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Angular Material Renderers' --mode file --out docs src",
     "test": "karma start ./test-config/karma.conf.js --single-run",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
     "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
