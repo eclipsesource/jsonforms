@@ -234,21 +234,21 @@ export const withIncreasedRank = (by: number, rankedTester: RankedTester) =>
 export const isBooleanControl = and(uiTypeIs('Control'), schemaTypeIs('boolean'));
 
 // TODO: rather check for properties property
-export const isObjectControl =  and(uiTypeIs('Control'), schemaTypeIs('object'));
+export const isObjectControl = and(uiTypeIs('Control'), schemaTypeIs('object'));
 
-export const isAllOfControl =  and(
-    uiTypeIs('Control'),
-    schemaMatches(schema => schema.hasOwnProperty('allOf'))
+export const isAllOfControl = and(
+  uiTypeIs('Control'),
+  schemaMatches(schema => schema.hasOwnProperty('allOf'))
 );
 
-export const isAnyOfControl =  and(
-    uiTypeIs('Control'),
-    schemaMatches(schema => schema.hasOwnProperty('anyOf'))
+export const isAnyOfControl = and(
+  uiTypeIs('Control'),
+  schemaMatches(schema => schema.hasOwnProperty('anyOf'))
 );
 
-export const isOneOfControl =  and(
-    uiTypeIs('Control'),
-    schemaMatches(schema => schema.hasOwnProperty('oneOf'))
+export const isOneOfControl = and(
+  uiTypeIs('Control'),
+  schemaMatches(schema => schema.hasOwnProperty('oneOf'))
 );
 
 /**
@@ -345,17 +345,32 @@ export const isObjectArrayWithNesting =
     }
     const schemaPath = (uischema as ControlElement).scope;
     const resolvedSchema = resolveSchema(schema, schemaPath);
+    const minimalElementsMap: { [key: string]: number; } = { 'object': 1, 'array': 0 };
     return _.has(resolvedSchema, 'items') &&
-      traverse(resolvedSchema.items, val => val !== schema && _.has(val, 'items'));
+      traverse(resolvedSchema.items, val => {
+        if (val === schema) { return false; }
+        if (typeof val.type !== 'string') { return true; }
+        const typeCount = minimalElementsMap[val.type];
+        if (typeCount === undefined) { return false; }
+        if (typeCount === 0) { return true; } else { minimalElementsMap[val.type] = typeCount - 1; }
+        return false;
+      });
   };
 
-const traverse = (any: any, pred: (obj: any) => boolean): boolean => {
+const traverse = (any: JsonSchema | JsonSchema[], pred: (obj: JsonSchema) => boolean): boolean => {
+  if (_.isArray(any)) {
+    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
+  }
+
   if (pred(any)) {
     return true;
-  } else if (_.isArray(any)) {
-    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
-  } else if (_.isObject(any)) {
-    return _.reduce(_.toPairs(any), (acc, [_key, val]) => acc || traverse(val, pred), false);
+  }
+  if (any.items) {
+    return traverse(any.items, pred);
+  }
+  if (any.properties) {
+    return _.reduce(_.toPairs(any.properties),
+                    (acc, [_key, val]) => acc || traverse(val, pred), false);
   }
 
   return false;
@@ -414,20 +429,20 @@ export const isNumberFormatControl = and(
 );
 
 export const isCategorization = (category: UISchemaElement): category is Categorization =>
-    category.type === 'Categorization';
+  category.type === 'Categorization';
 
 export const isCategory = (uischema: UISchemaElement): boolean =>
-    uischema.type === 'Category';
+  uischema.type === 'Category';
 
 const hasCategory = (categorization: Categorization): boolean => {
-    if (_.isEmpty(categorization.elements)) {
-        return false;
-    }
-    // all children of the categorization have to be categories
-    return categorization.elements
-        .map(elem => isCategorization(elem) ? hasCategory(elem) : isCategory(elem))
-        .reduce((prev, curr) => prev && curr, true);
+  if (_.isEmpty(categorization.elements)) {
+    return false;
+  }
+  // all children of the categorization have to be categories
+  return categorization.elements
+    .map(elem => isCategorization(elem) ? hasCategory(elem) : isCategory(elem))
+    .reduce((prev, curr) => prev && curr, true);
 };
 
 export const categorizationHasCategory = (uischema: UISchemaElement) =>
-    hasCategory(uischema as Categorization);
+  hasCategory(uischema as Categorization);
