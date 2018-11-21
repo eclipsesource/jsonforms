@@ -262,7 +262,7 @@ test('tester isPrimitiveArrayControl', t => {
         properties: {
           foo: {
             type: 'array',
-            items: {type: 'integer'}
+            items: { type: 'integer' }
           }
         }
       }
@@ -277,7 +277,7 @@ test('tester isPrimitiveArrayControl', t => {
         properties: {
           foo: {
             type: 'array',
-            items: {type: 'object'}
+            items: { type: 'object' }
           }
         }
       }
@@ -287,7 +287,7 @@ test('tester isPrimitiveArrayControl', t => {
 });
 
 test('tester isObjectArrayControl', t => {
-  t.false(isObjectArrayControl({type: 'Foo'}, null));
+  t.false(isObjectArrayControl({ type: 'Foo' }, null));
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -297,14 +297,14 @@ test('tester isObjectArrayControl', t => {
   t.false(
     isObjectArrayControl(
       control,
-      {type: 'object', properties: {bar: {type: 'integer'}}}
+      { type: 'object', properties: { bar: { type: 'integer' } } }
     ),
     'Wrong Schema Type not checked!'
   );
   t.false(
     isObjectArrayControl(
       control,
-      {type: 'object', properties: {foo: {type: 'array'}}}
+      { type: 'object', properties: { foo: { type: 'array' } } }
     ),
     'Array Schema Type without items not checked!'
   );
@@ -317,8 +317,8 @@ test('tester isObjectArrayControl', t => {
           foo: {
             type: 'array',
             items: [
-              {type: 'integer'},
-              {type: 'string'},
+              { type: 'integer' },
+              { type: 'string' },
             ]
           }
         }
@@ -334,7 +334,7 @@ test('tester isObjectArrayControl', t => {
         properties: {
           foo: {
             type: 'array',
-            items: {type: 'integer'}
+            items: { type: 'integer' }
           }
         }
       }
@@ -349,8 +349,8 @@ test('tester isObjectArrayControl', t => {
         items: {
           type: 'object',
           properties: {
-            x: {type: 'integer'},
-            y: {type: 'integer'}
+            x: { type: 'integer' },
+            y: { type: 'integer' }
           }
         }
       }
@@ -632,6 +632,22 @@ test('tester isObjectArrayWithNesting', t => {
       }
     }
   };
+  const nestedSchema3 = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        Level2: {
+          type: 'object',
+          properties: {
+            Level3: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
+  };
   t.false(isObjectArrayWithNesting(undefined, undefined));
   t.false(isObjectArrayWithNesting(null, undefined));
   t.false(isObjectArrayWithNesting({ type: 'Foo' }, undefined));
@@ -639,4 +655,5 @@ test('tester isObjectArrayWithNesting', t => {
   t.false(isObjectArrayWithNesting(uischema, schema));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema2));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchema3));
 });
