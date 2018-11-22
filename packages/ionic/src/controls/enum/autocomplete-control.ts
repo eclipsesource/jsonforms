@@ -7,6 +7,7 @@ import { JsonFormsState } from '@jsonforms/core';
     selector: 'jsonforms-autocomplete-control',
     template: `<ion-item>
     <ion-label floating>{{label}}</ion-label>
+    <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
     <ionic-selectable
       item-content
       [ngModel]="data"

@@ -8,7 +8,6 @@ import { JsonFormsControl } from '@jsonforms/angular';
     template: `
       <ion-item [hidden]='hidden'>
           <ion-label floating>{{label}}</ion-label>
-          <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
           <ion-input
                   type="text"
                   (ionChange)="onChange($event)"
@@ -19,6 +18,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
                   [type]="getType()"
           >
           </ion-input>
+          <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
       </ion-item>
   `
 })
