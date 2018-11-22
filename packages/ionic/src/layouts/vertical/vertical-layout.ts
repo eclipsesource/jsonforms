@@ -6,13 +6,13 @@ import { NgRedux } from '@angular-redux/store';
 @Component({
   selector: 'jsonforms-vertical-layout',
   template: `
-      <div *ngFor="let element of uischema?.elements">
+      <ion-list *ngFor="let element of uischema?.elements">
           <jsonforms-outlet
                   [uischema]="element"
                   [path]="path"
                   [schema]="schema"
           ></jsonforms-outlet>
-      </div>
+      </ion-list>
   `
 })
 export class VerticalLayoutRenderer extends JsonFormsIonicLayout {
