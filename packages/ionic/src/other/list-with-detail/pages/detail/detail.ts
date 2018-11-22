@@ -6,11 +6,11 @@ import { AbstractDetailPage } from '../AbstractDetailPage';
 @Component({
     selector: 'jsonforms-master-detail-detail',
     template: `
+      <ion-header *ngIf="!isSplit">
+        <ion-navbar></ion-navbar>
+      </ion-header>
       <ion-content padding>
           <div *ngIf="item">
-              <ion-header *ngIf="!isSplit">
-                <ion-navbar></ion-navbar>
-              </ion-header>
               <jsonforms-outlet
                   [schema]="item.schema"
                   [uischema]="item.uischema"
@@ -31,7 +31,7 @@ export class DetailPage extends AbstractDetailPage {
     constructor(public navParams: NavParams) {
         super();
         this.item = navParams.get('item');
-        this.isSplit = this.item && this.item.isSplit;
+        this.isSplit = this.item && this.item.isSplit !== undefined ? this.item.isSplit : true;
     }
 
   goBack() {
