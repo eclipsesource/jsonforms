@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import {
@@ -36,14 +36,14 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
-import { MasterListComponent } from '../src/other/master-detail/master';
-import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { DebugElement } from '@angular/core';
+import { MasterListComponent } from '../src/other/master-detail/master';
+import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 
 describe('Master detail', () => {
 
-  let fixture: ComponentFixture<any>;
+  let fixture: ComponentFixture<MasterListComponent>;
   let component: any;
 
   const data = {
@@ -181,7 +181,7 @@ describe('Master detail', () => {
     });
   }));
 
-  it('remove a master item', async(() => {
+  it('remove an item', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
 
@@ -206,6 +206,218 @@ describe('Master detail', () => {
         expect(spy).toHaveBeenCalled();
       });
     });
+  }));
+
+  it('remove an item with index < selected index', fakeAsync(() => {
+    const moreData = {
+      orders: [
+        {
+          customer: { name: 'Carrot Chipmunk' },
+          title: 'Carrots'
+        },
+        {
+          customer: { name: 'Banana Joe' },
+          title: 'Bananas'
+        },
+        {
+          customer: { name: 'Fry' },
+          title: 'Slurm'
+        }
+      ]
+    };
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data: moreData,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    fixture.detectChanges();
+    tick();
+
+    // select last element
+    const listItems: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatListItem));
+    listItems[2].nativeElement.click();
+    fixture.detectChanges();
+    tick();
+
+    // delete 1st item
+    spyOn(component, 'deleteItem').and.callFake(() => {
+      mockSubStore.next({
+        jsonforms: {
+          core: {
+            data: { orders: moreData.orders.slice(1) },
+            schema,
+          }
+        }
+      });
+      mockSubStore.complete();
+      fixture.detectChanges();
+      tick();
+    });
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    buttons[0].nativeElement.click();
+
+    expect(component.selectedItemIdx).toBe(1);
+    expect(component.selectedItem.data.title).toBe('Slurm');
+  }));
+
+  it('remove an item with index > selected index', fakeAsync(() => {
+    const moreData = {
+      orders: [
+        {
+          customer: { name: 'Carrot Chipmunk' },
+          title: 'Carrots'
+        },
+        {
+          customer: { name: 'Banana Joe' },
+          title: 'Bananas'
+        },
+        {
+          customer: { name: 'Fry' },
+          title: 'Slurm'
+        }
+      ]
+    };
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data: moreData,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    fixture.detectChanges();
+    tick();
+
+    // delete 2nd item
+    spyOn(component, 'deleteItem').and.callFake(() => {
+      const copy = moreData.orders.slice();
+      copy.splice(1, 1);
+      mockSubStore.next({
+        jsonforms: {
+          core: {
+            data: { orders: copy },
+            schema,
+          }
+        }
+      });
+      mockSubStore.complete();
+      fixture.detectChanges();
+      tick();
+    });
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    buttons[1].nativeElement.click();
+
+    expect(component.selectedItemIdx).toBe(0);
+    expect(component.selectedItem.data.title).toBe('Carrots');
+  }));
+
+  it('remove an item with index == selected index', fakeAsync(() => {
+    const moreData = {
+      orders: [
+        {
+          customer: { name: 'Carrot Chipmunk' },
+          title: 'Carrots'
+        },
+        {
+          customer: { name: 'Banana Joe' },
+          title: 'Bananas'
+        },
+        {
+          customer: { name: 'Fry' },
+          title: 'Slurm'
+        }
+      ]
+    };
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data: moreData,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    fixture.detectChanges();
+    tick();
+
+    // delete 1st item
+    spyOn(component, 'deleteItem').and.callFake(() => {
+      mockSubStore.next({
+        jsonforms: {
+          core: {
+            data: { orders: moreData.orders.slice(1) },
+            schema,
+          }
+        }
+      });
+      mockSubStore.complete();
+      fixture.detectChanges();
+      tick();
+    });
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    buttons[0].nativeElement.click();
+
+    expect(component.selectedItemIdx).toBe(0);
+    expect(component.selectedItem.data.title).toBe('Bananas');
+  }));
+
+  it('remove last item', fakeAsync(() => {
+    const moreData = {
+      orders: [
+        {
+          customer: { name: 'Carrot Chipmunk' },
+          title: 'Carrots'
+        }
+      ]
+    };
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data: moreData,
+          schema,
+        }
+      }
+    });
+    component.ngOnInit();
+    fixture.detectChanges();
+    tick();
+
+    // delete item
+    spyOn(component, 'deleteItem').and.callFake(() => {
+      mockSubStore.next({
+        jsonforms: {
+          core: {
+            data: { orders: [] },
+            schema,
+          }
+        }
+      });
+      mockSubStore.complete();
+      fixture.detectChanges();
+      tick();
+    });
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    buttons[0].nativeElement.click();
+
+    expect(component.selectedItemIdx).toBe(-1);
+    expect(component.selectedItem).toBe(undefined);
   }));
 
   it('setting detail on click', async(() => {
@@ -251,7 +463,8 @@ describe('Master detail', () => {
                   scope: '#/properties/customer/properties/name'
                 }]
               }
-            }
+            },
+            0
           );
       });
     });
