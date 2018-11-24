@@ -49,9 +49,9 @@ const filterPredicate = (data: any) => (property: Property): boolean => {
   }
 };
 
-const isUserGroup = schema => _.has(schema.properties, 'users');
-const isTask = schema => _.has(schema.properties, 'done');
-const isUser = schema => _.has(schema.properties, 'birthday');
+const isUserGroup = (schema: JsonSchema) => _.has(schema.properties, 'users');
+const isTask = (schema: JsonSchema) => _.has(schema.properties, 'done');
+const isUser = (schema: JsonSchema) => _.has(schema.properties, 'birthday');
 
 const schemaLabelProvider: SchemaLabelProvider =
     (schema: JsonSchema, schemaPath: string): string => {
@@ -111,7 +111,6 @@ store.dispatch(
         { name: 'Test user' }
     )
 );
-
 
 detailSchemata.forEach(({ tester, uischema: detailedUiSchema }) =>
   store.dispatch(Actions.registerUISchema(tester, detailedUiSchema))

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import TreeWithDetailRenderer, { TreeWithDetailProps } from './tree/TreeWithDetailRenderer';
+import TreeWithDetailRenderer from './tree/TreeWithDetailRenderer';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
@@ -11,11 +11,10 @@ const theme = createMuiTheme({
     }
 });
 
-const ThemedTreeWithDetail = (props: TreeWithDetailProps) => {
+const ThemedTreeWithDetail = (props: any) => {
     return (
         <MuiThemeProvider theme={theme}>
-            <TreeWithDetailRenderer {...props}
-            />
+            <TreeWithDetailRenderer {...props}/>
         </MuiThemeProvider>
     );
 };

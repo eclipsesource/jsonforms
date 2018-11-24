@@ -9,7 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import { getData, getUiSchema } from '@jsonforms/core';
+import { getData, getUiSchema, JsonFormsState } from '@jsonforms/core';
 
 const styles: StyleRulesCallback<'textarea'> = () => ({
   textarea: {
@@ -79,7 +79,7 @@ class ModelSchemaDialog extends
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
   const rootData = getData(state);
 
   return {
@@ -91,7 +91,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default compose(
+export default compose<any, any>(
   withStyles(styles, { name: 'ModelSchemaDialog' }),
   withMobileDialog(),
   connect(mapStateToProps)
