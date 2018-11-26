@@ -28,6 +28,7 @@ import {
     CategorizationTabLayoutRenderer
 } from './layouts/categorization/categorization-tab-layout';
 import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
+import { ObjectControlRenderer } from './controls/object/object.control';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-contro
     EnumControlRenderer,
     RangeControlRenderer,
     AutoCompleteControlRenderer,
+    ObjectControlRenderer,
 
     // layouts
     HorizontalLayoutRenderer,
@@ -79,6 +81,7 @@ import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-contro
     EnumControlRenderer,
     RangeControlRenderer,
     AutoCompleteControlRenderer,
+    ObjectControlRenderer,
 
     // layouts
     HorizontalLayoutRenderer,
