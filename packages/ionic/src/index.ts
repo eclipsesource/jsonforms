@@ -1,3 +1,38 @@
+import {
+  BooleanToggleControlRenderer,
+  booleanToggleControlTester
+} from './controls/boolean/boolean-toggle-control';
+import { StringControlRenderer, stringControlTester } from './controls/string/string-control';
+import {
+  BooleanCheckboxControlRenderer,
+  booleanControlTester
+} from './controls/boolean/boolean-checkbox-control';
+import {
+  MultilineControlRenderer,
+  multilineControlTester
+} from './controls/string/multiline-control';
+import { NumberControlRenderer, numberControlTester } from './controls/number/number-control';
+import { DateControlRenderer, dateControlTester } from './controls/date/date-control';
+import { EnumControlRenderer, enumControlTester } from './controls/enum/enum-control';
+import { RangeControlRenderer, rangeControlTester } from './controls/range/range-control';
+import { isEnumControl, rankWith } from '@jsonforms/core';
+import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
+import {
+  HorizontalLayoutRenderer,
+  horizontalLayoutTester
+} from './layouts/horizontal/horizontal-layout';
+import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical/vertical-layout';
+import {
+  CategorizationTabLayoutRenderer,
+  categorizationTester
+} from './layouts/categorization/categorization-tab-layout';
+import { GroupLayoutRenderer, groupTester } from './layouts/group/group-layout';
+import {
+  ListWithDetailControl,
+  listWithDetailTester
+} from './other/list-with-detail/list-with-detail-control';
+import { LabelRenderer, labelTester } from './other/label/label';
+
 export {
     booleanControlTester,
     BooleanCheckboxControlRenderer
@@ -39,3 +74,26 @@ export {
 export { labelTester, LabelRenderer } from './other/label/label';
 
 export { JsonFormsIonicModule } from './json-forms.module';
+
+export const ionicRenderers: { tester: any, renderer: any }[] = [
+  // controls
+  { tester: booleanControlTester, renderer: BooleanCheckboxControlRenderer },
+  { tester: booleanToggleControlTester, renderer: BooleanToggleControlRenderer },
+  { tester: stringControlTester, renderer: StringControlRenderer },
+  { tester: multilineControlTester, renderer: MultilineControlRenderer },
+  { tester: numberControlTester, renderer: NumberControlRenderer },
+  { tester: dateControlTester, renderer: DateControlRenderer },
+  { tester: enumControlTester, renderer: EnumControlRenderer },
+  { tester: rangeControlTester, renderer: RangeControlRenderer },
+  { tester: rankWith(3, isEnumControl), renderer: AutoCompleteControlRenderer },
+
+  // layouts
+  { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
+  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
+  { tester: categorizationTester, renderer: CategorizationTabLayoutRenderer },
+  { tester: groupTester, renderer: GroupLayoutRenderer },
+
+  // other
+  { tester: listWithDetailTester, renderer: ListWithDetailControl },
+  { tester: labelTester, renderer: LabelRenderer },
+];
