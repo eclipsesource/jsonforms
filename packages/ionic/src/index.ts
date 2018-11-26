@@ -32,6 +32,7 @@ import {
   listWithDetailTester
 } from './other/list-with-detail/list-with-detail-control';
 import { LabelRenderer, labelTester } from './other/label/label';
+import { ObjectControlRenderer, objectControlTester } from './controls/object/object.control';
 
 export {
     booleanControlTester,
@@ -86,6 +87,7 @@ export const ionicRenderers: { tester: any, renderer: any }[] = [
   { tester: enumControlTester, renderer: EnumControlRenderer },
   { tester: rangeControlTester, renderer: RangeControlRenderer },
   { tester: rankWith(3, isEnumControl), renderer: AutoCompleteControlRenderer },
+  { tester: objectControlTester, renderer: ObjectControlRenderer },
 
   // layouts
   { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer },
