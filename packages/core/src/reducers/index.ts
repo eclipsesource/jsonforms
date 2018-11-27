@@ -43,6 +43,7 @@ import {
 import { JsonFormsState } from '../store';
 import { findMatchingUISchema, uischemaRegistryReducer, UISchemaTester } from './uischemas';
 import { Generate, JsonSchema, UISchemaElement } from '..';
+import { i18nReducer } from './i18n';
 
 export {
   rendererReducer,
@@ -59,12 +60,16 @@ export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsStat
     config: configReducer,
     uischemas: uischemaRegistryReducer,
     defaultData: defaultDataReducer,
+    i18n: i18nReducer,
     ...additionalReducers
   });
 
-export const getData = (state: JsonFormsState) => extractData(_.get(state, 'jsonforms.core'));
-export const getSchema = (state: JsonFormsState) => extractSchema(_.get(state, 'jsonforms.core'));
-export const getUiSchema = (state: JsonFormsState) => extractUiSchema(_.get(state, 'jsonforms.core'));
+export const getData = (state: JsonFormsState) =>
+  extractData(_.get(state, 'jsonforms.core'));
+export const getSchema = (state: JsonFormsState): JsonSchema =>
+  extractSchema(_.get(state, 'jsonforms.core'));
+export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
+  extractUiSchema(_.get(state, 'jsonforms.core')) ;
 export const getDefaultData = (state: JsonFormsState): JsonFormsDefaultDataRegistryEntry[] =>
     extractDefaultData(_.get(state, 'jsonforms.defaultData'));
 export const getRenderers = (state: JsonFormsState):
@@ -90,3 +95,5 @@ export const getSubErrorsAt = (instancePath: string) => (state: JsonFormsState) 
   subErrorsAt(instancePath)(state.jsonforms.core);
 
 export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
+
+export const getLocale = (state: JsonFormsState) => state.jsonforms.i18n.locale;

@@ -41,6 +41,8 @@ export const SET_CONFIG : 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
 export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 
+export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
+
 export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
 export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
 
@@ -218,3 +220,14 @@ export const unregisterUISchema = (
     tester,
   };
 };
+
+export interface SetLocaleAction {
+  type: 'jsonforms/SET_LOCALE';
+  locale: string;
+}
+
+export const setLocale = (locale: string): SetLocaleAction =>
+  ({
+    type: SET_LOCALE,
+    locale,
+  });

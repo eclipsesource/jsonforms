@@ -26,6 +26,7 @@ import { Store } from 'redux';
 import { JsonFormsCore } from './reducers/core';
 import { JsonFormsFieldRendererRegistryEntry } from './reducers/fields';
 import { JsonFormsRendererRegistryEntry } from './reducers/renderers';
+import { JsonFormsLocaleState } from './reducers/i18n';
 
 /**
  * JSONForms store.
@@ -60,6 +61,10 @@ export interface JsonFormsSubStates {
      * All available field renderers.
      */
     fields?: JsonFormsFieldRendererRegistryEntry[];
+    /**
+     *
+     */
+    i18n?: JsonFormsLocaleState;
     // allow additional state
     [additionalState: string]: any;
 }
