@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,18 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import test from 'ava';
-import { translateLabel } from '../src';
+import { SET_LOCALE } from '../actions';
 
-test('text translation, with translation object', t => {
-  const translationObject = {
-    'foo': 'Foo'
-  };
-  const translatedText = translateLabel(translationObject, '%foo');
-  t.is(translatedText, 'Foo');
-});
+export interface JsonFormsLocaleState {
+  locale: string;
+}
 
-test('text translation, without translation object', t => {
-  const translatedText = translateLabel(undefined, '%foo');
-  t.is(translatedText, '%foo');
-});
+export const i18nReducer = (
+  state = {
+    locale: navigator.languages[0]
+  },
+  action: any) => {
+  switch (action.type) {
+    case SET_LOCALE:
+      return {
+        ...state,
+        locale: action.locale === undefined ? navigator.languages[0] : action.locale
+      };
+    default:
+      return state;
+  }
+};
+
+export const fetchLocale = (state: any) => state.locale;
