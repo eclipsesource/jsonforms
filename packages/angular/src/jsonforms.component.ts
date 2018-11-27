@@ -90,7 +90,6 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
         const { renderers } = props as JsonFormsProps;
         const schema : JsonSchema = this.schema || props.schema;
         const uischema = this.uischema || props.uischema;
-        const id = isControl(props.uischema) ? createId(props.uischema.scope) : undefined;
 
         const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
         let bestComponent: Type<any> = UnknownRenderer;
@@ -114,7 +113,11 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer implements OnInit, On
             instance.schema = schema;
             instance.path = this.path;
             if (instance instanceof  JsonFormsControl) {
+              const controlInstance = instance as JsonFormsControl;
+              if (controlInstance.id === undefined) {
+                const id = isControl(props.uischema) ? createId(props.uischema.scope) : undefined;
                 (instance as JsonFormsControl).id = id;
+              }
             }
         }
     }
