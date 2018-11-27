@@ -4,9 +4,9 @@ import { NgRedux } from '@angular-redux/store';
 import { JsonFormsControl } from '@jsonforms/angular';
 
 @Component({
-    selector: 'jsonforms-string-control',
-    template: `
-      <ion-item [hidden]='hidden'>
+  selector: 'jsonforms-string-control',
+  template: `
+      <ion-item no-padding no-lines [hidden]='hidden'>
           <ion-label floating>{{label}}</ion-label>
           <ion-input
                   type="text"

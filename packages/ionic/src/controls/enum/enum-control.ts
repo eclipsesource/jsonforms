@@ -6,7 +6,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
 @Component({
   selector: 'jsonforms-enum-control',
   template: `
-      <ion-item>
+      <ion-item no-padding no-lines>
           <ion-label>{{label}}</ion-label>
           <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
           <ion-select [ngModel]="data" (ionChange)="onChange($event)">

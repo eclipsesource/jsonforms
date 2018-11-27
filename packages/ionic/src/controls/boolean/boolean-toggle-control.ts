@@ -14,7 +14,7 @@ import { Toggle } from 'ionic-angular';
 @Component({
     selector: 'jsonforms-toggle-control',
     template: `
-      <ion-item>
+      <ion-item no-padding>
           <ion-label>{{label}}</ion-label>
           <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
           <ion-toggle

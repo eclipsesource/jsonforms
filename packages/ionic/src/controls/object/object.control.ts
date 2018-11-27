@@ -57,11 +57,12 @@ export class ObjectControlRenderer extends JsonFormsControl {
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }
+
   mapAdditionalProps(props: ControlProps) {
     this.propsPath = props.path;
     this.detailUiSchema =
       props.findUISchema(props.scopedSchema, undefined, props.path);
   }
-
 }
+
 export const objectControlTester: RankedTester = rankWith(2, isObjectControl);

@@ -6,7 +6,7 @@ import { NgRedux } from '@angular-redux/store';
 @Component({
   selector: 'jsonforms-vertical-layout',
   template: `
-      <ion-list *ngFor="let element of uischema?.elements">
+      <ion-list no-lines *ngFor="let element of uischema?.elements">
           <jsonforms-outlet
                   [uischema]="element"
                   [path]="path"
