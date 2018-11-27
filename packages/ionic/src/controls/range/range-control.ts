@@ -30,8 +30,8 @@ import { isRangeControl, JsonFormsState, RankedTester, rankWith } from '@jsonfor
 @Component({
     selector: 'RangeControlRenderer',
     template: `
-        <ion-item [hidden]="hidden">
-            <ion-label>{{ label }}</ion-label>
+        <ion-item no-padding [hidden]="hidden">
+            <ion-label stacked>{{ label }}</ion-label>
             <ion-range
                 [ngModel]="data || scopedSchema.default"
                 (ionChange)="onChange($event)"

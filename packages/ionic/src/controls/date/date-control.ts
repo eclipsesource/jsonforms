@@ -6,7 +6,7 @@ import { JsonFormsControl } from '@jsonforms/angular';
 @Component({
   selector: 'jsonforms-date-control',
   template: `
-      <ion-item>
+      <ion-item no-padding no-lines>
           <ion-label floating>{{label}}</ion-label>
           <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
           <ion-datetime

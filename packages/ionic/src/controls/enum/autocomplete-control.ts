@@ -5,18 +5,20 @@ import { JsonFormsState } from '@jsonforms/core';
 
 @Component({
     selector: 'jsonforms-autocomplete-control',
-    template: `<ion-item>
-    <ion-label floating>{{label}}</ion-label>
-    <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
-    <ionic-selectable
-      item-content
-      [ngModel]="data"
-      [items]="options"
-      [canSearch]="true"
-      (onChange)="onChange($event)"
-    ></ionic-selectable>
-  </ion-item>`
+    template: `
+    <ion-item no-padding no-lines>
+      <ion-label floating>{{label}}</ion-label>
+      <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
+      <ionic-selectable
+        item-content
+        [ngModel]="data"
+        [items]="options"
+        [canSearch]="true"
+        (onChange)="onChange($event)"
+      ></ionic-selectable>
+    </ion-item>`
 })
+// TODO pressing ESC twice causes crash, see https://github.com/ionic-team/ionic/issues/11776
 export class AutoCompleteControlRenderer extends JsonFormsControl {
 
     options: any[];
