@@ -46,6 +46,12 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
+  L10nConfig,
+  LocaleValidationModule,
+  LocalizationModule,
+  TranslationModule
+} from 'angular-l10n';
+import {
   AutocompleteControlRenderer,
   BooleanControlRenderer,
   DateControlRenderer,
@@ -68,6 +74,8 @@ import {
   VerticalLayoutRenderer
 } from './layouts';
 
+const emptyL10NConfig: L10nConfig = {};
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -89,7 +97,10 @@ import {
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    LocalizationModule,
+    LocaleValidationModule.forRoot(),
+    TranslationModule.forRoot(emptyL10NConfig)
   ],
   declarations: [
     BooleanControlRenderer,
@@ -147,7 +158,10 @@ import {
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    LocalizationModule,
+    LocaleValidationModule,
+    TranslationModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: []

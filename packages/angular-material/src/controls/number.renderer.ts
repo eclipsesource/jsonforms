@@ -26,14 +26,17 @@ import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
-    isIntegerControl,
-    isNumberControl,
-    JsonFormsState,
-    or,
-    RankedTester,
-    rankWith
+  getLocale,
+  isIntegerControl,
+  isNumberControl,
+  JsonFormsState,
+  or,
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
+import { LocaleValidation } from 'angular-l10n';
 
+// using change event is non optional here if we want to allow formatting during input
 @Component({
     selector: 'NumberControlRenderer',
     template: `
@@ -41,9 +44,10 @@ import {
             <mat-label>{{ label }}</mat-label>
             <input
                 matInput
-                type="number"
                 (change)="onChange($event)"
                 placeholder="{{ description }}"
+                [value]="data !== undefined ?
+                  (data |  l10nDecimal:locale:digits) : ''"
                 [id]="id"
                 [formControl]="form"
                 [min]="min"
@@ -59,17 +63,30 @@ export class NumberControlRenderer extends JsonFormsControl {
     min: number;
     max: number;
     multipleOf: number;
+    locale: string;
 
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
+    constructor(
+      ngRedux: NgRedux<JsonFormsState>,
+      private localeValidation: LocaleValidation
+    ) {
         super(ngRedux);
     }
-    getEventValue = (event: any) => Number(event.target.value);
+
+    getEventValue = (event: any) => {
+      const parsedNumber = this.localeValidation.parseNumber(event.target.value, this.locale);
+      if (isNaN(parsedNumber)) {
+          return null;
+      }
+      return parsedNumber;
+    }
+
     mapAdditionalProps() {
         if (this.scopedSchema) {
             const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
             this.min = this.scopedSchema.minimum;
             this.max = this.scopedSchema.maximum;
             this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
+            this.locale = getLocale(this.ngRedux.getState());
         }
     }
 }
