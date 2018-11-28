@@ -46,8 +46,9 @@ import { LocaleValidation } from 'angular-l10n';
                 matInput
                 (change)="onChange($event)"
                 placeholder="{{ description }}"
-                [value]="data !== undefined ?
-                  (data |  l10nDecimal:locale:digits) : ''"
+                [value]="data !== undefined && data !== null && locale ?
+                  (data |  l10nDecimal:locale:digits) :
+                  (data !== undefined && data !== null ? data : '')"
                 [id]="id"
                 [formControl]="form"
                 [min]="min"
@@ -73,20 +74,24 @@ export class NumberControlRenderer extends JsonFormsControl {
     }
 
     getEventValue = (event: any) => {
-      const parsedNumber = this.localeValidation.parseNumber(event.target.value, this.locale);
-      if (isNaN(parsedNumber)) {
+      if (this.locale) {
+        const parsedNumber = this.localeValidation.parseNumber(event.target.value, this.locale);
+        if (isNaN(parsedNumber)) {
           return null;
+        }
+        return parsedNumber;
       }
-      return parsedNumber;
+
+      return parseFloat(event.target.value);
     }
 
     mapAdditionalProps() {
         if (this.scopedSchema) {
-            const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
-            this.min = this.scopedSchema.minimum;
-            this.max = this.scopedSchema.maximum;
-            this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
-            this.locale = getLocale(this.ngRedux.getState());
+          const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
+          this.min = this.scopedSchema.minimum;
+          this.max = this.scopedSchema.maximum;
+          this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
+          this.locale = getLocale(this.ngRedux.getState());
         }
     }
 }

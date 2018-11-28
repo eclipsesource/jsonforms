@@ -43,7 +43,7 @@ import {
 import { JsonFormsState } from '../store';
 import { findMatchingUISchema, uischemaRegistryReducer, UISchemaTester } from './uischemas';
 import { Generate, JsonSchema, UISchemaElement } from '..';
-import { i18nReducer } from './i18n';
+import { fetchLocale, i18nReducer } from './i18n';
 
 export {
   rendererReducer,
@@ -96,4 +96,4 @@ export const getSubErrorsAt = (instancePath: string) => (state: JsonFormsState) 
 
 export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
 
-export const getLocale = (state: JsonFormsState) => state.jsonforms.i18n.locale;
+export const getLocale = (state: JsonFormsState) => fetchLocale(_.get(state, 'jsonforms.i18n'));
