@@ -25,13 +25,15 @@
 import { SET_LOCALE } from '../actions';
 
 export interface JsonFormsLocaleState {
-  locale: string;
+  locale?: string;
 }
 
+const initState: JsonFormsLocaleState =  {
+  locale: undefined
+};
+
 export const i18nReducer = (
-  state = {
-    locale: navigator.languages[0]
-  },
+  state = initState,
   action: any) => {
   switch (action.type) {
     case SET_LOCALE:
@@ -44,4 +46,9 @@ export const i18nReducer = (
   }
 };
 
-export const fetchLocale = (state: any) => state.locale;
+export const fetchLocale = (state?: JsonFormsLocaleState) => {
+  if (state === undefined) {
+    return undefined;
+  }
+  return state.locale;
+}

@@ -146,8 +146,10 @@ export const data = {
   name: 'John Doe',
   vegetarian: false,
   birthDate: '1985-06-02',
-  personalData: {},
-  postalCode: '12345'
+  personalData: {
+    age: 34
+  },
+  postalCode: '12345',
 };
 
 registerExamples([

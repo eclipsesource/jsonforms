@@ -29,14 +29,20 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    ErrorTestExpectation,
-    numberAdditionalPropsTest,
-    numberBaseTest,
-    numberErrorTest,
-    numberInputEventTest
+  ErrorTestExpectation,
+  numberAdditionalPropsTest,
+  numberBaseTest,
+  numberErrorTest,
+  numberInputEventTest
 } from '@jsonforms/angular-test';
-import { NumberControlRenderer, NumberControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {
+  L10nConfig,
+  LocaleValidationModule,
+  LocalizationModule,
+  TranslationModule
+} from 'angular-l10n';
+import { NumberControlRenderer, NumberControlRendererTester } from '../src';
 
 describe('Material number field tester', () => {
     const uischema = {
@@ -75,12 +81,17 @@ describe('Material number field tester', () => {
         ).toBe(2);
     });
 });
+const emptyL10NConfig: L10nConfig = {};
+
 const imports = [
     MatFormFieldModule,
     MatInputModule,
     NoopAnimationsModule,
     ReactiveFormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    LocalizationModule,
+    LocaleValidationModule.forRoot(),
+    TranslationModule.forRoot(emptyL10NConfig)
 ];
 const providers = [
     { provide: NgRedux, useFactory: MockNgRedux.getInstance }

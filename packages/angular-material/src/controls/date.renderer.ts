@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { isDateControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import { getLocale, isDateControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, NativeDateAdapter } from '@angular/material';
 
@@ -34,7 +34,7 @@ export class DateControlRenderer extends JsonFormsControl {
   }
 
   mapAdditionalProps() {
-    const locale = this.ngRedux.getState().jsonforms.i18n.locale;
+    const locale = getLocale(this.ngRedux.getState());
     this.dateAdapter.setLocale(locale);
   }
 

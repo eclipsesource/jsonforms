@@ -124,7 +124,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     it('should render floats', () => {
         initAndExpect(fixture, testData, () => {
             expect(component.data).toBe(123.123);
-            expect(numberNativeElement.valueAsNumber).toBe(123.123);
+            expect(numberNativeElement.value).toBe('123.123');
             // step is of type string
             expect(numberNativeElement.step).toBe('0.1');
             expect(numberNativeElement.disabled).toBe(false);
@@ -148,7 +148,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
             },
             () => {
                 expect(component.data).toBe(123);
-                expect(numberNativeElement.valueAsNumber).toBe(123);
+                expect(numberNativeElement.value).toBe('123');
                 // step is of type string
                 expect(numberNativeElement.step).toBe('1');
                 expect(numberNativeElement.disabled).toBe(false);
@@ -161,28 +161,28 @@ export const numberBaseTest = <C extends JsonFormsControl>(
     it('should support updating the state', () => {
         updateFloatState(fixture, testData, () => {
             expect(component.data).toBe(456.456);
-            expect(numberNativeElement.valueAsNumber).toBe(456.456);
+            expect(Number(numberNativeElement.value)).toBe(456.456);
         });
     });
 
     it('should update with undefined value', () => {
         updateWithUndefined(fixture, testData, () => {
             expect(component.data).toBe(undefined);
-            expect(numberNativeElement.valueAsNumber).toBeNaN();
+            expect(numberNativeElement.value).toBe('');
         });
     });
 
     it('should update with null value', () => {
         updateWithNull(fixture, testData, () => {
             expect(component.data).toBe(null);
-            expect(numberNativeElement.valueAsNumber).toBeNaN();
+            expect(numberNativeElement.value).toBe('');
         });
     });
 
     it('should not update with wrong ref', () => {
         updateWithSiblingNumberValue(fixture, testData, () => {
             expect(component.data).toBe(123.123);
-            expect(numberNativeElement.valueAsNumber).toBe(123.123);
+            expect(Number(numberNativeElement.value)).toBe(123.123);
         });
     });
 
@@ -242,14 +242,14 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
         component.ngOnInit();
 
         const spy = spyOn(component, 'onChange');
-        numberNativeElement.valueAsNumber = 456.456;
+        numberNativeElement.value = 456.456;
         if (numberNativeElement.dispatchEvent) {
             numberNativeElement.dispatchEvent(new Event('change'));
         }
         // trigger change detection
         fixture.detectChanges();
         expect(spy).toHaveBeenCalled();
-        expect(numberNativeElement.valueAsNumber).toBe(456.456);
+        expect(Number(numberNativeElement.value)).toBe(456.456);
     });
 };
 export const numberErrorTest = <C extends JsonFormsControl>(
