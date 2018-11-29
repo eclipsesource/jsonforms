@@ -2,6 +2,12 @@ import { NgModule } from '@angular/core';
 import { IonicModule } from 'ionic-angular';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { JsonFormsModule } from '@jsonforms/angular';
+import {
+  L10nConfig,
+  LocaleValidationModule,
+  LocalizationModule,
+  TranslationModule
+} from 'angular-l10n';
 
 import { BooleanCheckboxControlRenderer } from './controls/boolean/boolean-checkbox-control';
 import { BooleanToggleControlRenderer } from './controls/boolean/boolean-toggle-control';
@@ -25,6 +31,8 @@ import { LabelRenderer } from './other/label/label';
 import { CategorizationTabLayoutRenderer } from './layouts/categorization/categorization-tab-layout';
 import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
 import { ObjectControlRenderer } from './controls/object/object.control';
+
+const emptyL10NConfig: L10nConfig = {};
 
 @NgModule({
   declarations: [
@@ -56,8 +64,22 @@ import { ObjectControlRenderer } from './controls/object/object.control';
     // other
     LabelRenderer
   ],
-  imports: [IonicModule, IonicSelectableModule, JsonFormsModule],
-  exports: [IonicModule, IonicSelectableModule, JsonFormsModule],
+  imports: [
+    IonicModule,
+    IonicSelectableModule,
+    JsonFormsModule,
+    LocalizationModule,
+    LocaleValidationModule.forRoot(),
+    TranslationModule.forRoot(emptyL10NConfig)
+  ],
+  exports: [
+    IonicModule,
+    IonicSelectableModule,
+    JsonFormsModule,
+    LocalizationModule,
+    LocaleValidationModule,
+    TranslationModule
+  ],
   entryComponents: [
     // controls
     BooleanCheckboxControlRenderer,
