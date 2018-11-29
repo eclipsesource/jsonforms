@@ -22,20 +22,35 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { SET_LOCALE } from '../actions';
+import { SET_LOCALE, SET_LOCALIZED_SCHEMAS } from '../actions';
+import { JsonSchema, SET_LOCALIZED_UISCHEMAS, UISchemaElement } from '..';
 
 export interface JsonFormsLocaleState {
   locale?: string;
+  localizedSchemas: Map<string, JsonSchema>;
+  localizedUISchemas: Map<string, UISchemaElement>;
 }
 
 const initState: JsonFormsLocaleState =  {
-  locale: undefined
+  locale: undefined,
+  localizedSchemas: new Map(),
+  localizedUISchemas: new Map()
 };
 
 export const i18nReducer = (
   state = initState,
   action: any) => {
   switch (action.type) {
+    case SET_LOCALIZED_SCHEMAS:
+      return {
+        ...state,
+        localizedSchemas: action.localizedSchemas
+      };
+    case SET_LOCALIZED_UISCHEMAS:
+      return {
+        ...state,
+        localizedUISchemas: action.localizedUISchemas
+      };
     case SET_LOCALE:
       return {
         ...state,
@@ -51,4 +66,22 @@ export const fetchLocale = (state?: JsonFormsLocaleState) => {
     return undefined;
   }
   return state.locale;
-}
+};
+
+export const findLocalizedSchema =
+  (locale: string) =>
+    (state?: JsonFormsLocaleState): JsonSchema => {
+      if (state === undefined) {
+        return undefined;
+      }
+      return state.localizedSchemas.get(locale);
+    };
+
+export const findLocalizedUISchema =
+  (locale: string) =>
+    (state?: JsonFormsLocaleState): UISchemaElement => {
+      if (state === undefined) {
+        return undefined;
+      }
+      return state.localizedUISchemas.get(locale);
+    };
