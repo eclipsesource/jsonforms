@@ -24,7 +24,18 @@
 */
 import * as _ from 'lodash';
 import { ErrorObject, ValidateFunction } from 'ajv';
-import { INIT, InitAction, SET_AJV, SetAjvAction, UPDATE_DATA, UpdateAction } from '../actions';
+import {
+  INIT,
+  InitAction,
+  SET_AJV,
+  SET_SCHEMA,
+  SET_UISCHEMA,
+  SetAjvAction,
+  SetSchemaAction,
+  SetUISchemaAction,
+  UPDATE_DATA,
+  UpdateAction
+} from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
 
@@ -63,7 +74,8 @@ const initState: JsonFormsCore = {
   validator: alwaysValid
 };
 
-type ValidCoreActions = InitAction | UpdateAction | SetAjvAction;
+type ValidCoreActions =
+  InitAction | UpdateAction | SetAjvAction | SetSchemaAction | SetUISchemaAction;
 
 export const coreReducer = (
   state: JsonFormsCore = initState,
@@ -92,6 +104,18 @@ export const coreReducer = (
         ...state,
         validator,
         errors
+      };
+    }
+    case SET_SCHEMA: {
+      return {
+        ...state,
+        schema: action.schema
+      };
+    }
+    case SET_UISCHEMA: {
+      return {
+        ...state,
+        uischema: action.uischema
       };
     }
     case UPDATE_DATA: {

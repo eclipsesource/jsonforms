@@ -40,8 +40,14 @@ export const REMOVE_FIELD: 'jsonforms/REMOVE_FIELD' = 'jsonforms/REMOVE_FIELD';
 export const SET_CONFIG : 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
 export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
+export const SET_SCHEMA: 'jsonforms/SET_SCHEMA' = `jsonforms/SET_SCHEMA`;
+export const SET_UISCHEMA: 'jsonforms/SET_UISCHEMA' = `jsonforms/SET_UISCHEMA`;
 
 export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
+export const SET_LOCALIZED_SCHEMAS: 'jsonforms/SET_LOCALIZED_SCHEMAS' =
+  `jsonforms/SET_LOCALIZED_SCHEMAS`;
+export const SET_LOCALIZED_UISCHEMAS: 'jsonforms/SET_LOCALIZED_UISCHEMAS' =
+  `jsonforms/SET_LOCALIZED_UISCHEMAS`;
 
 export const ADD_DEFAULT_DATA: 'jsonforms/ADD_DEFAULT_DATA' = `jsonforms/ADD_DEFAULT_DATA`;
 export const REMOVE_DEFAULT_DATA: 'jsonforms/REMOVE_DEFAULT_DATA' = `jsonforms/REMOVE_DEFAULT_DATA`;
@@ -217,7 +223,7 @@ export const unregisterUISchema = (
 ): RemoveUISchemaAction => {
   return {
     type: REMOVE_UI_SCHEMA,
-    tester,
+    tester
   };
 };
 
@@ -230,4 +236,50 @@ export const setLocale = (locale: string): SetLocaleAction =>
   ({
     type: SET_LOCALE,
     locale,
+  });
+
+export interface SetLocalizedSchemasAction {
+  type: 'jsonforms/SET_LOCALIZED_SCHEMAS';
+  localizedSchemas: Map<string, JsonSchema>;
+}
+
+export const setLocalizedSchemas =
+  (localizedSchemas: Map<string, JsonSchema>): SetLocalizedSchemasAction =>
+    ({
+      type: SET_LOCALIZED_SCHEMAS,
+      localizedSchemas
+    });
+
+export interface SetSchemaAction {
+  type: 'jsonforms/SET_SCHEMA';
+  schema: JsonSchema;
+}
+
+export const setSchema = (schema: JsonSchema): SetSchemaAction =>
+  ({
+    type: SET_SCHEMA,
+    schema
+  });
+
+export interface SetLocalizedUISchemasAction {
+  type: 'jsonforms/SET_LOCALIZED_UISCHEMAS';
+  localizedUISchemas: Map<string, UISchemaElement>;
+}
+
+export const setLocalizedUISchemas =
+  (localizedUISchemas: Map<string, UISchemaElement>): SetLocalizedUISchemasAction =>
+    ({
+      type: SET_LOCALIZED_UISCHEMAS,
+      localizedUISchemas
+    });
+
+export interface SetUISchemaAction {
+  type: 'jsonforms/SET_UISCHEMA';
+  uischema: UISchemaElement;
+}
+
+export const setUISchema = (uischema: UISchemaElement): SetUISchemaAction =>
+  ({
+    type: SET_UISCHEMA,
+    uischema
   });
