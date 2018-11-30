@@ -23,9 +23,17 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import * as _ from 'lodash';
 import { ExampleDescription, nestedArray as NestedArrayExample } from '@jsonforms/examples';
 import ConnectedRatingControl, { ratingControlTester } from './RatingControl';
-import { Actions } from '@jsonforms/core';
+import {
+  Actions,
+  JsonSchema,
+  setLocale,
+  setSchema,
+  setUISchema,
+  UISchemaElement
+} from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
 
 export interface ReactExampleDescription extends ExampleDescription {
@@ -37,6 +45,64 @@ const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
 const unregisterRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.unregisterField(ratingControlTester, ConnectedRatingControl));
 };
+
+export interface I18nExampleProps {
+  schema: JsonSchema;
+  uischema: UISchemaElement;
+  dispatch: Dispatch<AnyAction>;
+}
+
+class I18nExample extends React.Component<I18nExampleProps, {
+  localizedSchemas: Map<string, JsonSchema>,
+  localizedUISchemas: Map<string, UISchemaElement>
+}> {
+
+  constructor(props: I18nExampleProps) {
+    super(props);
+    const { schema, uischema } = props;
+    const localizedSchemas = new Map<string, JsonSchema>();
+    const deSchema = _.cloneDeep(schema);
+    _.set(deSchema, 'properties.name.description', 'Name der Person');
+    _.set(deSchema, 'properties.name.birthDate', 'Geburtstag der Person');
+    localizedSchemas.set('de-DE', deSchema);
+    localizedSchemas.set('en-US', schema);
+
+    const localizedUISchemas = new Map<string, UISchemaElement>();
+    const deUISchema = _.cloneDeep(uischema);
+    _.set(deUISchema, 'elements.0.elements.1.label', 'Geburtstag');
+    _.set(deUISchema, 'elements.2.elements.0.label', 'Nationalität');
+    _.set(deUISchema, 'elements.2.elements.1.label', 'Vegetarier');
+    localizedUISchemas.set('de-DE', deUISchema);
+    localizedUISchemas.set('en-US', uischema);
+
+    this.state = {
+      localizedSchemas,
+      localizedUISchemas
+    };
+  }
+
+
+  changeLocale = (locale: string) => {
+    const { dispatch } = this.props;
+    const { localizedSchemas, localizedUISchemas } = this.state;
+    dispatch(setLocale(locale));
+    dispatch(setSchema(localizedSchemas.get(locale)));
+    dispatch(setUISchema(localizedUISchemas.get(locale)));
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={() => this.changeLocale('en-US')}>
+          en-US
+        </button>
+        <button onClick={() => this.changeLocale('de-DE')}>
+          de-DE
+        </button>
+      </div>
+    );
+  }
+}
 
 export const enhanceExample: (examples: ExampleDescription[]) => ReactExampleDescription[] =
   examples => examples.map(e => {
@@ -90,6 +156,12 @@ export const enhanceExample: (examples: ExampleDescription[]) => ReactExampleDes
           )
         });
         return dynamic;
+      case 'i18n':
+        return Object.assign({}, e, {
+          customReactExtension: (dispatch: Dispatch<AnyAction>) => (
+            <I18nExample schema={e.schema} uischema={e.uischema} dispatch={dispatch}/>
+          )
+        });
       default: return e;
     }
   });
