@@ -27,7 +27,6 @@ import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import {
     JsonFormsState,
-    JsonSchema,
     Layout,
     mapStateToLayoutProps,
     OwnPropsOfRenderer,
@@ -39,10 +38,6 @@ export class LayoutRenderer<T extends Layout>
 
     hidden: boolean;
     private subscription: Subscription;
-    private elements: OwnPropsOfRenderer[];
-    private oldSchema: JsonSchema;
-    private oldUISchema: T;
-    private oldPath: string;
 
     constructor(private ngRedux: NgRedux<JsonFormsState>) {
         super();
@@ -64,19 +59,15 @@ export class LayoutRenderer<T extends Layout>
     }
 
     get renderProps(): OwnPropsOfRenderer[] {
-        if (this.uischema === this.oldUISchema &&
-            this.schema === this.oldSchema &&
-            this.path === this.oldPath) {
-            return this.elements;
-        }
-        this.oldUISchema = this.uischema as T;
-        this.oldSchema = this.schema;
-        this.oldPath = this.path;
-        this.elements =  (this.oldUISchema.elements || []).map((el: UISchemaElement) => ({
+        const elements = ((this.uischema as T).elements || []).map((el: UISchemaElement) => ({
             uischema: el,
-            schema: this.oldSchema,
-            path: this.oldPath
+            schema: this.schema,
+            path: this.path
         }));
-        return this.elements;
+        return elements;
     }
+
+    trackElement(_index: number, renderProp: OwnPropsOfRenderer) {
+        return renderProp ? renderProp.path + JSON.stringify(renderProp.uischema) : null;
+      }
 }
