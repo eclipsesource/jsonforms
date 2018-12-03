@@ -31,7 +31,7 @@ import { NgRedux } from '@angular-redux/store';
     selector: 'VerticalLayoutRenderer',
     template: `
     <div fxLayout='column' fxLayoutGap='16px' [fxHide]="hidden">
-        <div *ngFor="let props of renderProps" fxFlex>
+        <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
             <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
         </div>
     </div>
