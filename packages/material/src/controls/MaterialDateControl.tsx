@@ -40,6 +40,7 @@ import {
 import { Control } from '@jsonforms/react';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import EventIcon from '@material-ui/icons/Event';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
@@ -124,6 +125,7 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
                     clearLabel={labelClear}
                     leftArrowIcon={<KeyboardArrowLeftIcon />}
                     rightArrowIcon={<KeyboardArrowRightIcon />}
+                    keyboardIcon={<EventIcon />}
                     InputProps={inputProps}
                 />
             </MuiPickersUtilsProvider>

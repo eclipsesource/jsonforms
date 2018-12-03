@@ -39,6 +39,7 @@ import * as moment from 'moment';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import DateRangeIcon from '@material-ui/icons/DateRange';
+import EventIcon from '@material-ui/icons/Event';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { DateTimePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
@@ -94,6 +95,7 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
           leftArrowIcon={<KeyboardArrowLeftIcon />}
           rightArrowIcon={<KeyboardArrowRightIcon />}
           dateRangeIcon={<DateRangeIcon />}
+          keyboardIcon={<EventIcon />}
           timeIcon={<AccessTimeIcon />}
           onClear={() => handleChange(path, '')}
           InputProps={inputProps}
