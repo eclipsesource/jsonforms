@@ -35,7 +35,7 @@ import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/co
             <input
                 matInput
                 [type]="getType()"
-                (change)="onChange($event)"
+                (keyup)="onChange($event)"
                 placeholder="{{ description }}"
                 [id]="id"
                 [formControl]="form"
