@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import { isStringControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsControl } from '@jsonforms/angular';
 
@@ -44,5 +44,5 @@ export class StringControlRenderer extends JsonFormsControl {
 
 export const stringControlTester: RankedTester = rankWith(
     1,
-    isControl
+    isStringControl
 );
