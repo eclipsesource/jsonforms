@@ -25,7 +25,7 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { isControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import { isStringControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
 
 @Component({
     selector: 'TextControlRenderer',
@@ -63,4 +63,4 @@ export class TextControlRenderer extends JsonFormsControl {
         return 'text';
     }
 }
-export const TextControlRendererTester: RankedTester = rankWith(1, isControl);
+export const TextControlRendererTester: RankedTester = rankWith(1, isStringControl);
