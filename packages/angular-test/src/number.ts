@@ -244,7 +244,7 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
         const spy = spyOn(component, 'onChange');
         numberNativeElement.value = 456.456;
         if (numberNativeElement.dispatchEvent) {
-            numberNativeElement.dispatchEvent(new Event('change'));
+            numberNativeElement.dispatchEvent(new Event('input'));
         }
         // trigger change detection
         fixture.detectChanges();
