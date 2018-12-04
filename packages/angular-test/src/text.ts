@@ -293,7 +293,7 @@ export const textInputEventTest = <C extends JsonFormsControl>(
             const spy = spyOn(component, 'onChange');
             textNativeElement.value = 'bar';
             if (textNativeElement.dispatchEvent) {
-                textNativeElement.dispatchEvent(new Event('change'));
+                textNativeElement.dispatchEvent(new Event('input'));
             }
             // trigger change detection
             fixture.detectChanges();

@@ -44,7 +44,7 @@ import { LocaleValidation } from 'angular-l10n';
             <mat-label>{{ label }}</mat-label>
             <input
                 matInput
-                (keyup)="onChange($event)"
+                (input)="onChange($event)"
                 placeholder="{{ description }}"
                 [value]="data !== undefined && data !== null && locale ?
                   (data |  l10nDecimal:locale:digits) :

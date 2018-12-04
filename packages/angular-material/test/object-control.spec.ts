@@ -131,12 +131,10 @@ describe('Object Control', () => {
         }
       }
     });
-    component.ngOnInit();
     mockSubStore.complete();
     fixture.detectChanges();
-
-    fixture.whenRenderingDone().then(() => {
-      fixture.detectChanges();
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
       expect(fixture.nativeElement.querySelectorAll('input').length).toBe(2);
     });
   }));

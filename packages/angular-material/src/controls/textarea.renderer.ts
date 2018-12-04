@@ -34,7 +34,7 @@ import { isMultiLineControl, JsonFormsState, RankedTester, rankWith } from '@jso
             <mat-label>{{ label }}</mat-label>
             <textarea
                 matInput
-                (change)="onChange($event)"
+                (input)="onChange($event)"
                 placeholder="{{ description }}"
                 [id]="id"
                 [formControl]="form"
