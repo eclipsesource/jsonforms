@@ -59,6 +59,7 @@ export const removeSchemaKeywords = (path: string) => {
       }
       .content {
         padding: 15px;
+        background-color:#fff;
       }
       .add-button {
         float: right;
