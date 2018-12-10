@@ -35,7 +35,7 @@ export const removeSchemaKeywords = (path: string) => {
                 (mouseover)="onListItemHover(i)"
                 (mouseout)="onListItemHover(undefined)"
             >
-                <a matLine>{{item.label}}</a>
+                <a matLine>{{item.label || 'No label set'}}</a>
                 <button mat-icon-button
                         class="button hide"
                         (click)="onDeleteClick(item, i)"
