@@ -30,7 +30,8 @@ import {
     Layout,
     mapStateToLayoutProps,
     OwnPropsOfRenderer,
-    UISchemaElement } from '@jsonforms/core';
+    UISchemaElement
+} from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
 export class LayoutRenderer<T extends Layout>
@@ -67,7 +68,7 @@ export class LayoutRenderer<T extends Layout>
         return elements;
     }
 
-    trackElement(_index: number, renderProp: OwnPropsOfRenderer) {
+    trackElement(_index: number, renderProp: OwnPropsOfRenderer): string {
         return renderProp ? renderProp.path + JSON.stringify(renderProp.uischema) : null;
-      }
+    }
 }
