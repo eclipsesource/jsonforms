@@ -97,6 +97,17 @@ export class ListWithDetailControl extends JsonFormsControl {
             pushDetail: this.updateDetail
           };
           this.updateMaster();
+
+        } else if (this.masterItems !== undefined) {
+          const currentLabels = this.masterItems.map(item => item.label);
+          const nextLabels = masterItems.map((item: MasterItem) => item.label);
+          if (!_.isEqual(currentLabels, nextLabels)) {
+            this.masterParams.items.forEach((item: MasterItem, idx: number) => {
+              if (item.label !== nextLabels[idx]) {
+                item.label = nextLabels[idx];
+              }
+            });
+          }
         }
       });
 
