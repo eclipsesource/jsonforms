@@ -31,224 +31,210 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { IonicModule, IonicPageModule, Platform, Tab } from 'ionic-angular';
 import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
 import {
-  CategorizationTabLayoutRenderer,
-  CategoryRenderer,
-  StringControlRenderer,
-  stringControlTester
+    CategorizationTabLayoutRenderer,
+    CategoryRenderer,
+    StringControlRenderer,
+    stringControlTester
 } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
+import { ParamsService } from '../src/services/ParamsService';
 
 describe('Categorization tab layout', () => {
-  let fixture: ComponentFixture<any>;
-  let component: any;
+    let fixture: ComponentFixture<any>;
+    let component: any;
 
-  const data = { foo: true };
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'string'
-      },
-      bar: {
-        type: 'string'
-      }
-    }
-  };
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        JsonFormsOutlet,
-        CategorizationTabLayoutRenderer,
-        CategoryRenderer,
-        UnknownRenderer,
-        StringControlRenderer
-      ],
-      imports: [
-        IonicModule.forRoot(CategorizationTabLayoutRenderer),
-        IonicPageModule.forChild(CategoryRenderer)
-      ],
-      providers: [
-        { provide: Platform, useClass: PlatformMock },
-        { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-      ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [StringControlRenderer, UnknownRenderer]
+    const data = { foo: true };
+    const schema = {
+        type: 'object',
+        properties: {
+            foo: {
+                type: 'string'
+            },
+            bar: {
+                type: 'string'
+            },
         }
-      })
-      .compileComponents();
-
-    MockNgRedux.reset();
-    fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
-    component = fixture.componentInstance;
-  });
-
-  it('render categories initially', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = {
-      type: 'Categorization',
-      elements: [
-        {
-          type: 'Category',
-          label: 'foo',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/foo'
-            }
-          ]
-        },
-        {
-          type: 'Category',
-          label: 'bar',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/bar'
-            }
-          ]
-        }
-      ]
     };
 
-    component.ngOnInit();
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        },
-        renderers: [
-          { tester: stringControlTester, renderer: StringControlRenderer }
-        ]
-      }
-    });
-    mockSubStore.complete();
-    fixture.detectChanges();
+    beforeEach((() => {
+        TestBed.configureTestingModule({
+            declarations: [
+                JsonFormsOutlet,
+                CategorizationTabLayoutRenderer,
+                CategoryRenderer,
+                UnknownRenderer,
+                StringControlRenderer
+            ],
+            imports: [
+                IonicModule.forRoot(CategorizationTabLayoutRenderer),
+                IonicPageModule.forChild(CategoryRenderer),
+            ],
+            providers: [
+                {provide: Platform, useClass: PlatformMock},
+                {provide: NgRedux, useFactory: MockNgRedux.getInstance},
+                {provide: ParamsService, useClass: ParamsService}
+            ],
+        })
+            .overrideModule(BrowserDynamicTestingModule, {
+                set: {
+                    entryComponents: [
+                        StringControlRenderer,
+                        UnknownRenderer
+                    ]
+                }
+            })
+            .compileComponents();
 
-    fixture.whenRenderingDone().then(() => {
-      fixture.detectChanges();
-      const activateCategory: DebugElement[] = fixture.debugElement.queryAll(
-        By.directive(CategoryRenderer)
-      );
-      const ionTabs: DebugElement[] = fixture.debugElement.queryAll(
-        By.directive(Tab)
-      );
-      expect(activateCategory.length).toBe(1);
-      expect(ionTabs.length).toBe(2);
-    });
-  }));
+        MockNgRedux.reset();
+        fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
+        component = fixture.componentInstance;
+    }));
 
-  it('add category', async(() => {
-    const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = {
-      type: 'Categorization',
-      elements: [
-        {
-          type: 'Category',
-          label: 'foo',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/foo'
+    it('render categories initially', async(() => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = {
+            type: 'Categorization',
+            elements: [
+                {
+                    type: 'Category',
+                    label: 'foo',
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/foo'
+                    }]
+                },
+                {
+                    type: 'Category',
+                    label: 'bar',
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/bar'
+                    }]
+                }
+            ]
+        };
+
+        component.ngOnInit();
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                },
+                renderers: [
+                    { tester: stringControlTester, renderer: StringControlRenderer }
+                ]
             }
-          ]
-        },
-        {
-          type: 'Control',
-          label: 'bar',
-          elements: [
-            {
-              type: 'Control',
-              scope: '#/properties/bar'
-            }
-          ]
-        }
-      ]
-    };
-
-    component.ngOnInit();
-    mockSubStore.next({
-      jsonforms: {
-        core: {
-          data,
-          schema
-        },
-        renderers: [
-          { tester: stringControlTester, renderer: StringControlRenderer }
-        ]
-      }
-    });
-    fixture.detectChanges();
-    fixture.whenRenderingDone().then(() => {
-      fixture.detectChanges();
-      const activateCategory: DebugElement[] = fixture.debugElement.queryAll(
-        By.directive(CategoryRenderer)
-      );
-      const ionTabs: DebugElement[] = fixture.debugElement.queryAll(
-        By.directive(Tab)
-      );
-      expect(activateCategory.length).toBe(1);
-      expect(ionTabs.length).toBe(2);
-
-      component.uischema = {
-        type: 'Categorization',
-        elements: [
-          {
-            type: 'Category',
-            label: 'foo',
-            elements: [
-              {
-                type: 'Control',
-                scope: '#/properties/foo'
-              }
-            ]
-          },
-          {
-            type: 'Control',
-            label: 'bar',
-            elements: [
-              {
-                type: 'Control',
-                scope: '#/properties/bar'
-              }
-            ]
-          },
-          {
-            type: 'Control',
-            label: 'quux',
-            elements: [
-              {
-                type: 'Control',
-                scope: '#/properties/bar'
-              }
-            ]
-          }
-        ]
-      };
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data,
-            schema
-          },
-          renderers: [
-            { tester: stringControlTester, renderer: StringControlRenderer }
-          ]
-        }
-      });
-      mockSubStore.complete();
-      fixture.detectChanges();
-
-      fixture.whenRenderingDone().then(() => {
+        });
+        mockSubStore.complete();
         fixture.detectChanges();
-        const ionTabs2: DebugElement[] = fixture.debugElement.queryAll(
-          By.directive(Tab)
-        );
-        expect(ionTabs2.length).toBe(3);
-      });
-    });
-  }));
+
+        fixture.whenRenderingDone().then(() => {
+            fixture.detectChanges();
+            const activateCategory: DebugElement[] =
+                fixture.debugElement.queryAll(By.directive(CategoryRenderer));
+            const ionTabs: DebugElement[] =
+                fixture.debugElement.queryAll(By.directive(Tab));
+            expect(activateCategory.length).toBe(1);
+            expect(ionTabs.length).toBe(2);
+        });
+    }));
+
+    it('add category', async(() => {
+        const mockSubStore = MockNgRedux.getSelectorStub();
+        component.uischema = {
+            type: 'Categorization',
+            elements: [
+                {
+                    type: 'Category',
+                    label: 'foo',
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/foo'
+                    }]
+                },
+                {
+                    type: 'Control',
+                    label: 'bar',
+                    elements: [{
+                        type: 'Control',
+                        scope: '#/properties/bar'
+                    }]
+                }
+            ]
+        };
+
+        component.ngOnInit();
+        mockSubStore.next({
+            jsonforms: {
+                core: {
+                    data,
+                    schema,
+                },
+                renderers: [
+                    { tester: stringControlTester, renderer: StringControlRenderer }
+                ]
+            }
+        });
+        fixture.detectChanges();
+        fixture.whenRenderingDone().then(() => {
+            fixture.detectChanges();
+            const activateCategory: DebugElement[] =
+                fixture.debugElement.queryAll(By.directive(CategoryRenderer));
+            const ionTabs: DebugElement[] =
+                fixture.debugElement.queryAll(By.directive(Tab));
+            expect(activateCategory.length).toBe(1);
+            expect(ionTabs.length).toBe(2);
+
+            component.uischema = {
+                type: 'Categorization',
+                elements: [
+                    {
+                        type: 'Category',
+                        label: 'foo',
+                        elements: [{
+                            type: 'Control',
+                            scope: '#/properties/foo'
+                        }]
+                    },
+                    {
+                        type: 'Control',
+                        label: 'bar',
+                        elements: [{
+                            type: 'Control',
+                            scope: '#/properties/bar'
+                        }]
+                    },
+                    {
+                        type: 'Control',
+                        label: 'quux',
+                        elements: [{
+                            type: 'Control',
+                            scope: '#/properties/bar'
+                        }]
+                    }
+                ]
+            };
+            mockSubStore.next({
+                jsonforms: {
+                    core: {
+                        data,
+                        schema,
+                    },
+                    renderers: [
+                        { tester: stringControlTester, renderer: StringControlRenderer }
+                    ]
+                }
+            });
+            mockSubStore.complete();
+            fixture.detectChanges();
+
+            fixture.whenRenderingDone().then(() => {
+                fixture.detectChanges();
+                const ionTabs2: DebugElement[] =
+                    fixture.debugElement.queryAll(By.directive(Tab));
+                expect(ionTabs2.length).toBe(3);
+            });
+        });
+    }));
 });
