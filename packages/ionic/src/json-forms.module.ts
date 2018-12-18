@@ -31,6 +31,7 @@ import { LabelRenderer } from './other/label/label';
 import { CategorizationTabLayoutRenderer } from './layouts/categorization/categorization-tab-layout';
 import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
 import { ObjectControlRenderer } from './controls/object/object.control';
+import { ParamsService } from './services/ParamsService';
 
 const emptyL10NConfig: L10nConfig = {};
 
@@ -109,6 +110,8 @@ const emptyL10NConfig: L10nConfig = {};
     // other
     LabelRenderer
   ],
-  providers: []
+  providers: [
+    ParamsService
+  ]
 })
 export class JsonFormsIonicModule {}

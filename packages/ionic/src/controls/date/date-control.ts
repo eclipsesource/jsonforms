@@ -236,11 +236,9 @@ const getLocaleDateString = (locale: string): string => formats[locale] || 'dd/M
 })
 export class DateControlRenderer extends JsonFormsControl {
 
-  // @ts-ignore
   private dateFormat: string;
   private locale: string;
   @ViewChild('date') datePicker: DateTime;
-
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
