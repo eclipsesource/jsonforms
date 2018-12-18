@@ -43,7 +43,7 @@ import { isRangeControl, JsonFormsState, RankedTester, rankWith } from '@jsonfor
                 [tickInterval]="tickInterval"
                 [id]="id"
             ></mat-slider>
-            <mat-error>{{ error }}</mat-error>
+            <mat-error class='mat-caption'>{{ error }}</mat-error>
         </div>
     `
 })
