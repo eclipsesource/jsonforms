@@ -38,7 +38,7 @@ import { isBooleanControl, JsonFormsState, RankedTester, rankWith } from '@jsonf
             [id]="id">
             {{ label }}
         </mat-checkbox>
-        <mat-error>{{ error }}</mat-error>
+        <mat-error class='mat-caption'>{{ error }}</mat-error>
     </div>
     `
 })

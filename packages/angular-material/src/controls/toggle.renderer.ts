@@ -45,7 +45,7 @@ import {
             [id]="id">
             {{ label }}
         </mat-slide-toggle>
-        <mat-error>{{ error }}</mat-error>
+        <mat-error class='mat-caption'>{{ error }}</mat-error>
     </div>
     `
 })
