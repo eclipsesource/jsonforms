@@ -111,12 +111,53 @@ const nestedSchema2 = {
   }
 };
 
+const uischemaOptions: {
+  generate: ControlElement,
+  default: ControlElement,
+  inline: ControlElement,
+} = {
+  default: {
+    type: 'Control',
+    scope: '#',
+    options: {
+      detail : 'DEFAULT'
+    }
+  },
+  generate: {
+    type: 'Control',
+    scope: '#',
+    options: {
+      detail : 'GENERATE'
+    }
+  },
+  inline: {
+    type: 'Control',
+    scope: '#',
+    options: {
+      detail : {
+        type: 'HorizontalLayout',
+        elements: [
+          {
+            type: 'Control',
+            scope: '#/properties/message'
+          }
+        ]
+      }
+    }
+  }
+};
+
 describe('Material array layout', () => {
-  it('should only be applicable for intermediate array', () => {
+  it('should only be applicable for intermediate array or when containing proper options', () => {
     expect(materialArrayLayoutTester(uischema, schema)).toBe(-1);
     expect(materialArrayLayoutTester(uischema, nestedSchema)).toBe(4);
     expect(materialArrayLayoutTester(uischema, nestedSchema2)).toBe(4);
+
+    expect(materialArrayLayoutTester(uischemaOptions.default, schema)).toBe(-1);
+    expect(materialArrayLayoutTester(uischemaOptions.generate, schema)).toBe(4);
+    expect(materialArrayLayoutTester(uischemaOptions.inline, schema)).toBe(4);
   });
+
   it('should render two by two children', () => {
     const store = initJsonFormsStore();
     const tree = TestUtils.renderIntoDocument(
@@ -128,5 +169,31 @@ describe('Material array layout', () => {
     const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     // 2 data entries with each having 2 controls
     expect(controls.length).toBe(4);
+  });
+
+  it('should generate uischema when options.detail=GENERATE', () => {
+    const store = initJsonFormsStore();
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialArrayLayout schema={schema} uischema={uischemaOptions.generate}/>
+      </Provider>
+    );
+
+    const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    // 2 data entries with each having 2 controls
+    expect(controls.length).toBe(4);
+  });
+
+  it('should use inline options.detail uischema', () => {
+    const store = initJsonFormsStore();
+    const tree = TestUtils.renderIntoDocument(
+      <Provider store={store}>
+        <MaterialArrayLayout schema={schema} uischema={uischemaOptions.inline}/>
+      </Provider>
+    );
+
+    const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    // 2 data entries with each having 1 control
+    expect(controls.length).toBe(2);
   });
 });

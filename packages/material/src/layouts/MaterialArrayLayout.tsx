@@ -96,7 +96,8 @@ export const MaterialArrayLayout =
           {
             data ? _.map(data, (childData, index) => {
 
-              const foundUISchema = findUISchema(scopedSchema, uischema.scope, path);
+              const foundUISchema =
+                findUISchema(scopedSchema, uischema.scope, path, undefined, uischema);
               const childPath = composePaths(path, `${index}`);
               const childLabel = childData[firstPrimitiveProp];
 

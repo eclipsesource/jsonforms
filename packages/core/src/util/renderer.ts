@@ -222,9 +222,11 @@ export interface StatePropsOfScopedRenderer extends OwnPropsOfControl, StateProp
      * @param schemaPath the according schema path
      * @param path the instance path
      * @param fallbackLayoutType the type of the layout to use
+     * @param control may be checked for embedded inline uischema options
      */
     findUISchema(schema: JsonSchema, schemaPath: string,
-                 path: string, fallbackLayoutType?: string): UISchemaElement;
+                 path: string, fallbackLayoutType?: string,
+                 control?: ControlElement): UISchemaElement;
 }
 
 /**
