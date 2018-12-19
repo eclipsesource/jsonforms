@@ -346,8 +346,9 @@ export const isObjectArrayWithNesting =
     const schemaPath = (uischema as ControlElement).scope;
     const resolvedSchema = resolveSchema(schema, schemaPath);
     const wantedNestingByType: { [key: string]: number; } = { 'object': 2, 'array': 1 };
-    return _.has(resolvedSchema, 'items') &&
-      traverse(resolvedSchema.items, val => {
+    if (_.has(resolvedSchema, 'items')) {
+      // check if nested arrays
+      if (traverse(resolvedSchema.items, val => {
         if (val === schema) { return false; }
         // we don't support multiple types
         if (typeof val.type !== 'string') { return true; }
@@ -358,7 +359,19 @@ export const isObjectArrayWithNesting =
           return true;
         }
         return false;
-      });
+      })) {
+        return true;
+      }
+      // check if uischema options detail is set
+      if (uischema.options && uischema.options.detail) {
+        if (typeof uischema.options.detail === 'string') {
+          return uischema.options.detail.toUpperCase() !== 'DEFAULT';
+        } else if (typeof uischema.options.detail === 'object' && uischema.options.detail.type) {
+          return true;
+        }
+      }
+    }
+    return false;
   };
 
 const traverse = (any: JsonSchema | JsonSchema[], pred: (obj: JsonSchema) => boolean): boolean => {

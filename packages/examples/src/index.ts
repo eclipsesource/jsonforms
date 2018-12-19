@@ -27,6 +27,7 @@ import * as anyOf from './anyOf';
 import * as oneOf from './oneOf';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
+import * as arrayWithDetail from './arrays-with-detail';
 import * as stringArray from './stringArray';
 import * as categorization from './categorization';
 import * as day1 from './day1';
@@ -59,6 +60,7 @@ export {
   stringArray,
   array,
   nestedArray,
+  arrayWithDetail,
   categorization,
   day1,
   day2,
