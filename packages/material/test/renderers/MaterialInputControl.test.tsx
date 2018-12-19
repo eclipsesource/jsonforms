@@ -418,7 +418,7 @@ describe('Material input control', () => {
     expect(input.type).toBe('password');
   });
 
-  it('should render null for undefined input control', () => {
+  it('should render no applicable for undefined input control', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
@@ -444,8 +444,8 @@ describe('Material input control', () => {
       </Provider>,
       container
     );
-    const rendered = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
-    expect(rendered).toBe(undefined);
+    const rendered = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[1] as HTMLElement;
+    expect(rendered.textContent).toBe('No applicable field found.');
   });
 
   it('should render own id and create/use input id', () => {
