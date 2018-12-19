@@ -32,31 +32,29 @@ import {
 } from '@jsonforms/core';
 import { connectToJsonForms } from '@jsonforms/react';
 
-import { FormControlLabel } from '@material-ui/core';
+import { FormControlLabel, Hidden } from '@material-ui/core';
 
 import MaterialBooleanField from '../fields/MaterialBooleanField';
 
 export const MaterialBooleanControl =
-  ({  label, uischema, schema, visible, parentPath, id }: ControlProps) => {
-    let style = {};
-    if (!visible) {
-      style = {display: 'none'};
-    }
+  ({ label, uischema, schema, visible, parentPath, id }: ControlProps) => {
 
     return (
-      <FormControlLabel
-        style={style}
-        label={label}
-        id={id}
-        control={
-          <MaterialBooleanField
-            uischema={uischema}
-            schema={schema}
-            path={parentPath}
-            id={id + '-input'}
-          />
+      <Hidden xsUp={!visible}>
+        <FormControlLabel
+          label={label}
+          id={id}
+          control={
+            <MaterialBooleanField
+              uischema={uischema}
+              schema={schema}
+              path={parentPath}
+              id={id + '-input'}
+            />
           }
-      />
+        />
+      </Hidden>
+
     );
   };
 

@@ -38,6 +38,7 @@ import {
     StatePropsOfControl
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
+import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import EventIcon from '@material-ui/icons/Event';
@@ -70,10 +71,6 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
         const isValid = errors.length === 0;
         const trim = uischema.options && uischema.options.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-        let style = {};
-        if (!visible) {
-            style = {display: 'none'};
-        }
         const inputProps = {};
         const localeDateTimeFormat =
             momentLocale ? `${momentLocale.localeData().longDateFormat('L')}`
@@ -97,38 +94,39 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
             (event.target as HTMLInputElement).value;
 
         return (
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-                <DatePicker
-                    keyboard
-                    id={id + '-input'}
-                    label={computeLabel(labelText, required)}
-                    error={!isValid}
-                    style={style}
-                    fullWidth={!trim}
-                    helperText={!isValid ? errors : showDescription ? description : ' '}
-                    InputLabelProps={{shrink: true}}
-                    value={data || null}
-                    onChange={ datetime =>
-                        handleChange(path, datetime ? moment(datetime).format('YYYY-MM-DD') : '')
-                    }
-                    onInputChange={ ev =>
-                        handleChange(path, getValue(ev) ?
-                            moment(getValue(ev)).format('YYYY-MM-DD') : '')}
-                    format={localeDateTimeFormat}
-                    clearable={true}
-                    disabled={!enabled}
-                    autoFocus={uischema.options && uischema.options.focus}
-                    onClear={() => handleChange(path, '')}
-                    onFocus={this.onFocus}
-                    onBlur={this.onBlur}
-                    cancelLabel={labelCancel}
-                    clearLabel={labelClear}
-                    leftArrowIcon={<KeyboardArrowLeftIcon />}
-                    rightArrowIcon={<KeyboardArrowRightIcon />}
-                    keyboardIcon={<EventIcon />}
-                    InputProps={inputProps}
-                />
-            </MuiPickersUtilsProvider>
+            <Hidden xsUp={!visible}>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <DatePicker
+                        keyboard
+                        id={id + '-input'}
+                        label={computeLabel(labelText, required)}
+                        error={!isValid}
+                        fullWidth={!trim}
+                        helperText={!isValid ? errors : showDescription ? description : ' '}
+                        InputLabelProps={{ shrink: true }}
+                        value={data || null}
+                        onChange={datetime =>
+                            handleChange(path, datetime ? moment(datetime).format('YYYY-MM-DD') : '')
+                        }
+                        onInputChange={ev =>
+                            handleChange(path, getValue(ev) ?
+                                moment(getValue(ev)).format('YYYY-MM-DD') : '')}
+                        format={localeDateTimeFormat}
+                        clearable={true}
+                        disabled={!enabled}
+                        autoFocus={uischema.options && uischema.options.focus}
+                        onClear={() => handleChange(path, '')}
+                        onFocus={this.onFocus}
+                        onBlur={this.onBlur}
+                        cancelLabel={labelCancel}
+                        clearLabel={labelClear}
+                        leftArrowIcon={<KeyboardArrowLeftIcon />}
+                        rightArrowIcon={<KeyboardArrowRightIcon />}
+                        keyboardIcon={<EventIcon />}
+                        InputProps={inputProps}
+                    />
+                </MuiPickersUtilsProvider>
+            </Hidden>
         );
     }
 }
