@@ -42,7 +42,7 @@ import {
 } from './core';
 import { JsonFormsState } from '../store';
 import { findMatchingUISchema, uischemaRegistryReducer, UISchemaTester } from './uischemas';
-import { Generate, JsonSchema, UISchemaElement } from '..';
+import { ControlElement, Generate, JsonSchema, UISchemaElement } from '..';
 import { fetchLocale, findLocalizedSchema, i18nReducer, findLocalizedUISchema } from './i18n';
 
 export {
@@ -79,9 +79,26 @@ export const findUISchema = (state: JsonFormsState) =>
   (schema: JsonSchema,
    schemaPath: string,
    path: string,
-   fallbackLayoutType = 'VerticalLayout'
+   fallbackLayoutType = 'VerticalLayout',
+   control?: ControlElement
   ): UISchemaElement => {
-    const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(schema, schemaPath, path);
+    // handle options
+    if (control && control.options && control.options.detail) {
+      if (typeof control.options.detail === 'string') {
+        if (control.options.detail.toUpperCase() === 'GENERATE') {
+          // force generation of uischema
+          return Generate.uiSchema(schema, fallbackLayoutType);
+        }
+      } else if (typeof control.options.detail === 'object') {
+        // check if detail is a valid uischema
+        if (control.options.detail.type && typeof control.options.detail.type === 'string') {
+          return control.options.detail as UISchemaElement;
+        }
+      }
+    }
+    // default
+    const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)
+    (schema, schemaPath, path);
     if (uiSchema === undefined) {
       return Generate.uiSchema(schema, fallbackLayoutType);
     }
