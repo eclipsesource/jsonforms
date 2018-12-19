@@ -47,6 +47,7 @@ import * as config from './config';
 import * as text from './text';
 import * as numbers from './numbers';
 import * as listWithDetail from './list-with-detail';
+import * as listWithDetailRegistered from './list-with-detail-registered';
 import * as i18n from './i18n';
 import * as issue_1169 from './1169';
 export * from './register';
@@ -77,6 +78,7 @@ export {
   text,
   numbers,
   listWithDetail,
+  listWithDetailRegistered,
   i18n,
   issue_1169
 };

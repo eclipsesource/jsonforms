@@ -25,7 +25,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
-import { Actions, JsonFormsState } from '@jsonforms/core';
+import { Actions, JsonFormsState, UISchemaTester } from '@jsonforms/core';
 import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
@@ -68,6 +68,30 @@ export class AppModule {
       example.data,
       example.schema,
       example.uischema
+    ));
+
+    const uiSchema = {
+      type: 'HorizontalLayout',
+      elements: [
+          {
+              type: 'Control',
+              scope: '#/properties/buyer/properties/email'
+          },
+          {
+              type: 'Control',
+              scope: '#/properties/status'
+          },
+      ]
+    };
+    const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
+      if (schemaPath === '#/properties/warehouseitems/items') {
+        return 10;
+      }
+      return -1;
+    };
+    ngRedux.dispatch(Actions.registerUISchema(
+      itemTester,
+      uiSchema
     ));
   }
 }

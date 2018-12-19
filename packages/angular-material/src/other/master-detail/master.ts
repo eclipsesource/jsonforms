@@ -5,7 +5,6 @@ import { NgRedux } from '@angular-redux/store';
 import {
   ControlElement,
   ControlProps,
-  Generate,
   JsonFormsState,
   mapDispatchToArrayControlProps,
   RankedTester,
@@ -120,7 +119,12 @@ export class MasterListComponent extends JsonFormsControl {
     this.propsPath = props.path;
     const resolvedSchema = resolveSchema(schema, `${controlElement.scope}/items`);
     const detailUISchema = controlElement.options.detail ||
-      Generate.uiSchema(resolvedSchema, 'VerticalLayout');
+                           props.findUISchema(
+                             resolvedSchema,
+                             `${controlElement.scope}/items`,
+                             props.path,
+                             'VerticalLayout');
+
     const masterItems = (data || []).map((d: any, index: number) => {
       const labelRefInstancePath =
         removeSchemaKeywords(controlElement.options.labelRef);
