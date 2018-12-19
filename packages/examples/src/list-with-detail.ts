@@ -65,7 +65,8 @@ const schema = {
                     type: 'string',
                     enum: ['unordered', 'planned', 'ordered']
                 }
-            }
+            },
+            required: ['title']
         }
     },
     type: 'object',
@@ -76,8 +77,7 @@ const schema = {
                 $ref: '#/definitions/order'
             }
         }
-    },
-    required: ['title']
+    }
 };
 
 const uischema = {
