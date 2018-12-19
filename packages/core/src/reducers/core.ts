@@ -145,7 +145,11 @@ export const coreReducer = (
         };
       } else {
         const oldData: any = _.get(state.data, action.path);
-        const newData = action.updater(oldData);
+        let newData = action.updater(oldData);
+        if (newData === '') {
+          newData = undefined;
+        }
+
         const newState: any = _.set(_.cloneDeep(state.data), action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
 
