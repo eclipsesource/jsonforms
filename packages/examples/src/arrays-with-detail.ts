@@ -23,10 +23,13 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
+import { personCoreSchema } from './person';
 
 export const schema = {
   type: 'object',
   properties: {
+    ...personCoreSchema.properties,
+    occupation: { type: 'string' },
     comments: {
       type: 'array',
       items: {
@@ -43,7 +46,8 @@ export const schema = {
         }
       }
     }
-  }
+  },
+  required: ['occupation', 'nationality']
 };
 
 export const uischema = {
@@ -51,7 +55,22 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      scope: '#/properties/comments'
+      scope: '#/properties/comments',
+      options: {
+        detail: {
+          type: 'VerticalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/date'
+            },
+            {
+              type: 'Control',
+              scope: '#/properties/message'
+            }
+          ]
+        }
+      }
     }
   ]
 };
@@ -71,8 +90,8 @@ export const data = {
 
 registerExamples([
   {
-    name: 'array',
-    label: 'Array',
+    name: 'array-with-detail',
+    label: 'Array with detail',
     data,
     schema,
     uischema

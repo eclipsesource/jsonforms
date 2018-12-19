@@ -648,6 +648,43 @@ test('tester isObjectArrayWithNesting', t => {
       }
     }
   };
+
+  const uischemaOptions: {
+    generate: ControlElement,
+    default: ControlElement,
+    inline: ControlElement,
+  } = {
+    default: {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail : 'DEFAULT'
+      }
+    },
+    generate: {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail : 'GENERATE'
+      }
+    },
+    inline: {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail : {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/message'
+            }
+          ]
+        }
+      }
+    }
+  };
+
   t.false(isObjectArrayWithNesting(undefined, undefined));
   t.false(isObjectArrayWithNesting(null, undefined));
   t.false(isObjectArrayWithNesting({ type: 'Foo' }, undefined));
@@ -656,4 +693,8 @@ test('tester isObjectArrayWithNesting', t => {
   t.true(isObjectArrayWithNesting(uischema, nestedSchema));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema2));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema3));
+
+  t.false(isObjectArrayWithNesting(uischemaOptions.default, schema));
+  t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema));
+  t.true(isObjectArrayWithNesting(uischemaOptions.inline, schema));
 });
