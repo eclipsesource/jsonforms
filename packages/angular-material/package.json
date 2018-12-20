@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "2.1.0-rc.0",
+  "version": "2.1.0",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -55,8 +55,8 @@
     "@angular/material": "^5.2.0",
     "@angular/platform-browser": "^5.2.10",
     "@angular/platform-browser-dynamic": "^5.2.10",
-    "@jsonforms/angular": "^2.1.0-rc.0",
-    "@jsonforms/core": "^2.1.0-rc.0",
+    "@jsonforms/angular": "^2.1.0",
+    "@jsonforms/core": "^2.1.0",
     "angular-l10n": "^4.0.0-rc.0",
     "core-js": "^2.5.3",
     "hammerjs": "2.0.8",
@@ -65,8 +65,8 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@jsonforms/angular-test": "^2.1.0-rc.0",
-    "@jsonforms/examples": "^2.1.0-rc.0",
+    "@jsonforms/angular-test": "^2.1.0",
+    "@jsonforms/examples": "^2.1.0",
     "@types/node": "^10.10.0",
     "angular2-template-loader": "^0.6.2",
     "copy-webpack-plugin": "^4.5.1",
