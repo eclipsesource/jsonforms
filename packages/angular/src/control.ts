@@ -87,6 +87,8 @@ export class JsonFormsControl extends JsonFormsBaseRenderer<ControlElement>
         this.enabled ? this.form.enable() : this.form.disable();
         this.hidden = !visible;
         this.scopedSchema = Resolve.schema(schema, uischema.scope);
+        this.description =
+          this.scopedSchema !== undefined ? this.scopedSchema.description : '';
         this.id = props.id;
         this.form.setValue(data);
         this.mapAdditionalProps(props);
