@@ -345,14 +345,18 @@ export const isObjectArrayWithNesting =
     }
     const schemaPath = (uischema as ControlElement).scope;
     const resolvedSchema = resolveSchema(schema, schemaPath);
-    const minimalElementsMap: { [key: string]: number; } = { 'object': 1, 'array': 0 };
+    const wantedNestingByType: { [key: string]: number; } = { 'object': 2, 'array': 1 };
     return _.has(resolvedSchema, 'items') &&
       traverse(resolvedSchema.items, val => {
         if (val === schema) { return false; }
+        // we don't support multiple types
         if (typeof val.type !== 'string') { return true; }
-        const typeCount = minimalElementsMap[val.type];
+        const typeCount = wantedNestingByType[val.type];
         if (typeCount === undefined) { return false; }
-        if (typeCount === 0) { return true; } else { minimalElementsMap[val.type] = typeCount - 1; }
+        wantedNestingByType[val.type] = typeCount - 1;
+        if (wantedNestingByType[val.type] === 0) {
+          return true;
+        }
         return false;
       });
   };
