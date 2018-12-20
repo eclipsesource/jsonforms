@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/material-tree-renderer",
-  "version": "2.0.12",
+  "version": "2.1.0-rc.0",
   "description": "Material-based tree renderer for JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -52,8 +52,8 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.12",
-    "@jsonforms/react": "^2.0.12",
+    "@jsonforms/core": "^2.1.0-rc.0",
+    "@jsonforms/react": "^2.1.0-rc.0",
     "@material-ui/core": "^3.3.1",
     "@material-ui/icons": "^3.0.1",
     "ajv": "^6.4.0",
@@ -69,7 +69,7 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
-    "@jsonforms/material-renderers": "^2.0.12",
+    "@jsonforms/material-renderers": "^2.1.0-rc.0",
     "@types/lodash": "^4.14.104",
     "@types/recompose": "^0.27.0",
     "awesome-typescript-loader": "^3.1.3",
