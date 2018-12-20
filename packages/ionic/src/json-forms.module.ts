@@ -110,8 +110,6 @@ const emptyL10NConfig: L10nConfig = {};
     // other
     LabelRenderer
   ],
-  providers: [
-    ParamsService
-  ]
+  providers: [ParamsService]
 })
 export class JsonFormsIonicModule {}

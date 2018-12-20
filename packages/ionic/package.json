@@ -56,6 +56,7 @@
     "@ionic-native/status-bar": "4.7.0",
     "@jsonforms/angular": "^2.1.1-alpha.2",
     "@jsonforms/core": "^2.1.1-alpha.2",
+    "angular-l10n": "^4.0.0-rc.0",
     "ionic-angular": "3.9.2",
     "ionic-selectable": "^3.0.3",
     "ionicons": "3.0.0",
