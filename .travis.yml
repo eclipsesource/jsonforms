@@ -16,6 +16,7 @@ install:
   - lerna bootstrap --hoist --npm-ci-mode
 
 script:
+  - prettier --list-different '**/*.ts'
   - lerna run build
   - lerna run bundle
   - lerna run test-cov
