@@ -16,6 +16,7 @@
 		"lcov-result-merger": "^2.0.0",
 		"lerna": "^2.11.0",
 		"nyc": "^11.8.0",
+		"prettier": "^1.15.3",
 		"source-map-loader": "^0.2.3",
 		"style-loader": "^0.21.0",
 		"ts-loader": "^5.3.3",
