@@ -25,16 +25,46 @@
 import 'hammerjs';
 import { RankedTester } from '@jsonforms/core';
 export * from './module';
-import { BooleanControlRenderer, booleanControlTester } from './controls/boolean.renderer';
-import { TextControlRenderer, TextControlRendererTester } from './controls/text.renderer';
-import { TextAreaRenderer, TextAreaRendererTester } from './controls/textarea.renderer';
-import { NumberControlRenderer, NumberControlRendererTester } from './controls/number.renderer';
-import { RangeControlRenderer, RangeControlRendererTester } from './controls/range.renderer';
-import { DateControlRenderer, DateControlRendererTester } from './controls/date.renderer';
-import { ToggleControlRenderer, ToggleControlRendererTester } from './controls/toggle.renderer';
-import { AutocompleteControlRenderer, enumControlTester } from './controls/autocomplete.renderer';
-import { ObjectControlRenderer, ObjectControlRendererTester } from './other/object.renderer';
-import { VerticalLayoutRenderer, verticalLayoutTester } from './layouts/vertical-layout.renderer';
+import {
+  BooleanControlRenderer,
+  booleanControlTester
+} from './controls/boolean.renderer';
+import {
+  TextControlRenderer,
+  TextControlRendererTester
+} from './controls/text.renderer';
+import {
+  TextAreaRenderer,
+  TextAreaRendererTester
+} from './controls/textarea.renderer';
+import {
+  NumberControlRenderer,
+  NumberControlRendererTester
+} from './controls/number.renderer';
+import {
+  RangeControlRenderer,
+  RangeControlRendererTester
+} from './controls/range.renderer';
+import {
+  DateControlRenderer,
+  DateControlRendererTester
+} from './controls/date.renderer';
+import {
+  ToggleControlRenderer,
+  ToggleControlRendererTester
+} from './controls/toggle.renderer';
+import {
+  AutocompleteControlRenderer,
+  enumControlTester
+} from './controls/autocomplete.renderer';
+import {
+  ObjectControlRenderer,
+  ObjectControlRendererTester
+} from './other/object.renderer';
+import {
+  VerticalLayoutRenderer,
+  verticalLayoutTester
+} from './layouts/vertical-layout.renderer';
 import {
   HorizontalLayoutRenderer,
   horizontalLayoutTester
@@ -46,15 +76,23 @@ import {
 } from './layouts/categorization-layout.renderer';
 
 import { LabelRenderer, LabelRendererTester } from './other/label.renderer';
-import { masterDetailTester, MasterListComponent } from './other/master-detail/master';
-import { GroupLayoutRenderer, groupLayoutTester } from './layouts/group-layout.renderer';
+import {
+  masterDetailTester,
+  MasterListComponent
+} from './other/master-detail/master';
+import {
+  GroupLayoutRenderer,
+  groupLayoutTester
+} from './layouts/group-layout.renderer';
 
 export * from './controls';
 export * from './layouts';
 export * from './other';
 
-export const angularMaterialRenderers:
-  { tester: RankedTester, renderer: any }[] = [
+export const angularMaterialRenderers: {
+  tester: RankedTester;
+  renderer: any;
+}[] = [
   // controls
   { tester: booleanControlTester, renderer: BooleanControlRenderer },
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
@@ -72,5 +110,5 @@ export const angularMaterialRenderers:
   { tester: categorizationTester, renderer: CategorizationTabLayoutRenderer },
   { tester: LabelRendererTester, renderer: LabelRenderer },
   // other
-  { tester: masterDetailTester, renderer: MasterListComponent },
+  { tester: masterDetailTester, renderer: MasterListComponent }
 ];

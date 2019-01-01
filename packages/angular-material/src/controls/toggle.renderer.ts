@@ -26,38 +26,39 @@ import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
-    and,
-    isBooleanControl,
-    JsonFormsState,
-    optionIs,
-    RankedTester,
-    rankWith
+  and,
+  isBooleanControl,
+  JsonFormsState,
+  optionIs,
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
 
 @Component({
-    selector: 'ToggleControlRenderer',
-    template: `
+  selector: 'ToggleControlRenderer',
+  template: `
     <div [fxHide]="hidden">
-        <mat-slide-toggle
-            (change)="onChange($event)"
-            [checked]="isChecked()"
-            [disabled]="!enabled"
-            [id]="id">
-            {{ label }}
-        </mat-slide-toggle>
-        <mat-error class='mat-caption'>{{ error }}</mat-error>
+      <mat-slide-toggle
+        (change)="onChange($event)"
+        [checked]="isChecked()"
+        [disabled]="!enabled"
+        [id]="id"
+      >
+        {{ label }}
+      </mat-slide-toggle>
+      <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
-    `
+  `
 })
 export class ToggleControlRenderer extends JsonFormsControl {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
-    isChecked = () => this.data || false;
-    getEventValue = (event: any) => event.checked;
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  isChecked = () => this.data || false;
+  getEventValue = (event: any) => event.checked;
 }
 
 export const ToggleControlRendererTester: RankedTester = rankWith(
-    3,
-    and(isBooleanControl, optionIs('toggle', true)),
+  3,
+  and(isBooleanControl, optionIs('toggle', true))
 );

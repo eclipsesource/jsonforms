@@ -23,16 +23,17 @@
   THE SOFTWARE.
 */
 import { createThemeSelection } from './theme.switcher';
-import { stylingReducer, vanillaFields, vanillaRenderers, vanillaStyles } from '../src';
+import {
+  stylingReducer,
+  vanillaFields,
+  vanillaRenderers,
+  vanillaStyles
+} from '../src';
 import { renderExample } from '../../example/src/index';
 
-renderExample(
-  vanillaRenderers,
-  vanillaFields,
-  {
-    name: 'styles',
-    reducer: stylingReducer,
-    state: vanillaStyles
-  }
-);
+renderExample(vanillaRenderers, vanillaFields, {
+  name: 'styles',
+  reducer: stylingReducer,
+  state: vanillaStyles
+});
 createThemeSelection();

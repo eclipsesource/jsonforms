@@ -23,21 +23,29 @@
   THE SOFTWARE.
 */
 import { RankedTester } from '../testers';
-import { ADD_RENDERER, AddRendererAction, REMOVE_RENDERER, RemoveRendererAction } from '../actions';
+import {
+  ADD_RENDERER,
+  AddRendererAction,
+  REMOVE_RENDERER,
+  RemoveRendererAction
+} from '../actions';
 
 export interface JsonFormsRendererRegistryEntry {
-    tester: RankedTester;
-    renderer: any;
+  tester: RankedTester;
+  renderer: any;
 }
 
 type ValidRendererReducerActions = AddRendererAction | RemoveRendererAction;
 
 export const rendererReducer = (
   state: JsonFormsRendererRegistryEntry[] = [],
-  action: ValidRendererReducerActions) => {
+  action: ValidRendererReducerActions
+) => {
   switch (action.type) {
     case ADD_RENDERER:
-      return state.concat([{tester: action.tester, renderer: action.renderer}]);
+      return state.concat([
+        { tester: action.tester, renderer: action.renderer }
+      ]);
     case REMOVE_RENDERER:
       return state.filter(t => t.tester !== action.tester);
     default:

@@ -24,26 +24,27 @@
 */
 import { registerExamples } from './register';
 import {
-    Actions,
-    ControlElement, JsonSchema,
-    NOT_APPLICABLE,
-    VerticalLayout
+  Actions,
+  ControlElement,
+  JsonSchema,
+  NOT_APPLICABLE,
+  VerticalLayout
 } from '@jsonforms/core';
 import { AnyAction, Dispatch } from 'redux';
 
 const schema = {
-  'type': 'object',
-  'properties': {
-    'exampleArray': {
-      'type': 'array',
-      'items': {
-        'type': 'object',
-        'properties': {
-          'name': { 'type': 'string' },
-          'choices': {
-            'type': 'array',
-            'items': {
-              'type': 'string'
+  type: 'object',
+  properties: {
+    exampleArray: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          choices: {
+            type: 'array',
+            items: {
+              type: 'string'
             }
           }
         }
@@ -53,29 +54,24 @@ const schema = {
 };
 
 const uischema = {
-  'type': 'HorizontalLayout',
-  'elements': [
+  type: 'HorizontalLayout',
+  elements: [
     {
-      'type': 'Control',
-      'label': {
-         text: 'Example Array',
-         show: true
+      type: 'Control',
+      label: {
+        text: 'Example Array',
+        show: true
       },
-      'scope': '#/properties/exampleArray'
+      scope: '#/properties/exampleArray'
     }
   ]
 };
 
 const data = {
-  'exampleArray': [
+  exampleArray: [
     {
-      'choices': [
-        'This',
-        'is',
-        'an',
-        'example'
-      ],
-      'name': 'Hi there'
+      choices: ['This', 'is', 'an', 'example'],
+      name: 'Hi there'
     }
   ]
 };
@@ -87,7 +83,7 @@ registerExamples([
     data,
     schema,
     uischema
-  },
+  }
 ]);
 
 const nestedArrayTester = (_jsonSchema: JsonSchema, schemaPath: string) => {
@@ -109,6 +105,8 @@ export const nestedArrayLayout: VerticalLayout = {
 export const registerNestedArrayUISchema = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerUISchema(nestedArrayTester, nestedArrayLayout));
 };
-export const unregisterNestedArrayUISchema = (dispatch: Dispatch<AnyAction>) => {
+export const unregisterNestedArrayUISchema = (
+  dispatch: Dispatch<AnyAction>
+) => {
   dispatch(Actions.unregisterUISchema(nestedArrayTester));
 };

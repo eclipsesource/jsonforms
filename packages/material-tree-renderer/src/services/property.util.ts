@@ -4,10 +4,10 @@ import { resolveSchema } from '@jsonforms/core';
 import * as JsonRefs from 'json-refs';
 
 const isObject = (schema: JsonSchema): boolean => {
-    return schema.properties !== undefined;
+  return schema.properties !== undefined;
 };
 const isArray = (schema: JsonSchema): boolean => {
-    return schema.items !== undefined;
+  return schema.items !== undefined;
 };
 
 /**
@@ -15,31 +15,30 @@ const isArray = (schema: JsonSchema): boolean => {
  * like a label and the property key.
  */
 export interface Property {
+  label: string;
 
-    label: string;
+  property: string;
 
-    property: string;
+  schemaPath: string;
 
-    schemaPath: string;
-
-    /**
-     * The schema is the JsonSchema this property describes.
-     */
-    schema: JsonSchema;
+  /**
+   * The schema is the JsonSchema this property describes.
+   */
+  schema: JsonSchema;
 }
 
 /**
  * Interface for describing result of an extracted schema ref
  */
 interface SchemaRef {
-    uri: string;
+  uri: string;
 }
 
 /**
  * Interface wraps SchemaRef
  */
 interface SchemaRefs {
-    [id: string]: SchemaRef;
+  [id: string]: SchemaRef;
 }
 
 /**
@@ -48,14 +47,10 @@ interface SchemaRefs {
  * @returns {string}
  */
 export const findPropertyLabel = (property: Property): string => {
-    return _.find(
-        [
-            property.schema.title,
-            property.label,
-            property.property
-        ],
-        n => !_.isEmpty(n)
-    );
+  return _.find(
+    [property.schema.title, property.label, property.property],
+    n => !_.isEmpty(n)
+  );
 };
 
 /**
@@ -67,28 +62,33 @@ export const findPropertyLabel = (property: Property): string => {
  * @param extractedReferences Contains the definition attributes for the current schema
  * @returns SchemaRefs all the required reference paths for subschema
  */
-const findReferences = (parentSchema: JsonSchema,
-                        allRefs: SchemaRefs,
-                        schemaRefs: SchemaRefs,
-                        extractedReferences: { [id: string]: string }
+const findReferences = (
+  parentSchema: JsonSchema,
+  allRefs: SchemaRefs,
+  schemaRefs: SchemaRefs,
+  extractedReferences: { [id: string]: string }
 ) =>
-    _.reduce(
-        schemaRefs, (prev, schemaRefValue)  => {
-            let refs = _.pickBy(prev, _.flip(key => _.startsWith(key, schemaRefValue.uri)));
-            if (extractedReferences[schemaRefValue.uri]) {
-                refs = undefined;
-            }
-            if (!extractedReferences[schemaRefValue.uri]) {
-                extractedReferences[schemaRefValue.uri] = schemaRefValue.uri;
-                prev = _.omitBy(prev, value => value.uri === schemaRefValue.uri);
-            }
-            if (refs !== undefined) {
-                findReferences(parentSchema, prev, refs, extractedReferences);
-            }
-            return prev;
-        },
-        allRefs
-    );
+  _.reduce(
+    schemaRefs,
+    (prev, schemaRefValue) => {
+      let refs = _.pickBy(
+        prev,
+        _.flip(key => _.startsWith(key, schemaRefValue.uri))
+      );
+      if (extractedReferences[schemaRefValue.uri]) {
+        refs = undefined;
+      }
+      if (!extractedReferences[schemaRefValue.uri]) {
+        extractedReferences[schemaRefValue.uri] = schemaRefValue.uri;
+        prev = _.omitBy(prev, value => value.uri === schemaRefValue.uri);
+      }
+      if (refs !== undefined) {
+        findReferences(parentSchema, prev, refs, extractedReferences);
+      }
+      return prev;
+    },
+    allRefs
+  );
 
 /**
  * Calculate references for a given schema and copy definitions into the schema
@@ -98,42 +98,51 @@ const findReferences = (parentSchema: JsonSchema,
  * @returns JsonSchema current subschema with resolved references
  */
 export const makeSchemaSelfContained = (
-    parentSchema: JsonSchema,
-    schema: JsonSchema
+  parentSchema: JsonSchema,
+  schema: JsonSchema
 ): JsonSchema => {
-    const schemaRefs = JsonRefs.findRefs(schema, {resolveCirculars: true}) as SchemaRefs;
-    const allRefs = JsonRefs.findRefs(parentSchema, {resolveCirculars: true}) as SchemaRefs;
-    let extractedReferences;
-    findReferences(parentSchema, allRefs, schemaRefs, extractedReferences = {});
-    const refList = _.values(extractedReferences) as string[];
-    if (!_.isEmpty(refList)) {
-        _.each(refList, ref => {
-            const propertyKey = ref.substring((ref.indexOf('/') + 1), (ref.lastIndexOf('/')));
-            const property = ref.substring((ref.lastIndexOf('/') + 1));
-            if (_.has(parentSchema, propertyKey) &&
-                _.has(parentSchema, `${propertyKey}.${property}`)) {
-                if (_.get(schema, propertyKey)) {
-                    _.set(schema, propertyKey, {
-                        ..._.get(schema, propertyKey),
-                        ...{
-                            [property]: _.get(parentSchema, [propertyKey, property])
-                        }
-                    });
-                } else {
-                    schema = {
-                        ...schema,
-                        ...{
-                            [propertyKey]: {
-                                [property]: _.get(parentSchema, [propertyKey, property])
-                            }
-                        }
-                    };
-                }
+  const schemaRefs = JsonRefs.findRefs(schema, {
+    resolveCirculars: true
+  }) as SchemaRefs;
+  const allRefs = JsonRefs.findRefs(parentSchema, {
+    resolveCirculars: true
+  }) as SchemaRefs;
+  let extractedReferences;
+  findReferences(parentSchema, allRefs, schemaRefs, (extractedReferences = {}));
+  const refList = _.values(extractedReferences) as string[];
+  if (!_.isEmpty(refList)) {
+    _.each(refList, ref => {
+      const propertyKey = ref.substring(
+        ref.indexOf('/') + 1,
+        ref.lastIndexOf('/')
+      );
+      const property = ref.substring(ref.lastIndexOf('/') + 1);
+      if (
+        _.has(parentSchema, propertyKey) &&
+        _.has(parentSchema, `${propertyKey}.${property}`)
+      ) {
+        if (_.get(schema, propertyKey)) {
+          _.set(schema, propertyKey, {
+            ..._.get(schema, propertyKey),
+            ...{
+              [property]: _.get(parentSchema, [propertyKey, property])
             }
-        });
-    }
+          });
+        } else {
+          schema = {
+            ...schema,
+            ...{
+              [propertyKey]: {
+                [property]: _.get(parentSchema, [propertyKey, property])
+              }
+            }
+          };
+        }
+      }
+    });
+  }
 
-    return schema;
+  return schema;
 };
 
 /**
@@ -142,14 +151,16 @@ export const makeSchemaSelfContained = (
  * @param refPath The path to resolve
  * @return a JsonSchema that is self-contained
  */
-const resolveAndMakeSchemaSelfContained =
-    (parentSchema: JsonSchema, refPath: string): JsonSchema => {
-        const schema: JsonSchema = resolveSchema(parentSchema, refPath) as JsonSchema;
-        return {
-            ...schema,
-            ...makeSchemaSelfContained(parentSchema, schema)
-        } as JsonSchema;
-    };
+const resolveAndMakeSchemaSelfContained = (
+  parentSchema: JsonSchema,
+  refPath: string
+): JsonSchema => {
+  const schema: JsonSchema = resolveSchema(parentSchema, refPath) as JsonSchema;
+  return {
+    ...schema,
+    ...makeSchemaSelfContained(parentSchema, schema)
+  } as JsonSchema;
+};
 
 /**
  * Returns a flattened list of container properties.
@@ -166,102 +177,101 @@ const resolveAndMakeSchemaSelfContained =
  * @returns {@link Property[]} An array of properties where each property describes
  *                             a self-contained schema for the corresponding schema
  */
-const findContainerProps = (property: string,
-                            label: string,
-                            schemaPath: string,
-                            schema: JsonSchema,
-                            rootSchema: JsonSchema,
-                            isInContainer: boolean,
-                            visited: string[],
-                            recurse: boolean): Property[] => {
+const findContainerProps = (
+  property: string,
+  label: string,
+  schemaPath: string,
+  schema: JsonSchema,
+  rootSchema: JsonSchema,
+  isInContainer: boolean,
+  visited: string[],
+  recurse: boolean
+): Property[] => {
+  if (schema.$ref !== undefined) {
+    if (visited.indexOf(schema.$ref) !== -1) {
+      return [];
+    }
+    return findContainerProps(
+      property,
+      schema.$ref === '#'
+        ? undefined
+        : schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
+      schemaPath,
+      resolveAndMakeSchemaSelfContained(rootSchema, schema.$ref),
+      rootSchema,
+      isInContainer,
+      visited.slice().concat(schema.$ref),
+      recurse
+    );
+  } else if (isObject(schema)) {
+    const props = [];
 
-    if (schema.$ref !== undefined) {
-        if (visited.indexOf(schema.$ref) !== -1) {
-            return [];
-        }
-        return findContainerProps(
-            property,
-            schema.$ref === '#' ?
-                undefined :
-                schema.$ref.substring(schema.$ref.lastIndexOf('/') + 1),
-            schemaPath,
-            resolveAndMakeSchemaSelfContained(rootSchema, schema.$ref),
-            rootSchema,
-            isInContainer,
-            visited.slice().concat(schema.$ref),
-            recurse
-        );
-    } else if (isObject(schema)) {
-        const props = [];
+    if (isInContainer) {
+      const prop: Property = {
+        property,
+        label,
+        schema,
+        schemaPath
+      };
+      props.push(prop);
 
-        if (isInContainer) {
-            const prop: Property =  {
-                property,
-                label,
-                schema,
-                schemaPath
-            };
-            props.push(prop);
-
-            if (!recurse) {
-                return props;
-            }
-        }
-
-        return Object.keys(schema.properties)
-            .reduce(
-                (prev, currentProp) =>
-                    prev.concat(
-                        findContainerProps(
-                            currentProp,
-                            currentProp,
-                            `${
-                                schemaPath.length > 0 ? schemaPath + '.' : ''
-                            }properties.${currentProp}`,
-                            schema.properties[currentProp],
-                            rootSchema,
-                            false,
-                            visited,
-                            recurse
-                        )
-                    ),
-                props
-            );
-    } else if (isArray(schema) && !Array.isArray(schema.items)) {
-
-        return findContainerProps(
-            property,
-            label,
-            `${schemaPath}.items`,
-            schema.items,
-            rootSchema,
-            true,
-            visited,
-            recurse
-        );
-    } else if (schema.anyOf !== undefined) {
-        // TODO: oneOf?
-        const init: Property[] = [];
-        return _.reduce(
-            schema.anyOf,
-            (prev: Property[], anyOfSubSchema: JsonSchema, index: number) =>
-                prev.concat(
-                    findContainerProps(
-                        property,
-                        label,
-                        `${schemaPath}.anyOf.${index}`,
-                        anyOfSubSchema,
-                        rootSchema,
-                        isInContainer,
-                        visited,
-                        recurse
-                    )
-                ),
-            init
-        );
+      if (!recurse) {
+        return props;
+      }
     }
 
-    return [];
+    return Object.keys(schema.properties).reduce(
+      (prev, currentProp) =>
+        prev.concat(
+          findContainerProps(
+            currentProp,
+            currentProp,
+            `${
+              schemaPath.length > 0 ? schemaPath + '.' : ''
+            }properties.${currentProp}`,
+            schema.properties[currentProp],
+            rootSchema,
+            false,
+            visited,
+            recurse
+          )
+        ),
+      props
+    );
+  } else if (isArray(schema) && !Array.isArray(schema.items)) {
+    return findContainerProps(
+      property,
+      label,
+      `${schemaPath}.items`,
+      schema.items,
+      rootSchema,
+      true,
+      visited,
+      recurse
+    );
+  } else if (schema.anyOf !== undefined) {
+    // TODO: oneOf?
+    const init: Property[] = [];
+    return _.reduce(
+      schema.anyOf,
+      (prev: Property[], anyOfSubSchema: JsonSchema, index: number) =>
+        prev.concat(
+          findContainerProps(
+            property,
+            label,
+            `${schemaPath}.anyOf.${index}`,
+            anyOfSubSchema,
+            rootSchema,
+            isInContainer,
+            visited,
+            recurse
+          )
+        ),
+      init
+    );
+  }
+
+  return [];
 };
 
 /**
@@ -274,6 +284,18 @@ const findContainerProps = (property: string,
  * @return The array of {@link Property} or empty if no properties are available
  * @see Property
  */
-export const findContainerProperties =
-    (schema: JsonSchema, rootSchema: JsonSchema, recurse: boolean): Property[] =>
-        findContainerProps('root', 'root', '', schema, rootSchema, false, [], recurse);
+export const findContainerProperties = (
+  schema: JsonSchema,
+  rootSchema: JsonSchema,
+  recurse: boolean
+): Property[] =>
+  findContainerProps(
+    'root',
+    'root',
+    '',
+    schema,
+    rootSchema,
+    false,
+    [],
+    recurse
+  );

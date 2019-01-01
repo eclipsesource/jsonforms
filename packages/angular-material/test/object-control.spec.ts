@@ -27,7 +27,11 @@ import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatCardModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule
+} from '@angular/material';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
@@ -38,11 +42,17 @@ import {
   VerticalLayoutRenderer,
   verticalLayoutTester
 } from '../src';
-import { ObjectControlRenderer, ObjectControlRendererTester } from '../src/other/object.renderer';
+import {
+  ObjectControlRenderer,
+  ObjectControlRendererTester
+} from '../src/other/object.renderer';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
-const uischema2: ControlElement = { type: 'Control', scope: '#/properties/foo' };
+const uischema2: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
 const schema1 = {
   type: 'object',
   properties: {
@@ -68,7 +78,7 @@ const schema2 = {
 };
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
-  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
+  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer }
 ];
 
 describe('Object Control tester', () => {
@@ -99,18 +109,14 @@ describe('Object Control', () => {
         ReactiveFormsModule,
         FlexLayoutModule
       ],
-      providers: [
-        { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-      ]
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-          entryComponents: [
-            TextControlRenderer,
-            VerticalLayoutRenderer
-          ]
-      }
-  })
-  .compileComponents();
+      providers: [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }]
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [TextControlRenderer, VerticalLayoutRenderer]
+        }
+      })
+      .compileComponents();
 
     MockNgRedux.reset();
     fixture = TestBed.createComponent(ObjectControlRenderer);
@@ -127,7 +133,7 @@ describe('Object Control', () => {
         renderers: renderers,
         core: {
           data: {},
-          schema: schema2,
+          schema: schema2
         }
       }
     });
@@ -149,7 +155,7 @@ describe('Object Control', () => {
         renderers: renderers,
         core: {
           data: {},
-          schema: schema2,
+          schema: schema2
         }
       }
     });
@@ -172,7 +178,7 @@ describe('Object Control', () => {
         renderers: renderers,
         core: {
           data: {},
-          schema: schema1,
+          schema: schema1
         }
       }
     });
@@ -193,7 +199,7 @@ describe('Object Control', () => {
         renderers: renderers,
         core: {
           data: {},
-          schema: schema1,
+          schema: schema1
         }
       }
     });
@@ -205,5 +211,4 @@ describe('Object Control', () => {
       expect(fixture.nativeElement.querySelector('input').disabled).toBeFalsy();
     });
   }));
-
 });

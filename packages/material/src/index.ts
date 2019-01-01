@@ -24,18 +24,21 @@
 */
 import { FieldProps, RankedTester } from '@jsonforms/core';
 import {
-    materialAllOfControlTester,
-    MaterialAllOfRenderer,
-    materialAnyOfControlTester,
-    MaterialAnyOfRenderer,
-    MaterialArrayControlRenderer,
-    materialArrayControlTester,
-    materialObjectControlTester,
-    MaterialObjectRenderer,
-    materialOneOfControlTester,
-    MaterialOneOfRenderer,
+  materialAllOfControlTester,
+  MaterialAllOfRenderer,
+  materialAnyOfControlTester,
+  MaterialAnyOfRenderer,
+  MaterialArrayControlRenderer,
+  materialArrayControlTester,
+  materialObjectControlTester,
+  MaterialObjectRenderer,
+  materialOneOfControlTester,
+  MaterialOneOfRenderer
 } from './complex';
-import { MaterialLabelRenderer, materialLabelRendererTester } from './additional';
+import {
+  MaterialLabelRenderer,
+  materialLabelRendererTester
+} from './additional';
 import {
   MaterialBooleanControl,
   materialBooleanControlTester,
@@ -60,7 +63,7 @@ import {
   MaterialHorizontalLayout,
   materialHorizontalLayoutTester,
   MaterialVerticalLayout,
-  materialVerticalLayoutTester,
+  materialVerticalLayoutTester
 } from './layouts';
 import {
   MaterialBooleanField,
@@ -88,9 +91,12 @@ export * from './layouts';
 export * from './fields';
 export * from './util';
 
-export const materialRenderers: { tester: RankedTester, renderer: any}[] = [
+export const materialRenderers: { tester: RankedTester; renderer: any }[] = [
   // controls
-  { tester: materialArrayControlTester, renderer: MaterialArrayControlRenderer },
+  {
+    tester: materialArrayControlTester,
+    renderer: MaterialArrayControlRenderer
+  },
   { tester: materialBooleanControlTester, renderer: MaterialBooleanControl },
   { tester: materialNativeControlTester, renderer: MaterialNativeControl },
   { tester: materialInputControlTester, renderer: MaterialInputControl },
@@ -103,15 +109,24 @@ export const materialRenderers: { tester: RankedTester, renderer: any}[] = [
   { tester: materialOneOfControlTester, renderer: MaterialOneOfRenderer },
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
-  { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },
+  {
+    tester: materialHorizontalLayoutTester,
+    renderer: MaterialHorizontalLayout
+  },
   { tester: materialVerticalLayoutTester, renderer: MaterialVerticalLayout },
-  { tester: materialCategorizationTester, renderer: MaterialCategorizationLayout },
+  {
+    tester: materialCategorizationTester,
+    renderer: MaterialCategorizationLayout
+  },
   { tester: materialArrayLayoutTester, renderer: MaterialArrayLayout },
   // additional
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
 ];
 
-export const materialFields: { tester: RankedTester, field: ComponentType<FieldProps> }[] = [
+export const materialFields: {
+  tester: RankedTester;
+  field: ComponentType<FieldProps>;
+}[] = [
   { tester: materialBooleanFieldTester, field: MaterialBooleanField },
   { tester: materialDateFieldTester, field: MaterialDateField },
   { tester: materialEnumFieldTester, field: MaterialEnumField },
@@ -119,5 +134,5 @@ export const materialFields: { tester: RankedTester, field: ComponentType<FieldP
   { tester: materialNumberFieldTester, field: MaterialNumberField },
   { tester: materialNumberFormatFieldTester, field: MaterialNumberFormatField },
   { tester: materialTextFieldTester, field: MaterialTextField },
-  { tester: materialTimeFieldTester, field: MaterialTimeField },
+  { tester: materialTimeFieldTester, field: MaterialTimeField }
 ];

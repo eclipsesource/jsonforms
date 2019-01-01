@@ -23,14 +23,20 @@
   THE SOFTWARE.
 */
 import { NgRedux } from '@angular-redux/store';
-import { JsonFormsState, mapStateToLayoutProps, StatePropsOfLayout } from '@jsonforms/core';
+import {
+  JsonFormsState,
+  mapStateToLayoutProps,
+  StatePropsOfLayout
+} from '@jsonforms/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-export const connectLayoutToJsonForms =
-(store: NgRedux<JsonFormsState>, ownProps: any): Observable<StatePropsOfLayout> =>
-    store.select(state => {
-        const props = mapStateToLayoutProps(state, ownProps);
+export const connectLayoutToJsonForms = (
+  store: NgRedux<JsonFormsState>,
+  ownProps: any
+): Observable<StatePropsOfLayout> =>
+  store.select(state => {
+    const props = mapStateToLayoutProps(state, ownProps);
 
-        return props;
-    });
+    return props;
+  });

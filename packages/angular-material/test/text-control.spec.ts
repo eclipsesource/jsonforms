@@ -26,61 +26,68 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatError,
+  MatFormFieldModule,
+  MatInputModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    ErrorTestExpectation,
-    textBaseTest,
-    textErrorTest,
-    textInputEventTest,
-    textTypeTest
+  ErrorTestExpectation,
+  textBaseTest,
+  textErrorTest,
+  textInputEventTest,
+  textTypeTest
 } from '@jsonforms/angular-test';
 import { TextControlRenderer, TextControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material text field tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo'
-    };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
 
-    it('should succeed', () => {
-        expect(
-            TextControlRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'string'
-                        }
-                    }
-                }
-            )
-        ).toBe(1);
-    });
+  it('should succeed', () => {
+    expect(
+      TextControlRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string'
+          }
+        }
+      })
+    ).toBe(1);
+  });
 });
 const imports = [
-    MatFormFieldModule,
-    MatInputModule,
-    NoopAnimationsModule,
-    ReactiveFormsModule,
-    FlexLayoutModule
+  MatFormFieldModule,
+  MatInputModule,
+  NoopAnimationsModule,
+  ReactiveFormsModule,
+  FlexLayoutModule
 ];
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = TextControlRenderer;
 const errorTest: ErrorTestExpectation = {
-    errorInstance: MatError,
-    numberOfElements: 1,
-    indexOfElement: 0
+  errorInstance: MatError,
+  numberOfElements: 1,
+  indexOfElement: 0
 };
 const toSelect = (el: DebugElement) => el.nativeElement;
-const testConfig = {imports, providers, componentUT};
+const testConfig = { imports, providers, componentUT };
 
-describe('Text control Base Tests', textBaseTest(testConfig, 'input', toSelect));
-describe('Text control Input Event Tests',
-         textInputEventTest(testConfig, 'input', toSelect));
+describe(
+  'Text control Base Tests',
+  textBaseTest(testConfig, 'input', toSelect)
+);
+describe(
+  'Text control Input Event Tests',
+  textInputEventTest(testConfig, 'input', toSelect)
+);
 describe('Text control Error Tests', textErrorTest(testConfig, errorTest));
-describe('Text control Type Tests', textTypeTest(testConfig, 'input', toSelect));
+describe(
+  'Text control Type Tests',
+  textTypeTest(testConfig, 'input', toSelect)
+);

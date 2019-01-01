@@ -21,6 +21,7 @@ const isUniqueId = (idBase: string, iteration: number) => {
   return !usedIds.has(newID);
 };
 
-const makeId = (idBase: string, iteration: number) => iteration <= 1 ? idBase : idBase + iteration;
+const makeId = (idBase: string, iteration: number) =>
+  iteration <= 1 ? idBase : idBase + iteration;
 
 export const clearAllIds = () => usedIds.clear();

@@ -26,14 +26,20 @@ import test from 'ava';
 import * as _ from 'lodash';
 import * as Redux from 'redux';
 import {
-    clearAllIds,
-    defaultMapDispatchToControlProps,
-    defaultMapStateToEnumFieldProps, DispatchPropsOfField,
-    mapStateToFieldProps
+  clearAllIds,
+  defaultMapDispatchToControlProps,
+  defaultMapStateToEnumFieldProps,
+  DispatchPropsOfField,
+  mapStateToFieldProps
 } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
-import { ControlElement, JsonFormsState, RuleEffect, UISchemaElement } from '../../src';
+import {
+  ControlElement,
+  JsonFormsState,
+  RuleEffect,
+  UISchemaElement
+} from '../../src';
 
 const middlewares: Redux.Middleware[] = [];
 const mockStore = configureStore<JsonFormsState>(middlewares);
@@ -58,7 +64,7 @@ const disableRule = {
 
 const coreUISchema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/firstName',
+  scope: '#/properties/firstName'
 };
 
 const createState = (uischema: UISchemaElement): JsonFormsState => ({
@@ -226,7 +232,7 @@ test('mapStateToFieldProps - id', t => {
 test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
   const uiSchema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/nationality',
+    scope: '#/properties/nationality'
   };
   const ownProps = {
     schema: {
@@ -243,7 +249,10 @@ test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
     uischema: uiSchema
   };
 
-  const props = defaultMapStateToEnumFieldProps(createState(uiSchema), ownProps);
+  const props = defaultMapStateToEnumFieldProps(
+    createState(uiSchema),
+    ownProps
+  );
   t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
   t.is(props.data, undefined);
 });
@@ -251,7 +260,7 @@ test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
 test('mapStateToFieldProps - set data of enum field', t => {
   const uiSchema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/nationality',
+    scope: '#/properties/nationality'
   };
   const ownProps = {
     data: {
@@ -279,7 +288,7 @@ test('defaultMapDispatchToControlProps, initialized with custom handleChange', t
   let didChange = false;
   const uiSchema = {
     type: 'Control',
-    scope: '#/properties/nationality',
+    scope: '#/properties/nationality'
   };
   const ownProps = {
     handleChange: () => {
@@ -287,7 +296,10 @@ test('defaultMapDispatchToControlProps, initialized with custom handleChange', t
     }
   };
   const store = mockStore(createState(uiSchema));
-  const props: DispatchPropsOfField = defaultMapDispatchToControlProps(store.dispatch, ownProps);
+  const props: DispatchPropsOfField = defaultMapDispatchToControlProps(
+    store.dispatch,
+    ownProps
+  );
   props.handleChange(undefined, undefined);
   t.true(didChange);
 });
@@ -295,7 +307,7 @@ test('defaultMapDispatchToControlProps, initialized with custom handleChange', t
 test('defaultMapDispatchToControlProps, with default handleChange', t => {
   const uiSchema = {
     type: 'Control',
-    scope: '#/properties/nationality',
+    scope: '#/properties/nationality'
   };
   const store = mockStore(createState(uiSchema));
   const props = defaultMapDispatchToControlProps(store.dispatch, {});

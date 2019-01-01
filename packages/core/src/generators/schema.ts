@@ -26,115 +26,114 @@
 import { JsonSchema4 } from '../models/jsonSchema4';
 
 const ADDITIONAL_PROPERTIES = 'additionalProperties';
-const REQUIRED_PROPERTIES   = 'required';
+const REQUIRED_PROPERTIES = 'required';
 
-type Properties = {[property: string]: JsonSchema4};
+type Properties = { [property: string]: JsonSchema4 };
 
-const distinct = (properties: any[], discriminator: (item: any) => string): JsonSchema4[] => {
-    const known: { [property: string]: boolean } = {};
+const distinct = (
+  properties: any[],
+  discriminator: (item: any) => string
+): JsonSchema4[] => {
+  const known: { [property: string]: boolean } = {};
 
-    return properties.filter(item => {
-        const discriminatorValue = discriminator(item);
-        if (known.hasOwnProperty(discriminatorValue)) {
-            return false;
-        } else {
-            known[discriminatorValue] = true;
-            return true;
-        }
-    });
+  return properties.filter(item => {
+    const discriminatorValue = discriminator(item);
+    if (known.hasOwnProperty(discriminatorValue)) {
+      return false;
+    } else {
+      known[discriminatorValue] = true;
+      return true;
+    }
+  });
 };
 
 class Gen {
+  constructor(
+    private findOption: (props: Properties) => (optionName: string) => any
+  ) {}
 
-    constructor(private findOption: (props: Properties) => (optionName: string) => any) {
-
+  schemaObject = (data: Object): JsonSchema4 => {
+    const props: Properties = this.properties(data);
+    const schema: JsonSchema4 = {
+      type: 'object',
+      properties: props,
+      additionalProperties: this.findOption(props)(ADDITIONAL_PROPERTIES)
+    };
+    const required = this.findOption(props)(REQUIRED_PROPERTIES);
+    if (required.length > 0) {
+      schema.required = required;
     }
 
-    schemaObject = (data: Object): JsonSchema4 => {
-        const props: Properties = this.properties(data);
-        const schema: JsonSchema4 = {
-            type: 'object',
-            properties: props,
-            additionalProperties: this.findOption(props)(ADDITIONAL_PROPERTIES)
+    return schema;
+  };
+
+  properties = (data: any): Properties => {
+    const emptyProps: Properties = {};
+
+    return Object.keys(data).reduce((acc: Properties, propName: string) => {
+      acc[propName] = this.property(data[propName]);
+
+      return acc;
+    }, emptyProps);
+  };
+
+  property = (data: any): JsonSchema4 => {
+    switch (typeof data) {
+      case 'string':
+        return { type: 'string' };
+      case 'boolean':
+        return { type: 'boolean' };
+      case 'number':
+        if (Number.isInteger(data)) {
+          return { type: 'integer' };
+        }
+
+        return { type: 'number' };
+      case 'object':
+        if (data == null) {
+          return { type: 'null' };
+        }
+
+        return this.schemaObjectOrArray(data);
+      default:
+        return {};
+    }
+  };
+
+  schemaObjectOrArray = (data: any): JsonSchema4 => {
+    if (data instanceof Array) {
+      return this.schemaArray(data as any[]);
+    } else {
+      return this.schemaObject(data);
+    }
+  };
+
+  schemaArray = (data: any[]): JsonSchema4 => {
+    if (data.length > 0) {
+      const allProperties: JsonSchema4[] = data.map(this.property);
+      const uniqueProperties = distinct(allProperties, prop =>
+        JSON.stringify(prop)
+      );
+      if (uniqueProperties.length === 1) {
+        return {
+          type: 'array',
+          items: uniqueProperties[0]
         };
-        const required = this.findOption(props)(REQUIRED_PROPERTIES);
-        if (required.length > 0) {
-            schema.required = required;
-        }
-
-        return schema;
+      } else {
+        return {
+          type: 'array',
+          items: {
+            oneOf: uniqueProperties
+          }
+        };
+      }
+    } else {
+      return {
+        type: 'array',
+        items: {}
+      };
     }
-
-    properties = (data: any): Properties => {
-        const emptyProps: Properties = {};
-
-        return Object
-            .keys(data)
-            .reduce(
-                (acc: Properties, propName: string) => {
-                    acc[propName] = this.property(data[propName]);
-
-                    return acc;
-                },
-                emptyProps
-            );
-    }
-
-    property = (data: any): JsonSchema4 => {
-        switch (typeof data) {
-            case 'string':
-                return { 'type': 'string' };
-            case 'boolean':
-                return { 'type': 'boolean' };
-            case 'number':
-                if (Number.isInteger(data)) {
-                    return { 'type': 'integer' };
-                }
-
-                return { 'type': 'number' };
-            case 'object':
-                if (data == null) {
-                    return { 'type': 'null' };
-                }
-
-                return this.schemaObjectOrArray(data);
-            default:
-                return {};
-        }
-    }
-
-    schemaObjectOrArray = (data: any): JsonSchema4 => {
-        if (data instanceof Array) {
-            return this.schemaArray(data as any[]);
-        } else {
-            return this.schemaObject(data);
-        }
-    }
-
-    schemaArray = (data: any[]): JsonSchema4 => {
-        if (data.length > 0) {
-            const allProperties: JsonSchema4[] = data.map(this.property);
-            const uniqueProperties = distinct(allProperties, prop => JSON.stringify(prop));
-            if (uniqueProperties.length === 1) {
-                return {
-                    'type': 'array',
-                    'items': uniqueProperties[0]
-                };
-            } else {
-                return {
-                    'type': 'array',
-                    'items': {
-                        'oneOf': uniqueProperties
-                    }
-                };
-            }
-        } else {
-            return {
-                'type': 'array',
-                'items': {}
-            };
-        }
-    }
+  };
 }
 
 /**
@@ -143,28 +142,32 @@ class Gen {
  * @param {any} options any additional options that may alter the generated JSON schema
  * @returns {JsonSchema} the generated schema
  */
-export const generateJsonSchema = (instance: Object, options: any = {}): JsonSchema4 => {
+export const generateJsonSchema = (
+  instance: Object,
+  options: any = {}
+): JsonSchema4 => {
+  const findOption = (props: Properties) => (
+    optionName: string
+  ): boolean | string[] => {
+    switch (optionName) {
+      case ADDITIONAL_PROPERTIES:
+        if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {
+          return options[ADDITIONAL_PROPERTIES];
+        }
 
-    const findOption = (props: Properties) => (optionName: string): boolean  | string[] => {
-            switch (optionName) {
-                case ADDITIONAL_PROPERTIES:
-                    if (options.hasOwnProperty(ADDITIONAL_PROPERTIES)) {
-                        return options[ADDITIONAL_PROPERTIES];
-                    }
+        return true;
+      case REQUIRED_PROPERTIES:
+        if (options.hasOwnProperty(REQUIRED_PROPERTIES)) {
+          return options[REQUIRED_PROPERTIES](props);
+        }
 
-                    return true;
-                case REQUIRED_PROPERTIES:
-                    if (options.hasOwnProperty(REQUIRED_PROPERTIES)) {
-                        return options[REQUIRED_PROPERTIES](props);
-                    }
+        return Object.keys(props);
+      default:
+        return;
+    }
+  };
 
-                    return Object.keys(props);
-                default:
-                    return;
-            }
-        };
+  const gen = new Gen(findOption);
 
-    const gen = new Gen(findOption);
-
-    return gen.schemaObject(instance);
+  return gen.schemaObject(instance);
 };

@@ -25,44 +25,53 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { isRangeControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  isRangeControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
 
 @Component({
-    selector: 'RangeControlRenderer',
-    template: `
-        <div fxFlex fxLayout='column' [fxHide]="hidden">
-            <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{ label }}</label>
-            <mat-slider
-                [value]="data || scopedSchema.default"
-                (change)="onChange($event)"
-                [disabled]="!enabled"
-                [max]="max"
-                [min]="min"
-                [step]="multipleOf"
-                [thumbLabel]="true"
-                [tickInterval]="tickInterval"
-                [id]="id"
-            ></mat-slider>
-            <mat-error class='mat-caption'>{{ error }}</mat-error>
-        </div>
-    `
+  selector: 'RangeControlRenderer',
+  template: `
+    <div fxFlex fxLayout="column" [fxHide]="hidden">
+      <label class="mat-caption" style="color:rgba(0,0,0,.54)">{{
+        label
+      }}</label>
+      <mat-slider
+        [value]="data || scopedSchema.default"
+        (change)="onChange($event)"
+        [disabled]="!enabled"
+        [max]="max"
+        [min]="min"
+        [step]="multipleOf"
+        [thumbLabel]="true"
+        [tickInterval]="tickInterval"
+        [id]="id"
+      ></mat-slider>
+      <mat-error class="mat-caption">{{ error }}</mat-error>
+    </div>
+  `
 })
 export class RangeControlRenderer extends JsonFormsControl {
+  min: number;
+  max: number;
+  multipleOf: number;
 
-    min: number;
-    max: number;
-    multipleOf: number;
-
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  getEventValue = (event: any) => Number(event.value);
+  mapAdditionalProps() {
+    if (this.scopedSchema) {
+      this.min = this.scopedSchema.minimum;
+      this.max = this.scopedSchema.maximum;
+      this.multipleOf = this.scopedSchema.multipleOf || 1;
     }
-    getEventValue = (event: any) => Number(event.value);
-    mapAdditionalProps() {
-        if (this.scopedSchema) {
-            this.min = this.scopedSchema.minimum;
-            this.max = this.scopedSchema.maximum;
-            this.multipleOf = this.scopedSchema.multipleOf || 1;
-        }
-    }
+  }
 }
-export const RangeControlRendererTester: RankedTester = rankWith(4, isRangeControl);
+export const RangeControlRendererTester: RankedTester = rankWith(
+  4,
+  isRangeControl
+);

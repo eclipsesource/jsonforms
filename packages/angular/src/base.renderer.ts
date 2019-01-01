@@ -23,10 +23,13 @@
   THE SOFTWARE.
 */
 import { Input } from '@angular/core';
-import { JsonSchema, OwnPropsOfRenderer, UISchemaElement } from '@jsonforms/core';
+import {
+  JsonSchema,
+  OwnPropsOfRenderer,
+  UISchemaElement
+} from '@jsonforms/core';
 
-export class JsonFormsBaseRenderer  {
-
+export class JsonFormsBaseRenderer {
   @Input() uischema: UISchemaElement;
   @Input() schema: JsonSchema;
   @Input() path: string;
@@ -35,7 +38,7 @@ export class JsonFormsBaseRenderer  {
     return {
       uischema: this.uischema,
       schema: this.schema,
-      path: this.path,
+      path: this.path
     };
   }
 }

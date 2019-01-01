@@ -1,8 +1,4 @@
-import {
-    LabelDescription,
-    Scopable,
-    UISchemaElement
-} from '@jsonforms/core';
+import { LabelDescription, Scopable, UISchemaElement } from '@jsonforms/core';
 
 export interface TreeWithDetail extends UISchemaElement, Scopable {
   type: 'TreeWithDetail';

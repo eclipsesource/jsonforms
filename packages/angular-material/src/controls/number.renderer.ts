@@ -38,62 +38,70 @@ import { LocaleValidation } from 'angular-l10n';
 
 // using change event is non optional here if we want to allow formatting during input
 @Component({
-    selector: 'NumberControlRenderer',
-    template: `
-        <mat-form-field fxFlex [fxHide]="hidden">
-            <mat-label>{{ label }}</mat-label>
-            <input
-                matInput
-                (input)="onChange($event)"
-                placeholder="{{ description }}"
-                [value]="data !== undefined && data !== null && locale ?
-                  (data |  l10nDecimal:locale:digits) :
-                  (data !== undefined && data !== null ? data : '')"
-                [id]="id"
-                [formControl]="form"
-                [min]="min"
-                [max]="max"
-                [step]="multipleOf"
-            >
-            <mat-error>{{ error }}</mat-error>
-        </mat-form-field>
-    `
+  selector: 'NumberControlRenderer',
+  template: `
+    <mat-form-field fxFlex [fxHide]="hidden">
+      <mat-label>{{ label }}</mat-label>
+      <input
+        matInput
+        (input)="onChange($event)"
+        placeholder="{{ description }}"
+        [value]="
+          data !== undefined && data !== null && locale
+            ? (data | l10nDecimal: locale:digits)
+            : data !== undefined && data !== null
+            ? data
+            : ''
+        "
+        [id]="id"
+        [formControl]="form"
+        [min]="min"
+        [max]="max"
+        [step]="multipleOf"
+      />
+      <mat-error>{{ error }}</mat-error>
+    </mat-form-field>
+  `
 })
 export class NumberControlRenderer extends JsonFormsControl {
+  min: number;
+  max: number;
+  multipleOf: number;
+  locale: string;
 
-    min: number;
-    max: number;
-    multipleOf: number;
-    locale: string;
+  constructor(
+    ngRedux: NgRedux<JsonFormsState>,
+    private localeValidation: LocaleValidation
+  ) {
+    super(ngRedux);
+  }
 
-    constructor(
-      ngRedux: NgRedux<JsonFormsState>,
-      private localeValidation: LocaleValidation
-    ) {
-        super(ngRedux);
-    }
-
-    getEventValue = (event: any) => {
-      if (this.locale) {
-        const parsedNumber = this.localeValidation.parseNumber(event.target.value, this.locale);
-        if (isNaN(parsedNumber)) {
-          return null;
-        }
-        return parsedNumber;
+  getEventValue = (event: any) => {
+    if (this.locale) {
+      const parsedNumber = this.localeValidation.parseNumber(
+        event.target.value,
+        this.locale
+      );
+      if (isNaN(parsedNumber)) {
+        return null;
       }
-
-      return parseFloat(event.target.value);
+      return parsedNumber;
     }
 
-    mapAdditionalProps() {
-        if (this.scopedSchema) {
-          const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
-          this.min = this.scopedSchema.minimum;
-          this.max = this.scopedSchema.maximum;
-          this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
-          this.locale = getLocale(this.ngRedux.getState());
-        }
+    return parseFloat(event.target.value);
+  };
+
+  mapAdditionalProps() {
+    if (this.scopedSchema) {
+      const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
+      this.min = this.scopedSchema.minimum;
+      this.max = this.scopedSchema.maximum;
+      this.multipleOf = this.scopedSchema.multipleOf || defaultStep;
+      this.locale = getLocale(this.ngRedux.getState());
     }
+  }
 }
-export const NumberControlRendererTester: RankedTester =
-    rankWith(2, or(isNumberControl, isIntegerControl));
+export const NumberControlRendererTester: RankedTester = rankWith(
+  2,
+  or(isNumberControl, isIntegerControl)
+);

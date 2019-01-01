@@ -27,13 +27,21 @@ import {
   isPrimitiveArrayControl,
   or,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
 import MaterialArrayControlRenderer from './MaterialArrayControlRenderer';
-import MaterialObjectRenderer, { materialObjectControlTester } from './MaterialObjectRenderer';
-import MaterialAllOfRenderer, { materialAllOfControlTester } from './MaterialAllOfRenderer';
-import MaterialAnyOfRenderer, { materialAnyOfControlTester } from './MaterialAnyOfRenderer';
-import MaterialOneOfRenderer, { materialOneOfControlTester } from './MaterialOneOfRenderer';
+import MaterialObjectRenderer, {
+  materialObjectControlTester
+} from './MaterialObjectRenderer';
+import MaterialAllOfRenderer, {
+  materialAllOfControlTester
+} from './MaterialAllOfRenderer';
+import MaterialAnyOfRenderer, {
+  materialAnyOfControlTester
+} from './MaterialAnyOfRenderer';
+import MaterialOneOfRenderer, {
+  materialOneOfControlTester
+} from './MaterialOneOfRenderer';
 
 export const materialArrayControlTester: RankedTester = rankWith(
   3,

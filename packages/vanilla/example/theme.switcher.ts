@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-const knownThemes : {[key: string]: string} = {
+const knownThemes: { [key: string]: string } = {
   normal: 'Normal Label Top',
-  dark: 'Dark label Top',
+  dark: 'Dark label Top'
 };
 const changeTheme = (style: string) => {
   document.body.className = style;

@@ -23,26 +23,30 @@
   THE SOFTWARE.
 */
 import { Actions, getData } from '@jsonforms/core';
-import { CHANGE_EXAMPLE, changeExample, ExampleDescription } from '@jsonforms/examples';
+import {
+  CHANGE_EXAMPLE,
+  changeExample,
+  ExampleDescription
+} from '@jsonforms/examples';
 import { ReactExampleDescription } from './util';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch, Reducer } from 'redux';
 
 export interface ExampleStateProps {
-    examples: ReactExampleDescription[];
-    dataAsString: string;
-    selectedExample: ReactExampleDescription;
+  examples: ReactExampleDescription[];
+  dataAsString: string;
+  selectedExample: ReactExampleDescription;
 }
 
 export interface ExampleDispatchProps {
-    changeExampleData(example: ReactExampleDescription): void;
-    getComponent(example: ReactExampleDescription): React.Component;
+  changeExampleData(example: ReactExampleDescription): void;
+  getComponent(example: ReactExampleDescription): React.Component;
 }
 
 export interface AppProps extends ExampleStateProps {
-    changeExample(exampleName: string): void;
-    getExtensionComponent(): React.Component;
+  changeExample(exampleName: string): void;
+  getExtensionComponent(): React.Component;
 }
 
 const mapStateToProps = (state: any) => {
@@ -63,29 +67,38 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   getComponent: (example: ReactExampleDescription) =>
     example.customReactExtension ? example.customReactExtension(dispatch) : null
 });
-const mergeProps =
-    (stateProps: ExampleStateProps, dispatchProps: ExampleDispatchProps, ownProps: any): AppProps => {
-        return Object.assign({}, ownProps, {
-            ...stateProps,
-            changeExample: (exampleName: string) => dispatchProps.changeExampleData(
-                stateProps.examples.find((e: ExampleDescription) => e.name === exampleName)
-            ),
-            getExtensionComponent: () =>
-                dispatchProps.getComponent(stateProps.selectedExample)
-        });
-    };
+const mergeProps = (
+  stateProps: ExampleStateProps,
+  dispatchProps: ExampleDispatchProps,
+  ownProps: any
+): AppProps => {
+  return Object.assign({}, ownProps, {
+    ...stateProps,
+    changeExample: (exampleName: string) =>
+      dispatchProps.changeExampleData(
+        stateProps.examples.find(
+          (e: ExampleDescription) => e.name === exampleName
+        )
+      ),
+    getExtensionComponent: () =>
+      dispatchProps.getComponent(stateProps.selectedExample)
+  });
+};
 
 interface ExamplesState {
-    examples: ReactExampleDescription[];
-    selectedExample: ReactExampleDescription;
+  examples: ReactExampleDescription[];
+  selectedExample: ReactExampleDescription;
 }
 
 const initState: ExamplesState = {
-    examples: [],
-    selectedExample: undefined
+  examples: [],
+  selectedExample: undefined
 };
 
-export const exampleReducer = (state: ExamplesState = initState, action: any) => {
+export const exampleReducer = (
+  state: ExamplesState = initState,
+  action: any
+) => {
   switch (action.type) {
     case CHANGE_EXAMPLE:
       return Object.assign({}, state, {
@@ -95,7 +108,11 @@ export const exampleReducer = (state: ExamplesState = initState, action: any) =>
       return state;
   }
 };
-export const initializedConnect = connect(mapStateToProps, mapDispatchToProps, mergeProps);
+export const initializedConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+  mergeProps
+);
 export interface AdditionalStoreParams {
   name: string;
   reducer?: Reducer<any>;

@@ -87,7 +87,6 @@ export interface Condition {
  * A leaf condition.
  */
 export interface LeafCondition extends Condition, Scopable {
-
   type: 'LEAF';
 
   /**
@@ -125,7 +124,6 @@ export interface AndCondition extends ComposableCondition {
  * Common base interface for any UI schema element.
  */
 export interface UISchemaElement {
-
   /**
    * The type of this UI schema element.
    */
@@ -245,4 +243,5 @@ export interface Categorization extends UISchemaElement {
   elements: (Category | Categorization)[];
 }
 
-export const isGroup = (layout: Layout): layout is GroupLayout => layout.type === 'Group';
+export const isGroup = (layout: Layout): layout is GroupLayout =>
+  layout.type === 'Group';

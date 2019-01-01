@@ -25,174 +25,188 @@
 import { By } from '@angular/platform-browser';
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
-import { FabButton, IonicModule, IonicPageModule, Nav, Platform } from 'ionic-angular';
+import {
+  FabButton,
+  IonicModule,
+  IonicPageModule,
+  Nav,
+  Platform
+} from 'ionic-angular';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JsonFormsOutlet } from '@jsonforms/angular';
 import { ListWithDetailControl } from '../src';
-import { mockNav, PlatformMock, } from '../test-config/mocks-ionic';
+import { mockNav, PlatformMock } from '../test-config/mocks-ionic';
 import { MasterPage } from '../src/other/list-with-detail/pages/master/master';
 import { DetailPage } from '../src/other/list-with-detail/pages/detail/detail';
 
 describe('Master detail', () => {
+  let fixture: ComponentFixture<any>;
+  let component: any;
 
-    let fixture: ComponentFixture<any>;
-    let component: any;
-
-    const data = {
-        orders: [
-            {
-                customer: {
-                    name: 'ACME'
-                },
-                title: 'Carrots'
-            }
-        ]
-    };
-    const schema = {
-        definitions: {
-            order: {
-                type: 'object',
-                properties: {
-                    customer: {
-                        type: 'object',
-                        properties: {
-                            name: { type: 'string' }
-                        }
-                    },
-                    title: {
-                        type: 'string'
-                    }
-                }
-            }
+  const data = {
+    orders: [
+      {
+        customer: {
+          name: 'ACME'
         },
+        title: 'Carrots'
+      }
+    ]
+  };
+  const schema = {
+    definitions: {
+      order: {
         type: 'object',
         properties: {
-            orders: {
-                type: 'array',
-                items: {
-                    $ref: '#/definitions/order'
-                }
+          customer: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' }
             }
+          },
+          title: {
+            type: 'string'
+          }
         }
-    };
-    const uischema = {
-        type: 'ListWithDetail',
-        scope: '#/properties/orders',
-        options: {
-            labelRef: '#/items/properties/customer/properties/name',
-            detail: {
-                type: 'VerticalLayout',
-                elements: [{
-                    type: 'Control',
-                    scope: '#/properties/customer/properties/name'
-                }]
-            }
+      }
+    },
+    type: 'object',
+    properties: {
+      orders: {
+        type: 'array',
+        items: {
+          $ref: '#/definitions/order'
         }
-    };
+      }
+    }
+  };
+  const uischema = {
+    type: 'ListWithDetail',
+    scope: '#/properties/orders',
+    options: {
+      labelRef: '#/items/properties/customer/properties/name',
+      detail: {
+        type: 'VerticalLayout',
+        elements: [
+          {
+            type: 'Control',
+            scope: '#/properties/customer/properties/name'
+          }
+        ]
+      }
+    }
+  };
 
-    beforeEach((() => {
-        TestBed.configureTestingModule({
-            declarations: [
-                JsonFormsOutlet,
-                ListWithDetailControl,
-                MasterPage,
-                DetailPage
-            ],
-            imports: [
-                IonicModule.forRoot(ListWithDetailControl),
-                IonicPageModule.forChild(MasterPage),
-                IonicPageModule.forChild(DetailPage)
-            ],
-            providers: [
-                {provide: Platform, useClass: PlatformMock},
-                {provide: NgRedux, useFactory: MockNgRedux.getInstance},
-                {provide: Nav, useValue: mockNav()}
-            ],
-        }).compileComponents();
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        JsonFormsOutlet,
+        ListWithDetailControl,
+        MasterPage,
+        DetailPage
+      ],
+      imports: [
+        IonicModule.forRoot(ListWithDetailControl),
+        IonicPageModule.forChild(MasterPage),
+        IonicPageModule.forChild(DetailPage)
+      ],
+      providers: [
+        { provide: Platform, useClass: PlatformMock },
+        { provide: NgRedux, useFactory: MockNgRedux.getInstance },
+        { provide: Nav, useValue: mockNav() }
+      ]
+    }).compileComponents();
 
-        MockNgRedux.reset();
-        fixture = TestBed.createComponent(ListWithDetailControl);
-        component = fixture.componentInstance;
-    }));
+    MockNgRedux.reset();
+    fixture = TestBed.createComponent(ListWithDetailControl);
+    component = fixture.componentInstance;
+  });
 
-    it('should render', async(() => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
+  it('should render', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
 
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        component.ngOnInit();
-        mockSubStore.complete();
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
 
+    fixture.detectChanges();
+    fixture.whenRenderingDone().then(() => {
+      expect(component.masterItems.length).toBe(1);
+      expect(
+        fixture.debugElement.queryAll(By.directive(MasterPage)).length
+      ).toBe(1);
+      expect(fixture.debugElement.queryAll(By.directive(Nav)).length).toBe(2);
+    });
+  }));
+
+  it('add a master item', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
+
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      const masterPage: any = fixture.debugElement.query(
+        By.directive(MasterPage)
+      );
+      spyOn(masterPage.componentInstance, 'addItem').and.callThrough();
+      const addItemButton = fixture.debugElement.query(By.directive(FabButton))
+        .nativeElement;
+      addItemButton.click();
+      fixture.detectChanges();
+      fixture.whenRenderingDone().then(() => {
         fixture.detectChanges();
-        fixture.whenRenderingDone().then(() => {
-            expect(component.masterItems.length).toBe(1);
-            expect(fixture.debugElement.queryAll(By.directive(MasterPage)).length).toBe(1);
-            expect(fixture.debugElement.queryAll(By.directive(Nav)).length).toBe(2);
-        });
-    }));
+        expect(masterPage.componentInstance.addItem).toHaveBeenCalled();
+      });
+    });
+  }));
 
-    it('add a master item', async(() => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
+  it('setting detail on click', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
 
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        component.ngOnInit();
-        mockSubStore.complete();
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema
+        }
+      }
+    });
+    component.ngOnInit();
+    mockSubStore.complete();
 
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      spyOn(component.detailNav, 'setRoot');
+      const select = fixture.debugElement.query(By.css('.item')).nativeElement;
+      select.click();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
         fixture.detectChanges();
-        fixture.whenStable().then(() => {
-            const masterPage: any = fixture.debugElement.query(By.directive(MasterPage));
-            spyOn(masterPage.componentInstance, 'addItem').and.callThrough();
-            const addItemButton = fixture.debugElement.query(By.directive(FabButton)).nativeElement;
-            addItemButton.click();
-            fixture.detectChanges();
-            fixture.whenRenderingDone().then(() => {
-                fixture.detectChanges();
-                expect(masterPage.componentInstance.addItem).toHaveBeenCalled();
-            });
-        });
-    }));
-
-    it('setting detail on click', async(() => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                }
-            }
-        });
-        component.ngOnInit();
-        mockSubStore.complete();
-
-        fixture.detectChanges();
-        fixture.whenStable().then(() => {
-            spyOn(component.detailNav, 'setRoot');
-            const select = fixture.debugElement.query(By.css('.item')).nativeElement;
-            select.click();
-            fixture.detectChanges();
-            fixture.whenStable().then(() => {
-                fixture.detectChanges();
-                expect(fixture.debugElement.queryAll(By.directive(DetailPage)).length).toBe(1);
-                expect(component.detailNav.setRoot).toHaveBeenCalled();
-            });
-        });
-    }));
+        expect(
+          fixture.debugElement.queryAll(By.directive(DetailPage)).length
+        ).toBe(1);
+        expect(component.detailNav.setRoot).toHaveBeenCalled();
+      });
+    });
+  }));
 });

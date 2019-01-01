@@ -32,63 +32,60 @@ import { LabelRenderer, LabelRendererTester } from '../src/other';
 
 const data = {};
 const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-        foo: {
-            type: 'string'
-        }
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'string'
     }
+  }
 };
 const uischema: LabelElement = {
-    type: 'Label',
-    text: 'FooBar'
+  type: 'Label',
+  text: 'FooBar'
 };
 
 describe('Material label field tester', () => {
-
-    it('should succeed', () => {
-        expect(LabelRendererTester(uischema, schema)).toBe(4);
-    });
+  it('should succeed', () => {
+    expect(LabelRendererTester(uischema, schema)).toBe(4);
+  });
 });
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = LabelRenderer;
 
 describe('Label Renderer Base Tests', () => {
-    let fixture: ComponentFixture<LabelRenderer>;
-    let component: LabelRenderer;
-    let labelElement: HTMLLabelElement;
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            declarations: [componentUT],
-            providers: providers
-        }).compileComponents();
+  let fixture: ComponentFixture<LabelRenderer>;
+  let component: LabelRenderer;
+  let labelElement: HTMLLabelElement;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [componentUT],
+      providers: providers
+    }).compileComponents();
 
-        MockNgRedux.reset();
+    MockNgRedux.reset();
+  });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(componentUT);
+    component = fixture.componentInstance;
+
+    labelElement = fixture.debugElement.query(By.css('label')).nativeElement;
+  });
+
+  it('should render', () => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data: data,
+          schema: schema
+        }
+      }
     });
-    beforeEach(() => {
-        fixture = TestBed.createComponent(componentUT);
-        component = fixture.componentInstance;
-
-        labelElement = fixture.debugElement.query(By.css('label')).nativeElement;
-    });
-
-    it('should render', () => {
-        const mockSubStore = MockNgRedux.getSelectorStub();
-        component.uischema = uischema;
-
-        mockSubStore.next({
-            jsonforms: {
-                core: {
-                    data: data,
-                    schema: schema,
-                }
-            }
-        });
-        mockSubStore.complete();
-        fixture.detectChanges();
-        component.ngOnInit();
-        expect(labelElement.innerText.trim()).toBe('FooBar');
-    });
+    mockSubStore.complete();
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(labelElement.innerText.trim()).toBe('FooBar');
+  });
 });

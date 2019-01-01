@@ -25,7 +25,4 @@
 import { renderExample } from '../../example/src/index';
 import { materialFields, materialRenderers } from '../src';
 
-renderExample(
-  materialRenderers,
-  materialFields
-);
+renderExample(materialRenderers, materialFields);

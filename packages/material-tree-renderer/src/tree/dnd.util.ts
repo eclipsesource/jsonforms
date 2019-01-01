@@ -67,56 +67,53 @@ export interface DropResult {
  * @param oldPath the data at this path will be deleted
  * @param newPath the given data will be inserted at this path
  */
-export const moveListItem = (dispatch: Dispatch<AnyAction>) =>
-  (data: any, oldPath: string, newPath: string): boolean => {
-    if (newPath === oldPath) {
-      // nothing needs to be moved
-      return false;
-    }
+export const moveListItem = (dispatch: Dispatch<AnyAction>) => (
+  data: any,
+  oldPath: string,
+  newPath: string
+): boolean => {
+  if (newPath === oldPath) {
+    // nothing needs to be moved
+    return false;
+  }
 
-    const oldParentPath = parentPath(oldPath);
-    const oldIndex = indexFromPath(oldPath);
-    const newParentPath = parentPath(newPath);
-    const newIndex = indexFromPath(newPath);
+  const oldParentPath = parentPath(oldPath);
+  const oldIndex = indexFromPath(oldPath);
+  const newParentPath = parentPath(newPath);
+  const newIndex = indexFromPath(newPath);
 
-    // Remove moved data from source array
-    dispatch(
-      update(
-        oldParentPath,
-        array => {
-          // TODO clone necessary?
-          const clone = _.clone(array);
-          clone.splice(oldIndex, 1);
+  // Remove moved data from source array
+  dispatch(
+    update(oldParentPath, array => {
+      // TODO clone necessary?
+      const clone = _.clone(array);
+      clone.splice(oldIndex, 1);
 
-          console.log(`remove from ${oldParentPath}, index: ${oldIndex}`);
+      console.log(`remove from ${oldParentPath}, index: ${oldIndex}`);
 
-          return clone;
-        }
-      )
-    );
+      return clone;
+    })
+  );
 
-    // Add moved data to target array
-    dispatch(
-      update(
-        newParentPath,
-        array => {
-          if (array === undefined || array === null || array.length === 0) {
-            return [data];
-          }
+  // Add moved data to target array
+  dispatch(
+    update(newParentPath, array => {
+      if (array === undefined || array === null || array.length === 0) {
+        return [data];
+      }
 
-          // TODO clone necessary?
-          const clone = _.clone(array);
-          clone.splice(newIndex, 0, data);
+      // TODO clone necessary?
+      const clone = _.clone(array);
+      clone.splice(newIndex, 0, data);
 
-          console.log(`add to ${newParentPath}, index: ${newIndex}`);
+      console.log(`add to ${newParentPath}, index: ${newIndex}`);
 
-          return clone;
-        }
-      )
-    );
+      return clone;
+    })
+  );
 
-    return true;
-  };
+  return true;
+};
 
 export const mapDispatchToTreeListProps = (dispatch: Dispatch<AnyAction>) => ({
   moveListItem: moveListItem(dispatch)
@@ -128,8 +125,12 @@ export const mapDispatchToTreeListProps = (dispatch: Dispatch<AnyAction>) => ({
  * @param containerProps The ContainmentProperties that the list can supports
  * @param dragInfo The DragInfo describing the dragged item
  */
-export const canDropDraggedItem = (containerProps: Property[], dragInfo: DragInfo) => {
-  const matchingProps = containerProps
-    .filter(prop => _.isEqual(prop.schema, dragInfo.schema));
+export const canDropDraggedItem = (
+  containerProps: Property[],
+  dragInfo: DragInfo
+) => {
+  const matchingProps = containerProps.filter(prop =>
+    _.isEqual(prop.schema, dragInfo.schema)
+  );
   return matchingProps.length > 0;
 };

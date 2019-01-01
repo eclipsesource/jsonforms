@@ -28,7 +28,11 @@ export interface ResourceSet {
    * @param resolveReferenecs If true, JSON References in the resource are resolved
    * @return The old resource if one was already registered for the given name, undefined otherwise
    */
-  registerResource(name: string, resource: Object, resolveReferences: boolean): Object;
+  registerResource(
+    name: string,
+    resource: Object,
+    resolveReferences: boolean
+  ): Object;
 
   /**
    * Remove all registered resources from the ResourceSet.
@@ -37,7 +41,7 @@ export interface ResourceSet {
 }
 
 export class ResourceSetImpl implements ResourceSet {
-  private resourceMap: { [name: string]: Object};
+  private resourceMap: { [name: string]: Object };
 
   constructor() {
     this.resourceMap = {};
@@ -51,10 +55,16 @@ export class ResourceSetImpl implements ResourceSet {
     return this.resourceMap[name] !== undefined;
   }
 
-  registerResource(name: string, resource: Object, resolveReferences = false): Object {
+  registerResource(
+    name: string,
+    resource: Object,
+    resolveReferences = false
+  ): Object {
     const oldResource = this.resourceMap[name];
     if (resolveReferences) {
-      const resourcePromise = JsonRefs.resolveRefs(resource, {includeInvalid: true});
+      const resourcePromise = JsonRefs.resolveRefs(resource, {
+        includeInvalid: true
+      });
       resourcePromise.then(result => {
         this.resourceMap[name] = result.resolved;
       });

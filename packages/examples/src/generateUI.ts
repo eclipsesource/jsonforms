@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import {data as personData, personCoreSchema } from './person';
+import { data as personData, personCoreSchema } from './person';
 import { UISchemaElement } from '@jsonforms/core';
 
 export const schema = personCoreSchema;

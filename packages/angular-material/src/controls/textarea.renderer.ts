@@ -25,28 +25,36 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { isMultiLineControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  isMultiLineControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
 
 @Component({
-    selector: 'TextAreaRenderer',
-    template: `
-        <mat-form-field fxFlex [fxHide]="hidden">
-            <mat-label>{{ label }}</mat-label>
-            <textarea
-                matInput
-                (input)="onChange($event)"
-                placeholder="{{ description }}"
-                [id]="id"
-                [formControl]="form"
-            ></textarea>
-            <mat-error>{{ error }}</mat-error>
-        </mat-form-field>
-    `
+  selector: 'TextAreaRenderer',
+  template: `
+    <mat-form-field fxFlex [fxHide]="hidden">
+      <mat-label>{{ label }}</mat-label>
+      <textarea
+        matInput
+        (input)="onChange($event)"
+        placeholder="{{ description }}"
+        [id]="id"
+        [formControl]="form"
+      ></textarea>
+      <mat-error>{{ error }}</mat-error>
+    </mat-form-field>
+  `
 })
 export class TextAreaRenderer extends JsonFormsControl {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
-    getEventValue = (event: any) => event.target.value;
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  getEventValue = (event: any) => event.target.value;
 }
-export const TextAreaRendererTester: RankedTester = rankWith(2, isMultiLineControl);
+export const TextAreaRendererTester: RankedTester = rankWith(
+  2,
+  isMultiLineControl
+);

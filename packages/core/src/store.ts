@@ -31,8 +31,7 @@ import { JsonFormsLocaleState } from './reducers/i18n';
 /**
  * JSONForms store.
  */
-export interface JsonFormsStore extends Store<JsonFormsState> {
-}
+export interface JsonFormsStore extends Store<JsonFormsState> {}
 
 /**
  * The state shape of JSONForms.
@@ -45,32 +44,32 @@ export interface JsonFormsState {
 }
 
 export interface JsonFormsSubStates {
-    /**
-     * Substate for storing mandatory sub-state.
-     */
-    core?: JsonFormsCore;
-    /**
-     * Global configuration options.
-     */
-    config?: any;
-    /**
-     * All available renderers.
-     */
-    renderers?: JsonFormsRendererRegistryEntry[];
-    /**
-     * All available field renderers.
-     */
-    fields?: JsonFormsFieldRendererRegistryEntry[];
-    /**
-     *
-     */
-    i18n?: JsonFormsLocaleState;
-    // allow additional state
-    [additionalState: string]: any;
+  /**
+   * Substate for storing mandatory sub-state.
+   */
+  core?: JsonFormsCore;
+  /**
+   * Global configuration options.
+   */
+  config?: any;
+  /**
+   * All available renderers.
+   */
+  renderers?: JsonFormsRendererRegistryEntry[];
+  /**
+   * All available field renderers.
+   */
+  fields?: JsonFormsFieldRendererRegistryEntry[];
+  /**
+   *
+   */
+  i18n?: JsonFormsLocaleState;
+  // allow additional state
+  [additionalState: string]: any;
 }
 
 export interface JsonFormsExtendedState<T> extends JsonFormsState {
   jsonforms: {
-      [subState: string]: T;
+    [subState: string]: T;
   };
 }

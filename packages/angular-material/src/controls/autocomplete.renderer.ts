@@ -27,14 +27,14 @@ import { Component, Input } from '@angular/core';
 import { MatAutocompleteSelectedEvent } from '@angular/material';
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
-    Actions,
-    composeWithUi,
-    ControlElement,
-    isEnumControl,
-    JsonFormsState,
-    OwnPropsOfControl,
-    RankedTester,
-    rankWith
+  Actions,
+  composeWithUi,
+  ControlElement,
+  isEnumControl,
+  JsonFormsState,
+  OwnPropsOfControl,
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
@@ -61,70 +61,76 @@ import { startWith } from 'rxjs/operators/startWith';
  * entryComponents: [AutocompleteControlRenderer]
  * ...
  * </code></pre>
- * 
+ *
  */
 @Component({
-    selector: 'AutocompleteControlRenderer',
-    template: `
-        <mat-form-field fxFlex>
-            <mat-label>{{ label }}</mat-label>
-            <input
-                matInput
-                type="text"
-                (change)="onChange($event)"
-                placeholder="{{ description }}"
-                [id]="id"
-                [formControl]="form"
-                [matAutocomplete]="auto"
-            >
-            <mat-autocomplete
-                autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelect($event)">
-                <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                    {{ option }}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-error>{{ error }}</mat-error>
-        </mat-form-field>
-    `
+  selector: 'AutocompleteControlRenderer',
+  template: `
+    <mat-form-field fxFlex>
+      <mat-label>{{ label }}</mat-label>
+      <input
+        matInput
+        type="text"
+        (change)="onChange($event)"
+        placeholder="{{ description }}"
+        [id]="id"
+        [formControl]="form"
+        [matAutocomplete]="auto"
+      />
+      <mat-autocomplete
+        autoActiveFirstOption
+        #auto="matAutocomplete"
+        (optionSelected)="onSelect($event)"
+      >
+        <mat-option
+          *ngFor="let option of (filteredOptions | async)"
+          [value]="option"
+        >
+          {{ option }}
+        </mat-option>
+      </mat-autocomplete>
+      <mat-error>{{ error }}</mat-error>
+    </mat-form-field>
+  `
 })
 export class AutocompleteControlRenderer extends JsonFormsControl {
-    @Input() options: string[];
-    filteredOptions: Observable<string[]>;
+  @Input() options: string[];
+  filteredOptions: Observable<string[]>;
 
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
-    getEventValue = (event: any) => event.target.value;
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  getEventValue = (event: any) => event.target.value;
 
-    ngOnInit() {
-        super.ngOnInit();
-        this.filteredOptions = this.form.valueChanges
-            .pipe(
-                startWith(''),
-                map(val => this.filter(val))
-            );
-    }
+  ngOnInit() {
+    super.ngOnInit();
+    this.filteredOptions = this.form.valueChanges.pipe(
+      startWith(''),
+      map(val => this.filter(val))
+    );
+  }
 
-    onSelect(ev: MatAutocompleteSelectedEvent) {
-        const path = composeWithUi(this.uischema as ControlElement, this.path);
-        this.ngRedux.dispatch(Actions.update(path, () => ev.option.value));
-        this.triggerValidation();
-    }
+  onSelect(ev: MatAutocompleteSelectedEvent) {
+    const path = composeWithUi(this.uischema as ControlElement, this.path);
+    this.ngRedux.dispatch(Actions.update(path, () => ev.option.value));
+    this.triggerValidation();
+  }
 
-    filter(val: string): string[] {
-        return (this.options || this.scopedSchema.enum || []).filter(option =>
-            !val || option.toLowerCase().indexOf(val.toLowerCase()) === 0);
-    }
-    protected getOwnProps(): OwnPropsOfAutoComplete {
-        return {
-            ...super.getOwnProps(),
-            options: this.options
-        };
-    }
+  filter(val: string): string[] {
+    return (this.options || this.scopedSchema.enum || []).filter(
+      option => !val || option.toLowerCase().indexOf(val.toLowerCase()) === 0
+    );
+  }
+  protected getOwnProps(): OwnPropsOfAutoComplete {
+    return {
+      ...super.getOwnProps(),
+      options: this.options
+    };
+  }
 }
 
 export const enumControlTester: RankedTester = rankWith(2, isEnumControl);
 
 interface OwnPropsOfAutoComplete extends OwnPropsOfControl {
-    options: string[];
+  options: string[];
 }

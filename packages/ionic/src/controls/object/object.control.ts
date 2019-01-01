@@ -38,19 +38,18 @@ import {
   selector: 'jsonforms-object-control',
   template: `
     <ion-card>
-    <ion-card-content>
+      <ion-card-content>
         <jsonforms-outlet
-            [uischema]="detailUiSchema"
-            [schema]="scopedSchema"
-            [path]="propsPath"
+          [uischema]="detailUiSchema"
+          [schema]="scopedSchema"
+          [path]="propsPath"
         >
         </jsonforms-outlet>
-        </ion-card-content>
+      </ion-card-content>
     </ion-card>
-    `
+  `
 })
 export class ObjectControlRenderer extends JsonFormsControl {
-
   propsPath: string;
   detailUiSchema: UISchemaElement;
 
@@ -60,8 +59,11 @@ export class ObjectControlRenderer extends JsonFormsControl {
 
   mapAdditionalProps(props: ControlProps) {
     this.propsPath = props.path;
-    this.detailUiSchema =
-      props.findUISchema(props.scopedSchema, undefined, props.path);
+    this.detailUiSchema = props.findUISchema(
+      props.scopedSchema,
+      undefined,
+      props.path
+    );
   }
 }
 

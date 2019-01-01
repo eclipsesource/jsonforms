@@ -56,7 +56,7 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/description',
       options: {
-          multi: true
+        multi: true
       }
     },
     {
@@ -70,11 +70,11 @@ export const uischema = {
           type: 'Control',
           scope: '#/properties/recurrenceInterval',
           rule: {
-              effect: 'HIDE',
-              condition: {
-                  scope: '#/properties/recurrence',
-                  schema: { enum: ['Never'] }
-              }
+            effect: 'HIDE',
+            condition: {
+              scope: '#/properties/recurrence',
+              schema: { enum: ['Never'] }
+            }
           }
         }
       ]
@@ -102,7 +102,7 @@ export const categoryUiSchema = {
           type: 'Control',
           scope: '#/properties/description',
           options: {
-              'multi': true
+            multi: true
           }
         }
       ]
@@ -135,11 +135,11 @@ export const categoryUiSchema = {
               type: 'Control',
               scope: '#/properties/recurrenceInterval',
               rule: {
-                  effect: 'HIDE',
-                  condition: {
-                      scope: '#/properties/recurrence',
-                      schema: { enum: ['Never'] }
-                  }
+                effect: 'HIDE',
+                condition: {
+                  scope: '#/properties/recurrence',
+                  schema: { enum: ['Never'] }
+                }
               }
             }
           ]

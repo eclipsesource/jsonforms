@@ -52,7 +52,7 @@ export const uischema = {
           }
         }
       ]
-    },
+    }
   ]
 };
 
@@ -68,6 +68,6 @@ registerExamples([
     label: 'Text',
     data,
     schema,
-    uischema,
+    uischema
   }
 ]);

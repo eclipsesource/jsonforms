@@ -24,47 +24,58 @@
 */
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
-import { MatCheckbox, MatCheckboxModule, MatError, MatFormFieldModule } from '@angular/material';
 import {
-    booleanBaseTest,
-    booleanErrorTest,
-    booleanInputEventTest,
-    ErrorTestExpectation
+  MatCheckbox,
+  MatCheckboxModule,
+  MatError,
+  MatFormFieldModule
+} from '@angular/material';
+import {
+  booleanBaseTest,
+  booleanErrorTest,
+  booleanInputEventTest,
+  ErrorTestExpectation
 } from '@jsonforms/angular-test';
 import { BooleanControlRenderer, booleanControlTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material boolean field tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo'
-    };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
 
-    it('should succeed', () => {
-        expect(
-            booleanControlTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'boolean'
-                        }
-                    }
-                }
-            )
-        ).toBe(2);
-    });
+  it('should succeed', () => {
+    expect(
+      booleanControlTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'boolean'
+          }
+        }
+      })
+    ).toBe(2);
+  });
 });
 const imports = [MatCheckboxModule, MatFormFieldModule, FlexLayoutModule];
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = BooleanControlRenderer;
 const errorTest: ErrorTestExpectation = {
-    errorInstance: MatError, numberOfElements: 1, indexOfElement: 0};
-const testConfig = {imports, providers, componentUT};
-describe('Boolean control Base Tests', booleanBaseTest(testConfig, MatCheckbox));
-describe('Boolean control Input Event Tests',
-         booleanInputEventTest(testConfig, MatCheckbox, 'label'));
-describe('Boolean control Error Tests', booleanErrorTest(testConfig, MatCheckbox, errorTest));
+  errorInstance: MatError,
+  numberOfElements: 1,
+  indexOfElement: 0
+};
+const testConfig = { imports, providers, componentUT };
+describe(
+  'Boolean control Base Tests',
+  booleanBaseTest(testConfig, MatCheckbox)
+);
+describe(
+  'Boolean control Input Event Tests',
+  booleanInputEventTest(testConfig, MatCheckbox, 'label')
+);
+describe(
+  'Boolean control Error Tests',
+  booleanErrorTest(testConfig, MatCheckbox, errorTest)
+);

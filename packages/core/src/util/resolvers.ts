@@ -47,16 +47,16 @@ export const resolveData = (instance: any, dataPath: string): any => {
 
   return dataPathSegments
     .map(segment => decodeURIComponent(segment))
-    .reduce(
-      (curInstance, decodedSegment) => {
-        if (curInstance === undefined || !curInstance.hasOwnProperty(decodedSegment)) {
-          return undefined;
-        }
+    .reduce((curInstance, decodedSegment) => {
+      if (
+        curInstance === undefined ||
+        !curInstance.hasOwnProperty(decodedSegment)
+      ) {
+        return undefined;
+      }
 
-        return curInstance[decodedSegment];
-      },
-      instance
-    );
+      return curInstance[decodedSegment];
+    }, instance);
 };
 
 /**
@@ -67,45 +67,47 @@ export const resolveData = (instance: any, dataPath: string): any => {
  *               inside the function)
  * @param resolveTuples Whether arrays of tuples should be considered; default: false
  */
-export const findAllRefs =
-  (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false)
-    : ReferenceSchemaMap => {
-
-    if (isObject(schema)) {
-      Object.keys(schema.properties).forEach(key =>
-        findAllRefs(schema.properties[key], result));
-    }
-    if (isArray(schema)) {
-      if (Array.isArray(schema.items)) {
-        if (resolveTuples) {
-          const items: JsonSchema[] = schema.items;
-          items.forEach(child => findAllRefs(child, result));
-        }
-      } else {
-        findAllRefs(schema.items, result);
+export const findAllRefs = (
+  schema: JsonSchema,
+  result: ReferenceSchemaMap = {},
+  resolveTuples = false
+): ReferenceSchemaMap => {
+  if (isObject(schema)) {
+    Object.keys(schema.properties).forEach(key =>
+      findAllRefs(schema.properties[key], result)
+    );
+  }
+  if (isArray(schema)) {
+    if (Array.isArray(schema.items)) {
+      if (resolveTuples) {
+        const items: JsonSchema[] = schema.items;
+        items.forEach(child => findAllRefs(child, result));
       }
+    } else {
+      findAllRefs(schema.items, result);
     }
-    if (Array.isArray(schema.anyOf)) {
-      const anyOf: JsonSchema[] = schema.anyOf;
-      anyOf.forEach(child => findAllRefs(child, result));
-    }
-    if (schema.$ref !== undefined) {
-      result[schema.$ref] = schema;
-    }
+  }
+  if (Array.isArray(schema.anyOf)) {
+    const anyOf: JsonSchema[] = schema.anyOf;
+    anyOf.forEach(child => findAllRefs(child, result));
+  }
+  if (schema.$ref !== undefined) {
+    result[schema.$ref] = schema;
+  }
 
-    // tslint:disable:no-string-literal
-    if (_.has(schema, 'links')) {
-      _.get(schema, 'links').forEach((link: { targetSchema: JsonSchema }) => {
-        if (!_.isEmpty(link.targetSchema.$ref)) {
-          result[link.targetSchema.$ref] = schema;
-        } else {
-          findAllRefs(link.targetSchema, result);
-        }
-      });
-    }
+  // tslint:disable:no-string-literal
+  if (_.has(schema, 'links')) {
+    _.get(schema, 'links').forEach((link: { targetSchema: JsonSchema }) => {
+      if (!_.isEmpty(link.targetSchema.$ref)) {
+        result[link.targetSchema.$ref] = schema;
+      } else {
+        findAllRefs(link.targetSchema, result);
+      }
+    });
+  }
 
-    return result;
-  };
+  return result;
+};
 
 /**
  * Resolve the given schema path in order to obtain a subschema.
@@ -113,23 +115,25 @@ export const findAllRefs =
  * @param {string} schemaPath the schema path to be resolved
  * @returns {JsonSchema} the resolved sub-schema
  */
-export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchema => {
+export const resolveSchema = (
+  schema: JsonSchema,
+  schemaPath: string
+): JsonSchema => {
   if (_.isEmpty(schema)) {
     return undefined;
   }
   const validPathSegments = schemaPath.split('/');
-  const invalidSegment =
-      (pathSegment: string) =>
-          pathSegment === '#' || pathSegment === undefined || pathSegment === '';
-  const resultSchema = validPathSegments.reduce(
-    (curSchema, pathSegment) => {
-      curSchema = curSchema.$ref === undefined
+  const invalidSegment = (pathSegment: string) =>
+    pathSegment === '#' || pathSegment === undefined || pathSegment === '';
+  const resultSchema = validPathSegments.reduce((curSchema, pathSegment) => {
+    curSchema =
+      curSchema.$ref === undefined
         ? curSchema
         : resolveSchema(schema, curSchema.$ref);
-      return invalidSegment(pathSegment) ? curSchema : _.get(curSchema, pathSegment);
-    },
-    schema
-  );
+    return invalidSegment(pathSegment)
+      ? curSchema
+      : _.get(curSchema, pathSegment);
+  }, schema);
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
     return retrieveResolvableSchema(schema, resultSchema.$ref);
   }
@@ -146,7 +150,10 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
  */
 // disable rule because resolve is mutually recursive
 // tslint:disable:only-arrow-functions
-function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
+function retrieveResolvableSchema(
+  full: JsonSchema,
+  reference: string
+): JsonSchema {
   // tslint:enable:only-arrow-functions
   const child = resolveSchema(full, reference);
   const allRefs = findAllRefs(child);

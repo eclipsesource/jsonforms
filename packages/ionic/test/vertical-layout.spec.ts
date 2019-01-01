@@ -34,67 +34,63 @@ import { VerticalLayoutRenderer } from '../src';
 import { PlatformMock } from '../test-config/mocks-ionic';
 
 describe('Vertical layout', () => {
-    let fixture: any;
-    let component: any;
+  let fixture: any;
+  let component: any;
 
-    const data = { foo: true };
-    const schema = {
-        type: 'object',
-        properties: {
-            foo: {
-                type: 'boolean'
-            }
+  const data = { foo: true };
+  const schema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'boolean'
+      }
+    }
+  };
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [UnknownRenderer, JsonFormsOutlet, VerticalLayoutRenderer],
+      imports: [IonicModule.forRoot(VerticalLayoutRenderer)],
+      providers: [
+        { provide: Platform, useClass: PlatformMock },
+        { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+      ]
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [UnknownRenderer]
         }
+      })
+      .compileComponents();
+
+    MockNgRedux.reset();
+    fixture = TestBed.createComponent(VerticalLayoutRenderer);
+    component = fixture.componentInstance;
+  });
+
+  it('add elements', () => {
+    initComponent(fixture, setupMockStore(fixture, { data, schema, uischema }));
+    MockNgRedux.reset();
+    component.uischema = {
+      type: 'VerticalLayout',
+      elements: [
+        ...uischema.elements,
+        {
+          type: 'Control',
+          scope: '#properties/bar'
+        }
+      ]
     };
-    const uischema = {
-        type: 'VerticalLayout',
-        elements: [{
-            type: 'Control',
-            scope: '#/properties/foo'
-        }]
-    };
-
-    beforeEach((() => {
-        TestBed.configureTestingModule({
-            declarations: [
-                UnknownRenderer,
-                JsonFormsOutlet,
-                VerticalLayoutRenderer
-            ],
-            imports: [
-                IonicModule.forRoot(VerticalLayoutRenderer)
-            ],
-            providers: [
-                {provide: Platform, useClass: PlatformMock},
-                {provide: NgRedux, useFactory: MockNgRedux.getInstance},
-            ]
-        }).overrideModule(BrowserDynamicTestingModule, {
-            set: {
-                entryComponents: [
-                    UnknownRenderer
-                ]
-            }
-        }).compileComponents();
-
-        MockNgRedux.reset();
-        fixture = TestBed.createComponent(VerticalLayoutRenderer);
-        component = fixture.componentInstance;
-    }));
-
-    it('add elements', () => {
-        initComponent(fixture, setupMockStore(fixture, { data, schema, uischema }));
-        MockNgRedux.reset();
-        component.uischema = {
-            type: 'VerticalLayout',
-            elements: [
-                ...uischema.elements,
-                {
-                    type: 'Control',
-                    scope: '#properties/bar'
-                }
-            ]
-        };
-        fixture.detectChanges();
-        expect(component.uischema.elements.length).toBe(2);
-    });
+    fixture.detectChanges();
+    expect(component.uischema.elements.length).toBe(2);
+  });
 });

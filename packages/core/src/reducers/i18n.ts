@@ -31,15 +31,13 @@ export interface JsonFormsLocaleState {
   localizedUISchemas: Map<string, UISchemaElement>;
 }
 
-const initState: JsonFormsLocaleState =  {
+const initState: JsonFormsLocaleState = {
   locale: undefined,
   localizedSchemas: new Map(),
   localizedUISchemas: new Map()
 };
 
-export const i18nReducer = (
-  state = initState,
-  action: any) => {
+export const i18nReducer = (state = initState, action: any) => {
   switch (action.type) {
     case SET_LOCALIZED_SCHEMAS:
       return {
@@ -54,7 +52,8 @@ export const i18nReducer = (
     case SET_LOCALE:
       return {
         ...state,
-        locale: action.locale === undefined ? navigator.languages[0] : action.locale
+        locale:
+          action.locale === undefined ? navigator.languages[0] : action.locale
       };
     default:
       return state;
@@ -68,20 +67,20 @@ export const fetchLocale = (state?: JsonFormsLocaleState) => {
   return state.locale;
 };
 
-export const findLocalizedSchema =
-  (locale: string) =>
-    (state?: JsonFormsLocaleState): JsonSchema => {
-      if (state === undefined) {
-        return undefined;
-      }
-      return state.localizedSchemas.get(locale);
-    };
+export const findLocalizedSchema = (locale: string) => (
+  state?: JsonFormsLocaleState
+): JsonSchema => {
+  if (state === undefined) {
+    return undefined;
+  }
+  return state.localizedSchemas.get(locale);
+};
 
-export const findLocalizedUISchema =
-  (locale: string) =>
-    (state?: JsonFormsLocaleState): UISchemaElement => {
-      if (state === undefined) {
-        return undefined;
-      }
-      return state.localizedUISchemas.get(locale);
-    };
+export const findLocalizedUISchema = (locale: string) => (
+  state?: JsonFormsLocaleState
+): UISchemaElement => {
+  if (state === undefined) {
+    return undefined;
+  }
+  return state.localizedUISchemas.get(locale);
+};

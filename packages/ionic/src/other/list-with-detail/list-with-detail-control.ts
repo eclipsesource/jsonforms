@@ -11,7 +11,7 @@ import {
   resolveSchema,
   toDataPath,
   UISchemaElement,
-  uiTypeIs,
+  uiTypeIs
 } from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { Nav, Platform } from 'ionic-angular';
@@ -35,14 +35,22 @@ const isMasterPage = (page: any) => {
 @Component({
   selector: 'jsonforms-master-detail',
   template: `
-        <ion-split-pane (ionChange)="onSplitPaneChange($event)">
-            <ion-nav [root]="masterPage" [rootParams]="masterParams" #masterNav ></ion-nav>
-            <ion-nav [root]="detailPage" [rootParams]="detailParams" #detailNav main></ion-nav>
-        </ion-split-pane>
-    `
+    <ion-split-pane (ionChange)="onSplitPaneChange($event)">
+      <ion-nav
+        [root]="masterPage"
+        [rootParams]="masterParams"
+        #masterNav
+      ></ion-nav>
+      <ion-nav
+        [root]="detailPage"
+        [rootParams]="detailParams"
+        #detailNav
+        main
+      ></ion-nav>
+    </ion-split-pane>
+  `
 })
 export class ListWithDetailControl extends JsonFormsControl {
-
   @ViewChild('masterNav') masterNav: Nav;
   @ViewChild('detailNav') detailNav: Nav;
   masterPage: any;
@@ -52,10 +60,7 @@ export class ListWithDetailControl extends JsonFormsControl {
   detailParams: any;
   _isSplit: boolean;
 
-  constructor(
-    private platform: Platform,
-    ngRedux: NgRedux<JsonFormsState>,
-  ) {
+  constructor(private platform: Platform, ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
     this.masterPage = MasterPage;
     this.detailPage = DetailPage;
@@ -65,15 +70,20 @@ export class ListWithDetailControl extends JsonFormsControl {
     this.subscription = this.ngRedux
       .select()
       .subscribe((state: JsonFormsState) => {
-        const {data, schema, uischema} = this.mapToProps(state);
+        const { data, schema, uischema } = this.mapToProps(state);
         const controlElement = uischema as ControlElement;
         const instancePath = toDataPath(`${controlElement.scope}/items`);
-        const resolvedSchema = resolveSchema(schema, `${controlElement.scope}/items`);
-        const detailUISchema = controlElement.options.detail ||
+        const resolvedSchema = resolveSchema(
+          schema,
+          `${controlElement.scope}/items`
+        );
+        const detailUISchema =
+          controlElement.options.detail ||
           Generate.uiSchema(resolvedSchema, 'VerticalLayout');
         const masterItems = data.map((d: any, index: number) => {
-          const labelRefInstancePath =
-            removeSchemaKeywords(controlElement.options.labelRef);
+          const labelRefInstancePath = removeSchemaKeywords(
+            controlElement.options.labelRef
+          );
           const masterItem: MasterItem = {
             label: _.get(d, labelRefInstancePath),
             data: d,
@@ -86,8 +96,10 @@ export class ListWithDetailControl extends JsonFormsControl {
 
         this._isSplit = this.platform.width() > 768;
 
-        if (this.masterItems === undefined ||
-          this.masterItems.length !== masterItems.length) {
+        if (
+          this.masterItems === undefined ||
+          this.masterItems.length !== masterItems.length
+        ) {
           this.masterItems = masterItems;
           this.masterParams = {
             items: this.masterItems,
@@ -97,7 +109,6 @@ export class ListWithDetailControl extends JsonFormsControl {
             pushDetail: this.updateDetail
           };
           this.updateMaster();
-
         } else if (this.masterItems !== undefined) {
           const currentLabels = this.masterItems.map(item => item.label);
           const nextLabels = masterItems.map((item: MasterItem) => item.label);
@@ -124,63 +135,55 @@ export class ListWithDetailControl extends JsonFormsControl {
     if (this.masterNav && this.detailNav) {
       this._isSplit ? this.showDetail() : this.hideDetail();
     }
-  }
+  };
 
   showDetail = (): Promise<any> => {
     const activeDetailView = this.detailNav.getActive();
 
-    return this.detailNav.popToRoot({ animate: false })
-      .then(() => {
-        if (isMasterPage(activeDetailView)) {
-          // set empty detail
-          return this.detailNav.setRoot(DetailPage);
-        } else if (activeDetailView !== undefined) {
-          // update detail, such that navbar in detail disappears
-          return this.updateDetail(activeDetailView.data.item)
-            .then(() => this.updateMaster());
-        }
-      });
-  }
+    return this.detailNav.popToRoot({ animate: false }).then(() => {
+      if (isMasterPage(activeDetailView)) {
+        // set empty detail
+        return this.detailNav.setRoot(DetailPage);
+      } else if (activeDetailView !== undefined) {
+        // update detail, such that navbar in detail disappears
+        return this.updateDetail(activeDetailView.data.item).then(() =>
+          this.updateMaster()
+        );
+      }
+    });
+  };
 
   hideDetail = (): Promise<any> => {
     const activeDetailView = this.detailNav.getActive();
     const activeMasterView = this.masterNav.getActive();
 
     // set master as root on detail nav
-    return this.detailNav.setRoot(
-      activeMasterView.component,
-      activeMasterView.data,
-      { animate: false }
-    ).then(() => {
-      if (activeDetailView.data.item && activeDetailView.data.item.path) {
-        // update detail, such that navbar in detail appears
-        return this.updateDetail(activeDetailView.data.item);
-      }
-    });
-  }
+    return this.detailNav
+      .setRoot(activeMasterView.component, activeMasterView.data, {
+        animate: false
+      })
+      .then(() => {
+        if (activeDetailView.data.item && activeDetailView.data.item.path) {
+          // update detail, such that navbar in detail appears
+          return this.updateDetail(activeDetailView.data.item);
+        }
+      });
+  };
 
   updateMaster = () => {
     if (this._isSplit) {
-      this.masterNav.setRoot(
-        MasterPage,
-        this.masterParams,
-        { animate: false }
-      );
+      this.masterNav.setRoot(MasterPage, this.masterParams, { animate: false });
     } else {
-      this.detailNav.setRoot(
-        MasterPage,
-        this.masterParams,
-        { animate: false }
-      );
+      this.detailNav.setRoot(MasterPage, this.masterParams, { animate: false });
     }
-  }
+  };
 
   updateDetail = (item: any) => {
     const params = {
       item: {
         ...item,
         isSplit: this._isSplit,
-        goBack: this.goBack,
+        goBack: this.goBack
       }
     };
     if (!this._isSplit) {
@@ -189,13 +192,13 @@ export class ListWithDetailControl extends JsonFormsControl {
     } else {
       return this.detailNav.setRoot(DetailPage, params, { animate: false });
     }
-  }
+  };
 
   goBack = () => {
     if (!this._isSplit) {
       this.detailNav.pop();
     }
-  }
+  };
 }
 
 export const listWithDetailTester: RankedTester = rankWith(

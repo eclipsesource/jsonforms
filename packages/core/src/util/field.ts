@@ -26,14 +26,14 @@ import * as _ from 'lodash';
 import { ControlElement } from '../models/uischema';
 import { findUISchema, getConfig, getData, getErrorAt } from '../reducers';
 import {
-    composeWithUi,
-    isEnabled,
-    isVisible,
-    OwnPropsOfControl,
-    OwnPropsOfEnum,
-    Resolve,
-    StatePropsOfField,
-    StatePropsOfScopedRenderer
+  composeWithUi,
+  isEnabled,
+  isVisible,
+  OwnPropsOfControl,
+  OwnPropsOfEnum,
+  Resolve,
+  StatePropsOfField,
+  StatePropsOfScopedRenderer
 } from '../util';
 import { DispatchPropsOfControl, mapDispatchToControlProps } from './renderer';
 import { JsonFormsState } from '../store';
@@ -43,40 +43,38 @@ import { JsonFormsFieldRendererRegistryEntry } from '../reducers/fields';
 export { JsonFormsFieldRendererRegistryEntry };
 
 export interface OwnPropsOfField extends OwnPropsOfControl {
-    data?: any;
+  data?: any;
 }
 
 /**
  * State props of a field.
  */
 export interface StatePropsOfField extends StatePropsOfScopedRenderer {
-    isValid: boolean;
+  isValid: boolean;
 }
 
-export interface OwnPropsOfEnumField extends OwnPropsOfField, OwnPropsOfEnum {
-}
+export interface OwnPropsOfEnumField extends OwnPropsOfField, OwnPropsOfEnum {}
 
 /**
  * State props of a field for enum field
  */
-export interface StatePropsOfEnumField extends StatePropsOfField, OwnPropsOfEnum {
-}
+export interface StatePropsOfEnumField
+  extends StatePropsOfField,
+    OwnPropsOfEnum {}
 
 /**
  * Props of an enum field.
  */
-export interface EnumFieldProps extends StatePropsOfEnumField, DispatchPropsOfControl {
-
-}
+export interface EnumFieldProps
+  extends StatePropsOfEnumField,
+    DispatchPropsOfControl {}
 
 export type DispatchPropsOfField = DispatchPropsOfControl;
 
 /**
  * Props of a field.
  */
-export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {
-
-}
+export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {}
 /**
  * Registers the given field renderer when a JSON Forms store is created.
  * @param {RankedTester} tester
@@ -84,21 +82,23 @@ export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {
  * @returns {any}
  */
 export interface DispatchFieldStateProps extends FieldProps {
-    fields?: JsonFormsFieldRendererRegistryEntry[];
+  fields?: JsonFormsFieldRendererRegistryEntry[];
 }
 
-export const mapStateToDispatchFieldProps =
-    (state: JsonFormsState, ownProps: OwnPropsOfField): DispatchFieldStateProps => {
-        const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
-        return {
-            ...props,
-            ...ownProps,
-            fields: state.jsonforms.fields || []
-        };
-    };
+export const mapStateToDispatchFieldProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfField
+): DispatchFieldStateProps => {
+  const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
+  return {
+    ...props,
+    ...ownProps,
+    fields: state.jsonforms.fields || []
+  };
+};
 
 export interface DispatchFieldProps extends DispatchFieldStateProps {
-    showError: boolean;
+  showError: boolean;
 }
 
 /**
@@ -108,38 +108,42 @@ export interface DispatchFieldProps extends DispatchFieldStateProps {
  * @param ownProps any own props
  * @returns {StatePropsOfField} state props of a field
  */
-export const mapStateToFieldProps =
-    (state: JsonFormsState, ownProps: OwnPropsOfField): StatePropsOfField => {
-        const path = composeWithUi(ownProps.uischema, ownProps.path);
-        const visible = _.has(ownProps, 'visible') ? ownProps.visible : isVisible(ownProps, state);
-        const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled : isEnabled(ownProps, state);
-        const errors = getErrorAt(path)(state).map(error => error.message);
-        const isValid = _.isEmpty(errors);
-        const controlElement = ownProps.uischema as ControlElement;
-        const id = ownProps.id;
-        const defaultConfig = _.cloneDeep(getConfig(state));
-        const config = _.merge(
-            defaultConfig,
-            ownProps.uischema.options
-        );
+export const mapStateToFieldProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfField
+): StatePropsOfField => {
+  const path = composeWithUi(ownProps.uischema, ownProps.path);
+  const visible = _.has(ownProps, 'visible')
+    ? ownProps.visible
+    : isVisible(ownProps, state);
+  const enabled = _.has(ownProps, 'enabled')
+    ? ownProps.enabled
+    : isEnabled(ownProps, state);
+  const errors = getErrorAt(path)(state).map(error => error.message);
+  const isValid = _.isEmpty(errors);
+  const controlElement = ownProps.uischema as ControlElement;
+  const id = ownProps.id;
+  const defaultConfig = _.cloneDeep(getConfig(state));
+  const config = _.merge(defaultConfig, ownProps.uischema.options);
 
-        return {
-            data: ownProps.data !== undefined ?
-                Resolve.data(ownProps.data, path) :
-                Resolve.data(getData(state), path),
-            visible,
-            enabled,
-            id,
-            path,
-            errors,
-            isValid,
-            scopedSchema: Resolve.schema(ownProps.schema, controlElement.scope),
-            uischema: ownProps.uischema,
-            schema: ownProps.schema,
-            config,
-            findUISchema: findUISchema(state)
-        };
-    };
+  return {
+    data:
+      ownProps.data !== undefined
+        ? Resolve.data(ownProps.data, path)
+        : Resolve.data(getData(state), path),
+    visible,
+    enabled,
+    id,
+    path,
+    errors,
+    isValid,
+    scopedSchema: Resolve.schema(ownProps.schema, controlElement.scope),
+    uischema: ownProps.uischema,
+    schema: ownProps.schema,
+    config,
+    findUISchema: findUISchema(state)
+  };
+};
 
 /**
  * Default mapStateToFieldProps for enum field. Options is used for populating dropdown list
@@ -147,35 +151,43 @@ export const mapStateToFieldProps =
  * @param ownProps
  * @returns {StatePropsOfEnumField}
  */
-export const defaultMapStateToEnumFieldProps =
-    (state: JsonFormsState, ownProps: OwnPropsOfEnumField): StatePropsOfEnumField => {
-        const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
-        const options = ownProps.options !== undefined ? ownProps.options : props.scopedSchema.enum;
-        return {
-            ...props,
-            options
-        };
-    };
+export const defaultMapStateToEnumFieldProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfEnumField
+): StatePropsOfEnumField => {
+  const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
+  const options =
+    ownProps.options !== undefined ? ownProps.options : props.scopedSchema.enum;
+  return {
+    ...props,
+    options
+  };
+};
 
 /**
  * Synonym for mapDispatchToControlProps.
  *
  * @type {(dispatch) => {handleChange(path, value): void}}
  */
-export const mapDispatchToFieldProps: (dispatch: Dispatch<AnyAction>) => DispatchPropsOfControl =
-    mapDispatchToControlProps;
+export const mapDispatchToFieldProps: (
+  dispatch: Dispatch<AnyAction>
+) => DispatchPropsOfControl = mapDispatchToControlProps;
 
 /**
  * Default dispatch to control props which can be customized to set handleChange action
  *
  */
 export const defaultMapDispatchToControlProps =
-    // TODO: ownProps types
-    (dispatch: Dispatch<AnyAction>, ownProps: any): DispatchPropsOfControl => {
-        const dispatchControlProps: DispatchPropsOfControl = mapDispatchToFieldProps(dispatch);
+  // TODO: ownProps types
+  (dispatch: Dispatch<AnyAction>, ownProps: any): DispatchPropsOfControl => {
+    const dispatchControlProps: DispatchPropsOfControl = mapDispatchToFieldProps(
+      dispatch
+    );
 
-        return {
-            handleChange: ownProps.handleChange !== undefined ?
-                ownProps.handleChange : dispatchControlProps.handleChange
-        };
+    return {
+      handleChange:
+        ownProps.handleChange !== undefined
+          ? ownProps.handleChange
+          : dispatchControlProps.handleChange
     };
+  };

@@ -25,16 +25,16 @@
 import {
   isObjectArrayWithNesting,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
 import ArrayControlRenderer from './ArrayControlRenderer';
 import { ArrayControl } from './ArrayControl';
 
-export {
-  ArrayControl,
-  ArrayControlRenderer
-};
+export { ArrayControl, ArrayControlRenderer };
 
-export const arrayControlTester: RankedTester = rankWith(2, isObjectArrayWithNesting);
+export const arrayControlTester: RankedTester = rankWith(
+  2,
+  isObjectArrayWithNesting
+);
 
 export default ArrayControlRenderer;

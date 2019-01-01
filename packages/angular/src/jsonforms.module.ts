@@ -28,16 +28,10 @@ import { NgReduxModule } from '@angular-redux/store';
 import { JsonFormsOutlet } from './jsonforms.component';
 import { UnknownRenderer } from './unknown.component';
 @NgModule({
-  declarations: [
-    JsonFormsOutlet,
-    UnknownRenderer
-  ],
-  entryComponents: [
-    UnknownRenderer
-  ],
+  declarations: [JsonFormsOutlet, UnknownRenderer],
+  entryComponents: [UnknownRenderer],
   imports: [NgReduxModule],
   exports: [JsonFormsOutlet],
-  providers: [],
+  providers: []
 })
-export class JsonFormsModule {
-}
+export class JsonFormsModule {}

@@ -31,11 +31,12 @@ const applyDefaultConfiguration = (config: any = {}) =>
 
 export const configReducer = (
   state = applyDefaultConfiguration(),
-  action: SetConfigAction) => {
-    switch (action.type) {
-      case SET_CONFIG:
-        return applyDefaultConfiguration(action.config);
-      default:
-        return state;
-    }
-  };
+  action: SetConfigAction
+) => {
+  switch (action.type) {
+    case SET_CONFIG:
+      return applyDefaultConfiguration(action.config);
+    default:
+      return state;
+  }
+};

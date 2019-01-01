@@ -7,15 +7,19 @@ import {
   uischemaRegistryReducer,
   UISchemaTester
 } from '../../src/reducers/uischemas';
-import { registerUISchema, RemoveUISchemaAction, unregisterUISchema } from '../../src/actions';
+import {
+  registerUISchema,
+  RemoveUISchemaAction,
+  unregisterUISchema
+} from '../../src/actions';
 import { findUISchema, getSchema } from '../../src/reducers';
 import { Generate } from '../../src/generators';
 import { JsonFormsState } from '../../src';
 
 test('init state empty', t => {
   const dummyAction: RemoveUISchemaAction = {
-      type: 'jsonforms/REMOVE_UI_SCHEMA',
-      tester: undefined
+    type: 'jsonforms/REMOVE_UI_SCHEMA',
+    tester: undefined
   };
   t.deepEqual(uischemaRegistryReducer(undefined, dummyAction), []);
 });
@@ -52,8 +56,10 @@ test('remove ui schema', t => {
 });
 
 test('findMatchingUISchema', t => {
-  const testerA: UISchemaTester = (_schema, schemaPath) => _.endsWith(schemaPath, 'foo') ? 1 : 0;
-  const testerB: UISchemaTester = (_schema, schemaPath) => _.endsWith(schemaPath, 'bar') ? 1 : 0;
+  const testerA: UISchemaTester = (_schema, schemaPath) =>
+    _.endsWith(schemaPath, 'foo') ? 1 : 0;
+  const testerB: UISchemaTester = (_schema, schemaPath) =>
+    _.endsWith(schemaPath, 'bar') ? 1 : 0;
   const controlA = {
     type: 'Control',
     scope: '#/definitions/foo'
@@ -83,34 +89,40 @@ test('findMatchingUISchema', t => {
 });
 
 test('findUISchema returns generated UI schema if no match has been found', t => {
-    const middlewares: Redux.Middleware[] = [];
-    const mockStore = configureStore<JsonFormsState>(middlewares);
-    const store = mockStore({
-        jsonforms: {
-            core: {
-                schema: {
-                    definitions: {
-                        baz: {
-                            type: 'number'
-                        }
-                    }
-                },
-                data: undefined,
-                uischema: undefined
-            },
-            uischemas: []
-        }
-    });
+  const middlewares: Redux.Middleware[] = [];
+  const mockStore = configureStore<JsonFormsState>(middlewares);
+  const store = mockStore({
+    jsonforms: {
+      core: {
+        schema: {
+          definitions: {
+            baz: {
+              type: 'number'
+            }
+          }
+        },
+        data: undefined,
+        uischema: undefined
+      },
+      uischemas: []
+    }
+  });
 
-    t.deepEqual(
-        findUISchema(store.getState())(getSchema(store.getState()), '#/definitions/baz', undefined),
-        Generate.uiSchema(getSchema(store.getState()))
-    );
+  t.deepEqual(
+    findUISchema(store.getState())(
+      getSchema(store.getState()),
+      '#/definitions/baz',
+      undefined
+    ),
+    Generate.uiSchema(getSchema(store.getState()))
+  );
 });
 
 test('findMatchingUISchema with highest priority', t => {
-  const testerA: UISchemaTester = (_schema, schemaPath) => _.endsWith(schemaPath, 'foo') ? 2 : 0;
-  const testerB: UISchemaTester = (_schema, schemaPath) => _.endsWith(schemaPath, 'foo') ? 1 : 0;
+  const testerA: UISchemaTester = (_schema, schemaPath) =>
+    _.endsWith(schemaPath, 'foo') ? 2 : 0;
+  const testerB: UISchemaTester = (_schema, schemaPath) =>
+    _.endsWith(schemaPath, 'foo') ? 1 : 0;
   const controlA = {
     type: 'Control',
     scope: '#/definitions/foo'

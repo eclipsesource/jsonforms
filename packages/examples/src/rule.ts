@@ -60,7 +60,7 @@ export const uischema = {
       rule: {
         effect: 'DISABLE',
         condition: {
-          type: 'LEAF' ,
+          type: 'LEAF',
           scope: '#/properties/alive',
           expectedValue: false
         }

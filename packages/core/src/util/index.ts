@@ -22,9 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonFormsState, JsonSchema, Scopable, StatePropsOfRenderer } from '../';
+import {
+  JsonFormsState,
+  JsonSchema,
+  Scopable,
+  StatePropsOfRenderer
+} from '../';
 import { resolveData, resolveSchema } from './resolvers';
-import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
+import {
+  compose as composePaths,
+  composeWithUi,
+  toDataPath,
+  toDataPathSegments
+} from './path';
 import { isEnabled, isVisible } from './runtime';
 
 export { createCleanLabel, createLabelDescriptionFrom } from './label';
@@ -37,8 +47,7 @@ export { createCleanLabel, createLabelDescriptionFrom } from './label';
  * @returns {string} the escaped string
  */
 export const convertToValidClassName = (s: string): string =>
-  s.replace('#', 'root')
-   .replace(new RegExp('/', 'g'), '_');
+  s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
 
 export const formatErrorMessage = (errors: string[]) => {
   if (errors === undefined || errors === null) {
@@ -53,7 +62,7 @@ export const formatErrorMessage = (errors: string[]) => {
  */
 const Resolve: {
   schema(schema: JsonSchema, schemaPath: string): JsonSchema;
-  data(data: any, path: string): any
+  data(data: any, path: string): any;
 } = {
   schema: resolveSchema,
   data: resolveData
@@ -62,7 +71,8 @@ export { resolveData, resolveSchema } from './resolvers';
 export { Resolve };
 
 // Paths --
-const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope).join('.');
+const fromScopable = (scopable: Scopable) =>
+  toDataPathSegments(scopable.scope).join('.');
 
 const Paths = {
   compose: composePaths,
@@ -73,7 +83,7 @@ export { composePaths, composeWithUi, Paths, toDataPath };
 // Runtime --
 const Runtime = {
   isEnabled(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
-      return isEnabled(props, state);
+    return isEnabled(props, state);
   },
   isVisible(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
     return isVisible(props, state);

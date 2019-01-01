@@ -15,21 +15,24 @@ export interface LabelDefinition {
  * @return the resolved data or {null} if the path is not a valid path in the root data
  */
 export const resolveLocalData = (rootData: Object, path: string): Object => {
-    let resolvedData = rootData;
-    for (const segment of path.split('/')) {
-      if (segment === '#' || _.isEmpty(segment)) {
-        continue;
-      }
-      if (_.isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
-        console.warn(`The local path '${path}' cannot be resolved in the given data:`, rootData);
-
-        return null;
-      }
-      resolvedData = _.get(resolvedData, segment);
+  let resolvedData = rootData;
+  for (const segment of path.split('/')) {
+    if (segment === '#' || _.isEmpty(segment)) {
+      continue;
     }
+    if (_.isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
+      console.warn(
+        `The local path '${path}' cannot be resolved in the given data:`,
+        rootData
+      );
 
-    return resolvedData;
-  };
+      return null;
+    }
+    resolvedData = _.get(resolvedData, segment);
+  }
+
+  return resolvedData;
+};
 
 /**
  * Extract the array index from the given path.

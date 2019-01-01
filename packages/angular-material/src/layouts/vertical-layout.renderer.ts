@@ -23,23 +23,32 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { JsonFormsState, RankedTester, rankWith, uiTypeIs, VerticalLayout } from '@jsonforms/core';
+import {
+  JsonFormsState,
+  RankedTester,
+  rankWith,
+  uiTypeIs,
+  VerticalLayout
+} from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { NgRedux } from '@angular-redux/store';
 
 @Component({
-    selector: 'VerticalLayoutRenderer',
-    template: `
-    <div fxLayout='column' fxLayoutGap='16px' [fxHide]="hidden">
-        <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
-            <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
-        </div>
+  selector: 'VerticalLayoutRenderer',
+  template: `
+    <div fxLayout="column" fxLayoutGap="16px" [fxHide]="hidden">
+      <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
+        <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
+      </div>
     </div>
-    `
+  `
 })
 export class VerticalLayoutRenderer extends LayoutRenderer<VerticalLayout> {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
 }
-export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
+export const verticalLayoutTester: RankedTester = rankWith(
+  1,
+  uiTypeIs('VerticalLayout')
+);
