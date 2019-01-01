@@ -25,79 +25,85 @@
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatError, MatFormFieldModule, MatSlider, MatSliderModule } from '@angular/material';
+import {
+  MatError,
+  MatFormFieldModule,
+  MatSlider,
+  MatSliderModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    ErrorTestExpectation,
-    rangeBaseTest,
-    rangeErrorTest,
-    rangeInputEventTest
+  ErrorTestExpectation,
+  rangeBaseTest,
+  rangeErrorTest,
+  rangeInputEventTest
 } from '@jsonforms/angular-test';
 import { RangeControlRenderer, RangeControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material number field tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo',
-        options: { slider: true }
-    };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo',
+    options: { slider: true }
+  };
 
-    it('should succeed with floats', () => {
-        expect(
-            RangeControlRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'number',
-                            minimum: -42.42,
-                            maximum: 42.42,
-                            default: 0.42
-                        }
-                    }
-                }
-            )
-        ).toBe(4);
-    });
-    it('should succeed with integers', () => {
-        expect(
-            RangeControlRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'integer',
-                            minimum: -42,
-                            maximum: 42,
-                            default: 1
-                        }
-                    }
-                }
-            )
-        ).toBe(4);
-    });
+  it('should succeed with floats', () => {
+    expect(
+      RangeControlRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number',
+            minimum: -42.42,
+            maximum: 42.42,
+            default: 0.42
+          }
+        }
+      })
+    ).toBe(4);
+  });
+  it('should succeed with integers', () => {
+    expect(
+      RangeControlRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'integer',
+            minimum: -42,
+            maximum: 42,
+            default: 1
+          }
+        }
+      })
+    ).toBe(4);
+  });
 });
 const imports = [
-    NoopAnimationsModule,
-    MatSliderModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    FlexLayoutModule
+  NoopAnimationsModule,
+  MatSliderModule,
+  MatFormFieldModule,
+  ReactiveFormsModule,
+  FlexLayoutModule
 ];
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = RangeControlRenderer;
 const errorTest: ErrorTestExpectation = {
-    errorInstance: MatError,
-    numberOfElements: 1,
-    indexOfElement: 0
+  errorInstance: MatError,
+  numberOfElements: 1,
+  indexOfElement: 0
 };
 const defaultTestConfig = { imports, providers, componentUT };
 
-describe('Range control Base Tests', rangeBaseTest(defaultTestConfig, MatSlider));
-describe('Range control Input Event Tests', rangeInputEventTest(defaultTestConfig, MatSlider));
-describe('Range control Error Tests', rangeErrorTest(defaultTestConfig, MatSlider, errorTest));
+describe(
+  'Range control Base Tests',
+  rangeBaseTest(defaultTestConfig, MatSlider)
+);
+describe(
+  'Range control Input Event Tests',
+  rangeInputEventTest(defaultTestConfig, MatSlider)
+);
+describe(
+  'Range control Error Tests',
+  rangeErrorTest(defaultTestConfig, MatSlider, errorTest)
+);

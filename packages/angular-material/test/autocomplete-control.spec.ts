@@ -32,7 +32,13 @@ import {
 import { NgRedux } from '@angular-redux/store';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { DebugElement, NgZone } from '@angular/core';
-import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  fakeAsync,
+  inject,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { By } from '@angular/platform-browser';
@@ -48,11 +54,7 @@ const schema: JsonSchema = {
   properties: {
     foo: {
       type: 'string',
-      enum: [
-        'A',
-        'B',
-        'C'
-      ]
+      enum: ['A', 'B', 'C']
     }
   }
 };
@@ -68,9 +70,7 @@ const imports = [
   NoopAnimationsModule,
   ReactiveFormsModule
 ];
-const providers = [
-  { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = AutocompleteControlRenderer;
 const errorTest: ErrorTestExpectation = {
   errorInstance: MatError,
@@ -106,7 +106,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -128,7 +128,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -139,7 +139,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: { foo: 'B' },
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -159,7 +159,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -170,7 +170,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: { foo: undefined },
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -188,7 +188,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -199,7 +199,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: { foo: null },
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -217,7 +217,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -228,7 +228,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: { foo: 'A', bar: 'B' },
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -249,7 +249,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -257,7 +257,6 @@ describe('Autocomplete control Base Tests', () => {
     fixture.detectChanges();
     component.ngOnInit();
     expect(inputElement.disabled).toBe(true);
-
   });
   it('id should be present in output', () => {
     const mockSubStore = MockNgRedux.getSelectorStub();
@@ -269,7 +268,7 @@ describe('Autocomplete control Base Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -278,7 +277,6 @@ describe('Autocomplete control Base Tests', () => {
     fixture.detectChanges();
     component.ngOnInit();
     expect(inputElement.id).toBe('myId');
-
   });
 });
 describe('AutoComplete control Input Event Tests', () => {
@@ -294,7 +292,7 @@ describe('AutoComplete control Input Event Tests', () => {
       imports: imports,
       providers: [
         ...providers,
-        {provide: NgZone, useFactory: () => zone = new MockNgZone()}
+        { provide: NgZone, useFactory: () => (zone = new MockNgZone()) }
       ]
     }).compileComponents();
 
@@ -311,14 +309,16 @@ describe('AutoComplete control Input Event Tests', () => {
     inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
   });
 
-  afterEach(inject([OverlayContainer], (currentOverlayContainer: OverlayContainer) => {
-    // Since we're resetting the testing module in some of the tests,
-    // we can potentially have multiple overlay containers.
-    currentOverlayContainer.ngOnDestroy();
-    overlayContainer.ngOnDestroy();
-  }));
+  afterEach(inject(
+    [OverlayContainer],
+    (currentOverlayContainer: OverlayContainer) => {
+      // Since we're resetting the testing module in some of the tests,
+      // we can potentially have multiple overlay containers.
+      currentOverlayContainer.ngOnDestroy();
+      overlayContainer.ngOnDestroy();
+    }
+  ));
   it('should update via input event', fakeAsync(() => {
-
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
     component.schema = schema;
@@ -327,7 +327,7 @@ describe('AutoComplete control Input Event Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -341,19 +341,20 @@ describe('AutoComplete control Input Event Tests', () => {
     zone.simulateZoneExit();
     fixture.detectChanges();
 
-    const options =
-      overlayContainerElement.querySelectorAll('mat-option') as NodeListOf<HTMLElement>;
+    const options = overlayContainerElement.querySelectorAll(
+      'mat-option'
+    ) as NodeListOf<HTMLElement>;
     options[1].click();
     tick();
     fixture.detectChanges();
 
     expect(spy).toHaveBeenCalled();
-    const event = spy.calls.mostRecent().args[0] as MatAutocompleteSelectedEvent;
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
 
     expect(event.option.value).toBe('B');
   }));
   it('options should prefer own props', fakeAsync(() => {
-
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema;
     component.schema = schema;
@@ -363,7 +364,7 @@ describe('AutoComplete control Input Event Tests', () => {
       jsonforms: {
         core: {
           data: data,
-          schema: schema,
+          schema: schema
         }
       }
     });
@@ -377,14 +378,16 @@ describe('AutoComplete control Input Event Tests', () => {
     zone.simulateZoneExit();
     fixture.detectChanges();
 
-    const options =
-      overlayContainerElement.querySelectorAll('mat-option') as NodeListOf<HTMLElement>;
+    const options = overlayContainerElement.querySelectorAll(
+      'mat-option'
+    ) as NodeListOf<HTMLElement>;
     options[0].click();
     tick();
     fixture.detectChanges();
 
     expect(spy).toHaveBeenCalled();
-    const event = spy.calls.mostRecent().args[0] as MatAutocompleteSelectedEvent;
+    const event = spy.calls.mostRecent()
+      .args[0] as MatAutocompleteSelectedEvent;
 
     expect(event.option.value).toBe('X');
   }));
@@ -415,20 +418,24 @@ describe('AutoComplete control Error Tests', () => {
         core: {
           data: data,
           schema: schema,
-          errors: [{
-            dataPath: 'foo',
-            message: 'Hi, this is me, test error!'
-          }]
+          errors: [
+            {
+              dataPath: 'foo',
+              message: 'Hi, this is me, test error!'
+            }
+          ]
         }
-      },
+      }
     });
     mockSubStore.complete();
     fixture.detectChanges();
     component.ngOnInit();
-    const debugErrors: DebugElement[] =
-      fixture.debugElement.queryAll(By.directive(errorTest.errorInstance));
+    const debugErrors: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(errorTest.errorInstance)
+    );
     expect(debugErrors.length).toBe(errorTest.numberOfElements);
-    expect(debugErrors[errorTest.indexOfElement].nativeElement.textContent)
-      .toBe('Hi, this is me, test error!');
+    expect(
+      debugErrors[errorTest.indexOfElement].nativeElement.textContent
+    ).toBe('Hi, this is me, test error!');
   });
 });

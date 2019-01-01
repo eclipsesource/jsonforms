@@ -29,32 +29,35 @@ import { Subject } from 'rxjs';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { initComponent } from '@jsonforms/angular-test';
 import {
-    HorizontalLayoutRenderer,
-    horizontalLayoutTester
+  HorizontalLayoutRenderer,
+  horizontalLayoutTester
 } from '../src/layouts/horizontal-layout.renderer';
 
 describe('Horizontal layout tester', () => {
   it('should succeed', () => {
-    expect(horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined)).toBe(1);
+    expect(
+      horizontalLayoutTester({ type: 'HorizontalLayout' }, undefined)
+    ).toBe(1);
   });
 });
 describe('Horizontal layout', () => {
   let fixture: ComponentFixture<any>;
 
   beforeEach(() => {
-      fixture = beforeEachLayoutTest(
-          HorizontalLayoutRenderer,
-          {
-            imports: [FlexLayoutModule]
-          }
-      );
+    fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
+      imports: [FlexLayoutModule]
+    });
   });
 
   it('render with undefined elements', () => {
     const uischema: UISchemaElement = {
       type: 'HorizontalLayout'
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+      data: {},
+      schema: {},
+      uischema
+    });
     initComponent(fixture, mockSubStore);
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
@@ -64,7 +67,11 @@ describe('Horizontal layout', () => {
       type: 'HorizontalLayout',
       elements: null
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+      data: {},
+      schema: {},
+      uischema
+    });
     initComponent(fixture, mockSubStore);
     expect(fixture.nativeElement.children[0].children.length).toBe(0);
   });
@@ -72,15 +79,15 @@ describe('Horizontal layout', () => {
   it('render with children', () => {
     const uischema: HorizontalLayout = {
       type: 'HorizontalLayout',
-      elements: [
-        { type: 'Control' },
-        { type: 'Control' }
-      ]
+      elements: [{ type: 'Control' }, { type: 'Control' }]
     };
-    const mockSubStore: Subject<any> = setupMockStore(fixture, { data: {}, schema: {}, uischema });
+    const mockSubStore: Subject<any> = setupMockStore(fixture, {
+      data: {},
+      schema: {},
+      uischema
+    });
     initComponent(fixture, mockSubStore);
     expect(fixture.nativeElement.children[0].children.length).toBe(2);
     expect(fixture.nativeElement.children[0].hidden).toBe(false);
   });
-
 });

@@ -15,7 +15,7 @@ export const schema = {
     height: {
       type: 'number'
     }
-  },
+  }
 };
 
 export const uischema = {
@@ -48,7 +48,7 @@ export const uischema = {
           options: { slider: true }
         }
       ]
-    },
+    }
   ]
 };
 
@@ -60,6 +60,6 @@ registerExamples([
     label: 'Numbers',
     data,
     schema,
-    uischema,
+    uischema
   }
 ]);

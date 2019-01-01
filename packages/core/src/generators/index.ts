@@ -28,9 +28,13 @@ import { generateJsonSchema } from './schema';
 import { createControlElement, generateDefaultUISchema } from './uischema';
 
 export const Generate: {
-    jsonSchema(instance: Object, options?: any): JsonSchema;
-    uiSchema(jsonSchema: JsonSchema, layoutType?: string, prefix?: string): UISchemaElement;
-    controlElement(label: string, ref: string): ControlElement;
+  jsonSchema(instance: Object, options?: any): JsonSchema;
+  uiSchema(
+    jsonSchema: JsonSchema,
+    layoutType?: string,
+    prefix?: string
+  ): UISchemaElement;
+  controlElement(label: string, ref: string): ControlElement;
 } = {
   jsonSchema: generateJsonSchema,
   uiSchema: generateDefaultUISchema,

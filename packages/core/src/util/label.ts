@@ -27,7 +27,6 @@ import * as _ from 'lodash';
 import { ControlElement, LabelDescription } from '../models/uischema';
 
 const deriveLabel = (controlElement: ControlElement): string => {
-
   if (controlElement.scope !== undefined) {
     const ref = controlElement.scope;
     const label = ref.substr(ref.lastIndexOf('/') + 1);
@@ -39,7 +38,7 @@ const deriveLabel = (controlElement: ControlElement): string => {
 };
 
 export const createCleanLabel = (label: string): string => {
-  return _.startCase(label.replace('_', ' '))
+  return _.startCase(label.replace('_', ' '));
 };
 
 /**
@@ -47,7 +46,9 @@ export const createCleanLabel = (label: string): string => {
  * @param {ControlElement} withLabel the UI schema to obtain a label object for
  * @returns {LabelDescription}
  */
-export const createLabelDescriptionFrom = (withLabel: ControlElement): LabelDescription => {
+export const createLabelDescriptionFrom = (
+  withLabel: ControlElement
+): LabelDescription => {
   const labelProperty = withLabel.label;
   const derivedLabel = deriveLabel(withLabel);
   if (typeof labelProperty === 'boolean') {
@@ -68,9 +69,12 @@ export const createLabelDescriptionFrom = (withLabel: ControlElement): LabelDesc
       show: true
     };
   } else if (typeof labelProperty === 'object') {
-    const show = labelProperty.hasOwnProperty('show') ? labelProperty.show : true;
-    const label = labelProperty.hasOwnProperty('text') ?
-      labelProperty.text : derivedLabel;
+    const show = labelProperty.hasOwnProperty('show')
+      ? labelProperty.show
+      : true;
+    const label = labelProperty.hasOwnProperty('text')
+      ? labelProperty.text
+      : derivedLabel;
 
     return {
       text: label,

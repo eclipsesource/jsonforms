@@ -26,24 +26,24 @@ import { registerExamples } from './register';
 import { UISchemaElement } from '@jsonforms/core';
 
 export const schema = {
-  'type': 'object',
-  'properties': {
-     'Level1': {
-        'type': 'array',
-        'items': {
-           'type': 'object',
-           'properties': {
-              'Level2': {
-                 'type': 'object',
-                 'properties': {
-                    'Level3': {
-                       'type': 'string'
-                    }
-                 }
+  type: 'object',
+  properties: {
+    Level1: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          Level2: {
+            type: 'object',
+            properties: {
+              Level3: {
+                type: 'string'
               }
-           }
+            }
+          }
         }
-     }
+      }
+    }
   }
 };
 

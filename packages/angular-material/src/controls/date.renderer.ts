@@ -1,31 +1,39 @@
 import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { getLocale, isDateControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  getLocale,
+  isDateControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { DateAdapter, NativeDateAdapter } from '@angular/material';
 
 @Component({
   selector: 'DateControlRenderer',
   template: `
-  <mat-form-field fxFlex [fxHide]="hidden">
-    <mat-label>{{ label }}</mat-label>
-    <input
+    <mat-form-field fxFlex [fxHide]="hidden">
+      <mat-label>{{ label }}</mat-label>
+      <input
         matInput
         (dateChange)="onChange($event)"
         placeholder="{{ description }}"
         [id]="id"
         [formControl]="form"
         [matDatepicker]="datepicker"
-    >
-    <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
-    <mat-datepicker #datepicker></mat-datepicker>
+      />
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="datepicker"
+      ></mat-datepicker-toggle>
+      <mat-datepicker #datepicker></mat-datepicker>
 
-    <mat-error>{{ error }}</mat-error>
-  </mat-form-field>
+      <mat-error>{{ error }}</mat-error>
+    </mat-form-field>
   `
 })
 export class DateControlRenderer extends JsonFormsControl {
-
   constructor(
     ngRedux: NgRedux<JsonFormsState>,
     private dateAdapter: DateAdapter<NativeDateAdapter>

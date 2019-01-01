@@ -29,18 +29,18 @@ export const schema = {
     address: {
       type: 'object',
       properties: {
-        street_address: { 'type': 'string' },
-        city:           { 'type': 'string' },
-        state:          { 'type': 'string' },
-        coord:          { '$ref': '#/definitions/coord' },
+        street_address: { type: 'string' },
+        city: { type: 'string' },
+        state: { type: 'string' },
+        coord: { $ref: '#/definitions/coord' }
       },
       required: ['street_address', 'city', 'state']
     },
-    coord: {'$ref': 'http://json-schema.org/geo'}
+    coord: { $ref: 'http://json-schema.org/geo' }
   },
   type: 'object',
   properties: {
-      address: { '$ref': '#/definitions/address' }
+    address: { $ref: '#/definitions/address' }
   }
 };
 

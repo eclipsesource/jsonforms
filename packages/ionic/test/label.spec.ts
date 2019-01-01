@@ -47,7 +47,6 @@ const uischema: LabelElement = {
 };
 
 describe('Ionic label field tester', () => {
-
   it('should succeed', () => {
     expect(labelTester(uischema, schema)).toBe(4);
   });
@@ -58,15 +57,11 @@ describe('Ionic label base tests', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        LabelRenderer,
-      ],
-      imports: [
-        IonicModule.forRoot(LabelRenderer),
-      ],
+      declarations: [LabelRenderer],
+      imports: [IonicModule.forRoot(LabelRenderer)],
       providers: [
         { provide: Platform, useClass: PlatformMock },
-        { provide: NgRedux, useFactory: MockNgRedux.getInstance },
+        { provide: NgRedux, useFactory: MockNgRedux.getInstance }
       ]
     }).compileComponents();
 
@@ -77,7 +72,9 @@ describe('Ionic label base tests', () => {
   it('should render', () => {
     initAndExpect(fixture, { uischema, schema, data }, () => {
       expect(
-        fixture.debugElement.query(By.directive(Label)).nativeElement.innerText.trim()
+        fixture.debugElement
+          .query(By.directive(Label))
+          .nativeElement.innerText.trim()
       ).toBe('FooBar');
     });
   });

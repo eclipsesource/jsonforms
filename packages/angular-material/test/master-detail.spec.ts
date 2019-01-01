@@ -22,7 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import {
@@ -42,7 +48,6 @@ import { MasterListComponent } from '../src/other/master-detail/master';
 import { JsonFormsDetailComponent } from '../src/other/master-detail/detail';
 
 describe('Master detail', () => {
-
   let fixture: ComponentFixture<MasterListComponent>;
   let component: any;
 
@@ -90,15 +95,17 @@ describe('Master detail', () => {
       labelRef: '#/items/properties/customer/properties/name',
       detail: {
         type: 'VerticalLayout',
-        elements: [{
-          type: 'Control',
-          scope: '#/properties/customer/properties/name'
-        }]
+        elements: [
+          {
+            type: 'Control',
+            scope: '#/properties/customer/properties/name'
+          }
+        ]
       }
     }
   };
 
-  beforeEach((() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         JsonFormsOutlet,
@@ -114,19 +121,19 @@ describe('Master detail', () => {
         FlexLayoutModule,
         NoopAnimationsModule
       ],
-      providers: [
-        { provide: NgRedux, useFactory: MockNgRedux.getInstance },
-      ],
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [UnknownRenderer]
-      }
-    }).compileComponents();
+      providers: [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }]
+    })
+      .overrideModule(BrowserDynamicTestingModule, {
+        set: {
+          entryComponents: [UnknownRenderer]
+        }
+      })
+      .compileComponents();
 
     MockNgRedux.reset();
     fixture = TestBed.createComponent(MasterListComponent);
     component = fixture.componentInstance;
-  }));
+  });
 
   it('should render', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
@@ -136,7 +143,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data,
-          schema,
+          schema
         }
       }
     });
@@ -147,7 +154,9 @@ describe('Master detail', () => {
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       expect(component.masterItems.length).toBe(1);
-      expect(fixture.debugElement.queryAll(By.directive(MatListItem)).length).toBe(1);
+      expect(
+        fixture.debugElement.queryAll(By.directive(MatListItem)).length
+      ).toBe(1);
       // the component is wrapped in a div
       expect(fixture.nativeElement.children[0].style.display).not.toBe('none');
     });
@@ -161,7 +170,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data,
-          schema,
+          schema
         }
       }
     });
@@ -169,9 +178,13 @@ describe('Master detail', () => {
     mockSubStore.complete();
     fixture.detectChanges();
 
-    const spy = spyOn(component, 'addItem').and.returnValue(() => { /* noop */ });
+    const spy = spyOn(component, 'addItem').and.returnValue(() => {
+      /* noop */
+    });
     fixture.whenStable().then(() => {
-      const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+      const buttons: DebugElement[] = fixture.debugElement.queryAll(
+        By.css('button')
+      );
       buttons[1].nativeElement.click();
       fixture.detectChanges();
       fixture.whenRenderingDone().then(() => {
@@ -189,7 +202,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data,
-          schema,
+          schema
         }
       }
     });
@@ -197,9 +210,13 @@ describe('Master detail', () => {
     mockSubStore.complete();
     fixture.detectChanges();
 
-    const spy = spyOn(component, 'removeItems').and.returnValue(() => { /* noop */ });
+    const spy = spyOn(component, 'removeItems').and.returnValue(() => {
+      /* noop */
+    });
     fixture.whenStable().then(() => {
-      const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+      const buttons: DebugElement[] = fixture.debugElement.queryAll(
+        By.css('button')
+      );
       buttons[0].nativeElement.click();
       fixture.whenStable().then(() => {
         fixture.detectChanges();
@@ -232,7 +249,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data: moreData,
-          schema,
+          schema
         }
       }
     });
@@ -241,7 +258,9 @@ describe('Master detail', () => {
     tick();
 
     // select last element
-    const listItems: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatListItem));
+    const listItems: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatListItem)
+    );
     listItems[2].nativeElement.click();
     fixture.detectChanges();
     tick();
@@ -252,7 +271,7 @@ describe('Master detail', () => {
         jsonforms: {
           core: {
             data: { orders: moreData.orders.slice(1) },
-            schema,
+            schema
           }
         }
       });
@@ -260,7 +279,9 @@ describe('Master detail', () => {
       fixture.detectChanges();
       tick();
     });
-    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(
+      By.css('button')
+    );
     buttons[0].nativeElement.click();
 
     expect(component.selectedItemIdx).toBe(1);
@@ -291,7 +312,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data: moreData,
-          schema,
+          schema
         }
       }
     });
@@ -307,7 +328,7 @@ describe('Master detail', () => {
         jsonforms: {
           core: {
             data: { orders: copy },
-            schema,
+            schema
           }
         }
       });
@@ -315,7 +336,9 @@ describe('Master detail', () => {
       fixture.detectChanges();
       tick();
     });
-    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(
+      By.css('button')
+    );
     buttons[1].nativeElement.click();
 
     expect(component.selectedItemIdx).toBe(0);
@@ -346,7 +369,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data: moreData,
-          schema,
+          schema
         }
       }
     });
@@ -360,7 +383,7 @@ describe('Master detail', () => {
         jsonforms: {
           core: {
             data: { orders: moreData.orders.slice(1) },
-            schema,
+            schema
           }
         }
       });
@@ -368,7 +391,9 @@ describe('Master detail', () => {
       fixture.detectChanges();
       tick();
     });
-    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(
+      By.css('button')
+    );
     buttons[0].nativeElement.click();
 
     expect(component.selectedItemIdx).toBe(0);
@@ -391,7 +416,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data: moreData,
-          schema,
+          schema
         }
       }
     });
@@ -405,7 +430,7 @@ describe('Master detail', () => {
         jsonforms: {
           core: {
             data: { orders: [] },
-            schema,
+            schema
           }
         }
       });
@@ -413,7 +438,9 @@ describe('Master detail', () => {
       fixture.detectChanges();
       tick();
     });
-    const buttons: DebugElement[] = fixture.debugElement.queryAll(By.css('button'));
+    const buttons: DebugElement[] = fixture.debugElement.queryAll(
+      By.css('button')
+    );
     buttons[0].nativeElement.click();
 
     expect(component.selectedItemIdx).toBe(-1);
@@ -428,7 +455,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data,
-          schema,
+          schema
         }
       }
     });
@@ -438,34 +465,37 @@ describe('Master detail', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       spyOn(component, 'onSelect');
-      const select = fixture.debugElement.query(By.directive(MatListItem)).nativeElement;
+      const select = fixture.debugElement.query(By.directive(MatListItem))
+        .nativeElement;
       select.click();
       fixture.detectChanges();
       fixture.whenStable().then(() => {
         fixture.detectChanges();
         expect(
-          fixture.debugElement.queryAll(By.directive(JsonFormsDetailComponent)).length
+          fixture.debugElement.queryAll(By.directive(JsonFormsDetailComponent))
+            .length
         ).toBe(1);
-        expect(component.onSelect)
-          .toHaveBeenCalledWith(
-            {
-              label: 'ACME',
-              data: {
-                customer: { name: 'ACME' },
-                title: 'Carrots'
-              },
-              path: 'orders.0',
-              schema: undefined,
-              uischema: {
-                type: 'VerticalLayout',
-                elements: [{
+        expect(component.onSelect).toHaveBeenCalledWith(
+          {
+            label: 'ACME',
+            data: {
+              customer: { name: 'ACME' },
+              title: 'Carrots'
+            },
+            path: 'orders.0',
+            schema: undefined,
+            uischema: {
+              type: 'VerticalLayout',
+              elements: [
+                {
                   type: 'Control',
                   scope: '#/properties/customer/properties/name'
-                }]
-              }
-            },
-            0
-          );
+                }
+              ]
+            }
+          },
+          0
+        );
       });
     });
   }));
@@ -478,7 +508,7 @@ describe('Master detail', () => {
       jsonforms: {
         core: {
           data,
-          schema,
+          schema
         }
       }
     });

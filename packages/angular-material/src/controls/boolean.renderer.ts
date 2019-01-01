@@ -25,32 +25,40 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { isBooleanControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  isBooleanControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
 
 @Component({
-    selector: 'BooleanControlRenderer',
-    template: `
-    <div [fxHide]="hidden" fxLayout="column" fxLayoutAlign="center" style="height:100%">
-        <mat-checkbox
-            (change)="onChange($event)"
-            [checked]="isChecked()"
-            [disabled]="!enabled"
-            [id]="id">
-            {{ label }}
-        </mat-checkbox>
-        <mat-error class='mat-caption'>{{ error }}</mat-error>
+  selector: 'BooleanControlRenderer',
+  template: `
+    <div
+      [fxHide]="hidden"
+      fxLayout="column"
+      fxLayoutAlign="center"
+      style="height:100%"
+    >
+      <mat-checkbox
+        (change)="onChange($event)"
+        [checked]="isChecked()"
+        [disabled]="!enabled"
+        [id]="id"
+      >
+        {{ label }}
+      </mat-checkbox>
+      <mat-error class="mat-caption">{{ error }}</mat-error>
     </div>
-    `
+  `
 })
 export class BooleanControlRenderer extends JsonFormsControl {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
-    isChecked = () => this.data || false;
-    getEventValue = (event: any) => event.checked;
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  isChecked = () => this.data || false;
+  getEventValue = (event: any) => event.checked;
 }
 
-export const booleanControlTester: RankedTester = rankWith(
-    2,
-    isBooleanControl
-);
+export const booleanControlTester: RankedTester = rankWith(2, isBooleanControl);

@@ -24,28 +24,36 @@
 */
 import { Component } from '@angular/core';
 import {
-    HorizontalLayout,
-    JsonFormsState,
-    RankedTester,
-    rankWith,
-    uiTypeIs
+  HorizontalLayout,
+  JsonFormsState,
+  RankedTester,
+  rankWith,
+  uiTypeIs
 } from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { NgRedux } from '@angular-redux/store';
 
 @Component({
-    selector: 'HorizontalLayoutRenderer',
-    template: `
-        <div fxLayout='row' fxLayoutGap='16px' [fxHide]="hidden" fxLayoutAlign='center center'>
-            <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
-                <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
-            </div>
-        </div>
-    `
+  selector: 'HorizontalLayoutRenderer',
+  template: `
+    <div
+      fxLayout="row"
+      fxLayoutGap="16px"
+      [fxHide]="hidden"
+      fxLayoutAlign="center center"
+    >
+      <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
+        <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
+      </div>
+    </div>
+  `
 })
 export class HorizontalLayoutRenderer extends LayoutRenderer<HorizontalLayout> {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
 }
-export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
+export const horizontalLayoutTester: RankedTester = rankWith(
+  1,
+  uiTypeIs('HorizontalLayout')
+);

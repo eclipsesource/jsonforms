@@ -33,54 +33,38 @@ import { initialState, rootReducer } from './store';
 import { ReduxComponent } from './redux.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ReduxComponent
-  ],
-  imports: [
-    BrowserModule,
-    JsonFormsAngularMaterialModule,
-  ],
+  declarations: [AppComponent, ReduxComponent],
+  imports: [BrowserModule, JsonFormsAngularMaterialModule],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(
-    ngRedux: NgRedux<JsonFormsState>,
-    devTools: DevToolsExtension
-  ) {
+  constructor(ngRedux: NgRedux<JsonFormsState>, devTools: DevToolsExtension) {
     let enhancers: any[] = [];
     // ... add whatever other enhancers you want.
 
     // You probably only want to expose this tool in devMode.
     if (isDevMode() && devTools.isEnabled()) {
-      enhancers = [ ...enhancers, devTools.enhancer() ];
+      enhancers = [...enhancers, devTools.enhancer()];
     }
 
-    ngRedux.configureStore(
-      rootReducer,
-      initialState,
-      [],
-      enhancers
-    );
+    ngRedux.configureStore(rootReducer, initialState, [], enhancers);
     const example = initialState.examples.data[0];
-    ngRedux.dispatch(Actions.init(
-      example.data,
-      example.schema,
-      example.uischema
-    ));
+    ngRedux.dispatch(
+      Actions.init(example.data, example.schema, example.uischema)
+    );
 
     const uiSchema = {
       type: 'HorizontalLayout',
       elements: [
-          {
-              type: 'Control',
-              scope: '#/properties/buyer/properties/email'
-          },
-          {
-              type: 'Control',
-              scope: '#/properties/status'
-          },
+        {
+          type: 'Control',
+          scope: '#/properties/buyer/properties/email'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/status'
+        }
       ]
     };
     const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
@@ -89,10 +73,7 @@ export class AppModule {
       }
       return -1;
     };
-    ngRedux.dispatch(Actions.registerUISchema(
-      itemTester,
-      uiSchema
-    ));
+    ngRedux.dispatch(Actions.registerUISchema(itemTester, uiSchema));
   }
 }
 

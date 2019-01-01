@@ -14,7 +14,7 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/birthDate'
-        },
+        }
       ]
     },
     {
@@ -43,7 +43,7 @@ export const data = {
   personalData: {
     age: 34
   },
-  postalCode: '12345',
+  postalCode: '12345'
 };
 
 registerExamples([

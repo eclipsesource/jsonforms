@@ -27,64 +27,82 @@ import { GroupLayout, UISchemaElement } from '@jsonforms/core';
 import { MatCard, MatCardTitle } from '@angular/material';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { beforeEachLayoutTest, initComponent, setupMockStore } from '@jsonforms/angular-test';
+import {
+  beforeEachLayoutTest,
+  initComponent,
+  setupMockStore
+} from '@jsonforms/angular-test';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { GroupLayoutRenderer, groupLayoutTester } from '../src/layouts/group-layout.renderer';
+import {
+  GroupLayoutRenderer,
+  groupLayoutTester
+} from '../src/layouts/group-layout.renderer';
 
 describe('Group layout tester', () => {
-    it('should succeed', () => {
-        expect(groupLayoutTester({ type: 'Group' }, undefined)).toBe(1);
-    });
+  it('should succeed', () => {
+    expect(groupLayoutTester({ type: 'Group' }, undefined)).toBe(1);
+  });
 });
 describe('Group layout', () => {
-    let fixture: ComponentFixture<any>;
+  let fixture: ComponentFixture<any>;
 
-    beforeEach(() => {
-        fixture = beforeEachLayoutTest(
-            GroupLayoutRenderer,
-            {
-              declarations: [MatCard, MatCardTitle],
-              imports: [FlexLayoutModule]
-            }
-        );
+  beforeEach(() => {
+    fixture = beforeEachLayoutTest(GroupLayoutRenderer, {
+      declarations: [MatCard, MatCardTitle],
+      imports: [FlexLayoutModule]
     });
+  });
 
-    it('render with undefined elements', () => {
-        const uischema: UISchemaElement = {
-            type: 'Group'
-        };
-        initComponent(fixture, setupMockStore(fixture, { data: {}, schema: {}, uischema }));
-        const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
-        // title
-        expect(card[0].nativeElement.children.length).toBe(1);
-    });
+  it('render with undefined elements', () => {
+    const uischema: UISchemaElement = {
+      type: 'Group'
+    };
+    initComponent(
+      fixture,
+      setupMockStore(fixture, { data: {}, schema: {}, uischema })
+    );
+    const card: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatCard)
+    );
+    // title
+    expect(card[0].nativeElement.children.length).toBe(1);
+  });
 
-    it('render with null elements', () => {
-        const uischema: GroupLayout = {
-            type: 'Group',
-            elements: null
-        };
-        initComponent(fixture, setupMockStore(fixture, { data: {}, schema: {}, uischema }));
-        const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
-        // title
-        expect(card[0].nativeElement.children.length).toBe(1);
-    });
+  it('render with null elements', () => {
+    const uischema: GroupLayout = {
+      type: 'Group',
+      elements: null
+    };
+    initComponent(
+      fixture,
+      setupMockStore(fixture, { data: {}, schema: {}, uischema })
+    );
+    const card: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatCard)
+    );
+    // title
+    expect(card[0].nativeElement.children.length).toBe(1);
+  });
 
-    it('render with children', () => {
-        const uischema: GroupLayout = {
-            type: 'Group',
-            label: 'foo',
-            elements: [
-                { type: 'Control' },
-                { type: 'Control' }
-            ]
-        };
-        initComponent(fixture, setupMockStore(fixture, { data: {}, schema: {}, uischema }));
-        const card: DebugElement[] = fixture.debugElement.queryAll(By.directive(MatCard));
-        const title: DebugElement = fixture.debugElement.query(By.directive(MatCardTitle));
+  it('render with children', () => {
+    const uischema: GroupLayout = {
+      type: 'Group',
+      label: 'foo',
+      elements: [{ type: 'Control' }, { type: 'Control' }]
+    };
+    initComponent(
+      fixture,
+      setupMockStore(fixture, { data: {}, schema: {}, uischema })
+    );
+    const card: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatCard)
+    );
+    const title: DebugElement = fixture.debugElement.query(
+      By.directive(MatCardTitle)
+    );
 
-        expect(title.nativeElement.textContent).toBe('foo');
-        // title + 2 controls
-        expect(card[0].nativeElement.children.length).toBe(3);
-    });
+    expect(title.nativeElement.textContent).toBe('foo');
+    // title + 2 controls
+    expect(card[0].nativeElement.children.length).toBe(3);
+  });
 });

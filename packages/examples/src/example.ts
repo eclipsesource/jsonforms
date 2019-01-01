@@ -32,11 +32,15 @@ export interface ExampleDescription {
   uischema: UISchemaElement;
   config?: any;
 }
-export const CHANGE_EXAMPLE: 'jsonforms-example/CHANGE' = 'jsonforms-example/CHANGE';
+export const CHANGE_EXAMPLE: 'jsonforms-example/CHANGE' =
+  'jsonforms-example/CHANGE';
 export interface ChangeExampleAction {
   type: 'jsonforms-example/CHANGE';
   example: ExampleDescription;
 }
-export const changeExample = (example: ExampleDescription): ChangeExampleAction => ({
-  type: CHANGE_EXAMPLE, example: example
+export const changeExample = (
+  example: ExampleDescription
+): ChangeExampleAction => ({
+  type: CHANGE_EXAMPLE,
+  example: example
 });

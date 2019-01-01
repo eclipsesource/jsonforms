@@ -24,24 +24,27 @@
 */
 import { RankedTester } from '../testers';
 import {
-    ADD_FIELD,
-    AddFieldRendererAction,
-    REMOVE_FIELD,
-    RemoveFieldRendererAction
+  ADD_FIELD,
+  AddFieldRendererAction,
+  REMOVE_FIELD,
+  RemoveFieldRendererAction
 } from '../actions';
 
-type ValidFieldReducerActions = AddFieldRendererAction | RemoveFieldRendererAction;
+type ValidFieldReducerActions =
+  | AddFieldRendererAction
+  | RemoveFieldRendererAction;
 
 export type JsonFormsFieldRendererRegistryState = JsonFormsFieldRendererRegistryEntry[];
 
 export interface JsonFormsFieldRendererRegistryEntry {
-    tester: RankedTester;
-    field: any;
+  tester: RankedTester;
+  field: any;
 }
 
 export const fieldReducer = (
   state: JsonFormsFieldRendererRegistryState = [],
-  { type, tester, field }: ValidFieldReducerActions) => {
+  { type, tester, field }: ValidFieldReducerActions
+) => {
   switch (type) {
     case ADD_FIELD:
       return state.concat([{ tester, field }]);

@@ -26,49 +26,52 @@ import { NgRedux } from '@angular-redux/store';
 import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import {
-    JsonFormsState,
-    Layout,
-    mapStateToLayoutProps,
-    OwnPropsOfRenderer,
-    UISchemaElement
+  JsonFormsState,
+  Layout,
+  mapStateToLayoutProps,
+  OwnPropsOfRenderer,
+  UISchemaElement
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
-export class LayoutRenderer<T extends Layout>
-    extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
+export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer
+  implements OnInit, OnDestroy {
+  hidden: boolean;
+  private subscription: Subscription;
 
-    hidden: boolean;
-    private subscription: Subscription;
+  constructor(private ngRedux: NgRedux<JsonFormsState>) {
+    super();
+  }
 
-    constructor(private ngRedux: NgRedux<JsonFormsState>) {
-        super();
+  ngOnInit() {
+    this.subscription = this.ngRedux
+      .select()
+      .subscribe((state: JsonFormsState) => {
+        const props = mapStateToLayoutProps(state, this.getOwnProps());
+        this.hidden = !props.visible;
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
+  }
 
-    ngOnInit() {
-        this.subscription = this.ngRedux
-            .select()
-            .subscribe((state: JsonFormsState) => {
-                const props = mapStateToLayoutProps(state, this.getOwnProps());
-                this.hidden = !props.visible;
-            });
-    }
+  get renderProps(): OwnPropsOfRenderer[] {
+    const elements = ((this.uischema as T).elements || []).map(
+      (el: UISchemaElement) => ({
+        uischema: el,
+        schema: this.schema,
+        path: this.path
+      })
+    );
+    return elements;
+  }
 
-    ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
-
-    get renderProps(): OwnPropsOfRenderer[] {
-        const elements = ((this.uischema as T).elements || []).map((el: UISchemaElement) => ({
-            uischema: el,
-            schema: this.schema,
-            path: this.path
-        }));
-        return elements;
-    }
-
-    trackElement(_index: number, renderProp: OwnPropsOfRenderer): string {
-        return renderProp ? renderProp.path + JSON.stringify(renderProp.uischema) : null;
-    }
+  trackElement(_index: number, renderProp: OwnPropsOfRenderer): string {
+    return renderProp
+      ? renderProp.path + JSON.stringify(renderProp.uischema)
+      : null;
+  }
 }

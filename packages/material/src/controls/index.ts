@@ -22,12 +22,24 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import MaterialBooleanControl, { materialBooleanControlTester } from './MaterialBooleanControl';
-import MaterialInputControl, { materialInputControlTester } from './MaterialInputControl';
-import MaterialNativeControl, { materialNativeControlTester } from './MaterialNativeControl';
-import MaterialDateControl, { materialDateControlTester } from './MaterialDateControl';
-import MaterialDateTimeControl, { materialDateTimeControlTester } from './MaterialDateTimeControl';
-import MaterialSliderControl, { materialSliderControlTester } from './MaterialSliderControl';
+import MaterialBooleanControl, {
+  materialBooleanControlTester
+} from './MaterialBooleanControl';
+import MaterialInputControl, {
+  materialInputControlTester
+} from './MaterialInputControl';
+import MaterialNativeControl, {
+  materialNativeControlTester
+} from './MaterialNativeControl';
+import MaterialDateControl, {
+  materialDateControlTester
+} from './MaterialDateControl';
+import MaterialDateTimeControl, {
+  materialDateTimeControlTester
+} from './MaterialDateTimeControl';
+import MaterialSliderControl, {
+  materialSliderControlTester
+} from './MaterialSliderControl';
 
 export {
   MaterialBooleanControl,

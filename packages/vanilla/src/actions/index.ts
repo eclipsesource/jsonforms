@@ -37,7 +37,9 @@ export const unregisterStyle = (styleName: string) => ({
   name: styleName
 });
 
-export const registerStyles = (styleDefs: { name: string, classNames: string[] }[]) => ({
+export const registerStyles = (
+  styleDefs: { name: string; classNames: string[] }[]
+) => ({
   type: REGISTER_STYLES,
   styles: styleDefs
 });

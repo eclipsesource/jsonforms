@@ -13,10 +13,18 @@ export const Draft4 = {
       minimum: 0
     },
     positiveIntegerDefault0: {
-      allOf: [ { $ref: '#/definitions/positiveInteger' }, { default: 0 } ]
+      allOf: [{ $ref: '#/definitions/positiveInteger' }, { default: 0 }]
     },
     simpleTypes: {
-      enum: [ 'array', 'boolean', 'integer', 'null', 'number', 'object', 'string']
+      enum: [
+        'array',
+        'boolean',
+        'integer',
+        'null',
+        'number',
+        'object',
+        'string'
+      ]
     },
     stringArray: {
       type: 'array',
@@ -68,17 +76,11 @@ export const Draft4 = {
       format: 'regex'
     },
     additionalItems: {
-      anyOf: [
-        { type: 'boolean' },
-        { $ref: '#' }
-      ],
+      anyOf: [{ type: 'boolean' }, { $ref: '#' }],
       default: {}
     },
     items: {
-      anyOf: [
-        { $ref: '#' },
-        { $ref: '#/definitions/schemaArray' }
-      ],
+      anyOf: [{ $ref: '#' }, { $ref: '#/definitions/schemaArray' }],
       default: {}
     },
     maxItems: { $ref: '#/definitions/positiveInteger' },
@@ -91,10 +93,7 @@ export const Draft4 = {
     minProperties: { $ref: '#/definitions/positiveIntegerDefault0' },
     required: { $ref: '#/definitions/stringArray' },
     additionalProperties: {
-      anyOf: [
-        { type: 'boolean' },
-        { $ref: '#' }
-      ],
+      anyOf: [{ type: 'boolean' }, { $ref: '#' }],
       default: {}
     },
     definitions: {
@@ -115,10 +114,7 @@ export const Draft4 = {
     dependencies: {
       type: 'object',
       additionalProperties: {
-        anyOf: [
-          { $ref: '#' },
-          { $ref: '#/definitions/stringArray' }
-        ]
+        anyOf: [{ $ref: '#' }, { $ref: '#/definitions/stringArray' }]
       }
     },
     enum: {
@@ -143,8 +139,8 @@ export const Draft4 = {
     not: { $ref: '#' }
   },
   dependencies: {
-    exclusiveMaximum: [ 'maximum' ],
-    exclusiveMinimum: [ 'minimum' ]
+    exclusiveMaximum: ['maximum'],
+    exclusiveMinimum: ['minimum']
   },
   default: {}
 };

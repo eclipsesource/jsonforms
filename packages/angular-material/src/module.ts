@@ -166,5 +166,4 @@ const emptyL10NConfig: L10nConfig = {};
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: []
 })
-export class JsonFormsAngularMaterialModule {
-}
+export class JsonFormsAngularMaterialModule {}

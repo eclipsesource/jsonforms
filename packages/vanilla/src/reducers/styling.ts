@@ -40,8 +40,10 @@ const registerStyle = (styles: StyleDef[], { name, classNames }: StyleDef) => {
   return copy;
 };
 
-export const findStyle = (styles: StyleDef[]) => (style: string, ...args: any[]): string[] => {
-
+export const findStyle = (styles: StyleDef[]) => (
+  style: string,
+  ...args: any[]
+): string[] => {
   const foundStyle = _.find(styles, s => s.name === style);
   if (!_.isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
     return foundStyle.classNames(...args);
@@ -52,20 +54,25 @@ export const findStyle = (styles: StyleDef[]) => (style: string, ...args: any[])
   return [];
 };
 
-export const findStyleAsClassName = (styles: StyleDef[]) =>
-  (style: string, ...args: any[]): string =>
-   _.join(findStyle(styles)(style, args), ' ');
+export const findStyleAsClassName = (styles: StyleDef[]) => (
+  style: string,
+  ...args: any[]
+): string => _.join(findStyle(styles)(style, args), ' ');
 
 // TODO
-export const stylingReducer = (state: StyleDef[]  = [], action: any) => {
+export const stylingReducer = (state: StyleDef[] = [], action: any) => {
   switch (action.type) {
     case REGISTER_STYLE: {
-      return registerStyle(state, { name: action.name, classNames: action.classNames });
+      return registerStyle(state, {
+        name: action.name,
+        classNames: action.classNames
+      });
     }
     case REGISTER_STYLES: {
       return action.styles.reduce(
-          (allStyles: StyleDef[], style: StyleDef) => registerStyle(allStyles, style),
-          state
+        (allStyles: StyleDef[], style: StyleDef) =>
+          registerStyle(allStyles, style),
+        state
       );
     }
     case UNREGISTER_STYLE: {

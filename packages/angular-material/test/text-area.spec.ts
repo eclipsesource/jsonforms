@@ -26,81 +26,87 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatError,
+  MatFormFieldModule,
+  MatInputModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    ErrorTestExpectation,
-    TestData,
-    textBaseTest,
-    textErrorTest,
-    textInputEventTest
+  ErrorTestExpectation,
+  TestData,
+  textBaseTest,
+  textErrorTest,
+  textInputEventTest
 } from '@jsonforms/angular-test';
 import { TextAreaRenderer, TextAreaRendererTester } from '../src';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material text field tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo',
-        options: {multi: true}
-    };
-
-    it('should succeed', () => {
-        expect(
-            TextAreaRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'string'
-                        }
-                    }
-                }
-            )
-        ).toBe(2);
-    });
-});
-const imports = [
-    MatFormFieldModule,
-    MatInputModule,
-    NoopAnimationsModule,
-    ReactiveFormsModule,
-    FlexLayoutModule
-];
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
-const componentUT: any = TextAreaRenderer;
-const errorTest: ErrorTestExpectation = {
-    errorInstance: MatError,
-    numberOfElements: 1,
-    indexOfElement: 0
-};
-const toSelect = (el: DebugElement) => el.nativeElement;
-const testConfig = {imports, providers, componentUT};
-const defaultData = { foo: 'foo' };
-const defaultSchema: JsonSchema = {
-    type: 'object',
-    properties: {
-        foo: {
-            type: 'string'
-        }
-    }
-};
-const defaultUischema: ControlElement = {
+  const uischema = {
     type: 'Control',
     scope: '#/properties/foo',
-    options: {multi: true}
+    options: { multi: true }
+  };
+
+  it('should succeed', () => {
+    expect(
+      TextAreaRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string'
+          }
+        }
+      })
+    ).toBe(2);
+  });
+});
+const imports = [
+  MatFormFieldModule,
+  MatInputModule,
+  NoopAnimationsModule,
+  ReactiveFormsModule,
+  FlexLayoutModule
+];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
+const componentUT: any = TextAreaRenderer;
+const errorTest: ErrorTestExpectation = {
+  errorInstance: MatError,
+  numberOfElements: 1,
+  indexOfElement: 0
+};
+const toSelect = (el: DebugElement) => el.nativeElement;
+const testConfig = { imports, providers, componentUT };
+const defaultData = { foo: 'foo' };
+const defaultSchema: JsonSchema = {
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'string'
+    }
+  }
+};
+const defaultUischema: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo',
+  options: { multi: true }
 };
 const defaultTestData: TestData = {
-    data: defaultData,
-    schema: defaultSchema,
-    uischema: defaultUischema
+  data: defaultData,
+  schema: defaultSchema,
+  uischema: defaultUischema
 };
-describe('Text control Base Tests',
-         textBaseTest(testConfig, 'textarea', toSelect, defaultTestData));
-describe('Text control Input Event Tests',
-         textInputEventTest(testConfig, 'textarea', toSelect, defaultTestData));
-describe('Text control Error Tests', textErrorTest(testConfig, errorTest, defaultTestData));
+describe(
+  'Text control Base Tests',
+  textBaseTest(testConfig, 'textarea', toSelect, defaultTestData)
+);
+describe(
+  'Text control Input Event Tests',
+  textInputEventTest(testConfig, 'textarea', toSelect, defaultTestData)
+);
+describe(
+  'Text control Error Tests',
+  textErrorTest(testConfig, errorTest, defaultTestData)
+);

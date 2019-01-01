@@ -27,10 +27,11 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-    selector: 'print-redux',
-    template: `<label>{{data$ | async | json }}</label>
+  selector: 'print-redux',
+  template: `
+    <label>{{ data$ | async | json }}</label>
   `
 })
 export class ReduxComponent {
-    @select(['jsonforms', 'core', 'data']) readonly data$: Observable<any>;
+  @select(['jsonforms', 'core', 'data']) readonly data$: Observable<any>;
 }

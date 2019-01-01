@@ -25,46 +25,50 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { isRangeControl, JsonFormsState, RankedTester, rankWith } from '@jsonforms/core';
+import {
+  isRangeControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
 
 @Component({
-    selector: 'RangeControlRenderer',
-    template: `
-        <ion-item no-padding [hidden]="hidden">
-            <ion-label stacked>{{ label }}</ion-label>
-            <ion-range
-                [ngModel]="data || scopedSchema.default"
-                (ionChange)="onChange($event)"
-                [max]="max"
-                [min]="min"
-                [step]="multipleOf"
-                [id]="id"
-                [disabled]="!enabled"
-                [hidden]="hidden"
-            >
-                <ion-label range-left>{{min}}</ion-label>
-                <ion-label range-right>{{max}}</ion-label>
-            </ion-range>
-            <ion-label stacked *ngIf="error" color="error">{{error}}</ion-label>
-        </ion-item>
-    `
+  selector: 'RangeControlRenderer',
+  template: `
+    <ion-item no-padding [hidden]="hidden">
+      <ion-label stacked>{{ label }}</ion-label>
+      <ion-range
+        [ngModel]="data || scopedSchema.default"
+        (ionChange)="onChange($event)"
+        [max]="max"
+        [min]="min"
+        [step]="multipleOf"
+        [id]="id"
+        [disabled]="!enabled"
+        [hidden]="hidden"
+      >
+        <ion-label range-left>{{ min }}</ion-label>
+        <ion-label range-right>{{ max }}</ion-label>
+      </ion-range>
+      <ion-label stacked *ngIf="error" color="error">{{ error }}</ion-label>
+    </ion-item>
+  `
 })
 export class RangeControlRenderer extends JsonFormsControl {
+  min: number;
+  max: number;
+  multipleOf: number;
 
-    min: number;
-    max: number;
-    multipleOf: number;
-
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  getEventValue = (event: any) => Number(event.value);
+  mapAdditionalProps() {
+    if (this.scopedSchema) {
+      this.min = this.scopedSchema.minimum;
+      this.max = this.scopedSchema.maximum;
+      this.multipleOf = this.scopedSchema.multipleOf || 1;
     }
-    getEventValue = (event: any) => Number(event.value);
-    mapAdditionalProps() {
-        if (this.scopedSchema) {
-            this.min = this.scopedSchema.minimum;
-            this.max = this.scopedSchema.maximum;
-            this.multipleOf = this.scopedSchema.multipleOf || 1;
-        }
-    }
+  }
 }
 export const rangeControlTester: RankedTester = rankWith(4, isRangeControl);

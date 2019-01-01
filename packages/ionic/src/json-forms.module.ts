@@ -14,9 +14,7 @@ import { RangeControlRenderer } from './controls/range/range-control';
 
 import { HorizontalLayoutRenderer } from './layouts/horizontal/horizontal-layout';
 import { VerticalLayoutRenderer } from './layouts/vertical/vertical-layout';
-import {
-  CategorizationMenuLayoutRenderer
-} from './layouts/categorization/categorization-menu-layout';
+import { CategorizationMenuLayoutRenderer } from './layouts/categorization/categorization-menu-layout';
 import { CategoryRenderer } from './layouts/categorization/category/category';
 import { GroupLayoutRenderer } from './layouts/group/group-layout';
 
@@ -24,9 +22,7 @@ import { ListWithDetailControl } from './other/list-with-detail/list-with-detail
 import { MasterPage } from './other/list-with-detail/pages/master/master';
 import { DetailPage } from './other/list-with-detail/pages/detail/detail';
 import { LabelRenderer } from './other/label/label';
-import {
-    CategorizationTabLayoutRenderer
-} from './layouts/categorization/categorization-tab-layout';
+import { CategorizationTabLayoutRenderer } from './layouts/categorization/categorization-tab-layout';
 import { AutoCompleteControlRenderer } from './controls/enum/autocomplete-control';
 import { ObjectControlRenderer } from './controls/object/object.control';
 
@@ -60,16 +56,8 @@ import { ObjectControlRenderer } from './controls/object/object.control';
     // other
     LabelRenderer
   ],
-  imports: [
-    IonicModule,
-    IonicSelectableModule,
-    JsonFormsModule
-  ],
-  exports: [
-    IonicModule,
-    IonicSelectableModule,
-    JsonFormsModule
-  ],
+  imports: [IonicModule, IonicSelectableModule, JsonFormsModule],
+  exports: [IonicModule, IonicSelectableModule, JsonFormsModule],
   entryComponents: [
     // controls
     BooleanCheckboxControlRenderer,
@@ -99,7 +87,6 @@ import { ObjectControlRenderer } from './controls/object/object.control';
     // other
     LabelRenderer
   ],
-  providers: [
-  ]
+  providers: []
 })
 export class JsonFormsIonicModule {}

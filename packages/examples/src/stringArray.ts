@@ -3,14 +3,13 @@ import { registerExamples } from './register';
 export const schema = {
   type: 'object',
   properties: {
-    comments:
-      {
-        type: 'array',
-        items: {
-          type: 'string',
-          maxLength: 5
-        }
+    comments: {
+      type: 'array',
+      items: {
+        type: 'string',
+        maxLength: 5
       }
+    }
   }
 };
 
@@ -35,5 +34,5 @@ registerExamples([
     data,
     schema,
     uischema
-  },
+  }
 ]);

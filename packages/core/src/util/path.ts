@@ -53,13 +53,13 @@ export const compose = (path1: string, path2: string) => {
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
   const s = schemaPath
-      .replace(/anyOf\/[\d]\//, '')
-      .replace(/allOf\/[\d]\//, '')
-      .replace(/oneOf\/[\d]\//, '');
+    .replace(/anyOf\/[\d]\//, '')
+    .replace(/allOf\/[\d]\//, '')
+    .replace(/oneOf\/[\d]\//, '');
   const segments = s.split('/');
 
   const startFromRoot = segments[0] === '#' || segments[0] === '';
-  const startIndex =  startFromRoot ? 2 : 1;
+  const startIndex = startFromRoot ? 2 : 1;
   return _.range(startIndex, segments.length, 2).map(idx => segments[idx]);
 };
 
@@ -82,5 +82,10 @@ export const composeWithUi = (scopableUi: Scopable, path: string): string => {
     return '';
   }
 
-  return _.isEmpty(segments) ? path : compose(path, segments.join('.'));
+  return _.isEmpty(segments)
+    ? path
+    : compose(
+        path,
+        segments.join('.')
+      );
 };

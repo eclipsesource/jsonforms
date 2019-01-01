@@ -70,12 +70,11 @@ export const testRenderers = [
 ];
 
 export const initJsonFormsStore = ({
-                                     data,
-                                     schema,
-                                     uischema,
-                                     ...props
-                                   }: JsonFormsInitialState): Store<JsonFormsState> => {
-
+  data,
+  schema,
+  uischema,
+  ...props
+}: JsonFormsInitialState): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {

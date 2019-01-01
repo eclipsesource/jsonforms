@@ -10,16 +10,21 @@ import { Property } from '../services/property.util';
  * @param filterPredicate used to filter properties of the given data
  * @return The matching {@link Property}
  */
-export const matchContainerProperty =
-  (data: Object, properties: Property[], filterPredicate: any) => {
-    // TODO improve handling
-    const filtered = properties.filter(filterPredicate(data));
-    if (filtered.length > 1) {
-      console.warn('More than one matching container property was found for the given data',
-                   data);
-    }
+export const matchContainerProperty = (
+  data: Object,
+  properties: Property[],
+  filterPredicate: any
+) => {
+  // TODO improve handling
+  const filtered = properties.filter(filterPredicate(data));
+  if (filtered.length > 1) {
+    console.warn(
+      'More than one matching container property was found for the given data',
+      data
+    );
+  }
 
-    return _.head(filtered);
+  return _.head(filtered);
 };
 
 export interface StringMap {

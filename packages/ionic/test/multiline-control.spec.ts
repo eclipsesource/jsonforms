@@ -26,9 +26,9 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import {
-    textBaseTest,
-    textErrorTest,
-    textInputEventTest,
+  textBaseTest,
+  textErrorTest,
+  textInputEventTest
 } from '@jsonforms/angular-test';
 import { IonicModule, Label, Platform } from 'ionic-angular';
 import { TestData } from '@jsonforms/angular-test';
@@ -37,69 +37,70 @@ import { PlatformMock } from '../test-config/platform-mock';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 
 describe('Ionic multiline control tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo',
-        options: {
-            multi: true
-        }
-    };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo',
+    options: {
+      multi: true
+    }
+  };
 
-    it('should succeed', () => {
-        expect(
-            multilineControlTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'string'
-                        }
-                    }
-                }
-            )
-        ).toBe(2);
-    });
+  it('should succeed', () => {
+    expect(
+      multilineControlTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string'
+          }
+        }
+      })
+    ).toBe(2);
+  });
 });
 const imports = [IonicModule.forRoot(MultilineControlRenderer)];
 const providers = [
-    { provide: Platform, useClass: PlatformMock },
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+  { provide: Platform, useClass: PlatformMock },
+  { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 ];
 const componentUT: any = MultilineControlRenderer;
-const errorTest = { errorInstance: Label, numberOfElements: 2, indexOfElement: 1 };
+const errorTest = {
+  errorInstance: Label,
+  numberOfElements: 2,
+  indexOfElement: 1
+};
 const toSelect = (el: DebugElement) => el.componentInstance;
-const testConfig = {imports, providers, componentUT};
+const testConfig = { imports, providers, componentUT };
 
 const defaultData = { foo: 'foo' };
 const defaultSchema: JsonSchema = {
-    type: 'object',
-    properties: {
-        foo: {
-            type: 'string'
-        }
+  type: 'object',
+  properties: {
+    foo: {
+      type: 'string'
     }
+  }
 };
 const defaultUischema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/foo',
-    options: {multi: true}
+  type: 'Control',
+  scope: '#/properties/foo',
+  options: { multi: true }
 };
 const defaultTestData: TestData = {
-    data: defaultData,
-    schema: defaultSchema,
-    uischema: defaultUischema
+  data: defaultData,
+  schema: defaultSchema,
+  uischema: defaultUischema
 };
 
 describe(
-    'Ionic multiline control base tests',
-    textBaseTest(testConfig, 'ion-textarea', toSelect, defaultTestData)
+  'Ionic multiline control base tests',
+  textBaseTest(testConfig, 'ion-textarea', toSelect, defaultTestData)
 );
 describe(
-    'Ionic multiline control Input Event Tests',
-    textInputEventTest(testConfig, 'ion-textarea', toSelect, defaultTestData)
+  'Ionic multiline control Input Event Tests',
+  textInputEventTest(testConfig, 'ion-textarea', toSelect, defaultTestData)
 );
 describe(
-    'Ionic multiline control Error Tests',
-    textErrorTest(testConfig, errorTest, defaultTestData)
+  'Ionic multiline control Error Tests',
+  textErrorTest(testConfig, errorTest, defaultTestData)
 );

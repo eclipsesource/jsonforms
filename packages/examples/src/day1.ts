@@ -47,7 +47,7 @@ export const uischema: UISchemaElement = undefined;
 export const data = {
   name: 'Send email to Adrian',
   description: 'Confirm if you have passed the subject\nHereby ...',
-  done: true,
+  done: true
 };
 
 registerExamples([

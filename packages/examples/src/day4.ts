@@ -26,7 +26,7 @@ import { registerExamples } from './register';
 import {
   data as day3Data,
   schema as day3Schema,
-  uischema as day3UiSchema,
+  uischema as day3UiSchema
 } from './day3';
 
 export const schema = {
@@ -34,11 +34,11 @@ export const schema = {
   properties: {
     ...day3Schema.properties,
     recurrence: {
-        type: 'string',
-        enum: ['Never', 'Daily', 'Weekly', 'Monthly']
+      type: 'string',
+      enum: ['Never', 'Daily', 'Weekly', 'Monthly']
     },
     recurrenceInterval: {
-        type: 'integer'
+      type: 'integer'
     }
   },
   required: ['name']
@@ -56,11 +56,11 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/recurrenceInterval',
       rule: {
-          effect: 'HIDE',
-          condition: {
-              scope: '#/properties/recurrence',
-              schema: { enum: ['Never'] }
-          }
+        effect: 'HIDE',
+        condition: {
+          scope: '#/properties/recurrence',
+          schema: { enum: ['Never'] }
+        }
       }
     }
   ]

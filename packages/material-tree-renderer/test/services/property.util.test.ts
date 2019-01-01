@@ -7,7 +7,6 @@ import { JsonSchema } from '@jsonforms/core';
 import * as _ from 'lodash';
 
 describe('Property util', () => {
-
   test('should retrieve container property from a nested array (non primitive)', () => {
     const schema: JsonSchema = {
       type: 'array',
@@ -172,14 +171,14 @@ describe('Property util', () => {
         person: {
           type: 'object',
           properties: {
-            name: {type: 'string'}
+            name: { type: 'string' }
           }
         }
       },
       type: 'object',
       properties: {
-        friends: {type: 'array', items: {$ref: '#/definitions/person'}},
-        enemies: {type: 'array', items: {$ref: '#/definitions/person'}}
+        friends: { type: 'array', items: { $ref: '#/definitions/person' } },
+        enemies: { type: 'array', items: { $ref: '#/definitions/person' } }
       }
     };
 
@@ -191,7 +190,7 @@ describe('Property util', () => {
         schema: {
           type: 'object',
           properties: {
-            name: { type: 'string' },
+            name: { type: 'string' }
           }
         }
       },
@@ -214,20 +213,20 @@ describe('Property util', () => {
         person: {
           type: 'object',
           properties: {
-            name: {type: 'string'}
+            name: { type: 'string' }
           }
         },
         robot: {
           type: 'object',
           properties: {
-            name: {type: 'string'}
+            name: { type: 'string' }
           }
         }
       },
       type: 'object',
       properties: {
-        persons: {type: 'array', items: {$ref: '#/definitions/person'}},
-        robots: {type: 'array', items: {$ref: '#/definitions/robot'}}
+        persons: { type: 'array', items: { $ref: '#/definitions/person' } },
+        robots: { type: 'array', items: { $ref: '#/definitions/robot' } }
       }
     };
 
@@ -262,10 +261,7 @@ describe('Property util', () => {
         a: { type: 'object' },
         b: { type: 'object' }
       },
-      anyOf: [
-        { $ref: '#/definitions/a' },
-        { $ref: '#/definitions/b' }
-      ]
+      anyOf: [{ $ref: '#/definitions/a' }, { $ref: '#/definitions/b' }]
     };
 
     const properties = findContainerProperties(schema, schema, false);
@@ -280,10 +276,7 @@ describe('Property util', () => {
       },
       type: 'array',
       items: {
-        anyOf: [
-          { $ref: '#/definitions/a' },
-          { $ref: '#/definitions/b' }
-        ]
+        anyOf: [{ $ref: '#/definitions/a' }, { $ref: '#/definitions/b' }]
       }
     };
 
@@ -294,7 +287,7 @@ describe('Property util', () => {
         label: 'a',
         schema: {
           type: 'object',
-          properties: { foo: { type: 'string' } },
+          properties: { foo: { type: 'string' } }
         }
       },
       {
@@ -302,7 +295,7 @@ describe('Property util', () => {
         label: 'b',
         schema: {
           type: 'object',
-          properties: { foo: { type: 'string' } },
+          properties: { foo: { type: 'string' } }
         }
       }
     ]);
@@ -319,10 +312,7 @@ describe('Property util', () => {
         elements: {
           type: 'array',
           items: {
-            anyOf: [
-              { $ref: '#/definitions/a' },
-              { $ref: '#/definitions/b' }
-            ]
+            anyOf: [{ $ref: '#/definitions/a' }, { $ref: '#/definitions/b' }]
           }
         }
       }
@@ -352,55 +342,18 @@ describe('Property util', () => {
     ]);
   });
 
-    test('expect to retrieve properties from object with array object by using keyword anyOf twice', () => {
-        const schema: JsonSchema = {
-            definitions: {
-                a: { anyOf: [{$ref: '#/definitions/b'}] },
-                b: { type: 'object', properties: { foo: { type: 'string' } } }
-            },
-            type: 'object',
-            properties: {
-                elements: {
-                    type: 'array',
-                    items: {
-                        anyOf: [
-                            { $ref: '#/definitions/a' },
-                        ]
-                    }
-                }
-            }
-        };
-
-        const properties = findContainerProperties(schema, schema, false);
-        expect(properties).toMatchObject([
-            {
-                property: 'elements',
-                label: 'b',
-                schema: {
-                    properties: {
-                        foo: { type: 'string' }
-                    }
-                }
-            }
-        ]);
-    });
-
-  test('expect to retrieve properties from object with array object ' +
-       'where anyOf contains reference and object',
-       () => {
+  test('expect to retrieve properties from object with array object by using keyword anyOf twice', () => {
     const schema: JsonSchema = {
       definitions: {
-        a: { type: 'object', properties: { foo: { type: 'string' } } }
+        a: { anyOf: [{ $ref: '#/definitions/b' }] },
+        b: { type: 'object', properties: { foo: { type: 'string' } } }
       },
       type: 'object',
       properties: {
         elements: {
           type: 'array',
           items: {
-            anyOf: [
-              { $ref: '#/definitions/a' },
-              { type: 'object', properties: { bar: { type: 'string' } } }
-            ]
+            anyOf: [{ $ref: '#/definitions/a' }]
           }
         }
       }
@@ -410,68 +363,98 @@ describe('Property util', () => {
     expect(properties).toMatchObject([
       {
         property: 'elements',
-        label: 'a',
+        label: 'b',
         schema: {
           properties: {
             foo: { type: 'string' }
-          }
-        }
-      },
-      {
-        property: 'elements',
-        label: 'elements',
-        schema: {
-          properties: {
-            bar: { type: 'string' }
           }
         }
       }
     ]);
   });
 
-    test('expect to retrieve properties from object with array object by using keyword anyOf recursive', () => {
-        const schema: JsonSchema = {
-            definitions: {
-                a: {
-                    anyOf: [
-                        {$ref: '#/definitions/b'}
-                    ]
-                },
-                b: {
-                    anyOf: [
-                        {$ref: '#/definitions/a'},
-                        {$ref: '#/definitions/c'},
-                    ],
-                    type: 'object',
-                    properties: { foo: { type: 'string' } }
-                }
-            },
-            type: 'object',
-            properties: {
-                elements: {
-                    type: 'array',
-                    items: {
-                        anyOf: [
-                            { $ref: '#/definitions/a' },
-                        ]
-                    }
-                }
+  test(
+    'expect to retrieve properties from object with array object ' +
+      'where anyOf contains reference and object',
+    () => {
+      const schema: JsonSchema = {
+        definitions: {
+          a: { type: 'object', properties: { foo: { type: 'string' } } }
+        },
+        type: 'object',
+        properties: {
+          elements: {
+            type: 'array',
+            items: {
+              anyOf: [
+                { $ref: '#/definitions/a' },
+                { type: 'object', properties: { bar: { type: 'string' } } }
+              ]
             }
-        };
+          }
+        }
+      };
 
-        const properties = findContainerProperties(schema, schema, false);
-        expect(properties).toMatchObject([
-            {
-                property: 'elements',
-                label: 'b',
-                schema: {
-                    properties: {
-                        foo: { type: 'string' }
-                    }
-                }
+      const properties = findContainerProperties(schema, schema, false);
+      expect(properties).toMatchObject([
+        {
+          property: 'elements',
+          label: 'a',
+          schema: {
+            properties: {
+              foo: { type: 'string' }
             }
-        ]);
-    });
+          }
+        },
+        {
+          property: 'elements',
+          label: 'elements',
+          schema: {
+            properties: {
+              bar: { type: 'string' }
+            }
+          }
+        }
+      ]);
+    }
+  );
+
+  test('expect to retrieve properties from object with array object by using keyword anyOf recursive', () => {
+    const schema: JsonSchema = {
+      definitions: {
+        a: {
+          anyOf: [{ $ref: '#/definitions/b' }]
+        },
+        b: {
+          anyOf: [{ $ref: '#/definitions/a' }, { $ref: '#/definitions/c' }],
+          type: 'object',
+          properties: { foo: { type: 'string' } }
+        }
+      },
+      type: 'object',
+      properties: {
+        elements: {
+          type: 'array',
+          items: {
+            anyOf: [{ $ref: '#/definitions/a' }]
+          }
+        }
+      }
+    };
+
+    const properties = findContainerProperties(schema, schema, false);
+    expect(properties).toMatchObject([
+      {
+        property: 'elements',
+        label: 'b',
+        schema: {
+          properties: {
+            foo: { type: 'string' }
+          }
+        }
+      }
+    ]);
+  });
 
   test('should retrieve container properties from object that references an array object', () => {
     const schema: JsonSchema = {
@@ -481,7 +464,7 @@ describe('Property util', () => {
           items: {
             type: 'object',
             properties: {
-              name: {type: 'string'}
+              name: { type: 'string' }
             }
           }
         }
@@ -597,7 +580,7 @@ describe('Property util', () => {
             type: 'object',
             properties: {
               name: {
-                'type': 'string'
+                type: 'string'
               },
               attributes: {
                 type: 'array',
@@ -687,7 +670,7 @@ describe('Property util', () => {
             scope: { $ref: '#/definitions/scope' },
             options: { $ref: '#/definitions/options' },
             rule: { $ref: '#/definitions/rule' }
-          },
+          }
         },
         horizontallayout: {
           type: 'object',
@@ -698,7 +681,7 @@ describe('Property util', () => {
             },
             elements: { $ref: '#/definitions/elements' },
             rule: { $ref: '#/definitions/rule' }
-          },
+          }
         },
         verticallayout: {
           type: 'object',
@@ -709,19 +692,14 @@ describe('Property util', () => {
             },
             elements: { $ref: '#/definitions/elements' },
             rule: { $ref: '#/definitions/rule' }
-          },
+          }
         },
         rule: {
           type: 'object',
           properties: {
             effect: {
               type: 'string',
-              enum: [
-                'HIDE',
-                'SHOW',
-                'DISABLE',
-                'ENABLE'
-              ]
+              enum: ['HIDE', 'SHOW', 'DISABLE', 'ENABLE']
             },
             condition: {
               type: 'object',
@@ -729,12 +707,7 @@ describe('Property util', () => {
                 type: { type: 'string' },
                 scope: { $ref: '#/definitions/scope' },
                 expectedValue: {
-                  type: [
-                    'string',
-                    'integer',
-                    'number',
-                    'boolean'
-                  ]
+                  type: ['string', 'integer', 'number', 'boolean']
                 }
               }
             }
@@ -757,14 +730,24 @@ describe('Property util', () => {
         },
         label: { type: 'string' },
         scope: { $ref: '#/definitions/scope' },
-        options: { $ref: '#/definitions/options'  },
+        options: { $ref: '#/definitions/options' },
         rule: { $ref: '#/definitions/rule' }
       }
     };
-    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
-    const expectedSchema = { ...schema, ...{
-      definitions: _.pick(parentSchema.definitions, ['scope', 'options', 'rule'])
-    }};
+    const calculatedSchemaReferences = makeSchemaSelfContained(
+      parentSchema,
+      schema
+    );
+    const expectedSchema = {
+      ...schema,
+      ...{
+        definitions: _.pick(parentSchema.definitions, [
+          'scope',
+          'options',
+          'rule'
+        ])
+      }
+    };
     expect(calculatedSchemaReferences).toMatchObject(expectedSchema);
   });
 
@@ -786,7 +769,10 @@ describe('Property util', () => {
         bar: { type: 'string' }
       }
     };
-    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
+    const calculatedSchemaReferences = makeSchemaSelfContained(
+      parentSchema,
+      schema
+    );
     expect(calculatedSchemaReferences).toMatchObject(schema);
   });
 
@@ -796,7 +782,7 @@ describe('Property util', () => {
       properties: {
         type: { type: 'string' },
         label: { type: 'string' },
-        elements: { $ref: '#/definitions/elements' },
+        elements: { $ref: '#/definitions/elements' }
       }
     };
     const schema = {
@@ -811,7 +797,10 @@ describe('Property util', () => {
         scope: { $ref: '#/definitions/scope' }
       }
     };
-    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
+    const calculatedSchemaReferences = makeSchemaSelfContained(
+      parentSchema,
+      schema
+    );
     expect(calculatedSchemaReferences).toMatchObject(schema);
   });
 
@@ -821,7 +810,7 @@ describe('Property util', () => {
       properties: {
         type: { type: 'string' },
         label: { type: 'string' },
-        elements: { $ref: '#/defs/elements' },
+        elements: { $ref: '#/defs/elements' }
       },
       defs: {
         elements: {
@@ -843,7 +832,7 @@ describe('Property util', () => {
             },
             label: { type: 'string' },
             scope: { $ref: '#/defs/scope' }
-          },
+          }
         },
         horizontallayout: {
           type: 'object',
@@ -854,7 +843,7 @@ describe('Property util', () => {
               default: 'HorizontalLayout'
             },
             elements: { $ref: '#/defs/elements' }
-          },
+          }
         },
         scope: {
           type: 'string',
@@ -874,10 +863,16 @@ describe('Property util', () => {
         scope: { $ref: '#/defs/scope' }
       }
     };
-    const calculatedSchemaReferences = makeSchemaSelfContained(parentSchema, schema);
-    const expectedSchema = { ...schema, ...{
-      defs: _.pick(parentSchema.defs, ['scope'])
-    }};
+    const calculatedSchemaReferences = makeSchemaSelfContained(
+      parentSchema,
+      schema
+    );
+    const expectedSchema = {
+      ...schema,
+      ...{
+        defs: _.pick(parentSchema.defs, ['scope'])
+      }
+    };
     expect(calculatedSchemaReferences).toMatchObject(expectedSchema);
   });
 
@@ -887,10 +882,7 @@ describe('Property util', () => {
       properties: {
         type: {
           type: 'string',
-          enum: [
-            'HorizontalLayout',
-            'VerticalLayout',
-          ]
+          enum: ['HorizontalLayout', 'VerticalLayout']
         },
         label: {
           type: 'string'
@@ -982,7 +974,7 @@ describe('Property util', () => {
           definitions: schema.definitions
         }
       }
-    ]
+    ];
     expect(properties).toMatchObject(expectedProperties);
   });
 });

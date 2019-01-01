@@ -105,17 +105,17 @@ export interface JsonSchema7 {
    * Holds simple JSON Schema definitions for
    * referencing from elsewhere.
    */
-  definitions?: {[key: string]: JsonSchema7};
+  definitions?: { [key: string]: JsonSchema7 };
   /**
    * The keys that can exist on the object with the
    * json schema that should validate their value
    */
-  properties?: {[property: string]: JsonSchema7};
+  properties?: { [property: string]: JsonSchema7 };
   /**
    * The key of this object is a regex for which
    * properties the schema applies to
    */
-  patternProperties?: {[pattern: string]: JsonSchema7};
+  patternProperties?: { [pattern: string]: JsonSchema7 };
   /**
    * If the key is present as a property then the
    * string of properties must also be present.
@@ -123,7 +123,7 @@ export interface JsonSchema7 {
    * also be valid for the object if the key is
    * present.
    */
-  dependencies?: {[key: string]: JsonSchema7 | string[]};
+  dependencies?: { [key: string]: JsonSchema7 | string[] };
 
   /////////////////////////////////////////////////
   // Generic
@@ -134,7 +134,7 @@ export interface JsonSchema7 {
    * {"type": "string",
    *  "enum": ["red", "green", "blue"]}
    */
-  'enum'?: any[];
+  enum?: any[];
   /**
    * The basic type of this schema, can be one of
    * [string, number, object, array, boolean, null]

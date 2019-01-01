@@ -26,37 +26,41 @@ import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import {
-    ControlProps,
-    isObjectControl,
-    JsonFormsState,
-    RankedTester,
-    rankWith,
-    UISchemaElement
+  ControlProps,
+  isObjectControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith,
+  UISchemaElement
 } from '@jsonforms/core';
 
 @Component({
-    selector: 'ObjectRenderer',
-    template: `
+  selector: 'ObjectRenderer',
+  template: `
     <mat-card>
-        <jsonforms-outlet
-            [uischema]="detailUiSchema"
-            [schema]="scopedSchema"
-            [path]="path"
-        >
-        </jsonforms-outlet>
+      <jsonforms-outlet
+        [uischema]="detailUiSchema"
+        [schema]="scopedSchema"
+        [path]="path"
+      >
+      </jsonforms-outlet>
     </mat-card>
-    `
+  `
 })
 export class ObjectControlRenderer extends JsonFormsControl {
-
-    detailUiSchema: UISchemaElement;
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
-    mapAdditionalProps(props: ControlProps) {
-        this.detailUiSchema =
-            props.findUISchema(props.scopedSchema, undefined, props.path);
-    }
-
+  detailUiSchema: UISchemaElement;
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  mapAdditionalProps(props: ControlProps) {
+    this.detailUiSchema = props.findUISchema(
+      props.scopedSchema,
+      undefined,
+      props.path
+    );
+  }
 }
-export const ObjectControlRendererTester: RankedTester = rankWith(2, isObjectControl);
+export const ObjectControlRendererTester: RankedTester = rankWith(
+  2,
+  isObjectControl
+);

@@ -75,15 +75,18 @@ const initState: JsonFormsCore = {
 };
 
 type ValidCoreActions =
-  InitAction | UpdateAction | SetAjvAction | SetSchemaAction | SetUISchemaAction;
+  | InitAction
+  | UpdateAction
+  | SetAjvAction
+  | SetSchemaAction
+  | SetUISchemaAction;
 
 export const coreReducer = (
   state: JsonFormsCore = initState,
-  action: ValidCoreActions) => {
-
+  action: ValidCoreActions
+) => {
   switch (action.type) {
     case INIT: {
-
       const thisAjv = action.ajv ? action.ajv : ajv;
       const v = thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
@@ -119,7 +122,6 @@ export const coreReducer = (
       };
     }
     case UPDATE_DATA: {
-
       if (action.path === undefined || action.path === null) {
         return state;
       } else if (action.path === '') {
@@ -150,7 +152,11 @@ export const coreReducer = (
           newData = undefined;
         }
 
-        const newState: any = _.set(_.cloneDeep(state.data), action.path, newData);
+        const newState: any = _.set(
+          _.cloneDeep(state.data),
+          action.path,
+          newData
+        );
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
@@ -169,12 +175,22 @@ export const coreReducer = (
 
 export const extractData = (state: JsonFormsCore) => _.get(state, 'data');
 export const extractSchema = (state: JsonFormsCore) => _.get(state, 'schema');
-export const extractUiSchema = (state: JsonFormsCore) => _.get(state, 'uischema');
-export const errorAt = (instancePath: string) => (state: JsonFormsCore): any[] => {
-  return _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
+export const extractUiSchema = (state: JsonFormsCore) =>
+  _.get(state, 'uischema');
+export const errorAt = (instancePath: string) => (
+  state: JsonFormsCore
+): any[] => {
+  return _.filter(
+    state.errors,
+    (error: ErrorObject) => error.dataPath === instancePath
+  );
 };
-export const subErrorsAt = (instancePath: string) => (state: JsonFormsCore): any[] => {
+export const subErrorsAt = (instancePath: string) => (
+  state: JsonFormsCore
+): any[] => {
   const path = `${instancePath}.`;
 
-  return _.filter(state.errors, (error: ErrorObject) => error.dataPath.startsWith(path));
+  return _.filter(state.errors, (error: ErrorObject) =>
+    error.dataPath.startsWith(path)
+  );
 };

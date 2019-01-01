@@ -40,15 +40,12 @@ import * as Test from './testers';
 export * from './testers';
 export { Test };
 
-import {
-  convertToValidClassName,
-  createLabelDescriptionFrom
-} from './util';
+import { convertToValidClassName, createLabelDescriptionFrom } from './util';
 import { ControlElement, LabelDescription } from './models/uischema';
 
 const Helpers: {
   createLabelDescriptionFrom(withLabel: ControlElement): LabelDescription;
-  convertToValidClassName(s: string): string
+  convertToValidClassName(s: string): string;
 } = {
   createLabelDescriptionFrom,
   convertToValidClassName

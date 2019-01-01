@@ -25,47 +25,47 @@
 import { RankedTester } from '@jsonforms/core';
 
 import {
-    BooleanField,
-    booleanFieldTester,
-    DateField,
-    dateFieldTester,
-    dateTimeFieldTester,
-    EnumField,
-    enumFieldTester,
-    IntegerField,
-    integerFieldTester,
-    NumberField,
-    numberFieldTester,
-    SliderField,
-    sliderFieldTester,
-    TextAreaField,
-    textAreaFieldTester,
-    TextField,
-    textFieldTester,
-    TimeField,
-    timeFieldTester
+  BooleanField,
+  booleanFieldTester,
+  DateField,
+  dateFieldTester,
+  dateTimeFieldTester,
+  EnumField,
+  enumFieldTester,
+  IntegerField,
+  integerFieldTester,
+  NumberField,
+  numberFieldTester,
+  SliderField,
+  sliderFieldTester,
+  TextAreaField,
+  textAreaFieldTester,
+  TextField,
+  textFieldTester,
+  TimeField,
+  timeFieldTester
 } from './fields';
 
 import { InputControl, inputControlTester } from './controls';
 
 import {
-    ArrayControl,
-    arrayControlTester,
-    Categorization,
-    categorizationTester,
-    LabelRenderer,
-    labelRendererTester,
-    TableArrayControl,
-    tableArrayControlTester
+  ArrayControl,
+  arrayControlTester,
+  Categorization,
+  categorizationTester,
+  LabelRenderer,
+  labelRendererTester,
+  TableArrayControl,
+  tableArrayControlTester
 } from './complex';
 
 import {
-    GroupLayout,
-    groupTester,
-    HorizontalLayout,
-    horizontalLayoutTester,
-    VerticalLayout,
-    verticalLayoutTester
+  GroupLayout,
+  groupTester,
+  HorizontalLayout,
+  horizontalLayoutTester,
+  VerticalLayout,
+  verticalLayoutTester
 } from './layouts';
 import DateTimeField from './fields/DateTimeField';
 
@@ -73,7 +73,6 @@ import DateTimeField from './fields/DateTimeField';
  * Additional renderer props specific to vanilla renderers.
  */
 export interface VanillaRendererProps extends WithClassname {
-
   classNames?: { [className: string]: string };
   /**
    * Returns all classes associated with the given style.
@@ -93,11 +92,11 @@ export interface VanillaRendererProps extends WithClassname {
 }
 
 export interface WithChildren {
-    children: any;
+  children: any;
 }
 
 export interface WithClassname {
-    className?: string;
+  className?: string;
 }
 
 export * from './controls';
@@ -107,7 +106,7 @@ export * from './layouts';
 export * from './reducers';
 export * from './util';
 
-export const vanillaRenderers: { tester: RankedTester, renderer: any }[] = [
+export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: inputControlTester, renderer: InputControl },
   { tester: arrayControlTester, renderer: ArrayControl },
   { tester: labelRendererTester, renderer: LabelRenderer },

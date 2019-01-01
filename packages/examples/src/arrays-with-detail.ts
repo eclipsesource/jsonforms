@@ -95,5 +95,5 @@ registerExamples([
     data,
     schema,
     uischema
-  },
+  }
 ]);

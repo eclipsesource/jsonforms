@@ -25,52 +25,58 @@
 import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import {
-    MatError,
-    MatFormFieldModule,
-    MatSlideToggle,
-    MatSlideToggleModule
+  MatError,
+  MatFormFieldModule,
+  MatSlideToggle,
+  MatSlideToggleModule
 } from '@angular/material';
 import {
-    booleanBaseTest,
-    booleanErrorTest,
-    booleanInputEventTest,
-    ErrorTestExpectation
+  booleanBaseTest,
+  booleanErrorTest,
+  booleanInputEventTest,
+  ErrorTestExpectation
 } from '@jsonforms/angular-test';
 import { ToggleControlRenderer, ToggleControlRendererTester } from '../src';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 describe('Material boolean field tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo',
-        options: {toggle: true}
-    };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo',
+    options: { toggle: true }
+  };
 
-    it('should succeed', () => {
-        expect(
-            ToggleControlRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'boolean'
-                        }
-                    }
-                }
-            )
-        ).toBe(3);
-    });
+  it('should succeed', () => {
+    expect(
+      ToggleControlRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'boolean'
+          }
+        }
+      })
+    ).toBe(3);
+  });
 });
 const imports = [MatSlideToggleModule, MatFormFieldModule, FlexLayoutModule];
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = ToggleControlRenderer;
 const errorTest: ErrorTestExpectation = {
-    errorInstance: MatError, numberOfElements: 1, indexOfElement: 0};
-const testConfig = {imports, providers, componentUT};
-describe('Toggle control Base Tests', booleanBaseTest(testConfig, MatSlideToggle));
-describe('Toggle control Input Event Tests',
-         booleanInputEventTest(testConfig, MatSlideToggle, 'label'));
-describe('Toggle control Error Tests', booleanErrorTest(testConfig, MatSlideToggle, errorTest));
+  errorInstance: MatError,
+  numberOfElements: 1,
+  indexOfElement: 0
+};
+const testConfig = { imports, providers, componentUT };
+describe(
+  'Toggle control Base Tests',
+  booleanBaseTest(testConfig, MatSlideToggle)
+);
+describe(
+  'Toggle control Input Event Tests',
+  booleanInputEventTest(testConfig, MatSlideToggle, 'label')
+);
+describe(
+  'Toggle control Error Tests',
+  booleanErrorTest(testConfig, MatSlideToggle, errorTest)
+);

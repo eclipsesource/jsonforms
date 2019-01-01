@@ -17,48 +17,68 @@ import {
 const keywords = ['#', 'properties', 'items'];
 
 export const removeSchemaKeywords = (path: string) => {
-  return path.split('/').filter(s => !_.some(keywords, key => key === s)).join('.');
+  return path
+    .split('/')
+    .filter(s => !_.some(keywords, key => key === s))
+    .join('.');
 };
 
 @Component({
   selector: 'jsonforms-list-with-detail-master',
   template: `
     <mat-sidenav-container class="container" [fxHide]="hidden">
-        <mat-sidenav mode="side" opened>
-          <mat-nav-list>
-            <mat-list-item *ngIf="masterItems.length === 0">No items</mat-list-item>
-            <mat-list-item
-                *ngFor="let item of masterItems; let i = index; trackBy: trackElement"
-                [class.selected]="item === selectedItem"
-                (click)="onSelect(item, i)"
-                (mouseover)="onListItemHover(i)"
-                (mouseout)="onListItemHover(undefined)"
+      <mat-sidenav mode="side" opened>
+        <mat-nav-list>
+          <mat-list-item *ngIf="masterItems.length === 0"
+            >No items</mat-list-item
+          >
+          <mat-list-item
+            *ngFor="
+              let item of masterItems;
+              let i = index;
+              trackBy: trackElement
+            "
+            [class.selected]="item === selectedItem"
+            (click)="onSelect(item, i)"
+            (mouseover)="onListItemHover(i)"
+            (mouseout)="onListItemHover(undefined)"
+          >
+            <a matLine>{{ item.label || 'No label set' }}</a>
+            <button
+              mat-icon-button
+              class="button hide"
+              (click)="onDeleteClick(item, i)"
+              [ngClass]="{ show: highlightedIdx == i }"
             >
-                <a matLine>{{item.label || 'No label set'}}</a>
-                <button mat-icon-button
-                        class="button hide"
-                        (click)="onDeleteClick(item, i)"
-                        [ngClass]="{'show': highlightedIdx == i}"
-                >
-                  <mat-icon mat-list-icon>delete</mat-icon>
-                </button>
-            </mat-list-item>
-          </mat-nav-list>
-           <button mat-fab color="primary" class="add-button" (click)="onAddClick()" >
-               <mat-icon aria-label="Add item to list">add</mat-icon>
-           </button>
-        </mat-sidenav>
-        <mat-sidenav-content class="content">
-          <jsonforms-detail *ngIf="selectedItem" [item]="selectedItem"></jsonforms-detail>
-        </mat-sidenav-content>
-    </mat-sidenav-container>`,
-  styles: [`
+              <mat-icon mat-list-icon>delete</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-nav-list>
+        <button
+          mat-fab
+          color="primary"
+          class="add-button"
+          (click)="onAddClick()"
+        >
+          <mat-icon aria-label="Add item to list">add</mat-icon>
+        </button>
+      </mat-sidenav>
+      <mat-sidenav-content class="content">
+        <jsonforms-detail
+          *ngIf="selectedItem"
+          [item]="selectedItem"
+        ></jsonforms-detail>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  `,
+  styles: [
+    `
       .container {
         height: 100vh;
       }
       .content {
         padding: 15px;
-        background-color:#fff;
+        background-color: #fff;
       }
       .add-button {
         float: right;
@@ -78,10 +98,10 @@ export const removeSchemaKeywords = (path: string) => {
       mat-sidenav {
         width: 20%;
       }
-    `]
+    `
+  ]
 })
 export class MasterListComponent extends JsonFormsControl {
-
   masterItems: any[];
   selectedItem: any;
   selectedItemIdx: number;
@@ -104,10 +124,13 @@ export class MasterListComponent extends JsonFormsControl {
 
   ngOnInit() {
     super.ngOnInit();
-    const { addItem, removeItems } = mapDispatchToArrayControlProps(this.ngRedux.dispatch, {
-      uischema: this.uischema as ControlElement,
-      schema: this.schema,
-    });
+    const { addItem, removeItems } = mapDispatchToArrayControlProps(
+      this.ngRedux.dispatch,
+      {
+        uischema: this.uischema as ControlElement,
+        schema: this.schema
+      }
+    );
     this.addItem = addItem;
     this.removeItems = removeItems;
   }
@@ -117,17 +140,23 @@ export class MasterListComponent extends JsonFormsControl {
     const controlElement = uischema as ControlElement;
     const instancePath = toDataPath(`${controlElement.scope}/items`);
     this.propsPath = props.path;
-    const resolvedSchema = resolveSchema(schema, `${controlElement.scope}/items`);
-    const detailUISchema = controlElement.options.detail ||
-                           props.findUISchema(
-                             resolvedSchema,
-                             `${controlElement.scope}/items`,
-                             props.path,
-                             'VerticalLayout');
+    const resolvedSchema = resolveSchema(
+      schema,
+      `${controlElement.scope}/items`
+    );
+    const detailUISchema =
+      controlElement.options.detail ||
+      props.findUISchema(
+        resolvedSchema,
+        `${controlElement.scope}/items`,
+        props.path,
+        'VerticalLayout'
+      );
 
     const masterItems = (data || []).map((d: any, index: number) => {
-      const labelRefInstancePath =
-        removeSchemaKeywords(controlElement.options.labelRef);
+      const labelRefInstancePath = removeSchemaKeywords(
+        controlElement.options.labelRef
+      );
       const masterItem = {
         label: _.get(d, labelRefInstancePath),
         data: d,
@@ -161,7 +190,10 @@ export class MasterListComponent extends JsonFormsControl {
       // select next element, if possible
       this.selectedItem = this.masterItems[idx];
       this.selectedItemIdx = idx;
-    } else if (this.selectedItem.path === item.path && this.masterItems.length > 0) {
+    } else if (
+      this.selectedItem.path === item.path &&
+      this.masterItems.length > 0
+    ) {
       // select 1st entry, if no next element available
       this.selectedItem = this.masterItems[0];
       this.selectedItemIdx = 0;

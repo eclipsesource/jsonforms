@@ -23,24 +23,30 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { GroupLayout, JsonFormsState, RankedTester, rankWith, uiTypeIs } from '@jsonforms/core';
+import {
+  GroupLayout,
+  JsonFormsState,
+  RankedTester,
+  rankWith,
+  uiTypeIs
+} from '@jsonforms/core';
 import { LayoutRenderer } from './layout.renderer';
 import { NgRedux } from '@angular-redux/store';
 
 @Component({
-    selector: 'GroupLayoutRenderer',
-    template: `
-    <mat-card fxLayout='column' [fxHide]="hidden">
-        <mat-card-title class='mat-title'>{{uischema.label}}</mat-card-title>
-          <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
-            <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
-          </div>
+  selector: 'GroupLayoutRenderer',
+  template: `
+    <mat-card fxLayout="column" [fxHide]="hidden">
+      <mat-card-title class="mat-title">{{ uischema.label }}</mat-card-title>
+      <div *ngFor="let props of renderProps; trackBy: trackElement" fxFlex>
+        <jsonforms-outlet [renderProps]="props"></jsonforms-outlet>
+      </div>
     </mat-card>
-    `
+  `
 })
 export class GroupLayoutRenderer extends LayoutRenderer<GroupLayout> {
-    constructor(ngRedux: NgRedux<JsonFormsState>) {
-        super(ngRedux);
-    }
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
 }
 export const groupLayoutTester: RankedTester = rankWith(1, uiTypeIs('Group'));

@@ -26,7 +26,11 @@ import { NgRedux } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatError, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {
+  MatError,
+  MatFormFieldModule,
+  MatInputModule
+} from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   ErrorTestExpectation,
@@ -45,69 +49,68 @@ import {
 import { NumberControlRenderer, NumberControlRendererTester } from '../src';
 
 describe('Material number field tester', () => {
-    const uischema = {
-        type: 'Control',
-        scope: '#/properties/foo'
-    };
+  const uischema = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
 
-    it('should succeed with floats', () => {
-        expect(
-            NumberControlRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'number'
-                        }
-                    }
-                }
-            )
-        ).toBe(2);
-    });
-    it('should succeed with integers', () => {
-        expect(
-            NumberControlRendererTester(
-                uischema,
-                {
-                    type: 'object',
-                    properties: {
-                        foo: {
-                            type: 'integer'
-                        }
-                    }
-                }
-            )
-        ).toBe(2);
-    });
+  it('should succeed with floats', () => {
+    expect(
+      NumberControlRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'number'
+          }
+        }
+      })
+    ).toBe(2);
+  });
+  it('should succeed with integers', () => {
+    expect(
+      NumberControlRendererTester(uischema, {
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'integer'
+          }
+        }
+      })
+    ).toBe(2);
+  });
 });
 const emptyL10NConfig: L10nConfig = {};
 
 const imports = [
-    MatFormFieldModule,
-    MatInputModule,
-    NoopAnimationsModule,
-    ReactiveFormsModule,
-    FlexLayoutModule,
-    LocalizationModule,
-    LocaleValidationModule.forRoot(),
-    TranslationModule.forRoot(emptyL10NConfig)
+  MatFormFieldModule,
+  MatInputModule,
+  NoopAnimationsModule,
+  ReactiveFormsModule,
+  FlexLayoutModule,
+  LocalizationModule,
+  LocaleValidationModule.forRoot(),
+  TranslationModule.forRoot(emptyL10NConfig)
 ];
-const providers = [
-    { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
+const providers = [{ provide: NgRedux, useFactory: MockNgRedux.getInstance }];
 const componentUT: any = NumberControlRenderer;
 const errorTest: ErrorTestExpectation = {
-    errorInstance: MatError,
-    numberOfElements: 1,
-    indexOfElement: 0
+  errorInstance: MatError,
+  numberOfElements: 1,
+  indexOfElement: 0
 };
 const toSelect = (el: DebugElement) => el.nativeElement;
-const testConfig = {imports, providers, componentUT};
+const testConfig = { imports, providers, componentUT };
 
-describe('Number control Base Tests', numberBaseTest(testConfig, 'input', toSelect));
-describe('Number control Input Event Tests',
-         numberInputEventTest(testConfig, 'input', toSelect));
+describe(
+  'Number control Base Tests',
+  numberBaseTest(testConfig, 'input', toSelect)
+);
+describe(
+  'Number control Input Event Tests',
+  numberInputEventTest(testConfig, 'input', toSelect)
+);
 describe('Number control Error Tests', numberErrorTest(testConfig, errorTest));
-describe('Number control Additional Props Tests',
-         numberAdditionalPropsTest(testConfig, 'input', toSelect));
+describe(
+  'Number control Additional Props Tests',
+  numberAdditionalPropsTest(testConfig, 'input', toSelect)
+);
