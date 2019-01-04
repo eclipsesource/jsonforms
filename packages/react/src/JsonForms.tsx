@@ -75,7 +75,7 @@ export class JsonFormsDispatchRenderer
 
     constructor(props: JsonFormsProps) {
         super(props);
-        const isResolved = !hasRefs(props.schema);
+        const isResolved = props.isSubForm || !hasRefs(props.schema);
         this.state = {
             id: isControl(props.uischema) ? createId(props.uischema.scope) : undefined,
             schema: props.schema,

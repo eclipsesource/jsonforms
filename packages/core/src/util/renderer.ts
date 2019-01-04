@@ -474,10 +474,12 @@ export const mapStateToLayoutProps =
 
 export interface JsonFormsProps extends StatePropsOfRenderer {
     renderers?: { tester: RankedTester, renderer: any }[];
+    isSubForm?: Boolean;
 }
 
 export interface StatePropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
     renderers: JsonFormsRendererRegistryEntry[];
+    isSubForm: Boolean;
 }
 
 export const mapStateToJsonFormsRendererProps =
@@ -494,6 +496,7 @@ export const mapStateToJsonFormsRendererProps =
         return {
             renderers: _.get(state.jsonforms, 'renderers') || [],
             schema: ownProps.schema || getSchema(state),
-            uischema
+            uischema,
+            isSubForm: !!ownProps.schema,
         };
     };
