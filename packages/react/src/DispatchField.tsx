@@ -27,9 +27,9 @@ import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-    DispatchFieldProps,
-    formatErrorMessage,
-    mapStateToDispatchFieldProps,
+  DispatchFieldProps, DispatchFieldStateProps,
+  formatErrorMessage,
+  mapStateToDispatchFieldProps, OwnPropsOfField,
 } from '@jsonforms/core';
 import { FormHelperText } from '@material-ui/core';
 
@@ -66,4 +66,6 @@ class Dispatch extends React.Component<DispatchFieldProps, any> {
     }
 }
 
-export const DispatchField = connect(mapStateToDispatchFieldProps)(Dispatch);
+export const DispatchField = connect<DispatchFieldStateProps, {}, OwnPropsOfField>(
+  mapStateToDispatchFieldProps
+)(Dispatch);

@@ -18,13 +18,13 @@
 		"nyc": "^11.8.0",
 		"source-map-loader": "^0.2.3",
 		"style-loader": "^0.21.0",
-		"ts-loader": "^3.2.0",
+		"ts-loader": "^5.3.3",
 		"tslint": "^5.8.0",
 		"tslint-loader": "^3.5.3",
 		"tslint-react": "^3.2.0",
 		"typedoc": "^0.12.0",
 		"typescript": "^3.0.0",
-		"webpack": "^3.10.0",
+		"webpack": "^4.28.1",
 		"webpack-merge": "^4.1.1"
 	}
 }
