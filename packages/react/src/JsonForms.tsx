@@ -28,12 +28,14 @@ import * as _ from 'lodash';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-    createId,
-    isControl,
-    JsonFormsProps,
-    JsonSchema,
-    mapStateToJsonFormsRendererProps,
-    removeId
+  createId,
+  isControl,
+  JsonFormsProps,
+  JsonSchema,
+  mapStateToJsonFormsRendererProps,
+  OwnPropsOfRenderer,
+  removeId,
+  StatePropsOfJsonFormsRenderer
 } from '@jsonforms/core';
 
 interface JsonFormsRendererState {
@@ -141,7 +143,7 @@ export class JsonFormsDispatchRenderer
     }
 }
 
-export const JsonForms = connect(
+export const JsonForms = connect<StatePropsOfJsonFormsRenderer, {}, OwnPropsOfRenderer>(
     mapStateToJsonFormsRendererProps,
     null
 )(JsonFormsDispatchRenderer);
