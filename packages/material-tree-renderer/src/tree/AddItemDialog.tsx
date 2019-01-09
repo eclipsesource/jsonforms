@@ -1,13 +1,14 @@
 // tslint:disable:jsx-no-multiline-js
 // tslint:disable:jsx-no-lambda
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import * as React from 'react';
 import { connect } from 'react-redux';
 import {
     getData,
     getDefaultData,
     getSchema, JsonFormsState,
     JsonSchema,
+    JsonSchema7,
     Paths,
     Resolve,
     update
@@ -16,7 +17,7 @@ import { findContainerProperties, findPropertyLabel, Property } from '../service
 import Button from '@material-ui/core/Button';
 import * as _ from 'lodash';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import * as React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -86,7 +87,7 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
         add(path, prop, newData);
         setSelection(prop.schema, newData, selectionPath)();
         closeDialog();
-    }
+    };
 
     render() {
         const {
@@ -139,7 +140,7 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
 
 // TODO
 const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
-    const containerProperties = findContainerProperties(ownProps.schema, getSchema(state), false);
+    const containerProperties = findContainerProperties(ownProps.schema, getSchema(state) as JsonSchema7, false);
 
     return {
         rootData: getData(state),
