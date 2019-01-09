@@ -24,8 +24,10 @@
 */
 import test from 'ava';
 import {
+    AndCondition,
     ControlElement,
     LeafCondition,
+    OrCondition,
     RuleEffect,
     SchemaBasedCondition
 } from '../../src';
@@ -50,6 +52,130 @@ test('evalVisibility show valid case', t => {
         ruleValue: 'bar'
     };
     t.is(evalVisibility(uischema, data), true);
+});
+
+test('evalVisibility show valid case based on AndCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'bar'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'foo'
+      };
+    const condition: AndCondition = {
+          type: 'AND',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.SHOW,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar',
+        ruleValue2: 'foo'
+    };
+    t.is(evalVisibility(uischema, data), true);
+});
+
+test('evalVisibility show invalid case based on AndCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'bar'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'bar'
+      };
+    const condition: AndCondition = {
+          type: 'AND',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.SHOW,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar',
+        ruleValue2: 'foo'
+    };
+    t.is(evalVisibility(uischema, data), false);
+});
+
+test('evalVisibility show valid case based on OrCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'bar'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'foo'
+      };
+    const condition: OrCondition = {
+          type: 'OR',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.SHOW,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar1',
+        ruleValue2: 'foo'
+    };
+    t.is(evalVisibility(uischema, data), true);
+});
+
+test('evalVisibility show invalid case based on OrCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'foo'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'bar'
+      };
+    const condition: OrCondition = {
+          type: 'OR',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.SHOW,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar',
+        ruleValue2: 'foo'
+    };
+    t.is(evalVisibility(uischema, data), false);
 });
 
 test('evalVisibility show valid case based on schema condition', t => {
@@ -179,6 +305,130 @@ test('evalEnablement enable valid case', t => {
         ruleValue: 'bar'
     };
     t.is(evalEnablement(uischema, data), true);
+});
+
+test('evalEnablement show valid case based on AndCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'bar'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'foo'
+      };
+    const condition: AndCondition = {
+          type: 'AND',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.ENABLE,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar',
+        ruleValue2: 'foo'
+    };
+    t.is(evalEnablement(uischema, data), true);
+});
+
+test('evalEnablement show invalid case based on AndCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'bar'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'bar'
+      };
+    const condition: AndCondition = {
+          type: 'AND',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.ENABLE,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar',
+        ruleValue2: 'foo'
+    };
+    t.is(evalEnablement(uischema, data), false);
+});
+
+test('evalEnablement show valid case based on OrCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'bar'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'foo'
+      };
+    const condition: OrCondition = {
+          type: 'OR',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.ENABLE,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar1',
+        ruleValue2: 'foo'
+    };
+    t.is(evalEnablement(uischema, data), true);
+});
+
+test('evalEnablement show invalid case based on OrCondition', t => {
+    const leafCondition1: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue1',
+        expectedValue: 'foo'
+      };
+    const leafCondition2: LeafCondition = {
+        type: 'LEAF' ,
+        scope: '#/properties/ruleValue2',
+        expectedValue: 'bar'
+      };
+    const condition: OrCondition = {
+          type: 'OR',
+          conditions: [leafCondition1, leafCondition2]
+      };
+    const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/value',
+        rule: {
+            effect: RuleEffect.ENABLE,
+            condition: condition
+        }
+    };
+    const data = {
+        value: 'hello',
+        ruleValue1: 'bar',
+        ruleValue2: 'foo'
+    };
+    t.is(evalEnablement(uischema, data), false);
 });
 
 test('evalEnablement enable invalid case', t => {

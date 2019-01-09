@@ -309,12 +309,10 @@ export const mapStateToControlProps =
     (state: JsonFormsState, ownProps: OwnPropsOfControl): StatePropsOfControl => {
         const { uischema } = ownProps;
         const path = composeWithUi(uischema, ownProps.path);
-        const rulePath = _.has(uischema, 'rule')
-            && composeWithUi(uischema.rule.condition, ownProps.path);
         const visible = _.has(ownProps, 'visible') ?
-            ownProps.visible : isVisible(ownProps, state, rulePath);
+            ownProps.visible : isVisible(ownProps, state, ownProps.path);
         const enabled = _.has(ownProps, 'enabled') ?
-            ownProps.enabled  : isEnabled(ownProps, state, rulePath);
+            ownProps.enabled  : isEnabled(ownProps, state, ownProps.path);
         const labelDesc = createLabelDescriptionFrom(uischema);
         const label = labelDesc.show ? labelDesc.text : '';
         const errors = _.union(getErrorAt(path)(state).map(error => error.message));
