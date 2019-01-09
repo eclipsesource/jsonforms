@@ -43,11 +43,6 @@ import { JsonFormsState } from '../store';
 
 const ajv = createAjv();
 
-// const ruleIsMissingProperties = (uischema: UISchemaElement): boolean =>
-//     !_.has(uischema, 'rule.condition') ||
-//     !_.has(uischema, 'rule.condition.scope') ||
-//     (!_.has(uischema, 'rule.condition.expectedValue') && !_.has(uischema, 'rule.condition.schema'));
-
 const isOrCondition = (condition: Condition): condition is OrCondition =>
     condition.type === 'OR';
 
@@ -65,20 +60,16 @@ const getConditionScope = (condition: Scopable, path: string): string => {
 };
 
 const isRuleFulfilled = (uischema: UISchemaElement, data: any, path: string): boolean => {
-    // if (ruleIsMissingProperties(uischema)) {
-    //     return true;
-    // }
-
     const condition = uischema.rule.condition;
     return evaluateCondition(data, condition, path);
 
 };
 const evaluateCondition = (data: any, condition: Condition, path: string ): boolean => {
     if (isAndCondition(condition)) {
-        return condition.children.reduce(
+        return condition.conditions.reduce(
             (acc, cur) => acc && evaluateCondition(data, cur, path), true);
     } else if (isOrCondition(condition)) {
-        return condition.children.reduce(
+        return condition.conditions.reduce(
             (acc, cur) => acc || evaluateCondition(data, cur, path), false);
     } else if (isLeafCondition(condition)) {
         const value = resolveData(data, getConditionScope(condition, path));

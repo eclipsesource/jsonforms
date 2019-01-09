@@ -80,7 +80,7 @@ export interface Condition {
   /**
    * The type of condition.
    */
-  type?: string;
+  readonly type?: string;
 }
 
 /**
@@ -104,7 +104,7 @@ export interface SchemaBasedCondition extends Condition, Scopable {
  * A composable condition.
  */
 export interface ComposableCondition extends Condition {
-  children: Condition[];
+  conditions: Condition[];
 }
 
 /**
