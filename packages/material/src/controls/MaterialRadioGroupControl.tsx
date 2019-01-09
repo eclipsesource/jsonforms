@@ -71,13 +71,13 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
 
         return (
             <FormControl
-                component='fieldset'
+                component={'fieldset' as 'div'}
                 fullWidth={!trim}
             >
                 <FormLabel
                     htmlFor={id}
                     error={!isValid}
-                    component='legend'
+                    component={'legend' as 'label'}
                 >
                     {computeLabel(isPlainLabel(label) ? label : label.default, required)}
                 </FormLabel>

@@ -12,7 +12,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "types": ["jest"]
 }

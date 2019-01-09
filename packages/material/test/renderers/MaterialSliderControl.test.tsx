@@ -26,12 +26,11 @@ import * as React from 'react';
 import {
   Actions,
   ControlElement,
-  getData,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import SliderControl,
@@ -41,7 +40,7 @@ import * as TestUtils from 'react-dom/test-utils';
 import * as ReactDOM from 'react-dom';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
-import Slider from '@material-ui/lab/Slider';
+import Slider, { SliderProps } from '@material-ui/lab/Slider';
 
 const data = {'foo': 5};
 const schema = {
@@ -55,7 +54,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
   options: {
@@ -63,7 +62,7 @@ const uischema = {
   }
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -248,9 +247,9 @@ describe('Material slider control', () => {
         <SliderControl schema={jsonSchema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any>;
 
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     expect(input.props.value).toBe(5);
   });
 
@@ -261,8 +260,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     expect(input.props.value).toBe(3);
     store.dispatch(update('foo', () => 4));
     expect(input.props.value).toBe(4);
@@ -287,8 +286,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schemaWithMultipleOf} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     expect(input.props.step).toBe(2);
   });
 
@@ -299,8 +298,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     store.dispatch(update('foo', () => undefined));
     expect(input.props.value).toBe(schema.properties.foo.default);
   });
@@ -312,8 +311,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     store.dispatch(update('foo', () => null));
     expect(input.props.value).toBe(schema.properties.foo.default);
   });
@@ -325,8 +324,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     store.dispatch(update('bar', () => 11));
     expect(input.props.value).toBe(5);
   });
@@ -338,8 +337,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     store.dispatch(update(null, () => 3));
     expect(input.props.value).toBe(5);
   });
@@ -351,9 +350,9 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     store.dispatch(update(undefined, () => 13));
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     expect(input.props.value).toBe(5);
   });
 
@@ -364,8 +363,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema} enabled={false}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     expect(input.props.disabled).toBeTruthy();
   });
 
@@ -376,8 +375,8 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedComponentWithType(tree, Slider as React.ComponentClass<SliderProps>);
     expect(input.props.disabled).toBeFalsy();
   });
 
@@ -388,7 +387,7 @@ describe('Material slider control', () => {
         <SliderControl schema={schema} uischema={uischema} id='#/properties/foo'/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const divs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div') as HTMLElement[];
     // id
     expect(divs.find(d => d.id === '#/properties/foo')).toBeDefined();

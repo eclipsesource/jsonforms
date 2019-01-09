@@ -25,10 +25,11 @@
 import {
   Actions,
   ControlElement,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
-  NOT_APPLICABLE
+  JsonSchema,
+  NOT_APPLICABLE,
+  UISchemaElement
 } from '@jsonforms/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -38,9 +39,8 @@ import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
 import MaterialObjectRenderer,
        { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -73,11 +73,11 @@ const schema = {
     },
   },
 };
-const uischema1 = {
+const uischema1: ControlElement = {
   type: 'Control',
   scope: '#',
 };
-const uischema2 = {
+const uischema2: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
 };
@@ -145,7 +145,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema1} />
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     expect(input.length).toBe(2);
@@ -162,7 +162,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     expect(input.length).toBe(1);
@@ -177,7 +177,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });
@@ -189,7 +189,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     expect(input.length).toBe(0);
   });
@@ -201,7 +201,7 @@ describe('Material object control', () => {
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.hidden).toBeFalsy();
   });

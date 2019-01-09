@@ -69,7 +69,6 @@ const Master = (
                     path={path}
                     selection={selection}
                     handlers={handlers}
-                    uischema={uischema}
                     filterPredicate={filterPredicate}
                     labelProvider={labelProviders.forData}
                     imageProvider={imageProvider}
@@ -235,7 +234,7 @@ export class TreeWithDetailRenderer extends Control
                 path
             }
         });
-    }
+    };
 
     openDialog = (schema: JsonSchema, path: string) => () => {
         this.setState({
@@ -245,7 +244,7 @@ export class TreeWithDetailRenderer extends Control
                 path
             }
         });
-    }
+    };
 
     closeDialog = () => {
         this.setState({
@@ -255,7 +254,7 @@ export class TreeWithDetailRenderer extends Control
                 path: undefined
             }
         });
-    }
+    };
 
     render() {
         const {

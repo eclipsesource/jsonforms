@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { JsonSchema } from '@jsonforms/core';
+import { JsonSchema, JsonSchema7 } from '@jsonforms/core';
 import { resolveSchema } from '@jsonforms/core';
 import * as JsonRefs from 'json-refs';
 
@@ -19,12 +19,12 @@ export interface Property {
 
   property: string;
 
-  schemaPath: string;
+  schemaPath?: string;
 
   /**
    * The schema is the JsonSchema this property describes.
    */
-  schema: JsonSchema;
+  schema: JsonSchema7;
 }
 
 /**
@@ -152,14 +152,14 @@ export const makeSchemaSelfContained = (
  * @return a JsonSchema that is self-contained
  */
 const resolveAndMakeSchemaSelfContained = (
-  parentSchema: JsonSchema,
+  parentSchema: JsonSchema7,
   refPath: string
-): JsonSchema => {
+): JsonSchema7 => {
   const schema: JsonSchema = resolveSchema(parentSchema, refPath) as JsonSchema;
   return {
     ...schema,
     ...makeSchemaSelfContained(parentSchema, schema)
-  } as JsonSchema;
+  } as JsonSchema7;
 };
 
 /**
@@ -181,8 +181,8 @@ const findContainerProps = (
   property: string,
   label: string,
   schemaPath: string,
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
+  schema: JsonSchema7,
+  rootSchema: JsonSchema7,
   isInContainer: boolean,
   visited: string[],
   recurse: boolean
@@ -254,7 +254,7 @@ const findContainerProps = (
     const init: Property[] = [];
     return _.reduce(
       schema.anyOf,
-      (prev: Property[], anyOfSubSchema: JsonSchema, index: number) =>
+      (prev: Property[], anyOfSubSchema: JsonSchema7, index: number) =>
         prev.concat(
           findContainerProps(
             property,
@@ -285,8 +285,8 @@ const findContainerProps = (
  * @see Property
  */
 export const findContainerProperties = (
-  schema: JsonSchema,
-  rootSchema: JsonSchema,
+  schema: JsonSchema7,
+  rootSchema: JsonSchema7,
   recurse: boolean
 ): Property[] =>
   findContainerProps(

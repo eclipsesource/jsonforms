@@ -32,6 +32,7 @@ import {
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import BooleanField, { materialBooleanFieldTester } from '../../src/fields/MaterialBooleanField';
@@ -42,7 +43,7 @@ import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
 
-export const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+export const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -66,7 +67,7 @@ const schema = {
     }
   }
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
@@ -175,7 +176,7 @@ describe('Material boolean field', () => {
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
     expect(document.activeElement).toBe(inputs[1]);
@@ -196,7 +197,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={control}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
   });
@@ -215,7 +216,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={control}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBe(false);
   });
@@ -231,7 +232,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).not.toBe(input);
   });
@@ -243,7 +244,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.type).toBe('checkbox');
@@ -257,7 +258,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.checked = false;
@@ -272,7 +273,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => false));
     expect(input.checked).toBeFalsy();
@@ -286,7 +287,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
     expect(input.checked).toBeFalsy();
@@ -299,7 +300,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
     expect(input.checked).toBeFalsy();
@@ -312,7 +313,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('bar', () => 11));
     expect(input.checked).toBeTruthy();
@@ -325,7 +326,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => false));
     expect(input.checked).toBeTruthy();
@@ -338,7 +339,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     store.dispatch(update(undefined, () => false));
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.checked).toBeTruthy();
@@ -351,7 +352,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema} enabled={false}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
   });
@@ -363,7 +364,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });
@@ -375,7 +376,7 @@ describe('Material boolean field', () => {
         <BooleanField schema={schema} uischema={uischema} id='myid'/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.id).toBe('myid');
   });

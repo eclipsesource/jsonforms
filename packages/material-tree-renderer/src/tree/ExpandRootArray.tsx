@@ -1,6 +1,6 @@
 // tslint:disable:jsx-no-multiline-js
 import * as React from 'react';
-import { JsonSchema7, Paths, resolveData, UISchemaElement } from '@jsonforms/core';
+import { JsonSchema, Paths, resolveData, UISchemaElement } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
 import { WithImageProvider, WithLabelProvider } from './TreeWithDetailRenderer';
 
@@ -11,7 +11,7 @@ interface ExpandRootArrayProps {
     path: string;
     handlers: any;
     filterPredicate: any;
-    schema: JsonSchema7 | JsonSchema7[];
+    schema: JsonSchema | JsonSchema[];
 }
 
 /**
@@ -71,7 +71,6 @@ export const ExpandRootArrayContainer = (
     schema,
     rootData,
     selection,
-    uischema,
     handlers,
     filterPredicate,
     labelProvider,
@@ -86,7 +85,6 @@ export const ExpandRootArrayContainer = (
       rootData={rootData}
       selection={selection}
       handlers={handlers}
-      uischema={uischema}
       filterPredicate={filterPredicate}
       labelProvider={labelProvider}
       imageProvider={imageProvider}

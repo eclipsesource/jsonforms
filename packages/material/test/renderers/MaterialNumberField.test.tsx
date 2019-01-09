@@ -32,6 +32,7 @@ import {
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import NumberField, { materialNumberFieldTester } from '../../src/fields/MaterialNumberField';
@@ -41,7 +42,7 @@ import * as TestUtils from 'react-dom/test-utils';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -66,7 +67,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
@@ -189,7 +190,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
@@ -209,7 +210,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
   });
@@ -227,7 +228,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -242,7 +243,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -265,7 +266,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={jsonSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.type).toBe('number');
@@ -279,7 +280,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.value = '2.72';
     TestUtils.Simulate.change(input);
@@ -296,7 +297,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.value).toBe('2.72');
     store.dispatch(update('foo', () => 3.14));
@@ -309,7 +310,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
     expect(input.value).toBe('');
@@ -321,7 +322,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
     expect(input.value).toBe('');
@@ -333,7 +334,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('bar', () => 11));
     expect(input.value).toBe('3.14');
@@ -345,7 +346,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => 2.72));
     expect(input.value).toBe('3.14');
@@ -357,7 +358,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     store.dispatch(update(undefined, () => 13));
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.value).toBe('3.14');
@@ -369,7 +370,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema} enabled={false}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
   });
@@ -380,7 +381,7 @@ describe('Material number field', () => {
       <Provider store={store}>
         <NumberField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });

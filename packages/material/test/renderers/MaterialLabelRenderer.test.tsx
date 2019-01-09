@@ -27,18 +27,16 @@ import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 import {
   Actions,
-  ControlElement,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE
+  NOT_APPLICABLE,
+  UISchemaElement
 } from '@jsonforms/core';
 import '../../src/fields';
 import MaterialLabelRenderer, {
   materialLabelRendererTester
 } from '../../src/additional/MaterialLabelRenderer';
-import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
@@ -52,7 +50,7 @@ const uischema = {
   text: 'Foo'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -84,7 +82,7 @@ describe('Material Label Renderer', () => {
       <Provider store={store}>
         <MaterialLabelRenderer schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'h6') as HTMLHeadingElement;
     expect(label.textContent).toBe('Foo');
@@ -101,7 +99,7 @@ describe('Material Label Renderer', () => {
           visible={false}
         />
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h6')[0] as HTMLElement;
     expect(getComputedStyle(control).display).toBe('none');
   });
@@ -112,7 +110,7 @@ describe('Material Label Renderer', () => {
       <Provider store={store}>
         <MaterialLabelRenderer schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h6')[0] as HTMLElement;
     expect(control.hidden).toBeFalsy();
   });

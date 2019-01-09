@@ -3,12 +3,12 @@ import {
   findContainerProperties,
   makeSchemaSelfContained
 } from '../../src/services/property.util';
-import { JsonSchema } from '@jsonforms/core';
+import { JsonSchema7 } from '@jsonforms/core';
 import * as _ from 'lodash';
 
 describe('Property util', () => {
   test('should retrieve container property from a nested array (non primitive)', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       type: 'array',
       items: {
         type: 'array',
@@ -166,7 +166,7 @@ describe('Property util', () => {
   });
 
   test('should retrieve container properties from objects with same $ref', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         person: {
           type: 'object',
@@ -208,7 +208,7 @@ describe('Property util', () => {
   });
 
   test('should retrieve container properties from objects with different $ref', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         person: {
           type: 'object',
@@ -256,7 +256,7 @@ describe('Property util', () => {
   });
 
   test('should retrieve no container properties object if no array object', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         a: { type: 'object' },
         b: { type: 'object' }
@@ -269,7 +269,7 @@ describe('Property util', () => {
   });
 
   test('should retrieve container properties from array of objects by using keyword anyOf', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         a: { type: 'object', properties: { foo: { type: 'string' } } },
         b: { type: 'object', properties: { foo: { type: 'string' } } }
@@ -302,7 +302,7 @@ describe('Property util', () => {
   });
 
   test('expect to retrieve properties from object with array object by using keyword anyOf', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         a: { type: 'object', properties: { foo: { type: 'string' } } },
         b: { type: 'object', properties: { foo: { type: 'string' } } }
@@ -343,7 +343,7 @@ describe('Property util', () => {
   });
 
   test('expect to retrieve properties from object with array object by using keyword anyOf twice', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         a: { anyOf: [{ $ref: '#/definitions/b' }] },
         b: { type: 'object', properties: { foo: { type: 'string' } } }
@@ -377,7 +377,7 @@ describe('Property util', () => {
     'expect to retrieve properties from object with array object ' +
       'where anyOf contains reference and object',
     () => {
-      const schema: JsonSchema = {
+      const schema: JsonSchema7 = {
         definitions: {
           a: { type: 'object', properties: { foo: { type: 'string' } } }
         },
@@ -420,7 +420,7 @@ describe('Property util', () => {
   );
 
   test('expect to retrieve properties from object with array object by using keyword anyOf recursive', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         a: {
           anyOf: [{ $ref: '#/definitions/b' }]
@@ -457,7 +457,7 @@ describe('Property util', () => {
   });
 
   test('should retrieve container properties from object that references an array object', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         root: {
           type: 'array',
@@ -493,7 +493,7 @@ describe('Property util', () => {
   });
 
   test('should retrieve containers properties of objects with mutually recursive $refs', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       definitions: {
         person: {
           type: 'object',
@@ -568,7 +568,7 @@ describe('Property util', () => {
   // real world examples --
   //
   test('support simple UML-like schema with array objects', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       type: 'object',
       properties: {
         name: {
@@ -632,7 +632,7 @@ describe('Property util', () => {
   });
 
   test('make UI sub schema self-contained', () => {
-    const parentSchema: JsonSchema = {
+    const parentSchema: JsonSchema7 = {
       type: 'object',
       properties: {
         type: {
@@ -777,7 +777,7 @@ describe('Property util', () => {
   });
 
   test('make schema with missing reference definition self-contained', () => {
-    const parentSchema: JsonSchema = {
+    const parentSchema: JsonSchema7 = {
       type: 'object',
       properties: {
         type: { type: 'string' },
@@ -877,7 +877,7 @@ describe('Property util', () => {
   });
 
   test('Find properties by resolving circular references in a given schema ', () => {
-    const schema: JsonSchema = {
+    const schema: JsonSchema7 = {
       type: 'object',
       properties: {
         type: {
