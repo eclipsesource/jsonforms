@@ -24,7 +24,7 @@
 */
 import * as React from 'react';
 import { ArrayControlProps, composePaths } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import * as _ from 'lodash';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -132,7 +132,7 @@ export const MaterialArrayLayout =
                     </Grid>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
-                    <JsonForms
+                    <ResolvedJsonForms
                       schema={scopedSchema}
                       uischema={foundUISchema || uischema}
                       path={childPath}

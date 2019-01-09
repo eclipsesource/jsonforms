@@ -25,7 +25,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { ArrayControlProps, composePaths } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
 export const ArrayControl  = (
@@ -62,7 +62,7 @@ export const ArrayControl  = (
                 const childPath = composePaths(path, `${index}`);
 
                 return (
-                  <JsonForms
+                  <ResolvedJsonForms
                     schema={scopedSchema}
                     uischema={foundUISchema || uischema}
                     path={childPath}

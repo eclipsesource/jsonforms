@@ -12,7 +12,7 @@ import {
     UISchemaElement,
     VerticalLayout
 } from '@jsonforms/core';
-import { connectToJsonForms, JsonForms } from '@jsonforms/react';
+import { connectToJsonForms, ResolvedJsonForms } from '@jsonforms/react';
 
 const createControls =
     (allOf: JsonSchema[], schema: JsonSchema, scope: string): UISchemaElement => {
@@ -47,7 +47,7 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
         );
 
         return (
-            <JsonForms
+            <ResolvedJsonForms
                 schema={schema}
                 uischema={elements}
             />

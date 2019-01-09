@@ -15,7 +15,7 @@ import {
     toDataPath,
     UISchemaElement,
 } from '@jsonforms/core';
-import { connectToJsonForms, JsonForms } from '@jsonforms/react';
+import { connectToJsonForms, ResolvedJsonForms } from '@jsonforms/react';
 
 const createControls =
     (anyOf: JsonSchema[], schema: JsonSchema, scope: string): UISchemaElement => {
@@ -72,7 +72,7 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, any> {
         );
 
         return (
-            <JsonForms
+            <ResolvedJsonForms
                 schema={schema}
                 uischema={elements}
             />

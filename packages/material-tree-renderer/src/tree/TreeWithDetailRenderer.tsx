@@ -15,7 +15,7 @@ import {
     Runtime, StatePropsOfControl,
     UISchemaElement,
 } from '@jsonforms/core';
-import { Control, JsonForms } from '@jsonforms/react';
+import { Control, ResolvedJsonForms } from '@jsonforms/react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
@@ -321,7 +321,7 @@ export class TreeWithDetailRenderer extends Control
                     <div className={classes.treeMasterDetailDetail}>
                         {
                             this.state.selected ?
-                                <JsonForms
+                                <ResolvedJsonForms
                                     schema={this.state.selected.schema}
                                     path={this.state.selected.path}
                                     uischema={detailUiSchema}

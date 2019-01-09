@@ -11,7 +11,7 @@ import {
     rankWith,
     UISchemaElement
 } from '@jsonforms/core';
-import { connectToJsonForms, JsonForms } from '@jsonforms/react';
+import { connectToJsonForms, ResolvedJsonForms } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import * as _ from 'lodash';
 import * as React from 'react';
@@ -43,7 +43,7 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
 
         return (
             <Hidden xsUp={!visible}>
-                <JsonForms
+                <ResolvedJsonForms
                     visible={visible}
                     schema={scopedSchema}
                     uischema={detailUiSchema}
