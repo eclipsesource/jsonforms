@@ -37,7 +37,7 @@ import {
     JsonSchema,
     UISchemaElement
 } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import { Store } from 'redux';
 
 /**
@@ -72,7 +72,7 @@ const CustomElement = (config: CustomElementConfig) => (cls: any) => {
 })
 export class JsonFormsElement extends HTMLElement {
 
-  private InnerComponent: any = JsonForms;
+  private InnerComponent: any = ResolvedJsonForms;
   private innerComponentParameters: any = {};
   private allowDynamicUpdate = false;
   private _store: JsonFormsStore;

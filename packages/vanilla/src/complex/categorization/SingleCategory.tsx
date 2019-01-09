@@ -24,7 +24,7 @@
 */
 import * as React from 'react';
 import { Category, JsonSchema } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 
 export interface CategoryProps {
   category: Category;
@@ -38,7 +38,7 @@ export const SingleCategory = ({ category, schema, path }: CategoryProps) => (
     {
       (category.elements || []).map((child, index) =>
         (
-          <JsonForms
+          <ResolvedJsonForms
             key={`${path}-${index}`}
             uischema={child}
             schema={schema}

@@ -29,7 +29,7 @@ import {
     OwnPropsOfRenderer,
     UISchemaElement,
 } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
 export const renderLayoutElements = (
@@ -40,7 +40,7 @@ export const renderLayoutElements = (
   elements.map((child, index) =>
       (
         <Grid item key={`${path}-${index}`} xs>
-          <JsonForms
+          <ResolvedJsonForms
             uischema={child}
             schema={schema}
             path={path}

@@ -52,7 +52,7 @@ const hasRefs = (schema: JsonSchema) => {
     return false;
 };
 
-export class JsonFormsDispatchRenderer
+export class ResolvedJsonFormsDispatchRenderer
     extends React.Component<JsonFormsProps, JsonFormsRendererState> {
 
     static getDerivedStateFromProps(
@@ -77,12 +77,11 @@ export class JsonFormsDispatchRenderer
 
     constructor(props: JsonFormsProps) {
         super(props);
-        const isResolved = !hasRefs(props.schema);
         this.state = {
             id: isControl(props.uischema) ? createId(props.uischema.scope) : undefined,
             schema: props.schema,
-            resolvedSchema: isResolved ? props.schema : undefined,
-            resolving: !isResolved,
+            resolvedSchema: props.schema,
+            resolving: false,
         };
     }
 
@@ -140,6 +139,23 @@ export class JsonFormsDispatchRenderer
                 />
             );
         }
+    }
+}
+
+export const ResolvedJsonForms = connect<StatePropsOfJsonFormsRenderer, {}, OwnPropsOfRenderer>(
+    mapStateToJsonFormsRendererProps,
+    null
+)(ResolvedJsonFormsDispatchRenderer);
+
+export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer {
+    constructor(props: JsonFormsProps) {
+        super(props);
+        const isResolved = !hasRefs(props.schema);
+        this.state = {
+            ...this.state,
+            resolvedSchema: isResolved ? props.schema : undefined,
+            resolving: !isResolved,
+        };
     }
 }
 
