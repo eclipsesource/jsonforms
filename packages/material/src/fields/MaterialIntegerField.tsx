@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
     FieldProps,
     isIntegerControl,
@@ -32,7 +33,6 @@ import {
     rankWith,
     WithClassname
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
 export const MaterialIntegerField = (props: FieldProps & WithClassname) => {
@@ -54,7 +54,7 @@ export const MaterialIntegerField = (props: FieldProps & WithClassname) => {
   );
 };
 export const materialIntegerFieldTester: RankedTester = rankWith(2, isIntegerControl);
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialIntegerField);

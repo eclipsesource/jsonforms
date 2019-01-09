@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import { Card, CardContent, CardHeader } from '@material-ui/core';
 import {
@@ -34,7 +35,6 @@ import {
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
@@ -66,7 +66,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     );
 };
 
-export default connectToJsonForms(
+export default connect(
   mapStateToLayoutProps
 )(MaterializedGroupLayoutRenderer);
 

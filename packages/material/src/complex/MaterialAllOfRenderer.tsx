@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import {
     ControlElement,
@@ -12,7 +13,7 @@ import {
     UISchemaElement,
     VerticalLayout
 } from '@jsonforms/core';
-import { connectToJsonForms, ResolvedJsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 
 const createControls =
     (allOf: JsonSchema[], schema: JsonSchema, scope: string): UISchemaElement => {
@@ -56,7 +57,7 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
     }
 }
 
-const ConnectedMaterialAllOfRenderer = connectToJsonForms(
+const ConnectedMaterialAllOfRenderer = connect(
     mapStateToControlProps
 )(MaterialAllOfRenderer);
 

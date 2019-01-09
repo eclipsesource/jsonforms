@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   Formatted,
@@ -32,7 +33,6 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const NumberFormatField = (props: FieldProps & VanillaRendererProps & Formatted<number>) => {
@@ -74,7 +74,7 @@ export const NumberFormatField = (props: FieldProps & VanillaRendererProps & For
  */
 export const numberFormatFieldTester: RankedTester = rankWith(4, isNumberFormatControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(NumberFormatField);

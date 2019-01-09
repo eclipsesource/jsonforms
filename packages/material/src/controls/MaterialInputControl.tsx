@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import {
   computeLabel,
@@ -36,7 +37,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
+import { Control, DispatchField } from '@jsonforms/react';
 
 import { InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
@@ -96,4 +97,4 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialInputControlTester: RankedTester = rankWith(1, isControl);
-export default connectToJsonForms(mapStateToControlProps)(MaterialInputControl);
+export default connect(mapStateToControlProps)(MaterialInputControl);

@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isBooleanControl,
@@ -31,7 +32,6 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { StatelessComponent, SyntheticEvent } from 'react';
 import { addVanillaFieldProps } from '../util';
 import { VanillaRendererProps } from '../index';
@@ -60,7 +60,7 @@ export const BooleanField: StatelessComponent<FieldProps> =
  * @type {RankedTester}
  */
 export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
-export default connectToJsonForms(
+export default connect(
   addVanillaFieldProps(mapStateToFieldProps),
   mapDispatchToFieldProps
 )(BooleanField);

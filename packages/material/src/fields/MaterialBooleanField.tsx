@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
     FieldProps,
     isBooleanControl,
@@ -32,7 +33,6 @@ import {
     rankWith,
     WithClassname
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Checkbox from '@material-ui/core/Checkbox';
 
 export const MaterialBooleanField = (props: FieldProps & WithClassname) => {
@@ -53,7 +53,7 @@ export const MaterialBooleanField = (props: FieldProps & WithClassname) => {
 
 export const materialBooleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialBooleanField);

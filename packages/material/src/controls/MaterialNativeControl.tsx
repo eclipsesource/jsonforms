@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -39,7 +40,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 import TextField from '@material-ui/core/TextField';
 
 export class MaterialNativeControl extends Control<ControlProps, ControlState> {
@@ -88,7 +89,7 @@ export const materialNativeControlTester: RankedTester = rankWith(
   or(isDateControl, isTimeControl)
 );
 
-export default connectToJsonForms(
+export default connect(
   mapStateToControlProps,
   mapDispatchToControlProps
 )(MaterialNativeControl);

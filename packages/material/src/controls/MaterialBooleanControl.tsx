@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   ControlProps,
   isBooleanControl,
@@ -30,7 +31,6 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 
 import { FormControlLabel, Hidden } from '@material-ui/core';
 
@@ -58,7 +58,7 @@ export const MaterialBooleanControl =
     );
   };
 
-const ConnectedMaterialBooleanControl = connectToJsonForms(
+const ConnectedMaterialBooleanControl = connect(
   mapStateToControlProps
 )(MaterialBooleanControl);
 

@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import { Tab, Tabs } from '@material-ui/core';
 import {
@@ -36,7 +37,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
+import { RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 const isSingleLevelCategorization: Tester = and(
@@ -112,6 +113,6 @@ export class MaterialCategorizationLayoutRenderer
     }
 }
 
-export default connectToJsonForms(
+export default connect(
   mapStateToLayoutProps
 )(MaterialCategorizationLayoutRenderer);

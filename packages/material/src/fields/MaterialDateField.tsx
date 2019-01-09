@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
     FieldProps,
     isDateControl,
@@ -32,7 +33,6 @@ import {
     rankWith,
     WithClassname
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
 export const MaterialDateField = (props: FieldProps & WithClassname) => {
@@ -52,4 +52,4 @@ export const MaterialDateField = (props: FieldProps & WithClassname) => {
   );
 };
 export const materialDateFieldTester: RankedTester = rankWith(2, isDateControl);
-export default connectToJsonForms(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateField);
+export default connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateField);

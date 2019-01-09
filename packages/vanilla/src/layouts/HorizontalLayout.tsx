@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
     HorizontalLayout,
     mapStateToLayoutProps,
@@ -32,7 +33,6 @@ import {
     uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
-import { connectToJsonForms } from '@jsonforms/react';
 import { JsonFormsLayout } from './JsonFormsLayout';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
@@ -75,7 +75,7 @@ const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) =
   );
 };
 
-const ConnectedHorizontalLayout = connectToJsonForms(
+const ConnectedHorizontalLayout = connect(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(HorizontalLayoutRenderer);

@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
     computeLabel,
     ControlElement,
@@ -35,7 +36,7 @@ import {
     mapStateToControlProps,
     resolveSchema,
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import {
@@ -108,5 +109,5 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
     }
 }
 
-export default connectToJsonForms(mapStateToControlProps, mapDispatchToControlProps)
+export default connect(mapStateToControlProps, mapDispatchToControlProps)
     (MaterialRadioGroupControl);

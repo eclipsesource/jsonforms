@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   defaultMapDispatchToControlProps,
   defaultMapStateToEnumFieldProps,
@@ -31,7 +32,6 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
 import { addVanillaFieldProps } from '../util';
 import { WithClassname } from '../index';
@@ -70,7 +70,7 @@ export const EnumField = (props: EnumFieldProps & WithClassname) => {
  */
 export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 
-export default connectToJsonForms(
+export default connect(
   addVanillaFieldProps(defaultMapStateToEnumFieldProps),
   defaultMapDispatchToControlProps
 )(EnumField);

@@ -24,6 +24,7 @@
 */
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isIntegerControl,
@@ -32,7 +33,6 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const IntegerField  = (props: FieldProps & VanillaRendererProps) => {
@@ -59,7 +59,7 @@ export const IntegerField  = (props: FieldProps & VanillaRendererProps) => {
  */
 export const integerFieldTester: RankedTester = rankWith(2, isIntegerControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(IntegerField);
