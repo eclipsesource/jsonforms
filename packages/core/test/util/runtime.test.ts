@@ -54,7 +54,7 @@ test('evalVisibility show valid case', t => {
     t.is(evalVisibility(uischema, data), true);
 });
 
-test('evalVisibility show valid case based on andcondition', t => {
+test('evalVisibility show valid case based on AndCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -67,7 +67,7 @@ test('evalVisibility show valid case based on andcondition', t => {
       };
     const condition: AndCondition = {
           type: 'AND',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -85,7 +85,7 @@ test('evalVisibility show valid case based on andcondition', t => {
     t.is(evalVisibility(uischema, data), true);
 });
 
-test('evalVisibility show invalid case based on andcondition', t => {
+test('evalVisibility show invalid case based on AndCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -98,7 +98,7 @@ test('evalVisibility show invalid case based on andcondition', t => {
       };
     const condition: AndCondition = {
           type: 'AND',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -116,7 +116,7 @@ test('evalVisibility show invalid case based on andcondition', t => {
     t.is(evalVisibility(uischema, data), false);
 });
 
-test('evalVisibility show valid case based on orcondition', t => {
+test('evalVisibility show valid case based on OrCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -129,7 +129,7 @@ test('evalVisibility show valid case based on orcondition', t => {
       };
     const condition: OrCondition = {
           type: 'OR',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -147,7 +147,7 @@ test('evalVisibility show valid case based on orcondition', t => {
     t.is(evalVisibility(uischema, data), true);
 });
 
-test('evalVisibility show invalid case based on orcondition', t => {
+test('evalVisibility show invalid case based on OrCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -160,7 +160,7 @@ test('evalVisibility show invalid case based on orcondition', t => {
       };
     const condition: OrCondition = {
           type: 'OR',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -307,7 +307,7 @@ test('evalEnablement enable valid case', t => {
     t.is(evalEnablement(uischema, data), true);
 });
 
-test('evalEnablement show valid case based on andcondition', t => {
+test('evalEnablement show valid case based on AndCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -320,7 +320,7 @@ test('evalEnablement show valid case based on andcondition', t => {
       };
     const condition: AndCondition = {
           type: 'AND',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -338,7 +338,7 @@ test('evalEnablement show valid case based on andcondition', t => {
     t.is(evalEnablement(uischema, data), true);
 });
 
-test('evalEnablement show invalid case based on andcondition', t => {
+test('evalEnablement show invalid case based on AndCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -351,7 +351,7 @@ test('evalEnablement show invalid case based on andcondition', t => {
       };
     const condition: AndCondition = {
           type: 'AND',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -369,7 +369,7 @@ test('evalEnablement show invalid case based on andcondition', t => {
     t.is(evalEnablement(uischema, data), false);
 });
 
-test('evalEnablement show valid case based on orcondition', t => {
+test('evalEnablement show valid case based on OrCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -382,7 +382,7 @@ test('evalEnablement show valid case based on orcondition', t => {
       };
     const condition: OrCondition = {
           type: 'OR',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
@@ -400,7 +400,7 @@ test('evalEnablement show valid case based on orcondition', t => {
     t.is(evalEnablement(uischema, data), true);
 });
 
-test('evalEnablement show invalid case based on orcondition', t => {
+test('evalEnablement show invalid case based on OrCondition', t => {
     const leafCondition1: LeafCondition = {
         type: 'LEAF' ,
         scope: '#/properties/ruleValue1',
@@ -413,7 +413,7 @@ test('evalEnablement show invalid case based on orcondition', t => {
       };
     const condition: OrCondition = {
           type: 'OR',
-          children: [leafCondition1, leafCondition2]
+          conditions: [leafCondition1, leafCondition2]
       };
     const uischema: ControlElement = {
         type: 'Control',
