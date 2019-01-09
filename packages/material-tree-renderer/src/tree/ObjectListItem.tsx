@@ -253,7 +253,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
   const index = indexFromPath(ownProps.path);
   const containerProperties: Property[] = findContainerProperties(
       ownProps.schema,
-      getSchema(state),
+      getSchema(state) as JsonSchema7,
       false
   );
 
