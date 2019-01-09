@@ -69,6 +69,10 @@ import {
 } from './layouts';
 import DateTimeField from './fields/DateTimeField';
 
+export interface WithClassname {
+  className?: string;
+}
+
 /**
  * Additional renderer props specific to vanilla renderers.
  */
@@ -93,10 +97,6 @@ export interface VanillaRendererProps extends WithClassname {
 
 export interface WithChildren {
   children: any;
-}
-
-export interface WithClassname {
-  className?: string;
 }
 
 export * from './controls';

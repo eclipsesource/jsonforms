@@ -159,7 +159,7 @@ const resolveAndMakeSchemaSelfContained = (
   return {
     ...schema,
     ...makeSchemaSelfContained(parentSchema, schema)
-  } as JsonSchema7;
+  };
 };
 
 /**

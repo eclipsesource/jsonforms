@@ -360,6 +360,31 @@ export const isObjectArrayControl = and(
   schemaSubPathMatches('items', schema => schema.type === 'object')
 );
 
+const traverse = (
+  any: JsonSchema | JsonSchema[],
+  pred: (obj: JsonSchema) => boolean
+): boolean => {
+  if (_.isArray(any)) {
+    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
+  }
+
+  if (pred(any)) {
+    return true;
+  }
+  if (any.items) {
+    return traverse(any.items, pred);
+  }
+  if (any.properties) {
+    return _.reduce(
+      _.toPairs(any.properties),
+      (acc, [_key, val]) => acc || traverse(val, pred),
+      false
+    );
+  }
+
+  return false;
+};
+
 export const isObjectArrayWithNesting = (
   uischema: UISchemaElement,
   schema: JsonSchema
@@ -409,31 +434,6 @@ export const isObjectArrayWithNesting = (
       }
     }
   }
-  return false;
-};
-
-const traverse = (
-  any: JsonSchema | JsonSchema[],
-  pred: (obj: JsonSchema) => boolean
-): boolean => {
-  if (_.isArray(any)) {
-    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
-  }
-
-  if (pred(any)) {
-    return true;
-  }
-  if (any.items) {
-    return traverse(any.items, pred);
-  }
-  if (any.properties) {
-    return _.reduce(
-      _.toPairs(any.properties),
-      (acc, [_key, val]) => acc || traverse(val, pred),
-      false
-    );
-  }
-
   return false;
 };
 
