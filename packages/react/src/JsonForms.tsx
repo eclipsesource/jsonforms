@@ -145,7 +145,7 @@ export const ResolvedJsonForms = connect(
     null
 )(ResolvedJsonFormsDispatchRenderer);
 
-export class JsonFormsDispatchRenderer extends ResolvedJsonForms {
+export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer {
     constructor(props: JsonFormsProps) {
         super(props);
         const isResolved = !hasRefs(props.schema);
