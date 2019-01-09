@@ -32,6 +32,7 @@ import {
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import IntegerField, { materialIntegerFieldTester } from '../../src/fields/MaterialIntegerField';
@@ -51,12 +52,12 @@ const schema = {
       },
     },
   };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -150,7 +151,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
     expect(document.activeElement).toBe(inputs[1]);
@@ -169,7 +170,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
   });
@@ -187,7 +188,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={control} />
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -202,7 +203,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={control} />
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -213,7 +214,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.type).toBe('number');
@@ -227,7 +228,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.value = '13';
@@ -245,7 +246,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => 42));
     expect(input.value).toBe('42');
@@ -257,7 +258,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
     expect(input.value).toBe('');
@@ -269,7 +270,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
 
     store.dispatch(update('foo', () => null));
@@ -282,7 +283,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('bar', () => 11));
     expect(input.value).toBe('42');
@@ -294,7 +295,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => 13));
     expect(input.value).toBe('42');
@@ -306,7 +307,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     store.dispatch(update(undefined, () => 13));
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.value).toBe('42');
@@ -318,7 +319,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema} enabled={false}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
   });
@@ -329,7 +330,7 @@ describe('Material integer field', () => {
       <Provider store={store}>
         <IntegerField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });

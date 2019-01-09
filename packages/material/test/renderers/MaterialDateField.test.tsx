@@ -32,6 +32,7 @@ import {
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
@@ -41,7 +42,7 @@ import * as TestUtils from 'react-dom/test-utils';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -66,7 +67,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
 };
@@ -168,7 +169,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
     expect(document.activeElement).toBe(inputs[1]);
@@ -187,7 +188,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
   });
@@ -205,7 +206,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -220,7 +221,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -231,7 +232,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.type).toBe('date');
@@ -244,7 +245,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.value = '1961-04-12';
     TestUtils.Simulate.change(input);
@@ -257,7 +258,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => '1961-04-12'));
     expect(input.value).toBe('1961-04-12');
@@ -269,7 +270,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
     expect(input.value).toBe('');
@@ -281,7 +282,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
     expect(input.value).toBe('');
@@ -293,7 +294,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('bar', () => 'Bar'));
     expect(input.value).toBe('1980-06-04');
@@ -305,7 +306,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => '1961-04-12'));
     expect(input.value).toBe('1980-06-04');
@@ -317,7 +318,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(undefined, () => '1961-04-12'));
     expect(input.value).toBe('1980-06-04');
@@ -329,7 +330,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema} enabled={false}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
   });
@@ -340,7 +341,7 @@ describe('Material date field', () => {
       <Provider store={store}>
         <MaterialDateField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });

@@ -38,7 +38,7 @@
       "js"
     ],
     "transform": {
-      "^.+\\.(js|ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "testMatch": [
       "**/test/**/*.test.tsx"

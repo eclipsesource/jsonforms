@@ -32,6 +32,7 @@ import {
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
@@ -53,12 +54,12 @@ const schema = {
   },
 };
 
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -174,7 +175,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout} />
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
     expect(document.activeElement).toBe(inputs[1]);
@@ -193,7 +194,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
   });
@@ -211,7 +212,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -226,7 +227,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.autofocus).toBeFalsy();
   });
@@ -237,7 +238,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.type).toBe('time');
@@ -250,7 +251,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.value = '20:15';
     TestUtils.Simulate.change(input);
@@ -263,7 +264,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => '20:15'));
     expect(input.value).toBe('20:15');
@@ -275,7 +276,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => null));
     expect(input.value).toBe('');
@@ -287,7 +288,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('foo', () => undefined));
     expect(input.value).toBe('');
@@ -299,7 +300,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('bar', () => 'Bar'));
     expect(input.value).toBe('13:37');
@@ -311,7 +312,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => '20:15'));
     expect(input.value).toBe('13:37');
@@ -323,7 +324,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(undefined, () => '20:15'));
     expect(input.value).toBe('13:37');
@@ -335,7 +336,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema} enabled={false}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
   });
@@ -346,7 +347,7 @@ describe('Material time field', () => {
       <Provider store={store}>
         <TimeField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });

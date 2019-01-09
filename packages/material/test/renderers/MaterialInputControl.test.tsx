@@ -33,7 +33,8 @@ import {
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE
+  NOT_APPLICABLE,
+  UISchemaElement
 } from '@jsonforms/core';
 import '../../src/fields';
 import MaterialInputControl, {
@@ -52,12 +53,12 @@ const schema = {
     }
   }
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -136,7 +137,7 @@ describe('Material input control', () => {
         <MaterialHorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
     expect(document.activeElement).toBe(inputs[1]);
@@ -149,7 +150,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
     expect(control).toBeDefined();
@@ -180,7 +181,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={control}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const div = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0];
     expect(div).toBeDefined();
@@ -210,7 +211,7 @@ describe('Material input control', () => {
         />
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
     expect(getComputedStyle(control).display).toBe('none');
   });
@@ -222,7 +223,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[0] as HTMLElement;
     expect(control.hidden).toBeFalsy();
   });
@@ -234,7 +235,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
 
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     store.dispatch(Actions.update('foo', () => 2));
@@ -248,7 +249,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     store.dispatch(Actions.update('foo', () => 3));
     expect(validation.textContent).toBe('should be string');
@@ -261,7 +262,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     expect(validation.textContent).toBe('');
   });
@@ -273,7 +274,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={schema} uischema={uischema}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const validation = TestUtils.findRenderedDOMComponentWithTag(tree, 'p');
     store.dispatch(Actions.update('foo', () => 3));
     store.dispatch(Actions.update('foo', () => 'bar'));
@@ -335,7 +336,7 @@ describe('Material input control', () => {
         <MaterialHorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const validation = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'p');
     expect(validation[0].textContent).toBe('');
     expect(validation[1].textContent).toBe('is a required property');
@@ -364,7 +365,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
     expect(label.textContent).toBe('Date Field*');
   });
@@ -390,7 +391,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
     expect(label.textContent).toBe('Date Field');
   });
@@ -402,7 +403,7 @@ describe('Material input control', () => {
         password: {type: 'string'}
       }
     };
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/password',
       options: {format: 'password'}
@@ -413,8 +414,8 @@ describe('Material input control', () => {
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
       </Provider>,
       container
-    );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input');
+    ) as React.Component<any, any, any>;
+    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.type).toBe('password');
   });
 
@@ -433,7 +434,7 @@ describe('Material input control', () => {
       }
     };
 
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/expectedValue'
     };
@@ -443,7 +444,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={jsonSchema} uischema={control}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const rendered = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div')[1] as HTMLElement;
     expect(rendered.textContent).toBe('No applicable field found.');
   });
@@ -455,7 +456,7 @@ describe('Material input control', () => {
         name: {type: 'string'}
       }
     };
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
     };
@@ -465,7 +466,7 @@ describe('Material input control', () => {
         <MaterialInputControl schema={jsonSchema} uischema={control} id={control.scope}/>
       </Provider>,
       container
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.id).toBe('#/properties/name-input');
 

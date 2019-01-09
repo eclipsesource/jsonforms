@@ -25,10 +25,13 @@
 import * as React from 'react';
 import {
   Actions,
+  ControlElement,
   isEnumControl,
   jsonformsReducer,
   JsonFormsState,
+  JsonSchema,
   rankWith,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
@@ -48,12 +51,12 @@ const schema = {
     }
   }
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -79,11 +82,11 @@ describe('Material radio group control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <MaterialRadioGroupControl schema={schema} uischema={uischema} data={data} />
+        <MaterialRadioGroupControl schema={schema} uischema={uischema} />
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     const radioButtons = _.filter(inputs, i => i.type === 'radio');
     expect(radioButtons.length).toBe(4);
     // make sure one option is selected and it is "D"
@@ -98,11 +101,11 @@ describe('Material radio group control selection', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <MaterialRadioGroupControl schema={schema} uischema={uischema} data={data} />
+        <MaterialRadioGroupControl schema={schema} uischema={uischema} />
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
     const radioButtons = _.filter(inputs, i => i.type === 'radio');
 
     // change and verify selection

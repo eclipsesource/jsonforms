@@ -26,9 +26,10 @@ import * as React from 'react';
 import {
   Actions,
   ControlElement,
-  getData,
   jsonformsReducer,
   JsonFormsState,
+  JsonSchema,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import MaterialEnumField, { materialEnumFieldTester } from '../../src/fields/MaterialEnumField';
@@ -52,7 +53,7 @@ const uischema = {
   scope: '#/properties/nationality'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -98,7 +99,7 @@ describe('Material enum field', () => {
       <Provider store={store}>
         <MaterialEnumField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('nationality', () => 'DE'));

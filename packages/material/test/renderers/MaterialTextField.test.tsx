@@ -32,6 +32,7 @@ import {
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
+  UISchemaElement,
   update
 } from '@jsonforms/core';
 import TextField, { materialTextFieldTester, } from '../../src/fields/MaterialTextField';
@@ -69,12 +70,12 @@ const schema = {
     name: { type: 'string' }
   }
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/name'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {
@@ -194,7 +195,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     expect(document.activeElement).not.toBe(inputs[0]);
     expect(document.activeElement).toBe(inputs[1]);
@@ -211,7 +212,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).toBe(input);
   });
@@ -227,7 +228,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).not.toBe(input);
   });
@@ -242,7 +243,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(document.activeElement).not.toBe(input);
   });
@@ -259,7 +260,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={jsonSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.value).toBe('Foo');
@@ -271,7 +272,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     input.value = 'Bar';
@@ -285,7 +286,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('name', () => 'Bar'));
     expect(input.value).toBe('Bar');
@@ -297,7 +298,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('name', () => undefined));
     expect(input.value).toBe('');
@@ -309,7 +310,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('name', () => null));
     expect(input.value).toBe('');
@@ -321,7 +322,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update('firstname', () => 'Bar'));
     expect(input.value).toBe('Foo');
@@ -333,7 +334,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(null, () => 'Bar'));
     expect(input.value).toBe('Foo');
@@ -345,7 +346,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     store.dispatch(update(undefined, () => 'Bar'));
     expect(input.value).toBe('Foo');
@@ -357,7 +358,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema} enabled={false}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeTruthy();
   });
@@ -368,13 +369,13 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={minLengthSchema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.disabled).toBeFalsy();
   });
 
   it('should use maxLength for size and maxlength attributes', () =>  {
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
       options: {
@@ -387,7 +388,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={maxLengthSchema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(5);
     expect(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'))
@@ -396,7 +397,7 @@ describe('Material text field', () => {
   });
 
   it('should use maxLength for size attribute', () =>  {
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
       options: { trim: true }
@@ -406,7 +407,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={maxLengthSchema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
@@ -416,7 +417,7 @@ describe('Material text field', () => {
   });
 
   it('should use maxLength for maxlength attribute', () =>  {
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
       options: { restrict: true }
@@ -426,7 +427,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={maxLengthSchema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(5);
     expect(
@@ -441,7 +442,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
@@ -451,7 +452,7 @@ describe('Material text field', () => {
   });
 
   it('should have default values for trim and restrict', () =>  {
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
       options: {
@@ -464,7 +465,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
@@ -474,7 +475,7 @@ describe('Material text field', () => {
   });
 
   it('should have a default value for trim', () =>  {
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
       options: { trim: true }
@@ -484,7 +485,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
@@ -494,7 +495,7 @@ describe('Material text field', () => {
   });
 
   it('should have default values for restrict', () =>  {
-    const control = {
+    const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
       options: { restrict: true }
@@ -504,7 +505,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={schema} uischema={control}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
@@ -519,7 +520,7 @@ describe('Material text field', () => {
       <Provider store={store}>
         <TextField schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(

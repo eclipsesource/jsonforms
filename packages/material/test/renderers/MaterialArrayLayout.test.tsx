@@ -25,7 +25,6 @@
 import {
   Actions,
   ControlElement,
-  Generate,
   jsonformsReducer,
   JsonFormsState
 } from '@jsonforms/core';
@@ -86,7 +85,7 @@ const nestedSchema = {
   }
 };
 
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#'
 };
@@ -164,7 +163,7 @@ describe('Material array layout', () => {
       <Provider store={store}>
         <MaterialArrayLayout schema={schema} uischema={uischema}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     // 2 data entries with each having 2 controls
@@ -177,7 +176,7 @@ describe('Material array layout', () => {
       <Provider store={store}>
         <MaterialArrayLayout schema={schema} uischema={uischemaOptions.generate}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     // 2 data entries with each having 2 controls
@@ -190,7 +189,7 @@ describe('Material array layout', () => {
       <Provider store={store}>
         <MaterialArrayLayout schema={schema} uischema={uischemaOptions.inline}/>
       </Provider>
-    );
+    ) as React.Component<any, any, any>;
 
     const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
     // 2 data entries with each having 1 control
