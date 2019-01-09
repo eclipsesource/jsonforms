@@ -85,22 +85,6 @@ export interface DispatchFieldStateProps extends FieldProps {
   fields?: JsonFormsFieldRendererRegistryEntry[];
 }
 
-export const mapStateToDispatchFieldProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfField
-): DispatchFieldStateProps => {
-  const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
-  return {
-    ...props,
-    ...ownProps,
-    fields: state.jsonforms.fields || []
-  };
-};
-
-export interface DispatchFieldProps extends DispatchFieldStateProps {
-  showError: boolean;
-}
-
 /**
  * Map state to field props.
  *
@@ -144,6 +128,22 @@ export const mapStateToFieldProps = (
     findUISchema: findUISchema(state)
   };
 };
+
+export const mapStateToDispatchFieldProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfField
+): DispatchFieldStateProps => {
+  const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
+  return {
+    ...props,
+    ...ownProps,
+    fields: state.jsonforms.fields || []
+  };
+};
+
+export interface DispatchFieldProps extends DispatchFieldStateProps {
+  showError: boolean;
+}
 
 /**
  * Default mapStateToFieldProps for enum field. Options is used for populating dropdown list

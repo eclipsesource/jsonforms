@@ -60,14 +60,6 @@ const getConditionScope = (condition: Scopable, path: string): string => {
   return composeWithUi(condition, path);
 };
 
-const isRuleFulfilled = (
-  uischema: UISchemaElement,
-  data: any,
-  path: string
-): boolean => {
-  const condition = uischema.rule.condition;
-  return evaluateCondition(data, condition, path);
-};
 const evaluateCondition = (
   data: any,
   condition: Condition,
@@ -93,6 +85,15 @@ const evaluateCondition = (
     // unknown condition
     return true;
   }
+};
+
+const isRuleFulfilled = (
+  uischema: UISchemaElement,
+  data: any,
+  path: string
+): boolean => {
+  const condition = uischema.rule.condition;
+  return evaluateCondition(data, condition, path);
 };
 
 export const evalVisibility = (

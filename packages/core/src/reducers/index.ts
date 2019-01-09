@@ -22,16 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { combineReducers, Reducer } from 'redux';
-import * as _ from 'lodash';
-import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
-import { fieldReducer } from './fields';
-import { configReducer } from './config';
 import {
   defaultDataReducer,
   extractDefaultData,
   JsonFormsDefaultDataRegistryEntry
 } from './default-data';
+import { combineReducers, Reducer } from 'redux';
+import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
+import { fieldReducer } from './fields';
+import { configReducer } from './config';
+import * as _ from 'lodash';
 import {
   coreReducer,
   errorAt,
@@ -50,8 +50,8 @@ import { ControlElement, Generate, JsonSchema, UISchemaElement } from '..';
 import {
   fetchLocale,
   findLocalizedSchema,
-  i18nReducer,
-  findLocalizedUISchema
+  findLocalizedUISchema,
+  i18nReducer
 } from './i18n';
 
 export { rendererReducer, fieldReducer, coreReducer, UISchemaTester };
