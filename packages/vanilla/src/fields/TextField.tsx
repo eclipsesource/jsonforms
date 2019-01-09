@@ -24,6 +24,7 @@
 */
 import * as React from 'react';
 import { SyntheticEvent } from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isStringControl,
@@ -32,7 +33,6 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const TextField = (props: FieldProps & VanillaRendererProps) => {
@@ -72,7 +72,7 @@ export const TextField = (props: FieldProps & VanillaRendererProps) => {
  */
 export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(TextField);

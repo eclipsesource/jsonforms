@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -34,7 +35,7 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 import * as moment from 'moment';
 import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -103,6 +104,6 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
   }
 }
 export const materialDateTimeControlTester: RankedTester = rankWith(2, isDateTimeControl);
-export default connectToJsonForms(
+export default connect(
   mapStateToControlProps, mapDispatchToControlProps
 )(MaterialDateTimeControl);

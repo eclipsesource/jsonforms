@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isTimeControl,
@@ -31,7 +32,6 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
 import { VanillaRendererProps } from '../index';
 
@@ -58,7 +58,7 @@ export const TimeField = (props: FieldProps & VanillaRendererProps) => {
  */
 export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(TimeField);

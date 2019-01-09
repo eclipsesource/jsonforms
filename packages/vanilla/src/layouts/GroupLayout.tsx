@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as _ from 'lodash';
 import {
     GroupLayout,
@@ -33,7 +34,6 @@ import {
     uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
-import { connectToJsonForms } from '@jsonforms/react';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
 
@@ -76,7 +76,7 @@ export const GroupLayoutRenderer = (
   );
 };
 
-const ConnectedGroupLayout =  connectToJsonForms(
+const ConnectedGroupLayout =  connect(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(GroupLayoutRenderer);

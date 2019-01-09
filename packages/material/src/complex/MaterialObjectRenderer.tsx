@@ -11,10 +11,11 @@ import {
     rankWith,
     UISchemaElement
 } from '@jsonforms/core';
-import { connectToJsonForms, ResolvedJsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import * as _ from 'lodash';
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 interface MaterialObjectRendererProps extends ControlProps {
     findUiSchema(
@@ -62,7 +63,7 @@ const mapStateToObjectControlProps = (state: JsonFormsState, ownProps: OwnPropsO
     };
 };
 
-const ConnectedMaterialObjectRenderer = connectToJsonForms(
+const ConnectedMaterialObjectRenderer = connect(
     mapStateToObjectControlProps
 )(MaterialObjectRenderer);
 

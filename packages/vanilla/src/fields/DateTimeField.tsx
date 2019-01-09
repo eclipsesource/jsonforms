@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
+import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
 import {
     FieldProps,
@@ -32,7 +33,6 @@ import {
     RankedTester,
     rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 import { addVanillaFieldProps } from '../util';
 
@@ -61,7 +61,7 @@ export const DateTimeField = (props: FieldProps & VanillaRendererProps) => {
  * @type {RankedTester}
  */
 export const dateTimeFieldTester: RankedTester = rankWith(2, isDateTimeControl);
-export default connectToJsonForms(
+export default connect(
   addVanillaFieldProps(mapStateToFieldProps),
   mapDispatchToFieldProps
 )(DateTimeField);

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import {
     Categorization,
@@ -15,7 +16,7 @@ import {
     toDataPath,
     UISchemaElement,
 } from '@jsonforms/core';
-import { connectToJsonForms, ResolvedJsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 
 const createControls =
     (anyOf: JsonSchema[], schema: JsonSchema, scope: string): UISchemaElement => {
@@ -81,7 +82,7 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, any> {
     }
 }
 
-const ConnectedMaterialAnyOfRenderer = connectToJsonForms(
+const ConnectedMaterialAnyOfRenderer = connect(
     mapStateToControlProps
 )(MaterialAnyOfRenderer);
 ConnectedMaterialAnyOfRenderer.displayName = 'MaterialAnyOfRenderer';
