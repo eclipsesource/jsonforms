@@ -98,9 +98,9 @@ const findReferences = (
  * @returns JsonSchema current subschema with resolved references
  */
 export const makeSchemaSelfContained = (
-  parentSchema: JsonSchema,
-  schema: JsonSchema
-): JsonSchema => {
+  parentSchema: JsonSchema7,
+  schema: JsonSchema7
+): JsonSchema7 => {
   const schemaRefs = JsonRefs.findRefs(schema, {
     resolveCirculars: true
   }) as SchemaRefs;
@@ -155,7 +155,7 @@ const resolveAndMakeSchemaSelfContained = (
   parentSchema: JsonSchema7,
   refPath: string
 ): JsonSchema7 => {
-  const schema: JsonSchema = resolveSchema(parentSchema, refPath) as JsonSchema;
+  const schema: JsonSchema7 = resolveSchema(parentSchema, refPath) as JsonSchema7;
   return {
     ...schema,
     ...makeSchemaSelfContained(parentSchema, schema)
