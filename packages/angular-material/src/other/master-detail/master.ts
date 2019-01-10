@@ -47,7 +47,7 @@ export const removeSchemaKeywords = (path: string) => {
             <button
               mat-icon-button
               class="button hide"
-              (click)="onDeleteClick(item, i)"
+              (click)="onDeleteClick(item)"
               [ngClass]="{ show: highlightedIdx == i }"
             >
               <mat-icon mat-list-icon>delete</mat-icon>
@@ -74,7 +74,7 @@ export const removeSchemaKeywords = (path: string) => {
   styles: [
     `
       mat-list-item.selected {
-        background: rgba(0,0,0,.04);
+        background: rgba(0, 0, 0, 0.04);
       }
       .container {
         height: 100vh;
@@ -170,11 +170,34 @@ export class MasterListComponent extends JsonFormsControl {
       return masterItem;
     });
     this.masterItems = masterItems;
-
+    let newSelectedIdx = -1;
+    let newSelectedItem;
     if (this.masterItems.length === 0) {
+      // unset select if no elements anymore
       this.selectedItem = undefined;
-      this.selectedItemIdx = undefined;
-    } else if (this.masterItems.length > 0 && (this.selectedItemIdx === undefined || this.masterItems[this.selectedItemIdx].label !== this.selectedItem.label)) { // pre-select 1st entry if the previous selected element is not on the same index or is different
+      this.selectedItemIdx = -1;
+    } else if (this.selectedItemIdx >= this.masterItems.length) {
+      // the previous index is to high, reduce it to the maximal possible
+      newSelectedIdx = this.masterItems.length - 1;
+      newSelectedItem = this.masterItems[newSelectedIdx];
+    } else if (
+      this.selectedItemIdx !== -1 &&
+      this.selectedItemIdx < this.masterItems.length
+    ) {
+      newSelectedIdx = this.selectedItemIdx;
+      newSelectedItem = this.masterItems[this.selectedItemIdx];
+    }
+
+    if (
+      newSelectedItem !== undefined &&
+      this.selectedItem !== undefined &&
+      newSelectedItem.label === this.selectedItem.label
+    ) {
+      // after checking that we are on the same path, set selection
+      this.selectedItem = newSelectedItem;
+      this.selectedItemIdx = newSelectedIdx;
+    } else if (this.masterItems.length > 0) {
+      // pre-select 1st entry if the previous selected element as fallback
       this.selectedItem = this.masterItems[0];
       this.selectedItemIdx = 0;
     }
@@ -189,31 +212,7 @@ export class MasterListComponent extends JsonFormsControl {
     this.addItem(this.propsPath)();
   }
 
-  onDeleteClick(item: any, idx: number) {
-    this.deleteItem(item);
-    if (this.selectedItem.path === item.path && this.masterItems[idx]) {
-      // select next element, if possible
-      this.selectedItem = this.masterItems[idx];
-      this.selectedItemIdx = idx;
-    } else if (
-      this.selectedItem.path === item.path &&
-      this.masterItems.length > 0
-    ) {
-      // select 1st entry, if no next element available
-      this.selectedItem = this.masterItems[0];
-      this.selectedItemIdx = 0;
-    } else if (this.selectedItemIdx >= idx) {
-      // selected index has changed
-      this.selectedItemIdx -= 1;
-      this.selectedItem = this.masterItems[this.selectedItemIdx];
-    } else if (this.masterItems.length === 0) {
-      // unset select if no elements anymore
-      this.selectedItemIdx = -1;
-      this.selectedItem = undefined;
-    }
-  }
-
-  deleteItem(item: any) {
+  onDeleteClick(item: any) {
     this.removeItems(this.propsPath, [item.data])();
   }
 }
