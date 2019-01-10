@@ -28,6 +28,7 @@ In addition EclipseSource also offers [professional support](https://jsonforms.i
 * Clean (delete `dist` folder of all packages): `lerna run clean`
 * Run vanilla examples: `cd packages/vanilla && npm run dev`
 * Run material examples: `cd packages/material && npm run dev`
+* Check Formatting: `npm run check-format`
 
 ## Dependency & Release management
 For more info about how we handle dependencies and releases in the JSON Forms project, please see our [Developer Documentation wiki page](https://github.com/eclipsesource/jsonforms/wiki/Developer-documentation). 
