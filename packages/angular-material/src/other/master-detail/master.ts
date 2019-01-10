@@ -73,6 +73,9 @@ export const removeSchemaKeywords = (path: string) => {
   `,
   styles: [
     `
+      mat-list-item.selected {
+        background: rgba(0,0,0,.04);
+      }
       .container {
         height: 100vh;
       }
@@ -168,8 +171,10 @@ export class MasterListComponent extends JsonFormsControl {
     });
     this.masterItems = masterItems;
 
-    // pre-select 1st entry
-    if (this.masterItems.length > 0 && this.selectedItem === undefined) {
+    if (this.masterItems.length === 0) {
+      this.selectedItem = undefined;
+      this.selectedItemIdx = undefined;
+    } else if (this.masterItems.length > 0 && (this.selectedItemIdx === undefined || this.masterItems[this.selectedItemIdx].label !== this.selectedItem.label)) { // pre-select 1st entry if the previous selected element is not on the same index or is different
       this.selectedItem = this.masterItems[0];
       this.selectedItemIdx = 0;
     }
