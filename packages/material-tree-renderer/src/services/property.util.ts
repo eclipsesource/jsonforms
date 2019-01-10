@@ -155,7 +155,10 @@ const resolveAndMakeSchemaSelfContained = (
   parentSchema: JsonSchema7,
   refPath: string
 ): JsonSchema7 => {
-  const schema: JsonSchema7 = resolveSchema(parentSchema, refPath) as JsonSchema7;
+  const schema: JsonSchema7 = resolveSchema(
+    parentSchema,
+    refPath
+  ) as JsonSchema7;
   return {
     ...schema,
     ...makeSchemaSelfContained(parentSchema, schema)
