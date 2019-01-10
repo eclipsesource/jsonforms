@@ -2,7 +2,8 @@
 	"scripts": {
 		"lerna": "lerna",
 		"preparePublish": "git clean -dfx && npm ci && lerna bootstrap --hoist --npm-ci-mode && lerna run clean && lerna run build && lerna run doc && lerna run bundle && lerna run test",
-		"merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'"
+		"merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'",
+		"check-format": "prettier --list-different '**/*.ts' '!**/{lib,dist}/**/*.ts'"
 	},
 	"devDependencies": {
 		"@types/jest": "^23.0.0",
