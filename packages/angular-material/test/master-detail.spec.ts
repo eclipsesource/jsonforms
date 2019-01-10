@@ -25,9 +25,7 @@
 import {
   async,
   ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick
+  TestBed
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -225,7 +223,7 @@ describe('Master detail', () => {
     });
   }));
 
-  it('remove an item with index < selected index', fakeAsync(() => {
+  it('remove an item with index < selected index', () => {
     const moreData = {
       orders: [
         {
@@ -255,7 +253,6 @@ describe('Master detail', () => {
     });
     component.ngOnInit();
     fixture.detectChanges();
-    tick();
 
     // select last element
     const listItems: DebugElement[] = fixture.debugElement.queryAll(
@@ -263,10 +260,10 @@ describe('Master detail', () => {
     );
     listItems[2].nativeElement.click();
     fixture.detectChanges();
-    tick();
+    expect(component.selectedItemIdx).toBe(2);
 
     // delete 1st item
-    spyOn(component, 'deleteItem').and.callFake(() => {
+    spyOn(component, 'removeItems').and.callFake(() => () => {
       mockSubStore.next({
         jsonforms: {
           core: {
@@ -277,7 +274,6 @@ describe('Master detail', () => {
       });
       mockSubStore.complete();
       fixture.detectChanges();
-      tick();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
       By.css('button')
@@ -286,9 +282,9 @@ describe('Master detail', () => {
 
     expect(component.selectedItemIdx).toBe(1);
     expect(component.selectedItem.data.title).toBe('Slurm');
-  }));
+  });
 
-  it('remove an item with index > selected index', fakeAsync(() => {
+  it('remove an item with index > selected index', () => {
     const moreData = {
       orders: [
         {
@@ -318,10 +314,9 @@ describe('Master detail', () => {
     });
     component.ngOnInit();
     fixture.detectChanges();
-    tick();
 
     // delete 2nd item
-    spyOn(component, 'deleteItem').and.callFake(() => {
+    spyOn(component, 'removeItems').and.callFake(() => () => {
       const copy = moreData.orders.slice();
       copy.splice(1, 1);
       mockSubStore.next({
@@ -334,7 +329,6 @@ describe('Master detail', () => {
       });
       mockSubStore.complete();
       fixture.detectChanges();
-      tick();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
       By.css('button')
@@ -343,9 +337,9 @@ describe('Master detail', () => {
 
     expect(component.selectedItemIdx).toBe(0);
     expect(component.selectedItem.data.title).toBe('Carrots');
-  }));
+  });
 
-  it('remove an item with index == selected index', fakeAsync(() => {
+  it('remove an item with index == selected index', () => {
     const moreData = {
       orders: [
         {
@@ -375,10 +369,9 @@ describe('Master detail', () => {
     });
     component.ngOnInit();
     fixture.detectChanges();
-    tick();
 
     // delete 1st item
-    spyOn(component, 'deleteItem').and.callFake(() => {
+    spyOn(component, 'removeItems').and.callFake(() => () => {
       mockSubStore.next({
         jsonforms: {
           core: {
@@ -389,7 +382,6 @@ describe('Master detail', () => {
       });
       mockSubStore.complete();
       fixture.detectChanges();
-      tick();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
       By.css('button')
@@ -398,9 +390,9 @@ describe('Master detail', () => {
 
     expect(component.selectedItemIdx).toBe(0);
     expect(component.selectedItem.data.title).toBe('Bananas');
-  }));
+  });
 
-  it('remove last item', fakeAsync(() => {
+  it('remove last item', () => {
     const moreData = {
       orders: [
         {
@@ -422,10 +414,9 @@ describe('Master detail', () => {
     });
     component.ngOnInit();
     fixture.detectChanges();
-    tick();
 
     // delete item
-    spyOn(component, 'deleteItem').and.callFake(() => {
+    spyOn(component, 'removeItems').and.callFake(() => () => {
       mockSubStore.next({
         jsonforms: {
           core: {
@@ -436,7 +427,6 @@ describe('Master detail', () => {
       });
       mockSubStore.complete();
       fixture.detectChanges();
-      tick();
     });
     const buttons: DebugElement[] = fixture.debugElement.queryAll(
       By.css('button')
@@ -445,7 +435,7 @@ describe('Master detail', () => {
 
     expect(component.selectedItemIdx).toBe(-1);
     expect(component.selectedItem).toBe(undefined);
-  }));
+  });
 
   it('setting detail on click', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
