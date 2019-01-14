@@ -63,7 +63,7 @@
     "@types/react-redux": "^6.0.9",
     "lodash": "^4.17.4",
     "react": "^16.3.2",
-    "react-redux": "^5.0.6"
+    "react-redux": "^6.0.0"
   },
   "devDependencies": {
     "enzyme": "^3.6.0",
