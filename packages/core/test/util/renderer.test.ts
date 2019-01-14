@@ -556,3 +556,35 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', t => 
   const props = mapStateToLayoutProps(state, ownProps);
   t.true(props.visible);
 });
+
+test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: hideRule
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Homer' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.visible);
+});
