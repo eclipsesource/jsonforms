@@ -32,6 +32,7 @@ import {
   mapDispatchToControlProps,
   mapStateToControlProps,
   mapStateToJsonFormsRendererProps,
+  mapStateToLayoutProps,
   OwnPropsOfControl
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
@@ -144,6 +145,69 @@ test('mapStateToControlProps - visible via state ', t => {
   clonedState.jsonforms.core.data.firstName = 'Lisa';
   const props = mapStateToControlProps(clonedState, ownProps);
   t.true(props.visible);
+});
+
+test('mapStateToControlProps - visible via state with path from ownProps ', t => {
+  const uischema = {
+    ...coreUISchema,
+    rule: hideRule
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Lisa' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToControlProps(state, ownProps);
+  t.true(props.visible);
+});
+
+test('mapStateToControlProps - enabled via state with path from ownProps ', t => {
+  const uischema = {
+    ...coreUISchema,
+    rule: disableRule
+  };
+  const ownProps = {
+    visible: true,
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Lisa' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToControlProps(state, ownProps);
+  t.true(props.enabled);
 });
 
 test('mapStateToControlProps - enabled via ownProps ', t => {
@@ -459,4 +523,36 @@ test('mapDispatchToArrayControlProps should remove items from array', t => {
   props.removeItems('', ['foo', 'bar'])();
   t.is(store.getState().jsonforms.core.data.length, 1);
   t.is(store.getState().jsonforms.core.data[0], 'quux');
+});
+
+test('mapStateToLayoutProps - visible via state with path from ownProps ', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: hideRule
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Lisa' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.true(props.visible);
 });

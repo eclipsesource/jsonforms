@@ -488,7 +488,7 @@ export const mapStateToLayoutProps = (
 ): StatePropsOfLayout => {
   const visible: boolean = _.has(ownProps, 'visible')
     ? ownProps.visible
-    : isVisible(ownProps, state);
+    : isVisible(ownProps, state, ownProps.path);
 
   return {
     renderers: getRenderers(state),
