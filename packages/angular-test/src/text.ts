@@ -43,7 +43,7 @@ const defaultUischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
-export const defaultTextTestData: TestData = {
+export const defaultTextTestData: TestData<ControlElement> = {
   data: defaultData,
   schema: defaultSchema,
   uischema: defaultUischema
@@ -52,7 +52,7 @@ export const textBaseTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance: string,
   elementToUse: (element: DebugElement) => any,
-  testData: TestData = defaultTextTestData
+  testData: TestData<ControlElement> = defaultTextTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let textElement: DebugElement;
@@ -263,7 +263,7 @@ export const textInputEventTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance: string,
   elementToUse: (element: DebugElement) => any,
-  testData: TestData = defaultTextTestData
+  testData: TestData<ControlElement> = defaultTextTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let textNativeElement: any;
@@ -312,7 +312,7 @@ export const textInputEventTest = <C extends JsonFormsControl>(
 export const textErrorTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   errorTestInformation: ErrorTestExpectation,
-  testData: TestData = defaultTextTestData
+  testData: TestData<ControlElement> = defaultTextTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let component: C;
@@ -358,7 +358,7 @@ export const textTypeTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance: string,
   elementToUse: (element: DebugElement) => any,
-  testData: TestData = defaultTextTestData
+  testData: TestData<ControlElement> = defaultTextTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let component: C;

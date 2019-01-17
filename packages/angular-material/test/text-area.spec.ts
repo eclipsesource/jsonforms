@@ -93,7 +93,7 @@ const defaultUischema: ControlElement = {
   scope: '#/properties/foo',
   options: { multi: true }
 };
-const defaultTestData: TestData = {
+const defaultTestData: TestData<ControlElement> = {
   data: defaultData,
   schema: defaultSchema,
   uischema: defaultUischema

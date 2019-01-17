@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs';
 
 import { JsonFormsBaseRenderer } from './base.renderer';
 
-export class JsonFormsControl extends JsonFormsBaseRenderer
+export class JsonFormsControl extends JsonFormsBaseRenderer<ControlElement>
   implements OnInit, OnDestroy {
   @Input() id: string;
   @Input() disabled: boolean;
@@ -34,6 +34,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer
   subscription: Subscription;
   data: any;
   label: string;
+  description: string;
   error: string | null;
   scopedSchema: JsonSchema;
   enabled: boolean;
@@ -56,7 +57,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer
   getEventValue = (event: any) => event.value;
 
   onChange(ev: any) {
-    const path = composeWithUi(this.uischema as ControlElement, this.path);
+    const path = composeWithUi(this.uischema, this.path);
     this.ngRedux.dispatch(Actions.update(path, () => this.getEventValue(ev)));
     this.triggerValidation();
   }
@@ -85,10 +86,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer
         this.enabled = enabled;
         this.enabled ? this.form.enable() : this.form.disable();
         this.hidden = !visible;
-        this.scopedSchema = Resolve.schema(
-          schema,
-          (uischema as ControlElement).scope
-        );
+        this.scopedSchema = Resolve.schema(schema, uischema.scope);
         this.id = props.id;
         this.form.setValue(data);
         this.mapAdditionalProps(props);
@@ -113,7 +111,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer
 
   protected getOwnProps(): OwnPropsOfControl {
     const props: OwnPropsOfControl = {
-      uischema: this.uischema as ControlElement,
+      uischema: this.uischema,
       schema: this.schema,
       path: this.path,
       id: this.id

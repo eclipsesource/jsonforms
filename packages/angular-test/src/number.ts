@@ -58,7 +58,7 @@ const defaultUischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
-export const defaultNumberTestData: TestData = {
+export const defaultNumberTestData: TestData<ControlElement> = {
   data: defaultData,
   schema: defaultSchema,
   uischema: defaultUischema
@@ -66,7 +66,7 @@ export const defaultNumberTestData: TestData = {
 
 export const updateFloatState = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
@@ -85,7 +85,7 @@ export const updateFloatState = <C extends JsonFormsControl>(
 
 export const updateWithSiblingNumberValue = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const mockSubStore = setupMockStore(fixture, testData);
@@ -105,7 +105,7 @@ export const numberBaseTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance: string,
   elementToUse: (element: DebugElement) => any,
-  testData: TestData = defaultNumberTestData
+  testData: TestData<ControlElement> = defaultNumberTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let numberElement: DebugElement;
@@ -217,7 +217,7 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance: string,
   elementToUse: (element: DebugElement) => any,
-  testData: TestData = defaultNumberTestData
+  testData: TestData<ControlElement> = defaultNumberTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let numberNativeElement: any;
@@ -238,7 +238,7 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
 
   it('should update via input event', () => {
     const mockSubStore = MockNgRedux.getSelectorStub();
-    component.uischema = testData.uischema;
+    component.uischema = testData.uischema as ControlElement;
 
     mockSubStore.next({
       jsonforms: {
@@ -266,7 +266,7 @@ export const numberInputEventTest = <C extends JsonFormsControl>(
 export const numberErrorTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   errorTestInformation: ErrorTestExpectation,
-  testData: TestData = defaultNumberTestData
+  testData: TestData<ControlElement> = defaultNumberTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
 
@@ -302,7 +302,7 @@ const additionalSchema: JsonSchema = {
     }
   }
 };
-export const additionalTestData: TestData = {
+export const additionalTestData: TestData<ControlElement> = {
   data: defaultData,
   schema: additionalSchema,
   uischema: defaultUischema
@@ -312,7 +312,7 @@ export const numberAdditionalPropsTest = <C extends JsonFormsControl>(
   testConfig: TestConfig<C>,
   instance: string,
   elementToUse: (element: DebugElement) => any,
-  testData: TestData = additionalTestData
+  testData: TestData<ControlElement> = additionalTestData
 ) => () => {
   let fixture: ComponentFixture<any>;
   let numberNativeElement: any;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
-import { UISchemaElement } from '@jsonforms/core';
+import { Category, UISchemaElement } from '@jsonforms/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 
 @Component({
@@ -11,7 +11,7 @@ import { JsonFormsBaseRenderer } from '@jsonforms/angular';
     </div>
   `
 })
-export class CategoryRenderer extends JsonFormsBaseRenderer {
+export class CategoryRenderer extends JsonFormsBaseRenderer<Category> {
   label: string;
   elements: any[];
 

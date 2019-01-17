@@ -2,7 +2,7 @@ import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { JsonSchema, UISchemaElement } from '@jsonforms/core';
+import { ControlElement, JsonSchema, UISchemaElement } from '@jsonforms/core';
 import { Subject } from 'rxjs';
 
 export interface ErrorTestExpectation {
@@ -30,15 +30,15 @@ export const baseSetup = <C extends JsonFormsControl>(
   });
 };
 
-export interface TestData {
+export interface TestData<T extends UISchemaElement> {
   data: any;
   schema: JsonSchema;
-  uischema: UISchemaElement;
+  uischema: T;
 }
 
 export const setupMockStore = (
   fixture: ComponentFixture<any>,
-  testData: TestData
+  testData: TestData<UISchemaElement>
 ): Subject<any> => {
   const mockSubStore = MockNgRedux.getSelectorStub();
   const component = fixture.componentInstance;
@@ -67,7 +67,7 @@ export const initComponent = (
 
 export const initAndExpect = <C>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<UISchemaElement>,
   expectations: () => any
 ) => {
   initComponent(fixture, setupMockStore(fixture, testData));
@@ -76,7 +76,7 @@ export const initAndExpect = <C>(
 
 export const updateWithUndefined = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
@@ -94,7 +94,7 @@ export const updateWithUndefined = <C extends JsonFormsControl>(
 
 export const updateWithNull = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
@@ -112,7 +112,7 @@ export const updateWithNull = <C extends JsonFormsControl>(
 
 export const canBeDisabled = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
@@ -124,7 +124,7 @@ export const canBeDisabled = <C extends JsonFormsControl>(
 
 export const canBeHidden = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const mockSubStore: Subject<any> = setupMockStore(fixture, testData);
@@ -147,7 +147,7 @@ export const mustHaveId = <C extends JsonFormsControl>(
 
 export const showErrors = <C extends JsonFormsControl>(
   fixture: ComponentFixture<C>,
-  testData: TestData,
+  testData: TestData<ControlElement>,
   expectations: () => any
 ) => {
   const component = fixture.componentInstance;

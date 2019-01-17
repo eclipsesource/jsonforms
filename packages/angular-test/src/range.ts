@@ -47,7 +47,7 @@ export const rangeDefaultUischema: ControlElement = {
   scope: '#/properties/foo',
   options: { slider: true }
 };
-export const rangeDefaultTestData: TestData = {
+export const rangeDefaultTestData: TestData<ControlElement> = {
   data: rangeDefaultData,
   schema: rangeDefaultSchema,
   uischema: rangeDefaultUischema

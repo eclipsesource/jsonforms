@@ -47,7 +47,7 @@ import {
         [min]="min"
         [step]="multipleOf"
         [thumbLabel]="true"
-        [tickInterval]="tickInterval"
+        tickInterval="auto"
         [id]="id"
       ></mat-slider>
       <mat-error class="mat-caption">{{ error }}</mat-error>
