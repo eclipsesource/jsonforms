@@ -1,14 +1,18 @@
 import {
   and,
+  Categorization,
   categorizationHasCategory,
+  JsonFormsState,
+  mapStateToLayoutProps,
   RankedTester,
   rankWith,
   uiTypeIs
 } from '@jsonforms/core';
 import * as _ from 'lodash';
-import { Component } from '@angular/core';
-// import { NgRedux } from '@angular-redux/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgRedux } from '@angular-redux/store';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'jsonforms-categorization-layout',
@@ -25,8 +29,30 @@ import { JsonFormsBaseRenderer } from '@jsonforms/angular';
     </mat-tab-group>
   `
 })
-export class CategorizationTabLayoutRenderer extends JsonFormsBaseRenderer {
-  // constructor(private ngRedux: NgRedux<JsonFormsState>) {}
+export class CategorizationTabLayoutRenderer
+  extends JsonFormsBaseRenderer<Categorization>
+  implements OnInit, OnDestroy {
+  hidden: boolean;
+  private subscription: Subscription;
+
+  constructor(private ngRedux: NgRedux<JsonFormsState>) {
+    super();
+  }
+
+  ngOnInit() {
+    this.subscription = this.ngRedux
+      .select()
+      .subscribe((state: JsonFormsState) => {
+        const props = mapStateToLayoutProps(state, this.getOwnProps());
+        this.hidden = !props.visible;
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }
 
 export const categorizationTester: RankedTester = rankWith(

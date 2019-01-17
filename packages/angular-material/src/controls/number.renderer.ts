@@ -48,7 +48,7 @@ import { LocaleValidation } from 'angular-l10n';
         placeholder="{{ description }}"
         [value]="
           data !== undefined && data !== null && locale
-            ? (data | l10nDecimal: locale:digits)
+            ? (data | l10nDecimal: locale)
             : data !== undefined && data !== null
             ? data
             : ''

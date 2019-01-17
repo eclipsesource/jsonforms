@@ -9,5 +9,8 @@
   ],
   "files": [
     "./src/index.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "skipTemplateCodegen": true, // Don't produce *.ngfactory.ts
+  }
 }

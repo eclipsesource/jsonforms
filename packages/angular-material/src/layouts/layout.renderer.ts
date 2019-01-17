@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import { Subscription } from 'rxjs';
 
-export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer
+export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer<T>
   implements OnInit, OnDestroy {
   hidden: boolean;
   private subscription: Subscription;
@@ -59,7 +59,7 @@ export class LayoutRenderer<T extends Layout> extends JsonFormsBaseRenderer
   }
 
   get renderProps(): OwnPropsOfRenderer[] {
-    const elements = ((this.uischema as T).elements || []).map(
+    const elements = (this.uischema.elements || []).map(
       (el: UISchemaElement) => ({
         uischema: el,
         schema: this.schema,

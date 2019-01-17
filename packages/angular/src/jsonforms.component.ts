@@ -40,7 +40,8 @@ import {
   JsonFormsState,
   JsonSchema,
   mapStateToJsonFormsRendererProps,
-  OwnPropsOfRenderer
+  OwnPropsOfRenderer,
+  UISchemaElement
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 import 'rxjs/add/operator/map';
@@ -52,7 +53,7 @@ import { JsonFormsControl } from './control';
 @Directive({
   selector: 'jsonforms-outlet'
 })
-export class JsonFormsOutlet extends JsonFormsBaseRenderer
+export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
   implements OnInit, OnDestroy {
   private subscription: Subscription;
   private currentComponentRef: ComponentRef<any>;
@@ -114,7 +115,7 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer
 
     if (this.currentComponentRef.instance instanceof JsonFormsBaseRenderer) {
       const instance = this.currentComponentRef
-        .instance as JsonFormsBaseRenderer;
+        .instance as JsonFormsBaseRenderer<UISchemaElement>;
       instance.uischema = uischema;
       instance.schema = schema;
       instance.path = this.path;

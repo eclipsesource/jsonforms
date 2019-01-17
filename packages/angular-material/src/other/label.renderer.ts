@@ -18,7 +18,7 @@ import {
     <label class="mat-title" fxFlex> {{ label }} </label>
   `
 })
-export class LabelRenderer extends JsonFormsBaseRenderer {
+export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
   label: string;
   visible: boolean;
 
@@ -28,7 +28,7 @@ export class LabelRenderer extends JsonFormsBaseRenderer {
     super();
   }
   ngOnInit() {
-    const labelElement = this.uischema as LabelElement;
+    const labelElement = this.uischema;
     this.label =
       labelElement.text !== undefined &&
       labelElement.text !== null &&
@@ -48,7 +48,7 @@ export class LabelRenderer extends JsonFormsBaseRenderer {
   }
 
   mapAdditionalProps() {
-    this.label = (this.uischema as LabelElement).text;
+    this.label = this.uischema.text;
   }
 }
 

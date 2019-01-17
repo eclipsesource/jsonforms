@@ -1,6 +1,7 @@
 import { Input, OnDestroy, OnInit } from '@angular/core';
 import {
   JsonFormsState,
+  Layout,
   mapStateToLayoutProps,
   UISchemaElement
 } from '@jsonforms/core';
@@ -8,7 +9,7 @@ import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs';
 
-export class JsonFormsIonicLayout extends JsonFormsBaseRenderer
+export class JsonFormsIonicLayout extends JsonFormsBaseRenderer<Layout>
   implements OnInit, OnDestroy {
   @Input() path: string;
   elements: UISchemaElement[];
@@ -28,7 +29,7 @@ export class JsonFormsIonicLayout extends JsonFormsBaseRenderer
           path: this.path
         };
         const props = mapStateToLayoutProps(state, ownProps);
-        this.uischema = props.uischema;
+        this.uischema = props.uischema as Layout;
         this.schema = props.schema;
         this.initializers.forEach(initializer => initializer(props));
       });
