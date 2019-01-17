@@ -44,8 +44,28 @@
     ],
     "babel": "inherit"
   },
-  "dependencies": {
+  "peerDependencies": {
+    "@angular/animations": "^5.2.10",
+    "@angular/cdk": "^5.2.0",
+    "@angular/common": "^5.2.10",
+    "@angular/core": "^5.2.10",
+    "@angular/flex-layout": "^5.0.0-beta.15",
+    "@angular/forms": "^5.2.10",
+    "@angular/material": "^5.2.0",
+    "@angular/platform-browser": "^5.2.10",
     "@angular-redux/store": "^7.1.1",
+    "@jsonforms/core": "^2.1.1-alpha.2",
+    "@jsonforms/angular": "^2.1.1-alpha.2",
+    "core-js": "^2.5.3",
+    "redux": "^3.7.2",
+    "rxjs": "^5.5.7",
+    "zone.js": "^0.8.26"
+  },
+  "dependencies": {
+    "angular-l10n": "^4.0.0-rc.0",
+    "hammerjs": "2.0.8"
+  },
+  "devDependencies": {
     "@angular/animations": "^5.2.10",
     "@angular/cdk": "^5.2.0",
     "@angular/common": "^5.2.10",
@@ -55,17 +75,15 @@
     "@angular/forms": "^5.2.10",
     "@angular/material": "^5.2.0",
     "@angular/platform-browser": "^5.2.10",
-    "@angular/platform-browser-dynamic": "^5.2.10",
-    "@jsonforms/angular": "^2.1.1-alpha.2",
-    "@jsonforms/core": "^2.1.1-alpha.2",
-    "angular-l10n": "^4.0.0-rc.0",
+    "@angular-redux/store": "^7.1.1",
+    "@jsonforms/angular": "^2.1.0",
+    "@jsonforms/core": "^2.1.0",
     "core-js": "^2.5.3",
-    "hammerjs": "2.0.8",
     "redux": "^3.7.2",
     "rxjs": "^5.5.7",
-    "zone.js": "^0.8.26"
-  },
-  "devDependencies": {
+    "zone.js": "^0.8.26",
+    "@angular/compiler": "^5.2.10",
+    "@angular/platform-browser-dynamic": "^5.2.10",
     "@jsonforms/angular-test": "^2.1.1-alpha.2",
     "@jsonforms/examples": "^2.1.1-alpha.2",
     "@types/node": "^10.10.0",
