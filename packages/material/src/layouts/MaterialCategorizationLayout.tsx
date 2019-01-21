@@ -87,7 +87,7 @@ export class MaterialCategorizationLayoutRenderer
         return (
             <div style={style}>
                 <AppBar position='static'>
-                <Tabs value={value} onChange={this.handleChange}>
+                <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
                     {categorization.elements.map((e, idx) => <Tab  key={idx} label={e.label} />)}
                 </Tabs>
                 </AppBar>
