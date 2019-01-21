@@ -22,11 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
 import test from 'ava';
-import * as _ from 'lodash';
 import * as Redux from 'redux';
 import {
   clearAllIds,
+  createAjv,
   createDefaultValue,
   mapDispatchToArrayControlProps,
   mapDispatchToControlProps,
@@ -36,7 +37,7 @@ import {
   OwnPropsOfControl
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
-import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
+import * as _ from 'lodash';
 import { generateDefaultUISchema } from '../../src/generators';
 import {
   ControlElement,
@@ -587,4 +588,101 @@ test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.false(props.visible);
+});
+
+test('should assign defaults to enum', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        minLength: 1
+      },
+      color: {
+        type: 'string',
+        enum: ['red', 'green', 'blue'],
+        default: 'green'
+      }
+    }
+  };
+
+  const uischema: UISchemaElement = undefined;
+
+  const data = {
+    name: 'foo'
+  };
+
+  const initState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
+  const ownProps: OwnPropsOfControl = { schema };
+
+  mapDispatchToArrayControlProps(store.dispatch, ownProps);
+
+  t.is(store.getState().jsonforms.core.data.color, 'green');
+});
+
+test('should assign defaults to array', t => {
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo'
+        }
+      }
+    }
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const data = [{}];
+
+  const initState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
+  const ownProps: OwnPropsOfControl = {
+    schema,
+    uischema
+  };
+  const props = mapDispatchToArrayControlProps(store.dispatch, ownProps);
+
+  props.addItem('')();
+
+  t.is(store.getState().jsonforms.core.data.length, 2);
+  t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
+  t.deepEqual(store.getState().jsonforms.core.data[1], { message: 'foo' });
 });
