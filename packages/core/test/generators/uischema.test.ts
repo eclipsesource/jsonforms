@@ -478,3 +478,156 @@ test('generate for undefined schema', t => {
   const uischema: Layout = null;
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
+
+test('generate control for oneOf', t => {
+  const schema: JsonSchema = {
+    oneOf: [
+      {
+        properties: {
+          name: {
+            type: 'string'
+          }
+        }
+      },
+      {
+        type: 'number'
+      }
+    ]
+  };
+  const control = {
+    label: '',
+    type: 'Control',
+    scope: '#'
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control]
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('generate control for anyOf', t => {
+  const schema: JsonSchema = {
+    anyOf: [
+      {
+        properties: {
+          name: {
+            type: 'string'
+          }
+        }
+      },
+      {
+        type: 'number'
+      }
+    ]
+  };
+  const control = {
+    label: '',
+    type: 'Control',
+    scope: '#'
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control]
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('generate control for allOf', t => {
+  const schema: JsonSchema = {
+    allOf: [
+      {
+        properties: {
+          name: {
+            type: 'string'
+          }
+        }
+      },
+      {
+        type: 'number'
+      }
+    ]
+  };
+  const control = {
+    label: '',
+    type: 'Control',
+    scope: '#'
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control]
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('no separate control for oneOf in array', t => {
+  const schema: JsonSchema = {
+    properties: {
+      myarray: {
+        items: {
+          oneOf: [
+            {
+              properties: {
+                name: {
+                  type: 'string'
+                }
+              }
+            },
+            {
+              type: 'number'
+            }
+          ]
+        }
+      }
+    }
+  };
+  const control = {
+    label: 'Myarray',
+    type: 'Control',
+    scope: '#/properties/myarray'
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control]
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
+
+test('generate control for nested oneOf', t => {
+  const schema: JsonSchema = {
+    properties: {
+      myarray: {
+        properties: {
+          nameOrAge: {
+            oneOf: [
+              {
+                properties: {
+                  name: {
+                    type: 'string'
+                  }
+                }
+              },
+              {
+                type: 'number'
+              }
+            ]
+          }
+        }
+      }
+    }
+  };
+  const control = {
+    label: 'Name Or Age',
+    type: 'Control',
+    scope: '#/properties/myarray/properties/nameOrAge'
+  };
+  const nestedUiSchema: Layout = {
+    type: 'VerticalLayout',
+    elements: [control]
+  };
+  const uischema: Layout = {
+    type: 'VerticalLayout',
+    elements: [nestedUiSchema]
+  };
+  t.deepEqual(generateDefaultUISchema(schema), uischema);
+});
