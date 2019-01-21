@@ -40,7 +40,7 @@ import {
 import { RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
-const isSingleLevelCategorization: Tester = and(
+export const isSingleLevelCategorization: Tester = and(
     uiTypeIs('Categorization'),
     (uischema: UISchemaElement): boolean => {
       const categorization = uischema as Categorization;
