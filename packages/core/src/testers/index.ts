@@ -497,7 +497,7 @@ export const isCategorization = (
 export const isCategory = (uischema: UISchemaElement): boolean =>
   uischema.type === 'Category';
 
-const hasCategory = (categorization: Categorization): boolean => {
+export const hasCategory = (categorization: Categorization): boolean => {
   if (_.isEmpty(categorization.elements)) {
     return false;
   }

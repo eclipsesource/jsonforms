@@ -84,6 +84,7 @@ import {
   materialTimeFieldTester
 } from './fields';
 import { ComponentType } from 'react';
+import MaterialCategorizationStepperLayout, { materialCategorizationStepperTester } from './layouts/MaterialCategorizationStepperLayout';
 
 export * from './complex';
 export * from './controls';
@@ -117,6 +118,10 @@ export const materialRenderers: { tester: RankedTester; renderer: any }[] = [
   {
     tester: materialCategorizationTester,
     renderer: MaterialCategorizationLayout
+  },
+  {
+    tester: materialCategorizationStepperTester,
+    renderer: MaterialCategorizationStepperLayout
   },
   { tester: materialArrayLayoutTester, renderer: MaterialArrayLayout },
   // additional
