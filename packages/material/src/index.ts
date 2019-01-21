@@ -84,7 +84,9 @@ import {
   materialTimeFieldTester
 } from './fields';
 import { ComponentType } from 'react';
-import MaterialCategorizationStepperLayout, { materialCategorizationStepperTester } from './layouts/MaterialCategorizationStepperLayout';
+import MaterialCategorizationStepperLayout, {
+  materialCategorizationStepperTester
+} from './layouts/MaterialCategorizationStepperLayout';
 
 export * from './complex';
 export * from './controls';
