@@ -38,14 +38,12 @@ import {
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
-import { isSingleLevelCategorization } from './MaterialCategorizationLayout';
 
 export const materialCategorizationStepperTester: RankedTester = rankWith(
   2,
   and(
     uiTypeIs('Categorization'),
     categorizationHasCategory,
-    isSingleLevelCategorization,
     optionIs('variant', 'stepper')
   )
 );
