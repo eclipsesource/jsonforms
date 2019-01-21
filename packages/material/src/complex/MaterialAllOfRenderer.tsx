@@ -39,6 +39,7 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
             schema,
             uischema,
             scopedSchema,
+            path
         } = this.props;
 
         const elements = createControls(
@@ -51,6 +52,7 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
             <ResolvedJsonForms
                 schema={schema}
                 uischema={elements}
+                path={path}
             />
         );
 

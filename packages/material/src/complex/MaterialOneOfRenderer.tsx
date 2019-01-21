@@ -83,14 +83,14 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfS
 
     handleClose = () => {
         this.setState({ open: false });
-    }
+    };
 
     cancel = () => {
         this.setState({
             open: false,
             proceed: false,
         });
-    }
+    };
 
     confirm = () => {
         // TODO: use setState based on function
@@ -104,7 +104,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfS
             proceed: true,
             selected: this.state.newSelection
         });
-    }
+    };
 
     render() {
 
@@ -112,6 +112,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfS
             schema,
             uischema,
             scopedSchema,
+            path,
         } = this.props;
 
         const elements = createControls(
@@ -136,6 +137,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfS
                     selected={this.state.selected}
                     schema={schema}
                     uischema={elements}
+                    path={path}
                 />
                 <Dialog
                     open={this.state.open}

@@ -142,6 +142,20 @@ const addLabel = (layout: Layout, labelName: string) => {
   }
 };
 
+/**
+ * Returns whether the given {@code jsonSchema} is a combinator ({@code oneOf}, {@code anyOf}, {@code allOf}) at the root level
+ * @param jsonSchema
+ *      the schema to check
+ */
+const isCombinator = (jsonSchema: JsonSchema): boolean => {
+  return (
+    !_.isEmpty(jsonSchema) &&
+    (!_.isEmpty(jsonSchema.oneOf) ||
+      !_.isEmpty(jsonSchema.anyOf) ||
+      !_.isEmpty(jsonSchema.allOf))
+  );
+};
+
 const generateUISchema = (
   jsonSchema: JsonSchema,
   schemaElements: UISchemaElement[],
@@ -159,6 +173,16 @@ const generateUISchema = (
       layoutType,
       rootSchema
     );
+  }
+
+  if (isCombinator(jsonSchema)) {
+    const controlObject: ControlElement = createControlElement(
+      _.startCase(schemaName),
+      currentRef
+    );
+    schemaElements.push(controlObject);
+
+    return controlObject;
   }
 
   const type = deriveType(jsonSchema);

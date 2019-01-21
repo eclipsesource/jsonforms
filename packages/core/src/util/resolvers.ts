@@ -127,7 +127,7 @@ export const resolveSchema = (
     pathSegment === '#' || pathSegment === undefined || pathSegment === '';
   const resultSchema = validPathSegments.reduce((curSchema, pathSegment) => {
     curSchema =
-      curSchema.$ref === undefined
+      curSchema === undefined || curSchema.$ref === undefined
         ? curSchema
         : resolveSchema(schema, curSchema.$ref);
     return invalidSegment(pathSegment)

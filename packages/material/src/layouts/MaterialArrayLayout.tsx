@@ -53,12 +53,12 @@ export const MaterialArrayLayout =
      removeItems
    }: ArrayControlProps) => {
 
-    const firstPrimitiveProp = _.find(Object.keys(scopedSchema.properties), propName => {
+    const firstPrimitiveProp = scopedSchema.properties ? _.find(Object.keys(scopedSchema.properties), propName => {
       const prop = scopedSchema.properties[propName];
       return prop.type === 'string' ||
         prop.type === 'number' ||
         prop.type === 'integer';
-    });
+    }) : undefined;
 
     return (
       <Paper style={{ padding: 10 }}>
@@ -99,7 +99,7 @@ export const MaterialArrayLayout =
               const foundUISchema =
                 findUISchema(scopedSchema, uischema.scope, path, undefined, uischema);
               const childPath = composePaths(path, `${index}`);
-              const childLabel = childData[firstPrimitiveProp];
+              const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
 
               return (
                 <ExpansionPanel key={index}>
@@ -134,7 +134,7 @@ export const MaterialArrayLayout =
                   <ExpansionPanelDetails>
                     <ResolvedJsonForms
                       schema={scopedSchema}
-                      uischema={foundUISchema || uischema}
+                      uischema={foundUISchema}
                       path={childPath}
                       key={childPath}
                     />
