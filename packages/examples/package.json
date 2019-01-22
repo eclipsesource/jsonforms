@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/examples",
-  "version": "2.1.1-alpha.1",
+  "version": "2.1.1-alpha.2",
   "description": "JSON Forms Example Data",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -26,7 +26,7 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Examples' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "dependencies": {
-    "@jsonforms/core": "^2.1.1-alpha.1",
+    "@jsonforms/core": "^2.1.1-alpha.2",
     "redux": "^3.7.2"
   }
 }
