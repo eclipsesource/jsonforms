@@ -629,14 +629,54 @@ test('should assign defaults to enum', t => {
   store.dispatch(
     init(data, schema, uischema, createAjv({ useDefaults: true }))
   );
-  const ownProps: OwnPropsOfControl = { schema };
-
-  mapDispatchToArrayControlProps(store.dispatch, ownProps);
 
   t.is(store.getState().jsonforms.core.data.color, 'green');
 });
 
-test('should assign defaults to array', t => {
+test('should assign defaults to empty item within nested object of an array', t => {
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo'
+        }
+      }
+    }
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const data = [{}];
+
+  const initState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
+
+  t.is(store.getState().jsonforms.core.data.length, 1);
+  t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
+});
+
+test('should assign defaults to newly added item within nested object of an array', t => {
   const schema: JsonSchema = {
     type: 'array',
     items: {
@@ -683,6 +723,5 @@ test('should assign defaults to array', t => {
   props.addItem('')();
 
   t.is(store.getState().jsonforms.core.data.length, 2);
-  t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
   t.deepEqual(store.getState().jsonforms.core.data[1], { message: 'foo' });
 });
