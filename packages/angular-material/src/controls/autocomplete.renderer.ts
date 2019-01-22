@@ -76,6 +76,7 @@ import { startWith } from 'rxjs/operators/startWith';
         [id]="id"
         [formControl]="form"
         [matAutocomplete]="auto"
+        (keyup)="updateFilter($event)"
       />
       <mat-autocomplete
         autoActiveFirstOption
@@ -96,6 +97,7 @@ import { startWith } from 'rxjs/operators/startWith';
 export class AutocompleteControlRenderer extends JsonFormsControl {
   @Input() options: string[];
   filteredOptions: Observable<string[]>;
+  shouldNotFilter: boolean;
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
@@ -104,21 +106,34 @@ export class AutocompleteControlRenderer extends JsonFormsControl {
 
   ngOnInit() {
     super.ngOnInit();
+    this.shouldNotFilter = true;
     this.filteredOptions = this.form.valueChanges.pipe(
       startWith(''),
       map(val => this.filter(val))
     );
   }
 
+  updateFilter(event: any) {
+    // ENTER
+    if (event.keyCode === 13) {
+      this.shouldNotFilter = true;
+    } else {
+      this.shouldNotFilter = false;
+    }
+  }
+
   onSelect(ev: MatAutocompleteSelectedEvent) {
     const path = composeWithUi(this.uischema as ControlElement, this.path);
+    this.shouldNotFilter = true;
     this.ngRedux.dispatch(Actions.update(path, () => ev.option.value));
     this.triggerValidation();
   }
 
   filter(val: string): string[] {
     return (this.options || this.scopedSchema.enum || []).filter(
-      option => !val || option.toLowerCase().indexOf(val.toLowerCase()) === 0
+      option =>
+        this.shouldNotFilter ||
+        (!val || option.toLowerCase().indexOf(val.toLowerCase()) === 0)
     );
   }
   protected getOwnProps(): OwnPropsOfAutoComplete {
