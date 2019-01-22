@@ -94,10 +94,10 @@ class MaterialOneOfRenderer extends React.Component<ControlProps, MaterialOneOfS
 
     confirm = () => {
         // TODO: use setState based on function
-        const control = this.props.uischema as ControlElement;
-        this.props.handleChange(
-            toDataPath(control.scope),
-            createDefaultValue(this.props.scopedSchema.oneOf[this.state.selected])
+        const { path, scopedSchema, handleChange } = this.props;
+        handleChange(
+            path,
+            createDefaultValue(scopedSchema.oneOf[this.state.selected])
         );
         this.setState({
             open: false,
