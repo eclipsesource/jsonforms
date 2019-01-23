@@ -40,14 +40,22 @@
     "babel": "inherit"
   },
   "dependencies": {
+  },
+  "peerDependencies": {
     "@angular-redux/store": "^7.1.1",
-    "@angular/common": "^5.2.10",
     "@angular/core": "^5.2.10",
+    "@angular/forms": "^5.2.10",
     "@jsonforms/core": "^2.1.1-alpha.2",
     "redux": "^3.7.2",
     "rxjs": "^5.5.7"
   },
   "devDependencies": {
+    "@angular-redux/store": "^7.1.1",
+    "@angular/core": "^5.2.10",
+    "@angular/forms": "^5.2.10",
+    "@jsonforms/core": "^2.1.1-alpha.2",
+    "redux": "^3.7.2",
+    "rxjs": "^5.5.7",
     "copy-webpack-plugin": "^4.5.1",
     "webpack-dev-server": "^3.1.14"
   }
