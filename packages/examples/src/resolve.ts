@@ -36,7 +36,10 @@ export const schema = {
       },
       required: ['street_address', 'city', 'state']
     },
-    coord: { $ref: 'http://json-schema.org/geo' }
+    coord: {
+      $ref:
+        'http://json-schema.org/learn/examples/geographical-location.schema.json#'
+    }
   },
   type: 'object',
   properties: {
@@ -61,11 +64,7 @@ export const uischema = {
     },
     {
       type: 'Control',
-      scope: '#/properties/address/properties/coord/properties/latitude'
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/address/properties/coord/properties/longitude'
+      scope: '#/properties/address/properties/coord'
     }
   ]
 };

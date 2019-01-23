@@ -26,7 +26,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
-import { ErrorObject, ValidateFunction } from 'ajv';
+import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
 import {
   INIT,
   InitAction,
@@ -42,7 +42,6 @@ import {
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
 
-const ajv = createAjv();
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   const valid = validator(data);
   if (valid) {
@@ -67,6 +66,7 @@ export interface JsonFormsCore {
   uischema: UISchemaElement;
   errors?: ErrorObject[];
   validator?: ValidateFunction;
+  ajv?: Ajv;
 }
 
 const initState: JsonFormsCore = {
@@ -74,7 +74,8 @@ const initState: JsonFormsCore = {
   schema: {},
   uischema: undefined,
   errors: [],
-  validator: alwaysValid
+  validator: alwaysValid,
+  ajv: undefined
 };
 
 type ValidCoreActions =
@@ -84,22 +85,34 @@ type ValidCoreActions =
   | SetSchemaAction
   | SetUISchemaAction;
 
+const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
+  if (action && action.ajv) {
+    return action.ajv;
+  }
+  if (state.ajv) {
+    return state.ajv;
+  }
+  return createAjv();
+};
+
 export const coreReducer = (
   state: JsonFormsCore = initState,
   action: ValidCoreActions
 ) => {
   switch (action.type) {
     case INIT: {
-      const thisAjv = action.ajv ? action.ajv : ajv;
+      const thisAjv = getOrCreateAjv(state, action);
       const v = thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
 
       return {
+        ...state,
         data: action.data,
         schema: action.schema,
         uischema: action.uischema,
+        errors: e,
         validator: v,
-        errors: e
+        ajv: thisAjv
       };
     }
     case SET_AJV: {
@@ -113,8 +126,13 @@ export const coreReducer = (
       };
     }
     case SET_SCHEMA: {
+      const v =
+        action.schema && state.ajv
+          ? state.ajv.compile(action.schema)
+          : state.validator;
       return {
         ...state,
+        validator: v,
         schema: action.schema
       };
     }
@@ -133,6 +151,7 @@ export const coreReducer = (
 
         if (result === undefined || result === null) {
           return {
+            ...state,
             data: state.data,
             uischema: state.uischema,
             schema: state.schema
@@ -142,10 +161,8 @@ export const coreReducer = (
         const errors = sanitizeErrors(state.validator, result);
 
         return {
+          ...state,
           data: result,
-          uischema: state.uischema,
-          schema: state.schema,
-          validator: state.validator,
           errors
         };
       } else {
@@ -159,10 +176,8 @@ export const coreReducer = (
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
+          ...state,
           data: newState,
-          uischema: state.uischema,
-          schema: state.schema,
-          validator: state.validator,
           errors
         };
       }
