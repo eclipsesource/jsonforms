@@ -28,8 +28,10 @@ import './index.css';
 import App from './App';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
+import geoschema from './geographical-location.schema';
 import {
   Actions,
+  createAjv,
   JsonFormsFieldRendererRegistryEntry,
   jsonformsReducer,
   JsonFormsRendererRegistryEntry,
@@ -79,11 +81,19 @@ const setupStore = (
       }
     }
   );
+
+  // Needed for resolve example
+  const ajv = createAjv();
+  ajv.addSchema(
+    geoschema,
+    'http://json-schema.org/learn/examples/geographical-location.schema.json'
+  );
   store.dispatch(
     Actions.init(
       exampleData[0].data,
       exampleData[0].schema,
-      exampleData[0].uischema
+      exampleData[0].uischema,
+      ajv
     )
   );
 
