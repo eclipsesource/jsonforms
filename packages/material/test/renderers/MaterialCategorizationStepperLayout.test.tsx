@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 
-import * as React from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import {
   Actions,
@@ -44,7 +44,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
 import { materialFields, materialRenderers } from '../../src';
 import { Step, StepButton, Stepper } from '@material-ui/core';
 
-import * as Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });
 
 export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
