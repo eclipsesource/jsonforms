@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
@@ -37,12 +37,12 @@ import {
     uiTypeIs,
     unregisterRenderer
 } from '@jsonforms/core';
-import * as Enzyme from 'enzyme';
+import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
 import { StatelessRenderer } from '../../src/Renderer';
-import * as JsonRefs from 'json-refs';
+import JsonRefs from 'json-refs';
 
-import * as Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16';
 import { JsonForms, JsonFormsDispatchRenderer } from '../../src/JsonForms';
 
 Enzyme.configure({ adapter: new Adapter() });

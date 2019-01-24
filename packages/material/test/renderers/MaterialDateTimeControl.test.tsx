@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import {
   Actions,
   ControlElement,
@@ -40,9 +40,9 @@ import MaterialDateTimeControl, {
   materialDateTimeControlTester
 } from '../../src/controls/MaterialDateTimeControl';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
-import * as ReactDOM from 'react-dom';
-import * as moment from 'moment';
+import TestUtils from 'react-dom/test-utils';
+import ReactDOM from 'react-dom';
+import moment from 'moment';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
 

@@ -24,7 +24,7 @@
 */
 import 'jsdom-global/register';
 // @ts-ignore
-import * as installCE from 'document-register-element/pony';
+import installCE from 'document-register-element/pony';
 declare let global: any;
 installCE(global, 'force');
 global.requestAnimationFrame = (cb: any) => setTimeout(cb, 0);
