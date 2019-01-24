@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import { Tab, Tabs } from '@material-ui/core';

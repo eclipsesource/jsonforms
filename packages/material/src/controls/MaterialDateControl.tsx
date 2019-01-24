@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import startsWith from 'lodash/startsWith';
+import React from 'react';
 import {
     computeLabel,
     ControlProps,
@@ -42,7 +42,7 @@ import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import EventIcon from '@material-ui/icons/Event';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Moment } from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
@@ -86,8 +86,8 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
             labelClear = 'Clear';
         } else {
             labelText = label.default;
-            labelCancel = _.startsWith(label.cancel, '%') ? 'Cancel' : label.cancel;
-            labelClear = _.startsWith(label.clear, '%') ? 'Clear' : label.clear;
+            labelCancel = startsWith(label.cancel, '%') ? 'Cancel' : label.cancel;
+            labelClear = startsWith(label.clear, '%') ? 'Clear' : label.clear;
         }
 
         const getValue = (event: React.FormEvent<HTMLInputElement>) =>

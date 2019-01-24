@@ -5,7 +5,7 @@
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
+  of this software and associated documentation files (the 'Software'), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
@@ -14,7 +14,7 @@
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
 
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -23,12 +23,12 @@
   THE SOFTWARE.
 */
 
-import * as React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import { JsonForms } from '@jsonforms/react';
 import { AppProps, initializedConnect } from './reduxUtil';
 
-class App extends React.Component<AppProps> {
+class App extends Component<AppProps> {
   render() {
     return (
       <div>
@@ -46,15 +46,15 @@ class App extends React.Component<AppProps> {
             value={this.props.selectedExample.name || ''}
             onChange={ev => this.props.changeExample(ev.currentTarget.value)}
           >
-            {
-              this.props.examples.map(optionValue =>
-                (
-                  <option value={optionValue.name} label={optionValue.label} key={optionValue.name}>
-                    {optionValue.label}
-                  </option>
-                )
-              )
-            }
+            {this.props.examples.map(optionValue => (
+              <option
+                value={optionValue.name}
+                label={optionValue.label}
+                key={optionValue.name}
+              >
+                {optionValue.label}
+              </option>
+            ))}
           </select>
         </div>
 

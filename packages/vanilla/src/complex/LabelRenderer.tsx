@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import has from 'lodash/has';
+import React from 'react';
 import {
     isVisible, JsonFormsState,
     LabelElement, OwnPropsOfRenderer,
@@ -63,7 +63,7 @@ export const LabelRenderer: StatelessRenderer<RendererProps & VanillaRendererPro
   };
 
 const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfRenderer) => {
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
+  const visible = has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
     visible,

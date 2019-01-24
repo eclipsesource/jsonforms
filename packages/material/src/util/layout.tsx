@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import {
     JsonSchema,
     OwnPropsOfRenderer,
@@ -56,7 +56,7 @@ export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
 export const MaterialLayoutRenderer = (
   {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
 
-  if (_.isEmpty(elements)) {
+  if (isEmpty(elements)) {
     return null;
   } else {
     return (

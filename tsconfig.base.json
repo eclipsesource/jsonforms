@@ -12,8 +12,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop" :true
   },
   "types": ["jest"]
 }

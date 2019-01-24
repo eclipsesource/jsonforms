@@ -22,7 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import has from 'lodash/has';
+import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
 import { ControlElement } from '../models/uischema';
 import { findUISchema, getConfig, getData, getErrorAt } from '../reducers';
 import {
@@ -97,18 +100,18 @@ export const mapStateToFieldProps = (
   ownProps: OwnPropsOfField
 ): StatePropsOfField => {
   const path = composeWithUi(ownProps.uischema, ownProps.path);
-  const visible = _.has(ownProps, 'visible')
+  const visible = has(ownProps, 'visible')
     ? ownProps.visible
     : isVisible(ownProps, state);
-  const enabled = _.has(ownProps, 'enabled')
+  const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
     : isEnabled(ownProps, state);
   const errors = getErrorAt(path)(state).map(error => error.message);
-  const isValid = _.isEmpty(errors);
+  const isValid = isEmpty(errors);
   const controlElement = ownProps.uischema as ControlElement;
   const id = ownProps.id;
-  const defaultConfig = _.cloneDeep(getConfig(state));
-  const config = _.merge(defaultConfig, ownProps.uischema.options);
+  const defaultConfig = cloneDeep(getConfig(state));
+  const config = merge(defaultConfig, ownProps.uischema.options);
 
   return {
     data:

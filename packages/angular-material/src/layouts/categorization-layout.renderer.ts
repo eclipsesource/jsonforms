@@ -8,7 +8,6 @@ import {
   rankWith,
   uiTypeIs
 } from '@jsonforms/core';
-import * as _ from 'lodash';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';

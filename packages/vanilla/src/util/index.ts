@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {
   ControlElement,
   convertToValidClassName,
@@ -63,9 +63,9 @@ export const addVanillaControlProps = <P extends StatePropsOfControl>(
   const config = getConfig(state);
   const trim = config.trim;
   const controlElement = props.uischema as ControlElement;
-  const isValid = _.isEmpty(props.errors);
+  const isValid = isEmpty(props.errors);
   const styles = getStyle(state)('control');
-  let classNames: string[] = !_.isEmpty(controlElement.scope)
+  let classNames: string[] = !isEmpty(controlElement.scope)
     ? styles.concat([`${convertToValidClassName(controlElement.scope)}`])
     : [''];
 

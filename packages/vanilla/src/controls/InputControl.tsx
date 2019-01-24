@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import maxBy from 'lodash/maxBy';
+import React from 'react';
 import {
     computeLabel, ControlProps,
     ControlState,
@@ -37,7 +38,6 @@ import {
 } from '@jsonforms/core';
 import { Control, DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
-import * as _ from 'lodash';
 import { VanillaRendererProps } from '../index';
 import { connect } from 'react-redux';
 
@@ -61,7 +61,7 @@ export class InputControl extends Control<ControlProps & VanillaRendererProps, C
     const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'}`;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
     const labelText = isPlainLabel(label) ? label : label.default;
-    const field = _.maxBy(fields, r => r.tester(uischema, schema));
+    const field = maxBy(fields, r => r.tester(uischema, schema));
     if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
       console.warn('No applicable field found.');
       return null;

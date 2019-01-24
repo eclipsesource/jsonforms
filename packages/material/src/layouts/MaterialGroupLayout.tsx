@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { connect } from 'react-redux';
-import * as _ from 'lodash';
 import { Card, CardContent, CardHeader } from '@material-ui/core';
 import {
   GroupLayout,
@@ -58,7 +58,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
 
     return (
         <Card style={style}>
-          {!_.isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
+          {!isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
           <CardContent>
             <MaterialLayoutRenderer {...childProps}/>
           </CardContent>

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const schema = {
   type: 'object',

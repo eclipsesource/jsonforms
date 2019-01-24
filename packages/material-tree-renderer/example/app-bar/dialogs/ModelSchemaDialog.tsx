@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { createRef } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { StyleRulesCallback, withStyles, WithStyles } from '@material-ui/core/styles';
@@ -31,16 +31,16 @@ interface ModelSchemaDialogProps {
 
 class ModelSchemaDialog extends
   React.Component<ModelSchemaDialogProps & WithStyles<'textarea'>, {}> {
-  private textInput = React.createRef<HTMLInputElement>();
+  private textInput = createRef<HTMLInputElement>();
 
   handleCancel = () => {
     this.props.onClose();
-  }
+  };
 
   handleCopy = () => {
     this.textInput.current.select();
     document.execCommand('copy');
-  }
+  };
 
   render() {
     const { classes, fullScreen, open, rootData } = this.props;

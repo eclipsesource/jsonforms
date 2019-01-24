@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty';
+import startCase from 'lodash/startCase';
 import {
     ControlProps,
     findUISchema,
@@ -13,8 +15,7 @@ import {
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
-import * as _ from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 interface MaterialObjectRendererProps extends ControlProps {
@@ -36,10 +37,10 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
         } = this.props;
 
         const detailUiSchema = findUiSchema(scopedSchema, undefined, path, 'Group');
-        if (_.isEmpty(path)) {
+        if (isEmpty(path)) {
             detailUiSchema.type = 'VerticalLayout';
         } else {
-            (detailUiSchema as GroupLayout).label = _.startCase(path);
+            (detailUiSchema as GroupLayout).label = startCase(path);
         }
 
         return (

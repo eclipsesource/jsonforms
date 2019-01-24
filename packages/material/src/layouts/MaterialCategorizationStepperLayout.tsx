@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Step, StepButton, Stepper, Hidden } from '@material-ui/core';
+import { Hidden, Step, StepButton, Stepper, } from '@material-ui/core';
 import {
   and,
   Categorization,

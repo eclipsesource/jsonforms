@@ -22,8 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import fpfilter from 'lodash/fp/filter';
+import fpkeys from 'lodash/fp/keys';
+import fpmap from 'lodash/fp/map';
+import fpflow from 'lodash/fp/flow';
+import filter from 'lodash/filter';
+import join from 'lodash/join';
+import React from 'react';
 import {
     ArrayControlProps,
     ControlElement,
@@ -114,11 +119,11 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
           <tr>
             {
               scopedSchema.properties ?
-                _(scopedSchema.properties)
-                  .keys()
-                  .filter(prop => scopedSchema.properties[prop].type !== 'array')
-                  .map(prop => <th key={prop}>{prop}</th>)
-                  .value()
+                fpflow(
+                  fpkeys,
+                  fpfilter(prop => scopedSchema.properties[prop].type !== 'array'),
+                  fpmap(prop => <th key={prop}>{prop}</th>)
+                ) (scopedSchema.properties)
                 : <th>Items</th>
             }
             <th>
@@ -133,7 +138,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
               data.map((_child, index) => {
                 const childPath = Paths.compose(path, `${index}`);
                 // TODO
-                const errorsPerEntry: any[] = _.filter(
+                const errorsPerEntry: any[] = filter(
                   childErrors,
                   error => error.dataPath.startsWith(childPath)
                 );
@@ -142,24 +147,24 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                   <tr key={childPath}>
                     {
                       scopedSchema.properties ?
-                        _.chain(scopedSchema.properties)
-                          .keys()
-                          .filter(prop => scopedSchema.properties[prop].type !== 'array')
-                          .map(prop => {
+                        fpflow(
+                          fpkeys,
+                          fpfilter(prop => scopedSchema.properties[prop].type !== 'array'),
+                          fpmap(prop => {
                             const childPropPath = Paths.compose(childPath, prop.toString());
 
                             return (
                               <td key={childPropPath}>
                                 <DispatchField
-                                    schema={scopedSchema}
-                                    uischema={createControlElement(prop)}
-                                    path={childPath}
-                                    showError
+                                  schema={scopedSchema}
+                                  uischema={createControlElement(prop)}
+                                  path={childPath}
+                                  showError
                                 />
                               </td>
                             );
                           })
-                          .value() :
+                        )(scopedSchema.properties) :
                         <td key={Paths.compose(childPath, index.toString())}>
                           <DispatchField
                             schema={scopedSchema}
@@ -173,7 +178,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                       {
                         errorsPerEntry ?
                           <span className={getStyleAsClassName('array.validation.error')}>
-                            {_.join(errorsPerEntry.map(e => e.message), ' and ')}
+                            {join(errorsPerEntry.map(e => e.message), ' and ')}
                           </span> :
                           <span>OK</span>
                       }

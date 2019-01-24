@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import TreeWithDetailRenderer from './tree/TreeWithDetailRenderer';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 

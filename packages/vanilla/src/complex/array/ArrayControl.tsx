@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import range from 'lodash/range';
+import React from 'react';
 import { ArrayControlProps, composePaths } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
@@ -56,7 +56,7 @@ export const ArrayControl  = (
           </legend>
           <div className={classNames.children}>
             {
-              data ? _.range(0, data.length).map(index => {
+              data ? range(0, data.length).map(index => {
 
                 const foundUISchema = findUISchema(scopedSchema, uischema.scope, path);
                 const childPath = composePaths(path, `${index}`);

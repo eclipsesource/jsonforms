@@ -22,8 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
-
+import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
+import head from 'lodash/head';
+import startCase from 'lodash/startCase';
+import keys from 'lodash/keys';
 import { JsonSchema } from '../models/jsonSchema';
 import {
   ControlElement,
@@ -51,32 +54,30 @@ const createLayout = (layoutType: string): Layout => ({
  * @returns {boolean}
  */
 const isUnionType = (jsonSchema: JsonSchema): boolean =>
-  !_.isEmpty(jsonSchema) &&
-  !_.isEmpty(jsonSchema.type) &&
-  _.isArray(jsonSchema.type);
+  !isEmpty(jsonSchema) && !isEmpty(jsonSchema.type) && isArray(jsonSchema.type);
 
 /**
  * Derives the type of the jsonSchema element
  */
 const deriveType = (jsonSchema: JsonSchema): string => {
   if (
-    !_.isEmpty(jsonSchema) &&
-    !_.isEmpty(jsonSchema.type) &&
+    !isEmpty(jsonSchema) &&
+    !isEmpty(jsonSchema.type) &&
     typeof jsonSchema.type === 'string'
   ) {
     return jsonSchema.type;
   }
   if (isUnionType(jsonSchema)) {
-    return _.head(jsonSchema.type);
+    return head(jsonSchema.type);
   }
   if (
-    !_.isEmpty(jsonSchema) &&
-    (!_.isEmpty(jsonSchema.properties) ||
-      !_.isEmpty(jsonSchema.additionalProperties))
+    !isEmpty(jsonSchema) &&
+    (!isEmpty(jsonSchema.properties) ||
+      !isEmpty(jsonSchema.additionalProperties))
   ) {
     return 'object';
   }
-  if (!_.isEmpty(jsonSchema) && !_.isEmpty(jsonSchema.items)) {
+  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.items)) {
     return 'array';
   }
 
@@ -109,7 +110,7 @@ const wrapInLayoutIfNecessary = (
   uischema: UISchemaElement,
   layoutType: string
 ): Layout => {
-  if (!_.isEmpty(uischema) && !isLayout(uischema)) {
+  if (!isEmpty(uischema) && !isLayout(uischema)) {
     const verticalLayout: Layout = createLayout(layoutType);
     verticalLayout.elements.push(uischema);
 
@@ -127,8 +128,8 @@ const wrapInLayoutIfNecessary = (
  *      The name of the schema
  */
 const addLabel = (layout: Layout, labelName: string) => {
-  if (!_.isEmpty(labelName)) {
-    const fixedLabel = _.startCase(labelName);
+  if (!isEmpty(labelName)) {
+    const fixedLabel = startCase(labelName);
     if (isGroup(layout)) {
       layout.label = fixedLabel;
     } else {
@@ -149,10 +150,10 @@ const addLabel = (layout: Layout, labelName: string) => {
  */
 const isCombinator = (jsonSchema: JsonSchema): boolean => {
   return (
-    !_.isEmpty(jsonSchema) &&
-    (!_.isEmpty(jsonSchema.oneOf) ||
-      !_.isEmpty(jsonSchema.anyOf) ||
-      !_.isEmpty(jsonSchema.allOf))
+    !isEmpty(jsonSchema) &&
+    (!isEmpty(jsonSchema.oneOf) ||
+      !isEmpty(jsonSchema.anyOf) ||
+      !isEmpty(jsonSchema.allOf))
   );
 };
 
@@ -164,7 +165,7 @@ const generateUISchema = (
   layoutType: string,
   rootSchema?: JsonSchema
 ): UISchemaElement => {
-  if (!_.isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
+  if (!isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
     return generateUISchema(
       resolveSchema(rootSchema, jsonSchema.$ref),
       schemaElements,
@@ -177,7 +178,7 @@ const generateUISchema = (
 
   if (isCombinator(jsonSchema)) {
     const controlObject: ControlElement = createControlElement(
-      _.startCase(schemaName),
+      startCase(schemaName),
       currentRef
     );
     schemaElements.push(controlObject);
@@ -192,11 +193,11 @@ const generateUISchema = (
       const layout: Layout = createLayout(layoutType);
       schemaElements.push(layout);
 
-      if (jsonSchema.properties && _.keys(jsonSchema.properties).length > 1) {
+      if (jsonSchema.properties && keys(jsonSchema.properties).length > 1) {
         addLabel(layout, schemaName);
       }
 
-      if (!_.isEmpty(jsonSchema.properties)) {
+      if (!isEmpty(jsonSchema.properties)) {
         // traverse properties
         const nextRef: string = currentRef + '/properties';
         Object.keys(jsonSchema.properties).map(propName => {
@@ -228,7 +229,7 @@ const generateUISchema = (
     /* falls through */
     case 'boolean':
       const controlObject: ControlElement = createControlElement(
-        _.startCase(schemaName),
+        startCase(schemaName),
         currentRef
       );
       schemaElements.push(controlObject);

@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import maxBy from 'lodash/maxBy';
+import React from 'react';
 import { connect } from 'react-redux';
-import * as _ from 'lodash';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
   DispatchFieldProps, DispatchFieldStateProps,
@@ -39,7 +39,7 @@ import { FormHelperText } from '@material-ui/core';
 class Dispatch extends React.Component<DispatchFieldProps, any> {
     render() {
         const { uischema, schema, path, fields, id, errors, isValid, showError } = this.props;
-        const field = _.maxBy(fields, r => r.tester(uischema, schema));
+        const field = maxBy(fields, r => r.tester(uischema, schema));
 
         if (field === undefined || field.tester(uischema, schema) === -1) {
             return <UnknownRenderer type={'field'}/>;

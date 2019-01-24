@@ -1,7 +1,18 @@
-import * as _ from 'lodash';
+import has from 'lodash/has';
+import set from 'lodash/set';
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
+import find from 'lodash/find';
+import reduce from 'lodash/reduce';
+import pickBy from 'lodash/pickBy';
+import omitBy from 'lodash/omitBy';
+import flip from 'lodash/flip';
+import startsWith from 'lodash/startsWith';
+import values from 'lodash/values';
+import each from 'lodash/each';
 import { JsonSchema, JsonSchema7 } from '@jsonforms/core';
 import { resolveSchema } from '@jsonforms/core';
-import * as JsonRefs from 'json-refs';
+import JsonRefs from 'json-refs';
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
@@ -47,9 +58,9 @@ interface SchemaRefs {
  * @returns {string}
  */
 export const findPropertyLabel = (property: Property): string => {
-  return _.find(
+  return find(
     [property.schema.title, property.label, property.property],
-    n => !_.isEmpty(n)
+    n => !isEmpty(n)
   );
 };
 
@@ -68,19 +79,16 @@ const findReferences = (
   schemaRefs: SchemaRefs,
   extractedReferences: { [id: string]: string }
 ) =>
-  _.reduce(
+  reduce(
     schemaRefs,
     (prev, schemaRefValue) => {
-      let refs = _.pickBy(
-        prev,
-        _.flip(key => _.startsWith(key, schemaRefValue.uri))
-      );
+      let refs = pickBy(prev, flip(key => startsWith(key, schemaRefValue.uri)));
       if (extractedReferences[schemaRefValue.uri]) {
         refs = undefined;
       }
       if (!extractedReferences[schemaRefValue.uri]) {
         extractedReferences[schemaRefValue.uri] = schemaRefValue.uri;
-        prev = _.omitBy(prev, value => value.uri === schemaRefValue.uri);
+        prev = omitBy(prev, value => value.uri === schemaRefValue.uri);
       }
       if (refs !== undefined) {
         findReferences(parentSchema, prev, refs, extractedReferences);
@@ -109,23 +117,23 @@ export const makeSchemaSelfContained = (
   }) as SchemaRefs;
   let extractedReferences;
   findReferences(parentSchema, allRefs, schemaRefs, (extractedReferences = {}));
-  const refList = _.values(extractedReferences) as string[];
-  if (!_.isEmpty(refList)) {
-    _.each(refList, ref => {
+  const refList = values(extractedReferences) as string[];
+  if (!isEmpty(refList)) {
+    each(refList, ref => {
       const propertyKey = ref.substring(
         ref.indexOf('/') + 1,
         ref.lastIndexOf('/')
       );
       const property = ref.substring(ref.lastIndexOf('/') + 1);
       if (
-        _.has(parentSchema, propertyKey) &&
-        _.has(parentSchema, `${propertyKey}.${property}`)
+        has(parentSchema, propertyKey) &&
+        has(parentSchema, `${propertyKey}.${property}`)
       ) {
-        if (_.get(schema, propertyKey)) {
-          _.set(schema, propertyKey, {
-            ..._.get(schema, propertyKey),
+        if (get(schema, propertyKey)) {
+          set(schema, propertyKey, {
+            ...get(schema, propertyKey),
             ...{
-              [property]: _.get(parentSchema, [propertyKey, property])
+              [property]: get(parentSchema, [propertyKey, property])
             }
           });
         } else {
@@ -133,7 +141,7 @@ export const makeSchemaSelfContained = (
             ...schema,
             ...{
               [propertyKey]: {
-                [property]: _.get(parentSchema, [propertyKey, property])
+                [property]: get(parentSchema, [propertyKey, property])
               }
             }
           };
@@ -255,7 +263,7 @@ const findContainerProps = (
   } else if (schema.anyOf !== undefined) {
     // TODO: oneOf?
     const init: Property[] = [];
-    return _.reduce(
+    return reduce(
       schema.anyOf,
       (prev: Property[], anyOfSubSchema: JsonSchema7, index: number) =>
         prev.concat(

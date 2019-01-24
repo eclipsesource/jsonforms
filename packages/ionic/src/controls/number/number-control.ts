@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { Component } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import {
@@ -75,7 +75,7 @@ export class NumberControlRenderer extends JsonFormsControl {
   };
 
   mapAdditionalProps(props: ControlProps) {
-    if (!_.isEmpty(props.scopedSchema)) {
+    if (!isEmpty(props.scopedSchema)) {
       const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
       this.min = props.scopedSchema.minimum;
       this.max = props.scopedSchema.maximum;
