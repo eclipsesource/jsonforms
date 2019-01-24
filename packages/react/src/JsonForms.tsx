@@ -22,9 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as JsonRefs from 'json-refs';
-import * as _ from 'lodash';
+import isEqual from 'lodash/isEqual';
+import maxBy from 'lodash/maxBy';
+import React from 'react';
+import JsonRefs from 'json-refs';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
@@ -60,7 +61,7 @@ export class ResolvedJsonFormsDispatchRenderer
         prevState: JsonFormsRendererState
     ) {
 
-        if (!_.isEqual(prevState.schema, nextProps.schema)) {
+        if (!isEqual(prevState.schema, nextProps.schema)) {
             const newState: JsonFormsRendererState = {
                 id: prevState.id,
                 resolvedSchema: undefined,
@@ -106,7 +107,7 @@ export class ResolvedJsonFormsDispatchRenderer
                     resolvedSchema: resolvedSchema.resolved
                 });
             });
-    }
+    };
 
     componentWillUnmount() {
         this.mounted = false;
@@ -124,7 +125,7 @@ export class ResolvedJsonFormsDispatchRenderer
             return <div>Loading...</div>;
         }
 
-        const renderer = _.maxBy(renderers, r => r.tester(uischema, _schema));
+        const renderer = maxBy(renderers, r => r.tester(uischema, _schema));
         if (renderer === undefined || renderer.tester(uischema, _schema) === -1) {
             return <UnknownRenderer type={'renderer'}/>;
         } else {

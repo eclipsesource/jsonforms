@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { JsonSchema, Layout } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 export interface RenderChildrenProps {
@@ -39,7 +39,7 @@ export const renderChildren = (
   className: string,
   path: string) => {
 
-  if (_.isEmpty(layout.elements)) {
+  if (isEmpty(layout.elements)) {
     return [];
   }
 

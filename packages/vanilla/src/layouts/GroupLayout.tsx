@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { connect } from 'react-redux';
-import * as _ from 'lodash';
 import {
     GroupLayout,
     mapStateToLayoutProps,
@@ -66,7 +66,7 @@ export const GroupLayoutRenderer = (
       hidden={visible === undefined || visible === null ? false : !visible}
     >
       {
-        !_.isEmpty(group.label) ?
+        !isEmpty(group.label) ?
           <legend className={getStyleAsClassName('group.label')}>
             {group.label}
           </legend> : ''

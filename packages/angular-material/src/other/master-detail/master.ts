@@ -1,5 +1,6 @@
+import some from 'lodash/some';
+import get from 'lodash/get';
 import { Component } from '@angular/core';
-import * as _ from 'lodash';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
 import {
@@ -19,7 +20,7 @@ const keywords = ['#', 'properties', 'items'];
 export const removeSchemaKeywords = (path: string) => {
   return path
     .split('/')
-    .filter(s => !_.some(keywords, key => key === s))
+    .filter(s => !some(keywords, key => key === s))
     .join('.');
 };
 
@@ -161,7 +162,7 @@ export class MasterListComponent extends JsonFormsControl {
         controlElement.options.labelRef
       );
       const masterItem = {
-        label: _.get(d, labelRefInstancePath),
+        label: get(d, labelRefInstancePath),
         data: d,
         path: `${instancePath}.${index}`,
         schema: resolvedSchema,

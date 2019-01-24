@@ -1,5 +1,5 @@
 // tslint:disable:jsx-no-multiline-js
-import * as React from 'react';
+import React from 'react';
 import { JsonSchema, Paths, resolveData, UISchemaElement } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
 import { WithImageProvider, WithLabelProvider } from './TreeWithDetailRenderer';

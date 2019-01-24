@@ -1,5 +1,9 @@
 // tslint:disable:jsx-no-multiline-js
 // tslint:disable:jsx-no-lambda
+import keys from 'lodash/keys';
+import isEmpty from 'lodash/isEmpty';
+import find from 'lodash/find';
+import merge from 'lodash/merge';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from 'react-redux';
@@ -15,9 +19,8 @@ import {
 } from '@jsonforms/core';
 import { findContainerProperties, findPropertyLabel, Property } from '../services/property.util';
 import Button from '@material-ui/core/Button';
-import * as _ from 'lodash';
 import DialogContent from '@material-ui/core/DialogContent';
-import * as React from 'react';
+import React from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -43,12 +46,12 @@ export interface AddItemDialogProps {
 }
 
 const createData = (defaultData: any, prop: Property) => {
-    const foundData = _.find(defaultData, d => {
+    const foundData = find(defaultData, d => {
         return d.schemaPath === prop.schemaPath;
     });
 
     // default behavior is to read default property from schemas
-    const predefined = _.keys(prop.schema.properties).reduce(
+    const predefined = keys(prop.schema.properties).reduce(
         (acc: any, key: string) => {
             if (prop.schema.properties[key].default) {
                 acc[key] = prop.schema.properties[key].default;
@@ -61,7 +64,7 @@ const createData = (defaultData: any, prop: Property) => {
         {}
     );
 
-    return _.merge(foundData ? foundData.data : {}, predefined);
+    return merge(foundData ? foundData.data : {}, predefined);
 };
 
 const createPropLabel =
@@ -81,7 +84,7 @@ class AddItemDialog extends React.Component<AddItemDialogProps, {}> {
 
         const arrayPath = Paths.compose(path, prop.property);
         const array = Resolve.data(rootData, arrayPath) as any[];
-        const selectionIndex = _.isEmpty(array) ? 0 : array.length;
+        const selectionIndex = isEmpty(array) ? 0 : array.length;
         const selectionPath = Paths.compose(arrayPath, selectionIndex.toString());
 
         add(path, prop, newData);
@@ -162,7 +165,7 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
             update(
                 Paths.compose(path, prop.property),
                 array => {
-                    if (_.isEmpty(array)) {
+                    if (isEmpty(array)) {
                         return [newData];
                     }
                     array.push(newData);

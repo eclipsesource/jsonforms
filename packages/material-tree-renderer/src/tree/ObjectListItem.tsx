@@ -1,7 +1,10 @@
 // tslint:disable:jsx-no-multiline-js
-
+import isEmpty from 'lodash/isEmpty';
+import clone from 'lodash/clone';
+import initial from 'lodash/initial';
+import groupBy from 'lodash/groupBy';
 import { indexFromPath } from '../helpers/util';
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
     getData,
@@ -24,7 +27,6 @@ import {
   DropResult,
   moveListItem,
   Types } from './dnd.util';
-import * as _ from 'lodash';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -182,13 +184,13 @@ class ObjectListItem extends React.Component
         classes
     } = this.props;
     const pathSegments = path.split('.');
-    const parentPath = _.initial(pathSegments).join('.');
+    const parentPath = initial(pathSegments).join('.');
     const labelClass = selection === data ? classes.selected : '';
-    const hasParent = !_.isEmpty(parentPath);
+    const hasParent = !isEmpty(parentPath);
     const liClass =
       !hasParent ? [classes.listItem, classes.withoutBorders].join(' ') : classes.listItem;
     const scopedData = resolveData(rootData, parentPath);
-    const groupedProps = _.groupBy(containerProperties, property => property.property);
+    const groupedProps = groupBy(containerProperties, property => property.property);
 
     return (
       <li
@@ -206,7 +208,7 @@ class ObjectListItem extends React.Component
               {labelProvider(schema, data, path)}
           </Typography>
             {
-              !_.isEmpty(containerProperties) ?
+              !isEmpty(containerProperties) ?
                 (
                   <IconButton
                     className={classes.actionButton}
@@ -218,7 +220,7 @@ class ObjectListItem extends React.Component
                 ) : ''
             }
             {
-              (hasParent || _.isArray(scopedData)) &&
+              (hasParent || Array.isArray(scopedData)) &&
               <IconButton
                 className={classes.actionButton}
                 aria-label='Remove'
@@ -268,7 +270,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
 // TODO
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>, ownProps: any) => {
 
-  const parentPath = _.initial(ownProps.path.split('.')).join('.');
+  const parentPath = initial(ownProps.path.split('.')).join('.');
   const index = indexFromPath(ownProps.path);
 
   return {
@@ -277,9 +279,9 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>, ownProps: any) => {
         update(
           parentPath,
           array => {
-            const clone = _.clone(array);
-            clone.splice(index, 1);
-            return clone;
+            const clonedArray = clone(array);
+            clonedArray.splice(index, 1);
+            return clonedArray;
           }
         )
       );

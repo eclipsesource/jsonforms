@@ -22,13 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import remove from 'lodash/remove';
+import find from 'lodash/find';
+import join from 'lodash/join';
 import { REGISTER_STYLE, REGISTER_STYLES, UNREGISTER_STYLE } from '../actions';
 import { StyleDef } from '../util';
 
 const removeStyle = (styles: StyleDef[], name: string) => {
   const copy = styles.slice();
-  _.remove(copy, styleDef => styleDef.name === name);
+  remove(copy, styleDef => styleDef.name === name);
 
   return copy;
 };
@@ -44,10 +47,10 @@ export const findStyle = (styles: StyleDef[]) => (
   style: string,
   ...args: any[]
 ): string[] => {
-  const foundStyle = _.find(styles, s => s.name === style);
-  if (!_.isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
+  const foundStyle = find(styles, s => s.name === style);
+  if (!isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
     return foundStyle.classNames(...args);
-  } else if (!_.isEmpty(foundStyle)) {
+  } else if (!isEmpty(foundStyle)) {
     return foundStyle.classNames as string[];
   }
 
@@ -57,7 +60,7 @@ export const findStyle = (styles: StyleDef[]) => (
 export const findStyleAsClassName = (styles: StyleDef[]) => (
   style: string,
   ...args: any[]
-): string => _.join(findStyle(styles)(style, args), ' ');
+): string => join(findStyle(styles)(style, args), ' ');
 
 // TODO
 export const stylingReducer = (state: StyleDef[] = [], action: any) => {

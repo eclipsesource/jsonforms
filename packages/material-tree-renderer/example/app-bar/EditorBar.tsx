@@ -1,7 +1,7 @@
-import * as React from 'react';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import * as _ from 'lodash';
 import { StyleRulesCallback, withStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -61,7 +61,7 @@ class EditorBar extends
         open: true
       }
     });
-  }
+  };
 
   handleExportDialogClose = () => {
     this.setState({
@@ -69,7 +69,7 @@ class EditorBar extends
         open: false
       }
     });
-  }
+  };
 
   handleDownload = () => {
     const a = document.createElement('a');
@@ -78,14 +78,14 @@ class EditorBar extends
     a.href = URL.createObjectURL(file);
     a.download = 'download.json';
     a.click();
-  }
+  };
 
   handleFileUpload = (event: React.SyntheticEvent<HTMLInputElement>) => {
     // triggered after a file was selected
     const schema = this.props.schema;
     const target = event.target as HTMLInputElement;
     const files = target.files;
-    if (_.isEmpty(files) || files.length > 1) {
+    if (isEmpty(files) || files.length > 1) {
       return;
     }
     const file = files[0];
@@ -110,7 +110,7 @@ class EditorBar extends
       } else {
         console.error('Something went wrong! The file is an ArrayBuffer instead of a string.');
       }
-      if (!_.isEmpty(readData)) {
+      if (!isEmpty(readData)) {
         const valid = ajv.validate(schema, readData);
         if (valid) {
           this.props.updateRootData(readData);
@@ -124,7 +124,7 @@ class EditorBar extends
     };
 
     reader.readAsText(file);
-  }
+  };
 
   render() {
     const { classes } = this.props;

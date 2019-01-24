@@ -1,7 +1,8 @@
 // tslint:disable:jsx-no-multiline-js
 // tslint:disable:max-line-length
-import * as _ from 'lodash';
-import * as React from 'react';
+import has from 'lodash/has';
+import get from 'lodash/get';
+import React from 'react';
 import {
     Actions,
     ControlState,
@@ -207,7 +208,7 @@ export class TreeWithDetailRenderer extends Control
         });
 
         const path = Paths.fromScopable(controlElement);
-        if (_.isArray(resolvedRootData)) {
+        if (Array.isArray(resolvedRootData)) {
             this.setState({
                 selected: {
                     schema: scopedSchema.items as JsonSchema,
@@ -369,13 +370,13 @@ export interface OwnPropsOfTreeControl extends OwnPropsOfControl {
 
 const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl & WithImageProvider & WithLabelProviders): StatePropsOfTreeWithDetail => {
     const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
-    const visible = _.has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
-    const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
+    const visible = has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
+    const enabled = has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
     const rootData = getData(state);
 
     return {
         rootData: getData(state),
-        label: _.get(ownProps.uischema, 'label') as string,
+        label: get(ownProps.uischema, 'label') as string,
         resolvedRootData: Resolve.data(rootData, path),
         uischema: ownProps.uischema,
         schema: ownProps.schema,
@@ -398,10 +399,10 @@ const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): DispatchPropsOfTreeW
                     Actions.update(
                         path,
                         data => {
-                            const clone = data.slice();
-                            clone.push({});
+                            const clonedData = data.slice();
+                            clonedData.push({});
 
-                            return clone;
+                            return clonedData;
                         }
                     )
                 );

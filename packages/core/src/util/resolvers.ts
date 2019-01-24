@@ -22,7 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import has from 'lodash/has';
 import { JsonSchema } from '..';
 
 /**
@@ -32,16 +34,16 @@ export interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }
 
-const isObject = (schema: JsonSchema): boolean => {
+const isObjectSchema = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
 };
-const isArray = (schema: JsonSchema): boolean => {
+const isArraySchema = (schema: JsonSchema): boolean => {
   return schema.type === 'array' && schema.items !== undefined;
 };
 
 export const resolveData = (instance: any, dataPath: string): any => {
   const dataPathSegments = dataPath.split('.');
-  if (_.isEmpty(dataPath)) {
+  if (isEmpty(dataPath)) {
     return instance;
   }
 
@@ -72,12 +74,12 @@ export const findAllRefs = (
   result: ReferenceSchemaMap = {},
   resolveTuples = false
 ): ReferenceSchemaMap => {
-  if (isObject(schema)) {
+  if (isObjectSchema(schema)) {
     Object.keys(schema.properties).forEach(key =>
       findAllRefs(schema.properties[key], result)
     );
   }
-  if (isArray(schema)) {
+  if (isArraySchema(schema)) {
     if (Array.isArray(schema.items)) {
       if (resolveTuples) {
         const items: JsonSchema[] = schema.items;
@@ -96,9 +98,9 @@ export const findAllRefs = (
   }
 
   // tslint:disable:no-string-literal
-  if (_.has(schema, 'links')) {
-    _.get(schema, 'links').forEach((link: { targetSchema: JsonSchema }) => {
-      if (!_.isEmpty(link.targetSchema.$ref)) {
+  if (has(schema, 'links')) {
+    get(schema, 'links').forEach((link: { targetSchema: JsonSchema }) => {
+      if (!isEmpty(link.targetSchema.$ref)) {
         result[link.targetSchema.$ref] = schema;
       } else {
         findAllRefs(link.targetSchema, result);
@@ -119,7 +121,7 @@ export const resolveSchema = (
   schema: JsonSchema,
   schemaPath: string
 ): JsonSchema => {
-  if (_.isEmpty(schema)) {
+  if (isEmpty(schema)) {
     return undefined;
   }
   const validPathSegments = schemaPath.split('/');
@@ -132,7 +134,7 @@ export const resolveSchema = (
         : resolveSchema(schema, curSchema.$ref);
     return invalidSegment(pathSegment)
       ? curSchema
-      : _.get(curSchema, pathSegment);
+      : get(curSchema, pathSegment);
   }, schema);
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
     return retrieveResolvableSchema(schema, resultSchema.$ref);

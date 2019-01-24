@@ -22,17 +22,18 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
+import React from 'react';
 import './index.css';
 import App from './App';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
-    Actions,
-    JsonFormsFieldRendererRegistryEntry,
-    jsonformsReducer, JsonFormsRendererRegistryEntry,
-    RankedTester
+  Actions,
+  JsonFormsFieldRendererRegistryEntry,
+  jsonformsReducer,
+  JsonFormsRendererRegistryEntry,
+  RankedTester
 } from '@jsonforms/core';
 import { getExamples } from '@jsonforms/examples';
 import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
@@ -64,7 +65,8 @@ const setupStore = (
   );
   const store = createStore(
     combineReducers({
-      jsonforms: jsonformsReducer({ ...additionalReducers }), examples: exampleReducer,
+      jsonforms: jsonformsReducer({ ...additionalReducers }),
+      examples: exampleReducer
     }),
     {
       jsonforms: {
@@ -77,23 +79,32 @@ const setupStore = (
       }
     }
   );
-  store.dispatch(Actions.init(exampleData[0].data, exampleData[0].schema, exampleData[0].uischema));
+  store.dispatch(
+    Actions.init(
+      exampleData[0].data,
+      exampleData[0].schema,
+      exampleData[0].uischema
+    )
+  );
 
   return store;
 };
 export const renderExample = (
-  renderers: { tester: RankedTester, renderer: any }[],
-  fields: { tester: RankedTester, field: any }[],
+  renderers: { tester: RankedTester; renderer: any }[],
+  fields: { tester: RankedTester; field: any }[],
   ...additionalStoreParams: AdditionalStoreParams[]
 ) => {
-
   const exampleData = enhanceExample(getExamples());
-  const store = setupStore(exampleData, fields, renderers, additionalStoreParams);
+  const store = setupStore(
+    exampleData,
+    fields,
+    renderers,
+    additionalStoreParams
+  );
   ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>,
     document.getElementById('root')
   );
-
 };

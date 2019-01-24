@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import get from 'lodash/get';
+import isEqual from 'lodash/isEqual';
 import { Component, ViewChild } from '@angular/core';
 import {
   composeWithUi,
@@ -85,7 +86,7 @@ export class ListWithDetailControl extends JsonFormsControl {
             controlElement.options.labelRef
           );
           const masterItem: MasterItem = {
-            label: _.get(d, labelRefInstancePath),
+            label: get(d, labelRefInstancePath),
             data: d,
             path: `${instancePath}.${index}`,
             schema: resolvedSchema,
@@ -112,7 +113,7 @@ export class ListWithDetailControl extends JsonFormsControl {
         } else if (this.masterItems !== undefined) {
           const currentLabels = this.masterItems.map(item => item.label);
           const nextLabels = masterItems.map((item: MasterItem) => item.label);
-          if (!_.isEqual(currentLabels, nextLabels)) {
+          if (!isEqual(currentLabels, nextLabels)) {
             this.masterParams.items.forEach((item: MasterItem, idx: number) => {
               if (item.label !== nextLabels[idx]) {
                 item.label = nextLabels[idx];

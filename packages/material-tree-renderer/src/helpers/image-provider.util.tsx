@@ -1,11 +1,11 @@
-import * as React from 'react';
-import * as _ from 'lodash';
+import isString from 'lodash/isString';
+import React from 'react';
 import { Icon } from '@material-ui/core';
 
 export const wrapImageIfNecessary =
     (el: React.ReactElement<any> | string): React.ReactElement<any> => {
 
-    if (_.isString(el)) {
+    if (isString(el)) {
         return (<Icon className={el} fontSize={'inherit'}/>);
     }
 

@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { LabelDescription, Labels } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import { Grid, Hidden } from '@material-ui/core';

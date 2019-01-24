@@ -1,4 +1,4 @@
-import * as JsonRefs from 'json-refs';
+import JsonRefs from 'json-refs';
 
 export const RS_PROTOCOL = 'rs://';
 

@@ -22,10 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import find from 'lodash/find';
+import map from 'lodash/map';
+import React from 'react';
 import { ArrayControlProps, composePaths } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
-import * as _ from 'lodash';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -53,7 +54,7 @@ export const MaterialArrayLayout =
      removeItems
    }: ArrayControlProps) => {
 
-    const firstPrimitiveProp = scopedSchema.properties ? _.find(Object.keys(scopedSchema.properties), propName => {
+    const firstPrimitiveProp = scopedSchema.properties ? find(Object.keys(scopedSchema.properties), propName => {
       const prop = scopedSchema.properties[propName];
       return prop.type === 'string' ||
         prop.type === 'number' ||
@@ -94,7 +95,7 @@ export const MaterialArrayLayout =
         </Toolbar>
         <div>
           {
-            data ? _.map(data, (childData, index) => {
+            data ? map(data, (childData, index) => {
 
               const foundUISchema =
                 findUISchema(scopedSchema, uischema.scope, path, undefined, uischema);

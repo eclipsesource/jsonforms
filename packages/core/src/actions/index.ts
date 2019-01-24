@@ -22,11 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import AJV from 'ajv';
 import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { UISchemaTester } from '../reducers/uischemas';
-import * as AJV from 'ajv';
 import { AnyAction, Dispatch } from 'redux';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';

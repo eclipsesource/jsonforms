@@ -1,4 +1,4 @@
-import * as AJV from 'ajv';
+import AJV from 'ajv';
 import { Options } from 'ajv';
 import { Draft4 } from '../models/draft4';
 

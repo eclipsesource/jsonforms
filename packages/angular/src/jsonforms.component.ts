@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import maxBy from 'lodash/maxBy';
 import {
   ComponentFactoryResolver,
   ComponentRef,
@@ -90,7 +90,7 @@ export class JsonFormsOutlet extends JsonFormsBaseRenderer<UISchemaElement>
     const schema: JsonSchema = this.schema || props.schema;
     const uischema = this.uischema || props.uischema;
 
-    const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
+    const renderer = maxBy(renderers, r => r.tester(uischema, schema));
     let bestComponent: Type<any> = UnknownRenderer;
     if (renderer !== undefined && renderer.tester(uischema, schema) !== -1) {
       bestComponent = renderer.renderer;

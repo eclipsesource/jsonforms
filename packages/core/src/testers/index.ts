@@ -22,7 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import endsWith from 'lodash/endsWith';
+import last from 'lodash/last';
+import isArray from 'lodash/isArray';
+import reduce from 'lodash/reduce';
+import toPairs from 'lodash/toPairs';
+import has from 'lodash/has';
+import includes from 'lodash/includes';
 import { JsonSchema } from '../models/jsonSchema';
 import {
   Categorization,
@@ -51,7 +59,7 @@ export type RankedTester = (
 ) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
-  !_.isEmpty(uischema) &&
+  !isEmpty(uischema) &&
   uischema.scope !== undefined &&
   uischema.scope !== undefined;
 
@@ -68,15 +76,15 @@ export const isControl = (uischema: any): uischema is ControlElement =>
 export const schemaMatches = (
   predicate: (schema: JsonSchema) => boolean
 ): Tester => (uischema: UISchemaElement, schema: JsonSchema): boolean => {
-  if (_.isEmpty(uischema) || !isControl(uischema)) {
+  if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
   const schemaPath = uischema.scope;
-  if (_.isEmpty(schemaPath)) {
+  if (isEmpty(schemaPath)) {
     return false;
   }
   let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
-  while (!_.isEmpty(currentDataSchema) && !_.isEmpty(currentDataSchema.$ref)) {
+  while (!isEmpty(currentDataSchema) && !isEmpty(currentDataSchema.$ref)) {
     currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
   }
   if (currentDataSchema === undefined) {
@@ -90,18 +98,18 @@ export const schemaSubPathMatches = (
   subPath: string,
   predicate: (schema: JsonSchema) => boolean
 ): Tester => (uischema: UISchemaElement, schema: JsonSchema): boolean => {
-  if (_.isEmpty(uischema) || !isControl(uischema)) {
+  if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
   const schemaPath = uischema.scope;
-  if (_.isEmpty(schemaPath)) {
+  if (isEmpty(schemaPath)) {
     return false;
   }
   let currentDataSchema: JsonSchema = resolveSchema(schema, `${schemaPath}`);
-  while (!_.isEmpty(currentDataSchema.$ref)) {
+  while (!isEmpty(currentDataSchema.$ref)) {
     currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
   }
-  currentDataSchema = _.get(currentDataSchema, subPath);
+  currentDataSchema = get(currentDataSchema, subPath);
 
   if (currentDataSchema === undefined) {
     return false;
@@ -120,7 +128,7 @@ export const schemaSubPathMatches = (
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester =>
-  schemaMatches(schema => !_.isEmpty(schema) && schema.type === expectedType);
+  schemaMatches(schema => !isEmpty(schema) && schema.type === expectedType);
 
 /**
  * Only applicable for Controls.
@@ -134,7 +142,7 @@ export const schemaTypeIs = (expectedType: string): Tester =>
 export const formatIs = (expectedFormat: string): Tester =>
   schemaMatches(
     schema =>
-      !_.isEmpty(schema) &&
+      !isEmpty(schema) &&
       schema.format === expectedFormat &&
       schema.type === 'string'
   );
@@ -146,7 +154,7 @@ export const formatIs = (expectedFormat: string): Tester =>
  */
 export const uiTypeIs = (expected: string): Tester => (
   uischema: UISchemaElement
-): boolean => !_.isEmpty(uischema) && uischema.type === expected;
+): boolean => !isEmpty(uischema) && uischema.type === expected;
 
 /**
  * Checks whether the given UI schema has an option with the given
@@ -161,7 +169,7 @@ export const optionIs = (optionName: string, optionValue: any): Tester => (
 ): boolean => {
   const options = uischema.options;
 
-  return !_.isEmpty(options) && options[optionName] === optionValue;
+  return !isEmpty(options) && options[optionName] === optionValue;
 };
 
 /**
@@ -174,11 +182,11 @@ export const optionIs = (optionName: string, optionValue: any): Tester => (
 export const scopeEndsWith = (expected: string): Tester => (
   uischema: UISchemaElement
 ): boolean => {
-  if (_.isEmpty(expected) || !isControl(uischema)) {
+  if (isEmpty(expected) || !isControl(uischema)) {
     return false;
   }
 
-  return _.endsWith(uischema.scope, expected);
+  return endsWith(uischema.scope, expected);
 };
 
 /**
@@ -191,12 +199,12 @@ export const scopeEndsWith = (expected: string): Tester => (
 export const scopeEndIs = (expected: string): Tester => (
   uischema: UISchemaElement
 ): boolean => {
-  if (_.isEmpty(expected) || !isControl(uischema)) {
+  if (isEmpty(expected) || !isControl(uischema)) {
     return false;
   }
   const schemaPath = uischema.scope;
 
-  return !_.isEmpty(schemaPath) && _.last(schemaPath.split('/')) === expected;
+  return !isEmpty(schemaPath) && last(schemaPath.split('/')) === expected;
 };
 
 /**
@@ -352,9 +360,9 @@ export const isObjectArrayControl = and(
   uiTypeIs('Control'),
   schemaMatches(
     schema =>
-      !_.isEmpty(schema) &&
+      !isEmpty(schema) &&
       schema.type === 'array' &&
-      !_.isEmpty(schema.items) &&
+      !isEmpty(schema.items) &&
       !Array.isArray(schema.items) // we don't care about tuples
   ),
   schemaSubPathMatches('items', schema => schema.type === 'object')
@@ -364,8 +372,8 @@ const traverse = (
   any: JsonSchema | JsonSchema[],
   pred: (obj: JsonSchema) => boolean
 ): boolean => {
-  if (_.isArray(any)) {
-    return _.reduce(any, (acc, el) => acc || traverse(el, pred), false);
+  if (isArray(any)) {
+    return reduce(any, (acc, el) => acc || traverse(el, pred), false);
   }
 
   if (pred(any)) {
@@ -375,8 +383,8 @@ const traverse = (
     return traverse(any.items, pred);
   }
   if (any.properties) {
-    return _.reduce(
-      _.toPairs(any.properties),
+    return reduce(
+      toPairs(any.properties),
       (acc, [_key, val]) => acc || traverse(val, pred),
       false
     );
@@ -398,7 +406,7 @@ export const isObjectArrayWithNesting = (
     object: 2,
     array: 1
   };
-  if (_.has(resolvedSchema, 'items')) {
+  if (has(resolvedSchema, 'items')) {
     // check if nested arrays
     if (
       traverse(resolvedSchema.items, val => {
@@ -451,13 +459,13 @@ export const isPrimitiveArrayControl = and(
   uiTypeIs('Control'),
   schemaMatches(
     schema =>
-      !_.isEmpty(schema) &&
+      !isEmpty(schema) &&
       schema.type === 'array' &&
-      !_.isEmpty(schema.items) &&
+      !isEmpty(schema.items) &&
       !Array.isArray(schema.items) // we don't care about tuples
   ),
   schemaSubPathMatches('items', schema =>
-    _.includes(['integer', 'number', 'boolean', 'string'], schema.type)
+    includes(['integer', 'number', 'boolean', 'string'], schema.type)
   )
 );
 
@@ -498,7 +506,7 @@ export const isCategory = (uischema: UISchemaElement): boolean =>
   uischema.type === 'Category';
 
 export const hasCategory = (categorization: Categorization): boolean => {
-  if (_.isEmpty(categorization.elements)) {
+  if (isEmpty(categorization.elements)) {
     return false;
   }
   // all children of the categorization have to be categories

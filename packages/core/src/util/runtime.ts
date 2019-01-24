@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import has from 'lodash/has';
 // TODO: pass in uischema and data instead of props and state
 import { getData } from '../reducers';
 import {
@@ -54,7 +54,7 @@ const isLeafCondition = (condition: Condition): condition is LeafCondition =>
 
 const isSchemaCondition = (
   condition: Condition
-): condition is SchemaBasedCondition => _.has(condition, 'schema');
+): condition is SchemaBasedCondition => has(condition, 'schema');
 
 const getConditionScope = (condition: Scopable, path: string): string => {
   return composeWithUi(condition, path);

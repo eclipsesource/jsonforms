@@ -1,4 +1,5 @@
-import * as _ from 'lodash';
+import maxBy from 'lodash/maxBy';
+import remove from 'lodash/remove';
 import {
   ADD_UI_SCHEMA,
   AddUISchemaAction,
@@ -26,7 +27,7 @@ export const uischemaRegistryReducer = (
         .concat({ tester: action.tester, uischema: action.uischema });
     case REMOVE_UI_SCHEMA:
       const copy = state.slice();
-      _.remove(copy, entry => entry.tester === action.tester);
+      remove(copy, entry => entry.tester === action.tester);
       return copy;
     default:
       return state;
@@ -40,7 +41,7 @@ export const findMatchingUISchema = (
   schemaPath: string,
   path: string
 ): UISchemaElement => {
-  const match = _.maxBy(state, entry =>
+  const match = maxBy(state, entry =>
     entry.tester(jsonSchema, schemaPath, path)
   );
   if (

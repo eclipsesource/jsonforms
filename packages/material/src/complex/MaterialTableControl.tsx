@@ -22,8 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import capitalize from 'lodash/capitalize';
 import IconButton from '@material-ui/core/IconButton';
-import * as React from 'react';
+import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import {
   ArrayControlProps,
@@ -34,7 +35,6 @@ import {
   Paths
 } from '@jsonforms/core';
 import { DispatchField } from '@jsonforms/react';
-import * as _ from 'lodash';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import { ErrorObject } from 'ajv';
@@ -111,7 +111,7 @@ interface TableHeaderCellProps {
 }
 
 const TableHeaderCell = ({ propName }: TableHeaderCellProps) => (
-  <TableCell>{_.capitalize(propName)}</TableCell>
+  <TableCell>{capitalize(propName)}</TableCell>
 );
 
 interface NonEmptyCellProps {

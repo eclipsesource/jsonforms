@@ -22,6 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import get from 'lodash/get';
+import has from 'lodash/has';
+import cloneDeep from 'lodash/cloneDeep';
+import merge from 'lodash/merge';
+import union from 'lodash/union';
 import {
   findUISchema,
   getConfig,
@@ -32,7 +37,6 @@ import {
   getSubErrorsAt,
   getUiSchema
 } from '../reducers';
-import * as _ from 'lodash';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
@@ -329,15 +333,15 @@ export const mapStateToControlProps = (
 ): StatePropsOfControl => {
   const { uischema } = ownProps;
   const path = composeWithUi(uischema, ownProps.path);
-  const visible = _.has(ownProps, 'visible')
+  const visible = has(ownProps, 'visible')
     ? ownProps.visible
     : isVisible(ownProps, state, ownProps.path);
-  const enabled = _.has(ownProps, 'enabled')
+  const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
     : isEnabled(ownProps, state, ownProps.path);
   const labelDesc = createLabelDescriptionFrom(uischema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const errors = _.union(getErrorAt(path)(state).map(error => error.message));
+  const errors = union(getErrorAt(path)(state).map(error => error.message));
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const required =
@@ -346,8 +350,8 @@ export const mapStateToControlProps = (
   const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
-  const defaultConfig = _.cloneDeep(getConfig(state));
-  const config = _.merge(defaultConfig, controlElement.options);
+  const defaultConfig = cloneDeep(getConfig(state));
+  const config = merge(defaultConfig, controlElement.options);
 
   return {
     data: Resolve.data(getData(state), path),
@@ -486,7 +490,7 @@ export const mapStateToLayoutProps = (
   state: JsonFormsState,
   ownProps: StatePropsOfRenderer
 ): StatePropsOfLayout => {
-  const visible: boolean = _.has(ownProps, 'visible')
+  const visible: boolean = has(ownProps, 'visible')
     ? ownProps.visible
     : isVisible(ownProps, state, ownProps.path);
 
@@ -521,7 +525,7 @@ export const mapStateToJsonFormsRendererProps = (
   }
 
   return {
-    renderers: _.get(state.jsonforms, 'renderers') || [],
+    renderers: get(state.jsonforms, 'renderers') || [],
     schema: ownProps.schema || getSchema(state),
     uischema
   };

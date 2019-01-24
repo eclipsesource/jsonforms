@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import head from 'lodash/head';
 import { Property } from '../services/property.util';
 
 /**
@@ -24,7 +24,7 @@ export const matchContainerProperty = (
     );
   }
 
-  return _.head(filtered);
+  return head(filtered);
 };
 
 export interface StringMap {

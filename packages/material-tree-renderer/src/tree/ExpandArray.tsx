@@ -1,6 +1,7 @@
 // tslint:disable:jsx-no-multiline-js
-import * as React from 'react';
-import * as _ from 'lodash';
+import head from 'lodash/head';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
     getData,
@@ -166,7 +167,7 @@ class ExpandArrayContainer extends
       classes
     }: ExpandArrayContainerProps = this.props;
 
-    if (_.isEmpty(containmentProps)) {
+    if (isEmpty(containmentProps)) {
       return undefined;
     }
 
@@ -184,7 +185,7 @@ class ExpandArrayContainer extends
     }
 
     return connectDropTarget(
-      <ul key={_.head(containmentProps).property} className={className}>
+      <ul key={head(containmentProps).property} className={className}>
         <ExpandArray
           containmentProps={containmentProps}
           path={path}

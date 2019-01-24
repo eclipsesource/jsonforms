@@ -1,6 +1,7 @@
+import clone from 'lodash/clone';
+import isEqual from 'lodash/isEqual';
 import { JsonSchema7, update } from '@jsonforms/core';
 import { Property } from '../services/property.util';
-import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
 import { AnyAction, Dispatch } from 'redux';
 
@@ -86,12 +87,12 @@ export const moveListItem = (dispatch: Dispatch<AnyAction>) => (
   dispatch(
     update(oldParentPath, array => {
       // TODO clone necessary?
-      const clone = _.clone(array);
-      clone.splice(oldIndex, 1);
+      const clonedArray = clone(array);
+      clonedArray.splice(oldIndex, 1);
 
       console.log(`remove from ${oldParentPath}, index: ${oldIndex}`);
 
-      return clone;
+      return clonedArray;
     })
   );
 
@@ -103,12 +104,12 @@ export const moveListItem = (dispatch: Dispatch<AnyAction>) => (
       }
 
       // TODO clone necessary?
-      const clone = _.clone(array);
-      clone.splice(newIndex, 0, data);
+      const clonedArray = clone(array);
+      clonedArray.splice(newIndex, 0, data);
 
       console.log(`add to ${newParentPath}, index: ${newIndex}`);
 
-      return clone;
+      return clonedArray;
     })
   );
 
@@ -130,7 +131,7 @@ export const canDropDraggedItem = (
   dragInfo: DragInfo
 ) => {
   const matchingProps = containerProps.filter(prop =>
-    _.isEqual(prop.schema, dragInfo.schema)
+    isEqual(prop.schema, dragInfo.schema)
   );
   return matchingProps.length > 0;
 };

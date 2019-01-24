@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import {
   and,
   Categorization,
@@ -40,7 +40,7 @@ export const categorizationTester: RankedTester = rankWith(
   1,
   and(uiTypeIs('Categorization'), uischema => {
     const hasCategory = (element: Categorization): boolean => {
-      if (_.isEmpty(element.elements)) {
+      if (isEmpty(element.elements)) {
         return false;
       }
 

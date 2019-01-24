@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
   computeLabel,
@@ -36,7 +36,7 @@ import {
   rankWith,
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';

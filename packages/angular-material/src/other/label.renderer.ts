@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import has from 'lodash/has';
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
@@ -56,7 +56,7 @@ const mapStateToProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfRenderer
 ) => {
-  const visible = _.has(ownProps, 'visible')
+  const visible = has(ownProps, 'visible')
     ? ownProps.visible
     : isVisible(ownProps, state);
 

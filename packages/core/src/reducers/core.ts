@@ -22,7 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import set from 'lodash/set';
+import get from 'lodash/get';
+import filter from 'lodash/filter';
 import { ErrorObject, ValidateFunction } from 'ajv';
 import {
   INIT,
@@ -126,7 +129,7 @@ export const coreReducer = (
         return state;
       } else if (action.path === '') {
         // empty path is ok
-        const result = action.updater(_.cloneDeep(state.data));
+        const result = action.updater(cloneDeep(state.data));
 
         if (result === undefined || result === null) {
           return {
@@ -146,17 +149,13 @@ export const coreReducer = (
           errors
         };
       } else {
-        const oldData: any = _.get(state.data, action.path);
+        const oldData: any = get(state.data, action.path);
         let newData = action.updater(oldData);
         if (newData === '') {
           newData = undefined;
         }
 
-        const newState: any = _.set(
-          _.cloneDeep(state.data),
-          action.path,
-          newData
-        );
+        const newState: any = set(cloneDeep(state.data), action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
@@ -173,14 +172,13 @@ export const coreReducer = (
   }
 };
 
-export const extractData = (state: JsonFormsCore) => _.get(state, 'data');
-export const extractSchema = (state: JsonFormsCore) => _.get(state, 'schema');
-export const extractUiSchema = (state: JsonFormsCore) =>
-  _.get(state, 'uischema');
+export const extractData = (state: JsonFormsCore) => get(state, 'data');
+export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
+export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
 export const errorAt = (instancePath: string) => (
   state: JsonFormsCore
 ): any[] => {
-  return _.filter(
+  return filter(
     state.errors,
     (error: ErrorObject) => error.dataPath === instancePath
   );
@@ -190,7 +188,7 @@ export const subErrorsAt = (instancePath: string) => (
 ): any[] => {
   const path = `${instancePath}.`;
 
-  return _.filter(state.errors, (error: ErrorObject) =>
+  return filter(state.errors, (error: ErrorObject) =>
     error.dataPath.startsWith(path)
   );
 };

@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import get from 'lodash/get';
 import {
   defaultDataReducer,
   extractDefaultData,
@@ -31,7 +32,6 @@ import { combineReducers, Reducer } from 'redux';
 import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { configReducer } from './config';
-import * as _ from 'lodash';
 import {
   coreReducer,
   errorAt,
@@ -71,18 +71,18 @@ export const jsonformsReducer = (
   });
 
 export const getData = (state: JsonFormsState) =>
-  extractData(_.get(state, 'jsonforms.core'));
+  extractData(get(state, 'jsonforms.core'));
 export const getSchema = (state: JsonFormsState): JsonSchema =>
-  extractSchema(_.get(state, 'jsonforms.core'));
+  extractSchema(get(state, 'jsonforms.core'));
 export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
-  extractUiSchema(_.get(state, 'jsonforms.core'));
+  extractUiSchema(get(state, 'jsonforms.core'));
 export const getDefaultData = (
   state: JsonFormsState
 ): JsonFormsDefaultDataRegistryEntry[] =>
-  extractDefaultData(_.get(state, 'jsonforms.defaultData'));
+  extractDefaultData(get(state, 'jsonforms.defaultData'));
 export const getRenderers = (
   state: JsonFormsState
-): JsonFormsRendererRegistryEntry[] => _.get(state, 'jsonforms.renderers');
+): JsonFormsRendererRegistryEntry[] => get(state, 'jsonforms.renderers');
 
 export const findUISchema = (state: JsonFormsState) => (
   schema: JsonSchema,
@@ -130,13 +130,13 @@ export const getSubErrorsAt = (instancePath: string) => (
 export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
 
 export const getLocale = (state: JsonFormsState) =>
-  fetchLocale(_.get(state, 'jsonforms.i18n'));
+  fetchLocale(get(state, 'jsonforms.i18n'));
 
 export const getLocalizedSchema = (locale: string) => (
   state: JsonFormsState
-): JsonSchema => findLocalizedSchema(locale)(_.get(state, 'jsonforms.i18n'));
+): JsonSchema => findLocalizedSchema(locale)(get(state, 'jsonforms.i18n'));
 
 export const getLocalizedUISchema = (locale: string) => (
   state: JsonFormsState
 ): UISchemaElement =>
-  findLocalizedUISchema(locale)(_.get(state, 'jsonforms.i18n'));
+  findLocalizedUISchema(locale)(get(state, 'jsonforms.i18n'));

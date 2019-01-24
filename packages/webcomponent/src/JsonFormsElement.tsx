@@ -22,9 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as JsonRefs from 'json-refs';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
 import {
     Actions,

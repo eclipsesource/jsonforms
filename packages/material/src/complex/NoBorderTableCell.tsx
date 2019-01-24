@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/core/styles';
 import { TableCell } from '@material-ui/core';
-import * as React from 'react';
+import React from 'react';
 
 const styles = {
     noBottomBorder: {
