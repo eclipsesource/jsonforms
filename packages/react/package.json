@@ -56,21 +56,26 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.1.1-alpha.3",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/react": "^16.4.14",
-    "@types/react-redux": "^6.0.9",
-    "lodash": "^4.17.4",
-    "react": "^16.3.2",
+    "@types/react-redux": "^5.0.19",
+    "lodash": "^4.17.4"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "^2.1.1-alpha.3",
+    "react": "^16.4.0",
     "react-redux": "^6.0.0"
   },
   "devDependencies": {
+    "@jsonforms/core": "^2.1.1-alpha.3",
+    "react": "^16.4.0",
+    "react-redux": "^6.0.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.0.0",
-    "react-dom": "^16.3.2",
-    "redux": "^3.7.2",
+    "react-dom": "^16.4.0",
+    "redux": "^3.0.0",
     "redux-mock-store": "1.4.0",
     "ts-jest": "^23.0.0"
   }

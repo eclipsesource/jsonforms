@@ -27,6 +27,6 @@
   },
   "dependencies": {
     "@jsonforms/core": "^2.1.1-alpha.3",
-    "redux": "^3.7.2"
+    "redux": "^3.0.0"
   }
 }

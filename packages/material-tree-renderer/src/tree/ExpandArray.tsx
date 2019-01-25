@@ -10,7 +10,7 @@ import {
     resolveData
 } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
-import { DropTarget, DropTargetMonitor } from 'react-dnd';
+const { DropTarget }  = require('react-dnd');
 import {
   canDropDraggedItem,
   CSS_DELAY,
@@ -102,7 +102,7 @@ export interface ExpandArrayContainerProps extends ExpandArrayProps {
   /** Whether this list is a valid drop target for the currently dragged element. */
   validDropTarget?: boolean;
   classes?: any;
-  moveListItem?(data: any, oldPath: string, newPath: string): boolean;
+  moveListItem(data: any, oldPath: string, newPath: string): boolean;
 }
 
 export interface ExandArrayContainerState {
@@ -209,7 +209,7 @@ const mapStateToProps = (state: JsonFormsState) => ({
  * Injects drag and drop related properties into an expanded array
  */
     // TODO: typings
-const collect = (dndConnect: any, monitor: DropTargetMonitor) => {
+const collect = (dndConnect: any, monitor: any) => {
   return {
     connectDropTarget: dndConnect.dropTarget(),
     isOver: monitor.isOver({ shallow: true }),
@@ -228,7 +228,7 @@ const arrayDropTarget = {
    * Tests wether the currently dragged object list item can be dropped in this list
    * by checking whether the item's schema id matches with a containment property of this list.
    */
-  canDrop: (props: ExpandArrayContainerProps, monitor: DropTargetMonitor) => {
+  canDrop: (props: ExpandArrayContainerProps, monitor: any) => {
     return canDropDraggedItem(props.containmentProps, monitor.getItem() as DragInfo);
   },
 
@@ -238,7 +238,7 @@ const arrayDropTarget = {
    * The most nested one is called first, return results are available
    * from the before called component.
    */
-  drop: (props: any, monitor: DropTargetMonitor) => {
+  drop: (props: any, monitor: any) => {
     // drop was handled by a nested list
     if (monitor.didDrop()) {
       return monitor.getDropResult();

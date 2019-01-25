@@ -303,7 +303,7 @@ export interface StatePropsOfLayout extends OwnPropsOfRenderer {
   /**
    * All available renderers.
    */
-  renderers: any[];
+  renderers?: any[];
 }
 
 /**
@@ -508,7 +508,7 @@ export interface JsonFormsProps extends StatePropsOfRenderer {
 }
 
 export interface StatePropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
-  renderers: JsonFormsRendererRegistryEntry[];
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export const mapStateToJsonFormsRendererProps = (

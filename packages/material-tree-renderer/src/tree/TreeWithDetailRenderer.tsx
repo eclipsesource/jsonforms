@@ -17,8 +17,9 @@ import {
     UISchemaElement,
 } from '@jsonforms/core';
 import { Control, ResolvedJsonForms } from '@jsonforms/react';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
+/* tslint:disable:next-line */
+const HTML5Backend = require('react-dnd-html5-backend');
+const { DragDropContext } = require('react-dnd');
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import ObjectListItem from './ObjectListItem';

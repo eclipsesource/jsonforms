@@ -16,11 +16,7 @@ import {
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
 import { findContainerProperties, Property } from '../services/property.util';
-import {
-  DragSource,
-  DragSourceMonitor,
-  DropTarget,
-  DropTargetMonitor } from 'react-dnd';
+const { DragSource, DropTarget } = require('react-dnd');
 import {
   canDropDraggedItem,
   DragInfo,
@@ -394,7 +390,7 @@ const objectDragSource = {
     return dragInfo;
   },
 
-  endDrag(props: ObjectListItemDndProps, monitor: DragSourceMonitor) {
+  endDrag(props: ObjectListItemDndProps, monitor: any) {
     const dragInfo = monitor.getItem() as DragInfo;
     const dropInfo = monitor.getDropResult() as DropResult;
 
@@ -417,7 +413,7 @@ const objectDragSource = {
 /**
  * Injects drag and drop (drag source) related properties into a list item
  */
-const collectDragSource = (dndConnect: any, monitor: DragSourceMonitor) => {
+const collectDragSource = (dndConnect: any, monitor: any) => {
   return {
     connectDragSource: dndConnect.dragSource(),
     isDragging: monitor.isDragging()
@@ -427,7 +423,7 @@ const collectDragSource = (dndConnect: any, monitor: DragSourceMonitor) => {
 /**
  * Injects drag and drop (drop target) related properties into a list item
  */
-const collectDropTarget = (dndConnect: any, monitor: DropTargetMonitor) => {
+const collectDropTarget = (dndConnect: any, monitor: any) => {
   return {
     isOver: monitor.isOver({ shallow: true }),
     connectDropTarget: dndConnect.dropTarget()
@@ -438,7 +434,7 @@ const collectDropTarget = (dndConnect: any, monitor: DropTargetMonitor) => {
  * Define the drag and drop target (another item is dragged over this item) behavior of list items.
  */
 const objectDropTarget = {
-  canDrop: (props: any, monitor: DropTargetMonitor) => {
+  canDrop: (props: any, monitor: any) => {
     return canDropDraggedItem(props.parentProperties, monitor.getItem() as DragInfo);
   },
 
@@ -462,7 +458,7 @@ const objectDropTarget = {
    * @param props The properties of the hovered list element
    * @param monitor
    */
-  hover(props: ObjectListItemDndProps, monitor: DropTargetMonitor) {
+  hover(props: ObjectListItemDndProps, monitor: any) {
     if (!monitor.isOver({shallow: true})) {
       return;
     }

@@ -57,22 +57,22 @@ const uischema: ControlElement = {
 };
 
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: [
+        ...materialRenderers,
+        {
+          tester: rankWith(10, isEnumControl),
+          renderer: MaterialRadioGroupControl
+        }
+      ],
+      fields: materialFields
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: [
-          ...materialRenderers,
-           {
-      tester: rankWith(10, isEnumControl),
-      renderer: MaterialRadioGroupControl
-    }
-  ],
-  fields: materialFields
-      }
-    }
+    s
   );
-
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };

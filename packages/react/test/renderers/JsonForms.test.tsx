@@ -26,16 +26,16 @@ import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
-    jsonformsReducer,
-    JsonFormsStore,
-    JsonSchema,
-    Layout,
-    rankWith,
-    registerRenderer,
-    RendererProps,
-    UISchemaElement,
-    uiTypeIs,
-    unregisterRenderer
+  jsonformsReducer, JsonFormsState,
+  JsonFormsStore,
+  JsonSchema,
+  Layout,
+  rankWith,
+  registerRenderer,
+  RendererProps,
+  UISchemaElement,
+  uiTypeIs,
+  unregisterRenderer
 } from '@jsonforms/core';
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
@@ -51,49 +51,49 @@ Enzyme.configure({ adapter: new Adapter() });
  * Describes the initial state of the JSON Form's store.
  */
 export interface JsonFormsInitialState {
-    /**
-     * Data instance to be rendered.
-     */
-    data: any;
+  /**
+   * Data instance to be rendered.
+   */
+  data: any;
 
-    /**
-     * JSON Schema describing the data to be rendered.
-     */
-    schema?: JsonSchema;
+  /**
+   * JSON Schema describing the data to be rendered.
+   */
+  schema?: JsonSchema;
 
-    /**
-     * UI Schema describing the UI to be rendered.
-     */
-    uischema?: UISchemaElement;
+  /**
+   * UI Schema describing the UI to be rendered.
+   */
+  uischema?: UISchemaElement;
 
-    /**
-     * Any additional state.
-     */
-    [x: string]: any;
+  /**
+   * Any additional state.
+   */
+  [x: string]: any;
 }
 
 export const initJsonFormsStore = (
-    {
-        data,
-        schema,
-        uischema,
-        ...props
-    }: JsonFormsInitialState
+  {
+    data,
+    schema,
+    uischema,
+    ...props
+  }: JsonFormsInitialState
 ): JsonFormsStore => {
-
-    return createStore(
-        combineReducers({ jsonforms: jsonformsReducer() }),
-        {
-            jsonforms: {
-                core: {
-                    data,
-                    schema,
-                    uischema
-                },
-                ...props
-            }
-        }
-    );
+  const initState: JsonFormsState = {
+      jsonforms: {
+        core: {
+          data,
+          schema,
+          uischema
+        },
+        ...props
+      }
+  };
+  return createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
 };
 
 const CustomRenderer1: StatelessRenderer<RendererProps> = () => (<h1>test</h1>);
@@ -101,280 +101,266 @@ const CustomRenderer2: StatelessRenderer<RendererProps> = () => (<h2>test</h2>);
 const CustomRenderer3: StatelessRenderer<RendererProps> = () => (<h3>test</h3>);
 
 const fixture = {
-    data: { foo: 'John Doe' },
-    uischema: {
-        type: 'Control',
-        scope: '#/properties/foo'
-    },
-    schema: {
-        type: 'object',
-        properties: {
-            foo: {
-                type: 'string'
-            }
-        }
+  data: { foo: 'John Doe' },
+  uischema: {
+    type: 'Control',
+    scope: '#/properties/foo'
+  },
+  schema: {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string'
+      }
     }
+  }
 };
 
 test('JsonForms renderer should report about missing renderer', () => {
-    const store = initJsonFormsStore({
-        data: fixture.data,
-        uischema: fixture.uischema
-    });
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
 
-    const wrapper = mount(
-        <Provider store={store}>
-            <JsonForms />
-        </Provider>
-    );
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonForms />
+    </Provider>
+  );
 
-    expect(wrapper.text()).toContain('No applicable renderer found');
-    wrapper.unmount();
+  expect(wrapper.text()).toContain('No applicable renderer found');
+  wrapper.unmount();
 });
 
 test('JsonForms renderer should pick most applicable renderer', () => {
-    const store = initJsonFormsStore({
-        data: fixture.data,
-        uischema: fixture.uischema
-    });
-    store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-    store.dispatch(registerRenderer(() => 5, CustomRenderer1));
-    const wrapper = mount(
-        <Provider store={store}>
-            <JsonForms uischema={fixture.uischema} schema={fixture.schema} />
-        </Provider>
-    );
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
+  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer1));
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonForms uischema={fixture.uischema} schema={fixture.schema} />
+    </Provider>
+  );
 
-    expect(wrapper.find('h1').text()).toBe('test');
-    wrapper.unmount();
+  expect(wrapper.find('h1').text()).toBe('test');
+  wrapper.unmount();
 });
 
 test('JsonForms renderer should not consider any de-registered renderers', () => {
-    const tester1 = () => 9;
-    const tester2 = () => 8;
-    const tester3 = () => 10;
-    const store = initJsonFormsStore({
-        data: fixture.data,
-        uischema: fixture.uischema
-    });
-    store.dispatch(registerRenderer(tester1, CustomRenderer1));
-    store.dispatch(registerRenderer(tester2, CustomRenderer2));
-    store.dispatch(registerRenderer(tester3, CustomRenderer3));
-    store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
-    const wrapper = mount(
-        <Provider store={store}>
-            <JsonForms />
-        </Provider>
-    );
+  const tester1 = () => 9;
+  const tester2 = () => 8;
+  const tester3 = () => 10;
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
+  store.dispatch(registerRenderer(tester1, CustomRenderer1));
+  store.dispatch(registerRenderer(tester2, CustomRenderer2));
+  store.dispatch(registerRenderer(tester3, CustomRenderer3));
+  store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonForms />
+    </Provider>
+  );
 
-    expect(wrapper.find('h1')).toBeDefined();
-    wrapper.unmount();
+  expect(wrapper.find('h1')).toBeDefined();
+  wrapper.unmount();
 });
 
 test('deregister an unregistered renderer should be a no-op', () => {
-    const store = initJsonFormsStore(fixture);
-    store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-    store.dispatch(registerRenderer(() => 5, CustomRenderer2));
-    const tester = () => 10;
-    const nrOfRenderers = store.getState().jsonforms.renderers.length;
-    store.dispatch(unregisterRenderer(tester, CustomRenderer3));
-    expect(store.getState().jsonforms.renderers.length).toBe(nrOfRenderers);
+  const store = initJsonFormsStore(fixture);
+  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+  const tester = () => 10;
+  const nrOfRenderers = store.getState().jsonforms.renderers.length;
+  store.dispatch(unregisterRenderer(tester, CustomRenderer3));
+  expect(store.getState().jsonforms.renderers.length).toBe(nrOfRenderers);
 });
 
 test('ids should be unique within the same form', () => {
 
-    const FakeLayout = (props: RendererProps) => {
-        const layout = props.uischema as Layout;
-        const children = layout.elements.map((e, idx) => (
-            <JsonForms
-                uischema={e}
-                schema={fixture.schema}
-                path={props.path}
-                key={`${props.path}-${idx}`}
-            />)
-        );
-        return (
-            <div className='layout'>
-                {children}
-            </div>
-        );
-    };
-
-    const uischema2 = {
-        type: 'HorizontalLayout',
-        elements: [
-            {
-                type: 'Control',
-                scope: '#/properties/foo'
-            },
-            {
-                type: 'Control',
-                scope: '#/properties/foo'
-            }
-        ]
-    };
-
-    const store = initJsonFormsStore(
-        {
-            data: fixture.data,
-            schema: fixture.schema,
-            uischema: uischema2,
-            renderers: [{
-                tester: rankWith(10, uiTypeIs('HorizontalLayout')),
-                renderer: FakeLayout
-            }]
-        }
+  const FakeLayout = (props: RendererProps) => {
+    const layout = props.uischema as Layout;
+    const children = layout.elements.map((e, idx) => (
+      <JsonForms
+        uischema={e}
+        schema={fixture.schema}
+        path={props.path}
+        key={`${props.path}-${idx}`}
+      />)
     );
-
-    const ids: string[] = [];
-    const MyCustomRenderer: StatelessRenderer<any> = props => {
-        ids.push(props.id);
-        return (<div>Custom</div>);
-    };
-    store.dispatch(registerRenderer(() => 10, MyCustomRenderer));
-
-    const wrapper = mount(
-        <Provider store={store}>
-            <JsonForms uischema={uischema2} schema={fixture.schema} />
-        </Provider>,
+    return (
+      <div className='layout'>
+        {children}
+      </div>
     );
+  };
 
-    expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
-    expect(ids.indexOf('#/properties/foo2') > -1).toBeTruthy();
-    wrapper.unmount();
+  const uischema2 = {
+    type: 'HorizontalLayout',
+    elements: [
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      },
+      {
+        type: 'Control',
+        scope: '#/properties/foo'
+      }
+    ]
+  };
+
+  const store = initJsonFormsStore(
+    {
+      data: fixture.data,
+      schema: fixture.schema,
+      uischema: uischema2,
+      renderers: [{
+        tester: rankWith(10, uiTypeIs('HorizontalLayout')),
+        renderer: FakeLayout
+      }]
+    }
+  );
+
+  const ids: string[] = [];
+  const MyCustomRenderer: StatelessRenderer<any> = props => {
+    ids.push(props.id);
+    return (<div>Custom</div>);
+  };
+  store.dispatch(registerRenderer(() => 10, MyCustomRenderer));
+
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonForms uischema={uischema2} schema={fixture.schema} />
+    </Provider>,
+  );
+
+  expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
+  expect(ids.indexOf('#/properties/foo2') > -1).toBeTruthy();
+  wrapper.unmount();
 });
 
 test('render schema with $ref', () => {
 
-    const schemaWithRef = {
-        definitions: {
-            n: {
-                type: 'number'
-            }
-        },
-        type: 'object',
-        properties: {
-            foo: {
-                $ref: '#/definitions/n'
-            }
-        }
-    };
-    const resolvedSchema = {
-        definitions: {
-            n: {
-                type: 'number'
-            }
-        },
-        type: 'object',
-        properties: {
-            foo: {
-                type: 'number'
-            }
-        }
-    };
+  const schemaWithRef = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        $ref: '#/definitions/n'
+      }
+    }
+  };
+  const resolvedSchema = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'number'
+      }
+    }
+  };
 
-    const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
 
-    const renderers = [{
-        tester: tester,
-        renderer: CustomRenderer2
-    }];
+  const renderers = [{
+    tester: tester,
+    renderer: CustomRenderer2
+  }];
 
-    const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
-    jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
+  const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
+  jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
 
-    const wrapper = shallow(
-        <JsonFormsDispatchRenderer
-            path={''}
-            uischema={fixture.uischema}
-            schema={schemaWithRef}
-            // data={fixture.data}
-            renderers={renderers}
-            // findUISchema={jest.fn()}
-        />
-    );
+  const wrapper = shallow(
+    <JsonFormsDispatchRenderer
+      path={''}
+      uischema={fixture.uischema}
+      schema={schemaWithRef}
+      renderers={renderers}
+    />
+  );
 
-    return jsonRefsPromise.then(() => {
-        wrapper.update();
-        expect(wrapper.state()).toHaveProperty('resolving', false);
-        expect(wrapper.find(CustomRenderer2).length).toBe(1);
-    });
-    wrapper.unmount();
+  return jsonRefsPromise.then(() => {
+    wrapper.update();
+    expect(wrapper.state()).toHaveProperty('resolving', false);
+    expect(wrapper.find(CustomRenderer2).length).toBe(1);
+  });
+  wrapper.unmount();
 });
 
 test.skip('updates schema with ref', () => {
 
-    const schemaWithRef = {
-        definitions: {
-            n: {
-                type: 'number'
-            }
-        },
-        type: 'object',
-        properties: {
-            foo: {
-                $ref: '#/definitions/n'
-            }
-        }
-    };
-    const resolvedSchema = {
-        definitions: {
-            n: {
-                type: 'number'
-            }
-        },
-        type: 'object',
-        properties: {
-            foo: {
-                type: 'number'
-            }
-        }
-    };
+  const schemaWithRef = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        $ref: '#/definitions/n'
+      }
+    }
+  };
+  const resolvedSchema = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'number'
+      }
+    }
+  };
 
-    const tester1 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'string' ? 1 : -1;
-    const tester2 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+  const tester1 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'string' ? 1 : -1;
+  const tester2 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
 
-    const renderers = [{
-        tester: tester1,
-        renderer: CustomRenderer1
-    }, {
-        tester: tester2,
-        renderer: CustomRenderer2
-    }];
+  const renderers = [{
+    tester: tester1,
+    renderer: CustomRenderer1
+  }, {
+    tester: tester2,
+    renderer: CustomRenderer2
+  }];
 
-    const wrapper = shallow(
-        <JsonFormsDispatchRenderer
-            path={''}
-            uischema={fixture.uischema}
-            schema={fixture.schema}
-            // data={fixture.data}
-            renderers={renderers}
-            // findUISchema={jest.fn()}
-        />
-    );
+  const wrapper = shallow(
+    <JsonFormsDispatchRenderer
+      path={''}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      renderers={renderers}
+    />
+  );
 
-    expect(wrapper.find(CustomRenderer1).length).toBe(1);
+  expect(wrapper.find(CustomRenderer1).length).toBe(1);
 
-    const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
-    jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
+  const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
+  jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
 
-    // let outsideResolve: (value?: {} | PromiseLike<{}>) => void;
-    // const p = new Promise(resolve => {
-    //     outsideResolve = resolve;
-    // });
+  wrapper.setProps({ schema: schemaWithRef }
+  );
 
-    wrapper.setProps({ schema: schemaWithRef }
-    //     , () => {
-    //     jsonRefsPromise.then(res => outsideResolve(res));
-    // }
-    );
-
-    // return p
-    //     .then(() => {
-    return jsonRefsPromise.then(() => {
-        wrapper.update();
-        expect(wrapper.state()).toHaveProperty('resolving', false);
-        expect(wrapper.find(CustomRenderer2).length).toBe(1);
-        wrapper.unmount();
-    });
+  return jsonRefsPromise.then(() => {
+    wrapper.update();
+    expect(wrapper.state()).toHaveProperty('resolving', false);
+    expect(wrapper.find(CustomRenderer2).length).toBe(1);
+    wrapper.unmount();
+  });
 });
