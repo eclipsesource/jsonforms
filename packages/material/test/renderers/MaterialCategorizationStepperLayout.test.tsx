@@ -48,15 +48,15 @@ import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });
 
 export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
-
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+      fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
 
   const { data, schema, uischema } = initState;

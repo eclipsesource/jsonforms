@@ -25,17 +25,18 @@
 import startsWith from 'lodash/startsWith';
 import React from 'react';
 import {
-    computeLabel,
-    ControlProps,
-    ControlState,
-    isDateControl,
-    isDescriptionHidden,
-    isPlainLabel, JsonFormsState,
-    mapDispatchToControlProps,
-    mapStateToControlProps, OwnPropsOfControl,
-    RankedTester,
-    rankWith,
-    StatePropsOfControl
+  computeLabel,
+  ControlState,
+  DispatchPropsOfControl,
+  isDateControl,
+  isDescriptionHidden,
+  isPlainLabel, JsonFormsState,
+  mapDispatchToControlProps,
+  mapStateToControlProps,
+  OwnPropsOfControl,
+  RankedTester,
+  rankWith,
+  StatePropsOfControl
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
@@ -52,13 +53,14 @@ export interface DateControl {
     momentLocale?: Moment;
 }
 
-export class MaterialDateControl extends Control<ControlProps & DateControl, ControlState> {
+export class MaterialDateControl extends Control<StatePropsOfDateControl & DispatchPropsOfControl & DateControl, ControlState> {
     render() {
         const {
             description,
             id,
             errors,
             label,
+            labels,
             uischema,
             visible,
             enabled,
@@ -85,9 +87,9 @@ export class MaterialDateControl extends Control<ControlProps & DateControl, Con
             labelCancel = 'Cancel';
             labelClear = 'Clear';
         } else {
-            labelText = label.default;
-            labelCancel = startsWith(label.cancel, '%') ? 'Cancel' : label.cancel;
-            labelClear = startsWith(label.clear, '%') ? 'Clear' : label.clear;
+            labelText = labels.default;
+            labelCancel = startsWith(labels.cancel, '%') ? 'Cancel' : labels.cancel;
+            labelClear = startsWith(labels.clear, '%') ? 'Clear' : labels.clear;
         }
 
         const getValue = (event: React.FormEvent<HTMLInputElement>) =>
@@ -138,7 +140,7 @@ export const addLabelProps =
 
             return {
                 ...stateProps,
-                label: {
+                labels: {
                     // TODO cast
                     default: stateProps.label as string,
                     cancel: '%cancel',
@@ -148,7 +150,7 @@ export const addLabelProps =
         };
 
 export interface StatePropsOfDateControl extends StatePropsOfControl {
-    label: {
+    labels: {
         default: string;
         cancel: string;
         clear: string;

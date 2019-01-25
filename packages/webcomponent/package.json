@@ -43,11 +43,13 @@
     "@jsonforms/react": "^2.1.1-alpha.3",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "es6-shim": "^0.35.3",
-    "json-refs": "^3.0.10",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
+    "json-refs": "^3.0.10"
+  },
+  "peerDependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
     "react-redux": "^6.0.0",
-    "redux": "^3.7.2"
+    "redux": "^3.0.0"
   },
   "devDependencies": {
     "@jsonforms/test": "^2.1.1-alpha.3",

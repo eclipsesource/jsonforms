@@ -37,15 +37,15 @@ import { materialFields, materialRenderers } from '../../src';
 import { MaterialArrayLayout, materialArrayLayoutTester } from '../../src/layouts';
 
 export const initJsonFormsStore = (): Store<JsonFormsState> => {
-
+  const s: JsonFormsState ={
+    jsonforms: {
+      renderers: materialRenderers,
+      fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
 
   store.dispatch(Actions.init(data, schema, uischema));

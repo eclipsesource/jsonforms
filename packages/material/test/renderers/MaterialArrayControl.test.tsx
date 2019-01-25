@@ -39,15 +39,15 @@ import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
 
 export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
-
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+      fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
 
   const { data, schema, uischema } = fixture;

@@ -454,7 +454,7 @@ test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps
 });
 
 test('mapDispatchToArrayControlProps should adding items to array', t => {
-  const data = ['foo'];
+  const data: any = ['foo'];
   const schema: JsonSchema = {
     type: 'array',
     items: {
@@ -465,7 +465,7 @@ test('mapDispatchToArrayControlProps should adding items to array', t => {
     type: 'Control',
     scope: '#'
   };
-  const initState = {
+  const initState: JsonFormsState = {
     jsonforms: {
       core: {
         uischema,
@@ -476,7 +476,7 @@ test('mapDispatchToArrayControlProps should adding items to array', t => {
     }
   };
   const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
     initState
   );
   store.dispatch(init(data, schema, uischema));
@@ -501,7 +501,7 @@ test('mapDispatchToArrayControlProps should remove items from array', t => {
     type: 'Control',
     scope: '#'
   };
-  const initState = {
+  const initState: JsonFormsState = {
     jsonforms: {
       core: {
         uischema,
@@ -612,7 +612,7 @@ test('should assign defaults to enum', t => {
     name: 'foo'
   };
 
-  const initState = {
+  const initState: JsonFormsState = {
     jsonforms: {
       core: {
         uischema,
@@ -654,7 +654,7 @@ test('should assign defaults to empty item within nested object of an array', t 
 
   const data = [{}];
 
-  const initState = {
+  const initState: JsonFormsState = {
     jsonforms: {
       core: {
         uischema,
@@ -697,7 +697,7 @@ test('should assign defaults to newly added item within nested object of an arra
 
   const data = [{}];
 
-  const initState = {
+  const initState: JsonFormsState = {
     jsonforms: {
       core: {
         uischema,

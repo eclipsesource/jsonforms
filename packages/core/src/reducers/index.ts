@@ -40,7 +40,7 @@ import {
   extractUiSchema,
   subErrorsAt
 } from './core';
-import { JsonFormsState } from '../store';
+import { JsonFormsState, JsonFormsSubStates } from '../store';
 import {
   findMatchingUISchema,
   uischemaRegistryReducer,
@@ -58,8 +58,8 @@ export { rendererReducer, fieldReducer, coreReducer, UISchemaTester };
 
 export const jsonformsReducer = (
   additionalReducers = {}
-): Reducer<JsonFormsState> =>
-  combineReducers<JsonFormsState>({
+): Reducer<JsonFormsSubStates> =>
+  combineReducers<JsonFormsSubStates>({
     core: coreReducer,
     renderers: rendererReducer,
     fields: fieldReducer,

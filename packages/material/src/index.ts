@@ -22,7 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { FieldProps, RankedTester } from '@jsonforms/core';
+import {
+  JsonFormsFieldRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry
+} from '@jsonforms/core';
 import {
   materialAllOfControlTester,
   MaterialAllOfRenderer,
@@ -83,7 +86,6 @@ import {
   MaterialTimeField,
   materialTimeFieldTester
 } from './fields';
-import { ComponentType } from 'react';
 import MaterialCategorizationStepperLayout, {
   materialCategorizationStepperTester
 } from './layouts/MaterialCategorizationStepperLayout';
@@ -94,7 +96,7 @@ export * from './layouts';
 export * from './fields';
 export * from './util';
 
-export const materialRenderers: { tester: RankedTester; renderer: any }[] = [
+export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   // controls
   {
     tester: materialArrayControlTester,
@@ -130,10 +132,7 @@ export const materialRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
 ];
 
-export const materialFields: {
-  tester: RankedTester;
-  field: ComponentType<FieldProps>;
-}[] = [
+export const materialFields: JsonFormsFieldRendererRegistryEntry[] = [
   { tester: materialBooleanFieldTester, field: MaterialBooleanField },
   { tester: materialDateFieldTester, field: MaterialDateField },
   { tester: materialEnumFieldTester, field: MaterialEnumField },
