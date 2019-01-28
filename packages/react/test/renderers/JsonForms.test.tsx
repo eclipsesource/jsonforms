@@ -138,7 +138,7 @@ test('JsonForms renderer should pick most applicable renderer', () => {
     uischema: fixture.uischema
   });
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-  store.dispatch(registerRenderer(() => 5, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
   const wrapper = mount(
     <Provider store={store}>
       <JsonForms uischema={fixture.uischema} schema={fixture.schema} />
@@ -363,4 +363,25 @@ test.skip('updates schema with ref', () => {
     expect(wrapper.find(CustomRenderer2).length).toBe(1);
     wrapper.unmount();
   });
+});
+
+test('JsonForms renderer should pick most applicable renderer via ownProps', () => {
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
+  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonForms
+        uischema={fixture.uischema}
+        schema={fixture.schema}
+        renderers={[{ tester: () => 3, renderer: CustomRenderer3 }]}
+      />
+    </Provider>
+  );
+
+  expect(wrapper.find('h3').text()).toBe('test');
+  wrapper.unmount();
 });
