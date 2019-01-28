@@ -503,17 +503,20 @@ export const mapStateToLayoutProps = (
   };
 };
 
-export interface JsonFormsProps extends StatePropsOfRenderer {
-  renderers?: { tester: RankedTester; renderer: any }[];
-}
-
-export interface StatePropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
+export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 }
 
+export interface JsonFormsProps extends StatePropsOfRenderer {
+  renderers?: JsonFormsRendererRegistryEntry[];
+}
+
+export interface StatePropsOfJsonFormsRenderer
+  extends OwnPropsOfJsonFormsRenderer {}
+
 export const mapStateToJsonFormsRendererProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfRenderer
+  ownProps: OwnPropsOfJsonFormsRenderer
 ): StatePropsOfJsonFormsRenderer => {
   let uischema = ownProps.uischema;
   if (uischema === undefined) {
@@ -525,7 +528,7 @@ export const mapStateToJsonFormsRendererProps = (
   }
 
   return {
-    renderers: get(state.jsonforms, 'renderers') || [],
+    renderers: ownProps.renderers || get(state.jsonforms, 'renderers') || [],
     schema: ownProps.schema || getSchema(state),
     uischema
   };
