@@ -196,24 +196,17 @@ test('mapStateToFieldProps - enabled via state ', t => {
 
 test('mapStateToFieldProps - path', t => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
+    path: 'firstName'
   };
   const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
   t.is(props.path, 'firstName');
 });
 
-test('mapStateToFieldProps - compose path with ownProps.path', t => {
-  const ownProps = {
-    uischema: coreUISchema,
-    path: 'yo'
-  };
-  const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
-  t.is(props.path, 'yo.firstName');
-});
-
 test('mapStateToFieldProps - data', t => {
   const ownProps = {
-    uischema: coreUISchema
+    uischema: coreUISchema,
+    path: 'firstName'
   };
   const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
   t.is(props.data, 'Homer');
@@ -230,58 +223,24 @@ test('mapStateToFieldProps - id', t => {
 });
 
 test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
-  const uiSchema: ControlElement = {
+  const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/nationality'
   };
   const ownProps = {
     schema: {
-      type: 'object',
-      properties: {
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
-        nationality: {
-          type: 'string',
-          enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-        }
-      }
+      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
     },
-    uischema: uiSchema
+    uischema,
+    path: 'nationality'
   };
 
   const props = defaultMapStateToEnumFieldProps(
-    createState(uiSchema),
+    createState(uischema),
     ownProps
   );
   t.deepEqual(props.options, ['DE', 'IT', 'JP', 'US', 'RU', 'Other']);
   t.is(props.data, undefined);
-});
-
-test('mapStateToFieldProps - set data of enum field', t => {
-  const uiSchema: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/nationality'
-  };
-  const ownProps = {
-    data: {
-      nationality: 'JP'
-    },
-    schema: {
-      type: 'object',
-      properties: {
-        firstName: { type: 'string' },
-        lastName: { type: 'string' },
-        nationality: {
-          type: 'string',
-          enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-        }
-      }
-    },
-    uischema: uiSchema
-  };
-
-  const props = mapStateToFieldProps(createState(uiSchema), ownProps);
-  t.is(props.data, 'JP');
 });
 
 test('defaultMapDispatchToControlProps, initialized with custom handleChange', t => {

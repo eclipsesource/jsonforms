@@ -289,6 +289,7 @@ test('render schema with $ref', () => {
       uischema={fixture.uischema}
       schema={schemaWithRef}
       renderers={renderers}
+      rootSchema={resolvedSchema}
     />
   );
 
@@ -346,6 +347,7 @@ test.skip('updates schema with ref', () => {
       uischema={fixture.uischema}
       schema={fixture.schema}
       renderers={renderers}
+      rootSchema={resolvedSchema}
     />
   );
 

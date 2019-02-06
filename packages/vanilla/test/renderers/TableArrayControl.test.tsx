@@ -29,6 +29,7 @@ import test from 'ava';
 import { Provider } from 'react-redux';
 import {
   ControlElement,
+  createDefaultValue,
   getData,
   HorizontalLayout,
   update
@@ -83,7 +84,11 @@ test('render two children', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -146,7 +151,11 @@ test('render empty data', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -200,7 +209,11 @@ test('render new child (empty init data)', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -220,7 +233,11 @@ test('render new child (undefined data)', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -240,7 +257,11 @@ test('render new child (null data)', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -260,7 +281,11 @@ test('render new child', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -293,7 +318,11 @@ test('render primitives ', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={schema} uischema={uischema}/>
+      <TableArrayControl
+        schema={schema}
+        uischema={uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
   const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
@@ -310,7 +339,11 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
 
@@ -441,6 +474,7 @@ test('hide', t => {
         schema={t.context.schema}
         uischema={t.context.uischema}
         visible={false}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -457,7 +491,11 @@ test('show by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
@@ -472,7 +510,11 @@ test('single error', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -488,7 +530,11 @@ test('multiple errors', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -504,7 +550,11 @@ test('empty errors by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -519,7 +569,11 @@ test('reset validation message', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <TableArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
   ) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');

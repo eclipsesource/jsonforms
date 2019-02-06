@@ -42,10 +42,10 @@ const isArraySchema = (schema: JsonSchema): boolean => {
 };
 
 export const resolveData = (instance: any, dataPath: string): any => {
-  const dataPathSegments = dataPath.split('.');
   if (isEmpty(dataPath)) {
     return instance;
   }
+  const dataPathSegments = dataPath.split('.');
 
   return dataPathSegments
     .map(segment => decodeURIComponent(segment))
@@ -115,11 +115,13 @@ export const findAllRefs = (
  * Resolve the given schema path in order to obtain a subschema.
  * @param {JsonSchema} schema the root schema from which to start
  * @param {string} schemaPath the schema path to be resolved
+ * @param {JsonSchema} rootSchema the actual root schema
  * @returns {JsonSchema} the resolved sub-schema
  */
 export const resolveSchema = (
   schema: JsonSchema,
-  schemaPath: string
+  schemaPath: string,
+  rootSchema?: JsonSchema
 ): JsonSchema => {
   if (isEmpty(schema)) {
     return undefined;
@@ -136,8 +138,16 @@ export const resolveSchema = (
       ? curSchema
       : get(curSchema, pathSegment);
   }, schema);
+  // TODO: because schema is already scoped we might end up with refs pointing
+  // outside of the current schema. It would be better if we'd always could deal
+  // with absolute paths here, so that we don't need to keep two different
+  // schemas around
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    return retrieveResolvableSchema(schema, resultSchema.$ref);
+    try {
+      return retrieveResolvableSchema(schema, resultSchema.$ref);
+    } catch (e) {
+      return retrieveResolvableSchema(rootSchema, resultSchema.$ref);
+    }
   }
 
   return resultSchema;

@@ -65,7 +65,11 @@ export const isPlainLabel = (label: string | Labels): label is string => {
   return typeof label === 'string';
 };
 
-const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
+const isRequired = (
+  schema: JsonSchema,
+  schemaPath: string,
+  rootSchema: JsonSchema
+): boolean => {
   const pathSegments = schemaPath.split('/');
   const lastSegment = pathSegments[pathSegments.length - 1];
   const nextHigherSchemaSegments = pathSegments.slice(
@@ -73,7 +77,11 @@ const isRequired = (schema: JsonSchema, schemaPath: string): boolean => {
     pathSegments.length - 2
   );
   const nextHigherSchemaPath = nextHigherSchemaSegments.join('/');
-  const nextHigherSchema = Resolve.schema(schema, nextHigherSchemaPath);
+  const nextHigherSchema = Resolve.schema(
+    schema,
+    nextHigherSchemaPath,
+    rootSchema
+  );
 
   return (
     nextHigherSchema !== undefined &&
@@ -228,9 +236,9 @@ export interface StatePropsOfScopedRenderer
   parentPath?: string;
 
   /**
-   * The sub-schema that describes the data this element is bound to.
+   * The root schema as returned by the store.
    */
-  scopedSchema: JsonSchema;
+  rootSchema: JsonSchema;
 
   /**
    * Finds a registered UI schema to use, if any.
@@ -344,17 +352,23 @@ export const mapStateToControlProps = (
   const errors = union(getErrorAt(path)(state).map(error => error.message));
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
+  const rootSchema = getSchema(state);
   const required =
     controlElement.scope !== undefined &&
-    isRequired(ownProps.schema, controlElement.scope);
-  const resolvedSchema = Resolve.schema(ownProps.schema, controlElement.scope);
+    isRequired(ownProps.schema, controlElement.scope, rootSchema);
+  const resolvedSchema = Resolve.schema(
+    ownProps.schema || rootSchema,
+    controlElement.scope,
+    rootSchema
+  );
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const defaultConfig = cloneDeep(getConfig(state));
   const config = merge(defaultConfig, controlElement.options);
+  const data = Resolve.data(getData(state), path);
 
   return {
-    data: Resolve.data(getData(state), path),
+    data,
     description,
     errors,
     label,
@@ -364,12 +378,12 @@ export const mapStateToControlProps = (
     path,
     parentPath: ownProps.path,
     required,
-    scopedSchema: resolvedSchema,
     uischema: ownProps.uischema,
     findUISchema: findUISchema(state),
-    schema: ownProps.schema,
+    schema: resolvedSchema || rootSchema,
     config,
-    fields: state.jsonforms.fields
+    fields: state.jsonforms.fields,
+    rootSchema
   };
 };
 
@@ -392,8 +406,8 @@ export const mapDispatchToControlProps = (
  * State-based props of a table control.
  */
 export interface StatePropsOfArrayControl extends StatePropsOfControl {
-  // not sure whether we want to expose ajv API
   childErrors?: ErrorObject[];
+  createDefaultValue(): any;
 }
 
 /**
@@ -411,20 +425,19 @@ export const mapStateToArrayControlProps = (
     state,
     ownProps
   );
-  const controlElement = uischema as ControlElement;
-  const resolvedSchema = Resolve.schema(
-    schema,
-    controlElement.scope + '/items'
-  );
+
+  const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
   const childErrors = getSubErrorsAt(path)(state);
 
   return {
     ...props,
     path,
-    schema,
     uischema,
-    scopedSchema: resolvedSchema,
-    childErrors
+    schema: resolvedSchema,
+    childErrors,
+    createDefaultValue() {
+      return createDefaultValue(resolvedSchema as JsonSchema);
+    }
   };
 };
 
@@ -432,7 +445,7 @@ export const mapStateToArrayControlProps = (
  * Dispatch props of a table control
  */
 export interface DispatchPropsOfArrayControl {
-  addItem(path: string): () => void;
+  addItem(path: string, value: any): () => void;
   removeItems(path: string, toDelete: any[]): () => void;
 }
 
@@ -440,25 +453,19 @@ export interface DispatchPropsOfArrayControl {
  * Maps state to dispatch properties of an array control.
  *
  * @param dispatch the store's dispatch method
- * @param ownProps own properties
  * @returns {DispatchPropsOfArrayControl} dispatch props of an array control
  */
 export const mapDispatchToArrayControlProps = (
-  dispatch: Dispatch<AnyAction>,
-  ownProps: OwnPropsOfControl
+  dispatch: Dispatch<AnyAction>
 ): DispatchPropsOfArrayControl => ({
-  addItem: (path: string) => () => {
+  addItem: (path: string, value: any) => () => {
     dispatch(
       update(path, array => {
-        const schemaPath = ownProps.uischema.scope + '/items';
-        const resolvedSchema = Resolve.schema(ownProps.schema, schemaPath);
-        const newValue = createDefaultValue(resolvedSchema);
-
         if (array === undefined || array === null) {
-          return [newValue];
+          return [value];
         }
 
-        array.push(newValue);
+        array.push(value);
         return array;
       })
     );
@@ -507,12 +514,14 @@ export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 }
 
-export interface JsonFormsProps extends StatePropsOfRenderer {
+export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export interface StatePropsOfJsonFormsRenderer
-  extends OwnPropsOfJsonFormsRenderer {}
+  extends OwnPropsOfJsonFormsRenderer {
+  rootSchema: JsonSchema;
+}
 
 export const mapStateToJsonFormsRendererProps = (
   state: JsonFormsState,
@@ -530,6 +539,7 @@ export const mapStateToJsonFormsRendererProps = (
   return {
     renderers: ownProps.renderers || get(state.jsonforms, 'renderers') || [],
     schema: ownProps.schema || getSchema(state),
+    rootSchema: getSchema(state),
     uischema
   };
 };

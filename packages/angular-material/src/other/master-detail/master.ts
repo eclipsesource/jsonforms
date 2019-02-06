@@ -4,14 +4,13 @@ import { Component } from '@angular/core';
 import { JsonFormsControl } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
 import {
+  ArrayControlProps,
   ControlElement,
-  ControlProps,
   JsonFormsState,
   mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps,
   RankedTester,
   rankWith,
-  resolveSchema,
-  toDataPath,
   uiTypeIs
 } from '@jsonforms/core';
 
@@ -109,7 +108,8 @@ export class MasterListComponent extends JsonFormsControl {
   masterItems: any[];
   selectedItem: any;
   selectedItemIdx: number;
-  addItem: (path: string) => () => void;
+  addItem: (path: string, value: any) => () => void;
+  createDefaultValue: () => void;
   removeItems: (path: string, toDelete: any[]) => () => void;
   propsPath: string;
   highlightedIdx: number;
@@ -129,29 +129,21 @@ export class MasterListComponent extends JsonFormsControl {
   ngOnInit() {
     super.ngOnInit();
     const { addItem, removeItems } = mapDispatchToArrayControlProps(
-      this.ngRedux.dispatch,
-      {
-        uischema: this.uischema as ControlElement,
-        schema: this.schema
-      }
+      this.ngRedux.dispatch
     );
     this.addItem = addItem;
     this.removeItems = removeItems;
   }
 
-  mapAdditionalProps(props: ControlProps) {
-    const { data, schema, uischema } = props;
+  mapAdditionalProps(props: ArrayControlProps) {
+    const { data, path, schema, uischema, createDefaultValue } = props;
     const controlElement = uischema as ControlElement;
-    const instancePath = toDataPath(`${controlElement.scope}/items`);
     this.propsPath = props.path;
-    const resolvedSchema = resolveSchema(
-      schema,
-      `${controlElement.scope}/items`
-    );
+    this.createDefaultValue = createDefaultValue;
     const detailUISchema =
       controlElement.options.detail ||
       props.findUISchema(
-        resolvedSchema,
+        schema,
         `${controlElement.scope}/items`,
         props.path,
         'VerticalLayout'
@@ -164,8 +156,8 @@ export class MasterListComponent extends JsonFormsControl {
       const masterItem = {
         label: get(d, labelRefInstancePath),
         data: d,
-        path: `${instancePath}.${index}`,
-        schema: resolvedSchema,
+        path: `${path}.${index}`,
+        schema,
         uischema: detailUISchema
       };
       return masterItem;
@@ -210,11 +202,17 @@ export class MasterListComponent extends JsonFormsControl {
   }
 
   onAddClick() {
-    this.addItem(this.propsPath)();
+    this.addItem(this.propsPath, this.createDefaultValue())();
   }
 
   onDeleteClick(item: any) {
     this.removeItems(this.propsPath, [item.data])();
+  }
+
+  protected mapToProps(state: JsonFormsState): ArrayControlProps {
+    const props = mapStateToArrayControlProps(state, this.getOwnProps());
+    const dispatch = mapDispatchToArrayControlProps(this.ngRedux.dispatch);
+    return { ...props, ...dispatch };
   }
 }
 

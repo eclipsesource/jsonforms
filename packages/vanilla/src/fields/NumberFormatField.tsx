@@ -43,9 +43,9 @@ export const NumberFormatField = (props: FieldProps & VanillaRendererProps & For
     uischema,
     path,
     handleChange,
-    scopedSchema
+    schema
   } = props;
-  const maxLength = scopedSchema.maxLength;
+  const maxLength = schema.maxLength;
   const formattedNumber: string = props.toFormatted(props.data);
 
   const onChange = (ev: any) => {

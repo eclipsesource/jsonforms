@@ -469,7 +469,7 @@ describe('Master detail', () => {
               title: 'Carrots'
             },
             path: 'orders.0',
-            schema: undefined,
+            schema: schema.definitions.order,
             uischema: {
               type: 'VerticalLayout',
               elements: [

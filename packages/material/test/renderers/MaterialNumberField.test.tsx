@@ -59,13 +59,8 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
 
 const data = {'foo': 3.14};
 const schema = {
-  type: 'object',
-  properties: {
-    foo: {
-      type: 'number',
-      minimum: 5
-    },
-  },
+  type: 'number',
+  minimum: 5
 };
 const uischema: ControlElement = {
   type: 'Control',
@@ -208,7 +203,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={control}/>
+        <NumberField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -226,7 +225,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -241,7 +244,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={control}/>
+        <NumberField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -264,7 +271,11 @@ describe('Material number field', () => {
     );
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={jsonSchema} uischema={uischema}/>
+        <NumberField
+          schema={jsonSchema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
 
@@ -278,7 +289,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -295,7 +310,11 @@ describe('Material number field', () => {
     );
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -308,7 +327,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -320,7 +343,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -332,7 +359,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -344,7 +375,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -356,7 +391,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     store.dispatch(update(undefined, () => 13));
@@ -368,7 +407,12 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema} enabled={false}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+          enabled={false}
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -379,7 +423,11 @@ describe('Material number field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

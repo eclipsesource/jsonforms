@@ -51,7 +51,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       enabled,
       errors,
       label,
-      scopedSchema,
+      schema,
       handleChange,
       visible,
       path,
@@ -95,24 +95,24 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
         </Typography>
         <div style={rangeContainerStyle}>
           <Typography style={rangeItemStyle} variant='caption' align='left'>
-            {scopedSchema.minimum}
+            {schema.minimum}
           </Typography>
           <Typography style={rangeItemStyle} variant='caption' align='right'>
-            {scopedSchema.maximum}
+            {schema.maximum}
           </Typography>
         </div>
         <Slider
           style={sliderStyle}
-          min={scopedSchema.minimum}
-          max={scopedSchema.maximum}
-          value={Number(data || scopedSchema.default)}
+          min={schema.minimum}
+          max={schema.maximum}
+          value={Number(data || schema.default)}
           onChange={(_ev, value) => {
             handleChange(path, Number(value));
           }
           }
           id={id + '-input'}
           disabled={!enabled}
-          step={scopedSchema.multipleOf || 1}
+          step={schema.multipleOf || 1}
         />
         <FormHelperText error={!isValid}>
           {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}

@@ -2,65 +2,48 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-    ControlElement,
-    ControlProps,
-    generateDefaultUISchema,
-    isAllOfControl,
-    JsonSchema,
-    mapStateToControlProps,
-    RankedTester,
-    rankWith,
-    UISchemaElement,
-    VerticalLayout
+  ControlProps,
+  isAllOfControl,
+  JsonSchema,
+  mapStateToControlProps,
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
-
-const createControls =
-    (allOf: JsonSchema[], schema: JsonSchema, scope: string): UISchemaElement => {
-        const verticalLayout: VerticalLayout = { type: 'VerticalLayout', elements: [] };
-        return allOf.map((subSchema, index) =>
-            generateDefaultUISchema(subSchema, 'VerticalLayout', `${scope}/allOf/${index}`, schema)
-        ).reduce(
-            (layout, element) => {
-                return {
-                    ...layout,
-                    elements: (layout as VerticalLayout).elements.slice().concat([element])
-                };
-            },
-            verticalLayout
-        );
-    };
+import { createCombinatorRenderInfos, resolveSubSchemas } from './combinators';
 
 class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
 
-    render() {
+  render() {
 
-        const {
-            schema,
-            uischema,
-            scopedSchema,
-            path
-        } = this.props;
+    const {
+      schema,
+      rootSchema,
+      path
+    } = this.props;
 
-        const elements = createControls(
-            (scopedSchema as JsonSchema).allOf,
-            schema,
-            (uischema as ControlElement).scope
-        );
+    const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
+    const allOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).allOf, rootSchema, 'allOf');
 
-        return (
+    return (
+      <React.Fragment>
+        {
+          allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
             <ResolvedJsonForms
-                schema={schema}
-                uischema={elements}
-                path={path}
+              key={allOfIndex}
+              schema={allOfRenderInfo.schema}
+              uischema={allOfRenderInfo.uischema}
+              path={path}
             />
-        );
-
-    }
+          ))
+        }
+      </React.Fragment>
+    );
+  }
 }
 
 const ConnectedMaterialAllOfRenderer = connect(
-    mapStateToControlProps
+  mapStateToControlProps
 )(MaterialAllOfRenderer);
 
 export const materialAllOfControlTester: RankedTester = rankWith(2, isAllOfControl);

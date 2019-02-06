@@ -29,50 +29,52 @@ import { ResolvedJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
 export const ArrayControl  = (
-    {
-        classNames,
-        data,
-        label,
-        path,
-        scopedSchema,
-        addItem,
-        uischema,
-        findUISchema
-    }: ArrayControlProps & VanillaRendererProps
+  {
+    classNames,
+    data,
+    label,
+    path,
+    schema,
+    addItem,
+    uischema,
+    findUISchema,
+    createDefaultValue
+  }: ArrayControlProps & VanillaRendererProps
 ) => {
-    return (
-      <div className={classNames.wrapper}>
-        <fieldset className={classNames.fieldSet}>
-          <legend>
-            <button
-              className={classNames.button}
-              onClick={() => addItem(path)}
-            >
-              +
-            </button>
-            <label className={'array.label'}>
-              {label}
-            </label>
-          </legend>
-          <div className={classNames.children}>
-            {
-              data ? range(0, data.length).map(index => {
 
-                const foundUISchema = findUISchema(scopedSchema, uischema.scope, path);
-                const childPath = composePaths(path, `${index}`);
+  return (
+    <div className={classNames.wrapper}>
+      <fieldset className={classNames.fieldSet}>
+        <legend>
+          <button
+            className={classNames.button}
+            onClick={() => addItem(path, createDefaultValue())}
+          >
+            +
+          </button>
+          <label className={'array.label'}>
+            {label}
+          </label>
+        </legend>
+        <div className={classNames.children}>
+          {
+            data ? range(0, data.length).map(index => {
 
-                return (
-                  <ResolvedJsonForms
-                    schema={scopedSchema}
-                    uischema={foundUISchema || uischema}
-                    path={childPath}
-                    key={childPath}
-                  />
-                );
-              }) : <p>No data</p>
-            }
-          </div>
-        </fieldset>
-      </div>
-    );
-  };
+              const foundUISchema = findUISchema(schema, uischema.scope, path);
+              const childPath = composePaths(path, `${index}`);
+
+              return (
+                <ResolvedJsonForms
+                  schema={schema}
+                  uischema={foundUISchema || uischema}
+                  path={childPath}
+                  key={childPath}
+                />
+              );
+            }) : <p>No data</p>
+          }
+        </div>
+      </fieldset>
+    </div>
+  );
+};

@@ -37,30 +37,23 @@ import { FormControlLabel, Hidden } from '@material-ui/core';
 import MaterialBooleanField from '../fields/MaterialBooleanField';
 
 export const MaterialBooleanControl =
-  ({ label, uischema, schema, visible, parentPath, id }: ControlProps) => {
+  ({ label, uischema, schema, visible, path, id }: ControlProps) => (
+    <Hidden xsUp={!visible}>
+      <FormControlLabel
+        label={label}
+        id={id}
+        control={
+          <MaterialBooleanField
+            uischema={uischema}
+            schema={schema}
+            path={path}
+            id={id + '-input'}
+          />
+        }
+      />
+    </Hidden>
+  );
 
-    return (
-      <Hidden xsUp={!visible}>
-        <FormControlLabel
-          label={label}
-          id={id}
-          control={
-            <MaterialBooleanField
-              uischema={uischema}
-              schema={schema}
-              path={parentPath}
-              id={id + '-input'}
-            />
-          }
-        />
-      </Hidden>
-
-    );
-  };
-
-const ConnectedMaterialBooleanControl = connect(
-  mapStateToControlProps
-)(MaterialBooleanControl);
-
+const ConnectedMaterialBooleanControl = connect(mapStateToControlProps)(MaterialBooleanControl);
 export const materialBooleanControlTester: RankedTester = rankWith(2, isBooleanControl);
 export default ConnectedMaterialBooleanControl;

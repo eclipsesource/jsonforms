@@ -63,7 +63,7 @@ export class InputControl extends Control<ControlProps & VanillaRendererProps, C
     const labelText = isPlainLabel(label) ? label : label.default;
     const field = maxBy(fields, r => r.tester(uischema, schema));
     if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
-      console.warn('No applicable field found.');
+      console.warn('No applicable field found.', uischema, schema);
       return null;
     } else {
       return (

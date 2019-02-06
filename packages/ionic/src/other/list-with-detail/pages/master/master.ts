@@ -37,8 +37,9 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
   uischema: ControlElement;
   schema: JsonSchema;
   path: string;
-  addItem: (path: string) => () => void;
+  addItem: (path: string, value: any) => () => void;
   pushDetail: (params: any) => void;
+  createDefaultValue: () => void;
 
   constructor(
     public navParams: NavParams,
@@ -50,13 +51,11 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
     this.uischema = this.navParams.get('uischema');
     this.path = this.navParams.get('path');
     this.pushDetail = this.navParams.get('pushDetail');
+    this.createDefaultValue = this.navParams.get('createDefaultValue');
   }
 
   ngOnInit() {
-    const { addItem } = mapDispatchToArrayControlProps(this.ngRedux.dispatch, {
-      uischema: this.uischema,
-      schema: this.schema
-    });
+    const { addItem } = mapDispatchToArrayControlProps(this.ngRedux.dispatch);
     this.addItem = addItem;
   }
 
@@ -65,6 +64,6 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
   }
 
   onClick() {
-    this.addItem(this.path)();
+    this.addItem(this.path, this.createDefaultValue())();
   }
 }

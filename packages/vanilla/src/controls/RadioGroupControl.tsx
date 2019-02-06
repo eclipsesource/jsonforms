@@ -25,16 +25,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    computeLabel,
-    ControlElement,
-    ControlProps,
-    ControlState,
-    formatErrorMessage,
-    isDescriptionHidden,
-    isPlainLabel,
-    mapDispatchToControlProps,
-    mapStateToControlProps,
-    resolveSchema
+  computeLabel,
+  ControlProps,
+  ControlState,
+  formatErrorMessage,
+  isDescriptionHidden,
+  isPlainLabel,
+  mapDispatchToControlProps,
+  mapStateToControlProps
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
@@ -51,7 +49,6 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
             description,
             errors,
             data,
-            uischema,
             schema,
             visible,
         } = this.props;
@@ -64,7 +61,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
         };
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
-        const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
+        const options = schema.enum;
 
         return (
             <div
@@ -109,5 +106,5 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
 }
 
 export default connect(
-    addVanillaControlProps(mapStateToControlProps), mapDispatchToControlProps)
-    (RadioGroupControl);
+    addVanillaControlProps(mapStateToControlProps), mapDispatchToControlProps
+)(RadioGroupControl);

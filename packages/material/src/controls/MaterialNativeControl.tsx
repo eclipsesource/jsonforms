@@ -49,7 +49,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       id,
       errors,
       label,
-      scopedSchema,
+      schema,
       description,
       visible,
       required,
@@ -61,7 +61,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     const isValid = errors.length === 0;
     const trim = config.trim;
     const onChange = (ev: any) => handleChange(path, ev.target.value);
-    const fieldType = scopedSchema.format;
+    const fieldType = schema.format;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (

@@ -2,11 +2,14 @@ import get from 'lodash/get';
 import isEqual from 'lodash/isEqual';
 import { Component, ViewChild } from '@angular/core';
 import {
+  ArrayControlProps,
   composeWithUi,
   ControlElement,
   Generate,
   JsonFormsState,
   JsonSchema,
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps,
   RankedTester,
   rankWith,
   resolveSchema,
@@ -71,7 +74,9 @@ export class ListWithDetailControl extends JsonFormsControl {
     this.subscription = this.ngRedux
       .select()
       .subscribe((state: JsonFormsState) => {
-        const { data, schema, uischema } = this.mapToProps(state);
+        const { data, createDefaultValue, schema, uischema } = this.mapToProps(
+          state
+        );
         const controlElement = uischema as ControlElement;
         const instancePath = toDataPath(`${controlElement.scope}/items`);
         const resolvedSchema = resolveSchema(
@@ -107,7 +112,8 @@ export class ListWithDetailControl extends JsonFormsControl {
             path: composeWithUi(this.uischema as ControlElement, this.path),
             uischema: this.uischema,
             schema: this.schema,
-            pushDetail: this.updateDetail
+            pushDetail: this.updateDetail,
+            createDefaultValue
           };
           this.updateMaster();
         } else if (this.masterItems !== undefined) {
@@ -200,6 +206,12 @@ export class ListWithDetailControl extends JsonFormsControl {
       this.detailNav.pop();
     }
   };
+
+  protected mapToProps(state: JsonFormsState): ArrayControlProps {
+    const props = mapStateToArrayControlProps(state, this.getOwnProps());
+    const dispatch = mapDispatchToArrayControlProps(this.ngRedux.dispatch);
+    return { ...props, ...dispatch };
+  }
 }
 
 export const listWithDetailTester: RankedTester = rankWith(

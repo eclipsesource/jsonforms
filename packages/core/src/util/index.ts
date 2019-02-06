@@ -61,7 +61,11 @@ export const formatErrorMessage = (errors: string[]) => {
  * Convenience wrapper around resolveData and resolveSchema.
  */
 const Resolve: {
-  schema(schema: JsonSchema, schemaPath: string): JsonSchema;
+  schema(
+    schema: JsonSchema,
+    schemaPath: string,
+    rootSchema?: JsonSchema
+  ): JsonSchema;
   data(data: any, path: string): any;
 } = {
   schema: resolveSchema,

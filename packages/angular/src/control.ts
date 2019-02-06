@@ -9,8 +9,7 @@ import {
   JsonSchema,
   mapDispatchToControlProps,
   mapStateToControlProps,
-  OwnPropsOfControl,
-  Resolve
+  OwnPropsOfControl
 } from '@jsonforms/core';
 import { Input, OnDestroy, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
@@ -37,6 +36,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer<ControlElement>
   description: string;
   error: string | null;
   scopedSchema: JsonSchema;
+  rootSchema: JsonSchema;
   enabled: boolean;
   hidden: boolean;
 
@@ -74,7 +74,7 @@ export class JsonFormsControl extends JsonFormsBaseRenderer<ControlElement>
           label,
           required,
           schema,
-          uischema,
+          rootSchema,
           visible
         } = props;
         this.label = computeLabel(
@@ -86,7 +86,8 @@ export class JsonFormsControl extends JsonFormsBaseRenderer<ControlElement>
         this.enabled = enabled;
         this.enabled ? this.form.enable() : this.form.disable();
         this.hidden = !visible;
-        this.scopedSchema = Resolve.schema(schema, uischema.scope);
+        this.scopedSchema = schema;
+        this.rootSchema = rootSchema;
         this.description =
           this.scopedSchema !== undefined ? this.scopedSchema.description : '';
         this.id = props.id;

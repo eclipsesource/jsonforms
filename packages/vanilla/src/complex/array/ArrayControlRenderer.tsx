@@ -25,12 +25,11 @@
 import React from 'react';
 
 import {
-    ArrayControlProps,
-    ControlElement,
-    Helpers,
-    mapDispatchToArrayControlProps,
-    mapStateToControlProps,
-    Resolve
+  ArrayControlProps,
+  ControlElement,
+  Helpers,
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps
 } from '@jsonforms/core';
 import { ArrayControl } from './ArrayControl';
 import { addVanillaControlProps } from '../../util';
@@ -43,18 +42,18 @@ const ArrayControlRenderer  =
          uischema,
          data,
          path,
+         rootSchema,
+         createDefaultValue,
          findUISchema,
          addItem,
          getStyle,
          getStyleAsClassName,
-         removeItems
+         removeItems,
      }: ArrayControlProps & VanillaRendererProps) => {
 
         const controlElement = uischema as ControlElement;
         const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
-        const resolvedSchema = Resolve.schema(schema, `${controlElement.scope}/items`);
         const label = labelDescription.show ? labelDescription.text : '';
-
         const controlClassName =
             `control ${(Helpers.convertToValidClassName(controlElement.scope))}`;
         const fieldSetClassName = getStyleAsClassName('array.layout');
@@ -76,17 +75,18 @@ const ArrayControlRenderer  =
                 data={data}
                 label={label}
                 path={path}
-                scopedSchema={resolvedSchema}
                 addItem={addItem}
                 findUISchema={findUISchema}
                 uischema={uischema}
                 schema={schema}
+                rootSchema={rootSchema}
+                createDefaultValue={createDefaultValue}
             />
         );
     };
 
 const ConnectedArrayControlRenderer = connect(
-    addVanillaControlProps(mapStateToControlProps),
+    addVanillaControlProps(mapStateToArrayControlProps),
     mapDispatchToArrayControlProps
 )(ArrayControlRenderer);
 

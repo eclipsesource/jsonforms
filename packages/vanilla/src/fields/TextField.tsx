@@ -43,11 +43,11 @@ export const TextField = (props: FieldProps & VanillaRendererProps) => {
     id,
     enabled,
     uischema,
-    scopedSchema,
+    schema,
     path,
     handleChange
   } = props;
-  const maxLength = scopedSchema.maxLength;
+  const maxLength = schema.maxLength;
 
   return (
     <input

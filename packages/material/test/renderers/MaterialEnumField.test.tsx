@@ -29,8 +29,7 @@ import {
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
-  UISchemaElement,
-  update
+  UISchemaElement
 } from '@jsonforms/core';
 import MaterialEnumField, { materialEnumFieldTester } from '../../src/fields/MaterialEnumField';
 import { Provider } from 'react-redux';
@@ -40,13 +39,8 @@ import { combineReducers, createStore, Store } from 'redux';
 
 const data =  { nationality: 'JP'};
 const schema = {
-  type: 'object',
-  properties: {
-    nationality: {
-      type: 'string',
-      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-    }
-  }
+  type: 'string',
+  enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
 };
 const uischema = {
   type: 'Control',
@@ -97,12 +91,14 @@ describe('Material enum field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <MaterialEnumField schema={schema} uischema={uischema}/>
+        <MaterialEnumField
+          schema={schema}
+          uischema={uischema}
+          path='nationality'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
-
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('nationality', () => 'DE'));
-    expect(input.value).toBe('DE');
+    expect(input.value).toBe('JP');
   });
 });

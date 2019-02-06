@@ -1,17 +1,17 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import {
-    ControlProps,
-    findUISchema,
-    GroupLayout,
-    isObjectControl,
-    JsonFormsState,
-    JsonSchema,
-    mapStateToControlProps,
-    OwnPropsOfControl,
-    RankedTester,
-    rankWith,
-    UISchemaElement
+  ControlProps,
+  findUISchema,
+  GroupLayout,
+  isObjectControl,
+  JsonFormsState,
+  JsonSchema,
+  mapStateToControlProps,
+  OwnPropsOfControl,
+  RankedTester,
+  rankWith,
+  UISchemaElement
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
@@ -31,23 +31,22 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
     render() {
         const {
             findUiSchema,
-            scopedSchema,
+            schema,
             path,
             visible,
         } = this.props;
 
-        const detailUiSchema = findUiSchema(scopedSchema, undefined, path, 'Group');
+        const detailUiSchema = findUiSchema(schema, undefined, path, 'Group');
         if (isEmpty(path)) {
             detailUiSchema.type = 'VerticalLayout';
         } else {
             (detailUiSchema as GroupLayout).label = startCase(path);
         }
-
         return (
             <Hidden xsUp={!visible}>
                 <ResolvedJsonForms
                     visible={visible}
-                    schema={scopedSchema}
+                    schema={schema}
                     uischema={detailUiSchema}
                     path={path}
                 />

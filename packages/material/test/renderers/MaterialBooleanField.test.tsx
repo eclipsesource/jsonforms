@@ -60,12 +60,7 @@ export const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUi
 
 const data = { foo: true };
 const schema = {
-  type: 'object',
-  properties: {
-    foo: {
-      type: 'boolean'
-    }
-  }
+  type: 'boolean'
 };
 const uischema: ControlElement = {
   type: 'Control',
@@ -194,7 +189,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={control}/>
+        <BooleanField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -213,7 +212,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={control}/>
+        <BooleanField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -229,7 +232,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -241,7 +248,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -255,7 +266,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -270,7 +285,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore({'foo': false}, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -284,7 +303,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -297,7 +320,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -310,7 +337,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -323,7 +354,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -336,7 +371,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -349,7 +388,12 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema} enabled={false}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -361,7 +405,11 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;
@@ -373,7 +421,12 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = ReactDOM.render(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema} id='myid'/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+          id='myid'
+        />
       </Provider>,
       container
     ) as React.Component<any, any, any>;

@@ -25,26 +25,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    computeLabel,
-    ControlElement,
-    ControlProps,
-    ControlState,
-    formatErrorMessage,
-    isDescriptionHidden,
-    isPlainLabel,
-    mapDispatchToControlProps,
-    mapStateToControlProps,
-    resolveSchema,
+  computeLabel,
+  ControlProps,
+  ControlState,
+  formatErrorMessage,
+  isDescriptionHidden,
+  isPlainLabel,
+  mapDispatchToControlProps,
+  mapStateToControlProps
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import {
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    FormLabel
-} from '@material-ui/core';
+import { FormControl, FormControlLabel, FormHelperText, FormLabel } from '@material-ui/core';
 
 export class MaterialRadioGroupControl extends Control<ControlProps, ControlState> {
     render() {
@@ -56,7 +49,6 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             description,
             errors,
             data,
-            uischema,
             schema,
             visible
         } = this.props;
@@ -68,7 +60,7 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
         const trim = config.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
-        const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
+        const options = schema.enum;
 
         return (
             <FormControl
@@ -109,5 +101,4 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
     }
 }
 
-export default connect(mapStateToControlProps, mapDispatchToControlProps)
-    (MaterialRadioGroupControl);
+export default connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialRadioGroupControl);

@@ -24,13 +24,13 @@
 */
 import React from 'react';
 import {
-    FieldProps,
-    isStringControl,
-    mapDispatchToFieldProps,
-    mapStateToFieldProps,
-    RankedTester,
-    rankWith,
-    WithClassname,
+  FieldProps,
+  isStringControl,
+  mapDispatchToFieldProps,
+  mapStateToFieldProps,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
 import { connect } from 'react-redux';
@@ -46,9 +46,9 @@ export const MaterialTextField = (props: FieldProps & WithClassname) => {
     isValid,
     path,
     handleChange,
-    scopedSchema
+    schema
   } = props;
-  const maxLength = scopedSchema.maxLength;
+  const maxLength = schema.maxLength;
   let inputProps: any;
   if (config.restrict) {
     inputProps = {'maxLength': maxLength};
@@ -76,6 +76,7 @@ export const MaterialTextField = (props: FieldProps & WithClassname) => {
     />
   );
 };
+
 /**
  * Default tester for text-based/string controls.
  * @type {RankedTester}
