@@ -23,12 +23,11 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { LabelDescription, Labels } from '@jsonforms/core';
+import { ControlElement, JsonSchema, LabelDescription, Labels } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
-import { Grid, Hidden } from '@material-ui/core';
+import { Grid, Hidden, Typography } from '@material-ui/core';
 import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import ValidationIcon from './ValidationIcon';
 import NoBorderTableCell from './NoBorderTableCell';
@@ -39,11 +38,15 @@ export interface MaterialTableToolbarProps {
     label: string | Labels;
     labelObject: LabelDescription;
     path: string;
-    addItem(path: string): () => void;
+    uischema: ControlElement;
+    schema: JsonSchema;
+    rootSchema: JsonSchema;
+    createDefaultValue(): void;
+    addItem(path: string, value: any): () => void;
 }
 
 const TableToolbar = (
-    { numColumns, errors, label, labelObject, path, addItem }: MaterialTableToolbarProps
+    { numColumns, createDefaultValue, errors, label, labelObject, path, addItem }: MaterialTableToolbarProps
 ) => (
     <TableRow>
         <NoBorderTableCell colSpan={numColumns}>
@@ -76,7 +79,7 @@ const TableToolbar = (
             >
                 <IconButton
                     aria-label={`Add to ${labelObject.text}`}
-                    onClick={addItem(path)}
+                    onClick={addItem(path, createDefaultValue())}
                 >
                     <AddIcon/>
                 </IconButton>

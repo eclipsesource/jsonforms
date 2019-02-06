@@ -33,8 +33,7 @@ import {
   mapDispatchToControlProps,
   mapStateToControlProps,
   mapStateToJsonFormsRendererProps,
-  mapStateToLayoutProps,
-  OwnPropsOfControl
+  mapStateToLayoutProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
 import * as _ from 'lodash';
@@ -480,12 +479,8 @@ test('mapDispatchToArrayControlProps should adding items to array', t => {
     initState
   );
   store.dispatch(init(data, schema, uischema));
-  const ownProps: OwnPropsOfControl = {
-    schema,
-    uischema
-  };
-  const props = mapDispatchToArrayControlProps(store.dispatch, ownProps);
-  props.addItem('')();
+  const props = mapDispatchToArrayControlProps(store.dispatch);
+  props.addItem('', createDefaultValue(schema))();
   t.is(store.getState().jsonforms.core.data.length, 2);
 });
 
@@ -516,11 +511,7 @@ test('mapDispatchToArrayControlProps should remove items from array', t => {
     initState
   );
   store.dispatch(init(data, schema, uischema));
-  const ownProps: OwnPropsOfControl = {
-    schema,
-    uischema
-  };
-  const props = mapDispatchToArrayControlProps(store.dispatch, ownProps);
+  const props = mapDispatchToArrayControlProps(store.dispatch);
   props.removeItems('', ['foo', 'bar'])();
   t.is(store.getState().jsonforms.core.data.length, 1);
   t.is(store.getState().jsonforms.core.data[0], 'quux');
@@ -714,14 +705,10 @@ test('should assign defaults to newly added item within nested object of an arra
   store.dispatch(
     init(data, schema, uischema, createAjv({ useDefaults: true }))
   );
-  const ownProps: OwnPropsOfControl = {
-    schema,
-    uischema
-  };
-  const props = mapDispatchToArrayControlProps(store.dispatch, ownProps);
+  const props = mapDispatchToArrayControlProps(store.dispatch);
 
-  props.addItem('')();
+  props.addItem('', createDefaultValue(schema))();
 
   t.is(store.getState().jsonforms.core.data.length, 2);
-  t.deepEqual(store.getState().jsonforms.core.data[1], { message: 'foo' });
+  t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
 });

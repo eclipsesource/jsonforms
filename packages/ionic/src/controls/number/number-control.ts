@@ -75,11 +75,12 @@ export class NumberControlRenderer extends JsonFormsControl {
   };
 
   mapAdditionalProps(props: ControlProps) {
-    if (!isEmpty(props.scopedSchema)) {
+    if (!isEmpty(props.schema)) {
+      // TODO
       const defaultStep = isNumberControl(this.uischema, this.schema) ? 0.1 : 1;
-      this.min = props.scopedSchema.minimum;
-      this.max = props.scopedSchema.maximum;
-      this.step = props.scopedSchema.multipleOf || defaultStep;
+      this.min = props.schema.minimum;
+      this.max = props.schema.maximum;
+      this.step = props.schema.multipleOf || defaultStep;
       // this doesn't seem to work reliably; an entered value will be formatted
       // the 1st time when blurring out, but it doesn't work the 2nd time
       // although the internal state seems correct

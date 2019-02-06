@@ -172,13 +172,13 @@ const NonEmptyRow = (
 
 const TableRows = (
   {
-    data, path, scopedSchema, childErrors, openDeleteDialog
+    data, path, schema, childErrors, openDeleteDialog
   }: ArrayControlProps & WithDeleteDialogSupport) => {
 
   const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
 
   if (isEmptyTable) {
-    return (<EmptyTable numColumns={getValidColumnProps(scopedSchema).length + 1} />);
+    return (<EmptyTable numColumns={getValidColumnProps(schema).length + 1} />);
   }
 
   return data.map((_child: any, index: number) => {
@@ -189,7 +189,7 @@ const TableRows = (
         key={childPath}
         childPath={childPath}
         rowData={_child}
-        scopedSchema={scopedSchema}
+        scopedSchema={schema}
         childErrors={childErrors}
         openDeleteDialog={openDeleteDialog}
       />
@@ -204,19 +204,21 @@ export class MaterialTableControl
     const {
       label,
       path,
-      scopedSchema,
+      schema,
+      rootSchema,
       uischema,
       childErrors,
       errors,
+      createDefaultValue,
       addItem,
       openDeleteDialog
     } = this.props;
     const controlElement = uischema as ControlElement;
     const labelObject = Helpers.createLabelDescriptionFrom(controlElement);
     const allErrors = [].concat(errors).concat(childErrors.map((e: ErrorObject) => e.message));
-    const isObjectSchema = scopedSchema.type === 'object';
+    const isObjectSchema = schema.type === 'object';
     const headerCells: any = isObjectSchema ?
-      generateCells(TableHeaderCell, scopedSchema, path) : undefined;
+      generateCells(TableHeaderCell, schema, path) : undefined;
 
     return (
       <React.Fragment>
@@ -229,6 +231,10 @@ export class MaterialTableControl
               addItem={addItem}
               numColumns={isObjectSchema ? headerCells.length : 1}
               path={path}
+              uischema={controlElement}
+              schema={schema}
+              rootSchema={rootSchema}
+              createDefaultValue={createDefaultValue}
             />
             {
               isObjectSchema &&

@@ -54,7 +54,7 @@ export class ObjectControlRenderer extends JsonFormsControl {
   }
   mapAdditionalProps(props: ControlProps) {
     this.detailUiSchema = props.findUISchema(
-      props.scopedSchema,
+      props.schema,
       undefined,
       props.path
     );

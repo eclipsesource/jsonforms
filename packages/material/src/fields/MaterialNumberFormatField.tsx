@@ -45,9 +45,9 @@ export const MaterialNumberFormatField = (props: FieldProps & WithClassname & Fo
     isValid,
     path,
     handleChange,
-    scopedSchema
+    schema
   } = props;
-  const maxLength = scopedSchema.maxLength;
+  const maxLength = schema.maxLength;
   let config;
   if (uischema.options && uischema.options.restrict) {
     config = {'maxLength': maxLength};

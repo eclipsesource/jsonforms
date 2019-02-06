@@ -36,15 +36,15 @@ import {
 import { VanillaRendererProps } from '../index';
 
 export const SliderField = (props: FieldProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, scopedSchema, path, handleChange } = props;
+  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
 
   return (
   <div style={{display: 'flex'}}>
     <input
       type='range'
-      max={scopedSchema.maximum}
-      min={scopedSchema.minimum}
-      value={data || scopedSchema.default}
+      max={schema.maximum}
+      min={schema.minimum}
+      value={data || schema.default}
       onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
         handleChange(path, Number(ev.currentTarget.value))
       }
@@ -54,7 +54,7 @@ export const SliderField = (props: FieldProps & VanillaRendererProps) => {
       autoFocus={uischema.options && uischema.options.focus}
       style={{flex: '1'}}
     />
-    <label style={{marginLeft: '0.5em'}}>{data || scopedSchema.default}</label>
+    <label style={{marginLeft: '0.5em'}}>{data || schema.default}</label>
   </div>
   );
 };

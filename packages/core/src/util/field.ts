@@ -26,10 +26,14 @@ import isEmpty from 'lodash/isEmpty';
 import has from 'lodash/has';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
-import { ControlElement } from '../models/uischema';
-import { findUISchema, getConfig, getData, getErrorAt } from '../reducers';
 import {
-  composeWithUi,
+  findUISchema,
+  getConfig,
+  getData,
+  getErrorAt,
+  getSchema
+} from '../reducers';
+import {
   isEnabled,
   isVisible,
   OwnPropsOfControl,
@@ -42,6 +46,7 @@ import { DispatchPropsOfControl, mapDispatchToControlProps } from './renderer';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsFieldRendererRegistryEntry } from '../reducers/fields';
+import { JsonSchema } from '..';
 
 export { JsonFormsFieldRendererRegistryEntry };
 
@@ -54,6 +59,7 @@ export interface OwnPropsOfField extends OwnPropsOfControl {
  */
 export interface StatePropsOfField extends StatePropsOfScopedRenderer {
   isValid: boolean;
+  rootSchema: JsonSchema;
 }
 
 export interface OwnPropsOfEnumField extends OwnPropsOfField, OwnPropsOfEnum {}
@@ -99,7 +105,7 @@ export const mapStateToFieldProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfField
 ): StatePropsOfField => {
-  const path = composeWithUi(ownProps.uischema, ownProps.path);
+  const { id, schema, path, uischema } = ownProps;
   const visible = has(ownProps, 'visible')
     ? ownProps.visible
     : isVisible(ownProps, state);
@@ -108,27 +114,23 @@ export const mapStateToFieldProps = (
     : isEnabled(ownProps, state);
   const errors = getErrorAt(path)(state).map(error => error.message);
   const isValid = isEmpty(errors);
-  const controlElement = ownProps.uischema as ControlElement;
-  const id = ownProps.id;
   const defaultConfig = cloneDeep(getConfig(state));
   const config = merge(defaultConfig, ownProps.uischema.options);
+  const rootSchema = getSchema(state);
 
   return {
-    data:
-      ownProps.data !== undefined
-        ? Resolve.data(ownProps.data, path)
-        : Resolve.data(getData(state), path),
+    data: Resolve.data(getData(state), path),
     visible,
     enabled,
     id,
     path,
     errors,
     isValid,
-    scopedSchema: Resolve.schema(ownProps.schema, controlElement.scope),
-    uischema: ownProps.uischema,
-    schema: ownProps.schema,
+    schema,
+    uischema,
     config,
-    findUISchema: findUISchema(state)
+    findUISchema: findUISchema(state),
+    rootSchema
   };
 };
 
@@ -160,7 +162,7 @@ export const defaultMapStateToEnumFieldProps = (
 ): StatePropsOfEnumField => {
   const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
   const options =
-    ownProps.options !== undefined ? ownProps.options : props.scopedSchema.enum;
+    ownProps.options !== undefined ? ownProps.options : props.schema.enum;
   return {
     ...props,
     options

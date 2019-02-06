@@ -30,17 +30,17 @@ import filter from 'lodash/filter';
 import join from 'lodash/join';
 import React from 'react';
 import {
-    ArrayControlProps,
-    ControlElement,
-    formatErrorMessage,
-    Helpers,
-    isPlainLabel,
-    mapDispatchToArrayControlProps,
-    mapStateToArrayControlProps,
-    Paths,
-    RankedTester,
-    StatePropsOfControl,
-    Test,
+  ArrayControlProps,
+  ControlElement,
+  formatErrorMessage,
+  Helpers,
+  isPlainLabel,
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps,
+  Paths,
+  RankedTester,
+  StatePropsOfControl,
+  Test
 } from '@jsonforms/core';
 import { DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
@@ -75,7 +75,8 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const {
       addItem,
       uischema,
-      scopedSchema,
+      schema,
+      createDefaultValue,
       path,
       data,
       visible,
@@ -94,7 +95,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const createControlElement = (key?: string): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
+      scope: schema.type === 'object' ? `#/properties/${key}` : '#'
     });
     const labelObject = createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;
@@ -107,7 +108,7 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
           <label className={labelClass}>
             {labelText}
           </label>
-          <button className={buttonClass} onClick={addItem(path)}>
+          <button className={buttonClass} onClick={addItem(path, createDefaultValue())}>
             Add to {labelObject.text}
           </button>
         </header>
@@ -118,12 +119,12 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
           <thead>
           <tr>
             {
-              scopedSchema.properties ?
+              schema.properties ?
                 fpflow(
                   fpkeys,
-                  fpfilter(prop => scopedSchema.properties[prop].type !== 'array'),
+                  fpfilter(prop => schema.properties[prop].type !== 'array'),
                   fpmap(prop => <th key={prop}>{prop}</th>)
-                ) (scopedSchema.properties)
+                ) (schema.properties)
                 : <th>Items</th>
             }
             <th>
@@ -146,17 +147,17 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                 return (
                   <tr key={childPath}>
                     {
-                      scopedSchema.properties ?
+                      schema.properties ?
                         fpflow(
                           fpkeys,
-                          fpfilter(prop => scopedSchema.properties[prop].type !== 'array'),
+                          fpfilter(prop => schema.properties[prop].type !== 'array'),
                           fpmap(prop => {
                             const childPropPath = Paths.compose(childPath, prop.toString());
 
                             return (
                               <td key={childPropPath}>
                                 <DispatchField
-                                  schema={scopedSchema}
+                                  schema={schema}
                                   uischema={createControlElement(prop)}
                                   path={childPath}
                                   showError
@@ -164,10 +165,10 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
                               </td>
                             );
                           })
-                        )(scopedSchema.properties) :
+                        )(schema.properties) :
                         <td key={Paths.compose(childPath, index.toString())}>
                           <DispatchField
-                            schema={scopedSchema}
+                            schema={schema}
                             uischema={createControlElement()}
                             path={childPath}
                             showError

@@ -46,30 +46,16 @@ const DEFAULT_MAX_LENGTH = 524288;
 const DEFAULT_SIZE = 20;
 
 const data =  { 'name': 'Foo' };
-const minLengthSchema = {
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string',
-      minLength: 3
-    }
-  }
+const minLengthSchema ={
+  type: 'string',
+  minLength: 3
 };
 const maxLengthSchema = {
-  type: 'object',
-  properties: {
-    name: {
-      type: 'string',
-      maxLength: 5
-    }
-  }
+  type: 'string',
+  maxLength: 5
 };
-const schema = {
-  type: 'object',
-  properties: {
-    name: { type: 'string' }
-  }
-};
+const schema = { type: 'string' };
+
 const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/name'
@@ -211,7 +197,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={control}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -227,7 +217,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={control}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={control}
+          path={'name'}
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -242,7 +236,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={control}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -259,7 +257,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore({ 'name': 'Foo' }, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={jsonSchema} uischema={uischema}/>
+        <TextField
+          schema={jsonSchema}
+          uischema={uischema}
+          path={'name'}
+        />
       </Provider>
     ) as React.Component<any, any, any>;
 
@@ -271,7 +273,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
 
@@ -285,7 +291,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -297,7 +307,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -309,7 +323,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -321,7 +339,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -333,7 +355,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -345,7 +371,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -357,7 +387,12 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema} enabled={false}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+          enabled={false}
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -368,7 +403,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={minLengthSchema} uischema={uischema}/>
+        <TextField
+          schema={minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -387,7 +426,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={maxLengthSchema} uischema={control}/>
+        <TextField
+          schema={maxLengthSchema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -406,7 +449,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={maxLengthSchema} uischema={control}/>
+        <TextField
+          schema={maxLengthSchema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -426,7 +473,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={maxLengthSchema} uischema={control}/>
+        <TextField
+          schema={maxLengthSchema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -441,7 +492,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={schema} uischema={uischema}/>
+        <TextField
+          schema={schema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -464,7 +519,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={schema} uischema={control}/>
+        <TextField
+          schema={schema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -484,7 +543,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={schema} uischema={control}/>
+        <TextField
+          schema={schema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -504,7 +567,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={schema} uischema={control}/>
+        <TextField
+          schema={schema}
+          uischema={control}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -519,7 +586,11 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const tree = TestUtils.renderIntoDocument(
       <Provider store={store}>
-        <TextField schema={schema} uischema={uischema}/>
+        <TextField
+          schema={schema}
+          uischema={uischema}
+          path='name'
+        />
       </Provider>
     ) as React.Component<any, any, any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

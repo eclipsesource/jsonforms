@@ -40,13 +40,8 @@ import * as TestUtils from 'react-dom/test-utils';
 test.beforeEach(t => {
   t.context.data = {'name': 'Foo'};
   t.context.schema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-        minLength: 3
-      }
-    }
+    type: 'string',
+    minLength: 3
   };
   t.context.uischema = {
     type: 'Control',
@@ -126,7 +121,7 @@ test('autofocus active', t => {
     });
     const tree: React.Component<any> = TestUtils.renderIntoDocument(
         <Provider store={store}>
-          <TextAreaField schema={t.context.schema} uischema={uischema}/>
+          <TextAreaField schema={t.context.schema} uischema={uischema} path='name' />
         </Provider>
     ) as React.Component<any>;
     const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'textarea') as HTMLInputElement;
@@ -148,7 +143,7 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'textarea') as HTMLInputElement;
@@ -167,7 +162,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'textarea') as HTMLInputElement;
@@ -190,7 +185,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
       <Provider store={store}>
-          <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+          <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
       </Provider>
   ) as React.Component<any>;
   const textarea = TestUtils.findRenderedDOMComponentWithTag(
@@ -208,7 +203,7 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
 
@@ -229,7 +224,7 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textarea = TestUtils.findRenderedDOMComponentWithTag(
@@ -251,7 +246,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -270,7 +265,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -289,7 +284,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -308,7 +303,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -327,7 +322,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -364,7 +359,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaField schema={t.context.schema} uischema={t.context.uischema}/>
+      <TextAreaField schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(

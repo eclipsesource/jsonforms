@@ -52,7 +52,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath,
+      path,
       config
     } = this.props;
     const isValid = errors.length === 0;
@@ -84,7 +84,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         <DispatchField
             uischema={uischema}
             schema={schema}
-            path={parentPath}
+            path={path}
             id={id + '-input'}
             showError={false}
         />

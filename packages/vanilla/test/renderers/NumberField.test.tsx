@@ -40,13 +40,8 @@ import * as TestUtils from 'react-dom/test-utils';
 test.beforeEach(t => {
   t.context.data = {'foo': 3.14};
   t.context.schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number',
-        minimum: 5
-      },
-    },
+    type: 'number',
+    minimum: 5
   };
   t.context.uischema = {
     type: 'Control',
@@ -127,7 +122,7 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={uischema}/>
+      <NumberField schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any> ;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -150,7 +145,7 @@ test('autofocus inactive', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={uischema}/>
+      <NumberField schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -169,7 +164,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={uischema}/>
+      <NumberField schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -250,14 +245,7 @@ test('tester with machting schema type', t => {
 });
 
 test('render', t => {
-  const schema: JsonSchema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'number'
-      }
-    }
-  };
+  const schema: JsonSchema = { type: 'number' };
   const store = initJsonFormsStore({
     data: { 'foo': 3.14 },
     schema,
@@ -265,7 +253,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={schema} uischema={t.context.uischema}/>
+      <NumberField schema={schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -283,7 +271,7 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -294,13 +282,13 @@ test('update via input event', t => {
 
 test('update via action', t => {
   const store = initJsonFormsStore({
-    data: { 'foo': 2.72 },
+    data: { foo: 2.72 },
     schema: t.context.schema,
     uischema: t.context.uischema
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -317,7 +305,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -333,7 +321,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -349,7 +337,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -365,7 +353,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -381,7 +369,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   store.dispatch(update(undefined, () => 13));
@@ -412,7 +400,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberField schema={t.context.schema} uischema={t.context.uischema}/>
+      <NumberField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

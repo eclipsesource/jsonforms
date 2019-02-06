@@ -59,9 +59,7 @@ export type RankedTester = (
 ) => number;
 
 export const isControl = (uischema: any): uischema is ControlElement =>
-  !isEmpty(uischema) &&
-  uischema.scope !== undefined &&
-  uischema.scope !== undefined;
+  !isEmpty(uischema) && uischema.scope !== undefined;
 
 /**
  * Only applicable for Controls.
@@ -79,13 +77,16 @@ export const schemaMatches = (
   if (isEmpty(uischema) || !isControl(uischema)) {
     return false;
   }
+  if (isEmpty(schema)) {
+    return false;
+  }
   const schemaPath = uischema.scope;
   if (isEmpty(schemaPath)) {
     return false;
   }
-  let currentDataSchema: JsonSchema = resolveSchema(schema, schemaPath);
-  while (!isEmpty(currentDataSchema) && !isEmpty(currentDataSchema.$ref)) {
-    currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
+  let currentDataSchema = schema;
+  if (schema.type === 'object') {
+    currentDataSchema = resolveSchema(schema, schemaPath);
   }
   if (currentDataSchema === undefined) {
     return false;
@@ -102,12 +103,9 @@ export const schemaSubPathMatches = (
     return false;
   }
   const schemaPath = uischema.scope;
-  if (isEmpty(schemaPath)) {
-    return false;
-  }
-  let currentDataSchema: JsonSchema = resolveSchema(schema, `${schemaPath}`);
-  while (!isEmpty(currentDataSchema.$ref)) {
-    currentDataSchema = resolveSchema(schema, currentDataSchema.$ref);
+  let currentDataSchema: JsonSchema;
+  if (schema.type === 'object') {
+    currentDataSchema = resolveSchema(schema, schemaPath);
   }
   currentDataSchema = get(currentDataSchema, subPath);
 
@@ -422,10 +420,7 @@ export const isObjectArrayWithNesting = (
           return false;
         }
         wantedNestingByType[val.type] = typeCount - 1;
-        if (wantedNestingByType[val.type] === 0) {
-          return true;
-        }
-        return false;
+        return wantedNestingByType[val.type] === 0;
       })
     ) {
       return true;
@@ -457,13 +452,14 @@ export const isArrayObjectControl = isObjectArrayControl;
  */
 export const isPrimitiveArrayControl = and(
   uiTypeIs('Control'),
-  schemaMatches(
-    schema =>
+  schemaMatches(schema => {
+    return (
       !isEmpty(schema) &&
       schema.type === 'array' &&
       !isEmpty(schema.items) &&
-      !Array.isArray(schema.items) // we don't care about tuples
-  ),
+      !Array.isArray(schema.items)
+    ); // we don't care about tuples
+  }),
   schemaSubPathMatches('items', schema =>
     includes(['integer', 'number', 'boolean', 'string'], schema.type)
   )
