@@ -22,19 +22,30 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/filter';
+import { DispatchField } from '@jsonforms/react';
 import capitalize from 'lodash/capitalize';
-import IconButton from '@material-ui/core/IconButton';
 import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
+import {
+  FormHelperText,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography
+} from '@material-ui/core';
 import {
   ArrayControlProps,
   ControlElement,
+  formatErrorMessage,
   Generate,
   Helpers,
   JsonSchema,
   Paths
 } from '@jsonforms/core';
-import { DispatchField } from '@jsonforms/react';
+import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import { ErrorObject } from 'ajv';
@@ -60,35 +71,38 @@ const generateCells = (
 ) => {
 
   if (scopedSchema.type === 'object') {
-    return getValidColumnProps(scopedSchema)
-      .map(prop => {
-        const cellPath = Paths.compose(rowPath, prop);
-        const props = {
-          propName: prop,
-          scopedSchema,
-          rowPath,
-          cellPath,
-          errors: cellErrors
-        };
+    return getValidColumnProps(scopedSchema).map(prop => {
+      const cellPath = Paths.compose(
+        rowPath,
+        prop
+      );
+      const props = {
+        propName: prop,
+        scopedSchema,
+        rowPath,
+        cellPath,
+        errors: cellErrors
+      };
 
-        return (<Cell key={cellPath} {...props} />);
-      });
+      return <Cell key={cellPath} {...props} />;
+    });
   } else {
     // primitives
     const props = {
       scopedSchema,
       rowPath,
       cellPath: rowPath,
-      errors: cellErrors,
+      errors: cellErrors
     };
-    return (<Cell key={rowPath} {...props} />);
+    return <Cell key={rowPath} {...props} />;
   }
 };
 
 const getValidColumnProps = (scopedSchema: JsonSchema) => {
   if (scopedSchema.type === 'object') {
-    return Object.keys(scopedSchema.properties)
-      .filter(prop => scopedSchema.properties[prop].type !== 'array');
+    return Object.keys(scopedSchema.properties).filter(
+      prop => scopedSchema.properties[prop].type !== 'array'
+    );
   }
   // primitives
   return [''];
@@ -118,9 +132,21 @@ interface NonEmptyCellProps {
   rowPath: string;
   propName?: string;
   scopedSchema: JsonSchema;
+  errors?: any[];
 }
 
-const NonEmptyCell = ({ rowPath, propName, scopedSchema }: NonEmptyCellProps) => (
+const NonEmptyCell = ({
+  rowPath,
+  propName,
+  scopedSchema,
+  errors
+}: NonEmptyCellProps) => {
+  const errorsPerEntry: any[] = filter(
+    errors,
+    error => error.dataPath === rowPath + '.' + propName
+  ).map(e => e.message);
+  const isValid = isEmpty(errorsPerEntry);
+  return (
     <React.Fragment>
       <NoBorderTableCell>
         <DispatchField
@@ -130,11 +156,14 @@ const NonEmptyCell = ({ rowPath, propName, scopedSchema }: NonEmptyCellProps) =>
             scopedSchema.type === 'object' ? `#/properties/${propName}` : '#'
           )}
           path={rowPath}
-          showError
         />
+        <FormHelperText error={!isValid}>
+          {!isValid && formatErrorMessage(errorsPerEntry)}
+        </FormHelperText>
       </NoBorderTableCell>
     </React.Fragment>
   );
+};
 
 interface NonEmptyRowProps {
   childPath: string;
@@ -143,22 +172,17 @@ interface NonEmptyRowProps {
   rowData: any;
 }
 
-const NonEmptyRow = (
-  {
-    childPath,
-    scopedSchema,
-    childErrors,
-    rowData,
-    openDeleteDialog
-  }: NonEmptyRowProps & WithDeleteDialogSupport) => (
-
-  <TableRow
-    key={childPath}
-    hover
-  >
+const NonEmptyRow = ({
+  childPath,
+  scopedSchema,
+  childErrors,
+  rowData,
+  openDeleteDialog
+}: NonEmptyRowProps & WithDeleteDialogSupport) => (
+  <TableRow key={childPath} hover>
     {generateCells(NonEmptyCell, scopedSchema, childPath, childErrors)}
     <NoBorderTableCell style={styles.fixedCell}>
-      <div style={{ display: 'flex', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <IconButton
           aria-label={`Delete`}
           onClick={() => openDeleteDialog(childPath, rowData)}
@@ -197,9 +221,10 @@ const TableRows = (
   });
 };
 
-export class MaterialTableControl
-  extends React.Component<ArrayControlProps & WithDeleteDialogSupport, any> {
-
+export class MaterialTableControl extends React.Component<
+  ArrayControlProps & WithDeleteDialogSupport,
+  any
+> {
   render() {
     const {
       label,
