@@ -25,23 +25,27 @@
 import maxBy from 'lodash/maxBy';
 import React from 'react';
 import {
-    computeLabel, ControlProps,
-    ControlState,
-    formatErrorMessage,
-    isControl,
-    isDescriptionHidden,
-    isPlainLabel,
-    mapStateToControlProps,
-    NOT_APPLICABLE,
-    RankedTester,
-    rankWith,
+  computeLabel,
+  ControlProps,
+  ControlState,
+  formatErrorMessage,
+  isControl,
+  isDescriptionHidden,
+  isPlainLabel,
+  mapStateToControlProps,
+  NOT_APPLICABLE,
+  RankedTester,
+  rankWith
 } from '@jsonforms/core';
 import { Control, DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
 import { connect } from 'react-redux';
 
-export class InputControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
+export class InputControl extends Control<
+  ControlProps & VanillaRendererProps,
+  ControlState
+> {
   render() {
     const {
       classNames,
@@ -58,11 +62,20 @@ export class InputControl extends Control<ControlProps & VanillaRendererProps, C
     } = this.props;
 
     const isValid = errors.length === 0;
-    const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'}`;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const divClassNames = `validation  ${
+      isValid ? classNames.description : 'validation_error'
+    }`;
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused
+    );
     const labelText = isPlainLabel(label) ? label : label.default;
     const field = maxBy(fields, r => r.tester(uischema, schema));
-    if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
+    if (
+      field === undefined ||
+      field.tester(uischema, schema) === NOT_APPLICABLE
+    ) {
       console.warn('No applicable field found.', uischema, schema);
       return null;
     } else {
@@ -78,14 +91,17 @@ export class InputControl extends Control<ControlProps & VanillaRendererProps, C
             {computeLabel(labelText, required)}
           </label>
           <DispatchField
-              uischema={uischema}
-              schema={schema}
-              path={parentPath}
-              id={id + '-input'}
-              showError={false}
+            uischema={uischema}
+            schema={schema}
+            path={parentPath}
+            id={id + '-input'}
           />
           <div className={divClassNames}>
-            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+            {!isValid
+              ? formatErrorMessage(errors)
+              : showDescription
+              ? description
+              : null}
           </div>
         </div>
       );

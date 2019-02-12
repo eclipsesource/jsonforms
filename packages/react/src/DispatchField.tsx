@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,45 +27,36 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-  DispatchFieldProps, DispatchFieldStateProps,
-  formatErrorMessage,
-  mapStateToDispatchFieldProps, OwnPropsOfField,
+  DispatchFieldProps,
+  DispatchFieldStateProps,
+  mapStateToDispatchFieldProps,
+  OwnPropsOfField
 } from '@jsonforms/core';
-import { FormHelperText } from '@material-ui/core';
 
 /**
  * Dispatch renderer component for fields.
  */
 class Dispatch extends React.Component<DispatchFieldProps, any> {
-    render() {
-        const { uischema, schema, path, fields, id, errors, isValid, showError } = this.props;
-        const field = maxBy(fields, r => r.tester(uischema, schema));
+  render() {
+    const { uischema, schema, path, fields, id } = this.props;
+    const field = maxBy(fields, r => r.tester(uischema, schema));
 
-        if (field === undefined || field.tester(uischema, schema) === -1) {
-            return <UnknownRenderer type={'field'}/>;
-        } else {
-            const Field = field.field;
+    if (field === undefined || field.tester(uischema, schema) === -1) {
+      return <UnknownRenderer type={'field'} />;
+    } else {
+      const Field = field.field;
 
-            return (
-                <React.Fragment>
-                    <Field
-                        uischema={uischema}
-                        schema={schema}
-                        path={path}
-                        id={id}
-                    />
-                    {
-                        showError &&
-                        <FormHelperText error={!isValid}>
-                            {!isValid && formatErrorMessage(errors)}
-                        </FormHelperText>
-                    }
-                </React.Fragment>
-            );
-        }
+      return (
+        <React.Fragment>
+          <Field uischema={uischema} schema={schema} path={path} id={id} />
+        </React.Fragment>
+      );
     }
+  }
 }
 
-export const DispatchField = connect<DispatchFieldStateProps, {}, OwnPropsOfField>(
-  mapStateToDispatchFieldProps
-)(Dispatch);
+export const DispatchField = connect<
+  DispatchFieldStateProps,
+  {},
+  OwnPropsOfField
+>(mapStateToDispatchFieldProps)(Dispatch);

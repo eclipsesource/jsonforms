@@ -28,20 +28,17 @@ import { ArrayControlProps, composePaths } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
-export const ArrayControl  = (
-  {
-    classNames,
-    data,
-    label,
-    path,
-    schema,
-    addItem,
-    uischema,
-    findUISchema,
-    createDefaultValue
-  }: ArrayControlProps & VanillaRendererProps
-) => {
-
+export const ArrayControl = ({
+  classNames,
+  data,
+  label,
+  path,
+  schema,
+  addItem,
+  uischema,
+  findUISchema,
+  createDefaultValue
+}: ArrayControlProps & VanillaRendererProps) => {
   return (
     <div className={classNames.wrapper}>
       <fieldset className={classNames.fieldSet}>
@@ -52,14 +49,11 @@ export const ArrayControl  = (
           >
             +
           </button>
-          <label className={'array.label'}>
-            {label}
-          </label>
+          <label className={'array.label'}>{label}</label>
         </legend>
         <div className={classNames.children}>
-          {
-            data ? range(0, data.length).map(index => {
-
+          {data ? (
+            range(0, data.length).map(index => {
               const foundUISchema = findUISchema(schema, uischema.scope, path);
               const childPath = composePaths(path, `${index}`);
 
@@ -71,8 +65,10 @@ export const ArrayControl  = (
                   key={childPath}
                 />
               );
-            }) : <p>No data</p>
-          }
+            })
+          ) : (
+            <p>No data</p>
+          )}
         </div>
       </fieldset>
     </div>

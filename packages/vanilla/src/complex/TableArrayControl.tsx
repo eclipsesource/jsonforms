@@ -47,17 +47,9 @@ import { addVanillaControlProps } from '../util';
 import { connect } from 'react-redux';
 import { VanillaRendererProps } from '../index';
 
-const {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-} = Helpers;
+const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
 
-const {
-  or,
-  isObjectArrayControl,
-  isPrimitiveArrayControl,
-  rankWith
-} = Test;
+const { or, isObjectArrayControl, isPrimitiveArrayControl, rankWith } = Test;
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -65,12 +57,14 @@ const {
  * @type {RankedTester}
  */
 export const tableArrayControlTester: RankedTester = rankWith(
-    3,
-    or(isObjectArrayControl, isPrimitiveArrayControl)
+  3,
+  or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-class TableArrayControl extends React.Component<ArrayControlProps & VanillaRendererProps, any> {
-
+class TableArrayControl extends React.Component<
+  ArrayControlProps & VanillaRendererProps,
+  any
+> {
   render() {
     const {
       addItem,
@@ -90,8 +84,10 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     const tableClass = getStyleAsClassName('array.table.table');
     const labelClass = getStyleAsClassName('array.table.label');
     const buttonClass = getStyleAsClassName('array.table.button');
-    const controlClass = [getStyleAsClassName('array.table'),
-      convertToValidClassName(controlElement.scope)].join(' ');
+    const controlClass = [
+      getStyleAsClassName('array.table'),
+      convertToValidClassName(controlElement.scope)
+    ].join(' ');
     const createControlElement = (key?: string): ControlElement => ({
       type: 'Control',
       label: false,
@@ -105,10 +101,11 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
     return (
       <div className={controlClass} hidden={!visible}>
         <header>
-          <label className={labelClass}>
-            {labelText}
-          </label>
-          <button className={buttonClass} onClick={addItem(path, createDefaultValue())}>
+          <label className={labelClass}>{labelText}</label>
+          <button
+            className={buttonClass}
+            onClick={addItem(path, createDefaultValue())}
+          >
             Add to {labelObject.text}
           </button>
         </header>
@@ -117,77 +114,91 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
         </div>
         <table className={tableClass}>
           <thead>
-          <tr>
-            {
-              schema.properties ?
+            <tr>
+              {schema.properties ? (
                 fpflow(
                   fpkeys,
                   fpfilter(prop => schema.properties[prop].type !== 'array'),
                   fpmap(prop => <th key={prop}>{prop}</th>)
-                ) (schema.properties)
-                : <th>Items</th>
-            }
-            <th>
-              Valid
-            </th>
-          </tr>
+                )(schema.properties)
+              ) : (
+                <th>Items</th>
+              )}
+              <th>Valid</th>
+            </tr>
           </thead>
           <tbody>
-          {
-            (!data || !Array.isArray(data) || data.length === 0) ?
-              <tr><td>No data</td></tr> :
+            {!data || !Array.isArray(data) || data.length === 0 ? (
+              <tr>
+                <td>No data</td>
+              </tr>
+            ) : (
               data.map((_child, index) => {
-                const childPath = Paths.compose(path, `${index}`);
+                const childPath = Paths.compose(
+                  path,
+                  `${index}`
+                );
                 // TODO
-                const errorsPerEntry: any[] = filter(
-                  childErrors,
-                  error => error.dataPath.startsWith(childPath)
+                const errorsPerEntry: any[] = filter(childErrors, error =>
+                  error.dataPath.startsWith(childPath)
                 );
 
                 return (
                   <tr key={childPath}>
-                    {
-                      schema.properties ?
-                        fpflow(
-                          fpkeys,
-                          fpfilter(prop => schema.properties[prop].type !== 'array'),
-                          fpmap(prop => {
-                            const childPropPath = Paths.compose(childPath, prop.toString());
+                    {schema.properties ? (
+                      fpflow(
+                        fpkeys,
+                        fpfilter(
+                          prop => schema.properties[prop].type !== 'array'
+                        ),
+                        fpmap(prop => {
+                          const childPropPath = Paths.compose(
+                            childPath,
+                            prop.toString()
+                          );
 
-                            return (
-                              <td key={childPropPath}>
-                                <DispatchField
-                                  schema={schema}
-                                  uischema={createControlElement(prop)}
-                                  path={childPath}
-                                  showError
-                                />
-                              </td>
-                            );
-                          })
-                        )(schema.properties) :
-                        <td key={Paths.compose(childPath, index.toString())}>
-                          <DispatchField
-                            schema={schema}
-                            uischema={createControlElement()}
-                            path={childPath}
-                            showError
-                          />
-                        </td>
-                    }
+                          return (
+                            <td key={childPropPath}>
+                              <DispatchField
+                                schema={schema}
+                                uischema={createControlElement(prop)}
+                                path={childPath}
+                              />
+                            </td>
+                          );
+                        })
+                      )(schema.properties)
+                    ) : (
+                      <td
+                        key={Paths.compose(
+                          childPath,
+                          index.toString()
+                        )}
+                      >
+                        <DispatchField
+                          schema={schema}
+                          uischema={createControlElement()}
+                          path={childPath}
+                        />
+                      </td>
+                    )}
                     <td>
-                      {
-                        errorsPerEntry ?
-                          <span className={getStyleAsClassName('array.validation.error')}>
-                            {join(errorsPerEntry.map(e => e.message), ' and ')}
-                          </span> :
-                          <span>OK</span>
-                      }
+                      {errorsPerEntry ? (
+                        <span
+                          className={getStyleAsClassName(
+                            'array.validation.error'
+                          )}
+                        >
+                          {join(errorsPerEntry.map(e => e.message), ' and ')}
+                        </span>
+                      ) : (
+                        <span>OK</span>
+                      )}
                     </td>
                   </tr>
                 );
               })
-          }
+            )}
           </tbody>
         </table>
       </div>
@@ -196,6 +207,6 @@ class TableArrayControl extends React.Component<ArrayControlProps & VanillaRende
 }
 
 export default connect(
-    addVanillaControlProps<StatePropsOfControl>(mapStateToArrayControlProps),
-    mapDispatchToArrayControlProps
+  addVanillaControlProps<StatePropsOfControl>(mapStateToArrayControlProps),
+  mapDispatchToArrayControlProps
 )(TableArrayControl);

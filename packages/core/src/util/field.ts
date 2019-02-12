@@ -146,9 +146,7 @@ export const mapStateToDispatchFieldProps = (
   };
 };
 
-export interface DispatchFieldProps extends DispatchFieldStateProps {
-  showError: boolean;
-}
+export interface DispatchFieldProps extends DispatchFieldStateProps {}
 
 /**
  * Default mapStateToFieldProps for enum field. Options is used for populating dropdown list

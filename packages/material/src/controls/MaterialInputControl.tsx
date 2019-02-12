@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -57,19 +57,23 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
-    const style: {[x: string]: any} = {};
+    const style: { [x: string]: any } = {};
     if (!visible) {
       style.display = 'none';
     }
-    const inputLabelStyle: {[x: string]: any} = {
+    const inputLabelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
-      overflow : 'hidden',
+      overflow: 'hidden',
       textOverflow: 'ellipsis',
       // magic width as the label is transformed to 75% of its size
       width: '125%'
     };
 
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused
+    );
     return (
       <FormControl
         style={style}
@@ -78,18 +82,25 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         onBlur={this.onBlur}
         id={id}
       >
-        <InputLabel htmlFor={id + '-input'} error={!isValid} style={inputLabelStyle}>
+        <InputLabel
+          htmlFor={id + '-input'}
+          error={!isValid}
+          style={inputLabelStyle}
+        >
           {computeLabel(isPlainLabel(label) ? label : label.default, required)}
         </InputLabel>
         <DispatchField
-            uischema={uischema}
-            schema={schema}
-            path={path}
-            id={id + '-input'}
-            showError={false}
+          uischema={uischema}
+          schema={schema}
+          path={path}
+          id={id + '-input'}
         />
         <FormHelperText error={!isValid}>
-          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          {!isValid
+            ? formatErrorMessage(errors)
+            : showDescription
+            ? description
+            : null}
         </FormHelperText>
       </FormControl>
     );
