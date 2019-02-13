@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/webcomponent",
-  "version": "2.2.0",
+  "version": "2.2.1-alpha.0",
   "description": "Webcomponnet module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -39,8 +39,8 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.2.0",
-    "@jsonforms/react": "^2.2.0",
+    "@jsonforms/core": "^2.2.1-alpha.0",
+    "@jsonforms/react": "^2.2.1-alpha.0",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "es6-shim": "^0.35.3",
     "json-refs": "^3.0.10"
@@ -52,7 +52,7 @@
     "redux": "^3.0.0"
   },
   "devDependencies": {
-    "@jsonforms/test": "^2.2.0",
+    "@jsonforms/test": "^2.2.1-alpha.0",
     "@types/react-dom": "^16.0.8",
     "document-register-element": "^1.7.0",
     "jsdom": "^11.9.0",
