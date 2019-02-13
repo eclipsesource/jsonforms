@@ -55,8 +55,11 @@ import * as object from './object';
 import * as i18n from './i18n';
 import * as issue_1169 from './1169';
 import * as issue_1220 from './1220';
+import * as issue_1253 from './1253';
+import * as oneOfRecursive from './oneOf-recursive';
 export * from './register';
 export * from './example';
+
 export {
   allOf,
   anyOf,
@@ -90,5 +93,7 @@ export {
   object,
   i18n,
   issue_1169,
-  issue_1220
+  issue_1220,
+  issue_1253,
+  oneOfRecursive
 };
