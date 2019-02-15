@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,11 +25,14 @@
 import { Actions, ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
 import { MaterialArrayLayout, materialArrayLayoutTester } from '../../src/layouts';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 export const initJsonFormsStore = (): Store<JsonFormsState> => {
   const s: JsonFormsState ={
@@ -141,7 +144,7 @@ const uischemaOptions: {
   }
 };
 
-describe('Material array layout', () => {
+describe('Material array layout tester', () => {
   it('should only be applicable for intermediate array or when containing proper options', () => {
     expect(materialArrayLayoutTester(uischema, schema)).toBe(-1);
     expect(materialArrayLayoutTester(uischema, nestedSchema)).toBe(4);
@@ -151,52 +154,59 @@ describe('Material array layout', () => {
     expect(materialArrayLayoutTester(uischemaOptions.generate, schema)).toBe(4);
     expect(materialArrayLayoutTester(uischemaOptions.inline, schema)).toBe(4);
   });
+});
+
+describe('Material array layout', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
 
   it('should render two by two children', () => {
     const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
           uischema={uischema}
         />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const controls = wrapper.find('input');
     // 2 data entries with each having 2 controls
-    expect(controls.length).toBe(4);
+    expect(controls).toHaveLength(4);
   });
 
   it('should generate uischema when options.detail=GENERATE', () => {
     const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
           uischema={uischemaOptions.generate}
         />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const controls = wrapper.find('input');
     // 2 data entries with each having 2 controls
-    expect(controls.length).toBe(4);
+    expect(controls).toHaveLength(4);
   });
 
   it('should use inline options.detail uischema', () => {
     const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
           uischema={uischemaOptions.inline}
         />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const controls = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+    const controls = wrapper.find('input');
     // 2 data entries with each having 1 control
-    expect(controls.length).toBe(2);
+    expect(controls).toHaveLength(2);
   });
 });

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,6 @@ import {
   Actions,
   ControlElement,
   getData,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
@@ -36,17 +35,20 @@ import {
   update
 } from '@jsonforms/core';
 import TextField, { materialTextFieldTester, } from '../../src/fields/MaterialTextField';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
+
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const DEFAULT_MAX_LENGTH = 524288;
 const DEFAULT_SIZE = 20;
 
 const data =  { 'name': 'Foo' };
-const minLengthSchema ={
+const minLengthSchema = {
   type: 'string',
   minLength: 3
 };
@@ -149,44 +151,10 @@ describe('Material text field tester', () => {
 });
 
 describe('Material text field', () => {
-  it('should autofocus first element', () =>  {
-    const jsonSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        firstName: { type: 'string' },
-        lastName: { type: 'string' }
-      }
-    };
-    const firstControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/firstName',
-      options: { focus: true }
-    };
-    const secondControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/lastName',
-      options: {
-        focus: true
-      }
-    };
-    const layout: HorizontalLayout = {
-      type: 'HorizontalLayout',
-      elements: [firstControlElement, secondControlElement]
-    };
-    const store = initJsonFormsStore(
-      { firstName: 'Foo', lastName: 'Boo' },
-      jsonSchema,
-      layout
-    );
-    const tree = TestUtils.renderIntoDocument(
-      <Provider store={store}>
-        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>
-    ) as React.Component<any, any, any>;
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    expect(document.activeElement).not.toBe(inputs[0]);
-    expect(document.activeElement).toBe(inputs[1]);
-  });
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
 
   it('should autofocus via option', () =>  {
     const control: ControlElement = {
@@ -195,7 +163,7 @@ describe('Material text field', () => {
       options: { focus: true }
     };
     const store = initJsonFormsStore(data, minLengthSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -203,9 +171,9 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).toBe(input);
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeTruthy();
   });
 
   it('should not autofocus via option', () =>  {
@@ -215,7 +183,7 @@ describe('Material text field', () => {
       options: { focus: false }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -223,9 +191,9 @@ describe('Material text field', () => {
           path={'name'}
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).not.toBe(input);
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should not autofocus by default', () =>  {
@@ -234,7 +202,7 @@ describe('Material text field', () => {
       scope: '#/properties/name'
     };
     const store = initJsonFormsStore(data, minLengthSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -242,8 +210,8 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+    const input = wrapper.find('input').first();
     expect(document.activeElement).not.toBe(input);
   });
 
@@ -255,7 +223,7 @@ describe('Material text field', () => {
       }
     };
     const store = initJsonFormsStore({ 'name': 'Foo' }, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={jsonSchema}
@@ -263,15 +231,15 @@ describe('Material text field', () => {
           path={'name'}
         />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.value).toBe('Foo');
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
   it('should update via input event', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -279,17 +247,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    input.value = 'Bar';
-    TestUtils.Simulate.change(input);
+    const input = wrapper.find('input').first();
+    input.simulate('change', { target: { value: 'Bar' } });
     expect(getData(store.getState()).name).toBe('Bar');
   });
 
   it('should update via action', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -297,15 +264,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('name', () => 'Bar'));
-    expect(input.value).toBe('Bar');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Bar');
   });
 
   it('should update with undefined value', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -313,15 +281,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('name', () => undefined));
-    expect(input.value).toBe('');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should update with null value', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -329,15 +298,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('name', () => null));
-    expect(input.value).toBe('');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should not update if wrong ref', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -345,15 +315,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('firstname', () => 'Bar'));
-    expect(input.value).toBe('Foo');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
   it('should not update if null ref', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -361,15 +332,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update(null, () => 'Bar'));
-    expect(input.value).toBe('Foo');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
   it('should not update if undefined ref', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -377,15 +349,16 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update(undefined, () => 'Bar'));
-    expect(input.value).toBe('Foo');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('Foo');
   });
 
   it('can be disabled', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -394,14 +367,14 @@ describe('Material text field', () => {
           enabled={false}
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeTruthy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () =>  {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={minLengthSchema}
@@ -409,9 +382,9 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeFalsy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeFalsy();
   });
 
   it('should use maxLength for size and maxlength attributes', () =>  {
@@ -424,7 +397,7 @@ describe('Material text field', () => {
       }
     };
     const store = initJsonFormsStore(data, maxLengthSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={maxLengthSchema}
@@ -432,12 +405,11 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.maxLength).toBe(5);
-    expect(window.getComputedStyle(input.parentElement, null).getPropertyValue('width'))
-      .not.toBe('100%');
-    expect(input.size).toBe(5);
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().maxLength).toBe(5);
+    expect(input.parent().props().width).not.toBe('100%');
+    expect(input.props().size).toBe(5);
   });
 
   it('should use maxLength for size attribute', () =>  {
@@ -447,7 +419,7 @@ describe('Material text field', () => {
       options: { trim: true }
     };
     const store = initJsonFormsStore(data, maxLengthSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={maxLengthSchema}
@@ -455,11 +427,11 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).not.toBe('100%');
     expect(input.size).toBe(5);
   });
@@ -471,7 +443,7 @@ describe('Material text field', () => {
       options: { restrict: true }
     };
     const store = initJsonFormsStore(data, maxLengthSchema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={maxLengthSchema}
@@ -479,18 +451,18 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(5);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
   it('should not use maxLength by default', () =>  {
     const store = initJsonFormsStore(data, maxLengthSchema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={schema}
@@ -498,11 +470,11 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });
@@ -517,7 +489,7 @@ describe('Material text field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={schema}
@@ -525,11 +497,11 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });
@@ -541,7 +513,7 @@ describe('Material text field', () => {
       options: { trim: true }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={schema}
@@ -549,11 +521,12 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });
@@ -565,7 +538,7 @@ describe('Material text field', () => {
       options: { restrict: true }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={schema}
@@ -573,18 +546,19 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
   it('should have default values for attributes', () =>  {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TextField
           schema={schema}
@@ -592,11 +566,11 @@ describe('Material text field', () => {
           path='name'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
+    const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
     expect(input.maxLength).toBe(DEFAULT_MAX_LENGTH);
     expect(
-      window.getComputedStyle(input.parentElement, null).getPropertyValue('width')
+      getComputedStyle(input.parentElement, null).getPropertyValue('width')
     ).toBe('100%');
     expect(input.size).toBe(DEFAULT_SIZE);
   });

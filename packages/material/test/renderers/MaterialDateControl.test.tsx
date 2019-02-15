@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,22 +27,21 @@ import {
   Actions,
   ControlElement,
   getData,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
   UISchemaElement
 } from '@jsonforms/core';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import MaterialDateControl, {
-  materialDateControlTester
-} from '../../src/controls/MaterialDateControl';
+import MaterialDateControl, { materialDateControlTester } from '../../src/controls/MaterialDateControl';
 import * as React from 'react';
-import * as TestUtils from 'react-dom/test-utils';
-import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
+
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
@@ -130,60 +129,9 @@ describe('Material date control tester', () => {
 
 describe('Material date control', () => {
 
-  /** Use this container to render components */
-  const container = document.createElement('div');
+  let wrapper: ReactWrapper;
 
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
-  });
-
-  it('should autofocus first element', () => {
-    const jsonSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        firstDate: { type: 'string', format: 'date' },
-        secondDate: { type: 'string', format: 'date' }
-      }
-    };
-    const firstControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/firstDate',
-      options: {
-        focus: true
-      }
-    };
-    const secondControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/secondDate',
-      options: {
-        focus: true
-      }
-    };
-    const layout: HorizontalLayout = {
-      type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
-    };
-    const store = initJsonFormsStore(
-      {
-        firstDate: '1980-04-04',
-        secondDate: '1980-04-04'
-      },
-      schema,
-      uischema
-    );
-    const tree = ReactDOM.render(
-      <Provider store={store}>
-        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    expect(document.activeElement).not.toBe(inputs[0]);
-    expect(document.activeElement).toBe(inputs[1]);
-  });
+  afterEach(() => wrapper.unmount());
 
   it('should autofocus via option', () => {
     const control: ControlElement = {
@@ -194,14 +142,13 @@ describe('Material date control', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={control}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).toBe(input);
+      </Provider>
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBe(true);
   });
 
   it('should not autofocus via option', () => {
@@ -213,14 +160,13 @@ describe('Material date control', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={control}/>
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBeFalsy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should not autofocus by default', () => {
@@ -229,156 +175,149 @@ describe('Material date control', () => {
       scope: '#/properties/foo'
     };
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={control}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBeFalsy();
+      </Provider>
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
+      </Provider>
+    );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.type).toBe('text');
-    expect(input.value).toBe('1980-06-04');
+    const input = wrapper.find('input').first();
+    expect(input.props().type).toBe('text');
+    expect(input.props().value).toBe('1980-06-04');
   });
 
   it('should update via event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    input.value = '1961-04-12';
-    TestUtils.Simulate.change(input);
+      </Provider>
+    );
+    const input = wrapper.find('input').first();
+    input.simulate('change', { target: { value: '1961-04-12' } });
     expect(getData(store.getState()).foo).toBe('1961-04-12');
   });
 
   it('should update via action', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+      </Provider>
+    );
     store.dispatch(Actions.update('foo', () => '1961-04-12'));
-    expect(input.value).toBe('1961-04-12');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('1961-04-12');
   });
 
   it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(Actions.update('foo', () => null));
-    expect(input.value).toBe('');
+    wrapper.update()
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+      </Provider>
+    );
     store.dispatch(Actions.update('foo', () => undefined));
-    expect(input.value).toBe('');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should not update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(Actions.update('bar', () => 'Bar'));
-    expect(input.value).toBe('1980-06-04');
+    wrapper.update();
+    const input = wrapper.find('input');
+    expect(input.props().value).toBe('1980-06-04');
   });
 
   it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+      </Provider>
+    );
     store.dispatch(Actions.update(null, () => '1961-04-12'));
-    expect(input.value).toBe('1980-06-04');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('1980-06-04');
   });
 
   it('should not update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+      </Provider>
+    );
     store.dispatch(Actions.update(undefined, () => '1961-04-12'));
-    expect(input.value).toBe('1980-06-04');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('1980-06-04');
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema} enabled={false}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeTruthy();
+      </Provider>
+    );
+    const input = wrapper.find('input').first()
+    expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeFalsy();
+      </Provider>
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeFalsy();
   });
 
   it('should render input id', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialDateControl schema={schema} uischema={uischema} id='#/properties/foo'/>
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+      </Provider>
+    );
+    const input = wrapper.find('input').first();
     // there is only input id at the moment
-    expect(input.id).toBe('#/properties/foo-input');
+    expect(input.props().id).toBe('#/properties/foo-input');
   });
 });

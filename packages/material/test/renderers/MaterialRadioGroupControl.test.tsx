@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -36,10 +36,11 @@ import {
 } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
-import * as _ from 'lodash';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+Enzyme.configure({ adapter: new Adapter() });
 
 const data = { foo: 'D' };
 const schema = {
@@ -78,41 +79,39 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
 };
 
 describe('Material radio group control', () => {
-  it('Radio group should have data option selected', () => {
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
+  it('should have option selected', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialRadioGroupControl schema={schema} uischema={uischema} />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    const radioButtons = _.filter(inputs, i => i.type === 'radio');
+    const radioButtons = wrapper.find('input[type="radio"]');
+    const currentlyChecked = wrapper.find('input[type="radio"][checked=true]');
     expect(radioButtons.length).toBe(4);
-    // make sure one option is selected and it is "D"
-    const currentlyChecked = _.filter(radioButtons, radio => radio.checked);
-    expect(currentlyChecked.length).toBe(1);
-    expect(currentlyChecked[0].value).toBe('D');
+    expect(currentlyChecked.first().props().value).toBe('D');
   });
-});
 
-describe('Material radio group control selection', () => {
-  it('Radio group should have only one selected option ', () => {
+
+  it('should have only update selected option ', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
-      <Provider store={store}>
-        <MaterialRadioGroupControl schema={schema} uischema={uischema} />
-      </Provider>
-    ) as React.Component<any, any, any>;
 
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    const radioButtons = _.filter(inputs, i => i.type === 'radio');
-
-    // change and verify selection
     store.dispatch(update('foo', () => 'A'));
     store.dispatch(update('foo', () => 'B'));
-    const currentlyChecked = _.filter(radioButtons, radio => radio.checked);
+
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialRadioGroupControl schema={schema} uischema={uischema} />
+      </Provider>
+    );
+    const currentlyChecked = wrapper.find('input[type="radio"][checked=true]');
     expect(currentlyChecked.length).toBe(1);
-    expect(currentlyChecked[0].value).toBe('B');
+    expect(currentlyChecked.first().props().value).toBe('B');
   });
 });

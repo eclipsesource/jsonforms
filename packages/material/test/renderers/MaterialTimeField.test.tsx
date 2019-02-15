@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,7 +27,6 @@ import {
   Actions,
   ControlElement,
   getData,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
@@ -35,12 +34,15 @@ import {
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import TimeField, { materialTimeFieldTester } from '../../src/fields/MaterialTimeField';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
+
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const data = { 'foo': '13:37' };
 
@@ -129,52 +131,10 @@ describe('Material time field tester', () => {
 });
 
 describe('Material time field', () => {
-  it('should autofocus first element', () => {
-    const jsonSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        firstDate: { type: 'string', format: 'date' },
-        secondDate: { type: 'string', format: 'date' }
-      }
-    };
-    const firstControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/firstDate',
-      options: {
-        focus: true
-      }
-    };
-    const secondControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/secondDate',
-      options: {
-        focus: true
-      }
-    };
-    const layout: HorizontalLayout = {
-      type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
-    };
-    const store = initJsonFormsStore(
-      {
-        'firstDate': '1980-04-04',
-        'secondDate': '1980-04-04'
-      },
-      jsonSchema,
-      layout
-    );
-    const tree = TestUtils.renderIntoDocument(
-      <Provider store={store}>
-        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout} />
-      </Provider>
-    ) as React.Component<any, any, any>;
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    expect(document.activeElement).not.toBe(inputs[0]);
-    expect(document.activeElement).toBe(inputs[1]);
-  });
+
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
 
   it('should autofocus via option', () => {
     const control: ControlElement = {
@@ -185,13 +145,13 @@ describe('Material time field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField schema={schema} uischema={control}/>
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).toBe(input);
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeTruthy();
   });
 
   it('should not autofocus via option', () => {
@@ -203,13 +163,13 @@ describe('Material time field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField schema={schema} uischema={control}/>
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBeFalsy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should not autofocus by default', () => {
@@ -218,7 +178,7 @@ describe('Material time field', () => {
       scope: '#/properties/foo'
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -226,14 +186,14 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBeFalsy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -241,16 +201,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
+    );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.type).toBe('time');
-    expect(input.value).toBe('13:37');
+    const input = wrapper.find('input').first();
+    expect(input.props().type).toBe('time');
+    expect(input.props().value).toBe('13:37');
   });
 
   it('should update via event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -258,16 +218,15 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    input.value = '20:15';
-    TestUtils.Simulate.change(input);
+    );
+    const input = wrapper.find('input').first();
+    input.simulate('change', { target: { value: '20:15' } });
     expect(getData(store.getState()).foo).toBe('20:15');
   });
 
   it('should update via action', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -275,15 +234,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('foo', () => '20:15'));
-    expect(input.value).toBe('20:15');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('20:15');
   });
 
   it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -291,15 +251,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('foo', () => null));
-    expect(input.value).toBe('');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -307,15 +268,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('foo', () => undefined));
-    expect(input.value).toBe('');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -323,15 +285,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update('bar', () => 'Bar'));
-    expect(input.value).toBe('13:37');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('13:37');
   });
 
   it('should update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -339,15 +302,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update(null, () => '20:15'));
-    expect(input.value).toBe('13:37');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('13:37');
   });
 
   it('should update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -355,15 +319,16 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
+    );
     store.dispatch(update(undefined, () => '20:15'));
-    expect(input.value).toBe('13:37');
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('13:37');
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -372,14 +337,14 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeTruthy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <TimeField
           schema={schema}
@@ -387,8 +352,8 @@ describe('Material time field', () => {
           path='foo'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeFalsy();
+    );
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeFalsy();
   });
 });
