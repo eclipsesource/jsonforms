@@ -56,8 +56,6 @@
     ]
   },
   "dependencies": {
-    "@types/enzyme": "^3.1.15",
-    "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/react": "^16.4.14",
     "@types/react-redux": "^5.0.19",
     "lodash": "^4.17.4"
@@ -68,6 +66,8 @@
     "react-redux": "^6.0.0"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.1.15",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
     "@jsonforms/core": "^2.2.1-alpha.1",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.7.1",
