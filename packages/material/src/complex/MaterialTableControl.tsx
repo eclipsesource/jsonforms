@@ -141,9 +141,10 @@ const NonEmptyCell = ({
   scopedSchema,
   errors
 }: NonEmptyCellProps) => {
+  const path = rowPath + (scopedSchema.type === 'object' ? '.' + propName : '');
   const errorsPerEntry: any[] = filter(
     errors,
-    error => error.dataPath === rowPath + '.' + propName
+    error => error.dataPath === path
   ).map(e => e.message);
   const isValid = isEmpty(errorsPerEntry);
   return (
@@ -155,7 +156,7 @@ const NonEmptyCell = ({
             undefined,
             scopedSchema.type === 'object' ? `#/properties/${propName}` : '#'
           )}
-          path={rowPath}
+          path={path}
         />
         <FormHelperText error={!isValid}>
           {!isValid && formatErrorMessage(errorsPerEntry)}
