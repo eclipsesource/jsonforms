@@ -103,7 +103,7 @@ export const schemaSubPathMatches = (
     return false;
   }
   const schemaPath = uischema.scope;
-  let currentDataSchema: JsonSchema;
+  let currentDataSchema: JsonSchema = schema;
   if (schema.type === 'object') {
     currentDataSchema = resolveSchema(schema, schemaPath);
   }

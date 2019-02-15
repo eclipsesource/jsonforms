@@ -26,6 +26,41 @@ export const uischema = {
 
 const data = {};
 
+const schema2 = {
+  type: 'object',
+  properties: {
+    oneOrMoreThings: {
+      oneOf: [
+        {
+          $ref: '#/definitions/thing'
+        },
+        {
+          $ref: '#/definitions/thingArray'
+        }
+      ]
+    }
+  },
+  definitions: {
+    thing: {
+      title: 'Thing',
+      type: 'string'
+    },
+    thingArray: {
+      title: 'Things',
+      type: 'array',
+      items: {
+        $ref: '#/definitions/thing'
+      }
+    }
+  }
+};
+
+const uischema2 = {
+  type: 'Control',
+  label: 'Value',
+  scope: '#/properties/oneOrMoreThings'
+};
+
 registerExamples([
   {
     name: 'issue-1253',
@@ -33,5 +68,15 @@ registerExamples([
     data,
     schema,
     uischema
+  }
+]);
+
+registerExamples([
+  {
+    name: 'issue-1253-field',
+    label: 'issue 1253 (oneOf) - missing field',
+    data,
+    schema: schema2,
+    uischema: uischema2
   }
 ]);
