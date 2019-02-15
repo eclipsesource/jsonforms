@@ -57,7 +57,7 @@ export class InputControl extends Control<
       schema,
       visible,
       required,
-      parentPath,
+      path,
       fields
     } = this.props;
 
@@ -93,7 +93,7 @@ export class InputControl extends Control<
           <DispatchField
             uischema={uischema}
             schema={schema}
-            path={parentPath}
+            path={path}
             id={id + '-input'}
           />
           <div className={divClassNames}>

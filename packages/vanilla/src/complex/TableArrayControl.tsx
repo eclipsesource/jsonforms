@@ -162,7 +162,7 @@ class TableArrayControl extends React.Component<
                               <DispatchField
                                 schema={schema}
                                 uischema={createControlElement(prop)}
-                                path={childPath}
+                                path={childPath + '.' + prop}
                               />
                             </td>
                           );
