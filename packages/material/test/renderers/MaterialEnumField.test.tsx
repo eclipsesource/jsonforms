@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -33,9 +33,13 @@ import {
 } from '@jsonforms/core';
 import MaterialEnumField, { materialEnumFieldTester } from '../../src/fields/MaterialEnumField';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
+
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const data =  { nationality: 'JP'};
 const schema = {
@@ -89,7 +93,7 @@ describe('Material enum field tester', () => {
 describe('Material enum field', () => {
   it('should select an item from dropdown list', () =>  {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const wrapper = mount(
       <Provider store={store}>
         <MaterialEnumField
           schema={schema}
@@ -97,8 +101,8 @@ describe('Material enum field', () => {
           path='nationality'
         />
       </Provider>
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.value).toBe('JP');
+    );
+    const input = wrapper.find('input');
+    expect(input.props().value).toBe('JP');
   });
 });

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,16 +25,8 @@
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import {
-  Actions,
-  Categorization,
-  ControlElement,
-  jsonformsReducer,
-  JsonFormsState,
-  Layout
-} from '@jsonforms/core';
-import { mount } from 'enzyme';
-import { configure } from 'enzyme';
+import { Actions, Categorization, ControlElement, jsonformsReducer, JsonFormsState, Layout } from '@jsonforms/core';
+import Enzyme, { mount } from 'enzyme';
 
 import { combineReducers, createStore, Store } from 'redux';
 import MaterialCategorizationStepperLayoutRenderer, {
@@ -43,9 +35,9 @@ import MaterialCategorizationStepperLayoutRenderer, {
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { materialFields, materialRenderers } from '../../src';
 import { Step, StepButton, Stepper } from '@material-ui/core';
-
 import Adapter from 'enzyme-adapter-react-16';
-configure({ adapter: new Adapter() });
+
+Enzyme.configure({ adapter: new Adapter() });
 
 export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
   const s: JsonFormsState = {

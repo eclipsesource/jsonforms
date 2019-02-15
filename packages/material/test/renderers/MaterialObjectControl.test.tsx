@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,13 +32,14 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as TestUtils from 'react-dom/test-utils';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
-import MaterialObjectRenderer,
-       { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
+import MaterialObjectRenderer, { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
@@ -131,78 +132,70 @@ describe('Material object renderer tester', () => {
 
 describe('Material object control', () => {
 
-  /** Use this container to render components */
-  const container = document.createElement('div');
+  let wrapper: ReactWrapper;
 
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
-  });
+  afterEach(() => wrapper.unmount());
 
   it('should render all children', () => {
     const store = initJsonFormsStore(data, schema, uischema1);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialObjectRenderer schema={schema} uischema={uischema1} />
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
+    );
 
-    const input = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    expect(input.length).toBe(2);
-    expect(input[0].type).toBe('text');
-    expect(input[0].value).toBe('foo');
-    expect(input[1].type).toBe('text');
-    expect(input[1].value).toBe('bar');
+    const inputs = wrapper.find('input');
+    expect(inputs.length).toBe(2);
+    expect(inputs.at(0).props().type).toBe('text');
+    expect(inputs.at(0).props().value).toBe('foo');
+    expect(inputs.at(1).props().type).toBe('text');
+    expect(inputs.at(1).props().value).toBe('bar');
   });
 
   it('should render only itself', () => {
     const store = initJsonFormsStore(data, schema, uischema1);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
+    );
 
-    const input = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    expect(input.length).toBe(1);
-    expect(input[0].type).toBe('text');
-    expect(input[0].value).toBe('foo');
+    const inputs = wrapper.find('input');
+    expect(inputs.length).toBe(1);
+    expect(inputs.at(0).props().type).toBe('text');
+    expect(inputs.at(0).props().value).toBe('foo');
   });
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema2);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeFalsy();
+    );
+    const inputs = wrapper.find('input');
+    expect(inputs.first().props().disabled).toBeFalsy();
   });
 
   it('can be invisible', () => {
     const store = initJsonFormsStore(data, schema, uischema2);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
-      </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
-    expect(input.length).toBe(0);
+      </Provider>
+    );
+    const inputs = wrapper.find('input');
+    expect(inputs.length).toBe(0);
   });
 
   it('should be visible by default', () => {
     const store = initJsonFormsStore(data, schema, uischema2);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialObjectRenderer schema={schema} uischema={uischema2} />
       </Provider>,
-      container
-    ) as React.Component<any, any, any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.hidden).toBeFalsy();
+    );
+    const inputs = wrapper.find('input');
+    expect(inputs.first().props().hidden).toBeFalsy();
   });
 });
