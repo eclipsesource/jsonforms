@@ -60,7 +60,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
     const { path, schema, handleChange } = this.props;
     handleChange(
       path,
-      createDefaultValue(schema.oneOf[this.state.selectedOneOf])
+      createDefaultValue(schema.oneOf[this.state.newOneOfIndex])
     );
     this.setState({
       open: false,
@@ -69,7 +69,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
     });
   };
 
-  handleChange = (_event: any, newOneOfIndex: number) => {
+  handleTabChange = (_event: any, newOneOfIndex: number) => {
     this.setState({
       open: true,
       newOneOfIndex
@@ -79,7 +79,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
   render() {
 
     const oneOf = 'oneOf';
-    const { schema, path, rootSchema } = this.props;
+    const { schema, path, rootSchema, id } = this.props;
     const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
     const oneOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).oneOf, rootSchema, oneOf);
 
@@ -90,7 +90,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
           combinatorKeyword={'oneOf'}
           path={path}
         />
-        <Tabs value={this.state.selectedOneOf} onChange={this.handleChange}>
+        <Tabs value={this.state.selectedOneOf} onChange={this.handleTabChange}>
           {oneOfRenderInfos.map(oneOfRenderInfo => <Tab key={oneOfRenderInfo.label} label={oneOfRenderInfo.label}/>)}
         </Tabs>
         {
@@ -122,7 +122,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
             <Button onClick={this.cancel} color='primary'>
               No
             </Button>
-            <Button onClick={this.confirm} color='primary' autoFocus>
+            <Button onClick={this.confirm} color='primary' autoFocus id={`oneOf-${id}-confirm-yes`}>
               Yes
             </Button>
           </DialogActions>

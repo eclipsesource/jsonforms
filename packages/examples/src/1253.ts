@@ -55,10 +55,51 @@ const schema2 = {
   }
 };
 
+const schema3 = {
+  type: 'object',
+  properties: {
+    thingOrThings: {
+      oneOf: [
+        {
+          title: 'Thing',
+          type: 'object',
+          properties: {
+            thing: {
+              $ref: '#/definitions/thing'
+            }
+          }
+        },
+        {
+          $ref: '#/definitions/thingArray'
+        }
+      ]
+    }
+  },
+  definitions: {
+    thing: {
+      title: 'Thing',
+      type: 'string'
+    },
+    thingArray: {
+      title: 'Things',
+      type: 'array',
+      items: {
+        $ref: '#/definitions/thing'
+      }
+    }
+  }
+};
+
 const uischema2 = {
   type: 'Control',
   label: 'Value',
   scope: '#/properties/oneOrMoreThings'
+};
+
+const uischema3 = {
+  type: 'Control',
+  label: 'Value',
+  scope: '#/properties/thingOrThings'
 };
 
 registerExamples([
@@ -73,10 +114,30 @@ registerExamples([
 
 registerExamples([
   {
-    name: 'issue-1253-field',
-    label: 'issue 1253 (oneOf) - missing field',
+    name: 'issue-1253-wrong-path-binding',
+    label: 'issue 1253 (oneOf) - wrong path binding',
+    data,
+    schema: schema,
+    uischema: uischema
+  }
+]);
+
+registerExamples([
+  {
+    name: 'issue-1253-field-missing-field',
+    label: 'issue 1253 (oneOf) - missing field renderer',
     data,
     schema: schema2,
     uischema: uischema2
+  }
+]);
+
+registerExamples([
+  {
+    name: 'issue-1253-add-button-empty-row',
+    label: 'issue 1253 (oneOf) - add button does nothing',
+    data,
+    schema: schema3,
+    uischema: uischema3
   }
 ]);
