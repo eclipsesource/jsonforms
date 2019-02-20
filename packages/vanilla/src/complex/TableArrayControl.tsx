@@ -39,6 +39,7 @@ import {
   mapStateToArrayControlProps,
   Paths,
   RankedTester,
+  Resolve,
   StatePropsOfControl,
   Test
 } from '@jsonforms/core';
@@ -70,6 +71,7 @@ class TableArrayControl extends React.Component<
       addItem,
       uischema,
       schema,
+      rootSchema,
       createDefaultValue,
       path,
       data,
@@ -160,7 +162,7 @@ class TableArrayControl extends React.Component<
                           return (
                             <td key={childPropPath}>
                               <DispatchField
-                                schema={schema}
+                                schema={Resolve.schema(schema, `#/properties/${prop}`, rootSchema)}
                                 uischema={createControlElement(prop)}
                                 path={childPath + '.' + prop}
                               />

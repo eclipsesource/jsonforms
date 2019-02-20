@@ -53,38 +53,38 @@ export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
 };
 
 const fixture: {
-    data: any,
-    schema: JsonSchema,
-    uischema: ControlElement
+  data: any,
+  schema: JsonSchema,
+  uischema: ControlElement
 } = {
-    data: [
-        {
-            message: 'El Barto was here',
-            done: true
-        },
-        {
-            message: 'Yolo'
-        }
-    ],
-    schema: {
-        type: 'array',
-        items: {
-            type: 'object',
-            properties: {
-                message: {
-                    type: 'string',
-                    maxLength: 3
-                },
-                done: {
-                    type: 'boolean'
-                }
-            }
-        }
+  data: [
+    {
+      message: 'El Barto was here',
+      done: true
     },
-    uischema: {
-        type: 'Control',
-        scope: '#'
+    {
+      message: 'Yolo'
     }
+  ],
+  schema: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          maxLength: 3
+        },
+        done: {
+          type: 'boolean'
+        }
+      }
+    }
+  },
+  uischema: {
+    type: 'Control',
+    scope: '#'
+  }
 };
 
 describe('Material array control', () => {
@@ -197,10 +197,10 @@ describe('Material array control', () => {
 
     const buttons = wrapper.find('button');
     // 5 buttons
-      // add row
-      // delete row
-      // delete row
-      // two dialog buttons (no + yes)
+    // add row
+    // delete row
+    // delete row
+    // two dialog buttons (no + yes)
     const nrOfRowsBeforeDelete = wrapper.find('tr').length;
 
     const deleteButton = buttons.at(1);
@@ -214,5 +214,59 @@ describe('Material array control', () => {
     expect(nrOfRowsBeforeDelete).toBe(4);
     expect(nrOfRowsAfterDelete).toBe(3);
     expect(store.getState().jsonforms.core.data.length).toBe(1);
+  });
+
+  it('should support adding rows that contain enums', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        things: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              somethingElse: {
+                type: 'string'
+              },
+              thing: {
+                type: 'string',
+                enum: [
+                  'thing'
+                ]
+              },
+            }
+          }
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/things'
+    };
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init({}, schema, uischema));
+
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+
+    const buttons = wrapper.find('button');
+    // 3 buttons
+    // add row
+    // two dialog buttons (no + yes)
+    const nrOfRowsBeforeDelete = wrapper.find('tr').length;
+
+    const addButton = buttons.at(0);
+    addButton.simulate('click');
+    addButton.simulate('click');
+    wrapper.update();
+    const nrOfRowsAfterDelete = wrapper.find('tr').length;
+
+    // 2 header rows + 'no data' row
+    expect(nrOfRowsBeforeDelete).toBe(3);
+    expect(nrOfRowsAfterDelete).toBe(4);
+    expect(store.getState().jsonforms.core.data).toEqual({ things: [{}, {}]});
   });
 });
