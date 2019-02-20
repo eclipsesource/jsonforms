@@ -102,6 +102,41 @@ const uischema3 = {
   scope: '#/properties/thingOrThings'
 };
 
+const schema4 = {
+  definitions: {
+    color: {
+      type: 'string',
+      enum: ['red', 'green', 'blue']
+    }
+  },
+  type: 'object',
+  properties: {
+    things: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          somethingElse: {
+            type: 'string'
+          },
+          thing: {
+            type: 'string',
+            enum: ['thing']
+          },
+          anotherThing: {
+            $ref: '#/definitions/color'
+          }
+        }
+      }
+    }
+  }
+};
+
+const uischema4 = {
+  type: 'Control',
+  scope: '#/properties/things'
+};
+
 registerExamples([
   {
     name: 'issue-1253',
@@ -139,5 +174,15 @@ registerExamples([
     data,
     schema: schema3,
     uischema: uischema3
+  }
+]);
+
+registerExamples([
+  {
+    name: 'issue-1253-enum-error',
+    label: 'issue 1253 (enum)',
+    data,
+    schema: schema4,
+    uischema: uischema4
   }
 ]);

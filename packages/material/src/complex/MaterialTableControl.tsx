@@ -43,7 +43,8 @@ import {
   Generate,
   Helpers,
   JsonSchema,
-  Paths
+  Paths,
+  Resolve
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -65,20 +66,21 @@ const styles = {
 
 const generateCells = (
   Cell: React.ComponentType<NonEmptyCellProps | TableHeaderCellProps>,
-  scopedSchema: JsonSchema,
+  rootSchema: JsonSchema,
+  schema: JsonSchema,
   rowPath: string,
   cellErrors?: any[]
 ) => {
 
-  if (scopedSchema.type === 'object') {
-    return getValidColumnProps(scopedSchema).map(prop => {
+  if (schema.type === 'object') {
+    return getValidColumnProps(schema).map(prop => {
       const cellPath = Paths.compose(
         rowPath,
         prop
       );
       const props = {
         propName: prop,
-        scopedSchema,
+        schema,
         rowPath,
         cellPath,
         errors: cellErrors
@@ -89,7 +91,8 @@ const generateCells = (
   } else {
     // primitives
     const props = {
-      scopedSchema,
+      schema,
+      rootSchema,
       rowPath,
       cellPath: rowPath,
       errors: cellErrors
@@ -131,33 +134,47 @@ const TableHeaderCell = ({ propName }: TableHeaderCellProps) => (
 interface NonEmptyCellProps {
   rowPath: string;
   propName?: string;
-  scopedSchema: JsonSchema;
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
   errors?: any[];
 }
 
 const NonEmptyCell = ({
   rowPath,
   propName,
-  scopedSchema,
+  schema,
+  rootSchema,
   errors
 }: NonEmptyCellProps) => {
-  const path = rowPath + (scopedSchema.type === 'object' ? '.' + propName : '');
+  const path = rowPath + (schema.type === 'object' ? '.' + propName : '');
   const errorsPerEntry: any[] = filter(
     errors,
     error => error.dataPath === path
   ).map(e => e.message);
   const isValid = isEmpty(errorsPerEntry);
+
   return (
     <React.Fragment>
       <NoBorderTableCell>
-        <DispatchField
-          schema={scopedSchema}
-          uischema={Generate.controlElement(
-            undefined,
-            scopedSchema.type === 'object' ? `#/properties/${propName}` : '#'
-          )}
-          path={path}
-        />
+        {
+          schema.properties ?
+            <DispatchField
+              schema={Resolve.schema(schema, `#/properties/${propName}`, rootSchema)}
+              uischema={Generate.controlElement(
+                undefined,
+                `#/properties/${propName}`
+              )}
+              path={path}
+            /> :
+            <DispatchField
+              schema={schema}
+              uischema={Generate.controlElement(
+                undefined,
+                '#'
+              )}
+              path={path}
+            />
+        }
         <FormHelperText error={!isValid}>
           {!isValid && formatErrorMessage(errorsPerEntry)}
         </FormHelperText>
@@ -168,20 +185,22 @@ const NonEmptyCell = ({
 
 interface NonEmptyRowProps {
   childPath: string;
-  scopedSchema: JsonSchema;
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
   childErrors: ErrorObject[];
   rowData: any;
 }
 
 const NonEmptyRow = ({
   childPath,
-  scopedSchema,
+  schema,
+  rootSchema,
   childErrors,
   rowData,
   openDeleteDialog
 }: NonEmptyRowProps & WithDeleteDialogSupport) => (
   <TableRow key={childPath} hover>
-    {generateCells(NonEmptyCell, scopedSchema, childPath, childErrors)}
+    {generateCells(NonEmptyCell, rootSchema, schema, childPath, childErrors)}
     <NoBorderTableCell style={styles.fixedCell}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <IconButton
@@ -197,7 +216,7 @@ const NonEmptyRow = ({
 
 const TableRows = (
   {
-    data, path, schema, childErrors, openDeleteDialog
+    data, path, rootSchema, schema, childErrors, openDeleteDialog
   }: ArrayControlProps & WithDeleteDialogSupport) => {
 
   const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
@@ -214,7 +233,8 @@ const TableRows = (
         key={childPath}
         childPath={childPath}
         rowData={_child}
-        scopedSchema={schema}
+        schema={schema}
+        rootSchema={rootSchema}
         childErrors={childErrors}
         openDeleteDialog={openDeleteDialog}
       />
@@ -239,12 +259,13 @@ export class MaterialTableControl extends React.Component<
       addItem,
       openDeleteDialog
     } = this.props;
+
     const controlElement = uischema as ControlElement;
     const labelObject = Helpers.createLabelDescriptionFrom(controlElement);
     const allErrors = [].concat(errors).concat(childErrors.map((e: ErrorObject) => e.message));
     const isObjectSchema = schema.type === 'object';
     const headerCells: any = isObjectSchema ?
-      generateCells(TableHeaderCell, schema, path) : undefined;
+      generateCells(TableHeaderCell, rootSchema, schema, path) : undefined;
 
     return (
       <React.Fragment>
