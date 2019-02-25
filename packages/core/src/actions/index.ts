@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import AJV from 'ajv';
+import RefParser from 'json-schema-ref-parser';
 import { RankedTester } from '../testers';
 import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
@@ -64,20 +65,25 @@ export interface InitAction {
   data: any;
   schema: JsonSchema;
   uischema: UISchemaElement;
+  options?: InitActionOptions | AJV.Ajv;
+}
+
+export interface InitActionOptions {
   ajv?: AJV.Ajv;
+  refParserOptions?: RefParser.Options;
 }
 
 export const init = (
   data: any,
   schema: JsonSchema = generateJsonSchema(data),
   uischema: UISchemaElement = generateDefaultUISchema(schema),
-  ajv?: AJV.Ajv
+  options?: InitActionOptions | AJV.Ajv
 ) => ({
   type: INIT,
   data,
   schema,
   uischema,
-  ajv
+  options
 });
 
 export interface RegisterDefaultDataAction {

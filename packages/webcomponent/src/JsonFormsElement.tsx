@@ -24,12 +24,13 @@
 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import JsonRefs from 'json-refs';
+import RefParser from 'json-schema-ref-parser';
 import { Provider } from 'react-redux';
 import {
     Actions,
     Generate,
     getData,
+    getRefParserOptions,
     getSchema,
     getUiSchema,
     JsonFormsState,
@@ -107,18 +108,15 @@ export class JsonFormsElement extends HTMLElement {
 
     const data = getData(store.getState()) || {};
 
-    JsonRefs
-      .resolveRefs(
-        getSchema(store.getState()) || Generate.jsonSchema(data),
-        { includeInvalid: true }
-      ).then(result => {
-        this._store = setupStore(
-          result.resolved,
-          getUiSchema(store.getState()),
-          data
-        );
-        this.render();
-      });
+    RefParser.dereference(getSchema(store.getState()) || Generate.jsonSchema(data), getRefParserOptions(store.getState()))
+    .then(resolvedSchema => {
+      this._store = setupStore(
+        resolvedSchema,
+        getUiSchema(store.getState()),
+        data
+      );
+      this.render();
+    })
   }
 
   get store() {

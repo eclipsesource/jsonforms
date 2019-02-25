@@ -40,7 +40,7 @@ import {
 import Enzyme from 'enzyme';
 import { mount, shallow } from 'enzyme';
 import { StatelessRenderer } from '../../src/Renderer';
-import JsonRefs from 'json-refs';
+import RefParser from 'json-schema-ref-parser';
 
 import Adapter from 'enzyme-adapter-react-16';
 import { JsonForms, JsonFormsDispatchRenderer } from '../../src/JsonForms';
@@ -271,7 +271,7 @@ test('render schema with $ref', () => {
         type: 'number'
       }
     }
-  };
+  } as JsonSchema;
 
   const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
 
@@ -280,8 +280,8 @@ test('render schema with $ref', () => {
     renderer: CustomRenderer2
   }];
 
-  const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
-  jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
+  const promise = Promise.resolve(resolvedSchema);
+  jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
 
   const wrapper = shallow(
     <JsonFormsDispatchRenderer
@@ -290,15 +290,16 @@ test('render schema with $ref', () => {
       schema={schemaWithRef}
       renderers={renderers}
       rootSchema={resolvedSchema}
+      refResolver={() => promise}
     />
   );
 
-  return jsonRefsPromise.then(() => {
+  return promise.then(() => {
     wrapper.update();
     expect(wrapper.state()).toHaveProperty('resolving', false);
     expect(wrapper.find(CustomRenderer2).length).toBe(1);
+    wrapper.unmount();
   });
-  wrapper.unmount();
 });
 
 test.skip('updates schema with ref', () => {
@@ -341,6 +342,9 @@ test.skip('updates schema with ref', () => {
     renderer: CustomRenderer2
   }];
 
+  const promise = Promise.resolve(resolvedSchema);
+  jest.spyOn(RefParser, 'dereference').mockImplementation(() => promise);
+
   const wrapper = shallow(
     <JsonFormsDispatchRenderer
       path={''}
@@ -348,18 +352,15 @@ test.skip('updates schema with ref', () => {
       schema={fixture.schema}
       renderers={renderers}
       rootSchema={resolvedSchema}
+      refResolver={() => promise}
     />
   );
-
   expect(wrapper.find(CustomRenderer1).length).toBe(1);
-
-  const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
-  jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
 
   wrapper.setProps({ schema: schemaWithRef }
   );
 
-  return jsonRefsPromise.then(() => {
+  return promise.then(() => {
     wrapper.update();
     expect(wrapper.state()).toHaveProperty('resolving', false);
     expect(wrapper.find(CustomRenderer2).length).toBe(1);

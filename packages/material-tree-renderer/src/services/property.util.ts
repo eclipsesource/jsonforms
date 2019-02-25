@@ -11,8 +11,7 @@ import startsWith from 'lodash/startsWith';
 import values from 'lodash/values';
 import each from 'lodash/each';
 import { JsonSchema, JsonSchema7 } from '@jsonforms/core';
-import { resolveSchema } from '@jsonforms/core';
-import JsonRefs from 'json-refs';
+import { findRefs, resolveSchema } from '@jsonforms/core';
 
 const isObject = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
@@ -109,12 +108,8 @@ export const makeSchemaSelfContained = (
   parentSchema: JsonSchema7,
   schema: JsonSchema7
 ): JsonSchema7 => {
-  const schemaRefs = JsonRefs.findRefs(schema, {
-    resolveCirculars: true
-  }) as SchemaRefs;
-  const allRefs = JsonRefs.findRefs(parentSchema, {
-    resolveCirculars: true
-  }) as SchemaRefs;
+  const schemaRefs = findRefs(schema) as SchemaRefs;
+  const allRefs = findRefs(parentSchema) as SchemaRefs;
   let extractedReferences;
   findReferences(parentSchema, allRefs, schemaRefs, (extractedReferences = {}));
   const refList = values(extractedReferences) as string[];

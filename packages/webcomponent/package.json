@@ -42,8 +42,7 @@
     "@jsonforms/core": "^2.2.2-alpha.0",
     "@jsonforms/react": "^2.2.2-alpha.0",
     "@webcomponents/webcomponentsjs": "^1.0.20",
-    "es6-shim": "^0.35.3",
-    "json-refs": "^3.0.10"
+    "es6-shim": "^0.35.3"
   },
   "peerDependencies": {
     "react": "^16.4.0",

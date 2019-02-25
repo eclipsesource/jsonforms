@@ -27,10 +27,13 @@ import set from 'lodash/set';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
 import isEqual from 'lodash/isEqual';
+import isFunction from 'lodash/isFunction';
 import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
+import RefParser from 'json-schema-ref-parser';
 import {
   INIT,
   InitAction,
+  InitActionOptions,
   SET_AJV,
   SET_SCHEMA,
   SET_UISCHEMA,
@@ -68,6 +71,7 @@ export interface JsonFormsCore {
   errors?: ErrorObject[];
   validator?: ValidateFunction;
   ajv?: Ajv;
+  refParserOptions?: RefParser.Options;
 }
 
 const initState: JsonFormsCore = {
@@ -76,7 +80,8 @@ const initState: JsonFormsCore = {
   uischema: undefined,
   errors: [],
   validator: alwaysValid,
-  ajv: undefined
+  ajv: undefined,
+  refParserOptions: undefined
 };
 
 type ValidCoreActions =
@@ -87,14 +92,49 @@ type ValidCoreActions =
   | SetUISchemaAction;
 
 const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
-  if (action && action.ajv) {
-    return action.ajv;
+  if (action) {
+    if (hasAjvOption(action.options)) {
+      // options object with ajv
+      return action.options.ajv;
+    } else if (
+      action.options !== undefined &&
+      !hasRefParserOption(action.options)
+    ) {
+      // it is not an option object => should be ajv itself => check for compile function
+      if (isFunction(action.options.compile)) {
+        return action.options;
+      }
+    }
   }
   if (state.ajv) {
     return state.ajv;
   }
   return createAjv();
 };
+
+const getRefParserOptions = (
+  state: JsonFormsCore,
+  action?: InitAction
+): RefParser.Options => {
+  if (action && hasRefParserOption(action.options)) {
+    return action.options.refParserOptions;
+  }
+  return state.refParserOptions;
+};
+
+function hasRefParserOption(option: any): option is InitActionOptions {
+  if (option) {
+    return option.refParserOptions !== undefined;
+  }
+  return false;
+}
+
+function hasAjvOption(option: any): option is InitActionOptions {
+  if (option) {
+    return option.ajv !== undefined;
+  }
+  return false;
+}
 
 export const coreReducer = (
   state: JsonFormsCore = initState,
@@ -105,6 +145,7 @@ export const coreReducer = (
       const thisAjv = getOrCreateAjv(state, action);
       const v = thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
+      const o = getRefParserOptions(state, action);
 
       return {
         ...state,
@@ -113,7 +154,8 @@ export const coreReducer = (
         uischema: action.uischema,
         errors: e,
         validator: v,
-        ajv: thisAjv
+        ajv: thisAjv,
+        refParserOptions: o
       };
     }
     case SET_AJV: {
@@ -218,3 +260,5 @@ export const subErrorsAt = (instancePath: string, schema: JsonSchema) => (
       error.dataPath.startsWith(path) && isEqual(error.parentSchema, schema)
   );
 };
+export const extractRefParserOptions = (state: JsonFormsCore) =>
+  get(state, 'refParserOptions');

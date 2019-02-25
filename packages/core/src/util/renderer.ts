@@ -27,11 +27,13 @@ import has from 'lodash/has';
 import cloneDeep from 'lodash/cloneDeep';
 import merge from 'lodash/merge';
 import union from 'lodash/union';
+import RefParser from 'json-schema-ref-parser';
 import {
   findUISchema,
   getConfig,
   getData,
   getErrorAt,
+  getRefParserOptions,
   getRenderers,
   getSchema,
   getSubErrorsAt,
@@ -535,6 +537,10 @@ export const mapStateToLayoutProps = (
   };
 };
 
+export interface RefResolver {
+  (schema: JsonSchema): Promise<JsonSchema>;
+}
+
 export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 }
@@ -546,6 +552,7 @@ export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
   rootSchema: JsonSchema;
+  refResolver: RefResolver;
 }
 
 export const mapStateToJsonFormsRendererProps = (
@@ -565,7 +572,10 @@ export const mapStateToJsonFormsRendererProps = (
     renderers: ownProps.renderers || get(state.jsonforms, 'renderers') || [],
     schema: ownProps.schema || getSchema(state),
     rootSchema: getSchema(state),
-    uischema
+    uischema: uischema,
+    refResolver: function(schema) {
+      return RefParser.dereference(schema, getRefParserOptions(state));
+    }
   };
 };
 

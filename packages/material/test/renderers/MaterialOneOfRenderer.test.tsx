@@ -1,5 +1,4 @@
 import React from 'react';
-import JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 
@@ -11,6 +10,8 @@ import { combineReducers, createStore, Store } from 'redux';
 import { JsonForms } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
+
+const waitForAsync = () => new Promise(resolve => setImmediate(resolve));
 
 const initStore = () => {
   const s: JsonFormsState = {
@@ -94,11 +95,11 @@ describe('Material oneOf renderer', () => {
     });
   });
 
-  it('should add an item within an array', () => {
+  it('should add an item within an array', async () => {
     const schema = {
       type: 'object',
       properties: {
-        oneOrMoreThings: {
+        thingOrThings: {
           oneOf: [
             {
               $ref: '#/definitions/thing'
@@ -123,37 +124,13 @@ describe('Material oneOf renderer', () => {
         }
       }
     };
-    const resolvedSchema = {
-      type: 'object',
-      properties: {
-        thingOrThings: {
-          oneOf: [
-            {
-              title: 'Thing',
-              type: 'string',
-            },
-            {
-              title: 'Things',
-              type: 'array',
-              items: {
-                title: 'Thing',
-                type: 'string'
-              }
-            }
-          ]
-        }
-      }
-    };
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/thingOrThings'
     };
 
     const store = initStore();
-    store.dispatch(Actions.init({ data: {}, schema, uischema}));
-    const promise = Promise.resolve({ resolved: resolvedSchema});
-    const mock = jest.spyOn(JsonRefs, 'resolveRefs');
-    mock.mockReturnValue(promise);
+    store.dispatch(Actions.init({ data: {}, schema, uischema }));
 
     wrapper = mount(
       <Provider store={store}>
@@ -161,23 +138,23 @@ describe('Material oneOf renderer', () => {
       </Provider>
     );
 
-    return promise.then(() => {
-      // expect(wrapper.state())
-      wrapper.update();
+    await waitForAsync();
 
-      selectOneOfTab(wrapper, 1);
-      const nrOfRowsBeforeAdd = wrapper.find('tr');
-      clickAddButton(wrapper, 2);
-      const nrOfRowsAfterAdd = wrapper.find('tr');
+    wrapper.update();
 
-      // 1 header row + no data row
-      expect(nrOfRowsBeforeAdd.length).toBe(2);
-      // 1 header row + 2 data rows (one is replacing the 'No data' one)
-      expect(nrOfRowsAfterAdd.length).toBe(3);
-    });
+    selectOneOfTab(wrapper, 1);
+    const nrOfRowsBeforeAdd = wrapper.find('tr');
+    clickAddButton(wrapper, 2);
+    const nrOfRowsAfterAdd = wrapper.find('tr');
+
+    // 1 header row + no data row
+    expect(nrOfRowsBeforeAdd.length).toBe(2);
+    // 1 header row + 2 data rows (one is replacing the 'No data' one)
+    expect(nrOfRowsAfterAdd.length).toBe(3);
+
   });
 
-  it('should add an object within an array', () => {
+  it('should add an object within an array', async () => {
 
     const schema = {
       type: 'object',
@@ -213,33 +190,6 @@ describe('Material oneOf renderer', () => {
         }
       }
     };
-    const resolvedSchema = {
-      type: 'object',
-      properties: {
-        thingOrThings: {
-          oneOf: [
-            {
-              title: 'Thing',
-              type: 'object',
-              properties: {
-                thing: {
-                  title: 'Thing',
-                  type: 'string'
-                }
-              }
-            },
-            {
-              title: 'Things',
-              type: 'array',
-              items: {
-                title: 'Thing',
-                type: 'string'
-              }
-            }
-          ]
-        }
-      }
-    };
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/thingOrThings'
@@ -247,9 +197,6 @@ describe('Material oneOf renderer', () => {
 
     const store = initStore();
     store.dispatch(Actions.init({}, schema, uischema));
-    const promise = Promise.resolve({ resolved: resolvedSchema});
-    const mock = jest.spyOn(JsonRefs, 'resolveRefs');
-    mock.mockReturnValue(promise);
 
     wrapper = mount(
       <Provider store={store}>
@@ -257,26 +204,26 @@ describe('Material oneOf renderer', () => {
       </Provider>
     );
 
-    return promise.then(() => {
-      // expect(wrapper.state())
-      wrapper.update();
+    await waitForAsync();
 
-      selectOneOfTab(wrapper, 1);
-      const nrOfRowsBeforeAdd = wrapper.find('tr');
-      clickAddButton(wrapper, 2);
-      const nrOfRowsAfterAdd = wrapper.find('tr');
+    // expect(wrapper.state())
+    wrapper.update();
 
-      // 1 header row + no data row
-      expect(nrOfRowsBeforeAdd.length).toBe(2);
-      // 1 header row + 2 data rows (one is replacing the 'No data' one)
-      expect(nrOfRowsAfterAdd.length).toBe(3);
-      expect(getData(store.getState())).toEqual({
-        thingOrThings: ['', '']
-      });
+    selectOneOfTab(wrapper, 1);
+    const nrOfRowsBeforeAdd = wrapper.find('tr');
+    clickAddButton(wrapper, 2);
+    const nrOfRowsAfterAdd = wrapper.find('tr');
+
+    // 1 header row + no data row
+    expect(nrOfRowsBeforeAdd.length).toBe(2);
+    // 1 header row + 2 data rows (one is replacing the 'No data' one)
+    expect(nrOfRowsAfterAdd.length).toBe(3);
+    expect(getData(store.getState())).toEqual({
+      thingOrThings: ['', '']
     });
   });
 
-  it('should switch to array based oneOf subschema, then switch back, then edit', () => {
+  it('should switch to array based oneOf subschema, then switch back, then edit', async () => {
 
     const schema = {
       type: 'object',
@@ -312,33 +259,6 @@ describe('Material oneOf renderer', () => {
         }
       }
     };
-    const resolvedSchema = {
-      type: 'object',
-      properties: {
-        thingOrThings: {
-          oneOf: [
-            {
-              title: 'Thing',
-              type: 'object',
-              properties: {
-                thing: {
-                  title: 'Thing',
-                  type: 'string'
-                }
-              }
-            },
-            {
-              title: 'Things',
-              type: 'array',
-              items: {
-                title: 'Thing',
-                type: 'string'
-              }
-            }
-          ]
-        }
-      }
-    };
     const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/thingOrThings'
@@ -346,9 +266,6 @@ describe('Material oneOf renderer', () => {
 
     const store = initStore();
     store.dispatch(Actions.init({}, schema, uischema));
-    const promise = Promise.resolve({ resolved: resolvedSchema});
-    const mock = jest.spyOn(JsonRefs, 'resolveRefs');
-    mock.mockReturnValue(promise);
 
     wrapper = mount(
       <Provider store={store}>
@@ -356,17 +273,17 @@ describe('Material oneOf renderer', () => {
       </Provider>
     );
 
-    return promise.then(() => {
-      wrapper.update();
+    await waitForAsync();
 
-      selectOneOfTab(wrapper, 1);
-      clickAddButton(wrapper, 2);
-      selectOneOfTab(wrapper, 0);
+    wrapper.update();
 
-      const input = wrapper.find('input').first();
-      input.simulate('change', { target: { value: 'test' }});
-      wrapper.update();
-      expect(getData(store.getState())).toEqual({ thingOrThings: { thing: 'test' }});
-    });
+    selectOneOfTab(wrapper, 1);
+    clickAddButton(wrapper, 2);
+    selectOneOfTab(wrapper, 0);
+
+    const input = wrapper.find('input').first();
+    input.simulate('change', { target: { value: 'test' }});
+    wrapper.update();
+    expect(getData(store.getState())).toEqual({ thingOrThings: { thing: 'test' }});
   });
 });

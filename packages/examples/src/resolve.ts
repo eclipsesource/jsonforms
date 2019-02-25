@@ -37,8 +37,7 @@ export const schema = {
       required: ['street_address', 'city', 'state']
     },
     coord: {
-      $ref:
-        'http://json-schema.org/learn/examples/geographical-location.schema.json#'
+      $ref: 'geographical-location.schema.json#'
     }
   },
   type: 'object',
