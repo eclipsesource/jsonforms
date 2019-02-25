@@ -25,11 +25,11 @@
 import isEqual from 'lodash/isEqual';
 import maxBy from 'lodash/maxBy';
 import React from 'react';
-import JsonRefs from 'json-refs';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
   createId,
+  findRefs,
   isControl,
   JsonFormsProps,
   JsonSchema,
@@ -49,7 +49,7 @@ interface JsonFormsRendererState {
 
 const hasRefs = (schema: JsonSchema) => {
     if (schema !== undefined) {
-        return Object.keys(JsonRefs.findRefs(schema)).length > 0;
+        return Object.keys(findRefs(schema)).length > 0;
     }
     return false;
 };
@@ -89,26 +89,24 @@ export class ResolvedJsonFormsDispatchRenderer
 
     componentDidMount() {
         if (this.state.resolving) {
-            this.resolveAndUpdateSchema(this.props.schema);
+            this.resolveAndUpdateSchema(this.props);
         }
     }
 
     componentDidUpdate() {
         if (this.state.resolving) {
-            this.resolveAndUpdateSchema(this.props.schema);
+            this.resolveAndUpdateSchema(this.props);
         }
     }
 
-    resolveAndUpdateSchema = (schema: JsonSchema) => {
-        JsonRefs
-            .resolveRefs(schema)
-            .then(resolvedSchema => {
-                this.setState({
-                    resolving: false,
-                    resolvedSchema: resolvedSchema.resolved
-                });
+    resolveAndUpdateSchema = (props: JsonFormsProps) => {
+        props.refResolver(props.schema).then(resolvedSchema => {
+            this.setState({
+                resolving: false,
+                resolvedSchema: resolvedSchema
             });
-    };
+        });
+    }
 
     componentWillUnmount() {
         this.mounted = false;

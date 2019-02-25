@@ -23,6 +23,8 @@
   THE SOFTWARE.
 */
 import test from 'ava';
+import AJV from 'ajv';
+import RefParser from 'json-schema-ref-parser';
 import { coreReducer } from '../../src/reducers';
 import { init } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
@@ -55,6 +57,381 @@ test('core reducer should support v7', t => {
     )
   );
   t.is(after.errors.length, 1);
+});
+
+test('core reducer - no previous state - init without options should create new ajv and no ref parser options object', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const after = coreReducer(undefined, init({}, schema, undefined, undefined));
+  t.true(after.ajv !== undefined);
+  t.true(after.refParserOptions === undefined);
+});
+
+test('core reducer - no previous state - init with ajv as options object should use it', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const after = coreReducer(undefined, init({}, schema, undefined, myAjv));
+  t.deepEqual(after.ajv, myAjv);
+  t.true(after.refParserOptions === undefined);
+});
+
+test('core reducer - no previous state - init with empty options object', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const after = coreReducer(undefined, init({}, schema, undefined, {}));
+  t.true(after.ajv !== undefined);
+  t.true(after.refParserOptions === undefined);
+});
+
+test('core reducer - no previous state - init with options object with ajv', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const after = coreReducer(
+    undefined,
+    init({}, schema, undefined, {
+      ajv: myAjv
+    })
+  );
+  t.deepEqual(after.ajv, myAjv);
+  t.true(after.refParserOptions === undefined);
+});
+
+test('core reducer - no previous state - init with options object with ref parser options', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    undefined,
+    init({}, schema, undefined, {
+      refParserOptions: myOptions
+    })
+  );
+  t.true(after.ajv !== undefined);
+  t.deepEqual(after.refParserOptions, myOptions);
+});
+
+test('core reducer - no previous state - init with options object with ajv and ref parser options', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const myOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    undefined,
+    init({}, schema, undefined, {
+      ajv: myAjv,
+      refParserOptions: myOptions
+    })
+  );
+  t.deepEqual(after.ajv, myAjv);
+  t.deepEqual(after.refParserOptions, myOptions);
+});
+
+test('core reducer - previous state - init without options should keep previous objects', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const myOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      ajv: myAjv,
+      refParserOptions: myOptions
+    },
+    init({}, schema)
+  );
+  t.deepEqual(after.ajv, myAjv);
+  t.deepEqual(after.refParserOptions, myOptions);
+});
+
+test('core reducer - previous state - init with ajv options object should overwrite ajv and keep ref parser options', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const previousAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const newAjv = new AJV({
+    errorDataPath: 'newajv'
+  });
+  const myOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      ajv: previousAjv,
+      refParserOptions: myOptions
+    },
+    init({}, schema, undefined, newAjv)
+  );
+  t.deepEqual(after.ajv, newAjv);
+  t.deepEqual(after.refParserOptions, myOptions);
+});
+
+test('core reducer - previous state - init with options with ajv should overwrite ajv and keep ref parser options', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const previousAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const newAjv = new AJV({
+    errorDataPath: 'newajv'
+  });
+  const myOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      ajv: previousAjv,
+      refParserOptions: myOptions
+    },
+    init({}, schema, undefined, {
+      ajv: newAjv
+    })
+  );
+  t.deepEqual(after.ajv, newAjv);
+  t.deepEqual(after.refParserOptions, myOptions);
+});
+
+test('core reducer - previous state - init with options with ref parser options should overwrite ref parser options and keep ajv', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const previousOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const newOptions = {
+    parse: {
+      text: {
+        encoding: 'newEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      ajv: myAjv,
+      refParserOptions: previousOptions
+    },
+    init({}, schema, undefined, {
+      refParserOptions: newOptions
+    })
+  );
+  t.deepEqual(after.ajv, myAjv);
+  t.deepEqual(after.refParserOptions, newOptions);
+});
+
+test('core reducer - previous state - init with both options should overwrite both', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const previousAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const newAjv = new AJV({
+    errorDataPath: 'newajv'
+  });
+  const previousOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const newOptions = {
+    parse: {
+      text: {
+        encoding: 'newEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      ajv: previousAjv,
+      refParserOptions: previousOptions
+    },
+    init({}, schema, undefined, {
+      ajv: newAjv,
+      refParserOptions: newOptions
+    })
+  );
+  t.deepEqual(after.ajv, newAjv);
+  t.deepEqual(after.refParserOptions, newOptions);
+});
+
+test('core reducer - previous state - init with empty options should not overwrite', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const myAjv = new AJV({
+    errorDataPath: 'mypath'
+  });
+  const myOptions = {
+    parse: {
+      text: {
+        encoding: 'testEncoding'
+      }
+    }
+  } as RefParser.Options;
+  const after = coreReducer(
+    {
+      data: {},
+      schema: {},
+      uischema: {
+        type: 'Label'
+      },
+      ajv: myAjv,
+      refParserOptions: myOptions
+    },
+    init({}, schema, undefined, {})
+  );
+  t.deepEqual(after.ajv, myAjv);
+  t.deepEqual(after.refParserOptions, myOptions);
 });
 
 test('errorAt filters enum', t => {

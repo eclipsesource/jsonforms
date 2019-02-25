@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import get from 'lodash/get';
+import RefParser from 'json-schema-ref-parser';
 import {
   defaultDataReducer,
   extractDefaultData,
@@ -38,7 +39,8 @@ import {
   extractData,
   extractSchema,
   extractUiSchema,
-  subErrorsAt
+  subErrorsAt,
+  extractRefParserOptions
 } from './core';
 import { JsonFormsState, JsonFormsSubStates } from '../store';
 import {
@@ -79,6 +81,8 @@ export const getSchema = (state: JsonFormsState): JsonSchema =>
   extractSchema(get(state, 'jsonforms.core'));
 export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
   extractUiSchema(get(state, 'jsonforms.core'));
+export const getRefParserOptions = (state: JsonFormsState): RefParser.Options =>
+  extractRefParserOptions(get(state, 'jsonforms.core'));
 export const getDefaultData = (
   state: JsonFormsState
 ): JsonFormsDefaultDataRegistryEntry[] =>

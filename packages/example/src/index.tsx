@@ -82,21 +82,40 @@ const setupStore = (
     }
   );
 
-  // Needed for resolve example
+
+  // Resolve example configuration
+  // Add schema to validation
   const ajv = createAjv();
   ajv.addSchema(
     geoschema,
-    'http://json-schema.org/learn/examples/geographical-location.schema.json'
+    'geographical-location.schema.json'
   );
+  // Allow json-schema-ref-resolver to resolve same schema
+  const geoResolver = {
+      order: 1,
+      canRead: function(file:any) {
+          return file.url.indexOf('geographical-location.schema.json') !== -1;
+      },
+      read: function() {
+          return JSON.stringify(geoschema)
+      }
+  }
+  // Add configuration to JSONForms
   store.dispatch(
     Actions.init(
       exampleData[0].data,
       exampleData[0].schema,
       exampleData[0].uischema,
-      ajv
+      {
+        ajv: ajv,
+        refParserOptions: {
+          resolve: {
+            geo: geoResolver
+          } as any
+        }
+      }
     )
   );
-
   return store;
 };
 export const renderExample = (

@@ -107,7 +107,7 @@ const Resolve: {
   schema: resolveSchema,
   data: resolveData
 };
-export { resolveData, resolveSchema } from './resolvers';
+export { resolveData, resolveSchema, findRefs } from './resolvers';
 export { Resolve };
 
 // Paths --

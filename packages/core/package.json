@@ -40,8 +40,9 @@
   },
   "dependencies": {
     "ajv": "^6.4.0",
-    "json-refs": "^3.0.10",
+    "json-schema-ref-parser": "^6.1.0",
     "lodash": "^4.17.4",
+    "uri-js": "^4.2.2",
     "uuid": "^3.2.1"
   },
   "peerDependencies": {
