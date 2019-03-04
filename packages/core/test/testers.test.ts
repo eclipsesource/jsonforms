@@ -158,6 +158,21 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
   );
 });
 
+test('schemaMatches should check type sub-schema of control via predicate also without explicit type', t => {
+  const schema: JsonSchema = {
+    properties: {
+      foo: { type: 'string' }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.true(
+    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema)
+  );
+});
+
 test('schemaMatches should return false for non-control UI schema elements', t => {
   const schema: JsonSchema = {
     type: 'object',

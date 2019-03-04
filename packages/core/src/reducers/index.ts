@@ -46,13 +46,16 @@ import {
   uischemaRegistryReducer,
   UISchemaTester
 } from './uischemas';
-import { ControlElement, Generate, JsonSchema, UISchemaElement } from '..';
 import {
   fetchLocale,
   findLocalizedSchema,
   findLocalizedUISchema,
   i18nReducer
 } from './i18n';
+
+import { JsonSchema } from '../models/jsonSchema';
+import { ControlElement, UISchemaElement } from '../models/uischema';
+import { Generate } from '../generators';
 
 export { rendererReducer, fieldReducer, coreReducer, UISchemaTester };
 

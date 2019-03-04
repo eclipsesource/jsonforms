@@ -38,6 +38,7 @@ import {
   UISchemaElement
 } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
+import { deriveType } from '../util';
 
 /**
  * Constant that indicates that a tester is not capable of handling
@@ -85,7 +86,7 @@ export const schemaMatches = (
     return false;
   }
   let currentDataSchema = schema;
-  if (schema.type === 'object') {
+  if (deriveType(schema) === 'object') {
     currentDataSchema = resolveSchema(schema, schemaPath);
   }
   if (currentDataSchema === undefined) {

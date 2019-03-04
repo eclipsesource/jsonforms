@@ -22,6 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
+import head from 'lodash/head';
 import {
   JsonFormsState,
   JsonSchema,
@@ -55,6 +58,44 @@ export const formatErrorMessage = (errors: string[]) => {
   }
 
   return errors.join('\n');
+};
+
+/**
+ * Checks if the type of jsonSchema is a union of multiple types
+ *
+ * @param {JsonSchema} jsonSchema
+ * @returns {boolean}
+ */
+const isUnionType = (jsonSchema: JsonSchema): boolean =>
+  !isEmpty(jsonSchema) && !isEmpty(jsonSchema.type) && isArray(jsonSchema.type);
+
+/**
+ * Derives the type of the jsonSchema element
+ */
+const deriveType = (jsonSchema: JsonSchema): string => {
+  if (
+    !isEmpty(jsonSchema) &&
+    !isEmpty(jsonSchema.type) &&
+    typeof jsonSchema.type === 'string'
+  ) {
+    return jsonSchema.type;
+  }
+  if (isUnionType(jsonSchema)) {
+    return head(jsonSchema.type);
+  }
+  if (
+    !isEmpty(jsonSchema) &&
+    (!isEmpty(jsonSchema.properties) ||
+      !isEmpty(jsonSchema.additionalProperties))
+  ) {
+    return 'object';
+  }
+  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.items)) {
+    return 'array';
+  }
+
+  // ignore all remaining cases
+  return 'null';
 };
 
 /**
@@ -93,7 +134,7 @@ const Runtime = {
     return isVisible(props, state);
   }
 };
-export { isEnabled, isVisible, Runtime };
+export { isEnabled, isVisible, Runtime, deriveType };
 
 export * from './renderer';
 export * from './field';

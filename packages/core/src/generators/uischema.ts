@@ -23,8 +23,6 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import isArray from 'lodash/isArray';
-import head from 'lodash/head';
 import startCase from 'lodash/startCase';
 import keys from 'lodash/keys';
 import { JsonSchema } from '../models/jsonSchema';
@@ -36,6 +34,7 @@ import {
   UISchemaElement
 } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
+import { deriveType } from '../util';
 
 /**
  * Creates a new ILayout.
@@ -46,44 +45,6 @@ const createLayout = (layoutType: string): Layout => ({
   type: layoutType,
   elements: []
 });
-
-/**
- * Checks if the type of jsonSchema is a union of multiple types
- *
- * @param {JsonSchema} jsonSchema
- * @returns {boolean}
- */
-const isUnionType = (jsonSchema: JsonSchema): boolean =>
-  !isEmpty(jsonSchema) && !isEmpty(jsonSchema.type) && isArray(jsonSchema.type);
-
-/**
- * Derives the type of the jsonSchema element
- */
-const deriveType = (jsonSchema: JsonSchema): string => {
-  if (
-    !isEmpty(jsonSchema) &&
-    !isEmpty(jsonSchema.type) &&
-    typeof jsonSchema.type === 'string'
-  ) {
-    return jsonSchema.type;
-  }
-  if (isUnionType(jsonSchema)) {
-    return head(jsonSchema.type);
-  }
-  if (
-    !isEmpty(jsonSchema) &&
-    (!isEmpty(jsonSchema.properties) ||
-      !isEmpty(jsonSchema.additionalProperties))
-  ) {
-    return 'object';
-  }
-  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.items)) {
-    return 'array';
-  }
-
-  // ignore all remaining cases
-  return 'null';
-};
 
 /**
  * Creates a IControlObject with the given label referencing the given ref
