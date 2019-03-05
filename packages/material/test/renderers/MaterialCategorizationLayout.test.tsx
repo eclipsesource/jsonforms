@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018-2019 EclipseSource Munich
+  Copyright (c) 2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -39,12 +39,12 @@ import {
 import Enzyme, { mount } from 'enzyme';
 
 import { combineReducers, createStore, Store } from 'redux';
-import MaterialCategorizationStepperLayoutRenderer, {
-  MaterialCategorizationStepperLayoutRenderer as CategorizationStepperRenderer,
-  materialCategorizationStepperTester
-} from '../../src/layouts/MaterialCategorizationStepperLayout';
+import MaterialCategorizationLayoutRenderer, {
+  MaterialCategorizationLayoutRenderer as CategorizationLayoutRenderer,
+  materialCategorizationTester
+} from '../../src/layouts/MaterialCategorizationLayout';
 import { materialFields, materialRenderers } from '../../src';
-import { Step, StepButton, Stepper } from '@material-ui/core';
+import { Tab } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -88,12 +88,12 @@ const fixture = {
   }
 };
 
-describe('Material categorization stepper layout tester', () => {
+describe('Material categorization layout tester', () => {
   it('should not fail when given undefined data', () => {
-    expect(materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester(null, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester({type: 'Foo'}, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester({type: 'Categorization'}, undefined)).toBe(-1);
+    expect(materialCategorizationTester(undefined, undefined)).toBe(-1);
+    expect(materialCategorizationTester(null, undefined)).toBe(-1);
+    expect(materialCategorizationTester({type: 'Foo'}, undefined)).toBe(-1);
+    expect(materialCategorizationTester({type: 'Categorization'}, undefined)).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', () => {
@@ -101,15 +101,15 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: null
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(materialCategorizationTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should not fail with empty elements and no schema', () => {
+  it('should succeed with empty elements and no schema', () => {
     const uischema: Layout = {
       type: 'Categorization',
       elements: []
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(materialCategorizationTester(uischema, undefined)).toBe(1);
   });
 
   it('should not fail tester with single unknown element and no schema', () => {
@@ -121,10 +121,10 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(uischema, undefined)).toBe(-1);
+    expect(materialCategorizationTester(uischema, undefined)).toBe(-1);
   });
 
-  it('should not apply to a single category and no schema', () => {
+  it('should succeed with a single category and no schema', () => {
     const categorization =  {
       type: 'Categorization',
       elements: [
@@ -133,7 +133,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationTester(categorization, undefined)).toBe(1);
   });
 
   it('should not apply to a nested categorization with single category and no schema', () => {
@@ -149,7 +149,7 @@ describe('Material categorization stepper layout tester', () => {
       type: 'Categorization',
       elements: [nestedCategorization]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 
   it('should not apply to nested categorizations without categories and no schema', () => {
@@ -161,7 +161,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorization with null elements and no schema', () => {
@@ -176,7 +176,7 @@ describe('Material categorization stepper layout tester', () => {
       ]
     };
 
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 
   it('should not apply to a nested categorizations with empty elements and no schema', () => {
@@ -189,7 +189,7 @@ describe('Material categorization stepper layout tester', () => {
         }
       ]
     };
-    expect(materialCategorizationStepperTester(categorization, undefined)).toBe(-1);
+    expect(materialCategorizationTester(categorization, undefined)).toBe(-1);
   });
 });
 
@@ -226,14 +226,14 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
+        <MaterialCategorizationLayoutRenderer
           {...rendererDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
       </Provider>
     );
-    const steps = wrapper.find(Step);
+    const steps = wrapper.find(Tab);
     expect(steps.length).toBe(2);
     wrapper.unmount();
   });
@@ -284,16 +284,16 @@ describe('Material categorization stepper layout', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
+        <MaterialCategorizationLayoutRenderer
           {...rendererDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
       </Provider>
     );
-    const beforeClick = wrapper.find(CategorizationStepperRenderer).state().activeCategory;
-    wrapper.find(StepButton).at(1).simulate('click');
-    const afterClick = wrapper.find(CategorizationStepperRenderer).state().activeCategory;
+    const beforeClick = wrapper.find(CategorizationLayoutRenderer).state().activeCategory;
+    wrapper.find(Tab).at(1).simulate('click');
+    const afterClick = wrapper.find(CategorizationLayoutRenderer).state().activeCategory;
 
     expect(beforeClick).toBe(0);
     expect(afterClick).toBe(1);
@@ -305,7 +305,7 @@ describe('Material categorization stepper layout', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
+        <MaterialCategorizationLayoutRenderer
           {...rendererDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
@@ -314,7 +314,7 @@ describe('Material categorization stepper layout', () => {
       </Provider>
     );
 
-    expect(wrapper.find(Stepper).exists()).toBeFalsy();
+    expect(wrapper.find(Tab).exists()).toBeFalsy();
     wrapper.unmount();
   });
 
@@ -322,7 +322,7 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
+        <MaterialCategorizationLayoutRenderer
           {...rendererDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
@@ -330,7 +330,7 @@ describe('Material categorization stepper layout', () => {
       </Provider>
     );
 
-    expect(wrapper.find(Stepper).exists()).toBeTruthy();
+    expect(wrapper.find(Tab).exists()).toBeTruthy();
     wrapper.unmount();
   });
 
@@ -363,7 +363,7 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
+        <MaterialCategorizationLayoutRenderer
           {...rendererDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
@@ -371,7 +371,7 @@ describe('Material categorization stepper layout', () => {
       </Provider>
     );
 
-    expect(wrapper.find(Step).length).toBe(1);
+    expect(wrapper.find(Tab).length).toBe(1);
     wrapper.unmount();
   });
 });

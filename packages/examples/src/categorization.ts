@@ -41,6 +41,10 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/birthDate'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/vegetarian'
         }
       ]
     },
@@ -56,7 +60,14 @@ export const uischema = {
           type: 'Control',
           scope: '#/properties/vegetarian'
         }
-      ]
+      ],
+      rule: {
+        effect: 'HIDE',
+        condition: {
+          scope: '#/properties/vegetarian',
+          schema: { const: true }
+        }
+      }
     }
   ]
 };
