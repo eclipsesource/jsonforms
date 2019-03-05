@@ -29,11 +29,16 @@ import {
   and,
   Categorization,
   categorizationHasCategory,
+  Category,
+  getData,
+  isVisible,
+  JsonFormsState,
   mapStateToLayoutProps,
   optionIs,
   RankedTester,
   rankWith,
   RendererProps,
+  StatePropsOfRenderer,
   uiTypeIs
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
@@ -52,8 +57,12 @@ export interface CategorizationStepperState {
   activeCategory: number;
 }
 
+export interface MaterialCategorizationStepperLayoutRendererProps extends RendererProps {
+  data: any;
+}
+
 export class MaterialCategorizationStepperLayoutRenderer
-  extends RendererComponent<RendererProps, CategorizationStepperState> {
+  extends RendererComponent<MaterialCategorizationStepperLayoutRendererProps, CategorizationStepperState> {
 
   state = {
     activeCategory: 0
@@ -66,7 +75,7 @@ export class MaterialCategorizationStepperLayoutRenderer
   };
 
   render() {
-    const { uischema, schema, path, visible } = this.props;
+    const { data, uischema, schema, path, visible } = this.props;
     const categorization = uischema as Categorization;
     const { activeCategory } = this.state;
 
@@ -78,10 +87,13 @@ export class MaterialCategorizationStepperLayoutRenderer
       visible
     };
 
+    const categories = categorization.elements
+      .filter((category: Category) => isVisible(category, data));
+
     return (
       <Hidden xsUp={!visible}>
         <Stepper activeStep={activeCategory} nonLinear>
-          {categorization.elements.map((e, idx) =>
+          {categories.map((e: Category, idx: number) =>
             (
               <Step key={e.label}>
                 <StepButton onClick={this.handleStep(idx)}>
@@ -99,6 +111,14 @@ export class MaterialCategorizationStepperLayoutRenderer
   }
 }
 
+const mapStateToCategorizationProps = (state: JsonFormsState, ownProps: StatePropsOfRenderer): MaterialCategorizationStepperLayoutRendererProps => {
+  const props = mapStateToLayoutProps(state, ownProps);
+  return {
+    ...props,
+    data: getData(state)
+  };
+};
+
 export default connect(
-  mapStateToLayoutProps
+  mapStateToCategorizationProps,
 )(MaterialCategorizationStepperLayoutRenderer);
