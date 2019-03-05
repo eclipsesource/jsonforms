@@ -90,7 +90,7 @@ export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {}
  * @param field the field to be registered
  * @returns {any}
  */
-export interface DispatchFieldStateProps extends FieldProps {
+export interface DispatchFieldStateProps extends StatePropsOfField {
   fields?: JsonFormsFieldRendererRegistryEntry[];
 }
 
@@ -106,12 +106,13 @@ export const mapStateToFieldProps = (
   ownProps: OwnPropsOfField
 ): StatePropsOfField => {
   const { id, schema, path, uischema } = ownProps;
+  const rootData = getData(state);
   const visible = has(ownProps, 'visible')
     ? ownProps.visible
-    : isVisible(ownProps, state);
+    : isVisible(uischema, rootData);
   const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
-    : isEnabled(ownProps, state);
+    : isEnabled(uischema, rootData);
   const errors = getErrorAt(path)(state).map(error => error.message);
   const isValid = isEmpty(errors);
   const defaultConfig = cloneDeep(getConfig(state));
@@ -119,7 +120,7 @@ export const mapStateToFieldProps = (
   const rootSchema = getSchema(state);
 
   return {
-    data: Resolve.data(getData(state), path),
+    data: Resolve.data(rootData, path),
     visible,
     enabled,
     id,

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,44 +22,21 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
 import {
-  LabelElement,
-  mapStateToLayoutProps,
-  RankedTester,
-  rankWith,
-  rendererDefaultProps,
-  RendererProps,
-  uiTypeIs
+  ArrayControlProps,
+  JsonFormsState,
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps
 } from '@jsonforms/core';
-import { StatelessRenderer } from '@jsonforms/react';
+import { OnDestroy, OnInit } from '@angular/core';
+import { JsonFormsAbstractControl } from './abstract-control';
 
-import Typography from '@material-ui/core/Typography';
-import { connect } from 'react-redux';
-
-/**
- * Default tester for a label.
- * @type {RankedTester}
- */
-export const materialLabelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
-
-/**
- * Default renderer for a label.
- */
-export const MaterialLabelRenderer: StatelessRenderer<RendererProps> & { defaultProps: Partial<RendererProps> } =
-  ({ uischema, visible }) => {
-    const labelElement: LabelElement = uischema as LabelElement;
-    const style: {[x: string]: any} = {};
-    if (!visible) {
-      style.display = 'none';
-    }
-    return (
-      <Typography variant='h6' style={style}>
-        {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
-      </Typography>
-    );
-  };
-
-MaterialLabelRenderer.defaultProps = rendererDefaultProps;
-
-export default connect(mapStateToLayoutProps)(MaterialLabelRenderer);
+export class JsonFormsArrayControl
+  extends JsonFormsAbstractControl<ArrayControlProps>
+  implements OnInit, OnDestroy {
+  protected mapToProps(state: JsonFormsState): ArrayControlProps {
+    const props = mapStateToArrayControlProps(state, this.getOwnProps());
+    const dispatch = mapDispatchToArrayControlProps(this.ngRedux.dispatch);
+    return { ...props, ...dispatch };
+  }
+}

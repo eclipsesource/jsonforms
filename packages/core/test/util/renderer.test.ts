@@ -277,7 +277,6 @@ test('mapStateToControlProps - compose path with ownProps.path', t => {
   };
   const props = mapStateToControlProps(createState(coreUISchema), ownProps);
   t.is(props.path, 'yo.firstName');
-  t.is(props.parentPath, 'yo');
 });
 
 test('mapStateToControlProps - derive label', t => {

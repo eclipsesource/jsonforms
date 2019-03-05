@@ -22,15 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import {
-    HorizontalLayout,
-    mapStateToLayoutProps,
-    RankedTester,
-    rankWith,
-    RendererProps,
-    uiTypeIs,
+  HorizontalLayout,
+  mapStateToLayoutProps,
+  RankedTester,
+  rankWith, rendererDefaultProps,
+  RendererProps,
+  uiTypeIs
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
@@ -43,16 +43,17 @@ import { VanillaRendererProps } from '../index';
  */
 export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
 
-const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
-
-  const {
+const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> & {defaultProps: Partial<RendererProps>} = (
+  {
     schema,
     uischema,
-    path,
-    visible,
     getStyle,
     getStyleAsClassName,
-  } = props;
+    enabled,
+    visible,
+    path
+  }: RendererProps & VanillaRendererProps
+) => {
 
   const horizontalLayout = uischema as HorizontalLayout;
   const elementsSize = horizontalLayout.elements ? horizontalLayout.elements.length : 0;
@@ -65,6 +66,8 @@ const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) =
     <JsonFormsLayout
       className={layoutClassName}
       visible={visible}
+      enabled={enabled}
+      path={path}
       uischema={uischema}
       schema={schema}
       getStyle={getStyle}
@@ -75,9 +78,10 @@ const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) =
   );
 };
 
+HorizontalLayoutRenderer.defaultProps = rendererDefaultProps;
+
 const ConnectedHorizontalLayout = connect(
-  addVanillaLayoutProps(mapStateToLayoutProps),
-  null
+  addVanillaLayoutProps(mapStateToLayoutProps)
 )(HorizontalLayoutRenderer);
 
 export default ConnectedHorizontalLayout;

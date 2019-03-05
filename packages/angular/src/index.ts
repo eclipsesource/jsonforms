@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +24,7 @@
 */
 export * from './base.renderer';
 export * from './control';
+export * from './array-control';
 export * from './jsonforms.component';
 export * from './jsonforms.module';
 export * from './unknown.component';

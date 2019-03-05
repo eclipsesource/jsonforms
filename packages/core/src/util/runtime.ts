@@ -23,8 +23,6 @@
   THE SOFTWARE.
 */
 import has from 'lodash/has';
-// TODO: pass in uischema and data instead of props and state
-import { getData } from '../reducers';
 import {
   AndCondition,
   Condition,
@@ -38,8 +36,6 @@ import {
 import { resolveData } from './resolvers';
 import { composeWithUi } from './path';
 import { createAjv } from './validator';
-import { StatePropsOfRenderer } from './renderer';
-import { JsonFormsState } from '../store';
 
 const ajv = createAjv();
 
@@ -133,24 +129,24 @@ export const evalEnablement = (
 };
 
 export const isVisible = (
-  props: StatePropsOfRenderer,
-  state: JsonFormsState,
+  uischema: UISchemaElement,
+  data: any,
   path: string = undefined
 ): boolean => {
-  if (props.uischema.rule) {
-    return evalVisibility(props.uischema, getData(state), path);
+  if (uischema.rule) {
+    return evalVisibility(uischema, data, path);
   }
 
   return true;
 };
 
 export const isEnabled = (
-  props: StatePropsOfRenderer,
-  state: JsonFormsState,
+  uischema: UISchemaElement,
+  data: any,
   path: string = undefined
 ): boolean => {
-  if (props.uischema.rule) {
-    return evalEnablement(props.uischema, getData(state), path);
+  if (uischema.rule) {
+    return evalEnablement(uischema, data, path);
   }
 
   return true;

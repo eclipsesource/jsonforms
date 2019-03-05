@@ -6,17 +6,18 @@ import React from 'react';
 import {
   Actions,
   ControlState,
-  findUISchema,
-  getData, getSchema,
+  createId,
+  findUISchema, getData,
+  getErrorAt,
+  getSchema,
   JsonFormsState,
   JsonSchema,
   OwnPropsOfControl,
-  Paths,
-  Resolve,
-  Runtime, StatePropsOfControl,
-  UISchemaElement
+  Paths, Resolve,
+  Runtime,
+  StatePropsOfControl, UISchemaElement
 } from '@jsonforms/core';
-import { Control, ResolvedJsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 /* tslint:disable:next-line */
 const HTML5Backend = require('react-dnd-html5-backend');
 const { DragDropContext } = require('react-dnd');
@@ -28,6 +29,7 @@ import AddItemDialog from './AddItemDialog';
 import { StyleRulesCallback, withStyles, WithStyles } from '@material-ui/core/styles';
 import { InstanceLabelProvider, SchemaLabelProvider } from '../helpers/LabelProvider';
 import { AnyAction, Dispatch } from 'redux';
+import { union } from 'lodash';
 
 export interface MasterProps {
   schema: JsonSchema;
@@ -171,7 +173,6 @@ export interface TreeWithDetailState extends ControlState {
 export interface StatePropsOfTreeWithDetail extends StatePropsOfControl {
   classes?: any;
   rootData: any;
-  resolvedRootData: any;
   filterPredicate: any;
   labelProviders: {
     forSchema: SchemaLabelProvider;
@@ -189,7 +190,7 @@ export interface TreeWithDetailProps
 
 }
 
-export class TreeWithDetailRenderer extends Control
+export class TreeWithDetailRenderer extends React.Component
   <TreeWithDetailProps &
     WithStyles<'treeMasterDetailContent' |
       'treeMasterDetail'|
@@ -198,7 +199,7 @@ export class TreeWithDetailRenderer extends Control
     TreeWithDetailState> {
 
   componentWillMount() {
-    const { uischema, resolvedRootData, schema } = this.props;
+    const { uischema, data, schema } = this.props;
     const controlElement = uischema;
     this.setState({
       dialog: {
@@ -209,11 +210,11 @@ export class TreeWithDetailRenderer extends Control
     });
 
     const path = Paths.fromScopable(controlElement);
-    if (Array.isArray(resolvedRootData)) {
+    if (Array.isArray(data)) {
       this.setState({
         selected: {
           schema: schema.items as JsonSchema,
-          data: resolvedRootData[0],
+          data: data[0],
           path: Paths.compose(path, '0')
         }
       });
@@ -221,7 +222,7 @@ export class TreeWithDetailRenderer extends Control
       this.setState({
         selected: {
           schema: schema,
-          data: resolvedRootData,
+          data: data,
           path: path
         }
       });
@@ -264,7 +265,7 @@ export class TreeWithDetailRenderer extends Control
       schema,
       visible,
       path,
-      resolvedRootData,
+      data,
       rootData,
       addToRoot,
       filterPredicate,
@@ -279,9 +280,9 @@ export class TreeWithDetailRenderer extends Control
 
     let resetSelection;
     if (schema.items !== undefined) {
-      resetSelection = this.setSelection(schema.items as JsonSchema, resolvedRootData[0], Paths.compose(path, '0'));
+      resetSelection = this.setSelection(schema.items as JsonSchema, data[0], Paths.compose(path, '0'));
     } else {
-      resetSelection = this.setSelection(schema, resolvedRootData, path);
+      resetSelection = this.setSelection(schema, data, path);
     }
     const handlers = {
       onSelect: this.setSelection,
@@ -298,7 +299,7 @@ export class TreeWithDetailRenderer extends Control
             {typeof controlElement.label === 'string' ? controlElement.label : ''}
           </label>
           {
-            Array.isArray(resolvedRootData) &&
+            Array.isArray(data) &&
             <button onClick={addToRoot(schema, path)}>
               Add to root
             </button>
@@ -369,10 +370,10 @@ export interface OwnPropsOfTreeControl extends OwnPropsOfControl {
 }
 
 const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl & WithImageProvider & WithLabelProviders): StatePropsOfTreeWithDetail => {
-  const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
-  const visible = has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
-  const enabled = has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
   const rootData = getData(state);
+  const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
+  const visible = has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps.uischema, rootData);
+  const enabled = has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps.uischema, rootData);
   const rootSchema = getSchema(state);
   const resolvedSchema = Resolve.schema(
     ownProps.schema,
@@ -383,7 +384,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl 
   return {
     rootData: getData(state),
     label: get(ownProps.uischema, 'label') as string,
-    resolvedRootData: Resolve.data(rootData, path),
+    data: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
     schema:  resolvedSchema || rootSchema,
     findUISchema: findUISchema(state),
@@ -393,7 +394,9 @@ const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl 
     filterPredicate: ownProps.filterPredicate,
     imageProvider: ownProps.imageProvider,
     labelProviders: ownProps.labelProviders,
-    rootSchema: getSchema(state)
+    rootSchema: getSchema(state),
+    id: createId('tree'),
+    errors: union(getErrorAt(path)(state).map(error => error.message))
   };
 };
 
