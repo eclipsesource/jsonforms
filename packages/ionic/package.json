@@ -75,11 +75,11 @@
     "istanbul-instrumenter-loader": "^3.0.1",
     "jasmine": "^3.2.0",
     "jasmine-spec-reporter": "^4.2.1",
-    "karma": "^3.0.0",
+    "karma": "^3.1.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage-istanbul-reporter": "^2.0.4",
-    "karma-jasmine": "^1.1.2",
-    "karma-jasmine-html-reporter": "^1.3.1",
+    "karma-jasmine": "^2.0.1",
+    "karma-jasmine-html-reporter": "^1.4.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "ng-packagr": "^3.0.3",
@@ -88,6 +88,6 @@
     "request": "^2.88.0",
     "ts-loader": "^5.3.3",
     "ts-node": "^7.0.1",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.2.1"
   }
 }

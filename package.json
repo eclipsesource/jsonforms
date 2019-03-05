@@ -27,8 +27,8 @@
 		"tslint-loader": "^3.5.3",
 		"tslint-react": "^3.2.0",
 		"typedoc": "^0.12.0",
-		"typescript": "^3.0.0",
-		"webpack": "^4.28.1",
-		"webpack-merge": "^4.1.1"
+		"typescript": "^3.1.0",
+		"webpack": "^4.29.6",
+		"webpack-merge": "^4.2.1"
 	}
 }

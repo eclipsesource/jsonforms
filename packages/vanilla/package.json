@@ -32,7 +32,7 @@
     "source-map-loader": "^0.2.3",
     "ts-loader": "^5.3.3",
     "tslint-loader": "^3.5.3",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.2.1"
   },
   "ava": {
     "verbose": true,

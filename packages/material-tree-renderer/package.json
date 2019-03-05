@@ -73,6 +73,6 @@
     "ncp": "^2.0.0",
     "react-dom": "^16.4.0",
     "ts-jest": "^23.0.0",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.2.1"
   }
 }
