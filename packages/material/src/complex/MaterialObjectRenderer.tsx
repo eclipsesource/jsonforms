@@ -7,6 +7,7 @@ import {
   isObjectControl,
   JsonFormsState,
   JsonSchema,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   OwnPropsOfControl,
   RankedTester,
@@ -64,7 +65,8 @@ const mapStateToObjectControlProps = (state: JsonFormsState, ownProps: OwnPropsO
 };
 
 const ConnectedMaterialObjectRenderer = connect(
-    mapStateToObjectControlProps
+  mapStateToObjectControlProps,
+  mapDispatchToControlProps
 )(MaterialObjectRenderer);
 
 export const materialObjectControlTester: RankedTester = rankWith(2, isObjectControl);

@@ -49,6 +49,10 @@ const ArrayControlRenderer  =
          getStyle,
          getStyleAsClassName,
          removeItems,
+         id,
+         visible,
+         enabled,
+         errors
      }: ArrayControlProps & VanillaRendererProps) => {
 
         const controlElement = uischema as ControlElement;
@@ -68,6 +72,7 @@ const ArrayControlRenderer  =
 
         return (
             <ArrayControl
+                errors={errors}
                 getStyle={getStyle}
                 getStyleAsClassName={getStyleAsClassName}
                 removeItems={removeItems}
@@ -81,6 +86,9 @@ const ArrayControlRenderer  =
                 schema={schema}
                 rootSchema={rootSchema}
                 createDefaultValue={createDefaultValue}
+                id={id}
+                visible={visible}
+                enabled={enabled}
             />
         );
     };

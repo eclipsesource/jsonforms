@@ -1,7 +1,7 @@
 import some from 'lodash/some';
 import get from 'lodash/get';
 import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsArrayControl } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
 import {
   ArrayControlProps,
@@ -104,7 +104,7 @@ export const removeSchemaKeywords = (path: string) => {
     `
   ]
 })
-export class MasterListComponent extends JsonFormsControl {
+export class MasterListComponent extends JsonFormsArrayControl {
   masterItems: any[];
   selectedItem: any;
   selectedItemIdx: number;

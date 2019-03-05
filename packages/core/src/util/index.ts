@@ -25,12 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
 import head from 'lodash/head';
-import {
-  JsonFormsState,
-  JsonSchema,
-  Scopable,
-  StatePropsOfRenderer
-} from '../';
+import { JsonSchema, Scopable, UISchemaElement } from '../';
 import { resolveData, resolveSchema } from './resolvers';
 import {
   compose as composePaths,
@@ -127,11 +122,11 @@ export { composePaths, composeWithUi, Paths, toDataPath };
 
 // Runtime --
 const Runtime = {
-  isEnabled(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
-    return isEnabled(props, state);
+  isEnabled(uischema: UISchemaElement, data: any): boolean {
+    return isEnabled(uischema, data);
   },
-  isVisible(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
-    return isVisible(props, state);
+  isVisible(uischema: UISchemaElement, data: any): boolean {
+    return isVisible(uischema, data);
   }
 };
 export { isEnabled, isVisible, Runtime, deriveType };

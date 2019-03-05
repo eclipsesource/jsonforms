@@ -23,15 +23,16 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { connect } from 'react-redux';
 import {
-    GroupLayout,
-    mapStateToLayoutProps,
-    RankedTester,
-    rankWith,
-    RendererProps,
-    uiTypeIs,
+  GroupLayout,
+  mapStateToLayoutProps,
+  RankedTester,
+  rankWith,
+  rendererDefaultProps,
+  RendererProps,
+  uiTypeIs
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
 import { renderChildren } from './util';
@@ -44,7 +45,7 @@ import { VanillaRendererProps } from '../index';
  */
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
-export const GroupLayoutRenderer = (
+export const GroupLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> & {defaultProps: Partial<RendererProps>} = (
   {
     schema,
     uischema,
@@ -76,9 +77,10 @@ export const GroupLayoutRenderer = (
   );
 };
 
+GroupLayoutRenderer.defaultProps = rendererDefaultProps;
+
 const ConnectedGroupLayout =  connect(
-  addVanillaLayoutProps(mapStateToLayoutProps),
-  null
+  addVanillaLayoutProps(mapStateToLayoutProps)
 )(GroupLayoutRenderer);
 
 export default ConnectedGroupLayout;

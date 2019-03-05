@@ -196,49 +196,63 @@ export interface OwnPropsOfEnum {
 /**
  * State-based props of a {@link Renderer}.
  */
-export interface StatePropsOfRenderer extends OwnPropsOfRenderer {
+export interface StatePropsOfRenderer {
   /**
    * Any configuration options for the element.
    */
   config?: any;
+
+  /**
+   * The UI schema to be rendered.
+   */
+  uischema: UISchemaElement;
+
+  /**
+   * The JSON schema that describes the data.
+   */
+  schema: JsonSchema;
+
+  /**
+   * Whether the rendered element should be enabled.
+   */
+  enabled: boolean;
+  /**
+   * Whether the rendered element should be visible.
+   */
+  visible: boolean;
+
+  /**
+   * Instance path the data is written to, in case of a control.
+   */
+  path: string;
 }
 
 /**
  * State-based properties for UI schema elements that have a scope.
  */
-export interface StatePropsOfScopedRenderer
-  extends OwnPropsOfControl,
-    StatePropsOfRenderer {
+export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
   // constraint type
   uischema: ControlElement;
 
   /**
    * Any validation errors that are caused by the data to be rendered.
    */
-  errors?: any[];
+  errors: string[];
 
   /**
    * The data to be rendered.
    */
-  data?: any;
-
-  /**
-   * The absolute dot-separated path to the value being rendered.
-   * A path is a sequence of property names separated by dots,
-   * e.g. for accessing the value of b in the object
-   * { foo: { a: { b: 42 } } }, one would use foo.a.b.
-   */
-  path: string;
-
-  /**
-   * Path of the parent renderer, if any.
-   */
-  parentPath?: string;
+  data: any;
 
   /**
    * The root schema as returned by the store.
    */
   rootSchema: JsonSchema;
+
+  /**
+   * A unique ID that should be used for rendering the scoped UI schema element.
+   */
+  id: string;
 
   /**
    * Finds a registered UI schema to use, if any.
@@ -294,7 +308,7 @@ export interface DispatchPropsOfControl {
    * @param {string} path the path to the data to be updated
    * @param {any} value the new value that should be written to the given path
    */
-  handleChange?(path: string, value: any): void;
+  handleChange(path: string, value: any): void;
 }
 
 /**
@@ -307,7 +321,7 @@ export interface ControlProps
 /**
  * State props of a layout;
  */
-export interface StatePropsOfLayout extends OwnPropsOfRenderer {
+export interface StatePropsOfLayout extends StatePropsOfRenderer {
   /**
    * All available renderers.
    */
@@ -340,13 +354,14 @@ export const mapStateToControlProps = (
   ownProps: OwnPropsOfControl
 ): StatePropsOfControl => {
   const { uischema } = ownProps;
+  const rootData = getData(state);
   const path = composeWithUi(uischema, ownProps.path);
   const visible = has(ownProps, 'visible')
     ? ownProps.visible
-    : isVisible(ownProps, state, ownProps.path);
+    : isVisible(uischema, rootData, ownProps.path);
   const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
-    : isEnabled(ownProps, state, ownProps.path);
+    : isEnabled(uischema, rootData, ownProps.path);
   const labelDesc = createLabelDescriptionFrom(uischema);
   const label = labelDesc.show ? labelDesc.text : '';
   const errors = union(getErrorAt(path)(state).map(error => error.message));
@@ -365,7 +380,7 @@ export const mapStateToControlProps = (
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const defaultConfig = cloneDeep(getConfig(state));
   const config = merge(defaultConfig, controlElement.options);
-  const data = Resolve.data(getData(state), path);
+  const data = Resolve.data(rootData, path);
 
   return {
     data,
@@ -376,7 +391,6 @@ export const mapStateToControlProps = (
     enabled,
     id,
     path,
-    parentPath: ownProps.path,
     required,
     uischema: ownProps.uischema,
     findUISchema: findUISchema(state),
@@ -495,15 +509,20 @@ export interface ArrayControlProps
  */
 export const mapStateToLayoutProps = (
   state: JsonFormsState,
-  ownProps: StatePropsOfRenderer
+  ownProps: OwnPropsOfRenderer
 ): StatePropsOfLayout => {
+  const rootData = getData(state);
   const visible: boolean = has(ownProps, 'visible')
     ? ownProps.visible
-    : isVisible(ownProps, state, ownProps.path);
+    : isVisible(ownProps.uischema, rootData, ownProps.path);
+  const enabled: boolean = has(ownProps, 'enabled')
+    ? ownProps.enabled
+    : isEnabled(ownProps.uischema, rootData, ownProps.path);
 
   return {
     renderers: getRenderers(state),
     visible,
+    enabled,
     path: ownProps.path,
     uischema: ownProps.uischema,
     schema: ownProps.schema
@@ -542,4 +561,11 @@ export const mapStateToJsonFormsRendererProps = (
     rootSchema: getSchema(state),
     uischema
   };
+};
+
+export const rendererDefaultProps = {
+  visible: true,
+  enabled: true,
+  path: '',
+  errors: [] as string[]
 };

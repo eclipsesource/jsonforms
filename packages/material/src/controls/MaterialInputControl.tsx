@@ -32,6 +32,7 @@ import {
   isControl,
   isDescriptionHidden,
   isPlainLabel,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   RankedTester,
   rankWith
@@ -107,4 +108,4 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialInputControlTester: RankedTester = rankWith(1, isControl);
-export default connect(mapStateToControlProps)(MaterialInputControl);
+export default connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialInputControl);

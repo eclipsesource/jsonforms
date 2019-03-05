@@ -32,6 +32,7 @@ import {
   isControl,
   isDescriptionHidden,
   isPlainLabel,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   NOT_APPLICABLE,
   RankedTester,
@@ -112,7 +113,8 @@ export class InputControl extends Control<
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 
 export const ConnectedInputControl = connect(
-  addVanillaControlProps(mapStateToControlProps)
+  addVanillaControlProps(mapStateToControlProps),
+  mapDispatchToControlProps
 )(InputControl);
 
 export default ConnectedInputControl;

@@ -49,6 +49,9 @@ export const MaterialArrayLayoutRenderer  = (
     createDefaultValue,
     schema,
     rootSchema,
+    id,
+    enabled,
+    visible
   }: ArrayControlProps) => {
 
   const controlElement = uischema as ControlElement;
@@ -68,6 +71,9 @@ export const MaterialArrayLayoutRenderer  = (
       errors={errors}
       rootSchema={rootSchema}
       createDefaultValue={createDefaultValue}
+      id={id}
+      enabled={enabled}
+      visible={visible}
     />
   );
 };

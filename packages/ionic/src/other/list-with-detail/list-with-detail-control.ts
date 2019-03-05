@@ -17,12 +17,12 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { JsonFormsControl } from '@jsonforms/angular';
 import { Nav, Platform } from 'ionic-angular';
 import { NgRedux } from '@angular-redux/store';
 import { MasterPage } from './pages/master/master';
 import { DetailPage } from './pages/detail/detail';
 import { removeSchemaKeywords } from '../../common';
+import { JsonFormsArrayControl } from '../../../../angular/src/array-control';
 
 export interface MasterItem {
   label: string;
@@ -54,7 +54,7 @@ const isMasterPage = (page: any) => {
     </ion-split-pane>
   `
 })
-export class ListWithDetailControl extends JsonFormsControl {
+export class ListWithDetailControl extends JsonFormsArrayControl {
   @ViewChild('masterNav') masterNav: Nav;
   @ViewChild('detailNav') detailNav: Nav;
   masterPage: any;

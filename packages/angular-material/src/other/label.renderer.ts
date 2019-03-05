@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { Subscription } from 'rxjs/Subscription';
 import {
+  getData,
   isVisible,
   JsonFormsState,
   LabelElement,
@@ -58,7 +59,7 @@ const mapStateToProps = (
 ) => {
   const visible = has(ownProps, 'visible')
     ? ownProps.visible
-    : isVisible(ownProps, state);
+    : isVisible(ownProps.uischema, getData(state));
 
   return {
     visible

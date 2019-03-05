@@ -192,7 +192,7 @@ export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
 export const errorAt = (instancePath: string) => (
   state: JsonFormsCore
-): any[] => {
+): ErrorObject[] => {
   return filter(
     state.errors,
     (error: ErrorObject) => error.dataPath === instancePath

@@ -22,14 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import {
     mapStateToLayoutProps,
     RankedTester,
     rankWith,
+    rendererDefaultProps,
     RendererProps,
     uiTypeIs,
-    VerticalLayout,
+  VerticalLayout
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
 import { addVanillaLayoutProps } from '../util';
@@ -43,12 +44,13 @@ import { VanillaRendererProps } from '../index';
  */
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
-export const VerticalLayoutRenderer  = (
+export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> & {defaultProps: Partial<RendererProps>}  = (
   {
     schema,
     uischema,
     path,
     visible,
+    enabled,
     getStyle,
     getStyleAsClassName
   }: RendererProps & VanillaRendererProps) => {
@@ -66,6 +68,8 @@ export const VerticalLayoutRenderer  = (
       uischema={uischema}
       schema={schema}
       visible={visible}
+      enabled={enabled}
+      path={path}
       getStyle={getStyle}
       getStyleAsClassName={getStyleAsClassName}
     >
@@ -74,7 +78,8 @@ export const VerticalLayoutRenderer  = (
   );
 };
 
+VerticalLayoutRenderer.defaultProps = rendererDefaultProps;
+
 export default connect(
-  addVanillaLayoutProps(mapStateToLayoutProps),
-  null
+  addVanillaLayoutProps(mapStateToLayoutProps)
 )(VerticalLayoutRenderer);
