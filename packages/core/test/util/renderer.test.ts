@@ -22,25 +22,39 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
 import test from 'ava';
-import * as _ from 'lodash';
+import * as Redux from 'redux';
 import {
   clearAllIds,
+  createAjv,
   createDefaultValue,
+  mapDispatchToArrayControlProps,
   mapDispatchToControlProps,
   mapStateToControlProps,
-  mapStateToDispatchRendererProps
+  mapStateToJsonFormsRendererProps,
+  mapStateToLayoutProps
 } from '../../src/util';
 import configureStore from 'redux-mock-store';
-import { init, update, UPDATE_DATA, UpdateAction } from '../../src/actions';
+import * as _ from 'lodash';
 import { generateDefaultUISchema } from '../../src/generators';
-import { ControlElement, coreReducer } from '../../src';
+import {
+  ControlElement,
+  coreReducer,
+  JsonFormsState,
+  JsonSchema,
+  RuleEffect,
+  UISchemaElement
+} from '../../src';
+import { jsonformsReducer } from '../../src/reducers';
+import { ErrorObject } from 'ajv';
+import { combineReducers, createStore, Store } from 'redux';
 
-const middlewares = [];
-const mockStore = configureStore(middlewares);
+const middlewares: Redux.Middleware[] = [];
+const mockStore = configureStore<JsonFormsState>(middlewares);
 
 const hideRule = {
-  effect: 'HIDE',
+  effect: RuleEffect.HIDE,
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
@@ -49,7 +63,7 @@ const hideRule = {
 };
 
 const disableRule = {
-  effect: 'DISABLE',
+  effect: RuleEffect.DISABLE,
   condition: {
     type: 'LEAF',
     scope: '#/properties/firstName',
@@ -59,10 +73,10 @@ const disableRule = {
 
 const coreUISchema: ControlElement = {
   type: 'Control',
-  scope: '#/properties/firstName',
+  scope: '#/properties/firstName'
 };
 
-const createState = uischema => ({
+const createState = (uischema: UISchemaElement) => ({
   jsonforms: {
     core: {
       schema: {
@@ -76,7 +90,7 @@ const createState = uischema => ({
         firstName: 'Homer'
       },
       uischema,
-      errors: []
+      errors: [] as ErrorObject[]
     }
   }
 });
@@ -131,6 +145,69 @@ test('mapStateToControlProps - visible via state ', t => {
   clonedState.jsonforms.core.data.firstName = 'Lisa';
   const props = mapStateToControlProps(clonedState, ownProps);
   t.true(props.visible);
+});
+
+test('mapStateToControlProps - visible via state with path from ownProps ', t => {
+  const uischema = {
+    ...coreUISchema,
+    rule: hideRule
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Lisa' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToControlProps(state, ownProps);
+  t.true(props.visible);
+});
+
+test('mapStateToControlProps - enabled via state with path from ownProps ', t => {
+  const uischema = {
+    ...coreUISchema,
+    rule: disableRule
+  };
+  const ownProps = {
+    visible: true,
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Lisa' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToControlProps(state, ownProps);
+  t.true(props.enabled);
 });
 
 test('mapStateToControlProps - enabled via ownProps ', t => {
@@ -237,10 +314,14 @@ test('mapStateToControlProps - errors', t => {
     uischema: coreUISchema
   };
   const clonedState = _.cloneDeep(createState(coreUISchema));
-  clonedState.jsonforms.core.errors = [{
+  const error: ErrorObject = {
     dataPath: 'firstName',
-    message: 'Duff beer'
-  }];
+    message: 'Duff beer',
+    keyword: 'whatever',
+    schemaPath: '',
+    params: undefined
+  };
+  clonedState.jsonforms.core.errors = [error];
   const props = mapStateToControlProps(clonedState, ownProps);
   t.is(props.errors[0], 'Duff beer');
 });
@@ -251,14 +332,17 @@ test('mapStateToControlProps - no duplicate error messages', t => {
     properties: {
       firstName: {
         anyOf: [
-          {type: 'string', minLength: 5},
-          {type: 'string', enum: ['foo', 'bar']}
+          { type: 'string', minLength: 5 },
+          { type: 'string', enum: ['foo', 'bar'] }
         ]
       }
     }
   };
   const initCoreState = coreReducer(undefined, init({}, schema, coreUISchema));
-  const updateCoreState = coreReducer(initCoreState, update('firstName', () => true));
+  const updateCoreState = coreReducer(
+    initCoreState,
+    update('firstName', () => true)
+  );
   const props = mapStateToControlProps(
     { jsonforms: { core: updateCoreState } },
     { uischema: coreUISchema }
@@ -289,12 +373,12 @@ test('mapDispatchToControlProps', t => {
 
 test('createDefaultValue', t => {
   t.true(
-    _.isDate(createDefaultValue(
-      {
+    _.isDate(
+      createDefaultValue({
         type: 'string',
         format: 'date'
-      }
-    ))
+      })
+    )
   );
   t.true(
     _.isDate(
@@ -305,12 +389,12 @@ test('createDefaultValue', t => {
     )
   );
   t.true(
-    _.isDate(createDefaultValue(
-      {
+    _.isDate(
+      createDefaultValue({
         type: 'string',
         format: 'time'
-      }
-    ))
+      })
+    )
   );
   t.is(createDefaultValue({ type: 'string' }), '');
   t.is(createDefaultValue({ type: 'number' }), 0);
@@ -333,19 +417,13 @@ test(`mapStateToDispatchRendererProps should generate UI schema given ownProps s
     }
   };
 
-  const props = mapStateToDispatchRendererProps(
-    store.getState(),
-    { schema }
-  );
+  const props = mapStateToJsonFormsRendererProps(store.getState(), { schema });
   t.deepEqual(props.uischema, generateDefaultUISchema(schema));
 });
 
 test(`mapStateToDispatchRendererProps should use registered UI schema given no ownProps`, t => {
   const store = mockStore(createState(coreUISchema));
-  const props = mapStateToDispatchRendererProps(
-    store.getState(),
-    {}
-  );
+  const props = mapStateToJsonFormsRendererProps(store.getState(), {});
   t.deepEqual(props.uischema, coreUISchema);
 });
 
@@ -367,9 +445,270 @@ test(`mapStateToDispatchRendererProps should use UI schema if given via ownProps
     scope: '#/properties/foo'
   };
 
-  const props = mapStateToDispatchRendererProps(
-    store.getState(),
-    { schema, uischema }
-  );
+  const props = mapStateToJsonFormsRendererProps(store.getState(), {
+    schema,
+    uischema
+  });
   t.deepEqual(props.uischema, uischema);
+});
+
+test('mapDispatchToArrayControlProps should adding items to array', t => {
+  const data: any = ['foo'];
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'string'
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers<JsonFormsState>({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(init(data, schema, uischema));
+  const props = mapDispatchToArrayControlProps(store.dispatch);
+  props.addItem('', createDefaultValue(schema))();
+  t.is(store.getState().jsonforms.core.data.length, 2);
+});
+
+test('mapDispatchToArrayControlProps should remove items from array', t => {
+  const data = ['foo', 'bar', 'quux'];
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'string'
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(init(data, schema, uischema));
+  const props = mapDispatchToArrayControlProps(store.dispatch);
+  props.removeItems('', ['foo', 'bar'])();
+  t.is(store.getState().jsonforms.core.data.length, 1);
+  t.is(store.getState().jsonforms.core.data[0], 'quux');
+});
+
+test('mapStateToLayoutProps - visible via state with path from ownProps ', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: hideRule
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Lisa' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.true(props.visible);
+});
+
+test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [coreUISchema],
+    rule: hideRule
+  };
+  const ownProps = {
+    uischema,
+    path: 'foo'
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Homer' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToLayoutProps(state, ownProps);
+  t.false(props.visible);
+});
+
+test('should assign defaults to enum', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+        minLength: 1
+      },
+      color: {
+        type: 'string',
+        enum: ['red', 'green', 'blue'],
+        default: 'green'
+      }
+    }
+  };
+
+  const uischema: UISchemaElement = undefined;
+
+  const data = {
+    name: 'foo'
+  };
+
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
+
+  t.is(store.getState().jsonforms.core.data.color, 'green');
+});
+
+test('should assign defaults to empty item within nested object of an array', t => {
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo'
+        }
+      }
+    }
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const data = [{}];
+
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
+
+  t.is(store.getState().jsonforms.core.data.length, 1);
+  t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
+});
+
+test('should assign defaults to newly added item within nested object of an array', t => {
+  const schema: JsonSchema = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          default: 'foo'
+        }
+      }
+    }
+  };
+
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+
+  const data = [{}];
+
+  const initState: JsonFormsState = {
+    jsonforms: {
+      core: {
+        uischema,
+        schema,
+        data,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
+  );
+  store.dispatch(
+    init(data, schema, uischema, createAjv({ useDefaults: true }))
+  );
+  const props = mapDispatchToArrayControlProps(store.dispatch);
+
+  props.addItem('', createDefaultValue(schema))();
+
+  t.is(store.getState().jsonforms.core.data.length, 2);
+  t.deepEqual(store.getState().jsonforms.core.data[0], { message: 'foo' });
 });

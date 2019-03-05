@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -33,11 +33,10 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   mapStateToControlProps,
-  NOT_APPLICABLE,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
+import { Control, DispatchField } from '@jsonforms/react';
 
 import { InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
@@ -53,50 +52,59 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath,
-      config,
-      fields
+      path,
+      config
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
-    const style: {[x: string]: any} = {};
+    const style: { [x: string]: any } = {};
     if (!visible) {
       style.display = 'none';
     }
-    const inputLabelStyle: {[x: string]: any} = {
+    const inputLabelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
-      overflow : 'hidden',
+      overflow: 'hidden',
       textOverflow: 'ellipsis',
       // magic width as the label is transformed to 75% of its size
       width: '125%'
     };
 
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
-    const field = _.maxBy(fields, r => r.tester(uischema, schema));
-    if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
-      console.warn('No applicable field found.');
-      return null;
-    } else {
-
-      return (
-        <FormControl
-          style={style}
-          fullWidth={!trim}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          id={id}
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused
+    );
+    return (
+      <FormControl
+        style={style}
+        fullWidth={!trim}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        id={id}
+      >
+        <InputLabel
+          htmlFor={id + '-input'}
+          error={!isValid}
+          style={inputLabelStyle}
         >
-          <InputLabel htmlFor={id + '-input'} error={!isValid} style={inputLabelStyle}>
-            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
-          </InputLabel>
-          <DispatchField uischema={uischema} schema={schema} path={parentPath} id={id + '-input'} />
-          <FormHelperText error={!isValid}>
-            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-          </FormHelperText>
-        </FormControl>
-      );
-    }
+          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+        </InputLabel>
+        <DispatchField
+          uischema={uischema}
+          schema={schema}
+          path={path}
+          id={id + '-input'}
+        />
+        <FormHelperText error={!isValid}>
+          {!isValid
+            ? formatErrorMessage(errors)
+            : showDescription
+            ? description
+            : null}
+        </FormHelperText>
+      </FormControl>
+    );
   }
 }
 export const materialInputControlTester: RankedTester = rankWith(1, isControl);
-export default connectToJsonForms(mapStateToControlProps)(MaterialInputControl);
+export default connect(mapStateToControlProps)(MaterialInputControl);

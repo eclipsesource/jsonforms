@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/webcomponent",
-  "version": "2.0.7",
+  "version": "2.2.1-alpha.4",
   "description": "Webcomponnet module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -19,7 +19,7 @@
     "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
@@ -39,18 +39,21 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.7",
-    "@jsonforms/react": "^2.0.7",
+    "@jsonforms/core": "^2.2.1-alpha.4",
+    "@jsonforms/react": "^2.2.1-alpha.4",
     "@webcomponents/webcomponentsjs": "^1.0.20",
     "es6-shim": "^0.35.3",
-    "json-refs": "^3.0.4",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "react-redux": "^5.0.6",
-    "redux": "^3.7.2"
+    "json-refs": "^3.0.10"
+  },
+  "peerDependencies": {
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-redux": "^6.0.0",
+    "redux": "^3.0.0"
   },
   "devDependencies": {
-    "@jsonforms/test": "^2.0.7",
+    "@jsonforms/test": "^2.2.1-alpha.4",
+    "@types/react-dom": "^16.0.8",
     "document-register-element": "^1.7.0",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2"

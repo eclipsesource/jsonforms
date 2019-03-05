@@ -22,16 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import {
     JsonSchema,
+    OwnPropsOfRenderer,
     UISchemaElement,
-  } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+} from '@jsonforms/core';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
-const renderChildren = (
+export const renderLayoutElements = (
     elements: UISchemaElement[],
     schema: JsonSchema,
     path: string
@@ -39,7 +40,7 @@ const renderChildren = (
   elements.map((child, index) =>
       (
         <Grid item key={`${path}-${index}`} xs>
-          <JsonForms
+          <ResolvedJsonForms
             uischema={child}
             schema={schema}
             path={path}
@@ -48,23 +49,20 @@ const renderChildren = (
       )
   );
 
-export interface MaterialLayoutRendererProps {
+export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
     elements: UISchemaElement[];
-    schema: JsonSchema;
-    path: string;
-    visible: boolean;
     direction: 'row'|'column';
 }
 export const MaterialLayoutRenderer = (
   {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
 
-  if (_.isEmpty(elements)) {
+  if (isEmpty(elements)) {
     return null;
   } else {
     return (
       <Hidden xsUp={!visible}>
         <Grid container direction={direction} spacing={direction === 'row' ? 16 : 0}>
-          {renderChildren(elements, schema, path)}
+          {renderLayoutElements(elements, schema, path)}
         </Grid>
       </Hidden>
     );

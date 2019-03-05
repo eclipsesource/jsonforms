@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isBooleanControl,
@@ -31,33 +32,35 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { StatelessComponent, SyntheticEvent } from 'react';
+import { addVanillaFieldProps } from '../util';
+import { VanillaRendererProps } from '../index';
 
-export const BooleanField: StatelessComponent<FieldProps> = (props: FieldProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
+export const BooleanField: StatelessComponent<FieldProps> =
+    (props: FieldProps & VanillaRendererProps) => {
+        const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-  return (
-    <input
-      type='checkbox'
-      checked={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.checked)
-      }
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-    />
-  );
-};
+        return (
+            <input
+                type='checkbox'
+                checked={data || ''}
+                onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+                    handleChange(path, ev.currentTarget.checked)
+                }
+                className={className}
+                id={id}
+                disabled={!enabled}
+                autoFocus={uischema.options && uischema.options.focus}
+            />
+        );
+    };
 
 /**
  * Default tester for boolean controls.
  * @type {RankedTester}
  */
 export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
-export default connectToJsonForms(
-  mapStateToFieldProps,
+export default connect(
+  addVanillaFieldProps(mapStateToFieldProps),
   mapDispatchToFieldProps
 )(BooleanField);

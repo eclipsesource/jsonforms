@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,49 +25,55 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
-import { Actions, JsonFormsState } from '@jsonforms/core';
+import { Actions, JsonFormsState, UISchemaTester } from '@jsonforms/core';
 import { AppComponent } from './app.component';
-import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
-import { data, initialState, rootReducer, schema, uischema } from './store';
+import { initialState, rootReducer } from './store';
+import { ReduxComponent } from './redux.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    JsonFormsModule,
-    JsonFormsAngularMaterialModule
-  ],
+  declarations: [AppComponent, ReduxComponent],
+  imports: [BrowserModule, JsonFormsAngularMaterialModule],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor(
-    ngRedux: NgRedux<JsonFormsState>,
-    devTools: DevToolsExtension
-  ) {
-    let enhancers = [];
+  constructor(ngRedux: NgRedux<JsonFormsState>, devTools: DevToolsExtension) {
+    let enhancers: any[] = [];
     // ... add whatever other enhancers you want.
 
     // You probably only want to expose this tool in devMode.
     if (isDevMode() && devTools.isEnabled()) {
-      enhancers = [ ...enhancers, devTools.enhancer() ];
+      enhancers = [...enhancers, devTools.enhancer()];
     }
 
-    ngRedux.configureStore(
-      rootReducer,
-      initialState,
-      [],
-      enhancers
+    ngRedux.configureStore(rootReducer, initialState, [], enhancers);
+    const example = initialState.examples.data[0];
+    ngRedux.dispatch(
+      Actions.init(example.data, example.schema, example.uischema)
     );
-    ngRedux.dispatch(Actions.init(
-      data,
-      schema,
-      uischema
-    ));
+
+    const uiSchema = {
+      type: 'HorizontalLayout',
+      elements: [
+        {
+          type: 'Control',
+          scope: '#/properties/buyer/properties/email'
+        },
+        {
+          type: 'Control',
+          scope: '#/properties/status'
+        }
+      ]
+    };
+    const itemTester: UISchemaTester = (_schema, schemaPath, _path) => {
+      if (schemaPath === '#/properties/warehouseitems/items') {
+        return 10;
+      }
+      return -1;
+    };
+    ngRedux.dispatch(Actions.registerUISchema(itemTester, uiSchema));
   }
 }
 

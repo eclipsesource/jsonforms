@@ -22,19 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import has from 'lodash/has';
+import React from 'react';
 import {
-  isVisible,
-  LabelElement,
-  RankedTester,
-  rankWith,
-  RendererProps,
-  uiTypeIs,
+    isVisible, JsonFormsState,
+    LabelElement, OwnPropsOfRenderer,
+    RankedTester,
+    rankWith,
+    RendererProps,
+    uiTypeIs,
 } from '@jsonforms/core';
 import { getStyle as findStyle, getStyleAsClassName as findStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
-import { connectToJsonForms, StatelessRenderer } from '@jsonforms/react';
+import { StatelessRenderer } from '@jsonforms/react';
+import { connect } from 'react-redux';
 
 /**
  * Default tester for a label.
@@ -61,8 +62,8 @@ export const LabelRenderer: StatelessRenderer<RendererProps & VanillaRendererPro
     );
   };
 
-const mapStateToProps = (state, ownProps) => {
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
+const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfRenderer) => {
+  const visible = has(ownProps, 'visible') ? ownProps.visible :  isVisible(ownProps, state);
 
   return {
     visible,
@@ -71,4 +72,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connectToJsonForms(mapStateToProps, null)(LabelRenderer);
+export default connect(mapStateToProps, null)(LabelRenderer);

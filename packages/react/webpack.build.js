@@ -7,6 +7,9 @@ module.exports = merge(baseConfig, {
         library: "JSONFormsReact"
       },
       externals: {
-          '@jsonforms/core': 'JSONFormsCore',
+        '@jsonforms/core': 'JSONFormsCore',
+        "react": "React",
+        "redux": "Redux",
+        "react-redux": "ReactRedux"
     },
 });

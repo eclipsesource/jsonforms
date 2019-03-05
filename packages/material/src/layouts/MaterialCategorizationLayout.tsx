@@ -22,9 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
-import {Tabs, Tab } from '@material-ui/core';
+import { Tab, Tabs } from '@material-ui/core';
 import {
   and,
   Categorization,
@@ -36,10 +37,10 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
+import { RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
-const isSingleLevelCategorization: Tester = and(
+export const isSingleLevelCategorization: Tester = and(
     uiTypeIs('Categorization'),
     (uischema: UISchemaElement): boolean => {
       const categorization = uischema as Categorization;
@@ -53,20 +54,22 @@ export interface CategorizationState {
     value: number;
   }
 
-export class MaterialCategorizationLayoutRenderer
-    extends RendererComponent<RendererProps, CategorizationState> {
-    constructor(props) {
-      super(props);
+export interface MaterialCategorizationLayoutRendererProps extends RendererProps {
+    selected: number;
+    ownState?: boolean;
+    onChange?(selected: number, prevSelected: number): void;
+}
 
-      this.state = {
+export class MaterialCategorizationLayoutRenderer
+    extends RendererComponent<MaterialCategorizationLayoutRendererProps, CategorizationState> {
+
+    state = {
         value: 0
-      };
-    }
+    };
 
     render() {
         const { uischema, schema, path, visible } = this.props;
-        const { value } = this.state;
-
+        const value  = this.hasOwnState() ? this.state.value : this.props.selected;
         const categorization = uischema as Categorization;
 
         const childProps: MaterialLayoutRendererProps = {
@@ -84,7 +87,7 @@ export class MaterialCategorizationLayoutRenderer
         return (
             <div style={style}>
                 <AppBar position='static'>
-                <Tabs value={value} onChange={this.handleChange}>
+                <Tabs value={value} onChange={this.handleChange} variant='scrollable'>
                     {categorization.elements.map((e, idx) => <Tab  key={idx} label={e.label} />)}
                 </Tabs>
                 </AppBar>
@@ -94,11 +97,22 @@ export class MaterialCategorizationLayoutRenderer
             </div>
         );
     }
-    private handleChange = (_event, value) => {
-        this.setState({ value });
+
+    hasOwnState = () => {
+        return this.props.ownState !== undefined ? this.props.ownState : true;
+    }
+
+    private handleChange = (_event: any, value: any) => {
+        if (this.props.onChange) {
+            this.props.onChange(value, this.state.value);
+        }
+        const hasOwnState = this.hasOwnState();
+        if (hasOwnState) {
+            this.setState({ value });
+        }
     }
 }
 
-export default connectToJsonForms(
+export default connect(
   mapStateToLayoutProps
 )(MaterialCategorizationLayoutRenderer);

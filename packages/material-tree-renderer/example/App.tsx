@@ -1,26 +1,35 @@
-import * as React from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
-import EditorIde from '../src/ThemedTreeWithDetail';
+import { ThemedTreeWithDetail } from '../src';
 import EditorBar from './app-bar/EditorBar';
 import {
+  ControlElement,
   getData,
   getSchema,
-  getUiSchema
+  getUiSchema,
+  JsonFormsStore
 } from '@jsonforms/core';
 
-const App = ({store, filterPredicate, labelProvider, imageProvider}) => (
+interface AppParameter {
+  store: JsonFormsStore;
+  filterPredicate: any;
+  labelProviders: any;
+  imageProvider: any;
+}
+
+const App = ({ store, filterPredicate, labelProviders, imageProvider }: AppParameter) => (
   <Provider store={store}>
     <React.Fragment>
       <EditorBar
         schema={getSchema(store.getState())}
         rootData={getData(store.getState())}
       />
-      <EditorIde
+      <ThemedTreeWithDetail
         filterPredicate={filterPredicate}
-        labelProvider={labelProvider}
+        labelProviders={labelProviders}
         imageProvider={imageProvider}
         schema={getSchema(store.getState())}
-        uischema={getUiSchema(store.getState())}
+        uischema={getUiSchema(store.getState())as ControlElement}
       />
     </React.Fragment>
   </Provider>

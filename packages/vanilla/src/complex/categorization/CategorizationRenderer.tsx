@@ -22,26 +22,28 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import {
-  Categorization,
-  Category,
-  mapStateToLayoutProps
+    Categorization,
+    Category,
+    mapStateToLayoutProps, RendererProps
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
+import { RendererComponent } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
 import { addVanillaLayoutProps } from '../../util';
-import { VanillaLayoutProps } from '../../index';
+import { connect } from 'react-redux';
+import { VanillaRendererProps } from '../../index';
 
 export interface CategorizationState {
   selectedCategory: Category;
 }
 
-class CategorizationRenderer extends RendererComponent<VanillaLayoutProps, CategorizationState> {
+class CategorizationRenderer
+    extends RendererComponent<RendererProps & VanillaRendererProps, CategorizationState> {
 
-  onCategorySelected = category => () => {
+  onCategorySelected = (category: Category) => () => {
     return this.setState({selectedCategory: category});
   }
 
@@ -99,8 +101,6 @@ class CategorizationRenderer extends RendererComponent<VanillaLayoutProps, Categ
   }
 }
 
-const ConnectedCategorizationRenderer = connectToJsonForms(
-  addVanillaLayoutProps(mapStateToLayoutProps),
-  null
+export default connect(
+  addVanillaLayoutProps(mapStateToLayoutProps)
 )(CategorizationRenderer);
-export default ConnectedCategorizationRenderer;

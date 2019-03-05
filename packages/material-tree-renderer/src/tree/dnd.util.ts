@@ -1,10 +1,12 @@
+import clone from 'lodash/clone';
+import isEqual from 'lodash/isEqual';
 import { JsonSchema7, update } from '@jsonforms/core';
 import { Property } from '../services/property.util';
-import * as _ from 'lodash';
 import { indexFromPath, parentPath } from '../helpers/util';
+import { AnyAction, Dispatch } from 'redux';
 
 export const Types = {
-    TREE_DND: 'tree-master-detail-DnD'
+  TREE_DND: 'tree-master-detail-DnD'
 };
 
 /**
@@ -17,42 +19,42 @@ export const CSS_DELAY = 30;
  * Information about a currently dragged data object.
  */
 export interface DragInfo {
-    /** The path where the data object was located before the drag started. */
-    originalPath: string;
-    /**
-     * The current path of the dragged data object.
-     * This is updated when the dragged data is moved while dragging it
-     * and needed to move it back to its original position in case the drag is cancelled.
-     *
-     * This is initialized with the originalPath.
-     */
-    currentPath: string;
-    /** The JsonSchema defining the dragged data object */
-    schema: JsonSchema7;
-    /** The data object itself */
-    data: any;
+  /** The path where the data object was located before the drag started. */
+  originalPath: string;
+  /**
+   * The current path of the dragged data object.
+   * This is updated when the dragged data is moved while dragging it
+   * and needed to move it back to its original position in case the drag is cancelled.
+   *
+   * This is initialized with the originalPath.
+   */
+  currentPath: string;
+  /** The JsonSchema defining the dragged data object */
+  schema: JsonSchema7;
+  /** The data object itself */
+  data: any;
 }
 
 /**
  * Information about the handling of a drop event
  */
 export interface DropResult {
-    /**
-     * Whether the drop event was handled by a list or list item.
-     * If true, the dragged item was already moved to its target location
-     * and further drop handlers do not need to act.
-     */
-    isHandled: boolean;
+  /**
+   * Whether the drop event was handled by a list or list item.
+   * If true, the dragged item was already moved to its target location
+   * and further drop handlers do not need to act.
+   */
+  isHandled: boolean;
 
-    /**
-     * Whether the dragged item still needs to be moved
-     */
-    move?: boolean;
+  /**
+   * Whether the dragged item still needs to be moved
+   */
+  move?: boolean;
 
-    /**
-     * The path where the dragged item will be moved if it should be moved
-     */
-    moveTarget?: string;
+  /**
+   * The path where the dragged item will be moved if it should be moved
+   */
+  moveTarget?: string;
 }
 
 /**
@@ -66,78 +68,70 @@ export interface DropResult {
  * @param oldPath the data at this path will be deleted
  * @param newPath the given data will be inserted at this path
  */
-export const moveListItem = dispatch =>
-    (data: any, oldPath: string, newPath: string): boolean => {
-        if (newPath === oldPath) {
-            // nothing needs to be moved
-            return false;
-        }
+export const moveListItem = (dispatch: Dispatch<AnyAction>) => (
+  data: any,
+  oldPath: string,
+  newPath: string
+): boolean => {
+  if (newPath === oldPath) {
+    // nothing needs to be moved
+    return false;
+  }
 
-        const oldParentPath = parentPath(oldPath);
-        const oldIndex = indexFromPath(oldPath);
-        const newParentPath = parentPath(newPath);
-        const newIndex = indexFromPath(newPath);
+  const oldParentPath = parentPath(oldPath);
+  const oldIndex = indexFromPath(oldPath);
+  const newParentPath = parentPath(newPath);
+  const newIndex = indexFromPath(newPath);
 
-        // Remove moved data from source array
-        dispatch(
-            update(
-                oldParentPath,
-                array => {
-                    // TODO clone necessary?
-                    const clone = _.clone(array);
-                    clone.splice(oldIndex, 1);
+  // Remove moved data from source array
+  dispatch(
+    update(oldParentPath, array => {
+      // TODO clone necessary?
+      const clonedArray = clone(array);
+      clonedArray.splice(oldIndex, 1);
 
-                    console.log(`remove from ${oldParentPath}, index: ${oldIndex}`);
+      console.log(`remove from ${oldParentPath}, index: ${oldIndex}`);
 
-                    return clone;
-                }
-            )
-        );
+      return clonedArray;
+    })
+  );
 
-        // Add moved data to target array
-        dispatch(
-            update(
-                newParentPath,
-                array => {
-                    if (array === undefined || array === null || array.length === 0) {
-                        return [data];
-                    }
+  // Add moved data to target array
+  dispatch(
+    update(newParentPath, array => {
+      if (array === undefined || array === null || array.length === 0) {
+        return [data];
+      }
 
-                    // TODO clone necessary?
-                    const clone = _.clone(array);
-                    clone.splice(newIndex, 0, data);
+      // TODO clone necessary?
+      const clonedArray = clone(array);
+      clonedArray.splice(newIndex, 0, data);
 
-                    console.log(`add to ${newParentPath}, index: ${newIndex}`);
+      console.log(`add to ${newParentPath}, index: ${newIndex}`);
 
-                    return clone;
-                }
-            )
-        );
+      return clonedArray;
+    })
+  );
 
-        return true;
-    };
+  return true;
+};
 
-export const mapDispatchToTreeListProps = dispatch => ({
-    moveListItem: moveListItem(dispatch)
+export const mapDispatchToTreeListProps = (dispatch: Dispatch<AnyAction>) => ({
+  moveListItem: moveListItem(dispatch)
 });
 
 /**
  * Returns whether the dragged item can be dropped in a list.
  *
- * @param listProperties The ContainmentProperties that the list can supports
+ * @param containerProps The ContainmentProperties that the list can supports
  * @param dragInfo The DragInfo describing the dragged item
  */
-export const canDropDraggedItem = (listProperties: Property[], dragInfo: DragInfo) => {
-    if (_.isEmpty(dragInfo.schema.$id)) {
-        // Cannot determine if this is a valid drop point without schema id
-        console.warn(`The given schema for the data at path '${dragInfo.originalPath}'` +
-                     ` does not have an ID. No drag and drop is possible`,
-                     dragInfo.schema);
-
-        return false;
-    }
-    const matchingProps = listProperties
-        .filter(prop => prop.schema.$id === dragInfo.schema.$id);
-
-    return matchingProps.length > 0;
+export const canDropDraggedItem = (
+  containerProps: Property[],
+  dragInfo: DragInfo
+) => {
+  const matchingProps = containerProps.filter(prop =>
+    isEqual(prop.schema, dragInfo.schema)
+  );
+  return matchingProps.length > 0;
 };

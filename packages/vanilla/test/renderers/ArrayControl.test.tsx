@@ -31,6 +31,7 @@ import { vanillaRenderers } from '../../src/index';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 import IntegerField, { integerFieldTester } from '../../src/fields/IntegerField';
+import { createDefaultValue } from '@jsonforms/core';
 
 test.beforeEach(t => {
 
@@ -76,11 +77,15 @@ test('render two children', t => {
       }
     ]
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <ArrayControl schema={t.context.schema} uischema={t.context.uischema}/>
+      <ArrayControl
+        schema={t.context.schema}
+        uischema={t.context.uischema}
+        createDefaultValue={() => createDefaultValue(t.context.schema)}
+      />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const controls = TestUtils.scryRenderedDOMComponentsWithClass(
     tree,

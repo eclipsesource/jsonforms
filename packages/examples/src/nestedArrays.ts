@@ -26,29 +26,27 @@ import { registerExamples } from './register';
 import {
   Actions,
   ControlElement,
+  JsonSchema,
   NOT_APPLICABLE,
   VerticalLayout
 } from '@jsonforms/core';
+import { AnyAction, Dispatch } from 'redux';
+
 const schema = {
-  'type': 'object',
-  'properties': {
-    'firstarray': {
-      'type': 'array',
-      'items': {
-        'type': 'object',
-        'properties': {
-          'objectarrayofstrings': {
-            'type': 'object',
-            'properties': {
-              'choices': {
-                'type': 'array',
-                'items': {
-                  'type': 'string'
-                }
-              }
+  type: 'object',
+  properties: {
+    exampleArray: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          name: { type: 'string' },
+          choices: {
+            type: 'array',
+            items: {
+              type: 'string'
             }
-          },
-          'name': { 'type': 'string' }
+          }
         }
       }
     }
@@ -56,26 +54,24 @@ const schema = {
 };
 
 const uischema = {
-  'type': 'HorizontalLayout',
-  'elements': [
+  type: 'HorizontalLayout',
+  elements: [
     {
-      'type': 'Control',
-      'label': '1',
-      'scope': '#/properties/firstarray'
+      type: 'Control',
+      label: {
+        text: 'Example Array',
+        show: true
+      },
+      scope: '#/properties/exampleArray'
     }
   ]
 };
 
 const data = {
-  'firstarray': [
+  exampleArray: [
     {
-      'objectarrayofstrings': {
-        'choices': [
-          'CHOICE_STRING_1',
-          'CHOICE_STRING_2',
-          'CHOICE_STRING_3'
-        ]
-      }
+      choices: ['This', 'is', 'an', 'example'],
+      name: 'Hi there'
     }
   ]
 };
@@ -87,11 +83,11 @@ registerExamples([
     data,
     schema,
     uischema
-  },
+  }
 ]);
 
-const nestedArrayTester = (_jsonSchema, schemaPath) => {
-  return schemaPath === '#/properties/firstarray' ? 2 : NOT_APPLICABLE;
+const nestedArrayTester = (_jsonSchema: JsonSchema, schemaPath: string) => {
+  return schemaPath === '#/properties/exampleArray' ? 2 : NOT_APPLICABLE;
 };
 const control1: ControlElement = {
   type: 'Control',
@@ -100,15 +96,17 @@ const control1: ControlElement = {
 // register inner layout
 const control2: ControlElement = {
   type: 'Control',
-  scope: '#/properties/objectarrayofstrings/properties/choices'
+  scope: '#/properties/choices'
 };
 export const nestedArrayLayout: VerticalLayout = {
   type: 'VerticalLayout',
   elements: [control1, control2]
 };
-export const registerNestedArrayUISchema = dispatch => {
+export const registerNestedArrayUISchema = (dispatch: Dispatch<AnyAction>) => {
   dispatch(Actions.registerUISchema(nestedArrayTester, nestedArrayLayout));
 };
-export const unregisterNestedArrayUISchema = dispatch => {
+export const unregisterNestedArrayUISchema = (
+  dispatch: Dispatch<AnyAction>
+) => {
   dispatch(Actions.unregisterUISchema(nestedArrayTester));
 };

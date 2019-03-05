@@ -23,10 +23,11 @@
   THE SOFTWARE.
 */
 import 'jsdom-global/register';
-import * as installCE from 'document-register-element/pony';
-declare let global;
+// @ts-ignore
+import installCE from 'document-register-element/pony';
+declare let global: any;
 installCE(global, 'force');
-global.requestAnimationFrame = cb => setTimeout(cb, 0);
+global.requestAnimationFrame = (cb: any) => setTimeout(cb, 0);
 import {
   Actions,
   jsonformsReducer,
@@ -69,12 +70,11 @@ export const testRenderers = [
 ];
 
 export const initJsonFormsStore = ({
-                                     data,
-                                     schema,
-                                     uischema,
-                                     ...props
-                                   }: JsonFormsInitialState): Store<JsonFormsState> => {
-
+  data,
+  schema,
+  uischema,
+  ...props
+}: JsonFormsInitialState): Store<JsonFormsState> => {
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
     {

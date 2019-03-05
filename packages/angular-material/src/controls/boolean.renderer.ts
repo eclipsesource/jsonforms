@@ -22,65 +22,43 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Component, OnDestroy, OnInit  } from '@angular/core';
-import {
-    ControlElement,
-    isBooleanControl,
-    isPlainLabel,
-    JsonFormsState,
-    RankedTester,
-    rankWith,
-  } from '@jsonforms/core';
-import { MatCheckboxChange } from '@angular/material';
-
 import { NgRedux } from '@angular-redux/store';
-import { JsonFormsBaseRenderer } from '@jsonforms/angular';
-import { Subscription } from 'rxjs/Subscription';
-import { connectControlToJsonForms } from '../util';
+import { Component } from '@angular/core';
+import { JsonFormsControl } from '@jsonforms/angular';
+import {
+  isBooleanControl,
+  JsonFormsState,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
 
 @Component({
-    selector: 'BooleanControlRenderer',
-    template: `
-        <mat-checkbox
-            (change)="onChange($event)"
-            [checked]="value"
-            [align]="align"
-            [disabled]="disabled">
-            {{ label }}
-        </mat-checkbox>
-    `
+  selector: 'BooleanControlRenderer',
+  template: `
+    <div
+      [fxHide]="hidden"
+      fxLayout="column"
+      fxLayoutAlign="center"
+      style="height:100%"
+    >
+      <mat-checkbox
+        (change)="onChange($event)"
+        [checked]="isChecked()"
+        [disabled]="!enabled"
+        [id]="id"
+      >
+        {{ label }}
+      </mat-checkbox>
+      <mat-error class="mat-caption">{{ error }}</mat-error>
+    </div>
+  `
 })
-export class BooleanControlRenderer extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
-    onChange: (event?: MatCheckboxChange) => void;
-    label: string;
-    align: string;
-    errors: string;
-    value: boolean;
-    disabled: boolean;
-
-    private subscription: Subscription;
-
-    constructor(private ngRedux: NgRedux<JsonFormsState>) {
-        super();
-    }
-
-    ngOnInit() {
-        const state$ = connectControlToJsonForms(this.ngRedux, this.getOwnProps());
-        this.subscription = state$.subscribe(state => {
-            this.onChange = ev => state.handleChange(state.path, ev.checked);
-            this.value = state.data;
-            this.label = isPlainLabel(state.label) ? state.label : state.label.default;
-            this.disabled = !state.enabled;
-
-            const controlElement = state.uischema as ControlElement;
-            const options = controlElement.options || {};
-            this.align = options.align ? options.align : 'start';
-        });
-    }
-
-    ngOnDestroy() {
-        this.subscription.unsubscribe();
-    }
-
+export class BooleanControlRenderer extends JsonFormsControl {
+  constructor(ngRedux: NgRedux<JsonFormsState>) {
+    super(ngRedux);
+  }
+  isChecked = () => this.data || false;
+  getEventValue = (event: any) => event.checked;
 }
-export const BooleanControlRendererTester: RankedTester = rankWith(2, isBooleanControl);
+
+export const booleanControlTester: RankedTester = rankWith(2, isBooleanControl);

@@ -22,19 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-  GroupLayout,
-  mapStateToLayoutProps,
-  RankedTester,
-  rankWith,
-  uiTypeIs,
+    GroupLayout,
+    mapStateToLayoutProps,
+    RankedTester,
+    rankWith,
+    RendererProps,
+    uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
-import { connectToJsonForms } from '@jsonforms/react';
-import { VanillaLayoutProps } from '../index';
 import { renderChildren } from './util';
+import { VanillaRendererProps } from '../index';
 
 /**
  * Default tester for a group layout.
@@ -51,7 +52,7 @@ export const GroupLayoutRenderer = (
     visible,
     getStyle,
     getStyleAsClassName
-  }: VanillaLayoutProps) => {
+  }: RendererProps & VanillaRendererProps) => {
   const group = uischema as GroupLayout;
   const elementsSize = group.elements ? group.elements.length : 0;
   const classNames = getStyleAsClassName('group.layout');
@@ -65,7 +66,7 @@ export const GroupLayoutRenderer = (
       hidden={visible === undefined || visible === null ? false : !visible}
     >
       {
-        !_.isEmpty(group.label) ?
+        !isEmpty(group.label) ?
           <legend className={getStyleAsClassName('group.label')}>
             {group.label}
           </legend> : ''
@@ -75,7 +76,7 @@ export const GroupLayoutRenderer = (
   );
 };
 
-const ConnectedGroupLayout =  connectToJsonForms(
+const ConnectedGroupLayout =  connect(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(GroupLayoutRenderer);

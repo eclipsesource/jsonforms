@@ -22,12 +22,25 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, Scopable } from '../';
+import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
+import head from 'lodash/head';
+import {
+  JsonFormsState,
+  JsonSchema,
+  Scopable,
+  StatePropsOfRenderer
+} from '../';
 import { resolveData, resolveSchema } from './resolvers';
-import { compose as composePaths, composeWithUi, toDataPath, toDataPathSegments } from './path';
+import {
+  compose as composePaths,
+  composeWithUi,
+  toDataPath,
+  toDataPathSegments
+} from './path';
 import { isEnabled, isVisible } from './runtime';
 
-export { createLabelDescriptionFrom } from './label';
+export { createCleanLabel, createLabelDescriptionFrom } from './label';
 
 /**
  * Escape the given string such that it can be used as a class name,
@@ -37,10 +50,9 @@ export { createLabelDescriptionFrom } from './label';
  * @returns {string} the escaped string
  */
 export const convertToValidClassName = (s: string): string =>
-  s.replace('#', 'root')
-   .replace(new RegExp('/', 'g'), '_');
+  s.replace('#', 'root').replace(new RegExp('/', 'g'), '_');
 
-export const formatErrorMessage = errors => {
+export const formatErrorMessage = (errors: string[]) => {
   if (errors === undefined || errors === null) {
     return '';
   }
@@ -49,11 +61,53 @@ export const formatErrorMessage = errors => {
 };
 
 /**
+ * Checks if the type of jsonSchema is a union of multiple types
+ *
+ * @param {JsonSchema} jsonSchema
+ * @returns {boolean}
+ */
+const isUnionType = (jsonSchema: JsonSchema): boolean =>
+  !isEmpty(jsonSchema) && !isEmpty(jsonSchema.type) && isArray(jsonSchema.type);
+
+/**
+ * Derives the type of the jsonSchema element
+ */
+const deriveType = (jsonSchema: JsonSchema): string => {
+  if (
+    !isEmpty(jsonSchema) &&
+    !isEmpty(jsonSchema.type) &&
+    typeof jsonSchema.type === 'string'
+  ) {
+    return jsonSchema.type;
+  }
+  if (isUnionType(jsonSchema)) {
+    return head(jsonSchema.type);
+  }
+  if (
+    !isEmpty(jsonSchema) &&
+    (!isEmpty(jsonSchema.properties) ||
+      !isEmpty(jsonSchema.additionalProperties))
+  ) {
+    return 'object';
+  }
+  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.items)) {
+    return 'array';
+  }
+
+  // ignore all remaining cases
+  return 'null';
+};
+
+/**
  * Convenience wrapper around resolveData and resolveSchema.
  */
 const Resolve: {
-  schema(schema: JsonSchema, schemaPath: string): JsonSchema;
-  data(data, path): any
+  schema(
+    schema: JsonSchema,
+    schemaPath: string,
+    rootSchema?: JsonSchema
+  ): JsonSchema;
+  data(data: any, path: string): any;
 } = {
   schema: resolveSchema,
   data: resolveData
@@ -62,7 +116,8 @@ export { resolveData, resolveSchema } from './resolvers';
 export { Resolve };
 
 // Paths --
-const fromScopable = (scopable: Scopable) => toDataPathSegments(scopable.scope).join('.');
+const fromScopable = (scopable: Scopable) =>
+  toDataPathSegments(scopable.scope).join('.');
 
 const Paths = {
   compose: composePaths,
@@ -72,13 +127,18 @@ export { composePaths, composeWithUi, Paths, toDataPath };
 
 // Runtime --
 const Runtime = {
-  isEnabled,
-  isVisible,
+  isEnabled(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
+    return isEnabled(props, state);
+  },
+  isVisible(props: StatePropsOfRenderer, state: JsonFormsState): boolean {
+    return isVisible(props, state);
+  }
 };
-export { isEnabled, isVisible, Runtime };
+export { isEnabled, isVisible, Runtime, deriveType };
 
 export * from './renderer';
 export * from './field';
 export * from './runtime';
 export * from './Formatted';
 export * from './ids';
+export * from './validator';

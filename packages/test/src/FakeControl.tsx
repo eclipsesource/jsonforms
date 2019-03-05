@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   ControlElement,
   ControlProps,
@@ -32,7 +33,6 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 
 /**
  * Default tester for a horizontal layout.
@@ -50,6 +50,6 @@ const FakeControl = (props: ControlProps) => {
   );
 };
 
-const ConnectedFakeControl = connectToJsonForms(mapStateToControlProps, null)(FakeControl);
+const ConnectedFakeControl = connect(mapStateToControlProps, null)(FakeControl);
 
 export default ConnectedFakeControl;

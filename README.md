@@ -9,6 +9,10 @@
 For more info about the seed app, please see the corresponding README file of the [seed repo](https://github.com/eclipsesource/jsonforms-react-seed).
 For a more detailed tutorial about the usage of JSON Forms, please see [this tutorial](http://jsonforms.io/docs/tutorial).
 
+# Feedback, Help and Support
+Feel free to start a discussion by opening an issue on this repo or by contacting us [directly via email](mailto:jsonforms@eclipsesource.com?subject=JSON%20Forms).
+In addition EclipseSource also offers [professional support](https://jsonforms.io/support) for JSON Forms.
+
 # Developers Documentation
 
 ## First time setup
@@ -16,14 +20,18 @@ For a more detailed tutorial about the usage of JSON Forms, please see [this tut
 * Update npm (version >= 5.8.0)
 * Clone this repository
 * Install dependencies: `npm ci`
-* Hook up dependencies between packages: `npx lerna bootstrap --hoist --npm-ci-mode`
+* Hook up dependencies between packages: `npm run init`
 
 ## Build & Testing
-* Build (all packages): `lerna run build`
-* Test (all packages): `lerna run test`
-* Clean (delete `dist` folder of all packages): `lerna run clean`
+* Build (all packages): `npx lerna run build`
+* Test (all packages): `npx lerna run test`
+* Clean (delete `dist` folder of all packages): `npx lerna run clean`
 * Run vanilla examples: `cd packages/vanilla && npm run dev`
 * Run material examples: `cd packages/material && npm run dev`
+* Check Formatting: `npm run check-format`
+
+## Dependency & Release management
+For more info about how we handle dependencies and releases in the JSON Forms project, please see our [Developer Documentation wiki page](https://github.com/eclipsesource/jsonforms/wiki/Developer-documentation). 
 
 ## Continuous Integration
 The JSONForms project is build and tested via [Travis](https://travis-ci.org/). Coverage is documented by [Coveralls](https://coveralls.io).

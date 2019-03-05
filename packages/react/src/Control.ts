@@ -31,9 +31,10 @@ import { ControlProps, ControlState } from '@jsonforms/core';
  * @template P control specific properties
  * @template S the state managed by the control
  */
-export class Control<P extends ControlProps, S extends ControlState>
-  extends RendererComponent<P, S> {
-
+export class Control<
+  P extends ControlProps,
+  S extends ControlState
+> extends RendererComponent<P, S> {
   constructor(props: P) {
     super(props);
     // tslint:disable:no-object-literal-type-assertion
@@ -49,26 +50,26 @@ export class Control<P extends ControlProps, S extends ControlState>
    *
    * @param value the updated value
    */
-  handleChange = value => {
+  handleChange = (value: any) => {
     this.setState({ value });
     this.updateData(value);
-  }
+  };
 
   /**
    * Set the focused state to true.
    */
   onFocus = () => {
-    this.setState({ isFocused:  true });
-  }
+    this.setState({ isFocused: true });
+  };
 
   /**
    * Set the focused state to false.
    */
   onBlur = () => {
-    this.setState({ isFocused:  false });
-  }
+    this.setState({ isFocused: false });
+  };
 
-  private updateData = value => {
+  private updateData = (value: any) => {
     this.props.handleChange(this.props.path, value);
-  }
+  };
 }

@@ -22,20 +22,24 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { JsonSchema, UISchemaElement } from '../';
+import { ControlElement, JsonSchema, UISchemaElement } from '../';
 
 import { generateJsonSchema } from './schema';
-import { generateDefaultUISchema } from './uischema';
+import { createControlElement, generateDefaultUISchema } from './uischema';
 
-const Generate: {
+export const Generate: {
   jsonSchema(instance: Object, options?: any): JsonSchema;
-  uiSchema(jsonSchema: JsonSchema, layoutType?: string, prefix?: string): UISchemaElement
+  uiSchema(
+    jsonSchema: JsonSchema,
+    layoutType?: string,
+    prefix?: string
+  ): UISchemaElement;
+  controlElement(label: string, ref: string): ControlElement;
 } = {
   jsonSchema: generateJsonSchema,
   uiSchema: generateDefaultUISchema,
+  controlElement: createControlElement
 };
 
-export { Generate };
-export default Generate;
 export { generateJsonSchema };
 export { generateDefaultUISchema };

@@ -24,9 +24,10 @@
 */
 import { registerExamples } from './register';
 import { data as personData } from './person';
+import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 
-export const schema = undefined;
-export const uischema = undefined;
+export const schema: JsonSchema = undefined;
+export const uischema: UISchemaElement = undefined;
 export const data = personData;
 
 registerExamples([

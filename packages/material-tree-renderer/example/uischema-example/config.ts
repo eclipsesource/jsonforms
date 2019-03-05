@@ -10,7 +10,7 @@ export const labelProvider = {
   '#rule': '',
   '#scope': '',
   '#labelObject': '',
-  '#options': '',
+  '#options': ''
 };
 
 export const imageProvider = {
@@ -25,24 +25,24 @@ export const imageProvider = {
   '#labelObject': 'task',
   '#options': 'task',
   '#horizontallayout': 'task',
-  '#verticallayout': 'task',
+  '#verticallayout': 'task'
 };
 
 export const modelMapping = {
-  'attribute': 'type',
-  'mapping': {
-    'root': '#root',
-    'elements': '#elements',
-    'HorizontalLayout': '#horizontallayout',
-    'VerticalLayout': '#verticallayout',
-    'Categorization': '#categorization',
-    'Control': '#control',
-    'Category': '#category',
-    'Group': '#group',
-    'rule': '#rule',
-    'scope': '#scope',
-    'labelObject': '#labelObject',
-    'options': '#options'
+  attribute: 'type',
+  mapping: {
+    root: '#root',
+    elements: '#elements',
+    HorizontalLayout: '#horizontallayout',
+    VerticalLayout: '#verticallayout',
+    Categorization: '#categorization',
+    Control: '#control',
+    Category: '#category',
+    Group: '#group',
+    rule: '#rule',
+    scope: '#scope',
+    labelObject: '#labelObject',
+    options: '#options'
   }
 };
 

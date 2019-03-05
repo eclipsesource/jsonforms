@@ -1,15 +1,15 @@
 {
+	"name": "jsonforms-monorepo",
 	"scripts": {
 		"lerna": "lerna",
 		"preparePublish": "git clean -dfx && npm ci && lerna bootstrap --hoist --npm-ci-mode && lerna run clean && lerna run build && lerna run doc && lerna run bundle && lerna run test",
-		"merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'"
+		"merge-report": "mkdir -p coverage && lcov-result-merger 'packages/**/coverage/lcov.info' 'coverage/lcov.info'",
+		"check-format": "prettier --list-different '**/*.ts' '!**/{lib,dist}/**/*.ts'",
+		"init": "lerna bootstrap --hoist --npm-ci-mode"
 	},
 	"devDependencies": {
-		"@types/jest": "^22.2.0",
+		"@types/jest": "^23.0.0",
 		"@types/lodash": "^4.14.104",
-		"@types/node": "^8.0.0",
-		"@types/react": "16.3.17",
-		"@types/react-dnd": "^2.0.36",
 		"ajv": "^6.4.0",
 		"ava": "^0.25.0",
 		"babel-loader": "^7.1.2",
@@ -19,15 +19,16 @@
 		"lcov-result-merger": "^2.0.0",
 		"lerna": "^2.11.0",
 		"nyc": "^11.8.0",
+		"prettier": "^1.15.3",
 		"source-map-loader": "^0.2.3",
 		"style-loader": "^0.21.0",
-		"ts-loader": "^3.2.0",
+		"ts-loader": "^5.3.3",
 		"tslint": "^5.8.0",
 		"tslint-loader": "^3.5.3",
 		"tslint-react": "^3.2.0",
-		"typedoc": "^0.10.0",
-		"typescript": "2.8.3",
-		"webpack": "^3.10.0",
+		"typedoc": "^0.12.0",
+		"typescript": "^3.0.0",
+		"webpack": "^4.28.1",
 		"webpack-merge": "^4.1.1"
 	}
 }

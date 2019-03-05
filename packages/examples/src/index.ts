@@ -22,10 +22,16 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import * as allOf from './allOf';
+import * as anyOf from './anyOf';
+import * as oneOf from './oneOf';
+import * as oneOfArray from './oneOfArray';
 import * as array from './arrays';
 import * as nestedArray from './nestedArrays';
+import * as arrayWithDetail from './arrays-with-detail';
 import * as stringArray from './stringArray';
 import * as categorization from './categorization';
+import * as stepper from './stepper';
 import * as day1 from './day1';
 import * as day2 from './day2';
 import * as day3 from './day3';
@@ -44,13 +50,28 @@ import * as config from './config';
 import * as text from './text';
 import * as numbers from './numbers';
 import * as scope from './scope';
+import * as listWithDetail from './list-with-detail';
+import * as listWithDetailRegistered from './list-with-detail-registered';
+import * as object from './object';
+import * as i18n from './i18n';
+import * as issue_1169 from './1169';
+import * as issue_1220 from './1220';
+import * as issue_1253 from './1253';
+import * as oneOfRecursive from './oneOf-recursive';
 export * from './register';
 export * from './example';
+
 export {
+  allOf,
+  anyOf,
+  oneOf,
+  oneOfArray,
   stringArray,
   array,
   nestedArray,
+  arrayWithDetail,
   categorization,
+  stepper,
   day1,
   day2,
   day3,
@@ -69,4 +90,12 @@ export {
   text,
   numbers,
   scope
+  listWithDetail,
+  listWithDetailRegistered,
+  object,
+  i18n,
+  issue_1169,
+  issue_1220,
+  issue_1253,
+  oneOfRecursive
 };

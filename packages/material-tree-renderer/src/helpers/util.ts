@@ -1,5 +1,6 @@
-import * as _ from 'lodash';
-
+import get from 'lodash/get';
+import last from 'lodash/last';
+import isEmpty from 'lodash/isEmpty';
 export interface LabelDefinition {
   /** A constant label value displayed for every object for which this label definition applies. */
   constant?: string;
@@ -15,27 +16,30 @@ export interface LabelDefinition {
  * @return the resolved data or {null} if the path is not a valid path in the root data
  */
 export const resolveLocalData = (rootData: Object, path: string): Object => {
-    let resolvedData = rootData;
-    for (const segment of path.split('/')) {
-      if (segment === '#' || _.isEmpty(segment)) {
-        continue;
-      }
-      if (_.isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
-        console.warn(`The local path '${path}' cannot be resolved in the given data:`, rootData);
-
-        return null;
-      }
-      resolvedData = resolvedData[segment];
+  let resolvedData = rootData;
+  for (const segment of path.split('/')) {
+    if (segment === '#' || isEmpty(segment)) {
+      continue;
     }
+    if (isEmpty(resolvedData) || !resolvedData.hasOwnProperty(segment)) {
+      console.warn(
+        `The local path '${path}' cannot be resolved in the given data:`,
+        rootData
+      );
 
-    return resolvedData;
-  };
+      return null;
+    }
+    resolvedData = get(resolvedData, segment);
+  }
+
+  return resolvedData;
+};
 
 /**
  * Extract the array index from the given path.
  */
 export const indexFromPath = (path: string): number => {
-  return parseInt(_.last(path.split('.')), 10);
+  return parseInt(last(path.split('.')), 10);
 };
 
 /**

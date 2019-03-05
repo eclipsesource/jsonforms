@@ -1,14 +1,16 @@
 // tslint:disable:jsx-no-multiline-js
-import * as React from 'react';
-import * as _ from 'lodash';
+import head from 'lodash/head';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
-  getData,
-  Paths,
-  resolveData
+    getData,
+    JsonFormsState,
+    Paths,
+    resolveData
 } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
-import { DropTarget, DropTargetMonitor } from 'react-dnd';
+const { DropTarget }  = require('react-dnd');
 import {
   canDropDraggedItem,
   CSS_DELAY,
@@ -27,7 +29,7 @@ import { compose } from 'recompose';
 
 export interface ExpandArrayProps {
   rootData: any;
-  containmentProps: Property[];
+  containmentProps?: Property[];
   path: string;
   selection: any;
   handlers: any;
@@ -42,8 +44,8 @@ export interface ExpandArrayProps {
  *
  * @param data the array to expand
  * @param {@link Property} property It describes a single property.
- *                                  It is used to match a given data element with a schema by searching
- *                                  a list of properties.
+ *        It is used to match a given data element with a schema by searching
+ *        a list of properties.
  *
  * @param parentPath the instance path where data can be obtained from
  */
@@ -66,11 +68,11 @@ export const ExpandArray = (
     return '';
   }
   return (
-    data.map((element, index) => {
+    data.map((element: any, index: number) => {
       const composedPath = Paths.compose(path, index.toString());
       const property = matchContainerProperty(element, containmentProps, filterPredicate);
 
-      if (property === undefined || data === null) {
+      if (property === undefined) {
         return <li>No ContainmentProperty</li>;
       }
 
@@ -100,7 +102,7 @@ export interface ExpandArrayContainerProps extends ExpandArrayProps {
   /** Whether this list is a valid drop target for the currently dragged element. */
   validDropTarget?: boolean;
   classes?: any;
-  moveListItem?(data: any, oldPath: string, newPath: string): boolean;
+  moveListItem(data: any, oldPath: string, newPath: string): boolean;
 }
 
 export interface ExandArrayContainerState {
@@ -128,12 +130,14 @@ const styles: StyleRulesCallback<'currentTarget' | 'validTarget' | 'invalidTarge
     borderColor: 'rgb(189, 0, 0)'
   }
 });
+
 class ExpandArrayContainer extends
   React.Component<ExpandArrayContainerProps &
                   WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>,
-                  ExandArrayContainerState> {
+                  any> {
 
-  constructor(props) {
+  constructor(props: ExpandArrayContainerProps &
+                  WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>) {
     super(props);
     this.state = { setCss: false };
   }
@@ -163,7 +167,7 @@ class ExpandArrayContainer extends
       classes
     }: ExpandArrayContainerProps = this.props;
 
-    if (_.isEmpty(containmentProps)) {
+    if (isEmpty(containmentProps)) {
       return undefined;
     }
 
@@ -181,7 +185,7 @@ class ExpandArrayContainer extends
     }
 
     return connectDropTarget(
-      <ul key={_.head(containmentProps).property} className={className}>
+      <ul key={head(containmentProps).property} className={className}>
         <ExpandArray
           containmentProps={containmentProps}
           path={path}
@@ -197,14 +201,15 @@ class ExpandArrayContainer extends
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: JsonFormsState) => ({
   rootData: getData(state)
 });
 
 /**
  * Injects drag and drop related properties into an expanded array
  */
-const collect = (dndConnect, monitor: DropTargetMonitor) => {
+    // TODO: typings
+const collect = (dndConnect: any, monitor: any) => {
   return {
     connectDropTarget: dndConnect.dropTarget(),
     isOver: monitor.isOver({ shallow: true }),
@@ -223,7 +228,7 @@ const arrayDropTarget = {
    * Tests wether the currently dragged object list item can be dropped in this list
    * by checking whether the item's schema id matches with a containment property of this list.
    */
-  canDrop: (props: ExpandArrayContainerProps, monitor: DropTargetMonitor) => {
+  canDrop: (props: ExpandArrayContainerProps, monitor: any) => {
     return canDropDraggedItem(props.containmentProps, monitor.getItem() as DragInfo);
   },
 
@@ -233,7 +238,7 @@ const arrayDropTarget = {
    * The most nested one is called first, return results are available
    * from the before called component.
    */
-  drop: (props, monitor: DropTargetMonitor) => {
+  drop: (props: any, monitor: any) => {
     // drop was handled by a nested list
     if (monitor.didDrop()) {
       return monitor.getDropResult();
@@ -252,7 +257,7 @@ const arrayDropTarget = {
   }
 };
 
-const DnDExandArrayContainer = compose(
+const DnDExandArrayContainer = compose<ExpandArrayContainerProps, ExpandArrayContainerProps>(
   withStyles(styles, { name: 'ExpandArrayContainer' }),
   DropTarget(Types.TREE_DND, arrayDropTarget, collect)
 )(ExpandArrayContainer);

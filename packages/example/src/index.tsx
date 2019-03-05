@@ -22,20 +22,33 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
+import React from 'react';
 import './index.css';
 import App from './App';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
-import { Actions, jsonformsReducer, RankedTester } from '@jsonforms/core';
+import geoschema from './geographical-location.schema';
+import {
+  Actions,
+  createAjv,
+  JsonFormsFieldRendererRegistryEntry,
+  jsonformsReducer,
+  JsonFormsRendererRegistryEntry,
+  RankedTester
+} from '@jsonforms/core';
 import { getExamples } from '@jsonforms/examples';
 import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
 import { enhanceExample, ReactExampleDescription } from './util';
+
 const setupStore = (
-  exampleData: ReactExampleDescription[], fields, renderers, additionalStoreParams) => {
+  exampleData: ReactExampleDescription[],
+  fields: JsonFormsFieldRendererRegistryEntry[],
+  renderers: JsonFormsRendererRegistryEntry[],
+  additionalStoreParams: any
+) => {
   const additionalReducers = additionalStoreParams.reduce(
-    (acc, x) => {
+    (acc: any, x: any) => {
       if (x.reducer) {
         acc[x.name] = x.reducer;
       }
@@ -45,7 +58,7 @@ const setupStore = (
     {} as any
   );
   const additionalInitState = additionalStoreParams.reduce(
-    (acc, x) => {
+    (acc: any, x: any) => {
       acc[x.name] = x.state;
 
       return acc;
@@ -54,7 +67,8 @@ const setupStore = (
   );
   const store = createStore(
     combineReducers({
-      jsonforms: jsonformsReducer({ ...additionalReducers }), examples: exampleReducer,
+      jsonforms: jsonformsReducer({ ...additionalReducers }),
+      examples: exampleReducer
     }),
     {
       jsonforms: {
@@ -67,23 +81,40 @@ const setupStore = (
       }
     }
   );
-  store.dispatch(Actions.init(exampleData[0].data, exampleData[0].schema, exampleData[0].uischema));
+
+  // Needed for resolve example
+  const ajv = createAjv();
+  ajv.addSchema(
+    geoschema,
+    'http://json-schema.org/learn/examples/geographical-location.schema.json'
+  );
+  store.dispatch(
+    Actions.init(
+      exampleData[0].data,
+      exampleData[0].schema,
+      exampleData[0].uischema,
+      ajv
+    )
+  );
 
   return store;
 };
 export const renderExample = (
-  renderers: { tester: RankedTester, renderer: any }[],
-  fields: { tester: RankedTester, field: any }[],
+  renderers: { tester: RankedTester; renderer: any }[],
+  fields: { tester: RankedTester; field: any }[],
   ...additionalStoreParams: AdditionalStoreParams[]
 ) => {
-
   const exampleData = enhanceExample(getExamples());
-  const store = setupStore(exampleData, fields, renderers, additionalStoreParams);
+  const store = setupStore(
+    exampleData,
+    fields,
+    renderers,
+    additionalStoreParams
+  );
   ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>,
     document.getElementById('root')
   );
-
 };

@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -34,14 +35,15 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
-import { DateTimePicker } from 'material-ui-pickers';
-import * as moment from 'moment';
+import { Control } from '@jsonforms/react';
+import moment from 'moment';
+import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import DateRangeIcon from '@material-ui/icons/DateRange';
+import EventIcon from '@material-ui/icons/Event';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import { DateTimePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 
 export class MaterialDateTimeControl extends Control<ControlProps, ControlState> {
@@ -62,44 +64,46 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
-    let style = {};
-    if (!visible) {
-      style = {display: 'none'};
-    }
+
+    const getValue = (event: React.FormEvent<HTMLInputElement>) =>
+      (event.target as HTMLInputElement).value;
     const inputProps = {};
 
     return (
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <DateTimePicker
-          id={id + '-input'}
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
-          error={!isValid}
-          style={style}
-          fullWidth={!trim}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          helperText={!isValid ? errors : description}
-          InputLabelProps={{shrink: true, }}
-          value={data || null}
-          onChange={ datetime =>
-            handleChange(path, datetime ? moment(datetime).format() : '')
-          }
-          format='MM/DD/YYYY h:mm a'
-          clearable={true}
-          disabled={!enabled}
-          autoFocus={uischema.options && uischema.options.focus}
-          leftArrowIcon={<KeyboardArrowLeftIcon />}
-          rightArrowIcon={<KeyboardArrowRightIcon />}
-          dateRangeIcon={<DateRangeIcon />}
-          timeIcon={<AccessTimeIcon />}
-          onClear={() => handleChange(path, '')}
-          InputProps={inputProps}
-        />
-      </MuiPickersUtilsProvider>
+      <Hidden xsUp={!visible}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <DateTimePicker
+            keyboard
+            id={id + '-input'}
+            label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+            error={!isValid}
+            fullWidth={!trim}
+            onFocus={this.onFocus}
+            onBlur={this.onBlur}
+            helperText={!isValid ? errors : description}
+            InputLabelProps={{ shrink: true, }}
+            value={data || null}
+            onChange={datetime => handleChange(path, datetime ? moment(datetime).format() : '')}
+            onInputChange={ev =>
+              handleChange(path, getValue(ev) ? moment(getValue(ev)).format() : '')}
+            format='MM/DD/YYYY h:mm a'
+            clearable={true}
+            disabled={!enabled}
+            autoFocus={uischema.options && uischema.options.focus}
+            leftArrowIcon={<KeyboardArrowLeftIcon />}
+            rightArrowIcon={<KeyboardArrowRightIcon />}
+            dateRangeIcon={<DateRangeIcon />}
+            keyboardIcon={<EventIcon />}
+            timeIcon={<AccessTimeIcon />}
+            onClear={() => handleChange(path, '')}
+            InputProps={inputProps}
+          />
+        </MuiPickersUtilsProvider>
+      </Hidden>
     );
   }
 }
 export const materialDateTimeControlTester: RankedTester = rankWith(2, isDateTimeControl);
-export default connectToJsonForms(
+export default connect(
   mapStateToControlProps, mapDispatchToControlProps
 )(MaterialDateTimeControl);

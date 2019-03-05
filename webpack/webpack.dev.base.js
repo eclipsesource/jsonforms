@@ -3,6 +3,7 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.js');
 
 module.exports = merge(baseConfig, {
+    mode: 'development',
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/dev-server',

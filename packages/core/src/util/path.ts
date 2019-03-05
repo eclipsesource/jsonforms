@@ -22,18 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import range from 'lodash/range';
 import { Scopable } from '../';
 
 export const compose = (path1: string, path2: string) => {
   let p1 = path1;
-  if (!_.isEmpty(path1) && !_.isEmpty(path2) && !path2.startsWith('[')) {
+  if (!isEmpty(path1) && !isEmpty(path2) && !path2.startsWith('[')) {
     p1 = path1 + '.';
   }
 
-  if (_.isEmpty(p1)) {
+  if (isEmpty(p1)) {
     return path2;
-  } else if (_.isEmpty(path2)) {
+  } else if (isEmpty(path2)) {
     return p1;
   } else {
     return `${p1}${path2}`;
@@ -52,12 +53,15 @@ export const compose = (path1: string, path2: string) => {
  * @returns {string[]} an array containing only non-schema-specific segments
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
+  const s = schemaPath
+    .replace(/anyOf\/[\d]\//, '')
+    .replace(/allOf\/[\d]\//, '')
+    .replace(/oneOf\/[\d]\//, '');
+  const segments = s.split('/');
 
-  const segments = schemaPath.split('/');
   const startFromRoot = segments[0] === '#' || segments[0] === '';
-  const startIndex =  startFromRoot ? 2 : 1;
-
-  return _.range(startIndex, segments.length, 2).map(idx => segments[idx]);
+  const startIndex = startFromRoot ? 2 : 1;
+  return range(startIndex, segments.length, 2).map(idx => segments[idx]);
 };
 
 /**
@@ -75,9 +79,14 @@ export const toDataPath = (schemaPath: string): string => {
 export const composeWithUi = (scopableUi: Scopable, path: string): string => {
   const segments = toDataPathSegments(scopableUi.scope);
 
-  if (_.isEmpty(segments) && path === undefined) {
+  if (isEmpty(segments) && path === undefined) {
     return '';
   }
 
-  return _.isEmpty(segments) ? path : compose(path, segments.join('.'));
+  return isEmpty(segments)
+    ? path
+    : compose(
+        path,
+        segments.join('.')
+      );
 };

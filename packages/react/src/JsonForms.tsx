@@ -22,65 +22,146 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEqual from 'lodash/isEqual';
+import maxBy from 'lodash/maxBy';
+import React from 'react';
+import JsonRefs from 'json-refs';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
   createId,
   isControl,
   JsonFormsProps,
-  mapStateToDispatchRendererProps,
-  removeId
+  JsonSchema,
+  mapStateToJsonFormsRendererProps,
+  OwnPropsOfJsonFormsRenderer,
+  OwnPropsOfRenderer,
+  removeId,
+  StatePropsOfJsonFormsRenderer
 } from '@jsonforms/core';
 
-interface JsonFormsDispatchRendererState {
-  id: string;
+interface JsonFormsRendererState {
+    id: string;
+    schema: JsonSchema;
+    resolving: boolean;
+    resolvedSchema: JsonSchema;
 }
 
-class JsonFormsDispatchRenderer
-  extends React.Component<JsonFormsProps, JsonFormsDispatchRendererState> {
-
-  constructor(props) {
-    super(props);
-    if (isControl(props.uischema)) {
-      this.state = {
-        id: createId(props.uischema.scope)
-      };
-    } else {
-      this.state = {
-        id: undefined
-      };
+const hasRefs = (schema: JsonSchema) => {
+    if (schema !== undefined) {
+        return Object.keys(JsonRefs.findRefs(schema)).length > 0;
     }
-  }
+    return false;
+};
 
-  componentWillUnmount() {
-    if (isControl(this.props.uischema)) {
-      removeId(this.state.id);
-    }
-  }
+export class ResolvedJsonFormsDispatchRenderer
+    extends React.Component<JsonFormsProps, JsonFormsRendererState> {
 
-  render() {
-    const { uischema, schema, path, renderers } = this.props as JsonFormsProps;
-    const renderer = _.maxBy(renderers, r => r.tester(uischema, schema));
-    if (renderer === undefined || renderer.tester(uischema, schema) === -1) {
-      return <UnknownRenderer type={'renderer'} />;
-    } else {
-      const Render = renderer.renderer;
-      return (
-        <Render
-          uischema={uischema}
-          schema={schema}
-          path={path}
-          renderers={renderers}
-          id={this.state.id}
-        />
-      );
+    static getDerivedStateFromProps(
+        nextProps: JsonFormsProps,
+        prevState: JsonFormsRendererState
+    ) {
+
+        if (!isEqual(prevState.schema, nextProps.schema)) {
+            const newState: JsonFormsRendererState = {
+                id: prevState.id,
+                resolvedSchema: undefined,
+                schema: nextProps.schema,
+                resolving: true,
+            };
+            return newState;
+        }
+
+        return null;
     }
-  }
+
+    mounted = false;
+
+    constructor(props: JsonFormsProps) {
+        super(props);
+        this.state = {
+            id: isControl(props.uischema) ? createId(props.uischema.scope) : undefined,
+            schema: props.schema,
+            resolvedSchema: props.schema,
+            resolving: false,
+        };
+    }
+
+    componentDidMount() {
+        if (this.state.resolving) {
+            this.resolveAndUpdateSchema(this.props.schema);
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.state.resolving) {
+            this.resolveAndUpdateSchema(this.props.schema);
+        }
+    }
+
+    resolveAndUpdateSchema = (schema: JsonSchema) => {
+        JsonRefs
+            .resolveRefs(schema)
+            .then(resolvedSchema => {
+                this.setState({
+                    resolving: false,
+                    resolvedSchema: resolvedSchema.resolved
+                });
+            });
+    };
+
+    componentWillUnmount() {
+        this.mounted = false;
+        if (isControl(this.props.uischema)) {
+            removeId(this.state.id);
+        }
+    }
+
+    render() {
+        const { uischema, path, renderers } = this.props as JsonFormsProps;
+        const { resolving } = this.state;
+        const _schema = this.state.resolvedSchema;
+
+        if (resolving) {
+            return <div>Loading...</div>;
+        }
+
+        const renderer = maxBy(renderers, r => r.tester(uischema, _schema));
+        if (renderer === undefined || renderer.tester(uischema, _schema) === -1) {
+            return <UnknownRenderer type={'renderer'}/>;
+        } else {
+            const Render = renderer.renderer;
+            return (
+                <Render
+                    uischema={uischema}
+                    schema={_schema}
+                    path={path}
+                    renderers={renderers}
+                    id={this.state.id}
+                />
+            );
+        }
+    }
 }
 
-export const JsonForms = connect(
-  mapStateToDispatchRendererProps,
-  null
+export const ResolvedJsonForms = connect<StatePropsOfJsonFormsRenderer, {}, OwnPropsOfRenderer>(
+    mapStateToJsonFormsRendererProps,
+    null
+)(ResolvedJsonFormsDispatchRenderer);
+
+export class JsonFormsDispatchRenderer extends ResolvedJsonFormsDispatchRenderer {
+    constructor(props: JsonFormsProps) {
+        super(props);
+        const isResolved = !hasRefs(props.schema);
+        this.state = {
+            ...this.state,
+            resolvedSchema: isResolved ? props.schema : undefined,
+            resolving: !isResolved,
+        };
+    }
+}
+
+export const JsonForms = connect<StatePropsOfJsonFormsRenderer, {}, OwnPropsOfJsonFormsRenderer>(
+    mapStateToJsonFormsRendererProps,
+    null
 )(JsonFormsDispatchRenderer);

@@ -1,33 +1,28 @@
 // tslint:disable:jsx-no-multiline-js
-
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import clone from 'lodash/clone';
+import initial from 'lodash/initial';
+import groupBy from 'lodash/groupBy';
+import { indexFromPath } from '../helpers/util';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
-  getData,
-  getSchema,
-  JsonSchema7,
-  Paths,
-  resolveData,
-  update
+    getData,
+    getSchema, JsonFormsState,
+    JsonSchema7,
+    Paths,
+    resolveData,
+    update
 } from '@jsonforms/core';
 import ExpandArray from './ExpandArray';
-import { Property, retrieveContainerProperties } from '../services/property.util';
-import {
-  DragSource,
-  DragSourceMonitor,
-  DropTarget,
-  DropTargetMonitor } from 'react-dnd';
+import { findContainerProperties, Property } from '../services/property.util';
+const { DragSource, DropTarget } = require('react-dnd');
 import {
   canDropDraggedItem,
   DragInfo,
   DropResult,
   moveListItem,
   Types } from './dnd.util';
-import { indexFromPath } from '../helpers/util';
-import {
-  getContainerProperties,
-} from '../reducers';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
@@ -38,6 +33,9 @@ import {
   WithStyles
 } from '@material-ui/core/styles';
 import { compose } from 'recompose';
+import { wrapImageIfNecessary } from '../helpers/image-provider.util';
+import { InstanceLabelProvider } from '../helpers/LabelProvider';
+import { AnyAction, Dispatch } from 'redux';
 
 /**
  * The delay (in milliseconds) between removing this object list item's data from the store
@@ -62,7 +60,6 @@ const styles:
       content: '""',
       position: 'absolute',
       left: '0.2em',
-      borderTop: '1px solid lightgrey',
       top: '0.5em',
       width: '1em'
     }, // tslint:disable-next-line:object-literal-key-quotes
@@ -70,7 +67,6 @@ const styles:
       content: '""',
       position: 'absolute',
       left: '0.2em',
-      borderLeft: '1px solid lightgrey',
       top: '-0.5em',
       height: '100%'
     }
@@ -95,7 +91,14 @@ const styles:
       marginRight: '0.25em',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center'
-    }
+    }, // tslint:disable-next-line:object-literal-key-quotes
+    '&:hover': {
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      opacity: 0.9,
+      backgroundColor: theme.palette.secondary.main,
+    },
+    alignItems: 'center'
   },
   label: {
     display: 'flex',
@@ -106,13 +109,6 @@ const styles:
     '& span:first-child:empty': {
       background: '#ffff00',
       maxHeight: '1.5em'
-    }, // tslint:disable-next-line:object-literal-key-quotes
-    '&:hover': {
-      fontWeight: 'bold',
-      cursor: 'pointer',
-      color: 'white',
-      opacity: 0.9,
-      backgroundColor: theme.palette.secondary.main,
     }, // tslint:disable-next-line:object-literal-key-quotes
     '&:hover $actionButton': {
       display: 'flex',
@@ -137,6 +133,9 @@ const styles:
   }
 });
 
+/**
+ * Represents an item within the master view.
+ */
 export interface ObjectListItemProps {
   path: string;
   schema: JsonSchema7;
@@ -152,9 +151,9 @@ export interface ObjectListItemProps {
   /**
    * Self contained schemas of the corresponding schema
    */
-  containerProperties?: any;
-  labelProvider: any;
+  containerProperties?: Property[];
   imageProvider: any;
+  labelProvider: InstanceLabelProvider;
 }
 
 class ObjectListItem extends React.Component
@@ -167,36 +166,45 @@ class ObjectListItem extends React.Component
                'selected'>, {}> {
 
   render() {
-    const { path, schema, rootData, data, handlers, selection,
-            filterPredicate, containerProperties, labelProvider,
-            imageProvider, classes } = this.props;
+    const {
+        path,
+        schema,
+        rootData,
+        data,
+        handlers,
+        selection,
+        filterPredicate,
+        containerProperties,
+        labelProvider,
+        imageProvider,
+        classes
+    } = this.props;
     const pathSegments = path.split('.');
-    const parentPath = _.initial(pathSegments).join('.');
+    const parentPath = initial(pathSegments).join('.');
     const labelClass = selection === data ? classes.selected : '';
-    const hasParent = !_.isEmpty(parentPath);
+    const hasParent = !isEmpty(parentPath);
     const liClass =
       !hasParent ? [classes.listItem, classes.withoutBorders].join(' ') : classes.listItem;
     const scopedData = resolveData(rootData, parentPath);
-    const groupedProps = _.groupBy(containerProperties, property => property.property);
-    const imageClass = imageProvider(schema.$id);
-    // TODO: key should be set in caller
+    const groupedProps = groupBy(containerProperties, property => property.property);
+
     return (
       <li
         className={liClass}
         key={path}
       >
         <div className={classes.itemContainer}>
-          {imageClass !== '' ? <span className={imageClass} /> : ''}
+          {wrapImageIfNecessary(imageProvider(schema))}
 
           <span
             className={classes.label}
             onClick={handlers.onSelect(schema, data, path)}
           >
           <Typography className={labelClass}>
-              {labelProvider(schema)(data)}
+              {labelProvider(schema, data, path)}
           </Typography>
             {
-              !_.isEmpty(containerProperties) ?
+              !isEmpty(containerProperties) ?
                 (
                   <IconButton
                     className={classes.actionButton}
@@ -208,7 +216,7 @@ class ObjectListItem extends React.Component
                 ) : ''
             }
             {
-              (hasParent || _.isArray(scopedData)) &&
+              (hasParent || Array.isArray(scopedData)) &&
               <IconButton
                 className={classes.actionButton}
                 aria-label='Remove'
@@ -225,7 +233,6 @@ class ObjectListItem extends React.Component
               key={groupKey}
               containmentProps={groupedProps[groupKey]}
               path={Paths.compose(path, groupKey)}
-              schema={schema}
               selection={selection}
               handlers={handlers}
               filterPredicate={filterPredicate}
@@ -239,15 +246,14 @@ class ObjectListItem extends React.Component
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+// TODO
+const mapStateToProps = (state: JsonFormsState, ownProps: any) => {
   const index = indexFromPath(ownProps.path);
-  const containerProps = getContainerProperties(state);
-  let containerProperties;
-  if (_.has(containerProps, ownProps.schema.$id)) {
-    containerProperties = containerProps[ownProps.schema.$id];
-  } else {
-    containerProperties = retrieveContainerProperties(ownProps.schema, ownProps.schema);
-  }
+  const containerProperties: Property[] = findContainerProperties(
+      ownProps.schema,
+      getSchema(state) as JsonSchema7,
+      false
+  );
 
   return {
     index: index,
@@ -257,9 +263,10 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+// TODO
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>, ownProps: any) => {
 
-  const parentPath = _.initial(ownProps.path.split('.')).join('.');
+  const parentPath = initial(ownProps.path.split('.')).join('.');
   const index = indexFromPath(ownProps.path);
 
   return {
@@ -268,9 +275,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         update(
           parentPath,
           array => {
-            const clone = _.clone(array);
-            clone.splice(index, 1);
-            return clone;
+            const clonedArray = clone(array);
+            clonedArray.splice(index, 1);
+            return clonedArray;
           }
         )
       );
@@ -279,10 +286,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
+const mergeProps = (stateProps: any, dispatchProps: any, ownProps: any) => {
   const data = resolveData(stateProps.rootData, ownProps.path);
   let resetSelection = ownProps.handlers.resetSelection;
-  resetSelection = resetSelection ? resetSelection : () => undefined;
+  resetSelection = resetSelection ? resetSelection : (): any => undefined;
 
   return {
     ...stateProps,
@@ -302,7 +309,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   };
 };
 
-const ListItem = compose(
+const ListItem = compose<ObjectListItemProps, ObjectListItemProps>(
   withStyles(styles, { name: 'ObjectListItem' }),
 )(ObjectListItem);
 
@@ -316,59 +323,61 @@ export interface ObjectListItemDndProps extends ObjectListItemProps {
   parentProperties?: Property[];
   // Drag and Drop:
   isDragging: boolean;
-  connectDragSource;
-  connectDropTarget;
+  connectDragSource: any;
+  connectDropTarget: any;
 }
 
-const ObjectListItemDnd = (
-  {
-    path,
-    schema,
-    rootData,
-    data,
-    handlers,
-    selection,
-    isRoot,
-    // isDragging,
-    connectDragSource,
-    connectDropTarget,
-    filterPredicate,
-    containerProperties,
-    labelProvider,
-    imageProvider,
-  }: ObjectListItemDndProps
-) => {
-  const listItem = (
-    <ListItem
-      path={path}
-      schema={schema}
-      rootData={rootData}
-      data={data}
-      handlers={handlers}
-      selection={selection}
-      filterPredicate={filterPredicate}
-      containerProperties={containerProperties}
-      labelProvider={labelProvider}
-      imageProvider={imageProvider}
-    />
-  );
-  if (isRoot === true) {
-    // No Drag and Drop
-    return listItem;
-  }
+export class ObjectListItemDnd extends React.Component<ObjectListItemDndProps, any> {
+    render() {
+        const {
+            path,
+            schema,
+            rootData,
+            data,
+            handlers,
+            selection,
+            isRoot,
+            // isDragging,
+            connectDragSource,
+            connectDropTarget,
+            filterPredicate,
+            containerProperties,
+            labelProvider,
+            imageProvider,
+        }: ObjectListItemDndProps = this.props;
 
-  // const opacity = isDragging ? 0.2 : 1;
+        const listItem = (
+            <ListItem
+                path={path}
+                schema={schema}
+                rootData={rootData}
+                data={data}
+                handlers={handlers}
+                selection={selection}
+                filterPredicate={filterPredicate}
+                containerProperties={containerProperties}
+                labelProvider={labelProvider}
+                imageProvider={imageProvider}
+            />
+        );
+        if (isRoot === true) {
+            // No Drag and Drop
+            return listItem;
+        }
 
-  // wrap in div because react-dnd does not allow directly connecting to components
-  return connectDragSource(
-    connectDropTarget(<div>{listItem}</div>));
-};
+        // const opacity = isDragging ? 0.2 : 1;
+
+        // wrap in div because react-dnd does not allow directly connecting to components
+        return connectDragSource(
+            connectDropTarget(<div>{listItem}</div>));
+    }
+}
 
 /**
  * Define the drag and drop source (item is dragged) behavior of the list items
  */
 const objectDragSource = {
-  beginDrag(props, _monitor: DragSourceMonitor, _component) {
+  beginDrag(props: any) {
     const dragInfo: DragInfo = {
       originalPath: props.path,
       currentPath: props.path,
@@ -381,7 +390,7 @@ const objectDragSource = {
     return dragInfo;
   },
 
-  endDrag(props: ObjectListItemDndProps, monitor: DragSourceMonitor) {
+  endDrag(props: ObjectListItemDndProps, monitor: any) {
     const dragInfo = monitor.getItem() as DragInfo;
     const dropInfo = monitor.getDropResult() as DropResult;
 
@@ -404,7 +413,7 @@ const objectDragSource = {
 /**
  * Injects drag and drop (drag source) related properties into a list item
  */
-const collectDragSource = (dndConnect, monitor: DragSourceMonitor) => {
+const collectDragSource = (dndConnect: any, monitor: any) => {
   return {
     connectDragSource: dndConnect.dragSource(),
     isDragging: monitor.isDragging()
@@ -414,7 +423,7 @@ const collectDragSource = (dndConnect, monitor: DragSourceMonitor) => {
 /**
  * Injects drag and drop (drop target) related properties into a list item
  */
-const collectDropTarget = (dndConnect, monitor: DropTargetMonitor) => {
+const collectDropTarget = (dndConnect: any, monitor: any) => {
   return {
     isOver: monitor.isOver({ shallow: true }),
     connectDropTarget: dndConnect.dropTarget()
@@ -425,7 +434,7 @@ const collectDropTarget = (dndConnect, monitor: DropTargetMonitor) => {
  * Define the drag and drop target (another item is dragged over this item) behavior of list items.
  */
 const objectDropTarget = {
-  canDrop: (props, monitor: DropTargetMonitor) => {
+  canDrop: (props: any, monitor: any) => {
     return canDropDraggedItem(props.parentProperties, monitor.getItem() as DragInfo);
   },
 
@@ -449,7 +458,7 @@ const objectDropTarget = {
    * @param props The properties of the hovered list element
    * @param monitor
    */
-  hover(props: ObjectListItemDndProps, monitor: DropTargetMonitor) {
+  hover(props: ObjectListItemDndProps, monitor: any) {
     if (!monitor.isOver({shallow: true})) {
       return;
     }

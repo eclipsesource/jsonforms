@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "2.0.7",
+  "version": "2.2.1-alpha.4",
   "description": "Core module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -19,7 +19,7 @@
     "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
@@ -40,15 +40,19 @@
   },
   "dependencies": {
     "ajv": "^6.4.0",
-    "json-refs": "^3.0.4",
+    "json-refs": "^3.0.10",
     "lodash": "^4.17.4",
-    "redux": "^3.7.2",
     "uuid": "^3.2.1"
   },
+  "peerDependencies": {
+    "redux": "^3.0.0"
+  },
   "devDependencies": {
+    "@types/redux-mock-store": "^0.0.1",
     "document-register-element": "^1.7.0",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
+    "redux": "^3.0.0",
     "redux-mock-store": "1.4.0"
   }
 }

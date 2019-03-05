@@ -23,13 +23,10 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { personCoreSchema } from './person';
 
 export const schema = {
   type: 'object',
   properties: {
-    ...personCoreSchema.properties,
-    occupation: { type: 'string' },
     comments: {
       type: 'array',
       items: {
@@ -46,8 +43,7 @@ export const schema = {
         }
       }
     }
-  },
-  required: ['occupation', 'nationality']
+  }
 };
 
 export const uischema = {
@@ -80,5 +76,5 @@ registerExamples([
     data,
     schema,
     uischema
-  },
+  }
 ]);

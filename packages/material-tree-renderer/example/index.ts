@@ -1,131 +1,145 @@
-import { LabelDefinition } from '../src/helpers/util';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import keys from 'lodash/keys';
+import has from 'lodash/has';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
-import { detailSchemata, imageProvider, labelProvider, modelMapping } from './config';
-import { taskSchema } from './schema';
-import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
-import * as _ from 'lodash';
-import { findAllContainerProperties, Property } from '../src/services/property.util';
-import { JsonSchema7 } from '@jsonforms/core';
-import { setContainerProperties, treeWithDetailReducer } from '../src/reducers';
-import * as JsonRefs from 'json-refs';
 import {
   Actions,
   jsonformsReducer,
-  RankedTester
+  JsonFormsState,
+  JsonSchema,
+  NOT_APPLICABLE,
+  UISchemaElement,
+  UISchemaTester
 } from '@jsonforms/core';
+import {
+  materialFields,
+  materialRenderers
+} from '@jsonforms/material-renderers';
+import { taskSchema } from './schema';
+import { Property } from '../src/services/property.util';
 import App from './App';
+import { taskView, userGroupView, userView } from './uischemata';
+import { imageProvider } from './imageProvider';
+import {
+  InstanceLabelProvider,
+  SchemaLabelProvider
+} from '../src/helpers/LabelProvider';
 
 const uischema = {
-  'type': 'MasterDetailLayout',
-  'scope': '#'
+  type: 'MasterDetailLayout',
+  scope: '#'
 };
 
-const filterPredicate = (data: Object) => {
-  return (property: Property): boolean => {
-    if (!_.isEmpty(modelMapping) &&
-      !_.isEmpty(modelMapping.mapping)) {
-      if (data[modelMapping.attribute]) {
-        return property.schema.$id === modelMapping.mapping[data[modelMapping.attribute]];
-      }
-      return true;
-    }
-  };
+const detailSchemata: {
+  tester: UISchemaTester;
+  uischema: UISchemaElement;
+}[] = [
+  {
+    tester: schema =>
+      keys(schema.properties).some(key => key === 'done') ? 1 : NOT_APPLICABLE,
+    uischema: taskView
+  },
+  {
+    tester: schema =>
+      keys(schema.properties).some(key => key === 'birthday')
+        ? 1
+        : NOT_APPLICABLE,
+    uischema: userView
+  },
+  {
+    tester: schema =>
+      keys(schema.properties).some(key => key === 'users') ? 1 : NOT_APPLICABLE,
+    uischema: userGroupView
+  }
+];
+
+const filterPredicate = (data: any) => (property: Property): boolean => {
+  if (has(data, '_type') && has(property.schema, 'properties._type.default')) {
+    return data._type === property.schema.properties._type.default;
+  } else {
+    return false;
+  }
 };
 
-const calculateLabel =
-  (schema: JsonSchema7) => (element: Object): string => {
+const isUserGroup = (schema: JsonSchema) => has(schema.properties, 'users');
+const isTask = (schema: JsonSchema) => has(schema.properties, 'done');
+const isUser = (schema: JsonSchema) => has(schema.properties, 'birthday');
 
-    if (!_.isEmpty(labelProvider) && labelProvider[schema.$id] !== undefined) {
+const schemaLabelProvider: SchemaLabelProvider = (
+  schema: JsonSchema,
+  schemaPath: string
+): string => {
+  if (isUserGroup(schema)) {
+    return `User Group`;
+  }
 
-      if (typeof labelProvider[schema.$id] === 'string') {
-        // To be backwards compatible: a simple string is assumed to be a property name
-        return element[labelProvider[schema.$id]];
-      }
-      if (typeof labelProvider[schema.$id] === 'object') {
-        const info =  labelProvider[schema.$id] as LabelDefinition;
-        let label;
-        if (info.constant !== undefined) {
-          label = info.constant;
-        }
-        if (!_.isEmpty(info.property) && !_.isEmpty(element[info.property])) {
-          label = _.isEmpty(label) ?
-            element[info.property] :
-            `${label} ${element[info.property]}`;
-        }
-        if (label !== undefined) {
-          return label;
-        }
-      }
-    }
+  if (schemaPath.indexOf('task') !== -1) {
+    return `Task`;
+  }
 
-    const namingKeys = Object
-      .keys(schema.properties)
-      .filter(key => {
-        console.log(key);
-        return key === '$id' || key === 'name';
-      });
-    if (namingKeys.length !== 0) {
-      return element[namingKeys[0]];
-    }
+  if (isUser(schema)) {
+    return `User`;
+  }
 
-    return JSON.stringify(element);
-  };
+  return 'Unknown';
+};
 
-const imageGetter = (schemaId: string) =>
-  !_.isEmpty(imageProvider) ? `icon ${imageProvider[schemaId]}` : '';
+const instanceLabelProvider: InstanceLabelProvider = (
+  schema: JsonSchema,
+  data: any
+): string => {
+  if (isUserGroup(schema)) {
+    return `User Group`;
+  }
 
-const renderers: { tester: RankedTester, renderer: any}[] = materialRenderers;
-const fields: { tester: RankedTester, field: any}[] = materialFields;
+  if (isTask(schema)) {
+    return `Task ${data.name || ''}`;
+  }
 
-const jsonforms: any = {
+  if (isUser(schema)) {
+    return `User ${data.name || ''}`;
+  }
+
+  return 'Unknown';
+};
+
+const initState: any = {
   jsonforms: {
-    renderers,
-    fields,
-    treeWithDetail: {
-      imageMapping: imageProvider,
-      labelMapping: labelProvider,
-      modelMapping,
-      uiSchemata: detailSchemata
-    }
+    renderers: materialRenderers,
+    fields: materialFields
   }
 };
 
 const store: Store<any> = createStore(
-  combineReducers({
-      jsonforms: jsonformsReducer(
-        {
-          treeWithDetail: treeWithDetailReducer
-        }
-      )
-    }
-  ),
-  {
-    ...jsonforms
-  }
+  combineReducers<JsonFormsState>({
+    jsonforms: jsonformsReducer()
+  }),
+  { ...initState }
 );
 
-JsonRefs.resolveRefs(taskSchema)
-  .then(
-    resolvedSchema => {
-      store.dispatch(Actions.init({}, resolvedSchema.resolved, uischema));
+store.dispatch(Actions.init({}, taskSchema, uischema));
+store.dispatch(
+  Actions.registerDefaultData('properties.users.items', { name: 'Test user' })
+);
 
-      store.dispatch(setContainerProperties(findAllContainerProperties(resolvedSchema.resolved,
-                                                                       resolvedSchema.resolved)));
+detailSchemata.forEach(({ tester, uischema: detailedUiSchema }) =>
+  store.dispatch(Actions.registerUISchema(tester, detailedUiSchema))
+);
 
-      ReactDOM.render(
-        React.createElement(
-          App, {
-          store,
-          filterPredicate,
-          labelProvider: calculateLabel,
-          imageProvider: imageGetter
-        },
-          null
-        ),
-        document.getElementById('editor'));
+ReactDOM.render(
+  React.createElement(
+    App,
+    {
+      store,
+      filterPredicate,
+      labelProviders: {
+        forData: instanceLabelProvider,
+        forSchema: schemaLabelProvider
+      },
+      imageProvider: imageProvider
     },
-    err => {
-      console.log(err.stack);
-    });
+    null
+  ),
+  document.getElementById('editor')
+);

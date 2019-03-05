@@ -22,8 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { SyntheticEvent } from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isMultiLineControl,
@@ -32,9 +33,9 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
 
-export const TextAreaField = (props: FieldProps) => {
+export const TextAreaField = (props: FieldProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (
@@ -57,7 +58,7 @@ export const TextAreaField = (props: FieldProps) => {
  */
 export const textAreaFieldTester: RankedTester = rankWith(2, isMultiLineControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(TextAreaField);

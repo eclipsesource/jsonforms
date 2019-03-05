@@ -22,9 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import maxBy from 'lodash/maxBy';
+import React from 'react';
 import {
   computeLabel,
+  ControlProps,
   ControlState,
   formatErrorMessage,
   isControl,
@@ -33,14 +35,17 @@ import {
   mapStateToControlProps,
   NOT_APPLICABLE,
   RankedTester,
-  rankWith,
+  rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control, DispatchField } from '@jsonforms/react';
-import { VanillaControlProps } from '../index';
+import { Control, DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
-import * as _ from 'lodash';
+import { VanillaRendererProps } from '../index';
+import { connect } from 'react-redux';
 
-export class InputControl extends Control<VanillaControlProps, ControlState> {
+export class InputControl extends Control<
+  ControlProps & VanillaRendererProps,
+  ControlState
+> {
   render() {
     const {
       classNames,
@@ -52,17 +57,26 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
       schema,
       visible,
       required,
-      parentPath,
+      path,
       fields
     } = this.props;
 
     const isValid = errors.length === 0;
-    const divClassNames = `validation  ${isValid ? classNames.description : 'validation_error'}`;
-    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
+    const divClassNames = `validation  ${
+      isValid ? classNames.description : 'validation_error'
+    }`;
+    const showDescription = !isDescriptionHidden(
+      visible,
+      description,
+      this.state.isFocused
+    );
     const labelText = isPlainLabel(label) ? label : label.default;
-    const field = _.maxBy(fields, r => r.tester(uischema, schema));
-    if (field === undefined || field.tester(uischema, schema) === NOT_APPLICABLE) {
-      console.warn('No applicable field found.');
+    const field = maxBy(fields, r => r.tester(uischema, schema));
+    if (
+      field === undefined ||
+      field.tester(uischema, schema) === NOT_APPLICABLE
+    ) {
+      console.warn('No applicable field found.', uischema, schema);
       return null;
     } else {
       return (
@@ -76,9 +90,18 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
           <label htmlFor={id + '-input'} className={classNames.label}>
             {computeLabel(labelText, required)}
           </label>
-          <DispatchField uischema={uischema} schema={schema} path={parentPath} id={id + '-input'}/>
+          <DispatchField
+            uischema={uischema}
+            schema={schema}
+            path={path}
+            id={id + '-input'}
+          />
           <div className={divClassNames}>
-            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+            {!isValid
+              ? formatErrorMessage(errors)
+              : showDescription
+              ? description
+              : null}
           </div>
         </div>
       );
@@ -88,7 +111,7 @@ export class InputControl extends Control<VanillaControlProps, ControlState> {
 
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 
-export const ConnectedInputControl = connectToJsonForms(
+export const ConnectedInputControl = connect(
   addVanillaControlProps(mapStateToControlProps)
 )(InputControl);
 

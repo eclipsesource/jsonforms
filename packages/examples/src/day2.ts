@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import {  data as day1Data, schema as day1Schema } from './day1';
+import { data as day1Data, schema as day1Schema } from './day1';
 
 export const schema = day1Schema;
 
@@ -43,9 +43,9 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/description',
       options: {
-          multi: true
+        multi: true
       }
-    },
+    }
   ]
 };
 

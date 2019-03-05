@@ -22,8 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import React from 'react';
+import { connect } from 'react-redux';
 import { Card, CardContent, CardHeader } from '@material-ui/core';
 import {
   GroupLayout,
@@ -34,7 +35,6 @@ import {
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
@@ -58,7 +58,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
 
     return (
         <Card style={style}>
-          {!_.isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
+          {!isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
           <CardContent>
             <MaterialLayoutRenderer {...childProps}/>
           </CardContent>
@@ -66,7 +66,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
     );
 };
 
-export default connectToJsonForms(
+export default connect(
   mapStateToLayoutProps
 )(MaterializedGroupLayoutRenderer);
 

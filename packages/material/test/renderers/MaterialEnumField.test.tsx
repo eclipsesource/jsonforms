@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,43 +26,42 @@ import * as React from 'react';
 import {
   Actions,
   ControlElement,
-  getData,
   jsonformsReducer,
   JsonFormsState,
-  update
+  JsonSchema,
+  UISchemaElement
 } from '@jsonforms/core';
 import MaterialEnumField, { materialEnumFieldTester } from '../../src/fields/MaterialEnumField';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
+
 const data =  { nationality: 'JP'};
 const schema = {
-  type: 'object',
-  properties: {
-    nationality: {
-      type: 'string',
-      enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
-    }
-  }
+  type: 'string',
+  enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
 };
 const uischema = {
   type: 'Control',
   scope: '#/properties/nationality'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+        fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
-
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
@@ -94,14 +93,16 @@ describe('Material enum field tester', () => {
 describe('Material enum field', () => {
   it('should select an item from dropdown list', () =>  {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    const wrapper = mount(
       <Provider store={store}>
-        <MaterialEnumField schema={schema} uischema={uischema}/>
+        <MaterialEnumField
+          schema={schema}
+          uischema={uischema}
+          path='nationality'
+        />
       </Provider>
     );
-
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('nationality', () => 'DE'));
-    expect(input.value).toBe('DE');
+    const input = wrapper.find('input');
+    expect(input.props().value).toBe('JP');
   });
 });

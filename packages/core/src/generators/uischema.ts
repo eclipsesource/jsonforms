@@ -22,11 +22,19 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
-
+import isEmpty from 'lodash/isEmpty';
+import startCase from 'lodash/startCase';
+import keys from 'lodash/keys';
 import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, LabelElement, Layout, UISchemaElement } from '../models/uischema';
+import {
+  ControlElement,
+  isGroup,
+  LabelElement,
+  Layout,
+  UISchemaElement
+} from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
+import { deriveType } from '../util';
 
 /**
  * Creates a new ILayout.
@@ -34,54 +42,24 @@ import { resolveSchema } from '../util/resolvers';
  * @returns the new ILayout
  */
 const createLayout = (layoutType: string): Layout => ({
-    type: layoutType,
-    elements: []
+  type: layoutType,
+  elements: []
 });
-
-/**
- * Checks if the type of jsonSchema is a union of multiple types
- *
- * @param {JsonSchema} jsonSchema
- * @returns {boolean}
- */
-const isUnionType = (jsonSchema: JsonSchema): boolean =>
-  !_.isEmpty(jsonSchema) && !_.isEmpty(jsonSchema.type) && _.isArray(jsonSchema.type);
-
-/**
- * Derives the type of the jsonSchema element
- */
-const deriveType = (jsonSchema: JsonSchema): string => {
-    if (!_.isEmpty(jsonSchema) &&
-        !_.isEmpty(jsonSchema.type) &&
-        typeof jsonSchema.type === 'string') {
-        return jsonSchema.type;
-    }
-    if (isUnionType(jsonSchema)) {
-        return _.head(jsonSchema.type);
-    }
-    if (!_.isEmpty(jsonSchema) &&
-        (!_.isEmpty(jsonSchema.properties) || !_.isEmpty(jsonSchema.additionalProperties))) {
-        return 'object';
-    }
-    if (!_.isEmpty(jsonSchema) && !_.isEmpty(jsonSchema.items)) {
-        return 'array';
-    }
-
-    // ignore all remaining cases
-    return 'null';
-};
 
 /**
  * Creates a IControlObject with the given label referencing the given ref
  */
-const createControlElement = (label: string, ref: string): ControlElement => ({
-    type: 'Control',
-    label: label,
-    scope: ref,
+export const createControlElement = (
+  label: string,
+  ref: string
+): ControlElement => ({
+  type: 'Control',
+  label: label === undefined ? false : label,
+  scope: ref
 });
 
 const isLayout = (uischema: UISchemaElement): uischema is Layout =>
-    (uischema as Layout).elements !== undefined;
+  (uischema as Layout).elements !== undefined;
 
 /**
  * Wraps the given {@code uiSchema} in a Layout if there is none already.
@@ -89,15 +67,18 @@ const isLayout = (uischema: UISchemaElement): uischema is Layout =>
  * @param layoutType The type of the layout to create.
  * @returns the wrapped uiSchema.
  */
-const wrapInLayoutIfNecessary = (uischema: UISchemaElement, layoutType: string): Layout  => {
-    if (!_.isEmpty(uischema) && !isLayout(uischema)) {
-        const verticalLayout: Layout = createLayout(layoutType);
-        verticalLayout.elements.push(uischema);
+const wrapInLayoutIfNecessary = (
+  uischema: UISchemaElement,
+  layoutType: string
+): Layout => {
+  if (!isEmpty(uischema) && !isLayout(uischema)) {
+    const verticalLayout: Layout = createLayout(layoutType);
+    verticalLayout.elements.push(uischema);
 
-        return verticalLayout;
-    }
+    return verticalLayout;
+  }
 
-    return uischema as Layout;
+  return uischema as Layout;
 };
 
 /**
@@ -108,70 +89,118 @@ const wrapInLayoutIfNecessary = (uischema: UISchemaElement, layoutType: string):
  *      The name of the schema
  */
 const addLabel = (layout: Layout, labelName: string) => {
-    if (!_.isEmpty(labelName) ) {
-        // add label with name
-        const label: LabelElement = {
-            type: 'Label',
-            text: _.startCase(labelName)
-        };
-        layout.elements.push(label);
+  if (!isEmpty(labelName)) {
+    const fixedLabel = startCase(labelName);
+    if (isGroup(layout)) {
+      layout.label = fixedLabel;
+    } else {
+      // add label with name
+      const label: LabelElement = {
+        type: 'Label',
+        text: fixedLabel
+      };
+      layout.elements.push(label);
     }
+  }
 };
 
-const generateUISchema =
-    (jsonSchema: JsonSchema, schemaElements: UISchemaElement[],
-     currentRef: string, schemaName: string, layoutType: string, rootSchema?: JsonSchema)
-      : UISchemaElement => {
+/**
+ * Returns whether the given {@code jsonSchema} is a combinator ({@code oneOf}, {@code anyOf}, {@code allOf}) at the root level
+ * @param jsonSchema
+ *      the schema to check
+ */
+const isCombinator = (jsonSchema: JsonSchema): boolean => {
+  return (
+    !isEmpty(jsonSchema) &&
+    (!isEmpty(jsonSchema.oneOf) ||
+      !isEmpty(jsonSchema.anyOf) ||
+      !isEmpty(jsonSchema.allOf))
+  );
+};
 
-    const type = deriveType(jsonSchema);
+const generateUISchema = (
+  jsonSchema: JsonSchema,
+  schemaElements: UISchemaElement[],
+  currentRef: string,
+  schemaName: string,
+  layoutType: string,
+  rootSchema?: JsonSchema
+): UISchemaElement => {
+  if (!isEmpty(jsonSchema) && jsonSchema.$ref !== undefined) {
+    return generateUISchema(
+      resolveSchema(rootSchema, jsonSchema.$ref),
+      schemaElements,
+      currentRef,
+      schemaName,
+      layoutType,
+      rootSchema
+    );
+  }
 
-    switch (type) {
-        case 'object':
-            const layout: Layout = createLayout(layoutType);
-            schemaElements.push(layout);
+  if (isCombinator(jsonSchema)) {
+    const controlObject: ControlElement = createControlElement(
+      startCase(schemaName),
+      currentRef
+    );
+    schemaElements.push(controlObject);
 
-            addLabel(layout, schemaName);
+    return controlObject;
+  }
 
-            if (!_.isEmpty(jsonSchema.properties)) {
-                // traverse properties
-                const nextRef: string = currentRef + '/properties';
-                Object.keys(jsonSchema.properties).map(propName => {
-                    let value = jsonSchema.properties[propName];
-                    const ref = `${nextRef}/${propName}`;
-                    if (value.$ref !== undefined) {
-                        value = resolveSchema(rootSchema, value.$ref);
-                    }
-                    generateUISchema(
-                        value,
-                        layout.elements,
-                        ref, propName, layoutType, rootSchema
-                    );
-                });
-            }
+  const type = deriveType(jsonSchema);
 
-            return layout;
+  switch (type) {
+    case 'object':
+      const layout: Layout = createLayout(layoutType);
+      schemaElements.push(layout);
 
-        case 'array': // array items will be handled by the array control itself
-        /* falls through */
-        case 'string':
-        /* falls through */
-        case 'number':
-        /* falls through */
-        case 'integer':
-        /* falls through */
-        case 'boolean':
-            const controlObject: ControlElement = createControlElement(
-                _.startCase(schemaName),
-                currentRef
-            );
-            schemaElements.push(controlObject);
+      if (jsonSchema.properties && keys(jsonSchema.properties).length > 1) {
+        addLabel(layout, schemaName);
+      }
 
-            return controlObject;
-        case 'null':
-            return null;
-        default:
-            throw new Error('Unknown type: ' + JSON.stringify(jsonSchema));
-    }
+      if (!isEmpty(jsonSchema.properties)) {
+        // traverse properties
+        const nextRef: string = currentRef + '/properties';
+        Object.keys(jsonSchema.properties).map(propName => {
+          let value = jsonSchema.properties[propName];
+          const ref = `${nextRef}/${propName}`;
+          if (value.$ref !== undefined) {
+            value = resolveSchema(rootSchema, value.$ref);
+          }
+          generateUISchema(
+            value,
+            layout.elements,
+            ref,
+            propName,
+            layoutType,
+            rootSchema
+          );
+        });
+      }
+
+      return layout;
+
+    case 'array': // array items will be handled by the array control itself
+    /* falls through */
+    case 'string':
+    /* falls through */
+    case 'number':
+    /* falls through */
+    case 'integer':
+    /* falls through */
+    case 'boolean':
+      const controlObject: ControlElement = createControlElement(
+        startCase(schemaName),
+        currentRef
+      );
+      schemaElements.push(controlObject);
+
+      return controlObject;
+    case 'null':
+      return null;
+    default:
+      throw new Error('Unknown type: ' + JSON.stringify(jsonSchema));
+  }
 };
 
 /**
@@ -180,8 +209,13 @@ const generateUISchema =
  * @param {string} layoutType the desired layout type for the root layout
  *        of the generated UI schema
  */
-export const generateDefaultUISchema =
-    (jsonSchema: JsonSchema, layoutType = 'VerticalLayout', prefix = '#'): UISchemaElement =>
-        wrapInLayoutIfNecessary(
-            generateUISchema(jsonSchema, [], prefix, '', layoutType, jsonSchema),
-            layoutType);
+export const generateDefaultUISchema = (
+  jsonSchema: JsonSchema,
+  layoutType = 'VerticalLayout',
+  prefix = '#',
+  rootSchema = jsonSchema
+): UISchemaElement =>
+  wrapInLayoutIfNecessary(
+    generateUISchema(jsonSchema, [], prefix, '', layoutType, rootSchema),
+    layoutType
+  );

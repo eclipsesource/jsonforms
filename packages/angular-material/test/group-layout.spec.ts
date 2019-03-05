@@ -1,0 +1,108 @@
+/*
+  The MIT License
+
+  Copyright (c) 2018 EclipseSource Munich
+  https://github.com/eclipsesource/jsonforms
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  THE SOFTWARE.
+*/
+import { ComponentFixture } from '@angular/core/testing';
+import { GroupLayout, UISchemaElement } from '@jsonforms/core';
+import { MatCard, MatCardTitle } from '@angular/material';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+import {
+  beforeEachLayoutTest,
+  initComponent,
+  setupMockStore
+} from '@jsonforms/angular-test';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {
+  GroupLayoutRenderer,
+  groupLayoutTester
+} from '../src/layouts/group-layout.renderer';
+
+describe('Group layout tester', () => {
+  it('should succeed', () => {
+    expect(groupLayoutTester({ type: 'Group' }, undefined)).toBe(1);
+  });
+});
+describe('Group layout', () => {
+  let fixture: ComponentFixture<any>;
+
+  beforeEach(() => {
+    fixture = beforeEachLayoutTest(GroupLayoutRenderer, {
+      declarations: [MatCard, MatCardTitle],
+      imports: [FlexLayoutModule]
+    });
+  });
+
+  it('render with undefined elements', () => {
+    const uischema: UISchemaElement = {
+      type: 'Group'
+    };
+    initComponent(
+      fixture,
+      setupMockStore(fixture, { data: {}, schema: {}, uischema })
+    );
+    const card: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatCard)
+    );
+    // title
+    expect(card[0].nativeElement.children.length).toBe(1);
+  });
+
+  it('render with null elements', () => {
+    const uischema: GroupLayout = {
+      type: 'Group',
+      elements: null
+    };
+    initComponent(
+      fixture,
+      setupMockStore(fixture, { data: {}, schema: {}, uischema })
+    );
+    const card: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatCard)
+    );
+    // title
+    expect(card[0].nativeElement.children.length).toBe(1);
+  });
+
+  it('render with children', () => {
+    const uischema: GroupLayout = {
+      type: 'Group',
+      label: 'foo',
+      elements: [{ type: 'Control' }, { type: 'Control' }]
+    };
+    initComponent(
+      fixture,
+      setupMockStore(fixture, { data: {}, schema: {}, uischema })
+    );
+    const card: DebugElement[] = fixture.debugElement.queryAll(
+      By.directive(MatCard)
+    );
+    const title: DebugElement = fixture.debugElement.query(
+      By.directive(MatCardTitle)
+    );
+
+    expect(title.nativeElement.textContent).toBe('foo');
+    // title + 2 controls
+    expect(card[0].nativeElement.children.length).toBe(3);
+  });
+});

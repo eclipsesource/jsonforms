@@ -22,7 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import get from 'lodash/get';
+import has from 'lodash/has';
 import { JsonSchema } from '..';
 
 /**
@@ -32,31 +34,31 @@ export interface ReferenceSchemaMap {
   [ref: string]: JsonSchema;
 }
 
-const isObject = (schema: JsonSchema): boolean => {
+const isObjectSchema = (schema: JsonSchema): boolean => {
   return schema.properties !== undefined;
 };
-const isArray = (schema: JsonSchema): boolean => {
+const isArraySchema = (schema: JsonSchema): boolean => {
   return schema.type === 'array' && schema.items !== undefined;
 };
 
 export const resolveData = (instance: any, dataPath: string): any => {
-  const dataPathSegments = dataPath.split('.');
-  if (_.isEmpty(dataPath)) {
+  if (isEmpty(dataPath)) {
     return instance;
   }
+  const dataPathSegments = dataPath.split('.');
 
   return dataPathSegments
     .map(segment => decodeURIComponent(segment))
-    .reduce(
-      (curInstance, decodedSegment) => {
-        if (curInstance === undefined || !curInstance.hasOwnProperty(decodedSegment)) {
-          return undefined;
-        }
+    .reduce((curInstance, decodedSegment) => {
+      if (
+        curInstance === undefined ||
+        !curInstance.hasOwnProperty(decodedSegment)
+      ) {
+        return undefined;
+      }
 
-        return curInstance[decodedSegment];
-      },
-      instance
-    );
+      return curInstance[decodedSegment];
+    }, instance);
 };
 
 /**
@@ -67,70 +69,85 @@ export const resolveData = (instance: any, dataPath: string): any => {
  *               inside the function)
  * @param resolveTuples Whether arrays of tuples should be considered; default: false
  */
-export const findAllRefs =
-  (schema: JsonSchema, result: ReferenceSchemaMap = {}, resolveTuples = false)
-    : ReferenceSchemaMap => {
-
-    if (isObject(schema)) {
-      Object.keys(schema.properties).forEach(key =>
-        findAllRefs(schema.properties[key], result));
-    }
-    if (isArray(schema)) {
-      if (Array.isArray(schema.items)) {
-        if (resolveTuples) {
-          const items: JsonSchema[] = schema.items;
-          items.forEach(child => findAllRefs(child, result));
-        }
-      } else {
-        findAllRefs(schema.items, result);
+export const findAllRefs = (
+  schema: JsonSchema,
+  result: ReferenceSchemaMap = {},
+  resolveTuples = false
+): ReferenceSchemaMap => {
+  if (isObjectSchema(schema)) {
+    Object.keys(schema.properties).forEach(key =>
+      findAllRefs(schema.properties[key], result)
+    );
+  }
+  if (isArraySchema(schema)) {
+    if (Array.isArray(schema.items)) {
+      if (resolveTuples) {
+        const items: JsonSchema[] = schema.items;
+        items.forEach(child => findAllRefs(child, result));
       }
+    } else {
+      findAllRefs(schema.items, result);
     }
-    if (Array.isArray(schema.anyOf)) {
-      const anyOf: JsonSchema[] = schema.anyOf;
-      anyOf.forEach(child => findAllRefs(child, result));
-    }
-    if (schema.$ref !== undefined) {
-      result[schema.$ref] = schema;
-    }
+  }
+  if (Array.isArray(schema.anyOf)) {
+    const anyOf: JsonSchema[] = schema.anyOf;
+    anyOf.forEach(child => findAllRefs(child, result));
+  }
+  if (schema.$ref !== undefined) {
+    result[schema.$ref] = schema;
+  }
 
-    // tslint:disable:no-string-literal
-    if (schema['links'] !== undefined) {
-      schema['links'].forEach(link => {
-        if (!_.isEmpty(link.targetSchema.$ref)) {
-          result[link.targetSchema.$ref] = schema;
-        } else {
-          findAllRefs(link.targetSchema, result);
-        }
-      });
-    }
+  // tslint:disable:no-string-literal
+  if (has(schema, 'links')) {
+    get(schema, 'links').forEach((link: { targetSchema: JsonSchema }) => {
+      if (!isEmpty(link.targetSchema.$ref)) {
+        result[link.targetSchema.$ref] = schema;
+      } else {
+        findAllRefs(link.targetSchema, result);
+      }
+    });
+  }
 
-    return result;
-  };
+  return result;
+};
 
 /**
  * Resolve the given schema path in order to obtain a subschema.
  * @param {JsonSchema} schema the root schema from which to start
  * @param {string} schemaPath the schema path to be resolved
+ * @param {JsonSchema} rootSchema the actual root schema
  * @returns {JsonSchema} the resolved sub-schema
  */
-export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchema => {
-  if (_.isEmpty(schema)) {
+export const resolveSchema = (
+  schema: JsonSchema,
+  schemaPath: string,
+  rootSchema?: JsonSchema
+): JsonSchema => {
+  if (isEmpty(schema)) {
     return undefined;
   }
   const validPathSegments = schemaPath.split('/');
-  const invalidSegment =
-    pathSegment => pathSegment === '#' || pathSegment === undefined || pathSegment === '';
-  const resultSchema = validPathSegments.reduce(
-    (curSchema, pathSegment) => {
-      curSchema = curSchema.$ref === undefined
+  const invalidSegment = (pathSegment: string) =>
+    pathSegment === '#' || pathSegment === undefined || pathSegment === '';
+  const resultSchema = validPathSegments.reduce((curSchema, pathSegment) => {
+    curSchema =
+      curSchema === undefined || curSchema.$ref === undefined
         ? curSchema
         : resolveSchema(schema, curSchema.$ref);
-      return invalidSegment(pathSegment) ? curSchema : curSchema[pathSegment];
-    },
-    schema
-  );
+    return invalidSegment(pathSegment)
+      ? curSchema
+      : get(curSchema, pathSegment);
+  }, schema);
+  // TODO: because schema is already scoped we might end up with refs pointing
+  // outside of the current schema. It would be better if we'd always could deal
+  // with absolute paths here, so that we don't need to keep two different
+  // schemas around
   if (resultSchema !== undefined && resultSchema.$ref !== undefined) {
-    return retrieveResolvableSchema(schema, resultSchema.$ref);
+    try {
+      return retrieveResolvableSchema(schema, resultSchema.$ref);
+    } catch (e) {
+      return retrieveResolvableSchema(rootSchema, resultSchema.$ref);
+    }
   }
 
   return resultSchema;
@@ -145,7 +162,10 @@ export const resolveSchema = (schema: JsonSchema, schemaPath: string): JsonSchem
  */
 // disable rule because resolve is mutually recursive
 // tslint:disable:only-arrow-functions
-function retrieveResolvableSchema(full: JsonSchema, reference: string): JsonSchema {
+function retrieveResolvableSchema(
+  full: JsonSchema,
+  reference: string
+): JsonSchema {
   // tslint:enable:only-arrow-functions
   const child = resolveSchema(full, reference);
   const allRefs = findAllRefs(child);

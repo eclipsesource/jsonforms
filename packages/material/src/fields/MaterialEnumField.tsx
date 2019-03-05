@@ -22,21 +22,22 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import {
-  defaultMapDispatchToControlProps,
-  defaultMapStateToEnumFieldProps,
-  EnumFieldProps,
-  isEnumControl,
-  RankedTester,
-  rankWith,
+    defaultMapDispatchToControlProps,
+    defaultMapStateToEnumFieldProps,
+    EnumFieldProps,
+    isEnumControl,
+    RankedTester,
+    rankWith,
+    WithClassname,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
+import { connect } from 'react-redux';
 
-export const MaterialEnumField = (props: EnumFieldProps) => {
+export const MaterialEnumField = (props: EnumFieldProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
@@ -68,7 +69,7 @@ export const MaterialEnumField = (props: EnumFieldProps) => {
  * @type {RankedTester}
  */
 export const materialEnumFieldTester: RankedTester = rankWith(2, isEnumControl);
-export default connectToJsonForms(
+export default connect(
   defaultMapStateToEnumFieldProps,
-  defaultMapDispatchToControlProps)
-(MaterialEnumField);
+  defaultMapDispatchToControlProps
+)(MaterialEnumField);

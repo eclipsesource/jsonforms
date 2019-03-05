@@ -22,28 +22,22 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-    computeLabel,
-    ControlElement,
-    ControlProps,
-    ControlState,
-    formatErrorMessage,
-    isDescriptionHidden,
-    isPlainLabel,
-    mapDispatchToControlProps,
-    mapStateToControlProps,
-    resolveSchema,
+  computeLabel,
+  ControlProps,
+  ControlState,
+  formatErrorMessage,
+  isDescriptionHidden,
+  isPlainLabel,
+  mapDispatchToControlProps,
+  mapStateToControlProps
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import {
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    FormLabel
-} from '@material-ui/core';
+import { FormControl, FormControlLabel, FormHelperText, FormLabel } from '@material-ui/core';
 
 export class MaterialRadioGroupControl extends Control<ControlProps, ControlState> {
     render() {
@@ -55,7 +49,6 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             description,
             errors,
             data,
-            uischema,
             schema,
             visible
         } = this.props;
@@ -67,17 +60,17 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
         const trim = config.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
-        const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
+        const options = schema.enum;
 
         return (
             <FormControl
-                component='fieldset'
+                component={'fieldset' as 'div'}
                 fullWidth={!trim}
             >
                 <FormLabel
                     htmlFor={id}
                     error={!isValid}
-                    component='legend'
+                    component={'legend' as 'label'}
                 >
                     {computeLabel(isPlainLabel(label) ? label : label.default, required)}
                 </FormLabel>
@@ -108,5 +101,4 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
     }
 }
 
-export default connectToJsonForms(mapStateToControlProps, mapDispatchToControlProps)
-    (MaterialRadioGroupControl);
+export default connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialRadioGroupControl);

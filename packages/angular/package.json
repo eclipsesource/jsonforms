@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/angular",
-  "version": "2.0.7",
+  "version": "2.2.1-alpha.4",
   "description": "Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -18,12 +18,13 @@
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
+    "build-prod": "../../node_modules/.bin/ngc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
     "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Angular Core' --mode file --out docs src"
   },
   "nyc": {
     "reporter": [
@@ -38,16 +39,22 @@
     ],
     "babel": "inherit"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@angular-redux/store": "^7.1.1",
-    "@angular/common": "^5.2.10",
     "@angular/core": "^5.2.10",
-    "@jsonforms/core": "^2.0.7",
-    "redux": "^3.7.2",
+    "@angular/forms": "^5.2.10",
+    "@jsonforms/core": "^2.0.0",
+    "redux": "^3.0.0",
     "rxjs": "^5.5.7"
   },
   "devDependencies": {
+    "@angular-redux/store": "^7.1.1",
+    "@angular/core": "^5.2.10",
+    "@angular/forms": "^5.2.10",
+    "@jsonforms/core": "^2.2.1-alpha.4",
     "copy-webpack-plugin": "^4.5.1",
-    "webpack-dev-server": "^2.11.2"
+    "redux": "^3.0.0",
+    "rxjs": "^5.5.7",
+    "webpack-dev-server": "^3.1.14"
   }
 }

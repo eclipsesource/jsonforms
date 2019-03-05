@@ -22,20 +22,21 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
-import { SET_CONFIG } from '../actions';
+import merge from 'lodash/merge';
+import { SET_CONFIG, SetConfigAction } from '../actions';
 import { configDefault } from '../configDefault';
 
 const applyDefaultConfiguration = (config: any = {}) =>
-  _.merge({}, configDefault, config);
+  merge({}, configDefault, config);
 
 export const configReducer = (
   state = applyDefaultConfiguration(),
-  action) => {
-    switch (action.type) {
-      case SET_CONFIG:
-        return applyDefaultConfiguration(action.config);
-      default:
-        return state;
-    }
-  };
+  action: SetConfigAction
+) => {
+  switch (action.type) {
+    case SET_CONFIG:
+      return applyDefaultConfiguration(action.config);
+    default:
+      return state;
+  }
+};

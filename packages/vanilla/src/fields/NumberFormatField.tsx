@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   Formatted,
@@ -32,9 +33,9 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
 
-export const NumberFormatField = (props: FieldProps & Formatted<number>) => {
+export const NumberFormatField = (props: FieldProps & VanillaRendererProps & Formatted<number>) => {
   const {
     className,
     id,
@@ -42,12 +43,12 @@ export const NumberFormatField = (props: FieldProps & Formatted<number>) => {
     uischema,
     path,
     handleChange,
-    scopedSchema
+    schema
   } = props;
-  const maxLength = scopedSchema.maxLength;
+  const maxLength = schema.maxLength;
   const formattedNumber: string = props.toFormatted(props.data);
 
-  const onChange = ev => {
+  const onChange = (ev: any) => {
     const validStringNumber = props.fromFormatted(ev.currentTarget.value);
     handleChange(path, validStringNumber);
   };
@@ -73,7 +74,7 @@ export const NumberFormatField = (props: FieldProps & Formatted<number>) => {
  */
 export const numberFormatFieldTester: RankedTester = rankWith(4, isNumberFormatControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(NumberFormatField);

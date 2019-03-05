@@ -22,78 +22,70 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import {
-  ControlElement,
-  Helpers
-} from '@jsonforms/core';
-import Button from '@material-ui/core/Button';
-import { Grid, Hidden } from '@material-ui/core';
-import Toolbar from '@material-ui/core/Toolbar';
+import React from 'react';
+import { ControlElement, JsonSchema, LabelDescription, Labels } from '@jsonforms/core';
+import IconButton from '@material-ui/core/IconButton';
+import { Grid, Hidden, Typography } from '@material-ui/core';
+import TableRow from '@material-ui/core/TableRow';
 import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
 import ValidationIcon from './ValidationIcon';
+import NoBorderTableCell from './NoBorderTableCell';
 
-export const TableToolbar = (
-  {
-    errors,
-    childErrors,
-    label,
-    uischema,
-    numSelected,
-    openConfirmDeleteDialog,
-    addItem,
-    path
-  }
-) => {
-  const controlElement = uischema as ControlElement;
-  const labelObject = Helpers.createLabelDescriptionFrom(controlElement);
-  const allErrors = [].concat(errors).concat(childErrors.map(e => e.message));
+export interface MaterialTableToolbarProps {
+    numColumns: number;
+    errors: string[];
+    label: string | Labels;
+    labelObject: LabelDescription;
+    path: string;
+    uischema: ControlElement;
+    schema: JsonSchema;
+    rootSchema: JsonSchema;
+    createDefaultValue(): void;
+    addItem(path: string, value: any): () => void;
+}
 
-  return (
-    <Toolbar>
-      <Grid container alignItems='center' justify='space-between'>
-        <Grid item>
-          <Typography variant='title'>{label}</Typography>
-        </Grid>
-        <Hidden smUp={allErrors.length === 0}>
-          <Grid item>
-            <ValidationIcon id='tooltip-validation' errorMessages={allErrors}/>
-          </Grid>
-        </Hidden>
-        <Grid item>
-          <Grid container>
-            <Grid item>
-              <Tooltip id='tooltip-add' title={`Add to ${labelObject.text}`} placement='bottom'>
-                <Button
-                  variant='fab'
-                  color='primary'
-                  aria-label={`Add to ${labelObject.text}`}
-                  onClick={addItem(path)}
+const TableToolbar = (
+    { numColumns, createDefaultValue, errors, label, labelObject, path, addItem }: MaterialTableToolbarProps
+) => (
+    <TableRow>
+        <NoBorderTableCell colSpan={numColumns}>
+            <Grid
+                container
+                justify={'flex-start'}
+                alignItems={'center'}
+                spacing={16}
+            >
+                <Grid item>
+                  <Typography variant={'headline'}>{label}</Typography>
+                </Grid>
+                <Grid item>
+                    <Hidden smUp={errors.length === 0}>
+                        <Grid item>
+                            <ValidationIcon
+                                id='tooltip-validation'
+                                errorMessages={errors}
+                            />
+                        </Grid>
+                    </Hidden>
+                </Grid>
+            </Grid>
+        </NoBorderTableCell>
+        <NoBorderTableCell>
+            <Tooltip
+                id='tooltip-add'
+                title={`Add to ${labelObject.text}`}
+                placement='bottom'
+            >
+                <IconButton
+                    aria-label={`Add to ${labelObject.text}`}
+                    onClick={addItem(path, createDefaultValue())}
                 >
-                  <AddIcon/>
-                </Button>
-              </Tooltip>
-            </Grid>
-            <Grid item>
-              <Tooltip title='Delete'>
-                <div>
-                  <Button
-                    variant='fab'
-                    aria-label={`Delete`}
-                    disabled={numSelected === 0}
-                    onClick={openConfirmDeleteDialog}
-                  >
-                    <DeleteIcon />
-                  </Button>
-                </div>
-              </Tooltip>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Toolbar>
-  );
-};
+                    <AddIcon/>
+                </IconButton>
+            </Tooltip>
+        </NoBorderTableCell>
+    </TableRow>
+);
+
+export default TableToolbar;

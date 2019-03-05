@@ -22,149 +22,64 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import React from 'react';
 import {
-  mapDispatchToTableControlProps,
-  mapStateToTableControlProps,
-  TableControlProps
+  ArrayControlProps,
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps,
 } from '@jsonforms/core';
-import { connectToJsonForms, RendererComponent } from '@jsonforms/react';
-import { TableToolbar } from './TableToolbar';
+import { RendererComponent } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
-import Button from '@material-ui/core/Button';
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Hidden
-} from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
+import { Hidden } from '@material-ui/core';
+import { connect } from 'react-redux';
+import { DeleteDialog } from './DeleteDialog';
 
-export class MaterialArrayControlRenderer extends RendererComponent<TableControlProps, TableState> {
-  constructor(props) {
+export class MaterialArrayControlRenderer extends RendererComponent<ArrayControlProps, any> {
+
+  constructor(props: ArrayControlProps) {
     super(props);
     this.state = {
-      selected: this.createSelection(false),
-      openConfirmDelete: false
+      open: false,
+      path: undefined,
+      rowData: undefined
     };
+  }
+
+  openDeleteDialog = (path: string, rowData: any) => {
+    this.setState({
+      open: true,
+      path,
+      rowData
+    });
   }
 
   render() {
-    const { visible } = this.props;
-    const numSelected = this.state.selected ? _.filter(this.state.selected, v => v).length : 0;
-
-    const tableProps = {
-      selectAll: this.selectAll,
-      select: this.select,
-      isSelected: this.isSelected,
-      numSelected,
-      openConfirmDeleteDialog: this.openConfirmDeleteDialog,
-      ...this.props
-    };
-
-    const selectedCount = _.filter(this.state.selected, v => v).length;
+    const { visible, removeItems } = this.props;
 
     return (
-      <Hidden xsUp={!visible}>
-        <Grid container direction='column' spacing={0}>
-          <Hidden xsUp={this.props.scopedSchema.type !== 'object'}>
-            <Grid item>
-              <TableToolbar {...tableProps} />
-            </Grid>
-          </Hidden>
-          <Grid item>
-            <MaterialTableControl {...tableProps} />
-          </Grid>
-          <Dialog
-            open={this.state.openConfirmDelete}
-            keepMounted
-            onClose={this.closeConfirmDeleteDialog}
-            aria-labelledby='alert-dialog-confirmdelete-title'
-            aria-describedby='alert-dialog-confirmdelete-description'
-          >
-            <DialogTitle id='alert-dialog-confirmdelete-title'>
-              {'Confirm Deletion'}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id='alert-dialog-confirmdelete-description'>
-                Are you sure you want to delete the {selectedCount} selected objects?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.closeConfirmDeleteDialog} color='primary'>
-                No
-              </Button>
-              <Button onClick={this.confirmDelete} color='primary'>
-                Yes
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Grid>
-      </Hidden>
+      <React.Fragment>
+        <Hidden xsUp={!visible}>
+          <MaterialTableControl
+            {...this.props}
+            openDeleteDialog={this.openDeleteDialog}
+          />
+        </Hidden>
+        <DeleteDialog
+          open={this.state.open}
+          onCancel={() => this.setState({open: false})}
+          onConfirm={() => {
+            const path = this.state.path.substring(0, this.state.path.lastIndexOf(('.')));
+            removeItems(path, [this.state.rowData])();
+            this.setState({open: false});
+          }}
+          onClose={() => this.setState({open: false})}
+        />
+      </React.Fragment>
     );
   }
-
-  private select = (_event, index) => {
-    const copy = this.state.selected.slice();
-    copy[index] = !copy[index];
-
-    this.setState({ selected: copy });
-  }
-  private selectAll = (_event, checked) => {
-    if (checked) {
-      this.setState({ selected: this.createSelection(true) });
-      return;
-    }
-    this.setState({ selected: this.createSelection(false) });
-  }
-  private closeConfirmDeleteDialog = () => {
-    this.setState({ openConfirmDelete: false });
-  }
-  private openConfirmDeleteDialog = () => {
-    this.setState({ openConfirmDelete: true });
-  }
-  private confirmDelete = () => {
-    const selectedIndices = this.state.selected;
-    const toDelete = selectedIndices.reduce(
-      (acc, value, index) => {
-        if (value) {
-          acc.push(this.props.data[index]);
-        }
-        return acc;
-      },
-      []
-    );
-    this.props.removeItems(this.props.path, toDelete)();
-    this.closeConfirmDeleteDialog();
-    this.setState({ selected: this.createSelection(false) });
-  }
-  private isSelected = index => {
-    if (this.state.selected.length <= index) {
-      return false;
-    }
-    return this.state.selected[index];
-  }
-  private createSelection = (selected: boolean) => this.props.data ?
-    _.fill(Array(this.props.data.length), selected)
-    : []
 }
 
-export interface TableState {
-  /**
-   * Represents the selected entries of the array.
-   */
-  selected: boolean[];
-
-  /**
-   * Determines whether the confirm deletion dialog is opened.
-   */
-  openConfirmDelete: boolean;
-}
-
-export default connectToJsonForms(
-  mapStateToTableControlProps,
-  mapDispatchToTableControlProps
+export default connect(
+  mapStateToArrayControlProps,
+  mapDispatchToArrayControlProps
 )(MaterialArrayControlRenderer);

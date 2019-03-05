@@ -105,8 +105,12 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/birthDate'
-        },
+        }
       ]
+    },
+    {
+      type: 'Label',
+      text: 'Additional Information'
     },
     {
       type: 'HorizontalLayout',
@@ -142,7 +146,9 @@ export const data = {
   name: 'John Doe',
   vegetarian: false,
   birthDate: '1985-06-02',
-  personalData: {},
+  personalData: {
+    age: 34
+  },
   postalCode: '12345'
 };
 

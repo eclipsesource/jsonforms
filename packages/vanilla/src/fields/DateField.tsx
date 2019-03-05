@@ -22,19 +22,21 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import {
-  FieldProps,
-  isDateControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
+    FieldProps,
+    isDateControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith,
 } from '@jsonforms/core';
 import { SyntheticEvent } from 'react';
-import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
+import { connect } from 'react-redux';
+import { addVanillaFieldProps } from '../util';
 
-export const DateField = (props: FieldProps) => {
+export const DateField = (props: FieldProps & VanillaRendererProps) => {
     const { data, className, id, enabled, uischema, path, handleChange } = props;
 
     return (
@@ -57,7 +59,7 @@ export const DateField = (props: FieldProps) => {
  */
 export const dateFieldTester: RankedTester = rankWith(2, isDateControl);
 
-export default connectToJsonForms(
-  mapStateToFieldProps,
+export default connect(
+  addVanillaFieldProps(mapStateToFieldProps),
   mapDispatchToFieldProps
 )(DateField);

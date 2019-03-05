@@ -23,7 +23,4 @@
   THE SOFTWARE.
 */
 import InputControl, { inputControlTester } from './InputControl';
-export {
-  InputControl,
-  inputControlTester
-};
+export { InputControl, inputControlTester };

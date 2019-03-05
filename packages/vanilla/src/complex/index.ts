@@ -25,7 +25,9 @@
 import ArrayControl, { arrayControlTester } from './array';
 import Categorization, { categorizationTester } from './categorization';
 import LabelRenderer, { labelRendererTester } from './LabelRenderer';
-import TableArrayControl, { tableArrayControlTester } from './TableArrayControl';
+import TableArrayControl, {
+  tableArrayControlTester
+} from './TableArrayControl';
 
 export {
   ArrayControl,

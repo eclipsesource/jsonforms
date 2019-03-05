@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -31,11 +32,12 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isRangeControl,
+  mapDispatchToControlProps,
   mapStateToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 
 import { FormControl, FormHelperText, Typography } from '@material-ui/core';
 import Slider from '@material-ui/lab/Slider';
@@ -49,7 +51,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       enabled,
       errors,
       label,
-      scopedSchema,
+      schema,
       handleChange,
       visible,
       path,
@@ -93,24 +95,24 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
         </Typography>
         <div style={rangeContainerStyle}>
           <Typography style={rangeItemStyle} variant='caption' align='left'>
-            {scopedSchema.minimum}
+            {schema.minimum}
           </Typography>
           <Typography style={rangeItemStyle} variant='caption' align='right'>
-            {scopedSchema.maximum}
+            {schema.maximum}
           </Typography>
         </div>
         <Slider
           style={sliderStyle}
-          min={scopedSchema.minimum}
-          max={scopedSchema.maximum}
-          value={Number(data || scopedSchema.default)}
+          min={schema.minimum}
+          max={schema.maximum}
+          value={Number(data || schema.default)}
           onChange={(_ev, value) => {
             handleChange(path, Number(value));
           }
           }
           id={id + '-input'}
           disabled={!enabled}
-          step={scopedSchema.multipleOf || 1}
+          step={schema.multipleOf || 1}
         />
         <FormHelperText error={!isValid}>
           {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
@@ -120,4 +122,6 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialSliderControlTester: RankedTester = rankWith(4, isRangeControl);
-export default connectToJsonForms(mapStateToControlProps)(MaterialSliderControl);
+export default connect(
+  mapStateToControlProps, mapDispatchToControlProps
+)(MaterialSliderControl);

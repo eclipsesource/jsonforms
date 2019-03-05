@@ -9,5 +9,10 @@
   ],
   "files": [
     "./src/index.ts"
-  ]
+  ],
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "generateCodeForLibraries": false,
+    "skipTemplateCodegen": true
+  }
 }

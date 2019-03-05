@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {JsonSchema} from './jsonSchema';
+import { JsonSchema } from './jsonSchema';
 
 /**
  * Interface for describing an UI schema element that is referencing
@@ -80,14 +80,13 @@ export interface Condition {
   /**
    * The type of condition.
    */
-  type?: string;
+  readonly type?: string;
 }
 
 /**
  * A leaf condition.
  */
 export interface LeafCondition extends Condition, Scopable {
-
   type: 'LEAF';
 
   /**
@@ -101,24 +100,44 @@ export interface SchemaBasedCondition extends Condition, Scopable {
 }
 
 /**
+ * A composable condition.
+ */
+export interface ComposableCondition extends Condition {
+  conditions: Condition[];
+}
+
+/**
+ * An or condition.
+ */
+export interface OrCondition extends ComposableCondition {
+  type: 'OR';
+}
+
+/**
+ * An and condition.
+ */
+export interface AndCondition extends ComposableCondition {
+  type: 'AND';
+}
+
+/**
  * Common base interface for any UI schema element.
  */
 export interface UISchemaElement {
+  /**
+   * The type of this UI schema element.
+   */
+  type: string;
 
-    /**
-     * The type of this UI schema element.
-     */
-    type: string;
+  /**
+   * An optional rule.
+   */
+  rule?: Rule;
 
-    /**
-     * An optional rule.
-     */
-    rule?: Rule;
-
-    /**
-     * Any additional options.
-     */
-    options?: any;
+  /**
+   * Any additional options.
+   */
+  options?: any;
 }
 
 /**
@@ -221,5 +240,8 @@ export interface Categorization extends UISchemaElement {
    * The child elements of this categorization which are either of type
    * {@link Category} or {@link Categorization}.
    */
-  elements: (Category|Categorization)[];
+  elements: (Category | Categorization)[];
 }
+
+export const isGroup = (layout: Layout): layout is GroupLayout =>
+  layout.type === 'Group';

@@ -23,11 +23,28 @@
   THE SOFTWARE.
 */
 import { RankedTester } from '../testers';
-import { ADD_FIELD, REMOVE_FIELD } from '../actions';
+import {
+  ADD_FIELD,
+  AddFieldRendererAction,
+  REMOVE_FIELD,
+  RemoveFieldRendererAction
+} from '../actions';
+
+type ValidFieldReducerActions =
+  | AddFieldRendererAction
+  | RemoveFieldRendererAction;
+
+export type JsonFormsFieldRendererRegistryState = JsonFormsFieldRendererRegistryEntry[];
+
+export interface JsonFormsFieldRendererRegistryEntry {
+  tester: RankedTester;
+  field: any;
+}
 
 export const fieldReducer = (
-  state: { tester: RankedTester, field: any }[] = [],
-  { type, tester, field }) => {
+  state: JsonFormsFieldRendererRegistryState = [],
+  { type, tester, field }: ValidFieldReducerActions
+) => {
   switch (type) {
     case ADD_FIELD:
       return state.concat([{ tester, field }]);

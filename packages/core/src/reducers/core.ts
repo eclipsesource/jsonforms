@@ -22,13 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
-import { ErrorObject, ValidateFunction } from 'ajv';
-import { INIT, UPDATE_DATA } from '../actions';
+import cloneDeep from 'lodash/cloneDeep';
+import set from 'lodash/set';
+import get from 'lodash/get';
+import filter from 'lodash/filter';
+import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
+import {
+  INIT,
+  InitAction,
+  SET_AJV,
+  SET_SCHEMA,
+  SET_UISCHEMA,
+  SetAjvAction,
+  SetSchemaAction,
+  SetUISchemaAction,
+  UPDATE_DATA,
+  UpdateAction
+} from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
 
-const ajv = createAjv();
 const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   const valid = validator(data);
   if (valid) {
@@ -38,7 +51,7 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
-const sanitizeErrors = (validator, data) =>
+const sanitizeErrors = (validator: ValidateFunction, data: any) =>
   validate(validator, data).map(error => {
     error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
 
@@ -47,50 +60,98 @@ const sanitizeErrors = (validator, data) =>
 
 const alwaysValid: ValidateFunction = () => true;
 
-type CoreReducerState = {
-  data: any,
-  schema: JsonSchema,
-  uischema: UISchemaElement,
-  errors?: ErrorObject[],
-  validator?: ValidateFunction
-};
+export interface JsonFormsCore {
+  data: any;
+  schema: JsonSchema;
+  uischema: UISchemaElement;
+  errors?: ErrorObject[];
+  validator?: ValidateFunction;
+  ajv?: Ajv;
+}
 
-const initState = {
-  data: {} as any,
+const initState: JsonFormsCore = {
+  data: {},
   schema: {},
   uischema: undefined,
   errors: [],
-  validator: alwaysValid
+  validator: alwaysValid,
+  ajv: undefined
+};
+
+type ValidCoreActions =
+  | InitAction
+  | UpdateAction
+  | SetAjvAction
+  | SetSchemaAction
+  | SetUISchemaAction;
+
+const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
+  if (action && action.ajv) {
+    return action.ajv;
+  }
+  if (state.ajv) {
+    return state.ajv;
+  }
+  return createAjv();
 };
 
 export const coreReducer = (
-  state: CoreReducerState = initState,
-  action) => {
-
+  state: JsonFormsCore = initState,
+  action: ValidCoreActions
+) => {
   switch (action.type) {
     case INIT: {
-
-      const v = ajv.compile(action.schema);
+      const thisAjv = getOrCreateAjv(state, action);
+      const v = thisAjv.compile(action.schema);
       const e = sanitizeErrors(v, action.data);
 
       return {
+        ...state,
         data: action.data,
         schema: action.schema,
         uischema: action.uischema,
+        errors: e,
         validator: v,
-        errors: e
+        ajv: thisAjv
+      };
+    }
+    case SET_AJV: {
+      const currentAjv = action.ajv;
+      const validator = currentAjv.compile(state.schema);
+      const errors = sanitizeErrors(validator, state.data);
+      return {
+        ...state,
+        validator,
+        errors
+      };
+    }
+    case SET_SCHEMA: {
+      const v =
+        action.schema && state.ajv
+          ? state.ajv.compile(action.schema)
+          : state.validator;
+      return {
+        ...state,
+        validator: v,
+        schema: action.schema
+      };
+    }
+    case SET_UISCHEMA: {
+      return {
+        ...state,
+        uischema: action.uischema
       };
     }
     case UPDATE_DATA: {
-
       if (action.path === undefined || action.path === null) {
         return state;
       } else if (action.path === '') {
         // empty path is ok
-        const result = action.updater(_.cloneDeep(state.data));
+        const result = action.updater(cloneDeep(state.data));
 
         if (result === undefined || result === null) {
           return {
+            ...state,
             data: state.data,
             uischema: state.uischema,
             schema: state.schema
@@ -100,23 +161,23 @@ export const coreReducer = (
         const errors = sanitizeErrors(state.validator, result);
 
         return {
+          ...state,
           data: result,
-          uischema: state.uischema,
-          schema: state.schema,
-          validator: state.validator,
           errors
         };
       } else {
-        const oldData: any = _.get(state.data, action.path);
-        const newData = action.updater(oldData);
-        const newState: any = _.set(_.cloneDeep(state.data), action.path, newData);
+        const oldData: any = get(state.data, action.path);
+        let newData = action.updater(oldData);
+        if (newData === '') {
+          newData = undefined;
+        }
+
+        const newState: any = set(cloneDeep(state.data), action.path, newData);
         const errors = sanitizeErrors(state.validator, newState);
 
         return {
+          ...state,
           data: newState,
-          uischema: state.uischema,
-          schema: state.schema,
-          validator: state.validator,
           errors
         };
       }
@@ -126,14 +187,23 @@ export const coreReducer = (
   }
 };
 
-export const extractData = state => state.data;
-export const extractSchema = state => state.schema;
-export const extractUiSchema = state => state.uischema;
-export const errorAt = instancePath => (state): any[] => {
-  return _.filter(state.errors, (error: ErrorObject) => error.dataPath === instancePath);
+export const extractData = (state: JsonFormsCore) => get(state, 'data');
+export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
+export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
+export const errorAt = (instancePath: string) => (
+  state: JsonFormsCore
+): any[] => {
+  return filter(
+    state.errors,
+    (error: ErrorObject) => error.dataPath === instancePath
+  );
 };
-export const subErrorsAt = instancePath => (state): any[] => {
+export const subErrorsAt = (instancePath: string) => (
+  state: JsonFormsCore
+): any[] => {
   const path = `${instancePath}.`;
 
-  return _.filter(state.errors, (error: ErrorObject) => error.dataPath.startsWith(path));
+  return filter(state.errors, (error: ErrorObject) =>
+    error.dataPath.startsWith(path)
+  );
 };

@@ -22,16 +22,30 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import MaterialBooleanField, { materialBooleanFieldTester } from './MaterialBooleanField';
-import MaterialDateField, { materialDateFieldTester } from './MaterialDateField';
-import MaterialEnumField, { materialEnumFieldTester } from './MaterialEnumField';
-import MaterialIntegerField, { materialIntegerFieldTester } from './MaterialIntegerField';
-import MaterialNumberField, { materialNumberFieldTester } from './MaterialNumberField';
+import MaterialBooleanField, {
+  materialBooleanFieldTester
+} from './MaterialBooleanField';
+import MaterialDateField, {
+  materialDateFieldTester
+} from './MaterialDateField';
+import MaterialEnumField, {
+  materialEnumFieldTester
+} from './MaterialEnumField';
+import MaterialIntegerField, {
+  materialIntegerFieldTester
+} from './MaterialIntegerField';
+import MaterialNumberField, {
+  materialNumberFieldTester
+} from './MaterialNumberField';
 import MaterialNumberFormatField, {
   materialNumberFormatFieldTester
 } from './MaterialNumberFormatField';
-import MaterialTextField, { materialTextFieldTester } from './MaterialTextField';
-import MaterialTimeField, { materialTimeFieldTester } from './MaterialTimeField';
+import MaterialTextField, {
+  materialTextFieldTester
+} from './MaterialTextField';
+import MaterialTimeField, {
+  materialTimeFieldTester
+} from './MaterialTimeField';
 
 export {
   MaterialBooleanField,

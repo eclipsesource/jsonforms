@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   mapStateToLayoutProps,
   RankedTester,
@@ -31,7 +32,6 @@ import {
   uiTypeIs,
   VerticalLayout,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
 /**
@@ -54,6 +54,6 @@ export const MaterialVerticalLayoutRenderer  = (
   return <MaterialLayoutRenderer {...childProps}/>;
 };
 
-export default connectToJsonForms(
+export default connect(
   mapStateToLayoutProps
 )(MaterialVerticalLayoutRenderer);

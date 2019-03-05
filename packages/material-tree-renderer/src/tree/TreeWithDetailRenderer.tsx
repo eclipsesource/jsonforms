@@ -1,38 +1,36 @@
 // tslint:disable:jsx-no-multiline-js
 // tslint:disable:max-line-length
-import * as _ from 'lodash';
-import * as React from 'react';
+import has from 'lodash/has';
+import get from 'lodash/get';
+import React from 'react';
 import {
   Actions,
-  ControlProps,
   ControlState,
-  generateDefaultUISchema,
-  getData,
-  JsonSchema7,
+  findUISchema,
+  getData, getSchema,
+  JsonFormsState,
+  JsonSchema,
+  OwnPropsOfControl,
   Paths,
   Resolve,
-  Runtime,
-  UISchemaElement,
+  Runtime, StatePropsOfControl,
+  UISchemaElement
 } from '@jsonforms/core';
-import { Control, JsonForms } from '@jsonforms/react';
+import { Control, ResolvedJsonForms } from '@jsonforms/react';
+/* tslint:disable:next-line */
+const HTML5Backend = require('react-dnd-html5-backend');
+const { DragDropContext } = require('react-dnd');
 import { connect } from 'react-redux';
-import ObjectListItem from './ObjectListItem';
-import ExpandRootArray from './ExpandRootArray';
-import AddItemDialog from './AddItemDialog';
-import HTML5Backend from 'react-dnd-html5-backend';
-// import TouchBackend from 'react-dnd-touch-backend';
-import { DragDropContext } from 'react-dnd';
-import { TreeWithDetail } from '../TreeWithDetail';
-import { getUiSchemata } from '../reducers';
-import {
-  StyleRulesCallback,
-  withStyles,
-  WithStyles
-} from '@material-ui/core/styles';
 import { compose } from 'recompose';
+import ObjectListItem from './ObjectListItem';
+import { ExpandRootArray } from './ExpandRootArray';
+import AddItemDialog from './AddItemDialog';
+import { StyleRulesCallback, withStyles, WithStyles } from '@material-ui/core/styles';
+import { InstanceLabelProvider, SchemaLabelProvider } from '../helpers/LabelProvider';
+import { AnyAction, Dispatch } from 'redux';
 
 export interface MasterProps {
-  schema: JsonSchema7;
+  schema: JsonSchema;
   path: string;
   rootData: any;
   selection: any;
@@ -45,7 +43,10 @@ export interface MasterProps {
   };
   uischema: UISchemaElement;
   filterPredicate: any;
-  labelProvider: any;
+  labelProviders: {
+    forSchema: SchemaLabelProvider;
+    forData: InstanceLabelProvider;
+  };
   imageProvider: any;
 }
 
@@ -58,7 +59,7 @@ const Master = (
     uischema,
     rootData,
     filterPredicate,
-    labelProvider,
+    labelProviders,
     imageProvider
   }: MasterProps) => {
   if (schema.items !== undefined) {
@@ -70,9 +71,8 @@ const Master = (
           path={path}
           selection={selection}
           handlers={handlers}
-          uischema={uischema}
           filterPredicate={filterPredicate}
-          labelProvider={labelProvider}
+          labelProvider={labelProviders.forData}
           imageProvider={imageProvider}
         />
       </ul>
@@ -89,46 +89,52 @@ const Master = (
         handlers={handlers}
         isRoot={true}
         filterPredicate={filterPredicate}
-        labelProvider={labelProvider}
+        labelProvider={labelProviders.forData}
         imageProvider={imageProvider}
       />
     </ul>
   );
 };
 
-const isNotTuple = (schema: JsonSchema7) => !Array.isArray(schema.items);
+const isNotTuple = (schema: JsonSchema) => !Array.isArray(schema.items);
 
 const styles: StyleRulesCallback<'treeMasterDetailContent' |
-                                 'treeMasterDetail' |
-                                 'treeMasterDetailMaster' |
-                                 'treeMasterDetailDetail'> = () => ({
-  treeMasterDetailContent: {},
+  'treeMasterDetail' |
+  'treeMasterDetailMaster' |
+  'treeMasterDetailDetail'> = () => ({
+  treeMasterDetailContent: {
+    paddingTop: '1em',
+    paddingBottom: '1em'
+  },
+  // tslint:disable-next-line: object-literal-key-quotes
   treeMasterDetail: {
     display: 'flex',
-    flexDirection: 'column', // tslint:disable-next-line:object-literal-key-quotes
+    flexDirection: 'column',
+    // tslint:disable-next-line:object-literal-key-quotes
     '& $treeMasterDetailContent': {
       display: 'flex',
       flexDirection: 'row'
     }
   },
+  // tslint:disable-next-line: object-literal-key-quotes
   treeMasterDetailMaster: {
     flex: 1,
     padding: '0.5em',
-    borderStyle: 'solid',
+    height: 'auto',
+    borderRight: '0.2em solid lightgrey',
     borderWidth: 'thin',
-    borderColor: 'lightgrey',
-    borderRadius: '0.2em', // tslint:disable-next-line:object-literal-key-quotes
+    // tslint:disable-next-line:object-literal-key-quotes
     '& ul': {
       listStyleType: 'none',
       margin: 0,
       padding: 0,
       position: 'relative',
-      overflow: 'hidden', // tslint:disable-next-line:object-literal-key-quotes
+      overflow: 'hidden',
+      // tslint:disable-next-line:object-literal-key-quotes
       '&:after': {
         content: '""',
         position: 'absolute',
         left: '0.2em',
-        borderLeft: '1px solid lightgrey',
         height: '0.6em',
         bottom: '0'
       }, // tslint:disable-next-line:object-literal-key-quotes
@@ -137,54 +143,63 @@ const styles: StyleRulesCallback<'treeMasterDetailContent' |
       }
     }
   },
+  // tslint:disable-next-line: object-literal-key-quotes
   treeMasterDetailDetail: {
     flex: 3,
     padding: '0.5em',
-    borderStyle: 'solid',
-    borderWidth: 'thin',
-    borderColor: 'lightgrey',
-    borderRadius: '0.2em', // tslint:disable-next-line:object-literal-key-quotes
+    paddingLeft: '1em',
+    // tslint:disable-next-line:object-literal-key-quotes
     '&:first-child': {
       marginRight: '0.25em'
     }
   }
 });
 
-export interface TreeMasterDetailState extends ControlState {
+export interface TreeWithDetailState extends ControlState {
   selected: {
-    schema: JsonSchema7,
+    schema: JsonSchema,
     data: any,
     path: string
   };
   dialog: {
     open: boolean,
-    schema: JsonSchema7,
+    schema: JsonSchema,
     path: string
   };
 }
 
-export interface TreeProps extends ControlProps {
-  resolvedSchema: any;
+export interface StatePropsOfTreeWithDetail extends StatePropsOfControl {
+  classes?: any;
   rootData: any;
   resolvedRootData: any;
-  addToRoot: any;
-  uiSchemata?;
   filterPredicate: any;
-  labelProvider: any;
+  labelProviders: {
+    forSchema: SchemaLabelProvider;
+    forData: InstanceLabelProvider;
+  };
   imageProvider: any;
 }
 
-export class TreeMasterDetail extends Control
-  <TreeProps &
+export interface DispatchPropsOfTreeWithDetail {
+  addToRoot: any;
+}
+
+export interface TreeWithDetailProps
+  extends StatePropsOfTreeWithDetail, DispatchPropsOfTreeWithDetail {
+
+}
+
+export class TreeWithDetailRenderer extends Control
+  <TreeWithDetailProps &
     WithStyles<'treeMasterDetailContent' |
-               'treeMasterDetail'|
-               'treeMasterDetailMaster' |
-               'treeMasterDetailDetail'>,
-    TreeMasterDetailState> {
+      'treeMasterDetail'|
+      'treeMasterDetailMaster' |
+      'treeMasterDetailDetail'>,
+    TreeWithDetailState> {
 
   componentWillMount() {
-    const { uischema, resolvedRootData, resolvedSchema } = this.props;
-    const controlElement = uischema as TreeWithDetail;
+    const { uischema, resolvedRootData, schema } = this.props;
+    const controlElement = uischema;
     this.setState({
       dialog: {
         open: false,
@@ -194,10 +209,10 @@ export class TreeMasterDetail extends Control
     });
 
     const path = Paths.fromScopable(controlElement);
-    if (_.isArray(resolvedRootData)) {
+    if (Array.isArray(resolvedRootData)) {
       this.setState({
         selected: {
-          schema: resolvedSchema.items,
+          schema: schema.items as JsonSchema,
           data: resolvedRootData[0],
           path: Paths.compose(path, '0')
         }
@@ -205,7 +220,7 @@ export class TreeMasterDetail extends Control
     } else {
       this.setState({
         selected: {
-          schema: resolvedSchema,
+          schema: schema,
           data: resolvedRootData,
           path: path
         }
@@ -213,7 +228,7 @@ export class TreeMasterDetail extends Control
     }
   }
 
-  setSelection = (schema, data, path) => () => {
+  setSelection = (schema: JsonSchema, data: any, path: string) => () => {
     this.setState({
       selected: {
         schema,
@@ -221,9 +236,9 @@ export class TreeMasterDetail extends Control
         path
       }
     });
-  }
+  };
 
-  openDialog = (schema, path) => () => {
+  openDialog = (schema: JsonSchema, path: string) => () => {
     this.setState({
       dialog: {
         open: true,
@@ -231,7 +246,7 @@ export class TreeMasterDetail extends Control
         path
       }
     });
-  }
+  };
 
   closeDialog = () => {
     this.setState({
@@ -241,21 +256,32 @@ export class TreeMasterDetail extends Control
         path: undefined
       }
     });
-  }
+  };
 
   render() {
-    const { uischema, schema, resolvedSchema, visible, path, resolvedRootData, rootData, addToRoot,
-            uiSchemata, filterPredicate, labelProvider, imageProvider, classes } = this.props;
-    const controlElement = uischema as TreeWithDetail;
+    const {
+      uischema,
+      schema,
+      visible,
+      path,
+      resolvedRootData,
+      rootData,
+      addToRoot,
+      filterPredicate,
+      labelProviders,
+      imageProvider,
+      classes
+    } = this.props;
+    const controlElement = uischema;
     const dialogProps = {
       open: this.state.dialog.open
     };
 
     let resetSelection;
-    if (resolvedSchema.items !== undefined) {
-      resetSelection = this.setSelection(resolvedSchema.items, resolvedRootData[0], Paths.compose(path, '0'));
+    if (schema.items !== undefined) {
+      resetSelection = this.setSelection(schema.items as JsonSchema, resolvedRootData[0], Paths.compose(path, '0'));
     } else {
-      resetSelection = this.setSelection(resolvedSchema, resolvedRootData, path);
+      resetSelection = this.setSelection(schema, resolvedRootData, path);
     }
     const handlers = {
       onSelect: this.setSelection,
@@ -263,11 +289,7 @@ export class TreeMasterDetail extends Control
       resetSelection: resetSelection
     };
 
-    let detailSchema;
-    if (this.state.selected && this.state.selected.schema && this.state.selected.schema.$id) {
-      const uiSchema = uiSchemata[this.state.selected.schema.$id];
-      detailSchema = uiSchema ? uiSchema : generateDefaultUISchema(this.state.selected.schema);
-    }
+    const detailUiSchema = this.props.findUISchema(this.state.selected.schema, undefined, path);
 
     return (
       <div hidden={!visible} className={classes.treeMasterDetail}>
@@ -277,9 +299,7 @@ export class TreeMasterDetail extends Control
           </label>
           {
             Array.isArray(resolvedRootData) &&
-            <button
-              onClick={addToRoot(schema, path)}
-            >
+            <button onClick={addToRoot(schema, path)}>
               Add to root
             </button>
           }
@@ -288,23 +308,23 @@ export class TreeMasterDetail extends Control
           <div className={classes.treeMasterDetailMaster}>
             <Master
               uischema={uischema}
-              schema={resolvedSchema}
+              schema={schema}
               path={path}
               handlers={handlers}
               selection={this.state.selected.data}
               rootData={rootData}
               filterPredicate={filterPredicate}
-              labelProvider={labelProvider}
+              labelProviders={labelProviders}
               imageProvider={imageProvider}
             />
           </div>
           <div className={classes.treeMasterDetailDetail}>
             {
               this.state.selected ?
-                <JsonForms
+                <ResolvedJsonForms
                   schema={this.state.selected.schema}
                   path={this.state.selected.path}
-                  uischema={detailSchema}
+                  uischema={detailUiSchema}
                 /> : 'Select an item'
             }
           </div>
@@ -312,13 +332,15 @@ export class TreeMasterDetail extends Control
         <div>
           {
             this.state.dialog.open &&
-              <AddItemDialog
-                path={this.state.dialog.path}
-                schema={this.state.dialog.schema}
-                closeDialog={this.closeDialog}
-                dialogProps={dialogProps}
-                setSelection={this.setSelection}
-              />
+            <AddItemDialog
+              path={this.state.dialog.path}
+              schema={this.state.dialog.schema}
+              closeDialog={this.closeDialog}
+              dialogProps={dialogProps}
+              setSelection={this.setSelection}
+              labelProvider={labelProviders.forSchema}
+              imageProvider={imageProvider}
+            />
           }
         </div>
       </div>
@@ -326,41 +348,67 @@ export class TreeMasterDetail extends Control
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+export interface WithLabelProviders {
+  // TODO typings
+  labelProviders: {
+    forSchema: SchemaLabelProvider;
+    forData: InstanceLabelProvider;
+  };
+}
+
+export interface WithLabelProvider {
+  labelProvider: any;
+}
+
+export interface WithImageProvider {
+  imageProvider: any;
+}
+
+export interface OwnPropsOfTreeControl extends OwnPropsOfControl {
+  filterPredicate: any;
+}
+
+const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl & WithImageProvider & WithLabelProviders): StatePropsOfTreeWithDetail => {
   const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
-  const visible = _.has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
-  const enabled = _.has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
+  const visible = has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps, state);
+  const enabled = has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps, state);
   const rootData = getData(state);
-  const uiSchemata = getUiSchemata(state);
+  const rootSchema = getSchema(state);
+  const resolvedSchema = Resolve.schema(
+    ownProps.schema,
+    ownProps.uischema.scope,
+    rootSchema
+  );
 
   return {
     rootData: getData(state),
+    label: get(ownProps.uischema, 'label') as string,
     resolvedRootData: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
-    schema: ownProps.schema,
-    resolvedSchema: Resolve.schema(ownProps.schema, ownProps.uischema.scope),
+    schema:  resolvedSchema || rootSchema,
+    findUISchema: findUISchema(state),
     path,
     visible,
     enabled,
-    uiSchemata,
     filterPredicate: ownProps.filterPredicate,
-    labelProvider: ownProps.labelProvider,
-    imageProvider: ownProps.imageProvider
+    imageProvider: ownProps.imageProvider,
+    labelProviders: ownProps.labelProviders,
+    rootSchema: getSchema(state)
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  addToRoot(schema, path) {
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): DispatchPropsOfTreeWithDetail => ({
+  addToRoot(schema: JsonSchema, path: string) {
     return () => {
       if (isNotTuple(schema)) {
         dispatch(
           Actions.update(
             path,
             data => {
-              const clone = data.slice();
-              clone.push({});
+              const clonedData = data.slice();
+              clonedData.push({});
 
-              return clone;
+              return clonedData;
             }
           )
         );
@@ -369,13 +417,13 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-const DnDTreeMasterDetail = compose(
+const DnDTreeMasterDetail = compose<TreeWithDetailProps, TreeWithDetailProps>(
   withStyles(styles, { name: 'TreeMasterDetail' }),
   DragDropContext(HTML5Backend)
-)(TreeMasterDetail);
+)(TreeWithDetailRenderer);
 
-export const TreeWithDetailRenderer = connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(DnDTreeMasterDetail);
-export default TreeWithDetailRenderer;
+const ConnectedTreeWithDetailRenderer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DnDTreeMasterDetail);
+export default ConnectedTreeWithDetailRenderer;

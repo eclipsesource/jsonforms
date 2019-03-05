@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isTimeControl,
@@ -31,10 +32,10 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
+import { VanillaRendererProps } from '../index';
 
-export const TimeField = (props: FieldProps) => {
+export const TimeField = (props: FieldProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (
@@ -57,7 +58,7 @@ export const TimeField = (props: FieldProps) => {
  */
 export const timeFieldTester: RankedTester = rankWith(2, isTimeControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(TimeField);

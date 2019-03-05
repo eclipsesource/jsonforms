@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/react",
-  "version": "2.0.7",
+  "version": "2.2.1-alpha.4",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -19,11 +19,11 @@
     "bundle": "../../node_modules/.bin/webpack --config ./webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src"
+    "test": "jest --no-cache",
+    "test-cov": "jest --no-cache",
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms React Core' --mode file --out docs src"
   },
   "ava": {
     "verbose": true,
@@ -32,6 +32,23 @@
     ],
     "babel": "inherit"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "testMatch": [
+      "**/test/**/*.test.tsx"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/dist/"
+    ]
+  },
   "nyc": {
     "reporter": [
       "lcov",
@@ -39,17 +56,27 @@
     ]
   },
   "dependencies": {
-    "@jsonforms/core": "^2.0.7",
-    "lodash": "^4.17.4",
-    "react": "^16.3.2",
-    "react-redux": "^5.0.6"
+    "@types/react": "^16.4.14",
+    "@types/react-redux": "^5.0.19",
+    "lodash": "^4.17.4"
+  },
+  "peerDependencies": {
+    "@jsonforms/core": "^2.0.0",
+    "react": "^16.4.0",
+    "react-redux": "^6.0.0"
   },
   "devDependencies": {
-    "document-register-element": "^1.7.0",
-    "jsdom": "^11.9.0",
-    "jsdom-global": "^3.0.2",
-    "react-dom": "^16.3.2",
-    "redux": "^3.7.2",
-    "redux-mock-store": "1.4.0"
+    "@jsonforms/core": "^2.2.1-alpha.4",
+    "@types/enzyme": "^3.1.15",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "jest": "^23.0.0",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "react-redux": "^6.0.0",
+    "redux": "^3.0.0",
+    "redux-mock-store": "1.4.0",
+    "ts-jest": "^23.0.0"
   }
 }

@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,48 +25,44 @@
 import * as React from 'react';
 import {
   Actions,
-  ControlElement,
-  getData,
-  HorizontalLayout,
+  ControlElement, getData,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
-  update
+  UISchemaElement
 } from '@jsonforms/core';
 import BooleanField, { materialBooleanFieldTester } from '../../src/fields/MaterialBooleanField';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
 
-export const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
+
+export const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+        fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
-
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
 
 const data = { foo: true };
 const schema = {
-  type: 'object',
-  properties: {
-    foo: {
-      type: 'boolean'
-    }
-  }
+  type: 'boolean'
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
@@ -126,59 +122,15 @@ describe('Material boolean field tester', () => {
 
 describe('Material boolean field', () => {
 
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
   /** Use this container to render components */
   const container = document.createElement('div');
 
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(container);
-  });
-
-  it('should autofocus first element', () => {
-    const jsonSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        firstBooleanField: { type: 'boolean' },
-        secondBooleanField: { type: 'boolean' }
-      }
-    };
-    const firstControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/firstBooleanField',
-      options: {
-        focus: true
-      }
-    };
-    const secondControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/secondBooleanField',
-      options: {
-        focus: true
-      }
-    };
-    const layout: HorizontalLayout = {
-      type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
-    };
-    const store = initJsonFormsStore(
-      {
-        'firstBooleanField': true,
-        'secondBooleanField': false
-      },
-      schema,
-      layout
-    );
-    const tree = ReactDOM.render(
-      <Provider store={store}>
-        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>,
-      container
-    );
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    expect(document.activeElement).not.toBe(inputs[0]);
-    expect(document.activeElement).toBe(inputs[1]);
   });
 
   // seems to be broken in material-ui
@@ -191,14 +143,17 @@ describe('Material boolean field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={control}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).toBe(input);
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeTruthy();
   });
 
   it('should not autofocus via option', () => {
@@ -210,14 +165,17 @@ describe('Material boolean field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={control}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBe(false);
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBe(false);
   });
 
   it('should not autofocus by default', () => {
@@ -226,157 +184,198 @@ describe('Material boolean field', () => {
       scope: '#/properties/foo',
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).not.toBe(input);
+    const input = wrapper.find('input').first();
+    expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.type).toBe('checkbox');
-    expect(input.checked).toBeTruthy();
+    const input = wrapper.find('input').first();
+    expect(input.props().type).toBe('checkbox');
+    expect(input.props().checked).toBeTruthy();
   });
 
   it('should update via input event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    input.checked = false;
-    TestUtils.Simulate.change(input);
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: false } });
     expect(getData(store.getState()).foo).toBeFalsy();
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore({'foo': false}, schema, uischema);
-    const tree = ReactDOM.render(
+    const store = initJsonFormsStore(data, schema, uischema);
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('foo', () => false));
-    expect(input.checked).toBeFalsy();
+    store.dispatch(Actions.update('foo', () => false));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().checked).toBeFalsy();
     expect(getData(store.getState()).foo).toBeFalsy();
   });
 
   it('should update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('foo', () => undefined));
-    expect(input.checked).toBeFalsy();
+    store.dispatch(Actions.update('foo', () => undefined));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().checked).toBeFalsy();
   });
 
   it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('foo', () => null));
-    expect(input.checked).toBeFalsy();
+    store.dispatch(Actions.update('foo', () => null));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().checked).toBeFalsy();
   });
 
   it('should not update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('bar', () => 11));
-    expect(input.checked).toBeTruthy();
+    const input = wrapper.find('input').first();
+    store.dispatch(Actions.update('bar', () => 11));
+    expect(input.props().checked).toBeTruthy();
   });
 
   it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>,
-      container
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update(null, () => false));
-    expect(input.checked).toBeTruthy();
+    const input = wrapper.find('input').first();
+    store.dispatch(Actions.update(null, () => false));
+    expect(input.props().checked).toBeTruthy();
   });
 
   it('should not update with an undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    store.dispatch(update(undefined, () => false));
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.checked).toBeTruthy();
+    store.dispatch(Actions.update(undefined, () => false));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().checked).toBeTruthy();
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema} enabled={false}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          enabled={false}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeTruthy();
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeFalsy();
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeFalsy();
   });
 
   it('id should be present in output', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
-        <BooleanField schema={schema} uischema={uischema} id='myid'/>
-      </Provider>,
-      container
-    );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.id).toBe('myid');
+        <BooleanField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+          id='myid'
+        />
+      </Provider>
+    )
+    const input = wrapper.find('input');
+    expect(input.props().id).toBe('myid');
   });
 });

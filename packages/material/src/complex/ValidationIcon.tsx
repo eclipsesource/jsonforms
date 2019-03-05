@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 
 import Badge from '@material-ui/core/Badge';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';

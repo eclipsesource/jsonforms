@@ -54,11 +54,11 @@ test('render with undefined elements', t => {
     schema: {},
     uischema,
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
 });
@@ -74,11 +74,11 @@ test('render with null elements', t => {
     uischema,
     styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
 });
@@ -94,11 +94,11 @@ test('render with children', t => {
     uischema,
     styles
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout');
 
   t.is(verticalLayout.tagName, 'DIV');
@@ -117,14 +117,14 @@ test('hide', t => {
     styles
   });
 
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer
         uischema={uischema}
         visible={false}
       />
     </Provider>
-  );
+  ) as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'vertical-layout'
@@ -144,11 +144,11 @@ test('show by default', t => {
     styles,
   });
 
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  );
+  ) as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'vertical-layout'

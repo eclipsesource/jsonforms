@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
+import { UISchemaElement } from '@jsonforms/core';
 
 export const schema = {
   type: 'object',
@@ -41,12 +42,12 @@ export const schema = {
   required: ['name']
 };
 
-export const uischema = undefined;
+export const uischema: UISchemaElement = undefined;
 
 export const data = {
   name: 'Send email to Adrian',
   description: 'Confirm if you have passed the subject\nHereby ...',
-  done: true,
+  done: true
 };
 
 registerExamples([

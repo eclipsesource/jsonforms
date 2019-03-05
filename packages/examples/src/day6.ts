@@ -26,7 +26,7 @@ import { registerExamples } from './register';
 import {
   data as day5Data,
   schema as day5Schema,
-  uischema as day5UiSchema,
+  uischema as day5UiSchema
 } from './day5';
 
 export const schema = day5Schema;

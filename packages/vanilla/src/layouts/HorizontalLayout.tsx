@@ -22,19 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-  HorizontalLayout,
-  mapStateToLayoutProps,
-  RankedTester,
-  rankWith,
-  uiTypeIs,
+    HorizontalLayout,
+    mapStateToLayoutProps,
+    RankedTester,
+    rankWith,
+    RendererProps,
+    uiTypeIs,
 } from '@jsonforms/core';
 import { addVanillaLayoutProps } from '../util';
-import { connectToJsonForms } from '@jsonforms/react';
 import { JsonFormsLayout } from './JsonFormsLayout';
-import { VanillaLayoutProps } from '../index';
 import { renderChildren } from './util';
+import { VanillaRendererProps } from '../index';
 
 /**
  * Default tester for a horizontal layout.
@@ -42,8 +43,7 @@ import { renderChildren } from './util';
  */
 export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
 
-const HorizontalLayoutRenderer = (
-  props: VanillaLayoutProps) => {
+const HorizontalLayoutRenderer = (props: RendererProps & VanillaRendererProps) => {
 
   const {
     schema,
@@ -65,13 +65,17 @@ const HorizontalLayoutRenderer = (
     <JsonFormsLayout
       className={layoutClassName}
       visible={visible}
+      uischema={uischema}
+      schema={schema}
+      getStyle={getStyle}
+      getStyleAsClassName={getStyleAsClassName}
     >
       {renderChildren(horizontalLayout, schema, childClassNames, path)}
     </JsonFormsLayout>
   );
 };
 
-const ConnectedHorizontalLayout = connectToJsonForms(
+const ConnectedHorizontalLayout = connect(
   addVanillaLayoutProps(mapStateToLayoutProps),
   null
 )(HorizontalLayoutRenderer);

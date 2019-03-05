@@ -1,36 +1,43 @@
-import {  Input, OnDestroy, OnInit } from '@angular/core';
-import { JsonFormsState, mapStateToLayoutProps } from '@jsonforms/core';
+import { Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  JsonFormsState,
+  Layout,
+  mapStateToLayoutProps,
+  UISchemaElement
+} from '@jsonforms/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
 import { NgRedux } from '@angular-redux/store';
+import { Subscription } from 'rxjs';
 
-export class JsonFormsIonicLayout extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
-
+export class JsonFormsIonicLayout extends JsonFormsBaseRenderer<Layout>
+  implements OnInit, OnDestroy {
   @Input() path: string;
-  protected subscription;
-  protected elements;
+  elements: UISchemaElement[];
+  subscription: Subscription;
+  initializers: any[] = [];
 
   constructor(protected ngRedux: NgRedux<JsonFormsState>) {
     super();
   }
 
-  connectLayoutToJsonForms = (store, ownProps) => {
-    return store.select().map(state => {
-      return mapStateToLayoutProps(state, ownProps);
-    });
-  }
-
   ngOnInit() {
-    const ownProps = {
-      ...this.getOwnProps(),
-      path: this.path
-    };
-    const state$ = this.connectLayoutToJsonForms(this.ngRedux, ownProps);
-    this.subscription = state$.subscribe(state => {
-      this.elements = state.uischema.elements;
-    });
+    this.subscription = this.ngRedux
+      .select()
+      .subscribe((state: JsonFormsState) => {
+        const ownProps = {
+          ...this.getOwnProps(),
+          path: this.path
+        };
+        const props = mapStateToLayoutProps(state, ownProps);
+        this.uischema = props.uischema as Layout;
+        this.schema = props.schema;
+        this.initializers.forEach(initializer => initializer(props));
+      });
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

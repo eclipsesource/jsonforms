@@ -32,14 +32,9 @@ import * as TestUtils from 'react-dom/test-utils';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': 'a' };
-  t.context.schema = {
-    'type': 'object',
-    'properties': {
-      'foo': {
-        'type': 'string',
-        'enum': ['a', 'b'],
-      },
-    },
+  t.context.schema =  {
+        type: 'string',
+    enum: ['a', 'b'],
   };
   t.context.uischema = {
     type: 'Control',
@@ -138,11 +133,11 @@ test('render', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   t.is(select.tagName, 'SELECT');
@@ -159,11 +154,11 @@ test('update via input event', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
 
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   select.value = 'b';
@@ -178,11 +173,11 @@ test('update via action', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('foo', () => 'b'));
   t.is(select.value, 'b');
@@ -195,11 +190,11 @@ test('update with undefined value', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('foo', () => undefined));
   t.is(select.selectedIndex, 0);
@@ -212,11 +207,11 @@ test('update with null value', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('foo', () => null));
   t.is(select.selectedIndex, 0);
@@ -229,11 +224,11 @@ test('update with wrong ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('bar', () => 'Bar'));
   t.is(select.selectedIndex, 1);
@@ -246,11 +241,11 @@ test('update with null ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update(null, () => false));
   t.is(select.selectedIndex, 1);
@@ -263,11 +258,11 @@ test('update with undefined ref', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update(undefined, () => false));
   t.is(select.selectedIndex, 1);
@@ -280,11 +275,11 @@ test('disable', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
       <EnumField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   t.true(select.disabled);
 });
@@ -295,11 +290,11 @@ test('enabled by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema
   });
-  const tree = TestUtils.renderIntoDocument(
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema}/>
+      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  );
+  ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   t.false(select.disabled);
 });

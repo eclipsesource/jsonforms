@@ -22,19 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-  FieldProps,
-  isBooleanControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith
+    FieldProps,
+    isBooleanControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith,
+    WithClassname
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Checkbox from '@material-ui/core/Checkbox';
 
-export const MaterialBooleanField = (props: FieldProps) => {
+export const MaterialBooleanField = (props: FieldProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
   const config = {'autoFocus': uischema.options && uischema.options.focus};
 
@@ -52,7 +53,7 @@ export const MaterialBooleanField = (props: FieldProps) => {
 
 export const materialBooleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialBooleanField);

@@ -29,18 +29,21 @@ export const schema = {
     address: {
       type: 'object',
       properties: {
-        street_address: { 'type': 'string' },
-        city:           { 'type': 'string' },
-        state:          { 'type': 'string' },
-        coord:          { '$ref': '#/definitions/coord' },
+        street_address: { type: 'string' },
+        city: { type: 'string' },
+        state: { type: 'string' },
+        coord: { $ref: '#/definitions/coord' }
       },
       required: ['street_address', 'city', 'state']
     },
-    coord: {'$ref': 'http://json-schema.org/geo'}
+    coord: {
+      $ref:
+        'http://json-schema.org/learn/examples/geographical-location.schema.json#'
+    }
   },
   type: 'object',
   properties: {
-      address: { '$ref': '#/definitions/address' }
+    address: { $ref: '#/definitions/address' }
   }
 };
 
@@ -61,11 +64,7 @@ export const uischema = {
     },
     {
       type: 'Control',
-      scope: '#/properties/address/properties/coord/properties/latitude'
-    },
-    {
-      type: 'Control',
-      scope: '#/properties/address/properties/coord/properties/longitude'
+      scope: '#/properties/address/properties/coord'
     }
   ]
 };

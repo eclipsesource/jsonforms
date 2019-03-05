@@ -22,20 +22,22 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import * as JsonRefs from 'json-refs';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import JsonRefs from 'json-refs';
 import { Provider } from 'react-redux';
 import {
-  Actions,
-  Generate,
-  getData,
-  getSchema,
-  getUiSchema,
-  JsonFormsState,
-  JsonFormsStore
+    Actions,
+    Generate,
+    getData,
+    getSchema,
+    getUiSchema,
+    JsonFormsState,
+    JsonFormsStore,
+    JsonSchema,
+    UISchemaElement
 } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { ResolvedJsonForms } from '@jsonforms/react';
 import { Store } from 'redux';
 
 /**
@@ -52,7 +54,7 @@ interface CustomElementConfig {
  */
 // Usage as decorator
 // tslint:disable:variable-name
-const CustomElement = (config: CustomElementConfig) => cls => {
+const CustomElement = (config: CustomElementConfig) => (cls: any) => {
 // tslint:enable:variable-name
   if (customElements.get(config.selector)) {
     return;
@@ -70,7 +72,7 @@ const CustomElement = (config: CustomElementConfig) => cls => {
 })
 export class JsonFormsElement extends HTMLElement {
 
-  private InnerComponent: any = JsonForms;
+  private InnerComponent: any = ResolvedJsonForms;
   private innerComponentParameters: any = {};
   private allowDynamicUpdate = false;
   private _store: JsonFormsStore;
@@ -97,7 +99,7 @@ export class JsonFormsElement extends HTMLElement {
    * @param {Object} store the store containing the jsonforms state and reducer
    */
   set store(store: Store<JsonFormsState>) {
-    const setupStore = (schema, uischema, d) => {
+    const setupStore = (schema: JsonSchema, uischema: UISchemaElement, d: any) => {
       store.dispatch(Actions.init(d, schema, uischema));
 
       return store;

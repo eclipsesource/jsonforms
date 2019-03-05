@@ -22,36 +22,21 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as _ from 'lodash';
 import { NgRedux } from '@angular-redux/store';
 import {
-    ControlProps,
-    JsonFormsState,
-    mapDispatchToControlProps,
-    mapStateToControlProps,
-    mapStateToLayoutProps,
-    StatePropsOfLayout
+  JsonFormsState,
+  mapStateToLayoutProps,
+  StatePropsOfLayout
 } from '@jsonforms/core';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-export const connectControlToJsonForms =
-(store: NgRedux<JsonFormsState>, ownProps: any): Observable<ControlProps> =>
-    store.select(
-        state => {
-            const props = mapStateToControlProps(state, ownProps);
-            const dispatch = mapDispatchToControlProps(store.dispatch);
-            const result: ControlProps =  {...props, ...dispatch};
+export const connectLayoutToJsonForms = (
+  store: NgRedux<JsonFormsState>,
+  ownProps: any
+): Observable<StatePropsOfLayout> =>
+  store.select(state => {
+    const props = mapStateToLayoutProps(state, ownProps);
 
-            return result;
-        },
-        ({handleChange: _x, ...x}, {handleChange: _y, ...y}) => _.isEqual(x, y)
-    );
-
-export const connectLayoutToJsonForms =
-(store: NgRedux<JsonFormsState>, ownProps: any): Observable<StatePropsOfLayout> =>
-    store.select(state => {
-        const props = mapStateToLayoutProps(state, ownProps);
-
-        return props;
-    });
+    return props;
+  });

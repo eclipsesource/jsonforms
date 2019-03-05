@@ -1,12 +1,14 @@
 {
   "name": "@jsonforms/angular-material",
-  "version": "2.0.7",
+  "version": "2.2.1-alpha.4",
   "description": "Material Renderer Set for Angular module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
   "homepage": "http://jsonforms.io/",
   "license": "MIT",
-  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "directories": {
     "src": "src",
     "test": "test"
@@ -16,13 +18,24 @@
   "scripts": {
     "bundle": "../../node_modules/.bin/webpack --config webpack/webpack.build.js --env=production --display-error-details",
     "build": "../../node_modules/.bin/tsc",
+    "build-prod": "../../node_modules/.bin/ngc",
     "dev": "../../node_modules/.bin/webpack --config webpack/webpack.dev.js && webpack-dev-server --config webpack/webpack.dev.js --env=dev --inline",
     "clean": "rm -rf lib coverage dist .nyc_output 2> /dev/null",
-    "lint": "../../node_modules/.bin/tslint --project ../../tslint.json --exclude src/models/jsonSchema.ts",
+    "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
-    "test": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/ava",
-    "test-cov": "../../node_modules/.bin/tsc --project test/tsconfig.test.json && ../../node_modules/.bin/nyc ../../node_modules/.bin/ava",
-    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Core' --mode file --out docs src"
+    "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Angular Material Renderers' --mode file --out docs src",
+    "test": "karma start ./test-config/karma.conf.js --single-run",
+    "test-ci": "karma start ./test-config/karma.conf.js --single-run",
+    "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
+    "e2e": "npm run e2e-update && npm run e2e-test",
+    "e2e-test": "protractor ./test-config/protractor.conf.js",
+    "e2e-update": "webdriver-manager update --standalone false --gecko false"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ]
   },
   "ava": {
     "verbose": true,
@@ -31,32 +44,66 @@
     ],
     "babel": "inherit"
   },
-  "nyc": {
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ]
+  "peerDependencies": {
+    "@angular-redux/store": "^7.1.1",
+    "@angular/animations": "^5.2.10",
+    "@angular/cdk": "^5.2.0",
+    "@angular/common": "^5.2.10",
+    "@angular/core": "^5.2.10",
+    "@angular/flex-layout": "^5.0.0-beta.15",
+    "@angular/forms": "^5.2.10",
+    "@angular/material": "^5.2.0",
+    "@angular/platform-browser": "^5.2.10",
+    "@jsonforms/angular": "^2.0.0",
+    "@jsonforms/core": "^2.0.0",
+    "core-js": "^2.5.3",
+    "rxjs": "^5.5.7",
+    "zone.js": "^0.8.26"
   },
   "dependencies": {
+    "angular-l10n": "^4.0.0-rc.0",
+    "hammerjs": "2.0.8"
+  },
+  "devDependencies": {
     "@angular-redux/store": "^7.1.1",
     "@angular/animations": "^5.2.10",
     "@angular/cdk": "^5.2.0",
     "@angular/common": "^5.2.10",
     "@angular/compiler": "^5.2.10",
     "@angular/core": "^5.2.10",
+    "@angular/flex-layout": "^5.0.0-beta.15",
     "@angular/forms": "^5.2.10",
     "@angular/material": "^5.2.0",
     "@angular/platform-browser": "^5.2.10",
     "@angular/platform-browser-dynamic": "^5.2.10",
-    "@jsonforms/angular": "^2.0.7",
-    "@jsonforms/core": "^2.0.7",
-    "core-js": "^2.5.3",
-    "redux": "^3.7.2",
-    "rxjs": "^5.5.7",
-    "zone.js": "^0.8.26"
-  },
-  "devDependencies": {
+    "@jsonforms/angular": "^2.2.1-alpha.4",
+    "@jsonforms/angular-test": "^2.2.1-alpha.4",
+    "@jsonforms/core": "^2.2.1-alpha.4",
+    "@jsonforms/examples": "^2.2.1-alpha.4",
+    "@types/node": "^10.10.0",
+    "angular2-template-loader": "^0.6.2",
     "copy-webpack-plugin": "^4.5.1",
-    "webpack-dev-server": "^2.11.2"
+    "core-js": "^2.5.3",
+    "html-loader": "^0.5.5",
+    "istanbul-instrumenter-loader": "^3.0.1",
+    "jasmine": "^3.2.0",
+    "jasmine-spec-reporter": "^4.2.1",
+    "karma": "^3.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage-istanbul-reporter": "^2.0.4",
+    "karma-jasmine": "^1.1.2",
+    "karma-jasmine-html-reporter": "^1.3.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^3.0.5",
+    "null-loader": "^0.1.1",
+    "protractor": "^5.4.1",
+    "redux": "^3.0.0",
+    "request": "^2.88.0",
+    "rxjs": "^5.5.7",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^7.0.1",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14",
+    "zone.js": "^0.8.26"
   }
 }

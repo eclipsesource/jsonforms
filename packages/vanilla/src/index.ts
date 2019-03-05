@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,20 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  DispatchPropsOfControl,
-  FieldProps,
-  RankedTester,
-  StatePropsOfControl,
-  StatePropsOfRenderer
-} from '@jsonforms/core';
-import { ComponentType } from 'react';
+import { RankedTester } from '@jsonforms/core';
 
 import {
   BooleanField,
   booleanFieldTester,
   DateField,
-  dateFieldTester, dateTimeFieldTester,
+  dateFieldTester,
+  dateTimeFieldTester,
   EnumField,
   enumFieldTester,
   IntegerField,
@@ -52,10 +46,7 @@ import {
   timeFieldTester
 } from './fields';
 
-import {
-  InputControl,
-  inputControlTester
-} from './controls';
+import { InputControl, inputControlTester } from './controls';
 
 import {
   ArrayControl,
@@ -78,17 +69,22 @@ import {
 } from './layouts';
 import DateTimeField from './fields/DateTimeField';
 
+export interface WithClassname {
+  className?: string;
+}
+
 /**
  * Additional renderer props specific to vanilla renderers.
  */
-export interface VanillaRendererProps {
+export interface VanillaRendererProps extends WithClassname {
+  classNames?: { [className: string]: string };
   /**
    * Returns all classes associated with the given style.
    * @param {string} string the style name
    * @param args any additional args necessary to calculate the classes
    * @returns {string[]} array of class names
    */
-  getStyle(string: string, ...args: any[]): string[];
+  getStyle?(string: string, ...args: any[]): string[];
 
   /**
    * Returns all classes associated with the given style as a single class name.
@@ -96,33 +92,11 @@ export interface VanillaRendererProps {
    * @param args any additional args necessary to calculate the classes
    * @returns {string[]} array of class names
    */
-  getStyleAsClassName(string: string, ...args: any[]): string;
+  getStyleAsClassName?(string: string, ...args: any[]): string;
 }
 
-/**
- * Vanilla specific state-related control props.
- */
-export interface VanillaControlStateProps extends StatePropsOfControl, VanillaRendererProps {
-  classNames: {
-    wrapper: string;
-    input: string;
-    label: string;
-    description: string;
-  };
-}
-
-/**
- * Vanilla specific control props.
- */
-export interface VanillaControlProps extends VanillaControlStateProps, DispatchPropsOfControl {
-
-}
-
-/**
- * Vanilla specific layout props.
- */
-export interface VanillaLayoutProps extends StatePropsOfRenderer, VanillaRendererProps {
-
+export interface WithChildren {
+  children: any;
 }
 
 export * from './controls';
@@ -132,7 +106,7 @@ export * from './layouts';
 export * from './reducers';
 export * from './util';
 
-export const vanillaRenderers = [
+export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: inputControlTester, renderer: InputControl },
   { tester: arrayControlTester, renderer: ArrayControl },
   { tester: labelRendererTester, renderer: LabelRenderer },
@@ -143,7 +117,7 @@ export const vanillaRenderers = [
   { tester: horizontalLayoutTester, renderer: HorizontalLayout }
 ];
 
-export const vanillaFields: { tester: RankedTester; field: ComponentType<FieldProps> }[] = [
+export const vanillaFields: { tester: RankedTester; field: any }[] = [
   { tester: booleanFieldTester, field: BooleanField },
   { tester: dateFieldTester, field: DateField },
   { tester: dateTimeFieldTester, field: DateTimeField },

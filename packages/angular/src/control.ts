@@ -1,80 +1,143 @@
 import {
+  Actions,
+  composeWithUi,
   computeLabel,
   ControlElement,
+  ControlProps,
   isPlainLabel,
   JsonFormsState,
   JsonSchema,
   mapDispatchToControlProps,
   mapStateToControlProps,
-  Resolve
+  OwnPropsOfControl
 } from '@jsonforms/core';
-import * as _ from 'lodash';
-import { OnDestroy, OnInit } from '@angular/core';
+import { Input, OnDestroy, OnInit } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
-import { Subscription } from 'rxjs/Subscription';
-import { FormControl } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  ValidationErrors,
+  ValidatorFn
+} from '@angular/forms';
+import { Subscription } from 'rxjs';
+
 import { JsonFormsBaseRenderer } from './base.renderer';
 
-export class JsonFormsControl extends JsonFormsBaseRenderer implements OnInit, OnDestroy {
+export class JsonFormsControl extends JsonFormsBaseRenderer<ControlElement>
+  implements OnInit, OnDestroy {
+  @Input() id: string;
+  @Input() disabled: boolean;
+  @Input() visible: boolean;
 
-  onChange: (event?: any) => void;
-  scopedSchema: JsonSchema;
-  label: string;
-  value: any;
-  disabled: boolean;
+  form: FormControl;
   subscription: Subscription;
-  form;
-  errors: any[] = [];
-  error: string;
+  data: any;
+  label: string;
+  description: string;
+  error: string | null;
+  scopedSchema: JsonSchema;
+  rootSchema: JsonSchema;
+  enabled: boolean;
+  hidden: boolean;
 
   constructor(protected ngRedux: NgRedux<JsonFormsState>) {
     super();
+    this.form = new FormControl(
+      {
+        value: '',
+        disabled: true
+      },
+      {
+        updateOn: 'change',
+        validators: this.validator.bind(this)
+      }
+    );
   }
 
-  connectControlToJsonForms = (store, ownProps: any) =>
-    store.select().map(state => {
-      const props = mapStateToControlProps(state, ownProps);
-      const dispatch = mapDispatchToControlProps(store.dispatch);
-      return {...props, ...dispatch};
-    })
+  getEventValue = (event: any) => event.value;
+
+  onChange(ev: any) {
+    const path = composeWithUi(this.uischema, this.path);
+    this.ngRedux.dispatch(Actions.update(path, () => this.getEventValue(ev)));
+    this.triggerValidation();
+  }
 
   ngOnInit() {
-    this.subscription = this
-      .connectControlToJsonForms(this.ngRedux, this.getOwnProps())
-      .subscribe(state => {
-        if (!this.form) {
-          this.form = new FormControl(
-            _.get(this.ngRedux.getState().jsonforms.core.data, state.path),
-            {updateOn: 'change', validators: this.validate}
-          );
-        }
-        this.onChange = ev => {
-          state.handleChange(state.path, ev.value);
-        };
-        this.errors = state.errors;
-        this.error = state.errors.join('\n');
-
+    this.subscription = this.ngRedux
+      .select()
+      .subscribe((state: JsonFormsState) => {
+        const props = this.mapToProps(state);
+        const {
+          data,
+          enabled,
+          errors,
+          label,
+          required,
+          schema,
+          rootSchema,
+          visible
+        } = props;
         this.label = computeLabel(
-          isPlainLabel(state.label) ? state.label : state.label.default, state.required);
-
-        this.uischema = state.uischema as ControlElement;
-        this.schema = state.schema;
-        this.scopedSchema = Resolve.schema(this.schema, (this.uischema as ControlElement).scope);
-        this.value = state.data;
-        this.disabled = !state.enabled;
-
-        // these cause the correct update of the error underline, seems to be
-        // related to ionic-team/ionic#11640
-        this.form.markAsTouched();
-        this.form.updateValueAndValidity();
+          isPlainLabel(label) ? label : label.default,
+          required
+        );
+        this.data = data;
+        this.error = errors ? errors.join('\n') : null;
+        this.enabled = enabled;
+        this.enabled ? this.form.enable() : this.form.disable();
+        this.hidden = !visible;
+        this.scopedSchema = schema;
+        this.rootSchema = rootSchema;
+        this.description =
+          this.scopedSchema !== undefined ? this.scopedSchema.description : '';
+        this.id = props.id;
+        this.form.setValue(data);
+        this.mapAdditionalProps(props);
       });
+    this.triggerValidation();
   }
 
-  validate = () => {
-    return this.errors.length > 0 ? ({ schema: this.errors[0] }) : null;
+  validator: ValidatorFn = (_c: AbstractControl): ValidationErrors | null => {
+    return this.error ? { error: this.error } : null;
+  };
+
+  // @ts-ignore
+  mapAdditionalProps(props: ControlProps) {
+    // do nothing by default
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  protected getOwnProps(): OwnPropsOfControl {
+    const props: OwnPropsOfControl = {
+      uischema: this.uischema,
+      schema: this.schema,
+      path: this.path,
+      id: this.id
+    };
+    if (this.disabled !== undefined) {
+      props.enabled = !this.disabled;
+    }
+    if (this.visible !== undefined) {
+      props.visible = this.visible;
+    }
+    return props;
+  }
+
+  protected mapToProps(state: JsonFormsState): ControlProps {
+    const props = mapStateToControlProps(state, this.getOwnProps());
+    const dispatch = mapDispatchToControlProps(this.ngRedux.dispatch);
+    return { ...props, ...dispatch };
+  }
+
+  protected triggerValidation() {
+    // these cause the correct update of the error underline, seems to be
+    // related to ionic-team/ionic#11640
+    this.form.markAsTouched();
+    this.form.updateValueAndValidity();
   }
 }

@@ -22,23 +22,23 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-    computeLabel,
-    ControlElement,
-    ControlState,
-    formatErrorMessage,
-    isDescriptionHidden,
-    isPlainLabel,
-    mapDispatchToControlProps,
-    mapStateToControlProps,
-    resolveSchema
+  computeLabel,
+  ControlProps,
+  ControlState,
+  formatErrorMessage,
+  isDescriptionHidden,
+  isPlainLabel,
+  mapDispatchToControlProps,
+  mapStateToControlProps
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
-import { VanillaControlProps } from '../index';
+import { Control } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
+import { VanillaRendererProps } from '../index';
 
-export class RadioGroupControl extends Control<VanillaControlProps, ControlState> {
+export class RadioGroupControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
 
     render() {
         const {
@@ -49,7 +49,6 @@ export class RadioGroupControl extends Control<VanillaControlProps, ControlState
             description,
             errors,
             data,
-            uischema,
             schema,
             visible,
         } = this.props;
@@ -62,7 +61,7 @@ export class RadioGroupControl extends Control<VanillaControlProps, ControlState
         };
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
-        const options = resolveSchema(schema, (uischema as ControlElement).scope).enum;
+        const options = schema.enum;
 
         return (
             <div
@@ -106,6 +105,6 @@ export class RadioGroupControl extends Control<VanillaControlProps, ControlState
     }
 }
 
-export default connectToJsonForms(
-    addVanillaControlProps(mapStateToControlProps), mapDispatchToControlProps)
-    (RadioGroupControl);
+export default connect(
+    addVanillaControlProps(mapStateToControlProps), mapDispatchToControlProps
+)(RadioGroupControl);

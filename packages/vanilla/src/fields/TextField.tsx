@@ -22,8 +22,9 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 import { SyntheticEvent } from 'react';
+import { connect } from 'react-redux';
 import {
   FieldProps,
   isStringControl,
@@ -32,9 +33,9 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
+import { VanillaRendererProps } from '../index';
 
-export const TextField = (props: FieldProps) => {
+export const TextField = (props: FieldProps & VanillaRendererProps) => {
   const {
     config,
     data,
@@ -42,11 +43,11 @@ export const TextField = (props: FieldProps) => {
     id,
     enabled,
     uischema,
-    scopedSchema,
+    schema,
     path,
     handleChange
   } = props;
-  const maxLength = scopedSchema.maxLength;
+  const maxLength = schema.maxLength;
 
   return (
     <input
@@ -71,7 +72,7 @@ export const TextField = (props: FieldProps) => {
  */
 export const textFieldTester: RankedTester = rankWith(1, isStringControl);
 
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(TextField);

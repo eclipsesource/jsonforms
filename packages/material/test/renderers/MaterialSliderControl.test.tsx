@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,22 +26,22 @@ import * as React from 'react';
 import {
   Actions,
   ControlElement,
-  getData,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
-  update
+  UISchemaElement
 } from '@jsonforms/core';
-import SliderControl,
- { materialSliderControlTester } from '../../src/controls/MaterialSliderControl';
+import SliderControl, { materialSliderControlTester } from '../../src/controls/MaterialSliderControl';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
-import * as ReactDOM from 'react-dom';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import Slider from '@material-ui/lab/Slider';
+
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const data = {'foo': 5};
 const schema = {
@@ -55,7 +55,7 @@ const schema = {
     },
   },
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo',
   options: {
@@ -63,17 +63,17 @@ const uischema = {
   }
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+      fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        controls: materialFields,
-      }
-    }
+    s
   );
-
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
@@ -223,12 +223,9 @@ describe('Material slider tester', () => {
 
 describe('Material slider control', () => {
 
-  /** Use this container to render components */
-  const container = document.createElement('div');
+  let wrapper: ReactWrapper;
 
-  afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
-  });
+  afterEach(() => wrapper.unmount());
 
   it('should render', () => {
     const jsonSchema: JsonSchema = {
@@ -243,29 +240,29 @@ describe('Material slider control', () => {
       }
     };
     const store = initJsonFormsStore({ foo: 5 }, jsonSchema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={jsonSchema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
 
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    expect(input.props.value).toBe(5);
+    const input = wrapper.find(Slider).first();
+    expect(input.props().value).toBe(5);
   });
 
   it('should update via action', () => {
     const store = initJsonFormsStore({ foo: 3 }, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    expect(input.props.value).toBe(3);
-    store.dispatch(update('foo', () => 4));
-    expect(input.props.value).toBe(4);
+    let slider = wrapper.find(Slider).first();
+    expect(slider.props().value).toBe(3);
+    store.dispatch(Actions.update('foo', () => 4));
+    wrapper.update();
+    slider = wrapper.find(Slider).first();
+    expect(slider.props().value).toBe(4);
   });
 
   it('should honor multipleOf', () => {
@@ -282,117 +279,113 @@ describe('Material slider control', () => {
       },
     };
     const store = initJsonFormsStore({ foo: 6 }, schemaWithMultipleOf, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schemaWithMultipleOf} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    expect(input.props.step).toBe(2);
+    const input = wrapper.find(Slider).first();
+    expect(input.props().step).toBe(2);
   });
 
   it('should not update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    store.dispatch(update('foo', () => undefined));
-    expect(input.props.value).toBe(schema.properties.foo.default);
+    store.dispatch(Actions.update('foo', () => undefined));
+    wrapper.update();
+    const input = wrapper.find(Slider);
+    expect(input.props().value).toBe(schema.properties.foo.default);
   });
 
   it('should not update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    store.dispatch(update('foo', () => null));
-    expect(input.props.value).toBe(schema.properties.foo.default);
+    store.dispatch(Actions.update('foo', () => null));
+    wrapper.update();
+    const slider = wrapper.find(Slider).first();
+    expect(slider.props().value).toBe(schema.properties.foo.default);
   });
 
   it('should not update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    store.dispatch(update('bar', () => 11));
-    expect(input.props.value).toBe(5);
+    store.dispatch(Actions.update('bar', () => 11));
+    wrapper.update();
+    const input = wrapper.find(Slider).first();
+    expect(input.props().value).toBe(5);
   });
 
   it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    store.dispatch(update(null, () => 3));
-    expect(input.props.value).toBe(5);
+    store.dispatch(Actions.update(null, () => 3));
+    wrapper.update();
+    const input = wrapper.find(Slider).first();
+    expect(input.props().value).toBe(5);
   });
 
   it('should not update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    store.dispatch(update(undefined, () => 13));
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    expect(input.props.value).toBe(5);
+    store.dispatch(Actions.update(undefined, () => 13));
+    wrapper.update();
+    const input = wrapper.find(Slider).first();
+    expect(input.props().value).toBe(5);
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema} enabled={false}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    expect(input.props.disabled).toBeTruthy();
+    const input = wrapper.find(Slider).first();
+    expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema}/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const input = TestUtils.findRenderedComponentWithType(tree, Slider) as Slider;
-    expect(input.props.disabled).toBeFalsy();
+    const input = wrapper.find(Slider).first();
+    expect(input.props().disabled).toBeFalsy();
   });
 
   it('should render id and input id', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = ReactDOM.render(
+    wrapper = mount(
       <Provider store={store}>
         <SliderControl schema={schema} uischema={uischema} id='#/properties/foo'/>
-      </Provider>,
-      container
+      </Provider>
     );
-    const divs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'div') as HTMLElement[];
+    const divs = wrapper.find('div');
     // id
-    expect(divs.find(d => d.id === '#/properties/foo')).toBeDefined();
+    expect(divs.find((d: any) => d.id === '#/properties/foo')).toBeDefined();
     // input id
-    expect(divs.find(d => d.id === '#/properties/foo-input')).toBeDefined();
+    expect(divs.find((d: any) => d.id === '#/properties/foo-input')).toBeDefined();
   });
 });

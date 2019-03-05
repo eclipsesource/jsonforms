@@ -22,9 +22,26 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { FieldProps, RankedTester } from '@jsonforms/core';
-import { MaterialArrayControlRenderer, materialArrayControlTester } from './complex';
-import { MaterialLabelRenderer, materialLabelRendererTester } from './additional';
+import {
+  JsonFormsFieldRendererRegistryEntry,
+  JsonFormsRendererRegistryEntry
+} from '@jsonforms/core';
+import {
+  materialAllOfControlTester,
+  MaterialAllOfRenderer,
+  materialAnyOfControlTester,
+  MaterialAnyOfRenderer,
+  MaterialArrayControlRenderer,
+  materialArrayControlTester,
+  materialObjectControlTester,
+  MaterialObjectRenderer,
+  materialOneOfControlTester,
+  MaterialOneOfRenderer
+} from './complex';
+import {
+  MaterialLabelRenderer,
+  materialLabelRendererTester
+} from './additional';
 import {
   MaterialBooleanControl,
   materialBooleanControlTester,
@@ -49,7 +66,7 @@ import {
   MaterialHorizontalLayout,
   materialHorizontalLayoutTester,
   MaterialVerticalLayout,
-  materialVerticalLayoutTester,
+  materialVerticalLayoutTester
 } from './layouts';
 import {
   MaterialBooleanField,
@@ -69,33 +86,53 @@ import {
   MaterialTimeField,
   materialTimeFieldTester
 } from './fields';
-import { ComponentType } from 'react';
+import MaterialCategorizationStepperLayout, {
+  materialCategorizationStepperTester
+} from './layouts/MaterialCategorizationStepperLayout';
 
 export * from './complex';
 export * from './controls';
 export * from './layouts';
 export * from './fields';
+export * from './util';
 
-export const materialRenderers = [
+export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   // controls
-  { tester: materialArrayControlTester, renderer: MaterialArrayControlRenderer },
+  {
+    tester: materialArrayControlTester,
+    renderer: MaterialArrayControlRenderer
+  },
   { tester: materialBooleanControlTester, renderer: MaterialBooleanControl },
   { tester: materialNativeControlTester, renderer: MaterialNativeControl },
   { tester: materialInputControlTester, renderer: MaterialInputControl },
   { tester: materialDateTimeControlTester, renderer: MaterialDateTimeControl },
   { tester: materialDateControlTester, renderer: MaterialDateControl },
-  { tester: materialSliderControlTester, renderer: MaterialSliderControl},
+  { tester: materialSliderControlTester, renderer: MaterialSliderControl },
+  { tester: materialObjectControlTester, renderer: MaterialObjectRenderer },
+  { tester: materialAllOfControlTester, renderer: MaterialAllOfRenderer },
+  { tester: materialAnyOfControlTester, renderer: MaterialAnyOfRenderer },
+  { tester: materialOneOfControlTester, renderer: MaterialOneOfRenderer },
   // layouts
   { tester: materialGroupTester, renderer: MaterialGroupLayout },
-  { tester: materialHorizontalLayoutTester, renderer: MaterialHorizontalLayout },
+  {
+    tester: materialHorizontalLayoutTester,
+    renderer: MaterialHorizontalLayout
+  },
   { tester: materialVerticalLayoutTester, renderer: MaterialVerticalLayout },
-  { tester: materialCategorizationTester, renderer: MaterialCategorizationLayout },
+  {
+    tester: materialCategorizationTester,
+    renderer: MaterialCategorizationLayout
+  },
+  {
+    tester: materialCategorizationStepperTester,
+    renderer: MaterialCategorizationStepperLayout
+  },
   { tester: materialArrayLayoutTester, renderer: MaterialArrayLayout },
   // additional
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
 ];
 
-export const materialFields: { tester: RankedTester, field: ComponentType<FieldProps> }[] = [
+export const materialFields: JsonFormsFieldRendererRegistryEntry[] = [
   { tester: materialBooleanFieldTester, field: MaterialBooleanField },
   { tester: materialDateFieldTester, field: MaterialDateField },
   { tester: materialEnumFieldTester, field: MaterialEnumField },
@@ -103,5 +140,5 @@ export const materialFields: { tester: RankedTester, field: ComponentType<FieldP
   { tester: materialNumberFieldTester, field: MaterialNumberField },
   { tester: materialNumberFormatFieldTester, field: MaterialNumberFormatField },
   { tester: materialTextFieldTester, field: MaterialTextField },
-  { tester: materialTimeFieldTester, field: MaterialTimeField },
+  { tester: materialTimeFieldTester, field: MaterialTimeField }
 ];

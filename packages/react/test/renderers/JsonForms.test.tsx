@@ -22,15 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import 'jsdom-global/register';
-
-import * as React from 'react';
-import { test } from 'ava';
-import * as _ from 'lodash';
+import React from 'react';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
-  jsonformsReducer,
+  jsonformsReducer, JsonFormsState,
   JsonFormsStore,
   JsonSchema,
   Layout,
@@ -41,10 +37,15 @@ import {
   uiTypeIs,
   unregisterRenderer
 } from '@jsonforms/core';
-import * as TestUtils from 'react-dom/test-utils';
-import * as ReactDOM from 'react-dom';
-import { JsonForms } from '../../src/JsonForms';
+import Enzyme from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import { StatelessRenderer } from '../../src/Renderer';
+import JsonRefs from 'json-refs';
+
+import Adapter from 'enzyme-adapter-react-16';
+import { JsonForms, JsonFormsDispatchRenderer } from '../../src/JsonForms';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 /**
  * Describes the initial state of the JSON Form's store.
@@ -71,15 +72,15 @@ export interface JsonFormsInitialState {
   [x: string]: any;
 }
 
-export const initJsonFormsStore = ({
-  data,
-  schema,
-  uischema,
-  ...props
-}: JsonFormsInitialState): JsonFormsStore => {
-  return createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    {
+export const initJsonFormsStore = (
+  {
+    data,
+    schema,
+    uischema,
+    ...props
+  }: JsonFormsInitialState
+): JsonFormsStore => {
+  const initState: JsonFormsState = {
       jsonforms: {
         core: {
           data,
@@ -88,7 +89,10 @@ export const initJsonFormsStore = ({
         },
         ...props
       }
-    }
+  };
+  return createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    initState
   );
 };
 
@@ -96,119 +100,97 @@ const CustomRenderer1: StatelessRenderer<RendererProps> = () => (<h1>test</h1>);
 const CustomRenderer2: StatelessRenderer<RendererProps> = () => (<h2>test</h2>);
 const CustomRenderer3: StatelessRenderer<RendererProps> = () => (<h3>test</h3>);
 
-test.beforeEach(t => {
-  t.context.data = { foo: 'John Doe' };
-  t.context.uischema = {
+const fixture = {
+  data: { foo: 'John Doe' },
+  uischema: {
     type: 'Control',
     scope: '#/properties/foo'
-  };
-  t.context.schema = {
+  },
+  schema: {
     type: 'object',
     properties: {
       foo: {
         type: 'string'
       }
     }
-  };
-  t.context.container = document.createElement('div');
-});
+  }
+};
 
-test.afterEach(t => {
-  ReactDOM.unmountComponentAtNode(t.context.container);
-});
-
-test('JsonForms renderer should report about missing renderer', t => {
-  const data = { foo: 'John Doe' };
-  const uischema = { type: 'Foo' };
-  const schema: JsonSchema = { type: 'object', properties: { foo: { type: 'string' } } };
+test('JsonForms renderer should report about missing renderer', () => {
   const store = initJsonFormsStore({
-    data,
-    schema,
-    uischema
+    data: fixture.data,
+    uischema: fixture.uischema
   });
 
-  const component = (
+  const wrapper = mount(
     <Provider store={store}>
-      <JsonForms uischema={uischema} schema={schema} />
+      <JsonForms />
     </Provider>
   );
-  const tree = ReactDOM.render(component, t.context.container);
 
-  const div = _.head(
-    TestUtils.scryRenderedDOMComponentsWithTag(
-      tree,
-      'div'
-    )
-  ) as HTMLDivElement;
-  t.is(div.textContent, 'No applicable renderer found.');
+  expect(wrapper.text()).toContain('No applicable renderer found');
+  wrapper.unmount();
 });
 
-test('JsonForms renderer should pick most applicable renderer', t => {
+test('JsonForms renderer should pick most applicable renderer', () => {
   const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    data: fixture.data,
+    uischema: fixture.uischema
   });
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
-  store.dispatch(registerRenderer(() => 5, CustomRenderer1));
-  const component = (
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+  const wrapper = mount(
     <Provider store={store}>
-      <JsonForms uischema={t.context.uischema} schema={t.context.schema} />
+      <JsonForms uischema={fixture.uischema} schema={fixture.schema} />
     </Provider>
   );
-  const tree = ReactDOM.render(component, t.context.container);
 
-  t.not(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1'), undefined);
+  expect(wrapper.find('h1').text()).toBe('test');
+  wrapper.unmount();
 });
 
-test('JsonForms renderer should not consider any de-registered renderers', t => {
+test('JsonForms renderer should not consider any de-registered renderers', () => {
   const tester1 = () => 9;
   const tester2 = () => 8;
   const tester3 = () => 10;
   const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
+    data: fixture.data,
+    uischema: fixture.uischema
   });
   store.dispatch(registerRenderer(tester1, CustomRenderer1));
   store.dispatch(registerRenderer(tester2, CustomRenderer2));
   store.dispatch(registerRenderer(tester3, CustomRenderer3));
   store.dispatch(unregisterRenderer(tester3, CustomRenderer2));
-  const component = (
+  const wrapper = mount(
     <Provider store={store}>
-      <JsonForms uischema={t.context.uischema} schema={t.context.schema} />
+      <JsonForms />
     </Provider>
   );
-  const tree = ReactDOM.render(component, t.context.container);
 
-  t.not(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1'), undefined);
+  expect(wrapper.find('h1')).toBeDefined();
+  wrapper.unmount();
 });
 
-test('deregister an unregistered renderer should be a no-op', t => {
-  const store = initJsonFormsStore({
-    data: t.context.data,
-    schema: t.context.schema,
-    uischema: t.context.uischema
-  });
+test('deregister an unregistered renderer should be a no-op', () => {
+  const store = initJsonFormsStore(fixture);
   store.dispatch(registerRenderer(() => 10, CustomRenderer1));
   store.dispatch(registerRenderer(() => 5, CustomRenderer2));
   const tester = () => 10;
   const nrOfRenderers = store.getState().jsonforms.renderers.length;
   store.dispatch(unregisterRenderer(tester, CustomRenderer3));
-  t.is(store.getState().jsonforms.renderers.length, nrOfRenderers);
+  expect(store.getState().jsonforms.renderers.length).toBe(nrOfRenderers);
 });
 
-test('ids should be unique within the same form', t => {
+test('ids should be unique within the same form', () => {
 
   const FakeLayout = (props: RendererProps) => {
-    const { uischema, schema, path } = props;
-    const layout = uischema as Layout;
+    const layout = props.uischema as Layout;
     const children = layout.elements.map((e, idx) => (
       <JsonForms
         uischema={e}
-        schema={schema}
-        path={path}
-        key={`${path}-${idx}`}
+        schema={fixture.schema}
+        path={props.path}
+        key={`${props.path}-${idx}`}
       />)
     );
     return (
@@ -234,8 +216,8 @@ test('ids should be unique within the same form', t => {
 
   const store = initJsonFormsStore(
     {
-      data: t.context.data,
-      schema: t.context.schema,
+      data: fixture.data,
+      schema: fixture.schema,
       uischema: uischema2,
       renderers: [{
         tester: rankWith(10, uiTypeIs('HorizontalLayout')),
@@ -244,28 +226,164 @@ test('ids should be unique within the same form', t => {
     }
   );
 
-  const ids = [];
+  const ids: string[] = [];
   const MyCustomRenderer: StatelessRenderer<any> = props => {
     ids.push(props.id);
     return (<div>Custom</div>);
   };
   store.dispatch(registerRenderer(() => 10, MyCustomRenderer));
 
-  ReactDOM.render(
+  const wrapper = mount(
     <Provider store={store}>
-      <JsonForms uischema={uischema2} schema={t.context.schema} />
+      <JsonForms uischema={uischema2} schema={fixture.schema} />
     </Provider>,
-    t.context.container
   );
 
-  t.is(
-    ids.indexOf('#/properties/foo') > -1,
-    true,
-    'Generated DOM should contain id: ' + '#/properties/foo'
+  expect(ids.indexOf('#/properties/foo') > -1).toBeTruthy();
+  expect(ids.indexOf('#/properties/foo2') > -1).toBeTruthy();
+  wrapper.unmount();
+});
+
+test('render schema with $ref', () => {
+
+  const schemaWithRef = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        $ref: '#/definitions/n'
+      }
+    }
+  };
+  const resolvedSchema = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'number'
+      }
+    }
+  };
+
+  const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+
+  const renderers = [{
+    tester: tester,
+    renderer: CustomRenderer2
+  }];
+
+  const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
+  jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
+
+  const wrapper = shallow(
+    <JsonFormsDispatchRenderer
+      path={''}
+      uischema={fixture.uischema}
+      schema={schemaWithRef}
+      renderers={renderers}
+      rootSchema={resolvedSchema}
+    />
   );
-  t.is(
-    ids.indexOf('#/properties/foo2') > -1,
-    true,
-    'Generated DOM should contain id: ' + '#/properties/foo2'
+
+  return jsonRefsPromise.then(() => {
+    wrapper.update();
+    expect(wrapper.state()).toHaveProperty('resolving', false);
+    expect(wrapper.find(CustomRenderer2).length).toBe(1);
+  });
+  wrapper.unmount();
+});
+
+test.skip('updates schema with ref', () => {
+
+  const schemaWithRef = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        $ref: '#/definitions/n'
+      }
+    }
+  };
+  const resolvedSchema = {
+    definitions: {
+      n: {
+        type: 'number'
+      }
+    },
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'number'
+      }
+    }
+  };
+
+  const tester1 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'string' ? 1 : -1;
+  const tester2 = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
+
+  const renderers = [{
+    tester: tester1,
+    renderer: CustomRenderer1
+  }, {
+    tester: tester2,
+    renderer: CustomRenderer2
+  }];
+
+  const wrapper = shallow(
+    <JsonFormsDispatchRenderer
+      path={''}
+      uischema={fixture.uischema}
+      schema={fixture.schema}
+      renderers={renderers}
+      rootSchema={resolvedSchema}
+    />
   );
+
+  expect(wrapper.find(CustomRenderer1).length).toBe(1);
+
+  const jsonRefsPromise = Promise.resolve({ resolved: resolvedSchema });
+  jest.spyOn(JsonRefs, 'resolveRefs').mockImplementation(() => jsonRefsPromise);
+
+  wrapper.setProps({ schema: schemaWithRef }
+  );
+
+  return jsonRefsPromise.then(() => {
+    wrapper.update();
+    expect(wrapper.state()).toHaveProperty('resolving', false);
+    expect(wrapper.find(CustomRenderer2).length).toBe(1);
+    wrapper.unmount();
+  });
+});
+
+test('JsonForms renderer should pick most applicable renderer via ownProps', () => {
+  const store = initJsonFormsStore({
+    data: fixture.data,
+    uischema: fixture.uischema
+  });
+  store.dispatch(registerRenderer(() => 10, CustomRenderer1));
+  store.dispatch(registerRenderer(() => 5, CustomRenderer2));
+  const wrapper = mount(
+    <Provider store={store}>
+      <JsonForms
+        uischema={fixture.uischema}
+        schema={fixture.schema}
+        renderers={[{ tester: () => 3, renderer: CustomRenderer3 }]}
+      />
+    </Provider>
+  );
+
+  expect(wrapper.find('h3').text()).toBe('test');
+  wrapper.unmount();
 });

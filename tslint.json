@@ -63,10 +63,8 @@
         "no-unsafe-any": false,
         "no-unsafe-finally": true,
         "no-unused-expression": true,
-        "no-unused-variable": true,
         "no-use-before-declare": true,
         "no-var-keyword": true,
-        "no-void-expression": true,
         "radix": true,
         "restrict-plus-operands": true,
         "strict-boolean-expressions": [true, "allow-null-union", "allow-undefined-union", "allow-string", "allow-number", "allow-mix"],
@@ -75,7 +73,6 @@
             true,
             "allow-null-check"
         ],
-        "typeof-compare": true,
         "use-isnan": true,
 
 
@@ -89,10 +86,6 @@
         "max-file-line-count": [
             true,
             500
-        ],
-        "max-line-length": [
-            true,
-            100
         ],
         "no-default-export": false,
         "no-mergeable-namespace": true,
@@ -109,10 +102,6 @@
                     "typeLiterals": "ignore"
                 }
             }
-        ],
-        "align": [
-            true,
-            "arguments", "parameters", "statements"
         ],
         "arrow-parens": [
             true,
@@ -164,7 +153,8 @@
         ],
         "semicolon": [
             true,
-            "always"
+            "always",
+            "strict-bound-class-methods"
         ],
         "variable-name": [false, "allow-leading-underscore"],
         "whitespace": [

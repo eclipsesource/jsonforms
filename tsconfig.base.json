@@ -10,7 +10,11 @@
     "target": "es5",
     "jsx": "react",
     "noUnusedParameters": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "esModuleInterop" :true
   },
   "types": ["jest"]
 }

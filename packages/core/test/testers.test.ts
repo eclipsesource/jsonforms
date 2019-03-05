@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,6 +40,7 @@ import {
   optionIs,
   or,
   schemaMatches,
+  schemaSubPathMatches,
   schemaTypeIs,
   scopeEndIs,
   scopeEndsWith,
@@ -152,7 +153,24 @@ test('schemaMatches should check type sub-schema of control via predicate', t =>
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema));
+  t.true(
+    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema)
+  );
+});
+
+test('schemaMatches should check type sub-schema of control via predicate also without explicit type', t => {
+  const schema: JsonSchema = {
+    properties: {
+      foo: { type: 'string' }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.true(
+    schemaMatches(subSchema => subSchema.type === 'string')(uischema, schema)
+  );
 });
 
 test('schemaMatches should return false for non-control UI schema elements', t => {
@@ -178,7 +196,7 @@ test('schemaMatches should return false for control pointing to invalid subschem
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/bar',
+    scope: '#/properties/bar'
   };
   t.false(schemaMatches(() => false)(uischema, schema));
 });
@@ -226,10 +244,7 @@ test('and should allow to compose multiple testers', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(and(
-    schemaTypeIs('string'),
-    scopeEndIs('foo')
-  )(uischema, schema));
+  t.true(and(schemaTypeIs('string'), scopeEndIs('foo'))(uischema, schema));
 });
 
 test('or should allow to compose multiple testers', t => {
@@ -243,10 +258,9 @@ test('or should allow to compose multiple testers', t => {
     type: 'Control',
     scope: '#/properties/foo'
   };
-  t.true(or(
-    schemaTypeIs('integer'),
-    optionIs('slider', true)
-  )(uischema, schema));
+  t.true(
+    or(schemaTypeIs('integer'), optionIs('slider', true))(uischema, schema)
+  );
 });
 
 test('tester isPrimitiveArrayControl', t => {
@@ -255,39 +269,33 @@ test('tester isPrimitiveArrayControl', t => {
     scope: '#/properties/foo'
   };
   t.true(
-    isPrimitiveArrayControl(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'array',
-            items: {type: 'integer'}
-          }
+    isPrimitiveArrayControl(control, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'array',
+          items: { type: 'integer' }
         }
       }
-    ),
+    }),
     `Primitive array tester was not triggered for 'integer' schema type`
   );
   t.false(
-    isPrimitiveArrayControl(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'array',
-            items: {type: 'object'}
-          }
+    isPrimitiveArrayControl(control, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'array',
+          items: { type: 'object' }
         }
       }
-    ),
+    }),
     `Primitive array tester was not triggered for 'object' schema type`
   );
 });
 
 test('tester isObjectArrayControl', t => {
-  t.false(isObjectArrayControl({type: 'Foo'}, null));
+  t.false(isObjectArrayControl({ type: 'Foo' }, null));
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
@@ -295,50 +303,41 @@ test('tester isObjectArrayControl', t => {
   t.false(isObjectArrayControl(control, undefined), 'No Schema not checked!');
 
   t.false(
-    isObjectArrayControl(
-      control,
-      {type: 'object', properties: {bar: {type: 'integer'}}}
-    ),
+    isObjectArrayControl(control, {
+      type: 'object',
+      properties: { bar: { type: 'integer' } }
+    }),
     'Wrong Schema Type not checked!'
   );
   t.false(
-    isObjectArrayControl(
-      control,
-      {type: 'object', properties: {foo: {type: 'array'}}}
-    ),
+    isObjectArrayControl(control, {
+      type: 'object',
+      properties: { foo: { type: 'array' } }
+    }),
     'Array Schema Type without items not checked!'
   );
   t.false(
-    isObjectArrayControl(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'array',
-            items: [
-              {type: 'integer'},
-              {type: 'string'},
-            ]
-          }
+    isObjectArrayControl(control, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'array',
+          items: [{ type: 'integer' }, { type: 'string' }]
         }
       }
-    ),
+    }),
     'Array Schema Type with tuples not checked!'
   );
   t.false(
-    isObjectArrayControl(
-      control,
-      {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'array',
-            items: {type: 'integer'}
-          }
+    isObjectArrayControl(control, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'array',
+          items: { type: 'integer' }
         }
       }
-    ),
+    }),
     'Array Schema Type with wrong item type not checked!'
   );
   const schema: JsonSchema = {
@@ -349,8 +348,8 @@ test('tester isObjectArrayControl', t => {
         items: {
           type: 'object',
           properties: {
-            x: {type: 'integer'},
-            y: {type: 'integer'}
+            x: { type: 'integer' },
+            y: { type: 'integer' }
           }
         }
       }
@@ -365,22 +364,22 @@ test('isBooleanControl', t => {
   t.false(isBooleanControl({ type: 'Foo' }, undefined));
   t.false(isBooleanControl({ type: 'Control' }, undefined));
   t.false(
-    isBooleanControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isBooleanControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   t.false(
-    isBooleanControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' }, bar: { type: 'boolean' } } }
-    )
+    isBooleanControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' }, bar: { type: 'boolean' } }
+    })
   );
   t.true(
-    isBooleanControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'boolean' } } }
-    )
+    isBooleanControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'boolean' } }
+    })
   );
 });
 
@@ -390,31 +389,28 @@ test('test isDateControl', t => {
   t.false(isDateControl({ type: 'Foo' }, undefined));
   t.false(isDateControl({ type: 'Control' }, undefined));
   t.false(
-    isDateControl(
-      t.context.uischmea,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isDateControl(t.context.uischmea, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   t.false(
-    isDateControl(
-      t.context.uischema,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: {
-            type: 'string',
-            format: 'date',
-          }
+    isDateControl(t.context.uischema, {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: {
+          type: 'string',
+          format: 'date'
         }
       }
-    )
+    })
   );
   t.true(
-    isDateControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string', format: 'date' } } }
-    )
+    isDateControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string', format: 'date' } }
+    })
   );
 });
 test('test isEnumControl', t => {
@@ -423,39 +419,36 @@ test('test isEnumControl', t => {
   t.false(isEnumControl({ type: 'Foo' }, undefined));
   t.false(isEnumControl({ type: 'Control' }, undefined));
   t.false(
-    isEnumControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isEnumControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   t.false(
-    isEnumControl(
-      t.context.uischema,
-      {
-        'type': 'object',
-        'properties': {
-          'foo': {
-            'type': 'string'
-          },
-          'bar': {
-            'type': 'string',
-            'enum': ['a', 'b']
-          }
+    isEnumControl(t.context.uischema, {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'string'
+        },
+        bar: {
+          type: 'string',
+          enum: ['a', 'b']
         }
       }
-    )
+    })
   );
   t.true(
-    isEnumControl(
-      t.context.uischema,
-      { 'type': 'object', 'properties': { 'foo': { 'type': 'string', 'enum': ['a', 'b'] } } }
-    )
+    isEnumControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string', enum: ['a', 'b'] } }
+    })
   );
   t.true(
-    isEnumControl(
-      t.context.uischema,
-      { 'type': 'object', 'properties': { 'foo': { 'type': 'number', 'enum': [1, 2] } } }
-    )
+    isEnumControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'number', enum: [1, 2] } }
+    })
   );
 });
 test('test isIntegerControl', t => {
@@ -464,21 +457,22 @@ test('test isIntegerControl', t => {
   t.false(isIntegerControl({ type: 'Foo' }, undefined));
   t.false(isIntegerControl({ type: 'Control' }, undefined));
   t.false(
-    isIntegerControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isIntegerControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   t.false(
-    isIntegerControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' }, bar: { type: 'integer' } } }
-    )
+    isIntegerControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' }, bar: { type: 'integer' } }
+    })
   );
   t.true(
-    isIntegerControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'integer' } } })
+    isIntegerControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'integer' } }
+    })
   );
 });
 test('test isNumberControl', t => {
@@ -487,24 +481,22 @@ test('test isNumberControl', t => {
   t.false(isNumberControl({ type: 'Foo' }, undefined));
   t.false(isNumberControl({ type: 'Control' }, undefined));
   t.false(
-    isNumberControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isNumberControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   t.false(
-    isNumberControl(
-      t.context.uischema,
-      {
-        type: 'object', properties: { foo: { type: 'string' }, bar: { type: 'number' } }
-      }
-    )
+    isNumberControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' }, bar: { type: 'number' } }
+    })
   );
   t.true(
-    isNumberControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'number' } } }
-    )
+    isNumberControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'number' } }
+    })
   );
 });
 test('tester isStringControl', t => {
@@ -513,24 +505,22 @@ test('tester isStringControl', t => {
   t.false(isStringControl({ type: 'Foo' }, undefined));
   t.false(isStringControl({ type: 'Control' }, undefined));
   t.false(
-    isStringControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'number' } } }
-    )
+    isStringControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'number' } }
+    })
   );
   t.false(
-    isStringControl(
-      t.context.uischema,
-      {
-        type: 'object', properties: { foo: { type: 'number' }, bar: { type: 'string' } }
-      }
-    )
+    isStringControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'number' }, bar: { type: 'string' } }
+    })
   );
   t.true(
-    isStringControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isStringControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
 });
 test('test isTimeControl', t => {
@@ -539,28 +529,25 @@ test('test isTimeControl', t => {
   t.false(isTimeControl({ type: 'Foo' }, undefined));
   t.false(isTimeControl({ type: 'Control' }, undefined));
   t.false(
-    isTimeControl(
-      t.context.uischmea,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isTimeControl(t.context.uischmea, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   t.false(
-    isTimeControl(
-      t.context.uischema,
-      {
-        type: 'object',
-        properties: {
-          foo: { type: 'string' },
-          bar: { type: 'string', format: 'time' }
-        }
+    isTimeControl(t.context.uischema, {
+      type: 'object',
+      properties: {
+        foo: { type: 'string' },
+        bar: { type: 'string', format: 'time' }
       }
-    )
+    })
   );
   t.true(
-    isTimeControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string', format: 'time' } } }
-    )
+    isTimeControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string', format: 'time' } }
+    })
   );
 });
 test('tester isMultiLineControl', t => {
@@ -569,18 +556,18 @@ test('tester isMultiLineControl', t => {
   t.false(isMultiLineControl({ type: 'Foo' }, undefined));
   t.false(isMultiLineControl({ type: 'Control' }, undefined));
   t.false(
-    isMultiLineControl(
-      t.context.uischema,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isMultiLineControl(t.context.uischema, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
   const control = t.context.uischema;
   control.options = { multi: true };
   t.true(
-    isMultiLineControl(
-      control,
-      { type: 'object', properties: { foo: { type: 'string' } } }
-    )
+    isMultiLineControl(control, {
+      type: 'object',
+      properties: { foo: { type: 'string' } }
+    })
   );
 });
 
@@ -632,6 +619,59 @@ test('tester isObjectArrayWithNesting', t => {
       }
     }
   };
+  const nestedSchema3 = {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        Level2: {
+          type: 'object',
+          properties: {
+            Level3: {
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const uischemaOptions: {
+    generate: ControlElement;
+    default: ControlElement;
+    inline: ControlElement;
+  } = {
+    default: {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail: 'DEFAULT'
+      }
+    },
+    generate: {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail: 'GENERATE'
+      }
+    },
+    inline: {
+      type: 'Control',
+      scope: '#',
+      options: {
+        detail: {
+          type: 'HorizontalLayout',
+          elements: [
+            {
+              type: 'Control',
+              scope: '#/properties/message'
+            }
+          ]
+        }
+      }
+    }
+  };
+
   t.false(isObjectArrayWithNesting(undefined, undefined));
   t.false(isObjectArrayWithNesting(null, undefined));
   t.false(isObjectArrayWithNesting({ type: 'Foo' }, undefined));
@@ -639,4 +679,29 @@ test('tester isObjectArrayWithNesting', t => {
   t.false(isObjectArrayWithNesting(uischema, schema));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema));
   t.true(isObjectArrayWithNesting(uischema, nestedSchema2));
+  t.true(isObjectArrayWithNesting(uischema, nestedSchema3));
+
+  t.false(isObjectArrayWithNesting(uischemaOptions.default, schema));
+  t.true(isObjectArrayWithNesting(uischemaOptions.generate, schema));
+  t.true(isObjectArrayWithNesting(uischemaOptions.inline, schema));
+});
+
+test('tester schemaSubPathMatches', t => {
+  const schema = {
+    title: 'Things',
+    type: 'array',
+    items: {
+      type: 'number'
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#'
+  };
+  t.true(
+    schemaSubPathMatches('items', items => items.type === 'number')(
+      uischema,
+      schema
+    )
+  );
 });

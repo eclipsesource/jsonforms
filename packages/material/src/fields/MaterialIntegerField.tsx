@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,19 +22,20 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
-  FieldProps,
-  isIntegerControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith
+    FieldProps,
+    isIntegerControl,
+    mapDispatchToFieldProps,
+    mapStateToFieldProps,
+    RankedTester,
+    rankWith,
+    WithClassname
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
-export const MaterialIntegerField = (props: FieldProps) => {
+export const MaterialIntegerField = (props: FieldProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
   const config = {'step': '1'};
 
@@ -53,7 +54,7 @@ export const MaterialIntegerField = (props: FieldProps) => {
   );
 };
 export const materialIntegerFieldTester: RankedTester = rankWith(2, isIntegerControl);
-export default connectToJsonForms(
+export default connect(
   mapStateToFieldProps,
   mapDispatchToFieldProps
 )(MaterialIntegerField);

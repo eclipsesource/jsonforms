@@ -22,34 +22,35 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
-import * as _ from 'lodash';
+import fpfilter from 'lodash/fp/filter';
+import fpkeys from 'lodash/fp/keys';
+import fpmap from 'lodash/fp/map';
+import fpflow from 'lodash/fp/flow';
+import filter from 'lodash/filter';
+import join from 'lodash/join';
+import React from 'react';
 import {
+  ArrayControlProps,
   ControlElement,
   formatErrorMessage,
   Helpers,
   isPlainLabel,
-  mapDispatchToTableControlProps,
-  mapStateToTableControlProps,
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps,
   Paths,
   RankedTester,
-  TableControlProps,
-  Test,
+  Resolve,
+  StatePropsOfControl,
+  Test
 } from '@jsonforms/core';
-import { connectToJsonForms, DispatchField, RendererComponent } from '@jsonforms/react';
+import { DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
+import { connect } from 'react-redux';
+import { VanillaRendererProps } from '../index';
 
-const {
-  createLabelDescriptionFrom,
-  convertToValidClassName
-} = Helpers;
+const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
 
-const {
-  or,
-  isObjectArrayControl,
-  isPrimitiveArrayControl,
-  rankWith
-} = Test;
+const { or, isObjectArrayControl, isPrimitiveArrayControl, rankWith } = Test;
 
 /**
  * Alternative tester for an array that also checks whether the 'table'
@@ -57,21 +58,21 @@ const {
  * @type {RankedTester}
  */
 export const tableArrayControlTester: RankedTester = rankWith(
-    3,
-    or(isObjectArrayControl, isPrimitiveArrayControl)
+  3,
+  or(isObjectArrayControl, isPrimitiveArrayControl)
 );
 
-export interface VanillaTableProps extends TableControlProps {
-  getStyleAsClassName(style: string): string;
-}
-
-class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
-
+class TableArrayControl extends React.Component<
+  ArrayControlProps & VanillaRendererProps,
+  any
+> {
   render() {
     const {
       addItem,
       uischema,
-      scopedSchema,
+      schema,
+      rootSchema,
+      createDefaultValue,
       path,
       data,
       visible,
@@ -85,12 +86,14 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
     const tableClass = getStyleAsClassName('array.table.table');
     const labelClass = getStyleAsClassName('array.table.label');
     const buttonClass = getStyleAsClassName('array.table.button');
-    const controlClass = [getStyleAsClassName('array.table'),
-      convertToValidClassName(controlElement.scope)].join(' ');
+    const controlClass = [
+      getStyleAsClassName('array.table'),
+      convertToValidClassName(controlElement.scope)
+    ].join(' ');
     const createControlElement = (key?: string): ControlElement => ({
       type: 'Control',
       label: false,
-      scope: scopedSchema.type === 'object' ? `#/properties/${key}` : '#'
+      scope: schema.type === 'object' ? `#/properties/${key}` : '#'
     });
     const labelObject = createLabelDescriptionFrom(controlElement);
     const isValid = errors.length === 0;
@@ -100,10 +103,11 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
     return (
       <div className={controlClass} hidden={!visible}>
         <header>
-          <label className={labelClass}>
-            {labelText}
-          </label>
-          <button className={buttonClass} onClick={addItem(path)}>
+          <label className={labelClass}>{labelText}</label>
+          <button
+            className={buttonClass}
+            onClick={addItem(path, createDefaultValue())}
+          >
             Add to {labelObject.text}
           </button>
         </header>
@@ -112,74 +116,91 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
         </div>
         <table className={tableClass}>
           <thead>
-          <tr>
-            {
-              scopedSchema.properties ?
-                _(scopedSchema.properties)
-                  .keys()
-                  .filter(prop => scopedSchema.properties[prop].type !== 'array')
-                  .map(prop => <th key={prop}>{prop}</th>)
-                  .value()
-                : <th>Items</th>
-            }
-            <th>
-              Valid
-            </th>
-          </tr>
+            <tr>
+              {schema.properties ? (
+                fpflow(
+                  fpkeys,
+                  fpfilter(prop => schema.properties[prop].type !== 'array'),
+                  fpmap(prop => <th key={prop}>{prop}</th>)
+                )(schema.properties)
+              ) : (
+                <th>Items</th>
+              )}
+              <th>Valid</th>
+            </tr>
           </thead>
           <tbody>
-          {
-            (!data || !Array.isArray(data) || data.length === 0) ?
-              <tr><td>No data</td></tr> :
+            {!data || !Array.isArray(data) || data.length === 0 ? (
+              <tr>
+                <td>No data</td>
+              </tr>
+            ) : (
               data.map((_child, index) => {
-                const childPath = Paths.compose(path, `${index}`);
-                const errorsPerEntry = _.filter(
-                  childErrors,
-                  error => error.dataPath.startsWith(childPath)
+                const childPath = Paths.compose(
+                  path,
+                  `${index}`
+                );
+                // TODO
+                const errorsPerEntry: any[] = filter(childErrors, error =>
+                  error.dataPath.startsWith(childPath)
                 );
 
                 return (
                   <tr key={childPath}>
-                    {
-                      scopedSchema.properties ?
-                        _.chain(scopedSchema.properties)
-                          .keys()
-                          .filter(prop => scopedSchema.properties[prop].type !== 'array')
-                          .map(prop => {
-                            const childPropPath = Paths.compose(childPath, prop.toString());
+                    {schema.properties ? (
+                      fpflow(
+                        fpkeys,
+                        fpfilter(
+                          prop => schema.properties[prop].type !== 'array'
+                        ),
+                        fpmap(prop => {
+                          const childPropPath = Paths.compose(
+                            childPath,
+                            prop.toString()
+                          );
 
-                            return (
-                              <td key={childPropPath}>
-                                <DispatchField
-                                  schema={scopedSchema}
-                                  uischema={createControlElement(prop)}
-                                  path={childPath}
-                                />
-                              </td>
-                            );
-                          })
-                          .value() :
-                        <td key={Paths.compose(childPath, index.toString())}>
-                          <DispatchField
-                            schema={scopedSchema}
-                            uischema={createControlElement()}
-                            path={childPath}
-                          />
-                        </td>
-                    }
+                          return (
+                            <td key={childPropPath}>
+                              <DispatchField
+                                schema={Resolve.schema(schema, `#/properties/${prop}`, rootSchema)}
+                                uischema={createControlElement(prop)}
+                                path={childPath + '.' + prop}
+                              />
+                            </td>
+                          );
+                        })
+                      )(schema.properties)
+                    ) : (
+                      <td
+                        key={Paths.compose(
+                          childPath,
+                          index.toString()
+                        )}
+                      >
+                        <DispatchField
+                          schema={schema}
+                          uischema={createControlElement()}
+                          path={childPath}
+                        />
+                      </td>
+                    )}
                     <td>
-                      {
-                        errorsPerEntry ?
-                          <span className={getStyleAsClassName('array.validation.error')}>
-                            {_.join(errorsPerEntry.map(e => e.message), ' and ')}
-                          </span> :
-                          <span>OK</span>
-                      }
+                      {errorsPerEntry ? (
+                        <span
+                          className={getStyleAsClassName(
+                            'array.validation.error'
+                          )}
+                        >
+                          {join(errorsPerEntry.map(e => e.message), ' and ')}
+                        </span>
+                      ) : (
+                        <span>OK</span>
+                      )}
                     </td>
                   </tr>
                 );
               })
-          }
+            )}
           </tbody>
         </table>
       </div>
@@ -187,9 +208,7 @@ class TableArrayControl extends RendererComponent<VanillaTableProps, void> {
   }
 }
 
-const ConnectedTableArrayControl  = connectToJsonForms(
-    addVanillaControlProps(mapStateToTableControlProps),
-    mapDispatchToTableControlProps
-  )(TableArrayControl);
-
-export default ConnectedTableArrayControl;
+export default connect(
+  addVanillaControlProps<StatePropsOfControl>(mapStateToArrayControlProps),
+  mapDispatchToArrayControlProps
+)(TableArrayControl);

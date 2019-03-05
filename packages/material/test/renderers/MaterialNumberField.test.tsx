@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,53 +25,48 @@
 import * as React from 'react';
 import {
   Actions,
-  ControlElement,
-  getData,
-  HorizontalLayout,
+  ControlElement, getData,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
-  update
+  UISchemaElement
 } from '@jsonforms/core';
 import NumberField, { materialNumberFieldTester } from '../../src/fields/MaterialNumberField';
-import HorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+Enzyme.configure({ adapter: new Adapter() });
+
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+        fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
-
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
 
 const data = {'foo': 3.14};
 const schema = {
-  type: 'object',
-  properties: {
-    foo: {
-      type: 'number',
-      minimum: 5
-    },
-  },
+  type: 'number',
+  minimum: 5
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
 
-describe('Materila number field tester', () => {
+describe('Material number field tester', () => {
 
   it('should fail', () => {
     expect(materialNumberFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
@@ -147,54 +142,9 @@ describe('Materila number field tester', () => {
 
 describe('Material number field', () => {
 
-  it('should autofocus first element', () => {
-    const jsonSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        firstNumberField: {type: 'number', minimum: 5},
-        secondNumberField: {type: 'number', minimum: 5}
-      }
-    };
-    const firstControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/firstNumberField',
-      options: {
-        focus: true
-      }
-    };
-    const secondControlElement: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/secondNumberField',
-      options: {
-        focus: true
-      }
-    };
-    const layout: HorizontalLayout = {
-      type: 'HorizontalLayout',
-      elements: [
-        firstControlElement,
-        secondControlElement
-      ]
-    };
-    const store = initJsonFormsStore(
-      {
-        'firstNumberField': 3.14,
-        'secondNumberField': 5.12
-      },
-      schema,
-      uischema
-    );
+  let wrapper: ReactWrapper;
 
-    const tree = TestUtils.renderIntoDocument(
-      <Provider store={store}>
-        <HorizontalLayoutRenderer schema={jsonSchema} uischema={layout}/>
-      </Provider>
-    );
-
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    expect(document.activeElement).not.toBe(inputs[0]);
-    expect(document.activeElement).toBe(inputs[1]);
-  });
+  afterEach(() => wrapper.unmount());
 
   it('should autofocus via option', () => {
     const control: ControlElement = {
@@ -205,13 +155,17 @@ describe('Material number field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={control}/>
+        <NumberField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(document.activeElement).toBe(input);
+    const inputs = wrapper.find('input');
+    expect(inputs.first().props().autoFocus).toBeTruthy();
   });
 
   it('should not autofocus via option', () => {
@@ -223,13 +177,17 @@ describe('Material number field', () => {
       }
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBeFalsy();
+    const inputs = wrapper.find('input');
+    expect(inputs.first().props().autoFocus).toBeFalsy();
   });
 
   it('should not autofocus by default', () => {
@@ -238,13 +196,17 @@ describe('Material number field', () => {
       scope: '#/properties/foo'
     };
     const store = initJsonFormsStore(data, schema, control);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={control}/>
+        <NumberField
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.autofocus).toBeFalsy();
+    const inputs = wrapper.find('input');
+    expect(inputs.first().props().autoFocus).toBeFalsy();
   });
 
   it('should render', () => {
@@ -261,28 +223,35 @@ describe('Material number field', () => {
       schema,
       uischema
     );
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={jsonSchema} uischema={uischema}/>
+        <NumberField
+          schema={jsonSchema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
 
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.type).toBe('number');
-    expect(input.step).toBe('0.1');
-    expect(input.value).toBe('3.14');
+    const input = wrapper.find('input').first();
+    expect(input.props().type).toBe('number');
+    expect(input.props().step).toBe('0.1');
+    expect(input.props().value).toBe(3.14);
   });
 
   it('should update via input event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    input.value = '2.72';
-    TestUtils.Simulate.change(input);
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: 2.72 } });
     expect(getData(store.getState()).foo).toBe(2.72);
   });
 
@@ -292,96 +261,134 @@ describe('Material number field', () => {
       schema,
       uischema
     );
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.value).toBe('2.72');
-    store.dispatch(update('foo', () => 3.14));
-    expect(input.value).toBe('3.14');
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe(2.72);
+    store.dispatch(Actions.update('foo', () => 3.14));
+    wrapper.update();
+    expect(wrapper.find('input').first().props().value).toBe(3.14);
   });
 
   it('should update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('foo', () => undefined));
-    expect(input.value).toBe('');
+    store.dispatch(Actions.update('foo', () => undefined));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should not update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('foo', () => null));
-    expect(input.value).toBe('');
+    store.dispatch(Actions.update('foo', () => null));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe('');
   });
 
   it('should not update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update('bar', () => 11));
-    expect(input.value).toBe('3.14');
+    store.dispatch(Actions.update('bar', () => 11));
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe(3.14);
   });
 
   it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    store.dispatch(update(null, () => 2.72));
-    expect(input.value).toBe('3.14');
+    store.dispatch(Actions.update(null, () => 2.72));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe(3.14);
   });
 
   it('should not update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    store.dispatch(update(undefined, () => 13));
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.value).toBe('3.14');
+    store.dispatch(Actions.update(undefined, () => 13));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().value).toBe(3.14);
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema} enabled={false}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+          enabled={false}
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeTruthy();
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeTruthy();
   });
 
   it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <NumberField schema={schema} uischema={uischema}/>
+        <NumberField
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
       </Provider>
     );
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
-    expect(input.disabled).toBeFalsy();
+    const input = wrapper.find('input').first();
+    expect(input.props().disabled).toBeFalsy();
   });
 });

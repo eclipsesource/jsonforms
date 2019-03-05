@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -38,7 +39,8 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connectToJsonForms, Control } from '@jsonforms/react';
+import { Hidden } from '@material-ui/core';
+import { Control } from '@jsonforms/react';
 import TextField from '@material-ui/core/TextField';
 
 export class MaterialNativeControl extends Control<ControlProps, ControlState> {
@@ -47,7 +49,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       id,
       errors,
       label,
-      scopedSchema,
+      schema,
       description,
       visible,
       required,
@@ -58,29 +60,26 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
-    let style = {};
-    if (!visible) {
-      style = {display: 'none'};
-    }
-    const onChange = ev => handleChange(path, ev.target.value);
-    const fieldType = scopedSchema.format;
+    const onChange = (ev: any) => handleChange(path, ev.target.value);
+    const fieldType = schema.format;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     return (
-      <TextField
-        id={id + '-input'}
-        label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
-        type={fieldType}
-        error={!isValid}
-        style={style}
-        fullWidth={!trim}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-        helperText={!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-        InputLabelProps={{shrink: true}}
-        value={data}
-        onChange={onChange}
-      />
+      <Hidden xsUp={!visible}>
+        <TextField
+          id={id + '-input'}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          type={fieldType}
+          error={!isValid}
+          fullWidth={!trim}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          helperText={!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          InputLabelProps={{ shrink: true }}
+          value={data}
+          onChange={onChange}
+        />
+      </Hidden>
     );
   }
 }
@@ -90,7 +89,7 @@ export const materialNativeControlTester: RankedTester = rankWith(
   or(isDateControl, isTimeControl)
 );
 
-export default connectToJsonForms(
+export default connect(
   mapStateToControlProps,
   mapDispatchToControlProps
 )(MaterialNativeControl);

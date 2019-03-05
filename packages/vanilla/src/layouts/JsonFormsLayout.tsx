@@ -22,10 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { RendererProps } from '@jsonforms/core';
+import { VanillaRendererProps, WithChildren } from '../index';
 
 // tslint:disable:variable-name
-export const JsonFormsLayout = ({ className, children, visible }) => {
+export const JsonFormsLayout =
+    ({ className, children, visible }: RendererProps & VanillaRendererProps & WithChildren) => {
 // tslint:enable:variable-name
 
   return (

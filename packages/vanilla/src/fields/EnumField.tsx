@@ -22,7 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   defaultMapDispatchToControlProps,
   defaultMapStateToEnumFieldProps,
@@ -31,10 +32,11 @@ import {
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
+import { addVanillaFieldProps } from '../util';
+import { WithClassname } from '../index';
 
-export const EnumField = (props: EnumFieldProps) => {
+export const EnumField = (props: EnumFieldProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
@@ -68,7 +70,7 @@ export const EnumField = (props: EnumFieldProps) => {
  */
 export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
 
-export default connectToJsonForms(
-  defaultMapStateToEnumFieldProps,
+export default connect(
+  addVanillaFieldProps(defaultMapStateToEnumFieldProps),
   defaultMapDispatchToControlProps
 )(EnumField);

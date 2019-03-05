@@ -22,8 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import get from 'lodash/get';
+import {
+  defaultDataReducer,
+  extractDefaultData,
+  JsonFormsDefaultDataRegistryEntry
+} from './default-data';
 import { combineReducers, Reducer } from 'redux';
-import { rendererReducer } from './renderers';
+import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
 import { fieldReducer } from './fields';
 import { configReducer } from './config';
 import {
@@ -34,43 +40,106 @@ import {
   extractUiSchema,
   subErrorsAt
 } from './core';
-import { JsonFormsState } from '../store';
-import { findMatchingUISchema, uischemaRegistryReducer } from './uischemas';
-import { Generate, JsonSchema, UISchemaElement } from '..';
+import { JsonFormsState, JsonFormsSubStates } from '../store';
+import {
+  findMatchingUISchema,
+  uischemaRegistryReducer,
+  UISchemaTester
+} from './uischemas';
+import {
+  fetchLocale,
+  findLocalizedSchema,
+  findLocalizedUISchema,
+  i18nReducer
+} from './i18n';
 
-export {
-  rendererReducer,
-  fieldReducer,
-  coreReducer
-};
+import { JsonSchema } from '../models/jsonSchema';
+import { ControlElement, UISchemaElement } from '../models/uischema';
+import { Generate } from '../generators';
 
-export const jsonformsReducer = (additionalReducers = {}): Reducer<JsonFormsState> =>
-  combineReducers<JsonFormsState>({
+export { rendererReducer, fieldReducer, coreReducer, UISchemaTester };
+
+export const jsonformsReducer = (
+  additionalReducers = {}
+): Reducer<JsonFormsSubStates> =>
+  combineReducers<JsonFormsSubStates>({
     core: coreReducer,
     renderers: rendererReducer,
     fields: fieldReducer,
     config: configReducer,
     uischemas: uischemaRegistryReducer,
+    defaultData: defaultDataReducer,
+    i18n: i18nReducer,
     ...additionalReducers
   });
 
-export const getData = state => extractData(state.jsonforms.core);
-export const getSchema = state => extractSchema(state.jsonforms.core);
-export const getUiSchema = state => extractUiSchema(state.jsonforms.core);
+export const getData = (state: JsonFormsState) =>
+  extractData(get(state, 'jsonforms.core'));
+export const getSchema = (state: JsonFormsState): JsonSchema =>
+  extractSchema(get(state, 'jsonforms.core'));
+export const getUiSchema = (state: JsonFormsState): UISchemaElement =>
+  extractUiSchema(get(state, 'jsonforms.core'));
+export const getDefaultData = (
+  state: JsonFormsState
+): JsonFormsDefaultDataRegistryEntry[] =>
+  extractDefaultData(get(state, 'jsonforms.defaultData'));
+export const getRenderers = (
+  state: JsonFormsState
+): JsonFormsRendererRegistryEntry[] => get(state, 'jsonforms.renderers');
 
-export const findUISchema = state =>
-  (schema: JsonSchema, schemaPath: string, path: string): UISchemaElement => {
-    const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(schema, schemaPath, path);
-    if (uiSchema === undefined) {
-      return Generate.uiSchema(schema);
+export const findUISchema = (state: JsonFormsState) => (
+  schema: JsonSchema,
+  schemaPath: string,
+  path: string,
+  fallbackLayoutType = 'VerticalLayout',
+  control?: ControlElement
+): UISchemaElement => {
+  // handle options
+  if (control && control.options && control.options.detail) {
+    if (typeof control.options.detail === 'string') {
+      if (control.options.detail.toUpperCase() === 'GENERATE') {
+        // force generation of uischema
+        return Generate.uiSchema(schema, fallbackLayoutType);
+      }
+    } else if (typeof control.options.detail === 'object') {
+      // check if detail is a valid uischema
+      if (
+        control.options.detail.type &&
+        typeof control.options.detail.type === 'string'
+      ) {
+        return control.options.detail as UISchemaElement;
+      }
     }
-    return uiSchema;
-  };
+  }
+  // default
+  const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(
+    schema,
+    schemaPath,
+    path
+  );
+  if (uiSchema === undefined) {
+    return Generate.uiSchema(schema, fallbackLayoutType);
+  }
+  return uiSchema;
+};
 
-export const getErrorAt = instancePath => state => {
+export const getErrorAt = (instancePath: string) => (state: JsonFormsState) => {
   return errorAt(instancePath)(state.jsonforms.core);
 };
-export const getSubErrorsAt = instancePath => state =>
-  subErrorsAt(instancePath)(state.jsonforms.core);
+export const getSubErrorsAt = (instancePath: string) => (
+  state: JsonFormsState
+) => subErrorsAt(instancePath)(state.jsonforms.core);
 
-export const getConfig = state => state.jsonforms.config;
+export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
+
+export const getLocale = (state: JsonFormsState) =>
+  fetchLocale(get(state, 'jsonforms.i18n'));
+
+export const getLocalizedSchema = (locale: string) => (
+  state: JsonFormsState
+): JsonSchema => findLocalizedSchema(locale)(get(state, 'jsonforms.i18n'));
+
+export const getLocalizedUISchema = (locale: string) => (
+  state: JsonFormsState
+): UISchemaElement =>
+  findLocalizedUISchema(locale)(get(state, 'jsonforms.i18n'));

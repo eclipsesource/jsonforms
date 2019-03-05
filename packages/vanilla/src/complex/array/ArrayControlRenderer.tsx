@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,73 +22,72 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import * as React from 'react';
+import React from 'react';
 
 import {
+  ArrayControlProps,
   ControlElement,
   Helpers,
-  JsonSchema,
-  mapDispatchToTableControlProps,
-  mapStateToControlProps,
-  Resolve,
-  UISchemaElement
+  mapDispatchToArrayControlProps,
+  mapStateToArrayControlProps
 } from '@jsonforms/core';
-import { connectToJsonForms } from '@jsonforms/react';
 import { ArrayControl } from './ArrayControl';
-import { VanillaControlProps } from '../../index';
 import { addVanillaControlProps } from '../../util';
-
-export interface ArrayControlRendererProps extends VanillaControlProps {
-  addItem(path: string);
-  findUISchema(schema: JsonSchema, schemaPath: string, path: string): UISchemaElement;
-}
+import { connect } from 'react-redux';
+import { VanillaRendererProps } from '../../index';
 
 const ArrayControlRenderer  =
-  ({
-     schema,
-     uischema,
-     data,
-     path,
-     findUISchema,
-     addItem,
-     getStyle,
-     getStyleAsClassName
-  }: ArrayControlRendererProps) => {
+    ({
+         schema,
+         uischema,
+         data,
+         path,
+         rootSchema,
+         createDefaultValue,
+         findUISchema,
+         addItem,
+         getStyle,
+         getStyleAsClassName,
+         removeItems,
+     }: ArrayControlProps & VanillaRendererProps) => {
 
-    const controlElement = uischema as ControlElement;
-    const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
-    const resolvedSchema = Resolve.schema(schema, `${controlElement.scope}/items`);
-    const label = labelDescription.show ? labelDescription.text : '';
+        const controlElement = uischema as ControlElement;
+        const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
+        const label = labelDescription.show ? labelDescription.text : '';
+        const controlClassName =
+            `control ${(Helpers.convertToValidClassName(controlElement.scope))}`;
+        const fieldSetClassName = getStyleAsClassName('array.layout');
+        const buttonClassName = getStyleAsClassName('array.button');
+        const childrenClassName = getStyleAsClassName('array.children');
+        const classNames: { [className: string]: string} = {
+            wrapper: controlClassName,
+            fieldSet: fieldSetClassName,
+            button: buttonClassName,
+            children: childrenClassName
+        };
 
-    const controlClassName =
-      `control ${(Helpers.convertToValidClassName(controlElement.scope))}`;
-    const fieldSetClassName = getStyle('array.layout');
-    const buttonClassName = getStyle('array.button');
-    const childrenClassName = getStyleAsClassName('array.children');
-    const classNames = {
-      wrapper: controlClassName,
-      fieldSet: fieldSetClassName,
-      button: buttonClassName,
-      children: childrenClassName
+        return (
+            <ArrayControl
+                getStyle={getStyle}
+                getStyleAsClassName={getStyleAsClassName}
+                removeItems={removeItems}
+                classNames={classNames}
+                data={data}
+                label={label}
+                path={path}
+                addItem={addItem}
+                findUISchema={findUISchema}
+                uischema={uischema}
+                schema={schema}
+                rootSchema={rootSchema}
+                createDefaultValue={createDefaultValue}
+            />
+        );
     };
 
-    return (
-      <ArrayControl
-        classNames={classNames}
-        data={data}
-        label={label}
-        path={path}
-        resolvedSchema={resolvedSchema}
-        onAdd={addItem(path)}
-        controlElement={controlElement}
-        findUISchema={findUISchema}
-      />
-    );
-  };
-
-const ConnectedArrayControlRenderer = connectToJsonForms(
-  addVanillaControlProps(mapStateToControlProps),
-  mapDispatchToTableControlProps
+const ConnectedArrayControlRenderer = connect(
+    addVanillaControlProps(mapStateToArrayControlProps),
+    mapDispatchToArrayControlProps
 )(ArrayControlRenderer);
 
 export default ConnectedArrayControlRenderer;

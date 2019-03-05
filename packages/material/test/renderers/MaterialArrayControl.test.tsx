@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
-  Copyright (c) 2018 EclipseSource Munich
+
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,110 +22,112 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Actions, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import { Actions, ControlElement, jsonformsReducer, JsonFormsState, JsonSchema } from '@jsonforms/core';
 import * as React from 'react';
-import * as _ from 'lodash';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
 import { combineReducers, createStore, Store } from 'redux';
 import { materialFields, materialRenderers } from '../../src';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
-
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+      fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
 
+  const { data, schema, uischema } = fixture;
   store.dispatch(Actions.init(customData ? customData : data, schema, uischema));
 
   return store;
 };
 
-const data = [
-  {
-    message: 'El Barto was here',
-    done: true
-  },
-  {
-    message: 'Yolo'
-  }
-];
-const schema = {
-  type: 'array',
-  items: {
-    type: 'object',
-    properties: {
-      message: {
-        type: 'string',
-        maxLength: 3
-      },
-      done: {
-        type: 'boolean'
+const fixture: {
+  data: any,
+  schema: JsonSchema,
+  uischema: ControlElement
+} = {
+  data: [
+    {
+      message: 'El Barto was here',
+      done: true
+    },
+    {
+      message: 'Yolo'
+    }
+  ],
+  schema: {
+    type: 'array',
+    items: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          maxLength: 3
+        },
+        done: {
+          type: 'boolean'
+        }
       }
     }
+  },
+  uischema: {
+    type: 'Control',
+    scope: '#'
   }
-};
-const uischema = {
-  type: 'Control',
-  scope: '#'
 };
 
 describe('Material array control', () => {
 
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
   it('should render', () => {
     const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+        <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema}/>
       </Provider>
     );
 
-    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
-    // header + 2 data entries
-    expect(rows.length).toBe(3);
+    const rows = wrapper.find('tr');
+    // 2 header rows + 2 data entries
+    expect(rows.length).toBe(4);
   });
 
   it('should render empty', () => {
     const store = initJsonFormsStore([]);
 
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+        <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema}/>
       </Provider>
     );
 
-    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
-    // header + no data row
-    expect(rows.length).toBe(2);
-    const emptyDataCol = rows[1].cells;
-    expect(emptyDataCol.length).toBe(1);
-    // selection column + 2 data columns
-    expect(emptyDataCol[0].colSpan).toBe(3);
-    // assert that the select all is not checked
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    const cboxes = _.filter(
-      inputs,
-      i => i.type === 'checkbox'
-    );
-    expect(cboxes.length).toBe(1);
-    expect(cboxes[0].checked).toBe(false);
-    TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
-    expect(cboxes[0].checked).toBe(false);
+    const rows = wrapper.find('tr');
+    // two header rows + no data row
+    expect(rows.length).toBe(3);
+    const headerColumns = rows.at(1).children();
+    // 3 columns: message & done properties + column for delete button
+    expect(headerColumns).toHaveLength(3);
   });
 
   it('should render empty primitives', () => {
     const store = initJsonFormsStore();
     // re-init
-    const data = { test: [] };
-    const schema = {
+    const data: any = { test: [] };
+    const schema: JsonSchema = {
       type: 'object',
       properties: {
         test: {
@@ -134,35 +136,25 @@ describe('Material array control', () => {
         }
       }
     };
-    const uischema = {
+    const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/test'
     };
     store.dispatch(Actions.init(data, schema, uischema));
 
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
 
-    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
+    const rows = wrapper.find('tr');
     // header + no data row
-    expect(rows.length).toBe(2);
-    const emptyDataCol = rows[1].cells;
-    expect(emptyDataCol.length).toBe(1);
+    expect(rows).toHaveLength(2);
+    const emptyDataCol = rows.at(1).find('td');
+    expect(emptyDataCol).toHaveLength(1);
     // selection column + 1 data column
-    expect(emptyDataCol[0].colSpan).toBe(2);
-    // assert that the select all is not checked
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    const cboxes = _.filter(
-      inputs,
-      i => i.type === 'checkbox'
-    );
-    expect(cboxes.length).toBe(1);
-    expect(cboxes[0].checked).toBe(false);
-    TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
-    expect(cboxes[0].checked).toBe(false);
+    expect(emptyDataCol.first().props().colSpan).toBe(2);
   });
 
   it('should render primitives', () => {
@@ -178,110 +170,103 @@ describe('Material array control', () => {
         }
       }
     };
-    const uischema = {
+    const uischema: ControlElement = {
       type: 'Control',
       scope: '#/properties/test'
     };
     store.dispatch(Actions.init(data, schema, uischema));
 
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
 
-    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
+    const rows = wrapper.find('tr');
     // header + 2 data entries
-    expect(rows.length).toBe(3);
+    expect(rows).toHaveLength(3);
   });
 
   it('should delete an item', () => {
     const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+        <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
       </Provider>
     );
 
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    const cboxes = _.filter(
-      inputs,
-      i => i.type === 'checkbox'
-    );
-    const buttons = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'button');
-    const deleteButton = buttons[1];
-    TestUtils.Simulate.change(cboxes[1], {'target': {'checked': true}});
+    const buttons = wrapper.find('button');
+    // 5 buttons
+    // add row
+    // delete row
+    // delete row
+    // two dialog buttons (no + yes)
+    const nrOfRowsBeforeDelete = wrapper.find('tr').length;
 
-    TestUtils.Simulate.click(deleteButton);
-    const confirmButton = buttons[3];
-    TestUtils.Simulate.click(confirmButton);
+    const deleteButton = buttons.at(1);
+    deleteButton.simulate('click');
 
-    const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
-    expect(rows.length).toBe(2);
+    const confirmButton = buttons.at(4);
+    confirmButton.simulate('click');
+
+    const nrOfRowsAfterDelete = wrapper.find('tr').length;
+
+    expect(nrOfRowsBeforeDelete).toBe(4);
+    expect(nrOfRowsAfterDelete).toBe(3);
     expect(store.getState().jsonforms.core.data.length).toBe(1);
   });
 
-  it('should keep selection change', () => {
+  it('should support adding rows that contain enums', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        things: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              somethingElse: {
+                type: 'string'
+              },
+              thing: {
+                type: 'string',
+                enum: [
+                  'thing'
+                ]
+              },
+            }
+          }
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/things'
+    };
     const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
+    store.dispatch(Actions.init({}, schema, uischema));
+
+    wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
       </Provider>
     );
 
-    const inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    const cboxes = _.filter(
-      inputs,
-      i => i.type === 'checkbox'
-    );
-    const currentlyChecked = _.head(_.filter(cboxes, cbox => cbox.checked));
+    const buttons = wrapper.find('button');
+    // 3 buttons
+    // add row
+    // two dialog buttons (no + yes)
+    const nrOfRowsBeforeDelete = wrapper.find('tr').length;
 
-    // select all
-    TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
+    const addButton = buttons.at(0);
+    addButton.simulate('click');
+    addButton.simulate('click');
+    wrapper.update();
+    const nrOfRowsAfterDelete = wrapper.find('tr').length;
 
-    expect(cboxes.length).toBe(5);
-    expect(_.filter(cboxes, cbox => cbox.checked).length).toBe(4);
-    TestUtils.Simulate.change(currentlyChecked, {'target': {'checked': false}});
-    // keep select all state
-    expect(_.filter(cboxes, cbox => cbox.checked).length).toBe(3);
-  });
-
-  it('added items are also selected when selecting all', () => {
-    const store = initJsonFormsStore();
-    const tree = TestUtils.renderIntoDocument(
-      <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema}/>
-      </Provider>
-    );
-    let inputs: HTMLInputElement[] = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    let cboxes = _.filter(
-      inputs,
-      i => i.type === 'checkbox'
-    );
-    // 1 select all, 2 for selecting rows, 2 from the renderer
-    expect(cboxes.length).toBe(5);
-    const buttons = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'button');
-    const addButton = buttons[0];
-    TestUtils.Simulate.click(addButton);
-
-    expect(cboxes[0].checked).toBeFalsy();
-    expect(cboxes[1].checked).toBeFalsy();
-    expect(cboxes[3].checked).toBeFalsy();
-
-    inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    cboxes = _.filter(
-      inputs,
-      i => i.type === 'checkbox'
-    );
-    // 1 select all, 3 for selecting rows, 3 from the renderer
-    expect(cboxes.length).toBe(7);
-
-    // select all
-    TestUtils.Simulate.change(cboxes[0], {'target': {'checked': true}});
-
-    expect(cboxes[0].checked).toBeTruthy();
-    expect(cboxes[1].checked).toBeTruthy();
-    expect(cboxes[3].checked).toBeTruthy();
-    expect(cboxes[5].checked).toBeTruthy();
+    // 2 header rows + 'no data' row
+    expect(nrOfRowsBeforeDelete).toBe(3);
+    expect(nrOfRowsAfterDelete).toBe(4);
+    expect(store.getState().jsonforms.core.data).toEqual({ things: [{}, {}]});
   });
 });

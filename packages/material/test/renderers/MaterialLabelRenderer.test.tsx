@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,23 +24,22 @@
 */
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import * as TestUtils from 'react-dom/test-utils';
 import {
   Actions,
-  ControlElement,
-  HorizontalLayout,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE
+  NOT_APPLICABLE,
+  UISchemaElement
 } from '@jsonforms/core';
 import '../../src/fields';
-import MaterialLabelRenderer, {
-  materialLabelRendererTester
-} from '../../src/additional/MaterialLabelRenderer';
-import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
+import MaterialLabelRenderer, { materialLabelRendererTester } from '../../src/additional/MaterialLabelRenderer';
 import { materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 const data = {};
 const schema = {
@@ -52,17 +51,17 @@ const uischema = {
   text: 'Foo'
 };
 
-const initJsonFormsStore = (testData, testSchema, testUiSchema): Store<JsonFormsState> => {
+const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+        fields: materialFields,
+    }
+  };
   const store: Store<JsonFormsState> = createStore(
     combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: materialRenderers,
-        fields: materialFields,
-      }
-    }
+    s
   );
-
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };
@@ -78,22 +77,25 @@ describe('Material Label Renderer tester', () => {
 
 describe('Material Label Renderer', () => {
 
+  let wrapper: ReactWrapper;
+
+  afterEach(() => wrapper.unmount());
+
   it('render', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialLabelRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
 
-    const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'h2') as HTMLHeadingElement;
-    expect(label.textContent).toBe('Foo');
-
+    const label = wrapper.find('h6').first();
+    expect(label.text()).toBe('Foo');
   });
 
   it('can be hidden', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialLabelRenderer
           schema={schema}
@@ -102,19 +104,18 @@ describe('Material Label Renderer', () => {
         />
       </Provider>
     );
-    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h2')[0] as HTMLElement;
-    expect(getComputedStyle(control).display).toBe('none');
+    const label = wrapper.find('h6').first();
+    expect(getComputedStyle(label.getDOMNode()).display).toBe('none');
   });
 
   it('should be shown by default', () => {
     const store = initJsonFormsStore(data, schema, uischema);
-    const tree = TestUtils.renderIntoDocument(
+    wrapper = mount(
       <Provider store={store}>
         <MaterialLabelRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
-    const control = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'h2')[0] as HTMLElement;
-    expect(control.hidden).toBeFalsy();
+    const label = wrapper.find('h6').first();
+    expect(label.props().hidden).toBeFalsy();
   });
-
 });

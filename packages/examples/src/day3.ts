@@ -23,7 +23,11 @@
   THE SOFTWARE.
 */
 import { registerExamples } from './register';
-import { data as day2Data, schema as day2Schema, uischema as day2UiSchema } from './day2';
+import {
+  data as day2Data,
+  schema as day2Schema,
+  uischema as day2UiSchema
+} from './day2';
 
 export const schema = {
   type: 'object',
@@ -58,17 +62,15 @@ export const uischema = {
 
 export const data = {
   ...day2Data,
-  rating: 3,
+  rating: 3
 };
 
-registerExamples(
-  [
-    {
-      name: 'day3',
-      label: 'Day 3',
-      data,
-      schema,
-      uischema
-    }
-  ]
-);
+registerExamples([
+  {
+    name: 'day3',
+    label: 'Day 3',
+    data,
+    schema,
+    uischema
+  }
+]);
