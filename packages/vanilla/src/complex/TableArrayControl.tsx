@@ -47,6 +47,7 @@ import { DispatchField } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 import { connect } from 'react-redux';
 import { VanillaRendererProps } from '../index';
+import { startCase } from 'lodash';
 
 const { createLabelDescriptionFrom, convertToValidClassName } = Helpers;
 
@@ -121,7 +122,7 @@ class TableArrayControl extends React.Component<
                 fpflow(
                   fpkeys,
                   fpfilter(prop => schema.properties[prop].type !== 'array'),
-                  fpmap(prop => <th key={prop}>{prop}</th>)
+                  fpmap(prop => <th key={prop}>{startCase(prop)}</th>)
                 )(schema.properties)
               ) : (
                 <th>Items</th>

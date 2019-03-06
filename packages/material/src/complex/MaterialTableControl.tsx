@@ -25,7 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import { DispatchField } from '@jsonforms/react';
-import capitalize from 'lodash/capitalize';
+import startCase from 'lodash/startCase';
 import React from 'react';
 import {
   FormHelperText,
@@ -128,7 +128,7 @@ interface TableHeaderCellProps {
 }
 
 const TableHeaderCell = ({ propName }: TableHeaderCellProps) => (
-  <TableCell>{capitalize(propName)}</TableCell>
+  <TableCell>{startCase(propName)}</TableCell>
 );
 
 interface NonEmptyCellProps {
