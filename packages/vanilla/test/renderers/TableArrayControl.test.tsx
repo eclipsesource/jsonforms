@@ -116,11 +116,11 @@ test('render two children', t => {
 
   const headColumn1 = headRow.children.item(0);
   t.is(headColumn1.tagName, 'TH');
-  t.is((headColumn1 as HTMLTableHeaderCellElement).textContent, 'x');
+  t.is((headColumn1 as HTMLTableHeaderCellElement).textContent, 'X');
 
   const headColumn2 = headRow.children.item(1);
   t.is(headColumn2.tagName, 'TH');
-  t.is((headColumn2 as HTMLTableHeaderCellElement).textContent, 'y');
+  t.is((headColumn2 as HTMLTableHeaderCellElement).textContent, 'Y');
 
   const tBody = tableChildren.item(1);
   t.is(tBody.tagName, 'TBODY');
@@ -184,11 +184,11 @@ test('render empty data', t => {
 
   const headColumn1 = headRow.children.item(0);
   t.is(headColumn1.tagName, 'TH');
-  t.is((headColumn1 as HTMLTableHeaderCellElement).textContent, 'x');
+  t.is((headColumn1 as HTMLTableHeaderCellElement).textContent, 'X');
 
   const headColumn2 = headRow.children.item(1);
   t.is(headColumn2.tagName, 'TH');
-  t.is((headColumn2 as HTMLTableHeaderCellElement).textContent, 'y');
+  t.is((headColumn2 as HTMLTableHeaderCellElement).textContent, 'Y');
 
   const tBody = tableChildren.item(1);
   t.is(tBody.tagName, 'TBODY');
