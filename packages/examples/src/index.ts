@@ -89,7 +89,7 @@ export {
   config,
   text,
   numbers,
-  scope
+  scope,
   listWithDetail,
   listWithDetailRegistered,
   object,
