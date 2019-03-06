@@ -516,3 +516,8 @@ export const hasCategory = (categorization: Categorization): boolean => {
 
 export const categorizationHasCategory = (uischema: UISchemaElement) =>
   hasCategory(uischema as Categorization);
+
+export const not = (tester: Tester): Tester => (
+  uischema: UISchemaElement,
+  schema: JsonSchema
+) => !tester(uischema, schema);

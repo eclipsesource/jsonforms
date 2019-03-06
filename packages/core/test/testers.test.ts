@@ -37,6 +37,7 @@ import {
   isPrimitiveArrayControl,
   isStringControl,
   isTimeControl,
+  not,
   optionIs,
   or,
   schemaMatches,
@@ -703,5 +704,13 @@ test('tester schemaSubPathMatches', t => {
       uischema,
       schema
     )
+  );
+});
+
+test('tester not', t => {
+  t.false(
+    not(isBooleanControl)(t.context.uischema, {
+      type: 'boolean'
+    })
   );
 });
