@@ -24,7 +24,7 @@
 */
 import React from 'react';
 import { connect } from 'react-redux';
-import { Hidden, Step, StepButton, Stepper, } from '@material-ui/core';
+import { Hidden, Step, StepButton, Stepper } from '@material-ui/core';
 import {
   and,
   Categorization,
@@ -38,6 +38,7 @@ import {
   RankedTester,
   rankWith,
   RendererProps,
+  StatePropsOfLayout,
   StatePropsOfRenderer,
   uiTypeIs
 } from '@jsonforms/core';
@@ -57,12 +58,12 @@ export interface CategorizationStepperState {
   activeCategory: number;
 }
 
-export interface MaterialCategorizationStepperLayoutRendererProps extends RendererProps {
+export interface MaterialCategorizationStepperLayoutRendererProps {
   data: any;
 }
 
 export class MaterialCategorizationStepperLayoutRenderer
-  extends RendererComponent<MaterialCategorizationStepperLayoutRendererProps, CategorizationStepperState> {
+  extends RendererComponent<MaterialCategorizationStepperLayoutRendererProps & RendererProps, CategorizationStepperState> {
 
   state = {
     activeCategory: 0
@@ -111,7 +112,10 @@ export class MaterialCategorizationStepperLayoutRenderer
   }
 }
 
-const mapStateToCategorizationProps = (state: JsonFormsState, ownProps: StatePropsOfRenderer): MaterialCategorizationStepperLayoutRendererProps => {
+const mapStateToCategorizationProps = (
+  state: JsonFormsState,
+  ownProps: StatePropsOfRenderer
+): MaterialCategorizationStepperLayoutRendererProps & StatePropsOfLayout => {
   const props = mapStateToLayoutProps(state, ownProps);
   return {
     ...props,

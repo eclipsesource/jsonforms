@@ -520,6 +520,7 @@ export const mapStateToLayoutProps = (
     : isEnabled(ownProps.uischema, rootData, ownProps.path);
 
   return {
+    ...layoutDefaultProps,
     renderers: getRenderers(state),
     visible,
     enabled,
@@ -563,9 +564,13 @@ export const mapStateToJsonFormsRendererProps = (
   };
 };
 
-export const rendererDefaultProps = {
+export const layoutDefaultProps = {
   visible: true,
   enabled: true,
-  path: '',
+  path: ''
+};
+
+export const controlDefaultProps = {
+  ...layoutDefaultProps,
   errors: [] as string[]
 };

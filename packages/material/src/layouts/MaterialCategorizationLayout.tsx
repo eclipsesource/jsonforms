@@ -36,6 +36,7 @@ import {
   RankedTester,
   rankWith,
   RendererProps,
+  StatePropsOfLayout,
   StatePropsOfRenderer,
   Tester,
   UISchemaElement,
@@ -117,7 +118,10 @@ export class MaterialCategorizationLayoutRenderer
     };
 }
 
-const mapStateToCategorizationProps = (state: JsonFormsState, ownProps: StatePropsOfRenderer): MaterialCategorizationLayoutRendererProps & RendererProps => {
+const mapStateToCategorizationProps = (
+  state: JsonFormsState,
+  ownProps: StatePropsOfRenderer
+): MaterialCategorizationLayoutRendererProps & StatePropsOfLayout => {
   const props = mapStateToLayoutProps(state, ownProps);
   return {
     ...props,
