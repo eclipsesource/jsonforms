@@ -14,7 +14,7 @@ export const orderSchema = {
       type: 'number'
     },
     shippingAddress: {
-      '$ref': '#/definitions/shippingAddress'
+      $ref: '#/definitions/shippingAddress'
     }
   },
   definitions: {
@@ -49,7 +49,7 @@ export const uischema = {
         {
           type: 'Control',
           scope: '#/properties/price'
-        },
+        }
       ]
     },
     {
