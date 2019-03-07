@@ -54,8 +54,8 @@
     "@angular/forms": "^5.2.10",
     "@angular/material": "^5.2.0",
     "@angular/platform-browser": "^5.2.10",
-    "@jsonforms/angular": "^2.0.0",
-    "@jsonforms/core": "^2.0.0",
+    "@jsonforms/angular": "^2.2.1",
+    "@jsonforms/core": "^2.2.1",
     "core-js": "^2.5.3",
     "rxjs": "^5.5.7",
     "zone.js": "^0.8.26"
