@@ -49,6 +49,7 @@ import * as resolve from './resolve';
 import * as config from './config';
 import * as text from './text';
 import * as numbers from './numbers';
+import * as scope from './scope';
 import * as listWithDetail from './list-with-detail';
 import * as listWithDetailRegistered from './list-with-detail-registered';
 import * as object from './object';
@@ -88,6 +89,7 @@ export {
   config,
   text,
   numbers,
+  scope,
   listWithDetail,
   listWithDetailRegistered,
   object,
