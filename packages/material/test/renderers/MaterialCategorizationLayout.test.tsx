@@ -32,7 +32,7 @@ import {
   jsonformsReducer,
   JsonFormsState,
   Layout,
-  rendererDefaultProps,
+  layoutDefaultProps,
   RuleEffect,
   SchemaBasedCondition
 } from '@jsonforms/core';
@@ -227,7 +227,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <Provider store={store}>
         <MaterialCategorizationLayoutRenderer
-          {...rendererDefaultProps}
+          {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -285,7 +285,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <Provider store={store}>
         <MaterialCategorizationLayoutRenderer
-          {...rendererDefaultProps}
+          {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />
@@ -306,7 +306,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <Provider store={store}>
         <MaterialCategorizationLayoutRenderer
-          {...rendererDefaultProps}
+          {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
           visible={false}
@@ -323,7 +323,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <Provider store={store}>
         <MaterialCategorizationLayoutRenderer
-          {...rendererDefaultProps}
+          {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={fixture.uischema}
         />
@@ -364,7 +364,7 @@ describe('Material categorization stepper layout', () => {
     const wrapper = mount(
       <Provider store={store}>
         <MaterialCategorizationLayoutRenderer
-          {...rendererDefaultProps}
+          {...layoutDefaultProps}
           schema={fixture.schema}
           uischema={uischema}
         />

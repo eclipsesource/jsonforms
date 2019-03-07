@@ -28,7 +28,6 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  rendererDefaultProps,
   RendererProps,
   uiTypeIs
 } from '@jsonforms/core';
@@ -46,7 +45,7 @@ export const materialLabelRendererTester: RankedTester = rankWith(1, uiTypeIs('L
 /**
  * Default renderer for a label.
  */
-export const MaterialLabelRenderer: StatelessRenderer<RendererProps> & { defaultProps: Partial<RendererProps> } =
+export const MaterialLabelRenderer: StatelessRenderer<RendererProps> =
   ({ uischema, visible }) => {
     const labelElement: LabelElement = uischema as LabelElement;
     const style: {[x: string]: any} = {};
@@ -59,7 +58,5 @@ export const MaterialLabelRenderer: StatelessRenderer<RendererProps> & { default
       </Typography>
     );
   };
-
-MaterialLabelRenderer.defaultProps = rendererDefaultProps;
 
 export default connect(mapStateToLayoutProps)(MaterialLabelRenderer);

@@ -27,7 +27,6 @@ import {
     mapStateToLayoutProps,
     RankedTester,
     rankWith,
-    rendererDefaultProps,
     RendererProps,
     uiTypeIs,
   VerticalLayout
@@ -44,7 +43,7 @@ import { VanillaRendererProps } from '../index';
  */
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
-export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> & {defaultProps: Partial<RendererProps>}  = (
+export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps>  = (
   {
     schema,
     uischema,
@@ -77,8 +76,6 @@ export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRe
     </JsonFormsLayout>
   );
 };
-
-VerticalLayoutRenderer.defaultProps = rendererDefaultProps;
 
 export default connect(
   addVanillaLayoutProps(mapStateToLayoutProps)

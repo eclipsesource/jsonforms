@@ -28,7 +28,7 @@ import {
   HorizontalLayout,
   mapStateToLayoutProps,
   RankedTester,
-  rankWith, rendererDefaultProps,
+  rankWith,
   RendererProps,
   uiTypeIs
 } from '@jsonforms/core';
@@ -43,7 +43,7 @@ import { VanillaRendererProps } from '../index';
  */
 export const horizontalLayoutTester: RankedTester = rankWith(1, uiTypeIs('HorizontalLayout'));
 
-const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> & {defaultProps: Partial<RendererProps>} = (
+const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> = (
   {
     schema,
     uischema,
@@ -77,8 +77,6 @@ const HorizontalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendere
     </JsonFormsLayout>
   );
 };
-
-HorizontalLayoutRenderer.defaultProps = rendererDefaultProps;
 
 const ConnectedHorizontalLayout = connect(
   addVanillaLayoutProps(mapStateToLayoutProps)
