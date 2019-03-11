@@ -123,12 +123,14 @@ export const findUISchema = (state: JsonFormsState) => (
   return uiSchema;
 };
 
-export const getErrorAt = (instancePath: string) => (state: JsonFormsState) => {
-  return errorAt(instancePath)(state.jsonforms.core);
-};
-export const getSubErrorsAt = (instancePath: string) => (
+export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsState
-) => subErrorsAt(instancePath)(state.jsonforms.core);
+) => {
+  return errorAt(instancePath, schema)(state.jsonforms.core);
+};
+export const getSubErrorsAt = (instancePath: string, schema: JsonSchema) => (
+  state: JsonFormsState
+) => subErrorsAt(instancePath, schema)(state.jsonforms.core);
 
 export const getConfig = (state: JsonFormsState) => state.jsonforms.config;
 

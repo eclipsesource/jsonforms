@@ -364,7 +364,6 @@ export const mapStateToControlProps = (
     : isEnabled(uischema, rootData, ownProps.path);
   const labelDesc = createLabelDescriptionFrom(uischema);
   const label = labelDesc.show ? labelDesc.text : '';
-  const errors = union(getErrorAt(path)(state).map(error => error.message));
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const rootSchema = getSchema(state);
@@ -376,6 +375,7 @@ export const mapStateToControlProps = (
     controlElement.scope,
     rootSchema
   );
+  const errors = union(getErrorAt(path, resolvedSchema)(state).map(error => error.message));
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const defaultConfig = cloneDeep(getConfig(state));
@@ -441,7 +441,7 @@ export const mapStateToArrayControlProps = (
   );
 
   const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
-  const childErrors = getSubErrorsAt(path)(state);
+  const childErrors = getSubErrorsAt(path, resolvedSchema)(state);
 
   return {
     ...props,

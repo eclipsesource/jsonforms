@@ -318,7 +318,8 @@ test('mapStateToControlProps - errors', t => {
     message: 'Duff beer',
     keyword: 'whatever',
     schemaPath: '',
-    params: undefined
+    params: undefined,
+    parentSchema: { type: 'string' }
   };
   clonedState.jsonforms.core.errors = [error];
   const props = mapStateToControlProps(clonedState, ownProps);
@@ -347,7 +348,7 @@ test('mapStateToControlProps - no duplicate error messages', t => {
     { uischema: coreUISchema }
   );
   // 'should be string' should only appear once
-  t.is(props.errors.length, 3);
+  t.is(props.errors.length, 1);
 });
 
 test('mapStateToControlProps - id', t => {

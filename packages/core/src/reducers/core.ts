@@ -26,6 +26,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
 import get from 'lodash/get';
 import filter from 'lodash/filter';
+import isEqual from 'lodash/isEqual';
 import { Ajv, ErrorObject, ValidateFunction } from 'ajv';
 import {
   INIT,
@@ -190,20 +191,22 @@ export const coreReducer = (
 export const extractData = (state: JsonFormsCore) => get(state, 'data');
 export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
-export const errorAt = (instancePath: string) => (
+export const errorAt = (instancePath: string, schema: JsonSchema) => (
+  state: JsonFormsCore
+): ErrorObject[] =>
+  filter(
+    state.errors,
+    error =>
+      error.dataPath === instancePath && isEqual(error.parentSchema, schema)
+  );
+export const subErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsCore
 ): ErrorObject[] => {
-  return filter(
-    state.errors,
-    (error: ErrorObject) => error.dataPath === instancePath
-  );
-};
-export const subErrorsAt = (instancePath: string) => (
-  state: JsonFormsCore
-): any[] => {
   const path = `${instancePath}.`;
 
-  return filter(state.errors, (error: ErrorObject) =>
-    error.dataPath.startsWith(path)
+  return filter(
+    state.errors,
+    error =>
+      error.dataPath.startsWith(path) && isEqual(error.parentSchema, schema)
   );
 };

@@ -26,6 +26,8 @@ import test from 'ava';
 import { coreReducer } from '../../src/reducers';
 import { init } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
+import { errorAt, JsonFormsCore, subErrorsAt } from '../../src/reducers/core';
+import cloneDeep = require('lodash/cloneDeep');
 
 test('core reducer should support v7', t => {
   const schema: JsonSchema = {
@@ -47,4 +49,200 @@ test('core reducer should support v7', t => {
     )
   );
   t.is(after.errors.length, 1);
+});
+
+test('errorAt filters by path', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const state: JsonFormsCore = {
+    data: undefined,
+    schema: undefined,
+    uischema: undefined,
+    errors: [
+      {
+        keyword: '',
+        dataPath: 'bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo.bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+    ]
+  };
+  const filtered = errorAt('foo', schema.properties.foo)(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt filters by schema', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const state: JsonFormsCore = {
+    data: undefined,
+    schema: undefined,
+    uischema: undefined,
+    errors: [
+      {
+        keyword: '',
+        dataPath: 'bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: {type: 'string', enum: ['bar']}
+      },
+    ]
+  };
+  const filtered = errorAt('foo', schema.properties.foo)(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('subErrorsAt filters by path', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const state: JsonFormsCore = {
+    data: undefined,
+    schema: undefined,
+    uischema: undefined,
+    errors: [
+      {
+        keyword: '',
+        dataPath: 'bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo.bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+    ]
+  };
+  const filtered = subErrorsAt('foo', schema.properties.foo)(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[2]);
+});
+
+test('subErrorsAt filters by schema', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'string',
+        const: 'bar'
+      }
+    }
+  };
+  const state: JsonFormsCore = {
+    data: undefined,
+    schema: undefined,
+    uischema: undefined,
+    errors: [
+      {
+        keyword: '',
+        dataPath: 'foo',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+      {
+        keyword: '',
+        dataPath: 'foo.bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: {type: 'string', enum: ['bar']}
+      },
+      {
+        keyword: '',
+        dataPath: 'foo.bar',
+        schemaPath: '',
+        message: '',
+        params: {},
+        schema: undefined,
+        parentSchema: cloneDeep(schema.properties.foo)
+      },
+    ]
+  };
+  const filtered = subErrorsAt('foo', schema.properties.foo)(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[2]);
 });
