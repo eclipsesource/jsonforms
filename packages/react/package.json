@@ -61,7 +61,7 @@
     "lodash": "^4.17.4"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^2.2.1",
+    "@jsonforms/core": "^2.2.2",
     "react": "^16.4.0",
     "react-redux": "^6.0.0"
   },
