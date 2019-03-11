@@ -113,7 +113,7 @@ export const mapStateToFieldProps = (
   const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
     : isEnabled(uischema, rootData);
-  const errors = getErrorAt(path)(state).map(error => error.message);
+  const errors = getErrorAt(path, schema)(state).map(error => error.message);
   const isValid = isEmpty(errors);
   const defaultConfig = cloneDeep(getConfig(state));
   const config = merge(defaultConfig, ownProps.uischema.options);
