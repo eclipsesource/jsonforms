@@ -16,8 +16,8 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Vanilla Renderers' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^2.2.1",
-    "@jsonforms/react": "^2.2.1"
+    "@jsonforms/core": "^2.2.2",
+    "@jsonforms/react": "^2.2.2"
   },
   "devDependencies": {
     "@jsonforms/core": "^2.2.1",
