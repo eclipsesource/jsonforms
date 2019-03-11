@@ -152,6 +152,49 @@ export const data = {
   postalCode: '12345'
 };
 
+const schema2 = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string'
+    },
+    personalData: {
+      type: 'object',
+      properties: {
+        middleName: {
+          type: 'string'
+        },
+        lastName: {
+          type: 'string'
+        }
+      },
+      required: ['middleName', 'lastName']
+    }
+  },
+  required: ['name']
+};
+const uischema2 = {
+  type: 'HorizontalLayout',
+  elements: [
+    {
+      type: 'Control',
+      scope: '#/properties/name'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/personalData/properties/middleName'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/personalData/properties/lastName'
+    }
+  ]
+};
+const data2 = {
+  name: 'John Doe',
+  personalData: {}
+};
+
 registerExamples([
   {
     name: 'person',
@@ -159,5 +202,12 @@ registerExamples([
     data,
     schema,
     uischema
+  },
+  {
+    name: 'person2',
+    label: 'Person2',
+    data: data2,
+    schema: schema2,
+    uischema: uischema2
   }
 ]);
