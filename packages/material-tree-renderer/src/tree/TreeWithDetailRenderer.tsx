@@ -396,7 +396,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl 
     labelProviders: ownProps.labelProviders,
     rootSchema: getSchema(state),
     id: createId('tree'),
-    errors: union(getErrorAt(path)(state).map(error => error.message))
+    errors: union(getErrorAt(path, resolvedSchema || rootSchema)(state).map(error => error.message))
   };
 };
 
