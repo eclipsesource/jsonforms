@@ -26,8 +26,14 @@ import test from 'ava';
 import { coreReducer } from '../../src/reducers';
 import { init } from '../../src/actions';
 import { JsonSchema } from '../../src/models/jsonSchema';
-import { errorAt, JsonFormsCore, subErrorsAt } from '../../src/reducers/core';
-import cloneDeep = require('lodash/cloneDeep');
+import {
+  errorAt,
+  JsonFormsCore,
+  sanitizeErrors,
+  subErrorsAt
+} from '../../src/reducers/core';
+
+import { createAjv } from '../../src';
 
 test('core reducer should support v7', t => {
   const schema: JsonSchema = {
@@ -51,198 +57,487 @@ test('core reducer should support v7', t => {
   t.is(after.errors.length, 1);
 });
 
-test('errorAt filters by path', t => {
+test('errorAt filters enum', t => {
+  const ajv = createAjv();
   const schema: JsonSchema = {
     type: 'object',
     properties: {
+      bar: {
+        type: 'string',
+        enum: ['f', 'b']
+      },
       foo: {
         type: 'string',
-        const: 'bar'
+        enum: ['f', 'b']
       }
     }
   };
+  const data = { foo: '', bar: '' };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
   const state: JsonFormsCore = {
-    data: undefined,
-    schema: undefined,
+    data,
+    schema,
     uischema: undefined,
-    errors: [
-      {
-        keyword: '',
-        dataPath: 'bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo.bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-    ]
+    errors
   };
   const filtered = errorAt('foo', schema.properties.foo)(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
-test('errorAt filters by schema', t => {
+test('errorAt filters required', t => {
+  const ajv = createAjv();
   const schema: JsonSchema = {
     type: 'object',
     properties: {
+      bar: {
+        type: 'string',
+        enum: ['f', 'b']
+      },
       foo: {
         type: 'string',
-        const: 'bar'
+        enum: ['f', 'b']
       }
-    }
+    },
+    required: ['bar', 'foo']
   };
+  const data = {};
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
   const state: JsonFormsCore = {
-    data: undefined,
-    schema: undefined,
+    data,
+    schema,
     uischema: undefined,
-    errors: [
-      {
-        keyword: '',
-        dataPath: 'bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: {type: 'string', enum: ['bar']}
-      },
-    ]
+    errors
   };
   const filtered = errorAt('foo', schema.properties.foo)(state);
   t.is(filtered.length, 1);
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
-test('subErrorsAt filters by path', t => {
+test('errorAt filters array minItems', t => {
+  const ajv = createAjv();
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
+      numbers: {
+        title: 'Numbers',
+        type: 'array',
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['One', 'Two', 'Three']
+        },
+        minItems: 1
+      },
+      colours: {
+        title: 'Colours',
+        type: 'array',
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['Red', 'Green', 'Blue']
+        },
+        minItems: 1
       }
     }
   };
-  const state: JsonFormsCore = {
-    data: undefined,
-    schema: undefined,
-    uischema: undefined,
-    errors: [
-      {
-        keyword: '',
-        dataPath: 'bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo.bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-    ]
+  const data: { colours: string[]; numbers: string[] } = {
+    colours: [],
+    numbers: []
   };
-  const filtered = subErrorsAt('foo', schema.properties.foo)(state);
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt('colours', schema.properties.colours)(state);
   t.is(filtered.length, 1);
-  t.deepEqual(filtered[0], state.errors[2]);
+  t.deepEqual(filtered[0], state.errors[1]);
 });
 
-test('subErrorsAt filters by schema', t => {
+test('errorAt filters array inner value', t => {
+  const ajv = createAjv();
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      foo: {
-        type: 'string',
-        const: 'bar'
+      numbers: {
+        title: 'Numbers',
+        type: 'array',
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['One', 'Two', 'Three']
+        },
+        minItems: 1
+      },
+      colours: {
+        title: 'Colours',
+        type: 'array',
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['Red', 'Green', 'Blue']
+        },
+        minItems: 1
       }
     }
   };
-  const state: JsonFormsCore = {
-    data: undefined,
-    schema: undefined,
-    uischema: undefined,
-    errors: [
-      {
-        keyword: '',
-        dataPath: 'foo',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-      {
-        keyword: '',
-        dataPath: 'foo.bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: {type: 'string', enum: ['bar']}
-      },
-      {
-        keyword: '',
-        dataPath: 'foo.bar',
-        schemaPath: '',
-        message: '',
-        params: {},
-        schema: undefined,
-        parentSchema: cloneDeep(schema.properties.foo)
-      },
-    ]
+  const data: { colours: string[]; numbers: string[] } = {
+    colours: ['Foo'],
+    numbers: ['Bar']
   };
-  const filtered = subErrorsAt('foo', schema.properties.foo)(state);
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt('colours.0', schema.properties.colours)(state);
   t.is(filtered.length, 1);
-  t.deepEqual(filtered[0], state.errors[2]);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt filters oneOf simple', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        oneOf: [
+          {
+            title: 'Numbers',
+            type: 'string',
+              enum: ['One', 'Two', 'Three']
+          },
+          {
+            title: 'Colours',
+            type: 'string',
+              enum: ['Red', 'Green', 'Blue']
+          }
+        ]
+      }
+    }
+  };
+  const data: { coloursOrNumbers: string } = { coloursOrNumbers: 'Foo' };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'coloursOrNumbers',
+    schema.properties.coloursOrNumbers.oneOf[1]
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt filters oneOf objects', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        oneOf: [
+          {
+            title: 'Numbers',
+            type: 'object',
+            properties: {
+              number: {
+                title: 'Type',
+                type: 'string',
+                enum: ['One', 'Two', 'Three']
+              }
+            },
+            additionalProperties: false
+          },
+          {
+            title: 'Colours',
+            type: 'object',
+            properties: {
+              colour: {
+              title: 'Type',
+              type: 'string',
+              enum: ['Red', 'Green', 'Blue']
+              }
+            },
+            additionalProperties: false
+          }
+        ]
+      }
+    },
+    additionalProperties: false
+  };
+  const data = { coloursOrNumbers: {colour: 'Foo'} };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'coloursOrNumbers.colour',
+    schema.properties.coloursOrNumbers.oneOf[1].properties.colour
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt filters oneOf objects same properties', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        oneOf: [
+          {
+            title: 'Numbers',
+            type: 'object',
+            properties: {
+              colourOrNumber: {
+                title: 'Type',
+                type: 'string',
+                enum: ['One', 'Two', 'Three']
+              }
+            }
+          },
+          {
+            title: 'Colours',
+            type: 'object',
+            properties: {
+              colourOrNumber: {
+              title: 'Type',
+              type: 'string',
+              enum: ['Red', 'Green', 'Blue']
+              }
+            }
+          }
+        ]
+      }
+    }
+  };
+  const data = { coloursOrNumbers: {colourOrNumber: 'Foo'} };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'coloursOrNumbers.colourOrNumber',
+    schema.properties.coloursOrNumbers.oneOf[1].properties.colourOrNumber
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt filters oneOf array', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        oneOf: [
+          {
+            title: 'Numbers',
+            type: 'array',
+            items: {
+              title: 'Type',
+              type: 'string',
+              enum: ['One', 'Two', 'Three']
+            },
+            minItems: 1
+          },
+          {
+            title: 'Colours',
+            type: 'array',
+            items: {
+              title: 'Type',
+              type: 'string',
+              enum: ['Red', 'Green', 'Blue']
+            },
+            minItems: 1
+          }
+        ]
+      }
+    }
+  };
+  const data: { coloursOrNumbers: string[] } = { coloursOrNumbers: [] };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'coloursOrNumbers',
+    schema.properties.coloursOrNumbers.oneOf[1]
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('errorAt filters oneOf array inner', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        oneOf: [
+          {
+            title: 'Numbers',
+            type: 'array',
+            items: {
+              title: 'Type',
+              type: 'string',
+              enum: ['One', 'Two', 'Three']
+            },
+            minItems: 1
+          },
+          {
+            title: 'Colours',
+            type: 'array',
+            items: {
+              title: 'Type',
+              type: 'string',
+              enum: ['Red', 'Green', 'Blue']
+            },
+            minItems: 1
+          }
+        ]
+      }
+    }
+  };
+  const data: { coloursOrNumbers: string[] } = { coloursOrNumbers: ['Foo'] };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'coloursOrNumbers',
+    schema.properties.coloursOrNumbers.oneOf[1]
+  )(state);
+  t.is(filtered.length, 0);
+});
+
+test('subErrorsAt filters array inner', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      numbers: {
+        title: 'Numbers',
+        type: 'array',
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['One', 'Two', 'Three']
+        },
+        minItems: 1
+      },
+      colours: {
+        title: 'Colours',
+        type: 'array',
+        items: {
+          title: 'Type',
+          type: 'string',
+          enum: ['Red', 'Green', 'Blue']
+        },
+        minItems: 1
+      }
+    }
+  };
+  const data: { colours: string[]; numbers: string[] } = {
+    colours: ['Foo'],
+    numbers: ['Bar']
+  };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = subErrorsAt('colours', schema.properties.colours
+    .items as JsonSchema)(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+test('subErrorsAt filters oneOf array inner', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        oneOf: [
+          {
+            title: 'Numbers',
+            type: 'array',
+            items: {
+              title: 'Type',
+              type: 'string',
+              enum: ['One', 'Two', 'Three']
+            },
+            minItems: 1
+          },
+          {
+            title: 'Colours',
+            type: 'array',
+            items: {
+              title: 'Type',
+              type: 'string',
+              enum: ['Red', 'Green', 'Blue']
+            },
+            minItems: 1
+          }
+        ]
+      }
+    }
+  };
+  const data: { coloursOrNumbers: string[] } = { coloursOrNumbers: ['Foo'] };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = subErrorsAt('coloursOrNumbers', schema.properties
+    .coloursOrNumbers.oneOf[1].items as JsonSchema)(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
 });
