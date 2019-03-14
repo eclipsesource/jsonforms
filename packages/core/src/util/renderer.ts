@@ -375,7 +375,9 @@ export const mapStateToControlProps = (
     controlElement.scope,
     rootSchema
   );
-  const errors = union(getErrorAt(path, resolvedSchema)(state).map(error => error.message));
+  const errors = union(
+    getErrorAt(path, resolvedSchema)(state).map(error => error.message)
+  );
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const defaultConfig = cloneDeep(getConfig(state));

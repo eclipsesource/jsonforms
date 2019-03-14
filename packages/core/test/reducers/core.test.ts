@@ -218,12 +218,12 @@ test('errorAt filters oneOf simple', t => {
           {
             title: 'Numbers',
             type: 'string',
-              enum: ['One', 'Two', 'Three']
+            enum: ['One', 'Two', 'Three']
           },
           {
             title: 'Colours',
             type: 'string',
-              enum: ['Red', 'Green', 'Blue']
+            enum: ['Red', 'Green', 'Blue']
           }
         ]
       }
@@ -271,9 +271,9 @@ test('errorAt filters oneOf objects', t => {
             type: 'object',
             properties: {
               colour: {
-              title: 'Type',
-              type: 'string',
-              enum: ['Red', 'Green', 'Blue']
+                title: 'Type',
+                type: 'string',
+                enum: ['Red', 'Green', 'Blue']
               }
             },
             additionalProperties: false
@@ -283,7 +283,7 @@ test('errorAt filters oneOf objects', t => {
     },
     additionalProperties: false
   };
-  const data = { coloursOrNumbers: {colour: 'Foo'} };
+  const data = { coloursOrNumbers: { colour: 'Foo' } };
   const v = ajv.compile(schema);
   const errors = sanitizeErrors(v, data);
 
@@ -324,9 +324,9 @@ test('errorAt filters oneOf objects same properties', t => {
             type: 'object',
             properties: {
               colourOrNumber: {
-              title: 'Type',
-              type: 'string',
-              enum: ['Red', 'Green', 'Blue']
+                title: 'Type',
+                type: 'string',
+                enum: ['Red', 'Green', 'Blue']
               }
             }
           }
@@ -334,7 +334,7 @@ test('errorAt filters oneOf objects same properties', t => {
       }
     }
   };
-  const data = { coloursOrNumbers: {colourOrNumber: 'Foo'} };
+  const data = { coloursOrNumbers: { colourOrNumber: 'Foo' } };
   const v = ajv.compile(schema);
   const errors = sanitizeErrors(v, data);
 
