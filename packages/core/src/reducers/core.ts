@@ -52,7 +52,7 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   return validator.errors;
 };
 
-const sanitizeErrors = (validator: ValidateFunction, data: any) =>
+export const sanitizeErrors = (validator: ValidateFunction, data: any) =>
   validate(validator, data).map(error => {
     error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
 
@@ -193,12 +193,20 @@ export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
 export const errorAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsCore
-): ErrorObject[] =>
-  filter(
+): ErrorObject[] => {
+  const oneOfDataPaths = filter(
     state.errors,
-    error =>
-      error.dataPath === instancePath && isEqual(error.parentSchema, schema)
-  );
+    error => error.keyword === 'oneOf'
+  ).map(error => error.dataPath);
+
+  return filter(state.errors, error => {
+    let result = error.dataPath === instancePath;
+    if (oneOfDataPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
+      result = result && isEqual(error.parentSchema, schema);
+    }
+    return result;
+  });
+};
 export const subErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsCore
 ): ErrorObject[] => {

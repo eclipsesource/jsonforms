@@ -56,111 +56,148 @@ const data = {
   }
 };
 
-const schema2 = {
-  'type': 'object',
-  'properties': {
-     'coloursOrNumbers': {
-        'oneOf': [
-          //  {
-          //     '$ref': '#/definitions/colours'
-          //  },
-          //  {
-          //     '$ref': '#/definitions/numbers'
-          //  },
-          //  {
-          //     '$ref': '#/definitions/shapes'
-          //  }
-          {
-            '$ref': '#/definitions/foo'
-         },
-         {
-            '$ref': '#/definitions/bar'
-         },
-         {
-            '$ref': '#/definitions/fooBar'
-         }
-        ]
-     }
-  },
-  'definitions': {
-    'foo': {
-        properties: {
-          fooInner: {
-            'title': 'Colours',
-         'type': 'string',
-         'enum': [
-            'Red',
-            'Green',
-            'Blue'
-         ],
-      }
-    }, required: ['fooInner']
-   },
-   'bar': {
-    properties: {
-      barInner: {
-    'title': 'Numbers',
-    'type': 'string',
-    'enum': [
-      'One',
-      'Two',
-      'Three'
-   ],
-  }}, required: ['barInner']
-},
-'fooBar': {
+const schema_1265_array = {
+  type: 'object',
   properties: {
-    foobarInner: {
-  'title': 'Shapes',
-  'type': 'string',
-  'enum': [
-    'Circle',
-    'Triangle',
-    'Square'
- ], }}, required: ['foobarInner']
-},
-     'colours': {
-        'title': 'Colours',
-        'type': 'array',
-        'items': {
-           'title': 'Type',
-           'type': 'string',
-           'enum': [
-              'Red',
-              'Green',
-              'Blue'
-           ],
-           'minItems': 1
+    coloursOrNumbers: {
+      oneOf: [
+        {
+          $ref: '#/definitions/colours'
+        },
+        {
+          $ref: '#/definitions/numbers'
+        },
+        {
+          $ref: '#/definitions/shapes'
         }
-     },
-     'numbers': {
-        'title': 'Numbers',
-        'type': 'array',
-        'items': {
-           'title': 'Type',
-           'type': 'string',
-           'enum': [
-              'One',
-              'Two',
-              'Three'
-           ],
-           'minItems': 1
+      ]
+    }
+  },
+  definitions: {
+    colours: {
+      title: 'Colours',
+      type: 'array',
+      items: {
+        title: 'Type',
+        type: 'string',
+        enum: ['Red', 'Green', 'Blue'],
+        minItems: 1
+      }
+    },
+    numbers: {
+      title: 'Numbers',
+      type: 'array',
+      items: {
+        title: 'Type',
+        type: 'string',
+        enum: ['One', 'Two', 'Three'],
+        minItems: 1
+      }
+    },
+    shapes: {
+      title: 'Shapes',
+      type: 'array',
+      items: {
+        title: 'Type',
+        type: 'string',
+        enum: ['Circle', 'Triangle', 'Square'],
+        minItems: 1
+      }
+    }
+  }
+};
+
+const schema_1265_object = {
+  type: 'object',
+  properties: {
+    coloursOrNumbers: {
+      oneOf: [
+        {
+          $ref: '#/definitions/colours'
+        },
+        {
+          $ref: '#/definitions/numbers'
+        },
+        {
+          $ref: '#/definitions/shapes'
         }
-     },
-     'shapes': {
-        'title': 'Shapes',
-        'type': 'array',
-        'items': {
-           'title': 'Type',
-           'type': 'string',
-           'enum': [
-              'Circle',
-              'Triangle',
-              'Square'
-           ],
-           'minItems': 1
+      ]
+    }
+  },
+  additionalProperties: false,
+  definitions: {
+    colours: {
+      title: 'Colours',
+      type: 'object',
+      properties: {
+        colour: {
+          title: 'Type',
+          type: 'string',
+          enum: ['Red', 'Green', 'Blue']
         }
-     }
+      },
+      additionalProperties: false
+    },
+    numbers: {
+      title: 'Numbers',
+      type: 'object',
+      properties: {
+        number: {
+          title: 'Type',
+          type: 'string',
+          enum: ['One', 'Two', 'Three']
+        }
+      },
+      additionalProperties: false
+    },
+    shapes: {
+      title: 'Shapes',
+      type: 'object',
+      properties: {
+        shape: {
+          title: 'Type',
+          type: 'string',
+          enum: ['Circle', 'Triangle', 'Square']
+        }
+      },
+      additionalProperties: false
+    }
+  }
+};
+
+const schema_1265_simple = {
+  type: 'object',
+  properties: {
+    coloursOrNumbers: {
+      oneOf: [
+        {
+          $ref: '#/definitions/colours'
+        },
+        {
+          $ref: '#/definitions/numbers'
+        },
+        {
+          $ref: '#/definitions/shapes'
+        }
+      ]
+    }
+  },
+  definitions: {
+    colours: {
+      title: 'Colours',
+      type: 'string',
+      enum: ['Red', 'Green', 'Blue']
+    },
+    numbers: {
+      title: 'Numbers',
+      type: 'string',
+      enum: ['One', 'Two', 'Three']
+    },
+    shapes: {
+      title: 'Shapes',
+      type: 'string',
+      enum: ['Circle', 'Triangle', 'Square']
+    }
   }
 };
 
@@ -173,10 +210,24 @@ registerExamples([
     uischema
   },
   {
-    name: '1265',
-    label: '1265',
-    data: {coloursOrNumbers: {}},
-    schema: schema2,
+    name: '1265_array',
+    label: '1265 Array',
+    data: { coloursOrNumbers: ['Foo'] },
+    schema: schema_1265_array,
+    uischema: undefined
+  },
+  {
+    name: '1265_object',
+    label: '1265 Object',
+    data: { coloursOrNumbers: { colour: 'Foo' } },
+    schema: schema_1265_object,
+    uischema: undefined
+  },
+  {
+    name: '1265_simple',
+    label: '1265 Simple',
+    data: { coloursOrNumbers: 'Foo' },
+    schema: schema_1265_simple,
     uischema: undefined
   }
 ]);
