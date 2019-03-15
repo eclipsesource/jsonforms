@@ -28,7 +28,7 @@ import { Provider } from 'react-redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Actions, ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
-import { materialFields, MaterialAllOfRenderer, materialRenderers } from '../../src';
+import { MaterialAllOfRenderer, materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -82,7 +82,7 @@ describe('Material allOf renderer', () => {
     store.dispatch(Actions.init({data: undefined}, schema, uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialAllOfRenderer schema={schema} uischema={uischema} handleChange={()=>{}}/>
+        <MaterialAllOfRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -116,7 +116,7 @@ describe('Material allOf renderer', () => {
     store.dispatch(Actions.init({data: undefined}, schema, uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialAllOfRenderer schema={schema} uischema={uischema} handleChange={()=>{}} visible={false}/>
+        <MaterialAllOfRenderer schema={schema} uischema={uischema} visible={false}/>
       </Provider>
     );
     const inputs = wrapper.find('input');

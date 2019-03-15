@@ -6,6 +6,8 @@ import { NgRedux } from '@angular-redux/store';
 import {
   ArrayControlProps,
   ControlElement,
+  createDefaultValue,
+  findUISchema,
   JsonFormsState,
   mapDispatchToArrayControlProps,
   mapStateToArrayControlProps,
@@ -47,7 +49,7 @@ export const removeSchemaKeywords = (path: string) => {
             <button
               mat-icon-button
               class="button hide"
-              (click)="onDeleteClick(item)"
+              (click)="onDeleteClick(i)"
               [ngClass]="{ show: highlightedIdx == i }"
             >
               <mat-icon mat-list-icon>delete</mat-icon>
@@ -109,8 +111,7 @@ export class MasterListComponent extends JsonFormsArrayControl {
   selectedItem: any;
   selectedItemIdx: number;
   addItem: (path: string, value: any) => () => void;
-  createDefaultValue: () => void;
-  removeItems: (path: string, toDelete: any[]) => () => void;
+  removeItems: (path: string, toDelete: number[]) => () => void;
   propsPath: string;
   highlightedIdx: number;
 
@@ -136,13 +137,13 @@ export class MasterListComponent extends JsonFormsArrayControl {
   }
 
   mapAdditionalProps(props: ArrayControlProps) {
-    const { data, path, schema, uischema, createDefaultValue } = props;
+    const { data, path, schema, uischema } = props;
     const controlElement = uischema as ControlElement;
     this.propsPath = props.path;
-    this.createDefaultValue = createDefaultValue;
     const detailUISchema =
       controlElement.options.detail ||
-      props.findUISchema(
+      findUISchema(
+        props.uischemas,
         schema,
         `${controlElement.scope}/items`,
         props.path,
@@ -202,11 +203,11 @@ export class MasterListComponent extends JsonFormsArrayControl {
   }
 
   onAddClick() {
-    this.addItem(this.propsPath, this.createDefaultValue())();
+    this.addItem(this.propsPath, createDefaultValue(this.scopedSchema))();
   }
 
-  onDeleteClick(item: any) {
-    this.removeItems(this.propsPath, [item.data])();
+  onDeleteClick(item: number) {
+    this.removeItems(this.propsPath, [item])();
   }
 
   protected mapToProps(state: JsonFormsState): ArrayControlProps {

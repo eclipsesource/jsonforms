@@ -100,13 +100,13 @@ export class ResolvedJsonFormsDispatchRenderer
     }
 
     resolveAndUpdateSchema = (props: JsonFormsProps) => {
-        props.refResolver(props.schema).then(resolvedSchema => {
+        props.refResolver(props.schema).then((resolvedSchema: any) => {
             this.setState({
                 resolving: false,
                 resolvedSchema: resolvedSchema
             });
         });
-    }
+    };
 
     componentWillUnmount() {
         this.mounted = false;

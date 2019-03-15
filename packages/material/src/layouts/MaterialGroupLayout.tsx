@@ -25,7 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Card, CardContent, CardHeader } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Hidden } from '@material-ui/core';
 import {
   GroupLayout,
   mapStateToLayoutProps,
@@ -35,40 +35,52 @@ import {
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
-import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import {
+  MaterialLayoutRenderer,
+  MaterialLayoutRendererProps
+} from '../util/layout';
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
+const style: { [x: string]: any } = { marginBottom: '10px' };
 export const MaterializedGroupLayoutRenderer = (props: StatePropsOfLayout) => {
-    const { uischema, schema, path, visible, renderers } = props;
+  const { uischema, schema, path, visible, renderers } = props;
 
-    const groupLayout = uischema as GroupLayout;
+  const groupLayout = uischema as GroupLayout;
 
-    const childProps: MaterialLayoutRendererProps = {
-      elements: groupLayout.elements,
-      schema,
-      path,
-      direction: 'column',
-      visible,
-      renderers
-    };
-    const style: {[x: string]: any} = { marginBottom: '10px' };
-    if (!visible) {
-        style.display = 'none';
-    }
-
-    return (
-        <Card style={style}>
-          {!isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
-          <CardContent>
-            <MaterialLayoutRenderer {...childProps} />
-          </CardContent>
-        </Card>
-    );
+  return (
+    <GroupComponent
+      elements={groupLayout.elements}
+      schema={schema}
+      path={path}
+      direction={'column'}
+      visible={visible}
+      uischema={uischema}
+      renderers={renderers}
+    />
+  );
 };
 
-export default connect(
-  mapStateToLayoutProps
-)(MaterializedGroupLayoutRenderer);
+const GroupComponent = React.memo((props: MaterialLayoutRendererProps) => {
+  const { visible, uischema } = props;
+  const groupLayout = uischema as GroupLayout;
+  return (
+    <Hidden xsUp={!visible}>
+      <Card style={style}>
+        {!isEmpty(groupLayout.label) && (
+          <CardHeader title={groupLayout.label} />
+        )}
+        <CardContent>
+          <MaterialLayoutRenderer {...props} />
+        </CardContent>
+      </Card>
+    </Hidden>
+  );
+});
 
-export const materialGroupTester: RankedTester = withIncreasedRank(1, groupTester);
+export default connect(mapStateToLayoutProps)(MaterializedGroupLayoutRenderer);
+
+export const materialGroupTester: RankedTester = withIncreasedRank(
+  1,
+  groupTester
+);

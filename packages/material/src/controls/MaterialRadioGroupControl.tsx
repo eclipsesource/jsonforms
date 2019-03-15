@@ -22,13 +22,13 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import merge from 'lodash/merge';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
   ControlState,
-  formatErrorMessage,
   isDescriptionHidden,
   isPlainLabel,
   rankWith,
@@ -56,7 +56,12 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             visible
         } = this.props;
         const isValid = errors.length === 0;
-        const trim = config.trim;
+        const style: { [x: string]: any } = {};
+        if (!visible) {
+            style.display = 'none';
+        }
+        const mergedConfig = merge({}, config, this.props.uischema.options);
+        const trim = mergedConfig.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
         const options = schema.enum;
@@ -94,7 +99,7 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
               </RadioGroup>
               <FormHelperText error={!isValid}>
                 {!isValid
-                  ? formatErrorMessage(errors)
+                  ? errors
                   : showDescription
                   ? description
                   : null}

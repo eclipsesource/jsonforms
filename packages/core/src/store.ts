@@ -27,6 +27,8 @@ import { JsonFormsCore } from './reducers/core';
 import { JsonFormsFieldRendererRegistryEntry } from './reducers/fields';
 import { JsonFormsRendererRegistryEntry } from './reducers/renderers';
 import { JsonFormsLocaleState } from './reducers/i18n';
+import { UISchemaTester } from './reducers/uischemas';
+import { UISchemaElement } from './models/uischema';
 
 /**
  * JSONForms store.
@@ -64,6 +66,10 @@ export interface JsonFormsSubStates {
    *
    */
   i18n?: JsonFormsLocaleState;
+  /**
+   *
+   */
+  uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
   // allow additional state
   [additionalState: string]: any;
 }

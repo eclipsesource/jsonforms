@@ -24,6 +24,7 @@
 */
 import React from 'react';
 import { connect } from 'react-redux';
+import merge from 'lodash/merge';
 import {
   computeLabel,
   ControlProps,
@@ -62,8 +63,9 @@ export class MaterialDateTimeControl extends Control<ControlProps, ControlState>
       data,
       config
     } = this.props;
+    const mergedConfig = merge({}, config, uischema.options);
     const isValid = errors.length === 0;
-    const trim = config.trim;
+    const trim = mergedConfig.trim;
 
     const getValue = (event: React.FormEvent<HTMLInputElement>) =>
       (event.target as HTMLInputElement).value;

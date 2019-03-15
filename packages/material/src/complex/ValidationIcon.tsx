@@ -43,7 +43,7 @@ const styles: StyleRulesCallback<'badge'> = ({ palette }) => ({
 });
 
 export interface ValidationProps {
-  errorMessages: string[];
+  errorMessages: string;
   id: string;
 }
 
@@ -52,9 +52,9 @@ const ValidationIcon: React.SFC<ValidationProps & WithStyles<'badge'>> =
     return (
       <Tooltip
         id={id}
-        title={errorMessages.map((e, idx) => <div key={`${id}_${idx}`}>{e}</div>)}
+        title={errorMessages}
       >
-        <Badge className={classes.badge} badgeContent={errorMessages.length}>
+        <Badge className={classes.badge} badgeContent={errorMessages.split('\n').length}>
           <ErrorOutlineIcon color='inherit'/>
         </Badge>
       </Tooltip>

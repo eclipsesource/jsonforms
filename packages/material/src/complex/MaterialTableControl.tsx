@@ -23,10 +23,12 @@
   THE SOFTWARE.
 */
 import isEmpty from 'lodash/isEmpty';
-import filter from 'lodash/filter';
+import union from 'lodash/union';
 import { DispatchField } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
+import range from 'lodash/range';
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   FormHelperText,
   Hidden,
@@ -38,11 +40,12 @@ import {
   Typography
 } from '@material-ui/core';
 import {
-  ArrayControlProps,
+  ArrayLayoutProps,
   ControlElement,
   formatErrorMessage,
   Generate,
-  Helpers,
+  getErrorAt,
+  JsonFormsState,
   JsonSchema,
   Paths,
   Resolve
@@ -50,7 +53,6 @@ import {
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { WithDeleteDialogSupport } from './DeleteDialog';
-import { ErrorObject } from 'ajv';
 import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
 
@@ -66,13 +68,10 @@ const styles = {
 };
 
 const generateCells = (
-  Cell: React.ComponentType<NonEmptyCellProps | TableHeaderCellProps>,
-  rootSchema: JsonSchema,
+  Cell: React.ComponentType<OwnPropsOfNonEmptyCell | TableHeaderCellProps>,
   schema: JsonSchema,
-  rowPath: string,
-  cellErrors?: any[]
+  rowPath: string
 ) => {
-
   if (schema.type === 'object') {
     return getValidColumnProps(schema).map(prop => {
       const cellPath = Paths.compose(
@@ -83,8 +82,7 @@ const generateCells = (
         propName: prop,
         schema,
         rowPath,
-        cellPath,
-        errors: cellErrors
+        cellPath
       };
 
       return <Cell key={cellPath} {...props} />;
@@ -93,10 +91,8 @@ const generateCells = (
     // primitives
     const props = {
       schema,
-      rootSchema,
       rowPath,
-      cellPath: rowPath,
-      errors: cellErrors
+      cellPath: rowPath
     };
     return <Cell key={rowPath} {...props} />;
   }
@@ -128,78 +124,92 @@ interface TableHeaderCellProps {
   propName: string;
 }
 
-const TableHeaderCell = ({ propName }: TableHeaderCellProps) => (
+const TableHeaderCell = React.memo(({ propName }: TableHeaderCellProps) => (
   <TableCell>{startCase(propName)}</TableCell>
-);
+));
 
-interface NonEmptyCellProps {
+interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
+  rootSchema: JsonSchema;
+  errors: string;
+  path: string;
+}
+interface OwnPropsOfNonEmptyCell {
   rowPath: string;
   propName?: string;
   schema: JsonSchema;
-  rootSchema: JsonSchema;
-  errors?: any[];
 }
+const mapStateToNonEmptyCellProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfNonEmptyCell
+): NonEmptyCellProps => {
 
-const NonEmptyCell = ({
-  rowPath,
-  propName,
-  schema,
-  rootSchema,
-  errors
-}: NonEmptyCellProps) => {
-  const path = rowPath + (schema.type === 'object' ? '.' + propName : '');
-  const errorsPerEntry: any[] = filter(
+  const path = ownProps.rowPath + (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+  const errors = formatErrorMessage(
+    union(
+      getErrorAt(path, ownProps.schema)(state).map(
+        error => error.message
+      )
+    )
+  );
+  return {
+    rowPath: ownProps.rowPath,
+    propName: ownProps.propName,
+    schema: ownProps.schema,
+    rootSchema: state.jsonforms.core.schema,
     errors,
-    error => error.dataPath === path
-  ).map(e => e.message);
-  const isValid = isEmpty(errorsPerEntry);
+    path
+  };
+};
 
-  return (
-    <NoBorderTableCell>
-      {
-        schema.properties ?
+class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
+  render() {
+    const { path, propName, schema, rootSchema, errors } = this.props;
+
+    const isValid = isEmpty(errors);
+
+    return (
+      <NoBorderTableCell>
+        {schema.properties ? (
           <DispatchField
-            schema={Resolve.schema(schema, `#/properties/${propName}`, rootSchema)}
+            schema={Resolve.schema(
+              schema,
+              `#/properties/${propName}`,
+              rootSchema
+            )}
             uischema={Generate.controlElement(
               undefined,
               `#/properties/${propName}`
             )}
             path={path}
-          /> :
+          />
+        ) : (
           <DispatchField
             schema={schema}
-            uischema={Generate.controlElement(
-              undefined,
-              '#'
-            )}
+            uischema={Generate.controlElement(undefined, '#')}
             path={path}
           />
-      }
-      <FormHelperText error={!isValid}>
-        {!isValid && formatErrorMessage(errorsPerEntry)}
-      </FormHelperText>
-    </NoBorderTableCell>
-  );
-};
+        )}
+        <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
+      </NoBorderTableCell>
+    );
+  }
+}
+const NonEmptyCell = connect(mapStateToNonEmptyCellProps)(NonEmptyCellInner);
 
 interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
-  rootSchema: JsonSchema;
-  childErrors: ErrorObject[];
-  rowData: any;
+  rowData: number;
 }
 
-const NonEmptyRow = ({
+const NonEmptyRow = React.memo(({
   childPath,
   schema,
-  rootSchema,
-  childErrors,
   rowData,
   openDeleteDialog
 }: NonEmptyRowProps & WithDeleteDialogSupport) => (
   <TableRow key={childPath} hover>
-    {generateCells(NonEmptyCell, rootSchema, schema, childPath, childErrors)}
+    {generateCells(NonEmptyCell, schema, childPath)}
     <NoBorderTableCell style={styles.fixedCell}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <IconButton
@@ -211,40 +221,51 @@ const NonEmptyRow = ({
       </div>
     </NoBorderTableCell>
   </TableRow>
-);
-
-const TableRows = (
-  {
-    data, path, rootSchema, schema, childErrors, openDeleteDialog
-  }: ArrayControlProps & WithDeleteDialogSupport) => {
-
-  const isEmptyTable = !data || !Array.isArray(data) || data.length === 0;
+));
+interface TableRowsProp {
+  data: number;
+  path: string;
+  schema: JsonSchema;
+}
+const TableRows = ({
+  data,
+  path,
+  schema,
+  openDeleteDialog
+}: TableRowsProp & WithDeleteDialogSupport) => {
+  const isEmptyTable = data === 0;
 
   if (isEmptyTable) {
-    return (<EmptyTable numColumns={getValidColumnProps(schema).length + 1} />);
+    return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
   }
 
-  return data.map((_child: any, index: number) => {
-    const childPath = Paths.compose(path, `${index}`);
+  return (
+    <React.Fragment>
+      {range(data).map((index: number) => {
+        const childPath = Paths.compose(
+          path,
+          `${index}`
+        );
 
-    return (
-      <NonEmptyRow
-        key={childPath}
-        childPath={childPath}
-        rowData={_child}
-        schema={schema}
-        rootSchema={rootSchema}
-        childErrors={childErrors}
-        openDeleteDialog={openDeleteDialog}
-      />
-    );
-  });
+        return (
+          <NonEmptyRow
+            key={childPath}
+            childPath={childPath}
+            rowData={index}
+            schema={schema}
+            openDeleteDialog={openDeleteDialog}
+          />
+        );
+      })}
+    </React.Fragment>
+  );
 };
 
 export class MaterialTableControl extends React.Component<
-  ArrayControlProps & WithDeleteDialogSupport,
+ArrayLayoutProps & WithDeleteDialogSupport,
   any
 > {
+  addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {
       label,
@@ -252,50 +273,40 @@ export class MaterialTableControl extends React.Component<
       schema,
       rootSchema,
       uischema,
-      childErrors,
       errors,
-      createDefaultValue,
-      addItem,
       openDeleteDialog,
       visible
     } = this.props;
 
     const controlElement = uischema as ControlElement;
-    const labelObject = Helpers.createLabelDescriptionFrom(controlElement);
-    const allErrors = [].concat(errors).concat(childErrors.map((e: ErrorObject) => e.message));
     const isObjectSchema = schema.type === 'object';
-    const headerCells: any = isObjectSchema ?
-      generateCells(TableHeaderCell, rootSchema, schema, path) : undefined;
+    const headerCells: any = isObjectSchema
+      ? generateCells(TableHeaderCell, schema, path)
+      : undefined;
 
     return (
       <Hidden xsUp={!visible}>
         <Table>
           <TableHead>
             <TableToolbar
-              errors={allErrors}
+              errors={errors}
               label={label}
-              labelObject={labelObject}
-              addItem={addItem}
+              addItem={this.addItem}
               numColumns={isObjectSchema ? headerCells.length : 1}
               path={path}
               uischema={controlElement}
               schema={schema}
               rootSchema={rootSchema}
-              createDefaultValue={createDefaultValue}
             />
-            {
-              isObjectSchema &&
+            {isObjectSchema && (
               <TableRow>
-                  {headerCells}
-                  <TableCell/>
+                {headerCells}
+                <TableCell />
               </TableRow>
-            }
+            )}
           </TableHead>
           <TableBody>
-            <TableRows
-              {...this.props}
-              openDeleteDialog={openDeleteDialog}
-            />
+            <TableRows openDeleteDialog={openDeleteDialog} {...this.props} />
           </TableBody>
         </Table>
       </Hidden>

@@ -109,7 +109,8 @@ test('findUISchema returns generated UI schema if no match has been found', t =>
   });
 
   t.deepEqual(
-    findUISchema(store.getState())(
+    findUISchema(
+      store.getState().jsonforms.uischemas,
       getSchema(store.getState()),
       '#/definitions/baz',
       undefined

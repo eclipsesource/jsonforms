@@ -28,7 +28,6 @@ import {
   computeLabel,
   ControlProps,
   ControlState,
-  formatErrorMessage,
   isDateControl,
   isDescriptionHidden,
   isPlainLabel,
@@ -42,6 +41,7 @@ import {
 import { Hidden } from '@material-ui/core';
 import { Control } from '@jsonforms/react';
 import TextField from '@material-ui/core/TextField';
+import merge from 'lodash/merge';
 
 export class MaterialNativeControl extends Control<ControlProps, ControlState> {
   render() {
@@ -59,7 +59,8 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
       config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = config.trim;
+    const mergedConfig = merge({}, config, this.props.uischema.options);
+    const trim = mergedConfig.trim;
     const onChange = (ev: any) => handleChange(path, ev.target.value);
     const fieldType = schema.format;
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
@@ -74,7 +75,7 @@ export class MaterialNativeControl extends Control<ControlProps, ControlState> {
           fullWidth={!trim}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
-          helperText={!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          helperText={!isValid ? errors : showDescription ? description : null}
           InputLabelProps={{ shrink: true }}
           value={data}
           onChange={onChange}

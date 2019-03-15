@@ -24,16 +24,10 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import has from 'lodash/has';
-import cloneDeep from 'lodash/cloneDeep';
-import merge from 'lodash/merge';
+import union from 'lodash/union';
+import { getConfig, getData, getErrorAt, getSchema } from '../reducers';
 import {
-  findUISchema,
-  getConfig,
-  getData,
-  getErrorAt,
-  getSchema
-} from '../reducers';
-import {
+  formatErrorMessage,
   isEnabled,
   isVisible,
   OwnPropsOfControl,
@@ -113,10 +107,10 @@ export const mapStateToFieldProps = (
   const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
     : isEnabled(uischema, rootData);
-  const errors = getErrorAt(path, schema)(state).map(error => error.message);
+  const errors = formatErrorMessage(
+    union(getErrorAt(path, schema)(state).map(error => error.message))
+  );
   const isValid = isEmpty(errors);
-  const defaultConfig = cloneDeep(getConfig(state));
-  const config = merge(defaultConfig, ownProps.uischema.options);
   const rootSchema = getSchema(state);
 
   return {
@@ -129,8 +123,7 @@ export const mapStateToFieldProps = (
     isValid,
     schema,
     uischema,
-    config,
-    findUISchema: findUISchema(state),
+    config: getConfig(state),
     rootSchema
   };
 };

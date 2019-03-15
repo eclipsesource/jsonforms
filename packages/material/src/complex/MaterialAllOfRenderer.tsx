@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
 
 import {
-  ControlProps,
+  CombinatorRendererProps,
   isAllOfControl,
   JsonSchema,
-  mapStateToControlProps,
+  mapStateToAllOfProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { createCombinatorRenderInfos, resolveSubSchemas } from './combinators';
 
-class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
+class MaterialAllOfRenderer extends React.Component<CombinatorRendererProps, any> {
 
   render() {
 
@@ -45,7 +45,7 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
 }
 
 const ConnectedMaterialAllOfRenderer = connect(
-  mapStateToControlProps
+  mapStateToAllOfProps
 )(MaterialAllOfRenderer);
 
 export const materialAllOfControlTester: RankedTester = rankWith(2, isAllOfControl);

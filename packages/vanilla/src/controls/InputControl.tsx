@@ -28,7 +28,6 @@ import {
   computeLabel,
   ControlProps,
   ControlState,
-  formatErrorMessage,
   isControl,
   isDescriptionHidden,
   isPlainLabel,
@@ -99,7 +98,7 @@ export class InputControl extends Control<
           />
           <div className={divClassNames}>
             {!isValid
-              ? formatErrorMessage(errors)
+              ? errors
               : showDescription
               ? description
               : null}

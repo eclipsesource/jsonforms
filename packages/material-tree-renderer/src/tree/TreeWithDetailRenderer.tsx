@@ -7,15 +7,16 @@ import {
   Actions,
   ControlState,
   createId,
-  findUISchema, getData,
+  findUISchema,
+  formatErrorMessage,
+  getData,
   getErrorAt,
   getSchema,
   JsonFormsState,
   JsonSchema,
-  OwnPropsOfControl,
-  Paths, Resolve,
-  Runtime,
-  StatePropsOfControl, UISchemaElement
+  OwnPropsOfControl, Paths,
+  Resolve,
+  Runtime, StatePropsOfControl, UISchemaElement, UISchemaTester
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 /* tslint:disable:next-line */
@@ -179,6 +180,7 @@ export interface StatePropsOfTreeWithDetail extends StatePropsOfControl {
     forData: InstanceLabelProvider;
   };
   imageProvider: any;
+  uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
 }
 
 export interface DispatchPropsOfTreeWithDetail {
@@ -271,7 +273,8 @@ export class TreeWithDetailRenderer extends React.Component
       filterPredicate,
       labelProviders,
       imageProvider,
-      classes
+      classes,
+      uischemas
     } = this.props;
     const controlElement = uischema;
     const dialogProps = {
@@ -290,7 +293,7 @@ export class TreeWithDetailRenderer extends React.Component
       resetSelection: resetSelection
     };
 
-    const detailUiSchema = this.props.findUISchema(this.state.selected.schema, undefined, path);
+    const detailUiSchema = findUISchema(uischemas, this.state.selected.schema, undefined, path);
 
     return (
       <div hidden={!visible} className={classes.treeMasterDetail}>
@@ -387,7 +390,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl 
     data: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
     schema:  resolvedSchema || rootSchema,
-    findUISchema: findUISchema(state),
+    uischemas: state.jsonforms.uischemas,
     path,
     visible,
     enabled,
@@ -396,7 +399,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl 
     labelProviders: ownProps.labelProviders,
     rootSchema: getSchema(state),
     id: createId('tree'),
-    errors: union(getErrorAt(path, resolvedSchema || rootSchema)(state).map(error => error.message))
+    errors: formatErrorMessage(union(getErrorAt(path, resolvedSchema || rootSchema)(state).map(error => error.message)))
   };
 };
 

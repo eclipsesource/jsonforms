@@ -22,17 +22,17 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import React from 'react';
 import fpfilter from 'lodash/fp/filter';
-import fpkeys from 'lodash/fp/keys';
 import fpmap from 'lodash/fp/map';
 import fpflow from 'lodash/fp/flow';
 import filter from 'lodash/filter';
 import join from 'lodash/join';
-import React from 'react';
+import fpkeys from 'lodash/fp/keys';
 import {
   ArrayControlProps,
   ControlElement,
-  formatErrorMessage,
+  createDefaultValue,
   Helpers,
   isPlainLabel,
   mapDispatchToArrayControlProps,
@@ -73,7 +73,6 @@ class TableArrayControl extends React.Component<
       uischema,
       schema,
       rootSchema,
-      createDefaultValue,
       path,
       data,
       visible,
@@ -107,13 +106,13 @@ class TableArrayControl extends React.Component<
           <label className={labelClass}>{labelText}</label>
           <button
             className={buttonClass}
-            onClick={addItem(path, createDefaultValue())}
+            onClick={addItem(path, createDefaultValue(schema))}
           >
             Add to {labelObject.text}
           </button>
         </header>
         <div className={divClassNames}>
-          {!isValid ? formatErrorMessage(errors) : ''}
+          {!isValid ? errors : ''}
         </div>
         <table className={tableClass}>
           <thead>

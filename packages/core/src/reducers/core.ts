@@ -253,12 +253,17 @@ export const subErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsCore
 ): ErrorObject[] => {
   const path = `${instancePath}.`;
-
-  return filter(
+  const oneOfDataPaths = filter(
     state.errors,
-    error =>
-      error.dataPath.startsWith(path) && isEqual(error.parentSchema, schema)
-  );
+    error => error.keyword === 'oneOf'
+  ).map(error => error.dataPath);
+  return filter(state.errors, error => {
+    let result = error.dataPath.startsWith(path);
+    if (oneOfDataPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
+      result = result && isEqual(error.parentSchema, schema);
+    }
+    return result;
+  });
 };
 export const extractRefParserOptions = (state: JsonFormsCore) =>
   get(state, 'refParserOptions');

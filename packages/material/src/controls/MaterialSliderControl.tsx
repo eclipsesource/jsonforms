@@ -28,7 +28,6 @@ import {
   computeLabel,
   ControlProps,
   ControlState,
-  formatErrorMessage,
   isDescriptionHidden,
   isPlainLabel,
   isRangeControl,
@@ -41,6 +40,7 @@ import { Control } from '@jsonforms/react';
 
 import { FormControl, FormHelperText, Hidden, Typography } from '@material-ui/core';
 import Slider from '@material-ui/lab/Slider';
+import merge from 'lodash/merge';
 
 export class MaterialSliderControl extends Control<ControlProps, ControlState> {
   render() {
@@ -59,7 +59,8 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
       config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = config.trim;
+    const mergedConfig = merge({}, config, this.props.uischema.options);
+    const trim = mergedConfig.trim;
     const labelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -110,7 +111,7 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
             step={schema.multipleOf || 1}
           />
           <FormHelperText error={!isValid}>
-            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+            {!isValid ? errors : showDescription ? description : null}
           </FormHelperText>
         </FormControl>
       </Hidden>

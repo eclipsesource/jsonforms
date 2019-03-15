@@ -4,6 +4,7 @@ import { AbstractMasterPage } from '../AbstractMasterPage';
 import { MasterItem } from '../../list-with-detail-control';
 import {
   ControlElement,
+  createDefaultValue,
   JsonFormsState,
   JsonSchema,
   mapDispatchToArrayControlProps
@@ -39,7 +40,6 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
   path: string;
   addItem: (path: string, value: any) => () => void;
   pushDetail: (params: any) => void;
-  createDefaultValue: () => void;
 
   constructor(
     public navParams: NavParams,
@@ -51,7 +51,6 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
     this.uischema = this.navParams.get('uischema');
     this.path = this.navParams.get('path');
     this.pushDetail = this.navParams.get('pushDetail');
-    this.createDefaultValue = this.navParams.get('createDefaultValue');
   }
 
   ngOnInit() {
@@ -64,6 +63,6 @@ export class MasterPage extends AbstractMasterPage implements OnInit {
   }
 
   onClick() {
-    this.addItem(this.path, this.createDefaultValue())();
+    this.addItem(this.path, createDefaultValue(this.schema))();
   }
 }
