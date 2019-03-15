@@ -12,7 +12,6 @@ import {
   mapStateToArrayControlProps,
   RankedTester,
   rankWith,
-  resolveSchema,
   toDataPath,
   UISchemaElement,
   uiTypeIs
@@ -74,18 +73,12 @@ export class ListWithDetailControl extends JsonFormsArrayControl {
     this.subscription = this.ngRedux
       .select()
       .subscribe((state: JsonFormsState) => {
-        const { data, createDefaultValue, schema, uischema } = this.mapToProps(
-          state
-        );
+        const { data, schema, uischema } = this.mapToProps(state);
         const controlElement = uischema as ControlElement;
         const instancePath = toDataPath(`${controlElement.scope}/items`);
-        const resolvedSchema = resolveSchema(
-          schema,
-          `${controlElement.scope}/items`
-        );
         const detailUISchema =
           controlElement.options.detail ||
-          Generate.uiSchema(resolvedSchema, 'VerticalLayout');
+          Generate.uiSchema(schema, 'VerticalLayout');
         const masterItems = data.map((d: any, index: number) => {
           const labelRefInstancePath = removeSchemaKeywords(
             controlElement.options.labelRef
@@ -94,7 +87,7 @@ export class ListWithDetailControl extends JsonFormsArrayControl {
             label: get(d, labelRefInstancePath),
             data: d,
             path: `${instancePath}.${index}`,
-            schema: resolvedSchema,
+            schema: schema,
             uischema: detailUISchema
           };
           return masterItem;
@@ -111,9 +104,8 @@ export class ListWithDetailControl extends JsonFormsArrayControl {
             items: this.masterItems,
             path: composeWithUi(this.uischema as ControlElement, this.path),
             uischema: this.uischema,
-            schema: this.schema,
-            pushDetail: this.updateDetail,
-            createDefaultValue
+            schema: schema,
+            pushDetail: this.updateDetail
           };
           this.updateMaster();
         } else if (this.masterItems !== undefined) {

@@ -34,6 +34,7 @@ import {
 } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
 import { connect } from 'react-redux';
+import merge from 'lodash/merge';
 
 export const MaterialTextField = (props: FieldProps & WithClassname) => {
   const {
@@ -49,13 +50,14 @@ export const MaterialTextField = (props: FieldProps & WithClassname) => {
     schema
   } = props;
   const maxLength = schema.maxLength;
+  const mergedConfig = merge({}, config, uischema.options);
   let inputProps: any;
-  if (config.restrict) {
+  if (mergedConfig.restrict) {
     inputProps = {'maxLength': maxLength};
   } else {
     inputProps = {};
   }
-  if (config.trim && maxLength !== undefined) {
+  if (mergedConfig.trim && maxLength !== undefined) {
     inputProps.size = maxLength;
   }
   const onChange = (ev: any) => handleChange(path, ev.target.value);
@@ -70,7 +72,7 @@ export const MaterialTextField = (props: FieldProps & WithClassname) => {
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
-      fullWidth={!config.trim || maxLength === undefined}
+      fullWidth={!mergedConfig.trim || maxLength === undefined}
       inputProps={inputProps}
       error={!isValid}
     />

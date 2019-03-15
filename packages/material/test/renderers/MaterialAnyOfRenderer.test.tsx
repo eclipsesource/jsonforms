@@ -28,7 +28,7 @@ import { Provider } from 'react-redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Actions, ControlElement, getData, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
-import { materialFields, MaterialAnyOfRenderer, materialRenderers } from '../../src';
+import { MaterialAnyOfRenderer, materialFields, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import { JsonForms } from '@jsonforms/react';
 
@@ -100,7 +100,7 @@ describe('Material anyOf renderer', () => {
     store.dispatch(Actions.init({data: undefined}, schema, uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialAnyOfRenderer schema={schema} uischema={uischema} handleChange={()=>{}}/>
+        <MaterialAnyOfRenderer schema={schema} uischema={uischema}/>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -244,7 +244,7 @@ describe('Material anyOf renderer', () => {
     wrapper.update();
 
     selectanyOfTab(wrapper, 1);
-    clickAddButton(wrapper, 2);
+    clickAddButton(wrapper, 1);
     wrapper.find('input').first().simulate('change', { target: { value: 5 }});
     wrapper.update();
     selectanyOfTab(wrapper, 0);
@@ -253,7 +253,7 @@ describe('Material anyOf renderer', () => {
     input.simulate('change', { target: { value: 'test' }});
     wrapper.update();
 
-    expect(getData(store.getState())).toEqual({ myThingsAndOrYourThings: [ {age: 5, name: 'test'}, {} ]});
+    expect(getData(store.getState())).toEqual({ myThingsAndOrYourThings: [ {age: 5, name: 'test'} ]});
 
   });
 
@@ -284,7 +284,7 @@ describe('Material anyOf renderer', () => {
     store.dispatch(Actions.init({data: undefined}, schema, uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialAnyOfRenderer schema={schema} uischema={uischema} handleChange={()=>{}} visible={false} />
+        <MaterialAnyOfRenderer schema={schema} uischema={uischema} visible={false} />
       </Provider>
     );
     const inputs = wrapper.find('input');

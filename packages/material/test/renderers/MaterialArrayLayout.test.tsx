@@ -35,7 +35,7 @@ import Adapter from 'enzyme-adapter-react-16';
 Enzyme.configure({ adapter: new Adapter() });
 
 export const initJsonFormsStore = (): Store<JsonFormsState> => {
-  const s: JsonFormsState ={
+  const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
       fields: materialFields,

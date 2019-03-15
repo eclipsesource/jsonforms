@@ -25,8 +25,9 @@
 import React from 'react';
 import {
   ArrayControlProps,
+  ArrayLayoutProps,
   mapDispatchToArrayControlProps,
-  mapStateToArrayControlProps,
+  mapStateToArrayLayoutProps,
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
@@ -34,7 +35,7 @@ import { Hidden } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { DeleteDialog } from './DeleteDialog';
 
-export class MaterialArrayControlRenderer extends RendererComponent<ArrayControlProps, any> {
+export class MaterialArrayControlRenderer extends RendererComponent<ArrayLayoutProps, any> {
 
   constructor(props: ArrayControlProps) {
     super(props);
@@ -45,16 +46,23 @@ export class MaterialArrayControlRenderer extends RendererComponent<ArrayControl
     };
   }
 
-  openDeleteDialog = (path: string, rowData: any) => {
+  openDeleteDialog = (path: string, rowData: number) => {
     this.setState({
       open: true,
       path,
       rowData
     });
-  }
-
+  };
+  deleteCancel = () => this.setState({open: false});
+  deleteConfirm = () => {
+    const path = this.state.path.substring(0, this.state.path.lastIndexOf(('.')));
+    this.props.removeItems(path, [this.state.rowData])();
+    this.setState({open: false});
+  };
+  deleteClose = () => this.setState({open: false});
   render() {
-    const { visible, removeItems } = this.props;
+    const { visible } = this.props;
+
     return (
       <Hidden xsUp={!visible}>
         <MaterialTableControl
@@ -63,13 +71,9 @@ export class MaterialArrayControlRenderer extends RendererComponent<ArrayControl
         />
         <DeleteDialog
           open={this.state.open}
-          onCancel={() => this.setState({ open: false })}
-          onConfirm={() => {
-            const path = this.state.path.substring(0, this.state.path.lastIndexOf(('.')));
-            removeItems(path, [this.state.rowData])();
-            this.setState({ open: false });
-          }}
-          onClose={() => this.setState({ open: false })}
+          onCancel={this.deleteCancel}
+          onConfirm={this.deleteConfirm}
+          onClose={this.deleteClose}
         />
       </Hidden>
     );
@@ -77,6 +81,6 @@ export class MaterialArrayControlRenderer extends RendererComponent<ArrayControl
 }
 
 export default connect(
-  mapStateToArrayControlProps,
+  mapStateToArrayLayoutProps,
   mapDispatchToArrayControlProps
 )(MaterialArrayControlRenderer);

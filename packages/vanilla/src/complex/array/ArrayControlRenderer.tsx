@@ -43,8 +43,7 @@ const ArrayControlRenderer  =
          data,
          path,
          rootSchema,
-         createDefaultValue,
-         findUISchema,
+         uischemas,
          addItem,
          getStyle,
          getStyleAsClassName,
@@ -81,11 +80,10 @@ const ArrayControlRenderer  =
                 label={label}
                 path={path}
                 addItem={addItem}
-                findUISchema={findUISchema}
+                uischemas={uischemas}
                 uischema={uischema}
                 schema={schema}
                 rootSchema={rootSchema}
-                createDefaultValue={createDefaultValue}
                 id={id}
                 visible={visible}
                 enabled={enabled}

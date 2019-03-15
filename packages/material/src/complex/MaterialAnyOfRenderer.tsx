@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-  ControlProps,
+  CombinatorRendererProps,
   isAnyOfControl,
   JsonSchema,
-  mapStateToControlProps,
+  mapStateToAllOfProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
@@ -18,7 +18,7 @@ interface MaterialAnyOfState {
   selectedAnyOf: number;
 }
 
-class MaterialAnyOfRenderer extends React.Component<ControlProps, MaterialAnyOfState> {
+class MaterialAnyOfRenderer extends React.Component<CombinatorRendererProps, MaterialAnyOfState> {
 
   state: MaterialAnyOfState = {
     selectedAnyOf: 0
@@ -47,11 +47,12 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, MaterialAnyOfS
         </Tabs>
         {
           anyOfRenderInfos.map((anyOfRenderInfo, anyOfIndex) => (
-            this.state.selectedAnyOf === anyOfIndex && <ResolvedJsonForms
+            this.state.selectedAnyOf === anyOfIndex &&
+            <ResolvedJsonForms
+              key={anyOfIndex}
               schema={anyOfRenderInfo.schema}
               uischema={anyOfRenderInfo.uischema}
               path={path}
-              key={anyOfIndex}
             />
           ))
         }
@@ -61,7 +62,7 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, MaterialAnyOfS
 }
 
 const ConnectedMaterialAnyOfRenderer = connect(
-  mapStateToControlProps
+  mapStateToAllOfProps
 )(MaterialAnyOfRenderer);
 ConnectedMaterialAnyOfRenderer.displayName = 'MaterialAnyOfRenderer';
 export const materialAnyOfControlTester: RankedTester = rankWith(2, isAnyOfControl);

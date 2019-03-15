@@ -34,6 +34,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { VanillaRendererProps } from '../index';
+import merge from 'lodash/merge';
 
 export const TextField = (props: FieldProps & VanillaRendererProps) => {
   const {
@@ -48,7 +49,7 @@ export const TextField = (props: FieldProps & VanillaRendererProps) => {
     handleChange
   } = props;
   const maxLength = schema.maxLength;
-
+  const mergedConfig = merge({}, config, uischema.options);
   return (
     <input
       type='text'
@@ -60,8 +61,8 @@ export const TextField = (props: FieldProps & VanillaRendererProps) => {
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      maxLength={config.restrict ? maxLength : undefined}
-      size={config.trim ? maxLength : undefined}
+      maxLength={mergedConfig.restrict ? maxLength : undefined}
+      size={mergedConfig.trim ? maxLength : undefined}
     />
   );
 };

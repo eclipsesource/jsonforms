@@ -105,7 +105,7 @@ export abstract class JsonFormsAbstractControl<
           required
         );
         this.data = data;
-        this.error = errors ? errors.join('\n') : null;
+        this.error = errors;
         this.enabled = enabled;
         this.enabled ? this.form.enable() : this.form.disable();
         this.hidden = !visible;

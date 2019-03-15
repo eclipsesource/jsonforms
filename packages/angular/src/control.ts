@@ -24,9 +24,11 @@
 */
 import {
   ControlProps,
+  ControlWithDetailProps,
   JsonFormsState,
   mapDispatchToControlProps,
-  mapStateToControlProps
+  mapStateToControlProps,
+  mapStateToControlWithDetailProps
 } from '@jsonforms/core';
 import { OnDestroy, OnInit } from '@angular/core';
 import { JsonFormsAbstractControl } from './abstract-control';
@@ -35,6 +37,16 @@ export class JsonFormsControl extends JsonFormsAbstractControl<ControlProps>
   implements OnInit, OnDestroy {
   protected mapToProps(state: JsonFormsState): ControlProps {
     const props = mapStateToControlProps(state, this.getOwnProps());
+    const dispatch = mapDispatchToControlProps(this.ngRedux.dispatch);
+    return { ...props, ...dispatch };
+  }
+}
+
+export class JsonFormsControlWithDetail
+  extends JsonFormsAbstractControl<ControlWithDetailProps>
+  implements OnInit, OnDestroy {
+  protected mapToProps(state: JsonFormsState): ControlWithDetailProps {
+    const props = mapStateToControlWithDetailProps(state, this.getOwnProps());
     const dispatch = mapDispatchToControlProps(this.ngRedux.dispatch);
     return { ...props, ...dispatch };
   }

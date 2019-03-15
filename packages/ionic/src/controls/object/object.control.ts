@@ -24,9 +24,10 @@
 */
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
-import { JsonFormsControl } from '@jsonforms/angular';
+import { JsonFormsControlWithDetail } from '@jsonforms/angular';
 import {
-  ControlProps,
+  ControlWithDetailProps,
+  findUISchema,
   isObjectControl,
   JsonFormsState,
   RankedTester,
@@ -49,7 +50,7 @@ import {
     </ion-card>
   `
 })
-export class ObjectControlRenderer extends JsonFormsControl {
+export class ObjectControlRenderer extends JsonFormsControlWithDetail {
   propsPath: string;
   detailUiSchema: UISchemaElement;
 
@@ -57,9 +58,10 @@ export class ObjectControlRenderer extends JsonFormsControl {
     super(ngRedux);
   }
 
-  mapAdditionalProps(props: ControlProps) {
+  mapAdditionalProps(props: ControlWithDetailProps) {
     this.propsPath = props.path;
-    this.detailUiSchema = props.findUISchema(
+    this.detailUiSchema = findUISchema(
+      props.uischemas,
       props.schema,
       undefined,
       props.path

@@ -24,7 +24,7 @@
 */
 import range from 'lodash/range';
 import React from 'react';
-import { ArrayControlProps, composePaths } from '@jsonforms/core';
+import { ArrayControlProps, composePaths, createDefaultValue, findUISchema } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { VanillaRendererProps } from '../../index';
 
@@ -36,8 +36,7 @@ export const ArrayControl = ({
   schema,
   addItem,
   uischema,
-  findUISchema,
-  createDefaultValue
+  uischemas
 }: ArrayControlProps & VanillaRendererProps) => {
   return (
     <div className={classNames.wrapper}>
@@ -45,7 +44,7 @@ export const ArrayControl = ({
         <legend>
           <button
             className={classNames.button}
-            onClick={() => addItem(path, createDefaultValue())}
+            onClick={() => addItem(path, createDefaultValue(schema))}
           >
             +
           </button>
@@ -54,7 +53,7 @@ export const ArrayControl = ({
         <div className={classNames.children}>
           {data ? (
             range(0, data.length).map(index => {
-              const foundUISchema = findUISchema(schema, uischema.scope, path);
+              const foundUISchema = findUISchema(uischemas, schema, uischema.scope, path);
               const childPath = composePaths(path, `${index}`);
 
               return (

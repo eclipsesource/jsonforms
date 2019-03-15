@@ -28,7 +28,6 @@ import {
   computeLabel,
   ControlProps,
   ControlState,
-  formatErrorMessage,
   isControl,
   isDescriptionHidden,
   isPlainLabel,
@@ -41,6 +40,7 @@ import { Control, DispatchField } from '@jsonforms/react';
 
 import { InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
+import merge from 'lodash/merge';
 
 export class MaterialInputControl extends Control<ControlProps, ControlState> {
   render() {
@@ -57,7 +57,8 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       config
     } = this.props;
     const isValid = errors.length === 0;
-    const trim = config.trim;
+    const mergedConfig = merge({}, config, uischema.options);
+    const trim = mergedConfig.trim;
     const style: { [x: string]: any } = {};
     if (!visible) {
       style.display = 'none';
@@ -98,7 +99,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         />
         <FormHelperText error={!isValid}>
           {!isValid
-            ? formatErrorMessage(errors)
+            ? errors
             : showDescription
             ? description
             : null}

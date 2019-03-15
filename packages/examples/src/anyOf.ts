@@ -20,6 +20,14 @@ export const schema = {
         mail: { type: 'string' }
       },
       required: ['name', 'mail']
+    },
+    users: {
+      type: 'array',
+      items: { $ref: '#/definitions/user' }
+    },
+    addresses: {
+      type: 'array',
+      items: { $ref: '#/definitions/address' }
     }
   },
 
@@ -28,6 +36,12 @@ export const schema = {
   properties: {
     addressOrUser: {
       anyOf: [{ $ref: '#/definitions/address' }, { $ref: '#/definitions/user' }]
+    },
+    addressesOrUsers: {
+      anyOf: [
+        { $ref: '#/definitions/addresses' },
+        { $ref: '#/definitions/users' }
+      ]
     }
   }
 };
@@ -38,6 +52,10 @@ export const uischema = {
     {
       type: 'Control',
       scope: '#/properties/addressOrUser'
+    },
+    {
+      type: 'Control',
+      scope: '#/properties/addressesOrUsers'
     }
   ]
 };

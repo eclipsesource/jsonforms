@@ -28,7 +28,6 @@ import {
   computeLabel,
   ControlProps,
   ControlState,
-  formatErrorMessage,
   isDescriptionHidden,
   isPlainLabel,
   mapDispatchToControlProps,
@@ -98,7 +97,7 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
                     }
                 </div>
                 <div className={divClassNames}>
-                    {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+                    {!isValid ? errors : showDescription ? description : null}
                 </div>
             </div>
         );

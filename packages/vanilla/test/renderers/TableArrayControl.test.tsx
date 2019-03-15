@@ -29,7 +29,6 @@ import test from 'ava';
 import { Provider } from 'react-redux';
 import {
   ControlElement,
-  createDefaultValue,
   getData,
   HorizontalLayout,
   update
@@ -87,7 +86,6 @@ test('render two children', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -154,7 +152,6 @@ test('render empty data', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -212,7 +209,6 @@ test('render new child (empty init data)', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -236,7 +232,6 @@ test('render new child (undefined data)', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -260,7 +255,6 @@ test('render new child (null data)', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -284,7 +278,6 @@ test('render new child', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -321,7 +314,6 @@ test('render primitives ', t => {
       <TableArrayControl
         schema={schema}
         uischema={uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -342,7 +334,6 @@ test('update via action', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -474,7 +465,7 @@ test('hide', t => {
         schema={t.context.schema}
         uischema={t.context.uischema}
         visible={false}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
+
       />
     </Provider>
   ) as React.Component<any>;
@@ -494,7 +485,6 @@ test('show by default', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -513,7 +503,6 @@ test('single error', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -533,7 +522,6 @@ test('multiple errors', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -553,7 +541,6 @@ test('empty errors by default', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;
@@ -572,7 +559,6 @@ test('reset validation message', t => {
       <TableArrayControl
         schema={t.context.schema}
         uischema={t.context.uischema}
-        createDefaultValue={() => createDefaultValue(t.context.schema)}
       />
     </Provider>
   ) as React.Component<any>;

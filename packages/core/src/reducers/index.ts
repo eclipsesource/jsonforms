@@ -91,7 +91,16 @@ export const getRenderers = (
   state: JsonFormsState
 ): JsonFormsRendererRegistryEntry[] => get(state, 'jsonforms.renderers');
 
-export const findUISchema = (state: JsonFormsState) => (
+/**
+ * Finds a registered UI schema to use, if any.
+ * @param schema the JSON schema describing the data to be rendered
+ * @param schemaPath the according schema path
+ * @param path the instance path
+ * @param fallbackLayoutType the type of the layout to use
+ * @param control may be checked for embedded inline uischema options
+ */
+export const findUISchema = (
+  uischemas: { tester: UISchemaTester; uischema: UISchemaElement }[],
   schema: JsonSchema,
   schemaPath: string,
   path: string,
@@ -116,11 +125,7 @@ export const findUISchema = (state: JsonFormsState) => (
     }
   }
   // default
-  const uiSchema = findMatchingUISchema(state.jsonforms.uischemas)(
-    schema,
-    schemaPath,
-    path
-  );
+  const uiSchema = findMatchingUISchema(uischemas)(schema, schemaPath, path);
   if (uiSchema === undefined) {
     return Generate.uiSchema(schema, fallbackLayoutType);
   }

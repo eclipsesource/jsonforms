@@ -25,66 +25,43 @@
 import React from 'react';
 
 import {
-  ArrayControlProps,
-  ControlElement,
-  Helpers,
+  ArrayLayoutProps,
   isObjectArrayWithNesting,
   mapDispatchToArrayControlProps,
-  mapStateToArrayControlProps,
+  mapStateToArrayLayoutProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
 import { MaterialArrayLayout } from './MaterialArrayLayout';
-import { Hidden } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { Hidden } from '@material-ui/core';
 
-export const MaterialArrayLayoutRenderer  = (
-  {
-    uischema,
-    data,
-    path,
-    findUISchema,
-    addItem,
-    removeItems,
-    errors,
-    createDefaultValue,
-    schema,
-    rootSchema,
-    id,
-    enabled,
-    visible,
-    renderers
-  }: ArrayControlProps) => {
-
-  const controlElement = uischema as ControlElement;
-  const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
-  const label = labelDescription.show ? labelDescription.text : '';
-
-  return (
-    <Hidden xsUp={!visible}>
-      <MaterialArrayLayout
-        data={data}
-        label={label}
-        path={path}
-        addItem={addItem}
-        removeItems={removeItems}
-        findUISchema={findUISchema}
-        uischema={uischema}
-        schema={schema}
-        errors={errors}
-        rootSchema={rootSchema}
-        createDefaultValue={createDefaultValue}
-        id={id}
-        enabled={enabled}
-        visible={visible}
-        renderers={renderers}
-      />
-    </Hidden>
-  );
-};
+export class MaterialArrayLayoutRenderer extends React.Component<ArrayLayoutProps, any> {
+  addItem = (path: string, value: any) => this.props.addItem(path, value);
+  render() {
+    return (
+      <Hidden xsUp={!this.props.visible}>
+        <MaterialArrayLayout
+          label={this.props.label}
+          uischema={this.props.uischema}
+          schema={this.props.schema}
+          id={this.props.id}
+          rootSchema={this.props.rootSchema}
+          errors={this.props.errors}
+          enabled={this.props.enabled}
+          visible={this.props.visible}
+          data={this.props.data}
+          path={this.props.path}
+          addItem={this.addItem}
+          renderers={this.props.renderers}
+        />
+      </Hidden>
+    );
+  }
+}
 
 const ConnectedMaterialArrayLayoutRenderer = connect(
-  mapStateToArrayControlProps,
+  mapStateToArrayLayoutProps,
   mapDispatchToArrayControlProps
 )(MaterialArrayLayoutRenderer);
 

@@ -23,11 +23,14 @@
   THE SOFTWARE.
 */
 
-import React, { Component } from 'react';
+import React, { Component, CSSProperties } from 'react';
 import './App.css';
 import { JsonForms } from '@jsonforms/react';
 import { AppProps, initializedConnect } from './reduxUtil';
 
+const preStyle: CSSProperties = {
+  overflowX: 'auto'
+};
 class App extends Component<AppProps> {
   render() {
     return (
@@ -60,7 +63,7 @@ class App extends Component<AppProps> {
 
         <h4 className='data-title'>Bound data</h4>
         <div className='data-content'>
-          <pre>{this.props.dataAsString}</pre>
+          <pre style={preStyle}>{this.props.dataAsString}</pre>
         </div>
         <div className='demoform'>
           {this.props.getExtensionComponent()}

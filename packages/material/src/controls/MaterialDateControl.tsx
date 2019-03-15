@@ -60,7 +60,9 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
             id,
             errors,
             label,
-            labels,
+            defaultLabel,
+            cancelLabel,
+            clearLabel,
             uischema,
             visible,
             enabled,
@@ -87,9 +89,9 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
             labelCancel = 'Cancel';
             labelClear = 'Clear';
         } else {
-            labelText = labels.default;
-            labelCancel = startsWith(labels.cancel, '%') ? 'Cancel' : labels.cancel;
-            labelClear = startsWith(labels.clear, '%') ? 'Clear' : labels.clear;
+            labelText = defaultLabel;
+            labelCancel = startsWith(cancelLabel, '%') ? 'Cancel' : cancelLabel;
+            labelClear = startsWith(clearLabel, '%') ? 'Clear' : clearLabel;
         }
 
         const getValue = (event: React.FormEvent<HTMLInputElement>) =>
@@ -140,21 +142,17 @@ export const addLabelProps =
 
             return {
                 ...stateProps,
-                labels: {
-                    // TODO cast
-                    default: stateProps.label as string,
-                    cancel: '%cancel',
-                    clear: '%clear'
-                },
+                // TODO cast
+                defaultLabel: stateProps.label as string,
+                cancelLabel: '%cancel',
+                clearLabel: '%clear',
             };
         };
 
 export interface StatePropsOfDateControl extends StatePropsOfControl {
-    labels: {
-        default: string;
-        cancel: string;
-        clear: string;
-    };
+    defaultLabel: string;
+    cancelLabel: string;
+    clearLabel: string;
 }
 
 export const materialDateControlTester: RankedTester = rankWith(4, isDateControl);

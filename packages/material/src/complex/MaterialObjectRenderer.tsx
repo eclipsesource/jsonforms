@@ -1,43 +1,30 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import {
-  ControlProps,
+  ControlWithDetailProps,
   findUISchema,
   GroupLayout,
   isObjectControl,
-  JsonFormsState,
-  JsonSchema,
   mapDispatchToControlProps,
-  mapStateToControlProps,
-  OwnPropsOfControl,
+  mapStateToControlWithDetailProps,
   RankedTester,
-  rankWith,
-  UISchemaElement
+  rankWith
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import React from 'react';
 import { connect } from 'react-redux';
 
-interface MaterialObjectRendererProps extends ControlProps {
-    findUiSchema(
-        schema: JsonSchema,
-        schemaPath: string,
-        instancePath: string,
-        fallbackLayoutType: string
-    ): UISchemaElement;
-}
-
-class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps, any> {
+class MaterialObjectRenderer extends React.Component<ControlWithDetailProps, any> {
     render() {
         const {
-            findUiSchema,
+            uischemas,
             schema,
             path,
             visible,
         } = this.props;
 
-        const detailUiSchema = findUiSchema(schema, undefined, path, 'Group');
+        const detailUiSchema = findUISchema(uischemas, schema, undefined, path, 'Group');
         if (isEmpty(path)) {
             detailUiSchema.type = 'VerticalLayout';
         } else {
@@ -56,16 +43,8 @@ class MaterialObjectRenderer extends React.Component<MaterialObjectRendererProps
     }
 }
 
-const mapStateToObjectControlProps = (state: JsonFormsState, ownProps: OwnPropsOfControl) => {
-    const props =  mapStateToControlProps(state, ownProps);
-    return {
-        ...props,
-        findUiSchema: findUISchema(state)
-    };
-};
-
 const ConnectedMaterialObjectRenderer = connect(
-  mapStateToObjectControlProps,
+  mapStateToControlWithDetailProps,
   mapDispatchToControlProps
 )(MaterialObjectRenderer);
 

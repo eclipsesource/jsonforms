@@ -324,7 +324,7 @@ test('mapStateToControlProps - errors', t => {
   };
   clonedState.jsonforms.core.errors = [error];
   const props = mapStateToControlProps(clonedState, ownProps);
-  t.is(props.errors[0], 'Duff beer');
+  t.is(props.errors, 'Duff beer');
 });
 
 test('mapStateToControlProps - no duplicate error messages', t => {
@@ -349,7 +349,7 @@ test('mapStateToControlProps - no duplicate error messages', t => {
     { uischema: coreUISchema }
   );
   // 'should be string' should only appear once
-  t.is(props.errors.length, 3);
+  t.is(props.errors.split('\n').length, 3);
 });
 
 test('mapStateToControlProps - id', t => {
@@ -513,7 +513,7 @@ test('mapDispatchToArrayControlProps should remove items from array', t => {
   );
   store.dispatch(init(data, schema, uischema));
   const props = mapDispatchToArrayControlProps(store.dispatch);
-  props.removeItems('', ['foo', 'bar'])();
+  props.removeItems('', [0, 1])();
   t.is(store.getState().jsonforms.core.data.length, 1);
   t.is(store.getState().jsonforms.core.data[0], 'quux');
 });

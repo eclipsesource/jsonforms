@@ -22,14 +22,18 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import {
+  composeWithUi,
+  createLabelDescriptionFrom,
+  formatErrorMessage,
+  isEnabled,
+  isVisible,
+  Resolve
+} from '../util';
 import get from 'lodash/get';
-import has from 'lodash/has';
-import cloneDeep from 'lodash/cloneDeep';
-import merge from 'lodash/merge';
 import union from 'lodash/union';
 import RefParser from 'json-schema-ref-parser';
 import {
-  findUISchema,
   getConfig,
   getData,
   getErrorAt,
@@ -37,18 +41,13 @@ import {
   getRenderers,
   getSchema,
   getSubErrorsAt,
-  getUiSchema
+  getUiSchema,
+  UISchemaTester
 } from '../reducers';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import {
-  composeWithUi,
-  createLabelDescriptionFrom,
-  isEnabled,
-  isVisible,
-  Resolve
-} from '../util';
+import has from 'lodash/has';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
 import { generateDefaultUISchema } from '../generators';
@@ -241,7 +240,7 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
   /**
    * Any validation errors that are caused by the data to be rendered.
    */
-  errors: string[];
+  errors: string;
 
   /**
    * The data to be rendered.
@@ -257,22 +256,6 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
    * A unique ID that should be used for rendering the scoped UI schema element.
    */
   id: string;
-
-  /**
-   * Finds a registered UI schema to use, if any.
-   * @param schema the JSON schema describing the data to be rendered
-   * @param schemaPath the according schema path
-   * @param path the instance path
-   * @param fallbackLayoutType the type of the layout to use
-   * @param control may be checked for embedded inline uischema options
-   */
-  findUISchema(
-    schema: JsonSchema,
-    schemaPath: string,
-    path: string,
-    fallbackLayoutType?: string,
-    control?: ControlElement
-  ): UISchemaElement;
 }
 
 /**
@@ -379,13 +362,11 @@ export const mapStateToControlProps = (
     controlElement.scope,
     rootSchema
   );
-  const errors = union(
-    getErrorAt(path, resolvedSchema)(state).map(error => error.message)
+  const errors = formatErrorMessage(
+    union(getErrorAt(path, resolvedSchema)(state).map(error => error.message))
   );
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
-  const defaultConfig = cloneDeep(getConfig(state));
-  const config = merge(defaultConfig, controlElement.options);
   const data = Resolve.data(rootData, path);
 
   return {
@@ -399,9 +380,8 @@ export const mapStateToControlProps = (
     path,
     required,
     uischema: ownProps.uischema,
-    findUISchema: findUISchema(state),
     schema: resolvedSchema || rootSchema,
-    config,
+    config: getConfig(state),
     fields: state.jsonforms.fields,
     rootSchema
   };
@@ -425,10 +405,40 @@ export const mapDispatchToControlProps = (
 /**
  * State-based props of a table control.
  */
-export interface StatePropsOfArrayControl extends StatePropsOfControl {
-  childErrors?: ErrorObject[];
+export interface StatePropsOfControlWithDetail extends StatePropsOfControl {
+  uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
   renderers?: JsonFormsRendererRegistryEntry[];
-  createDefaultValue(): any;
+}
+
+/**
+ * Map state to control with detail props
+ *
+ * @param state the store's state
+ * @param ownProps any element's own props
+ * @returns {StatePropsOfArrayControl} state props for a table control
+ */
+export const mapStateToControlWithDetailProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfControlWithDetail => {
+  const { ...props } = mapStateToControlProps(state, ownProps);
+
+  return {
+    ...props,
+    uischemas: state.jsonforms.uischemas
+  };
+};
+
+export interface ControlWithDetailProps
+  extends StatePropsOfControlWithDetail,
+    DispatchPropsOfControl {}
+
+/**
+ * State-based props of a table control.
+ */
+export interface StatePropsOfArrayControl
+  extends StatePropsOfControlWithDetail {
+  childErrors?: ErrorObject[];
 }
 
 /**
@@ -442,7 +452,7 @@ export const mapStateToArrayControlProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
 ): StatePropsOfArrayControl => {
-  const { path, schema, uischema, ...props } = mapStateToControlProps(
+  const { path, schema, uischema, ...props } = mapStateToControlWithDetailProps(
     state,
     ownProps
   );
@@ -456,10 +466,7 @@ export const mapStateToArrayControlProps = (
     uischema,
     schema: resolvedSchema,
     childErrors,
-    renderers: ownProps.renderers || getRenderers(state),
-    createDefaultValue() {
-      return createDefaultValue(resolvedSchema as JsonSchema);
-    }
+    renderers: ownProps.renderers || getRenderers(state)
   };
 };
 
@@ -468,7 +475,7 @@ export const mapStateToArrayControlProps = (
  */
 export interface DispatchPropsOfArrayControl {
   addItem(path: string, value: any): () => void;
-  removeItems(path: string, toDelete: any[]): () => void;
+  removeItems?(path: string, toDelete: number[]): () => void;
 }
 
 /**
@@ -492,10 +499,13 @@ export const mapDispatchToArrayControlProps = (
       })
     );
   },
-  removeItems: (path: string, toDelete: any[]) => () => {
+  removeItems: (path: string, toDelete: number[]) => () => {
     dispatch(
       update(path, array => {
-        toDelete.forEach(s => array.splice(array.indexOf(s), 1));
+        toDelete
+          .sort()
+          .reverse()
+          .forEach(s => array.splice(s, 1));
         return array;
       })
     );
@@ -538,9 +548,7 @@ export const mapStateToLayoutProps = (
   };
 };
 
-export interface RefResolver {
-  (schema: JsonSchema): Promise<any>;
-}
+export type RefResolver = (schema: JsonSchema) => Promise<JsonSchema>;
 
 export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
@@ -553,7 +561,7 @@ export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
   rootSchema: JsonSchema;
-  refResolver: RefResolver;
+  refResolver: any;
 }
 
 export const mapStateToJsonFormsRendererProps = (
@@ -574,9 +582,8 @@ export const mapStateToJsonFormsRendererProps = (
     schema: ownProps.schema || getSchema(state),
     rootSchema: getSchema(state),
     uischema: uischema,
-    refResolver: function(schema) {
-      return RefParser.dereference(schema as any, getRefParserOptions(state));
-    }
+    refResolver: (schema: any) =>
+      RefParser.dereference(schema, getRefParserOptions(state))
   };
 };
 
@@ -590,3 +597,86 @@ export const controlDefaultProps = {
   ...layoutDefaultProps,
   errors: [] as string[]
 };
+
+export interface CombinatorRendererProps {
+  schema: JsonSchema;
+  rootSchema: JsonSchema;
+  path: string;
+  visible: boolean;
+}
+/**
+ * Map state to control props.
+ * @param state the store's state
+ * @param ownProps any own props
+ * @returns {StatePropsOfControl} state props for a control
+ */
+export const mapStateToAllOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): CombinatorRendererProps => {
+  const { uischema } = ownProps;
+  const path = composeWithUi(uischema, ownProps.path);
+  const rootSchema = getSchema(state);
+  const resolvedSchema = Resolve.schema(
+    ownProps.schema || rootSchema,
+    uischema.scope,
+    rootSchema
+  );
+  const visible = has(ownProps, 'visible')
+    ? ownProps.visible
+    : isVisible(uischema, getData(state), ownProps.path);
+
+  return {
+    path,
+    schema: resolvedSchema || rootSchema,
+    rootSchema,
+    visible
+  };
+};
+
+export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {
+  data: number;
+}
+/**
+ * Map state to table props
+ *
+ * @param state the store's state
+ * @param ownProps any element's own props
+ * @returns {StatePropsOfArrayControl} state props for a table control
+ */
+export const mapStateToArrayLayoutProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfArrayLayout => {
+  const {
+    path,
+    schema,
+    uischema,
+    errors,
+    ...props
+  } = mapStateToControlWithDetailProps(state, ownProps);
+
+  const resolvedSchema = Resolve.schema(schema, 'items', props.rootSchema);
+  const childErrors = formatErrorMessage(
+    getSubErrorsAt(path, resolvedSchema)(state).map(error => error.message)
+  );
+  const allErrors =
+    errors +
+    (errors.length > 0 && childErrors.length > 0 ? '\n' : '') +
+    childErrors;
+  return {
+    ...props,
+    path,
+    uischema,
+    schema: resolvedSchema,
+    data: props.data ? props.data.length : 0,
+    errors: allErrors
+  };
+};
+
+/**
+ * Props of an array control.
+ */
+export interface ArrayLayoutProps
+  extends StatePropsOfArrayLayout,
+    DispatchPropsOfArrayControl {}
