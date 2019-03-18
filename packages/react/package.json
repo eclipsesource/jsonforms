@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/react",
-  "version": "2.2.1",
+  "version": "2.2.2-alpha.0",
   "description": "React module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
@@ -66,7 +66,7 @@
     "react-redux": "^6.0.0"
   },
   "devDependencies": {
-    "@jsonforms/core": "^2.2.1",
+    "@jsonforms/core": "^2.2.2-alpha.0",
     "@types/enzyme": "^3.1.15",
     "@types/enzyme-adapter-react-16": "^1.0.3",
     "enzyme": "^3.6.0",

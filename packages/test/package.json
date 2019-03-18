@@ -1,7 +1,7 @@
 {
   "name": "@jsonforms/test",
   "private": true,
-  "version": "2.2.1",
+  "version": "2.2.2-alpha.0",
   "description": "Test utilities for JSON Forms",
   "scripts": {
     "build": "../../node_modules/.bin/tsc",
@@ -11,8 +11,8 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "devDependencies": {
-    "@jsonforms/core": "^2.2.1",
-    "@jsonforms/react": "^2.2.1",
+    "@jsonforms/core": "^2.2.2-alpha.0",
+    "@jsonforms/react": "^2.2.2-alpha.0",
     "document-register-element": "^1.7.0",
     "jsdom": "^11.9.0",
     "jsdom-global": "^3.0.2",
