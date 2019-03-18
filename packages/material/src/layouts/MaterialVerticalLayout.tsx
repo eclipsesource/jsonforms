@@ -28,9 +28,9 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  RendererProps,
+  StatePropsOfLayout,
   uiTypeIs,
-  VerticalLayout,
+  VerticalLayout
 } from '@jsonforms/core';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
 
@@ -41,7 +41,7 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 export const materialVerticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
 export const MaterialVerticalLayoutRenderer  = (
-  { schema, uischema, path, visible }: RendererProps) => {
+  { schema, uischema, path, visible, renderers }: StatePropsOfLayout) => {
   const verticalLayout = uischema as VerticalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: verticalLayout.elements,
@@ -51,7 +51,7 @@ export const MaterialVerticalLayoutRenderer  = (
     visible
   };
 
-  return <MaterialLayoutRenderer {...childProps}/>;
+  return <MaterialLayoutRenderer {...childProps} renderers={renderers} />;
 };
 
 export default connect(

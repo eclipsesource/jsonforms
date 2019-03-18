@@ -29,7 +29,7 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  RendererProps,
+  StatePropsOfLayout,
   uiTypeIs
 } from '@jsonforms/core';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
@@ -44,7 +44,7 @@ export const materialHorizontalLayoutTester: RankedTester = rankWith(
 );
 
 export const MaterialHorizontalLayoutRenderer = (
-  { schema, uischema, path, visible }: RendererProps) => {
+  { schema, uischema, path, visible, renderers }: StatePropsOfLayout) => {
   const horizontalLayout = uischema as HorizontalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: horizontalLayout.elements,
@@ -54,7 +54,7 @@ export const MaterialHorizontalLayoutRenderer = (
     visible
   };
 
-  return <MaterialLayoutRenderer {...childProps}/>;
+  return <MaterialLayoutRenderer {...childProps} renderers={renderers} />;
 };
 
 const ConnectedMaterialHorizontalLayoutRendered = connect(

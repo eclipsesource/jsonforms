@@ -59,7 +59,7 @@ export interface CategorizationState {
     activeCategory: number;
   }
 
-export interface MaterialCategorizationLayoutRendererProps {
+export interface MaterialCategorizationLayoutRendererProps extends StatePropsOfLayout {
     selected?: number;
     ownState?: boolean;
     data: any;
@@ -74,7 +74,7 @@ export class MaterialCategorizationLayoutRenderer
     };
 
     render() {
-        const { data, uischema, schema, path, visible, selected } = this.props;
+        const { data, uischema, schema, path, visible, selected, renderers } = this.props;
         const value  = this.hasOwnState() ? this.state.activeCategory : selected;
         const categorization = uischema as Categorization;
 
@@ -83,7 +83,8 @@ export class MaterialCategorizationLayoutRenderer
             schema,
             path,
             direction: 'column',
-            visible
+            visible,
+            renderers
         };
 
         const categories = categorization.elements

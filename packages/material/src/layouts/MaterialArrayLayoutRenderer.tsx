@@ -51,7 +51,8 @@ export const MaterialArrayLayoutRenderer  = (
     rootSchema,
     id,
     enabled,
-    visible
+    visible,
+    renderers
   }: ArrayControlProps) => {
 
   const controlElement = uischema as ControlElement;
@@ -74,6 +75,7 @@ export const MaterialArrayLayoutRenderer  = (
       id={id}
       enabled={enabled}
       visible={visible}
+      renderers={renderers}
     />
   );
 };

@@ -187,6 +187,7 @@ export interface OwnPropsOfControl extends OwnPropsOfRenderer {
   id?: string;
   // constraint type
   uischema?: ControlElement;
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export interface OwnPropsOfEnum {
@@ -423,6 +424,7 @@ export const mapDispatchToControlProps = (
  */
 export interface StatePropsOfArrayControl extends StatePropsOfControl {
   childErrors?: ErrorObject[];
+  renderers?: JsonFormsRendererRegistryEntry[];
   createDefaultValue(): any;
 }
 
@@ -451,6 +453,7 @@ export const mapStateToArrayControlProps = (
     uischema,
     schema: resolvedSchema,
     childErrors,
+    renderers: ownProps.renderers || getRenderers(state),
     createDefaultValue() {
       return createDefaultValue(resolvedSchema as JsonSchema);
     }
@@ -511,7 +514,7 @@ export interface ArrayControlProps
  */
 export const mapStateToLayoutProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfRenderer
+  ownProps: OwnPropsOfJsonFormsRenderer
 ): StatePropsOfLayout => {
   const rootData = getData(state);
   const visible: boolean = has(ownProps, 'visible')
@@ -523,7 +526,7 @@ export const mapStateToLayoutProps = (
 
   return {
     ...layoutDefaultProps,
-    renderers: getRenderers(state),
+    renderers: ownProps.renderers || getRenderers(state),
     visible,
     enabled,
     path: ownProps.path,

@@ -25,9 +25,10 @@
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import {
+    JsonFormsRendererRegistryEntry,
     JsonSchema,
     OwnPropsOfRenderer,
-    UISchemaElement,
+  UISchemaElement
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
@@ -35,7 +36,8 @@ import { Grid, Hidden } from '@material-ui/core';
 export const renderLayoutElements = (
     elements: UISchemaElement[],
     schema: JsonSchema,
-    path: string
+    path: string,
+    renderers?: JsonFormsRendererRegistryEntry[]
   ) =>
   elements.map((child, index) =>
       (
@@ -44,6 +46,7 @@ export const renderLayoutElements = (
             uischema={child}
             schema={schema}
             path={path}
+            renderers={renderers}
           />
         </Grid>
       )
@@ -52,9 +55,10 @@ export const renderLayoutElements = (
 export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
     elements: UISchemaElement[];
     direction: 'row'|'column';
+    renderers?: JsonFormsRendererRegistryEntry[];
 }
 export const MaterialLayoutRenderer = (
-  {visible, elements, schema, path, direction}: MaterialLayoutRendererProps) => {
+  {visible, elements, schema, path, direction, renderers }: MaterialLayoutRendererProps) => {
 
   if (isEmpty(elements)) {
     return null;
@@ -62,7 +66,7 @@ export const MaterialLayoutRenderer = (
     return (
       <Hidden xsUp={!visible}>
         <Grid container direction={direction} spacing={direction === 'row' ? 16 : 0}>
-          {renderLayoutElements(elements, schema, path)}
+          {renderLayoutElements(elements, schema, path, renderers)}
         </Grid>
       </Hidden>
     );

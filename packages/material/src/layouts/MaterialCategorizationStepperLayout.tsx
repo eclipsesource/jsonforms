@@ -58,7 +58,7 @@ export interface CategorizationStepperState {
   activeCategory: number;
 }
 
-export interface MaterialCategorizationStepperLayoutRendererProps {
+export interface MaterialCategorizationStepperLayoutRendererProps extends StatePropsOfLayout {
   data: any;
 }
 
@@ -76,7 +76,7 @@ export class MaterialCategorizationStepperLayoutRenderer
   };
 
   render() {
-    const { data, uischema, schema, path, visible } = this.props;
+    const { data, uischema, schema, path, visible, renderers } = this.props;
     const categorization = uischema as Categorization;
     const { activeCategory } = this.state;
 
@@ -85,7 +85,8 @@ export class MaterialCategorizationStepperLayoutRenderer
       schema,
       path,
       direction: 'column',
-      visible
+      visible,
+      renderers
     };
 
     const categories = categorization.elements
