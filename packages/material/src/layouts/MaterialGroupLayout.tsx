@@ -31,7 +31,7 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  RendererProps,
+  StatePropsOfLayout,
   uiTypeIs,
   withIncreasedRank
 } from '@jsonforms/core';
@@ -39,17 +39,18 @@ import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/lay
 
 export const groupTester: RankedTester = rankWith(1, uiTypeIs('Group'));
 
-export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
-    const { uischema, schema, path, visible } = props;
+export const MaterializedGroupLayoutRenderer = (props: StatePropsOfLayout) => {
+    const { uischema, schema, path, visible, renderers } = props;
 
     const groupLayout = uischema as GroupLayout;
 
     const childProps: MaterialLayoutRendererProps = {
-        elements: groupLayout.elements,
-        schema,
-        path,
-        direction: 'column',
-        visible
+      elements: groupLayout.elements,
+      schema,
+      path,
+      direction: 'column',
+      visible,
+      renderers
     };
     const style: {[x: string]: any} = { marginBottom: '10px' };
     if (!visible) {
@@ -60,7 +61,7 @@ export const MaterializedGroupLayoutRenderer = (props: RendererProps) => {
         <Card style={style}>
           {!isEmpty(groupLayout.label) && <CardHeader title={groupLayout.label}/>}
           <CardContent>
-            <MaterialLayoutRenderer {...childProps}/>
+            <MaterialLayoutRenderer {...childProps} />
           </CardContent>
         </Card>
     );

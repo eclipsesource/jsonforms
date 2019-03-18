@@ -35,7 +35,6 @@ import {
   JsonSchema,
   mapStateToJsonFormsRendererProps,
   OwnPropsOfJsonFormsRenderer,
-  OwnPropsOfRenderer,
   removeId,
   StatePropsOfJsonFormsRenderer
 } from '@jsonforms/core';
@@ -144,7 +143,7 @@ export class ResolvedJsonFormsDispatchRenderer
     }
 }
 
-export const ResolvedJsonForms = connect<StatePropsOfJsonFormsRenderer, {}, OwnPropsOfRenderer>(
+export const ResolvedJsonForms = connect<StatePropsOfJsonFormsRenderer, {}, OwnPropsOfJsonFormsRenderer>(
     mapStateToJsonFormsRendererProps,
     null
 )(ResolvedJsonFormsDispatchRenderer);

@@ -52,7 +52,8 @@ export const MaterialArrayLayout =
      errors,
      addItem,
      findUISchema,
-     removeItems
+     removeItems,
+     renderers
    }: ArrayControlProps) => {
 
     const firstPrimitiveProp = schema.properties ? find(Object.keys(schema.properties), propName => {
@@ -139,6 +140,7 @@ export const MaterialArrayLayout =
                       uischema={foundUISchema}
                       path={childPath}
                       key={childPath}
+                      renderers={renderers}
                     />
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
