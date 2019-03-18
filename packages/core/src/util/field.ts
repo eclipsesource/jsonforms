@@ -140,9 +140,10 @@ export const mapStateToDispatchFieldProps = (
   ownProps: OwnPropsOfField
 ): DispatchFieldStateProps => {
   const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
+  const { renderers, ...otherOwnProps } = ownProps;
   return {
     ...props,
-    ...ownProps,
+    ...otherOwnProps,
     fields: state.jsonforms.fields || []
   };
 };
