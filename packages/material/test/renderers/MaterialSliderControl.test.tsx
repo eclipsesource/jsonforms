@@ -388,4 +388,27 @@ describe('Material slider control', () => {
     // input id
     expect(divs.find((d: any) => d.id === '#/properties/foo-input')).toBeDefined();
   });
+
+  it('should be hideable', () => {
+    const jsonSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'number',
+          maximum: 10,
+          minimum: 2,
+          default: 6
+        }
+      }
+    };
+    const store = initJsonFormsStore({ foo: 5 }, jsonSchema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <SliderControl schema={jsonSchema} uischema={uischema} visible={false}/>
+      </Provider>
+    );
+
+    const inputs = wrapper.find(Slider);
+    expect(inputs.length).toBe(0);
+  });
 });

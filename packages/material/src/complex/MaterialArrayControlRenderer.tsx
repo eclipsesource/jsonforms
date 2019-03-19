@@ -55,26 +55,23 @@ export class MaterialArrayControlRenderer extends RendererComponent<ArrayControl
 
   render() {
     const { visible, removeItems } = this.props;
-
     return (
-      <React.Fragment>
-        <Hidden xsUp={!visible}>
-          <MaterialTableControl
-            {...this.props}
-            openDeleteDialog={this.openDeleteDialog}
-          />
-        </Hidden>
+      <Hidden xsUp={!visible}>
+        <MaterialTableControl
+          {...this.props}
+          openDeleteDialog={this.openDeleteDialog}
+        />
         <DeleteDialog
           open={this.state.open}
-          onCancel={() => this.setState({open: false})}
+          onCancel={() => this.setState({ open: false })}
           onConfirm={() => {
             const path = this.state.path.substring(0, this.state.path.lastIndexOf(('.')));
             removeItems(path, [this.state.rowData])();
-            this.setState({open: false});
+            this.setState({ open: false });
           }}
-          onClose={() => this.setState({open: false})}
+          onClose={() => this.setState({ open: false })}
         />
-      </React.Fragment>
+      </Hidden>
     );
   }
 }

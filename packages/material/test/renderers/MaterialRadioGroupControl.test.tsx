@@ -114,4 +114,16 @@ describe('Material radio group control', () => {
     expect(currentlyChecked.length).toBe(1);
     expect(currentlyChecked.first().props().value).toBe('B');
   });
+
+  it('should be hideable ', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialRadioGroupControl schema={schema} uischema={uischema} visible={false}/>
+      </Provider>
+    );
+
+    const radioButtons = wrapper.find('input[type="radio"]');
+    expect(radioButtons.length).toBe(0);
+  });
 });

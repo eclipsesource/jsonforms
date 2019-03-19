@@ -39,7 +39,7 @@ import {
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 
-import { FormControl, FormHelperText, Typography } from '@material-ui/core';
+import { FormControl, FormHelperText, Hidden, Typography } from '@material-ui/core';
 import Slider from '@material-ui/lab/Slider';
 
 export class MaterialSliderControl extends Control<ControlProps, ControlState> {
@@ -60,10 +60,6 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
     } = this.props;
     const isValid = errors.length === 0;
     const trim = config.trim;
-    const style: { [x: string]: any } = {};
-    if (!visible) {
-      style.display = 'none';
-    }
     const labelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -82,42 +78,42 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
 
     const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
     return (
-
-      <FormControl
-        style={style}
-        fullWidth={!trim}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-        id={id}
-      >
-        <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
-          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
-        </Typography>
-        <div style={rangeContainerStyle}>
-          <Typography style={rangeItemStyle} variant='caption' align='left'>
-            {schema.minimum}
+      <Hidden xsUp={!visible}>
+        <FormControl
+          fullWidth={!trim}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          id={id}
+        >
+          <Typography id={id + '-typo'} style={labelStyle} variant='caption'>
+            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
           </Typography>
-          <Typography style={rangeItemStyle} variant='caption' align='right'>
-            {schema.maximum}
-          </Typography>
-        </div>
-        <Slider
-          style={sliderStyle}
-          min={schema.minimum}
-          max={schema.maximum}
-          value={Number(data || schema.default)}
-          onChange={(_ev, value) => {
-            handleChange(path, Number(value));
-          }
-          }
-          id={id + '-input'}
-          disabled={!enabled}
-          step={schema.multipleOf || 1}
-        />
-        <FormHelperText error={!isValid}>
-          {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-        </FormHelperText>
-      </FormControl>
+          <div style={rangeContainerStyle}>
+            <Typography style={rangeItemStyle} variant='caption' align='left'>
+              {schema.minimum}
+            </Typography>
+            <Typography style={rangeItemStyle} variant='caption' align='right'>
+              {schema.maximum}
+            </Typography>
+          </div>
+          <Slider
+            style={sliderStyle}
+            min={schema.minimum}
+            max={schema.maximum}
+            value={Number(data || schema.default)}
+            onChange={(_ev, value) => {
+              handleChange(path, Number(value));
+            }
+            }
+            id={id + '-input'}
+            disabled={!enabled}
+            step={schema.multipleOf || 1}
+          />
+          <FormHelperText error={!isValid}>
+            {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
+          </FormHelperText>
+        </FormControl>
+      </Hidden>
     );
   }
 }

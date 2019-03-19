@@ -37,7 +37,7 @@ import {
 import { Control } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import { FormControl, FormControlLabel, FormHelperText, FormLabel } from '@material-ui/core';
+import { FormControl, FormControlLabel, FormHelperText, FormLabel, Hidden } from '@material-ui/core';
 
 export class MaterialRadioGroupControl extends Control<ControlProps, ControlState> {
     render() {
@@ -53,50 +53,51 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             visible
         } = this.props;
         const isValid = errors.length === 0;
-        const style: { [x: string]: any } = {};
-        if (!visible) {
-            style.display = 'none';
-        }
         const trim = config.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
         const options = schema.enum;
 
         return (
+          <Hidden xsUp={!visible}>
             <FormControl
-                component={'fieldset' as 'div'}
-                fullWidth={!trim}
+              component={'fieldset' as 'div'}
+              fullWidth={!trim}
             >
-                <FormLabel
-                    htmlFor={id}
-                    error={!isValid}
-                    component={'legend' as 'label'}
-                >
-                    {computeLabel(isPlainLabel(label) ? label : label.default, required)}
-                </FormLabel>
+              <FormLabel
+                htmlFor={id}
+                error={!isValid}
+                component={'legend' as 'label'}
+              >
+                {computeLabel(
+                  isPlainLabel(label) ? label : label.default,
+                  required
+                )}
+              </FormLabel>
 
-                <RadioGroup
-                    value={this.state.value}
-                    onChange={(_ev, value) => this.handleChange(value)}
-                    row={true}
-                >
-                    {
-                        options.map(optionValue =>
-                            (
-                                <FormControlLabel
-                                    value={optionValue}
-                                    key={optionValue}
-                                    control={<Radio checked={data === optionValue} />}
-                                    label={optionValue}
-                                />
-                            )
-                        )
-                    }
-                </RadioGroup>
-                <FormHelperText error={!isValid}>
-                    {!isValid ? formatErrorMessage(errors) : showDescription ? description : null}
-                </FormHelperText>
+              <RadioGroup
+                value={this.state.value}
+                onChange={(_ev, value) => this.handleChange(value)}
+                row={true}
+              >
+                {options.map(optionValue => (
+                  <FormControlLabel
+                    value={optionValue}
+                    key={optionValue}
+                    control={<Radio checked={data === optionValue} />}
+                    label={optionValue}
+                  />
+                ))}
+              </RadioGroup>
+              <FormHelperText error={!isValid}>
+                {!isValid
+                  ? formatErrorMessage(errors)
+                  : showDescription
+                  ? description
+                  : null}
+              </FormHelperText>
             </FormControl>
+          </Hidden>
         );
     }
 }

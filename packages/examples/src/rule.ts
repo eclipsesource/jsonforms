@@ -60,9 +60,10 @@ export const uischema = {
       rule: {
         effect: 'DISABLE',
         condition: {
-          type: 'LEAF',
           scope: '#/properties/alive',
-          expectedValue: false
+          schema: {
+            const: false
+          }
         }
       }
     }

@@ -369,4 +369,38 @@ describe('Material oneOf renderer', () => {
       expect(getData(store.getState())).toEqual({ thingOrThings: { thing: 'test' }});
     });
   });
+
+  it('should be hideable', () => {
+    const store = initStore();
+    const schema = {
+      type: 'object',
+      properties: {
+        value: {
+          oneOf: [
+            {
+              title: 'String',
+              type: 'string'
+            },
+            {
+              title: 'Number',
+              type: 'number'
+            }
+          ]
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/value'
+    };
+    store.dispatch(Actions.init({data: undefined}, schema, uischema));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialOneOfRenderer schema={schema} uischema={uischema} visible={false} />
+      </Provider>
+    );
+    const inputs = wrapper.find('input');
+    expect(inputs.length).toBe(0);
+  });
 });

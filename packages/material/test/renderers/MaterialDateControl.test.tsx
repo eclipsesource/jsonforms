@@ -320,4 +320,15 @@ describe('Material date control', () => {
     // there is only input id at the moment
     expect(input.props().id).toBe('#/properties/foo-input');
   });
+
+  it('should be hideable', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialDateControl schema={schema} uischema={uischema} visible={false}/>
+      </Provider>
+    );
+    const inputs = wrapper.find('input');
+    expect(inputs.length).toBe(0);
+  });
 });

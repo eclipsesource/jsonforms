@@ -17,6 +17,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Hidden,
   Tab,
   Tabs
 } from '@material-ui/core';
@@ -79,12 +80,12 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
   render() {
 
     const oneOf = 'oneOf';
-    const { schema, path, rootSchema, id } = this.props;
+    const { schema, path, rootSchema, id, visible } = this.props;
     const _schema = resolveSubSchemas(schema, rootSchema, oneOf);
     const oneOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).oneOf, rootSchema, oneOf);
 
     return (
-      <React.Fragment>
+      <Hidden xsUp={!visible}>
         <CombinatorProperties
           schema={_schema}
           combinatorKeyword={'oneOf'}
@@ -127,7 +128,7 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Hidden>
     );
 
   }

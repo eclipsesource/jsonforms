@@ -209,4 +209,21 @@ describe('Material array layout', () => {
     // 2 data entries with each having 1 control
     expect(controls).toHaveLength(2);
   });
+
+  it('should be hideable', () => {
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </Provider>
+    );
+
+    const controls = wrapper.find('input');
+    // no controls should be rendered
+    expect(controls).toHaveLength(0);
+  });
 });

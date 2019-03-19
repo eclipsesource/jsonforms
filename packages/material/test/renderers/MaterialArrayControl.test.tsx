@@ -269,4 +269,47 @@ describe('Material array control', () => {
     expect(nrOfRowsAfterDelete).toBe(4);
     expect(store.getState().jsonforms.core.data).toEqual({ things: [{}, {}]});
   });
+
+  it('should be hideable', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        things: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              somethingElse: {
+                type: 'string'
+              },
+              thing: {
+                type: 'string',
+                enum: [
+                  'thing'
+                ]
+              },
+            }
+          }
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/things'
+    };
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init({}, schema, uischema));
+
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayControlRenderer schema={schema} uischema={uischema} visible={false}/>
+      </Provider>
+    );
+
+    const nrOfButtons = wrapper.find('button').length;
+    expect(nrOfButtons).toBe(0);
+
+    const nrOfRows = wrapper.find('tr').length;
+    expect(nrOfRows).toBe(0);
+  });
 });
