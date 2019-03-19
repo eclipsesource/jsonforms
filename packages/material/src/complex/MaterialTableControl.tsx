@@ -29,6 +29,7 @@ import startCase from 'lodash/startCase';
 import React from 'react';
 import {
   FormHelperText,
+  Hidden,
   Table,
   TableBody,
   TableCell,
@@ -257,7 +258,8 @@ export class MaterialTableControl extends React.Component<
       errors,
       createDefaultValue,
       addItem,
-      openDeleteDialog
+      openDeleteDialog,
+      visible
     } = this.props;
 
     const controlElement = uischema as ControlElement;
@@ -268,7 +270,7 @@ export class MaterialTableControl extends React.Component<
       generateCells(TableHeaderCell, rootSchema, schema, path) : undefined;
 
     return (
-      <React.Fragment>
+      <Hidden xsUp={!visible}>
         <Table>
           <TableHead>
             <TableToolbar
@@ -298,7 +300,7 @@ export class MaterialTableControl extends React.Component<
             />
           </TableBody>
         </Table>
-      </React.Fragment>
+      </Hidden>
     );
   }
 }

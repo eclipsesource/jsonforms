@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Hidden } from '@material-ui/core';
 
 import {
   ControlProps,
@@ -19,14 +20,15 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
     const {
       schema,
       rootSchema,
-      path
+      path,
+      visible
     } = this.props;
 
     const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
     const allOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).allOf, rootSchema, 'allOf');
 
     return (
-      <React.Fragment>
+      <Hidden xsUp={!visible}>
         {
           allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
             <ResolvedJsonForms
@@ -37,7 +39,7 @@ class MaterialAllOfRenderer extends React.Component<ControlProps, any> {
             />
           ))
         }
-      </React.Fragment>
+      </Hidden>
     );
   }
 }

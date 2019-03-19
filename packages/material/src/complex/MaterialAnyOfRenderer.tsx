@@ -12,7 +12,7 @@ import {
 import { ResolvedJsonForms } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
 import { createCombinatorRenderInfos, resolveSubSchemas } from './combinators';
-import { Tab, Tabs } from '@material-ui/core';
+import { Hidden, Tab, Tabs } from '@material-ui/core';
 
 interface MaterialAnyOfState {
   selectedAnyOf: number;
@@ -31,12 +31,12 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, MaterialAnyOfS
   render() {
 
     const anyOf = 'anyOf';
-    const { path, schema, rootSchema } = this.props;
+    const { path, schema, rootSchema, visible } = this.props;
     const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
     const anyOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).anyOf, rootSchema, anyOf);
 
     return (
-      <React.Fragment>
+      <Hidden xsUp={!visible}>
         <CombinatorProperties
           schema={_schema}
           combinatorKeyword={'anyOf'}
@@ -54,7 +54,7 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, MaterialAnyOfS
             />
           ))
         }
-      </React.Fragment>
+      </Hidden>
     );
   }
 }
