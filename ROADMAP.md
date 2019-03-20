@@ -10,6 +10,6 @@ H1/2019:
 H2/2019
  * Separation of core components and add-ons
  * Strict application of semantic versioning
- * VS Code integration of Editor component
- 
+ * Yeoman-based scafolding support
+
  
