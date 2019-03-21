@@ -39,6 +39,7 @@
     ]
   },
   "dependencies": {
+    "@types/json-schema": "^7.0.3",
     "ajv": "^6.4.0",
     "json-schema-ref-parser": "^6.1.0",
     "lodash": "^4.17.4",
