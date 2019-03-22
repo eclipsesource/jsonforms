@@ -538,7 +538,7 @@ export const mapStateToLayoutProps = (
 };
 
 export interface RefResolver {
-  (schema: JsonSchema): Promise<JsonSchema>;
+  (schema: JsonSchema): Promise<any>;
 }
 
 export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
@@ -574,7 +574,7 @@ export const mapStateToJsonFormsRendererProps = (
     rootSchema: getSchema(state),
     uischema: uischema,
     refResolver: function(schema) {
-      return RefParser.dereference(schema, getRefParserOptions(state));
+      return RefParser.dereference(schema as any, getRefParserOptions(state));
     }
   };
 };
