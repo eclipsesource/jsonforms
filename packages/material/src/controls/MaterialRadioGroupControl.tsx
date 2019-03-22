@@ -31,6 +31,9 @@ import {
   formatErrorMessage,
   isDescriptionHidden,
   isPlainLabel,
+  rankWith,
+  RankedTester,
+  optionIs,
   mapDispatchToControlProps,
   mapStateToControlProps
 } from '@jsonforms/core';
@@ -102,4 +105,5 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
     }
 }
 
+export const materialRadioGroupControlTester: RankedTester = rankWith(2, optionIs('format', 'radio'));
 export default connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialRadioGroupControl);

@@ -40,6 +40,9 @@ import MaterialDateTimeControl, {
 import MaterialSliderControl, {
   materialSliderControlTester
 } from './MaterialSliderControl';
+import MaterialRadioGroupControl, {
+  materialRadioGroupControlTester
+} from './MaterialRadioGroupControl';
 
 export {
   MaterialBooleanControl,
@@ -53,5 +56,7 @@ export {
   MaterialDateTimeControl,
   materialDateTimeControlTester,
   MaterialSliderControl,
-  materialSliderControlTester
+  materialSliderControlTester,
+  MaterialRadioGroupControl,
+  materialRadioGroupControlTester
 };
