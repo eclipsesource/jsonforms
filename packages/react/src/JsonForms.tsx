@@ -46,7 +46,7 @@ interface JsonFormsRendererState {
     resolvedSchema: JsonSchema;
 }
 
-const hasRefs = (schema: JsonSchema) => {
+const hasRefs = (schema: JsonSchema): boolean => {
     if (schema !== undefined) {
         return Object.keys(findRefs(schema)).length > 0;
     }
@@ -62,11 +62,12 @@ export class ResolvedJsonFormsDispatchRenderer
     ) {
 
         if (!isEqual(prevState.schema, nextProps.schema)) {
+            const schemaHasRefs: boolean = hasRefs(nextProps.schema);
             const newState: JsonFormsRendererState = {
                 id: prevState.id,
-                resolvedSchema: undefined,
+                resolvedSchema: schemaHasRefs ? undefined : nextProps.schema,
                 schema: nextProps.schema,
-                resolving: true,
+                resolving: schemaHasRefs,
             };
             return newState;
         }
