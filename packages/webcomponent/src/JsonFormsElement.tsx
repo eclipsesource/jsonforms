@@ -108,10 +108,10 @@ export class JsonFormsElement extends HTMLElement {
 
     const data = getData(store.getState()) || {};
 
-    RefParser.dereference(getSchema(store.getState()) || Generate.jsonSchema(data), getRefParserOptions(store.getState()))
+    RefParser.dereference(getSchema(store.getState()) || Generate.jsonSchema(data) as any, getRefParserOptions(store.getState()))
     .then(resolvedSchema => {
       this._store = setupStore(
-        resolvedSchema,
+        resolvedSchema as any,
         getUiSchema(store.getState()),
         data
       );
