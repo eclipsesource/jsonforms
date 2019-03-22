@@ -57,7 +57,7 @@ const TableToolbar = (
                 spacing={16}
             >
                 <Grid item>
-                  <Typography variant={'headline'}>{label}</Typography>
+                  <Typography variant={'h6'}>{label}</Typography>
                 </Grid>
                 <Grid item>
                     <Hidden smUp={errors.length === 0}>

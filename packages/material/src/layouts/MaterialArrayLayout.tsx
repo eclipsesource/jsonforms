@@ -68,7 +68,7 @@ export const MaterialArrayLayout =
         <Toolbar>
           <Grid container alignItems='center' justify='space-between'>
             <Grid item>
-              <Typography variant={'headline'}>{label}</Typography>
+              <Typography variant={'h6'}>{label}</Typography>
             </Grid>
             <Hidden smUp={errors.length === 0}>
               <Grid item>
