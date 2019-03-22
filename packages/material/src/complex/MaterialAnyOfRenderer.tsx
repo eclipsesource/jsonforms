@@ -51,6 +51,7 @@ class MaterialAnyOfRenderer extends React.Component<ControlProps, MaterialAnyOfS
               schema={anyOfRenderInfo.schema}
               uischema={anyOfRenderInfo.uischema}
               path={path}
+              key={anyOfIndex}
             />
           ))
         }
