@@ -1,6 +1,6 @@
 {
   "name": "@jsonforms/core",
-  "version": "2.2.2-beta.0",
+  "version": "2.2.2-beta.1",
   "description": "Core module of JSON Forms",
   "repository": "https://github.com/eclipsesource/jsonforms",
   "bugs": "https://github.com/eclipsesource/jsonforms/issues",
