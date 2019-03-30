@@ -25,6 +25,7 @@
 import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
 import head from 'lodash/head';
+import find from 'lodash/find';
 import { JsonSchema, Scopable, UISchemaElement } from '../';
 import { resolveData, resolveSchema } from './resolvers';
 import {
@@ -89,6 +90,16 @@ const deriveType = (jsonSchema: JsonSchema): string => {
     return 'array';
   }
 
+  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.allOf)) {
+    const allOfType = find(
+      jsonSchema.allOf,
+      (schema: JsonSchema) => deriveType(schema) !== 'null'
+    );
+
+    if (allOfType) {
+      return deriveType(allOfType);
+    }
+  }
   // ignore all remaining cases
   return 'null';
 };
