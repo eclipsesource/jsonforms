@@ -1,7 +1,7 @@
 /*
   The MIT License
   
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
   
   Permission is hereby granted, free of charge, to any person obtaining a copy
