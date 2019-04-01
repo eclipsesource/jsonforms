@@ -166,8 +166,11 @@ export const uiTypeIs = (expected: string): Tester => (
 export const optionIs = (optionName: string, optionValue: any): Tester => (
   uischema: UISchemaElement
 ): boolean => {
-  const options = uischema.options;
+  if (isEmpty(uischema)) {
+    return false;
+  }
 
+  const options = uischema.options;
   return !isEmpty(options) && options[optionName] === optionValue;
 };
 
