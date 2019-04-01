@@ -155,32 +155,30 @@ const NonEmptyCell = ({
   const isValid = isEmpty(errorsPerEntry);
 
   return (
-    <React.Fragment>
-      <NoBorderTableCell>
-        {
-          schema.properties ?
-            <DispatchField
-              schema={Resolve.schema(schema, `#/properties/${propName}`, rootSchema)}
-              uischema={Generate.controlElement(
-                undefined,
-                `#/properties/${propName}`
-              )}
-              path={path}
-            /> :
-            <DispatchField
-              schema={schema}
-              uischema={Generate.controlElement(
-                undefined,
-                '#'
-              )}
-              path={path}
-            />
-        }
-        <FormHelperText error={!isValid}>
-          {!isValid && formatErrorMessage(errorsPerEntry)}
-        </FormHelperText>
-      </NoBorderTableCell>
-    </React.Fragment>
+    <NoBorderTableCell>
+      {
+        schema.properties ?
+          <DispatchField
+            schema={Resolve.schema(schema, `#/properties/${propName}`, rootSchema)}
+            uischema={Generate.controlElement(
+              undefined,
+              `#/properties/${propName}`
+            )}
+            path={path}
+          /> :
+          <DispatchField
+            schema={schema}
+            uischema={Generate.controlElement(
+              undefined,
+              '#'
+            )}
+            path={path}
+          />
+      }
+      <FormHelperText error={!isValid}>
+        {!isValid && formatErrorMessage(errorsPerEntry)}
+      </FormHelperText>
+    </NoBorderTableCell>
   );
 };
 

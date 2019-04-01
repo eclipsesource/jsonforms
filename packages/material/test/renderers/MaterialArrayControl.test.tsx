@@ -256,17 +256,17 @@ describe('Material array control', () => {
     // 3 buttons
     // add row
     // two dialog buttons (no + yes)
-    const nrOfRowsBeforeDelete = wrapper.find('tr').length;
+    const nrOfRowsBeforeAdd = wrapper.find('tr').length;
 
     const addButton = buttons.at(0);
     addButton.simulate('click');
     addButton.simulate('click');
     wrapper.update();
-    const nrOfRowsAfterDelete = wrapper.find('tr').length;
+    const nrOfRowsAfterAdd = wrapper.find('tr').length;
 
     // 2 header rows + 'no data' row
-    expect(nrOfRowsBeforeDelete).toBe(3);
-    expect(nrOfRowsAfterDelete).toBe(4);
+    expect(nrOfRowsBeforeAdd).toBe(3);
+    expect(nrOfRowsAfterAdd).toBe(4);
     expect(store.getState().jsonforms.core.data).toEqual({ things: [{}, {}]});
   });
 
