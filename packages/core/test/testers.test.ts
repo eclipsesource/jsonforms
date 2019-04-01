@@ -47,7 +47,12 @@ import {
   scopeEndsWith,
   uiTypeIs
 } from '../src/testers';
-import { ControlElement, JsonSchema, LabelElement } from '../src';
+import {
+  ControlElement,
+  JsonSchema,
+  LabelElement,
+  UISchemaElement
+} from '../src';
 
 test.beforeEach(t => {
   t.context.uischema = {
@@ -133,6 +138,12 @@ test('optionIs should check for options', t => {
     }
   };
   t.true(optionIs('answer', 42)(control, undefined));
+});
+
+test('optionIs should not fail if uischema is undefined or null', t => {
+  const uischema: UISchemaElement = null;
+  t.false(optionIs('answer', 42)(uischema, undefined));
+  t.false(optionIs('answer', 42)(uischema, undefined));
 });
 
 test('optionIs should return false for UI schema elements without options field', t => {
