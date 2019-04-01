@@ -35,12 +35,11 @@ import {
   mapStateToLayoutProps,
   RankedTester,
   rankWith,
-  RendererProps,
   StatePropsOfLayout,
-  StatePropsOfRenderer,
   Tester,
   UISchemaElement,
-  uiTypeIs
+  uiTypeIs,
+  OwnPropsOfRenderer
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
@@ -67,7 +66,7 @@ export interface MaterialCategorizationLayoutRendererProps extends StatePropsOfL
 }
 
 export class MaterialCategorizationLayoutRenderer
-    extends RendererComponent<MaterialCategorizationLayoutRendererProps & RendererProps, CategorizationState> {
+    extends RendererComponent<MaterialCategorizationLayoutRendererProps, CategorizationState> {
 
     state = {
         activeCategory: 0
@@ -121,7 +120,7 @@ export class MaterialCategorizationLayoutRenderer
 
 const mapStateToCategorizationProps = (
   state: JsonFormsState,
-  ownProps: StatePropsOfRenderer
+  ownProps: OwnPropsOfRenderer,
 ): MaterialCategorizationLayoutRendererProps & StatePropsOfLayout => {
   const props = mapStateToLayoutProps(state, ownProps);
   return {

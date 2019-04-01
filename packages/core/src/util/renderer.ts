@@ -183,13 +183,14 @@ export interface OwnPropsOfRenderer {
    * it is the case with nested controls.
    */
   path?: string;
+
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export interface OwnPropsOfControl extends OwnPropsOfRenderer {
   id?: string;
   // constraint type
   uischema?: ControlElement;
-  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export interface OwnPropsOfEnum {

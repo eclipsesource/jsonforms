@@ -226,4 +226,20 @@ describe('Material array layout', () => {
     // no controls should be rendered
     expect(controls).toHaveLength(0);
   });
+
+  it('should have renderers prop via ownProps', () => {
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischema}
+          renderers={[]}
+        />
+      </Provider>
+    );
+
+    const materialArrayLayout = wrapper.find(MaterialArrayLayout);
+    expect(materialArrayLayout.props().renderers).toHaveLength(0);
+  })
 });

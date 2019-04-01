@@ -44,7 +44,8 @@ import {
   JsonFormsState,
   JsonSchema,
   RuleEffect,
-  UISchemaElement
+  UISchemaElement,
+  rankWith
 } from '../../src';
 import { jsonformsReducer } from '../../src/reducers';
 import { ErrorObject } from 'ajv';
@@ -547,6 +548,42 @@ test('mapStateToLayoutProps - visible via state with path from ownProps ', t => 
   };
   const props = mapStateToLayoutProps(state, ownProps);
   t.true(props.visible);
+});
+
+test('mapStateToLayoutProps should return renderers prop via ownProps', t => {
+  const uischema = {
+    type: 'VerticalLayout',
+    elements: [] as UISchemaElement[]
+  };
+  const state = {
+    jsonforms: {
+      core: {
+        schema: {
+          type: 'object',
+          properties: {
+            firstName: { type: 'string' },
+            lastName: { type: 'string' }
+          }
+        },
+        data: {
+          foo: { firstName: 'Homer' }
+        },
+        uischema,
+        errors: [] as ErrorObject[]
+      }
+    }
+  };
+  const props = mapStateToLayoutProps(state, {
+    uischema,
+    path: 'foo',
+    renderers: [
+      {
+        tester: rankWith(1, () => true),
+        renderer: undefined
+      }
+    ]
+  });
+  t.is(props.renderers.length, 1);
 });
 
 test('mapStateToLayoutProps - hidden via state with path from ownProps ', t => {
