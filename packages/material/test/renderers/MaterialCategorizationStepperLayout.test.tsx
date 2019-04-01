@@ -43,7 +43,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
   MaterialCategorizationStepperLayoutRenderer as CategorizationStepperRenderer,
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
-import { materialFields, materialRenderers } from '../../src';
+import { materialFields, materialRenderers, MaterialLayoutRenderer } from '../../src';
 import { Step, StepButton, Stepper } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -374,4 +374,22 @@ describe('Material categorization stepper layout', () => {
     expect(wrapper.find(Step).length).toBe(1);
     wrapper.unmount();
   });
+
+  it('should have renderers prop via ownProps', () => {
+    const store = initJsonFormsStore(fixture);
+    const renderers: any[] = []
+    const wrapper = mount(
+      <Provider store={store}>
+        <MaterialCategorizationStepperLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          renderers={renderers}
+        />
+      </Provider>
+    );
+
+    const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);
+    expect(materialArrayLayout.props().renderers).toHaveLength(0);
+  })
 });

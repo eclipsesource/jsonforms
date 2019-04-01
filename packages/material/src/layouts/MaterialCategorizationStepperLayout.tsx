@@ -39,8 +39,8 @@ import {
   rankWith,
   RendererProps,
   StatePropsOfLayout,
-  StatePropsOfRenderer,
-  uiTypeIs
+  uiTypeIs,
+  OwnPropsOfRenderer
 } from '@jsonforms/core';
 import { RendererComponent } from '@jsonforms/react';
 import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
@@ -115,7 +115,7 @@ export class MaterialCategorizationStepperLayoutRenderer
 
 const mapStateToCategorizationProps = (
   state: JsonFormsState,
-  ownProps: StatePropsOfRenderer
+  ownProps: OwnPropsOfRenderer
 ): MaterialCategorizationStepperLayoutRendererProps & StatePropsOfLayout => {
   const props = mapStateToLayoutProps(state, ownProps);
   return {

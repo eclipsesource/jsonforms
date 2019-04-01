@@ -43,7 +43,7 @@ import MaterialCategorizationLayoutRenderer, {
   MaterialCategorizationLayoutRenderer as CategorizationLayoutRenderer,
   materialCategorizationTester
 } from '../../src/layouts/MaterialCategorizationLayout';
-import { materialFields, materialRenderers } from '../../src';
+import { materialFields, materialRenderers, MaterialLayoutRenderer } from '../../src';
 import { Tab } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -374,4 +374,22 @@ describe('Material categorization stepper layout', () => {
     expect(wrapper.find(Tab).length).toBe(1);
     wrapper.unmount();
   });
+
+  it('should have renderers prop via ownProps', () => {
+    const store = initJsonFormsStore(fixture);
+    const renderers: any[] = []
+    const wrapper = mount(
+      <Provider store={store}>
+        <MaterialCategorizationLayoutRenderer
+          {...layoutDefaultProps}
+          schema={fixture.schema}
+          uischema={fixture.uischema}
+          renderers={renderers}
+        />
+      </Provider>
+    );
+
+    const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);
+    expect(materialArrayLayout.props().renderers).toHaveLength(0);
+  })
 });
