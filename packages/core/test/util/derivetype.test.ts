@@ -65,13 +65,6 @@ test('derive type with type - union', t => {
   const schema: JsonSchema = {
     type: ['string', 'number']
   };
-  t.is(deriveType(schema), 'string');
-});
-
-test('derive type with type - union', t => {
-  const schema: JsonSchema = {
-    type: ['string', 'number']
-  };
   // we just take the first, as derive type returns exactly one value
   t.is(deriveType(schema), 'string');
 });
