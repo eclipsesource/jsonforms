@@ -30,9 +30,7 @@ import {
   RemoveCellRendererAction
 } from '../actions';
 
-type ValidCellReducerActions =
-  | AddCellRendererAction
-  | RemoveCellRendererAction;
+type ValidCellReducerActions = AddCellRendererAction | RemoveCellRendererAction;
 
 export type JsonFormsCellRendererRegistryState = JsonFormsCellRendererRegistryEntry[];
 

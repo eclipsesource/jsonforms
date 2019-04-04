@@ -28,9 +28,7 @@ import DateTimeCell, { dateTimeCellTester } from './DateTimeCell';
 import EnumCell, { enumCellTester } from './EnumCell';
 import IntegerCell, { integerCellTester } from './IntegerCell';
 import NumberCell, { numberCellTester } from './NumberCell';
-import NumberFormatCell, {
-  numberFormatCellTester
-} from './NumberFormatCell';
+import NumberFormatCell, { numberFormatCellTester } from './NumberFormatCell';
 import SliderCell, { sliderCellTester } from './SliderCell';
 import TextCell, { textCellTester } from './TextCell';
 import TextAreaCell, { textAreaCellTester } from './TextAreaCell';
