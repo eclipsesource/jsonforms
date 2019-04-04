@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,29 +22,27 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { connect } from 'react-redux';
 import {
-  CellProps,
-  isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
+  isEnumControl,
+  mapDispatchToControlProps,
+  mapStateToEnumControlProps,
   RankedTester,
-  rankWith,
-  WithClassname
+  rankWith
 } from '@jsonforms/core';
-import { MaterialBooleanComponent } from '../components/MaterialBooleanComponent';
+import { connect } from 'react-redux';
+import { MaterialEnumComponent } from '../components/MaterialEnumComponent';
+import { MaterialInputControl } from './MaterialInputControl';
 
-export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
-  return <MaterialBooleanComponent {...props} />;
-};
-
-export const materialBooleanCellTester: RankedTester = rankWith(
+export class MaterialEnumControl extends MaterialInputControl {
+  protected getInnerComponent(): any {
+    return MaterialEnumComponent;
+  }
+}
+export const materialEnumControlTester: RankedTester = rankWith(
   2,
-  isBooleanControl
+  isEnumControl
 );
-
 export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialBooleanCell);
+  mapStateToEnumControlProps,
+  mapDispatchToControlProps
+)(MaterialEnumControl);

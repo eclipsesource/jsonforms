@@ -23,25 +23,30 @@
   THE SOFTWARE.
 */
 import * as React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import {
   Actions,
   ControlElement,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
-  NOT_APPLICABLE,
   UISchemaElement,
-  HorizontalLayout
+  HorizontalLayout,
+  isControl,
+  rankWith,
+  RankedTester,
+  mapStateToControlProps,
+  mapDispatchToControlProps
 } from '@jsonforms/core';
 import '../../src/cells';
-import MaterialInputControl, { materialInputControlTester } from '../../src/controls/MaterialInputControl';
+import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { MaterialTextComponent } from '../../src/components/MaterialTextComponent';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -58,6 +63,19 @@ const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
+class TestControlInner extends MaterialInputControl {
+  protected getInnerComponent(): any {
+    return MaterialTextComponent;
+  }
+}
+export const testControlTester: RankedTester = rankWith(
+  1,
+  isControl
+);
+const TestControl = connect(
+  mapStateToControlProps,
+  mapDispatchToControlProps
+)(TestControlInner);
 
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
@@ -74,19 +92,6 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-describe('Material input control tester', () => {
-  it('should fail', () => {
-    expect(materialInputControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialInputControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialInputControlTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialInputControlTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
-  });
-  it('should succeed', () => {
-    const control: ControlElement = {type: 'Control', scope: '#/properties/foo'};
-    expect(materialInputControlTester(control, undefined)).toBe(1);
-  });
-});
-
 describe('Material input control', () => {
 
   let wrapper: ReactWrapper;
@@ -99,7 +104,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={uischema}/>
+        <TestControl schema={schema} uischema={uischema}/>
       </Provider>
     );
 
@@ -126,7 +131,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={control}/>
+        <TestControl schema={schema} uischema={control}/>
       </Provider>
     );
 
@@ -148,7 +153,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl
+        <TestControl
           schema={schema}
           uischema={uischema}
           visible={false}
@@ -163,7 +168,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={uischema}/>
+        <TestControl schema={schema} uischema={uischema}/>
       </Provider>
     );
     const control = wrapper.find('div').first();
@@ -174,7 +179,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={uischema}/>
+        <TestControl schema={schema} uischema={uischema}/>
       </Provider>
     );
 
@@ -187,7 +192,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={uischema}/>
+        <TestControl schema={schema} uischema={uischema}/>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => 3));
@@ -199,7 +204,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={uischema}/>
+        <TestControl schema={schema} uischema={uischema}/>
       </Provider>
     );
     const validation = wrapper.find('p').first();
@@ -210,7 +215,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={schema} uischema={uischema}/>
+        <TestControl schema={schema} uischema={uischema}/>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => 3));
@@ -300,7 +305,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore({}, jsonSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+        <TestControl schema={jsonSchema} uischema={control}/>
       </Provider>,
     );
     const label = wrapper.find('label').first();
@@ -325,7 +330,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore({}, jsonSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+        <TestControl schema={jsonSchema} uischema={control}/>
       </Provider>
     );
     const label = wrapper.find('label').first();
@@ -347,40 +352,11 @@ describe('Material input control', () => {
     const store = initJsonFormsStore({}, jsonSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={jsonSchema} uischema={control}/>
+        <TestControl schema={jsonSchema} uischema={control}/>
       </Provider>
     );
     const input = wrapper.find('input');
     expect(input.props().type).toBe('password');
-  });
-
-  it('should render no applicable for undefined input control', () => {
-    const jsonSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        expectedValue: {
-          type: [
-            'string',
-            'integer',
-            'number',
-            'boolean'
-          ]
-        }
-      }
-    };
-
-    const control: ControlElement = {
-      type: 'Control',
-      scope: '#/properties/expectedValue'
-    };
-    const store = initJsonFormsStore({}, jsonSchema, control);
-    wrapper = mount(
-      <Provider store={store}>
-        <MaterialInputControl schema={jsonSchema} uischema={control}/>
-      </Provider>
-    );
-    const rendered = wrapper.find('div').at(1);
-    expect(rendered.text()).toBe('No applicable cell found.');
   });
 
   it('should render own id and create/use input id', () => {
@@ -397,7 +373,7 @@ describe('Material input control', () => {
     const store = initJsonFormsStore({}, jsonSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialInputControl schema={jsonSchema} uischema={control} id={control.scope}/>
+        <TestControl schema={jsonSchema} uischema={control} id={control.scope}/>
       </Provider>
     );
     const input = wrapper.find('input').first();

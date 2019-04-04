@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,28 +23,27 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  CellProps,
-  isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
-  RankedTester,
-  rankWith,
-  WithClassname
+    CellProps,
+    WithClassname
 } from '@jsonforms/core';
-import { MaterialBooleanComponent } from '../components/MaterialBooleanComponent';
+import Input from '@material-ui/core/Input';
 
-export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
-  return <MaterialBooleanComponent {...props} />;
+export const MaterialIntegerComponent = (props: CellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
+  const config = {'step': '1'};
+
+  return (
+    <Input
+      type='number'
+      value={data || ''}
+      onChange={ev => handleChange(path, parseInt(ev.target.value, 10))}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      inputProps={config}
+      fullWidth={true}
+    />
+  );
 };
-
-export const materialBooleanCellTester: RankedTester = rankWith(
-  2,
-  isBooleanControl
-);
-
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialBooleanCell);

@@ -25,38 +25,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    CellProps,
-    isNumberControl,
-    mapDispatchToCellProps,
-    mapStateToCellProps,
-    RankedTester,
-    rankWith, WithClassname,
+  CellProps,
+  isNumberControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
+import { MaterialNumberComponent } from '../components/MaterialNumberComponent';
 
-export const MaterialNumberCell = (props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = {'step': '0.1'};
-
-  return (
-    <Input
-      type='number'
-      value={data || ''}
-      onChange={ev => handleChange(path, Number(ev.target.value))}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      inputProps={config}
-      fullWidth={true}
-    />
-  );
-};
+export const MaterialNumberCell = (props: CellProps & WithClassname) => (
+  <MaterialNumberComponent {...props} />
+);
 /**
  * Default tester for number controls.
  * @type {RankedTester}
  */
-export const materialNumberCellTester: RankedTester = rankWith(2, isNumberControl);
+export const materialNumberCellTester: RankedTester = rankWith(
+  2,
+  isNumberControl
+);
 export default connect(
   mapStateToCellProps,
   mapDispatchToCellProps

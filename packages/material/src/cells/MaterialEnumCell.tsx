@@ -24,46 +24,22 @@
 */
 import React from 'react';
 import {
-    defaultMapDispatchToControlProps,
-    defaultMapStateToEnumCellProps,
-    EnumCellProps,
-    isEnumControl,
-    RankedTester,
-    rankWith,
-    WithClassname,
+  defaultMapDispatchToControlProps,
+  defaultMapStateToEnumCellProps,
+  EnumCellProps,
+  isEnumControl,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
 
-import Select from '@material-ui/core/Select';
-import { MenuItem } from '@material-ui/core';
 import { connect } from 'react-redux';
+import { MaterialEnumComponent } from '../components/MaterialEnumComponent';
 
-export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
+export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
+  <MaterialEnumComponent {...props} />
+);
 
-  return (
-    <Select
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
-      fullWidth={true}
-    >
-      {
-        [<MenuItem value='' key={'empty'} />]
-          .concat(
-            options.map(optionValue =>
-              (
-                <MenuItem value={optionValue} key={optionValue}>
-                  {optionValue}
-                </MenuItem>
-              )
-            )
-          )}
-    </Select>
-  );
-};
 /**
  * Default tester for enum controls.
  * @type {RankedTester}

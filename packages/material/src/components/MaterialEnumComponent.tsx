@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,28 +23,38 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  CellProps,
-  isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
-  RankedTester,
-  rankWith,
-  WithClassname
+    EnumCellProps,
+    WithClassname,
 } from '@jsonforms/core';
-import { MaterialBooleanComponent } from '../components/MaterialBooleanComponent';
 
-export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
-  return <MaterialBooleanComponent {...props} />;
+import Select from '@material-ui/core/Select';
+import { MenuItem } from '@material-ui/core';
+
+export const MaterialEnumComponent = (props: EnumCellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
+
+  return (
+    <Select
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      value={data || ''}
+      onChange={ev => handleChange(path, ev.target.value)}
+      fullWidth={true}
+    >
+      {
+        [<MenuItem value='' key={'empty'} />]
+          .concat(
+            options.map(optionValue =>
+              (
+                <MenuItem value={optionValue} key={optionValue}>
+                  {optionValue}
+                </MenuItem>
+              )
+            )
+          )}
+    </Select>
+  );
 };
-
-export const materialBooleanCellTester: RankedTester = rankWith(
-  2,
-  isBooleanControl
-);
-
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialBooleanCell);

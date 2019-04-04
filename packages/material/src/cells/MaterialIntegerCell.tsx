@@ -25,35 +25,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    CellProps,
-    isIntegerControl,
-    mapDispatchToCellProps,
-    mapStateToCellProps,
-    RankedTester,
-    rankWith,
-    WithClassname
+  CellProps,
+  isIntegerControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
+import { MaterialIntegerComponent } from '../components/MaterialIntegerComponent';
 
-export const MaterialIntegerCell = (props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = {'step': '1'};
-
-  return (
-    <Input
-      type='number'
-      value={data || ''}
-      onChange={ev => handleChange(path, parseInt(ev.target.value, 10))}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      inputProps={config}
-      fullWidth={true}
-    />
-  );
-};
-export const materialIntegerCellTester: RankedTester = rankWith(2, isIntegerControl);
+export const MaterialIntegerCell = (props: CellProps & WithClassname) => (
+  <MaterialIntegerComponent {...props} />
+);
+export const materialIntegerCellTester: RankedTester = rankWith(
+  2,
+  isIntegerControl
+);
 export default connect(
   mapStateToCellProps,
   mapDispatchToCellProps

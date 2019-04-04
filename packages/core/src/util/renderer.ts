@@ -403,6 +403,25 @@ export const mapDispatchToControlProps = (
 });
 
 /**
+ * Default mapStateToCellProps for enum control. Options is used for populating dropdown list
+ * @param state
+ * @param ownProps
+ * @returns {StatePropsOfControl & OwnPropsOfEnum}
+ */
+export const mapStateToEnumControlProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl & OwnPropsOfEnum
+): StatePropsOfControl & OwnPropsOfEnum => {
+  const props: StatePropsOfControl = mapStateToControlProps(state, ownProps);
+  const options =
+    ownProps.options !== undefined ? ownProps.options : props.schema.enum;
+  return {
+    ...props,
+    options
+  };
+};
+
+/**
  * State-based props of a table control.
  */
 export interface StatePropsOfControlWithDetail extends StatePropsOfControl {

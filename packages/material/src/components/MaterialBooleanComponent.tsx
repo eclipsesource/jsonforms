@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,28 +23,24 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  CellProps,
-  isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
-  RankedTester,
-  rankWith,
-  WithClassname
+    CellProps,
+    WithClassname
 } from '@jsonforms/core';
-import { MaterialBooleanComponent } from '../components/MaterialBooleanComponent';
+import Checkbox from '@material-ui/core/Checkbox';
 
-export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
-  return <MaterialBooleanComponent {...props} />;
+export const MaterialBooleanComponent = (props: CellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
+  const config = {'autoFocus': uischema.options && uischema.options.focus};
+
+  return (
+    <Checkbox
+      checked={data || ''}
+      onChange={(_ev, checked) => handleChange(path, checked)}
+      className={className}
+      id={id}
+      disabled={!enabled}
+      inputProps={config}
+    />
+  );
 };
-
-export const materialBooleanCellTester: RankedTester = rankWith(
-  2,
-  isBooleanControl
-);
-
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialBooleanCell);
