@@ -25,9 +25,9 @@
 import MaterialBooleanControl, {
   materialBooleanControlTester
 } from './MaterialBooleanControl';
-import MaterialInputControl, {
-  materialInputControlTester
-} from './MaterialInputControl';
+import MaterialEnumControl, {
+  materialEnumControlTester
+} from './MaterialEnumControl';
 import MaterialNativeControl, {
   materialNativeControlTester
 } from './MaterialNativeControl';
@@ -43,12 +43,21 @@ import MaterialSliderControl, {
 import MaterialRadioGroupControl, {
   materialRadioGroupControlTester
 } from './MaterialRadioGroupControl';
+import MaterialIntegerControl, {
+  materialIntegerControlTester
+} from './MaterialIntegerControl';
+import MaterialNumberControl, {
+  materialNumberControlTester
+} from './MaterialNumberControl';
+import MaterialTextControl, {
+  materialTextControlTester
+} from './MaterialTextControl';
 
 export {
   MaterialBooleanControl,
   materialBooleanControlTester,
-  MaterialInputControl,
-  materialInputControlTester,
+  MaterialEnumControl,
+  materialEnumControlTester,
   MaterialNativeControl,
   materialNativeControlTester,
   MaterialDateControl,
@@ -58,5 +67,11 @@ export {
   MaterialSliderControl,
   materialSliderControlTester,
   MaterialRadioGroupControl,
-  materialRadioGroupControlTester
+  materialRadioGroupControlTester,
+  MaterialIntegerControl,
+  materialIntegerControlTester,
+  MaterialNumberControl,
+  materialNumberControlTester,
+  MaterialTextControl,
+  materialTextControlTester,
 };

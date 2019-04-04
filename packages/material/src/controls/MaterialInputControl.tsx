@@ -23,26 +23,21 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
   ControlState,
-  isControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
-  RankedTester,
-  rankWith
 } from '@jsonforms/core';
-import { Control, DispatchCell } from '@jsonforms/react';
+import { Control } from '@jsonforms/react';
 
 import { InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
 import merge from 'lodash/merge';
 
-export class MaterialInputControl extends Control<ControlProps, ControlState> {
+export abstract class MaterialInputControl extends Control<ControlProps, ControlState> {
+
   render() {
     const {
       id,
@@ -50,10 +45,8 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       errors,
       label,
       uischema,
-      schema,
       visible,
       required,
-      path,
       config
     } = this.props;
     const isValid = errors.length === 0;
@@ -76,6 +69,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       description,
       this.state.isFocused
     );
+    const InnerComponent = this.getInnerComponent();
     return (
       <FormControl
         style={style}
@@ -91,11 +85,11 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         >
           {computeLabel(isPlainLabel(label) ? label : label.default, required)}
         </InputLabel>
-        <DispatchCell
-          uischema={uischema}
-          schema={schema}
-          path={path}
+        <InnerComponent
+          {...this.props}
           id={id + '-input'}
+          isValid={isValid}
+          visible={visible}
         />
         <FormHelperText error={!isValid}>
           {!isValid
@@ -107,6 +101,6 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
       </FormControl>
     );
   }
+
+  protected abstract getInnerComponent(): any;
 }
-export const materialInputControlTester: RankedTester = rankWith(1, isControl);
-export default connect(mapStateToControlProps, mapDispatchToControlProps)(MaterialInputControl);

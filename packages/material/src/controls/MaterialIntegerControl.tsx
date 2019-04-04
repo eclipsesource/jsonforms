@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,29 +22,27 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { connect } from 'react-redux';
 import {
-  CellProps,
-  isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
+  isIntegerControl,
+  mapDispatchToControlProps,
+  mapStateToControlProps,
   RankedTester,
-  rankWith,
-  WithClassname
+  rankWith
 } from '@jsonforms/core';
-import { MaterialBooleanComponent } from '../components/MaterialBooleanComponent';
+import { connect } from 'react-redux';
+import { MaterialIntegerComponent } from '../components/MaterialIntegerComponent';
+import { MaterialInputControl } from './MaterialInputControl';
 
-export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
-  return <MaterialBooleanComponent {...props} />;
-};
-
-export const materialBooleanCellTester: RankedTester = rankWith(
+export class MaterialIntegerControl extends MaterialInputControl {
+  protected getInnerComponent(): any {
+    return MaterialIntegerComponent;
+  }
+}
+export const materialIntegerControlTester: RankedTester = rankWith(
   2,
-  isBooleanControl
+  isIntegerControl
 );
-
 export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialBooleanCell);
+  mapStateToControlProps,
+  mapDispatchToControlProps
+)(MaterialIntegerControl);

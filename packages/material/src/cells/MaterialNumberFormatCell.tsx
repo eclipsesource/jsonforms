@@ -24,65 +24,29 @@
 */
 import React from 'react';
 import {
-    CellProps,
-    Formatted,
-    isNumberFormatControl,
-    mapDispatchToCellProps,
-    mapStateToCellProps,
-    RankedTester,
-    rankWith,
-    WithClassname,
+  CellProps,
+  Formatted,
+  isNumberFormatControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
 import { connect } from 'react-redux';
+import { MaterialNumberFormatComponent } from '../components/MaterialNumberFormatComponent';
 
-export const MaterialNumberFormatCell = (props: CellProps & WithClassname & Formatted<number>) => {
-  const {
-    className,
-    id,
-    enabled,
-    uischema,
-    isValid,
-    path,
-    handleChange,
-    schema
-  } = props;
-  const maxLength = schema.maxLength;
-  let config;
-  if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
-  } else {
-    config = {};
-  }
-  const trim = uischema.options && uischema.options.trim;
-  const formattedNumber = props.toFormatted(props.data);
-
-  const onChange = (ev: any) => {
-    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
-    handleChange(path, validStringNumber);
-  };
-
-  return (
-    <Input
-      type='text'
-      value={formattedNumber}
-      onChange={onChange}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim || maxLength === undefined}
-      inputProps={config}
-      error={!isValid}
-    />
-  );
-};
+export const MaterialNumberFormatCell = (
+  props: CellProps & WithClassname & Formatted<number>
+) => <MaterialNumberFormatComponent {...props} />;
 /**
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const materialNumberFormatCellTester: RankedTester = rankWith(4, isNumberFormatControl);
+export const materialNumberFormatCellTester: RankedTester = rankWith(
+  4,
+  isNumberFormatControl
+);
 export default connect(
   mapStateToCellProps,
   mapDispatchToCellProps

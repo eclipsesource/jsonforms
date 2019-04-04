@@ -25,34 +25,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    CellProps,
-    isTimeControl,
-    mapDispatchToCellProps,
-    mapStateToCellProps,
-    RankedTester,
-    rankWith,
-    WithClassname
+  CellProps,
+  isTimeControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
+import { MaterialTimeComponent } from '../components/MaterialTimeComponent';
 
-export const MaterialTimeCell = (props: CellProps & WithClassname) => {
-    const { data, className, id, enabled, uischema, path, handleChange } = props;
-
-    return (
-        <Input
-            type='time'
-            value={data || ''}
-            onChange={ev => handleChange(path, ev.target.value)}
-            className={className}
-            id={id}
-            disabled={!enabled}
-            autoFocus={uischema.options && uischema.options.focus}
-            fullWidth={true}
-        />
-    );
-};
+export const MaterialTimeCell = (props: CellProps & WithClassname) => (
+  <MaterialTimeComponent {...props} />
+);
 export const materialTimeCellTester: RankedTester = rankWith(2, isTimeControl);
 export default connect(
-    mapStateToCellProps,
-    mapDispatchToCellProps
+  mapStateToCellProps,
+  mapDispatchToCellProps
 )(MaterialTimeCell);
