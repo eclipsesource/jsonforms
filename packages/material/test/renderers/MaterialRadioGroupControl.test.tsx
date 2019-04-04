@@ -36,7 +36,7 @@ import {
 } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import { Provider } from 'react-redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -67,7 +67,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
           renderer: MaterialRadioGroupControl
         }
       ],
-      fields: materialFields
+      cells: materialCells
     }
   };
   const store: Store<JsonFormsState> = createStore(

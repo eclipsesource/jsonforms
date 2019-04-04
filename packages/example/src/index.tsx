@@ -32,7 +32,7 @@ import geoschema from './geographical-location.schema';
 import {
   Actions,
   createAjv,
-  JsonFormsFieldRendererRegistryEntry,
+  JsonFormsCellRendererRegistryEntry,
   jsonformsReducer,
   JsonFormsRendererRegistryEntry,
   RankedTester
@@ -43,7 +43,7 @@ import { enhanceExample, ReactExampleDescription } from './util';
 
 const setupStore = (
   exampleData: ReactExampleDescription[],
-  fields: JsonFormsFieldRendererRegistryEntry[],
+  cells: JsonFormsCellRendererRegistryEntry[],
   renderers: JsonFormsRendererRegistryEntry[],
   additionalStoreParams: any
 ) => {
@@ -72,7 +72,7 @@ const setupStore = (
     }),
     {
       jsonforms: {
-        fields: fields,
+        cells: cells,
         renderers: renderers,
         ...additionalInitState
       },
@@ -81,7 +81,6 @@ const setupStore = (
       }
     }
   );
-
 
   // Resolve example configuration
   // Add schema to validation
@@ -93,13 +92,13 @@ const setupStore = (
   // Allow json-schema-ref-resolver to resolve same schema
   const geoResolver = {
       order: 1,
-      canRead: function(file:any) {
+      canRead: function(file: any) {
           return file.url.indexOf('geographical-location.schema.json') !== -1;
       },
       read: function() {
-          return JSON.stringify(geoschema)
+          return JSON.stringify(geoschema);
       }
-  }
+  };
   // Add configuration to JSONForms
   store.dispatch(
     Actions.init(
@@ -120,13 +119,13 @@ const setupStore = (
 };
 export const renderExample = (
   renderers: { tester: RankedTester; renderer: any }[],
-  fields: { tester: RankedTester; field: any }[],
+  cells: { tester: RankedTester; cell: any }[],
   ...additionalStoreParams: AdditionalStoreParams[]
 ) => {
   const exampleData = enhanceExample(getExamples());
   const store = setupStore(
     exampleData,
-    fields,
+    cells,
     renderers,
     additionalStoreParams
   );

@@ -33,7 +33,7 @@ import {
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import DateTimeField, { dateTimeFieldTester } from '../../src/fields/DateTimeField';
+import DateTimeCell, { dateTimeCellTester } from '../../src/cells/DateTimeCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -123,7 +123,7 @@ test('autofocus active', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={uischema}
         path='foo'
@@ -149,7 +149,7 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={uischema}
         path='foo'
@@ -172,7 +172,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={uischema}
         path='foo'
@@ -184,15 +184,15 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(dateTimeFieldTester(undefined, undefined), -1);
-  t.is(dateTimeFieldTester(null, undefined), -1);
-  t.is(dateTimeFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(dateTimeFieldTester({ type: 'Control' }, undefined), -1);
+  t.is(dateTimeCellTester(undefined, undefined), -1);
+  t.is(dateTimeCellTester(null, undefined), -1);
+  t.is(dateTimeCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(dateTimeCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-    dateTimeFieldTester(
+    dateTimeCellTester(
       t.context.uischmea,
       {
         type: 'object',
@@ -207,7 +207,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-    dateTimeFieldTester(
+    dateTimeCellTester(
       t.context.uischema,
       {
         type: 'object',
@@ -226,7 +226,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with correct prop type', t => {
   t.is(
-    dateTimeFieldTester(
+    dateTimeCellTester(
       t.context.uischema,
       {
         type: 'object',
@@ -250,7 +250,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -271,7 +271,7 @@ test.cb('update via event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -298,7 +298,7 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -324,7 +324,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -344,7 +344,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -364,7 +364,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -384,7 +384,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -404,7 +404,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -424,7 +424,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -444,7 +444,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateTimeField
+      <DateTimeCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'

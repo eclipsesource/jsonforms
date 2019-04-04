@@ -23,45 +23,67 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import {
-    FieldProps,
-    isRangeControl,
-    mapDispatchToFieldProps,
-    mapStateToFieldProps,
+    CellProps,
+    Formatted,
+    isNumberFormatControl,
+    mapDispatchToCellProps,
+    mapStateToCellProps,
     RankedTester,
     rankWith,
+    WithClassname,
 } from '@jsonforms/core';
-import { VanillaRendererProps } from '../index';
+import Input from '@material-ui/core/Input';
+import { connect } from 'react-redux';
 
-export const SliderField = (props: FieldProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
+export const MaterialNumberFormatCell = (props: CellProps & WithClassname & Formatted<number>) => {
+  const {
+    className,
+    id,
+    enabled,
+    uischema,
+    isValid,
+    path,
+    handleChange,
+    schema
+  } = props;
+  const maxLength = schema.maxLength;
+  let config;
+  if (uischema.options && uischema.options.restrict) {
+    config = {'maxLength': maxLength};
+  } else {
+    config = {};
+  }
+  const trim = uischema.options && uischema.options.trim;
+  const formattedNumber = props.toFormatted(props.data);
+
+  const onChange = (ev: any) => {
+    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
+    handleChange(path, validStringNumber);
+  };
 
   return (
-  <div style={{display: 'flex'}}>
-    <input
-      type='range'
-      max={schema.maximum}
-      min={schema.minimum}
-      value={data || schema.default}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, Number(ev.currentTarget.value))
-      }
+    <Input
+      type='text'
+      value={formattedNumber}
+      onChange={onChange}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      style={{flex: '1'}}
+      multiline={uischema.options && uischema.options.multi}
+      fullWidth={!trim || maxLength === undefined}
+      inputProps={config}
+      error={!isValid}
     />
-    <label style={{marginLeft: '0.5em'}}>{data || schema.default}</label>
-  </div>
   );
 };
-
-export const sliderFieldTester: RankedTester = rankWith(4, isRangeControl);
-
+/**
+ * Default tester for text-based/string controls.
+ * @type {RankedTester}
+ */
+export const materialNumberFormatCellTester: RankedTester = rankWith(4, isNumberFormatControl);
 export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(SliderField);
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(MaterialNumberFormatCell);

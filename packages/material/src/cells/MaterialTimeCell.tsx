@@ -23,57 +23,36 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
 import {
-  FieldProps,
-  isStringControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith
+    CellProps,
+    isTimeControl,
+    mapDispatchToCellProps,
+    mapStateToCellProps,
+    RankedTester,
+    rankWith,
+    WithClassname
 } from '@jsonforms/core';
-import { VanillaRendererProps } from '../index';
-import merge from 'lodash/merge';
+import Input from '@material-ui/core/Input';
 
-export const TextField = (props: FieldProps & VanillaRendererProps) => {
-  const {
-    config,
-    data,
-    className,
-    id,
-    enabled,
-    uischema,
-    schema,
-    path,
-    handleChange
-  } = props;
-  const maxLength = schema.maxLength;
-  const mergedConfig = merge({}, config, uischema.options);
-  return (
-    <input
-      type='text'
-      value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      maxLength={mergedConfig.restrict ? maxLength : undefined}
-      size={mergedConfig.trim ? maxLength : undefined}
-    />
-  );
+export const MaterialTimeCell = (props: CellProps & WithClassname) => {
+    const { data, className, id, enabled, uischema, path, handleChange } = props;
+
+    return (
+        <Input
+            type='time'
+            value={data || ''}
+            onChange={ev => handleChange(path, ev.target.value)}
+            className={className}
+            id={id}
+            disabled={!enabled}
+            autoFocus={uischema.options && uischema.options.focus}
+            fullWidth={true}
+        />
+    );
 };
-
-/**
- * Default tester for text-based/string controls.
- * @type {RankedTester}
- */
-export const textFieldTester: RankedTester = rankWith(1, isStringControl);
-
+export const materialTimeCellTester: RankedTester = rankWith(2, isTimeControl);
 export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(TextField);
+    mapStateToCellProps,
+    mapDispatchToCellProps
+)(MaterialTimeCell);

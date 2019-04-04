@@ -38,9 +38,9 @@ import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/HorizontalLayout';
 import InputControl, { inputControlTester } from '../../src/controls/InputControl';
-import BooleanField, { booleanFieldTester } from '../../src/fields/BooleanField';
-import TextField, { textFieldTester } from '../../src/fields/TextField';
-import DateField, { dateFieldTester } from '../../src/fields/DateField';
+import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
+import TextCell, { textCellTester } from '../../src/cells/TextCell';
+import DateCell, { dateCellTester } from '../../src/cells/DateCell';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
@@ -64,20 +64,20 @@ test('autofocus on first element', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      firstBooleanField: { type: 'boolean' },
-      secondBooleanField: { type: 'boolean' }
+      firstBooleanCell: { type: 'boolean' },
+      secondBooleanCell: { type: 'boolean' }
     }
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/firstBooleanField',
+    scope: '#/properties/firstBooleanCell',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: 'properties/secondBooleanField',
+    scope: 'properties/secondBooleanCell',
     options: {
       focus: true
     }
@@ -90,8 +90,8 @@ test('autofocus on first element', t => {
     ]
   };
   const data = {
-    'firstBooleanField': true,
-    'secondBooleanField': false
+    'firstBooleanCell': true,
+    'secondBooleanCell': false
   };
   const store = initJsonFormsVanillaStore({
     data,
@@ -101,8 +101,8 @@ test('autofocus on first element', t => {
       { tester: inputControlTester, renderer: InputControl },
       { tester: horizontalLayoutTester, renderer: HorizontalLayoutRenderer }
     ],
-    fields: [
-      { tester: booleanFieldTester, field: BooleanField }
+    cells: [
+      { tester: booleanCellTester, cell: BooleanCell }
     ]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
@@ -130,7 +130,7 @@ test('render', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -166,7 +166,7 @@ test('render without label', t => {
     schema: t.context.schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -198,7 +198,7 @@ test('hide', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -220,7 +220,7 @@ test('show by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -237,7 +237,7 @@ test('single error', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -255,7 +255,7 @@ test('multiple errors', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -273,7 +273,7 @@ test('empty errors by default', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -290,7 +290,7 @@ test('reset validation message', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: booleanFieldTester, field: BooleanField }]
+    cells: [{ tester: booleanCellTester, cell: BooleanCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -354,7 +354,7 @@ test('validation of nested schema', t => {
     schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: textFieldTester, field: TextField }]
+    cells: [{ tester: textCellTester, cell: TextCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -366,27 +366,27 @@ test('validation of nested schema', t => {
   t.is(validation[1].textContent, 'is a required property');
   t.is(validation[2].textContent, 'is a required property');
 });
-test('required field is marked', t => {
+test('required cell is marked', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      dateField: {
+      dateCell: {
         type: 'string',
         format: 'date'
       }
     },
-    required: ['dateField']
+    required: ['dateCell']
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/dateField'
+    scope: '#/properties/dateCell'
   };
   const store = initJsonFormsVanillaStore({
     data: {},
     schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: dateFieldTester, field: DateField }]
+    cells: [{ tester: dateCellTester, cell: DateCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -394,14 +394,14 @@ test('required field is marked', t => {
     </Provider>
   ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Field*');
+  t.is(label.textContent, 'Date Cell*');
 });
 
 test('not required', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      dateField: {
+      dateCell: {
         type: 'string',
         format: 'date'
       }
@@ -409,14 +409,14 @@ test('not required', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/dateField'
+    scope: '#/properties/dateCell'
   };
   const store = initJsonFormsVanillaStore({
     data: {},
     schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: dateFieldTester, field: DateField }]
+    cells: [{ tester: dateCellTester, cell: DateCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -424,22 +424,22 @@ test('not required', t => {
     </Provider>
   ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Field');
+  t.is(label.textContent, 'Date Cell');
 });
-test('required field is marked', t => {
+test('required cell is marked', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      dateField: {
+      dateCell: {
         type: 'string',
         format: 'date'
       }
     },
-    required: ['dateField']
+    required: ['dateCell']
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/dateField'
+    scope: '#/properties/dateCell'
   };
 
   const store = initJsonFormsVanillaStore({
@@ -447,7 +447,7 @@ test('required field is marked', t => {
     schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: dateFieldTester, field: DateField }]
+    cells: [{ tester: dateCellTester, cell: DateCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -455,14 +455,14 @@ test('required field is marked', t => {
     </Provider>
   ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Field*');
+  t.is(label.textContent, 'Date Cell*');
 });
 
 test('not required', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      dateField: {
+      dateCell: {
         type: 'string',
         format: 'date'
       }
@@ -470,7 +470,7 @@ test('not required', t => {
   };
   const uischema: ControlElement = {
     type: 'Control',
-    scope: '#/properties/dateField'
+    scope: '#/properties/dateCell'
   };
 
   const store = initJsonFormsVanillaStore({
@@ -478,7 +478,7 @@ test('not required', t => {
     schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: dateFieldTester, field: DateField }]
+    cells: [{ tester: dateCellTester, cell: DateCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -486,7 +486,7 @@ test('not required', t => {
     </Provider>
   ) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
-  t.is(label.textContent, 'Date Field');
+  t.is(label.textContent, 'Date Cell');
 });
 
 test('show description on focus', t => {
@@ -509,7 +509,7 @@ test('show description on focus', t => {
     schema,
     uischema,
     renderers: [{tester: inputControlTester, renderer: InputControl}],
-    fields: [{ tester: textFieldTester, field: TextField }]
+    cells: [{ tester: textCellTester, cell: TextCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -523,7 +523,7 @@ test('show description on focus', t => {
   t.is(description.textContent, 'Enter your first name');
 });
 
-test('hide description when input field is not focused', t => {
+test('hide description when input cell is not focused', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
@@ -543,7 +543,7 @@ test('hide description when input field is not focused', t => {
     schema,
     uischema,
     renderers: [{tester: inputControlTester, renderer: InputControl}],
-    fields: [{ tester: textFieldTester, field: TextField }]
+    cells: [{ tester: textCellTester, cell: TextCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -577,7 +577,7 @@ test('hide description on blur', t => {
     schema,
     uischema,
     renderers: [{tester: inputControlTester, renderer: InputControl}],
-    fields: [{ tester: textFieldTester, field: TextField }]
+    cells: [{ tester: textCellTester, cell: TextCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -614,7 +614,7 @@ test('description undefined', t => {
     schema,
     uischema,
     renderers: [{tester: inputControlTester, renderer: InputControl}],
-    fields: [{ tester: textFieldTester, field: TextField }]
+    cells: [{ tester: textCellTester, cell: TextCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
@@ -649,7 +649,7 @@ test('undefined input control', t => {
     schema,
     uischema,
     renderers: [{ tester: inputControlTester, renderer: InputControl }],
-    fields: [{ tester: textFieldTester, field: TextField }]
+    cells: [{ tester: textCellTester, cell: TextCell }]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>

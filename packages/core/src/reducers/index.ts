@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { cellReducer } from './cells';
 import get from 'lodash/get';
-import RefParser from 'json-schema-ref-parser';
 import {
   defaultDataReducer,
   extractDefaultData,
@@ -31,16 +31,16 @@ import {
 } from './default-data';
 import { combineReducers, Reducer } from 'redux';
 import { JsonFormsRendererRegistryEntry, rendererReducer } from './renderers';
-import { fieldReducer } from './fields';
+import RefParser from 'json-schema-ref-parser';
 import { configReducer } from './config';
 import {
   coreReducer,
   errorAt,
   extractData,
+  extractRefParserOptions,
   extractSchema,
   extractUiSchema,
-  subErrorsAt,
-  extractRefParserOptions
+  subErrorsAt
 } from './core';
 import { JsonFormsState, JsonFormsSubStates } from '../store';
 import {
@@ -59,7 +59,7 @@ import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import { Generate } from '../generators';
 
-export { rendererReducer, fieldReducer, coreReducer, UISchemaTester };
+export { rendererReducer, cellReducer, coreReducer, UISchemaTester };
 
 export const jsonformsReducer = (
   additionalReducers = {}
@@ -67,7 +67,7 @@ export const jsonformsReducer = (
   combineReducers<JsonFormsSubStates>({
     core: coreReducer,
     renderers: rendererReducer,
-    fields: fieldReducer,
+    cells: cellReducer,
     config: configReducer,
     uischemas: uischemaRegistryReducer,
     defaultData: defaultDataReducer,

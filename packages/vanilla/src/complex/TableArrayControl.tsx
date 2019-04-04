@@ -43,7 +43,7 @@ import {
   StatePropsOfControl,
   Test
 } from '@jsonforms/core';
-import { DispatchField } from '@jsonforms/react';
+import { DispatchCell } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 import { connect } from 'react-redux';
 import { VanillaRendererProps } from '../index';
@@ -161,7 +161,7 @@ class TableArrayControl extends React.Component<
 
                           return (
                             <td key={childPropPath}>
-                              <DispatchField
+                              <DispatchCell
                                 schema={Resolve.schema(schema, `#/properties/${prop}`, rootSchema)}
                                 uischema={createControlElement(prop)}
                                 path={childPath + '.' + prop}
@@ -177,7 +177,7 @@ class TableArrayControl extends React.Component<
                           index.toString()
                         )}
                       >
-                        <DispatchField
+                        <DispatchCell
                           schema={schema}
                           uischema={createControlElement()}
                           path={childPath}

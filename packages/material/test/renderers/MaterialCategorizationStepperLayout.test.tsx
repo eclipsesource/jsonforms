@@ -43,7 +43,7 @@ import MaterialCategorizationStepperLayoutRenderer, {
   MaterialCategorizationStepperLayoutRenderer as CategorizationStepperRenderer,
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
-import { materialFields, materialRenderers, MaterialLayoutRenderer } from '../../src';
+import { materialCells, materialRenderers, MaterialLayoutRenderer } from '../../src';
 import { Step, StepButton, Stepper } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -53,7 +53,7 @@ export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      fields: materialFields
+      cells: materialCells
     }
   };
   const store: Store<JsonFormsState> = createStore(

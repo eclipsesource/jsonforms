@@ -32,7 +32,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import IntegerField, { integerFieldTester } from '../../src/fields/IntegerField';
+import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -62,20 +62,20 @@ test.failing('autofocus on first element', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      firstIntegerField: { type: 'integer', minimum: 5 },
-      secondIntegerField: { type: 'integer', minimum: 5 }
+      firstIntegerCell: { type: 'integer', minimum: 5 },
+      secondIntegerCell: { type: 'integer', minimum: 5 }
     }
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/firstIntegerField',
+    scope: '#/properties/firstIntegerCell',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/secondIntegerField',
+    scope: '#/properties/secondIntegerCell',
     options: {
       focus: true
     }
@@ -88,8 +88,8 @@ test.failing('autofocus on first element', t => {
     ]
   };
   const data = {
-    'firstIntegerField': 10,
-    'secondIntegerField': 12
+    'firstIntegerCell': 10,
+    'secondIntegerCell': 12
   };
   const store = initJsonFormsStore({
     data,
@@ -122,7 +122,7 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -145,7 +145,7 @@ test('autofocus inactive', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -165,7 +165,7 @@ test('autofocus inactive by default', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -173,31 +173,31 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(integerFieldTester(undefined, undefined), -1);
-  t.is(integerFieldTester(null, undefined), -1);
-  t.is(integerFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(integerFieldTester({type: 'Control'}, undefined), -1);
+  t.is(integerCellTester(undefined, undefined), -1);
+  t.is(integerCellTester(null, undefined), -1);
+  t.is(integerCellTester({type: 'Foo'}, undefined), -1);
+  t.is(integerCellTester({type: 'Control'}, undefined), -1);
 
   const controlElement: ControlElement = {
     type: 'Control',
     scope: '#/properties/foo'
   };
   t.is(
-    integerFieldTester(
+    integerCellTester(
       controlElement,
       {type: 'object', properties: {foo: {type: 'string'}}}
     ),
     -1
   );
   t.is(
-    integerFieldTester(
+    integerCellTester(
       controlElement,
       {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}
     ),
     -1
   );
   t.is(
-    integerFieldTester(
+    integerCellTester(
       controlElement,
       {type: 'object', properties: {foo: {type: 'integer'}}}),
     2
@@ -212,7 +212,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -230,7 +230,7 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -250,7 +250,7 @@ test.cb('update via action', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -272,7 +272,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -288,7 +288,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -305,7 +305,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -321,7 +321,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -337,7 +337,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   store.dispatch(update(undefined, () => 13));
@@ -353,7 +353,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -368,7 +368,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <IntegerField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <IntegerCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

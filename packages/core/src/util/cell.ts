@@ -33,72 +33,72 @@ import {
   OwnPropsOfControl,
   OwnPropsOfEnum,
   Resolve,
-  StatePropsOfField,
+  StatePropsOfCell,
   StatePropsOfScopedRenderer
-} from '../util';
+} from '.';
 import { DispatchPropsOfControl, mapDispatchToControlProps } from './renderer';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
-import { JsonFormsFieldRendererRegistryEntry } from '../reducers/fields';
+import { JsonFormsCellRendererRegistryEntry } from '../reducers/cells';
 import { JsonSchema } from '..';
 
-export { JsonFormsFieldRendererRegistryEntry };
+export { JsonFormsCellRendererRegistryEntry };
 
-export interface OwnPropsOfField extends OwnPropsOfControl {
+export interface OwnPropsOfCell extends OwnPropsOfControl {
   data?: any;
 }
 
 /**
- * State props of a field.
+ * State props of a cell.
  */
-export interface StatePropsOfField extends StatePropsOfScopedRenderer {
+export interface StatePropsOfCell extends StatePropsOfScopedRenderer {
   isValid: boolean;
   rootSchema: JsonSchema;
 }
 
-export interface OwnPropsOfEnumField extends OwnPropsOfField, OwnPropsOfEnum {}
+export interface OwnPropsOfEnumCell extends OwnPropsOfCell, OwnPropsOfEnum {}
 
 /**
- * State props of a field for enum field
+ * State props of a cell for enum cell
  */
-export interface StatePropsOfEnumField
-  extends StatePropsOfField,
+export interface StatePropsOfEnumCell
+  extends StatePropsOfCell,
     OwnPropsOfEnum {}
 
 /**
- * Props of an enum field.
+ * Props of an enum cell.
  */
-export interface EnumFieldProps
-  extends StatePropsOfEnumField,
+export interface EnumCellProps
+  extends StatePropsOfEnumCell,
     DispatchPropsOfControl {}
 
-export type DispatchPropsOfField = DispatchPropsOfControl;
+export type DispatchPropsOfCell = DispatchPropsOfControl;
 
 /**
- * Props of a field.
+ * Props of a cell.
  */
-export interface FieldProps extends StatePropsOfField, DispatchPropsOfField {}
+export interface CellProps extends StatePropsOfCell, DispatchPropsOfCell {}
 /**
- * Registers the given field renderer when a JSON Forms store is created.
+ * Registers the given cell renderer when a JSON Forms store is created.
  * @param {RankedTester} tester
- * @param field the field to be registered
+ * @param cell the cell to be registered
  * @returns {any}
  */
-export interface DispatchFieldStateProps extends StatePropsOfField {
-  fields?: JsonFormsFieldRendererRegistryEntry[];
+export interface DispatchCellStateProps extends StatePropsOfCell {
+  cells?: JsonFormsCellRendererRegistryEntry[];
 }
 
 /**
- * Map state to field props.
+ * Map state to cell props.
  *
  * @param state JSONForms state tree
  * @param ownProps any own props
- * @returns {StatePropsOfField} state props of a field
+ * @returns {StatePropsOfCell} state props of a cell
  */
-export const mapStateToFieldProps = (
+export const mapStateToCellProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfField
-): StatePropsOfField => {
+  ownProps: OwnPropsOfCell
+): StatePropsOfCell => {
   const { id, schema, path, uischema } = ownProps;
   const rootData = getData(state);
   const visible = has(ownProps, 'visible')
@@ -128,32 +128,32 @@ export const mapStateToFieldProps = (
   };
 };
 
-export const mapStateToDispatchFieldProps = (
+export const mapStateToDispatchCellProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfField
-): DispatchFieldStateProps => {
-  const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
+  ownProps: OwnPropsOfCell
+): DispatchCellStateProps => {
+  const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const { renderers, ...otherOwnProps } = ownProps;
   return {
     ...props,
     ...otherOwnProps,
-    fields: state.jsonforms.fields || []
+    cells: state.jsonforms.cells || []
   };
 };
 
-export interface DispatchFieldProps extends DispatchFieldStateProps {}
+export interface DispatchCellProps extends DispatchCellStateProps {}
 
 /**
- * Default mapStateToFieldProps for enum field. Options is used for populating dropdown list
+ * Default mapStateToCellProps for enum cell. Options is used for populating dropdown list
  * @param state
  * @param ownProps
- * @returns {StatePropsOfEnumField}
+ * @returns {StatePropsOfEnumCell}
  */
-export const defaultMapStateToEnumFieldProps = (
+export const defaultMapStateToEnumCellProps = (
   state: JsonFormsState,
-  ownProps: OwnPropsOfEnumField
-): StatePropsOfEnumField => {
-  const props: StatePropsOfField = mapStateToFieldProps(state, ownProps);
+  ownProps: OwnPropsOfEnumCell
+): StatePropsOfEnumCell => {
+  const props: StatePropsOfCell = mapStateToCellProps(state, ownProps);
   const options =
     ownProps.options !== undefined ? ownProps.options : props.schema.enum;
   return {
@@ -167,7 +167,7 @@ export const defaultMapStateToEnumFieldProps = (
  *
  * @type {(dispatch) => {handleChange(path, value): void}}
  */
-export const mapDispatchToFieldProps: (
+export const mapDispatchToCellProps: (
   dispatch: Dispatch<AnyAction>
 ) => DispatchPropsOfControl = mapDispatchToControlProps;
 
@@ -178,7 +178,7 @@ export const mapDispatchToFieldProps: (
 export const defaultMapDispatchToControlProps =
   // TODO: ownProps types
   (dispatch: Dispatch<AnyAction>, ownProps: any): DispatchPropsOfControl => {
-    const dispatchControlProps: DispatchPropsOfControl = mapDispatchToFieldProps(
+    const dispatchControlProps: DispatchPropsOfControl = mapDispatchToCellProps(
       dispatch
     );
 

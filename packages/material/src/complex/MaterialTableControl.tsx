@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
-import { DispatchField } from '@jsonforms/react';
+import { DispatchCell } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
 import React from 'react';
@@ -170,7 +170,7 @@ class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
     return (
       <NoBorderTableCell>
         {schema.properties ? (
-          <DispatchField
+          <DispatchCell
             schema={Resolve.schema(
               schema,
               `#/properties/${propName}`,
@@ -183,7 +183,7 @@ class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
             path={path}
           />
         ) : (
-          <DispatchField
+          <DispatchCell
             schema={schema}
             uischema={Generate.controlElement(undefined, '#')}
             path={path}

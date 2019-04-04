@@ -26,7 +26,7 @@ import { initJsonFormsStore } from '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { getData, update } from '@jsonforms/core';
-import EnumField, { enumFieldTester } from '../../src/fields/EnumField';
+import EnumCell, { enumCellTester } from '../../src/cells/EnumCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -53,15 +53,15 @@ test.beforeEach(t => {
 });
 
 test('tester', t => {
-  t.is(enumFieldTester(undefined, undefined), -1);
-  t.is(enumFieldTester(null, undefined), -1);
-  t.is(enumFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(enumFieldTester({type: 'Control'}, undefined), -1);
+  t.is(enumCellTester(undefined, undefined), -1);
+  t.is(enumCellTester(null, undefined), -1);
+  t.is(enumCellTester({type: 'Foo'}, undefined), -1);
+  t.is(enumCellTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-    enumFieldTester(
+    enumCellTester(
       t.context.uischema,
       { type: 'object', properties: {foo: {type: 'string'}} }
     ),
@@ -71,7 +71,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-      enumFieldTester(
+      enumCellTester(
           t.context.uischema,
           {
             'type': 'object',
@@ -92,7 +92,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with matching string type', t => {
   t.is(
-      enumFieldTester(
+      enumCellTester(
           t.context.uischema,
           {
             'type': 'object',
@@ -111,7 +111,7 @@ test('tester with matching string type', t => {
 test('tester with matching numeric type', t => {
   // TODO should this be true?
   t.is(
-      enumFieldTester(
+      enumCellTester(
           t.context.uischema,
           {
             'type': 'object',
@@ -135,7 +135,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -156,7 +156,7 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -175,7 +175,7 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -192,7 +192,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -209,7 +209,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -226,7 +226,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -243,7 +243,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -260,7 +260,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -277,7 +277,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -292,7 +292,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;

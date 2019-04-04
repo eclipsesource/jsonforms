@@ -34,9 +34,9 @@ import {
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import TextField, { materialTextFieldTester, } from '../../src/fields/MaterialTextField';
+import TextCell, { materialTextCellTester, } from '../../src/cells/MaterialTextCell';
 import { Provider } from 'react-redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -67,7 +67,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      fields: materialFields,
+      cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -79,12 +79,12 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-describe('Material text field tester', () => {
+describe('Material text cell tester', () => {
   it('should fail', () =>  {
-    expect(materialTextFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
   });
   it('should fail with wrong schema type', () => {
     const control: ControlElement = {
@@ -92,7 +92,7 @@ describe('Material text field tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialTextFieldTester(
+      materialTextCellTester(
         control,
         {
           type: 'object',
@@ -112,7 +112,7 @@ describe('Material text field tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialTextFieldTester(
+      materialTextCellTester(
         control,
         {
           type: 'object',
@@ -135,7 +135,7 @@ describe('Material text field tester', () => {
       scope: '#/properties/foo'
     };
     expect(
-      materialTextFieldTester(
+      materialTextCellTester(
         control,
         {
           type: 'object',
@@ -150,7 +150,7 @@ describe('Material text field tester', () => {
   });
 });
 
-describe('Material text field', () => {
+describe('Material text cell', () => {
 
   let wrapper: ReactWrapper;
 
@@ -165,7 +165,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={control}
           path='name'
@@ -185,7 +185,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={control}
           path={'name'}
@@ -204,7 +204,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={control}
           path='name'
@@ -225,7 +225,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore({ 'name': 'Foo' }, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={jsonSchema}
           uischema={uischema}
           path={'name'}
@@ -241,7 +241,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -258,7 +258,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -275,7 +275,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -292,7 +292,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -309,7 +309,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -326,7 +326,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -343,7 +343,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -360,7 +360,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -376,7 +376,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={minLengthSchema}
           uischema={uischema}
           path='name'
@@ -399,7 +399,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={maxLengthSchema}
           uischema={control}
           path='name'
@@ -421,7 +421,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={maxLengthSchema}
           uischema={control}
           path='name'
@@ -445,7 +445,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={maxLengthSchema}
           uischema={control}
           path='name'
@@ -464,7 +464,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={schema}
           uischema={uischema}
           path='name'
@@ -491,7 +491,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={schema}
           uischema={control}
           path='name'
@@ -515,7 +515,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={schema}
           uischema={control}
           path='name'
@@ -540,7 +540,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={schema}
           uischema={control}
           path='name'
@@ -560,7 +560,7 @@ describe('Material text field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextField
+        <TextCell
           schema={schema}
           uischema={uischema}
           path='name'

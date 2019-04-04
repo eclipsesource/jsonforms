@@ -44,11 +44,11 @@ export interface ReactExampleDescription extends ExampleDescription {
   customReactExtension?(dispatch: Dispatch<AnyAction>): React.Component;
 }
 const registerRatingControl = (dispatch: Dispatch<AnyAction>) => {
-  dispatch(Actions.registerField(ratingControlTester, ConnectedRatingControl));
+  dispatch(Actions.registerCell(ratingControlTester, ConnectedRatingControl));
 };
 const unregisterRatingControl = (dispatch: Dispatch<AnyAction>) => {
   dispatch(
-    Actions.unregisterField(ratingControlTester, ConnectedRatingControl)
+    Actions.unregisterCell(ratingControlTester, ConnectedRatingControl)
   );
 };
 
@@ -117,10 +117,10 @@ export const enhanceExample: (
           customReactExtension: (dispatch: Dispatch<AnyAction>) => (
             <div>
               <button onClick={() => registerRatingControl(dispatch)}>
-                Register Custom Field
+                Register Custom Cell
               </button>
               <button onClick={() => unregisterRatingControl(dispatch)}>
-                Unregister Custom Field
+                Unregister Custom Cell
               </button>
             </div>
           )

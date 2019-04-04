@@ -31,9 +31,9 @@ import {
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import MaterialEnumField, { materialEnumFieldTester } from '../../src/fields/MaterialEnumField';
+import MaterialEnumCell, { materialEnumCellTester } from '../../src/cells/MaterialEnumCell';
 import { Provider } from 'react-redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
@@ -55,7 +55,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-        fields: materialFields,
+        cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -66,7 +66,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-describe('Material enum field tester', () => {
+describe('Material enum cell tester', () => {
 
   it('should succeed with matching prop type', () => {
     const control: ControlElement = {
@@ -74,7 +74,7 @@ describe('Material enum field tester', () => {
       scope: '#/properties/nationality'
     };
     expect(
-      materialEnumFieldTester(
+      materialEnumCellTester(
         control,
         {
           type: 'object',
@@ -90,12 +90,12 @@ describe('Material enum field tester', () => {
   });
 });
 
-describe('Material enum field', () => {
+describe('Material enum cell', () => {
   it('should select an item from dropdown list', () =>  {
     const store = initJsonFormsStore(data, schema, uischema);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialEnumField
+        <MaterialEnumCell
           schema={schema}
           uischema={uischema}
           path='nationality'

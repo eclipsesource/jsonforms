@@ -183,8 +183,8 @@ registerExamples([
 
 registerExamples([
   {
-    name: 'issue-1253-field-missing-field',
-    label: 'issue 1253 (oneOf) - missing field renderer',
+    name: 'issue-1253-cell-missing-cell',
+    label: 'issue 1253 (oneOf) - missing cell renderer',
     data,
     schema: schema2,
     uischema: uischema2

@@ -1,19 +1,19 @@
 /*
   The MIT License
-  
+
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-  
+
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-  
+
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,56 +25,52 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  FieldProps,
-  Formatted,
-  isNumberFormatControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
+  defaultMapDispatchToControlProps,
+  defaultMapStateToEnumCellProps,
+  EnumCellProps,
+  isEnumControl,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
-import { VanillaRendererProps } from '../index';
+import { SyntheticEvent } from 'react';
+import { addVanillaCellProps } from '../util';
+import { WithClassname } from '../index';
 
-export const NumberFormatField = (props: FieldProps & VanillaRendererProps & Formatted<number>) => {
-  const {
-    className,
-    id,
-    enabled,
-    uischema,
-    path,
-    handleChange,
-    schema
-  } = props;
-  const maxLength = schema.maxLength;
-  const formattedNumber: string = props.toFormatted(props.data);
-
-  const onChange = (ev: any) => {
-    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
-    handleChange(path, validStringNumber);
-  };
+export const EnumCell = (props: EnumCellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
-    <input
-      type='text'
-      value={formattedNumber}
-      onChange={onChange}
+    <select
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
-      size={uischema.options && uischema.options.trim ? maxLength : undefined}
-    />
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLSelectElement>) =>
+        handleChange(path, ev.currentTarget.value)
+      }
+    >
+      {
+        [<option value='' key={'empty'} />]
+          .concat(
+            options.map(optionValue =>
+              (
+                <option value={optionValue} label={optionValue} key={optionValue}>
+                  {optionValue}
+                </option>
+              )
+            )
+          )}
+    </select>
   );
 };
-
 /**
- * Default tester for text-based/string controls.
+ * Default tester for enum controls.
  * @type {RankedTester}
  */
-export const numberFormatFieldTester: RankedTester = rankWith(4, isNumberFormatControl);
+export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
 
 export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(NumberFormatField);
+  addVanillaCellProps(defaultMapStateToEnumCellProps),
+  defaultMapDispatchToControlProps
+)(EnumCell);

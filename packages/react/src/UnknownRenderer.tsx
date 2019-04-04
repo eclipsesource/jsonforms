@@ -32,7 +32,7 @@ export interface UnknownRendererProps {
   /**
    * The type for which no renderer has been found.
    */
-  type: 'renderer' | 'field';
+  type: 'renderer' | 'cell';
 }
 
 /**

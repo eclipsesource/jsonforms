@@ -32,7 +32,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import SliderField, { sliderFieldTester } from '../../src/fields/SliderField';
+import SliderCell, { sliderCellTester } from '../../src/cells/SliderCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -65,20 +65,20 @@ test.failing('autofocus on first element', t => {
   const schema: JsonSchema = {
     type: 'object',
     properties: {
-      firstSliderField: { type: 'number', minimum: 5, maximum: 10 },
-      secondSliderField: { type: 'number', minimum: 5, maximum: 10 }
+      firstSliderCell: { type: 'number', minimum: 5, maximum: 10 },
+      secondSliderCell: { type: 'number', minimum: 5, maximum: 10 }
     }
   };
   const firstControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/firstSliderField',
+    scope: '#/properties/firstSliderCell',
     options: {
       focus: true
     }
   };
   const secondControlElement: ControlElement = {
     type: 'Control',
-    scope: '#/properties/secondSliderField',
+    scope: '#/properties/secondSliderCell',
     options: {
       focus: true
     }
@@ -91,8 +91,8 @@ test.failing('autofocus on first element', t => {
     ]
   };
   const data = {
-    firstSliderField: 3.14,
-    secondSliderField: 5.12
+    firstSliderCell: 3.14,
+    secondSliderCell: 5.12
   };
   const store = initJsonFormsStore({
     data,
@@ -123,7 +123,7 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={uischema}
         path='foo'
@@ -147,7 +147,7 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={uischema}
         path='foo'
@@ -167,7 +167,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={uischema}
         path='foo'
@@ -179,16 +179,16 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(sliderFieldTester(undefined, undefined), -1);
-  t.is(sliderFieldTester(null, undefined), -1);
-  t.is(sliderFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(sliderFieldTester({type: 'Control'}, undefined), -1);
+  t.is(sliderCellTester(undefined, undefined), -1);
+  t.is(sliderCellTester(null, undefined), -1);
+  t.is(sliderCellTester({type: 'Foo'}, undefined), -1);
+  t.is(sliderCellTester({type: 'Control'}, undefined), -1);
 });
 
 test('tester with wrong schema type', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -204,7 +204,7 @@ test('tester with wrong schema type', t => {
 test('tester with wrong schema type, but sibling has correct one', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -218,10 +218,10 @@ test('tester with wrong schema type, but sibling has correct one', t => {
   );
 });
 
-test('tester with correct schema type, but missing maximum and minimum fields', t => {
+test('tester with correct schema type, but missing maximum and minimum cells', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -237,7 +237,7 @@ test('tester with correct schema type, but missing maximum and minimum fields', 
 test('tester with correct schema type, but missing maximum', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -256,7 +256,7 @@ test('tester with correct schema type, but missing maximum', t => {
 test('tester with correct schema type, but missing minimum', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -275,7 +275,7 @@ test('tester with correct schema type, but missing minimum', t => {
 test('tester with matching schema type (number) without default', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -295,7 +295,7 @@ test('tester with matching schema type (number) without default', t => {
 test('tester with matching schema type (integer) without default', t => {
   const control: ControlElement = t.context.uischema;
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -316,7 +316,7 @@ test('tester with matching schema type (number) with default', t => {
   const control: ControlElement = t.context.uischema;
   control.options = { slider: true };
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -338,7 +338,7 @@ test('tester with matching schema type (integer) with default', t => {
   const control: ControlElement = t.context.uischema;
   control.options = { slider: true };
   t.is(
-    sliderFieldTester(
+    sliderCellTester(
       control,
       {
         type: 'object',
@@ -375,7 +375,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={schema}
         uischema={t.context.uischema}
         path='foo'
@@ -395,7 +395,7 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -416,7 +416,7 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -437,7 +437,7 @@ test.failing('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -457,7 +457,7 @@ test.failing('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -477,7 +477,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -497,7 +497,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -517,7 +517,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -537,7 +537,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'
@@ -557,7 +557,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderField
+      <SliderCell
         schema={t.context.schema}
         uischema={t.context.uischema}
         path='foo'

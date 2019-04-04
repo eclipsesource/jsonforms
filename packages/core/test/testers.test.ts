@@ -146,7 +146,7 @@ test('optionIs should not fail if uischema is undefined or null', t => {
   t.false(optionIs('answer', 42)(uischema, undefined));
 });
 
-test('optionIs should return false for UI schema elements without options field', t => {
+test('optionIs should return false for UI schema elements without options cell', t => {
   const control: ControlElement = {
     type: 'Control',
     scope: '#/properties/bar'

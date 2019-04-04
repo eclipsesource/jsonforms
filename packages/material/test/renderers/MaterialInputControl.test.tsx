@@ -34,9 +34,9 @@ import {
   UISchemaElement,
   HorizontalLayout
 } from '@jsonforms/core';
-import '../../src/fields';
+import '../../src/cells';
 import MaterialInputControl, { materialInputControlTester } from '../../src/controls/MaterialInputControl';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 
@@ -63,7 +63,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      fields: materialFields
+      cells: materialCells
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -285,16 +285,16 @@ describe('Material input control', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
-        dateField: {
+        dateCell: {
           type: 'string',
           format: 'date'
         }
       },
-      required: ['dateField']
+      required: ['dateCell']
     };
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/dateField'
+      scope: '#/properties/dateCell'
     };
 
     const store = initJsonFormsStore({}, jsonSchema, control);
@@ -304,14 +304,14 @@ describe('Material input control', () => {
       </Provider>,
     );
     const label = wrapper.find('label').first();
-    expect(label.text()).toBe('Date Field*');
+    expect(label.text()).toBe('Date Cell*');
   });
 
   it('should not display a marker for a non-required prop', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
-        dateField: {
+        dateCell: {
           type: 'string',
           format: 'date'
         }
@@ -319,7 +319,7 @@ describe('Material input control', () => {
     };
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/dateField'
+      scope: '#/properties/dateCell'
     };
 
     const store = initJsonFormsStore({}, jsonSchema, control);
@@ -329,10 +329,10 @@ describe('Material input control', () => {
       </Provider>
     );
     const label = wrapper.find('label').first();
-    expect(label.text()).toBe('Date Field');
+    expect(label.text()).toBe('Date Cell');
   });
 
-  it('should display a password field if the password option is set', () => {
+  it('should display a password cell if the password option is set', () => {
     const jsonSchema = {
       type: 'object',
       properties: {
@@ -380,7 +380,7 @@ describe('Material input control', () => {
       </Provider>
     );
     const rendered = wrapper.find('div').at(1);
-    expect(rendered.text()).toBe('No applicable field found.');
+    expect(rendered.text()).toBe('No applicable cell found.');
   });
 
   it('should render own id and create/use input id', () => {

@@ -22,34 +22,43 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { connect } from 'react-redux';
-import {
-    FieldProps,
-    isDateControl,
-    mapDispatchToFieldProps,
-    mapStateToFieldProps,
-    RankedTester,
-    rankWith,
-    WithClassname
-} from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
+import BooleanCell, { booleanCellTester } from './BooleanCell';
+import DateCell, { dateCellTester } from './DateCell';
+import DateTimeCell, { dateTimeCellTester } from './DateTimeCell';
+import EnumCell, { enumCellTester } from './EnumCell';
+import IntegerCell, { integerCellTester } from './IntegerCell';
+import NumberCell, { numberCellTester } from './NumberCell';
+import NumberFormatCell, {
+  numberFormatCellTester
+} from './NumberFormatCell';
+import SliderCell, { sliderCellTester } from './SliderCell';
+import TextCell, { textCellTester } from './TextCell';
+import TextAreaCell, { textAreaCellTester } from './TextAreaCell';
+import TimeCell, { timeCellTester } from './TimeCell';
+import * as Customizable from './CustomizableCells';
 
-export const MaterialDateField = (props: FieldProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-
-  return (
-    <Input
-      type='date'
-      value={data || ''}
-      onChange={ev => handleChange(path, ev.target.value)}
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      fullWidth={true}
-    />
-  );
+export {
+  BooleanCell,
+  booleanCellTester,
+  DateCell,
+  dateCellTester,
+  DateTimeCell,
+  dateTimeCellTester,
+  EnumCell,
+  enumCellTester,
+  IntegerCell,
+  integerCellTester,
+  NumberCell,
+  numberCellTester,
+  NumberFormatCell,
+  numberFormatCellTester,
+  SliderCell,
+  sliderCellTester,
+  TextCell,
+  textCellTester,
+  TextAreaCell,
+  textAreaCellTester,
+  TimeCell,
+  timeCellTester
 };
-export const materialDateFieldTester: RankedTester = rankWith(2, isDateControl);
-export default connect(mapStateToFieldProps, mapDispatchToFieldProps)(MaterialDateField);
+export { Customizable };

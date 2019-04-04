@@ -143,7 +143,7 @@ const Runtime = {
 export { isEnabled, isVisible, Runtime, deriveType };
 
 export * from './renderer';
-export * from './field';
+export * from './cell';
 export * from './runtime';
 export * from './Formatted';
 export * from './ids';

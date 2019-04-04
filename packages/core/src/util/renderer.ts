@@ -267,7 +267,7 @@ export interface RendererProps extends StatePropsOfRenderer {}
  * State-based props of a Control
  */
 export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
-  fields?: { tester: RankedTester; field: any }[];
+  cells?: { tester: RankedTester; cell: any }[];
 
   /**
    * The label for the rendered element.
@@ -275,7 +275,7 @@ export interface StatePropsOfControl extends StatePropsOfScopedRenderer {
   label: string | Labels;
 
   /**
-   * Description of input field
+   * Description of input cell
    */
   description?: string;
 
@@ -382,7 +382,7 @@ export const mapStateToControlProps = (
     uischema: ownProps.uischema,
     schema: resolvedSchema || rootSchema,
     config: getConfig(state),
-    fields: state.jsonforms.fields,
+    cells: state.jsonforms.cells,
     rootSchema
   };
 };

@@ -32,9 +32,9 @@ import {
   NOT_APPLICABLE,
   UISchemaElement
 } from '@jsonforms/core';
-import IntegerField, { materialIntegerFieldTester } from '../../src/fields/MaterialIntegerField';
+import IntegerCell, { materialIntegerCellTester } from '../../src/cells/MaterialIntegerCell';
 import { Provider } from 'react-redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -56,7 +56,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-        fields: materialFields,
+      cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -67,7 +67,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-describe('Material integer field tester', () => {
+describe('Material integer cells tester', () => {
 
   const controlElement: ControlElement = {
     type: 'Control',
@@ -75,18 +75,18 @@ describe('Material integer field tester', () => {
   };
 
   it('should fail', () => {
-    expect(materialIntegerFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialIntegerFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialIntegerFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialIntegerFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
     expect(
-      materialIntegerFieldTester(
+      materialIntegerCellTester(
         controlElement,
         {type: 'object', properties: {foo: {type: 'string'}}}
       )
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialIntegerFieldTester(
+      materialIntegerCellTester(
         controlElement,
         {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}
       )
@@ -95,7 +95,7 @@ describe('Material integer field tester', () => {
 
   it('should succeed', () => {
     expect(
-      materialIntegerFieldTester(
+      materialIntegerCellTester(
         controlElement,
         { type: 'object', properties: { foo: { type: 'integer' } } }
       )
@@ -103,7 +103,7 @@ describe('Material integer field tester', () => {
   });
 });
 
-describe('Material integer field', () => {
+describe('Material integer cells', () => {
 
   let wrapper: ReactWrapper;
 
@@ -120,7 +120,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -142,7 +142,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -161,7 +161,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -176,7 +176,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -194,7 +194,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -215,7 +215,7 @@ describe('Material integer field', () => {
     );
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -232,7 +232,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -249,7 +249,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -266,7 +266,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -283,7 +283,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -300,7 +300,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -317,7 +317,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           enabled={false}
@@ -333,7 +333,7 @@ describe('Material integer field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <IntegerField
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'

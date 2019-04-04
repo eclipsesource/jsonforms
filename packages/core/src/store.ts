@@ -24,7 +24,7 @@
 */
 import { Store } from 'redux';
 import { JsonFormsCore } from './reducers/core';
-import { JsonFormsFieldRendererRegistryEntry } from './reducers/fields';
+import { JsonFormsCellRendererRegistryEntry } from './reducers/cells';
 import { JsonFormsRendererRegistryEntry } from './reducers/renderers';
 import { JsonFormsLocaleState } from './reducers/i18n';
 import { UISchemaTester } from './reducers/uischemas';
@@ -59,9 +59,9 @@ export interface JsonFormsSubStates {
    */
   renderers?: JsonFormsRendererRegistryEntry[];
   /**
-   * All available field renderers.
+   * All available cell renderers.
    */
-  fields?: JsonFormsFieldRendererRegistryEntry[];
+  cells?: JsonFormsCellRendererRegistryEntry[];
   /**
    *
    */

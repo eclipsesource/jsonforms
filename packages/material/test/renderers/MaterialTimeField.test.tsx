@@ -34,10 +34,10 @@ import {
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import TimeField, { materialTimeFieldTester } from '../../src/fields/MaterialTimeField';
+import TimeCell, { materialTimeCellTester } from '../../src/cells/MaterialTimeCell';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -60,7 +60,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      fields: materialFields,
+      cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -71,18 +71,18 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-describe('Material time field tester', () => {
+describe('Material time cell tester', () => {
 
   it('should fail', () => {
-    expect(materialTimeFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeFieldTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeFieldTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTimeCellTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
   });
 
   it('should fail with wrong prop type', () => {
     expect(
-      materialTimeFieldTester(
+      materialTimeCellTester(
         uischema,
         {
           type: 'object',
@@ -96,7 +96,7 @@ describe('Material time field tester', () => {
 
   it('should fail if only sibling prop has correct type', () => {
     expect(
-      materialTimeFieldTester(
+      materialTimeCellTester(
         uischema,
         {
           type: 'object',
@@ -114,7 +114,7 @@ describe('Material time field tester', () => {
 
   it('should succeed with correct prop type', () => {
     expect(
-      materialTimeFieldTester(
+      materialTimeCellTester(
         uischema,
         {
           type: 'object',
@@ -130,7 +130,7 @@ describe('Material time field tester', () => {
   });
 });
 
-describe('Material time field', () => {
+describe('Material time cell', () => {
 
   let wrapper: ReactWrapper;
 
@@ -147,7 +147,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField schema={schema} uischema={control}/>
+        <TimeCell schema={schema} uischema={control}/>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -165,7 +165,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField schema={schema} uischema={control}/>
+        <TimeCell schema={schema} uischema={control}/>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -180,7 +180,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -195,7 +195,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -212,7 +212,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -228,7 +228,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -245,7 +245,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -262,7 +262,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -279,7 +279,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -296,7 +296,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -313,7 +313,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -330,7 +330,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           enabled={false}
@@ -346,7 +346,7 @@ describe('Material time field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeField
+        <TimeCell
           schema={schema}
           uischema={uischema}
           path='foo'

@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import {
-  JsonFormsFieldRendererRegistryEntry,
+  JsonFormsCellRendererRegistryEntry,
   JsonFormsRendererRegistryEntry
 } from '@jsonforms/core';
 import {
@@ -53,10 +53,10 @@ import {
   materialInputControlTester,
   MaterialNativeControl,
   materialNativeControlTester,
-  MaterialSliderControl,
-  materialSliderControlTester,
   MaterialRadioGroupControl,
-  materialRadioGroupControlTester
+  materialRadioGroupControlTester,
+  MaterialSliderControl,
+  materialSliderControlTester
 } from './controls';
 import {
   MaterialArrayLayout,
@@ -71,23 +71,23 @@ import {
   materialVerticalLayoutTester
 } from './layouts';
 import {
-  MaterialBooleanField,
-  materialBooleanFieldTester,
-  MaterialDateField,
-  materialDateFieldTester,
-  MaterialEnumField,
-  materialEnumFieldTester,
-  MaterialIntegerField,
-  materialIntegerFieldTester,
-  MaterialNumberField,
-  materialNumberFieldTester,
-  MaterialNumberFormatField,
-  materialNumberFormatFieldTester,
-  MaterialTextField,
-  materialTextFieldTester,
-  MaterialTimeField,
-  materialTimeFieldTester
-} from './fields';
+  MaterialBooleanCell,
+  materialBooleanCellTester,
+  MaterialDateCell,
+  materialDateCellTester,
+  MaterialEnumCell,
+  materialEnumCellTester,
+  MaterialIntegerCell,
+  materialIntegerCellTester,
+  MaterialNumberCell,
+  materialNumberCellTester,
+  MaterialNumberFormatCell,
+  materialNumberFormatCellTester,
+  MaterialTextCell,
+  materialTextCellTester,
+  MaterialTimeCell,
+  materialTimeCellTester
+} from './cells';
 import MaterialCategorizationStepperLayout, {
   materialCategorizationStepperTester
 } from './layouts/MaterialCategorizationStepperLayout';
@@ -95,7 +95,7 @@ import MaterialCategorizationStepperLayout, {
 export * from './complex';
 export * from './controls';
 export * from './layouts';
-export * from './fields';
+export * from './cells';
 export * from './util';
 
 export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
@@ -138,13 +138,13 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
 ];
 
-export const materialFields: JsonFormsFieldRendererRegistryEntry[] = [
-  { tester: materialBooleanFieldTester, field: MaterialBooleanField },
-  { tester: materialDateFieldTester, field: MaterialDateField },
-  { tester: materialEnumFieldTester, field: MaterialEnumField },
-  { tester: materialIntegerFieldTester, field: MaterialIntegerField },
-  { tester: materialNumberFieldTester, field: MaterialNumberField },
-  { tester: materialNumberFormatFieldTester, field: MaterialNumberFormatField },
-  { tester: materialTextFieldTester, field: MaterialTextField },
-  { tester: materialTimeFieldTester, field: MaterialTimeField }
+export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
+  { tester: materialBooleanCellTester, cell: MaterialBooleanCell },
+  { tester: materialDateCellTester, cell: MaterialDateCell },
+  { tester: materialEnumCellTester, cell: MaterialEnumCell },
+  { tester: materialIntegerCellTester, cell: MaterialIntegerCell },
+  { tester: materialNumberCellTester, cell: MaterialNumberCell },
+  { tester: materialNumberFormatCellTester, cell: MaterialNumberFormatCell },
+  { tester: materialTextCellTester, cell: MaterialTextCell },
+  { tester: materialTimeCellTester, cell: MaterialTimeCell }
 ];

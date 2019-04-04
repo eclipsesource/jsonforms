@@ -34,8 +34,7 @@ export const rootReducer: Reducer<JsonFormsState> = combineReducers({
 
 export const initialState: any = {
   jsonforms: {
-    renderers: angularMaterialRenderers,
-    fields: []
+    renderers: angularMaterialRenderers
   },
   examples: {
     data: getExamples()
