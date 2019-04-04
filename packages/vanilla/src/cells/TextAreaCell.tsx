@@ -1,19 +1,19 @@
 /*
   The MIT License
-
+  
   Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
-
+  
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-
+  
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-
+  
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,45 +23,42 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import { SyntheticEvent } from 'react';
+import { connect } from 'react-redux';
 import {
-    FieldProps,
-    isDateTimeControl,
-    mapDispatchToFieldProps,
-    mapStateToFieldProps,
-    RankedTester,
-    rankWith,
+  CellProps,
+  isMultiLineControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
+  RankedTester,
+  rankWith,
 } from '@jsonforms/core';
 import { VanillaRendererProps } from '../index';
-import { addVanillaFieldProps } from '../util';
 
-export const DateTimeField = (props: FieldProps & VanillaRendererProps) => {
-    const { data, className, id, enabled, uischema, path, handleChange } = props;
-    const toISOString = (inputDateTime: string) => {
-        return (inputDateTime === '' ? '' : inputDateTime + ':00.000Z');
-    };
+export const TextAreaCell = (props: CellProps & VanillaRendererProps) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-    return (
-      <input
-        type='datetime-local'
-        value={(data || '').substr(0, 16)}
-        onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-          handleChange(path, toISOString(ev.currentTarget.value))
-        }
-        className={className}
-        id={id}
-        disabled={!enabled}
-        autoFocus={uischema.options && uischema.options.focus}
-      />
-    );
+  return (
+    <textarea
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
+        handleChange(path, ev.currentTarget.value)
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
 };
+
 /**
- * Default tester for datetime controls.
+ * Tester for a multi-line string control.
  * @type {RankedTester}
  */
-export const dateTimeFieldTester: RankedTester = rankWith(2, isDateTimeControl);
+export const textAreaCellTester: RankedTester = rankWith(2, isMultiLineControl);
+
 export default connect(
-  addVanillaFieldProps(mapStateToFieldProps),
-  mapDispatchToFieldProps
-)(DateTimeField);
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(TextAreaCell);

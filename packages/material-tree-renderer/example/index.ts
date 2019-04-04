@@ -37,7 +37,7 @@ import {
   UISchemaTester
 } from '@jsonforms/core';
 import {
-  materialFields,
+  materialCells,
   materialRenderers
 } from '@jsonforms/material-renderers';
 import { taskSchema } from './schema';
@@ -131,7 +131,7 @@ const instanceLabelProvider: InstanceLabelProvider = (
 const initState: any = {
   jsonforms: {
     renderers: materialRenderers,
-    fields: materialFields
+    cells: materialCells
   }
 };
 

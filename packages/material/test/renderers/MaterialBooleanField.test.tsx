@@ -32,11 +32,11 @@ import {
   NOT_APPLICABLE,
   UISchemaElement
 } from '@jsonforms/core';
-import BooleanField, { materialBooleanFieldTester } from '../../src/fields/MaterialBooleanField';
+import BooleanCell, { materialBooleanCellTester } from '../../src/cells/MaterialBooleanCell';
 import { Provider } from 'react-redux';
 import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -47,7 +47,7 @@ export const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUi
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-        fields: materialFields,
+        cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -67,7 +67,7 @@ const uischema: ControlElement = {
   scope: '#/properties/foo'
 };
 
-describe('Material boolean field tester', () => {
+describe('Material boolean cell tester', () => {
 
   const control: ControlElement = {
     type: 'Control',
@@ -75,18 +75,18 @@ describe('Material boolean field tester', () => {
   };
 
   it('should fail', () => {
-    expect(materialBooleanFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialBooleanFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialBooleanFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialBooleanFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
     expect(
-      materialBooleanFieldTester(
+      materialBooleanCellTester(
         control,
         {type: 'object', properties: {foo: {type: 'string'}}}
       )
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialBooleanFieldTester(
+      materialBooleanCellTester(
         control,
         {
           type: 'object',
@@ -105,7 +105,7 @@ describe('Material boolean field tester', () => {
 
   it('should succeed', () => {
     expect(
-      materialBooleanFieldTester(
+      materialBooleanCellTester(
         control,
         {
           type: 'object',
@@ -120,7 +120,7 @@ describe('Material boolean field tester', () => {
   });
 });
 
-describe('Material boolean field', () => {
+describe('Material boolean cell', () => {
 
   let wrapper: ReactWrapper;
 
@@ -145,7 +145,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -167,7 +167,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -186,7 +186,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -201,7 +201,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -218,7 +218,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -235,7 +235,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -253,7 +253,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -270,7 +270,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -287,7 +287,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -303,7 +303,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -319,7 +319,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -336,7 +336,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           enabled={false}
@@ -352,7 +352,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -367,7 +367,7 @@ describe('Material boolean field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <BooleanField
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'

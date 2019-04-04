@@ -28,9 +28,9 @@ import * as Redux from 'redux';
 import {
   clearAllIds,
   defaultMapDispatchToControlProps,
-  defaultMapStateToEnumFieldProps,
-  DispatchPropsOfField,
-  mapStateToFieldProps
+  defaultMapStateToEnumCellProps,
+  DispatchPropsOfCell,
+  mapStateToCellProps
 } from '../../src/util';
 import { UPDATE_DATA, UpdateAction } from '../../src/actions';
 import configureStore from 'redux-mock-store';
@@ -90,7 +90,7 @@ const createState = (uischema: UISchemaElement): JsonFormsState => ({
   }
 });
 
-test('mapStateToFieldProps - visible via ownProps ', t => {
+test('mapStateToCellProps - visible via ownProps ', t => {
   const uischema: ControlElement = {
     ...coreUISchema,
     rule: hideRule
@@ -99,11 +99,11 @@ test('mapStateToFieldProps - visible via ownProps ', t => {
     visible: true,
     uischema
   };
-  const props = mapStateToFieldProps(createState(uischema), ownProps);
+  const props = mapStateToCellProps(createState(uischema), ownProps);
   t.true(props.visible);
 });
 
-test('mapStateToFieldProps - hidden via ownProps ', t => {
+test('mapStateToCellProps - hidden via ownProps ', t => {
   const uischema = {
     ...coreUISchema,
     rule: hideRule
@@ -112,11 +112,11 @@ test('mapStateToFieldProps - hidden via ownProps ', t => {
     visible: false,
     uischema
   };
-  const props = mapStateToFieldProps(createState(uischema), ownProps);
+  const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToFieldProps - hidden via state ', t => {
+test('mapStateToCellProps - hidden via state ', t => {
   const uischema = {
     ...coreUISchema,
     rule: hideRule
@@ -124,11 +124,11 @@ test('mapStateToFieldProps - hidden via state ', t => {
   const ownProps = {
     uischema
   };
-  const props = mapStateToFieldProps(createState(uischema), ownProps);
+  const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.visible);
 });
 
-test('mapStateToFieldProps - visible via state ', t => {
+test('mapStateToCellProps - visible via state ', t => {
   const uischema = {
     ...coreUISchema,
     rule: hideRule
@@ -138,11 +138,11 @@ test('mapStateToFieldProps - visible via state ', t => {
   };
   const clonedState = _.cloneDeep(createState(uischema));
   clonedState.jsonforms.core.data.firstName = 'Lisa';
-  const props = mapStateToFieldProps(clonedState, ownProps);
+  const props = mapStateToCellProps(clonedState, ownProps);
   t.true(props.visible);
 });
 
-test('mapStateToFieldProps - enabled via ownProps ', t => {
+test('mapStateToCellProps - enabled via ownProps ', t => {
   const uischema = {
     ...coreUISchema,
     rule: disableRule
@@ -151,11 +151,11 @@ test('mapStateToFieldProps - enabled via ownProps ', t => {
     enabled: true,
     uischema
   };
-  const props = mapStateToFieldProps(createState(uischema), ownProps);
+  const props = mapStateToCellProps(createState(uischema), ownProps);
   t.true(props.enabled);
 });
 
-test('mapStateToFieldProps - disabled via ownProps ', t => {
+test('mapStateToCellProps - disabled via ownProps ', t => {
   const uischema = {
     ...coreUISchema,
     rule: disableRule
@@ -164,11 +164,11 @@ test('mapStateToFieldProps - disabled via ownProps ', t => {
     enabled: false,
     uischema
   };
-  const props = mapStateToFieldProps(createState(uischema), ownProps);
+  const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToFieldProps - disabled via state ', t => {
+test('mapStateToCellProps - disabled via state ', t => {
   const uischema = {
     ...coreUISchema,
     rule: disableRule
@@ -176,11 +176,11 @@ test('mapStateToFieldProps - disabled via state ', t => {
   const ownProps = {
     uischema
   };
-  const props = mapStateToFieldProps(createState(uischema), ownProps);
+  const props = mapStateToCellProps(createState(uischema), ownProps);
   t.false(props.enabled);
 });
 
-test('mapStateToFieldProps - enabled via state ', t => {
+test('mapStateToCellProps - enabled via state ', t => {
   const uischema = {
     ...coreUISchema,
     rule: disableRule
@@ -190,39 +190,39 @@ test('mapStateToFieldProps - enabled via state ', t => {
   };
   const clonedState = _.cloneDeep(createState(uischema));
   clonedState.jsonforms.core.data.firstName = 'Lisa';
-  const props = mapStateToFieldProps(clonedState, ownProps);
+  const props = mapStateToCellProps(clonedState, ownProps);
   t.true(props.enabled);
 });
 
-test('mapStateToFieldProps - path', t => {
+test('mapStateToCellProps - path', t => {
   const ownProps = {
     uischema: coreUISchema,
     path: 'firstName'
   };
-  const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
+  const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.path, 'firstName');
 });
 
-test('mapStateToFieldProps - data', t => {
+test('mapStateToCellProps - data', t => {
   const ownProps = {
     uischema: coreUISchema,
     path: 'firstName'
   };
-  const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
+  const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.data, 'Homer');
 });
 
-test('mapStateToFieldProps - id', t => {
+test('mapStateToCellProps - id', t => {
   clearAllIds();
   const ownProps = {
     uischema: coreUISchema,
     id: '#/properties/firstName'
   };
-  const props = mapStateToFieldProps(createState(coreUISchema), ownProps);
+  const props = mapStateToCellProps(createState(coreUISchema), ownProps);
   t.is(props.id, '#/properties/firstName');
 });
 
-test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
+test('mapStateToEnumCellProps - set default options for dropdown list', t => {
   const uischema: ControlElement = {
     type: 'Control',
     scope: '#/properties/nationality'
@@ -235,7 +235,7 @@ test('mapStateToEnumFieldProps - set default options for dropdown list', t => {
     path: 'nationality'
   };
 
-  const props = defaultMapStateToEnumFieldProps(
+  const props = defaultMapStateToEnumCellProps(
     createState(uischema),
     ownProps
   );
@@ -255,7 +255,7 @@ test('defaultMapDispatchToControlProps, initialized with custom handleChange', t
     }
   };
   const store = mockStore(createState(uiSchema));
-  const props: DispatchPropsOfField = defaultMapDispatchToControlProps(
+  const props: DispatchPropsOfCell = defaultMapDispatchToControlProps(
     store.dispatch,
     ownProps
   );

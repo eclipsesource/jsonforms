@@ -24,10 +24,10 @@
 */
 import React from 'react';
 import {
-  FieldProps,
+  CellProps,
   isStringControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
   RankedTester,
   rankWith,
   WithClassname
@@ -36,7 +36,7 @@ import Input from '@material-ui/core/Input';
 import { connect } from 'react-redux';
 import merge from 'lodash/merge';
 
-export const MaterialTextField = (props: FieldProps & WithClassname) => {
+export const MaterialTextCell = (props: CellProps & WithClassname) => {
   const {
     data,
     config,
@@ -83,8 +83,8 @@ export const MaterialTextField = (props: FieldProps & WithClassname) => {
  * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const materialTextFieldTester: RankedTester = rankWith(1, isStringControl);
+export const materialTextCellTester: RankedTester = rankWith(1, isStringControl);
 export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(MaterialTextField);
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(MaterialTextCell);

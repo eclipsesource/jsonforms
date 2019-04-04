@@ -23,42 +23,58 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
 import {
-  FieldProps,
-  isMultiLineControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
+  CellProps,
+  Formatted,
+  isNumberFormatControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
 import { VanillaRendererProps } from '../index';
 
-export const TextAreaField = (props: FieldProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
+export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Formatted<number>) => {
+  const {
+    className,
+    id,
+    enabled,
+    uischema,
+    path,
+    handleChange,
+    schema
+  } = props;
+  const maxLength = schema.maxLength;
+  const formattedNumber: string = props.toFormatted(props.data);
+
+  const onChange = (ev: any) => {
+    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
+    handleChange(path, validStringNumber);
+  };
 
   return (
-    <textarea
-      value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLTextAreaElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
+    <input
+      type='text'
+      value={formattedNumber}
+      onChange={onChange}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
+      maxLength={uischema.options && uischema.options.restrict ? maxLength : undefined}
+      size={uischema.options && uischema.options.trim ? maxLength : undefined}
     />
   );
 };
 
 /**
- * Tester for a multi-line string control.
+ * Default tester for text-based/string controls.
  * @type {RankedTester}
  */
-export const textAreaFieldTester: RankedTester = rankWith(2, isMultiLineControl);
+export const numberFormatCellTester: RankedTester = rankWith(4, isNumberFormatControl);
 
 export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(TextAreaField);
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(NumberFormatCell);

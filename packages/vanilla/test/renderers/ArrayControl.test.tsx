@@ -30,7 +30,7 @@ import ArrayControl from '../../src/complex/array/ArrayControlRenderer';
 import { vanillaRenderers } from '../../src/index';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import IntegerField, { integerFieldTester } from '../../src/fields/IntegerField';
+import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
 
 test.beforeEach(t => {
 
@@ -70,9 +70,9 @@ test('render two children', t => {
     schema: t.context.schema,
     uischema: t.context.uischema,
     renderers: vanillaRenderers,
-    fields: [
+    cells: [
       {
-        tester: integerFieldTester, field: IntegerField
+        tester: integerCellTester, cell: IntegerCell
       }
     ]
   });

@@ -23,44 +23,41 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { SyntheticEvent } from 'react';
 import { connect } from 'react-redux';
 import {
-  FieldProps,
-  isNumberControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
+    CellProps,
+    isNumberControl,
+    mapDispatchToCellProps,
+    mapStateToCellProps,
+    RankedTester,
+    rankWith, WithClassname,
 } from '@jsonforms/core';
-import { VanillaRendererProps } from '../index';
+import Input from '@material-ui/core/Input';
 
-export const NumberField = (props: FieldProps & VanillaRendererProps) => {
+export const MaterialNumberCell = (props: CellProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
+  const config = {'step': '0.1'};
 
   return (
-    <input
+    <Input
       type='number'
-      step='0.1'
       value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, Number(ev.currentTarget.value))
-      }
+      onChange={ev => handleChange(path, Number(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
+      inputProps={config}
+      fullWidth={true}
     />
   );
 };
-
 /**
  * Default tester for number controls.
  * @type {RankedTester}
  */
-export const numberFieldTester: RankedTester = rankWith(2, isNumberControl);
-
+export const materialNumberCellTester: RankedTester = rankWith(2, isNumberControl);
 export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(NumberField);
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(MaterialNumberCell);

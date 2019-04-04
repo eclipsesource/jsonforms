@@ -23,44 +23,43 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  FieldProps,
-  isBooleanControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith,
+    CellProps,
+    isDateControl,
+    mapDispatchToCellProps,
+    mapStateToCellProps,
+    RankedTester,
+    rankWith,
 } from '@jsonforms/core';
-import { StatelessComponent, SyntheticEvent } from 'react';
-import { addVanillaFieldProps } from '../util';
+import { SyntheticEvent } from 'react';
 import { VanillaRendererProps } from '../index';
+import { connect } from 'react-redux';
+import { addVanillaCellProps } from '../util';
 
-export const BooleanField: StatelessComponent<FieldProps> =
-    (props: FieldProps & VanillaRendererProps) => {
-        const { data, className, id, enabled, uischema, path, handleChange } = props;
+export const DateCell = (props: CellProps & VanillaRendererProps) => {
+    const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-        return (
-            <input
-                type='checkbox'
-                checked={data || ''}
-                onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-                    handleChange(path, ev.currentTarget.checked)
-                }
-                className={className}
-                id={id}
-                disabled={!enabled}
-                autoFocus={uischema.options && uischema.options.focus}
-            />
-        );
-    };
-
+    return (
+      <input
+        type='date'
+        value={data || ''}
+        onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+          handleChange(path, ev.currentTarget.value)
+        }
+        className={className}
+        id={id}
+        disabled={!enabled}
+        autoFocus={uischema.options && uischema.options.focus}
+      />
+    );
+};
 /**
- * Default tester for boolean controls.
+ * Default tester for date controls.
  * @type {RankedTester}
  */
-export const booleanFieldTester: RankedTester = rankWith(2, isBooleanControl);
+export const dateCellTester: RankedTester = rankWith(2, isDateControl);
+
 export default connect(
-  addVanillaFieldProps(mapStateToFieldProps),
-  mapDispatchToFieldProps
-)(BooleanField);
+  addVanillaCellProps(mapStateToCellProps),
+  mapDispatchToCellProps
+)(DateCell);

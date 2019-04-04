@@ -34,9 +34,9 @@ import {
   UISchemaElement,
   update
 } from '@jsonforms/core';
-import MaterialDateField, { materialDateFieldTester } from '../../src/fields/MaterialDateField';
+import MaterialDateCell, { materialDateCellTester } from '../../src/cells/MaterialDateCell';
 import { Provider } from 'react-redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -48,7 +48,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-        fields: materialFields,
+        cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -69,16 +69,16 @@ const uischema: ControlElement = {
   scope: '#/properties/foo',
 };
 
-describe('Material date field', () => {
+describe('Material date cell', () => {
 
   it ('should fail', () => {
-    expect(materialDateFieldTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateFieldTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateFieldTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateFieldTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
 
     expect(
-      materialDateFieldTester(
+      materialDateCellTester(
         uischema,
         {
           type: 'object',
@@ -89,7 +89,7 @@ describe('Material date field', () => {
       )
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialDateFieldTester(
+      materialDateCellTester(
         uischema,
         {
           type: 'object',
@@ -107,7 +107,7 @@ describe('Material date field', () => {
 
   it('should succeed', () => {
     expect(
-      materialDateFieldTester(
+      materialDateCellTester(
         uischema,
         {
           type: 'object',
@@ -123,7 +123,7 @@ describe('Material date field', () => {
   });
 });
 
-describe('Material date field', () => {
+describe('Material date cell', () => {
 
   let wrapper: ReactWrapper;
 
@@ -140,7 +140,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -162,7 +162,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -181,7 +181,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -196,7 +196,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -213,7 +213,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -229,7 +229,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -246,7 +246,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -263,7 +263,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -280,7 +280,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -296,7 +296,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -312,7 +312,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -328,7 +328,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           enabled={false}
@@ -344,7 +344,7 @@ describe('Material date field', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateField
+        <MaterialDateCell
           schema={schema}
           uischema={uischema}
           path='foo'

@@ -36,7 +36,7 @@ import {
 import MaterialDateControl, { materialDateControlTester } from '../../src/controls/MaterialDateControl';
 import * as React from 'react';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -47,7 +47,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-        fields: materialFields,
+        cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(

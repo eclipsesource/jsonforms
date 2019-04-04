@@ -22,35 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { RankedTester } from '../testers';
-import {
-  ADD_FIELD,
-  AddFieldRendererAction,
-  REMOVE_FIELD,
-  RemoveFieldRendererAction
-} from '../actions';
-
-type ValidFieldReducerActions =
-  | AddFieldRendererAction
-  | RemoveFieldRendererAction;
-
-export type JsonFormsFieldRendererRegistryState = JsonFormsFieldRendererRegistryEntry[];
-
-export interface JsonFormsFieldRendererRegistryEntry {
-  tester: RankedTester;
-  field: any;
-}
-
-export const fieldReducer = (
-  state: JsonFormsFieldRendererRegistryState = [],
-  { type, tester, field }: ValidFieldReducerActions
-) => {
-  switch (type) {
-    case ADD_FIELD:
-      return state.concat([{ tester, field }]);
-    case REMOVE_FIELD:
-      return state.filter(t => t.tester !== tester);
-    default:
-      return state;
-  }
-};
+export { MaterialBooleanCell } from './MaterialBooleanCell';
+export { MaterialDateCell } from './MaterialDateCell';
+export { MaterialEnumCell } from './MaterialEnumCell';
+export { MaterialIntegerCell } from './MaterialIntegerCell';
+export { MaterialNumberCell } from './MaterialNumberCell';
+export { MaterialNumberFormatCell } from './MaterialNumberFormatCell';
+export { MaterialTextCell } from './MaterialTextCell';
+export { MaterialTimeCell } from './MaterialTimeCell';

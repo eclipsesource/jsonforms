@@ -22,44 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
-import {
-  FieldProps,
-  isIntegerControl,
-  mapDispatchToFieldProps,
-  mapStateToFieldProps,
-  RankedTester,
-  rankWith
-} from '@jsonforms/core';
-import { VanillaRendererProps } from '../index';
-
-export const IntegerField  = (props: FieldProps & VanillaRendererProps) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-
-  return (
-    <input
-      type='number'
-      step='1'
-      value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, parseInt(ev.currentTarget.value, 10))
-      }
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-    />
-  );
-};
-/**
- * Default tester for integer controls.
- * @type {RankedTester}
- */
-export const integerFieldTester: RankedTester = rankWith(2, isIntegerControl);
-
-export default connect(
-  mapStateToFieldProps,
-  mapDispatchToFieldProps
-)(IntegerField);
+export { BooleanCell } from './BooleanCell';
+export { DateCell } from './DateCell';
+export { DateTimeCell } from './DateTimeCell';
+export { EnumCell } from './EnumCell';
+export { IntegerCell } from './IntegerCell';
+export { NumberCell } from './NumberCell';
+export { NumberFormatCell } from './NumberFormatCell';
+export { SliderCell } from './SliderCell';
+export { TextCell } from './TextCell';
+export { TextAreaCell } from './TextAreaCell';
+export { TimeCell } from './TimeCell';

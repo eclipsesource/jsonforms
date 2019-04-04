@@ -27,36 +27,36 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { UnknownRenderer } from './UnknownRenderer';
 import {
-  DispatchFieldProps,
-  DispatchFieldStateProps,
-  mapStateToDispatchFieldProps,
-  OwnPropsOfField
+  DispatchCellProps,
+  DispatchCellStateProps,
+  mapStateToDispatchCellProps,
+  OwnPropsOfCell
 } from '@jsonforms/core';
 
 /**
- * Dispatch renderer component for fields.
+ * Dispatch renderer component for cells.
  */
-class Dispatch extends React.Component<DispatchFieldProps, any> {
+class Dispatch extends React.Component<DispatchCellProps, any> {
   render() {
-    const { uischema, schema, path, fields, id } = this.props;
-    const field = maxBy(fields, r => r.tester(uischema, schema));
+    const { uischema, schema, path, cells, id } = this.props;
+    const cell = maxBy(cells, r => r.tester(uischema, schema));
 
-    if (field === undefined || field.tester(uischema, schema) === -1) {
-      return <UnknownRenderer type={'field'} />;
+    if (cell === undefined || cell.tester(uischema, schema) === -1) {
+      return <UnknownRenderer type={'cell'} />;
     } else {
-      const Field = field.field;
+      const Cell = cell.cell;
 
       return (
         <React.Fragment>
-          <Field uischema={uischema} schema={schema} path={path} id={id} />
+          <Cell uischema={uischema} schema={schema} path={path} id={id} />
         </React.Fragment>
       );
     }
   }
 }
 
-export const DispatchField = connect<
-  DispatchFieldStateProps,
+export const DispatchCell = connect<
+  DispatchCellStateProps,
   {},
-  OwnPropsOfField
->(mapStateToDispatchFieldProps)(Dispatch);
+  OwnPropsOfCell
+>(mapStateToDispatchCellProps)(Dispatch);

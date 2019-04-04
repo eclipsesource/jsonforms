@@ -33,7 +33,7 @@ import {
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import DateField, { dateFieldTester } from '../../src/fields/DateField';
+import DateCell, { dateCellTester } from '../../src/cells/DateCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -122,7 +122,7 @@ test('autofocus active', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -144,7 +144,7 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -163,7 +163,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -171,15 +171,15 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(dateFieldTester(undefined, undefined), -1);
-  t.is(dateFieldTester(null, undefined), -1);
-  t.is(dateFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(dateFieldTester({ type: 'Control' }, undefined), -1);
+  t.is(dateCellTester(undefined, undefined), -1);
+  t.is(dateCellTester(null, undefined), -1);
+  t.is(dateCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(dateCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-    dateFieldTester(
+    dateCellTester(
       t.context.uischmea,
       {
         type: 'object',
@@ -194,7 +194,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-    dateFieldTester(
+    dateCellTester(
       t.context.uischema,
       {
         type: 'object',
@@ -213,7 +213,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with correct prop type', t => {
   t.is(
-    dateFieldTester(
+    dateCellTester(
       t.context.uischema,
       {
         type: 'object',
@@ -237,7 +237,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -254,7 +254,7 @@ test.cb('update via event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -277,7 +277,7 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -299,7 +299,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -315,7 +315,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -331,7 +331,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -347,7 +347,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -363,7 +363,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -379,7 +379,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -394,7 +394,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <DateField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <DateCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

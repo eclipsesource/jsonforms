@@ -25,13 +25,13 @@
 import { createThemeSelection } from './theme.switcher';
 import {
   stylingReducer,
-  vanillaFields,
+  vanillaCells,
   vanillaRenderers,
   vanillaStyles
 } from '../src';
 import { renderExample } from '../../example/src/index';
 
-renderExample(vanillaRenderers, vanillaFields, {
+renderExample(vanillaRenderers, vanillaCells, {
   name: 'styles',
   reducer: stylingReducer,
   state: vanillaStyles

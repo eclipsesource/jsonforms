@@ -34,7 +34,7 @@ import {
 
 import { FormControlLabel, Hidden } from '@material-ui/core';
 
-import MaterialBooleanField from '../fields/MaterialBooleanField';
+import MaterialBooleanCell from '../cells/MaterialBooleanCell';
 
 export const MaterialBooleanControl =
   ({ label, uischema, schema, visible, path, id }: ControlProps) => (
@@ -43,7 +43,7 @@ export const MaterialBooleanControl =
         label={label}
         id={id}
         control={
-          <MaterialBooleanField
+          <MaterialBooleanCell
             uischema={uischema}
             schema={schema}
             path={path}

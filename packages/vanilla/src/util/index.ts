@@ -29,11 +29,11 @@ import {
   getConfig,
   JsonFormsState,
   OwnPropsOfControl,
-  OwnPropsOfField,
+  OwnPropsOfCell,
   OwnPropsOfRenderer,
   RendererProps,
   StatePropsOfControl,
-  StatePropsOfField
+  StatePropsOfCell
 } from '@jsonforms/core';
 import { getStyle, getStyleAsClassName } from '../reducers';
 import { VanillaRendererProps } from '../index';
@@ -111,16 +111,16 @@ export const addVanillaLayoutProps = (
   };
 };
 
-export const addVanillaFieldProps = (
-  mapStateToFieldsProps: (
+export const addVanillaCellProps = (
+  mapStateToCellsProps: (
     s: JsonFormsState,
-    p: OwnPropsOfField
-  ) => StatePropsOfField
+    p: OwnPropsOfCell
+  ) => StatePropsOfCell
 ) => (
   state: JsonFormsState,
-  ownProps: OwnPropsOfField
-): StatePropsOfField & VanillaRendererProps => {
-  const props = mapStateToFieldsProps(state, ownProps);
+  ownProps: OwnPropsOfCell
+): StatePropsOfCell & VanillaRendererProps => {
+  const props = mapStateToCellsProps(state, ownProps);
   const inputClassName = ['validate'].concat(
     props.isValid ? 'valid' : 'invalid'
   );

@@ -37,7 +37,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, DispatchField } from '@jsonforms/react';
+import { Control, DispatchCell } from '@jsonforms/react';
 import { addVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
 import { connect } from 'react-redux';
@@ -58,7 +58,7 @@ export class InputControl extends Control<
       visible,
       required,
       path,
-      fields
+      cells
     } = this.props;
 
     const isValid = errors.length === 0;
@@ -71,12 +71,12 @@ export class InputControl extends Control<
       this.state.isFocused
     );
     const labelText = isPlainLabel(label) ? label : label.default;
-    const field = maxBy(fields, r => r.tester(uischema, schema));
+    const cell = maxBy(cells, r => r.tester(uischema, schema));
     if (
-      field === undefined ||
-      field.tester(uischema, schema) === NOT_APPLICABLE
+      cell === undefined ||
+      cell.tester(uischema, schema) === NOT_APPLICABLE
     ) {
-      console.warn('No applicable field found.', uischema, schema);
+      console.warn('No applicable cell found.', uischema, schema);
       return null;
     } else {
       return (
@@ -90,7 +90,7 @@ export class InputControl extends Control<
           <label htmlFor={id + '-input'} className={classNames.label}>
             {computeLabel(labelText, required)}
           </label>
-          <DispatchField
+          <DispatchCell
             uischema={uischema}
             schema={schema}
             path={path}

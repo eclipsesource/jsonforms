@@ -43,7 +43,7 @@ You can use the [WebComponent](https://www.webcomponents.org/introduction) wrapp
 import { combineReducers, createStore } from 'redux';
 import { JsonFormsElement } from '@jsonforms/webcomponent';
 import { jsonformsReducer } from '@jsonforms/core';
-import { materialFields, materialRenderers } from '@jsonforms/material';
+import { materialCells, materialRenderers } from '@jsonforms/material';
 const jsonForms = document.createElement('json-forms') as JsonFormsElement;
 jsonForms.store = createStore(
     combineReducers({
@@ -57,7 +57,7 @@ jsonForms.store = createStore(
                 uischema
             },
             renderers: materialRenderers,
-            fields: materialFields
+            cells: materialCells
         }
     }
 );

@@ -32,7 +32,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
-import TextField, { textFieldTester, } from '../../src/fields/TextField';
+import TextCell, { textCellTester, } from '../../src/cells/TextCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -116,7 +116,7 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={uischema} path='name' />
+      <TextCell schema={t.context.minLengthSchema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -136,7 +136,7 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={uischema} path='name' />
+      <TextCell schema={t.context.minLengthSchema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -151,7 +151,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -159,10 +159,10 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(textFieldTester(undefined, undefined), -1);
-  t.is(textFieldTester(null, undefined), -1);
-  t.is(textFieldTester({type: 'Foo'}, undefined), -1);
-  t.is(textFieldTester({type: 'Control'}, undefined), -1);
+  t.is(textCellTester(undefined, undefined), -1);
+  t.is(textCellTester(null, undefined), -1);
+  t.is(textCellTester({type: 'Foo'}, undefined), -1);
+  t.is(textCellTester({type: 'Control'}, undefined), -1);
 });
 
 test('render', t => {
@@ -179,7 +179,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={schema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={schema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -194,7 +194,7 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -211,7 +211,7 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -233,7 +233,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -249,7 +249,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -265,7 +265,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -281,7 +281,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -297,7 +297,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -313,7 +313,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' enabled={false}/>
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' enabled={false}/>
     </Provider>
   ) as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -328,7 +328,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -352,7 +352,7 @@ test('use maxLength for attributes size and maxlength', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
+      <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -377,7 +377,7 @@ test('use maxLength for attribute size only', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
+      <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -402,7 +402,7 @@ test('use maxLength for attribute max length only', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
+      <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -418,7 +418,7 @@ test('do not use maxLength by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.maxLengthSchema} uischema={t.context.uischema} path='name'/>
+      <TextCell schema={t.context.maxLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -443,7 +443,7 @@ test('maxLength not specified, attributes should have default values (trim && re
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={uischema} path='name'/>
+      <TextCell schema={t.context.schema} uischema={uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -468,7 +468,7 @@ test('maxLength not specified, attributes should have default values (trim)', t 
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={uischema} path='name' />
+      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -493,7 +493,7 @@ test('maxLength not specified, attributes should have default values (restrict)'
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={uischema} path='name'/>
+      <TextCell schema={t.context.schema} uischema={uischema} path='name'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -509,7 +509,7 @@ test('maxLength not specified, attributes should have default values', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextField schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <TextCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

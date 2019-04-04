@@ -37,8 +37,8 @@ export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
 export const ADD_RENDERER: 'jsonforms/ADD_RENDERER' = 'jsonforms/ADD_RENDERER';
 export const REMOVE_RENDERER: 'jsonforms/REMOVE_RENDERER' =
   'jsonforms/REMOVE_RENDERER';
-export const ADD_FIELD: 'jsonforms/ADD_FIELD' = 'jsonforms/ADD_FIELD';
-export const REMOVE_FIELD: 'jsonforms/REMOVE_FIELD' = 'jsonforms/REMOVE_FIELD';
+export const ADD_CELL: 'jsonforms/ADD_CELL' = 'jsonforms/ADD_CELL';
+export const REMOVE_CELL: 'jsonforms/REMOVE_CELL' = 'jsonforms/REMOVE_CELL';
 export const SET_CONFIG: 'jsonforms/SET_CONFIG' = 'jsonforms/SET_CONFIG';
 export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA`;
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
@@ -139,28 +139,28 @@ export const registerRenderer = (tester: RankedTester, renderer: any) => ({
   renderer
 });
 
-export interface AddFieldRendererAction {
-  type: 'jsonforms/ADD_FIELD';
+export interface AddCellRendererAction {
+  type: 'jsonforms/ADD_CELL';
   tester: RankedTester;
-  field: any;
+  cell: any;
 }
 
-export const registerField = (tester: RankedTester, field: any) => ({
-  type: ADD_FIELD,
+export const registerCell = (tester: RankedTester, cell: any) => ({
+  type: ADD_CELL,
   tester,
-  field
+  cell
 });
 
-export interface RemoveFieldRendererAction {
-  type: 'jsonforms/REMOVE_FIELD';
+export interface RemoveCellRendererAction {
+  type: 'jsonforms/REMOVE_CELL';
   tester: RankedTester;
-  field: any;
+  cell: any;
 }
 
-export const unregisterField = (tester: RankedTester, field: any) => ({
-  type: REMOVE_FIELD,
+export const unregisterCell = (tester: RankedTester, cell: any) => ({
+  type: REMOVE_CELL,
   tester,
-  field
+  cell
 });
 
 export interface RemoveRendererAction {

@@ -22,14 +22,44 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-export { BooleanField } from './BooleanField';
-export { DateField } from './DateField';
-export { DateTimeField } from './DateTimeField';
-export { EnumField } from './EnumField';
-export { IntegerField } from './IntegerField';
-export { NumberField } from './NumberField';
-export { NumberFormatField } from './NumberFormatField';
-export { SliderField } from './SliderField';
-export { TextField } from './TextField';
-export { TextAreaField } from './TextAreaField';
-export { TimeField } from './TimeField';
+import React from 'react';
+import { SyntheticEvent } from 'react';
+import { connect } from 'react-redux';
+import {
+  CellProps,
+  isIntegerControl,
+  mapDispatchToCellProps,
+  mapStateToCellProps,
+  RankedTester,
+  rankWith
+} from '@jsonforms/core';
+import { VanillaRendererProps } from '../index';
+
+export const IntegerCell  = (props: CellProps & VanillaRendererProps) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
+
+  return (
+    <input
+      type='number'
+      step='1'
+      value={data || ''}
+      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+        handleChange(path, parseInt(ev.currentTarget.value, 10))
+      }
+      className={className}
+      id={id}
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+    />
+  );
+};
+/**
+ * Default tester for integer controls.
+ * @type {RankedTester}
+ */
+export const integerCellTester: RankedTester = rankWith(2, isIntegerControl);
+
+export default connect(
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(IntegerCell);

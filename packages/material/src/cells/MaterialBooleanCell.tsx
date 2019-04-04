@@ -25,52 +25,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  defaultMapDispatchToControlProps,
-  defaultMapStateToEnumFieldProps,
-  EnumFieldProps,
-  isEnumControl,
-  RankedTester,
-  rankWith,
+    CellProps,
+    isBooleanControl,
+    mapDispatchToCellProps,
+    mapStateToCellProps,
+    RankedTester,
+    rankWith,
+    WithClassname
 } from '@jsonforms/core';
-import { SyntheticEvent } from 'react';
-import { addVanillaFieldProps } from '../util';
-import { WithClassname } from '../index';
+import Checkbox from '@material-ui/core/Checkbox';
 
-export const EnumField = (props: EnumFieldProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
+export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
+  const config = {'autoFocus': uischema.options && uischema.options.focus};
 
   return (
-    <select
+    <Checkbox
+      checked={data || ''}
+      onChange={(_ev, checked) => handleChange(path, checked)}
       className={className}
       id={id}
       disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      value={data || ''}
-      onChange={(ev: SyntheticEvent<HTMLSelectElement>) =>
-        handleChange(path, ev.currentTarget.value)
-      }
-    >
-      {
-        [<option value='' key={'empty'} />]
-          .concat(
-            options.map(optionValue =>
-              (
-                <option value={optionValue} label={optionValue} key={optionValue}>
-                  {optionValue}
-                </option>
-              )
-            )
-          )}
-    </select>
+      inputProps={config}
+    />
   );
 };
-/**
- * Default tester for enum controls.
- * @type {RankedTester}
- */
-export const enumFieldTester: RankedTester = rankWith(2, isEnumControl);
+
+export const materialBooleanCellTester: RankedTester = rankWith(2, isBooleanControl);
 
 export default connect(
-  addVanillaFieldProps(defaultMapStateToEnumFieldProps),
-  defaultMapDispatchToControlProps
-)(EnumField);
+  mapStateToCellProps,
+  mapDispatchToCellProps
+)(MaterialBooleanCell);

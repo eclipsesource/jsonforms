@@ -36,7 +36,7 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, DispatchField } from '@jsonforms/react';
+import { Control, DispatchCell } from '@jsonforms/react';
 
 import { InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
@@ -91,7 +91,7 @@ export class MaterialInputControl extends Control<ControlProps, ControlState> {
         >
           {computeLabel(isPlainLabel(label) ? label : label.default, required)}
         </InputLabel>
-        <DispatchField
+        <DispatchCell
           uischema={uischema}
           schema={schema}
           path={path}

@@ -33,7 +33,7 @@ import {
   update
 } from '@jsonforms/core';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
-import TimeField, { timeFieldTester } from '../../src/fields/TimeField';
+import TimeCell, { timeCellTester } from '../../src/cells/TimeCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 
@@ -122,7 +122,7 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema} path='foo'/>
+      <TimeCell schema={t.context.schema} uischema={uischema} path='foo'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -144,7 +144,7 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema} path='foo'/>
+      <TimeCell schema={t.context.schema} uischema={uischema} path='foo'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -163,7 +163,7 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={uischema} path='foo'/>
+      <TimeCell schema={t.context.schema} uischema={uischema} path='foo'/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -171,15 +171,15 @@ test('autofocus inactive by default', t => {
 });
 
 test('tester', t => {
-  t.is(timeFieldTester(undefined, undefined), -1);
-  t.is(timeFieldTester(null, undefined), -1);
-  t.is(timeFieldTester({ type: 'Foo' }, undefined), -1);
-  t.is(timeFieldTester({ type: 'Control' }, undefined), -1);
+  t.is(timeCellTester(undefined, undefined), -1);
+  t.is(timeCellTester(null, undefined), -1);
+  t.is(timeCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(timeCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
-    timeFieldTester(
+    timeCellTester(
       t.context.uischmea,
       {
         type: 'object',
@@ -194,7 +194,7 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-    timeFieldTester(
+    timeCellTester(
       t.context.uischema,
       {
         type: 'object',
@@ -213,7 +213,7 @@ test('tester with wrong prop type, but sibling has correct one', t => {
 
 test('tester with correct prop type', t => {
   t.is(
-    timeFieldTester(
+    timeCellTester(
       t.context.uischema,
       {
         type: 'object',
@@ -238,7 +238,7 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
 
@@ -256,7 +256,7 @@ test.cb('update via event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -274,7 +274,7 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -291,7 +291,7 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -308,7 +308,7 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -325,7 +325,7 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -342,7 +342,7 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -359,7 +359,7 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -376,7 +376,7 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' enabled={false}/>
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' enabled={false}/>
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -392,7 +392,7 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TimeField schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <TimeCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
   ) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

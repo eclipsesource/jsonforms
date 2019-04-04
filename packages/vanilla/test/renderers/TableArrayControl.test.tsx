@@ -38,7 +38,7 @@ import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
-import IntegerField, { integerFieldTester } from '../../src/fields/IntegerField';
+import IntegerCell, { integerCellTester } from '../../src/cells/IntegerCell';
 
 test.beforeEach(t => {
 
@@ -77,8 +77,8 @@ test('render two children', t => {
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema,
-    fields: [
-      { tester: integerFieldTester, field: IntegerField }
+    cells: [
+      { tester: integerCellTester, cell: IntegerCell }
     ]
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(

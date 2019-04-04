@@ -25,26 +25,26 @@
 import { RankedTester } from '@jsonforms/core';
 
 import {
-  BooleanField,
-  booleanFieldTester,
-  DateField,
-  dateFieldTester,
-  dateTimeFieldTester,
-  EnumField,
-  enumFieldTester,
-  IntegerField,
-  integerFieldTester,
-  NumberField,
-  numberFieldTester,
-  SliderField,
-  sliderFieldTester,
-  TextAreaField,
-  textAreaFieldTester,
-  TextField,
-  textFieldTester,
-  TimeField,
-  timeFieldTester
-} from './fields';
+  BooleanCell,
+  booleanCellTester,
+  DateCell,
+  dateCellTester,
+  dateTimeCellTester,
+  EnumCell,
+  enumCellTester,
+  IntegerCell,
+  integerCellTester,
+  NumberCell,
+  numberCellTester,
+  SliderCell,
+  sliderCellTester,
+  TextAreaCell,
+  textAreaCellTester,
+  TextCell,
+  textCellTester,
+  TimeCell,
+  timeCellTester
+} from './cells';
 
 import { InputControl, inputControlTester } from './controls';
 
@@ -67,7 +67,7 @@ import {
   VerticalLayout,
   verticalLayoutTester
 } from './layouts';
-import DateTimeField from './fields/DateTimeField';
+import DateTimeCell from './cells/DateTimeCell';
 
 export interface WithClassname {
   className?: string;
@@ -101,7 +101,7 @@ export interface WithChildren {
 
 export * from './controls';
 export * from './complex';
-export * from './fields';
+export * from './cells';
 export * from './layouts';
 export * from './reducers';
 export * from './util';
@@ -117,15 +117,15 @@ export const vanillaRenderers: { tester: RankedTester; renderer: any }[] = [
   { tester: horizontalLayoutTester, renderer: HorizontalLayout }
 ];
 
-export const vanillaFields: { tester: RankedTester; field: any }[] = [
-  { tester: booleanFieldTester, field: BooleanField },
-  { tester: dateFieldTester, field: DateField },
-  { tester: dateTimeFieldTester, field: DateTimeField },
-  { tester: enumFieldTester, field: EnumField },
-  { tester: integerFieldTester, field: IntegerField },
-  { tester: numberFieldTester, field: NumberField },
-  { tester: sliderFieldTester, field: SliderField },
-  { tester: textAreaFieldTester, field: TextAreaField },
-  { tester: textFieldTester, field: TextField },
-  { tester: timeFieldTester, field: TimeField }
+export const vanillaCells: { tester: RankedTester; cell: any }[] = [
+  { tester: booleanCellTester, cell: BooleanCell },
+  { tester: dateCellTester, cell: DateCell },
+  { tester: dateTimeCellTester, cell: DateTimeCell },
+  { tester: enumCellTester, cell: EnumCell },
+  { tester: integerCellTester, cell: IntegerCell },
+  { tester: numberCellTester, cell: NumberCell },
+  { tester: sliderCellTester, cell: SliderCell },
+  { tester: textAreaCellTester, cell: TextAreaCell },
+  { tester: textCellTester, cell: TextCell },
+  { tester: timeCellTester, cell: TimeCell }
 ];

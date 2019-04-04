@@ -28,7 +28,7 @@ import { Provider } from 'react-redux';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -38,7 +38,7 @@ export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      fields: materialFields,
+      cells: materialCells,
     }
   };
   const store: Store<JsonFormsState> = createStore(
