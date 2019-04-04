@@ -25,12 +25,8 @@
 import MaterialBooleanCell, {
   materialBooleanCellTester
 } from './MaterialBooleanCell';
-import MaterialDateCell, {
-  materialDateCellTester
-} from './MaterialDateCell';
-import MaterialEnumCell, {
-  materialEnumCellTester
-} from './MaterialEnumCell';
+import MaterialDateCell, { materialDateCellTester } from './MaterialDateCell';
+import MaterialEnumCell, { materialEnumCellTester } from './MaterialEnumCell';
 import MaterialIntegerCell, {
   materialIntegerCellTester
 } from './MaterialIntegerCell';
@@ -40,12 +36,8 @@ import MaterialNumberCell, {
 import MaterialNumberFormatCell, {
   materialNumberFormatCellTester
 } from './MaterialNumberFormatCell';
-import MaterialTextCell, {
-  materialTextCellTester
-} from './MaterialTextCell';
-import MaterialTimeCell, {
-  materialTimeCellTester
-} from './MaterialTimeCell';
+import MaterialTextCell, { materialTextCellTester } from './MaterialTextCell';
+import MaterialTimeCell, { materialTimeCellTester } from './MaterialTimeCell';
 
 export {
   MaterialBooleanCell,

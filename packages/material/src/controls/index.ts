@@ -73,5 +73,5 @@ export {
   MaterialNumberControl,
   materialNumberControlTester,
   MaterialTextControl,
-  materialTextControlTester,
+  materialTextControlTester
 };
