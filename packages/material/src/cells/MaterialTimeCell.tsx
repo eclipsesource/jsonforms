@@ -33,10 +33,10 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { MaterialTimeComponent } from '../components/MaterialTimeComponent';
+import { MuiInputTime } from '../muicontrols/MuiInputTime';
 
 export const MaterialTimeCell = (props: CellProps & WithClassname) => (
-  <MaterialTimeComponent {...props} />
+  <MuiInputTime {...props} />
 );
 export const materialTimeCellTester: RankedTester = rankWith(2, isTimeControl);
 export default connect(
