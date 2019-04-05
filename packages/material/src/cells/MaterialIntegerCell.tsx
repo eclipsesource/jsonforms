@@ -33,10 +33,10 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { MaterialIntegerComponent } from '../components/MaterialIntegerComponent';
+import { MuiInputInteger } from '../muicontrols/MuiInputInteger';
 
 export const MaterialIntegerCell = (props: CellProps & WithClassname) => (
-  <MaterialIntegerComponent {...props} />
+  <MuiInputInteger {...props} />
 );
 export const materialIntegerCellTester: RankedTester = rankWith(
   2,

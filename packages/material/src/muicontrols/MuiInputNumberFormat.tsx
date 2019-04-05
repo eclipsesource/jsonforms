@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2017-2019 EclipseSource Munich
+  Copyright (c) 2018 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,49 +22,53 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import isEmpty from 'lodash/isEmpty';
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  ControlProps,
-  isBooleanControl,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
-  RankedTester,
-  rankWith,
+    CellProps,
+    Formatted,
+    WithClassname,
 } from '@jsonforms/core';
+import Input from '@material-ui/core/Input';
 
-import { FormControlLabel, Hidden } from '@material-ui/core';
-import { MuiCheckbox } from '../muicontrols/MuiCheckbox';
+export const MuiInputNumberFormat = (props: CellProps & WithClassname & Formatted<number>) => {
+  const {
+    className,
+    id,
+    enabled,
+    uischema,
+    isValid,
+    path,
+    handleChange,
+    schema
+  } = props;
+  const maxLength = schema.maxLength;
+  let config;
+  if (uischema.options && uischema.options.restrict) {
+    config = {'maxLength': maxLength};
+  } else {
+    config = {};
+  }
+  const trim = uischema.options && uischema.options.trim;
+  const formattedNumber = props.toFormatted(props.data);
 
-export const MaterialBooleanControl = ({
-  label,
-  id,
-  visible,
-  ...props
-}: ControlProps) => (
-  <Hidden xsUp={!visible}>
-    <FormControlLabel
-      label={label}
+  const onChange = (ev: any) => {
+    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
+    handleChange(path, validStringNumber);
+  };
+
+  return (
+    <Input
+      type='text'
+      value={formattedNumber}
+      onChange={onChange}
+      className={className}
       id={id}
-      control={
-        <MuiCheckbox
-          id={id + '-input'}
-          isValid={isEmpty(props.errors)}
-          visible={visible}
-          {...props}
-        />
-      }
+      disabled={!enabled}
+      autoFocus={uischema.options && uischema.options.focus}
+      multiline={uischema.options && uischema.options.multi}
+      fullWidth={!trim || maxLength === undefined}
+      inputProps={config}
+      error={!isValid}
     />
-  </Hidden>
-);
-
-const ConnectedMaterialBooleanControl = connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialBooleanControl);
-export const materialBooleanControlTester: RankedTester = rankWith(
-  2,
-  isBooleanControl
-);
-export default ConnectedMaterialBooleanControl;
+  );
+};

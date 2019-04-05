@@ -34,11 +34,11 @@ import {
   WithClassname
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { MaterialNumberFormatComponent } from '../components/MaterialNumberFormatComponent';
+import { MuiInputNumberFormat } from '../muicontrols/MuiInputNumberFormat';
 
 export const MaterialNumberFormatCell = (
   props: CellProps & WithClassname & Formatted<number>
-) => <MaterialNumberFormatComponent {...props} />;
+) => <MuiInputNumberFormat {...props} />;
 /**
  * Default tester for text-based/string controls.
  * @type {RankedTester}

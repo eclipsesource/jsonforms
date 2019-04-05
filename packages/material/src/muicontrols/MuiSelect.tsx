@@ -31,7 +31,7 @@ import {
 import Select from '@material-ui/core/Select';
 import { MenuItem } from '@material-ui/core';
 
-export const MaterialEnumComponent = (props: EnumCellProps & WithClassname) => {
+export const MuiSelect = (props: EnumCellProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (

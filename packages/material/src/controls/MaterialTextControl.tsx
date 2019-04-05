@@ -30,12 +30,12 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { MaterialTextComponent } from '../components/MaterialTextComponent';
+import { MuiInputText } from '../muicontrols/MuiInputText';
 import { MaterialInputControl } from './MaterialInputControl';
 
 export class MaterialTextControl extends MaterialInputControl {
   protected getInnerComponent(): any {
-    return MaterialTextComponent;
+    return MuiInputText;
   }
 }
 export const materialTextControlTester: RankedTester = rankWith(

@@ -25,50 +25,25 @@
 import React from 'react';
 import {
     CellProps,
-    Formatted,
-    WithClassname,
+    WithClassname
 } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
 
-export const MaterialNumberFormatComponent = (props: CellProps & WithClassname & Formatted<number>) => {
-  const {
-    className,
-    id,
-    enabled,
-    uischema,
-    isValid,
-    path,
-    handleChange,
-    schema
-  } = props;
-  const maxLength = schema.maxLength;
-  let config;
-  if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
-  } else {
-    config = {};
-  }
-  const trim = uischema.options && uischema.options.trim;
-  const formattedNumber = props.toFormatted(props.data);
-
-  const onChange = (ev: any) => {
-    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
-    handleChange(path, validStringNumber);
-  };
+export const MuiInputInteger = (props: CellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange } = props;
+  const config = {'step': '1'};
 
   return (
     <Input
-      type='text'
-      value={formattedNumber}
-      onChange={onChange}
+      type='number'
+      value={data || ''}
+      onChange={ev => handleChange(path, parseInt(ev.target.value, 10))}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim || maxLength === undefined}
       inputProps={config}
-      error={!isValid}
+      fullWidth={true}
     />
   );
 };

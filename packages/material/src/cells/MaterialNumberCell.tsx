@@ -33,10 +33,10 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { MaterialNumberComponent } from '../components/MaterialNumberComponent';
+import { MuiInputNumber } from '../muicontrols/MuiInputNumber';
 
 export const MaterialNumberCell = (props: CellProps & WithClassname) => (
-  <MaterialNumberComponent {...props} />
+  <MuiInputNumber {...props} />
 );
 /**
  * Default tester for number controls.
