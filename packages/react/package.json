@@ -22,7 +22,7 @@
     "lint": "../../node_modules/.bin/tslint --project tsconfig.json --exclude src/models/jsonSchema.ts",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "test": "jest --no-cache",
-    "test-cov": "jest --no-cache",
+    "test-cov": "jest --no-cache --coverage",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms React Core' --mode file --out docs src"
   },
   "ava": {
