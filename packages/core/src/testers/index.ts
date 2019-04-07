@@ -354,12 +354,10 @@ export const isDateTimeControl = and(
 );
 
 /**
- * Tests whether the given UI schema is of type Control and if the schema
- * is an array of objects.
+ * Tests whether the given schema is an array of objects.
  * @type {Tester}
  */
-export const isObjectArrayControl = and(
-  uiTypeIs('Control'),
+export const isObjectArray = and(
   schemaMatches(
     schema =>
       !isEmpty(schema) &&
@@ -369,6 +367,13 @@ export const isObjectArrayControl = and(
   ),
   schemaSubPathMatches('items', schema => schema.type === 'object')
 );
+
+/**
+ * Tests whether the given UI schema is of type Control and if the schema
+ * is an array of objects.
+ * @type {Tester}
+ */
+export const isObjectArrayControl = and(uiTypeIs('Control'), isObjectArray);
 
 const traverse = (
   any: JsonSchema | JsonSchema[],

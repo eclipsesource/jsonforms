@@ -40,7 +40,9 @@ import {
 } from './complex';
 import {
   MaterialLabelRenderer,
-  materialLabelRendererTester
+  materialLabelRendererTester,
+  MaterialListWithDetailRenderer,
+  materialListWithDetailTester
 } from './additional';
 import {
   MaterialBooleanControl,
@@ -145,7 +147,11 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   },
   { tester: materialArrayLayoutTester, renderer: MaterialArrayLayout },
   // additional
-  { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer }
+  { tester: materialLabelRendererTester, renderer: MaterialLabelRenderer },
+  {
+    tester: materialListWithDetailTester,
+    renderer: MaterialListWithDetailRenderer
+  }
 ];
 
 export const materialCells: JsonFormsCellRendererRegistryEntry[] = [
