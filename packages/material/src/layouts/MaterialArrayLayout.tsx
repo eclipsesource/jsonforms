@@ -43,21 +43,18 @@ import {
   update
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import map from 'lodash/map';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import { Grid, Hidden, Tooltip } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { Grid } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ValidationIcon from '../complex/ValidationIcon';
 import { connect, Dispatch } from 'react-redux';
 import { AnyAction } from 'redux';
+import { ArrayLayoutToolbar } from './ArrayToolbar';
 
 const paperStyle = { padding: 10 };
 const iconStyle: any = { float: 'right' };
@@ -122,56 +119,6 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
     );
   }
 }
-
-interface ArrayLayoutToolbarProps {
-  label: string;
-  errors: string;
-  path: string;
-  addItem(path: string, data: any): () => void;
-  createDefault(): any;
-}
-const ArrayLayoutToolbar = React.memo(
-  ({
-    label,
-    errors,
-    addItem,
-    path,
-    createDefault
-  }: ArrayLayoutToolbarProps) => {
-    return (
-      <Toolbar>
-        <Grid container alignItems='center' justify='space-between'>
-          <Grid item>
-            <Typography variant={'h6'}>{label}</Typography>
-          </Grid>
-          <Hidden smUp={errors.length === 0}>
-            <Grid item>
-              <ValidationIcon id='tooltip-validation' errorMessages={errors} />
-            </Grid>
-          </Hidden>
-          <Grid item>
-            <Grid container>
-              <Grid item>
-                <Tooltip
-                  id='tooltip-add'
-                  title={`Add to ${label}`}
-                  placement='bottom'
-                >
-                  <IconButton
-                    aria-label={`Add to ${label}`}
-                    onClick={addItem(path, createDefault())}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Toolbar>
-    );
-  }
-);
 
 class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
   render() {
