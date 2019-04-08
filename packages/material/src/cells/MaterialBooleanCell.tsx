@@ -33,7 +33,7 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { MuiCheckbox } from '../muicontrols/MuiCheckbox';
+import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
   return <MuiCheckbox {...props} />;

@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import '../../src/cells';
 import MaterialLabelRenderer, { materialLabelRendererTester } from '../../src/additional/MaterialLabelRenderer';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -54,8 +54,7 @@ const uischema = {
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(

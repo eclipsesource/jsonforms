@@ -25,18 +25,16 @@
 import * as React from 'react';
 import {
   Actions,
-  ControlElement,
-  getData,
+  ControlElement, getData,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
-  UISchemaElement,
-  update
+  UISchemaElement
 } from '@jsonforms/core';
-import MaterialDateCell, { materialDateCellTester } from '../../src/cells/MaterialDateCell';
+import IntegerCell, { materialIntegerCellTester } from '../../src/cells/MaterialIntegerCell';
 import { Provider } from 'react-redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -44,11 +42,20 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+const data = {'foo': 42};
+const schema = {
+  type: 'integer',
+  minimum: 5
+};
+const uischema: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
+
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-        cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -59,71 +66,43 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-const data = { 'foo': '1980-06-04' };
-const schema = {
-    type: 'string',
-    format: 'date'
-};
-const uischema: ControlElement = {
-  type: 'Control',
-  scope: '#/properties/foo',
-};
+describe('Material integer cells tester', () => {
 
-describe('Material date cell', () => {
+  const controlElement: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
 
-  it ('should fail', () => {
-    expect(materialDateCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
-
+  it('should fail', () => {
+    expect(materialIntegerCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialIntegerCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
     expect(
-      materialDateCellTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: {type: 'string'},
-          },
-        },
+      materialIntegerCellTester(
+        controlElement,
+        {type: 'object', properties: {foo: {type: 'string'}}}
       )
     ).toBe(NOT_APPLICABLE);
     expect(
-      materialDateCellTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: {type: 'string'},
-            bar: {
-              type: 'string',
-              format: 'date',
-            },
-          },
-        },
+      materialIntegerCellTester(
+        controlElement,
+        {type: 'object', properties: {foo: {type: 'string'}, bar: {type: 'integer'}}}
       )
     ).toBe(NOT_APPLICABLE);
   });
 
   it('should succeed', () => {
     expect(
-      materialDateCellTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: {
-              type: 'string',
-              format: 'date',
-            },
-          },
-        },
+      materialIntegerCellTester(
+        controlElement,
+        { type: 'object', properties: { foo: { type: 'integer' } } }
       )
     ).toBe(2);
   });
 });
 
-describe('Material date cell', () => {
+describe('Material integer cells', () => {
 
   let wrapper: ReactWrapper;
 
@@ -140,7 +119,7 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -159,29 +138,29 @@ describe('Material date cell', () => {
         focus: false
       }
     };
-    const store = initJsonFormsStore(data, schema, uischema);
+    const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={control}
           path='foo'
         />
       </Provider>
     );
-    const input = wrapper.find('input').first();
+    const input = wrapper.find('input');
     expect(input.props().autoFocus).toBeFalsy();
   });
 
   it('should not autofocus by default', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
-    const store = initJsonFormsStore(data, schema, uischema);
+    const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={control}
           path='foo'
@@ -196,7 +175,7 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -205,72 +184,78 @@ describe('Material date cell', () => {
     );
 
     const input = wrapper.find('input').first();
-    expect(input.props().type).toBe('date');
-    expect(input.props().value).toBe('1980-06-04');
+    expect(input.props().type).toBe('number');
+    expect(input.props().step).toBe('1');
+    expect(input.props().value).toBe(42);
   });
 
-  it('should update via event', () => {
+  it('should update via input event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '1961-04-12' } });
-    expect(getData(store.getState()).foo).toBe('1961-04-12');
+
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: 13 } });
+    expect(getData(store.getState()).foo).toBe(13);
   });
 
   it('should update via action', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
+    const store = initJsonFormsStore(
+      { 'foo': 13 },
+      schema,
+      uischema
+    );
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update('foo', () => '1961-04-12'));
+    store.dispatch(Actions.update('foo', () => 42));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('1961-04-12');
+    expect(input.props().value).toBe(42);
   });
 
-  it('should update with null value', () => {
+  it('should not update with undefined value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update('foo', () => null));
+    store.dispatch(Actions.update('foo', () => undefined));
     wrapper.update();
     const input = wrapper.find('input');
     expect(input.props().value).toBe('');
   });
 
-  it('should update with undefined value', () => {
+  it('should not update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update('foo', () => undefined));
+    store.dispatch(Actions.update('foo', () => null));
     wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
@@ -280,55 +265,58 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    const input = wrapper.find('input').first();
-    store.dispatch(update('bar', () => 'Bar'));
-    expect(input.props().value).toBe('1980-06-04');
+    store.dispatch(Actions.update('bar', () => 11));
+    wrapper.update();
+    const input = wrapper.find('input');
+    expect(input.props().value).toBe(42);
   });
 
   it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update(null, () => '1961-04-12'));
+    store.dispatch(Actions.update(null, () => 13));
+    wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('1980-06-04');
+    expect(input.props().value).toBe(42);
   });
 
-  it('should update with undefined ref', () => {
+  it('should not update with undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
+    store.dispatch(Actions.update(undefined, () => 13));
+    wrapper.update();
     const input = wrapper.find('input').first();
-    store.dispatch(update(undefined, () => '1961-04-12'));
-    expect(input.props().value).toBe('1980-06-04');
+    expect(input.props().value).toBe(42);
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           enabled={false}
@@ -344,7 +332,7 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
+        <IntegerCell
           schema={schema}
           uischema={uischema}
           path='foo'

@@ -36,7 +36,7 @@ import {
 import MaterialDateControl, { materialDateControlTester } from '../../src/controls/MaterialDateControl';
 import * as React from 'react';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -46,8 +46,7 @@ Enzyme.configure({ adapter: new Adapter() });
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-        cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -230,7 +229,7 @@ describe('Material date control', () => {
       </Provider>,
     );
     store.dispatch(Actions.update('foo', () => null));
-    wrapper.update()
+    wrapper.update();
     const input = wrapper.find('input').first();
     expect(input.props().value).toBe('');
   });
@@ -294,7 +293,7 @@ describe('Material date control', () => {
         <MaterialDateControl schema={schema} uischema={uischema} enabled={false}/>
       </Provider>
     );
-    const input = wrapper.find('input').first()
+    const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeTruthy();
   });
 

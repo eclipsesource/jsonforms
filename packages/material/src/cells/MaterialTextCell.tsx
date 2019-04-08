@@ -33,7 +33,7 @@ import {
   WithClassname
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { MuiInputText } from '../muicontrols/MuiInputText';
+import { MuiInputText } from '../mui-controls/MuiInputText';
 
 export const MaterialTextCell = (props: CellProps & WithClassname) => (
   <MuiInputText {...props} />

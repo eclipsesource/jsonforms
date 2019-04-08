@@ -102,7 +102,7 @@ export * from './complex';
 export * from './controls';
 export * from './layouts';
 export * from './cells';
-export * from './muicontrols';
+export * from './mui-controls';
 export * from './util';
 
 export const materialRenderers: JsonFormsRendererRegistryEntry[] = [

@@ -35,7 +35,7 @@ import {
 } from '@jsonforms/core';
 
 import { FormControlLabel, Hidden } from '@material-ui/core';
-import { MuiCheckbox } from '../muicontrols/MuiCheckbox';
+import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanControl = ({
   label,

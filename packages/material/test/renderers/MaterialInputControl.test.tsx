@@ -22,9 +22,12 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { materialRenderers } from '../../src';
 import {
   Actions,
   ControlElement,
+  ControlProps,
+  ControlState,
   HorizontalLayout,
   isControl,
   jsonformsReducer,
@@ -36,16 +39,16 @@ import {
   rankWith,
   UISchemaElement
 } from '@jsonforms/core';
-import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import * as React from 'react';
 import { connect, Provider } from 'react-redux';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialCells, materialRenderers } from '../../src';
+import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import '../../src/cells';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
-import { MuiInputText } from '../../src/muicontrols';
+import { MuiInputText } from '../../src/mui-controls';
+import { Control } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -62,9 +65,14 @@ const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/foo'
 };
-class TestControlInner extends MaterialInputControl {
-  protected getInnerComponent(): any {
-    return MuiInputText;
+class TestControlInner extends Control<ControlProps, ControlState> {
+  render() {
+    return (
+      <MaterialInputControl
+        {...this.props}
+        input={MuiInputText}
+      />
+    );
   }
 }
 export const testControlTester: RankedTester = rankWith(1, isControl);
@@ -80,8 +88,7 @@ const initJsonFormsStore = (
 ): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(

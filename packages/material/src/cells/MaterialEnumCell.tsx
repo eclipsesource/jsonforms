@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 
 import { connect } from 'react-redux';
-import { MuiSelect } from '../muicontrols/MuiSelect';
+import { MuiSelect } from '../mui-controls/MuiSelect';
 
 export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
   <MuiSelect {...props} />

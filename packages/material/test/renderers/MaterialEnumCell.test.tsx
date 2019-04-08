@@ -33,7 +33,7 @@ import {
 } from '@jsonforms/core';
 import MaterialEnumCell, { materialEnumCellTester } from '../../src/cells/MaterialEnumCell';
 import { Provider } from 'react-redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
@@ -54,8 +54,7 @@ const uischema = {
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-        cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(

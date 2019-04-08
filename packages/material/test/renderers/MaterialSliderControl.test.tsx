@@ -34,7 +34,7 @@ import {
 } from '@jsonforms/core';
 import SliderControl, { materialSliderControlTester } from '../../src/controls/MaterialSliderControl';
 import { Provider } from 'react-redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import Slider from '@material-ui/lab/Slider';
 
@@ -66,8 +66,7 @@ const uischema: ControlElement = {
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(
