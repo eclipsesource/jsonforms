@@ -83,30 +83,31 @@ export class MaterialListWithDetailRenderer extends React.Component<
   handleListItemClick = (index: number) => () => {
     this.setState({ selectedIndex: index });
   };
-  innerCreateDefaultValue = () => createDefaultValue(this.props.schema);
+  createDefaultValue = () => createDefaultValue(this.props.schema);
   render() {
+    const {uischema, visible, errors, path, data, schema} = this.props;
     const labelDescription = Helpers.createLabelDescriptionFrom(
-      this.props.uischema
+      uischema
     );
     const label = labelDescription.show ? labelDescription.text : '';
     return (
-      <Hidden xsUp={!this.props.visible}>
+      <Hidden xsUp={!visible}>
         <ArrayLayoutToolbar
           label={label}
-          errors={this.props.errors}
-          path={this.props.path}
+          errors={errors}
+          path={path}
           addItem={this.addItem}
-          createDefault={this.innerCreateDefaultValue}
+          createDefault={this.createDefaultValue}
         />
         <Grid container direction='row' spacing={16}>
           <Grid item xs={3}>
             <List>
-              {this.props.data > 0 ? (
-                map(range(this.props.data), index => (
+              {data > 0 ? (
+                map(range(data), index => (
                   <ConnectedListWithDetailMasterItem
                     index={index}
-                    path={this.props.path}
-                    schema={this.props.schema}
+                    path={path}
+                    schema={schema}
                     handleSelect={this.handleListItemClick}
                     removeItem={this.removeItem}
                     selected={this.state.selectedIndex === index}
@@ -126,20 +127,21 @@ export class MaterialListWithDetailRenderer extends React.Component<
     );
   }
   private renderDetail(): any {
+    const {uischemas, schema, uischema, path} = this.props;
     if (this.state.selectedIndex !== undefined) {
       const foundUISchema = findUISchema(
-        this.props.uischemas,
-        this.props.schema,
-        this.props.uischema.scope,
-        this.props.path,
+        uischemas,
+        schema,
+        uischema.scope,
+        path,
         undefined,
-        this.props.uischema
+        uischema
       );
       return (
         <ResolvedJsonForms
           uischema={foundUISchema}
-          schema={this.props.schema}
-          path={composePaths(this.props.path, `${this.state.selectedIndex}`)}
+          schema={schema}
+          path={composePaths(path, `${this.state.selectedIndex}`)}
         />
       );
     }
@@ -176,20 +178,21 @@ class ListWithDetailMasterItem extends React.Component<
   any
 > {
   render() {
+    const {selected, handleSelect, index, childLabel, removeItem, path} = this.props;
     return (
       <ListItem
         button
-        selected={this.props.selected}
-        onClick={this.props.handleSelect(this.props.index)}
+        selected={selected}
+        onClick={handleSelect(index)}
       >
         <ListItemAvatar>
-          <Avatar aria-label='Index'>{this.props.index + 1}</Avatar>
+          <Avatar aria-label='Index'>{index + 1}</Avatar>
         </ListItemAvatar>
-        <ListItemText primary={this.props.childLabel} />
+        <ListItemText primary={childLabel} />
         <ListItemSecondaryAction>
           <IconButton
             aria-label='Delete'
-            onClick={this.props.removeItem(this.props.path, this.props.index)}
+            onClick={removeItem(path, index)}
           >
             <DeleteIcon />
           </IconButton>
