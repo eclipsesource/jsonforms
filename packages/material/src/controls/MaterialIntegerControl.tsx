@@ -22,7 +22,10 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import React from 'react';
 import {
+  ControlProps,
+  ControlState,
   isIntegerControl,
   mapDispatchToControlProps,
   mapStateToControlProps,
@@ -30,12 +33,18 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { MuiInputInteger } from '../muicontrols/MuiInputInteger';
+import { MuiInputInteger } from '../mui-controls/MuiInputInteger';
 import { MaterialInputControl } from './MaterialInputControl';
+import { Control } from '@jsonforms/react';
 
-export class MaterialIntegerControl extends MaterialInputControl {
-  protected getInnerComponent(): any {
-    return MuiInputInteger;
+export class MaterialIntegerControl extends Control<ControlProps, ControlState> {
+  render() {
+    return (
+      <MaterialInputControl
+        {...this.props}
+        input={MuiInputInteger}
+      />
+    );
   }
 }
 export const materialIntegerControlTester: RankedTester = rankWith(

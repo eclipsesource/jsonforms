@@ -34,7 +34,7 @@ import {
   WithClassname
 } from '@jsonforms/core';
 import { connect } from 'react-redux';
-import { MuiInputNumberFormat } from '../muicontrols/MuiInputNumberFormat';
+import { MuiInputNumberFormat } from '../mui-controls/MuiInputNumberFormat';
 
 export const MaterialNumberFormatCell = (
   props: CellProps & WithClassname & Formatted<number>

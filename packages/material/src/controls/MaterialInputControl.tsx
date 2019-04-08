@@ -36,7 +36,10 @@ import { InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
 import merge from 'lodash/merge';
 
-export abstract class MaterialInputControl extends Control<ControlProps, ControlState> {
+interface WithInput {
+  input: any;
+}
+export abstract class MaterialInputControl extends Control<ControlProps & WithInput, ControlState> {
 
   render() {
     const {
@@ -47,7 +50,8 @@ export abstract class MaterialInputControl extends Control<ControlProps, Control
       uischema,
       visible,
       required,
-      config
+      config,
+      input
     } = this.props;
     const isValid = errors.length === 0;
     const mergedConfig = merge({}, config, uischema.options);
@@ -69,7 +73,7 @@ export abstract class MaterialInputControl extends Control<ControlProps, Control
       description,
       this.state.isFocused
     );
-    const InnerComponent = this.getInnerComponent();
+    const InnerComponent = input;
     return (
       <FormControl
         style={style}
@@ -101,6 +105,4 @@ export abstract class MaterialInputControl extends Control<ControlProps, Control
       </FormControl>
     );
   }
-
-  protected abstract getInnerComponent(): any;
 }

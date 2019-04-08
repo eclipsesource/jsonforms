@@ -33,7 +33,7 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { MuiInputInteger } from '../muicontrols/MuiInputInteger';
+import { MuiInputInteger } from '../mui-controls/MuiInputInteger';
 
 export const MaterialIntegerCell = (props: CellProps & WithClassname) => (
   <MuiInputInteger {...props} />

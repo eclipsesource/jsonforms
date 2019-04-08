@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,16 +24,14 @@
 */
 import React from 'react';
 import {
-  CellProps,
-  WithClassname
+    CellProps,
+    Formatted,
+    WithClassname,
 } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
-import merge from 'lodash/merge';
 
-export const MuiInputText = (props: CellProps & WithClassname) => {
+export const MuiInputNumberFormat = (props: CellProps & WithClassname & Formatted<number>) => {
   const {
-    data,
-    config,
     className,
     id,
     enabled,
@@ -44,30 +42,32 @@ export const MuiInputText = (props: CellProps & WithClassname) => {
     schema
   } = props;
   const maxLength = schema.maxLength;
-  const mergedConfig = merge({}, config, uischema.options);
-  let inputProps: any;
-  if (mergedConfig.restrict) {
-    inputProps = {'maxLength': maxLength};
+  let config;
+  if (uischema.options && uischema.options.restrict) {
+    config = {'maxLength': maxLength};
   } else {
-    inputProps = {};
+    config = {};
   }
-  if (mergedConfig.trim && maxLength !== undefined) {
-    inputProps.size = maxLength;
-  }
-  const onChange = (ev: any) => handleChange(path, ev.target.value);
+  const trim = uischema.options && uischema.options.trim;
+  const formattedNumber = props.toFormatted(props.data);
+
+  const onChange = (ev: any) => {
+    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
+    handleChange(path, validStringNumber);
+  };
 
   return (
     <Input
-      type={uischema.options && (uischema.options.format === 'password') ? 'password' : 'text'}
-      value={data || ''}
+      type='text'
+      value={formattedNumber}
       onChange={onChange}
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
       multiline={uischema.options && uischema.options.multi}
-      fullWidth={!mergedConfig.trim || maxLength === undefined}
-      inputProps={inputProps}
+      fullWidth={!trim || maxLength === undefined}
+      inputProps={config}
       error={!isValid}
     />
   );

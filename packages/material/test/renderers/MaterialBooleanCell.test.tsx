@@ -25,42 +25,28 @@
 import * as React from 'react';
 import {
   Actions,
-  ControlElement,
-  getData,
+  ControlElement, getData,
   jsonformsReducer,
   JsonFormsState,
   JsonSchema,
   NOT_APPLICABLE,
-  UISchemaElement,
-  update
+  UISchemaElement
 } from '@jsonforms/core';
-import TimeCell, { materialTimeCellTester } from '../../src/cells/MaterialTimeCell';
+import BooleanCell, { materialBooleanCellTester } from '../../src/cells/MaterialBooleanCell';
 import { Provider } from 'react-redux';
+import * as ReactDOM from 'react-dom';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = { 'foo': '13:37' };
-
-const schema = {
-  type: 'string',
-  format: 'time'
-};
-
-const uischema: ControlElement = {
-  type: 'Control',
-  scope: '#/properties/foo'
-};
-
-const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
+export const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -71,71 +57,82 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
   return store;
 };
 
-describe('Material time cell tester', () => {
+const data = { foo: true };
+const schema = {
+  type: 'boolean'
+};
+const uischema: ControlElement = {
+  type: 'Control',
+  scope: '#/properties/foo'
+};
+
+describe('Material boolean cell tester', () => {
+
+  const control: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo',
+  };
 
   it('should fail', () => {
-    expect(materialTimeCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeCellTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTimeCellTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
-  });
-
-  it('should fail with wrong prop type', () => {
+    expect(materialBooleanCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester(null, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialBooleanCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
     expect(
-      materialTimeCellTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-          },
-        },
+      materialBooleanCellTester(
+        control,
+        {type: 'object', properties: {foo: {type: 'string'}}}
       )
     ).toBe(NOT_APPLICABLE);
-  });
-
-  it('should fail if only sibling prop has correct type', () => {
     expect(
-      materialTimeCellTester(
-        uischema,
-        {
-          type: 'object',
-          properties: {
-            foo: { type: 'string' },
-            bar: {
-              type: 'string',
-              format: 'time'
-            },
-          },
-        },
-      )
-    ).toBe(NOT_APPLICABLE);
-  });
-
-  it('should succeed with correct prop type', () => {
-    expect(
-      materialTimeCellTester(
-        uischema,
+      materialBooleanCellTester(
+        control,
         {
           type: 'object',
           properties: {
             foo: {
-              type: 'string',
-              format: 'time',
+              type: 'string'
             },
-          },
-        },
+            bar: {
+              type: 'boolean'
+            }
+          }
+        }
+      )
+    ).toBe(NOT_APPLICABLE);
+  });
+
+  it('should succeed', () => {
+    expect(
+      materialBooleanCellTester(
+        control,
+        {
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'boolean'
+            }
+          }
+        }
       )
     ).toBe(2);
   });
 });
 
-describe('Material time cell', () => {
+describe('Material boolean cell', () => {
 
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
 
+  /** Use this container to render components */
+  const container = document.createElement('div');
+
+  afterEach(() => {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  // seems to be broken in material-ui
   it('should autofocus via option', () => {
     const control: ControlElement = {
       type: 'Control',
@@ -147,7 +144,11 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={control}/>
+        <BooleanCell
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -165,24 +166,28 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell schema={schema} uischema={control}/>
+        <BooleanCell
+          schema={schema}
+          uischema={control}
+          path='foo'
+        />
       </Provider>
     );
     const input = wrapper.find('input').first();
-    expect(input.props().autoFocus).toBeFalsy();
+    expect(input.props().autoFocus).toBe(false);
   });
 
   it('should not autofocus by default', () => {
     const control: ControlElement = {
       type: 'Control',
-      scope: '#/properties/foo'
+      scope: '#/properties/foo',
     };
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
-          uischema={control}
+          uischema={uischema}
           path='foo'
         />
       </Provider>
@@ -195,7 +200,7 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -204,133 +209,133 @@ describe('Material time cell', () => {
     );
 
     const input = wrapper.find('input').first();
-    expect(input.props().type).toBe('time');
-    expect(input.props().value).toBe('13:37');
+    expect(input.props().type).toBe('checkbox');
+    expect(input.props().checked).toBeTruthy();
   });
 
-  it('should update via event', () => {
+  it('should update via input event', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    const input = wrapper.find('input').first();
-    input.simulate('change', { target: { value: '20:15' } });
-    expect(getData(store.getState()).foo).toBe('20:15');
+
+    const input = wrapper.find('input');
+    input.simulate('change', { target: { value: false } });
+    expect(getData(store.getState()).foo).toBeFalsy();
   });
 
   it('should update via action', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update('foo', () => '20:15'));
+    store.dispatch(Actions.update('foo', () => false));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('20:15');
+    expect(input.props().checked).toBeFalsy();
+    expect(getData(store.getState()).foo).toBeFalsy();
+  });
+
+  it('should update with undefined value', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <BooleanCell
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </Provider>
+    );
+    store.dispatch(Actions.update('foo', () => undefined));
+    wrapper.update();
+    const input = wrapper.find('input').first();
+    expect(input.props().checked).toBeFalsy();
   });
 
   it('should update with null value', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update('foo', () => null));
+    store.dispatch(Actions.update('foo', () => null));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('');
+    expect(input.props().checked).toBeFalsy();
   });
 
-  it('update with undefined value', () => {
+  it('should not update with wrong ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update('foo', () => undefined));
-    wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('');
+    store.dispatch(Actions.update('bar', () => 11));
+    expect(input.props().checked).toBeTruthy();
   });
 
-  it('should update with wrong ref', () => {
+  it('should not update with null ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
-      </Provider>
+      </Provider>,
     );
-    store.dispatch(update('bar', () => 'Bar'));
-    wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('13:37');
+    store.dispatch(Actions.update(null, () => false));
+    expect(input.props().checked).toBeTruthy();
   });
 
-  it('should update with null ref', () => {
+  it('should not update with an undefined ref', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
         />
       </Provider>
     );
-    store.dispatch(update(null, () => '20:15'));
+    store.dispatch(Actions.update(undefined, () => false));
     wrapper.update();
     const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('13:37');
-  });
-
-  it('should update with undefined ref', () => {
-    const store = initJsonFormsStore(data, schema, uischema);
-    wrapper = mount(
-      <Provider store={store}>
-        <TimeCell
-          schema={schema}
-          uischema={uischema}
-          path='foo'
-        />
-      </Provider>
-    );
-    store.dispatch(update(undefined, () => '20:15'));
-    wrapper.update();
-    const input = wrapper.find('input').first();
-    expect(input.props().value).toBe('13:37');
+    expect(input.props().checked).toBeTruthy();
   });
 
   it('can be disabled', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           enabled={false}
@@ -346,7 +351,7 @@ describe('Material time cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TimeCell
+        <BooleanCell
           schema={schema}
           uischema={uischema}
           path='foo'
@@ -355,5 +360,21 @@ describe('Material time cell', () => {
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();
+  });
+
+  it('id should be present in output', () => {
+    const store = initJsonFormsStore(data, schema, uischema);
+    wrapper = mount(
+      <Provider store={store}>
+        <BooleanCell
+          schema={schema}
+          uischema={uischema}
+          path='foo'
+          id='myid'
+        />
+      </Provider>
+    );
+    const input = wrapper.find('input');
+    expect(input.props().id).toBe('myid');
   });
 });

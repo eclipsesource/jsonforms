@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,51 +24,37 @@
 */
 import React from 'react';
 import {
-    CellProps,
-    Formatted,
+    EnumCellProps,
     WithClassname,
 } from '@jsonforms/core';
-import Input from '@material-ui/core/Input';
 
-export const MuiInputNumberFormat = (props: CellProps & WithClassname & Formatted<number>) => {
-  const {
-    className,
-    id,
-    enabled,
-    uischema,
-    isValid,
-    path,
-    handleChange,
-    schema
-  } = props;
-  const maxLength = schema.maxLength;
-  let config;
-  if (uischema.options && uischema.options.restrict) {
-    config = {'maxLength': maxLength};
-  } else {
-    config = {};
-  }
-  const trim = uischema.options && uischema.options.trim;
-  const formattedNumber = props.toFormatted(props.data);
+import Select from '@material-ui/core/Select';
+import { MenuItem } from '@material-ui/core';
 
-  const onChange = (ev: any) => {
-    const validStringNumber = props.fromFormatted(ev.currentTarget.value);
-    handleChange(path, validStringNumber);
-  };
+export const MuiSelect = (props: EnumCellProps & WithClassname) => {
+  const { data, className, id, enabled, uischema, path, handleChange, options } = props;
 
   return (
-    <Input
-      type='text'
-      value={formattedNumber}
-      onChange={onChange}
+    <Select
       className={className}
       id={id}
       disabled={!enabled}
       autoFocus={uischema.options && uischema.options.focus}
-      multiline={uischema.options && uischema.options.multi}
-      fullWidth={!trim || maxLength === undefined}
-      inputProps={config}
-      error={!isValid}
-    />
+      value={data || ''}
+      onChange={ev => handleChange(path, ev.target.value)}
+      fullWidth={true}
+    >
+      {
+        [<MenuItem value='' key={'empty'} />]
+          .concat(
+            options.map(optionValue =>
+              (
+                <MenuItem value={optionValue} key={optionValue}>
+                  {optionValue}
+                </MenuItem>
+              )
+            )
+          )}
+    </Select>
   );
 };

@@ -34,7 +34,7 @@ import {
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { combineReducers, createStore, Store } from 'redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import MaterialObjectRenderer, { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -44,8 +44,7 @@ Enzyme.configure({ adapter: new Adapter() });
 const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema: UISchemaElement): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells,
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(

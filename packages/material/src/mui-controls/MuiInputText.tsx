@@ -1,7 +1,7 @@
 /*
   The MIT License
 
-  Copyright (c) 2018 EclipseSource Munich
+  Copyright (c) 2017-2019 EclipseSource Munich
   https://github.com/eclipsesource/jsonforms
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,23 +24,51 @@
 */
 import React from 'react';
 import {
-    CellProps,
-    WithClassname
+  CellProps,
+  WithClassname
 } from '@jsonforms/core';
-import Checkbox from '@material-ui/core/Checkbox';
+import Input from '@material-ui/core/Input';
+import merge from 'lodash/merge';
 
-export const MuiCheckbox = (props: CellProps & WithClassname) => {
-  const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = {'autoFocus': uischema.options && uischema.options.focus};
+export const MuiInputText = (props: CellProps & WithClassname) => {
+  const {
+    data,
+    config,
+    className,
+    id,
+    enabled,
+    uischema,
+    isValid,
+    path,
+    handleChange,
+    schema
+  } = props;
+  const maxLength = schema.maxLength;
+  const mergedConfig = merge({}, config, uischema.options);
+  let inputProps: any;
+  if (mergedConfig.restrict) {
+    inputProps = {'maxLength': maxLength};
+  } else {
+    inputProps = {};
+  }
+  if (mergedConfig.trim && maxLength !== undefined) {
+    inputProps.size = maxLength;
+  }
+  const onChange = (ev: any) => handleChange(path, ev.target.value);
 
   return (
-    <Checkbox
-      checked={data || ''}
-      onChange={(_ev, checked) => handleChange(path, checked)}
+    <Input
+      type={uischema.options && (uischema.options.format === 'password') ? 'password' : 'text'}
+      value={data || ''}
+      onChange={onChange}
       className={className}
       id={id}
       disabled={!enabled}
-      inputProps={config}
+      autoFocus={uischema.options && uischema.options.focus}
+      multiline={uischema.options && uischema.options.multi}
+      fullWidth={!mergedConfig.trim || maxLength === undefined}
+      inputProps={inputProps}
+      error={!isValid}
     />
   );
 };

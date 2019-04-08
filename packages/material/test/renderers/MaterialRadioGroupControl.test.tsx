@@ -36,7 +36,7 @@ import {
 } from '@jsonforms/core';
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import { Provider } from 'react-redux';
-import { materialCells, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -66,8 +66,7 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
           tester: rankWith(10, isEnumControl),
           renderer: MaterialRadioGroupControl
         }
-      ],
-      cells: materialCells
+      ]
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -97,7 +96,6 @@ describe('Material radio group control', () => {
     expect(radioButtons.length).toBe(4);
     expect(currentlyChecked.first().props().value).toBe('D');
   });
-
 
   it('should have only update selected option ', () => {
     const store = initJsonFormsStore(data, schema, uischema);

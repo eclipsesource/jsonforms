@@ -33,7 +33,7 @@ import {
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { MuiInputTime } from '../muicontrols/MuiInputTime';
+import { MuiInputTime } from '../mui-controls/MuiInputTime';
 
 export const MaterialTimeCell = (props: CellProps & WithClassname) => (
   <MuiInputTime {...props} />

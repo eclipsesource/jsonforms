@@ -43,7 +43,7 @@ import MaterialCategorizationLayoutRenderer, {
   MaterialCategorizationLayoutRenderer as CategorizationLayoutRenderer,
   materialCategorizationTester
 } from '../../src/layouts/MaterialCategorizationLayout';
-import { materialCells, materialRenderers, MaterialLayoutRenderer } from '../../src';
+import { MaterialLayoutRenderer, materialRenderers } from '../../src';
 import { Tab } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -52,8 +52,7 @@ Enzyme.configure({ adapter: new Adapter() });
 export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells
+      renderers: materialRenderers
     }
   };
   const store: Store<JsonFormsState> = createStore(
@@ -377,7 +376,7 @@ describe('Material categorization stepper layout', () => {
 
   it('should have renderers prop via ownProps', () => {
     const store = initJsonFormsStore(fixture);
-    const renderers: any[] = []
+    const renderers: any[] = [];
     const wrapper = mount(
       <Provider store={store}>
         <MaterialCategorizationLayoutRenderer
@@ -391,5 +390,5 @@ describe('Material categorization stepper layout', () => {
 
     const materialArrayLayout = wrapper.find(MaterialLayoutRenderer);
     expect(materialArrayLayout.props().renderers).toHaveLength(0);
-  })
+  });
 });
