@@ -624,6 +624,46 @@ test('errorAt filters oneOf simple', t => {
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
+test('errorAt filters anyOf simple', t => {
+  const ajv = createAjv();
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      coloursOrNumbers: {
+        anyOf: [
+          {
+            title: 'Numbers',
+            type: 'string',
+            enum: ['One', 'Two', 'Three']
+          },
+          {
+            title: 'Colours',
+            type: 'string',
+            enum: ['Red', 'Green', 'Blue']
+          }
+        ]
+      }
+    }
+  };
+  const data: { coloursOrNumbers: string } = { coloursOrNumbers: 'Foo' };
+  const v = ajv.compile(schema);
+  const errors = sanitizeErrors(v, data);
+
+  const state: JsonFormsCore = {
+    data,
+    schema,
+    uischema: undefined,
+    errors
+  };
+  const filtered = errorAt(
+    'coloursOrNumbers',
+    schema.properties.coloursOrNumbers.anyOf[1]
+  )(state);
+  t.is(filtered.length, 1);
+  t.deepEqual(filtered[0], state.errors[1]);
+});
+
+
 test('errorAt filters oneOf objects', t => {
   const ajv = createAjv();
   const schema: JsonSchema = {
