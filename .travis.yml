@@ -17,9 +17,9 @@ install:
 
 script:
   - prettier --list-different '**/*.ts'
-  - lerna run build
-  - lerna run bundle
-  - lerna run test-cov
+  - npm run build
+  - npm run bundle
+  - npm run test-cov
 
 after_success:
     - 'npm run merge-report && cat coverage/lcov.info | ./node_modules/.bin/coveralls'

@@ -23,9 +23,9 @@ In addition EclipseSource also offers [professional support](https://jsonforms.i
 * Hook up dependencies between packages: `npm run init`
 
 ## Build & Testing
-* Build (all packages): `npx lerna run build`
-* Test (all packages): `npx lerna run test`
-* Clean (delete `dist` folder of all packages): `npx lerna run clean`
+* Build (all packages): `npm run build`
+* Test (all packages): `npm run test`
+* Clean (delete `dist` folder of all packages): `npm run clean`
 * Run vanilla examples: `cd packages/vanilla && npm run dev`
 * Run material examples: `cd packages/material && npm run dev`
 * Check Formatting: `npm run check-format`
