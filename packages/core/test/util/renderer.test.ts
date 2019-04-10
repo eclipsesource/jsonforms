@@ -348,7 +348,6 @@ test('mapStateToControlProps - no duplicate error messages', t => {
     { jsonforms: { core: updateCoreState } },
     { uischema: coreUISchema }
   );
-  // 'should be string' should only appear once
   t.is(props.errors.split('\n').length, 1);
 });
 

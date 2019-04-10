@@ -32,7 +32,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 
 import { combineReducers, createStore, Store } from 'redux';
-import { materialFields, materialRenderers } from '../../src';
+import { materialRenderers } from '../../src';
 import MaterialListWithDetailRenderer, {
   materialListWithDetailTester
 } from '../../src/additional/MaterialListWithDetailRenderer';
@@ -40,23 +40,6 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (overrideData?: any): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers,
-      fields: materialFields
-    }
-  };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-
-  store.dispatch(Actions.init(overrideData ? overrideData : data, schema, uischema));
-
-  return store;
-};
 
 const data = [
   {
@@ -83,16 +66,32 @@ const schema = {
   }
 };
 
+const uischema: ControlElement = {
+  type: 'Control',
+  scope: '#'
+};
+
+export const initJsonFormsStore = (overrideData?: any): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers
+    }
+  };
+  const store: Store<JsonFormsState> = createStore(
+    combineReducers({ jsonforms: jsonformsReducer() }),
+    s
+  );
+
+  store.dispatch(Actions.init(overrideData ? overrideData : data, schema, uischema));
+
+  return store;
+};
+
 const nestedSchema = {
   type: 'array',
   items: {
     ...schema
   }
-};
-
-const uischema: ControlElement = {
-  type: 'Control',
-  scope: '#'
 };
 
 const nestedSchema2 = {
