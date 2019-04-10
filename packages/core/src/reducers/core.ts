@@ -234,9 +234,11 @@ export const extractData = (state: JsonFormsCore) => get(state, 'data');
 export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
 
-const errorsAt = (instancePath: string, schema: JsonSchema, matchPath: (path: string) => boolean) => (
-  state: JsonFormsCore
-): ErrorObject[] => {
+const errorsAt = (
+  instancePath: string,
+  schema: JsonSchema,
+  matchPath: (path: string) => boolean
+) => (state: JsonFormsCore): ErrorObject[] => {
   const combinatorPaths = filter(
     state.errors,
     error => error.keyword === 'oneOf' || error.keyword === 'anyOf'

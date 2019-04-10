@@ -663,7 +663,6 @@ test('errorAt filters anyOf simple', t => {
   t.deepEqual(filtered[0], state.errors[1]);
 });
 
-
 test('errorAt filters oneOf objects', t => {
   const ajv = createAjv();
   const schema: JsonSchema = {
