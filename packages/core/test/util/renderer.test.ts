@@ -349,7 +349,7 @@ test('mapStateToControlProps - no duplicate error messages', t => {
     { uischema: coreUISchema }
   );
   // 'should be string' should only appear once
-  t.is(props.errors.split('\n').length, 3);
+  t.is(props.errors.split('\n').length, 1);
 });
 
 test('mapStateToControlProps - id', t => {

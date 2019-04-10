@@ -233,37 +233,28 @@ export const coreReducer = (
 export const extractData = (state: JsonFormsCore) => get(state, 'data');
 export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
-export const errorAt = (instancePath: string, schema: JsonSchema) => (
+
+const errorsAt = (instancePath: string, schema: JsonSchema, matchPath: (path: string) => boolean) => (
   state: JsonFormsCore
 ): ErrorObject[] => {
-  const oneOfDataPaths = filter(
+  const combinatorPaths = filter(
     state.errors,
-    error => error.keyword === 'oneOf'
+    error => error.keyword === 'oneOf' || error.keyword === 'anyOf'
   ).map(error => error.dataPath);
 
   return filter(state.errors, error => {
-    let result = error.dataPath === instancePath;
-    if (oneOfDataPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
+    let result = matchPath(error.dataPath);
+    if (combinatorPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
       result = result && isEqual(error.parentSchema, schema);
     }
     return result;
   });
 };
-export const subErrorsAt = (instancePath: string, schema: JsonSchema) => (
-  state: JsonFormsCore
-): ErrorObject[] => {
-  const path = `${instancePath}.`;
-  const oneOfDataPaths = filter(
-    state.errors,
-    error => error.keyword === 'oneOf'
-  ).map(error => error.dataPath);
-  return filter(state.errors, error => {
-    let result = error.dataPath.startsWith(path);
-    if (oneOfDataPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
-      result = result && isEqual(error.parentSchema, schema);
-    }
-    return result;
-  });
-};
+
+export const errorAt = (instancePath: string, schema: JsonSchema) =>
+  errorsAt(instancePath, schema, path => path === instancePath);
+export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
+  errorsAt(instancePath, schema, path => path.startsWith(instancePath));
+
 export const extractRefParserOptions = (state: JsonFormsCore) =>
   get(state, 'refParserOptions');
