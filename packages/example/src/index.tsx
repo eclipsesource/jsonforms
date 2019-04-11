@@ -65,11 +65,12 @@ const setupStore = (
     },
     {} as any
   );
+  const reducer = combineReducers({
+    jsonforms: jsonformsReducer({ ...additionalReducers }),
+    examples: exampleReducer
+  });
   const store = createStore(
-    combineReducers({
-      jsonforms: jsonformsReducer({ ...additionalReducers }),
-      examples: exampleReducer
-    }),
+    reducer,
     {
       jsonforms: {
         cells: cells,

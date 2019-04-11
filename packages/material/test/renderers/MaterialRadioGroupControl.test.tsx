@@ -37,7 +37,7 @@ import {
 import MaterialRadioGroupControl from '../../src/controls/MaterialRadioGroupControl';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 Enzyme.configure({ adapter: new Adapter() });
@@ -69,10 +69,8 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
       ]
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };

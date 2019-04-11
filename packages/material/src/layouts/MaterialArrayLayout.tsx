@@ -52,8 +52,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { connect, Dispatch } from 'react-redux';
-import { AnyAction } from 'redux';
+import { connect } from 'react-redux';
+import { AnyAction, Dispatch } from 'redux';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
 
 const paperStyle = { padding: 10 };
@@ -240,15 +240,13 @@ export interface DispatchPropsOfExpandPanel {
 }
 
 /**
- * Maps state to dispatch properties of an array control.
+ * Maps state to dispatch properties of an expand pandel control.
  *
  * @param dispatch the store's dispatch method
- * @returns {DispatchPropsOfArrayControl} dispatch props of an array control
+ * @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
  */
-export const mapDispatchToExpandPanelProps = (
-  dispatch: Dispatch<AnyAction>
-): DispatchPropsOfExpandPanel => ({
-  removeItems: (path: string, toDelete: number[]) => () => {
+export const mapDispatchToExpandPanelProps: (dispatch: Dispatch<AnyAction>) => DispatchPropsOfExpandPanel = dispatch => ({
+  removeItems: (path: string, toDelete: number[]) => (): void => {
     dispatch(
       update(path, array => {
         toDelete

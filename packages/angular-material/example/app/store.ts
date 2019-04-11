@@ -25,11 +25,11 @@
 import { combineReducers, Reducer } from 'redux';
 import { jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { angularMaterialRenderers } from '../../src/index';
-import { getExamples } from '@jsonforms/examples';
+import { ExampleDescription, getExamples } from '@jsonforms/examples';
 
 export const rootReducer: Reducer<JsonFormsState> = combineReducers({
   jsonforms: jsonformsReducer(),
-  examples: (state = []) => state
+  examples: (state: ExampleDescription[] = []) => state
 });
 
 export const initialState: any = {

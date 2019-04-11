@@ -30,7 +30,6 @@ import find from 'lodash/find';
 import reduce from 'lodash/reduce';
 import pickBy from 'lodash/pickBy';
 import omitBy from 'lodash/omitBy';
-import flip from 'lodash/flip';
 import startsWith from 'lodash/startsWith';
 import values from 'lodash/values';
 import each from 'lodash/each';
@@ -105,7 +104,9 @@ const findReferences = (
   reduce(
     schemaRefs,
     (prev, schemaRefValue) => {
-      let refs = pickBy(prev, flip(key => startsWith(key, schemaRefValue.uri)));
+      let refs = pickBy(prev, (_value, key) =>
+        startsWith(key, schemaRefValue.uri)
+      );
       if (extractedReferences[schemaRefValue.uri]) {
         refs = undefined;
       }

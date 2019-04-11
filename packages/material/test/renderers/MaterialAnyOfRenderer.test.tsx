@@ -29,7 +29,7 @@ import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Actions, ControlElement, getData, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { MaterialAnyOfRenderer, materialCells, materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { JsonForms } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -43,12 +43,8 @@ const initStore = () => {
       cells: materialCells
     }
   };
-
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   return store;
 };
 

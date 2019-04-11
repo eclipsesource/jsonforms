@@ -28,14 +28,7 @@ import installCE from 'document-register-element/pony';
 declare let global: any;
 installCE(global, 'force');
 global.requestAnimationFrame = (cb: any) => setTimeout(cb, 0);
-import {
-  Actions,
-  jsonformsReducer,
-  JsonFormsState,
-  JsonSchema,
-  UISchemaElement
-} from '@jsonforms/core';
-import { combineReducers, createStore, Store } from 'redux';
+import { JsonSchema, UISchemaElement } from '@jsonforms/core';
 import FakeLayout, { fakeLayoutTester } from './FakeLayout';
 import FakeControl, { fakeControlTester } from './FakeControl';
 
@@ -68,26 +61,5 @@ export const testRenderers = [
   { tester: fakeLayoutTester, renderer: FakeLayout },
   { tester: fakeControlTester, renderer: FakeControl }
 ];
-
-export const initJsonFormsStore = ({
-  data,
-  schema,
-  uischema,
-  ...props
-}: JsonFormsInitialState): Store<JsonFormsState> => {
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    {
-      jsonforms: {
-        renderers: testRenderers,
-        ...props
-      }
-    }
-  );
-
-  store.dispatch(Actions.init(data, schema, uischema));
-
-  return store;
-};
 
 export { FakeControl, FakeLayout, fakeLayoutTester, fakeControlTester };

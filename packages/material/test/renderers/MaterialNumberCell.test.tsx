@@ -47,10 +47,8 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };

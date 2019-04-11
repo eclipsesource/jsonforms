@@ -27,30 +27,12 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 
 import MaterialArrayControlRenderer from '../../src/complex/MaterialArrayControlRenderer';
-import { combineReducers, createStore, Store } from 'redux';
+import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
-
-export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells,
-    }
-  };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-
-  const { data, schema, uischema } = fixture;
-  store.dispatch(Actions.init(customData ? customData : data, schema, uischema));
-
-  return store;
-};
 
 const fixture: {
   data: any,
@@ -85,6 +67,21 @@ const fixture: {
     type: 'Control',
     scope: '#'
   }
+};
+
+export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+      cells: materialCells,
+    }
+  };
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
+  const { data, schema, uischema } = fixture;
+  store.dispatch(Actions.init(customData ? customData : data, schema, uischema));
+
+  return store;
 };
 
 describe('Material array control', () => {

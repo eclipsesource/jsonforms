@@ -34,23 +34,6 @@ import Adapter from 'enzyme-adapter-react-16';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-export const initJsonFormsStore = (): Store<JsonFormsState> => {
-  const s: JsonFormsState = {
-    jsonforms: {
-      renderers: materialRenderers,
-      cells: materialCells,
-    }
-  };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-
-  store.dispatch(Actions.init(data, schema, uischema));
-
-  return store;
-};
-
 const data = [
   {
     message: 'El Barto was here',
@@ -106,6 +89,20 @@ const nestedSchema2 = {
       }
     }
   }
+};
+
+export const initJsonFormsStore = (): Store<JsonFormsState> => {
+  const s: JsonFormsState = {
+    jsonforms: {
+      renderers: materialRenderers,
+      cells: materialCells,
+    }
+  };
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
+  store.dispatch(Actions.init(data, schema, uischema));
+
+  return store;
 };
 
 const uischemaOptions: {
