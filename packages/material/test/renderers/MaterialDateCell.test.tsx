@@ -37,7 +37,7 @@ import {
 import MaterialDateCell, { materialDateCellTester } from '../../src/cells/MaterialDateCell';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { combineReducers, createStore, Store, AnyAction, Reducer } from 'redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -50,10 +50,8 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };

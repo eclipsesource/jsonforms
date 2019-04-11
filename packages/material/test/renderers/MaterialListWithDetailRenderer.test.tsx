@@ -77,11 +77,8 @@ export const initJsonFormsStore = (overrideData?: any): Store<JsonFormsState> =>
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(overrideData ? overrideData : data, schema, uischema));
 
   return store;

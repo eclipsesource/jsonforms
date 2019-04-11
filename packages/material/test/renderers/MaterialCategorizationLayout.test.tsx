@@ -38,7 +38,7 @@ import {
 } from '@jsonforms/core';
 import Enzyme, { mount } from 'enzyme';
 
-import { combineReducers, createStore, Store } from 'redux';
+import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import MaterialCategorizationLayoutRenderer, {
   MaterialCategorizationLayoutRenderer as CategorizationLayoutRenderer,
   materialCategorizationTester
@@ -55,10 +55,8 @@ export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
 
   const { data, schema, uischema } = initState;
   store.dispatch(Actions.init(data, schema, uischema));

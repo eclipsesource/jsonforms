@@ -22,14 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { Reducer } from 'react';
 import { Provider } from 'react-redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Actions, ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
 import { MaterialAllOfRenderer, materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { AnyAction, combineReducers, createStore, Store } from 'redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -39,11 +39,8 @@ const initStore = () => {
       renderers: materialRenderers
     }
   };
-
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
 
   return store;
 };

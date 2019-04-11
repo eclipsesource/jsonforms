@@ -55,11 +55,8 @@ export const initJsonFormsStore = (initState: any): Store<JsonFormsState> => {
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
-
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   const { data, schema, uischema } = initState;
   store.dispatch(Actions.init(data, schema, uischema));
 

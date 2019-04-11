@@ -79,7 +79,7 @@
     "jest": "^23.0.0",
     "react-dom": "^16.4.0",
     "react-redux": "^6.0.0",
-    "redux-mock-store": "1.4.0",
+    "redux-mock-store": "1.5.3",
     "source-map-loader": "^0.2.3",
     "ts-jest": "^23.0.0",
     "ts-loader": "^5.3.3",

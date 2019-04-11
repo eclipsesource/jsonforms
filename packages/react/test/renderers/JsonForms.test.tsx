@@ -90,10 +90,8 @@ export const initJsonFormsStore = (
         ...props
       }
   };
-  return createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    initState
-  );
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  return createStore(reducer, initState);
 };
 
 const CustomRenderer1: StatelessRenderer<RendererProps> = () => (<h1>test</h1>);
@@ -259,7 +257,7 @@ test('render schema with $ref', () => {
       }
     }
   };
-  const resolvedSchema = {
+  const resolvedSchema: any = {
     definitions: {
       n: {
         type: 'number'
@@ -271,7 +269,7 @@ test('render schema with $ref', () => {
         type: 'number'
       }
     }
-  } as JsonSchema;
+  };
 
   const tester = (_uischema: UISchemaElement, s: JsonSchema) => s.properties.foo.type === 'number' ? 1 : -1;
 
@@ -317,7 +315,7 @@ test.skip('updates schema with ref', () => {
       }
     }
   };
-  const resolvedSchema = {
+  const resolvedSchema: any = {
     definitions: {
       n: {
         type: 'number'

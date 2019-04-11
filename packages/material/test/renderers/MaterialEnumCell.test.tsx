@@ -34,7 +34,7 @@ import {
 import MaterialEnumCell, { materialEnumCellTester } from '../../src/cells/MaterialEnumCell';
 import { Provider } from 'react-redux';
 import { materialRenderers } from '../../src';
-import { combineReducers, createStore, Store } from 'redux';
+import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -57,10 +57,8 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };

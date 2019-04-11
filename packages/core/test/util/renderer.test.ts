@@ -506,10 +506,8 @@ test('mapDispatchToArrayControlProps should remove items from array', t => {
       }
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    initState
-  );
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, initState);
   store.dispatch(init(data, schema, uischema));
   const props = mapDispatchToArrayControlProps(store.dispatch);
   props.removeItems('', [0, 1])();
@@ -649,10 +647,8 @@ test('should assign defaults to enum', t => {
       }
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    initState
-  );
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, initState);
   store.dispatch(
     init(data, schema, uischema, createAjv({ useDefaults: true }))
   );
@@ -691,10 +687,8 @@ test('should assign defaults to empty item within nested object of an array', t 
       }
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    initState
-  );
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, initState);
   store.dispatch(
     init(data, schema, uischema, createAjv({ useDefaults: true }))
   );
@@ -734,10 +728,8 @@ test('should assign defaults to newly added item within nested object of an arra
       }
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    initState
-  );
+  const reducer = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, initState);
   store.dispatch(
     init(data, schema, uischema, createAjv({ useDefaults: true }))
   );

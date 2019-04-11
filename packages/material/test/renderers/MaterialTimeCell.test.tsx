@@ -36,7 +36,7 @@ import {
 } from '@jsonforms/core';
 import TimeCell, { materialTimeCellTester } from '../../src/cells/MaterialTimeCell';
 import { Provider } from 'react-redux';
-import { combineReducers, createStore, Store } from 'redux';
+import { combineReducers, createStore, Store, Reducer, AnyAction } from 'redux';
 import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
@@ -62,10 +62,8 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
       renderers: materialRenderers
     }
   };
-  const store: Store<JsonFormsState> = createStore(
-    combineReducers({ jsonforms: jsonformsReducer() }),
-    s
-  );
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
+  const store: Store<JsonFormsState> = createStore(reducer, s);
   store.dispatch(Actions.init(testData, testSchema, testUiSchema));
   return store;
 };

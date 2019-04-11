@@ -86,12 +86,12 @@ const mergeProps = (
 };
 
 interface ExamplesState {
-  examples: ReactExampleDescription[];
+  data: ReactExampleDescription[];
   selectedExample: ReactExampleDescription;
 }
 
 const initState: ExamplesState = {
-  examples: [],
+  data: [],
   selectedExample: undefined
 };
 

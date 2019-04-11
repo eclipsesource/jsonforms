@@ -52,8 +52,8 @@
     ]
   },
   "dependencies": {
-    "react-dnd": "^2.6.0",
-    "react-dnd-html5-backend": "^2.6.0",
+    "react-dnd": "^7.4.5",
+    "react-dnd-html5-backend": "^7.4.4",
     "recompose": "^0.27.1"
   },
   "peerDependencies": {

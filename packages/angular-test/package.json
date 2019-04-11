@@ -6,7 +6,7 @@
   "dependencies": {
     "@jsonforms/angular": "^2.2.2",
     "@jsonforms/core": "^2.2.2",
-    "redux": "^3.0.0"
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "jasmine": "^3.2.0",
