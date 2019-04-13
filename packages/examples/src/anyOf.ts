@@ -92,6 +92,15 @@ const data = {
   }
 };
 
+const schema_simple = {
+  type: 'object',
+  properties: {
+    foo: {
+      anyOf: [{ type: 'string' }, { enum: ['foo', 'bar'] }]
+    }
+  }
+};
+
 registerExamples([
   {
     name: 'anyOf',
@@ -99,5 +108,12 @@ registerExamples([
     data,
     schema,
     uischema
+  },
+  {
+    name: 'anyOf_simple',
+    label: 'AnyOf Simple',
+    data: { foo: 'foo' },
+    schema: schema_simple,
+    uischema: undefined
   }
 ]);

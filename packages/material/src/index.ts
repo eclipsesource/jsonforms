@@ -55,16 +55,18 @@ import {
   materialEnumControlTester,
   MaterialIntegerControl,
   materialIntegerControlTester,
-  MaterialNumberControl,
-  materialNumberControlTester,
-  MaterialTextControl,
-  materialTextControlTester,
   MaterialNativeControl,
   materialNativeControlTester,
+  MaterialNumberControl,
+  materialNumberControlTester,
   MaterialRadioGroupControl,
   materialRadioGroupControlTester,
+  MaterialSimpleAnyOfControl,
+  materialSimpleAnyOfControlTester,
   MaterialSliderControl,
-  materialSliderControlTester
+  materialSliderControlTester,
+  MaterialTextControl,
+  materialTextControlTester
 } from './controls';
 import {
   MaterialArrayLayout,
@@ -151,6 +153,10 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
   {
     tester: materialListWithDetailTester,
     renderer: MaterialListWithDetailRenderer
+  },
+  {
+    tester: materialSimpleAnyOfControlTester,
+    renderer: MaterialSimpleAnyOfControl
   }
 ];
 

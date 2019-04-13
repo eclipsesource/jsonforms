@@ -53,6 +53,10 @@ import MaterialTextControl, {
   materialTextControlTester
 } from './MaterialTextControl';
 
+import MaterialSimpleAnyOfControl, {
+  materialSimpleAnyOfControlTester
+} from './MaterialSimpleAnyOfControl';
+
 export {
   MaterialBooleanControl,
   materialBooleanControlTester,
@@ -73,5 +77,7 @@ export {
   MaterialNumberControl,
   materialNumberControlTester,
   MaterialTextControl,
-  materialTextControlTester
+  materialTextControlTester,
+  MaterialSimpleAnyOfControl,
+  materialSimpleAnyOfControlTester
 };
