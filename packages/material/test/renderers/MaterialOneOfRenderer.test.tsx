@@ -32,6 +32,7 @@ import { Actions, ControlElement, getData, jsonformsReducer, JsonFormsState } fr
 import { materialCells, MaterialOneOfRenderer, materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import { JsonForms } from '@jsonforms/react';
+import { Tab } from '@material-ui/core';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -77,6 +78,159 @@ describe('Material oneOf renderer', () => {
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
+
+  it('should render and select first tab by default', () => {
+    const store = initStore();
+    const schema = {
+      type: 'object',
+      properties: {
+        value: {
+          oneOf: [
+            {
+              title: 'String',
+              type: 'string'
+            },
+            {
+              title: 'Number',
+              type: 'number'
+            }
+          ]
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/value'
+    };
+    store.dispatch(Actions.init({data: undefined}, schema, uischema));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialOneOfRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+
+    const firstTab = wrapper.find(Tab).first();
+    expect(firstTab.props().selected).toBeTruthy();
+  });
+  it('should render and select second tab due to datatype', () => {
+    const store = initStore();
+    const schema = {
+      type: 'object',
+      properties: {
+        value: {
+          oneOf: [
+            {
+              title: 'String',
+              type: 'string'
+            },
+            {
+              title: 'Number',
+              type: 'number'
+            }
+          ]
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/value'
+    };
+    store.dispatch(Actions.init({value: 5}, schema, uischema));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialOneOfRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+
+    const secondTab = wrapper.find(Tab).at(1);
+    expect(secondTab.props().selected).toBeTruthy();
+  });
+  it('should render and select second tab due to schema with additionalProperties', () => {
+    const store = initStore();
+    const schema = {
+      type: 'object',
+      properties: {
+        value: {
+          oneOf: [
+            {
+              title: 'String',
+              type: 'object',
+              properties: {
+                foo: {type: 'string'}
+              },
+              additionalProperties: false
+            },
+            {
+              title: 'Number',
+              type: 'object',
+              properties: {
+                bar: {type: 'string'}
+              },
+              additionalProperties: false
+            }
+          ]
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/value'
+    };
+    store.dispatch(Actions.init({value: {bar: 'bar'}}, schema, uischema));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialOneOfRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+
+    const secondTab = wrapper.find(Tab).at(1);
+    expect(secondTab.props().selected).toBeTruthy();
+  });
+  it('should render and select second tab due to schema with required', () => {
+    const store = initStore();
+    const schema = {
+      type: 'object',
+      properties: {
+        value: {
+          oneOf: [
+            {
+              title: 'String',
+              type: 'object',
+              properties: {
+                foo: {type: 'string'}
+              },
+              required: ['foo']
+            },
+            {
+              title: 'Number',
+              type: 'object',
+              properties: {
+                bar: {type: 'string'}
+              },
+              required: ['bar']
+            }
+          ]
+        }
+      }
+    };
+    const uischema: ControlElement = {
+      type: 'Control',
+      label: 'Value',
+      scope: '#/properties/value'
+    };
+    store.dispatch(Actions.init({value: {bar: 'bar'}}, schema, uischema));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialOneOfRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+
+    const secondTab = wrapper.find(Tab).at(1);
+    expect(secondTab.props().selected).toBeTruthy();
+  });
 
   it('should add an item at correct path', () => {
     const store = initStore();
