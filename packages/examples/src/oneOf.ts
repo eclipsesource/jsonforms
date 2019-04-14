@@ -225,6 +225,78 @@ const schema_1265_simple = {
   }
 };
 
+const schema_1273 = {
+  type: 'object',
+  properties: {
+    quantity: {
+      oneOf: [
+        {
+          $ref: '#/definitions/unrangedQuantity'
+        },
+        {
+          $ref: '#/definitions/rangedQuantity'
+        }
+      ]
+    }
+  },
+  definitions: {
+    unrangedQuantity: {
+      title: 'Value',
+      type: 'object',
+      properties: {
+        value: {
+          type: 'number'
+        },
+        unit: {
+          type: 'string'
+        }
+      },
+      required: ['value', 'unit']
+    },
+    rangedQuantity: {
+      title: 'Range',
+      type: 'object',
+      properties: {
+        valueLow: {
+          type: 'number'
+        },
+        valueHigh: {
+          type: 'number',
+          maximum: 10
+        },
+        unit: {
+          type: 'string'
+        }
+      },
+      required: ['valueLow', 'valueHigh', 'unit']
+    }
+  }
+};
+
+const schema_1273_simple = {
+  type: 'object',
+  properties: {
+    quantity: {
+      oneOf: [
+        {
+          type: 'string'
+        },
+        {
+          type: 'number'
+        }
+      ]
+    }
+  }
+};
+
+const data_1273 = {
+  quantity: {
+    valueLow: 1,
+    valueHigh: 100,
+    unit: 'kg'
+  }
+};
+
 registerExamples([
   {
     name: 'oneOf',
@@ -252,6 +324,20 @@ registerExamples([
     label: '1265 Simple',
     data: { coloursOrNumbers: 'Foo' },
     schema: schema_1265_simple,
+    uischema: undefined
+  },
+  {
+    name: '1273',
+    label: '1273',
+    data: data_1273,
+    schema: schema_1273,
+    uischema: undefined
+  },
+  {
+    name: '1273_simple',
+    label: 'Simple 1273',
+    data: { quantity: 5 },
+    schema: schema_1273_simple,
     uischema: undefined
   }
 ]);
