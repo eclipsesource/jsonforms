@@ -103,8 +103,8 @@ describe('Material Label Renderer', () => {
         />
       </Provider>
     );
-    const label = wrapper.find('h6').first();
-    expect(getComputedStyle(label.getDOMNode()).display).toBe('none');
+    const labels = wrapper.find('h6');
+    expect(labels.length).toBe(0);
   });
 
   it('should be shown by default', () => {

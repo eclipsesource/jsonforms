@@ -162,8 +162,8 @@ describe('Material input control', () => {
         <TestControl schema={schema} uischema={uischema} visible={false} />
       </Provider>
     );
-    const control = wrapper.find('div').first();
-    expect(getComputedStyle(control.getDOMNode()).display).toBe('none');
+    const inputs = wrapper.find('input');
+    expect(inputs.length).toBe(0);
   });
 
   it('should be shown by default', () => {

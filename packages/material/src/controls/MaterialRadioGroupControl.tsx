@@ -56,10 +56,6 @@ export class MaterialRadioGroupControl extends Control<ControlProps, ControlStat
             visible
         } = this.props;
         const isValid = errors.length === 0;
-        const style: { [x: string]: any } = {};
-        if (!visible) {
-            style.display = 'none';
-        }
         const mergedConfig = merge({}, config, this.props.uischema.options);
         const trim = mergedConfig.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);

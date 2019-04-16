@@ -32,7 +32,7 @@ import {
 } from '@jsonforms/core';
 import { Control } from '@jsonforms/react';
 
-import { InputLabel } from '@material-ui/core';
+import { Hidden, InputLabel } from '@material-ui/core';
 import { FormControl, FormHelperText } from '@material-ui/core';
 import merge from 'lodash/merge';
 
@@ -56,10 +56,6 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
     const isValid = errors.length === 0;
     const mergedConfig = merge({}, config, uischema.options);
     const trim = mergedConfig.trim;
-    const style: { [x: string]: any } = {};
-    if (!visible) {
-      style.display = 'none';
-    }
     const inputLabelStyle: { [x: string]: any } = {
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -75,34 +71,35 @@ export abstract class MaterialInputControl extends Control<ControlProps & WithIn
     );
     const InnerComponent = input;
     return (
-      <FormControl
-        style={style}
-        fullWidth={!trim}
-        onFocus={this.onFocus}
-        onBlur={this.onBlur}
-        id={id}
-      >
-        <InputLabel
-          htmlFor={id + '-input'}
-          error={!isValid}
-          style={inputLabelStyle}
+      <Hidden xsUp={!visible}>
+        <FormControl
+          fullWidth={!trim}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          id={id}
         >
-          {computeLabel(isPlainLabel(label) ? label : label.default, required)}
-        </InputLabel>
-        <InnerComponent
-          {...this.props}
-          id={id + '-input'}
-          isValid={isValid}
-          visible={visible}
-        />
-        <FormHelperText error={!isValid}>
-          {!isValid
-            ? errors
-            : showDescription
-            ? description
-            : null}
-        </FormHelperText>
-      </FormControl>
+          <InputLabel
+            htmlFor={id + '-input'}
+            error={!isValid}
+            style={inputLabelStyle}
+          >
+            {computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          </InputLabel>
+          <InnerComponent
+            {...this.props}
+            id={id + '-input'}
+            isValid={isValid}
+            visible={visible}
+          />
+          <FormHelperText error={!isValid}>
+            {!isValid
+              ? errors
+              : showDescription
+              ? description
+              : null}
+          </FormHelperText>
+        </FormControl>
+      </Hidden>
     );
   }
 }
