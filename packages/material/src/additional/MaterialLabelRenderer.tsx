@@ -32,8 +32,10 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { StatelessRenderer } from '@jsonforms/react';
-
-import Typography from '@material-ui/core/Typography';
+import {
+  Hidden,
+  Typography
+} from '@material-ui/core';
 import { connect } from 'react-redux';
 
 /**
@@ -48,14 +50,12 @@ export const materialLabelRendererTester: RankedTester = rankWith(1, uiTypeIs('L
 export const MaterialLabelRenderer: StatelessRenderer<RendererProps> =
   ({ uischema, visible }) => {
     const labelElement: LabelElement = uischema as LabelElement;
-    const style: {[x: string]: any} = {};
-    if (!visible) {
-      style.display = 'none';
-    }
     return (
-      <Typography variant='h6' style={style}>
-        {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
-      </Typography>
+      <Hidden xsUp={!visible}>
+        <Typography variant='h6'>
+          {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
+        </Typography>
+      </Hidden>
     );
   };
 
