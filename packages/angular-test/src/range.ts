@@ -354,9 +354,17 @@ export const rangeInputEventTest = <C extends JsonFormsControl, I>(
 
     const spy = spyOn(component, 'onChange');
 
-    fixture.debugElement
-      .query(By.css('.mat-slider-wrapper'))
-      .nativeElement.click();
+    const sliderElement = fixture.debugElement.query(By.css('.mat-slider'))
+      .nativeElement;
+
+    const trackElement = fixture.debugElement.query(
+      By.css('.mat-slider-wrapper')
+    ).nativeElement;
+    const dimensions = trackElement.getBoundingClientRect();
+    const x = dimensions.left + dimensions.width * 0.2;
+    const y = dimensions.top + dimensions.height * 0.2;
+
+    dispatchEvent(sliderElement, createMouseEvent('mousedown', x, y, 0));
 
     // trigger change detection
     fixture.detectChanges();
@@ -408,4 +416,38 @@ export const rangeErrorTest = <C extends JsonFormsControl, I>(
       debugErrors[errorTestInformation.indexOfElement].nativeElement.textContent
     ).toBe('Hi, this is me, test error!');
   });
+};
+
+/** Creates a browser MouseEvent with the specified options. */
+const createMouseEvent = (type: string, x = 0, y = 0, button = 0) => {
+  const event = document.createEvent('MouseEvent');
+
+  event.initMouseEvent(
+    type,
+    true /* canBubble */,
+    false /* cancelable */,
+    window /* view */,
+    0 /* detail */,
+    x /* screenX */,
+    y /* screenY */,
+    x /* clientX */,
+    y /* clientY */,
+    false /* ctrlKey */,
+    false /* altKey */,
+    false /* shiftKey */,
+    false /* metaKey */,
+    button /* button */,
+    null /* relatedTarget */
+  );
+
+  // `initMouseEvent` doesn't allow us to pass the `buttons` and
+  // defaults it to 0 which looks like a fake event.
+  Object.defineProperty(event, 'buttons', { get: () => 1 });
+
+  return event;
+};
+/** Utility to dispatch any event on a Node. */
+const dispatchEvent = (node: Node | Window, event: Event): Event => {
+  node.dispatchEvent(event);
+  return event;
 };
