@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
+import { NavParams } from '@ionic/angular';
 import { AbstractMasterPage } from '../AbstractMasterPage';
 import { MasterItem } from '../../list-with-detail-control';
 import {
@@ -35,7 +35,6 @@ import {
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
 
-@IonicPage()
 @Component({
   selector: 'jsonforms-master-detail-master',
   template: `

@@ -33,7 +33,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { Toggle } from 'ionic-angular';
+import { IonToggle } from '@ionic/angular';
 
 @Component({
   selector: 'jsonforms-toggle-control',
@@ -56,7 +56,7 @@ export class BooleanToggleControlRenderer extends JsonFormsControl {
     super(ngRedux);
   }
   isChecked = () => this.data || false;
-  getEventValue = (toggle: Toggle) => toggle.value;
+  getEventValue = (toggle: IonToggle) => toggle.value;
 }
 
 export const booleanToggleControlTester: RankedTester = rankWith(

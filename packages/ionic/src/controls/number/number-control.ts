@@ -108,8 +108,8 @@ export class NumberControlRenderer extends JsonFormsControl {
       // this doesn't seem to work reliably; an entered value will be formatted
       // the 1st time when blurring out, but it doesn't work the 2nd time
       // although the internal state seems correct
-      const pipe = new L10nDecimalPipe();
       this.locale = getLocale(this.ngRedux.getState());
+      const pipe = new L10nDecimalPipe(this.localeService);
       this.localeService.setDefaultLocale(this.locale);
       if (this.locale) {
         this.displayValue = pipe.transform(props.data, this.locale);

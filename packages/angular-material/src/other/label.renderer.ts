@@ -26,7 +26,6 @@ import has from 'lodash/has';
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsBaseRenderer } from '@jsonforms/angular';
-import { Subscription } from 'rxjs/Subscription';
 import {
   getData,
   isVisible,
@@ -37,6 +36,8 @@ import {
   rankWith,
   uiTypeIs
 } from '@jsonforms/core';
+import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'LabelRenderer',
   template: `
@@ -60,7 +61,7 @@ export class LabelRenderer extends JsonFormsBaseRenderer<LabelElement> {
       labelElement.text;
     this.subscription = this.ngRedux
       .select()
-      .map((s: JsonFormsState) => mapStateToProps(s, this.getOwnProps()))
+      .pipe(map((s: JsonFormsState) => mapStateToProps(s, this.getOwnProps())))
       .subscribe(props => {
         this.visible = props.visible;
       });

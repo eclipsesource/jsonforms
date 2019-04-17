@@ -36,9 +36,9 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators/map';
-import { startWith } from 'rxjs/operators/startWith';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { startWith } from 'rxjs/operators';
 
 /**
  * To use this component you will need to add your own tester:

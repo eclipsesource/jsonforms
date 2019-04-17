@@ -32,7 +32,7 @@ import {
   rankWith
 } from '@jsonforms/core';
 import { JsonFormsControl } from '@jsonforms/angular';
-import { DateTime } from 'ionic-angular';
+import { IonDatetime } from '@ionic/angular';
 
 const formats: { [locale: string]: string } = {
   'ar-SA': 'dd/MM/yy',
@@ -268,19 +268,20 @@ const getLocaleDateString = (locale: string): string =>
 export class DateControlRenderer extends JsonFormsControl {
   private dateFormat: string;
   private locale: string;
-  @ViewChild('date') datePicker: DateTime;
+  @ViewChild('date') datePicker: IonDatetime;
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
   }
 
   mapAdditionalProps() {
+    // TODO: DEPS
     this.locale = getLocale(this.ngRedux.getState());
     this.dateFormat = getLocaleDateString(this.locale).toUpperCase();
-    this.datePicker.setValue(this.data);
+    this.datePicker.value = this.data;//.setValue(this.data);
     this.datePicker.displayFormat = this.dateFormat;
     this.datePicker.pickerFormat = this.dateFormat;
-    this.datePicker._inputUpdated();
+    //this.datePicker._inputUpdated();
   }
 }
 

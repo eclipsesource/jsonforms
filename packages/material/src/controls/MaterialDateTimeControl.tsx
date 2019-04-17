@@ -45,7 +45,7 @@ import DateRangeIcon from '@material-ui/icons/DateRange';
 import EventIcon from '@material-ui/icons/Event';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { DateTimePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
-import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MomentUtils from '@date-io/moment';
 
 export class MaterialDateTimeControl extends Control<ControlProps, ControlState> {
   render() {
