@@ -29,11 +29,12 @@ import React from 'react';
 import {
   ArrayLayoutProps,
   composePaths,
+  computeLabel,
   ControlElement,
   createDefaultValue,
   findUISchema,
   getData,
-  Helpers,
+  isPlainLabel,
   JsonFormsRendererRegistryEntry,
   JsonFormsState,
   JsonSchema,
@@ -81,15 +82,15 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
       uischema,
       errors,
       addItem,
-      renderers
+      renderers,
+      label,
+      required
     } = this.props;
-    const labelDescription = Helpers.createLabelDescriptionFrom(uischema);
-    const label = labelDescription.show ? labelDescription.text : '';
 
     return (
       <Paper style={paperStyle}>
         <ArrayLayoutToolbar
-          label={label}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
           errors={errors}
           path={path}
           addItem={addItem}

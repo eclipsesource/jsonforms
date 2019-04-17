@@ -55,7 +55,7 @@ const ArrayControlRenderer  =
      }: ArrayControlProps & VanillaRendererProps) => {
 
         const controlElement = uischema as ControlElement;
-        const labelDescription = Helpers.createLabelDescriptionFrom(controlElement);
+        const labelDescription = Helpers.createLabelDescriptionFrom(controlElement, schema);
         const label = labelDescription.show ? labelDescription.text : '';
         const controlClassName =
             `control ${(Helpers.convertToValidClassName(controlElement.scope))}`;

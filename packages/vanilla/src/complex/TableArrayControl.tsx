@@ -95,7 +95,7 @@ class TableArrayControl extends React.Component<
       label: false,
       scope: schema.type === 'object' ? `#/properties/${key}` : '#'
     });
-    const labelObject = createLabelDescriptionFrom(controlElement);
+    const labelObject = createLabelDescriptionFrom(controlElement, schema);
     const isValid = errors.length === 0;
     const divClassNames = 'validation' + (isValid ? '' : ' validation_error');
     const labelText = isPlainLabel(label) ? label : label.default;

@@ -349,8 +349,6 @@ export const mapStateToControlProps = (
   const enabled = has(ownProps, 'enabled')
     ? ownProps.enabled
     : isEnabled(uischema, rootData, ownProps.path);
-  const labelDesc = createLabelDescriptionFrom(uischema);
-  const label = labelDesc.show ? labelDesc.text : '';
   const controlElement = uischema as ControlElement;
   const id = ownProps.id;
   const rootSchema = getSchema(state);
@@ -368,7 +366,8 @@ export const mapStateToControlProps = (
   const description =
     resolvedSchema !== undefined ? resolvedSchema.description : '';
   const data = Resolve.data(rootData, path);
-
+  const labelDesc = createLabelDescriptionFrom(uischema, resolvedSchema);
+  const label = labelDesc.show ? labelDesc.text : '';
   return {
     data,
     description,

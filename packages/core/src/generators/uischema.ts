@@ -49,12 +49,8 @@ const createLayout = (layoutType: string): Layout => ({
 /**
  * Creates a IControlObject with the given label referencing the given ref
  */
-export const createControlElement = (
-  label: string,
-  ref: string
-): ControlElement => ({
+export const createControlElement = (ref: string): ControlElement => ({
   type: 'Control',
-  label: label === undefined ? false : label,
   scope: ref
 });
 
@@ -138,10 +134,7 @@ const generateUISchema = (
   }
 
   if (isCombinator(jsonSchema)) {
-    const controlObject: ControlElement = createControlElement(
-      startCase(schemaName),
-      currentRef
-    );
+    const controlObject: ControlElement = createControlElement(currentRef);
     schemaElements.push(controlObject);
 
     return controlObject;
@@ -189,10 +182,7 @@ const generateUISchema = (
     case 'integer':
     /* falls through */
     case 'boolean':
-      const controlObject: ControlElement = createControlElement(
-        startCase(schemaName),
-        currentRef
-      );
+      const controlObject: ControlElement = createControlElement(currentRef);
       schemaElements.push(controlObject);
 
       return controlObject;

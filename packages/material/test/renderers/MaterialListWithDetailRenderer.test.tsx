@@ -57,7 +57,8 @@ const schema = {
     properties: {
       message: {
         type: 'string',
-        maxLength: 3
+        maxLength: 3,
+        title: 'Schema Title'
       },
       done: {
         type: 'boolean'
@@ -195,6 +196,56 @@ describe('Material list with detail renderer', () => {
 
     const controlFirst = wrapper.find('input').at(0);
     expect(controlFirst.props().value).toBe('Yolo');
+  });
+
+  it('ui schema label for list', () => {
+    const uischemaWithLabel = {
+      ...uischema,
+      label: "My awesome label"
+    }
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischemaWithLabel} />
+      </Provider>
+    );
+
+    const listLabel = wrapper.find('h6').at(0);
+    expect(listLabel.text()).toBe('My awesome label');
+  });
+
+  it('schema title for list', () => {
+    const titleSchema = {
+      ...schema,
+      title: "My awesome title"
+    };
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialListWithDetailRenderer schema={titleSchema} uischema={uischema} />
+      </Provider>
+    );
+
+    const listTitle = wrapper.find('h6').at(0);
+    expect(listTitle.text()).toBe('My awesome title');
+  });
+
+  it('choose appropriate labels in nested schema', () => {
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialListWithDetailRenderer schema={schema} uischema={uischema} />
+      </Provider>
+    );
+
+    const liSecond = wrapper.find('div[role="button"]').at(1);
+    liSecond.simulate('click');
+
+    const labels = wrapper.find('label');
+    expect(labels).toHaveLength(2);
+
+    const label = labels.at(0);
+    expect(label.text()).toBe('Schema Title');
   });
 
   it('add data to the array', () => {

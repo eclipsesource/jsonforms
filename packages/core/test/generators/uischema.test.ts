@@ -95,38 +95,31 @@ test('generate ui schema for Control element by resolving refs', t => {
   };
   const typeControl: ControlElement = {
     type: 'Control',
-    label: 'Type',
     scope: '#/properties/type'
   };
   const labelControl: ControlElement = {
     type: 'Control',
-    label: 'Label',
     scope: '#/properties/label'
   };
   const scopeControl: ControlElement = {
     type: 'Control',
-    label: 'Scope',
     scope: '#/properties/scope'
   };
   const effectControl: ControlElement = {
     type: 'Control',
-    label: 'Effect',
     scope: '#/properties/rule/properties/effect'
   };
 
   const conditionTypeControl: ControlElement = {
     type: 'Control',
-    label: 'Type',
     scope: '#/properties/rule/properties/condition/properties/type'
   };
   const conditionScopeControl: ControlElement = {
     type: 'Control',
-    label: 'Scope',
     scope: '#/properties/rule/properties/condition/properties/scope'
   };
   const conditionExpectedValueControl: ControlElement = {
     type: 'Control',
-    label: 'Expected Value',
     scope: '#/properties/rule/properties/condition/properties/expectedValue'
   };
   const conditionLayout: VerticalLayout = {
@@ -172,7 +165,6 @@ test('generate ui schema for schema with one property', t => {
   };
   const control = {
     type: 'Control',
-    label: 'Name',
     scope: '#/properties/name'
   };
   const uischema: Layout = {
@@ -187,7 +179,6 @@ test('generate ui schema for schema without object root', t => {
     type: 'string'
   };
   const control: ControlElement = {
-    label: '',
     type: 'Control',
     scope: '#'
   };
@@ -208,7 +199,6 @@ test('generate ui schema for schema with unspecified object root', t => {
   };
   const controlElement = {
     type: 'Control',
-    label: 'Age',
     scope: '#/properties/age'
   };
   const uischema: Layout = {
@@ -237,12 +227,10 @@ test(`nested object attributes`, t => {
   };
   const idControl: ControlElement = {
     type: 'Control',
-    label: 'Id',
     scope: '#/properties/id'
   };
   const nameControl: ControlElement = {
     type: 'Control',
-    label: 'Name',
     scope: '#/properties/private/properties/name'
   };
   const nestedLayout: VerticalLayout = {
@@ -270,12 +258,10 @@ test(`don't ignore non-json-schema id attributes`, t => {
   };
   const idControl: ControlElement = {
     type: 'Control',
-    label: 'Id',
     scope: '#/properties/id'
   };
   const nameControl: ControlElement = {
     type: 'Control',
-    label: 'Name',
     scope: '#/properties/name'
   };
   const uischema: Layout = {
@@ -336,57 +322,46 @@ test('generate ui schema for schema with multiple properties', t => {
     elements: [
       {
         type: 'Control',
-        label: 'Id',
         scope: '#/properties/id'
       },
       {
         type: 'Control',
-        label: 'Last Name',
         scope: '#/properties/lastName'
       },
       {
         type: 'Control',
-        label: 'Email',
         scope: '#/properties/email'
       },
       {
         type: 'Control',
-        label: 'First Name',
         scope: '#/properties/firstName'
       },
       {
         type: 'Control',
-        label: 'Gender',
         scope: '#/properties/gender'
       },
       {
         type: 'Control',
-        label: 'Active',
         scope: '#/properties/active'
       },
       {
         type: 'Control',
-        label: 'Registration Time',
         scope: '#/properties/registrationTime'
       },
       {
         type: 'Control',
-        label: 'Weight',
         scope: '#/properties/weight'
       },
       {
         type: 'Control',
-        label: 'Height',
         scope: '#/properties/height'
       },
       {
         type: 'Control',
-        label: 'Nationality',
         scope: '#/properties/nationality'
       },
       {
         type: 'Control',
-        label: 'Birth Date',
         scope: '#/properties/birthDate'
       }
     ] as ControlElement[]
@@ -409,7 +384,6 @@ test('generate named array control', t => {
     }
   };
   const control: ControlElement = {
-    label: 'Comments',
     type: 'Control',
     scope: '#/properties/comments'
   };
@@ -430,7 +404,6 @@ test('generate unnamed array control', t => {
     }
   };
   const control: ControlElement = {
-    label: '',
     type: 'Control',
     scope: '#'
   };
@@ -450,7 +423,6 @@ test('generate unnamed array control w/o type', t => {
     }
   };
   const control = {
-    label: '',
     type: 'Control',
     scope: '#'
   };
@@ -495,7 +467,6 @@ test('generate control for oneOf', t => {
     ]
   };
   const control = {
-    label: '',
     type: 'Control',
     scope: '#'
   };
@@ -522,7 +493,6 @@ test('generate control for anyOf', t => {
     ]
   };
   const control = {
-    label: '',
     type: 'Control',
     scope: '#'
   };
@@ -549,7 +519,6 @@ test('generate control for allOf', t => {
     ]
   };
   const control = {
-    label: '',
     type: 'Control',
     scope: '#'
   };
@@ -582,7 +551,6 @@ test('no separate control for oneOf in array', t => {
     }
   };
   const control = {
-    label: 'Myarray',
     type: 'Control',
     scope: '#/properties/myarray'
   };
@@ -617,7 +585,6 @@ test('generate control for nested oneOf', t => {
     }
   };
   const control = {
-    label: 'Name Or Age',
     type: 'Control',
     scope: '#/properties/myarray/properties/nameOrAge'
   };

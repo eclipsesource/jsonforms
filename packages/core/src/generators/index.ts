@@ -34,7 +34,7 @@ export const Generate: {
     layoutType?: string,
     prefix?: string
   ): UISchemaElement;
-  controlElement(label: string, ref: string): ControlElement;
+  controlElement(ref: string): ControlElement;
 } = {
   jsonSchema: generateJsonSchema,
   uiSchema: generateDefaultUISchema,

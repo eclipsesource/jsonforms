@@ -69,7 +69,8 @@ const schema = {
         },
         title: {
           type: 'string',
-          minLength: 5
+          minLength: 5,
+          title: 'Official Title'
         },
         ordered: { type: 'boolean' },
         processId: {

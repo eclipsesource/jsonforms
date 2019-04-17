@@ -238,5 +238,43 @@ describe('Material array layout', () => {
 
     const materialArrayLayout = wrapper.find(MaterialArrayLayout);
     expect(materialArrayLayout.props().renderers).toHaveLength(0);
-  })
+  });
+
+  it('ui schema label for array', () => {
+    const uischemaWithLabel = {
+      ...uischema,
+      label: "My awesome label"
+    }
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithLabel}
+        />
+      </Provider>
+    );
+
+    const listLabel = wrapper.find('h6').at(0);
+    expect(listLabel.text()).toBe('My awesome label');
+  });
+
+  it('schema title for array', () => {
+    const titleSchema = {
+      ...schema,
+      title: "My awesome title"
+    };
+    const store = initJsonFormsStore();
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={titleSchema}
+          uischema={uischema}
+        />
+      </Provider>
+    );
+
+    const listTitle = wrapper.find('h6').at(0);
+    expect(listTitle.text()).toBe('My awesome title');
+  });
 });
