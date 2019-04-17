@@ -25,9 +25,16 @@
 import startCase from 'lodash/startCase';
 
 import { ControlElement, LabelDescription } from '../models/uischema';
+import { JsonSchema } from '../models/jsonSchema';
 
-const deriveLabel = (controlElement: ControlElement): string => {
-  if (controlElement.scope !== undefined) {
+const deriveLabel = (
+  controlElement: ControlElement,
+  schemaElement?: JsonSchema
+): string => {
+  if (schemaElement && typeof schemaElement.title === 'string') {
+    return schemaElement.title;
+  }
+  if (typeof controlElement.scope === 'string') {
     const ref = controlElement.scope;
     const label = ref.substr(ref.lastIndexOf('/') + 1);
 
@@ -42,48 +49,35 @@ export const createCleanLabel = (label: string): string => {
 };
 
 /**
- * Return a label object based on the given control element.
+ * Return a label object based on the given control and schema element.
  * @param {ControlElement} withLabel the UI schema to obtain a label object for
+ * @param {JsonSchema} schema optional: the corresponding schema element
  * @returns {LabelDescription}
  */
 export const createLabelDescriptionFrom = (
-  withLabel: ControlElement
+  withLabel: ControlElement,
+  schema?: JsonSchema
 ): LabelDescription => {
   const labelProperty = withLabel.label;
-  const derivedLabel = deriveLabel(withLabel);
   if (typeof labelProperty === 'boolean') {
-    if (labelProperty) {
-      return {
-        text: derivedLabel,
-        show: labelProperty
-      };
-    } else {
-      return {
-        text: derivedLabel,
-        show: labelProperty as boolean
-      };
-    }
-  } else if (typeof labelProperty === 'string') {
-    return {
-      text: labelProperty as string,
-      show: true
-    };
-  } else if (typeof labelProperty === 'object') {
-    const show = labelProperty.hasOwnProperty('show')
-      ? labelProperty.show
-      : true;
-    const label = labelProperty.hasOwnProperty('text')
-      ? labelProperty.text
-      : derivedLabel;
-
-    return {
-      text: label,
-      show
-    };
-  } else {
-    return {
-      text: derivedLabel,
-      show: true
-    };
+    return labelDescription(deriveLabel(withLabel, schema), labelProperty);
   }
+  if (typeof labelProperty === 'string') {
+    return labelDescription(labelProperty, true);
+  }
+  if (typeof labelProperty === 'object') {
+    const label =
+      typeof labelProperty.text === 'string'
+        ? labelProperty.text
+        : deriveLabel(withLabel, schema);
+    const show =
+      typeof labelProperty.show === 'boolean' ? labelProperty.show : true;
+    return labelDescription(label, show);
+  }
+  return labelDescription(deriveLabel(withLabel, schema), true);
 };
+
+const labelDescription = (text: string, show: boolean): LabelDescription => ({
+  text: text,
+  show: show
+});

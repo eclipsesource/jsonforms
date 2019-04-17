@@ -33,6 +33,7 @@ export const schema = {
     enableArray: { type: 'boolean' },
     comments: {
       type: 'array',
+      title: 'Messages',
       items: {
         type: 'object',
         properties: {

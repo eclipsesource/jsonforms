@@ -43,7 +43,6 @@ import {
   ArrayLayoutProps,
   ControlElement,
   formatErrorMessage,
-  Generate,
   getErrorAt,
   JsonFormsState,
   JsonSchema,
@@ -161,6 +160,12 @@ const mapStateToNonEmptyCellProps = (
   };
 };
 
+const controlWithoutLabel = (scope: string): ControlElement => ({
+  type: 'Control',
+  scope: scope,
+  label: false
+});
+
 class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
   render() {
     const { path, propName, schema, rootSchema, errors } = this.props;
@@ -176,16 +181,13 @@ class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
               `#/properties/${propName}`,
               rootSchema
             )}
-            uischema={Generate.controlElement(
-              undefined,
-              `#/properties/${propName}`
-            )}
+            uischema={controlWithoutLabel(`#/properties/${propName}`)}
             path={path}
           />
         ) : (
           <DispatchCell
             schema={schema}
-            uischema={Generate.controlElement(undefined, '#')}
+            uischema={controlWithoutLabel('#')}
             path={path}
           />
         )}

@@ -26,10 +26,11 @@ import {
   and,
   ArrayLayoutProps,
   composePaths,
+  computeLabel,
   createDefaultValue,
   findUISchema,
   getData,
-  Helpers,
+  isPlainLabel,
   isObjectArray,
   JsonFormsState,
   JsonSchema,
@@ -85,15 +86,11 @@ export class MaterialListWithDetailRenderer extends React.Component<
   };
   createDefaultValue = () => createDefaultValue(this.props.schema);
   render() {
-    const {uischema, visible, errors, path, data, schema} = this.props;
-    const labelDescription = Helpers.createLabelDescriptionFrom(
-      uischema
-    );
-    const label = labelDescription.show ? labelDescription.text : '';
+    const {required, visible, errors, path, data, schema, label} = this.props;
     return (
       <Hidden xsUp={!visible}>
         <ArrayLayoutToolbar
-          label={label}
+          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
           errors={errors}
           path={path}
           addItem={this.addItem}
