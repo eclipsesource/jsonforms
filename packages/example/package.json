@@ -1,11 +1,11 @@
 {
   "name": "@jsonforms/examples-react",
-  "version": "2.2.2",
+  "version": "2.2.3-alpha.0",
   "private": true,
   "dependencies": {
-    "@jsonforms/core": "^2.2.2",
-    "@jsonforms/examples": "^2.2.2",
-    "@jsonforms/react": "^2.2.2",
+    "@jsonforms/core": "^2.2.3-alpha.0",
+    "@jsonforms/examples": "^2.2.3-alpha.0",
+    "@jsonforms/react": "^2.2.3-alpha.0",
     "@material-ui/core": "^3.3.1",
     "lodash": "^4.17.4",
     "react": "^16.4.0",
