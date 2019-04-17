@@ -44,7 +44,6 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import { NgRedux } from '@angular-redux/store';
-import 'rxjs/add/operator/map';
 import { UnknownRenderer } from './unknown.component';
 import { JsonFormsBaseRenderer } from './base.renderer';
 import { Subscription } from 'rxjs';

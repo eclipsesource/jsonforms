@@ -41,20 +41,20 @@
   },
   "peerDependencies": {
     "@angular-redux/store": "^9.0.0",
-    "@angular/core": "^5.2.10",
-    "@angular/forms": "^5.2.10",
+    "@angular/core": "^7.2.13",
+    "@angular/forms": "^7.2.13",
     "@jsonforms/core": "^2.2.2",
     "redux": "^4.0.1",
-    "rxjs": "^5.5.7"
+    "rxjs": "^6.4.0"
   },
   "devDependencies": {
     "@angular-redux/store": "^9.0.0",
-    "@angular/core": "^5.2.10",
-    "@angular/forms": "^5.2.10",
+    "@angular/core": "^7.2.13",
+    "@angular/forms": "^7.2.13",
     "@jsonforms/core": "^2.2.2",
     "copy-webpack-plugin": "^4.5.1",
     "redux": "^4.0.1",
-    "rxjs": "^5.5.7",
+    "rxjs": "^6.4.0",
     "webpack-dev-server": "^3.2.1"
   }
 }

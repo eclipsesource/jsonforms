@@ -26,7 +26,7 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { Actions, JsonFormsState, setLocale } from '@jsonforms/core';
 import { ExampleDescription } from '@jsonforms/examples';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   template: `

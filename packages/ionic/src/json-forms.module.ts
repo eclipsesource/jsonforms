@@ -23,7 +23,7 @@
   THE SOFTWARE.
 */
 import { NgModule } from '@angular/core';
-import { IonicModule } from 'ionic-angular';
+import { IonicModule } from '@ionic/angular';
 import { IonicSelectableModule } from 'ionic-selectable';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {

@@ -33,8 +33,7 @@ import {
   uiTypeIs
 } from '@jsonforms/core';
 import { Component, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { CategoryRenderer } from './category/category';
+import { NavController } from '@ionic/angular';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 
@@ -99,16 +98,19 @@ export class CategorizationMenuLayoutRenderer extends JsonFormsIonicLayout {
 
   selectCategory(category: Category) {
     this.selectedCategory = category;
-    this.nav.setRoot(CategoryRenderer, { category });
+    // TODO: DEPS
+    //this.nav.navigateRoot.(CategoryRenderer, { category });
   }
 
   canGoBack() {
+    // TODO: DEPS
     // FIXME: addToStack allows explicit control when to display the 'Go back' button,
     // FIXME: is there a better way to control this?
-    const count = this.nav
-      .getViews()
-      .reduce((acc, view) => acc + (view.data.addToNavStack ? 1 : 0), 0);
-    return count > 1;
+    //const count = this.nav.
+    //  .getViews()
+    //  .reduce((acc, view) => acc + (view.data.addToNavStack ? 1 : 0), 0);
+    //return count > 1;
+    return false;
   }
 
   goBack() {

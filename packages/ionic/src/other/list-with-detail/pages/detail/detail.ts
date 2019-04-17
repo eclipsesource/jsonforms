@@ -23,10 +23,9 @@
   THE SOFTWARE.
 */
 import { Component } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
+import { NavParams } from '@ionic/angular';
 import { AbstractDetailPage } from '../AbstractDetailPage';
 
-@IonicPage()
 @Component({
   selector: 'jsonforms-master-detail-detail',
   template: `

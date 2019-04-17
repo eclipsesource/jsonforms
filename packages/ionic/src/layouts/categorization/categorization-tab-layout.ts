@@ -37,8 +37,8 @@ import { Component, ViewChild } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 import { CategoryRenderer } from './category/category';
-import { ParamsService } from '../../services/ParamsService';
-import { Tab, Tabs } from 'ionic-angular';
+//import { ParamsService } from '../../services/ParamsService';
+import { IonTabs } from '@ionic/angular';
 
 interface CategoryRenderParams {
   renderer: typeof CategoryRenderer;
@@ -67,12 +67,13 @@ interface CategoryRenderParams {
   `
 })
 export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
-  @ViewChild('tabs') tabs: Tabs;
+  @ViewChild('tabs') tabs: IonTabs;
   categoryPages: CategoryRenderParams[];
 
   constructor(
     ngRedux: NgRedux<JsonFormsState>,
-    private paramsService: ParamsService
+    // TODO: DEPS
+    //private paramsService: ParamsService
   ) {
     super(ngRedux);
     this.categoryPages = [];
@@ -97,27 +98,28 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
       });
     });
 
+    // TODO: DEPS
     // Tabs do not seem to update correctly, hence this workaround
     // this issue seems to be the as described in https://github.com/ionic-team/ionic/issues/13509
-    const contained: string[] = [];
-    categorization.elements.forEach((category: Category) => {
-      const key =
-        CategoryRenderer.CATEGORY_KEY + `${category.label}-${this.path}`;
-      contained.push(category.label);
-      this.paramsService.set(key, {
-        uischema: category,
-        label: category.label,
-        schema: this.schema,
-        path: this.path
-      });
-    });
-    const indices: number[] = [];
-    this.tabs._tabs.forEach((tab: Tab, idx: number) => {
-      if (contained.indexOf(tab.tabTitle) === -1) {
-        indices.push(idx);
-      }
-    });
-    indices.reverse().forEach(idx => this.tabs._tabs.splice(idx, 1));
+    //const contained: string[] = [];
+    //categorization.elements.forEach((category: Category) => {
+    //  const key =
+    //    CategoryRenderer.CATEGORY_KEY + `${category.label}-${this.path}`;
+    //  contained.push(category.label);
+    //  this.paramsService.set(key, {
+    //    uischema: category,
+    //    label: category.label,
+    //    schema: this.schema,
+    //    path: this.path
+    //  });
+    //});
+    //const indices: number[] = [];
+    //this.tabs.tabBar. forEach((tab: Tab, idx: number) => {
+    //  if (contained.indexOf(tab.tabTitle) === -1) {
+    //    indices.push(idx);
+    //  }
+    //});
+    //indices.reverse().forEach(idx => this.tabs._tabs.splice(idx, 1));
   };
 
   trackByCategory(_i: number, categoryPage: any) {

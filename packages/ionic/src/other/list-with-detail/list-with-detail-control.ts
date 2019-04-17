@@ -40,7 +40,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Platform, IonNav } from '@ionic/angular';
 import { NgRedux } from '@angular-redux/store';
 import { MasterPage } from './pages/master/master';
 import { DetailPage } from './pages/detail/detail';
@@ -78,8 +78,8 @@ const isMasterPage = (page: any) => {
   `
 })
 export class ListWithDetailControl extends JsonFormsArrayControl {
-  @ViewChild('masterNav') masterNav: Nav;
-  @ViewChild('detailNav') detailNav: Nav;
+  @ViewChild('masterNav') masterNav: IonNav;
+  @ViewChild('detailNav') detailNav: IonNav;
   masterPage: any;
   detailPage: any;
   masterItems: MasterItem[];
@@ -163,41 +163,48 @@ export class ListWithDetailControl extends JsonFormsArrayControl {
   showDetail = (): Promise<any> => {
     const activeDetailView = this.detailNav.getActive();
 
-    return this.detailNav.popToRoot({ animate: false }).then(() => {
+    return this.detailNav.popToRoot({ animated: false }).then(() => {
       if (isMasterPage(activeDetailView)) {
         // set empty detail
         return this.detailNav.setRoot(DetailPage);
       } else if (activeDetailView !== undefined) {
+        // TODO: DEPS
         // update detail, such that navbar in detail disappears
-        return this.updateDetail(activeDetailView.data.item).then(() =>
-          this.updateMaster()
-        );
+       // return this.updateDetail(activeDetailView.data.item).then(() =>
+       //   this.updateMaster()
+       // );
       }
     });
   };
 
   hideDetail = (): Promise<any> => {
-    const activeDetailView = this.detailNav.getActive();
-    const activeMasterView = this.masterNav.getActive();
-
     // set master as root on detail nav
-    return this.detailNav
-      .setRoot(activeMasterView.component, activeMasterView.data, {
-        animate: false
-      })
-      .then(() => {
-        if (activeDetailView.data.item && activeDetailView.data.item.path) {
-          // update detail, such that navbar in detail appears
-          return this.updateDetail(activeDetailView.data.item);
-        }
-      });
-  };
+    return Promise.all(
+      [
+        this.masterNav.getActive(),
+        this.detailNav.getActive()
+      ]
+    ).then(([activeMasterView, _]) => {
+      this.detailNav.setRoot(
+        activeMasterView.component,
+        activeMasterView.params,
+        { animated: false }
+      )
+     // TODO: DEPS
+     // .then(() => {
+     //   if (activeDetailView.params) {
+     //     // update detail, such that navbar in detail appears
+     //     return this.updateDetail(activeDetailView.data.item);
+     //   }
+     // });
+    });
+  }
 
   updateMaster = () => {
     if (this._isSplit) {
-      this.masterNav.setRoot(MasterPage, this.masterParams, { animate: false });
+      this.masterNav.setRoot(MasterPage, this.masterParams, { animated: false });
     } else {
-      this.detailNav.setRoot(MasterPage, this.masterParams, { animate: false });
+      this.detailNav.setRoot(MasterPage, this.masterParams, { animated: false });
     }
   };
 
@@ -211,9 +218,9 @@ export class ListWithDetailControl extends JsonFormsArrayControl {
     };
     if (!this._isSplit) {
       // push such that we have a back button
-      return this.detailNav.push(DetailPage, params, { animate: false });
+      return this.detailNav.push(DetailPage, params, { animated: false });
     } else {
-      return this.detailNav.setRoot(DetailPage, params, { animate: false });
+      return this.detailNav.setRoot(DetailPage, params, { animated: false });
     }
   };
 

@@ -46,7 +46,7 @@ import EventIcon from '@material-ui/icons/Event';
 import moment from 'moment';
 import { Moment } from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
-import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MomentUtils from '@date-io/moment';
 import { connect } from 'react-redux';
 
 export interface DateControl {
