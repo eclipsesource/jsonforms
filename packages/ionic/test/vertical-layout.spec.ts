@@ -22,75 +22,75 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { TestBed } from '@angular/core/testing';
-import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
-import { IonicModule, Platform } from 'ionic-angular';
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
-import { setupMockStore } from '@jsonforms/angular-test';
-import { initComponent } from '@jsonforms/angular-test';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { VerticalLayoutRenderer } from '../src';
-import { PlatformMock } from '../test-config/mocks-ionic';
-
-describe('Vertical layout', () => {
-  let fixture: any;
-  let component: any;
-
-  const data = { foo: true };
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'boolean'
-      }
-    }
-  };
-  const uischema = {
-    type: 'VerticalLayout',
-    elements: [
-      {
-        type: 'Control',
-        scope: '#/properties/foo'
-      }
-    ]
-  };
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [UnknownRenderer, JsonFormsOutlet, VerticalLayoutRenderer],
-      imports: [IonicModule.forRoot(VerticalLayoutRenderer)],
-      providers: [
-        { provide: Platform, useClass: PlatformMock },
-        { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-      ]
-    })
-      .overrideModule(BrowserDynamicTestingModule, {
-        set: {
-          entryComponents: [UnknownRenderer]
-        }
-      })
-      .compileComponents();
-
-    MockNgRedux.reset();
-    fixture = TestBed.createComponent(VerticalLayoutRenderer);
-    component = fixture.componentInstance;
-  });
-
-  it('add elements', () => {
-    initComponent(fixture, setupMockStore(fixture, { data, schema, uischema }));
-    MockNgRedux.reset();
-    component.uischema = {
-      type: 'VerticalLayout',
-      elements: [
-        ...uischema.elements,
-        {
-          type: 'Control',
-          scope: '#properties/bar'
-        }
-      ]
-    };
-    fixture.detectChanges();
-    expect(component.uischema.elements.length).toBe(2);
-  });
-});
+// import { TestBed } from '@angular/core/testing';
+// import { JsonFormsOutlet, UnknownRenderer } from '@jsonforms/angular';
+// import { IonicModule, Platform } from 'ionic-angular';
+// import { NgRedux } from '@angular-redux/store';
+// import { MockNgRedux } from '@angular-redux/store/testing';
+// import { setupMockStore } from '@jsonforms/angular-test';
+// import { initComponent } from '@jsonforms/angular-test';
+// import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+// import { VerticalLayoutRenderer } from '../src';
+// import { PlatformMock } from '../test-config/mocks-ionic';
+// 
+// describe('Vertical layout', () => {
+//   let fixture: any;
+//   let component: any;
+// 
+//   const data = { foo: true };
+//   const schema = {
+//     type: 'object',
+//     properties: {
+//       foo: {
+//         type: 'boolean'
+//       }
+//     }
+//   };
+//   const uischema = {
+//     type: 'VerticalLayout',
+//     elements: [
+//       {
+//         type: 'Control',
+//         scope: '#/properties/foo'
+//       }
+//     ]
+//   };
+// 
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({
+//       declarations: [UnknownRenderer, JsonFormsOutlet, VerticalLayoutRenderer],
+//       imports: [IonicModule.forRoot(VerticalLayoutRenderer)],
+//       providers: [
+//         { provide: Platform, useClass: PlatformMock },
+//         { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+//       ]
+//     })
+//       .overrideModule(BrowserDynamicTestingModule, {
+//         set: {
+//           entryComponents: [UnknownRenderer]
+//         }
+//       })
+//       .compileComponents();
+// 
+//     MockNgRedux.reset();
+//     fixture = TestBed.createComponent(VerticalLayoutRenderer);
+//     component = fixture.componentInstance;
+//   });
+// 
+//   it('add elements', () => {
+//     initComponent(fixture, setupMockStore(fixture, { data, schema, uischema }));
+//     MockNgRedux.reset();
+//     component.uischema = {
+//       type: 'VerticalLayout',
+//       elements: [
+//         ...uischema.elements,
+//         {
+//           type: 'Control',
+//           scope: '#properties/bar'
+//         }
+//       ]
+//     };
+//     fixture.detectChanges();
+//     expect(component.uischema.elements.length).toBe(2);
+//   });
+// });
