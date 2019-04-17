@@ -45,14 +45,14 @@
 // import { IonicModule, Label, Platform } from 'ionic-angular';
 // import { NgRedux } from '@angular-redux/store';
 // import { Subject } from 'rxjs';
-// 
+//
 // describe('Ionic range control tester', () => {
 //   const uischema = {
 //     type: 'Control',
 //     scope: '#/properties/foo',
 //     options: { slider: true }
 //   };
-// 
+//
 //   it('should succeed with floats', () => {
 //     expect(
 //       rangeControlTester(uischema, {
@@ -84,13 +84,13 @@
 //     ).toBe(4);
 //   });
 // });
-// 
+//
 // describe('ionic range control', () => {
 //   let fixture: ComponentFixture<any>;
 //   let component: any;
 //   let rangeElement: DebugElement;
 //   let rangeInstance: any;
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [RangeControlRenderer],
@@ -100,14 +100,14 @@
 //         { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 //       ]
 //     }).compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(RangeControlRenderer);
 //     component = fixture.componentInstance;
 //     rangeElement = fixture.debugElement.queryAll(By.css('ion-range'))[0];
 //     rangeInstance = rangeElement.componentInstance;
 //   });
-// 
+//
 //   // ngModel binding is async
 //   it('should render integer', async(() => {
 //     const schema = {
@@ -134,7 +134,7 @@
 //         })
 //     );
 //   }));
-// 
+//
 //   it('should render floats', async(() => {
 //     initAndExpect(fixture, rangeDefaultTestData, () =>
 //       fixture.whenStable().then(() => {
@@ -148,7 +148,7 @@
 //       })
 //     );
 //   }));
-// 
+//
 //   it('should support updating the state', async(() => {
 //     updateFloatState(fixture, rangeDefaultTestData, () =>
 //       fixture.whenStable().then(() => {
@@ -156,7 +156,7 @@
 //       })
 //     );
 //   }));
-// 
+//
 //   it('should update with undefined value', async(() => {
 //     updateWithUndefined(
 //       fixture,
@@ -171,7 +171,7 @@
 //         })
 //     );
 //   }));
-// 
+//
 //   it('should update with null value', async(() => {
 //     updateWithNull(
 //       fixture,
@@ -186,7 +186,7 @@
 //         })
 //     );
 //   }));
-// 
+//
 //   it('should not update with wrong ref', async(() => {
 //     updateWithSiblingNumberValue(
 //       fixture,
@@ -201,7 +201,7 @@
 //         })
 //     );
 //   }));
-// 
+//
 //   // store needed as we evaluate the calculated enabled value to disable/enable the control
 //   it('can be disabled', async(() => {
 //     canBeDisabled(fixture, rangeDefaultTestData, () =>
@@ -210,7 +210,7 @@
 //       })
 //     );
 //   }));
-// 
+//
 //   // store needed as we evaluate the calculated enabled value to disable/enable the control
 //   it('can be hidden', async(() => {
 //     canBeHidden(fixture, rangeDefaultTestData, () =>
@@ -219,7 +219,7 @@
 //         .then(() => expect(rangeElement.nativeElement.hidden).toBe(true))
 //     );
 //   }));
-// 
+//
 //   it('id should be present in output', async(() => {
 //     const mockSubStore: Subject<any> = setupMockStore(
 //       fixture,
@@ -227,19 +227,19 @@
 //     );
 //     component.id = 'myId';
 //     initComponent(fixture, mockSubStore);
-// 
+//
 //     fixture.whenStable().then(() => {
 //       expect(rangeElement.nativeElement.id).toBe('myId');
 //     });
 //   }));
-// 
+//
 //   it('should support update via input event', async(() => {
 //     initComponent(fixture, setupMockStore(fixture, rangeDefaultTestData));
 //     const spy = spyOn(component, 'onChange').and.callThrough();
 //     rangeElement.componentInstance.ionChange.emit(456.456);
 //     expect(spy).toHaveBeenCalled();
 //   }));
-// 
+//
 //   it('should support displaying errors', async(() => {
 //     // initComponent(fixture, setupMockStore(fixture, rangeDefaultTestData));
 //     showErrors(fixture, rangeDefaultTestData, () =>

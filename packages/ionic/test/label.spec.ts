@@ -31,7 +31,7 @@
 // import { JsonSchema, LabelElement } from '@jsonforms/core';
 // import { LabelRenderer, labelTester } from '../src';
 // import { PlatformMock } from '../test-config/mocks-ionic';
-// 
+//
 // const data = {};
 // const schema: JsonSchema = {
 //   type: 'object',
@@ -45,16 +45,16 @@
 //   type: 'Label',
 //   text: 'FooBar'
 // };
-// 
+//
 // describe('Ionic label field tester', () => {
 //   it('should succeed', () => {
 //     expect(labelTester(uischema, schema)).toBe(4);
 //   });
 // });
-// 
+//
 // describe('Ionic label base tests', () => {
 //   let fixture: ComponentFixture<LabelRenderer>;
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [LabelRenderer],
@@ -64,11 +64,11 @@
 //         { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 //       ]
 //     }).compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(LabelRenderer);
 //   });
-// 
+//
 //   it('should render', () => {
 //     initAndExpect(fixture, { uischema, schema, data }, () => {
 //       expect(

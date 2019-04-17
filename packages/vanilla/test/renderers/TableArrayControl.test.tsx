@@ -88,7 +88,7 @@ test('render two children', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const header = TestUtils.findRenderedDOMComponentWithTag(tree, 'header') as HTMLInputElement;
   const legendChildren = header.children;
@@ -154,7 +154,7 @@ test('render empty data', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const header = TestUtils.findRenderedDOMComponentWithTag(tree, 'header') as HTMLInputElement;
   const legendChildren = header.children;
@@ -211,7 +211,7 @@ test('render new child (empty init data)', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
@@ -234,7 +234,7 @@ test('render new child (undefined data)', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
@@ -257,7 +257,7 @@ test('render new child (null data)', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'root_properties_test');
   t.not(control, undefined);
@@ -280,7 +280,7 @@ test('render new child', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
   TestUtils.Simulate.click(button);
@@ -316,7 +316,7 @@ test('render primitives ', t => {
         uischema={uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
   const lastRow = _.last(rows) as HTMLTableRowElement;
   t.is(lastRow.children.item(1).textContent, 'should NOT be longer than 3 characters');
@@ -336,7 +336,7 @@ test('update via action', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const children = TestUtils.findRenderedDOMComponentWithTag(tree, 'tbody');
   t.is(children.childNodes.length, 1);
@@ -468,7 +468,7 @@ test('hide', t => {
 
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
@@ -487,7 +487,7 @@ test('show by default', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
@@ -505,7 +505,7 @@ test('single error', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 2));
   t.is(validation.textContent, 'should be array');
@@ -524,7 +524,7 @@ test('multiple errors', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
   t.is(validation.textContent, 'should be array');
@@ -543,7 +543,7 @@ test('empty errors by default', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.textContent, '');
 });
@@ -561,7 +561,7 @@ test('reset validation message', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(update('test', () => 3));
   t.is(validation.textContent, 'should be array');
@@ -613,7 +613,7 @@ test.skip('validation of nested schema', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');

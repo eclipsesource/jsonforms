@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import {
@@ -36,6 +36,7 @@ import TextCell, { textCellTester, } from '../../src/cells/TextCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 const defaultMaxLength = 524288;
 const defaultSize = 20;
@@ -88,7 +89,7 @@ test.failing('autofocus on first element', t => {
     type: 'HorizontalLayout',
     elements: [firstControlElement, secondControlElement]
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: { firstName: 'Foo', lastName: 'Boo' },
     schema,
     uischema
@@ -97,7 +98,7 @@ test.failing('autofocus on first element', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
@@ -109,7 +110,7 @@ test('autofocus active', t => {
     scope:   '#/properties/name',
     options: { focus: true }
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema
@@ -118,7 +119,7 @@ test('autofocus active', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
@@ -129,7 +130,7 @@ test('autofocus inactive', t => {
     scope:   '#/properties/name',
     options: { focus: false }
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema
@@ -138,13 +139,13 @@ test('autofocus inactive', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.not(document.activeElement, input);
 });
 
 test('autofocus inactive by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -153,7 +154,7 @@ test('autofocus inactive by default', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.not(document.activeElement, input);
 });
@@ -172,7 +173,7 @@ test('render', t => {
       name: { type: 'string' }
     }
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: { name: 'Foo' },
     schema,
     uischema: t.context.uischema
@@ -181,13 +182,13 @@ test('render', t => {
     <Provider store={store}>
       <TextCell schema={schema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, 'Foo');
 });
 
 test('update via input event', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -196,7 +197,7 @@ test('update via input event', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   input.value = 'Bar';
   TestUtils.Simulate.change(input);
@@ -204,7 +205,7 @@ test('update via input event', t => {
 });
 
 test.cb('update via action', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -213,7 +214,7 @@ test.cb('update via action', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => 'Bar'));
   setTimeout(
@@ -226,7 +227,7 @@ test.cb('update via action', t => {
 });
 
 test('update with undefined value', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -235,14 +236,14 @@ test('update with undefined value', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => undefined));
   t.is(input.value, '');
 });
 
 test('update with null value', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -251,14 +252,14 @@ test('update with null value', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('name', () => null));
   t.is(input.value, '');
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -267,14 +268,14 @@ test('update with wrong ref', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('firstname', () => 'Bar'));
   t.is(input.value, 'Foo');
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -283,14 +284,14 @@ test('update with null ref', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => 'Bar'));
   t.is(input.value, 'Foo');
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -299,14 +300,14 @@ test('update with undefined ref', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(undefined, () => 'Bar'));
   t.is(input.value, 'Foo');
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -315,13 +316,13 @@ test('disable', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' enabled={false}/>
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.true(input.disabled);
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.minLengthSchema,
     uischema: t.context.uischema
@@ -330,7 +331,7 @@ test('enabled by default', t => {
     <Provider store={store}>
       <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });
@@ -344,7 +345,7 @@ test('use maxLength for attributes size and maxlength', t => {
     restrict: true,
     trim: true
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
     uischema,
@@ -354,7 +355,7 @@ test('use maxLength for attributes size and maxlength', t => {
     <Provider store={store}>
       <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.is(input.size, 5);
@@ -369,7 +370,7 @@ test('use maxLength for attribute size only', t => {
     restrict: false,
     trim: true
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
     uischema,
@@ -379,7 +380,7 @@ test('use maxLength for attribute size only', t => {
     <Provider store={store}>
       <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, 5);
@@ -394,7 +395,7 @@ test('use maxLength for attribute max length only', t => {
     restrict: true,
     trim: false
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
     uischema,
@@ -404,14 +405,14 @@ test('use maxLength for attribute max length only', t => {
     <Provider store={store}>
       <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, 5);
   t.is(input.size, defaultSize);
 });
 
 test('do not use maxLength by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.maxLengthSchema,
     uischema: t.context.uischema
@@ -420,7 +421,7 @@ test('do not use maxLength by default', t => {
     <Provider store={store}>
       <TextCell schema={t.context.maxLengthSchema} uischema={t.context.uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, defaultSize);
@@ -435,7 +436,7 @@ test('maxLength not specified, attributes should have default values (trim && re
     restrict: true,
     trim: true
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
@@ -445,7 +446,7 @@ test('maxLength not specified, attributes should have default values (trim && re
     <Provider store={store}>
       <TextCell schema={t.context.schema} uischema={uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, defaultSize);
@@ -460,7 +461,7 @@ test('maxLength not specified, attributes should have default values (trim)', t 
     restrict: false,
     trim: true
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
@@ -470,7 +471,7 @@ test('maxLength not specified, attributes should have default values (trim)', t 
     <Provider store={store}>
       <TextCell schema={t.context.schema} uischema={uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, defaultSize);
@@ -485,7 +486,7 @@ test('maxLength not specified, attributes should have default values (restrict)'
     restrict: true,
     trim: false
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema,
@@ -495,14 +496,14 @@ test('maxLength not specified, attributes should have default values (restrict)'
     <Provider store={store}>
       <TextCell schema={t.context.schema} uischema={uischema} path='name'/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, defaultSize);
 });
 
 test('maxLength not specified, attributes should have default values', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -511,7 +512,7 @@ test('maxLength not specified, attributes should have default values', t => {
     <Provider store={store}>
       <TextCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.maxLength, defaultMaxLength);
   t.is(input.size, defaultSize);

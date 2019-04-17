@@ -68,7 +68,7 @@ test('render with undefined text', t => {
         uischema={uischema}
       />
     </Provider>
-  )  as React.Component<any>;;
+  )  as unknown as React.Component<any>;;
 
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.className, 'jsf-label');
@@ -94,7 +94,7 @@ test('render with null text', t => {
         uischema={uischema}
       />
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.className, 'jsf-label');
   t.is(label.textContent, '');
@@ -114,7 +114,7 @@ test('render with text', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.is(label.className, 'jsf-label');
   t.is(label.childNodes.length, 1);
@@ -135,7 +135,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.true(label.hidden);
 });
@@ -153,7 +153,7 @@ test('show by default', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;;
+  ) as unknown as React.Component<any>;;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label') as HTMLLabelElement;
   t.false(label.hidden);
 });

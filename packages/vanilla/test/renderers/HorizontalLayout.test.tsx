@@ -70,7 +70,7 @@ test('render with undefined elements', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
@@ -92,7 +92,7 @@ test('render with null elements', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 0);
@@ -116,7 +116,7 @@ test('render with children', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
   t.not(horizontalLayout, undefined);
   t.is(horizontalLayout.children.length, 2);
@@ -136,7 +136,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree, 'horizontal-layout'
   ) as HTMLDivElement;
@@ -154,7 +154,7 @@ test('show by default', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer uischema={t.context.uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree, 'horizontal-layout'
   ) as HTMLDivElement;

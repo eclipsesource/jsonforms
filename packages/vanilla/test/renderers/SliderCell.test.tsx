@@ -22,7 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import {
@@ -36,6 +36,7 @@ import SliderCell, { sliderCellTester } from '../../src/cells/SliderCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.data = {'foo': 5};
@@ -94,7 +95,7 @@ test.failing('autofocus on first element', t => {
     firstSliderCell: 3.14,
     secondSliderCell: 5.12
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data,
     schema,
     uischema
@@ -103,7 +104,7 @@ test.failing('autofocus on first element', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
@@ -116,7 +117,7 @@ test('autofocus active', t => {
     scope:   '#/properties/foo',
     options: { focus: true }
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema
@@ -129,7 +130,7 @@ test('autofocus active', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
@@ -140,7 +141,7 @@ test('autofocus inactive', t => {
     scope:   '#/properties/foo',
     options: { focus: false }
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema
@@ -153,14 +154,14 @@ test('autofocus inactive', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
 
 test('autofocus inactive by default', t => {
   const uischema: ControlElement = t.context.uischema;
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema
@@ -173,7 +174,7 @@ test('autofocus inactive by default', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.autofocus);
 });
@@ -368,7 +369,7 @@ test('render', t => {
       }
     }
   };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: { 'foo': 5 },
     schema,
     uischema: t.context.uischema
@@ -381,14 +382,14 @@ test('render', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.type, 'range');
   t.is(input.value, '5');
 });
 
 test('update via input event', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -401,7 +402,7 @@ test('update via input event', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   input.value = '3';
   TestUtils.Simulate.change(input);
@@ -409,7 +410,7 @@ test('update via input event', t => {
 });
 
 test('update via action', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: { 'foo': 3},
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -422,7 +423,7 @@ test('update via action', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, '3');
   store.dispatch(update('foo', () => 4));
@@ -430,7 +431,7 @@ test('update via action', t => {
 });
 // FIXME this moves the slider and changes the value
 test.failing('update with undefined value', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -443,14 +444,14 @@ test.failing('update with undefined value', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => undefined));
   t.is(input.value, '');
 });
 // FIXME this moves the slider and changes the value
 test.failing('update with null value', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -463,14 +464,14 @@ test.failing('update with null value', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('foo', () => null));
   t.is(input.value, '');
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -483,14 +484,14 @@ test('update with wrong ref', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update('bar', () => 11));
   t.is(input.value, '5');
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -503,14 +504,14 @@ test('update with null ref', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   store.dispatch(update(null, () => 3));
   t.is(input.value, '5');
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -523,14 +524,14 @@ test('update with undefined ref', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   store.dispatch(update(undefined, () => 13));
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(input.value, '5');
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -544,13 +545,13 @@ test('disable', t => {
         enabled={false}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.true(input.disabled);
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -563,7 +564,7 @@ test('enabled by default', t => {
         path='foo'
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.false(input.disabled);
 });

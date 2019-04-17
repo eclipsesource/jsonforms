@@ -38,11 +38,11 @@
 // } from '../src';
 // import { PlatformMock } from '../test-config/mocks-ionic';
 // import { ParamsService } from '../src/services/ParamsService';
-// 
+//
 // describe('Categorization tab layout', () => {
 //   let fixture: ComponentFixture<any>;
 //   let component: any;
-// 
+//
 //   const data = { foo: true };
 //   const schema = {
 //     type: 'object',
@@ -55,7 +55,7 @@
 //       }
 //     }
 //   };
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [
@@ -81,12 +81,12 @@
 //         }
 //       })
 //       .compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(CategorizationTabLayoutRenderer);
 //     component = fixture.componentInstance;
 //   });
-// 
+//
 //   it('render categories initially', async(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
 //     component.uischema = {
@@ -114,7 +114,7 @@
 //         }
 //       ]
 //     };
-// 
+//
 //     component.ngOnInit();
 //     mockSubStore.next({
 //       jsonforms: {
@@ -129,7 +129,7 @@
 //     });
 //     mockSubStore.complete();
 //     fixture.detectChanges();
-// 
+//
 //     fixture.whenRenderingDone().then(() => {
 //       fixture.detectChanges();
 //       const activateCategory: DebugElement[] = fixture.debugElement.queryAll(
@@ -142,7 +142,7 @@
 //       expect(ionTabs.length).toBe(2);
 //     });
 //   }));
-// 
+//
 //   it('add category', async(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
 //     component.uischema = {
@@ -170,7 +170,7 @@
 //         }
 //       ]
 //     };
-// 
+//
 //     component.ngOnInit();
 //     mockSubStore.next({
 //       jsonforms: {
@@ -194,7 +194,7 @@
 //       );
 //       expect(activateCategory.length).toBe(1);
 //       expect(ionTabs.length).toBe(2);
-// 
+//
 //       component.uischema = {
 //         type: 'Categorization',
 //         elements: [
@@ -243,7 +243,7 @@
 //       });
 //       mockSubStore.complete();
 //       fixture.detectChanges();
-// 
+//
 //       fixture.whenRenderingDone().then(() => {
 //         fixture.detectChanges();
 //         const ionTabs2: DebugElement[] = fixture.debugElement.queryAll(

@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
- import { NgRedux } from '@angular-redux/store';
- import { MockNgRedux } from '@angular-redux/store/testing';
+import { NgRedux } from '@angular-redux/store';
+import { MockNgRedux } from '@angular-redux/store/testing';
 // import {
 //   booleanBaseTest,
 //   booleanErrorTest,
@@ -32,13 +32,13 @@
 // import { Checkbox, IonicModule, Label, Platform } from 'ionic-angular';
 import { BooleanCheckboxControlRenderer } from '../src';
 // import { PlatformMock } from '../test-config/mocks-ionic';
-// 
+//
 // describe('Ionic boolean control tester', () => {
 //   const uischema = {
 //     type: 'Control',
 //     scope: '#/properties/foo'
 //   };
-// 
+//
 //   it('should succeed', () => {
 //     expect(
 //       booleanControlTester(uischema, {
@@ -52,7 +52,7 @@ import { BooleanCheckboxControlRenderer } from '../src';
 //     ).toBe(2);
 //   });
 // });
-// 
+//
 // const imports = [IonicModule.forRoot(BooleanCheckboxControlRenderer)];
 // const providers = [
 //   { provide: Platform, useClass: PlatformMock },
@@ -65,7 +65,7 @@ import { BooleanCheckboxControlRenderer } from '../src';
 //   indexOfElement: 1
 // };
 // const testConfig = { imports, providers, componentUT };
-// 
+//
 // describe('Boolean control Base Tests', booleanBaseTest(testConfig, Checkbox));
 // describe(
 //   'Boolean control Input Event Tests',
@@ -81,48 +81,45 @@ import { TestBed, async } from '@angular/core/testing';
 import { ControlElement, JsonSchema } from '@jsonforms/core';
 
 describe('boolean', () => {
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [BooleanCheckboxControlRenderer],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [{ provide: NgRedux, useValue: MockNgRedux.getInstance() }]
+    }).compileComponents();
+  }));
 
-    beforeEach(async(() => {
-      TestBed.configureTestingModule({
-        declarations: [BooleanCheckboxControlRenderer],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        providers: [
-          { provide: NgRedux, useValue: MockNgRedux.getInstance()}
-        ]
-      }).compileComponents();
-    }));
+  const defaultBooleanTestSchema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'boolean'
+      }
+    }
+  };
 
-    const defaultBooleanTestSchema: JsonSchema = {
-      type: 'object',
-      properties: {
-        foo: {
-          type: 'boolean'
+  it('should create the app', async () => {
+    const data = { foo: true };
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    const fixture = TestBed.createComponent(BooleanCheckboxControlRenderer);
+    const component = fixture.componentInstance;
+    const uischema: ControlElement = {
+      type: 'Control',
+      scope: '#/properties/foo'
+    };
+    component.uischema = uischema;
+
+    mockSubStore.next({
+      jsonforms: {
+        core: {
+          data,
+          schema: defaultBooleanTestSchema
         }
       }
-    };
-
-    it('should create the app', async () => {
-      const data = { foo: true };
-      const mockSubStore = MockNgRedux.getSelectorStub();
-      const fixture = TestBed.createComponent(BooleanCheckboxControlRenderer);
-      const component = fixture.componentInstance;
-      const uischema: ControlElement = {
-        type: 'Control',
-        scope: '#/properties/foo'
-      };
-      component.uischema = uischema;
-
-      mockSubStore.next({
-        jsonforms: {
-          core: {
-            data,
-            schema: defaultBooleanTestSchema
-          }
-        }
-      });
-      mockSubStore.complete();
-      fixture.detectChanges();
-      component.ngOnInit();
-      expect(fixture.debugElement.componentInstance.isChecked()).toBe(true);
     });
-})
+    mockSubStore.complete();
+    fixture.detectChanges();
+    component.ngOnInit();
+    expect(fixture.debugElement.componentInstance.isChecked()).toBe(true);
+  });
+});

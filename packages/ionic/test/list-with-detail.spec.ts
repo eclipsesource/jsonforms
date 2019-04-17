@@ -38,11 +38,11 @@
 // import { mockNav, PlatformMock } from '../test-config/mocks-ionic';
 // import { MasterPage } from '../src/other/list-with-detail/pages/master/master';
 // import { DetailPage } from '../src/other/list-with-detail/pages/detail/detail';
-// 
+//
 // describe('Master detail', () => {
 //   let fixture: ComponentFixture<any>;
 //   let component: any;
-// 
+//
 //   const data = {
 //     orders: [
 //       {
@@ -96,7 +96,7 @@
 //       }
 //     }
 //   };
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [
@@ -116,16 +116,16 @@
 //         { provide: Nav, useValue: mockNav() }
 //       ]
 //     }).compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(ListWithDetailControl);
 //     component = fixture.componentInstance;
 //   });
-// 
+//
 //   it('should render', async(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
 //     component.uischema = uischema;
-// 
+//
 //     mockSubStore.next({
 //       jsonforms: {
 //         core: {
@@ -136,7 +136,7 @@
 //     });
 //     component.ngOnInit();
 //     mockSubStore.complete();
-// 
+//
 //     fixture.detectChanges();
 //     fixture.whenRenderingDone().then(() => {
 //       expect(component.masterItems.length).toBe(1);
@@ -146,11 +146,11 @@
 //       expect(fixture.debugElement.queryAll(By.directive(Nav)).length).toBe(2);
 //     });
 //   }));
-// 
+//
 //   it('add a master item', async(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
 //     component.uischema = uischema;
-// 
+//
 //     mockSubStore.next({
 //       jsonforms: {
 //         core: {
@@ -161,7 +161,7 @@
 //     });
 //     component.ngOnInit();
 //     mockSubStore.complete();
-// 
+//
 //     fixture.detectChanges();
 //     fixture.whenStable().then(() => {
 //       const masterPage: any = fixture.debugElement.query(
@@ -178,11 +178,11 @@
 //       });
 //     });
 //   }));
-// 
+//
 //   it('setting detail on click', async(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
 //     component.uischema = uischema;
-// 
+//
 //     mockSubStore.next({
 //       jsonforms: {
 //         core: {
@@ -193,7 +193,7 @@
 //     });
 //     component.ngOnInit();
 //     mockSubStore.complete();
-// 
+//
 //     fixture.detectChanges();
 //     fixture.whenStable().then(() => {
 //       spyOn(component.detailNav, 'setRoot');

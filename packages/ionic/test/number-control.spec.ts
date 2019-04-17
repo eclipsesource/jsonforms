@@ -50,15 +50,15 @@
 //   TranslationModule
 // } from 'angular-l10n';
 // import { PlatformMock } from '../test-config/platform-mock';
-// 
+//
 // const emptyL10NConfig: L10nConfig = {};
-// 
+//
 // describe('Number field tester', () => {
 //   const uischema = {
 //     type: 'Control',
 //     scope: '#/properties/foo'
 //   };
-// 
+//
 //   it('should succeed with floats', () => {
 //     expect(
 //       numberControlTester(uischema, {
@@ -80,13 +80,13 @@
 //     ).toBe(2);
 //   });
 // });
-// 
+//
 // describe('Ionic number control', () => {
 //   let fixture: ComponentFixture<any>;
 //   let component: any;
 //   let textInput: DebugElement;
 //   let textInputInstance: any;
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [NumberControlRenderer],
@@ -101,14 +101,14 @@
 //         { provide: NgRedux, useFactory: MockNgRedux.getInstance }
 //       ]
 //     }).compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(NumberControlRenderer);
 //     component = fixture.componentInstance;
 //     textInput = fixture.debugElement.query(By.directive(TextInput));
 //     textInputInstance = textInput.componentInstance;
 //   });
-// 
+//
 //   it('should render floats', () => {
 //     initAndExpect(fixture, defaultNumberTestData, () => {
 //       expect(textInputInstance.value).toBe(123.123);
@@ -116,7 +116,7 @@
 //       expect(textInputInstance.disabled).toBe(false);
 //     });
 //   });
-// 
+//
 //   it('should render integer', () => {
 //     initAndExpect(
 //       fixture,
@@ -137,13 +137,13 @@
 //       }
 //     );
 //   });
-// 
+//
 //   it('should support updating the state', () => {
 //     updateFloatState(fixture, defaultNumberTestData, () => {
 //       expect(textInputInstance.value).toBe(456.456);
 //     });
 //   });
-// 
+//
 //   // possibly related to https://github.com/ionic-team/ionic/issues/14370
 //   xit('should support updating with undefined', () => {
 //     updateWithUndefined(fixture, defaultNumberTestData, () => {
@@ -151,7 +151,7 @@
 //       expect(textInputInstance.value).toBe(undefined);
 //     });
 //   });
-// 
+//
 //   // possibly related to https://github.com/ionic-team/ionic/issues/14370
 //   xit('should support updating with null', () => {
 //     updateWithNull(fixture, defaultNumberTestData, () => {
@@ -159,13 +159,13 @@
 //       expect(textInputInstance.value).toBe(null);
 //     });
 //   });
-// 
+//
 //   it('should not update with wrong ref', () => {
 //     updateWithSiblingNumberValue(fixture, defaultNumberTestData, () => {
 //       expect(textInputInstance.value).toBe(123.123);
 //     });
 //   });
-// 
+//
 //   // store needed as we evaluate the calculated enabled value to disable/enable the control
 //   // also, see https://github.com/ionic-team/ionic/issues/5280
 //   it('can be disabled', () => {
@@ -173,22 +173,22 @@
 //       expect(textInputInstance.disabled).toBe(true);
 //     });
 //   });
-// 
+//
 //   it('id should be present in output', () => {
 //     mustHaveId(fixture, () => {
 //       expect(textInput.nativeElement.id).toBe('myId');
 //     });
 //   });
-// 
+//
 //   it('should support input event changes', async(() => {
 //     initComponent(fixture, setupMockStore(fixture, defaultNumberTestData));
-// 
+//
 //     const spy = spyOn(component, 'onChange');
 //     textInput.componentInstance.ionBlur.emit(456.456);
 //     fixture.detectChanges();
 //     expect(spy).toHaveBeenCalled();
 //   }));
-// 
+//
 //   it('should show errors', () => {
 //     showErrors(fixture, defaultNumberTestData, () => {
 //       const debugError: DebugElement = fixture.debugElement.queryAll(
@@ -199,7 +199,7 @@
 //       );
 //     });
 //   });
-// 
+//
 //   it('should support additional props', () => {
 //     initAndExpect(fixture, additionalTestData, () => {
 //       expect(textInput.componentInstance.step).toBe(3);

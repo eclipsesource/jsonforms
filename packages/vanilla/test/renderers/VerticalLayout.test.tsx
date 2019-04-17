@@ -58,7 +58,7 @@ test('render with undefined elements', t => {
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as unknown as React.Component<any>;
 
   t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
 });
@@ -78,7 +78,7 @@ test('render with null elements', t => {
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   t.not(TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout'), undefined);
 });
@@ -98,7 +98,7 @@ test('render with children', t => {
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout');
 
   t.is(verticalLayout.tagName, 'DIV');
@@ -124,7 +124,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'vertical-layout'
@@ -148,7 +148,7 @@ test('show by default', t => {
     <Provider store={store}>
       <VerticalLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'vertical-layout'

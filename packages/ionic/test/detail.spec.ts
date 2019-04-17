@@ -48,10 +48,10 @@
 // } from '../src';
 // import { PlatformMock } from '../test-config/mocks-ionic';
 // import { DetailPage } from '../src/other/list-with-detail/pages/detail/detail';
-// 
+//
 // describe('Master detail', () => {
 //   let fixture: ComponentFixture<any>;
-// 
+//
 //   const data = {
 //     orders: [
 //       {
@@ -89,7 +89,7 @@
 //       }
 //     }
 //   };
-// 
+//
 //   const pageData = {
 //     get() {
 //       return {
@@ -118,7 +118,7 @@
 //       };
 //     }
 //   };
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [JsonFormsOutlet, StringControlRenderer, DetailPage],
@@ -135,14 +135,14 @@
 //         }
 //       })
 //       .compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(DetailPage);
 //   });
-// 
+//
 //   it('should render detail page with inactive rule', fakeAsync(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
-// 
+//
 //     mockSubStore.next({
 //       jsonforms: {
 //         core: {
@@ -173,10 +173,10 @@
 //     expect(textInputs.length).toBe(1);
 //     expect(items[0].nativeElement.hidden).toBe(false);
 //   }));
-// 
+//
 //   it('should render detail page with active rule', fakeAsync(() => {
 //     const mockSubStore = MockNgRedux.getSelectorStub();
-// 
+//
 //     mockSubStore.next({
 //       jsonforms: {
 //         core: {

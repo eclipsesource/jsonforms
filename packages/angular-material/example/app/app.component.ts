@@ -36,7 +36,7 @@ import { Observable } from 'rxjs';
       Example:
       <select (change)="onChange($event)">
         <option
-          *ngFor="let example of (exampleData$ | async)"
+          *ngFor="let example of exampleData$ | async"
           value="{{ example.name }}"
           label="{{ example.label }}"
         >

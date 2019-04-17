@@ -71,7 +71,7 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
   categoryPages: CategoryRenderParams[];
 
   constructor(
-    ngRedux: NgRedux<JsonFormsState>,
+    ngRedux: NgRedux<JsonFormsState>
     // TODO: DEPS
     //private paramsService: ParamsService
   ) {
