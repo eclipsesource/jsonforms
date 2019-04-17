@@ -13,7 +13,7 @@
   
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-  
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,56 +22,107 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
-import {
-  booleanBaseTest,
-  booleanErrorTest,
-  booleanInputEventTest
-} from '@jsonforms/angular-test';
-import { Checkbox, IonicModule, Label, Platform } from 'ionic-angular';
-import { BooleanCheckboxControlRenderer, booleanControlTester } from '../src';
-import { PlatformMock } from '../test-config/mocks-ionic';
+ import { NgRedux } from '@angular-redux/store';
+ import { MockNgRedux } from '@angular-redux/store/testing';
+// import {
+//   booleanBaseTest,
+//   booleanErrorTest,
+//   booleanInputEventTest
+// } from '@jsonforms/angular-test';
+// import { Checkbox, IonicModule, Label, Platform } from 'ionic-angular';
+import { BooleanCheckboxControlRenderer } from '../src';
+// import { PlatformMock } from '../test-config/mocks-ionic';
+// 
+// describe('Ionic boolean control tester', () => {
+//   const uischema = {
+//     type: 'Control',
+//     scope: '#/properties/foo'
+//   };
+// 
+//   it('should succeed', () => {
+//     expect(
+//       booleanControlTester(uischema, {
+//         type: 'object',
+//         properties: {
+//           foo: {
+//             type: 'boolean'
+//           }
+//         }
+//       })
+//     ).toBe(2);
+//   });
+// });
+// 
+// const imports = [IonicModule.forRoot(BooleanCheckboxControlRenderer)];
+// const providers = [
+//   { provide: Platform, useClass: PlatformMock },
+//   { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+// ];
+// const componentUT: any = BooleanCheckboxControlRenderer;
+// const errorTest = {
+//   errorInstance: Label,
+//   numberOfElements: 2,
+//   indexOfElement: 1
+// };
+// const testConfig = { imports, providers, componentUT };
+// 
+// describe('Boolean control Base Tests', booleanBaseTest(testConfig, Checkbox));
+// describe(
+//   'Boolean control Input Event Tests',
+//   booleanInputEventTest(testConfig, Checkbox, 'button')
+// );
+// describe(
+//   'Boolean control Error Tests',
+//   booleanErrorTest(testConfig, Checkbox, errorTest)
+// );
 
-describe('Ionic boolean control tester', () => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TestBed, async } from '@angular/core/testing';
+import { ControlElement, JsonSchema } from '@jsonforms/core';
 
-  it('should succeed', () => {
-    expect(
-      booleanControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'boolean'
+describe('boolean', () => {
+
+    beforeEach(async(() => {
+      TestBed.configureTestingModule({
+        declarations: [BooleanCheckboxControlRenderer],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        providers: [
+          { provide: NgRedux, useValue: MockNgRedux.getInstance()}
+        ]
+      }).compileComponents();
+    }));
+
+    const defaultBooleanTestSchema: JsonSchema = {
+      type: 'object',
+      properties: {
+        foo: {
+          type: 'boolean'
+        }
+      }
+    };
+
+    it('should create the app', async () => {
+      const data = { foo: true };
+      const mockSubStore = MockNgRedux.getSelectorStub();
+      const fixture = TestBed.createComponent(BooleanCheckboxControlRenderer);
+      const component = fixture.componentInstance;
+      const uischema: ControlElement = {
+        type: 'Control',
+        scope: '#/properties/foo'
+      };
+      component.uischema = uischema;
+
+      mockSubStore.next({
+        jsonforms: {
+          core: {
+            data,
+            schema: defaultBooleanTestSchema
           }
         }
-      })
-    ).toBe(2);
-  });
-});
-
-const imports = [IonicModule.forRoot(BooleanCheckboxControlRenderer)];
-const providers = [
-  { provide: Platform, useClass: PlatformMock },
-  { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
-const componentUT: any = BooleanCheckboxControlRenderer;
-const errorTest = {
-  errorInstance: Label,
-  numberOfElements: 2,
-  indexOfElement: 1
-};
-const testConfig = { imports, providers, componentUT };
-
-describe('Boolean control Base Tests', booleanBaseTest(testConfig, Checkbox));
-describe(
-  'Boolean control Input Event Tests',
-  booleanInputEventTest(testConfig, Checkbox, 'button')
-);
-describe(
-  'Boolean control Error Tests',
-  booleanErrorTest(testConfig, Checkbox, errorTest)
-);
+      });
+      mockSubStore.complete();
+      fixture.detectChanges();
+      component.ngOnInit();
+      expect(fixture.debugElement.componentInstance.isChecked()).toBe(true);
+    });
+})

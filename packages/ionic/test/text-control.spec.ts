@@ -22,62 +22,62 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { NgRedux } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/testing';
-import { DebugElement } from '@angular/core';
-import {
-  textBaseTest,
-  textErrorTest,
-  textInputEventTest,
-  textTypeTest
-} from '@jsonforms/angular-test';
-import { IonicModule, Label, Platform } from 'ionic-angular';
-import { StringControlRenderer, stringControlTester } from '../src';
-import { PlatformMock } from '../test-config/platform-mock';
-
-describe('Ionic text field tester', () => {
-  const uischema = {
-    type: 'Control',
-    scope: '#/properties/foo'
-  };
-
-  it('should succeed', () => {
-    expect(
-      stringControlTester(uischema, {
-        type: 'object',
-        properties: {
-          foo: {
-            type: 'string'
-          }
-        }
-      })
-    ).toBe(1);
-  });
-});
-const imports = [IonicModule.forRoot(StringControlRenderer)];
-const providers = [
-  { provide: Platform, useClass: PlatformMock },
-  { provide: NgRedux, useFactory: MockNgRedux.getInstance }
-];
-const componentUT: any = StringControlRenderer;
-const errorTest = {
-  errorInstance: Label,
-  numberOfElements: 2,
-  indexOfElement: 1
-};
-const toSelect = (el: DebugElement) => el.componentInstance;
-const testConfig = { imports, providers, componentUT };
-
-describe(
-  'Text control Base Tests',
-  textBaseTest(testConfig, 'ion-input', toSelect)
-);
-describe(
-  'Text control Input Event Tests',
-  textInputEventTest(testConfig, 'ion-input', toSelect)
-);
-describe('Text control Error Tests', textErrorTest(testConfig, errorTest));
-describe(
-  'Text control type tests',
-  textTypeTest(testConfig, 'ion-input', toSelect)
-);
+// import { NgRedux } from '@angular-redux/store';
+// import { MockNgRedux } from '@angular-redux/store/testing';
+// import { DebugElement } from '@angular/core';
+// import {
+//   textBaseTest,
+//   textErrorTest,
+//   textInputEventTest,
+//   textTypeTest
+// } from '@jsonforms/angular-test';
+// import { IonicModule, Label, Platform } from 'ionic-angular';
+// import { StringControlRenderer, stringControlTester } from '../src';
+// import { PlatformMock } from '../test-config/platform-mock';
+// 
+// describe('Ionic text field tester', () => {
+//   const uischema = {
+//     type: 'Control',
+//     scope: '#/properties/foo'
+//   };
+// 
+//   it('should succeed', () => {
+//     expect(
+//       stringControlTester(uischema, {
+//         type: 'object',
+//         properties: {
+//           foo: {
+//             type: 'string'
+//           }
+//         }
+//       })
+//     ).toBe(1);
+//   });
+// });
+// const imports = [IonicModule.forRoot(StringControlRenderer)];
+// const providers = [
+//   { provide: Platform, useClass: PlatformMock },
+//   { provide: NgRedux, useFactory: MockNgRedux.getInstance }
+// ];
+// const componentUT: any = StringControlRenderer;
+// const errorTest = {
+//   errorInstance: Label,
+//   numberOfElements: 2,
+//   indexOfElement: 1
+// };
+// const toSelect = (el: DebugElement) => el.componentInstance;
+// const testConfig = { imports, providers, componentUT };
+// 
+// describe(
+//   'Text control Base Tests',
+//   textBaseTest(testConfig, 'ion-input', toSelect)
+// );
+// describe(
+//   'Text control Input Event Tests',
+//   textInputEventTest(testConfig, 'ion-input', toSelect)
+// );
+// describe('Text control Error Tests', textErrorTest(testConfig, errorTest));
+// describe(
+//   'Text control type tests',
+//   textTypeTest(testConfig, 'ion-input', toSelect)
+// );

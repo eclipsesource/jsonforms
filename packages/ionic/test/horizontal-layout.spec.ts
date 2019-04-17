@@ -22,69 +22,69 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { MockNgRedux } from '@angular-redux/store/testing';
-import {
-  beforeEachLayoutTest,
-  initComponent,
-  setupMockStore
-} from '@jsonforms/angular-test';
-import { IonicModule, Platform } from 'ionic-angular';
-import { PlatformMock } from '../test-config/mocks-ionic';
-import { HorizontalLayoutRenderer } from '../src';
-
-describe('Horizontal layout', () => {
-  let fixture: any;
-  let component: any;
-
-  const data = { foo: true };
-  const schema = {
-    type: 'object',
-    properties: {
-      foo: {
-        type: 'boolean'
-      }
-    }
-  };
-  const uischema = {
-    type: 'HorizontalLayout',
-    elements: [
-      {
-        type: 'Control',
-        scope: '#/properties/foo'
-      }
-    ]
-  };
-
-  beforeEach(() => {
-    fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
-      providers: [
-        {
-          provide: Platform,
-          useClass: PlatformMock
-        }
-      ],
-      imports: [IonicModule.forRoot(HorizontalLayoutRenderer)]
-    });
-    component = fixture.componentInstance;
-  });
-
-  it('add elements', () => {
-    const mockSubStore = setupMockStore(fixture, { data, schema, uischema });
-    initComponent(fixture, mockSubStore);
-
-    MockNgRedux.reset();
-    component.uischema = {
-      type: 'HorizontalLayout',
-      elements: [
-        ...uischema.elements,
-        {
-          type: 'Control',
-          scope: '#properties/bar'
-        }
-      ]
-    };
-
-    fixture.detectChanges();
-    expect(component.uischema.elements.length).toBe(2);
-  });
-});
+// import { MockNgRedux } from '@angular-redux/store/testing';
+// import {
+//   beforeEachLayoutTest,
+//   initComponent,
+//   setupMockStore
+// } from '@jsonforms/angular-test';
+// import { IonicModule, Platform } from 'ionic-angular';
+// import { PlatformMock } from '../test-config/mocks-ionic';
+// import { HorizontalLayoutRenderer } from '../src';
+// 
+// describe('Horizontal layout', () => {
+//   let fixture: any;
+//   let component: any;
+// 
+//   const data = { foo: true };
+//   const schema = {
+//     type: 'object',
+//     properties: {
+//       foo: {
+//         type: 'boolean'
+//       }
+//     }
+//   };
+//   const uischema = {
+//     type: 'HorizontalLayout',
+//     elements: [
+//       {
+//         type: 'Control',
+//         scope: '#/properties/foo'
+//       }
+//     ]
+//   };
+// 
+//   beforeEach(() => {
+//     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
+//       providers: [
+//         {
+//           provide: Platform,
+//           useClass: PlatformMock
+//         }
+//       ],
+//       imports: [IonicModule.forRoot(HorizontalLayoutRenderer)]
+//     });
+//     component = fixture.componentInstance;
+//   });
+// 
+//   it('add elements', () => {
+//     const mockSubStore = setupMockStore(fixture, { data, schema, uischema });
+//     initComponent(fixture, mockSubStore);
+// 
+//     MockNgRedux.reset();
+//     component.uischema = {
+//       type: 'HorizontalLayout',
+//       elements: [
+//         ...uischema.elements,
+//         {
+//           type: 'Control',
+//           scope: '#properties/bar'
+//         }
+//       ]
+//     };
+// 
+//     fixture.detectChanges();
+//     expect(component.uischema.elements.length).toBe(2);
+//   });
+// });
