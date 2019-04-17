@@ -109,7 +109,7 @@ test('autofocus on first element', t => {
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
   t.is(document.activeElement, inputs[1]);
@@ -136,7 +136,7 @@ test('render', t => {
     <Provider store={store}>
       <InputControl uischema={t.context.uischema} schema={t.context.schema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
   t.not(control, undefined);
@@ -172,7 +172,7 @@ test('render without label', t => {
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control');
   t.not(control, undefined);
@@ -209,7 +209,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.true(control.hidden);
 });
@@ -226,7 +226,7 @@ test('show by default', t => {
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
   t.false(control.hidden);
 });
@@ -243,7 +243,7 @@ test('single error', t => {
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 2));
   t.is(validation.textContent, 'should be boolean');
@@ -261,7 +261,7 @@ test('multiple errors', t => {
     <Provider store={store}>
       <InputControl schema={t.context.schema} uischema={t.context.uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 3));
   t.is(validation.textContent, 'should be boolean');
@@ -279,7 +279,7 @@ test('empty errors by default', t => {
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   t.is(validation.textContent, '');
 });
@@ -296,7 +296,7 @@ test('reset validation message', t => {
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
   store.dispatch(Actions.update('foo', () => 3));
   store.dispatch(Actions.update('foo', () => true));
@@ -360,7 +360,7 @@ test('validation of nested schema', t => {
     <Provider store={store}>
       <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
   t.is(validation[0].textContent, '');
   t.is(validation[1].textContent, 'is a required property');
@@ -392,7 +392,7 @@ test('required cell is marked', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Cell*');
 });
@@ -422,7 +422,7 @@ test('not required', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Cell');
 });
@@ -453,7 +453,7 @@ test('required cell is marked', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Cell*');
 });
@@ -484,7 +484,7 @@ test('not required', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
   t.is(label.textContent, 'Date Cell');
 });
@@ -515,7 +515,7 @@ test('show description on focus', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
   TestUtils.Simulate.focus(control);
   const description =
@@ -549,7 +549,7 @@ test('hide description when input cell is not focused', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const description = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'input-description'
@@ -583,7 +583,7 @@ test('hide description on blur', t => {
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLDivElement;
   TestUtils.Simulate.focus(control);
   const description =
@@ -620,7 +620,7 @@ test('description undefined', t => {
     <Provider store={store}>
       <JsonForms />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const description =
     TestUtils.findRenderedDOMComponentWithClass(tree, 'input-description') as HTMLDivElement;
   t.is(description.textContent, '');
@@ -655,7 +655,7 @@ test('undefined input control', t => {
     <Provider store={store}>
       <InputControl schema={schema} uischema={uischema}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const control = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'control');
   t.is(control.length, 0);
 });

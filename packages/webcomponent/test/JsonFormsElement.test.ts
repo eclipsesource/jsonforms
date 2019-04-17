@@ -242,7 +242,7 @@ test.cb('Connect JSON Forms element and cause re-init store', t => {
             data: {
               firstname: 'bar',
               lastname: 'foo'
-            },
+            } as any,
             schema: undefined,
             uischema: undefined
           },

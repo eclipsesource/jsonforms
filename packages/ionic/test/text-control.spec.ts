@@ -34,13 +34,13 @@
 // import { IonicModule, Label, Platform } from 'ionic-angular';
 // import { StringControlRenderer, stringControlTester } from '../src';
 // import { PlatformMock } from '../test-config/platform-mock';
-// 
+//
 // describe('Ionic text field tester', () => {
 //   const uischema = {
 //     type: 'Control',
 //     scope: '#/properties/foo'
 //   };
-// 
+//
 //   it('should succeed', () => {
 //     expect(
 //       stringControlTester(uischema, {
@@ -67,7 +67,7 @@
 // };
 // const toSelect = (el: DebugElement) => el.componentInstance;
 // const testConfig = { imports, providers, componentUT };
-// 
+//
 // describe(
 //   'Text control Base Tests',
 //   textBaseTest(testConfig, 'ion-input', toSelect)

@@ -49,10 +49,11 @@ export const initJsonFormsVanillaStore = ({
       jsonforms: jsonformsReducer({ styles: stylingReducer })
     }),
     {
+      // TODO
       jsonforms: {
         styles: vanillaStyles,
         ...other
-      }
+      } as any
     }
   );
 

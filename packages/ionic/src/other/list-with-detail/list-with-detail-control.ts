@@ -170,41 +170,43 @@ export class ListWithDetailControl extends JsonFormsArrayControl {
       } else if (activeDetailView !== undefined) {
         // TODO: DEPS
         // update detail, such that navbar in detail disappears
-       // return this.updateDetail(activeDetailView.data.item).then(() =>
-       //   this.updateMaster()
-       // );
+        // return this.updateDetail(activeDetailView.data.item).then(() =>
+        //   this.updateMaster()
+        // );
       }
     });
   };
 
   hideDetail = (): Promise<any> => {
     // set master as root on detail nav
-    return Promise.all(
-      [
-        this.masterNav.getActive(),
-        this.detailNav.getActive()
-      ]
-    ).then(([activeMasterView, _]) => {
+    return Promise.all([
+      this.masterNav.getActive(),
+      this.detailNav.getActive()
+    ]).then(([activeMasterView, _]) => {
       this.detailNav.setRoot(
         activeMasterView.component,
         activeMasterView.params,
         { animated: false }
-      )
-     // TODO: DEPS
-     // .then(() => {
-     //   if (activeDetailView.params) {
-     //     // update detail, such that navbar in detail appears
-     //     return this.updateDetail(activeDetailView.data.item);
-     //   }
-     // });
+      );
+      // TODO: DEPS
+      // .then(() => {
+      //   if (activeDetailView.params) {
+      //     // update detail, such that navbar in detail appears
+      //     return this.updateDetail(activeDetailView.data.item);
+      //   }
+      // });
     });
-  }
+  };
 
   updateMaster = () => {
     if (this._isSplit) {
-      this.masterNav.setRoot(MasterPage, this.masterParams, { animated: false });
+      this.masterNav.setRoot(MasterPage, this.masterParams, {
+        animated: false
+      });
     } else {
-      this.detailNav.setRoot(MasterPage, this.masterParams, { animated: false });
+      this.detailNav.setRoot(MasterPage, this.masterParams, {
+        animated: false
+      });
     }
   };
 

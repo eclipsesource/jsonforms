@@ -32,11 +32,11 @@
 // import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 // import { VerticalLayoutRenderer } from '../src';
 // import { PlatformMock } from '../test-config/mocks-ionic';
-// 
+//
 // describe('Vertical layout', () => {
 //   let fixture: any;
 //   let component: any;
-// 
+//
 //   const data = { foo: true };
 //   const schema = {
 //     type: 'object',
@@ -55,7 +55,7 @@
 //       }
 //     ]
 //   };
-// 
+//
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
 //       declarations: [UnknownRenderer, JsonFormsOutlet, VerticalLayoutRenderer],
@@ -71,12 +71,12 @@
 //         }
 //       })
 //       .compileComponents();
-// 
+//
 //     MockNgRedux.reset();
 //     fixture = TestBed.createComponent(VerticalLayoutRenderer);
 //     component = fixture.componentInstance;
 //   });
-// 
+//
 //   it('add elements', () => {
 //     initComponent(fixture, setupMockStore(fixture, { data, schema, uischema }));
 //     MockNgRedux.reset();

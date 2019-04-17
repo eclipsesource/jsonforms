@@ -67,7 +67,7 @@ test('render with label', t => {
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.className, 'group-layout');
@@ -92,7 +92,7 @@ test('render with null elements', t => {
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.children.length, 0);
@@ -116,7 +116,7 @@ test('render with children', t => {
     <Provider store={store}>
       <GroupLayoutRenderer uischema={uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
   t.is(groupLayout.tagName, 'FIELDSET');
   t.is(groupLayout.children.length, 2);
@@ -136,7 +136,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'group-layout'
@@ -155,7 +155,7 @@ test('show by default', t => {
     <Provider store={store}>
       <GroupLayoutRenderer uischema={t.context.uischema} />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(
     tree,
     'group-layout'

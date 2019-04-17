@@ -31,11 +31,11 @@
 // import { IonicModule, Platform } from 'ionic-angular';
 // import { PlatformMock } from '../test-config/mocks-ionic';
 // import { HorizontalLayoutRenderer } from '../src';
-// 
+//
 // describe('Horizontal layout', () => {
 //   let fixture: any;
 //   let component: any;
-// 
+//
 //   const data = { foo: true };
 //   const schema = {
 //     type: 'object',
@@ -54,7 +54,7 @@
 //       }
 //     ]
 //   };
-// 
+//
 //   beforeEach(() => {
 //     fixture = beforeEachLayoutTest(HorizontalLayoutRenderer, {
 //       providers: [
@@ -67,11 +67,11 @@
 //     });
 //     component = fixture.componentInstance;
 //   });
-// 
+//
 //   it('add elements', () => {
 //     const mockSubStore = setupMockStore(fixture, { data, schema, uischema });
 //     initComponent(fixture, mockSubStore);
-// 
+//
 //     MockNgRedux.reset();
 //     component.uischema = {
 //       type: 'HorizontalLayout',
@@ -83,7 +83,7 @@
 //         }
 //       ]
 //     };
-// 
+//
 //     fixture.detectChanges();
 //     expect(component.uischema.elements.length).toBe(2);
 //   });

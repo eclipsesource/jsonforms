@@ -83,7 +83,7 @@ test('render two children', t => {
         uischema={t.context.uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const controls = TestUtils.scryRenderedDOMComponentsWithClass(
     tree,

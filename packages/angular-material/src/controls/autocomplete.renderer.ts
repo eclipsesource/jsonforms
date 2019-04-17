@@ -84,7 +84,7 @@ import { startWith } from 'rxjs/operators';
         (optionSelected)="onSelect($event)"
       >
         <mat-option
-          *ngFor="let option of (filteredOptions | async)"
+          *ngFor="let option of filteredOptions | async"
           [value]="option"
         >
           {{ option }}

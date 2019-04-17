@@ -35,7 +35,7 @@
 // import { MultilineControlRenderer, multilineControlTester } from '../src';
 // import { PlatformMock } from '../test-config/platform-mock';
 // import { ControlElement, JsonSchema } from '@jsonforms/core';
-// 
+//
 // describe('Ionic multiline control tester', () => {
 //   const uischema = {
 //     type: 'Control',
@@ -44,7 +44,7 @@
 //       multi: true
 //     }
 //   };
-// 
+//
 //   it('should succeed', () => {
 //     expect(
 //       multilineControlTester(uischema, {
@@ -71,7 +71,7 @@
 // };
 // const toSelect = (el: DebugElement) => el.componentInstance;
 // const testConfig = { imports, providers, componentUT };
-// 
+//
 // const defaultData = { foo: 'foo' };
 // const defaultSchema: JsonSchema = {
 //   type: 'object',
@@ -91,7 +91,7 @@
 //   schema: defaultSchema,
 //   uischema: defaultUischema
 // };
-// 
+//
 // describe(
 //   'Ionic multiline control base tests',
 //   textBaseTest(testConfig, 'ion-textarea', toSelect, defaultTestData)

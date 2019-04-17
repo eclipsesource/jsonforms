@@ -22,13 +22,14 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { initJsonFormsStore } from '@jsonforms/test';
+import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { getData, update } from '@jsonforms/core';
 import EnumCell, { enumCellTester } from '../../src/cells/EnumCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
+import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': 'a' };
@@ -128,7 +129,7 @@ test('tester with matching numeric type', t => {
 });
 
 test('render', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -137,7 +138,7 @@ test('render', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   t.is(select.tagName, 'SELECT');
@@ -149,7 +150,7 @@ test('render', t => {
 });
 
 test('update via input event', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -158,7 +159,7 @@ test('update via input event', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   select.value = 'b';
@@ -168,7 +169,7 @@ test('update via input event', t => {
 
 test('update via action', t => {
   const data = { 'foo': 'b' };
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -177,7 +178,7 @@ test('update via action', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('foo', () => 'b'));
   t.is(select.value, 'b');
@@ -185,7 +186,7 @@ test('update via action', t => {
 });
 
 test('update with undefined value', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -194,7 +195,7 @@ test('update with undefined value', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('foo', () => undefined));
   t.is(select.selectedIndex, 0);
@@ -202,7 +203,7 @@ test('update with undefined value', t => {
 });
 
 test('update with null value', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -211,7 +212,7 @@ test('update with null value', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('foo', () => null));
   t.is(select.selectedIndex, 0);
@@ -219,7 +220,7 @@ test('update with null value', t => {
 });
 
 test('update with wrong ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -228,7 +229,7 @@ test('update with wrong ref', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update('bar', () => 'Bar'));
   t.is(select.selectedIndex, 1);
@@ -236,7 +237,7 @@ test('update with wrong ref', t => {
 });
 
 test('update with null ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -245,7 +246,7 @@ test('update with null ref', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update(null, () => false));
   t.is(select.selectedIndex, 1);
@@ -253,7 +254,7 @@ test('update with null ref', t => {
 });
 
 test('update with undefined ref', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -262,7 +263,7 @@ test('update with undefined ref', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   store.dispatch(update(undefined, () => false));
   t.is(select.selectedIndex, 1);
@@ -270,7 +271,7 @@ test('update with undefined ref', t => {
 });
 
 test('disable', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -279,13 +280,13 @@ test('disable', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   t.true(select.disabled);
 });
 
 test('enabled by default', t => {
-  const store = initJsonFormsStore({
+  const store = initJsonFormsVanillaStore({
     data: t.context.data,
     schema: t.context.schema,
     uischema: t.context.uischema
@@ -294,7 +295,7 @@ test('enabled by default', t => {
     <Provider store={store}>
       <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
   t.false(select.disabled);
 });

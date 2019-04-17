@@ -278,7 +278,7 @@ test('render', t => {
         uischema={uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   // master tree
   const div = TestUtils.findRenderedDOMComponentWithClass(
@@ -374,7 +374,7 @@ test('render on click', t => {
         uischema={uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const div: HTMLDivElement = TestUtils.findRenderedDOMComponentWithClass(
     tree,
@@ -437,7 +437,7 @@ test('hide', t => {
         visible={false}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const div = TestUtils.findRenderedDOMComponentWithClass(
     tree,
@@ -471,7 +471,7 @@ test('showed by default', t => {
         uischema={uischema}
       />
     </Provider>
-  ) as React.Component<any>;
+  ) as unknown as React.Component<any>;
 
   const div: HTMLDivElement = TestUtils.findRenderedDOMComponentWithClass(
     tree,

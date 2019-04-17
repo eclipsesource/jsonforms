@@ -65,7 +65,7 @@ test('render', t => {
         <Provider store={store}>
             <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
         </Provider>
-    ) as React.Component<any>;
+    ) as unknown as React.Component<any>;
 
     const inputs: HTMLInputElement[] =
         TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
@@ -88,7 +88,7 @@ test('Radio group should have only one selected option', t => {
         <Provider store={store}>
             <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
         </Provider>
-    ) as React.Component<any>;
+    ) as unknown as React.Component<any>;
 
     const inputs: HTMLInputElement[] =
         TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input') as HTMLInputElement[];
