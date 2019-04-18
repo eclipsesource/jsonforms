@@ -63,8 +63,8 @@
     "moment": "^2.20.1"
   },
   "peerDependencies": {
-    "@jsonforms/core": "^2.2.2",
-    "@jsonforms/react": "^2.2.2",
+    "@jsonforms/core": "^2.2.3",
+    "@jsonforms/react": "^2.2.3",
     "react-redux": "^6.0.0"
   },
   "devDependencies": {

@@ -53,8 +53,8 @@
     "@angular/forms": "^7.2.13",
     "@angular/material": "^7.3.7",
     "@angular/platform-browser": "^7.2.13",
-    "@jsonforms/angular": "^2.2.2",
-    "@jsonforms/core": "^2.2.2",
+    "@jsonforms/angular": "^2.2.3",
+    "@jsonforms/core": "^2.2.3",
     "core-js": "^2.5.3",
     "rxjs": "^6.4.0",
     "zone.js": "^0.8.26"
