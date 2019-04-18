@@ -1,0 +1,26 @@
+---
+name: APIs
+route: /docs/api
+---
+
+import Note from './components/Note'
+import ApiLink from '../../components/common/ApiLink.js'
+
+# APIs
+
+<Note 
+  title="ATTENTION" 
+  body="Please note that we do not yet follow SemVer conventions yet as the the API of the WIP renderer sets is not considered stable yet. We'll switch versioning schemes starting with 3.x"
+/>
+
+This section provides links to the API documentation of all available JSON Forms modules.
+
+<div style={{ display: 'flex', flexDirection: 'column' }}>
+  <ApiLink link={'/public/api/core/index.html'} title='Core' />
+  <ApiLink link={'/public/api/react/index.html'} title='React integration' />
+  <ApiLink link={'/public/api/material/index.html'} title='React-based Material UI renderers' />
+  <ApiLink link={'/public/api/vanilla/index.html'} title='React-based Vanilla renderers' />
+  <ApiLink link={'/public/api/angular/index.html'} title='Angular integration' />
+  <ApiLink link={'/public/api/angular-material/index.html'} title='Angular-based Material renderers' />
+  <ApiLink link={'/public/api/ionic/index.html'} title='Angular-based Ionic 3 renderers' />
+</div>

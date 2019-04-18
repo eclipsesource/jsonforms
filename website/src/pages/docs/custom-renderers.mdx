@@ -1,0 +1,156 @@
+---
+name: Custom Renderes 
+route: /docs/custom-renderers
+---
+
+import { Default, WithCustomRenderer } from './components/custom-renderers'
+
+# Custom renderers
+
+ The default renderers of JSON Forms are a good fit for most scenarios,
+but there might be certain situations where you'd want to customize the rendered UI Schema elements.
+JSON Forms allows for this by registering a custom renderer that produces a different UI
+for a given UI Schema element.
+
+In this section you will learn how to create and register a custom renderer for a control.
+We will replace the default renderer for integer values of a rating property. By default an integer
+property is rendered like this:
+
+<Default />
+
+Our goal is to instead render the UI for rating depicted below:
+
+<WithCustomRenderer />
+
+## Running the seed
+
+If you want to follow along with this tutorial, you may want to [clone the seed repository](https://github.com/eclipsesource/jsonforms-react-seed)
+which basically is just a skeleton application scaffolded by create-react-app with redux
+and JSON Forms dependencies added.
+
+```bash
+cd jsonforms-react-seed
+npm install
+npm start
+```
+
+Once the dependencies are installed and the local server has been started,
+navigate to http://localhost:3000 in order to see the application running.
+
+The seed is described in more detail within the `README.md` file of
+the [repo](https://github.com/eclipsesource/jsonforms-react-seed), hence we
+only focus on the most crucial parts of the app in the following.
+
+##  Core concepts about rendering
+
+Before explaining how to contribute a component (which will be referred to as "custom control") to JSON Forms,
+we first explain how the basic process of rendering works.
+
+JSON Forms maintains a registry of renderers (which are regular React components). When JSON Forms is instructed to
+render a given UI schema to produce a form, it will start with the root element of the UI Schema and try to
+find a renderer for this UI Schema element in its registry of renderers.
+
+To find a matching renderer, JSON Forms relies on so-called testers.
+Every renderer has a tester associated with its registration, which is a function of a UI schema and a
+JSON schema returning a number.
+The returned number is the priority which expresses if and how well a renderer can actually render the
+given UI Schema Element (where `NOT_APPLICABLE` aka. `-1`) means "not at all").
+
+In order to create and register a renderer, we need to perform the following steps:
+
+1. Create a renderer (a React component)
+2. Create a corresponding tester for the renderer
+3. Register both the renderer and the tester with the framework
+
+The seed app already contains all of the ingredients necessary to create a custom renderer,
+which we'll use in the following.
+
+### 1. Create a renderer
+
+As mentioned previously, the seed app already features a component which we want to use as a renderer.
+It's contained in `src/Rating.js` and is a rating control, i.e. it allows to set a value between 0 and 5
+by selecting the appropriate number of stars. We won't go into detail about the control itself, but we should mention
+that we need to provide an `onClick` property in order to allow specifying a callback which gets called
+every time the user clicks on a star. We also need to suppy an initial `value`.
+
+In order to leverage the React component to a JSON Forms compatible renderer, we need to connect it to the store.
+This will allow us to retrieve the initial value and to emit events updating the respective value in the
+store when the users clicks on a star. JSON Forms provides a
+helper function `mapStateToControlProps` which already provides most of the necessary props for us.
+In this case, the props are `data`, which is the actual data bit to be rendered, and `path`,
+a dot-separated string, which is necessary to propagate an update back to the store.
+
+For the `onClick` prop we pass the `handleChange` handler, which we retrieve
+via another helper function provided by JSON Forms called `mapDispatchToControlProps`.
+All the handler actually does is to emit a change with the new value.
+
+The complete code of `src/RatingControl.js` looks as follows:
+
+```jsx
+import * as React from 'react';
+import { 
+  mapStateToControlProps, 
+  mapDispatchToControlProps 
+} from '@jsonforms/core';
+import { connect } from 'react-redux';
+import { Rating } from './Rating';
+
+const RatingControl = 
+  ({ data, handleChange, path }) => (
+  <Rating
+    value={data}
+    onClick={ev => handleChange(path, Number(ev.value))}
+  />
+);
+
+export default connect(
+  mapStateToControlProps,
+  mapDispatchToControlProps,
+)(RatingControl);
+```
+
+### 2. Create a tester
+
+Now that we have our renderer ready, we need to tell JSON Forms when we want to make use of it.
+For that purpose we create a tester that checks if the corresponding UI schema element is a control
+and whether it is bound to a path that ends with `rating`. If that is the case, we return a rank of
+3. That is because the default renderer sets provide a rank with a value of 2, hence our tester will need to
+rank the custom control higher a bit higher, such that it will be picked up for the rating control during rendering.
+The `ratingControlTester.js` file contains the respective code as a default export.
+
+```javascript
+import { 
+  rankWith, 
+  scopeEndsWith 
+} from '@jsonforms/core';
+
+export default rankWith(
+  Number.MAX_VALUE, 
+  scopeEndsWith('rating')
+);
+```
+
+Generally speaking, the testers API if made out of different predicates and functions that allow
+for composition (e.g. `and` or `or`) such that it is easy to target specific parts
+of the UI schema and/or JSON schema.
+
+### 3. Register the renderer
+ All there is left to do is to register the renderer with its tester. We can do so by calling
+the `registerRenderer` action on the store. Within `index.js`, the following
+statement registers the renderer.
+
+```javascript
+import RatingControl from './RatingControl';
+import ratingControlTester from './ratingControlTester'
+
+store.dispatch(
+  Actions.registerRenderer(
+    ratingControlTester, 
+    RatingControl
+  )
+);
+```
+
+And that's it! The rating control will now be used to render the `rating` property.
+It should be noted that in order to create a full-fledged control there's more work left,
+since we did not cover concepts like validation or visibility.

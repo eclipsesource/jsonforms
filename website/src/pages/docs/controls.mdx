@@ -1,0 +1,51 @@
+---
+name: Controls
+route: /docs/uischema/controls
+parent: UI Schema Elements
+---
+
+import ApiLink from '../../components/common/ApiLink.js'
+import { Example } from './components/controls'
+
+# Controls
+
+Controls represent the basic building blocks for creating forms.
+
+A control is usually displaying the value of one property from the data in an UI element such as an input field.
+How a control is rendered depends on the type of the property as defined in the JSON Schema,
+e.g. a property of type `boolean` is rendered as a Checkbox by default.
+
+## `scope` (string)
+
+The mandatory `scope` property, which expects a [JSON schema reference value](https://spacetelescope.github.io/understanding-json-schema/structuring.html#reuse"),
+defines to which property of the data the control should be bound to.
+
+For instance, let's suppose we want to create a control for the `name` property in this schema:
+
+```json
+{
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  }
+}
+```
+
+The corresponding UI Schema needs to set the type of the UI Schema Element to Control and set the scope to point to the name property from the JSON schema as follows:
+
+```json
+{
+  "type": "Control",
+  "scope": "#/properties/name"
+}
+```
+
+JSON Forms will render the following form from this UI Schema:
+
+<Example />
+
+JSON Forms ships with a default renderer set which consists of renderers for all primitive types as well as
+for arrays. Furthermore JSON Forms allows controls to be replaced or new controls to be added for newly
+invented UI Schema Elements. For documentation on these so called **Custom Renderers** please see the section
+about [Custom renderers](/docs/custom-renderers).

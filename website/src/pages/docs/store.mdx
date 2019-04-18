@@ -1,0 +1,62 @@
+---
+name: Redux store shape
+route: /docs/store
+---
+
+# Store shape
+
+JSON Forms makes use of redux to maintain its internal state. This section describes the state managed by the JSON Forms reducer.
+
+JSON Forms exports its reducer via the `jsonformsReducer` function. 
+It's expected that you add this reducer to your application via `combineReducers` under the `jsonforms` key. 
+The basic structure of the JSON Forms state looks like this:
+
+```javascript
+export interface JsonFormsState {
+  jsonforms: {
+    core: {
+      data: any;
+      schema?: JsonSchema;
+      uischema?: UISchemaElement;
+      validation?: ValidationState,
+    };
+    // TODO: should we type these?    
+    renderers?: any[];
+    fields?: any[];
+    // allow additional state for JSONForms
+    [additionalState: string]: any;
+  };
+}
+```
+
+Let's inspect each of these state properties:
+
+## `core` 
+The core substate stores the data, which represents the data to be rendered, 
+the schema which describes the structure of the `data` and the `uischema`, which describes how to render the `data`.
+
+The `validation` substate stores any validation errors the data currently has with respect to the schema. 
+Validation is performed via [ajv](https://github.com/epoberezkin/ajv). The `ValidationState` shape hence looks like this:
+
+```javascript
+error: Ajv.ErrorObject[];
+validator: Ajv.ValidateFunction;
+```
+
+The `errors` property stores the current errors. 
+Under the hood, JSON Forms uses ajv to validate the data against the schema, 
+hence the ValidationFunction and ErrorObject types are from ajv.
+
+## `renderers`
+
+The renderers property stores all available renderers that are used by JSON Forms when rendering. 
+If you want to know more about renderers, see the section on Custom Renderers.
+
+## `fields`
+
+Fields are like renderers but only represent the data to be displayed and nothing else. 
+This is not necessarily the case with Renderers stored within renderers, as such renderers may also display a label or any validation errors. Fields are more universal in that sense that they should not make any assumptions about the environment they are embedded in, e.g. a field may either be used by a regular control or by a table, where it is used within a call. Most controls for primitive datatypes in the default renderer sets of JSON Forms are implemented with fields.
+
+If you contribute custom renderers/fields, some of them might need to some additional state not covered by JSON Forms. 
+For that purpose the JsonFormsState allows any additional state to be passed in via an index property.
+

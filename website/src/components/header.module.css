@@ -1,0 +1,10 @@
+.logo__icon {
+  align-items: center;
+  display: flex
+}
+
+.logo__title {
+  text-decoration: none;
+  color: #fff;
+  flex: 1
+}

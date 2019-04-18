@@ -1,0 +1,119 @@
+---
+name: Tutorial
+route: /docs/tutorial
+---
+
+import { PersonVars } from './components/tutorial/TutorialExample' 
+
+# Tutorial
+
+This section describes you to integrate JSON Forms into a React app from scratch.
+Alternatively you can also clone the [seed app](https://github.com/eclipsesource/jsonforms-react-seed).
+
+1. We'll use [create-react-app](https://github.com/facebookincubator/create-react-app) to scaffold a basic React application which we'll use as a starting point.
+   If you didn't install create-react-app yet, please do so now before continuing.
+
+   Let's now create a basic application with (if you want to use TS, add the `--typescript` option):
+
+   ```bash
+   create-react-app my-jsonforms-app
+   ```
+
+   Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app and
+   install all dependencies:
+
+   ```bash
+   cd my-jsonforms-app
+   npm install
+   ```
+2. Install JSON Forms and the material renderer set. We'll use an example from JSON Forms in order to obtain
+   a JSON schema, a corresponding UI schema and a data instance to be rendered. You don't need to install
+   the `@jsonforms/examples` module if you plan to supply your own schema in the following:
+
+   ```bash
+   npm install --save @jsonforms/core
+   npm install --save @jsonforms/material-renderers
+   npm install --save @jsonforms/examples
+   
+   # Since 2.2.x, install react, redux and react-redux are peer dependencies
+   npm install --save react redux@3.7.2 react-redux
+   ```
+   Since 2.2.x JSON Forms does not include React, redux and react-redux as dependencies, but rather has them
+   configured as peer depenencies.
+3. Switch to the `src` directory and open `index.js` with an editor of your choice.
+   Let's add a couple of imports first:
+   ```javascript
+   import { combineReducers, createStore } from 'redux';
+   import { Provider } from 'react-redux';
+   
+   import { Actions, jsonformsReducer } from '@jsonforms/core';
+   import { person } from '@jsonforms/examples';
+   import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
+   ```
+   The `person` import is necessary for importing the person example
+   while `@jsonforms/material-renderers` imports the 
+   [Material UI](https://material-ui-next.com) based
+   renderer set. The other ones will be explained in a bit.
+
+   Now let's define the variables that are crucial for JSON Forms to work,
+   that is, `data`, `schema` and `uischema`. As previously mention, we are
+   using the person example from JSON Forms here:
+
+   ```javascript
+   const schema = person.schema;
+   const uischema = person.uischema;
+   const data = person.data;
+   ```
+
+   These variables are defined as follows, in case you are interested:
+
+   <PersonVars />
+4. Still in `index.js`, create a new store with the `createStore` function provided by redux.
+   For that purpose JSON Forms exports its reducer via `jsonformsReducer`. For the initial state we supply
+   the renderers we want to use, which we have imported from `@jsonforms/material-renderers`:
+
+   ```javascript
+   const store = createStore(
+     combineReducers(
+        { jsonforms: jsonformsReducer() }),  
+        {
+          jsonforms: {
+            renderers: materialRenderers,
+            fields: materialFields,
+          }
+        }
+   );
+   ```
+
+   In order for JSON Forms to initialize correctly, we also need to dispatch an initialization action that will
+   set-up some internal state that's necessary for JSON Forms:
+
+   ```javascript
+   store.dispatch(Actions.init(data, schema, uischema));
+   ```
+5. Wrap the existing `App` component within a `Provider`
+   
+   ```javascript
+   <Provider store={store}>
+     <App />
+   </Provider>
+   ```
+   
+   You can close the <code>index.js</code> file now.
+
+6. Open the `App.js` file and import the `JsonForms` component from `@jsonforms/react`.
+   Delete the `header` element and replace it with the `JsonForms` element
+   to get a form rendered:
+   ```jsx
+   import { JsonForms } from '@jsonforms/react';
+   // other imports...
+   
+   class App extends Component {
+     render() {
+       <div>
+          {/* other markup... */}
+          <JsonForms />
+       </div>
+     }
+   }
+   ```

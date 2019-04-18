@@ -1,0 +1,28 @@
+{
+  "name": "docz-example-basic",
+  "version": "1.0.0-rc.7",
+  "license": "MIT",
+  "scripts": {
+    "dev": "docz dev",
+    "build": "docz build"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.10",
+    "@jsonforms/core": "^2.2.2",
+    "@jsonforms/examples": "^2.2.2",
+    "@jsonforms/material-renderers": "^2.2.2",
+    "@jsonforms/react": "^2.2.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-helmet": "^5.2.0",
+    "react-redux": "^6.0.1",
+    "styled-components": "^4.2.0"
+  },
+  "devDependencies": {
+    "docz": "1.0.0",
+    "docz-plugin-css": "^0.11.0",
+    "docz-theme-default": "1.0.0",
+    "webpack": "^4.28.4"
+  }
+}
