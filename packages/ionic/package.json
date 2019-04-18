@@ -24,7 +24,7 @@
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Ionic' --mode file --out docs src",
     "test": "karma start ./test-config/karma.conf.js --single-run",
     "test-ci": "karma start ./test-config/karma.conf.js --single-run",
-    "test-cov": "karma start ./test-config/karma.conf.js --coverage --single-run",
+    "test-cov": "node --max_old_space_size=4096 ../../node_modules/.bin/karma start ./test-config/karma.conf.js --coverage --single-run",
     "e2e": "npm run e2e-update && npm run e2e-test",
     "e2e-test": "protractor ./test-config/protractor.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false"

@@ -24,7 +24,7 @@
     "lint": "../../node_modules/.bin/tslint --project tsconfig.json",
     "start": "npm run dev",
     "test": "jest --no-cache",
-    "test-cov": "jest --no-cache",
+    "test-cov": "jest --no-cache --coverage",
     "report": "../../node_modules/.bin/nyc report --reporter=html",
     "doc": "../../node_modules/.bin/typedoc --name 'JSON Forms Material Tree Renderer' --mode file --excludeExternals --theme ../../typedoc-jsonforms --out docs src"
   },
