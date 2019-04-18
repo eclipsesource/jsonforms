@@ -32,7 +32,7 @@
 		"tslint-loader": "^3.5.3",
 		"tslint-react": "^3.2.0",
 		"typedoc": "^0.12.0",
-		"typescript": "^3.1.0",
+		"typescript": "3.2.4",
 		"webpack": "^4.29.6",
 		"webpack-merge": "^4.2.1"
 	}

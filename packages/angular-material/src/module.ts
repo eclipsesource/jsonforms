@@ -46,7 +46,6 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
-  L10nConfig,
   LocaleValidationModule,
   LocalizationModule,
   TranslationModule
@@ -74,8 +73,6 @@ import {
   VerticalLayoutRenderer
 } from './layouts';
 
-const emptyL10NConfig: L10nConfig = {};
-
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -98,9 +95,7 @@ const emptyL10NConfig: L10nConfig = {};
     MatButtonModule,
     MatIconModule,
     MatAutocompleteModule,
-    LocalizationModule,
-    LocaleValidationModule.forRoot(),
-    TranslationModule.forRoot(emptyL10NConfig)
+    LocalizationModule
   ],
   declarations: [
     BooleanControlRenderer,
