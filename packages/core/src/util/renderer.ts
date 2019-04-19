@@ -35,7 +35,7 @@ import {
   getSchema,
   getSubErrorsAt,
   getUiSchema,
-  UISchemaTester,
+  UISchemaTester
 } from '../reducers';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
