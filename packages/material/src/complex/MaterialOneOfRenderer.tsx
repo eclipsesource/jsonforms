@@ -25,17 +25,14 @@
 import React from 'react';
 
 import {
-  ControlProps,
+  CombinatorRendererProps,
   createDefaultValue,
   isOneOfControl,
-  JsonFormsState,
   JsonSchema,
   mapDispatchToControlProps,
-  mapStateToControlProps,
-  OwnPropsOfControl,
+  mapStateToOneOfProps,
   RankedTester,
-  rankWith,
-  StatePropsOfControl
+  rankWith
 } from '@jsonforms/core';
 import {
   Button,
@@ -50,9 +47,8 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { ResolvedJsonForms } from '@jsonforms/react';
-import { createCombinatorRenderInfos, resolveSubSchemas } from './combinators';
+import { createCombinatorRenderInfos, resolveSubSchemas } from '@jsonforms/core/src/util/combinators';
 import CombinatorProperties from './CombinatorProperties';
-import { Ajv, ErrorObject } from 'ajv';
 
 interface MaterialOneOfState {
   open: boolean;
@@ -61,12 +57,7 @@ interface MaterialOneOfState {
   newOneOfIndex?: any;
 }
 
-interface OneOfProps {
-  rootSchema: JsonSchema;
-  ajv: Ajv;
-}
-
-class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, MaterialOneOfState> {
+class MaterialOneOfRenderer extends React.Component<CombinatorRendererProps, MaterialOneOfState> {
 
   state: MaterialOneOfState = {
     open: false,
@@ -74,21 +65,11 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
     selectedOneOf: 0,
     newOneOfIndex: 0
   };
-  constructor(props: ControlProps&OneOfProps) {
+  constructor(props: CombinatorRendererProps) {
     super(props);
-    const {schema, rootSchema, ajv, data} = this.props;
-    const _schema = resolveSubSchemas(schema, rootSchema, 'oneOf');
-    const structuralKeywords = ['required', 'additionalProperties', 'type'];
-    const dataIsValid = (errors: ErrorObject[]): boolean => {
-      return !errors || errors.length === 0 || !errors.find(e => structuralKeywords.indexOf(e.keyword) !== -1);
-    };
-    for (let i = 0; i < _schema.oneOf.length; i++) {
-      const valFn = ajv.compile(_schema.oneOf[i]);
-      valFn(data);
-      if ( dataIsValid(valFn.errors)) {
-        this.state.selectedOneOf = i;
-        break;
-      }
+    const {indexOfFittingSchema} = this.props;
+    if (indexOfFittingSchema) {
+      this.state.selectedOneOf = indexOfFittingSchema;
     }
   }
   handleClose = () => {
@@ -179,13 +160,8 @@ class MaterialOneOfRenderer extends React.Component<ControlProps & OneOfProps, M
   }
 }
 
-const mapMyStateToControlProps = (state: JsonFormsState, ownProps: OwnPropsOfControl): StatePropsOfControl&OneOfProps => {
-  const props = mapStateToControlProps(state, ownProps);
-  return {...props, ajv: state.jsonforms.core.ajv};
-};
-
 const ConnectedMaterialOneOfRenderer = connect(
-  mapMyStateToControlProps,
+  mapStateToOneOfProps,
   mapDispatchToControlProps
 )(MaterialOneOfRenderer);
 ConnectedMaterialOneOfRenderer.displayName = 'MaterialOneOfRenderer';

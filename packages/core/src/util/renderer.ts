@@ -22,6 +22,7 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { ControlElement, UISchemaElement } from '../models/uischema';
 import {
   composeWithUi,
   createLabelDescriptionFrom,
@@ -30,7 +31,6 @@ import {
   isVisible,
   Resolve
 } from '../util';
-import get from 'lodash/get';
 import union from 'lodash/union';
 import RefParser from 'json-schema-ref-parser';
 import {
@@ -46,7 +46,7 @@ import {
 } from '../reducers';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
-import { ControlElement, UISchemaElement } from '../models/uischema';
+import get from 'lodash/get';
 import has from 'lodash/has';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
@@ -54,6 +54,7 @@ import { generateDefaultUISchema } from '../generators';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
+import { CombinatorKeyword, resolveSubSchemas } from './combinators';
 
 export { JsonFormsRendererRegistryEntry };
 
@@ -617,22 +618,49 @@ export const controlDefaultProps = {
   errors: [] as string[]
 };
 
-export interface CombinatorRendererProps {
+export interface StatePropsOfCombinator {
   schema: JsonSchema;
   rootSchema: JsonSchema;
   path: string;
   visible: boolean;
+  id: string;
+  indexOfFittingSchema: number;
 }
+export interface CombinatorRendererProps
+  extends StatePropsOfCombinator,
+    DispatchPropsOfControl {}
 /**
- * Map state to control props.
+ * Map state to all of renderer props.
  * @param state the store's state
  * @param ownProps any own props
- * @returns {StatePropsOfControl} state props for a control
+ * @returns {StatePropsOfCombinator} state props for a combinator
  */
 export const mapStateToAllOfProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfControl
-): CombinatorRendererProps => {
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
+};
+
+export const mapStateToOneOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'oneOf');
+};
+
+export const mapStateToAnyOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'anyOf');
+};
+
+const mapStateToCombinatorRendererProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl,
+  keyword: CombinatorKeyword
+): StatePropsOfCombinator => {
   const { uischema } = ownProps;
   const path = composeWithUi(uischema, ownProps.path);
   const rootSchema = getSchema(state);
@@ -644,12 +672,38 @@ export const mapStateToAllOfProps = (
   const visible = has(ownProps, 'visible')
     ? ownProps.visible
     : isVisible(uischema, getData(state), ownProps.path);
+  const id = ownProps.id;
+
+  const data = Resolve.data(getData(state), path);
+
+  const ajv = state.jsonforms.core.ajv;
+  const schema = resolvedSchema || rootSchema;
+  const _schema = resolveSubSchemas(schema, rootSchema, keyword);
+  const structuralKeywords = ['required', 'additionalProperties', 'type'];
+  const dataIsValid = (errors: ErrorObject[]): boolean => {
+    return (
+      !errors ||
+      errors.length === 0 ||
+      !errors.find(e => structuralKeywords.indexOf(e.keyword) !== -1)
+    );
+  };
+  let indexOfFittingSchema: number;
+  for (let i = 0; i < _schema[keyword].length; i++) {
+    const valFn = ajv.compile(_schema[keyword][i]);
+    valFn(data);
+    if (dataIsValid(valFn.errors)) {
+      indexOfFittingSchema = i;
+      break;
+    }
+  }
 
   return {
     path,
-    schema: resolvedSchema || rootSchema,
+    schema,
     rootSchema,
-    visible
+    visible,
+    id,
+    indexOfFittingSchema
   };
 };
 

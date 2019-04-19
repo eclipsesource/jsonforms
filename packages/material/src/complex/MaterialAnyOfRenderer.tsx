@@ -26,27 +26,35 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
-  CombinatorRendererProps,
   isAnyOfControl,
   JsonSchema,
-  mapStateToAllOfProps,
+  mapStateToAnyOfProps,
   RankedTester,
-  rankWith
+  rankWith,
+  StatePropsOfCombinator
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
-import { createCombinatorRenderInfos, resolveSubSchemas } from './combinators';
+import { createCombinatorRenderInfos, resolveSubSchemas } from '@jsonforms/core/src/util/combinators';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 
 interface MaterialAnyOfState {
   selectedAnyOf: number;
 }
 
-class MaterialAnyOfRenderer extends React.Component<CombinatorRendererProps, MaterialAnyOfState> {
+class MaterialAnyOfRenderer extends React.Component<StatePropsOfCombinator, MaterialAnyOfState> {
 
   state: MaterialAnyOfState = {
     selectedAnyOf: 0
   };
+
+  constructor(props: StatePropsOfCombinator) {
+    super(props);
+    const {indexOfFittingSchema} = this.props;
+    if (indexOfFittingSchema) {
+      this.state.selectedAnyOf = indexOfFittingSchema;
+    }
+  }
 
   handleChange = (_event: any, value: number) => {
     this.setState({ selectedAnyOf: value });
@@ -86,7 +94,7 @@ class MaterialAnyOfRenderer extends React.Component<CombinatorRendererProps, Mat
 }
 
 const ConnectedMaterialAnyOfRenderer = connect(
-  mapStateToAllOfProps
+  mapStateToAnyOfProps
 )(MaterialAnyOfRenderer);
 ConnectedMaterialAnyOfRenderer.displayName = 'MaterialAnyOfRenderer';
 export const materialAnyOfControlTester: RankedTester = rankWith(2, isAnyOfControl);
