@@ -22,12 +22,11 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import {
-  generateDefaultUISchema,
-  JsonSchema,
-  resolveSchema,
-  UISchemaElement
-} from '@jsonforms/core';
+
+import { JsonSchema } from '../models/jsonSchema';
+import { UISchemaElement } from '../models/uischema';
+import { resolveSchema } from './resolvers';
+import { generateDefaultUISchema } from '../generators';
 
 export interface CombinatorSubSchemaRenderInfo {
   schema: JsonSchema;
@@ -35,7 +34,7 @@ export interface CombinatorSubSchemaRenderInfo {
   label: string;
 }
 
-type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
+export type CombinatorKeyword = 'anyOf' | 'oneOf' | 'allOf';
 
 const createLabel = (
   subSchema: JsonSchema,
