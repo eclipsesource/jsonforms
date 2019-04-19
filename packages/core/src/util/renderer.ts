@@ -22,15 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import get from 'lodash/get';
 import { ControlElement, UISchemaElement } from '../models/uischema';
-import {
-  composeWithUi,
-  createLabelDescriptionFrom,
-  formatErrorMessage,
-  isEnabled,
-  isVisible,
-  Resolve
-} from '../util';
 import union from 'lodash/union';
 import RefParser from 'json-schema-ref-parser';
 import {
@@ -42,11 +35,20 @@ import {
   getSchema,
   getSubErrorsAt,
   getUiSchema,
-  UISchemaTester
+  UISchemaTester,
 } from '../reducers';
 import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
-import get from 'lodash/get';
+import {
+  CombinatorKeyword,
+  composeWithUi,
+  createLabelDescriptionFrom,
+  formatErrorMessage,
+  isEnabled,
+  isVisible,
+  Resolve,
+  resolveSubSchemas
+} from '../util';
 import has from 'lodash/has';
 import { update } from '../actions';
 import { ErrorObject } from 'ajv';
@@ -54,7 +56,6 @@ import { generateDefaultUISchema } from '../generators';
 import { JsonFormsState } from '../store';
 import { AnyAction, Dispatch } from 'redux';
 import { JsonFormsRendererRegistryEntry } from '../reducers/renderers';
-import { CombinatorKeyword, resolveSubSchemas } from './combinators';
 
 export { JsonFormsRendererRegistryEntry };
 

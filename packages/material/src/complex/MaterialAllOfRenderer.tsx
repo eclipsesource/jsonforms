@@ -27,15 +27,16 @@ import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
 
 import {
+  createCombinatorRenderInfos,
   isAllOfControl,
   JsonSchema,
   mapStateToAllOfProps,
   RankedTester,
   rankWith,
+  resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
-import { createCombinatorRenderInfos, resolveSubSchemas } from '@jsonforms/core/src/util/combinators';
 
 class MaterialAllOfRenderer extends React.Component<StatePropsOfCombinator, any> {
 

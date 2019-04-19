@@ -26,16 +26,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import {
+  createCombinatorRenderInfos,
   isAnyOfControl,
   JsonSchema,
   mapStateToAnyOfProps,
   RankedTester,
   rankWith,
+  resolveSubSchemas,
   StatePropsOfCombinator
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import CombinatorProperties from './CombinatorProperties';
-import { createCombinatorRenderInfos, resolveSubSchemas } from '@jsonforms/core/src/util/combinators';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 
 interface MaterialAnyOfState {

@@ -26,13 +26,15 @@ import React from 'react';
 
 import {
   CombinatorRendererProps,
+  createCombinatorRenderInfos,
   createDefaultValue,
   isOneOfControl,
   JsonSchema,
   mapDispatchToControlProps,
   mapStateToOneOfProps,
   RankedTester,
-  rankWith
+  rankWith,
+  resolveSubSchemas
 } from '@jsonforms/core';
 import {
   Button,
@@ -47,7 +49,6 @@ import {
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { ResolvedJsonForms } from '@jsonforms/react';
-import { createCombinatorRenderInfos, resolveSubSchemas } from '@jsonforms/core/src/util/combinators';
 import CombinatorProperties from './CombinatorProperties';
 
 interface MaterialOneOfState {
