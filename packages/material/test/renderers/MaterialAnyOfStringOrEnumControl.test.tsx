@@ -36,7 +36,7 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import {
-  materialRenderers, MaterialSimpleAnyOfControl, materialSimpleAnyOfControlTester
+  MaterialAnyOfStringOrEnumControl, materialAnyOfStringOrEnumControlTester, materialRenderers
 } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 
@@ -53,8 +53,8 @@ const uischema: ControlElement = {
 
 describe('Material simple any of control tester', () => {
   it('should only be applicable for simple any of cases', () => {
-    expect(materialSimpleAnyOfControlTester({ type: 'Foo' }, schema)).toBe(-1);
-    expect(materialSimpleAnyOfControlTester(uischema, schema)).toBe(5);
+    expect(materialAnyOfStringOrEnumControlTester({ type: 'Foo' }, schema)).toBe(-1);
+    expect(materialAnyOfStringOrEnumControlTester(uischema, schema)).toBe(5);
 
     const nestedSchema: JsonSchema = {
       properties: {
@@ -65,7 +65,7 @@ describe('Material simple any of control tester', () => {
       type: 'Control',
       scope: '#/properties/foo'
     };
-    expect(materialSimpleAnyOfControlTester(nestedUischema, nestedSchema)).toBe(
+    expect(materialAnyOfStringOrEnumControlTester(nestedUischema, nestedSchema)).toBe(
       5
     );
     const schemaNoEnum: JsonSchema = {
@@ -80,14 +80,14 @@ describe('Material simple any of control tester', () => {
     const schemaNoString: JsonSchema = {
       anyOf: [{ type: 'integer' }, { enum: [1, 2] }]
     };
-    expect(materialSimpleAnyOfControlTester(uischema, schemaNoEnum)).toBe(-1);
+    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoEnum)).toBe(-1);
     expect(
-      materialSimpleAnyOfControlTester(uischema, schemaConflictTypes)
+      materialAnyOfStringOrEnumControlTester(uischema, schemaConflictTypes)
     ).toBe(-1);
     expect(
-      materialSimpleAnyOfControlTester(uischema, schemaAdditionalProps)
+      materialAnyOfStringOrEnumControlTester(uischema, schemaAdditionalProps)
     ).toBe(5);
-    expect(materialSimpleAnyOfControlTester(uischema, schemaNoString)).toBe(-1);
+    expect(materialAnyOfStringOrEnumControlTester(uischema, schemaNoString)).toBe(-1);
   });
 });
 
@@ -109,7 +109,7 @@ const initJsonFormsStore = (
     return store;
   };
 
-describe('Material input control', () => {
+describe('Material any of string or enum control', () => {
     let wrapper: ReactWrapper;
 
     afterEach(() => {
@@ -120,7 +120,7 @@ describe('Material input control', () => {
       const store = initJsonFormsStore('foo', schema, uischema);
       wrapper = mount(
         <Provider store={store}>
-          <MaterialSimpleAnyOfControl schema={schema} uischema={uischema} />
+          <MaterialAnyOfStringOrEnumControl schema={schema} uischema={uischema} />
         </Provider>
       );
       const inputs = wrapper.find('input');

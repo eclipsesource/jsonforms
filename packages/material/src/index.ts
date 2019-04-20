@@ -45,6 +45,8 @@ import {
   materialListWithDetailTester
 } from './additional';
 import {
+  MaterialAnyOfStringOrEnumControl,
+  materialAnyOfStringOrEnumControlTester,
   MaterialBooleanControl,
   materialBooleanControlTester,
   MaterialDateControl,
@@ -61,8 +63,6 @@ import {
   materialNumberControlTester,
   MaterialRadioGroupControl,
   materialRadioGroupControlTester,
-  MaterialSimpleAnyOfControl,
-  materialSimpleAnyOfControlTester,
   MaterialSliderControl,
   materialSliderControlTester,
   MaterialTextControl,
@@ -155,8 +155,8 @@ export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
     renderer: MaterialListWithDetailRenderer
   },
   {
-    tester: materialSimpleAnyOfControlTester,
-    renderer: MaterialSimpleAnyOfControl
+    tester: materialAnyOfStringOrEnumControlTester,
+    renderer: MaterialAnyOfStringOrEnumControl
   }
 ];
 

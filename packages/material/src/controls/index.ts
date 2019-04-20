@@ -53,9 +53,9 @@ import MaterialTextControl, {
   materialTextControlTester
 } from './MaterialTextControl';
 
-import MaterialSimpleAnyOfControl, {
-  materialSimpleAnyOfControlTester
-} from './MaterialSimpleAnyOfControl';
+import MaterialAnyOfStringOrEnumControl, {
+  materialAnyOfStringOrEnumControlTester
+} from './MaterialAnyOfStringOrEnumControl';
 
 export {
   MaterialBooleanControl,
@@ -78,6 +78,6 @@ export {
   materialNumberControlTester,
   MaterialTextControl,
   materialTextControlTester,
-  MaterialSimpleAnyOfControl,
-  materialSimpleAnyOfControlTester
+  MaterialAnyOfStringOrEnumControl,
+  materialAnyOfStringOrEnumControlTester
 };
