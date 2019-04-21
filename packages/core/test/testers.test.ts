@@ -368,6 +368,44 @@ test('tester isObjectArrayControl', t => {
     }
   };
   t.true(isObjectArrayControl(control, schema));
+  const schema_noType: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        items: {
+          type: 'object',
+          properties: {
+            x: { type: 'integer' },
+            y: { type: 'integer' }
+          }
+        }
+      }
+    }
+  };
+  t.true(isObjectArrayControl(control, schema_noType));
+  const schema_innerAllOf: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: {
+        type: 'array',
+        items: {
+          allOf: [
+            {
+              properties: {
+                x: { type: 'integer' }
+              }
+            },
+            {
+              properties: {
+                y: { type: 'integer' }
+              }
+            }
+          ]
+        }
+      }
+    }
+  };
+  t.true(isObjectArrayControl(control, schema_innerAllOf));
 });
 
 test('isBooleanControl', t => {
