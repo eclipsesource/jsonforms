@@ -359,13 +359,9 @@ export const isDateTimeControl = and(
  */
 export const isObjectArray = and(
   schemaMatches(
-    schema =>
-      !isEmpty(schema) &&
-      schema.type === 'array' &&
-      !isEmpty(schema.items) &&
-      !Array.isArray(schema.items) // we don't care about tuples
+    schema => deriveType(schema) === 'array' && !Array.isArray(schema.items) // we don't care about tuples
   ),
-  schemaSubPathMatches('items', schema => schema.type === 'object')
+  schemaSubPathMatches('items', schema => deriveType(schema) === 'object')
 );
 
 /**
