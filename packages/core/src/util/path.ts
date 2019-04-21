@@ -54,9 +54,9 @@ export const compose = (path1: string, path2: string) => {
  */
 export const toDataPathSegments = (schemaPath: string): string[] => {
   const s = schemaPath
-    .replace(/anyOf\/[\d]\//, '')
-    .replace(/allOf\/[\d]\//, '')
-    .replace(/oneOf\/[\d]\//, '');
+    .replace(/anyOf\/[\d]\//g, '')
+    .replace(/allOf\/[\d]\//g, '')
+    .replace(/oneOf\/[\d]\//g, '');
   const segments = s.split('/');
 
   const startFromRoot = segments[0] === '#' || segments[0] === '';

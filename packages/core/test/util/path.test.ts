@@ -43,6 +43,23 @@ test('resolve ', t => {
 test('toDataPath ', t => {
   t.is(toDataPath('#/properties/foo/properties/bar'), 'foo.bar');
 });
+test('toDataPath replace anyOf', t => {
+  t.is(toDataPath('/anyOf/1/properties/foo/anyOf/1/properties/bar'), 'foo.bar');
+});
+test('toDataPath replace allOf', t => {
+  t.is(toDataPath('/allOf/1/properties/foo/allOf/1/properties/bar'), 'foo.bar');
+});
+test('toDataPath replace oneOf', t => {
+  t.is(toDataPath('/oneOf/1/properties/foo/oneOf/1/properties/bar'), 'foo.bar');
+});
+test('toDataPath replace all combinators', t => {
+  t.is(
+    toDataPath(
+      '/oneOf/1/properties/foo/anyOf/1/properties/bar/allOf/1/properties/foobar'
+    ),
+    'foo.bar.foobar'
+  );
+});
 test('toDataPath use of keywords', t => {
   t.is(toDataPath('#/properties/properties'), 'properties');
 });
