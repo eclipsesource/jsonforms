@@ -36,7 +36,12 @@ import logger from 'redux-logger';
 
 @NgModule({
   declarations: [AppComponent, ReduxComponent],
-  imports: [BrowserModule, JsonFormsAngularMaterialModule, TranslationModule.forRoot({}), LocaleValidationModule.forRoot()],
+  imports: [
+    BrowserModule,
+    JsonFormsAngularMaterialModule,
+    TranslationModule.forRoot({}),
+    LocaleValidationModule.forRoot()
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
