@@ -26,15 +26,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
 import { Actions, JsonFormsState, UISchemaTester } from '@jsonforms/core';
+import { TranslationModule, LocaleValidationModule } from 'angular-l10n';
 import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
 import { initialState, rootReducer } from './store';
 import { ReduxComponent } from './redux.component';
+import logger from 'redux-logger';
 
 @NgModule({
   declarations: [AppComponent, ReduxComponent],
-  imports: [BrowserModule, JsonFormsAngularMaterialModule],
+  imports: [BrowserModule, JsonFormsAngularMaterialModule, TranslationModule.forRoot({}), LocaleValidationModule.forRoot()],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
@@ -48,7 +50,7 @@ export class AppModule {
       enhancers = [...enhancers, devTools.enhancer()];
     }
 
-    ngRedux.configureStore(rootReducer, initialState, [], enhancers);
+    ngRedux.configureStore(rootReducer, initialState, [logger], enhancers);
     const example = initialState.examples.data[0];
     ngRedux.dispatch(
       Actions.init(example.data, example.schema, example.uischema)
