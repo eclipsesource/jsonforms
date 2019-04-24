@@ -1,0 +1,51 @@
+---
+name: Multiple Forms 
+route: /docs/multiple-forms
+---
+
+import { LinkedForms, MultipleForms } from './components/multiple-forms/FormsExamples'
+
+# Multiple Forms
+
+There are use cases where multiple forms should be embedded into a single page. This section 
+describes some of these in more detail.
+
+## Linking forms
+
+Forms can interact with each other by using `$ref` and setting the `scope` property within the UI schema
+accordingly. In this example, we have two entities, Person and Address. Whenever we change
+the `shippingAddress` property of the person, it is accordingly updated in the address form and vice versa.
+
+<LinkedForms />
+
+## Multiple forms within single store
+There might be use cases where you have forms that do not have anything in common. In such cases
+you can explicitly pass  `schema` and `uischema` props to the `JsonForms` component
+(if you don't specify these, they will be fetched from the store).
+
+Additionally, the `JsonForms` component also takes a `path` prop which specifies
+the instance path that is used to bind against the data.
+
+To illustrate, let's look again at the example from before, but this time
+the `person` and `address` schemas are not stored in any common parent schema.
+
+<MultipleForms />
+
+The code for the above example looks as follows:
+
+```
+<div>
+  <JsonForms schema={personSchema}
+             uischema={personUISchema}
+             path='person'
+  />
+  <JsonForms schema={addressSchema}
+             uischema={addressUISchema}
+             path='address'
+  />
+</div>
+```
+
+As you can see we explicitly pass in the `schema` and `uischema` props.
+We also need to specify which property the data should be written to, in this case we
+use `person` and `shippingAddress`.
