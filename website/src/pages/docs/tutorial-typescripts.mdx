@@ -1,6 +1,6 @@
 ---
-name: Tutorial
-route: /docs/tutorial
+name: Typescript Tutorial
+route: /docs/tutorial-typescript
 ---
 
 import { PersonVars } from './components/tutorial/TutorialExample' 
@@ -13,10 +13,10 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
 1. We'll use [create-react-app](https://github.com/facebookincubator/create-react-app) to scaffold a basic React application which we'll use as a starting point.
    If you didn't install create-react-app yet, please do so now before continuing.
 
-   Let's now create a basic application with (if you want to use TS, add the `--typescript` option):
+   Let's now create a basic application with:
 
    ```bash
-   create-react-app my-jsonforms-app
+   create-react-app my-jsonforms-app -- typescript
    ```
 
    Scaffolding may take a couple of moments. Once it's finished, switch to your newly created app and
@@ -41,7 +41,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    ```
    Since 2.2.x JSON Forms does not include React, redux and react-redux as dependencies, but rather has them
    configured as peer depenencies.
-3. Switch to the `src` directory and open `index.js` with an editor of your choice.
+3. Switch to the `src` directory and open `index.tsx` with an editor of your choice.
    Let's add a couple of imports first:
    ```javascript
    import { combineReducers, createStore } from 'redux';
@@ -69,7 +69,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    These variables are defined as follows, in case you are interested:
 
    <PersonVars />
-4. Still in `index.js`, create a new store with the `createStore` function provided by redux.
+4. Still in `index.tsx`, create a new store with the `createStore` function provided by redux.
    For that purpose JSON Forms exports its reducer via `jsonformsReducer`. For the initial state we supply
    the renderers we want to use, which we have imported from `@jsonforms/material-renderers`:
 
@@ -102,7 +102,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    
    You can close the <code>index.js</code> file now.
 
-6. Open the `App.js` file and import the `JsonForms` component from `@jsonforms/react`.
+6. Open the `App.tsx` file and import the `JsonForms` component from `@jsonforms/react`.
    Delete the `header` element and replace it with the `JsonForms` element
    to get a form rendered:
    ```jsx
