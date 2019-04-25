@@ -209,7 +209,8 @@ export class MasterListComponent extends JsonFormsArrayControl {
     if (
       newSelectedItem !== undefined &&
       this.selectedItem !== undefined &&
-      newSelectedItem.path === this.selectedItem.path
+      (newSelectedItem.label === this.selectedItem.label ||
+        newSelectedItem.path === this.selectedItem.path)
     ) {
       // after checking that we are on the same path, set selection
       this.selectedItem = newSelectedItem;
