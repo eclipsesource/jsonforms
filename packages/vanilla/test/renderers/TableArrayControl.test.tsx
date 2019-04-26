@@ -109,8 +109,8 @@ test('render two children', t => {
   t.is(tHead.children.length, 1);
   const headRow = tHead.children.item(0);
   t.is(headRow.tagName, 'TR');
-  // two data columns + validation column
-  t.is(headRow.children.length, 3);
+  // two data columns + validation column + delete column
+  t.is(headRow.children.length, 4);
 
   const headColumn1 = headRow.children.item(0);
   t.is(headColumn1.tagName, 'TH');
@@ -125,11 +125,11 @@ test('render two children', t => {
   t.is(tBody.children.length, 1);
   const bodyRow = tBody.children.item(0);
   t.is(bodyRow.tagName, 'TR');
-  // two data columns + validation column
-  t.is(bodyRow.children.length, 3);
+  // two data columns + validation column + delete column
+  t.is(bodyRow.children.length, 4);
 
   const tds = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'td');
-  t.is(tds.length, 3);
+  t.is(tds.length, 4);
   t.is(tds[0].children.length, 1);
   t.is(tds[0].children[0].id, '');
   t.is(tds[1].children.length, 1);
@@ -176,8 +176,8 @@ test('render empty data', t => {
 
   const headRow = tHead.children.item(0);
   t.is(headRow.tagName, 'TR');
-  // two data columns + validation column
-  t.is(headRow.children.length, 3);
+  // two data columns + validation column + delete column
+  t.is(headRow.children.length, 4);
 
   const headColumn1 = headRow.children.item(0);
   t.is(headColumn1.tagName, 'TH');
@@ -282,8 +282,8 @@ test('render new child', t => {
     </Provider>
   ) as unknown as React.Component<any>;
 
-  const button = TestUtils.findRenderedDOMComponentWithTag(tree, 'button') as HTMLButtonElement;
-  TestUtils.Simulate.click(button);
+  const addButton = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'button')[0] as HTMLButtonElement;
+  TestUtils.Simulate.click(addButton);
   t.is(getData(store.getState()).test.length, 2);
 });
 
@@ -341,14 +341,14 @@ test('update via action', t => {
   const children = TestUtils.findRenderedDOMComponentWithTag(tree, 'tbody');
   t.is(children.childNodes.length, 1);
 
-  store.dispatch(update('test', () => [{x: 1, y: 3}, {x: 2, y: 3}]));
+  store.dispatch(update('test', () => [{ x: 1, y: 3 }, { x: 2, y: 3 }]));
   t.is(children.childNodes.length, 2);
 
-  store.dispatch(update(undefined, () => [{x: 1, y: 3}, {x: 2, y: 3}, {x: 3, y: 3}]));
+  store.dispatch(update(undefined, () => [{ x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }]));
   t.is(children.childNodes.length, 2);
 });
 
-test('tester', t =>  t.is(tableArrayControlTester({type: 'Foo'}, null), -1));
+test('tester', t => t.is(tableArrayControlTester({ type: 'Foo' }, null), -1));
 
 test('tester with recursive document ref only', t => {
   const control: ControlElement = {
@@ -578,7 +578,7 @@ test.skip('validation of nested schema', t => {
         type: 'object',
         properties: {
           middleName: { type: 'string' },
-          lastName:   { type: 'string' }
+          lastName: { type: 'string' }
         },
         required: ['middleName', 'lastName']
       }
@@ -611,7 +611,7 @@ test.skip('validation of nested schema', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
     </Provider>
   ) as unknown as React.Component<any>;
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'validation');
