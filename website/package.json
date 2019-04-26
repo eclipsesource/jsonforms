@@ -8,15 +8,15 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.10",
-    "@jsonforms/core": "^2.2.2",
-    "@jsonforms/examples": "^2.2.2",
-    "@jsonforms/material-renderers": "^2.2.2",
-    "@jsonforms/react": "^2.2.2",
+    "@jsonforms/core": "^2.2.3",
+    "@jsonforms/examples": "^2.2.3",
+    "@jsonforms/material-renderers": "^2.2.3",
+    "@jsonforms/react": "^2.2.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.0",
-    "react-redux": "^6.0.1",
+    "react-redux": "^7.0.2",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {

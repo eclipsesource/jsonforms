@@ -81,9 +81,11 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#errors" class="tsd-kind-icon">errors</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#label" class="tsd-kind-icon">label</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#labelobject" class="tsd-kind-icon">label<wbr>Object</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#numcolumns" class="tsd-kind-icon">num<wbr>Columns</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#path" class="tsd-kind-icon">path</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#schema" class="tsd-kind-icon">schema</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="materialtabletoolbarprops.html#uischema" class="tsd-kind-icon">uischema</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -100,10 +102,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="errors" class="tsd-anchor"></a>
 					<h3>errors</h3>
-					<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">errors<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableToolbar.tsx:38</li>
+							<li>Defined in complex/TableToolbar.tsx:37</li>
 						</ul>
 					</aside>
 				</section>
@@ -113,17 +115,7 @@
 					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Labels</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableToolbar.tsx:39</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="labelobject" class="tsd-anchor"></a>
-					<h3>label<wbr>Object</h3>
-					<div class="tsd-signature tsd-kind-icon">label<wbr>Object<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">LabelDescription</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in complex/TableToolbar.tsx:40</li>
+							<li>Defined in complex/TableToolbar.tsx:38</li>
 						</ul>
 					</aside>
 				</section>
@@ -133,7 +125,7 @@
 					<div class="tsd-signature tsd-kind-icon">num<wbr>Columns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in complex/TableToolbar.tsx:37</li>
+							<li>Defined in complex/TableToolbar.tsx:36</li>
 						</ul>
 					</aside>
 				</section>
@@ -143,7 +135,37 @@
 					<div class="tsd-signature tsd-kind-icon">path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
+							<li>Defined in complex/TableToolbar.tsx:39</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rootschema" class="tsd-anchor"></a>
+					<h3>root<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">root<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in complex/TableToolbar.tsx:42</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="schema" class="tsd-anchor"></a>
+					<h3>schema</h3>
+					<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
+					<aside class="tsd-sources">
+						<ul>
 							<li>Defined in complex/TableToolbar.tsx:41</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="uischema" class="tsd-anchor"></a>
+					<h3>uischema</h3>
+					<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ControlElement</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in complex/TableToolbar.tsx:40</li>
 						</ul>
 					</aside>
 				</section>
@@ -154,19 +176,22 @@
 					<a name="additem" class="tsd-anchor"></a>
 					<h3>add<wbr>Item</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Item<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Item<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in complex/TableToolbar.tsx:42</li>
+									<li>Defined in complex/TableToolbar.tsx:43</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>path: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
@@ -209,13 +234,19 @@
 								<a href="materialtabletoolbarprops.html#label" class="tsd-kind-icon">label</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="materialtabletoolbarprops.html#labelobject" class="tsd-kind-icon">label<wbr>Object</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="materialtabletoolbarprops.html#numcolumns" class="tsd-kind-icon">num<wbr>Columns</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="materialtabletoolbarprops.html#path" class="tsd-kind-icon">path</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="materialtabletoolbarprops.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="materialtabletoolbarprops.html#schema" class="tsd-kind-icon">schema</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="materialtabletoolbarprops.html#uischema" class="tsd-kind-icon">uischema</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="materialtabletoolbarprops.html#additem" class="tsd-kind-icon">add<wbr>Item</a>

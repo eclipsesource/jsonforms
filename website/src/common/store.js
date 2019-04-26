@@ -1,7 +1,7 @@
 import { combineReducers, createStore } from 'redux';
 import { Actions, jsonformsReducer } from '@jsonforms/core';
 import {
-  materialFields,
+  materialCells,
   materialRenderers,
   materialCategorizationTester,
   MaterialCategorizationLayout
@@ -14,7 +14,7 @@ export const createJsonFormsStore = ({ data, schema, uischema }) => {
       jsonforms: {
         renderers: materialRenderers
           .concat([{ tester: materialCategorizationTester, renderer: MaterialCategorizationLayout}]),
-        fields: materialFields,
+        cells: materialCells,
       }
     }
   );

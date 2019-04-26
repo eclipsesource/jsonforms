@@ -68,10 +68,15 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="ownpropsofrenderer.html" class="tsd-signature-type">OwnPropsOfRenderer</a>
+						<a href="ownpropsofjsonformsrenderer.html" class="tsd-signature-type">OwnPropsOfJsonFormsRenderer</a>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">StatePropsOfJsonFormsRenderer</span>
+								<ul class="tsd-hierarchy">
+									<li>
+										<a href="jsonformsprops.html" class="tsd-signature-type">JsonFormsProps</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>
@@ -86,7 +91,9 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="statepropsofjsonformsrenderer.html#enabled" class="tsd-kind-icon">enabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="statepropsofjsonformsrenderer.html#path" class="tsd-kind-icon">path</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="statepropsofjsonformsrenderer.html#renderers" class="tsd-kind-icon">renderers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="statepropsofjsonformsrenderer.html#refresolver" class="tsd-kind-icon">ref<wbr>Resolver</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited"><a href="statepropsofjsonformsrenderer.html#renderers" class="tsd-kind-icon">renderers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="statepropsofjsonformsrenderer.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="statepropsofjsonformsrenderer.html#schema" class="tsd-kind-icon">schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="statepropsofjsonformsrenderer.html#uischema" class="tsd-kind-icon">uischema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="statepropsofjsonformsrenderer.html#visible" class="tsd-kind-icon">visible</a></li>
@@ -104,7 +111,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofrenderer.html">OwnPropsOfRenderer</a>.<a href="ownpropsofrenderer.html#enabled">enabled</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:148</li>
+							<li>Defined in util/renderer.ts:175</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -120,7 +127,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofrenderer.html">OwnPropsOfRenderer</a>.<a href="ownpropsofrenderer.html#path">path</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:159</li>
+							<li>Defined in util/renderer.ts:186</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -132,12 +139,34 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="renderers" class="tsd-anchor"></a>
-					<h3>renderers</h3>
-					<div class="tsd-signature tsd-kind-icon">renderers<span class="tsd-signature-symbol">:</span> <a href="jsonformsrendererregistryentry.html" class="tsd-signature-type">JsonFormsRendererRegistryEntry</a><span class="tsd-signature-symbol">[]</span></div>
+					<a name="refresolver" class="tsd-anchor"></a>
+					<h3>ref<wbr>Resolver</h3>
+					<div class="tsd-signature tsd-kind-icon">ref<wbr>Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in util/renderer.ts:478</li>
+							<li>Defined in util/renderer.ts:584</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited">
+					<a name="renderers" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> renderers</h3>
+					<div class="tsd-signature tsd-kind-icon">renderers<span class="tsd-signature-symbol">:</span> <a href="jsonformsrendererregistryentry.html" class="tsd-signature-type">JsonFormsRendererRegistryEntry</a><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="ownpropsofjsonformsrenderer.html">OwnPropsOfJsonFormsRenderer</a>.<a href="ownpropsofjsonformsrenderer.html#renderers">renderers</a></p>
+						<p>Overrides <a href="ownpropsofrenderer.html">OwnPropsOfRenderer</a>.<a href="ownpropsofrenderer.html#renderers">renderers</a></p>
+						<ul>
+							<li>Defined in util/renderer.ts:574</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="rootschema" class="tsd-anchor"></a>
+					<h3>root<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">root<wbr>Schema<span class="tsd-signature-symbol">:</span> <a href="../globals.html#jsonschema" class="tsd-signature-type">JsonSchema</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in util/renderer.ts:583</li>
 						</ul>
 					</aside>
 				</section>
@@ -148,7 +177,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofrenderer.html">OwnPropsOfRenderer</a>.<a href="ownpropsofrenderer.html#schema">schema</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:144</li>
+							<li>Defined in util/renderer.ts:171</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -164,7 +193,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofrenderer.html">OwnPropsOfRenderer</a>.<a href="ownpropsofrenderer.html#uischema">uischema</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:140</li>
+							<li>Defined in util/renderer.ts:167</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -180,7 +209,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="ownpropsofrenderer.html">OwnPropsOfRenderer</a>.<a href="ownpropsofrenderer.html#visible">visible</a></p>
 						<ul>
-							<li>Defined in util/renderer.ts:152</li>
+							<li>Defined in util/renderer.ts:179</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,7 +242,13 @@
 								<a href="statepropsofjsonformsrenderer.html#path" class="tsd-kind-icon">path</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="statepropsofjsonformsrenderer.html#refresolver" class="tsd-kind-icon">ref<wbr>Resolver</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-inherited">
 								<a href="statepropsofjsonformsrenderer.html#renderers" class="tsd-kind-icon">renderers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="statepropsofjsonformsrenderer.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="statepropsofjsonformsrenderer.html#schema" class="tsd-kind-icon">schema</a>

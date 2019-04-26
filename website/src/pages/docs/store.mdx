@@ -21,8 +21,8 @@ export interface JsonFormsState {
       validation?: ValidationState,
     };
     // TODO: should we type these?    
-    renderers?: any[];
-    fields?: any[];
+    renderers?: JsonFormsRendererRegistryEntry[];
+    cells?: JsonFormsCellRendererRegistryEntry[];
     // allow additional state for JSONForms
     [additionalState: string]: any;
   };

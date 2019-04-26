@@ -70,7 +70,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">JsonFormsControl</span>
+						<span class="tsd-signature-type">JsonFormsArrayControl</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">MasterListComponent</span>
@@ -82,6 +82,8 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
+					<li><span class="tsd-signature-type">OnInit</span></li>
+					<li><span class="tsd-signature-type">OnDestroy</span></li>
 					<li><span class="tsd-signature-type">OnInit</span></li>
 					<li><span class="tsd-signature-type">OnDestroy</span></li>
 				</ul>
@@ -101,6 +103,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="masterlistcomponent.html#additem" class="tsd-kind-icon">add<wbr>Item</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#description" class="tsd-kind-icon">description</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#disabled" class="tsd-kind-icon">disabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#enabled" class="tsd-kind-icon">enabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#error" class="tsd-kind-icon">error</a></li>
@@ -115,6 +118,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="masterlistcomponent.html#propspath" class="tsd-kind-icon">props<wbr>Path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="masterlistcomponent.html#removeitems" class="tsd-kind-icon">remove<wbr>Items</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#schema" class="tsd-kind-icon">schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#scopedschema" class="tsd-kind-icon">scoped<wbr>Schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="masterlistcomponent.html#selecteditem" class="tsd-kind-icon">selected<wbr>Item</a></li>
@@ -128,10 +132,9 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="masterlistcomponent.html#deleteitem" class="tsd-kind-icon">delete<wbr>Item</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected"><a href="masterlistcomponent.html#getownprops" class="tsd-kind-icon">get<wbr>Own<wbr>Props</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="masterlistcomponent.html#mapadditionalprops" class="tsd-kind-icon">map<wbr>Additional<wbr>Props</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="masterlistcomponent.html#maptoprops" class="tsd-kind-icon">map<wbr>ToProps</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="masterlistcomponent.html#maptoprops" class="tsd-kind-icon">map<wbr>ToProps</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="masterlistcomponent.html#ngondestroy" class="tsd-kind-icon">ng<wbr>OnDestroy</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="masterlistcomponent.html#ngoninit" class="tsd-kind-icon">ng<wbr>OnInit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="masterlistcomponent.html#onaddclick" class="tsd-kind-icon">on<wbr>Add<wbr>Click</a></li>
@@ -157,9 +160,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides JsonFormsControl.__constructor</p>
+								<p>Overrides JsonFormsAbstractControl.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L91">other/master-detail/master.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L140">other/master-detail/master.ts:140</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -181,7 +184,7 @@
 					<div class="tsd-signature tsd-kind-icon">add<wbr>Item<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L88">other/master-detail/master.ts:88</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L137">other/master-detail/master.ts:137</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -189,7 +192,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -197,6 +200,9 @@
 										<ul class="tsd-parameters">
 											<li>
 												<h5>path: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5>value: <span class="tsd-signature-type">any</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
@@ -223,9 +229,20 @@
 					<h3>data</h3>
 					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.data</p>
+						<p>Inherited from JsonFormsAbstractControl.data</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:14</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:14</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="description" class="tsd-anchor"></a>
+					<h3>description</h3>
+					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from JsonFormsAbstractControl.description</p>
+						<ul>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:16</li>
 						</ul>
 					</aside>
 				</section>
@@ -234,9 +251,9 @@
 					<h3>disabled</h3>
 					<div class="tsd-signature tsd-kind-icon">disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.disabled</p>
+						<p>Inherited from JsonFormsAbstractControl.disabled</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:10</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:10</li>
 						</ul>
 					</aside>
 				</section>
@@ -245,9 +262,9 @@
 					<h3>enabled</h3>
 					<div class="tsd-signature tsd-kind-icon">enabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.enabled</p>
+						<p>Inherited from JsonFormsAbstractControl.enabled</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:18</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:20</li>
 						</ul>
 					</aside>
 				</section>
@@ -256,9 +273,9 @@
 					<h3>error</h3>
 					<div class="tsd-signature tsd-kind-icon">error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.error</p>
+						<p>Inherited from JsonFormsAbstractControl.error</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:16</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:17</li>
 						</ul>
 					</aside>
 				</section>
@@ -267,9 +284,9 @@
 					<h3>form</h3>
 					<div class="tsd-signature tsd-kind-icon">form<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">FormControl</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.form</p>
+						<p>Inherited from JsonFormsAbstractControl.form</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:12</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:12</li>
 						</ul>
 					</aside>
 				</section>
@@ -278,9 +295,9 @@
 					<h3>get<wbr>Event<wbr>Value</h3>
 					<div class="tsd-signature tsd-kind-icon">get<wbr>Event<wbr>Value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.getEventValue</p>
+						<p>Inherited from JsonFormsAbstractControl.getEventValue</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:21</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:23</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -310,9 +327,9 @@
 					<h3>hidden</h3>
 					<div class="tsd-signature tsd-kind-icon">hidden<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.hidden</p>
+						<p>Inherited from JsonFormsAbstractControl.hidden</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:19</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:21</li>
 						</ul>
 					</aside>
 				</section>
@@ -322,7 +339,7 @@
 					<div class="tsd-signature tsd-kind-icon">highlighted<wbr>Idx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L91">other/master-detail/master.ts:91</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L140">other/master-detail/master.ts:140</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -331,9 +348,9 @@
 					<h3>id</h3>
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.id</p>
+						<p>Inherited from JsonFormsAbstractControl.id</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:9</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:9</li>
 						</ul>
 					</aside>
 				</section>
@@ -342,9 +359,9 @@
 					<h3>label</h3>
 					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.label</p>
+						<p>Inherited from JsonFormsAbstractControl.label</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:15</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:15</li>
 						</ul>
 					</aside>
 				</section>
@@ -354,7 +371,7 @@
 					<div class="tsd-signature tsd-kind-icon">master<wbr>Items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L85">other/master-detail/master.ts:85</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L134">other/master-detail/master.ts:134</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -363,9 +380,9 @@
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> ng<wbr>Redux</h3>
 					<div class="tsd-signature tsd-kind-icon">ng<wbr>Redux<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NgRedux</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.ngRedux</p>
+						<p>Inherited from JsonFormsAbstractControl.ngRedux</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:8</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:8</li>
 						</ul>
 					</aside>
 				</section>
@@ -386,7 +403,7 @@
 					<div class="tsd-signature tsd-kind-icon">props<wbr>Path<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L90">other/master-detail/master.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L139">other/master-detail/master.ts:139</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -396,7 +413,7 @@
 					<div class="tsd-signature tsd-kind-icon">remove<wbr>Items<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L89">other/master-detail/master.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L138">other/master-detail/master.ts:138</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -404,7 +421,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, toDelete<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, toDelete<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -414,7 +431,7 @@
 												<h5>path: <span class="tsd-signature-type">string</span></h5>
 											</li>
 											<li>
-												<h5>toDelete: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+												<h5>toDelete: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h5>
 											</li>
 										</ul>
 										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
@@ -437,6 +454,17 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="rootschema" class="tsd-anchor"></a>
+					<h3>root<wbr>Schema</h3>
+					<div class="tsd-signature tsd-kind-icon">root<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from JsonFormsAbstractControl.rootSchema</p>
+						<ul>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:19</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="schema" class="tsd-anchor"></a>
 					<h3>schema</h3>
 					<div class="tsd-signature tsd-kind-icon">schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
@@ -452,9 +480,9 @@
 					<h3>scoped<wbr>Schema</h3>
 					<div class="tsd-signature tsd-kind-icon">scoped<wbr>Schema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">JsonSchema</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.scopedSchema</p>
+						<p>Inherited from JsonFormsAbstractControl.scopedSchema</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:17</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:18</li>
 						</ul>
 					</aside>
 				</section>
@@ -464,7 +492,7 @@
 					<div class="tsd-signature tsd-kind-icon">selected<wbr>Item<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L86">other/master-detail/master.ts:86</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L135">other/master-detail/master.ts:135</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -474,7 +502,7 @@
 					<div class="tsd-signature tsd-kind-icon">selected<wbr>Item<wbr>Idx<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L87">other/master-detail/master.ts:87</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L136">other/master-detail/master.ts:136</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -483,16 +511,16 @@
 					<h3>subscription</h3>
 					<div class="tsd-signature tsd-kind-icon">subscription<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Subscription</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.subscription</p>
+						<p>Inherited from JsonFormsAbstractControl.subscription</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:13</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:13</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="uischema" class="tsd-anchor"></a>
 					<h3>uischema</h3>
-					<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">UISchemaElement</span></div>
+					<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ControlElement</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsBaseRenderer.uischema</p>
 						<ul>
@@ -505,9 +533,9 @@
 					<h3>validator</h3>
 					<div class="tsd-signature tsd-kind-icon">validator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ValidatorFn</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.validator</p>
+						<p>Inherited from JsonFormsAbstractControl.validator</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:24</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:26</li>
 						</ul>
 					</aside>
 				</section>
@@ -516,38 +544,15 @@
 					<h3>visible</h3>
 					<div class="tsd-signature tsd-kind-icon">visible<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from JsonFormsControl.visible</p>
+						<p>Inherited from JsonFormsAbstractControl.visible</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:11</li>
+							<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:11</li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="deleteitem" class="tsd-anchor"></a>
-					<h3>delete<wbr>Item</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">delete<wbr>Item<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L179">other/master-detail/master.ts:179</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>item: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
 					<a name="getownprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> get<wbr>Own<wbr>Props</h3>
@@ -557,10 +562,10 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from JsonFormsControl.getOwnProps</p>
+								<p>Inherited from JsonFormsAbstractControl.getOwnProps</p>
 								<p>Overrides JsonFormsBaseRenderer.getOwnProps</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:27</li>
+									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:29</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfControl</span></h4>
@@ -571,38 +576,38 @@
 					<a name="mapadditionalprops" class="tsd-anchor"></a>
 					<h3>map<wbr>Additional<wbr>Props</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">map<wbr>Additional<wbr>Props<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">map<wbr>Additional<wbr>Props<span class="tsd-signature-symbol">(</span>props<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayControlProps</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides JsonFormsControl.mapAdditionalProps</p>
+								<p>Overrides JsonFormsAbstractControl.mapAdditionalProps</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L115">other/master-detail/master.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L163">other/master-detail/master.ts:163</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>props: <span class="tsd-signature-type">ControlProps</span></h5>
+									<h5>props: <span class="tsd-signature-type">ArrayControlProps</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="maptoprops" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> map<wbr>ToProps</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">map<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ControlProps</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
+						<li class="tsd-signature tsd-kind-icon">map<wbr>ToProps<span class="tsd-signature-symbol">(</span>state<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">JsonFormsState</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ArrayControlProps</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from JsonFormsControl.mapToProps</p>
+								<p>Overrides JsonFormsArrayControl.mapToProps</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:28</li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L238">other/master-detail/master.ts:238</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -611,7 +616,7 @@
 									<h5>state: <span class="tsd-signature-type">JsonFormsState</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ControlProps</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ArrayControlProps</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -624,9 +629,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from JsonFormsControl.ngOnDestroy</p>
+								<p>Inherited from JsonFormsAbstractControl.ngOnDestroy</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:26</li>
+									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:28</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -642,9 +647,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides JsonFormsControl.ngOnInit</p>
+								<p>Overrides JsonFormsAbstractControl.ngOnInit</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L105">other/master-detail/master.ts:105</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L154">other/master-detail/master.ts:154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -661,7 +666,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L154">other/master-detail/master.ts:154</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L230">other/master-detail/master.ts:230</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -677,9 +682,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from JsonFormsControl.onChange</p>
+								<p>Inherited from JsonFormsAbstractControl.onChange</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:22</li>
+									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:24</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -696,22 +701,19 @@
 					<a name="ondeleteclick" class="tsd-anchor"></a>
 					<h3>on<wbr>Delete<wbr>Click</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">on<wbr>Delete<wbr>Click<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, idx<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Delete<wbr>Click<span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L158">other/master-detail/master.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L234">other/master-detail/master.ts:234</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>item: <span class="tsd-signature-type">any</span></h5>
-								</li>
-								<li>
-									<h5>idx: <span class="tsd-signature-type">number</span></h5>
+									<h5>item: <span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -728,7 +730,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L97">other/master-detail/master.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L146">other/master-detail/master.ts:146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -751,7 +753,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L149">other/master-detail/master.ts:149</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L225">other/master-detail/master.ts:225</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -777,7 +779,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/angular-material/src/other/master-detail/master.ts#L101">other/master-detail/master.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/angular-material/src/other/master-detail/master.ts#L150">other/master-detail/master.ts:150</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -802,9 +804,9 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from JsonFormsControl.triggerValidation</p>
+								<p>Inherited from JsonFormsAbstractControl.triggerValidation</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/control.d.ts:29</li>
+									<li>Defined in /home/edgar/git/jsonforms/packages/angular-material/node_modules/@jsonforms/angular/lib/abstract-control.d.ts:31</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -868,6 +870,9 @@
 								<a href="masterlistcomponent.html#data" class="tsd-kind-icon">data</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="masterlistcomponent.html#description" class="tsd-kind-icon">description</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="masterlistcomponent.html#disabled" class="tsd-kind-icon">disabled</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
@@ -910,6 +915,9 @@
 								<a href="masterlistcomponent.html#removeitems" class="tsd-kind-icon">remove<wbr>Items</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="masterlistcomponent.html#rootschema" class="tsd-kind-icon">root<wbr>Schema</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="masterlistcomponent.html#schema" class="tsd-kind-icon">schema</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
@@ -933,16 +941,13 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="masterlistcomponent.html#visible" class="tsd-kind-icon">visible</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="masterlistcomponent.html#deleteitem" class="tsd-kind-icon">delete<wbr>Item</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited tsd-is-protected">
 								<a href="masterlistcomponent.html#getownprops" class="tsd-kind-icon">get<wbr>Own<wbr>Props</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="masterlistcomponent.html#mapadditionalprops" class="tsd-kind-icon">map<wbr>Additional<wbr>Props</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="masterlistcomponent.html#maptoprops" class="tsd-kind-icon">map<wbr>ToProps</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -1032,9 +1037,6 @@
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../globals.html#categorizationtester" class="tsd-kind-icon">categorization<wbr>Tester</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-is-not-exported">
-						<a href="../globals.html#emptyl10nconfig" class="tsd-kind-icon">empty<wbr>L10NConfig</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../globals.html#enumcontroltester" class="tsd-kind-icon">enum<wbr>Control<wbr>Tester</a>

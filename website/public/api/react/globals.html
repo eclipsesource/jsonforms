@@ -95,10 +95,9 @@
 						<section class="tsd-index-section ">
 							<h3>Variables</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-variable"><a href="globals.html#dispatchfield" class="tsd-kind-icon">Dispatch<wbr>Field</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#dispatchcell" class="tsd-kind-icon">Dispatch<wbr>Cell</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#jsonforms" class="tsd-kind-icon">Json<wbr>Forms</a></li>
 								<li class="tsd-kind-variable"><a href="globals.html#resolvedjsonforms" class="tsd-kind-icon">Resolved<wbr>Json<wbr>Forms</a></li>
-								<li class="tsd-kind-variable"><a href="globals.html#connecttojsonforms" class="tsd-kind-icon">connect<wbr>ToJson<wbr>Forms</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
@@ -118,7 +117,7 @@
 					<div class="tsd-signature tsd-kind-icon">Renderer<span class="tsd-signature-symbol">:</span> <a href="classes/renderercomponent.html" class="tsd-signature-type">RendererComponent</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">__type</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="interfaces/statelessrenderer.html" class="tsd-signature-type">StatelessRenderer</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RendererProps</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/Renderer.tsx#L52">Renderer.tsx:52</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/react/src/Renderer.tsx#L52">Renderer.tsx:52</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -131,60 +130,34 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Variables</h2>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="dispatchfield" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> Dispatch<wbr>Field</h3>
-					<div class="tsd-signature tsd-kind-icon">Dispatch<wbr>Field<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfField</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect&lt;DispatchFieldStateProps, {}, OwnPropsOfField&gt;(mapStateToDispatchFieldProps)(Dispatch)</span></div>
+					<a name="dispatchcell" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Dispatch<wbr>Cell</h3>
+					<div class="tsd-signature tsd-kind-icon">Dispatch<wbr>Cell<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfCell</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect&lt;DispatchCellStateProps,{},OwnPropsOfCell&gt;(mapStateToDispatchCellProps)(Dispatch)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/DispatchField.tsx#L69">DispatchField.tsx:69</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/react/src/DispatchCell.tsx#L58">DispatchCell.tsx:58</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="jsonforms" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Json<wbr>Forms</h3>
-					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfRenderer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect&lt;StatePropsOfJsonFormsRenderer, {}, OwnPropsOfRenderer&gt;(mapStateToJsonFormsRendererProps,null)(JsonFormsDispatchRenderer)</span></div>
+					<div class="tsd-signature tsd-kind-icon">Json<wbr>Forms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfJsonFormsRenderer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect&lt;StatePropsOfJsonFormsRenderer, {}, OwnPropsOfJsonFormsRenderer&gt;(mapStateToJsonFormsRendererProps,null)(JsonFormsDispatchRenderer)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/JsonForms.tsx#L162">JsonForms.tsx:162</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/react/src/JsonForms.tsx#L162">JsonForms.tsx:162</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-variable">
 					<a name="resolvedjsonforms" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Resolved<wbr>Json<wbr>Forms</h3>
-					<div class="tsd-signature tsd-kind-icon">Resolved<wbr>Json<wbr>Forms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfRenderer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect&lt;StatePropsOfJsonFormsRenderer, {}, OwnPropsOfRenderer&gt;(mapStateToJsonFormsRendererProps,null)(ResolvedJsonFormsDispatchRenderer)</span></div>
+					<div class="tsd-signature tsd-kind-icon">Resolved<wbr>Json<wbr>Forms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ComponentClass</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">OwnPropsOfJsonFormsRenderer</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> =&nbsp;connect&lt;StatePropsOfJsonFormsRenderer, {}, OwnPropsOfJsonFormsRenderer&gt;(mapStateToJsonFormsRendererProps,null)(ResolvedJsonFormsDispatchRenderer)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/JsonForms.tsx#L145">JsonForms.tsx:145</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/react/src/JsonForms.tsx#L145">JsonForms.tsx:145</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable">
-					<a name="connecttojsonforms" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> connect<wbr>ToJson<wbr>Forms</h3>
-					<div class="tsd-signature tsd-kind-icon">connect<wbr>ToJson<wbr>Forms<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Connect</span><span class="tsd-signature-symbol"> =&nbsp;connect</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/util.ts#L36">util.ts:36</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>JSONForms specific connect function. This is a wrapper
-								around redux&#39;s connect function and is provided for convenience
-							reasons.</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>param</dt>
-							<dd></dd>
-							<dt>param</dt>
-							<dd></dd>
-							<dt>returns</dt>
-							<dd><p>function expecting a Renderer Component to be connected</p>
-							</dd>
-						</dl>
-					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
@@ -199,7 +172,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/JsonForms.tsx#L48">JsonForms.tsx:48</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/react/src/JsonForms.tsx#L49">JsonForms.tsx:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -255,16 +228,13 @@
 						<a href="globals.html#renderer" class="tsd-kind-icon">Renderer</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="globals.html#dispatchfield" class="tsd-kind-icon">Dispatch<wbr>Field</a>
+						<a href="globals.html#dispatchcell" class="tsd-kind-icon">Dispatch<wbr>Cell</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#jsonforms" class="tsd-kind-icon">Json<wbr>Forms</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="globals.html#resolvedjsonforms" class="tsd-kind-icon">Resolved<wbr>Json<wbr>Forms</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="globals.html#connecttojsonforms" class="tsd-kind-icon">connect<wbr>ToJson<wbr>Forms</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="globals.html#hasrefs" class="tsd-kind-icon">has<wbr>Refs</a>

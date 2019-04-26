@@ -70,7 +70,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">JsonFormsBaseRenderer</span>
+						<span class="tsd-signature-type">JsonFormsBaseRenderer</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Category</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">CategoryRenderer</span>
@@ -94,15 +94,18 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="categoryrenderer.html#elements" class="tsd-kind-icon">elements</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="categoryrenderer.html#label" class="tsd-kind-icon">label</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="categoryrenderer.html#paramsservice" class="tsd-kind-icon">params<wbr>Service</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="categoryrenderer.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="categoryrenderer.html#schema" class="tsd-kind-icon">schema</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="categoryrenderer.html#uischema" class="tsd-kind-icon">uischema</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="categoryrenderer.html#category_key" class="tsd-kind-icon">CATEGORY_<wbr>KEY</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-inherited tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected"><a href="categoryrenderer.html#getownprops" class="tsd-kind-icon">get<wbr>Own<wbr>Props</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="categoryrenderer.html#updatedelements" class="tsd-kind-icon">updated<wbr>Elements</a></li>
 							</ul>
 						</section>
 					</div>
@@ -114,19 +117,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Category<wbr>Renderer<span class="tsd-signature-symbol">(</span>navParams<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NavParams</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="categoryrenderer.html" class="tsd-signature-type">CategoryRenderer</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Category<wbr>Renderer<span class="tsd-signature-symbol">(</span>navParams<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NavParams</span>, paramsService<span class="tsd-signature-symbol">: </span><a href="paramsservice.html" class="tsd-signature-type">ParamsService</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="categoryrenderer.html" class="tsd-signature-type">CategoryRenderer</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/ionic/src/layouts/categorization/category/category.ts#L17">layouts/categorization/category/category.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/layouts/categorization/category/category.ts#L43">ionic/src/layouts/categorization/category/category.ts:43</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>navParams: <span class="tsd-signature-type">NavParams</span></h5>
+								</li>
+								<li>
+									<h5>paramsService: <a href="paramsservice.html" class="tsd-signature-type">ParamsService</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="categoryrenderer.html" class="tsd-signature-type">CategoryRenderer</a></h4>
@@ -142,7 +148,7 @@
 					<div class="tsd-signature tsd-kind-icon">elements<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/ionic/src/layouts/categorization/category/category.ts#L17">layouts/categorization/category/category.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/layouts/categorization/category/category.ts#L43">ionic/src/layouts/categorization/category/category.ts:43</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -152,7 +158,17 @@
 					<div class="tsd-signature tsd-kind-icon">label<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/ionic/src/layouts/categorization/category/category.ts#L16">layouts/categorization/category/category.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/layouts/categorization/category/category.ts#L42">ionic/src/layouts/categorization/category/category.ts:42</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="paramsservice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> params<wbr>Service</h3>
+					<div class="tsd-signature tsd-kind-icon">params<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="paramsservice.html" class="tsd-signature-type">ParamsService</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/layouts/categorization/category/category.ts#L45">ionic/src/layouts/categorization/category/category.ts:45</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,7 +179,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsBaseRenderer.path</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:5</li>
+							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:5</li>
 						</ul>
 					</aside>
 				</section>
@@ -174,23 +190,33 @@
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsBaseRenderer.schema</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:4</li>
+							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:4</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="uischema" class="tsd-anchor"></a>
 					<h3>uischema</h3>
-					<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">UISchemaElement</span></div>
+					<div class="tsd-signature tsd-kind-icon">uischema<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Category</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from JsonFormsBaseRenderer.uischema</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/packages/ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:3</li>
+							<li>Defined in ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:3</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="category_key" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> CATEGORY_<wbr>KEY</h3>
+					<div class="tsd-signature tsd-kind-icon">CATEGORY_<wbr>KEY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;jsonforms-category-&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/layouts/categorization/category/category.ts#L41">ionic/src/layouts/categorization/category/category.ts:41</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-inherited tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 					<a name="getownprops" class="tsd-anchor"></a>
@@ -203,10 +229,27 @@
 							<aside class="tsd-sources">
 								<p>Inherited from JsonFormsBaseRenderer.getOwnProps</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/packages/ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:6</li>
+									<li>Defined in ionic/node_modules/@jsonforms/angular/lib/base.renderer.d.ts:6</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">OwnPropsOfRenderer</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="updatedelements" class="tsd-anchor"></a>
+					<h3>updated<wbr>Elements</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">updated<wbr>Elements<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/ionic/src/layouts/categorization/category/category.ts#L56">ionic/src/layouts/categorization/category/category.ts:56</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -236,6 +279,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="categoryrenderer.html#label" class="tsd-kind-icon">label</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="categoryrenderer.html#paramsservice" class="tsd-kind-icon">params<wbr>Service</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="categoryrenderer.html#path" class="tsd-kind-icon">path</a>
 							</li>
@@ -245,8 +291,14 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="categoryrenderer.html#uischema" class="tsd-kind-icon">uischema</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="categoryrenderer.html#category_key" class="tsd-kind-icon">CATEGORY_<wbr>KEY</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-protected">
 								<a href="categoryrenderer.html#getownprops" class="tsd-kind-icon">get<wbr>Own<wbr>Props</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="categoryrenderer.html#updatedelements" class="tsd-kind-icon">updated<wbr>Elements</a>
 							</li>
 						</ul>
 					</li>

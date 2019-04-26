@@ -37,7 +37,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    npm install --save @jsonforms/examples
    
    # Since 2.2.x, install react, redux and react-redux are peer dependencies
-   npm install --save react redux@3.7.2 react-redux
+   npm install --save react redux react-redux
    ```
    Since 2.2.x JSON Forms does not include React, redux and react-redux as dependencies, but rather has them
    configured as peer depenencies.
@@ -49,7 +49,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
    
    import { Actions, jsonformsReducer } from '@jsonforms/core';
    import { person } from '@jsonforms/examples';
-   import { materialFields, materialRenderers } from '@jsonforms/material-renderers';
+   import { materialRenderers } from '@jsonforms/material-renderers';
    ```
    The `person` import is necessary for importing the person example
    while `@jsonforms/material-renderers` imports the 
@@ -79,8 +79,7 @@ Alternatively you can also clone the [seed app](https://github.com/eclipsesource
         { jsonforms: jsonformsReducer() }),  
         {
           jsonforms: {
-            renderers: materialRenderers,
-            fields: materialFields,
+            renderers: materialRenderers
           }
         }
    );

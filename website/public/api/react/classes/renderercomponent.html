@@ -130,6 +130,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="renderercomponent.html#props" class="tsd-kind-icon">props</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="renderercomponent.html#refs" class="tsd-kind-icon">refs</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="renderercomponent.html#state" class="tsd-kind-icon">state</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="renderercomponent.html#contexttype" class="tsd-kind-icon">context<wbr>Type</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-inherited">
@@ -168,7 +169,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Component.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/87844c77/packages/react/src/Renderer.tsx#L34">Renderer.tsx:34</a></li>
+									<li>Defined in <a href="https://github.com/eclipsesource/jsonforms/blob/4e3afaa3/packages/react/src/Renderer.tsx#L34">Renderer.tsx:34</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -191,12 +192,21 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Component.context</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:315</li>
+							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:435</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If using the new style context, re-declare this in your class to be the
+							<code>React.ContextType</code> of your <code>static contextType</code>.</p>
+						</div>
+						<pre><code class="language-ts"><span class="hljs-keyword">static</span> contextType = MyContext
+context!: React.ContextType&lt;<span class="hljs-keyword">typeof</span> MyContext&gt;</code></pre>
 						<dl class="tsd-comment-tags">
 							<dt>deprecated</dt>
+							<dd><p>if used without a type annotation, or without static contextType</p>
+							</dd>
+							<dt>see</dt>
 							<dd><p><a href="https://reactjs.org/docs/legacy-context.html">https://reactjs.org/docs/legacy-context.html</a></p>
 							</dd>
 						</dl>
@@ -205,11 +215,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="props" class="tsd-anchor"></a>
 					<h3>props</h3>
-					<div class="tsd-signature tsd-kind-icon">props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<div class="tsd-signature tsd-kind-icon">props<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">P</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">Readonly</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from Component.props</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:309</li>
+							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:460</li>
 						</ul>
 					</aside>
 				</section>
@@ -220,7 +230,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Component.refs</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:320</li>
+							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:466</li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -246,9 +256,41 @@
 					<aside class="tsd-sources">
 						<p>Inherited from Component.state</p>
 						<ul>
-							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:310</li>
+							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:461</li>
 						</ul>
 					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+					<a name="contexttype" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagOptional">Optional</span> context<wbr>Type</h3>
+					<div class="tsd-signature tsd-kind-icon">context<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Context</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from Component.contextType</p>
+						<ul>
+							<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:420</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>If set, <code>this.context</code> will be set at runtime to the current value of the given Context.</p>
+						</div>
+						<p>Usage:</p>
+						<pre><code class="language-ts">type MyContext = number
+const Ctx = React.createContext&lt;MyContext&gt;(0)
+
+class Foo extends React.Component {
+  static contextType = Ctx
+  context!: React.ContextType&lt;typeof Ctx&gt;
+  render () {
+    return &lt;&gt;My context's value: {this.context}&lt;/&gt;;
+  }
+}</code></pre>
+						<dl class="tsd-comment-tags">
+							<dt>see</dt>
+							<dd><p><a href="https://reactjs.org/docs/context.html#classcontexttype">https://reactjs.org/docs/context.html#classcontexttype</a></p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
@@ -264,7 +306,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillMount</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:475</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:648</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -302,7 +344,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillReceiveProps</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:507</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:680</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -351,7 +393,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.UNSAFE_componentWillUpdate</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:535</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:708</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -401,7 +443,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentDidCatch</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:414</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:577</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -434,7 +476,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentDidMount</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:393</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:556</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -457,7 +499,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from NewLifecycle.componentDidUpdate</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:446</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:619</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -493,7 +535,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillMount</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:461</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:634</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -530,7 +572,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillReceiveProps</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:490</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:663</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -578,7 +620,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.componentWillUnmount</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:409</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:572</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -602,7 +644,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from DeprecatedLifecycle.componentWillUpdate</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:520</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:693</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -651,7 +693,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from Component.forceUpdate</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:301</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:452</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -687,7 +729,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from NewLifecycle.getSnapshotBeforeUpdate</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:440</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:613</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -726,7 +768,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from Component.render</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:302</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:453</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReactNode</span></h4>
@@ -744,7 +786,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from Component.setState</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:296</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:447</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -789,7 +831,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from ComponentLifecycle.shouldComponentUpdate</p>
 								<ul>
-									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:404</li>
+									<li>Defined in /home/edgar/git/jsonforms/node_modules/@types/react/index.d.ts:567</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -859,6 +901,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="renderercomponent.html#state" class="tsd-kind-icon">state</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="renderercomponent.html#contexttype" class="tsd-kind-icon">context<wbr>Type</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="renderercomponent.html#unsafe_componentwillmount" class="tsd-kind-icon">UNSAFE_<wbr>component<wbr>Will<wbr>Mount</a>
 							</li>
@@ -927,16 +972,13 @@
 						<a href="../globals.html#renderer" class="tsd-kind-icon">Renderer</a>
 					</li>
 					<li class=" tsd-kind-variable">
-						<a href="../globals.html#dispatchfield" class="tsd-kind-icon">Dispatch<wbr>Field</a>
+						<a href="../globals.html#dispatchcell" class="tsd-kind-icon">Dispatch<wbr>Cell</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../globals.html#jsonforms" class="tsd-kind-icon">Json<wbr>Forms</a>
 					</li>
 					<li class=" tsd-kind-variable">
 						<a href="../globals.html#resolvedjsonforms" class="tsd-kind-icon">Resolved<wbr>Json<wbr>Forms</a>
-					</li>
-					<li class=" tsd-kind-variable">
-						<a href="../globals.html#connecttojsonforms" class="tsd-kind-icon">connect<wbr>ToJson<wbr>Forms</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-not-exported">
 						<a href="../globals.html#hasrefs" class="tsd-kind-icon">has<wbr>Refs</a>
