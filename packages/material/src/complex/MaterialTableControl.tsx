@@ -185,12 +185,12 @@ class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
             path={path}
           />
         ) : (
-          <DispatchCell
-            schema={schema}
-            uischema={controlWithoutLabel('#')}
-            path={path}
-          />
-        )}
+            <DispatchCell
+              schema={schema}
+              uischema={controlWithoutLabel('#')}
+              path={path}
+            />
+          )}
         <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
       </NoBorderTableCell>
     );
@@ -201,29 +201,29 @@ const NonEmptyCell = connect(mapStateToNonEmptyCellProps)(NonEmptyCellInner);
 interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
-  rowData: number;
+  rowIndex: number;
 }
 
 const NonEmptyRow = React.memo(({
   childPath,
   schema,
-  rowData,
+  rowIndex,
   openDeleteDialog
 }: NonEmptyRowProps & WithDeleteDialogSupport) => (
-  <TableRow key={childPath} hover>
-    {generateCells(NonEmptyCell, schema, childPath)}
-    <NoBorderTableCell style={styles.fixedCell}>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <IconButton
-          aria-label={`Delete`}
-          onClick={() => openDeleteDialog(childPath, rowData)}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </div>
-    </NoBorderTableCell>
-  </TableRow>
-));
+    <TableRow key={childPath} hover>
+      {generateCells(NonEmptyCell, schema, childPath)}
+      <NoBorderTableCell style={styles.fixedCell}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <IconButton
+            aria-label={`Delete`}
+            onClick={() => openDeleteDialog(childPath, rowIndex)}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      </NoBorderTableCell>
+    </TableRow>
+  ));
 interface TableRowsProp {
   data: number;
   path: string;
@@ -253,7 +253,7 @@ const TableRows = ({
           <NonEmptyRow
             key={childPath}
             childPath={childPath}
-            rowData={index}
+            rowIndex={index}
             schema={schema}
             openDeleteDialog={openDeleteDialog}
           />
@@ -264,9 +264,9 @@ const TableRows = ({
 };
 
 export class MaterialTableControl extends React.Component<
-ArrayLayoutProps & WithDeleteDialogSupport,
+  ArrayLayoutProps & WithDeleteDialogSupport,
   any
-> {
+  > {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {
