@@ -46,20 +46,20 @@ export class MaterialArrayControlRenderer extends RendererComponent<ArrayLayoutP
     };
   }
 
-  openDeleteDialog = (path: string, rowData: number) => {
+  openDeleteDialog = (path: string, rowIndex: number) => {
     this.setState({
       open: true,
       path,
-      rowData
+      rowData: rowIndex
     });
   };
-  deleteCancel = () => this.setState({open: false});
+  deleteCancel = () => this.setState({ open: false });
   deleteConfirm = () => {
     const path = this.state.path.substring(0, this.state.path.lastIndexOf(('.')));
     this.props.removeItems(path, [this.state.rowData])();
-    this.setState({open: false});
+    this.setState({ open: false });
   };
-  deleteClose = () => this.setState({open: false});
+  deleteClose = () => this.setState({ open: false });
   render() {
     const { visible } = this.props;
 
