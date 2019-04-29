@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 
 import Header from "./header"
 import Footer from "./footer"
-//import './layout.module.css'
 import styles from '../styles/global.module.css'
 
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
