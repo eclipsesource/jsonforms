@@ -23,21 +23,20 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import {
-    CellProps,
-    WithClassname
-} from '@jsonforms/core';
+import { CellProps, WithClassname } from '@jsonforms/core';
 import Input from '@material-ui/core/Input';
 
 export const MuiInputInteger = (props: CellProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
-  const config = {'step': '1'};
+  const config = { step: '1' };
+  const toNumber = (value: string) =>
+    value === '' ? undefined : parseInt(value, 10);
 
   return (
     <Input
       type='number'
-      value={data || ''}
-      onChange={ev => handleChange(path, parseInt(ev.target.value, 10))}
+      value={data !== undefined && data !== null ? data : ''}
+      onChange={ev => handleChange(path, toNumber(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}
