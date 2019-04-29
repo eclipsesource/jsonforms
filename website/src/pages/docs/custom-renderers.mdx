@@ -54,7 +54,7 @@ To find a matching renderer, JSON Forms relies on so-called testers.
 Every renderer has a tester associated with its registration, which is a function of a UI schema and a
 JSON schema returning a number.
 The returned number is the priority which expresses if and how well a renderer can actually render the
-given UI Schema Element (where `NOT_APPLICABLE` aka. `-1`) means "not at all").
+given UI Schema Element (where `NOT_APPLICABLE` aka. `-1` means "not at all").
 
 In order to create and register a renderer, we need to perform the following steps:
 
