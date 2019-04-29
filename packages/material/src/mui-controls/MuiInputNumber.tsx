@@ -29,12 +29,14 @@ import Input from '@material-ui/core/Input';
 export const MuiInputNumber = (props: CellProps & WithClassname) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
   const config = { step: '0.1' };
+  const toNumber = (value: string) =>
+    value === '' ? undefined : parseFloat(value);
 
   return (
     <Input
       type='number'
-      value={data || ''}
-      onChange={ev => handleChange(path, Number(ev.target.value))}
+      value={data === undefined || data === null ? '' : data}
+      onChange={ev => handleChange(path, toNumber(ev.target.value))}
       className={className}
       id={id}
       disabled={!enabled}
