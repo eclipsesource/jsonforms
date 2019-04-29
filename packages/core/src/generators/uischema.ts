@@ -34,7 +34,7 @@ import {
   UISchemaElement
 } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
-import { deriveType } from '../util';
+import { deriveTypes } from '../util';
 
 /**
  * Creates a new ILayout.
@@ -140,9 +140,18 @@ const generateUISchema = (
     return controlObject;
   }
 
-  const type = deriveType(jsonSchema);
+  const types = deriveTypes(jsonSchema);
+  if (types.length === 0) {
+    return null;
+  }
 
-  switch (type) {
+  if (types.length > 1) {
+    const controlObject: ControlElement = createControlElement(currentRef);
+    schemaElements.push(controlObject);
+    return controlObject;
+  }
+
+  switch (types[0]) {
     case 'object':
       const layout: Layout = createLayout(layoutType);
       schemaElements.push(layout);
@@ -186,8 +195,6 @@ const generateUISchema = (
       schemaElements.push(controlObject);
 
       return controlObject;
-    case 'null':
-      return null;
     default:
       throw new Error('Unknown type: ' + JSON.stringify(jsonSchema));
   }

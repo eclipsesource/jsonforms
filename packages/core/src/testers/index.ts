@@ -38,7 +38,7 @@ import {
   UISchemaElement
 } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
-import { deriveType } from '../util';
+import { deriveTypes, isValidType } from '../util';
 
 /**
  * Constant that indicates that a tester is not capable of handling
@@ -86,7 +86,7 @@ export const schemaMatches = (
     return false;
   }
   let currentDataSchema = schema;
-  if (deriveType(schema) === 'object') {
+  if (isValidType(schema, 'object')) {
     currentDataSchema = resolveSchema(schema, schemaPath);
   }
   if (currentDataSchema === undefined) {
@@ -127,7 +127,9 @@ export const schemaSubPathMatches = (
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester =>
-  schemaMatches(schema => !isEmpty(schema) && schema.type === expectedType);
+  schemaMatches(
+    schema => !isEmpty(schema) && isValidType(schema, expectedType)
+  );
 
 /**
  * Only applicable for Controls.
@@ -359,9 +361,9 @@ export const isDateTimeControl = and(
  */
 export const isObjectArray = and(
   schemaMatches(
-    schema => deriveType(schema) === 'array' && !Array.isArray(schema.items) // we don't care about tuples
+    schema => isValidType(schema, 'array') && !Array.isArray(schema.items) // we don't care about tuples
   ),
-  schemaSubPathMatches('items', schema => deriveType(schema) === 'object')
+  schemaSubPathMatches('items', schema => isValidType(schema, 'object'))
 );
 
 /**
@@ -457,17 +459,16 @@ export const isArrayObjectControl = isObjectArrayControl;
  */
 export const isPrimitiveArrayControl = and(
   uiTypeIs('Control'),
-  schemaMatches(schema => {
+  schemaMatches(
+    schema => deriveTypes(schema).length !== 0 && !Array.isArray(schema.items) // we don't care about tuples
+  ),
+  schemaSubPathMatches('items', schema => {
+    const types = deriveTypes(schema);
     return (
-      !isEmpty(schema) &&
-      schema.type === 'array' &&
-      !isEmpty(schema.items) &&
-      !Array.isArray(schema.items)
-    ); // we don't care about tuples
-  }),
-  schemaSubPathMatches('items', schema =>
-    includes(['integer', 'number', 'boolean', 'string'], schema.type)
-  )
+      types.length === 1 &&
+      includes(['integer', 'number', 'boolean', 'string'], types[0])
+    );
+  })
 );
 
 /**

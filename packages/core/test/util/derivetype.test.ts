@@ -25,13 +25,14 @@
 import test from 'ava';
 
 import { JsonSchema } from '../../src/models/jsonSchema';
-import { deriveType } from '../../src/util/index';
+import { deriveTypes } from '../../src/util/index';
 
 test('derive type with type', t => {
   const schema: JsonSchema = {
     type: 'string'
   };
-  t.is(deriveType(schema), 'string');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'string');
 });
 
 test('derive type w/o type - properties object', t => {
@@ -40,7 +41,8 @@ test('derive type w/o type - properties object', t => {
       foo: { type: 'string' }
     }
   };
-  t.is(deriveType(schema), 'object');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'object');
 });
 
 test('derive type w/o type - additionalProperties object', t => {
@@ -49,7 +51,8 @@ test('derive type w/o type - additionalProperties object', t => {
       type: 'string'
     }
   };
-  t.is(deriveType(schema), 'object');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'object');
 });
 
 test('derive type w/o type - items array', t => {
@@ -58,29 +61,33 @@ test('derive type w/o type - items array', t => {
       type: 'string'
     }
   };
-  t.is(deriveType(schema), 'array');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'array');
 });
 
 test('derive type with type - union', t => {
   const schema: JsonSchema = {
     type: ['string', 'number']
   };
+  t.is(deriveTypes(schema).length, 2);
   // we just take the first, as derive type returns exactly one value
-  t.is(deriveType(schema), 'string');
+  t.is(deriveTypes(schema), schema.type);
 });
 
 test('derive type with type - allOf first has type', t => {
   const schema: JsonSchema = {
     allOf: [{ type: 'string' }, { enum: ['foo', 'bar'] }]
   };
-  t.is(deriveType(schema), 'string');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'string');
 });
 
 test('derive type with type - allOf other has type', t => {
   const schema: JsonSchema = {
     allOf: [{ enum: ['foo', 'bar'] }, { type: 'string' }]
   };
-  t.is(deriveType(schema), 'string');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'string');
 });
 
 test('derive type w/o type - allOf other has type', t => {
@@ -90,5 +97,6 @@ test('derive type w/o type - allOf other has type', t => {
       { properties: { bar: { type: 'string' } } }
     ]
   };
-  t.is(deriveType(schema), 'object');
+  t.is(deriveTypes(schema).length, 1);
+  t.is(deriveTypes(schema)[0], 'object');
 });

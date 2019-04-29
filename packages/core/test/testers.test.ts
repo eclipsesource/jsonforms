@@ -104,6 +104,21 @@ test('schemaTypeIs should return false for control pointing to invalid sub-schem
   t.false(schemaTypeIs('string')(uischema, schema));
 });
 
+test('schemaTypeIs should return true for array type', t => {
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      foo: { type: ['string', 'integer'] }
+    }
+  };
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/foo'
+  };
+  t.true(schemaTypeIs('string')(uischema, schema));
+  t.true(schemaTypeIs('integer')(uischema, schema));
+});
+
 test('formatIs should check the format of a resolved sub-schema', t => {
   const uischema: ControlElement = {
     type: 'Control',
