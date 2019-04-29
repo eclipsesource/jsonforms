@@ -210,6 +210,11 @@ ol li {
   color: #2D3747
 }
 
+ul li {
+  color: #2D3747;
+  font-size: 1.2rem;
+}
+
 @media only screen and (max-width: 850px) {
   .toc_button {
     display: inline !important;
