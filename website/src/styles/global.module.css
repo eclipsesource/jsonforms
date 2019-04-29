@@ -192,6 +192,24 @@ main {
   display: none !important;
 }
 
+ol {
+  margin-left: 1.45rem;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: 1.45rem;
+  list-style-position: outside;
+  list-style-image: none;
+  font-size: 1.2rem;
+}
+
+ol li {
+  color: #2D3747
+}
+
 @media only screen and (max-width: 850px) {
   .toc_button {
     display: inline !important;
