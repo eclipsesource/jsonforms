@@ -43,15 +43,17 @@ interface MaterialAnyOfState {
   selectedAnyOf: number;
 }
 
-class MaterialAnyOfRenderer extends React.Component<StatePropsOfCombinator, MaterialAnyOfState> {
-
+class MaterialAnyOfRenderer extends React.Component<
+  StatePropsOfCombinator,
+  MaterialAnyOfState
+> {
   state: MaterialAnyOfState = {
     selectedAnyOf: 0
   };
 
   constructor(props: StatePropsOfCombinator) {
     super(props);
-    const {indexOfFittingSchema} = this.props;
+    const { indexOfFittingSchema } = this.props;
     if (indexOfFittingSchema) {
       this.state.selectedAnyOf = indexOfFittingSchema;
     }
@@ -62,11 +64,14 @@ class MaterialAnyOfRenderer extends React.Component<StatePropsOfCombinator, Mate
   };
 
   render() {
-
     const anyOf = 'anyOf';
     const { path, schema, rootSchema, visible } = this.props;
     const _schema = resolveSubSchemas(schema, rootSchema, anyOf);
-    const anyOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).anyOf, rootSchema, anyOf);
+    const anyOfRenderInfos = createCombinatorRenderInfos(
+      (_schema as JsonSchema).anyOf,
+      rootSchema,
+      anyOf
+    );
 
     return (
       <Hidden xsUp={!visible}>
@@ -76,27 +81,32 @@ class MaterialAnyOfRenderer extends React.Component<StatePropsOfCombinator, Mate
           path={path}
         />
         <Tabs value={this.state.selectedAnyOf} onChange={this.handleChange}>
-          {anyOfRenderInfos.map(anyOfRenderInfo => <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label}/>)}
+          {anyOfRenderInfos.map(anyOfRenderInfo => (
+            <Tab key={anyOfRenderInfo.label} label={anyOfRenderInfo.label} />
+          ))}
         </Tabs>
-        {
-          anyOfRenderInfos.map((anyOfRenderInfo, anyOfIndex) => (
-            this.state.selectedAnyOf === anyOfIndex &&
-            <ResolvedJsonForms
-              key={anyOfIndex}
-              schema={anyOfRenderInfo.schema}
-              uischema={anyOfRenderInfo.uischema}
-              path={path}
-            />
-          ))
-        }
+        {anyOfRenderInfos.map(
+          (anyOfRenderInfo, anyOfIndex) =>
+            this.state.selectedAnyOf === anyOfIndex && (
+              <ResolvedJsonForms
+                key={anyOfIndex}
+                schema={anyOfRenderInfo.schema}
+                uischema={anyOfRenderInfo.uischema}
+                path={path}
+              />
+            )
+        )}
       </Hidden>
     );
   }
 }
 
-const ConnectedMaterialAnyOfRenderer = connect(
-  mapStateToAnyOfProps
-)(MaterialAnyOfRenderer);
+const ConnectedMaterialAnyOfRenderer = connect(mapStateToAnyOfProps)(
+  MaterialAnyOfRenderer
+);
 ConnectedMaterialAnyOfRenderer.displayName = 'MaterialAnyOfRenderer';
-export const materialAnyOfControlTester: RankedTester = rankWith(2, isAnyOfControl);
+export const materialAnyOfControlTester: RankedTester = rankWith(
+  3,
+  isAnyOfControl
+);
 export default ConnectedMaterialAnyOfRenderer;

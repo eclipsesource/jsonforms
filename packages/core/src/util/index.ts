@@ -24,7 +24,7 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
-import head from 'lodash/head';
+import includes from 'lodash/includes';
 import find from 'lodash/find';
 import { JsonSchema, Scopable, UISchemaElement } from '../';
 import { resolveData, resolveSchema } from './resolvers';
@@ -56,52 +56,45 @@ export const formatErrorMessage = (errors: string[]) => {
   return errors.join('\n');
 };
 
-/**
- * Checks if the type of jsonSchema is a union of multiple types
- *
- * @param {JsonSchema} jsonSchema
- * @returns {boolean}
- */
-const isUnionType = (jsonSchema: JsonSchema): boolean =>
-  !isEmpty(jsonSchema) && !isEmpty(jsonSchema.type) && isArray(jsonSchema.type);
+const isValidType = (jsonSchema: JsonSchema, expected: string): boolean => {
+  return includes(deriveTypes(jsonSchema), expected);
+};
 
 /**
  * Derives the type of the jsonSchema element
  */
-const deriveType = (jsonSchema: JsonSchema): string => {
-  if (
-    !isEmpty(jsonSchema) &&
-    !isEmpty(jsonSchema.type) &&
-    typeof jsonSchema.type === 'string'
-  ) {
+const deriveTypes = (jsonSchema: JsonSchema): string[] => {
+  if (isEmpty(jsonSchema)) {
+    return [];
+  }
+  if (!isEmpty(jsonSchema.type) && typeof jsonSchema.type === 'string') {
+    return [jsonSchema.type];
+  }
+  if (isArray(jsonSchema.type)) {
     return jsonSchema.type;
   }
-  if (isUnionType(jsonSchema)) {
-    return head(jsonSchema.type);
-  }
   if (
-    !isEmpty(jsonSchema) &&
-    (!isEmpty(jsonSchema.properties) ||
-      !isEmpty(jsonSchema.additionalProperties))
+    !isEmpty(jsonSchema.properties) ||
+    !isEmpty(jsonSchema.additionalProperties)
   ) {
-    return 'object';
+    return ['object'];
   }
-  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.items)) {
-    return 'array';
+  if (!isEmpty(jsonSchema.items)) {
+    return ['array'];
   }
 
-  if (!isEmpty(jsonSchema) && !isEmpty(jsonSchema.allOf)) {
+  if (!isEmpty(jsonSchema.allOf)) {
     const allOfType = find(
       jsonSchema.allOf,
-      (schema: JsonSchema) => deriveType(schema) !== 'null'
+      (schema: JsonSchema) => deriveTypes(schema).length !== 0
     );
 
     if (allOfType) {
-      return deriveType(allOfType);
+      return deriveTypes(allOfType);
     }
   }
   // ignore all remaining cases
-  return 'null';
+  return [];
 };
 
 /**
@@ -140,7 +133,7 @@ const Runtime = {
     return isVisible(uischema, data);
   }
 };
-export { isEnabled, isVisible, Runtime, deriveType };
+export { isEnabled, isVisible, Runtime, deriveTypes, isValidType };
 
 export * from './renderer';
 export * from './cell';
