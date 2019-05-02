@@ -70,7 +70,6 @@ test('derive type with type - union', t => {
     type: ['string', 'number']
   };
   t.is(deriveTypes(schema).length, 2);
-  // we just take the first, as derive type returns exactly one value
   t.is(deriveTypes(schema), schema.type);
 });
 

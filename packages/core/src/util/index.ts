@@ -56,7 +56,7 @@ export const formatErrorMessage = (errors: string[]) => {
   return errors.join('\n');
 };
 
-const isValidType = (jsonSchema: JsonSchema, expected: string): boolean => {
+const hasType = (jsonSchema: JsonSchema, expected: string): boolean => {
   return includes(deriveTypes(jsonSchema), expected);
 };
 
@@ -133,7 +133,7 @@ const Runtime = {
     return isVisible(uischema, data);
   }
 };
-export { isEnabled, isVisible, Runtime, deriveTypes, isValidType };
+export { isEnabled, isVisible, Runtime, deriveTypes, hasType };
 
 export * from './renderer';
 export * from './cell';

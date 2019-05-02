@@ -38,7 +38,7 @@ import {
   UISchemaElement
 } from '../models/uischema';
 import { resolveSchema } from '../util/resolvers';
-import { deriveTypes, isValidType } from '../util';
+import { deriveTypes, hasType } from '../util';
 
 /**
  * Constant that indicates that a tester is not capable of handling
@@ -86,7 +86,7 @@ export const schemaMatches = (
     return false;
   }
   let currentDataSchema = schema;
-  if (isValidType(schema, 'object')) {
+  if (hasType(schema, 'object')) {
     currentDataSchema = resolveSchema(schema, schemaPath);
   }
   if (currentDataSchema === undefined) {
@@ -127,9 +127,7 @@ export const schemaSubPathMatches = (
  * @param {string} expectedType the expected type of the resolved sub-schema
  */
 export const schemaTypeIs = (expectedType: string): Tester =>
-  schemaMatches(
-    schema => !isEmpty(schema) && isValidType(schema, expectedType)
-  );
+  schemaMatches(schema => !isEmpty(schema) && hasType(schema, expectedType));
 
 /**
  * Only applicable for Controls.
@@ -361,9 +359,9 @@ export const isDateTimeControl = and(
  */
 export const isObjectArray = and(
   schemaMatches(
-    schema => isValidType(schema, 'array') && !Array.isArray(schema.items) // we don't care about tuples
+    schema => hasType(schema, 'array') && !Array.isArray(schema.items) // we don't care about tuples
   ),
-  schemaSubPathMatches('items', schema => isValidType(schema, 'object'))
+  schemaSubPathMatches('items', schema => hasType(schema, 'object'))
 );
 
 /**
