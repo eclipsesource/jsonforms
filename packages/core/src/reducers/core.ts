@@ -210,7 +210,7 @@ export const coreReducer = (
         };
       } else {
         const oldData: any = get(state.data, action.path);
-        let newData = action.updater(oldData);
+        let newData = action.updater(cloneDeep(oldData));
         if (newData === '') {
           newData = undefined;
         }
