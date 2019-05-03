@@ -31,22 +31,20 @@ import {
   isControl,
   isDescriptionHidden,
   isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   NOT_APPLICABLE,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control, DispatchCell } from '@jsonforms/react';
-import { addVanillaControlProps } from '../util';
+import { Control, DispatchCell, withJsonFormsControlProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
-import { connect } from 'react-redux';
 
 export class InputControl extends Control<
   ControlProps & VanillaRendererProps,
   ControlState
-> {
+  > {
   render() {
+
     const {
       classNames,
       description,
@@ -64,7 +62,7 @@ export class InputControl extends Control<
     const isValid = errors.length === 0;
     const divClassNames = `validation  ${
       isValid ? classNames.description : 'validation_error'
-    }`;
+      }`;
     const showDescription = !isDescriptionHidden(
       visible,
       description,
@@ -100,8 +98,8 @@ export class InputControl extends Control<
             {!isValid
               ? errors
               : showDescription
-              ? description
-              : null}
+                ? description
+                : null}
           </div>
         </div>
       );
@@ -111,9 +109,4 @@ export class InputControl extends Control<
 
 export const inputControlTester: RankedTester = rankWith(1, isControl);
 
-export const ConnectedInputControl = connect(
-  addVanillaControlProps(mapStateToControlProps),
-  mapDispatchToControlProps
-)(InputControl);
-
-export default ConnectedInputControl;
+export default withVanillaControlProps(withJsonFormsControlProps(InputControl));

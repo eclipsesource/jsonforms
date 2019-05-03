@@ -28,20 +28,21 @@ import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    getData,
-    JsonFormsState,
-    Paths,
-    resolveData
+  getData,
+  JsonFormsState,
+  Paths,
+  resolveData
 } from '@jsonforms/core';
 import ObjectListItem from './ObjectListItem';
-const { DropTarget }  = require('react-dnd');
+const { DropTarget } = require('react-dnd');
 import {
   canDropDraggedItem,
   CSS_DELAY,
   DragInfo,
   DropResult,
   mapDispatchToTreeListProps,
-  Types } from './dnd.util';
+  Types
+} from './dnd.util';
 import { Property } from '../services/property.util';
 import { matchContainerProperty } from '../helpers/container.util';
 import {
@@ -140,7 +141,7 @@ export interface ExandArrayContainerState {
 
 const styles: StyleRulesCallback<'currentTarget' | 'validTarget' | 'invalidTarget'> = () => ({
   currentTarget: {
-    borderWidth:  'medium'
+    borderWidth: 'medium'
   },
   validTarget: {
     borderStyle: 'dashed',
@@ -157,18 +158,18 @@ const styles: StyleRulesCallback<'currentTarget' | 'validTarget' | 'invalidTarge
 
 class ExpandArrayContainer extends
   React.Component<ExpandArrayContainerProps &
-                  WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>,
-                  any> {
+  WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>,
+  any> {
 
   constructor(props: ExpandArrayContainerProps &
-                  WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>) {
+    WithStyles<'currentTarget' | 'validTarget' | 'invalidTarget'>) {
     super(props);
     this.state = { setCss: false };
   }
 
   componentWillReceiveProps(nextProps: ExpandArrayContainerProps) {
     if (this.props.isDragging && !nextProps.isDragging) {
-      this.setState( { setCss: false });
+      this.setState({ setCss: false });
     } else if (!this.props.isDragging && nextProps.isDragging) {
       setTimeout(() => this.setState({ setCss: true }), CSS_DELAY);
     }
@@ -232,7 +233,7 @@ const mapStateToProps = (state: JsonFormsState) => ({
 /**
  * Injects drag and drop related properties into an expanded array
  */
-    // TODO: typings
+// TODO: typings
 const collect = (dndConnect: any, monitor: any) => {
   return {
     connectDropTarget: dndConnect.dropTarget(),
@@ -267,9 +268,6 @@ const arrayDropTarget = {
     if (monitor.didDrop()) {
       return monitor.getDropResult();
     }
-
-    // TODO remove console.log
-    console.log('valid drop of data at: ' + props.path);
 
     const dropInfo: DropResult = {
       isHandled: true,

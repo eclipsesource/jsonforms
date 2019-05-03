@@ -25,18 +25,16 @@
 import React from 'react';
 import {
   LabelElement,
-  mapStateToLayoutProps,
+  OwnPropsOfRenderer,
   RankedTester,
   rankWith,
-  RendererProps,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
-import { StatelessRenderer } from '@jsonforms/react';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import {
   Hidden,
   Typography
 } from '@material-ui/core';
-import { connect } from 'react-redux';
 
 /**
  * Default tester for a label.
@@ -47,16 +45,15 @@ export const materialLabelRendererTester: RankedTester = rankWith(1, uiTypeIs('L
 /**
  * Default renderer for a label.
  */
-export const MaterialLabelRenderer: StatelessRenderer<RendererProps> =
-  ({ uischema, visible }) => {
-    const labelElement: LabelElement = uischema as LabelElement;
-    return (
-      <Hidden xsUp={!visible}>
-        <Typography variant='h6'>
-          {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
-        </Typography>
-      </Hidden>
-    );
-  };
+export const MaterialLabelRenderer = ({ uischema, visible }: OwnPropsOfRenderer) => {
+  const labelElement: LabelElement = uischema as LabelElement;
+  return (
+    <Hidden xsUp={!visible}>
+      <Typography variant='h6'>
+        {labelElement.text !== undefined && labelElement.text !== null && labelElement.text}
+      </Typography>
+    </Hidden>
+  );
+};
 
-export default connect(mapStateToLayoutProps)(MaterialLabelRenderer);
+export default withJsonFormsLayoutProps(MaterialLabelRenderer);

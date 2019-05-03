@@ -24,15 +24,14 @@
 */
 import React, { FunctionComponent } from 'react';
 import {
-    mapStateToLayoutProps,
-    RankedTester,
-    rankWith,
-    RendererProps,
-    uiTypeIs,
+  RankedTester,
+  rankWith,
+  RendererProps,
+  uiTypeIs,
   VerticalLayout
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
-import { addVanillaLayoutProps } from '../util';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { JsonFormsLayout } from './JsonFormsLayout';
 import { renderChildren } from './util';
 import { VanillaRendererProps } from '../index';
@@ -43,7 +42,7 @@ import { VanillaRendererProps } from '../index';
  */
 export const verticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
 
-export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps>  = (
+export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRendererProps> = (
   {
     schema,
     uischema,
@@ -77,6 +76,4 @@ export const VerticalLayoutRenderer: FunctionComponent<RendererProps & VanillaRe
   );
 };
 
-export default connect(
-  addVanillaLayoutProps(mapStateToLayoutProps)
-)(VerticalLayoutRenderer);
+export default withVanillaControlProps(withJsonFormsLayoutProps(VerticalLayoutRenderer));

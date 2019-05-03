@@ -40,6 +40,7 @@ import { materialRenderers } from '../../src';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -76,15 +77,15 @@ describe('Material date control tester', () => {
   test('should fail', () => {
     expect(materialDateControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
     expect(materialDateControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateControlTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialDateControlTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialDateControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
     expect(
       materialDateControlTester(
         uischema,
         {
           type: 'object',
           properties: {
-            foo: {type: 'string'},
+            foo: { type: 'string' },
           },
         },
       )
@@ -95,7 +96,7 @@ describe('Material date control tester', () => {
         {
           type: 'object',
           properties: {
-            foo: {type: 'string'},
+            foo: { type: 'string' },
             bar: {
               type: 'string',
               format: 'date',
@@ -141,7 +142,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={control}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -159,7 +162,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={control}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>,
     );
     const input = wrapper.find('input').first();
@@ -174,7 +179,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={control}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -185,7 +192,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -198,7 +207,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -210,7 +221,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => '1961-04-12'));
@@ -223,7 +236,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>,
     );
     store.dispatch(Actions.update('foo', () => null));
@@ -236,7 +251,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => undefined));
@@ -249,7 +266,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>,
     );
     store.dispatch(Actions.update('bar', () => 'Bar'));
@@ -262,7 +281,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update(null, () => '1961-04-12'));
@@ -275,7 +296,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update(undefined, () => '1961-04-12'));
@@ -288,7 +311,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema} enabled={false}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} enabled={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -299,7 +324,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -310,7 +337,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema} id='#/properties/foo'/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} id='#/properties/foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -322,7 +351,9 @@ describe('Material date control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateControl schema={schema} uischema={uischema} visible={false}/>
+        <JsonFormsReduxContext>
+          <MaterialDateControl schema={schema} uischema={uischema} visible={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');

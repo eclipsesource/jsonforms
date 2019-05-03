@@ -23,16 +23,14 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isNumberControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
   WithClassname
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputNumber } from '../mui-controls/MuiInputNumber';
 
 export const MaterialNumberCell = (props: CellProps & WithClassname) => (
@@ -46,7 +44,4 @@ export const materialNumberCellTester: RankedTester = rankWith(
   2,
   isNumberControl
 );
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialNumberCell);
+export default withJsonFormsCellProps(MaterialNumberCell);

@@ -24,44 +24,39 @@
 */
 import React from 'react';
 import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import {
-    CellProps,
-    isRangeControl,
-    mapDispatchToCellProps,
-    mapStateToCellProps,
-    RankedTester,
-    rankWith,
+  CellProps,
+  isRangeControl,
+  RankedTester,
+  rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const SliderCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, schema, path, handleChange } = props;
 
   return (
-  <div style={{display: 'flex'}}>
-    <input
-      type='range'
-      max={schema.maximum}
-      min={schema.minimum}
-      value={data || schema.default}
-      onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-        handleChange(path, Number(ev.currentTarget.value))
-      }
-      className={className}
-      id={id}
-      disabled={!enabled}
-      autoFocus={uischema.options && uischema.options.focus}
-      style={{flex: '1'}}
-    />
-    <label style={{marginLeft: '0.5em'}}>{data || schema.default}</label>
-  </div>
+    <div style={{ display: 'flex' }}>
+      <input
+        type='range'
+        max={schema.maximum}
+        min={schema.minimum}
+        value={data || schema.default}
+        onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+          handleChange(path, Number(ev.currentTarget.value))
+        }
+        className={className}
+        id={id}
+        disabled={!enabled}
+        autoFocus={uischema.options && uischema.options.focus}
+        style={{ flex: '1' }}
+      />
+      <label style={{ marginLeft: '0.5em' }}>{data || schema.default}</label>
+    </div>
   );
 };
 
 export const sliderCellTester: RankedTester = rankWith(4, isRangeControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(SliderCell);
+export default withJsonFormsCellProps(SliderCell);

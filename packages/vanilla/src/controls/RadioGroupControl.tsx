@@ -23,18 +23,15 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  computeLabel,
-  ControlProps,
-  ControlState,
-  isDescriptionHidden,
-  isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps
+    computeLabel,
+    ControlProps,
+    ControlState,
+    isDescriptionHidden,
+    isPlainLabel
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
-import { addVanillaControlProps } from '../util';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
+import { withVanillaControlProps } from '../util';
 import { VanillaRendererProps } from '../index';
 
 export class RadioGroupControl extends Control<ControlProps & VanillaRendererProps, ControlState> {
@@ -104,6 +101,4 @@ export class RadioGroupControl extends Control<ControlProps & VanillaRendererPro
     }
 }
 
-export default connect(
-    addVanillaControlProps(mapStateToControlProps), mapDispatchToControlProps
-)(RadioGroupControl);
+export default withVanillaControlProps(withJsonFormsControlProps(RadioGroupControl));

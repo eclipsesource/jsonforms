@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -31,12 +30,10 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isRangeControl,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 
 import { FormControl, FormHelperText, Hidden, Typography } from '@material-ui/core';
 import Slider from '@material-ui/lab/Slider';
@@ -119,6 +116,5 @@ export class MaterialSliderControl extends Control<ControlProps, ControlState> {
   }
 }
 export const materialSliderControlTester: RankedTester = rankWith(4, isRangeControl);
-export default connect(
-  mapStateToControlProps, mapDispatchToControlProps
-)(MaterialSliderControl);
+
+export default withJsonFormsControlProps(MaterialSliderControl);

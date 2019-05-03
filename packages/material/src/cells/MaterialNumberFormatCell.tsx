@@ -27,13 +27,11 @@ import {
   CellProps,
   Formatted,
   isNumberFormatControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputNumberFormat } from '../mui-controls/MuiInputNumberFormat';
 
 export const MaterialNumberFormatCell = (
@@ -47,7 +45,5 @@ export const materialNumberFormatCellTester: RankedTester = rankWith(
   4,
   isNumberFormatControl
 );
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialNumberFormatCell);
+
+export default withJsonFormsCellProps(MaterialNumberFormatCell);

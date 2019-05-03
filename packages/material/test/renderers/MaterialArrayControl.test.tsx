@@ -37,6 +37,7 @@ import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -103,22 +104,19 @@ export const initJsonFormsStore = (customData?: any): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      cells: materialCells
+      cells: materialCells,
     }
   };
-  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({
-    jsonforms: jsonformsReducer()
-  });
+  const reducer: Reducer<JsonFormsState, AnyAction> = combineReducers({ jsonforms: jsonformsReducer() });
   const store: Store<JsonFormsState> = createStore(reducer, s);
   const { data, schema, uischema } = fixture;
-  store.dispatch(
-    Actions.init(customData ? customData : data, schema, uischema)
-  );
+  store.dispatch(Actions.init(customData ? customData : data, schema, uischema));
 
   return store;
 };
 
 describe('Material array control', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -127,10 +125,9 @@ describe('Material array control', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -144,10 +141,9 @@ describe('Material array control', () => {
 
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -180,7 +176,9 @@ describe('Material array control', () => {
 
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -214,7 +212,9 @@ describe('Material array control', () => {
 
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -227,10 +227,9 @@ describe('Material array control', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer schema={fixture.schema} uischema={fixture.uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -285,7 +284,9 @@ describe('Material array control', () => {
 
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -337,11 +338,13 @@ describe('Material array control', () => {
 
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={schema}
-          uischema={uischema}
-          visible={false}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -357,10 +360,12 @@ describe('Material array control', () => {
     store.dispatch(Actions.init(data, fixture2.schema, fixture2.uischema));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture2.schema}
-          uischema={fixture2.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     // up button
@@ -379,13 +384,15 @@ describe('Material array control', () => {
     );
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture2.schema}
-          uischema={fixture2.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
-    //first row is header in table
+    // first row is header in table
     const downButton = wrapper
       .find('tr')
       .at(1)
@@ -403,13 +410,15 @@ describe('Material array control', () => {
     );
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture2.schema}
-          uischema={fixture2.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
-    //first row is header in table
+    // first row is header in table
     const upButton = wrapper
       .find('tr')
       .at(3)
@@ -427,13 +436,15 @@ describe('Material array control', () => {
     );
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture2.schema}
-          uischema={fixture2.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
-    //first row is header in table
+    // first row is header in table
     const upButton = wrapper
       .find('tr')
       .at(1)
@@ -449,13 +460,15 @@ describe('Material array control', () => {
     );
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayControlRenderer
-          schema={fixture2.schema}
-          uischema={fixture2.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayControlRenderer
+            schema={fixture2.schema}
+            uischema={fixture2.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
-    //first row is header in table
+    // first row is header in table
     // first buttton is up arrow, second button is down arrow
     const downButton = wrapper
       .find('tr')

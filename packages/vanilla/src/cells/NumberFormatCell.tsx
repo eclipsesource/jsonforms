@@ -23,16 +23,14 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   Formatted,
   isNumberFormatControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
 export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Formatted<number>) => {
@@ -74,7 +72,4 @@ export const NumberFormatCell = (props: CellProps & VanillaRendererProps & Forma
  */
 export const numberFormatCellTester: RankedTester = rankWith(4, isNumberFormatControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(NumberFormatCell);
+export default withJsonFormsCellProps(NumberFormatCell);

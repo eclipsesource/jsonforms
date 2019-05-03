@@ -26,6 +26,7 @@ import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { getData, update } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import EnumCell, { enumCellTester } from '../../src/cells/EnumCell';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
@@ -33,8 +34,8 @@ import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
   t.context.data = { 'foo': 'a' };
-  t.context.schema =  {
-        type: 'string',
+  t.context.schema = {
+    type: 'string',
     enum: ['a', 'b'],
   };
   t.context.uischema = {
@@ -56,15 +57,15 @@ test.beforeEach(t => {
 test('tester', t => {
   t.is(enumCellTester(undefined, undefined), -1);
   t.is(enumCellTester(null, undefined), -1);
-  t.is(enumCellTester({type: 'Foo'}, undefined), -1);
-  t.is(enumCellTester({type: 'Control'}, undefined), -1);
+  t.is(enumCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(enumCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong prop type', t => {
   t.is(
     enumCellTester(
       t.context.uischema,
-      { type: 'object', properties: {foo: {type: 'string'}} }
+      { type: 'object', properties: { foo: { type: 'string' } } }
     ),
     -1
   );
@@ -72,59 +73,59 @@ test('tester with wrong prop type', t => {
 
 test('tester with wrong prop type, but sibling has correct one', t => {
   t.is(
-      enumCellTester(
-          t.context.uischema,
-          {
-            'type': 'object',
-            'properties': {
-              'foo': {
-                'type': 'string'
-              },
-              'bar': {
-                'type': 'string',
-                'enum': ['a', 'b']
-              }
-            }
+    enumCellTester(
+      t.context.uischema,
+      {
+        'type': 'object',
+        'properties': {
+          'foo': {
+            'type': 'string'
+          },
+          'bar': {
+            'type': 'string',
+            'enum': ['a', 'b']
           }
-      ),
-      -1
+        }
+      }
+    ),
+    -1
   );
 });
 
 test('tester with matching string type', t => {
   t.is(
-      enumCellTester(
-          t.context.uischema,
-          {
-            'type': 'object',
-            'properties': {
-              'foo': {
-                'type': 'string',
-                'enum': ['a', 'b']
-              }
-            }
+    enumCellTester(
+      t.context.uischema,
+      {
+        'type': 'object',
+        'properties': {
+          'foo': {
+            'type': 'string',
+            'enum': ['a', 'b']
           }
-      ),
-      2
+        }
+      }
+    ),
+    2
   );
 });
 
 test('tester with matching numeric type', t => {
   // TODO should this be true?
   t.is(
-      enumCellTester(
-          t.context.uischema,
-          {
-            'type': 'object',
-            'properties': {
-              'foo': {
-                'type': 'number',
-                'enum': [1, 2]
-              }
-            }
+    enumCellTester(
+      t.context.uischema,
+      {
+        'type': 'object',
+        'properties': {
+          'foo': {
+            'type': 'number',
+            'enum': [1, 2]
           }
-      ),
-      2
+        }
+      }
+    ),
+    2
   );
 });
 
@@ -136,7 +137,9 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -157,7 +160,9 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -176,7 +181,9 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -193,7 +200,9 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -210,7 +219,9 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -227,7 +238,9 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -244,7 +257,9 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -261,7 +276,9 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -278,7 +295,9 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} enabled={false} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;
@@ -293,7 +312,9 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <EnumCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const select = TestUtils.findRenderedDOMComponentWithTag(tree, 'select') as HTMLSelectElement;

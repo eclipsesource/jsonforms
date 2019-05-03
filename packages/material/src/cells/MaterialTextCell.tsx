@@ -26,13 +26,11 @@ import React from 'react';
 import {
   CellProps,
   isStringControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
   WithClassname
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiInputText } from '../mui-controls/MuiInputText';
 
 export const MaterialTextCell = (props: CellProps & WithClassname) => (
@@ -47,7 +45,5 @@ export const materialTextCellTester: RankedTester = rankWith(
   1,
   isStringControl
 );
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialTextCell);
+
+export default withJsonFormsCellProps(MaterialTextCell);

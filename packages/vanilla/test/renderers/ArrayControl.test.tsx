@@ -23,6 +23,7 @@
   THE SOFTWARE.
 */
 import '@jsonforms/test';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as React from 'react';
 import test from 'ava';
 import { Provider } from 'react-redux';
@@ -78,10 +79,12 @@ test('render two children', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <ArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <ArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 

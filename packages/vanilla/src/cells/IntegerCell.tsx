@@ -24,18 +24,16 @@
 */
 import React from 'react';
 import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isIntegerControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 
-export const IntegerCell  = (props: CellProps & VanillaRendererProps) => {
+export const IntegerCell = (props: CellProps & VanillaRendererProps) => {
   const { data, className, id, enabled, uischema, path, handleChange } = props;
 
   return (
@@ -59,7 +57,4 @@ export const IntegerCell  = (props: CellProps & VanillaRendererProps) => {
  */
 export const integerCellTester: RankedTester = rankWith(2, isIntegerControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(IntegerCell);
+export default withJsonFormsCellProps(IntegerCell);

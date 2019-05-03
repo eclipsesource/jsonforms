@@ -34,6 +34,7 @@ import {
   UISchemaElement,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import MaterialDateCell, {
   materialDateCellTester
 } from '../../src/cells/MaterialDateCell';
@@ -138,7 +139,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={control} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={control}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -156,7 +163,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={control} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={control}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -171,7 +184,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={control} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={control}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -182,7 +201,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -195,7 +220,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -207,7 +238,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('foo', () => '1961-04-12'));
@@ -220,7 +257,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('foo', () => null));
@@ -233,7 +276,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('foo', () => undefined));
@@ -246,7 +295,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -258,7 +313,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update(null, () => '1961-04-12'));
@@ -270,7 +331,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -282,12 +349,14 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell
-          schema={schema}
-          uischema={uischema}
-          enabled={false}
-          path='foo'
-        />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            enabled={false}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -298,7 +367,13 @@ describe('Material date cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialDateCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <MaterialDateCell
+            schema={schema}
+            uischema={uischema}
+            path='foo'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();

@@ -22,50 +22,40 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import {
   ArrayLayoutProps,
   isObjectArrayWithNesting,
-  mapDispatchToArrayControlProps,
-  mapStateToArrayLayoutProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { MaterialArrayLayout } from './MaterialArrayLayout';
-import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
+import { MaterialArrayLayout } from './MaterialArrayLayout';
+import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 
-export class MaterialArrayLayoutRenderer extends React.Component<ArrayLayoutProps, any> {
-  addItem = (path: string, value: any) => this.props.addItem(path, value);
-  render() {
+export const MaterialArrayLayoutRenderer =
+  ({ visible, enabled, id, uischema, schema, label, rootSchema, renderers, data, path, errors, addItem }: ArrayLayoutProps) => {
+    const addItemCb = useCallback((p: string, value: any) => addItem(p, value), [addItem]);
     return (
-      <Hidden xsUp={!this.props.visible}>
+      <Hidden xsUp={!visible}>
         <MaterialArrayLayout
-          label={this.props.label}
-          uischema={this.props.uischema}
-          schema={this.props.schema}
-          id={this.props.id}
-          rootSchema={this.props.rootSchema}
-          errors={this.props.errors}
-          enabled={this.props.enabled}
-          visible={this.props.visible}
-          data={this.props.data}
-          path={this.props.path}
-          addItem={this.addItem}
-          renderers={this.props.renderers}
+          label={label}
+          uischema={uischema}
+          schema={schema}
+          id={id}
+          rootSchema={rootSchema}
+          errors={errors}
+          enabled={enabled}
+          visible={visible}
+          data={data}
+          path={path}
+          addItem={addItemCb}
+          renderers={renderers}
         />
       </Hidden>
     );
-  }
-}
-
-const ConnectedMaterialArrayLayoutRenderer = connect(
-  mapStateToArrayLayoutProps,
-  mapDispatchToArrayControlProps
-)(MaterialArrayLayoutRenderer);
-
-export default ConnectedMaterialArrayLayoutRenderer;
-ConnectedMaterialArrayLayoutRenderer.displayName = 'MaterialArrayLayoutRenderer';
+  };
 
 export const materialArrayLayoutTester: RankedTester = rankWith(4, isObjectArrayWithNesting);
+export default withJsonFormsArrayLayoutProps(MaterialArrayLayoutRenderer);

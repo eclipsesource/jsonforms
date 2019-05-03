@@ -37,6 +37,7 @@ import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 const defaultMaxLength = 524288;
 const defaultSize = 20;
@@ -117,11 +118,13 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell
+          schema={t.context.minLengthSchema}
+          uischema={uischema}
+          path='name'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -144,11 +147,9 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -166,11 +167,9 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -201,7 +200,9 @@ test('render', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell schema={schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextCell schema={schema} uischema={t.context.uischema} path='name'/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -219,11 +220,9 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -243,11 +242,9 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -269,11 +266,9 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -292,11 +287,9 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name'/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -315,11 +308,9 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -338,11 +329,9 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -361,11 +350,9 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -384,12 +371,9 @@ test('disable', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-        enabled={false}
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' enabled={false} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -407,11 +391,9 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.minLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.minLengthSchema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -438,11 +420,9 @@ test('use maxLength for attributes size and maxlength', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -470,11 +450,9 @@ test('use maxLength for attribute size only', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -502,11 +480,9 @@ test('use maxLength for attribute max length only', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.maxLengthSchema} uischema={uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -525,11 +501,9 @@ test('do not use maxLength by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.maxLengthSchema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.maxLengthSchema} uischema={t.context.uischema} path='name'/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -557,7 +531,9 @@ test('maxLength not specified, attributes should have default values (trim && re
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.schema} uischema={uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -585,7 +561,9 @@ test('maxLength not specified, attributes should have default values (trim)', t 
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.schema} uischema={uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -613,7 +591,9 @@ test('maxLength not specified, attributes should have default values (restrict)'
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell schema={t.context.schema} uischema={uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.schema} uischema={uischema} path='name'/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -632,11 +612,9 @@ test('maxLength not specified, attributes should have default values', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='name'
-      />
+      <JsonFormsReduxContext>
+        <TextCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(

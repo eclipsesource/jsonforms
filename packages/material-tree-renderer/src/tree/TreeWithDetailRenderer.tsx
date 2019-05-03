@@ -42,7 +42,7 @@ import {
   Resolve,
   Runtime, StatePropsOfControl, UISchemaElement, UISchemaTester
 } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
 /* tslint:disable:next-line */
 const HTML5Backend = require('react-dnd-html5-backend');
 const { DragDropContext } = require('react-dnd');
@@ -129,58 +129,58 @@ const styles: StyleRulesCallback<'treeMasterDetailContent' |
   'treeMasterDetail' |
   'treeMasterDetailMaster' |
   'treeMasterDetailDetail'> = () => ({
-  treeMasterDetailContent: {
-    paddingTop: '1em',
-    paddingBottom: '1em'
-  },
-  // tslint:disable-next-line: object-literal-key-quotes
-  treeMasterDetail: {
-    display: 'flex',
-    flexDirection: 'column',
-    // tslint:disable-next-line:object-literal-key-quotes
-    '& $treeMasterDetailContent': {
+    treeMasterDetailContent: {
+      paddingTop: '1em',
+      paddingBottom: '1em'
+    },
+    // tslint:disable-next-line: object-literal-key-quotes
+    treeMasterDetail: {
       display: 'flex',
-      flexDirection: 'row'
-    }
-  },
-  // tslint:disable-next-line: object-literal-key-quotes
-  treeMasterDetailMaster: {
-    flex: 1,
-    padding: '0.5em',
-    height: 'auto',
-    borderRight: '0.2em solid lightgrey',
-    borderWidth: 'thin',
-    // tslint:disable-next-line:object-literal-key-quotes
-    '& ul': {
-      listStyleType: 'none',
-      margin: 0,
-      padding: 0,
-      position: 'relative',
-      overflow: 'hidden',
+      flexDirection: 'column',
       // tslint:disable-next-line:object-literal-key-quotes
-      '&:after': {
-        content: '""',
-        position: 'absolute',
-        left: '0.2em',
-        height: '0.6em',
-        bottom: '0'
-      }, // tslint:disable-next-line:object-literal-key-quotes
-      '&:last-child::after': {
-        display: 'none'
+      '& $treeMasterDetailContent': {
+        display: 'flex',
+        flexDirection: 'row'
+      }
+    },
+    // tslint:disable-next-line: object-literal-key-quotes
+    treeMasterDetailMaster: {
+      flex: 1,
+      padding: '0.5em',
+      height: 'auto',
+      borderRight: '0.2em solid lightgrey',
+      borderWidth: 'thin',
+      // tslint:disable-next-line:object-literal-key-quotes
+      '& ul': {
+        listStyleType: 'none',
+        margin: 0,
+        padding: 0,
+        position: 'relative',
+        overflow: 'hidden',
+        // tslint:disable-next-line:object-literal-key-quotes
+        '&:after': {
+          content: '""',
+          position: 'absolute',
+          left: '0.2em',
+          height: '0.6em',
+          bottom: '0'
+        }, // tslint:disable-next-line:object-literal-key-quotes
+        '&:last-child::after': {
+          display: 'none'
+        }
+      }
+    },
+    // tslint:disable-next-line: object-literal-key-quotes
+    treeMasterDetailDetail: {
+      flex: 3,
+      padding: '0.5em',
+      paddingLeft: '1em',
+      // tslint:disable-next-line:object-literal-key-quotes
+      '&:first-child': {
+        marginRight: '0.25em'
       }
     }
-  },
-  // tslint:disable-next-line: object-literal-key-quotes
-  treeMasterDetailDetail: {
-    flex: 3,
-    padding: '0.5em',
-    paddingLeft: '1em',
-    // tslint:disable-next-line:object-literal-key-quotes
-    '&:first-child': {
-      marginRight: '0.25em'
-    }
-  }
-});
+  });
 
 export interface TreeWithDetailState extends ControlState {
   selected: {
@@ -218,11 +218,11 @@ export interface TreeWithDetailProps
 
 export class TreeWithDetailRenderer extends React.Component
   <TreeWithDetailProps &
-    WithStyles<'treeMasterDetailContent' |
-      'treeMasterDetail'|
-      'treeMasterDetailMaster' |
-      'treeMasterDetailDetail'>,
-    TreeWithDetailState> {
+  WithStyles<'treeMasterDetailContent' |
+    'treeMasterDetail' |
+    'treeMasterDetailMaster' |
+    'treeMasterDetailDetail'>,
+  TreeWithDetailState> {
 
   componentWillMount() {
     const { uischema, data, schema } = this.props;
@@ -349,7 +349,7 @@ export class TreeWithDetailRenderer extends React.Component
           <div className={classes.treeMasterDetailDetail}>
             {
               this.state.selected ?
-                <ResolvedJsonForms
+                <JsonFormsDispatch
                   schema={this.state.selected.schema}
                   path={this.state.selected.path}
                   uischema={detailUiSchema}
@@ -399,8 +399,8 @@ export interface OwnPropsOfTreeControl extends OwnPropsOfControl {
 const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl & WithImageProvider & WithLabelProviders): StatePropsOfTreeWithDetail => {
   const rootData = getData(state);
   const path = Paths.compose(ownProps.path, Paths.fromScopable(ownProps.uischema));
-  const visible = has(ownProps, 'visible') ? ownProps.visible :  Runtime.isVisible(ownProps.uischema, rootData);
-  const enabled = has(ownProps, 'enabled') ? ownProps.enabled :  Runtime.isEnabled(ownProps.uischema, rootData);
+  const visible = has(ownProps, 'visible') ? ownProps.visible : Runtime.isVisible(ownProps.uischema, rootData);
+  const enabled = has(ownProps, 'enabled') ? ownProps.enabled : Runtime.isEnabled(ownProps.uischema, rootData);
   const rootSchema = getSchema(state);
   const resolvedSchema = Resolve.schema(
     ownProps.schema,
@@ -413,7 +413,7 @@ const mapStateToProps = (state: JsonFormsState, ownProps: OwnPropsOfTreeControl 
     label: get(ownProps.uischema, 'label') as string,
     data: Resolve.data(rootData, path),
     uischema: ownProps.uischema,
-    schema:  resolvedSchema || rootSchema,
+    schema: resolvedSchema || rootSchema,
     uischemas: state.jsonforms.uischemas,
     path,
     visible,

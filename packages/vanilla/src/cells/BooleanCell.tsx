@@ -23,44 +23,39 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { StatelessComponent, SyntheticEvent } from 'react';
-import { addVanillaCellProps } from '../util';
 import { VanillaRendererProps } from '../index';
 
 export const BooleanCell: StatelessComponent<CellProps> =
-    (props: CellProps & VanillaRendererProps) => {
-        const { data, className, id, enabled, uischema, path, handleChange } = props;
+  (props: CellProps & VanillaRendererProps) => {
+    const { data, className, id, enabled, uischema, path, handleChange } = props;
 
-        return (
-            <input
-                type='checkbox'
-                checked={data || ''}
-                onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
-                    handleChange(path, ev.currentTarget.checked)
-                }
-                className={className}
-                id={id}
-                disabled={!enabled}
-                autoFocus={uischema.options && uischema.options.focus}
-            />
-        );
-    };
+    return (
+      <input
+        type='checkbox'
+        checked={data || ''}
+        onChange={(ev: SyntheticEvent<HTMLInputElement>) =>
+          handleChange(path, ev.currentTarget.checked)
+        }
+        className={className}
+        id={id}
+        disabled={!enabled}
+        autoFocus={uischema.options && uischema.options.focus}
+      />
+    );
+  };
 
 /**
  * Default tester for boolean controls.
  * @type {RankedTester}
  */
 export const booleanCellTester: RankedTester = rankWith(2, isBooleanControl);
-export default connect(
-  addVanillaCellProps(mapStateToCellProps),
-  mapDispatchToCellProps
-)(BooleanCell);
+
+export default withJsonFormsCellProps(BooleanCell);

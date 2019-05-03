@@ -22,25 +22,40 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
+import { StatePropsOfMasterItem } from '@jsonforms/core';
+import { withJsonFormsMasterListItemProps } from '@jsonforms/react';
 import {
-  EnumCellProps,
-  isEnumControl,
-  RankedTester,
-  rankWith,
-  WithClassname
-} from '@jsonforms/core';
-import { withJsonFormsEnumCellProps } from '@jsonforms/react';
-import { MuiSelect } from '../mui-controls/MuiSelect';
+    Avatar,
+    IconButton,
+    ListItem,
+    ListItemAvatar,
+    ListItemSecondaryAction,
+    ListItemText,
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import React from 'react';
 
-export const MaterialEnumCell = (props: EnumCellProps & WithClassname) => (
-  <MuiSelect {...props} />
-);
+const ListWithDetailMasterItem = ({ index, childLabel, selected, handleSelect, removeItem, path }: StatePropsOfMasterItem) => {
+    return (
+        <ListItem
+            button
+            selected={selected}
+            onClick={handleSelect(index)}
+        >
+            <ListItemAvatar>
+                <Avatar aria-label='Index'>{index + 1}</Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={childLabel} />
+            <ListItemSecondaryAction>
+                <IconButton
+                    aria-label='Delete'
+                    onClick={removeItem(path, index)}
+                >
+                    <DeleteIcon />
+                </IconButton>
+            </ListItemSecondaryAction>
+        </ListItem>
+    );
+};
 
-/**
- * Default tester for enum controls.
- * @type {RankedTester}
- */
-export const materialEnumCellTester: RankedTester = rankWith(2, isEnumControl);
-
-export default withJsonFormsEnumCellProps(MaterialEnumCell);
+export default withJsonFormsMasterListItemProps(ListWithDetailMasterItem);

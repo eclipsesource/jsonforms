@@ -32,12 +32,13 @@ import {
   JsonSchema,
   Layout
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as TestUtils from 'react-dom/test-utils';
 import CategorizationRenderer, { categorizationTester } from '../../src/complex/categorization';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
-  t.context.data = { };
+  t.context.data = {};
   t.context.schema = {
     type: 'object',
     properties: {
@@ -82,8 +83,8 @@ test.beforeEach(t => {
 test('tester', t => {
   t.is(categorizationTester(undefined, undefined), -1);
   t.is(categorizationTester(null, undefined), -1);
-  t.is(categorizationTester({type: 'Foo'}, undefined), -1);
-  t.is(categorizationTester({type: 'Categorization'}, undefined), -1);
+  t.is(categorizationTester({ type: 'Foo' }, undefined), -1);
+  t.is(categorizationTester({ type: 'Categorization' }, undefined), -1);
 });
 
 test('tester with null elements and no schema', t => {
@@ -92,11 +93,11 @@ test('tester with null elements and no schema', t => {
     elements: null
   };
   t.is(
-      categorizationTester(
-          uischema,
-          undefined
-      ),
-      -1
+    categorizationTester(
+      uischema,
+      undefined
+    ),
+    -1
   );
 });
 
@@ -106,11 +107,11 @@ test('tester with empty elements and no schema', t => {
     elements: []
   };
   t.is(
-      categorizationTester(
-          uischema,
-          undefined
-      ),
-      -1
+    categorizationTester(
+      uischema,
+      undefined
+    ),
+    -1
   );
 });
 
@@ -124,16 +125,16 @@ test('apply tester with single unknown element and no schema', t => {
     ]
   };
   t.is(
-      categorizationTester(
-          uischema,
-          undefined
-      ),
-      -1
+    categorizationTester(
+      uischema,
+      undefined
+    ),
+    -1
   );
 });
 
 test('tester with single category and no schema', t => {
-  const categorization =  {
+  const categorization = {
     type: 'Categorization',
     elements: [
       {
@@ -142,11 +143,11 @@ test('tester with single category and no schema', t => {
     ]
   };
   t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      1
+    categorizationTester(
+      categorization,
+      undefined
+    ),
+    1
   );
 });
 
@@ -164,10 +165,10 @@ test('tester with nested categorization and single category and no schema', t =>
     elements: [nestedCategorization]
   };
   t.is(
-      categorizationTester(
-          categorization,
-          undefined),
-      1
+    categorizationTester(
+      categorization,
+      undefined),
+    1
   );
 });
 
@@ -181,11 +182,11 @@ test('tester with nested categorizations, but no category and no schema', t => {
     ]
   };
   t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      -1
+    categorizationTester(
+      categorization,
+      undefined
+    ),
+    -1
   );
 });
 
@@ -201,11 +202,11 @@ test('tester with nested categorizations, null elements and no schema', t => {
     ]
   };
   t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      -1
+    categorizationTester(
+      categorization,
+      undefined
+    ),
+    -1
   );
 });
 
@@ -220,11 +221,11 @@ test('tester with nested categorizations, empty elements and no schema', t => {
     ]
   };
   t.is(
-      categorizationTester(
-          categorization,
-          undefined
-      ),
-      -1
+    categorizationTester(
+      categorization,
+      undefined
+    ),
+    -1
   );
 });
 
@@ -273,10 +274,12 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer
-        schema={schema}
-        uischema={uischema}
-      />
+      <JsonFormsReduxContext>
+        <CategorizationRenderer
+          schema={schema}
+          uischema={uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -322,7 +325,7 @@ test('render', t => {
 });
 
 test('render on click', t => {
-  const data = {'name': 'Foo'};
+  const data = { 'name': 'Foo' };
   const nameControl: ControlElement = {
     type: 'Control',
     scope: '#/properties/name'
@@ -369,10 +372,12 @@ test('render on click', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer
-        schema={t.context.schema}
-        uischema={uischema}
-      />
+      <JsonFormsReduxContext>
+        <CategorizationRenderer
+          schema={t.context.schema}
+          uischema={uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -431,11 +436,13 @@ test('hide', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer
-        schema={t.context.schema}
-        uischema={uischema}
-        visible={false}
-      />
+      <JsonFormsReduxContext>
+        <CategorizationRenderer
+          schema={t.context.schema}
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -466,10 +473,12 @@ test('showed by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <CategorizationRenderer
-        schema={t.context.schema}
-        uischema={uischema}
-      />
+      <JsonFormsReduxContext>
+        <CategorizationRenderer
+          schema={t.context.schema}
+          uischema={uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 

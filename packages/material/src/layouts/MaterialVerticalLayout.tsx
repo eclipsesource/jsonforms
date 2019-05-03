@@ -23,25 +23,29 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  mapStateToLayoutProps,
+  LayoutProps,
   RankedTester,
   rankWith,
-  StatePropsOfLayout,
   uiTypeIs,
-  VerticalLayout
+  VerticalLayout,
 } from '@jsonforms/core';
-import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import {
+  MaterialLayoutRenderer,
+  MaterialLayoutRendererProps
+} from '../util/layout';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 
 /**
  * Default tester for a vertical layout.
  * @type {RankedTester}
  */
-export const materialVerticalLayoutTester: RankedTester = rankWith(1, uiTypeIs('VerticalLayout'));
+export const materialVerticalLayoutTester: RankedTester = rankWith(
+  1,
+  uiTypeIs('VerticalLayout')
+);
 
-export const MaterialVerticalLayoutRenderer  = (
-  { schema, uischema, path, visible, renderers }: StatePropsOfLayout) => {
+export const MaterialVerticalLayoutRenderer = ({ uischema, schema, path, visible, renderers }: LayoutProps) => {
   const verticalLayout = uischema as VerticalLayout;
   const childProps: MaterialLayoutRendererProps = {
     elements: verticalLayout.elements,
@@ -54,6 +58,4 @@ export const MaterialVerticalLayoutRenderer  = (
   return <MaterialLayoutRenderer {...childProps} renderers={renderers} />;
 };
 
-export default connect(
-  mapStateToLayoutProps
-)(MaterialVerticalLayoutRenderer);
+export default withJsonFormsLayoutProps(MaterialVerticalLayoutRenderer);

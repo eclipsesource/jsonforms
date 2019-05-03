@@ -23,16 +23,18 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   HorizontalLayout,
-  mapStateToLayoutProps,
+  LayoutProps,
   RankedTester,
   rankWith,
-  StatePropsOfLayout,
-  uiTypeIs
+  uiTypeIs,
 } from '@jsonforms/core';
-import { MaterialLayoutRenderer, MaterialLayoutRendererProps } from '../util/layout';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
+import {
+  MaterialLayoutRenderer,
+  MaterialLayoutRendererProps
+} from '../util/layout';
 
 /**
  * Default tester for a horizontal layout.
@@ -43,11 +45,10 @@ export const materialHorizontalLayoutTester: RankedTester = rankWith(
   uiTypeIs('HorizontalLayout')
 );
 
-export const MaterialHorizontalLayoutRenderer = (
-  { schema, uischema, path, visible, renderers }: StatePropsOfLayout) => {
-  const horizontalLayout = uischema as HorizontalLayout;
+export const MaterialHorizontalLayoutRenderer = ({ uischema, renderers, schema, path, visible }: LayoutProps) => {
+  const layout = uischema as HorizontalLayout;
   const childProps: MaterialLayoutRendererProps = {
-    elements: horizontalLayout.elements,
+    elements: layout.elements,
     schema,
     path,
     direction: 'row',
@@ -57,7 +58,4 @@ export const MaterialHorizontalLayoutRenderer = (
   return <MaterialLayoutRenderer {...childProps} renderers={renderers} />;
 };
 
-const ConnectedMaterialHorizontalLayoutRendered = connect(
-  mapStateToLayoutProps
-)(MaterialHorizontalLayoutRenderer);
-export default ConnectedMaterialHorizontalLayoutRendered;
+export default withJsonFormsLayoutProps(MaterialHorizontalLayoutRenderer);

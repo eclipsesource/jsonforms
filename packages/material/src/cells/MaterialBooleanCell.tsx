@@ -23,16 +23,14 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isBooleanControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
   WithClassname
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
 export const MaterialBooleanCell = (props: CellProps & WithClassname) => {
@@ -44,7 +42,4 @@ export const materialBooleanCellTester: RankedTester = rankWith(
   isBooleanControl
 );
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(MaterialBooleanCell);
+export default withJsonFormsCellProps(MaterialBooleanCell);

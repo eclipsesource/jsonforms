@@ -24,13 +24,13 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import union from 'lodash/union';
-import { DispatchCell } from '@jsonforms/react';
+import { DispatchCell, JsonFormsStateContext, useJsonForms } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
 import {
   FormHelperText,
+  Grid,
   Hidden,
   Table,
   TableBody,
@@ -38,14 +38,12 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Grid
 } from '@material-ui/core';
 import {
   ArrayLayoutProps,
   ControlElement,
+  errorsAt,
   formatErrorMessage,
-  getErrorAt,
-  JsonFormsState,
   JsonSchema,
   Paths,
   Resolve
@@ -58,6 +56,8 @@ import ArrowUpward from '@material-ui/icons/ArrowUpward';
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
+import { ErrorObject } from 'ajv';
+
 // we want a cell that doesn't automatically span
 const styles = {
   fixedCell: {
@@ -147,21 +147,24 @@ interface OwnPropsOfNonEmptyCell {
   propName?: string;
   schema: JsonSchema;
 }
-const mapStateToNonEmptyCellProps = (
-  state: JsonFormsState,
+const ctxToNonEmptyCellProps = (
+  ctx: JsonFormsStateContext,
   ownProps: OwnPropsOfNonEmptyCell
 ): NonEmptyCellProps => {
-  const path =
-    ownProps.rowPath +
-    (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
+
+  const path = ownProps.rowPath + (ownProps.schema.type === 'object' ? '.' + ownProps.propName : '');
   const errors = formatErrorMessage(
-    union(getErrorAt(path, ownProps.schema)(state).map(error => error.message))
+    union(
+      errorsAt(path, ownProps.schema, p => p === path)(ctx.core.errors).map(
+        (error: ErrorObject) => error.message
+      )
+    )
   );
   return {
     rowPath: ownProps.rowPath,
     propName: ownProps.propName,
     schema: ownProps.schema,
-    rootSchema: state.jsonforms.core.schema,
+    rootSchema: ctx.core.schema,
     errors,
     path
   };
@@ -173,37 +176,35 @@ const controlWithoutLabel = (scope: string): ControlElement => ({
   label: false
 });
 
-class NonEmptyCellInner extends React.Component<NonEmptyCellProps, any> {
-  render() {
-    const { path, propName, schema, rootSchema, errors } = this.props;
+const NonEmptyCell = (ownProps: OwnPropsOfNonEmptyCell) => {
+  const ctx = useJsonForms();
+  const { path, propName, schema, rootSchema, errors } = ctxToNonEmptyCellProps(ctx, ownProps);
 
-    const isValid = isEmpty(errors);
+  const isValid = isEmpty(errors);
 
-    return (
-      <NoBorderTableCell>
-        {schema.properties ? (
-          <DispatchCell
-            schema={Resolve.schema(
-              schema,
-              `#/properties/${propName}`,
-              rootSchema
-            )}
-            uischema={controlWithoutLabel(`#/properties/${propName}`)}
-            path={path}
-          />
-        ) : (
+  return (
+    <NoBorderTableCell>
+      {schema.properties ? (
+        <DispatchCell
+          schema={Resolve.schema(
+            schema,
+            `#/properties/${propName}`,
+            rootSchema
+          )}
+          uischema={controlWithoutLabel(`#/properties/${propName}`)}
+          path={path}
+        />
+      ) : (
           <DispatchCell
             schema={schema}
             uischema={controlWithoutLabel('#')}
             path={path}
           />
         )}
-        <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
-      </NoBorderTableCell>
-    );
-  }
-}
-const NonEmptyCell = connect(mapStateToNonEmptyCellProps)(NonEmptyCellInner);
+      <FormHelperText error={!isValid}>{!isValid && errors}</FormHelperText>
+    </NoBorderTableCell>
+  );
+};
 
 interface NonEmptyRowProps {
   childPath: string;
@@ -257,8 +258,8 @@ const NonEmptyRow = React.memo(
                 </Grid>
               </Fragment>
             ) : (
-              ''
-            )}
+                ''
+              )}
 
             <Grid item>
               <IconButton
@@ -292,9 +293,11 @@ const TableRows = ({
   uischema
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
+
   if (isEmptyTable) {
     return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
   }
+
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
@@ -302,6 +305,7 @@ const TableRows = ({
           path,
           `${index}`
         );
+
         return (
           <NonEmptyRow
             key={childPath}
@@ -326,7 +330,7 @@ const TableRows = ({
 export class MaterialTableControl extends React.Component<
   ArrayLayoutProps & WithDeleteDialogSupport,
   any
-> {
+  > {
   addItem = (path: string, value: any) => this.props.addItem(path, value);
   render() {
     const {

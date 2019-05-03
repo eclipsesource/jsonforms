@@ -31,7 +31,7 @@ import {
   HorizontalLayout,
   JsonSchema
 } from '@jsonforms/core';
-import { JsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch, JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import '../../src';
 import HorizontalLayoutRenderer, {
@@ -104,7 +104,9 @@ test('autofocus on first element', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <JsonForms />
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
@@ -134,7 +136,9 @@ test('render', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl uischema={t.context.uischema} schema={t.context.schema} />
+      <JsonFormsReduxContext>
+        <InputControl uischema={t.context.uischema} schema={t.context.schema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
 
@@ -182,7 +186,9 @@ test('render without label', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <JsonForms />
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
 
@@ -226,12 +232,14 @@ test('hide', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path={''}
-        visible={false}
-      />
+      <JsonFormsReduxContext>
+        <InputControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path={''}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(
@@ -251,7 +259,9 @@ test('show by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={t.context.schema} uischema={t.context.uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(
@@ -271,7 +281,9 @@ test('single error', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={t.context.schema} uischema={t.context.uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(
@@ -292,7 +304,9 @@ test('multiple errors', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={t.context.schema} uischema={t.context.uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={t.context.schema} uischema={t.context.uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(
@@ -313,7 +327,9 @@ test('empty errors by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <JsonForms />
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(
@@ -333,7 +349,9 @@ test('reset validation message', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <JsonForms />
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(
@@ -396,7 +414,9 @@ test('validation of nested schema', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const validation = TestUtils.scryRenderedDOMComponentsWithClass(
@@ -431,7 +451,9 @@ test('required cell is marked', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
@@ -461,7 +483,9 @@ test('not required', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
@@ -492,7 +516,9 @@ test('required cell is marked', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
@@ -523,7 +549,9 @@ test('not required', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(tree, 'label');
@@ -554,7 +582,9 @@ test('show description on focus', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(
@@ -593,7 +623,9 @@ test('hide description when input cell is not focused', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const description = TestUtils.findRenderedDOMComponentWithClass(
@@ -627,7 +659,9 @@ test('hide description on blur', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <JsonForms />
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(
@@ -671,7 +705,9 @@ test('description undefined', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <JsonForms />
+      <JsonFormsReduxContext>
+        <JsonFormsDispatch />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const description = TestUtils.findRenderedDOMComponentWithClass(
@@ -703,7 +739,9 @@ test('undefined input control', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <InputControl schema={schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <InputControl schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const control = TestUtils.scryRenderedDOMComponentsWithClass(tree, 'control');
