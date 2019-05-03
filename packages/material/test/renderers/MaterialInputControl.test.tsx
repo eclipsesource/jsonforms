@@ -44,11 +44,11 @@ import {
   rankWith,
   UISchemaElement
 } from '@jsonforms/core';
+import { Control, JsonFormsReduxContext } from '@jsonforms/react';
 import '../../src/cells';
 import { MaterialInputControl } from '../../src/controls/MaterialInputControl';
 import MaterialHorizontalLayoutRenderer from '../../src/layouts/MaterialHorizontalLayout';
 import { MuiInputText } from '../../src/mui-controls';
-import { Control } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -105,7 +105,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -132,7 +134,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={control} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -154,7 +158,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} visible={false} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} visible={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -165,7 +171,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const control = wrapper.find('div').first();
@@ -176,7 +184,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -189,7 +199,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => 3));
@@ -201,7 +213,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const validation = wrapper.find('p').first();
@@ -212,7 +226,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <TestControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => 3));
@@ -269,10 +285,12 @@ describe('Material input control', () => {
     );
     wrapper = mount(
       <Provider store={store}>
-        <MaterialHorizontalLayoutRenderer
-          schema={jsonSchema}
-          uischema={layout}
-        />
+        <JsonFormsReduxContext>
+          <MaterialHorizontalLayoutRenderer
+            schema={jsonSchema}
+            uischema={layout}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const validation = wrapper.find('p');
@@ -301,7 +319,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore({}, jsonSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={jsonSchema} uischema={control} />
+        <JsonFormsReduxContext>
+          <TestControl schema={jsonSchema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const label = wrapper.find('label').first();
@@ -326,7 +346,9 @@ describe('Material input control', () => {
     const store = initJsonFormsStore({}, jsonSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TestControl schema={jsonSchema} uischema={control} />
+        <JsonFormsReduxContext>
+          <TestControl schema={jsonSchema} uischema={control} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const label = wrapper.find('label').first();

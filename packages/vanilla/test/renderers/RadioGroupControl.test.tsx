@@ -29,12 +29,13 @@ import {
     rankWith,
     update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import * as React from 'react';
+import * as TestUtils from 'react-dom/test-utils';
 import * as _ from 'lodash';
 import { Provider } from 'react-redux';
 import '../../src';
 import RadioGroupControl from '../../src/controls/RadioGroupControl';
-import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
@@ -63,7 +64,9 @@ test('render', t => {
     });
     const tree: React.Component<any> = TestUtils.renderIntoDocument(
         <Provider store={store}>
-            <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
+            <JsonFormsReduxContext>
+                <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
+            </JsonFormsReduxContext>
         </Provider>
     ) as unknown as React.Component<any>;
 
@@ -86,7 +89,9 @@ test('Radio group should have only one selected option', t => {
     });
     const tree: React.Component<any> = TestUtils.renderIntoDocument(
         <Provider store={store}>
-            <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
+            <JsonFormsReduxContext>
+                <RadioGroupControl schema={t.context.schema} uischema={t.context.uischema} />
+            </JsonFormsReduxContext>
         </Provider>
     ) as unknown as React.Component<any>;
 

@@ -24,34 +24,22 @@
 */
 import merge from 'lodash/merge';
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
   ControlState,
   isDescriptionHidden,
   isPlainLabel,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
-  optionIs,
+  rankWith,
   RankedTester,
-  rankWith
+  optionIs
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import {
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  FormLabel,
-  Hidden
-} from '@material-ui/core';
+import { FormControl, FormControlLabel, FormHelperText, FormLabel, Hidden } from '@material-ui/core';
 
-export class MaterialRadioGroupControl extends Control<
-  ControlProps,
-  ControlState
-> {
+export class MaterialRadioGroupControl extends Control<ControlProps, ControlState> {
   render() {
     const {
       config,
@@ -67,17 +55,16 @@ export class MaterialRadioGroupControl extends Control<
     const isValid = errors.length === 0;
     const mergedConfig = merge({}, config, this.props.uischema.options);
     const trim = mergedConfig.trim;
-    const showDescription = !isDescriptionHidden(
-      visible,
-      description,
-      this.state.isFocused
-    );
+    const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
 
     const options = schema.enum;
 
     return (
       <Hidden xsUp={!visible}>
-        <FormControl component={'fieldset' as 'div'} fullWidth={!trim}>
+        <FormControl
+          component={'fieldset' as 'div'}
+          fullWidth={!trim}
+        >
           <FormLabel
             htmlFor={id}
             error={!isValid}
@@ -104,7 +91,11 @@ export class MaterialRadioGroupControl extends Control<
             ))}
           </RadioGroup>
           <FormHelperText error={!isValid}>
-            {!isValid ? errors : showDescription ? description : null}
+            {!isValid
+              ? errors
+              : showDescription
+                ? description
+                : null}
           </FormHelperText>
         </FormControl>
       </Hidden>
@@ -112,11 +103,5 @@ export class MaterialRadioGroupControl extends Control<
   }
 }
 
-export const materialRadioGroupControlTester: RankedTester = rankWith(
-  2,
-  optionIs('format', 'radio')
-);
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialRadioGroupControl);
+export const materialRadioGroupControlTester: RankedTester = rankWith(2, optionIs('format', 'radio'));
+export default withJsonFormsControlProps(MaterialRadioGroupControl);

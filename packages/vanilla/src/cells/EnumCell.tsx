@@ -23,17 +23,15 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  defaultMapDispatchToControlProps,
-  defaultMapStateToEnumCellProps,
   EnumCellProps,
   isEnumControl,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsEnumCellProps } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
-import { addVanillaCellProps } from '../util';
+import { withVanillaControlProps } from '../util';
 import { WithClassname } from '../index';
 
 export const EnumCell = (props: EnumCellProps & WithClassname) => {
@@ -70,7 +68,4 @@ export const EnumCell = (props: EnumCellProps & WithClassname) => {
  */
 export const enumCellTester: RankedTester = rankWith(2, isEnumControl);
 
-export default connect(
-  addVanillaCellProps(defaultMapStateToEnumCellProps),
-  defaultMapDispatchToControlProps
-)(EnumCell);
+export default withVanillaControlProps(withJsonFormsEnumCellProps(EnumCell));

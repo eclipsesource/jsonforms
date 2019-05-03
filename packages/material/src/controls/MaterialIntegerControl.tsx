@@ -32,18 +32,32 @@ import {
   RankedTester,
   rankWith
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
 import { MuiInputInteger } from '../mui-controls/MuiInputInteger';
 import { MaterialInputControl } from './MaterialInputControl';
-import { Control } from '@jsonforms/react';
+import { Control, JsonFormsContext } from '@jsonforms/react';
 
-export class MaterialIntegerControl extends Control<ControlProps, ControlState> {
+export class MaterialIntegerControl extends Control<
+  ControlProps,
+  ControlState
+> {
   render() {
     return (
-      <MaterialInputControl
-        {...this.props}
-        input={MuiInputInteger}
-      />
+      <JsonFormsContext.Consumer>
+        {({ core, dispatch }: any) => {
+          const stateProps = mapStateToControlProps(
+            { jsonforms: { core } },
+            this.props
+          );
+          const dispatchProps = mapDispatchToControlProps(dispatch);
+          return (
+            <MaterialInputControl
+              {...stateProps}
+              {...dispatchProps}
+              input={MuiInputInteger}
+            />
+          );
+        }}
+      </JsonFormsContext.Consumer>
     );
   }
 }
@@ -51,7 +65,4 @@ export const materialIntegerControlTester: RankedTester = rankWith(
   2,
   isIntegerControl
 );
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialIntegerControl);
+export default MaterialIntegerControl;

@@ -25,20 +25,17 @@
 import startsWith from 'lodash/startsWith';
 import React from 'react';
 import {
-  computeLabel,
-  ControlState,
-  DispatchPropsOfControl,
-  isDateControl,
-  isDescriptionHidden,
-  isPlainLabel, JsonFormsState,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
-  OwnPropsOfControl,
-  RankedTester,
-  rankWith,
-  StatePropsOfControl
+    computeLabel,
+    ControlState,
+    DispatchPropsOfControl,
+    isDateControl,
+    isDescriptionHidden,
+    isPlainLabel, 
+    RankedTester,
+    rankWith,
+    StatePropsOfControl
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
@@ -47,7 +44,6 @@ import moment from 'moment';
 import { Moment } from 'moment';
 import { DatePicker, MuiPickersUtilsProvider } from 'material-ui-pickers';
 import MomentUtils from '@date-io/moment';
-import { connect } from 'react-redux';
 
 export interface DateControl {
     momentLocale?: Moment;
@@ -60,9 +56,6 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
             id,
             errors,
             label,
-            defaultLabel,
-            cancelLabel,
-            clearLabel,
             uischema,
             visible,
             enabled,
@@ -72,6 +65,9 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
             data,
             momentLocale
         } = this.props;
+        const defaultLabel = label as string;
+        const cancelLabel = '%cancel';
+        const clearLabel = '%clear';
         const isValid = errors.length === 0;
         const trim = uischema.options && uischema.options.trim;
         const showDescription = !isDescriptionHidden(visible, description, this.state.isFocused);
@@ -135,20 +131,6 @@ export class MaterialDateControl extends Control<StatePropsOfDateControl & Dispa
     }
 }
 
-export const addLabelProps =
-    (mapStateToProps: (s: JsonFormsState, p: OwnPropsOfControl) => StatePropsOfControl) =>
-        (state: JsonFormsState, ownProps: OwnPropsOfControl): StatePropsOfDateControl => {
-            const stateProps = mapStateToProps(state, ownProps);
-
-            return {
-                ...stateProps,
-                // TODO cast
-                defaultLabel: stateProps.label as string,
-                cancelLabel: '%cancel',
-                clearLabel: '%clear',
-            };
-        };
-
 export interface StatePropsOfDateControl extends StatePropsOfControl {
     defaultLabel: string;
     cancelLabel: string;
@@ -156,7 +138,5 @@ export interface StatePropsOfDateControl extends StatePropsOfControl {
 }
 
 export const materialDateControlTester: RankedTester = rankWith(4, isDateControl);
-export default connect(
-    addLabelProps(mapStateToControlProps),
-    mapDispatchToControlProps
-)(MaterialDateControl);
+
+export default withJsonFormsControlProps(MaterialDateControl);

@@ -49,7 +49,8 @@ export const findStyle = (styles: StyleDef[]) => (
 ): string[] => {
   const foundStyle = find(styles, s => s.name === style);
   if (!isEmpty(foundStyle) && typeof foundStyle.classNames === 'function') {
-    return foundStyle.classNames(...args);
+    const res = foundStyle.classNames(args);
+    return res;
   } else if (!isEmpty(foundStyle)) {
     return foundStyle.classNames as string[];
   }

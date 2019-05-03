@@ -25,33 +25,25 @@
 import React from 'react';
 import {
   ControlProps,
-  ControlState,
   isEnumControl,
-  mapDispatchToControlProps,
-  mapStateToEnumControlProps,
+  OwnPropsOfEnum,
   RankedTester,
-  rankWith
+  rankWith,
 } from '@jsonforms/core';
-import { connect } from 'react-redux';
+import { withJsonFormsEnumProps } from '@jsonforms/react';
 import { MuiSelect } from '../mui-controls/MuiSelect';
 import { MaterialInputControl } from './MaterialInputControl';
-import { Control } from '@jsonforms/react';
 
-export class MaterialEnumControl extends Control<ControlProps, ControlState> {
-  render() {
-    return (
-      <MaterialInputControl
-        {...this.props}
-        input={MuiSelect}
-      />
-    );
-  }
-}
+export const MaterialEnumControl = (props: ControlProps & OwnPropsOfEnum) => (
+  <MaterialInputControl
+    {...props}
+    input={MuiSelect}
+  />
+);
+
 export const materialEnumControlTester: RankedTester = rankWith(
   2,
   isEnumControl
 );
-export default connect(
-  mapStateToEnumControlProps,
-  mapDispatchToControlProps
-)(MaterialEnumControl);
+
+export default withJsonFormsEnumProps(MaterialEnumControl);

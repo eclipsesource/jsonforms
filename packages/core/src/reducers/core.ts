@@ -139,7 +139,7 @@ const hasAjvOption = (option: any): option is InitActionOptions => {
 export const coreReducer = (
   state: JsonFormsCore = initState,
   action: ValidCoreActions
-) => {
+): JsonFormsCore => {
   switch (action.type) {
     case INIT: {
       const thisAjv = getOrCreateAjv(state, action);
@@ -234,17 +234,17 @@ export const extractData = (state: JsonFormsCore) => get(state, 'data');
 export const extractSchema = (state: JsonFormsCore) => get(state, 'schema');
 export const extractUiSchema = (state: JsonFormsCore) => get(state, 'uischema');
 
-const errorsAt = (
+export const errorsAt = (
   instancePath: string,
   schema: JsonSchema,
   matchPath: (path: string) => boolean
-) => (state: JsonFormsCore): ErrorObject[] => {
+) => (errors: ErrorObject[]): ErrorObject[] => {
   const combinatorPaths = filter(
-    state.errors,
+    errors,
     error => error.keyword === 'oneOf' || error.keyword === 'anyOf'
   ).map(error => error.dataPath);
 
-  return filter(state.errors, error => {
+  return filter(errors, error => {
     let result = matchPath(error.dataPath);
     if (combinatorPaths.findIndex(p => instancePath.startsWith(p)) !== -1) {
       result = result && isEqual(error.parentSchema, schema);
@@ -253,10 +253,17 @@ const errorsAt = (
   });
 };
 
+const getErrorsAt = (
+  instancePath: string,
+  schema: JsonSchema,
+  matchPath: (path: string) => boolean
+) => (state: JsonFormsCore): ErrorObject[] =>
+  errorsAt(instancePath, schema, matchPath)(state.errors);
+
 export const errorAt = (instancePath: string, schema: JsonSchema) =>
-  errorsAt(instancePath, schema, path => path === instancePath);
+  getErrorsAt(instancePath, schema, path => path === instancePath);
 export const subErrorsAt = (instancePath: string, schema: JsonSchema) =>
-  errorsAt(instancePath, schema, path => path.startsWith(instancePath));
+  getErrorsAt(instancePath, schema, path => path.startsWith(instancePath));
 
 export const extractRefParserOptions = (state: JsonFormsCore) =>
   get(state, 'refParserOptions');

@@ -32,6 +32,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import SliderCell, { sliderCellTester } from '../../src/cells/SliderCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
@@ -39,7 +40,7 @@ import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
-  t.context.data = {'foo': 5};
+  t.context.data = { 'foo': 5 };
   t.context.schema = {
     type: 'number',
     maximum: 10,
@@ -102,7 +103,9 @@ test.failing('autofocus on first element', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -114,7 +117,7 @@ test.failing('autofocus on first element', t => {
 test('autofocus active', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope:   '#/properties/foo',
+    scope: '#/properties/foo',
     options: { focus: true }
   };
   const store = initJsonFormsVanillaStore({
@@ -124,11 +127,13 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -138,7 +143,7 @@ test('autofocus active', t => {
 test('autofocus inactive', t => {
   const uischema: ControlElement = {
     type: 'Control',
-    scope:   '#/properties/foo',
+    scope: '#/properties/foo',
     options: { focus: false }
   };
   const store = initJsonFormsVanillaStore({
@@ -148,11 +153,13 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -168,11 +175,13 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -182,8 +191,8 @@ test('autofocus inactive by default', t => {
 test('tester', t => {
   t.is(sliderCellTester(undefined, undefined), -1);
   t.is(sliderCellTester(null, undefined), -1);
-  t.is(sliderCellTester({type: 'Foo'}, undefined), -1);
-  t.is(sliderCellTester({type: 'Control'}, undefined), -1);
+  t.is(sliderCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(sliderCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong schema type', t => {
@@ -376,11 +385,13 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -396,11 +407,13 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -411,17 +424,19 @@ test('update via input event', t => {
 
 test('update via action', t => {
   const store = initJsonFormsVanillaStore({
-    data: { 'foo': 3},
+    data: { 'foo': 3 },
     schema: t.context.schema,
     uischema: t.context.uischema
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -438,11 +453,13 @@ test.failing('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -458,11 +475,13 @@ test.failing('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -478,11 +497,13 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -498,11 +519,13 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -518,11 +541,13 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   store.dispatch(update(undefined, () => 13));
@@ -538,12 +563,14 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-        enabled={false}
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+          enabled={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -558,11 +585,13 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <SliderCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <SliderCell
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          path='foo'
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

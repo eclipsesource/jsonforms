@@ -23,56 +23,39 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import { Hidden } from '@material-ui/core';
 
 import {
   createCombinatorRenderInfos,
   isAllOfControl,
   JsonSchema,
-  mapStateToAllOfProps,
   RankedTester,
   rankWith,
   resolveSubSchemas,
-  StatePropsOfCombinator
-} from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
-
-class MaterialAllOfRenderer extends React.Component<
   StatePropsOfCombinator,
-  any
-> {
-  render() {
-    const { schema, rootSchema, path, visible } = this.props;
+} from '@jsonforms/core';
+import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
 
-    const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
-    const allOfRenderInfos = createCombinatorRenderInfos(
-      (_schema as JsonSchema).allOf,
-      rootSchema,
-      'allOf'
-    );
+const MaterialAllOfRenderer = ({ schema, rootSchema, visible, renderers, path }: StatePropsOfCombinator) => {
+  const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
+  const allOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).allOf, rootSchema, 'allOf');
 
-    return (
-      <Hidden xsUp={!visible}>
-        {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
-          <ResolvedJsonForms
+  return (
+    <Hidden xsUp={!visible}>
+      {
+        allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
+          <JsonFormsDispatch
             key={allOfIndex}
             schema={allOfRenderInfo.schema}
             uischema={allOfRenderInfo.uischema}
             path={path}
+            renderers={renderers}
           />
-        ))}
-      </Hidden>
-    );
-  }
-}
+        ))
+      }
+    </Hidden>
+  );
+};
 
-const ConnectedMaterialAllOfRenderer = connect(mapStateToAllOfProps)(
-  MaterialAllOfRenderer
-);
-
-export const materialAllOfControlTester: RankedTester = rankWith(
-  3,
-  isAllOfControl
-);
-export default ConnectedMaterialAllOfRenderer;
+export const materialAllOfControlTester: RankedTester = rankWith(3, isAllOfControl);
+export default withJsonFormsAllOfProps(MaterialAllOfRenderer);

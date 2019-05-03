@@ -40,6 +40,7 @@ import { materialRenderers } from '../../src';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 Enzyme.configure({ adapter: new Adapter() });
 
 const data = { foo: 'D' };
@@ -90,7 +91,9 @@ describe('Material radio group control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialRadioGroupControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialRadioGroupControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -108,7 +111,9 @@ describe('Material radio group control', () => {
 
     wrapper = mount(
       <Provider store={store}>
-        <MaterialRadioGroupControl schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialRadioGroupControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const currentlyChecked = wrapper.find('input[type="radio"][checked=true]');
@@ -120,11 +125,9 @@ describe('Material radio group control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialRadioGroupControl
-          schema={schema}
-          uischema={uischema}
-          visible={false}
-        />
+        <JsonFormsReduxContext>
+          <MaterialRadioGroupControl schema={schema} uischema={uischema} visible={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 

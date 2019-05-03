@@ -23,10 +23,10 @@
   THE SOFTWARE.
 */
 import React, { FunctionComponent } from 'react';
-import { LabelElement, mapStateToLayoutProps, RankedTester, rankWith, RendererProps, uiTypeIs } from '@jsonforms/core';
-import { addVanillaLayoutProps } from '../util';
-import { connect } from 'react-redux';
+import { LabelElement, RankedTester, rankWith, RendererProps, uiTypeIs } from '@jsonforms/core';
+import { withJsonFormsLayoutProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
+import { withVanillaControlProps } from '../util';
 
 /**
  * Default tester for a label.
@@ -37,7 +37,7 @@ export const labelRendererTester: RankedTester = rankWith(1, uiTypeIs('Label'));
 /**
  * Default renderer for a label.
  */
-export const LabelRenderer:  FunctionComponent<RendererProps & VanillaRendererProps> =
+export const LabelRenderer: FunctionComponent<RendererProps & VanillaRendererProps> =
   ({ uischema, visible, getStyleAsClassName }) => {
     const labelElement: LabelElement = uischema as LabelElement;
     const classNames = getStyleAsClassName('label-control');
@@ -53,4 +53,4 @@ export const LabelRenderer:  FunctionComponent<RendererProps & VanillaRendererPr
     );
   };
 
-export default connect(addVanillaLayoutProps(mapStateToLayoutProps))(LabelRenderer);
+export default withVanillaControlProps(withJsonFormsLayoutProps(LabelRenderer));

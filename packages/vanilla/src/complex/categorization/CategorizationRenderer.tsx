@@ -26,15 +26,13 @@ import React from 'react';
 import {
   Categorization,
   Category,
-  mapStateToLayoutProps,
   RendererProps
 } from '@jsonforms/core';
-import { RendererComponent } from '@jsonforms/react';
+import { RendererComponent, withJsonFormsLayoutProps } from '@jsonforms/react';
 import { CategorizationList } from './CategorizationList';
 import { SingleCategory } from './SingleCategory';
 import { isCategorization } from './tester';
-import { addVanillaLayoutProps } from '../../util';
-import { connect } from 'react-redux';
+import { withVanillaControlProps } from '../../util';
 import { VanillaRendererProps } from '../../index';
 
 export interface CategorizationState {
@@ -105,6 +103,4 @@ class CategorizationRenderer extends RendererComponent<
   }
 }
 
-export default connect(addVanillaLayoutProps(mapStateToLayoutProps))(
-  CategorizationRenderer
-);
+export default withVanillaControlProps(withJsonFormsLayoutProps(CategorizationRenderer));

@@ -36,11 +36,11 @@ import {
   RuleEffect,
   SchemaBasedCondition
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
 import { combineReducers, createStore, Store } from 'redux';
 import MaterialCategorizationStepperLayoutRenderer, {
-  MaterialCategorizationStepperLayoutRenderer as CategorizationStepperRenderer,
   materialCategorizationStepperTester
 } from '../../src/layouts/MaterialCategorizationStepperLayout';
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
@@ -88,8 +88,8 @@ describe('Material categorization stepper layout tester', () => {
   it('should not fail when given undefined data', () => {
     expect(materialCategorizationStepperTester(undefined, undefined)).toBe(-1);
     expect(materialCategorizationStepperTester(null, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester({type: 'Foo'}, undefined)).toBe(-1);
-    expect(materialCategorizationStepperTester({type: 'Categorization'}, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(materialCategorizationStepperTester({ type: 'Categorization' }, undefined)).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', () => {
@@ -121,7 +121,7 @@ describe('Material categorization stepper layout tester', () => {
   });
 
   it('should not apply to a single category and no schema', () => {
-    const categorization =  {
+    const categorization = {
       type: 'Categorization',
       elements: [
         {
@@ -235,7 +235,7 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('should render on click', () => {
-    const data = {'name': 'Foo'};
+    const data = { 'name': 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -280,16 +280,18 @@ describe('Material categorization stepper layout', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationStepperLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationStepperLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
-    const beforeClick = wrapper.find(CategorizationStepperRenderer).state().activeCategory;
+    const beforeClick = wrapper.find(Stepper).props().activeStep;
     wrapper.find(StepButton).at(1).simulate('click');
-    const afterClick = wrapper.find(CategorizationStepperRenderer).state().activeCategory;
+    const afterClick = wrapper.find(Stepper).props().activeStep;
 
     expect(beforeClick).toBe(0);
     expect(afterClick).toBe(1);

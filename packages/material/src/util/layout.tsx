@@ -25,47 +25,55 @@
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 import {
-    JsonFormsRendererRegistryEntry,
-    JsonSchema,
-    OwnPropsOfRenderer,
+  JsonFormsRendererRegistryEntry,
+  JsonSchema,
+  OwnPropsOfRenderer,
   UISchemaElement
 } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import { JsonFormsDispatch } from '@jsonforms/react';
 import { Grid, Hidden } from '@material-ui/core';
 
 export const renderLayoutElements = (
-    elements: UISchemaElement[],
-    schema: JsonSchema,
-    path: string,
-    renderers?: JsonFormsRendererRegistryEntry[]
-  ) =>
-  elements.map((child, index) =>
-      (
-        <Grid item key={`${path}-${index}`} xs>
-          <ResolvedJsonForms
-            uischema={child}
-            schema={schema}
-            path={path}
-            renderers={renderers}
-          />
-        </Grid>
-      )
-  );
+  elements: UISchemaElement[],
+  schema: JsonSchema,
+  path: string,
+  renderers?: JsonFormsRendererRegistryEntry[]
+) => {
+  return elements.map((child, index) => (
+    <Grid item key={`${path}-${index}`} xs>
+      <JsonFormsDispatch
+        uischema={child}
+        schema={schema}
+        path={path}
+        renderers={renderers}
+      />
+    </Grid>
+  ));
+};
 
 export interface MaterialLayoutRendererProps extends OwnPropsOfRenderer {
-    elements: UISchemaElement[];
-    direction: 'row'|'column';
-    renderers?: JsonFormsRendererRegistryEntry[];
+  elements: UISchemaElement[];
+  direction: 'row' | 'column';
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
-export const MaterialLayoutRenderer = (
-  {visible, elements, schema, path, direction, renderers }: MaterialLayoutRendererProps) => {
-
+export const MaterialLayoutRenderer = ({
+  visible,
+  elements,
+  schema,
+  path,
+  direction,
+  renderers
+}: MaterialLayoutRendererProps) => {
   if (isEmpty(elements)) {
     return null;
   } else {
     return (
       <Hidden xsUp={!visible}>
-        <Grid container direction={direction} spacing={direction === 'row' ? 16 : 0}>
+        <Grid
+          container
+          direction={direction}
+          spacing={direction === 'row' ? 16 : 0}
+        >
           {renderLayoutElements(elements, schema, path, renderers)}
         </Grid>
       </Hidden>

@@ -62,7 +62,7 @@
   },
   "peerDependencies": {
     "@jsonforms/core": "^2.2.3",
-    "react": "^16.4.0",
+    "react": "^16.8.6",
     "react-redux": "^6.0.0"
   },
   "devDependencies": {

@@ -23,16 +23,14 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-    CellProps,
-    isDateControl,
-    mapDispatchToCellProps,
-    mapStateToCellProps,
-    RankedTester,
-    rankWith,
-    WithClassname
+  CellProps,
+  isDateControl,
+  RankedTester,
+  rankWith,
+  WithClassname
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import Input from '@material-ui/core/Input';
 
 export const MaterialDateCell = (props: CellProps & WithClassname) => {
@@ -52,4 +50,5 @@ export const MaterialDateCell = (props: CellProps & WithClassname) => {
   );
 };
 export const materialDateCellTester: RankedTester = rankWith(2, isDateControl);
-export default connect(mapStateToCellProps, mapDispatchToCellProps)(MaterialDateCell);
+
+export default withJsonFormsCellProps(MaterialDateCell);

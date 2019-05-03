@@ -27,6 +27,7 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import test from 'ava';
 import { UISchemaElement, VerticalLayout } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import VerticalLayoutRenderer, { verticalLayoutTester } from '../../src/layouts/VerticalLayout';
 import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
@@ -41,8 +42,8 @@ const styles = [
 test('tester', t => {
   t.is(verticalLayoutTester(undefined, undefined), -1);
   t.is(verticalLayoutTester(null, undefined), -1);
-  t.is(verticalLayoutTester({type: 'Foo'}, undefined), -1);
-  t.is(verticalLayoutTester({type: 'VerticalLayout'}, undefined), 1);
+  t.is(verticalLayoutTester({ type: 'Foo' }, undefined), -1);
+  t.is(verticalLayoutTester({ type: 'VerticalLayout' }, undefined), 1);
 });
 
 test('render with undefined elements', t => {
@@ -56,7 +57,9 @@ test('render with undefined elements', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <VerticalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as unknown as React.Component<any>;
 
@@ -76,7 +79,9 @@ test('render with null elements', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <VerticalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -86,7 +91,7 @@ test('render with null elements', t => {
 test('render with children', t => {
   const uischema: VerticalLayout = {
     type: 'VerticalLayout',
-    elements: [ {type: 'Control'}, {type: 'Control'} ]
+    elements: [{ type: 'Control' }, { type: 'Control' }]
   };
   const store = initJsonFormsVanillaStore({
     data: {},
@@ -96,7 +101,9 @@ test('render with children', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <VerticalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'vertical-layout');
@@ -119,10 +126,12 @@ test('hide', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <VerticalLayoutRenderer
-        uischema={uischema}
-        visible={false}
-      />
+      <JsonFormsReduxContext>
+        <VerticalLayoutRenderer
+          uischema={uischema}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(
@@ -146,7 +155,9 @@ test('show by default', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <VerticalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <VerticalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const verticalLayout = TestUtils.findRenderedDOMComponentWithClass(

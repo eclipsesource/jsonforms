@@ -23,7 +23,6 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   computeLabel,
   ControlProps,
@@ -32,14 +31,12 @@ import {
   isDescriptionHidden,
   isPlainLabel,
   isTimeControl,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   or,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
 import { Hidden } from '@material-ui/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import TextField from '@material-ui/core/TextField';
 import merge from 'lodash/merge';
 
@@ -90,7 +87,4 @@ export const materialNativeControlTester: RankedTester = rankWith(
   or(isDateControl, isTimeControl)
 );
 
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialNativeControl);
+export default withJsonFormsControlProps(MaterialNativeControl);

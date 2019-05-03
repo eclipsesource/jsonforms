@@ -74,7 +74,6 @@ export class NumberControlRenderer extends JsonFormsControl {
     const data = this.oldValue
       ? ev.target.value.replace(this.oldValue, '')
       : ev.target.value;
-    console.log(data);
     // ignore these
     if (
       data === '.' ||

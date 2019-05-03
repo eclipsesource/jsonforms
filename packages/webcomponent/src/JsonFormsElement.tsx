@@ -38,7 +38,7 @@ import {
   JsonSchema,
   UISchemaElement
 } from '@jsonforms/core';
-import { ResolvedJsonForms } from '@jsonforms/react';
+import { JsonFormsReduxContext, JsonFormsDispatch } from '@jsonforms/react';
 import { Store } from 'redux';
 
 /**
@@ -72,7 +72,8 @@ const CustomElement = (config: CustomElementConfig) => (cls: any) => {
   selector: 'json-forms'
 })
 export class JsonFormsElement extends HTMLElement {
-  private InnerComponent: any = ResolvedJsonForms;
+
+  private InnerComponent: any = JsonFormsDispatch;
   private innerComponentParameters: any = {};
   private allowDynamicUpdate = false;
   private _store: JsonFormsStore;
@@ -152,9 +153,12 @@ export class JsonFormsElement extends HTMLElement {
 
     ReactDOM.render(
       <Provider store={this._store} key={`${storeId}-store`}>
-        <this.InnerComponent {...this.innerComponentParameters} />
+        <JsonFormsReduxContext>
+          <this.InnerComponent {...this.innerComponentParameters} />
+        </JsonFormsReduxContext>
       </Provider>,
       this
     );
   }
+
 }

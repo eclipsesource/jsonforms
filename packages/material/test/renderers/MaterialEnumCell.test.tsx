@@ -40,6 +40,7 @@ import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -48,7 +49,7 @@ const schema = {
   type: 'string',
   enum: ['DE', 'IT', 'JP', 'US', 'RU', 'Other']
 };
-const uischema = {
+const uischema: ControlElement = {
   type: 'Control',
   scope: '#/properties/nationality'
 };
@@ -96,11 +97,13 @@ describe('Material enum cell', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialEnumCell
-          schema={schema}
-          uischema={uischema}
-          path='nationality'
-        />
+        <JsonFormsReduxContext>
+          <MaterialEnumCell
+            schema={schema}
+            uischema={uischema}
+            path='nationality'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input');

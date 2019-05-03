@@ -41,13 +41,14 @@ import { combineReducers, createStore, Store } from 'redux';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 const DEFAULT_MAX_LENGTH = 524288;
 const DEFAULT_SIZE = 20;
 
-const data =  { 'name': 'Foo' };
+const data = { 'name': 'Foo' };
 const minLengthSchema = {
   type: 'string',
   minLength: 3
@@ -76,11 +77,11 @@ const initJsonFormsStore = (testData: any, testSchema: JsonSchema, testUiSchema:
 };
 
 describe('Material text cell tester', () => {
-  it('should fail', () =>  {
+  it('should fail', () => {
     expect(materialTextCellTester(undefined, undefined)).toBe(NOT_APPLICABLE);
     expect(materialTextCellTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextCellTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialTextCellTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialTextCellTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
   });
   it('should fail with wrong schema type', () => {
     const control: ControlElement = {
@@ -152,7 +153,7 @@ describe('Material text cell', () => {
 
   afterEach(() => wrapper.unmount());
 
-  it('should autofocus via option', () =>  {
+  it('should autofocus via option', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -172,7 +173,7 @@ describe('Material text cell', () => {
     expect(input.props().autoFocus).toBeTruthy();
   });
 
-  it('should not autofocus via option', () =>  {
+  it('should not autofocus via option', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -192,7 +193,7 @@ describe('Material text cell', () => {
     expect(input.props().autoFocus).toBeFalsy();
   });
 
-  it('should not autofocus by default', () =>  {
+  it('should not autofocus by default', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -211,7 +212,7 @@ describe('Material text cell', () => {
     expect(document.activeElement).not.toBe(input);
   });
 
-  it('should render', () =>  {
+  it('should render', () => {
     const jsonSchema: JsonSchema = {
       type: 'object',
       properties: {
@@ -221,11 +222,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore({ 'name': 'Foo' }, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={jsonSchema}
-          uischema={uischema}
-          path={'name'}
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={jsonSchema}
+            uischema={uischema}
+            path={'name'}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -233,15 +236,17 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('Foo');
   });
 
-  it('should update via input event', () =>  {
+  it('should update via input event', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -250,15 +255,17 @@ describe('Material text cell', () => {
     expect(getData(store.getState()).name).toBe('Bar');
   });
 
-  it('should update via action', () =>  {
+  it('should update via action', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('name', () => 'Bar'));
@@ -267,15 +274,17 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('Bar');
   });
 
-  it('should update with undefined value', () =>  {
+  it('should update with undefined value', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('name', () => undefined));
@@ -284,15 +293,17 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('');
   });
 
-  it('should update with null value', () =>  {
+  it('should update with null value', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('name', () => null));
@@ -301,15 +312,17 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('');
   });
 
-  it('should not update if wrong ref', () =>  {
+  it('should not update if wrong ref', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update('firstname', () => 'Bar'));
@@ -318,15 +331,17 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('Foo');
   });
 
-  it('should not update if null ref', () =>  {
+  it('should not update if null ref', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update(null, () => 'Bar'));
@@ -335,15 +350,17 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('Foo');
   });
 
-  it('should not update if undefined ref', () =>  {
+  it('should not update if undefined ref', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(update(undefined, () => 'Bar'));
@@ -352,38 +369,42 @@ describe('Material text cell', () => {
     expect(input.props().value).toBe('Foo');
   });
 
-  it('can be disabled', () =>  {
+  it('can be disabled', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-          enabled={false}
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+            enabled={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeTruthy();
   });
 
-  it('should be enabled by default', () =>  {
+  it('should be enabled by default', () => {
     const store = initJsonFormsStore(data, minLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={minLengthSchema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={minLengthSchema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
     expect(input.props().disabled).toBeFalsy();
   });
 
-  it('should use maxLength for size and maxlength attributes', () =>  {
+  it('should use maxLength for size and maxlength attributes', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -395,11 +416,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={maxLengthSchema}
-          uischema={control}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={maxLengthSchema}
+            uischema={control}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -408,7 +431,7 @@ describe('Material text cell', () => {
     expect(input.props().size).toBe(5);
   });
 
-  it('should use maxLength for size attribute', () =>  {
+  it('should use maxLength for size attribute', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -417,11 +440,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={maxLengthSchema}
-          uischema={control}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={maxLengthSchema}
+            uischema={control}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
@@ -432,7 +457,7 @@ describe('Material text cell', () => {
     expect(input.size).toBe(5);
   });
 
-  it('should use maxLength for maxlength attribute', () =>  {
+  it('should use maxLength for maxlength attribute', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -441,11 +466,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={maxLengthSchema}
-          uischema={control}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={maxLengthSchema}
+            uischema={control}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
@@ -456,15 +483,17 @@ describe('Material text cell', () => {
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
-  it('should not use maxLength by default', () =>  {
+  it('should not use maxLength by default', () => {
     const store = initJsonFormsStore(data, maxLengthSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={schema}
-          uischema={uischema}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={schema}
+            uischema={uischema}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
@@ -475,7 +504,7 @@ describe('Material text cell', () => {
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
-  it('should have default values for trim and restrict', () =>  {
+  it('should have default values for trim and restrict', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -487,11 +516,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={schema}
-          uischema={control}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={schema}
+            uischema={control}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first().getDOMNode() as HTMLInputElement;
@@ -502,7 +533,7 @@ describe('Material text cell', () => {
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
-  it('should have a default value for trim', () =>  {
+  it('should have a default value for trim', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -511,11 +542,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={schema}
-          uischema={control}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={schema}
+            uischema={control}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -527,7 +560,7 @@ describe('Material text cell', () => {
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
-  it('should have default values for restrict', () =>  {
+  it('should have default values for restrict', () => {
     const control: ControlElement = {
       type: 'Control',
       scope: '#/properties/name',
@@ -536,11 +569,13 @@ describe('Material text cell', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <TextCell
-          schema={schema}
-          uischema={control}
-          path='name'
-        />
+        <JsonFormsReduxContext>
+          <TextCell
+            schema={schema}
+            uischema={control}
+            path='name'
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -552,7 +587,7 @@ describe('Material text cell', () => {
     expect(input.size).toBe(DEFAULT_SIZE);
   });
 
-  it('should have default values for attributes', () =>  {
+  it('should have default values for attributes', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>

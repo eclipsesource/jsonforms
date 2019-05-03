@@ -26,6 +26,7 @@ import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { GroupLayout } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import GroupLayoutRenderer, { groupTester } from '../../src/layouts/GroupLayout';
 import * as TestUtils from 'react-dom/test-utils';
@@ -34,7 +35,7 @@ import { initJsonFormsVanillaStore } from '../vanillaStore';
 test.beforeEach(t => {
   t.context.uischema = {
     type: 'GroupLayout',
-    elements: [{type: 'Control'}]
+    elements: [{ type: 'Control' }]
   };
   t.context.styles = [
     {
@@ -47,8 +48,8 @@ test.beforeEach(t => {
 test('tester', t => {
   t.is(groupTester(undefined, undefined), -1);
   t.is(groupTester(null, undefined), -1);
-  t.is(groupTester({type: 'Foo'}, undefined), -1);
-  t.is(groupTester({type: 'Group'}, undefined), 1);
+  t.is(groupTester({ type: 'Foo' }, undefined), -1);
+  t.is(groupTester({ type: 'Group' }, undefined), 1);
 });
 
 test('render with label', t => {
@@ -65,7 +66,9 @@ test('render with label', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <GroupLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <GroupLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
@@ -90,7 +93,9 @@ test('render with null elements', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <GroupLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <GroupLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
@@ -102,8 +107,8 @@ test('render with children', t => {
   const uischema: GroupLayout = {
     type: 'Group',
     elements: [
-      {type: 'Control'},
-      {type: 'Control'}
+      { type: 'Control' },
+      { type: 'Control' }
     ]
   };
   const store = initJsonFormsVanillaStore({
@@ -114,7 +119,9 @@ test('render with children', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <GroupLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <GroupLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'group-layout');
@@ -131,10 +138,12 @@ test('hide', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <GroupLayoutRenderer
-        uischema={t.context.uischema}
-        visible={false}
-      />
+      <JsonFormsReduxContext>
+        <GroupLayoutRenderer
+          uischema={t.context.uischema}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(
@@ -153,7 +162,9 @@ test('show by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <GroupLayoutRenderer uischema={t.context.uischema} />
+      <JsonFormsReduxContext>
+        <GroupLayoutRenderer uischema={t.context.uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const groupLayout = TestUtils.findRenderedDOMComponentWithClass(

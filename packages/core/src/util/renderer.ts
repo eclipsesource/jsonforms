@@ -25,6 +25,7 @@
 import get from 'lodash/get';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import union from 'lodash/union';
+import find from 'lodash/find';
 import RefParser from 'json-schema-ref-parser';
 import {
   getConfig,
@@ -41,6 +42,7 @@ import { RankedTester } from '../testers';
 import { JsonSchema } from '../models/jsonSchema';
 import {
   CombinatorKeyword,
+  composePaths,
   composeWithUi,
   createLabelDescriptionFrom,
   formatErrorMessage,
@@ -319,6 +321,8 @@ export interface StatePropsOfLayout extends StatePropsOfRenderer {
   renderers?: any[];
 }
 
+export interface LayoutProps extends StatePropsOfLayout {}
+
 /**
  * The state of a control.
  */
@@ -427,11 +431,55 @@ export const mapStateToEnumControlProps = (
 };
 
 /**
+ * Map state to control props.
+ * @param state the store's state
+ * @param ownProps any own props
+ * @returns {StatePropsOfControl} state props for a control
+ */
+export const mapStateToMasterListItemProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfMasterListItem
+): StatePropsOfMasterItem => {
+  const { schema, path, index } = ownProps;
+  const firstPrimitiveProp = schema.properties
+    ? find(Object.keys(schema.properties), propName => {
+        const prop = schema.properties[propName];
+        return (
+          prop.type === 'string' ||
+          prop.type === 'number' ||
+          prop.type === 'integer'
+        );
+      })
+    : undefined;
+  const childPath = composePaths(path, `${index}`);
+  const childData = Resolve.data(getData(state), childPath);
+  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+
+  return {
+    ...ownProps,
+    childLabel
+  };
+};
+
+/**
  * State-based props of a table control.
  */
 export interface StatePropsOfControlWithDetail extends StatePropsOfControl {
   uischemas?: { tester: UISchemaTester; uischema: UISchemaElement }[];
   renderers?: JsonFormsRendererRegistryEntry[];
+}
+
+export interface OwnPropsOfMasterListItem {
+  index: number;
+  selected: boolean;
+  path: string;
+  schema: JsonSchema;
+  handleSelect(index: number): () => void;
+  removeItem(path: string, value: number): () => void;
+}
+
+export interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
+  childLabel: string;
 }
 
 /**
@@ -561,6 +609,12 @@ export interface ArrayControlProps
   extends StatePropsOfArrayControl,
     DispatchPropsOfArrayControl {}
 
+export const layoutDefaultProps = {
+  visible: true,
+  enabled: true,
+  path: ''
+};
+
 /**
  * Map state to layout props.
  * @param state JSONForms state tree
@@ -596,14 +650,14 @@ export interface OwnPropsOfJsonFormsRenderer extends OwnPropsOfRenderer {
   renderers?: JsonFormsRendererRegistryEntry[];
 }
 
-export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
-  renderers?: JsonFormsRendererRegistryEntry[];
-}
-
 export interface StatePropsOfJsonFormsRenderer
   extends OwnPropsOfJsonFormsRenderer {
   rootSchema: JsonSchema;
   refResolver: any;
+}
+
+export interface JsonFormsProps extends StatePropsOfJsonFormsRenderer {
+  renderers?: JsonFormsRendererRegistryEntry[];
 }
 
 export const mapStateToJsonFormsRendererProps = (
@@ -629,54 +683,17 @@ export const mapStateToJsonFormsRendererProps = (
   };
 };
 
-export const layoutDefaultProps = {
-  visible: true,
-  enabled: true,
-  path: ''
-};
-
 export const controlDefaultProps = {
   ...layoutDefaultProps,
   errors: [] as string[]
 };
 
-export interface StatePropsOfCombinator {
-  schema: JsonSchema;
+export interface StatePropsOfCombinator extends OwnPropsOfControl {
   rootSchema: JsonSchema;
   path: string;
-  visible: boolean;
   id: string;
   indexOfFittingSchema: number;
 }
-export interface CombinatorRendererProps
-  extends StatePropsOfCombinator,
-    DispatchPropsOfControl {}
-/**
- * Map state to all of renderer props.
- * @param state the store's state
- * @param ownProps any own props
- * @returns {StatePropsOfCombinator} state props for a combinator
- */
-export const mapStateToAllOfProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfControl
-): StatePropsOfCombinator => {
-  return mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
-};
-
-export const mapStateToOneOfProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfControl
-): StatePropsOfCombinator => {
-  return mapStateToCombinatorRendererProps(state, ownProps, 'oneOf');
-};
-
-export const mapStateToAnyOfProps = (
-  state: JsonFormsState,
-  ownProps: OwnPropsOfControl
-): StatePropsOfCombinator => {
-  return mapStateToCombinatorRendererProps(state, ownProps, 'anyOf');
-};
 
 const mapStateToCombinatorRendererProps = (
   state: JsonFormsState,
@@ -727,6 +744,35 @@ const mapStateToCombinatorRendererProps = (
     id,
     indexOfFittingSchema
   };
+};
+
+export interface CombinatorRendererProps
+  extends StatePropsOfCombinator,
+    DispatchPropsOfControl {}
+/**
+ * Map state to all of renderer props.
+ * @param state the store's state
+ * @param ownProps any own props
+ * @returns {StatePropsOfCombinator} state props for a combinator
+ */
+export const mapStateToAllOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator =>
+  mapStateToCombinatorRendererProps(state, ownProps, 'allOf');
+
+export const mapStateToAnyOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'anyOf');
+};
+
+export const mapStateToOneOfProps = (
+  state: JsonFormsState,
+  ownProps: OwnPropsOfControl
+): StatePropsOfCombinator => {
+  return mapStateToCombinatorRendererProps(state, ownProps, 'oneOf');
 };
 
 export interface StatePropsOfArrayLayout extends StatePropsOfControlWithDetail {

@@ -32,6 +32,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import NumberCell, { numberCellTester } from '../../src/cells/NumberCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
@@ -39,7 +40,7 @@ import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
-  t.context.data = {'foo': 3.14};
+  t.context.data = { 'foo': 3.14 };
   t.context.schema = {
     type: 'number',
     minimum: 5
@@ -99,9 +100,11 @@ test.failing('autofocus on first element', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
-  ) as unknown as React.Component<any> ;
+  ) as unknown as React.Component<any>;
 
   const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
   t.not(document.activeElement, inputs[0]);
@@ -123,9 +126,11 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
-  ) as unknown as React.Component<any> ;
+  ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
   t.is(document.activeElement, input);
 });
@@ -146,7 +151,9 @@ test('autofocus inactive', t => {
 
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -165,7 +172,9 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -175,8 +184,8 @@ test('autofocus inactive by default', t => {
 test('tester', t => {
   t.is(numberCellTester(undefined, undefined), -1);
   t.is(numberCellTester(null, undefined), -1);
-  t.is(numberCellTester({type: 'Foo'}, undefined), -1);
-  t.is(numberCellTester({type: 'Control'}, undefined), -1);
+  t.is(numberCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(numberCellTester({ type: 'Control' }, undefined), -1);
 });
 
 test('tester with wrong schema type', t => {
@@ -254,7 +263,9 @@ test('render', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -272,7 +283,9 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -289,7 +302,9 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -306,7 +321,9 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -322,7 +339,9 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -338,7 +357,9 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -354,7 +375,9 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -370,7 +393,9 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   store.dispatch(update(undefined, () => 13));
@@ -386,7 +411,9 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} enabled={false} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;
@@ -401,7 +428,9 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <NumberCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'input') as HTMLInputElement;

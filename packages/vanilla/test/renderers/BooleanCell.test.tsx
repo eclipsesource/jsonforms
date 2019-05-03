@@ -33,6 +33,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import BooleanCell, { booleanCellTester } from '../../src/cells/BooleanCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
@@ -117,7 +118,9 @@ test('autofocus active', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -142,7 +145,9 @@ test('autofocus inactive', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -164,7 +169,9 @@ test('autofocus inactive by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -242,11 +249,9 @@ test('render', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
 
@@ -266,11 +271,9 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
 
@@ -292,11 +295,9 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -316,11 +317,9 @@ test.failing('update with undefined value', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -339,11 +338,9 @@ test.failing('update with null value', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -362,11 +359,9 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -385,11 +380,9 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -408,11 +401,9 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   store.dispatch(update(undefined, () => false));
@@ -431,11 +422,9 @@ test('disable', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        enabled={false}
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(
@@ -453,11 +442,9 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <BooleanCell
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        path='foo'
-      />
+      <JsonFormsReduxContext>
+        <BooleanCell schema={t.context.schema} uischema={t.context.uischema} path='foo' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const input = TestUtils.findRenderedDOMComponentWithTag(

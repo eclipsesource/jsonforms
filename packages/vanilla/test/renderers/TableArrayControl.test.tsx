@@ -33,6 +33,7 @@ import {
   HorizontalLayout,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import TableArrayControl, { tableArrayControlTester, } from '../../src/complex/TableArrayControl';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import '../../src';
@@ -83,10 +84,12 @@ test('render two children', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -149,10 +152,12 @@ test('render empty data', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -206,10 +211,12 @@ test('render new child (empty init data)', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -229,10 +236,12 @@ test('render new child (undefined data)', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -252,10 +261,12 @@ test('render new child (null data)', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -275,10 +286,12 @@ test('render new child', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -311,10 +324,12 @@ test('render primitives ', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={schema}
-        uischema={uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={schema}
+          uischema={uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const rows = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'tr');
@@ -331,10 +346,12 @@ test('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -461,12 +478,13 @@ test('hide', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        visible={false}
-
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
@@ -482,10 +500,12 @@ test('show by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const control = TestUtils.findRenderedDOMComponentWithClass(tree, 'control') as HTMLElement;
@@ -500,10 +520,12 @@ test('single error', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -519,10 +541,12 @@ test('multiple errors', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -538,10 +562,12 @@ test('empty errors by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');
@@ -556,10 +582,12 @@ test('reset validation message', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TableArrayControl
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-      />
+      <JsonFormsReduxContext>
+        <TableArrayControl
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const validation = TestUtils.findRenderedDOMComponentWithClass(tree, 'validation');

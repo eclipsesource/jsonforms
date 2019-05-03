@@ -32,6 +32,7 @@ import {
   JsonSchema,
   update
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import TextAreaCell, { textAreaCellTester, } from '../../src/cells/TextAreaCell';
 import HorizontalLayoutRenderer from '../../src/layouts/HorizontalLayout';
 import { Provider } from 'react-redux';
@@ -39,7 +40,7 @@ import * as TestUtils from 'react-dom/test-utils';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
 
 test.beforeEach(t => {
-  t.context.data = {'name': 'Foo'};
+  t.context.data = { 'name': 'Foo' };
   t.context.schema = {
     type: 'string',
     minLength: 3
@@ -60,73 +61,73 @@ test.beforeEach(t => {
   ];
 });
 test.failing('autofocus on first element', t => {
-    const schema: JsonSchema = {
-        type: 'object',
-        properties: {
-            firstName: { type: 'string', minLength: 3 },
-            lastName: { type: 'string', minLength: 3 }
-        }
-    };
-    const firstControlElement: ControlElement = {
-        type: 'Control',
-        scope: '#/properties/firstName',
-        options: {
-            focus: true
-        }
-    };
-    const secondControlElement: ControlElement = {
-        type: 'Control',
-        scope: '#/properties/lastName',
-        options: {
-            focus: true
-        }
-    };
-    const uischema: HorizontalLayout = {
-        type: 'HorizontalLayout',
-        elements: [
-            firstControlElement,
-            secondControlElement
-        ]
-    };
-    const data = {
-        'firstName': 'Foo',
-        'lastName': 'Boo'
-    };
-    const store = initJsonFormsVanillaStore({
-      data,
-      schema,
-      uischema
-    });
-    const tree: React.Component<any> = TestUtils.renderIntoDocument(
-        <Provider store={store}>
-          <HorizontalLayoutRenderer schema={schema} uischema={uischema}/>
-        </Provider>
-    ) as unknown as React.Component<any>;
-    const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
-    t.not(document.activeElement, inputs[0]);
-    t.is(document.activeElement, inputs[1]);
+  const schema: JsonSchema = {
+    type: 'object',
+    properties: {
+      firstName: { type: 'string', minLength: 3 },
+      lastName: { type: 'string', minLength: 3 }
+    }
+  };
+  const firstControlElement: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/firstName',
+    options: {
+      focus: true
+    }
+  };
+  const secondControlElement: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/lastName',
+    options: {
+      focus: true
+    }
+  };
+  const uischema: HorizontalLayout = {
+    type: 'HorizontalLayout',
+    elements: [
+      firstControlElement,
+      secondControlElement
+    ]
+  };
+  const data = {
+    'firstName': 'Foo',
+    'lastName': 'Boo'
+  };
+  const store = initJsonFormsVanillaStore({
+    data,
+    schema,
+    uischema
+  });
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <HorizontalLayoutRenderer schema={schema} uischema={uischema} />
+    </Provider>
+  ) as unknown as React.Component<any>;
+  const inputs = TestUtils.scryRenderedDOMComponentsWithTag(tree, 'input');
+  t.not(document.activeElement, inputs[0]);
+  t.is(document.activeElement, inputs[1]);
 });
 
 test('autofocus active', t => {
-    const uischema: ControlElement = {
-        type: 'Control',
-        scope: '#/properties/name',
-        options: {
-            focus: true
-        }
-    };
-    const store = initJsonFormsVanillaStore({
-      data: t.context.data,
-      schema: t.context.schema,
-      uischema
-    });
-    const tree: React.Component<any> = TestUtils.renderIntoDocument(
-        <Provider store={store}>
-          <TextAreaCell schema={t.context.schema} uischema={uischema} path='name' />
-        </Provider>
-    ) as unknown as React.Component<any>;
-    const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'textarea') as HTMLInputElement;
-    t.is(document.activeElement, input);
+  const uischema: ControlElement = {
+    type: 'Control',
+    scope: '#/properties/name',
+    options: {
+      focus: true
+    }
+  };
+  const store = initJsonFormsVanillaStore({
+    data: t.context.data,
+    schema: t.context.schema,
+    uischema
+  });
+  const tree: React.Component<any> = TestUtils.renderIntoDocument(
+    <Provider store={store}>
+      <TextAreaCell schema={t.context.schema} uischema={uischema} path='name' />
+    </Provider>
+  ) as unknown as React.Component<any>;
+  const input = TestUtils.findRenderedDOMComponentWithTag(tree, 'textarea') as HTMLInputElement;
+  t.is(document.activeElement, input);
 });
 
 test('autofocus inactive', t => {
@@ -173,9 +174,9 @@ test('autofocus inactive by default', t => {
 test('tester', t => {
   t.is(textAreaCellTester(undefined, undefined), -1);
   t.is(textAreaCellTester(null, undefined), -1);
-  t.is(textAreaCellTester({type: 'Foo'}, undefined), -1);
-  t.is(textAreaCellTester({type: 'Control'}, undefined), -1);
-  t.is(textAreaCellTester({type: 'Control', options: {multi: true}}, undefined), 2);
+  t.is(textAreaCellTester({ type: 'Foo' }, undefined), -1);
+  t.is(textAreaCellTester({ type: 'Control' }, undefined), -1);
+  t.is(textAreaCellTester({ type: 'Control', options: { multi: true } }, undefined), 2);
 });
 
 test('render', t => {
@@ -185,9 +186,11 @@ test('render', t => {
     uischema: t.context.uischema
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
-      <Provider store={store}>
-          <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
-      </Provider>
+    <Provider store={store}>
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
+    </Provider>
   ) as unknown as React.Component<any>;
   const textarea = TestUtils.findRenderedDOMComponentWithTag(
     tree,
@@ -204,7 +207,9 @@ test('update via input event', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -225,7 +230,9 @@ test.cb('update via action', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textarea = TestUtils.findRenderedDOMComponentWithTag(
@@ -236,7 +243,7 @@ test.cb('update via action', t => {
   setTimeout(() => {
     t.is(textarea.value, 'Bar');
     t.end();
-  },         100);
+  }, 100);
 });
 
 test('update with undefined value', t => {
@@ -247,7 +254,9 @@ test('update with undefined value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -266,7 +275,9 @@ test('update with null value', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -285,7 +296,9 @@ test('update with wrong ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -304,7 +317,9 @@ test('update with null ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -323,7 +338,9 @@ test('update with undefined ref', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -342,7 +359,9 @@ test('disable', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} enabled={false}/>
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} enabled={false} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(
@@ -360,7 +379,9 @@ test('enabled by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      <JsonFormsReduxContext>
+        <TextAreaCell schema={t.context.schema} uischema={t.context.uischema} path='name' />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const textArea = TestUtils.findRenderedDOMComponentWithTag(

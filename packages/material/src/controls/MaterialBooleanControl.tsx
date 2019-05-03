@@ -24,47 +24,45 @@
 */
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
-import { connect } from 'react-redux';
 import {
-  ControlProps,
   isBooleanControl,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   RankedTester,
   rankWith,
+  ControlProps,
 } from '@jsonforms/core';
-
+import { withJsonFormsControlProps } from '@jsonforms/react';
 import { FormControlLabel, Hidden } from '@material-ui/core';
 import { MuiCheckbox } from '../mui-controls/MuiCheckbox';
 
-export const MaterialBooleanControl = ({
-  label,
-  id,
-  visible,
-  ...props
-}: ControlProps) => (
-  <Hidden xsUp={!visible}>
-    <FormControlLabel
-      label={label}
-      id={id}
-      control={
-        <MuiCheckbox
-          id={id + '-input'}
-          isValid={isEmpty(props.errors)}
-          visible={visible}
-          {...props}
+export const MaterialBooleanControl =
+  ({ data, visible, label, id, enabled, uischema, schema, rootSchema, handleChange, errors, path }: ControlProps) => {
+    return (
+      <Hidden xsUp={!visible}>
+        <FormControlLabel
+          label={label}
+          id={id}
+          control={
+            <MuiCheckbox
+              id={`${id}-input`}
+              isValid={isEmpty(errors)}
+              data={data}
+              enabled={enabled}
+              visible={visible}
+              path={path}
+              uischema={uischema}
+              schema={schema}
+              rootSchema={rootSchema}
+              handleChange={handleChange}
+              errors={errors}
+            />
+          }
         />
-      }
-    />
-  </Hidden>
-);
+      </Hidden>
+    );
+  };
 
-const ConnectedMaterialBooleanControl = connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialBooleanControl);
 export const materialBooleanControlTester: RankedTester = rankWith(
   2,
   isBooleanControl
 );
-export default ConnectedMaterialBooleanControl;
+export default withJsonFormsControlProps(MaterialBooleanControl);

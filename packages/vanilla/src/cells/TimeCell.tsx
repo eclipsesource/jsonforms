@@ -23,15 +23,13 @@
   THE SOFTWARE.
 */
 import React from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isTimeControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith,
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { SyntheticEvent } from 'react';
 import { VanillaRendererProps } from '../index';
 
@@ -58,7 +56,4 @@ export const TimeCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const timeCellTester: RankedTester = rankWith(2, isTimeControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(TimeCell);
+export default withJsonFormsCellProps(TimeCell);

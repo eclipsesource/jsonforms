@@ -36,10 +36,12 @@ import { configReducer } from './config';
 import {
   coreReducer,
   errorAt,
+  errorsAt,
   extractData,
   extractRefParserOptions,
   extractSchema,
   extractUiSchema,
+  JsonFormsCore,
   subErrorsAt
 } from './core';
 import { JsonFormsState, JsonFormsSubStates } from '../store';
@@ -60,6 +62,7 @@ import { ControlElement, UISchemaElement } from '../models/uischema';
 import { Generate } from '../generators';
 
 export { rendererReducer, cellReducer, coreReducer, UISchemaTester };
+export { JsonFormsCore };
 
 export const jsonformsReducer = (
   additionalReducers = {}
@@ -137,6 +140,9 @@ export const getErrorAt = (instancePath: string, schema: JsonSchema) => (
 ) => {
   return errorAt(instancePath, schema)(state.jsonforms.core);
 };
+
+export { errorsAt };
+
 export const getSubErrorsAt = (instancePath: string, schema: JsonSchema) => (
   state: JsonFormsState
 ) => subErrorsAt(instancePath, schema)(state.jsonforms.core);

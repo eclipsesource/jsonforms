@@ -22,65 +22,46 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import React from 'react';
-import {
-  ArrayControlProps,
-  ArrayLayoutProps,
-  mapDispatchToArrayControlProps,
-  mapStateToArrayLayoutProps,
-} from '@jsonforms/core';
-import { RendererComponent } from '@jsonforms/react';
+import React, { useCallback, useState } from 'react';
+import { ArrayLayoutProps } from '@jsonforms/core';
+import { withJsonFormsArrayLayoutProps } from '@jsonforms/react';
 import { MaterialTableControl } from './MaterialTableControl';
 import { Hidden } from '@material-ui/core';
-import { connect } from 'react-redux';
 import { DeleteDialog } from './DeleteDialog';
 
-export class MaterialArrayControlRenderer extends RendererComponent<ArrayLayoutProps, any> {
+export const MaterialArrayControlRenderer = (props: ArrayLayoutProps) => {
+  const [open, setOpen] = useState(false);
+  const [path, setPath] = useState(undefined);
+  const [rowData, setRowData] = useState(undefined);
+  const { removeItems, visible } = props;
 
-  constructor(props: ArrayControlProps) {
-    super(props);
-    this.state = {
-      open: false,
-      path: undefined,
-      rowData: undefined
-    };
-  }
+  const openDeleteDialog = useCallback((p: string, rowIndex: number) => {
+    setOpen(true);
+    setPath(p);
+    setRowData(rowIndex);
+  }, [setOpen, setPath, setRowData]);
+  const deleteCancel = useCallback(() => setOpen(false), [setOpen]);
+  const deleteConfirm = useCallback(() => {
+    const p = path.substring(0, path.lastIndexOf(('.')));
+    removeItems(p, [rowData])();
+    setOpen(false);
+  }, [setOpen, path, rowData]);
+  const deleteClose = useCallback(() => setOpen(false), [setOpen]);
 
-  openDeleteDialog = (path: string, rowIndex: number) => {
-    this.setState({
-      open: true,
-      path,
-      rowData: rowIndex
-    });
-  };
-  deleteCancel = () => this.setState({ open: false });
-  deleteConfirm = () => {
-    const path = this.state.path.substring(0, this.state.path.lastIndexOf(('.')));
-    this.props.removeItems(path, [this.state.rowData])();
-    this.setState({ open: false });
-  };
-  deleteClose = () => this.setState({ open: false });
-  render() {
-    const { visible } = this.props;
+  return (
+    <Hidden xsUp={!visible}>
+      <MaterialTableControl
+        {...props}
+        openDeleteDialog={openDeleteDialog}
+      />
+      <DeleteDialog
+        open={open}
+        onCancel={deleteCancel}
+        onConfirm={deleteConfirm}
+        onClose={deleteClose}
+      />
+    </Hidden>
+  );
+};
 
-    return (
-      <Hidden xsUp={!visible}>
-        <MaterialTableControl
-          {...this.props}
-          openDeleteDialog={this.openDeleteDialog}
-        />
-        <DeleteDialog
-          open={this.state.open}
-          onCancel={this.deleteCancel}
-          onConfirm={this.deleteConfirm}
-          onClose={this.deleteClose}
-        />
-      </Hidden>
-    );
-  }
-}
-
-export default connect(
-  mapStateToArrayLayoutProps,
-  mapDispatchToArrayControlProps
-)(MaterialArrayControlRenderer);
+export default withJsonFormsArrayLayoutProps(MaterialArrayControlRenderer);

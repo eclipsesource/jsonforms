@@ -24,15 +24,13 @@
 */
 import React from 'react';
 import { SyntheticEvent } from 'react';
-import { connect } from 'react-redux';
 import {
   CellProps,
   isStringControl,
-  mapDispatchToCellProps,
-  mapStateToCellProps,
   RankedTester,
   rankWith
 } from '@jsonforms/core';
+import { withJsonFormsCellProps } from '@jsonforms/react';
 import { VanillaRendererProps } from '../index';
 import merge from 'lodash/merge';
 
@@ -73,7 +71,4 @@ export const TextCell = (props: CellProps & VanillaRendererProps) => {
  */
 export const textCellTester: RankedTester = rankWith(1, isStringControl);
 
-export default connect(
-  mapStateToCellProps,
-  mapDispatchToCellProps
-)(TextCell);
+export default withJsonFormsCellProps(TextCell);

@@ -26,6 +26,7 @@ import '@jsonforms/test';
 import * as React from 'react';
 import test from 'ava';
 import { LabelElement, UISchemaElement } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import { Provider } from 'react-redux';
 import LabelRenderer, {
   labelRendererTester
@@ -65,7 +66,12 @@ test('render with undefined text', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <LabelRenderer
+          schema={t.context.schema}
+          uischema={uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
 
@@ -91,7 +97,12 @@ test('render with null text', t => {
 
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema} uischema={uischema} />
+      <JsonFormsReduxContext>
+        <LabelRenderer
+          schema={t.context.schema}
+          uischema={uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(
@@ -111,7 +122,12 @@ test('render with text', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema} uischema={t.context.uischema} />
+      <JsonFormsReduxContext>
+        <LabelRenderer
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(
@@ -131,11 +147,13 @@ test('hide', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer
-        schema={t.context.schema}
-        uischema={t.context.uischema}
-        visible={false}
-      />
+      <JsonFormsReduxContext>
+        <LabelRenderer
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(
@@ -153,7 +171,12 @@ test('show by default', t => {
   });
   const tree: React.Component<any> = (TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <LabelRenderer schema={t.context.schema} uischema={t.context.uischema} />
+      <JsonFormsReduxContext>
+        <LabelRenderer
+          schema={t.context.schema}
+          uischema={t.context.uischema}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown) as React.Component<any>;
   const label = TestUtils.findRenderedDOMComponentWithTag(

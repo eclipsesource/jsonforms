@@ -40,6 +40,7 @@ import { materialRenderers } from '../../src';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -85,6 +86,7 @@ describe('Material Label Renderer tester', () => {
 });
 
 describe('Material Label Renderer', () => {
+
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -93,7 +95,9 @@ describe('Material Label Renderer', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialLabelRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialLabelRenderer schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -105,11 +109,13 @@ describe('Material Label Renderer', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialLabelRenderer
-          schema={schema}
-          uischema={uischema}
-          visible={false}
-        />
+        <JsonFormsReduxContext>
+          <MaterialLabelRenderer
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const labels = wrapper.find('h6');
@@ -120,7 +126,12 @@ describe('Material Label Renderer', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialLabelRenderer schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialLabelRenderer
+            schema={schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const label = wrapper.find('h6').first();

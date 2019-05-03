@@ -40,10 +40,11 @@ import Slider from '@material-ui/lab/Slider';
 
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-const data = {'foo': 5};
+const data = { 'foo': 5 };
 const schema = {
   type: 'object',
   properties: {
@@ -80,8 +81,8 @@ describe('Material slider tester', () => {
   it('should fail', () => {
     expect(materialSliderControlTester(undefined, undefined)).toBe(NOT_APPLICABLE);
     expect(materialSliderControlTester(null, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialSliderControlTester({type: 'Foo'}, undefined)).toBe(NOT_APPLICABLE);
-    expect(materialSliderControlTester({type: 'Control'}, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialSliderControlTester({ type: 'Foo' }, undefined)).toBe(NOT_APPLICABLE);
+    expect(materialSliderControlTester({ type: 'Control' }, undefined)).toBe(NOT_APPLICABLE);
   });
 
   it('should fail with wrong schema type', () => {
@@ -91,7 +92,7 @@ describe('Material slider tester', () => {
         {
           type: 'object',
           properties: {
-            foo: {type: 'string'}
+            foo: { type: 'string' }
           }
         }
       )
@@ -105,8 +106,8 @@ describe('Material slider tester', () => {
         {
           type: 'object',
           properties: {
-            foo: {type: 'string'},
-            bar: {type: 'number'}
+            foo: { type: 'string' },
+            bar: { type: 'number' }
           }
         }
       )
@@ -120,7 +121,7 @@ describe('Material slider tester', () => {
         {
           type: 'object',
           properties: {
-            foo: {type: 'number'}
+            foo: { type: 'number' }
           }
         }
       )
@@ -239,7 +240,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore({ foo: 5 }, jsonSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={jsonSchema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={jsonSchema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -251,7 +254,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore({ foo: 3 }, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     let slider = wrapper.find(Slider).first();
@@ -278,7 +283,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore({ foo: 6 }, schemaWithMultipleOf, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schemaWithMultipleOf} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schemaWithMultipleOf} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find(Slider).first();
@@ -289,7 +296,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => undefined));
@@ -302,7 +311,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => null));
@@ -315,7 +326,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('bar', () => 11));
@@ -328,7 +341,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update(null, () => 3));
@@ -341,7 +356,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update(undefined, () => 13));
@@ -354,7 +371,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema} enabled={false}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} enabled={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find(Slider).first();
@@ -365,7 +384,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find(Slider).first();
@@ -376,7 +397,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={schema} uischema={uischema} id='#/properties/foo'/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={schema} uischema={uischema} id='#/properties/foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const divs = wrapper.find('div');
@@ -401,7 +424,9 @@ describe('Material slider control', () => {
     const store = initJsonFormsStore({ foo: 5 }, jsonSchema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <SliderControl schema={jsonSchema} uischema={uischema} visible={false}/>
+        <JsonFormsReduxContext>
+          <SliderControl schema={jsonSchema} uischema={uischema} visible={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
 

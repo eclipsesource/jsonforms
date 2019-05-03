@@ -25,34 +25,32 @@
 import React from 'react';
 
 import {
-  ArrayControlProps,
-  ControlElement,
-  Helpers,
-  mapDispatchToArrayControlProps,
-  mapStateToArrayControlProps
+    ArrayControlProps,
+    ControlElement,
+    Helpers
 } from '@jsonforms/core';
+import { withJsonFormsArrayControlProps } from '@jsonforms/react';
 import { ArrayControl } from './ArrayControl';
-import { addVanillaControlProps } from '../../util';
-import { connect } from 'react-redux';
+import { withVanillaControlProps } from '../../util';
 import { VanillaRendererProps } from '../../index';
 
-const ArrayControlRenderer  =
+const ArrayControlRenderer =
     ({
-         schema,
-         uischema,
-         data,
-         path,
-         rootSchema,
-         uischemas,
-         addItem,
-         getStyle,
-         getStyleAsClassName,
-         removeItems,
-         id,
-         visible,
-         enabled,
-         errors
-     }: ArrayControlProps & VanillaRendererProps) => {
+        schema,
+        uischema,
+        data,
+        path,
+        rootSchema,
+        uischemas,
+        addItem,
+        getStyle,
+        getStyleAsClassName,
+        removeItems,
+        id,
+        visible,
+        enabled,
+        errors
+    }: ArrayControlProps & VanillaRendererProps) => {
 
         const controlElement = uischema as ControlElement;
         const labelDescription = Helpers.createLabelDescriptionFrom(controlElement, schema);
@@ -62,7 +60,7 @@ const ArrayControlRenderer  =
         const fieldSetClassName = getStyleAsClassName('array.layout');
         const buttonClassName = getStyleAsClassName('array.button');
         const childrenClassName = getStyleAsClassName('array.children');
-        const classNames: { [className: string]: string} = {
+        const classNames: { [className: string]: string } = {
             wrapper: controlClassName,
             fieldSet: fieldSetClassName,
             button: buttonClassName,
@@ -91,9 +89,4 @@ const ArrayControlRenderer  =
         );
     };
 
-const ConnectedArrayControlRenderer = connect(
-    addVanillaControlProps(mapStateToArrayControlProps),
-    mapDispatchToArrayControlProps
-)(ArrayControlRenderer);
-
-export default ConnectedArrayControlRenderer;
+export default withVanillaControlProps(withJsonFormsArrayControlProps(ArrayControlRenderer));

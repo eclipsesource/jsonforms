@@ -28,28 +28,25 @@ import {
   ControlState,
   EnumCellProps,
   JsonSchema,
-  mapDispatchToControlProps,
-  mapStateToControlProps,
   RankedTester,
   rankWith,
   schemaMatches,
   uiTypeIs,
   WithClassname
 } from '@jsonforms/core';
-import { Control } from '@jsonforms/react';
+import { Control, withJsonFormsControlProps } from '@jsonforms/react';
 import { Input } from '@material-ui/core';
 import { InputBaseComponentProps } from '@material-ui/core/InputBase';
 import merge from 'lodash/merge';
 import React from 'react';
-import { connect } from 'react-redux';
 import { MaterialInputControl } from './MaterialInputControl';
 
 const findEnumSchema = (schemas: JsonSchema[]) =>
-    schemas.find(
-      s => s.enum !== undefined && (s.type === 'string' || s.type === undefined)
-    );
-  const findTextSchema = (schemas: JsonSchema[]) =>
-    schemas.find(s => s.type === 'string' && s.enum === undefined);
+  schemas.find(
+    s => s.enum !== undefined && (s.type === 'string' || s.type === undefined)
+  );
+const findTextSchema = (schemas: JsonSchema[]) =>
+  schemas.find(s => s.type === 'string' && s.enum === undefined);
 
 const MuiAutocompleteInputText = (props: EnumCellProps & WithClassname) => {
   const {
@@ -129,7 +126,4 @@ export const materialAnyOfStringOrEnumControlTester: RankedTester = rankWith(
   5,
   simpleAnyOf
 );
-export default connect(
-  mapStateToControlProps,
-  mapDispatchToControlProps
-)(MaterialAnyOfStringOrEnumControl);
+export default withJsonFormsControlProps(MaterialAnyOfStringOrEnumControl);

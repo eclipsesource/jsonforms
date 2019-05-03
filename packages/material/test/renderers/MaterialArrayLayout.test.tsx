@@ -39,6 +39,7 @@ import {
 } from '../../src/layouts';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -178,7 +179,12 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout schema={schema} uischema={uischema} />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -191,10 +197,12 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaOptions.generate}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaOptions.generate}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -207,10 +215,12 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaOptions.inline}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaOptions.inline}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -223,11 +233,13 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischema}
-          visible={false}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -240,11 +252,13 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischema}
-          renderers={[]}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischema}
+            renderers={[]}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -260,7 +274,12 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout schema={schema} uischema={uischemaWithLabel} />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaWithLabel}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -289,10 +308,12 @@ describe('Material array layout', () => {
     store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaWithSortOption}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -318,10 +339,12 @@ describe('Material array layout', () => {
     store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaWithSortOption}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     // getting up button of second item in expension panel;
@@ -346,10 +369,12 @@ describe('Material array layout', () => {
     store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaWithSortOption}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     // getting up button of second item in expension panel;
@@ -374,10 +399,12 @@ describe('Material array layout', () => {
     store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaWithSortOption}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     // getting up button of second item in expension panel;
@@ -393,10 +420,12 @@ describe('Material array layout', () => {
     store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithSortOption}
-        />
+        <JsonFormsReduxContext>
+          <MaterialArrayLayout
+            schema={schema}
+            uischema={uischemaWithSortOption}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     // getting up button of second item in expension panel;

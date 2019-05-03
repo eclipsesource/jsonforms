@@ -32,12 +32,13 @@ import {
   UISchemaElement
 } from '@jsonforms/core';
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
 import { materialRenderers } from '../../src';
 import MaterialObjectRenderer, { materialObjectControlTester } from '../../src/complex/MaterialObjectRenderer';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
+import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -137,8 +138,10 @@ describe('Material object control', () => {
     const store = initJsonFormsStore(data, schema, uischema1);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialObjectRenderer schema={schema} uischema={uischema1} />
-      </Provider>,
+        <JsonFormsReduxContext>
+          <MaterialObjectRenderer schema={schema} uischema={uischema1} />
+        </JsonFormsReduxContext>
+      </Provider>
     );
 
     const inputs = wrapper.find('input');
@@ -153,8 +156,10 @@ describe('Material object control', () => {
     const store = initJsonFormsStore(data, schema, uischema1);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-      </Provider>,
+        <JsonFormsReduxContext>
+          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+        </JsonFormsReduxContext>
+      </Provider>
     );
 
     const inputs = wrapper.find('input');
@@ -167,8 +172,10 @@ describe('Material object control', () => {
     const store = initJsonFormsStore(data, schema, uischema2);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-      </Provider>,
+        <JsonFormsReduxContext>
+          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+        </JsonFormsReduxContext>
+      </Provider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().disabled).toBeFalsy();
@@ -178,7 +185,9 @@ describe('Material object control', () => {
     const store = initJsonFormsStore(data, schema, uischema2);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
+        <JsonFormsReduxContext>
+          <MaterialObjectRenderer schema={schema} uischema={uischema2} visible={false} />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -189,8 +198,10 @@ describe('Material object control', () => {
     const store = initJsonFormsStore(data, schema, uischema2);
     wrapper = mount(
       <Provider store={store}>
-        <MaterialObjectRenderer schema={schema} uischema={uischema2} />
-      </Provider>,
+        <JsonFormsReduxContext>
+          <MaterialObjectRenderer schema={schema} uischema={uischema2} />
+        </JsonFormsReduxContext>
+      </Provider>
     );
     const inputs = wrapper.find('input');
     expect(inputs.first().props().hidden).toBeFalsy();

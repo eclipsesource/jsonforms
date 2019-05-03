@@ -41,6 +41,7 @@ import { materialRenderers } from '../../src';
 import { combineReducers, createStore, Store } from 'redux';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -153,7 +154,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={control} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={control} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -171,7 +174,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -186,7 +191,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, control);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={control} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={control} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const inputs = wrapper.find('input');
@@ -205,7 +212,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore({ foo: 3.14 }, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -227,7 +236,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore({ foo: 0 }, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={jsonSchema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -241,7 +252,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input');
@@ -253,7 +266,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore({ foo: 2.72 }, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const input = wrapper.find('input').first();
@@ -272,7 +287,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => undefined));
@@ -285,7 +302,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('foo', () => null));
@@ -298,7 +317,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update('bar', () => 11));
@@ -310,7 +331,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update(null, () => 2.72));
@@ -323,7 +346,9 @@ describe('Material number cells', () => {
     const store = initJsonFormsStore(data, schema, uischema);
     wrapper = mount(
       <Provider store={store}>
-        <NumberCell schema={schema} uischema={uischema} path='foo' />
+        <JsonFormsReduxContext>
+          <NumberCell schema={schema} uischema={uischema} path='foo' />
+        </JsonFormsReduxContext>
       </Provider>
     );
     store.dispatch(Actions.update(undefined, () => 13));

@@ -24,7 +24,6 @@
 */
 
 import React from 'react';
-import { Provider } from 'react-redux';
 import {
   Actions,
   Categorization,
@@ -36,6 +35,7 @@ import {
   RuleEffect,
   SchemaBasedCondition
 } from '@jsonforms/core';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 import Enzyme, { mount } from 'enzyme';
 
 import { AnyAction, combineReducers, createStore, Reducer, Store } from 'redux';
@@ -46,6 +46,7 @@ import MaterialCategorizationLayoutRenderer, {
 import { MaterialLayoutRenderer, materialRenderers } from '../../src';
 import { Tab } from '@material-ui/core';
 import Adapter from 'enzyme-adapter-react-16';
+import { Provider } from 'react-redux';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -89,8 +90,8 @@ describe('Material categorization layout tester', () => {
   it('should not fail when given undefined data', () => {
     expect(materialCategorizationTester(undefined, undefined)).toBe(-1);
     expect(materialCategorizationTester(null, undefined)).toBe(-1);
-    expect(materialCategorizationTester({type: 'Foo'}, undefined)).toBe(-1);
-    expect(materialCategorizationTester({type: 'Categorization'}, undefined)).toBe(-1);
+    expect(materialCategorizationTester({ type: 'Foo' }, undefined)).toBe(-1);
+    expect(materialCategorizationTester({ type: 'Categorization' }, undefined)).toBe(-1);
   });
 
   it('should not fail with null elements and no schema', () => {
@@ -122,7 +123,7 @@ describe('Material categorization layout tester', () => {
   });
 
   it('should succeed with a single category and no schema', () => {
-    const categorization =  {
+    const categorization = {
       type: 'Categorization',
       elements: [
         {
@@ -223,12 +224,14 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={uischema}
-        />
-      </Provider>
+        <JsonFormsReduxContext>
+          <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
+      </Provider >
     );
     const steps = wrapper.find(Tab);
     expect(steps.length).toBe(2);
@@ -236,7 +239,7 @@ describe('Material categorization stepper layout', () => {
   });
 
   it('should render on click', () => {
-    const data = {'name': 'Foo'};
+    const data = { 'name': 'Foo' };
     const nameControl: ControlElement = {
       type: 'Control',
       scope: '#/properties/name'
@@ -281,11 +284,13 @@ describe('Material categorization stepper layout', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
     const beforeClick = wrapper.find(CategorizationLayoutRenderer).state().activeCategory;
@@ -302,12 +307,14 @@ describe('Material categorization stepper layout', () => {
 
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-          visible={false}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            visible={false}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -319,11 +326,13 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -360,11 +369,13 @@ describe('Material categorization stepper layout', () => {
     const store = initJsonFormsStore(fixture);
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={uischema}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={uischema}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 
@@ -377,12 +388,14 @@ describe('Material categorization stepper layout', () => {
     const renderers: any[] = [];
     const wrapper = mount(
       <Provider store={store}>
-        <MaterialCategorizationLayoutRenderer
-          {...layoutDefaultProps}
-          schema={fixture.schema}
-          uischema={fixture.uischema}
-          renderers={renderers}
-        />
+        <JsonFormsReduxContext>
+          <MaterialCategorizationLayoutRenderer
+            {...layoutDefaultProps}
+            schema={fixture.schema}
+            uischema={fixture.uischema}
+            renderers={renderers}
+          />
+        </JsonFormsReduxContext>
       </Provider>
     );
 

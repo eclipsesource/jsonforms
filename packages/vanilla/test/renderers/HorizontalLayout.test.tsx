@@ -35,11 +35,12 @@ import HorizontalLayoutRenderer, {
   horizontalLayoutTester
 } from '../../src/layouts/HorizontalLayout';
 import { initJsonFormsVanillaStore } from '../vanillaStore';
+import { JsonFormsReduxContext } from '@jsonforms/react';
 
 test.beforeEach(t => {
   t.context.uischema = {
     type: 'HorizontalLayout',
-    elements: [{type: 'Control'}]
+    elements: [{ type: 'Control' }]
   };
   t.context.styles = [
     {
@@ -68,7 +69,9 @@ test('render with undefined elements', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
 
@@ -90,7 +93,9 @@ test('render with null elements', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
@@ -114,7 +119,9 @@ test('render with children', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer uischema={uischema} />
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer uischema={uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(tree, 'horizontal-layout');
@@ -131,10 +138,12 @@ test('hide', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer
-        uischema={t.context.uischema}
-        visible={false}
-      />
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer
+          uischema={t.context.uischema}
+          visible={false}
+        />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
@@ -152,7 +161,9 @@ test('show by default', t => {
   });
   const tree: React.Component<any> = TestUtils.renderIntoDocument(
     <Provider store={store}>
-      <HorizontalLayoutRenderer uischema={t.context.uischema}/>
+      <JsonFormsReduxContext>
+        <HorizontalLayoutRenderer uischema={t.context.uischema} />
+      </JsonFormsReduxContext>
     </Provider>
   ) as unknown as React.Component<any>;
   const horizontalLayout = TestUtils.findRenderedDOMComponentWithClass(
