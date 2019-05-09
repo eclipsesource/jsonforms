@@ -61,7 +61,13 @@ import { JsonSchema } from '../models/jsonSchema';
 import { ControlElement, UISchemaElement } from '../models/uischema';
 import { Generate } from '../generators';
 
-export { rendererReducer, cellReducer, coreReducer, UISchemaTester };
+export {
+  rendererReducer,
+  cellReducer,
+  coreReducer,
+  UISchemaTester,
+  findMatchingUISchema
+};
 export { JsonFormsCore };
 
 export const jsonformsReducer = (
@@ -108,7 +114,8 @@ export const findUISchema = (
   schemaPath: string,
   path: string,
   fallbackLayoutType = 'VerticalLayout',
-  control?: ControlElement
+  control?: ControlElement,
+  rootSchema?: JsonSchema
 ): UISchemaElement => {
   // handle options
   if (control && control.options && control.options.detail) {
@@ -130,7 +137,7 @@ export const findUISchema = (
   // default
   const uiSchema = findMatchingUISchema(uischemas)(schema, schemaPath, path);
   if (uiSchema === undefined) {
-    return Generate.uiSchema(schema, fallbackLayoutType);
+    return Generate.uiSchema(schema, fallbackLayoutType, '#', rootSchema);
   }
   return uiSchema;
 };

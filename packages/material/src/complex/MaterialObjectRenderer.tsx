@@ -25,38 +25,59 @@
 import isEmpty from 'lodash/isEmpty';
 import startCase from 'lodash/startCase';
 import {
-    findUISchema,
-    GroupLayout,
-    isObjectControl,
-    isPlainLabel,
-    RankedTester,
-    rankWith,
-    StatePropsOfControlWithDetail,
+  findUISchema,
+  GroupLayout,
+  isObjectControl,
+  isPlainLabel,
+  RankedTester,
+  rankWith,
+  StatePropsOfControlWithDetail
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsDetailProps } from '@jsonforms/react';
 import { Hidden } from '@material-ui/core';
 import React from 'react';
 
-const MaterialObjectRenderer = ({ renderers, uischemas, schema, label, path, visible }: StatePropsOfControlWithDetail) => {
-
-    const detailUiSchema = findUISchema(uischemas, schema, undefined, path, 'Group');
-    if (isEmpty(path)) {
-        detailUiSchema.type = 'VerticalLayout';
-    } else {
-        (detailUiSchema as GroupLayout).label = startCase(isPlainLabel(label) ? label : label.default);
-    }
-    return (
-        <Hidden xsUp={!visible}>
-            <JsonFormsDispatch
-                visible={visible}
-                schema={schema}
-                uischema={detailUiSchema}
-                path={path}
-                renderers={renderers}
-            />
-        </Hidden>
+const MaterialObjectRenderer = ({
+  renderers,
+  uischemas,
+  schema,
+  label,
+  path,
+  visible,
+  uischema,
+  rootSchema
+}: StatePropsOfControlWithDetail) => {
+  const detailUiSchema = findUISchema(
+    uischemas,
+    schema,
+    uischema.scope,
+    path,
+    'Group',
+    uischema,
+    rootSchema
+  );
+  if (isEmpty(path)) {
+    detailUiSchema.type = 'VerticalLayout';
+  } else {
+    (detailUiSchema as GroupLayout).label = startCase(
+      isPlainLabel(label) ? label : label.default
     );
+  }
+  return (
+    <Hidden xsUp={!visible}>
+      <JsonFormsDispatch
+        visible={visible}
+        schema={schema}
+        uischema={detailUiSchema}
+        path={path}
+        renderers={renderers}
+      />
+    </Hidden>
+  );
 };
 
-export const materialObjectControlTester: RankedTester = rankWith(2, isObjectControl);
+export const materialObjectControlTester: RankedTester = rankWith(
+  2,
+  isObjectControl
+);
 export default withJsonFormsDetailProps(MaterialObjectRenderer);

@@ -27,35 +27,69 @@ import { Hidden } from '@material-ui/core';
 
 import {
   createCombinatorRenderInfos,
+  findMatchingUISchema,
   isAllOfControl,
   JsonSchema,
   RankedTester,
   rankWith,
   resolveSubSchemas,
-  StatePropsOfCombinator,
+  StatePropsOfCombinator
 } from '@jsonforms/core';
 import { JsonFormsDispatch, withJsonFormsAllOfProps } from '@jsonforms/react';
 
-const MaterialAllOfRenderer = ({ schema, rootSchema, visible, renderers, path }: StatePropsOfCombinator) => {
+const MaterialAllOfRenderer = ({
+  schema,
+  rootSchema,
+  visible,
+  renderers,
+  path,
+  uischemas,
+  uischema
+}: StatePropsOfCombinator) => {
   const _schema = resolveSubSchemas(schema, rootSchema, 'allOf');
-  const allOfRenderInfos = createCombinatorRenderInfos((_schema as JsonSchema).allOf, rootSchema, 'allOf');
+  const delegateUISchema = findMatchingUISchema(uischemas)(
+    _schema,
+    uischema.scope,
+    path
+  );
+  if (delegateUISchema) {
+    return (
+      <Hidden xsUp={!visible}>
+        <JsonFormsDispatch
+          schema={_schema}
+          uischema={delegateUISchema}
+          path={path}
+          renderers={renderers}
+        />
+      </Hidden>
+    );
+  }
+  const allOfRenderInfos = createCombinatorRenderInfos(
+    (_schema as JsonSchema).allOf,
+    rootSchema,
+    'allOf',
+    uischema,
+    path,
+    uischemas
+  );
 
   return (
     <Hidden xsUp={!visible}>
-      {
-        allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
-          <JsonFormsDispatch
-            key={allOfIndex}
-            schema={allOfRenderInfo.schema}
-            uischema={allOfRenderInfo.uischema}
-            path={path}
-            renderers={renderers}
-          />
-        ))
-      }
+      {allOfRenderInfos.map((allOfRenderInfo, allOfIndex) => (
+        <JsonFormsDispatch
+          key={allOfIndex}
+          schema={allOfRenderInfo.schema}
+          uischema={allOfRenderInfo.uischema}
+          path={path}
+          renderers={renderers}
+        />
+      ))}
     </Hidden>
   );
 };
 
-export const materialAllOfControlTester: RankedTester = rankWith(3, isAllOfControl);
+export const materialAllOfControlTester: RankedTester = rankWith(
+  3,
+  isAllOfControl
+);
 export default withJsonFormsAllOfProps(MaterialAllOfRenderer);
