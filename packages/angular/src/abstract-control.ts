@@ -24,7 +24,6 @@
 */
 import {
   Actions,
-  composeWithUi,
   computeLabel,
   ControlElement,
   isPlainLabel,
@@ -62,6 +61,7 @@ export abstract class JsonFormsAbstractControl<
   rootSchema: JsonSchema;
   enabled: boolean;
   hidden: boolean;
+  propsPath: string;
 
   constructor(protected ngRedux: NgRedux<JsonFormsState>) {
     super();
@@ -80,8 +80,9 @@ export abstract class JsonFormsAbstractControl<
   getEventValue = (event: any) => event.value;
 
   onChange(ev: any) {
-    const path = composeWithUi(this.uischema, this.path);
-    this.ngRedux.dispatch(Actions.update(path, () => this.getEventValue(ev)));
+    this.ngRedux.dispatch(
+      Actions.update(this.propsPath, () => this.getEventValue(ev))
+    );
     this.triggerValidation();
   }
 
@@ -98,7 +99,8 @@ export abstract class JsonFormsAbstractControl<
           required,
           schema,
           rootSchema,
-          visible
+          visible,
+          path
         } = props;
         this.label = computeLabel(
           isPlainLabel(label) ? label : label.default,
@@ -115,6 +117,7 @@ export abstract class JsonFormsAbstractControl<
           this.scopedSchema !== undefined ? this.scopedSchema.description : '';
         this.id = props.id;
         this.form.setValue(data);
+        this.propsPath = path;
         this.mapAdditionalProps(props);
       });
     this.triggerValidation();
