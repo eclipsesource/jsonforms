@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { NgRedux, NgReduxModule } from '@angular-redux/store';
-import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -32,11 +32,13 @@ import {
   MatFormFieldModule,
   MatInputModule
 } from '@angular/material';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
+import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import {
+  GroupLayoutRenderer,
+  groupLayoutTester,
   TextControlRenderer,
   TextControlRendererTester,
   VerticalLayoutRenderer,
@@ -78,7 +80,8 @@ const schema2 = {
 };
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
-  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer }
+  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
+  { tester: groupLayoutTester, renderer: GroupLayoutRenderer }
 ];
 
 describe('Object Control tester', () => {
@@ -96,7 +99,8 @@ describe('Object Control', () => {
       declarations: [
         ObjectControlRenderer,
         TextControlRenderer,
-        VerticalLayoutRenderer
+        VerticalLayoutRenderer,
+        GroupLayoutRenderer
       ],
       imports: [
         CommonModule,
@@ -113,7 +117,11 @@ describe('Object Control', () => {
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [TextControlRenderer, VerticalLayoutRenderer]
+          entryComponents: [
+            TextControlRenderer,
+            VerticalLayoutRenderer,
+            GroupLayoutRenderer
+          ]
         }
       })
       .compileComponents();
