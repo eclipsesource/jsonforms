@@ -81,7 +81,8 @@ const schema2 = {
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
   { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
-  { tester: groupLayoutTester, renderer: GroupLayoutRenderer }
+  { tester: groupLayoutTester, renderer: GroupLayoutRenderer },
+  { tester: ObjectControlRendererTester, renderer: ObjectControlRenderer }
 ];
 
 describe('Object Control tester', () => {
@@ -120,7 +121,8 @@ describe('Object Control', () => {
           entryComponents: [
             TextControlRenderer,
             VerticalLayoutRenderer,
-            GroupLayoutRenderer
+            GroupLayoutRenderer,
+            ObjectControlRenderer
           ]
         }
       })
