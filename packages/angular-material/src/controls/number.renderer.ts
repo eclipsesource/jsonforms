@@ -57,6 +57,8 @@ import {
 })
 export class NumberControlRenderer extends JsonFormsControl {
   private readonly MAXIMUM_FRACTIONAL_DIGITS = 20;
+
+  oldValue: string;
   min: number;
   max: number;
   multipleOf: number;
@@ -69,13 +71,17 @@ export class NumberControlRenderer extends JsonFormsControl {
   }
 
   onChange(ev: any) {
+    const data = this.oldValue
+      ? ev.target.value.replace(this.oldValue, '')
+      : ev.target.value;
+    console.log(data);
     // ignore these
     if (
-      ev.data === '.' ||
-      ev.data === ',' ||
-      ev.data === ' ' ||
+      data === '.' ||
+      data === ',' ||
+      data === ' ' ||
       // if the value is 0 and we already have a value then we ignore
-      (ev.data === '0' &&
+      (data === '0' &&
         this.getValue() !== '' &&
         // a 0 in the first place
         ((ev.target.selectionStart === 1 && ev.target.selectionEnd === 1) ||
@@ -83,9 +89,11 @@ export class NumberControlRenderer extends JsonFormsControl {
           (ev.target.selectionStart === ev.target.value.length &&
             ev.target.selectionEnd === ev.target.value.length)))
     ) {
+      this.oldValue = ev.target.value;
       return;
     }
     super.onChange(ev);
+    this.oldValue = this.getValue();
   }
   getEventValue = (event: any) => {
     const cleanPattern = new RegExp(`[^-+0-9${this.decimalSeparator}]`, 'g');
@@ -128,6 +136,7 @@ export class NumberControlRenderer extends JsonFormsControl {
           maximumFractionDigits: this.MAXIMUM_FRACTIONAL_DIGITS
         });
         this.determineDecimalSeparator();
+        this.oldValue = this.getValue();
       }
     }
   }
