@@ -22,8 +22,8 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -41,9 +41,10 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
+  MatTableModule,
   MatTabsModule
 } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { JsonFormsModule } from '@jsonforms/angular';
 import {
   LocaleValidationModule,
@@ -64,7 +65,8 @@ import {
   JsonFormsDetailComponent,
   LabelRenderer,
   MasterListComponent,
-  ObjectControlRenderer
+  ObjectControlRenderer,
+  TableRenderer
 } from './other';
 import {
   CategorizationTabLayoutRenderer,
@@ -95,6 +97,7 @@ import {
     MatButtonModule,
     MatIconModule,
     MatAutocompleteModule,
+    MatTableModule,
     LocalizationModule
   ],
   declarations: [
@@ -113,7 +116,8 @@ import {
     MasterListComponent,
     JsonFormsDetailComponent,
     ObjectControlRenderer,
-    AutocompleteControlRenderer
+    AutocompleteControlRenderer,
+    TableRenderer
   ],
   entryComponents: [
     BooleanControlRenderer,
@@ -131,7 +135,8 @@ import {
     MasterListComponent,
     JsonFormsDetailComponent,
     ObjectControlRenderer,
-    AutocompleteControlRenderer
+    AutocompleteControlRenderer,
+    TableRenderer
   ],
   exports: [
     BrowserAnimationsModule,
