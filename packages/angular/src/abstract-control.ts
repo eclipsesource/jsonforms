@@ -109,7 +109,7 @@ export abstract class JsonFormsAbstractControl<
         this.data = data;
         this.error = errors;
         this.enabled = enabled;
-        this.enabled ? this.form.enable() : this.form.disable();
+        this.isEnabled() ? this.form.enable() : this.form.disable();
         this.hidden = !visible;
         this.scopedSchema = schema;
         this.rootSchema = rootSchema;
@@ -136,6 +136,13 @@ export abstract class JsonFormsAbstractControl<
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  isEnabled(): boolean {
+    return (
+      this.enabled &&
+      (this.uischema.options ? !this.uischema.options.readonly : true)
+    );
   }
 
   protected getOwnProps(): OwnPropsOfControl {

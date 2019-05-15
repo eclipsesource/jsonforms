@@ -41,7 +41,7 @@ import {
       <mat-slide-toggle
         (change)="onChange($event)"
         [checked]="isChecked()"
-        [disabled]="!enabled"
+        [disabled]="!isEnabled()"
         [id]="id"
       >
         {{ label }}

@@ -35,6 +35,7 @@ import {
   JsonFormsState,
   RankedTester,
   rankWith,
+  setReadonly,
   UISchemaElement
 } from '@jsonforms/core';
 
@@ -68,6 +69,9 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
       this.detailUiSchema.type = 'VerticalLayout';
     } else {
       (this.detailUiSchema as GroupLayout).label = startCase(props.path);
+    }
+    if (!this.isEnabled()) {
+      setReadonly(this.detailUiSchema);
     }
   }
 }

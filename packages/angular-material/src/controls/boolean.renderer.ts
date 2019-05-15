@@ -44,7 +44,7 @@ import {
       <mat-checkbox
         (change)="onChange($event)"
         [checked]="isChecked()"
-        [disabled]="!enabled"
+        [disabled]="!isEnabled()"
         [id]="id"
       >
         {{ label }}

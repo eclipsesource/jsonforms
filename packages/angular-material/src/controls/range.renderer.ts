@@ -42,7 +42,7 @@ import {
       <mat-slider
         [value]="data || scopedSchema.default"
         (change)="onChange($event)"
-        [disabled]="!enabled"
+        [disabled]="!isEnabled()"
         [max]="max"
         [min]="min"
         [step]="multipleOf"
