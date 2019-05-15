@@ -29,13 +29,13 @@ import { JsonFormsArrayControl } from '@jsonforms/angular';
 import {
   ArrayControlProps,
   ControlElement,
+  deriveTypes,
   isObjectArrayControl,
   isPrimitiveArrayControl,
   JsonFormsState,
   JsonSchema,
   or,
   OwnPropsOfRenderer,
-  // Paths,
   Paths,
   RankedTester,
   rankWith,
@@ -43,7 +43,7 @@ import {
 } from '@jsonforms/core';
 
 @Component({
-  selector: 'ObjectRenderer',
+  selector: 'TableRenderer',
   template: `
     <table
       mat-table
@@ -57,7 +57,6 @@ import {
       >
         <th mat-header-cell *matHeaderCellDef>{{ item.header }}</th>
         <td mat-cell *matCellDef="let index = index">
-          <!--{{ element[item.property] }}-->
           <jsonforms-outlet
             [renderProps]="getProps(index, item.props)"
           ></jsonforms-outlet>
@@ -74,6 +73,7 @@ export class TableRenderer extends JsonFormsArrayControl {
   detailUiSchema: UISchemaElement;
   displayedColumns: string[];
   items: ColumnDescription[];
+  readonly columnsToIgnore = ['array', 'object'];
 
   constructor(ngRedux: NgRedux<JsonFormsState>) {
     super(ngRedux);
@@ -102,17 +102,19 @@ export class TableRenderer extends JsonFormsArrayControl {
   ): ColumnDescription[] => {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map(prop => {
+        const uischema = controlWithoutLabel(`#/properties/${prop}`);
         return {
           property: prop,
           header: startCase(prop),
           props: {
             schema: schema,
-            uischema: controlWithoutLabel(`#/properties/${prop}`),
+            uischema,
             path: rowPath
           }
         };
       });
     }
+    // needed to correctly render input control for multi attributes
     return [
       {
         property: 'DUMMY',
@@ -128,9 +130,13 @@ export class TableRenderer extends JsonFormsArrayControl {
 
   getValidColumnProps = (scopedSchema: JsonSchema) => {
     if (scopedSchema.type === 'object') {
-      return Object.keys(scopedSchema.properties).filter(
-        prop => scopedSchema.properties[prop].type !== 'array'
-      );
+      return Object.keys(scopedSchema.properties).filter(prop => {
+        const types = deriveTypes(scopedSchema.properties[prop]);
+        if (types.length > 1) {
+          return false;
+        }
+        return this.columnsToIgnore.indexOf(types[0]) === -1;
+      });
     }
     // primitives
     return [''];

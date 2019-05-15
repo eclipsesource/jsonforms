@@ -160,7 +160,7 @@ describe('Table', () => {
     fixture.whenStable().then(() => {
       // 2 columns
       expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
-      // 1 head column and 2 data columns
+      // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 4 data entries
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
@@ -188,7 +188,7 @@ describe('Table', () => {
     fixture.whenStable().then(() => {
       // 2 columns
       expect(fixture.nativeElement.querySelectorAll('th').length).toBe(2);
-      // 1 head column and 2 data columns
+      // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 4 data entries
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(4);
@@ -215,7 +215,7 @@ describe('Table', () => {
     fixture.whenStable().then(() => {
       // 1 column
       expect(fixture.nativeElement.querySelectorAll('th').length).toBe(1);
-      // 1 head column and 2 data columns
+      // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 2 data entries
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(2);
@@ -241,7 +241,7 @@ describe('Table', () => {
     fixture.whenStable().then(() => {
       // 1 columns
       expect(fixture.nativeElement.querySelectorAll('th').length).toBe(1);
-      // 1 head column and 2 data columns
+      // 1 head row and 2 data rows
       expect(fixture.nativeElement.querySelectorAll('tr').length).toBe(1 + 2);
       // 2 data entries
       expect(fixture.nativeElement.querySelectorAll('td').length).toBe(2);
@@ -270,7 +270,7 @@ describe('Table', () => {
       expect(fixture.nativeElement.querySelector('input').disabled).toBe(true);
     });
   }));
-  xit('should be enabled by default', async(() => {
+  it('should be enabled by default', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema1;
     component.schema = schema_object1;
@@ -284,11 +284,11 @@ describe('Table', () => {
         }
       }
     });
-    component.ngOnInit();
     mockSubStore.complete();
     fixture.detectChanges();
-    fixture.whenRenderingDone().then(() => {
-      fixture.detectChanges();
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelectorAll('input').length).toBe(2);
       expect(fixture.nativeElement.querySelector('input').disabled).toBeFalsy();
     });
   }));
