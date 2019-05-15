@@ -22,12 +22,15 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
+import isEmpty from 'lodash/isEmpty';
+import startCase from 'lodash/startCase';
 import { NgRedux } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import { JsonFormsControlWithDetail } from '@jsonforms/angular';
 import {
   ControlWithDetailProps,
   findUISchema,
+  GroupLayout,
   isObjectControl,
   JsonFormsState,
   RankedTester,
@@ -42,7 +45,7 @@ import {
       <jsonforms-outlet
         [uischema]="detailUiSchema"
         [schema]="scopedSchema"
-        [path]="path"
+        [path]="propsPath"
       >
       </jsonforms-outlet>
     </mat-card>
@@ -58,8 +61,14 @@ export class ObjectControlRenderer extends JsonFormsControlWithDetail {
       props.uischemas,
       props.schema,
       undefined,
-      props.path
+      props.path,
+      'Group'
     );
+    if (isEmpty(props.path)) {
+      this.detailUiSchema.type = 'VerticalLayout';
+    } else {
+      (this.detailUiSchema as GroupLayout).label = startCase(props.path);
+    }
   }
 }
 export const ObjectControlRendererTester: RankedTester = rankWith(

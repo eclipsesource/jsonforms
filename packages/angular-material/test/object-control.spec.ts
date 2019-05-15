@@ -26,6 +26,7 @@ import { NgRedux, NgReduxModule } from '@angular-redux/store';
 import { MockNgRedux } from '@angular-redux/store/lib/testing';
 import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
@@ -37,6 +38,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { ControlElement } from '@jsonforms/core';
 import {
+  GroupLayoutRenderer,
+  groupLayoutTester,
   TextControlRenderer,
   TextControlRendererTester,
   VerticalLayoutRenderer,
@@ -46,7 +49,6 @@ import {
   ObjectControlRenderer,
   ObjectControlRendererTester
 } from '../src/other/object.renderer';
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 const uischema1: ControlElement = { type: 'Control', scope: '#' };
 const uischema2: ControlElement = {
@@ -78,7 +80,8 @@ const schema2 = {
 };
 const renderers = [
   { tester: TextControlRendererTester, renderer: TextControlRenderer },
-  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer }
+  { tester: verticalLayoutTester, renderer: VerticalLayoutRenderer },
+  { tester: groupLayoutTester, renderer: GroupLayoutRenderer }
 ];
 
 describe('Object Control tester', () => {
@@ -96,7 +99,8 @@ describe('Object Control', () => {
       declarations: [
         ObjectControlRenderer,
         TextControlRenderer,
-        VerticalLayoutRenderer
+        VerticalLayoutRenderer,
+        GroupLayoutRenderer
       ],
       imports: [
         CommonModule,
@@ -113,7 +117,11 @@ describe('Object Control', () => {
     })
       .overrideModule(BrowserDynamicTestingModule, {
         set: {
-          entryComponents: [TextControlRenderer, VerticalLayoutRenderer]
+          entryComponents: [
+            TextControlRenderer,
+            VerticalLayoutRenderer,
+            GroupLayoutRenderer
+          ]
         }
       })
       .compileComponents();
@@ -121,6 +129,32 @@ describe('Object Control', () => {
     MockNgRedux.reset();
     fixture = TestBed.createComponent(ObjectControlRenderer);
     component = fixture.componentInstance;
+  }));
+
+  it('object control creates group', async(() => {
+    const mockSubStore = MockNgRedux.getSelectorStub();
+    component.uischema = uischema2;
+    component.schema = schema2;
+
+    mockSubStore.next({
+      jsonforms: {
+        renderers: renderers,
+        core: {
+          data: {},
+          schema: schema2
+        }
+      }
+    });
+    mockSubStore.complete();
+    fixture.detectChanges();
+    component.ngOnInit();
+    fixture.whenStable().then(() => {
+      // one for the object renderer and one for the group
+      expect(fixture.nativeElement.querySelectorAll('mat-card').length).toBe(2);
+      expect(
+        fixture.nativeElement.querySelectorAll('mat-card-title')[0].textContent
+      ).toBe('Foo');
+    });
   }));
 
   it('render all elements', async(() => {
