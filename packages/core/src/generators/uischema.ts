@@ -151,37 +151,40 @@ const generateUISchema = (
     return controlObject;
   }
 
+  if (currentRef === '#' && types[0] === 'object') {
+    const layout: Layout = createLayout(layoutType);
+    schemaElements.push(layout);
+
+    if (jsonSchema.properties && keys(jsonSchema.properties).length > 1) {
+      addLabel(layout, schemaName);
+    }
+
+    if (!isEmpty(jsonSchema.properties)) {
+      // traverse properties
+      const nextRef: string = currentRef + '/properties';
+      Object.keys(jsonSchema.properties).map(propName => {
+        let value = jsonSchema.properties[propName];
+        const ref = `${nextRef}/${propName}`;
+        if (value.$ref !== undefined) {
+          value = resolveSchema(rootSchema, value.$ref);
+        }
+        generateUISchema(
+          value,
+          layout.elements,
+          ref,
+          propName,
+          layoutType,
+          rootSchema
+        );
+      });
+    }
+
+    return layout;
+  }
+
   switch (types[0]) {
-    case 'object':
-      const layout: Layout = createLayout(layoutType);
-      schemaElements.push(layout);
-
-      if (jsonSchema.properties && keys(jsonSchema.properties).length > 1) {
-        addLabel(layout, schemaName);
-      }
-
-      if (!isEmpty(jsonSchema.properties)) {
-        // traverse properties
-        const nextRef: string = currentRef + '/properties';
-        Object.keys(jsonSchema.properties).map(propName => {
-          let value = jsonSchema.properties[propName];
-          const ref = `${nextRef}/${propName}`;
-          if (value.$ref !== undefined) {
-            value = resolveSchema(rootSchema, value.$ref);
-          }
-          generateUISchema(
-            value,
-            layout.elements,
-            ref,
-            propName,
-            layoutType,
-            rootSchema
-          );
-        });
-      }
-
-      return layout;
-
+    case 'object': // object items will be handled by the object control itself
+    /* falls through */
     case 'array': // array items will be handled by the array control itself
     /* falls through */
     case 'string':

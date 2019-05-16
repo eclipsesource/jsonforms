@@ -26,7 +26,6 @@ import test from 'ava';
 import { generateDefaultUISchema } from '../../src/generators/uischema';
 import {
   ControlElement,
-  LabelElement,
   Layout,
   VerticalLayout
 } from '../../src/models/uischema';
@@ -85,14 +84,6 @@ test('generate ui schema for Control element by resolving refs', t => {
       }
     }
   };
-  const ruleLabel: LabelElement = {
-    type: 'Label',
-    text: 'Rule'
-  };
-  const conditionLabel: LabelElement = {
-    type: 'Label',
-    text: 'Condition'
-  };
   const typeControl: ControlElement = {
     type: 'Control',
     scope: '#/properties/type'
@@ -105,39 +96,14 @@ test('generate ui schema for Control element by resolving refs', t => {
     type: 'Control',
     scope: '#/properties/scope'
   };
-  const effectControl: ControlElement = {
+  const ruleControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/rule/properties/effect'
+    scope: '#/properties/rule'
   };
 
-  const conditionTypeControl: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/rule/properties/condition/properties/type'
-  };
-  const conditionScopeControl: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/rule/properties/condition/properties/scope'
-  };
-  const conditionExpectedValueControl: ControlElement = {
-    type: 'Control',
-    scope: '#/properties/rule/properties/condition/properties/expectedValue'
-  };
-  const conditionLayout: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: [
-      conditionLabel,
-      conditionTypeControl,
-      conditionScopeControl,
-      conditionExpectedValueControl
-    ]
-  };
-  const ruleLayout: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: [ruleLabel, effectControl, conditionLayout]
-  };
   const uischema: VerticalLayout = {
     type: 'VerticalLayout',
-    elements: [typeControl, labelControl, scopeControl, ruleLayout]
+    elements: [typeControl, labelControl, scopeControl, ruleControl]
   };
   const generatedUiSchema = generateDefaultUISchema(schema);
   t.deepEqual(generatedUiSchema, uischema);
@@ -208,7 +174,7 @@ test('generate ui schema for schema with unspecified object root', t => {
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
 
-test(`nested object attributes`, t => {
+test(`nested object not expanded`, t => {
   const schema = {
     type: 'object',
     properties: {
@@ -229,17 +195,13 @@ test(`nested object attributes`, t => {
     type: 'Control',
     scope: '#/properties/id'
   };
-  const nameControl: ControlElement = {
+  const privateControl: ControlElement = {
     type: 'Control',
-    scope: '#/properties/private/properties/name'
-  };
-  const nestedLayout: VerticalLayout = {
-    type: 'VerticalLayout',
-    elements: [nameControl]
+    scope: '#/properties/private'
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [idControl, nestedLayout]
+    elements: [idControl, privateControl]
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
@@ -586,15 +548,11 @@ test('generate control for nested oneOf', t => {
   };
   const control = {
     type: 'Control',
-    scope: '#/properties/myarray/properties/nameOrAge'
-  };
-  const nestedUiSchema: Layout = {
-    type: 'VerticalLayout',
-    elements: [control]
+    scope: '#/properties/myarray'
   };
   const uischema: Layout = {
     type: 'VerticalLayout',
-    elements: [nestedUiSchema]
+    elements: [control]
   };
   t.deepEqual(generateDefaultUISchema(schema), uischema);
 });
