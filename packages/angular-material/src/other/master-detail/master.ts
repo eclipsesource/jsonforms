@@ -37,6 +37,7 @@ import {
   mapStateToArrayControlProps,
   RankedTester,
   rankWith,
+  setReadonly,
   uiTypeIs
 } from '@jsonforms/core';
 
@@ -75,6 +76,7 @@ export const removeSchemaKeywords = (path: string) => {
               class="button hide"
               (click)="onDeleteClick(i)"
               [ngClass]="{ show: highlightedIdx == i }"
+              *ngIf="isEnabled()"
             >
               <mat-icon mat-list-icon>delete</mat-icon>
             </button>
@@ -85,6 +87,7 @@ export const removeSchemaKeywords = (path: string) => {
           color="primary"
           class="add-button"
           (click)="onAddClick()"
+          *ngIf="isEnabled()"
         >
           <mat-icon aria-label="Add item to list">add</mat-icon>
         </button>
@@ -173,6 +176,9 @@ export class MasterListComponent extends JsonFormsArrayControl {
         props.path,
         'VerticalLayout'
       );
+    if (!this.isEnabled()) {
+      setReadonly(detailUISchema);
+    }
 
     const masterItems = (data || []).map((d: any, index: number) => {
       const labelRefInstancePath = removeSchemaKeywords(

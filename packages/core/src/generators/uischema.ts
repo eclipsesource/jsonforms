@@ -29,6 +29,7 @@ import { JsonSchema } from '../models/jsonSchema';
 import {
   ControlElement,
   isGroup,
+  isLayout,
   LabelElement,
   Layout,
   UISchemaElement
@@ -53,9 +54,6 @@ export const createControlElement = (ref: string): ControlElement => ({
   type: 'Control',
   scope: ref
 });
-
-const isLayout = (uischema: UISchemaElement): uischema is Layout =>
-  (uischema as Layout).elements !== undefined;
 
 /**
  * Wraps the given {@code uiSchema} in a Layout if there is none already.

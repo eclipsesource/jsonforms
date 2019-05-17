@@ -142,3 +142,4 @@ export * from './Formatted';
 export * from './ids';
 export * from './validator';
 export * from './combinators';
+export * from './uischema';

@@ -24,7 +24,14 @@
 */
 import { NgRedux, select } from '@angular-redux/store';
 import { Component } from '@angular/core';
-import { Actions, JsonFormsState, setLocale } from '@jsonforms/core';
+import {
+  Actions,
+  getUiSchema,
+  JsonFormsState,
+  setLocale,
+  setReadonly,
+  unsetReadonly
+} from '@jsonforms/core';
 import { ExampleDescription } from '@jsonforms/examples';
 import { Observable } from 'rxjs';
 @Component({
@@ -48,6 +55,9 @@ import { Observable } from 'rxjs';
       <button (click)="changeLocale('de-DE')">Change locale to de-DE</button>
       <button (click)="changeLocale('en-US')">Change locale to en-US</button>
       Current locale: {{ currentLocale }}
+      <button (click)="setReadonly()">
+        {{ readonly ? 'Unset' : 'Set' }} Readonly
+      </button>
     </div>
     <jsonforms-outlet></jsonforms-outlet>
   `
@@ -55,6 +65,7 @@ import { Observable } from 'rxjs';
 export class AppComponent {
   @select(['examples', 'data']) readonly exampleData$: Observable<any>;
   currentLocale = 'en-US';
+  private readonly = false;
 
   constructor(
     private ngRedux: NgRedux<
@@ -79,5 +90,16 @@ export class AppComponent {
   changeLocale(locale: string) {
     this.currentLocale = locale;
     this.ngRedux.dispatch(setLocale(locale));
+  }
+
+  setReadonly() {
+    const uischema = getUiSchema(this.ngRedux.getState());
+    if (this.readonly) {
+      unsetReadonly(uischema);
+    } else {
+      setReadonly(uischema);
+    }
+    this.readonly = !this.readonly;
+    this.ngRedux.dispatch(Actions.setUISchema(uischema));
   }
 }
