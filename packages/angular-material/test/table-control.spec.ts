@@ -248,7 +248,7 @@ describe('Table', () => {
     });
   }));
 
-  xit('can be disabled', async(() => {
+  it('can be disabled', async(() => {
     const mockSubStore = MockNgRedux.getSelectorStub();
     component.uischema = uischema1;
     component.schema = schema_object1;
@@ -258,7 +258,7 @@ describe('Table', () => {
       jsonforms: {
         renderers: renderers,
         core: {
-          data: [],
+          data: [{ foo: 'foo_1', bar: 'bar_1' }],
           schema: schema_object1
         }
       }
@@ -267,7 +267,13 @@ describe('Table', () => {
     fixture.detectChanges();
     component.ngOnInit();
     fixture.whenStable().then(() => {
-      expect(fixture.nativeElement.querySelector('input').disabled).toBe(true);
+      expect(fixture.nativeElement.querySelectorAll('input').length).toBe(2);
+      expect(
+        fixture.nativeElement.querySelectorAll('input')[0].disabled
+      ).toBeTruthy();
+      expect(
+        fixture.nativeElement.querySelectorAll('input')[1].disabled
+      ).toBeTruthy();
     });
   }));
   it('should be enabled by default', async(() => {

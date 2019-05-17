@@ -39,6 +39,7 @@ import {
   Paths,
   RankedTester,
   rankWith,
+  setReadonly,
   UISchemaElement
 } from '@jsonforms/core';
 
@@ -103,6 +104,9 @@ export class TableRenderer extends JsonFormsArrayControl {
     if (schema.type === 'object') {
       return this.getValidColumnProps(schema).map(prop => {
         const uischema = controlWithoutLabel(`#/properties/${prop}`);
+        if (!this.isEnabled()) {
+          setReadonly(uischema);
+        }
         return {
           property: prop,
           header: startCase(prop),
