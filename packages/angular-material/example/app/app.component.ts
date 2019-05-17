@@ -26,10 +26,11 @@ import { NgRedux, select } from '@angular-redux/store';
 import { Component } from '@angular/core';
 import {
   Actions,
+  getUiSchema,
   JsonFormsState,
-  removeReadonly,
   setLocale,
-  setReadonly
+  setReadonly,
+  unsetReadonly
 } from '@jsonforms/core';
 import { ExampleDescription } from '@jsonforms/examples';
 import { Observable } from 'rxjs';
@@ -64,7 +65,6 @@ import { Observable } from 'rxjs';
 export class AppComponent {
   @select(['examples', 'data']) readonly exampleData$: Observable<any>;
   currentLocale = 'en-US';
-  private selectedExample: ExampleDescription;
   private readonly = false;
 
   constructor(
@@ -74,14 +74,14 @@ export class AppComponent {
   ) {}
 
   onChange = (ev: any) => {
-    this.selectedExample = this.ngRedux
+    const selectedExample = this.ngRedux
       .getState()
       .examples.data.find(e => e.name === ev.target.value);
     this.ngRedux.dispatch(
       Actions.init(
-        this.selectedExample.data,
-        this.selectedExample.schema,
-        this.selectedExample.uischema
+        selectedExample.data,
+        selectedExample.schema,
+        selectedExample.uischema
       )
     );
     this.ngRedux.dispatch(setLocale(this.currentLocale));
@@ -93,12 +93,13 @@ export class AppComponent {
   }
 
   setReadonly() {
+    const uischema = getUiSchema(this.ngRedux.getState());
     if (this.readonly) {
-      removeReadonly(this.selectedExample.uischema);
+      unsetReadonly(uischema);
     } else {
-      setReadonly(this.selectedExample.uischema);
+      setReadonly(uischema);
     }
     this.readonly = !this.readonly;
-    this.ngRedux.dispatch(Actions.setUISchema(this.selectedExample.uischema));
+    this.ngRedux.dispatch(Actions.setUISchema(uischema));
   }
 }

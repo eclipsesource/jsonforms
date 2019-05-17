@@ -38,7 +38,7 @@ const setReadonlyPropertyValue = (value: boolean): IterateCallback => (
 export const setReadonly = (uischema: UISchemaElement): void => {
   iterateSchema(uischema, setReadonlyPropertyValue(true));
 };
-export const removeReadonly = (uischema: UISchemaElement): void => {
+export const unsetReadonly = (uischema: UISchemaElement): void => {
   iterateSchema(uischema, setReadonlyPropertyValue(false));
 };
 export const iterateSchema = (
