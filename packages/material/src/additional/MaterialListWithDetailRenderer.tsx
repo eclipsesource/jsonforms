@@ -30,8 +30,8 @@ import {
   createDefaultValue,
   findUISchema,
   getData,
-  isPlainLabel,
   isObjectArray,
+  isPlainLabel,
   JsonFormsState,
   JsonSchema,
   mapDispatchToArrayControlProps,
@@ -65,8 +65,11 @@ import { ArrayLayoutToolbar } from '../layouts/ArrayToolbar';
 interface MaterialListWithDetailRendererState {
   selectedIndex: number;
 }
+export interface MaterialListWithDetailProps extends ArrayLayoutProps {
+  masterLabelNodeFnc?(data: any, index: number): React.ReactNode;
+}
 export class MaterialListWithDetailRenderer extends React.Component<
-  ArrayLayoutProps,
+  MaterialListWithDetailProps,
   MaterialListWithDetailRendererState
 > {
   state: MaterialListWithDetailRendererState = {
@@ -86,11 +89,27 @@ export class MaterialListWithDetailRenderer extends React.Component<
   };
   createDefaultValue = () => createDefaultValue(this.props.schema);
   render() {
-    const {required, visible, errors, path, data, schema, label} = this.props;
+    const {
+      required,
+      visible,
+      errors,
+      path,
+      data,
+      schema,
+      label,
+      masterLabelNodeFnc
+    } = this.props;
+
+    const getMasterLabelNode = masterLabelNodeFnc
+      ? masterLabelNodeFnc
+      : undefined;
     return (
       <Hidden xsUp={!visible}>
         <ArrayLayoutToolbar
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(
+            isPlainLabel(label) ? label : label.default,
+            required
+          )}
           errors={errors}
           path={path}
           addItem={this.addItem}
@@ -108,6 +127,7 @@ export class MaterialListWithDetailRenderer extends React.Component<
                     handleSelect={this.handleListItemClick}
                     removeItem={this.removeItem}
                     selected={this.state.selectedIndex === index}
+                    getLabelNode={getMasterLabelNode}
                     key={index}
                   />
                 ))
@@ -124,7 +144,7 @@ export class MaterialListWithDetailRenderer extends React.Component<
     );
   }
   private renderDetail(): any {
-    const {uischemas, schema, uischema, path} = this.props;
+    const { uischemas, schema, uischema, path } = this.props;
     if (this.state.selectedIndex !== undefined) {
       const foundUISchema = findUISchema(
         uischemas,
@@ -164,33 +184,34 @@ interface OwnPropsOfMasterListItem {
   selected: boolean;
   path: string;
   schema: JsonSchema;
+  getLabelNode?(data: any, index: number): React.ReactNode;
   handleSelect(index: number): () => void;
   removeItem(path: string, value: number): () => void;
 }
 interface StatePropsOfMasterItem extends OwnPropsOfMasterListItem {
-  childLabel: string;
+  childLabel: React.ReactNode;
 }
 class ListWithDetailMasterItem extends React.Component<
   ListWithDetailMasterItemProps,
   any
 > {
   render() {
-    const {selected, handleSelect, index, childLabel, removeItem, path} = this.props;
+    const {
+      selected,
+      handleSelect,
+      index,
+      childLabel,
+      removeItem,
+      path
+    } = this.props;
     return (
-      <ListItem
-        button
-        selected={selected}
-        onClick={handleSelect(index)}
-      >
+      <ListItem button selected={selected} onClick={handleSelect(index)}>
         <ListItemAvatar>
           <Avatar aria-label='Index'>{index + 1}</Avatar>
         </ListItemAvatar>
         <ListItemText primary={childLabel} />
         <ListItemSecondaryAction>
-          <IconButton
-            aria-label='Delete'
-            onClick={removeItem(path, index)}
-          >
+          <IconButton aria-label='Delete' onClick={removeItem(path, index)}>
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
@@ -209,7 +230,7 @@ export const mapStateToMasterListItemProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfMasterListItem
 ): StatePropsOfMasterItem => {
-  const { schema, path, index } = ownProps;
+  const { schema, path, index, getLabelNode } = ownProps;
   const firstPrimitiveProp = schema.properties
     ? find(Object.keys(schema.properties), propName => {
         const prop = schema.properties[propName];
@@ -222,7 +243,11 @@ export const mapStateToMasterListItemProps = (
     : undefined;
   const childPath = composePaths(path, `${index}`);
   const childData = Resolve.data(getData(state), childPath);
-  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+  const childLabel = getLabelNode
+    ? getLabelNode(childData, index)
+    : firstPrimitiveProp
+    ? childData[firstPrimitiveProp]
+    : '';
 
   return {
     ...ownProps,

@@ -102,6 +102,7 @@ import MaterialCategorizationStepperLayout, {
   materialCategorizationStepperTester
 } from './layouts/MaterialCategorizationStepperLayout';
 
+export * from './additional';
 export * from './complex';
 export * from './controls';
 export * from './layouts';
@@ -109,7 +110,12 @@ export * from './cells';
 export * from './mui-controls';
 export * from './util';
 
+import MyList, {
+  materialMyListWithDetailTester
+} from './additional/MyListDetail';
+
 export const materialRenderers: JsonFormsRendererRegistryEntry[] = [
+  { tester: materialMyListWithDetailTester, renderer: MyList },
   // controls
   {
     tester: materialArrayControlTester,
