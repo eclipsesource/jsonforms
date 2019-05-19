@@ -27,6 +27,11 @@ import MaterialLabelRenderer, {
 } from './MaterialLabelRenderer';
 export { MaterialLabelRenderer, materialLabelRendererTester };
 import MaterialListWithDetailRenderer, {
+  MaterialListWithDetailRenderer as MaterialListWithDetailRendererComponent,
   materialListWithDetailTester
 } from './MaterialListWithDetailRenderer';
-export { MaterialListWithDetailRenderer, materialListWithDetailTester };
+export {
+  MaterialListWithDetailRenderer,
+  MaterialListWithDetailRendererComponent,
+  materialListWithDetailTester
+};
