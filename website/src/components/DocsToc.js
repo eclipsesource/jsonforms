@@ -34,9 +34,6 @@ const DocsToc = ({ classes }) => {
               <Link to={m.route}>{m.name}</Link>
             </li>
           ))}
-          <li>
-            <Link to="/docs/api">API Documentation</Link>
-          </li>
         </ul>
       </div>
     </div>
