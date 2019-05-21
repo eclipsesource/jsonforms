@@ -223,7 +223,7 @@ export const mapStateToExpandPanelProps = (
     : undefined;
   const childPath = composePaths(path, `${index}`);
   const childData = Resolve.data(getData(state), childPath);
-  const childLabel = firstPrimitiveProp ? childData[firstPrimitiveProp] : '';
+  const childLabel = (childData && firstPrimitiveProp) ? childData[firstPrimitiveProp] : '';
 
   return {
     ...ownProps,
