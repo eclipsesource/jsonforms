@@ -539,11 +539,10 @@ export const mapDispatchToArrayControlProps = (
         if (toMove == 0) {
           return array;
         }
-        let newArray = array.map((item: any) => item);
-        let temp = newArray[toMove];
-        newArray[toMove] = newArray[toMove - 1]
-        newArray[toMove - 1] = temp;
-        return newArray;
+        let temp = array[toMove];
+        array[toMove] = array[toMove - 1]
+        array[toMove - 1] = temp;
+        return array;
       })
     );
   },

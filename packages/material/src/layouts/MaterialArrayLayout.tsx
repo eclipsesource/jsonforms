@@ -150,7 +150,6 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
       undefined,
       uischema
     );
-    debugger;
     return (
       <ExpansionPanel expanded={expanded} onChange={handleExpansion(childPath)}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -179,8 +178,9 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                         <IconButton
                           onClick={moveUp(path, index)}
                           style={iconStyle}
+                          disabled={index == 0}
                         >
-                          <ArrowUpward color={index == 0 ? "disabled" : "inherit"} />
+                          <ArrowUpward />
                         </IconButton>
                       </Grid> : ""}
                     {uischema.options && uischema.options.sortButtons ?
@@ -188,8 +188,9 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                         <IconButton
                           onClick={moveDown(path, index)}
                           style={iconStyle}
+                          disabled={isLast}
                         >
-                          <ArrowDownWard color={isLast ? "disabled" : "inherit"} />
+                          <ArrowDownWard />
                         </IconButton>
                       </Grid> :
                       ""}

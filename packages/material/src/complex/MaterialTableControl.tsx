@@ -48,7 +48,7 @@ import {
   JsonFormsState,
   JsonSchema,
   Paths,
-  Resolve
+  Resolve,
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -126,9 +126,9 @@ interface TableHeaderCellProps {
   propName: string;
 }
 
-const TableHeaderCell = ({ propName }: TableHeaderCellProps) => (
+const TableHeaderCell = React.memo(({ propName }: TableHeaderCellProps) => (
   <TableCell>{startCase(propName)}</TableCell>
-);
+));
 
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
   rootSchema: JsonSchema;
@@ -207,15 +207,17 @@ interface NonEmptyRowProps {
   rowIndex: number;
   moveUp: () => any;
   moveDown: () => any;
+  isLast: boolean;
 }
 
-const NonEmptyRow = ({
+const NonEmptyRow = React.memo(({
   childPath,
   schema,
   rowIndex,
   openDeleteDialog,
   moveUp,
-  moveDown
+  moveDown,
+  isLast
 }: NonEmptyRowProps & WithDeleteDialogSupport) => {
   console.log(moveUp);
   return (
@@ -233,6 +235,7 @@ const NonEmptyRow = ({
               <IconButton
                 aria-label={`move up`}
                 onClick={moveUp}
+                disabled={rowIndex == 0}
               >
                 <ArrowUpward />
               </IconButton>
@@ -241,6 +244,7 @@ const NonEmptyRow = ({
               <IconButton
                 aria-label={`move down`}
                 onClick={moveDown}
+                disabled={isLast}
               >
                 <ArrowDownWard />
               </IconButton>
@@ -258,7 +262,7 @@ const NonEmptyRow = ({
       </NoBorderTableCell>
     </TableRow>
   )
-};
+});
 interface TableRowsProp {
   data: number;
   path: string;
@@ -294,6 +298,7 @@ const TableRows = ({
             openDeleteDialog={openDeleteDialog}
             moveUp={moveUp(path, index)}
             moveDown={moveDown(path, index)}
+            isLast={index == data - 1}
           />
         );
       })}
