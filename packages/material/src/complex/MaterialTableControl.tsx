@@ -27,7 +27,7 @@ import union from 'lodash/union';
 import { DispatchCell } from '@jsonforms/react';
 import startCase from 'lodash/startCase';
 import range from 'lodash/range';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import {
   FormHelperText,
@@ -61,7 +61,7 @@ import TableToolbar from './TableToolbar';
 // we want a cell that doesn't automatically span
 const styles = {
   fixedCell: {
-    width: '150px',
+    width: '200px',
     height: '50px',
     paddingLeft: 0,
     paddingRight: 0,
@@ -208,6 +208,7 @@ interface NonEmptyRowProps {
   moveUp: () => any;
   moveDown: () => any;
   isLast: boolean;
+  sortButtons: boolean
 }
 
 const NonEmptyRow = React.memo(({
@@ -217,9 +218,9 @@ const NonEmptyRow = React.memo(({
   openDeleteDialog,
   moveUp,
   moveDown,
-  isLast
+  isLast,
+  sortButtons
 }: NonEmptyRowProps & WithDeleteDialogSupport) => {
-  console.log(moveUp);
   return (
     <TableRow key={childPath} hover>
       {generateCells(NonEmptyCell, schema, childPath)}
@@ -231,24 +232,29 @@ const NonEmptyRow = React.memo(({
             justify="center"
             alignItems="center"
           >
-            <Grid item>
-              <IconButton
-                aria-label={`move up`}
-                onClick={moveUp}
-                disabled={rowIndex == 0}
-              >
-                <ArrowUpward />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton
-                aria-label={`move down`}
-                onClick={moveDown}
-                disabled={isLast}
-              >
-                <ArrowDownWard />
-              </IconButton>
-            </Grid>
+            {sortButtons ?
+              <Fragment>
+                <Grid item>
+                  <IconButton
+                    aria-label={`move up`}
+                    onClick={moveUp}
+                    disabled={rowIndex == 0}
+                  >
+                    <ArrowUpward />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    aria-label={`move down`}
+                    onClick={moveDown}
+                    disabled={isLast}
+                  >
+                    <ArrowDownWard />
+                  </IconButton>
+                </Grid>
+              </Fragment> : ""
+            }
+
             <Grid item>
               <IconButton
                 aria-label={`Delete`}
@@ -269,6 +275,7 @@ interface TableRowsProp {
   schema: JsonSchema;
   moveUp?(path: string, toMove: number): () => any;
   moveDown?(path: string, toMove: number): () => any;
+  uischema: ControlElement
 }
 const TableRows = ({
   data,
@@ -276,12 +283,14 @@ const TableRows = ({
   schema,
   openDeleteDialog,
   moveUp,
-  moveDown
+  moveDown,
+  uischema
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
   if (isEmptyTable) {
     return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
   }
+  debugger;
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
@@ -299,6 +308,7 @@ const TableRows = ({
             moveUp={moveUp(path, index)}
             moveDown={moveDown(path, index)}
             isLast={index == data - 1}
+            sortButtons={uischema.options && uischema.options.sortButtons}
           />
         );
       })}
