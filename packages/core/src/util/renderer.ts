@@ -263,7 +263,7 @@ export interface StatePropsOfScopedRenderer extends StatePropsOfRenderer {
 /**
  * Props of a {@link Renderer}.
  */
-export interface RendererProps extends StatePropsOfRenderer {}
+export interface RendererProps extends StatePropsOfRenderer { }
 
 /**
  * State-based props of a Control
@@ -305,7 +305,7 @@ export interface DispatchPropsOfControl {
  */
 export interface ControlProps
   extends StatePropsOfControl,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 
 /**
  * State props of a layout;
@@ -451,7 +451,7 @@ export const mapStateToControlWithDetailProps = (
 
 export interface ControlWithDetailProps
   extends StatePropsOfControlWithDetail,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 
 /**
  * State-based props of a table control.
@@ -496,6 +496,9 @@ export const mapStateToArrayControlProps = (
 export interface DispatchPropsOfArrayControl {
   addItem(path: string, value: any): () => void;
   removeItems?(path: string, toDelete: number[]): () => void;
+  moveUp?(path: string, indexToMove: number): () => any;
+  moveDown?(path: string, indexToMove: number): () => any;
+
 }
 
 /**
@@ -529,6 +532,33 @@ export const mapDispatchToArrayControlProps = (
         return array;
       })
     );
+  },
+  moveUp: (path, toMove: number) => () => {
+    dispatch(
+      update(path, array => {
+        if (toMove == 0) {
+          return array;
+        }
+        let newArray = array.map((item: any) => item);
+        let temp = newArray[toMove];
+        newArray[toMove] = newArray[toMove - 1]
+        newArray[toMove - 1] = temp;
+        return newArray;
+      })
+    );
+  },
+  moveDown: (path, toMove: number) => () => {
+    dispatch(
+      update(path, array => {
+        if (toMove == array.length - 1) {
+          return array;
+        }
+        let temp = array[toMove];
+        array[toMove] = array[toMove + 1]
+        array[toMove + 1] = temp;
+        return array;
+      })
+    );
   }
 });
 
@@ -537,7 +567,7 @@ export const mapDispatchToArrayControlProps = (
  */
 export interface ArrayControlProps
   extends StatePropsOfArrayControl,
-    DispatchPropsOfArrayControl {}
+  DispatchPropsOfArrayControl { }
 
 /**
  * Map state to layout props.
@@ -628,7 +658,7 @@ export interface StatePropsOfCombinator {
 }
 export interface CombinatorRendererProps
   extends StatePropsOfCombinator,
-    DispatchPropsOfControl {}
+  DispatchPropsOfControl { }
 /**
  * Map state to all of renderer props.
  * @param state the store's state
@@ -752,4 +782,4 @@ export const mapStateToArrayLayoutProps = (
  */
 export interface ArrayLayoutProps
   extends StatePropsOfArrayLayout,
-    DispatchPropsOfArrayControl {}
+  DispatchPropsOfArrayControl { }

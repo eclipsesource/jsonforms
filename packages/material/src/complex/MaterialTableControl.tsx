@@ -37,7 +37,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  Grid
 } from '@material-ui/core';
 import {
   ArrayLayoutProps,
@@ -51,14 +52,16 @@ import {
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowDownWard from '@material-ui/icons/ArrowDownWard';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+
 import { WithDeleteDialogSupport } from './DeleteDialog';
 import NoBorderTableCell from './NoBorderTableCell';
 import TableToolbar from './TableToolbar';
-
 // we want a cell that doesn't automatically span
 const styles = {
   fixedCell: {
-    width: '50px',
+    width: '150px',
     height: '50px',
     paddingLeft: 0,
     paddingRight: 0,
@@ -123,9 +126,9 @@ interface TableHeaderCellProps {
   propName: string;
 }
 
-const TableHeaderCell = React.memo(({ propName }: TableHeaderCellProps) => (
+const TableHeaderCell = ({ propName }: TableHeaderCellProps) => (
   <TableCell>{startCase(propName)}</TableCell>
-));
+);
 
 interface NonEmptyCellProps extends OwnPropsOfNonEmptyCell {
   rootSchema: JsonSchema;
@@ -202,45 +205,79 @@ interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
   rowIndex: number;
+  moveUp: () => any;
+  moveDown: () => any;
 }
 
-const NonEmptyRow = React.memo(({
+const NonEmptyRow = ({
   childPath,
   schema,
   rowIndex,
-  openDeleteDialog
-}: NonEmptyRowProps & WithDeleteDialogSupport) => (
+  openDeleteDialog,
+  moveUp,
+  moveDown
+}: NonEmptyRowProps & WithDeleteDialogSupport) => {
+  console.log(moveUp);
+  return (
     <TableRow key={childPath} hover>
       {generateCells(NonEmptyCell, schema, childPath)}
       <NoBorderTableCell style={styles.fixedCell}>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <IconButton
-            aria-label={`Delete`}
-            onClick={() => openDeleteDialog(childPath, rowIndex)}
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
           >
-            <DeleteIcon />
-          </IconButton>
+            <Grid item>
+              <IconButton
+                aria-label={`move up`}
+                onClick={moveUp}
+              >
+                <ArrowUpward />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton
+                aria-label={`move down`}
+                onClick={moveDown}
+              >
+                <ArrowDownWard />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton
+                aria-label={`Delete`}
+                onClick={() => openDeleteDialog(childPath, rowIndex)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         </div>
       </NoBorderTableCell>
     </TableRow>
-  ));
+  )
+};
 interface TableRowsProp {
   data: number;
   path: string;
   schema: JsonSchema;
+  moveUp?(path: string, toMove: number): () => any;
+  moveDown?(path: string, toMove: number): () => any;
 }
 const TableRows = ({
   data,
   path,
   schema,
-  openDeleteDialog
+  openDeleteDialog,
+  moveUp,
+  moveDown
 }: TableRowsProp & WithDeleteDialogSupport) => {
   const isEmptyTable = data === 0;
-
   if (isEmptyTable) {
     return <EmptyTable numColumns={getValidColumnProps(schema).length + 1} />;
   }
-
   return (
     <React.Fragment>
       {range(data).map((index: number) => {
@@ -248,7 +285,6 @@ const TableRows = ({
           path,
           `${index}`
         );
-
         return (
           <NonEmptyRow
             key={childPath}
@@ -256,6 +292,8 @@ const TableRows = ({
             rowIndex={index}
             schema={schema}
             openDeleteDialog={openDeleteDialog}
+            moveUp={moveUp(path, index)}
+            moveDown={moveDown(path, index)}
           />
         );
       })}
