@@ -66,6 +66,13 @@ const styles = {
     paddingLeft: 0,
     paddingRight: 0,
     textAlign: 'center'
+  },
+  fixedCellSmall: {
+    width: '50px',
+    height: '50px',
+    paddingLeft: 0,
+    paddingRight: 0,
+    textAlign: 'center'
   }
 };
 
@@ -222,7 +229,9 @@ const NonEmptyRow = React.memo(
     return (
       <TableRow key={childPath} hover>
         {generateCells(NonEmptyCell, schema, childPath)}
-        <NoBorderTableCell style={styles.fixedCell}>
+        <NoBorderTableCell
+          style={sortButtons ? styles.fixedCell : styles.fixedCellSmall}
+        >
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Grid
               container
