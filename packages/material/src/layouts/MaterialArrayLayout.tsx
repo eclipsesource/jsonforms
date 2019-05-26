@@ -54,7 +54,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
-import ArrowDownWard from '@material-ui/icons/ArrowDownWard';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import { connect } from 'react-redux';
 import { AnyAction, Dispatch } from 'redux';
 import { ArrayLayoutToolbar } from './ArrayToolbar';
@@ -199,7 +199,7 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                           style={iconStyle}
                           disabled={isLast}
                         >
-                          <ArrowDownWard />
+                          <ArrowDownward />
                         </IconButton>
                       </Grid>
                     ) : (

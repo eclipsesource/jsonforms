@@ -52,7 +52,7 @@ import {
 } from '@jsonforms/core';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowDownWard from '@material-ui/icons/ArrowDownWard';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import ArrowUpward from '@material-ui/icons/ArrowUpward';
 
 import { WithDeleteDialogSupport } from './DeleteDialog';
@@ -256,7 +256,7 @@ const NonEmptyRow = React.memo(
                       onClick={moveDown}
                       disabled={isLast}
                     >
-                      <ArrowDownWard />
+                      <ArrowDownward />
                     </IconButton>
                   </Grid>
                 </Fragment>
