@@ -64,7 +64,10 @@ const iconStyle: any = { float: 'right' };
 interface MaterialArrayLayoutState {
   expanded: string | boolean;
 }
-export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, MaterialArrayLayoutState> {
+export class MaterialArrayLayout extends React.Component<
+  ArrayLayoutProps,
+  MaterialArrayLayoutState
+> {
   state: MaterialArrayLayoutState = {
     expanded: null
   };
@@ -92,7 +95,10 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
     return (
       <Paper style={paperStyle}>
         <ArrayLayoutToolbar
-          label={computeLabel(isPlainLabel(label) ? label : label.default, required)}
+          label={computeLabel(
+            isPlainLabel(label) ? label : label.default,
+            required
+          )}
           errors={errors}
           path={path}
           addItem={addItem}
@@ -111,13 +117,13 @@ export class MaterialArrayLayout extends React.Component<ArrayLayoutProps, Mater
                   uischema={uischema}
                   renderers={renderers}
                   key={index}
-                  isLast={(data - 1) == index}
+                  isLast={data - 1 == index}
                 />
               );
             })
           ) : (
-              <p>No data</p>
-            )}
+            <p>No data</p>
+          )}
         </div>
       </Paper>
     );
@@ -157,7 +163,7 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
             <Grid item xs={10}>
               <Grid container alignItems={'center'}>
                 <Grid item xs={1}>
-                  <Avatar aria-label='Index'>{index + 1}</Avatar>
+                  <Avatar aria-label="Index">{index + 1}</Avatar>
                 </Grid>
                 <Grid item xs={2}>
                   {childLabel}
@@ -173,7 +179,7 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                     justify="center"
                     alignItems="center"
                   >
-                    {uischema.options && uischema.options.sortButtons ?
+                    {uischema.options && uischema.options.sortButtons ? (
                       <Grid item>
                         <IconButton
                           onClick={moveUp(path, index)}
@@ -182,8 +188,11 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                         >
                           <ArrowUpward />
                         </IconButton>
-                      </Grid> : ""}
-                    {uischema.options && uischema.options.sortButtons ?
+                      </Grid>
+                    ) : (
+                      ''
+                    )}
+                    {uischema.options && uischema.options.sortButtons ? (
                       <Grid item>
                         <IconButton
                           onClick={moveDown(path, index)}
@@ -192,8 +201,10 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                         >
                           <ArrowDownWard />
                         </IconButton>
-                      </Grid> :
-                      ""}
+                      </Grid>
+                    ) : (
+                      ''
+                    )}
                     <Grid item>
                       <IconButton
                         onClick={removeItems(path, [index])}
@@ -241,8 +252,8 @@ interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
  * Map state to control props.
  * @param state the store's state
  * @param ownProps any own props
-* @returns {StatePropsOfControl} state props for a control
-  */
+ * @returns {StatePropsOfControl} state props for a control
+ */
 export const mapStateToExpandPanelProps = (
   state: JsonFormsState,
   ownProps: OwnPropsOfExpandPanel
@@ -250,13 +261,13 @@ export const mapStateToExpandPanelProps = (
   const { schema, path, index } = ownProps;
   const firstPrimitiveProp = schema.properties
     ? find(Object.keys(schema.properties), propName => {
-      const prop = schema.properties[propName];
-      return (
-        prop.type === 'string' ||
-        prop.type === 'number' ||
-        prop.type === 'integer'
-      );
-    })
+        const prop = schema.properties[propName];
+        return (
+          prop.type === 'string' ||
+          prop.type === 'number' ||
+          prop.type === 'integer'
+        );
+      })
     : undefined;
   const childPath = composePaths(path, `${index}`);
   const childData = Resolve.data(getData(state), childPath);
@@ -283,9 +294,11 @@ export interface DispatchPropsOfExpandPanel {
  * Maps state to dispatch properties of an expand pandel control.
  *
  * @param dispatch the store's dispatch method
-* @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
-  */
-export const mapDispatchToExpandPanelProps: (dispatch: Dispatch<AnyAction>) => DispatchPropsOfExpandPanel = dispatch => ({
+ * @returns {DispatchPropsOfArrayControl} dispatch props of an expand panel control
+ */
+export const mapDispatchToExpandPanelProps: (
+  dispatch: Dispatch<AnyAction>
+) => DispatchPropsOfExpandPanel = dispatch => ({
   removeItems: (path: string, toDelete: number[]) => (event: any): void => {
     event.stopPropagation();
     dispatch(
@@ -302,12 +315,12 @@ export const mapDispatchToExpandPanelProps: (dispatch: Dispatch<AnyAction>) => D
     event.stopPropagation();
     dispatch(
       update(path, array => {
-        if (toMove == 0) {
+        if (toMove === 0) {
           return array;
         }
-        let elementToMove = array[toMove];
-        array[toMove] = array[toMove - 1]
-        array[toMove - 1] = elementToMove
+        const temp = array[toMove];
+        array[toMove] = array[toMove - 1];
+        array[toMove - 1] = temp;
         return array;
       })
     );
@@ -316,20 +329,20 @@ export const mapDispatchToExpandPanelProps: (dispatch: Dispatch<AnyAction>) => D
     event.stopPropagation();
     dispatch(
       update(path, array => {
-        if (toMove == array.length - 1) {
+        if (toMove === array.length - 1) {
           return array;
         }
-        let elementToMove = array[toMove];
-        array[toMove] = array[toMove + 1]
-        array[toMove + 1] = elementToMove
+        const temp = array[toMove];
+        array[toMove] = array[toMove + 1];
+        array[toMove + 1] = temp;
         return array;
       })
     );
-  },
+  }
 });
 export interface ExpandPanelProps
   extends StatePropsOfExpandPanel,
-  DispatchPropsOfExpandPanel { }
+    DispatchPropsOfExpandPanel {}
 
 const ConnectedExpandPanelRenderer = connect(
   mapStateToExpandPanelProps,
