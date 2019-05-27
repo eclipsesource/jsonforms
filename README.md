@@ -43,3 +43,6 @@ The JSONForms project is licensed under the MIT License. See the [LICENSE file](
 
 # Migration
 If you are already using JSONForms 1, check our [migration guide](https://github.com/eclipsesource/jsonforms/blob/master/MIGRATION.md).
+
+# Community
+We have a [Spectrum Chat](https://spectrum.chat/jsonforms) where you can reach out to the community if you have questions.
