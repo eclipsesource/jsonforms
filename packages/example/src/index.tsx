@@ -26,7 +26,7 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import './index.css';
 import App from './App';
-import { combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import geoschema from './geographical-location.schema';
 import {
@@ -40,6 +40,7 @@ import {
 import { getExamples } from '@jsonforms/examples';
 import { AdditionalStoreParams, exampleReducer } from './reduxUtil';
 import { enhanceExample, ReactExampleDescription } from './util';
+import thunk from 'redux-thunk';
 
 const setupStore = (
   exampleData: ReactExampleDescription[],
@@ -80,25 +81,23 @@ const setupStore = (
       examples: {
         data: exampleData
       }
-    }
+    },
+    applyMiddleware(thunk)
   );
 
   // Resolve example configuration
   // Add schema to validation
   const ajv = createAjv();
-  ajv.addSchema(
-    geoschema,
-    'geographical-location.schema.json'
-  );
+  ajv.addSchema(geoschema, 'geographical-location.schema.json');
   // Allow json-schema-ref-resolver to resolve same schema
   const geoResolver = {
-      order: 1,
-      canRead: function(file: any) {
-          return file.url.indexOf('geographical-location.schema.json') !== -1;
-      },
-      read: function() {
-          return JSON.stringify(geoschema);
-      }
+    order: 1,
+    canRead: function(file: any) {
+      return file.url.indexOf('geographical-location.schema.json') !== -1;
+    },
+    read: function() {
+      return JSON.stringify(geoschema);
+    }
   };
   // Add configuration to JSONForms
   store.dispatch(
