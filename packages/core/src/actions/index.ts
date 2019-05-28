@@ -29,8 +29,11 @@ import { JsonSchema, UISchemaElement } from '../';
 import { generateDefaultUISchema, generateJsonSchema } from '../generators';
 import { UISchemaTester } from '../reducers/uischemas';
 import { AnyAction, Dispatch } from 'redux';
+import { asyncSanitizeErrors } from '../reducers/core';
 
 export const INIT: 'jsonforms/INIT' = 'jsonforms/INIT';
+export const INIT_WITHOUT_VALIDATION: 'jsonforms/INIT_WITHOUT_VALIDATION' =
+  'jsonforms/INIT_WITHOUT_VALIDATION';
 export const SET_AJV: 'jsonforms/SET_AJV' = 'jsonforms/SET_AJV';
 export const UPDATE_DATA: 'jsonforms/UPDATE' = 'jsonforms/UPDATE';
 export const VALIDATE: 'jsonforms/VALIDATE' = 'jsonforms/VALIDATE';
@@ -44,6 +47,7 @@ export const ADD_UI_SCHEMA: 'jsonforms/ADD_UI_SCHEMA' = `jsonforms/ADD_UI_SCHEMA
 export const REMOVE_UI_SCHEMA: 'jsonforms/REMOVE_UI_SCHEMA' = `jsonforms/REMOVE_UI_SCHEMA`;
 export const SET_SCHEMA: 'jsonforms/SET_SCHEMA' = `jsonforms/SET_SCHEMA`;
 export const SET_UISCHEMA: 'jsonforms/SET_UISCHEMA' = `jsonforms/SET_UISCHEMA`;
+export const SET_ERRORS: 'jsonforms/SET_ERRORS' = `jsonforms/SET_ERRORS`;
 
 export const SET_LOCALE: 'jsonforms/SET_LOCALE' = `jsonforms/SET_LOCALE`;
 export const SET_LOCALIZED_SCHEMAS: 'jsonforms/SET_LOCALIZED_SCHEMAS' =
@@ -68,6 +72,14 @@ export interface InitAction {
   options?: InitActionOptions | AJV.Ajv;
 }
 
+export interface InitActionWithoutValidation {
+  type: 'jsonforms/INIT_WITHOUT_VALIDATION';
+  data: any;
+  schema: JsonSchema;
+  uischema: UISchemaElement;
+  options?: InitActionOptions | AJV.Ajv;
+}
+
 export interface InitActionOptions {
   ajv?: AJV.Ajv;
   refParserOptions?: RefParser.Options;
@@ -78,8 +90,58 @@ export const init = (
   schema: JsonSchema = generateJsonSchema(data),
   uischema: UISchemaElement = generateDefaultUISchema(schema),
   options?: InitActionOptions | AJV.Ajv
+) => {
+  return initAction(INIT, data, schema, uischema, options);
+};
+
+/**
+ * Init JSON Forms and trigger async validation. This action method will only work when
+ * an appropriate middleware like redux-thunk is configured.
+ */
+export const initAsyncValidation = (
+  data: any,
+  schema: JsonSchema = generateJsonSchema(data),
+  uischema: UISchemaElement = generateDefaultUISchema(schema),
+  options?: InitActionOptions | AJV.Ajv
+) => {
+  return (dispatch: any, getState: any) => {
+    return dispatch(asyncInitAction(data, schema, uischema, options))
+      .then(() => {
+        return asyncSanitizeErrors(
+          getState().jsonforms.core.validator,
+          getState().jsonforms.core.data
+        );
+      })
+      .then((errors: any) => dispatch(asyncSetErrors(errors)));
+  };
+};
+
+const asyncInitAction = (
+  data: any,
+  schema: JsonSchema,
+  uischema: UISchemaElement,
+  options?: InitActionOptions | AJV.Ajv
+) => {
+  return (dispatch: any) =>
+    Promise.resolve(
+      dispatch(
+        initAction(INIT_WITHOUT_VALIDATION, data, schema, uischema, options)
+      )
+    );
+};
+
+const asyncSetErrors = (errors: AJV.ErrorObject[]) => {
+  return (dispatch: any) => Promise.resolve(dispatch(setErrors(errors)));
+};
+
+const initAction = (
+  type: string,
+  data: any,
+  schema: JsonSchema,
+  uischema: UISchemaElement,
+  options?: InitActionOptions | AJV.Ajv
 ) => ({
-  type: INIT,
+  type,
   data,
   schema,
   uischema,
@@ -116,6 +178,16 @@ export interface SetAjvAction {
 export const setAjv = (ajv: AJV.Ajv) => ({
   type: SET_AJV,
   ajv
+});
+
+export interface SetErrorsAction {
+  type: 'jsonforms/SET_ERRORS';
+  errors: AJV.ErrorObject[];
+}
+
+export const setErrors = (errors: AJV.ErrorObject[]) => ({
+  type: SET_ERRORS,
+  errors
 });
 
 export const update = (

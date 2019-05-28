@@ -33,15 +33,19 @@ import RefParser from 'json-schema-ref-parser';
 import {
   INIT,
   InitAction,
+  InitActionWithoutValidation,
   InitActionOptions,
   SET_AJV,
+  SET_ERRORS,
   SET_SCHEMA,
   SET_UISCHEMA,
   SetAjvAction,
+  SetErrorsAction,
   SetSchemaAction,
   SetUISchemaAction,
   UPDATE_DATA,
-  UpdateAction
+  UpdateAction,
+  INIT_WITHOUT_VALIDATION
 } from '../actions';
 import { createAjv } from '../util/validator';
 import { JsonSchema, UISchemaElement } from '..';
@@ -51,16 +55,35 @@ const validate = (validator: ValidateFunction, data: any): ErrorObject[] => {
   if (valid) {
     return [];
   }
-
   return validator.errors;
 };
 
-export const sanitizeErrors = (validator: ValidateFunction, data: any) =>
-  validate(validator, data).map(error => {
-    error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
+const sanitizeError = (error: ErrorObject): ErrorObject => {
+  error.dataPath = error.dataPath.replace(/\//g, '.').substr(1);
+  return error;
+};
 
-    return error;
-  });
+export const sanitizeErrors = (validator: ValidateFunction, data: any) => {
+  if (validator.$async) {
+    // sync method called with async schema, fallback
+    return [];
+  } else {
+    return validate(validator, data).map(sanitizeError);
+  }
+};
+
+export const asyncSanitizeErrors = (validator: ValidateFunction, data: any) => {
+  if (!validator.$async) {
+    // async called with non-async schema, fallback to sync method
+    return Promise.resolve(validate(validator, data).map(sanitizeError));
+  } else {
+    const validation = validator(data) as Promise<any>;
+    return validation.then(
+      () => Promise.resolve([]),
+      (error: any) => Promise.resolve(error.errors.map(sanitizeError))
+    );
+  }
+};
 
 const alwaysValid: ValidateFunction = () => true;
 
@@ -86,12 +109,17 @@ const initState: JsonFormsCore = {
 
 type ValidCoreActions =
   | InitAction
+  | InitActionWithoutValidation
   | UpdateAction
   | SetAjvAction
   | SetSchemaAction
-  | SetUISchemaAction;
+  | SetUISchemaAction
+  | SetErrorsAction;
 
-const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
+const getOrCreateAjv = (
+  state: JsonFormsCore,
+  action?: InitAction | InitActionWithoutValidation
+): Ajv => {
   if (action) {
     if (hasAjvOption(action.options)) {
       // options object with ajv
@@ -114,7 +142,7 @@ const getOrCreateAjv = (state: JsonFormsCore, action?: InitAction): Ajv => {
 
 const getRefParserOptions = (
   state: JsonFormsCore,
-  action?: InitAction
+  action?: InitAction | InitActionWithoutValidation
 ): RefParser.Options => {
   if (action && hasRefParserOption(action.options)) {
     return action.options.refParserOptions;
@@ -158,14 +186,31 @@ export const coreReducer = (
         refParserOptions: o
       };
     }
+    case INIT_WITHOUT_VALIDATION: {
+      const thisAjv = getOrCreateAjv(state, action);
+      const v = thisAjv.compile(action.schema);
+      const o = getRefParserOptions(state, action);
+
+      return {
+        ...state,
+        data: action.data,
+        schema: action.schema,
+        uischema: action.uischema,
+        errors: [],
+        validator: v,
+        ajv: thisAjv,
+        refParserOptions: o
+      };
+    }
     case SET_AJV: {
-      const currentAjv = action.ajv;
-      const validator = currentAjv.compile(state.schema);
+      const newAjv = action.ajv;
+      const validator = newAjv.compile(state.schema);
       const errors = sanitizeErrors(validator, state.data);
       return {
         ...state,
-        validator,
-        errors
+        ajv: newAjv,
+        validator: validator,
+        errors: errors
       };
     }
     case SET_SCHEMA: {
@@ -183,6 +228,12 @@ export const coreReducer = (
       return {
         ...state,
         uischema: action.uischema
+      };
+    }
+    case SET_ERRORS: {
+      return {
+        ...state,
+        errors: action.errors
       };
     }
     case UPDATE_DATA: {
