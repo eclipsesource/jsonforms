@@ -61,7 +61,11 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
   changeExampleData: (example: ReactExampleDescription) => {
     dispatch(changeExample(example));
-    dispatch(Actions.init(example.data, example.schema, example.uischema));
+    dispatch(Actions.initAsyncValidation(
+      example.data,
+      example.schema,
+      example.uischema
+    ) as any);
     Actions.setConfig(example.config)(dispatch);
   },
   getComponent: (example: ReactExampleDescription) =>

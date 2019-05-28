@@ -48,6 +48,7 @@ export const personCoreSchema = {
 };
 
 export const schema = {
+  $async: true,
   type: 'object',
   properties: {
     ...personCoreSchema.properties,
