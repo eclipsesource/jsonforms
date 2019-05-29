@@ -47,7 +47,9 @@ import {
   isEnabled,
   isVisible,
   Resolve,
-  resolveSubSchemas
+  resolveSubSchemas,
+  moveUp,
+  moveDown
 } from '../util';
 import has from 'lodash/has';
 import { update } from '../actions';
@@ -496,8 +498,8 @@ export const mapStateToArrayControlProps = (
 export interface DispatchPropsOfArrayControl {
   addItem(path: string, value: any): () => void;
   removeItems?(path: string, toDelete: number[]): () => void;
-  moveUp?(path: string, indexToMove: number): () => any;
-  moveDown?(path: string, indexToMove: number): () => any;
+  moveUp?(path: string, toMove: number): () => void;
+  moveDown?(path: string, toMove: number): () => void;
 }
 
 /**
@@ -535,12 +537,7 @@ export const mapDispatchToArrayControlProps = (
   moveUp: (path, toMove: number) => () => {
     dispatch(
       update(path, array => {
-        if (toMove === 0) {
-          return array;
-        }
-        const temp = array[toMove];
-        array[toMove] = array[toMove - 1];
-        array[toMove - 1] = temp;
+        moveUp(array, toMove);
         return array;
       })
     );
@@ -548,12 +545,7 @@ export const mapDispatchToArrayControlProps = (
   moveDown: (path, toMove: number) => () => {
     dispatch(
       update(path, array => {
-        if (toMove === array.length - 1) {
-          return array;
-        }
-        const temp = array[toMove];
-        array[toMove] = array[toMove + 1];
-        array[toMove + 1] = temp;
+        moveDown(array, toMove);
         return array;
       })
     );

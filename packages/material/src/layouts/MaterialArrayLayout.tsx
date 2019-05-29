@@ -25,7 +25,7 @@
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import find from 'lodash/find';
 import range from 'lodash/range';
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   ArrayLayoutProps,
   composePaths,
@@ -41,7 +41,9 @@ import {
   Resolve,
   UISchemaElement,
   UISchemaTester,
-  update
+  update,
+  moveUp,
+  moveDown
 } from '@jsonforms/core';
 import { ResolvedJsonForms } from '@jsonforms/react';
 import IconButton from '@material-ui/core/IconButton';
@@ -80,6 +82,7 @@ export class MaterialArrayLayout extends React.Component<
   isExpanded = (index: number) =>
     this.state.expanded === composePaths(this.props.path, `${index}`);
   render() {
+    debugger;
     const {
       data,
       path,
@@ -179,29 +182,27 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                     justify="center"
                     alignItems="center"
                   >
-                    {uischema.options && uischema.options.sortButtons ? (
-                      <Grid item>
-                        <IconButton
-                          onClick={moveUp(path, index)}
-                          style={iconStyle}
-                          disabled={index == 0}
-                        >
-                          <ArrowUpward />
-                        </IconButton>
-                      </Grid>
-                    ) : (
-                      ''
-                    )}
-                    {uischema.options && uischema.options.sortButtons ? (
-                      <Grid item>
-                        <IconButton
-                          onClick={moveDown(path, index)}
-                          style={iconStyle}
-                          disabled={isLast}
-                        >
-                          <ArrowDownward />
-                        </IconButton>
-                      </Grid>
+                    {uischema.options && uischema.options.showSortButtons ? (
+                      <Fragment>
+                        <Grid item>
+                          <IconButton
+                            onClick={moveUp(path, index)}
+                            style={iconStyle}
+                            disabled={index == 0}
+                          >
+                            <ArrowUpward />
+                          </IconButton>
+                        </Grid>
+                        <Grid item>
+                          <IconButton
+                            onClick={moveDown(path, index)}
+                            style={iconStyle}
+                            disabled={isLast}
+                          >
+                            <ArrowDownward />
+                          </IconButton>
+                        </Grid>
+                      </Fragment>
                     ) : (
                       ''
                     )}
@@ -315,12 +316,7 @@ export const mapDispatchToExpandPanelProps: (
     event.stopPropagation();
     dispatch(
       update(path, array => {
-        if (toMove === 0) {
-          return array;
-        }
-        const temp = array[toMove];
-        array[toMove] = array[toMove - 1];
-        array[toMove - 1] = temp;
+        moveUp(array, toMove);
         return array;
       })
     );
@@ -329,12 +325,7 @@ export const mapDispatchToExpandPanelProps: (
     event.stopPropagation();
     dispatch(
       update(path, array => {
-        if (toMove === array.length - 1) {
-          return array;
-        }
-        const temp = array[toMove];
-        array[toMove] = array[toMove + 1];
-        array[toMove + 1] = temp;
+        moveDown(array, toMove);
         return array;
       })
     );

@@ -211,8 +211,9 @@ interface NonEmptyRowProps {
   rowIndex: number;
   moveUp: () => any;
   moveDown: () => any;
-  isLast: boolean;
-  sortButtons: boolean;
+  enableUp: boolean;
+  enableDown: boolean;
+  showSortButtons: boolean;
 }
 
 const NonEmptyRow = React.memo(
@@ -223,57 +224,51 @@ const NonEmptyRow = React.memo(
     openDeleteDialog,
     moveUp,
     moveDown,
-    isLast,
-    sortButtons
+    enableUp,
+    enableDown,
+    showSortButtons
   }: NonEmptyRowProps & WithDeleteDialogSupport) => {
     return (
       <TableRow key={childPath} hover>
         {generateCells(NonEmptyCell, schema, childPath)}
         <NoBorderTableCell
-          style={sortButtons ? styles.fixedCell : styles.fixedCellSmall}
+          style={showSortButtons ? styles.fixedCell : styles.fixedCellSmall}
         >
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="center"
-            >
-              {sortButtons ? (
-                <Fragment>
-                  <Grid item>
-                    <IconButton
-                      aria-label={`move up`}
-                      onClick={moveUp}
-                      disabled={rowIndex == 0}
-                    >
-                      <ArrowUpward />
-                    </IconButton>
-                  </Grid>
-                  <Grid item>
-                    <IconButton
-                      aria-label={`move down`}
-                      onClick={moveDown}
-                      disabled={isLast}
-                    >
-                      <ArrowDownward />
-                    </IconButton>
-                  </Grid>
-                </Fragment>
-              ) : (
-                ''
-              )}
+          <Grid container direction="row" justify="center" alignItems="center">
+            {showSortButtons ? (
+              <Fragment>
+                <Grid item>
+                  <IconButton
+                    aria-label={`Move up`}
+                    onClick={moveUp}
+                    disabled={!enableUp}
+                  >
+                    <ArrowUpward />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    aria-label={`Move down`}
+                    onClick={moveDown}
+                    disabled={!enableDown}
+                  >
+                    <ArrowDownward />
+                  </IconButton>
+                </Grid>
+              </Fragment>
+            ) : (
+              ''
+            )}
 
-              <Grid item>
-                <IconButton
-                  aria-label={`Delete`}
-                  onClick={() => openDeleteDialog(childPath, rowIndex)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Grid>
+            <Grid item>
+              <IconButton
+                aria-label={`Delete`}
+                onClick={() => openDeleteDialog(childPath, rowIndex)}
+              >
+                <DeleteIcon />
+              </IconButton>
             </Grid>
-          </div>
+          </Grid>
         </NoBorderTableCell>
       </TableRow>
     );
@@ -283,8 +278,8 @@ interface TableRowsProp {
   data: number;
   path: string;
   schema: JsonSchema;
-  moveUp?(path: string, toMove: number): () => any;
-  moveDown?(path: string, toMove: number): () => any;
+  moveUp?(path: string, toMove: number): () => void;
+  moveDown?(path: string, toMove: number): () => void;
   uischema: ControlElement;
 }
 const TableRows = ({
@@ -316,8 +311,11 @@ const TableRows = ({
             openDeleteDialog={openDeleteDialog}
             moveUp={moveUp(path, index)}
             moveDown={moveDown(path, index)}
-            isLast={index === data - 1}
-            sortButtons={uischema.options && uischema.options.sortButtons}
+            enableUp={index !== 0}
+            enableDown={index !== data - 1}
+            showSortButtons={
+              uischema.options && uischema.options.showSortButtons
+            }
           />
         );
       })}

@@ -143,3 +143,4 @@ export * from './ids';
 export * from './validator';
 export * from './combinators';
 export * from './uischema';
+export * from './array';
