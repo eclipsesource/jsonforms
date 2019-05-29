@@ -57,7 +57,7 @@ export const uischema = {
       type: 'Control',
       scope: '#/properties/comments',
       options: {
-        sortButtons: true,
+        showSortButtons: true,
         detail: {
           type: 'VerticalLayout',
           elements: [
