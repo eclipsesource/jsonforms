@@ -82,7 +82,6 @@ export class MaterialArrayLayout extends React.Component<
   isExpanded = (index: number) =>
     this.state.expanded === composePaths(this.props.path, `${index}`);
   render() {
-    debugger;
     const {
       data,
       path,
