@@ -22,13 +22,21 @@
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 */
-import { Actions, ControlElement, jsonformsReducer, JsonFormsState } from '@jsonforms/core';
+import {
+  Actions,
+  ControlElement,
+  jsonformsReducer,
+  JsonFormsState
+} from '@jsonforms/core';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 
 import { combineReducers, createStore, Store } from 'redux';
 import { materialCells, materialRenderers } from '../../src';
-import { MaterialArrayLayout, materialArrayLayoutTester } from '../../src/layouts';
+import {
+  MaterialArrayLayout,
+  materialArrayLayoutTester
+} from '../../src/layouts';
 import Enzyme, { mount, ReactWrapper } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
@@ -91,11 +99,19 @@ const nestedSchema2 = {
   }
 };
 
+const uischemaWithSortButtons: ControlElement = {
+  type: 'Control',
+  scope: '#',
+  options: {
+    showSortButtons: true
+  }
+};
+
 export const initJsonFormsStore = (): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers,
-      cells: materialCells,
+      cells: materialCells
     }
   };
   const reducer = combineReducers({ jsonforms: jsonformsReducer() });
@@ -106,29 +122,29 @@ export const initJsonFormsStore = (): Store<JsonFormsState> => {
 };
 
 const uischemaOptions: {
-  generate: ControlElement,
-  default: ControlElement,
-  inline: ControlElement,
+  generate: ControlElement;
+  default: ControlElement;
+  inline: ControlElement;
 } = {
   default: {
     type: 'Control',
     scope: '#',
     options: {
-      detail : 'DEFAULT'
+      detail: 'DEFAULT'
     }
   },
   generate: {
     type: 'Control',
     scope: '#',
     options: {
-      detail : 'GENERATE'
+      detail: 'GENERATE'
     }
   },
   inline: {
     type: 'Control',
     scope: '#',
     options: {
-      detail : {
+      detail: {
         type: 'HorizontalLayout',
         elements: [
           {
@@ -154,7 +170,6 @@ describe('Material array layout tester', () => {
 });
 
 describe('Material array layout', () => {
-
   let wrapper: ReactWrapper;
 
   afterEach(() => wrapper.unmount());
@@ -163,10 +178,7 @@ describe('Material array layout', () => {
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischema}
-        />
+        <MaterialArrayLayout schema={schema} uischema={uischema} />
       </Provider>
     );
 
@@ -243,15 +255,12 @@ describe('Material array layout', () => {
   it('ui schema label for array', () => {
     const uischemaWithLabel = {
       ...uischema,
-      label: "My awesome label"
-    }
+      label: 'My awesome label'
+    };
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={schema}
-          uischema={uischemaWithLabel}
-        />
+        <MaterialArrayLayout schema={schema} uischema={uischemaWithLabel} />
       </Provider>
     );
 
@@ -262,19 +271,129 @@ describe('Material array layout', () => {
   it('schema title for array', () => {
     const titleSchema = {
       ...schema,
-      title: "My awesome title"
+      title: 'My awesome title'
     };
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialArrayLayout
-          schema={titleSchema}
-          uischema={uischema}
-        />
+        <MaterialArrayLayout schema={titleSchema} uischema={uischema} />
       </Provider>
     );
 
     const listTitle = wrapper.find('h6').at(0);
     expect(listTitle.text()).toBe('My awesome title');
+  });
+
+  it('should render sort buttons if showSortButtons is true', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithSortButtons}
+        />
+      </Provider>
+    );
+    const btnCount = wrapper
+      .find('ExpansionPanelSummary')
+      .at(0)
+      .find('button').length;
+    //up button + down Button + delete button
+    expect(btnCount).toBe(3);
+  });
+  it('should move item up if up button is presses', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithSortButtons}
+        />
+      </Provider>
+    );
+    // getting up button of second item in expension panel;
+    const upButton = wrapper
+      .find('ExpansionPanelSummary')
+      .at(1)
+      .find('button')
+      .at(0);
+    upButton.simulate('click');
+    expect(store.getState().jsonforms.core.data).toEqual([
+      {
+        message: 'Yolo'
+      },
+      {
+        message: 'El Barto was here',
+        done: true
+      }
+    ]);
+  });
+  it('shoud move item down if down button is pressed', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithSortButtons}
+        />
+      </Provider>
+    );
+    // getting up button of second item in expension panel;
+    const upButton = wrapper
+      .find('ExpansionPanelSummary')
+      .at(0)
+      .find('button')
+      .at(1);
+    upButton.simulate('click');
+    expect(store.getState().jsonforms.core.data).toEqual([
+      {
+        message: 'Yolo'
+      },
+      {
+        message: 'El Barto was here',
+        done: true
+      }
+    ]);
+  });
+  it('should have up button disabled for first element', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithSortButtons}
+        />
+      </Provider>
+    );
+    // getting up button of second item in expension panel;
+    const upButton = wrapper
+      .find('ExpansionPanelSummary')
+      .at(0)
+      .find('button')
+      .at(0);
+    expect(upButton.is('[disabled]')).toBe(true);
+  });
+  it('should have down button disabled for last element', () => {
+    const store = initJsonFormsStore();
+    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    wrapper = mount(
+      <Provider store={store}>
+        <MaterialArrayLayout
+          schema={schema}
+          uischema={uischemaWithSortButtons}
+        />
+      </Provider>
+    );
+    // getting up button of second item in expension panel;
+    const downButton = wrapper
+      .find('ExpansionPanelSummary')
+      .at(1)
+      .find('button')
+      .at(1);
+    expect(downButton.is('[disabled]')).toBe(true);
   });
 });

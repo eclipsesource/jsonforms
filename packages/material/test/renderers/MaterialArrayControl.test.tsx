@@ -351,7 +351,7 @@ describe('Material array control', () => {
     const nrOfRows = wrapper.find('tr').length;
     expect(nrOfRows).toBe(0);
   });
-  it('should show sort buttons if showSortButtons is true', () => {
+  it('should render sort buttons if showSortButtons is true', () => {
     const store = initJsonFormsStore();
     store.dispatch(
       Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
@@ -364,14 +364,14 @@ describe('Material array control', () => {
         />
       </Provider>
     );
-    const buttonCount = wrapper.find('button').length;
+    const btnCount = wrapper.find('button').length;
     // add row
     // delete row
     // two dialog buttons (no + yes)
     // move (up + down)
-    expect(buttonCount).toBe(6);
+    expect(btnCount).toBe(6);
   });
-  it('should be able to move item down', () => {
+  it('should be able to move item down if down button is clicked', () => {
     const store = initJsonFormsStore();
     const multiData = { test: ['foo', 'baz', 'bar'] };
     store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
@@ -385,17 +385,17 @@ describe('Material array control', () => {
     );
     //first row is header in table
     // first buttton is up arrow, second button is down arrow
-    const moveDownButton = wrapper
+    const downButton = wrapper
       .find('tr')
       .at(1)
       .find('button')
       .at(1);
-    moveDownButton.simulate('click');
+    downButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual({
       test: ['baz', 'foo', 'bar']
     });
   });
-  it('should be able to move item up', () => {
+  it('should be able to move item up if up button is clicked', () => {
     const store = initJsonFormsStore();
     const multiData = { test: ['foo', 'baz', 'bar'] };
     store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
@@ -409,17 +409,17 @@ describe('Material array control', () => {
     );
     //first row is header in table
     // first buttton is up arrow, second button is down arrow
-    const moveUpButton = wrapper
+    const upButton = wrapper
       .find('tr')
       .at(3)
       .find('button')
       .at(0);
-    moveUpButton.simulate('click');
+    upButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual({
       test: ['foo', 'bar', 'baz']
     });
   });
-  it('Up button of first element should be disabled', () => {
+  it('should have up button disabled for first element', () => {
     const store = initJsonFormsStore();
     const multiData = { test: ['foo', 'baz', 'bar'] };
     store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
@@ -433,15 +433,15 @@ describe('Material array control', () => {
     );
     //first row is header in table
     // first buttton is up arrow, second button is down arrow
-    const moveUpButton = wrapper
+    const upButton = wrapper
       .find('tr')
       .at(1)
       .find('button')
       .at(0);
-    expect(moveUpButton.is('[disabled]')).toBe(true);
+    expect(upButton.is('[disabled]')).toBe(true);
   });
 
-  it('Down button of last element should be disabled', () => {
+  it('should have down button disabled for last element', () => {
     const store = initJsonFormsStore();
     const multiData = { test: ['foo', 'baz', 'bar'] };
     store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
@@ -455,11 +455,11 @@ describe('Material array control', () => {
     );
     //first row is header in table
     // first buttton is up arrow, second button is down arrow
-    const moveDownButton = wrapper
+    const downButton = wrapper
       .find('tr')
       .at(3)
       .find('button')
       .at(1);
-    expect(moveDownButton.is('[disabled]')).toBe(true);
+    expect(downButton.is('[disabled]')).toBe(true);
   });
 });
