@@ -99,7 +99,7 @@ const nestedSchema2 = {
   }
 };
 
-const uischemaWithSortButtons: ControlElement = {
+const uischemaWithSortOption: ControlElement = {
   type: 'Control',
   scope: '#',
   options: {
@@ -286,12 +286,12 @@ describe('Material array layout', () => {
 
   it('should render sort buttons if showSortButtons is true', () => {
     const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
-          uischema={uischemaWithSortButtons}
+          uischema={uischemaWithSortOption}
         />
       </Provider>
     );
@@ -304,12 +304,12 @@ describe('Material array layout', () => {
   });
   it('should move item up if up button is presses', () => {
     const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
-          uischema={uischemaWithSortButtons}
+          uischema={uischemaWithSortOption}
         />
       </Provider>
     );
@@ -332,12 +332,12 @@ describe('Material array layout', () => {
   });
   it('shoud move item down if down button is pressed', () => {
     const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
-          uischema={uischemaWithSortButtons}
+          uischema={uischemaWithSortOption}
         />
       </Provider>
     );
@@ -360,12 +360,12 @@ describe('Material array layout', () => {
   });
   it('should have up button disabled for first element', () => {
     const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
-          uischema={uischemaWithSortButtons}
+          uischema={uischemaWithSortOption}
         />
       </Provider>
     );
@@ -379,12 +379,12 @@ describe('Material array layout', () => {
   });
   it('should have down button disabled for last element', () => {
     const store = initJsonFormsStore();
-    store.dispatch(Actions.init(data, schema, uischemaWithSortButtons));
+    store.dispatch(Actions.init(data, schema, uischemaWithSortOption));
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayLayout
           schema={schema}
-          uischema={uischemaWithSortButtons}
+          uischema={uischemaWithSortOption}
         />
       </Provider>
     );

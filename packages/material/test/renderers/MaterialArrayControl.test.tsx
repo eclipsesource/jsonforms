@@ -80,7 +80,7 @@ const fixture2: {
   schema: JsonSchema;
   uischema: ControlElement;
 } = {
-  data: { test: ['foo'] },
+  data: { test: ['foo', 'baz', 'bar'] },
   schema: {
     type: 'object',
     properties: {
@@ -352,10 +352,9 @@ describe('Material array control', () => {
     expect(nrOfRows).toBe(0);
   });
   it('should render sort buttons if showSortButtons is true', () => {
+    const data = { test: ['foo'] };
     const store = initJsonFormsStore();
-    store.dispatch(
-      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
-    );
+    store.dispatch(Actions.init(data, fixture2.schema, fixture2.uischema));
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer
@@ -365,16 +364,17 @@ describe('Material array control', () => {
       </Provider>
     );
     const btnCount = wrapper.find('button').length;
-    // add row
-    // delete row
+    // add button
+    // delete button
     // two dialog buttons (no + yes)
-    // move (up + down)
+    // sort Buttons (up + down)
     expect(btnCount).toBe(6);
   });
   it('should be able to move item down if down button is clicked', () => {
     const store = initJsonFormsStore();
-    const multiData = { test: ['foo', 'baz', 'bar'] };
-    store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
+    store.dispatch(
+      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
+    );
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer
@@ -397,8 +397,9 @@ describe('Material array control', () => {
   });
   it('should be able to move item up if up button is clicked', () => {
     const store = initJsonFormsStore();
-    const multiData = { test: ['foo', 'baz', 'bar'] };
-    store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
+    store.dispatch(
+      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
+    );
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer
@@ -421,8 +422,9 @@ describe('Material array control', () => {
   });
   it('should have up button disabled for first element', () => {
     const store = initJsonFormsStore();
-    const multiData = { test: ['foo', 'baz', 'bar'] };
-    store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
+    store.dispatch(
+      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
+    );
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer
@@ -443,8 +445,9 @@ describe('Material array control', () => {
 
   it('should have down button disabled for last element', () => {
     const store = initJsonFormsStore();
-    const multiData = { test: ['foo', 'baz', 'bar'] };
-    store.dispatch(Actions.init(multiData, fixture2.schema, fixture2.uischema));
+    store.dispatch(
+      Actions.init(fixture2.data, fixture2.schema, fixture2.uischema)
+    );
     wrapper = mount(
       <Provider store={store}>
         <MaterialArrayControlRenderer
