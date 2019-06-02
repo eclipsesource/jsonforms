@@ -363,12 +363,14 @@ describe('Material array control', () => {
         />
       </Provider>
     );
-    const btnCount = wrapper.find('button').length;
-    // add button
-    // delete button
-    // two dialog buttons (no + yes)
-    // sort Buttons (up + down)
-    expect(btnCount).toBe(6);
+    // up button
+    expect(
+      wrapper.find('button').find({ 'aria-label': 'Move up' }).length
+    ).toBe(1);
+    // down button
+    expect(
+      wrapper.find('button').find({ 'aria-label': 'Move down' }).length
+    ).toBe(1);
   });
   it('should be able to move item down if down button is clicked', () => {
     const store = initJsonFormsStore();
@@ -384,12 +386,11 @@ describe('Material array control', () => {
       </Provider>
     );
     //first row is header in table
-    // first buttton is up arrow, second button is down arrow
     const downButton = wrapper
       .find('tr')
       .at(1)
       .find('button')
-      .at(1);
+      .find({ 'aria-label': 'Move down' });
     downButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual({
       test: ['baz', 'foo', 'bar']
@@ -409,12 +410,11 @@ describe('Material array control', () => {
       </Provider>
     );
     //first row is header in table
-    // first buttton is up arrow, second button is down arrow
     const upButton = wrapper
       .find('tr')
       .at(3)
       .find('button')
-      .at(0);
+      .find({ 'aria-label': 'Move up' });
     upButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual({
       test: ['foo', 'bar', 'baz']
@@ -434,12 +434,11 @@ describe('Material array control', () => {
       </Provider>
     );
     //first row is header in table
-    // first buttton is up arrow, second button is down arrow
     const upButton = wrapper
       .find('tr')
       .at(1)
       .find('button')
-      .at(0);
+      .find({ 'aria-label': 'Move up' });
     expect(upButton.is('[disabled]')).toBe(true);
   });
 
@@ -462,7 +461,7 @@ describe('Material array control', () => {
       .find('tr')
       .at(3)
       .find('button')
-      .at(1);
+      .find({ 'aria-label': 'Move down' });
     expect(downButton.is('[disabled]')).toBe(true);
   });
 });

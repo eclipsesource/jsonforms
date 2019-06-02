@@ -209,8 +209,8 @@ interface NonEmptyRowProps {
   childPath: string;
   schema: JsonSchema;
   rowIndex: number;
-  moveUp: () => any;
-  moveDown: () => any;
+  moveUp: () => void;
+  moveDown: () => void;
   enableUp: boolean;
   enableDown: boolean;
   showSortButtons: boolean;

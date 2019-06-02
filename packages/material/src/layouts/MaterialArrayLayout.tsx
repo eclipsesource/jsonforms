@@ -119,7 +119,8 @@ export class MaterialArrayLayout extends React.Component<
                   uischema={uischema}
                   renderers={renderers}
                   key={index}
-                  isLast={data - 1 == index}
+                  enableMoveUp={index != 0}
+                  enableMoveDown={index < data - 1}
                 />
               );
             })
@@ -148,7 +149,8 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
       uischema,
       uischemas,
       renderers,
-      isLast
+      enableMoveUp,
+      enableMoveDown
     } = this.props;
     const foundUISchema = findUISchema(
       uischemas,
@@ -187,7 +189,8 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                           <IconButton
                             onClick={moveUp(path, index)}
                             style={iconStyle}
-                            disabled={index == 0}
+                            disabled={!enableMoveUp}
+                            aria-label={`Move up`}
                           >
                             <ArrowUpward />
                           </IconButton>
@@ -196,7 +199,8 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                           <IconButton
                             onClick={moveDown(path, index)}
                             style={iconStyle}
-                            disabled={isLast}
+                            disabled={!enableMoveDown}
+                            aria-label={`Move down`}
                           >
                             <ArrowDownward />
                           </IconButton>
@@ -209,6 +213,7 @@ class ExpandPanelRenderer extends React.Component<ExpandPanelProps, any> {
                       <IconButton
                         onClick={removeItems(path, [index])}
                         style={iconStyle}
+                        aria-label={`Delete`}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -241,7 +246,8 @@ interface OwnPropsOfExpandPanel {
   expanded: boolean;
   renderers?: JsonFormsRendererRegistryEntry[];
   handleExpansion(panel: string): (event: any, expanded: boolean) => void;
-  isLast?: boolean;
+  enableMoveUp: boolean;
+  enableMoveDown: boolean;
 }
 interface StatePropsOfExpandPanel extends OwnPropsOfExpandPanel {
   childLabel: string;

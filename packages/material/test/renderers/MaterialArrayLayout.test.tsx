@@ -295,12 +295,23 @@ describe('Material array layout', () => {
         />
       </Provider>
     );
-    const btnCount = wrapper
-      .find('ExpansionPanelSummary')
-      .at(0)
-      .find('button').length;
-    //up button + down Button + delete button
-    expect(btnCount).toBe(3);
+
+    // up button
+    expect(
+      wrapper
+        .find('ExpansionPanelSummary')
+        .at(0)
+        .find('button')
+        .find({ 'aria-label': 'Move up' }).length
+    ).toBe(1);
+    // down button
+    expect(
+      wrapper
+        .find('ExpansionPanelSummary')
+        .at(0)
+        .find('button')
+        .find({ 'aria-label': 'Move down' }).length
+    ).toBe(1);
   });
   it('should move item up if up button is presses', () => {
     const store = initJsonFormsStore();
@@ -318,7 +329,7 @@ describe('Material array layout', () => {
       .find('ExpansionPanelSummary')
       .at(1)
       .find('button')
-      .at(0);
+      .find({ 'aria-label': 'Move up' });
     upButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual([
       {
@@ -346,7 +357,7 @@ describe('Material array layout', () => {
       .find('ExpansionPanelSummary')
       .at(0)
       .find('button')
-      .at(1);
+      .find({ 'aria-label': 'Move down' });
     upButton.simulate('click');
     expect(store.getState().jsonforms.core.data).toEqual([
       {
@@ -374,7 +385,7 @@ describe('Material array layout', () => {
       .find('ExpansionPanelSummary')
       .at(0)
       .find('button')
-      .at(0);
+      .find({ 'aria-label': 'Move up' });
     expect(upButton.is('[disabled]')).toBe(true);
   });
   it('should have down button disabled for last element', () => {
@@ -393,7 +404,7 @@ describe('Material array layout', () => {
       .find('ExpansionPanelSummary')
       .at(1)
       .find('button')
-      .at(1);
+      .find({ 'aria-label': 'Move down' });
     expect(downButton.is('[disabled]')).toBe(true);
   });
 });
