@@ -43,12 +43,12 @@ export const uischema = {
   elements: [
     {
       type: 'Control',
-      label: 'Value',
+      label: 'Name',
       scope: '#/properties/name'
     },
     {
       type: 'Control',
-      label: 'Value',
+      label: 'Version',
       scope: '#/properties/version'
     }
   ]
