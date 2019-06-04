@@ -69,36 +69,30 @@ const setupStore = (
     jsonforms: jsonformsReducer({ ...additionalReducers }),
     examples: exampleReducer
   });
-  const store = createStore(
-    reducer,
-    {
-      jsonforms: {
-        cells: cells,
-        renderers: renderers,
-        ...additionalInitState
-      },
-      examples: {
-        data: exampleData
-      }
+  const store = createStore(reducer, {
+    jsonforms: {
+      cells: cells,
+      renderers: renderers,
+      ...additionalInitState
+    },
+    examples: {
+      data: exampleData
     }
-  );
+  });
 
   // Resolve example configuration
   // Add schema to validation
   const ajv = createAjv();
-  ajv.addSchema(
-    geoschema,
-    'geographical-location.schema.json'
-  );
+  ajv.addSchema(geoschema, 'geographical-location.schema.json');
   // Allow json-schema-ref-resolver to resolve same schema
   const geoResolver = {
-      order: 1,
-      canRead: function(file: any) {
-          return file.url.indexOf('geographical-location.schema.json') !== -1;
-      },
-      read: function() {
-          return JSON.stringify(geoschema);
-      }
+    order: 1,
+    canRead: (file: any) => {
+      return file.url.indexOf('geographical-location.schema.json') !== -1;
+    },
+    read: () => {
+      return JSON.stringify(geoschema);
+    }
   };
   // Add configuration to JSONForms
   store.dispatch(

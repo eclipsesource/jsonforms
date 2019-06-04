@@ -37,7 +37,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NgRedux } from '@angular-redux/store';
 import { JsonFormsIonicLayout } from '../JsonFormsIonicLayout';
 import { CategoryRenderer } from './category/category';
-//import { ParamsService } from '../../services/ParamsService';
+// import { ParamsService } from '../../services/ParamsService';
 import { IonTabs } from '@ionic/angular';
 
 interface CategoryRenderParams {
@@ -73,7 +73,7 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
   constructor(
     ngRedux: NgRedux<JsonFormsState>
     // TODO: DEPS
-    //private paramsService: ParamsService
+    // private paramsService: ParamsService
   ) {
     super(ngRedux);
     this.categoryPages = [];
@@ -101,8 +101,8 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
     // TODO: DEPS
     // Tabs do not seem to update correctly, hence this workaround
     // this issue seems to be the as described in https://github.com/ionic-team/ionic/issues/13509
-    //const contained: string[] = [];
-    //categorization.elements.forEach((category: Category) => {
+    // const contained: string[] = [];
+    // categorization.elements.forEach((category: Category) => {
     //  const key =
     //    CategoryRenderer.CATEGORY_KEY + `${category.label}-${this.path}`;
     //  contained.push(category.label);
@@ -112,14 +112,14 @@ export class CategorizationTabLayoutRenderer extends JsonFormsIonicLayout {
     //    schema: this.schema,
     //    path: this.path
     //  });
-    //});
-    //const indices: number[] = [];
-    //this.tabs.tabBar. forEach((tab: Tab, idx: number) => {
+    // });
+    // const indices: number[] = [];
+    // this.tabs.tabBar. forEach((tab: Tab, idx: number) => {
     //  if (contained.indexOf(tab.tabTitle) === -1) {
     //    indices.push(idx);
     //  }
-    //});
-    //indices.reverse().forEach(idx => this.tabs._tabs.splice(idx, 1));
+    // });
+    // indices.reverse().forEach(idx => this.tabs._tabs.splice(idx, 1));
   };
 
   trackByCategory(_i: number, categoryPage: any) {

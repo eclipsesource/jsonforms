@@ -72,7 +72,9 @@ const uischema: ControlElement = {
   scope: '#'
 };
 
-export const initJsonFormsStore = (overrideData?: any): Store<JsonFormsState> => {
+export const initJsonFormsStore = (
+  overrideData?: any
+): Store<JsonFormsState> => {
   const s: JsonFormsState = {
     jsonforms: {
       renderers: materialRenderers
@@ -80,7 +82,9 @@ export const initJsonFormsStore = (overrideData?: any): Store<JsonFormsState> =>
   };
   const reducer = combineReducers({ jsonforms: jsonformsReducer() });
   const store: Store<JsonFormsState> = createStore(reducer, s);
-  store.dispatch(Actions.init(overrideData ? overrideData : data, schema, uischema));
+  store.dispatch(
+    Actions.init(overrideData ? overrideData : data, schema, uischema)
+  );
 
   return store;
 };
@@ -127,7 +131,9 @@ describe('Material list with detail tester', () => {
     expect(materialListWithDetailTester(uischema, schema)).toBe(-1);
     expect(materialListWithDetailTester(correctUISchema, wrongSchema)).toBe(-1);
     expect(materialListWithDetailTester(correctUISchema, schema)).toBe(4);
-    expect(materialListWithDetailTester(correctUISchema, nestedSchema)).toBe(-1);
+    expect(materialListWithDetailTester(correctUISchema, nestedSchema)).toBe(
+      -1
+    );
     expect(materialListWithDetailTester(correctUISchema, nestedSchema2)).toBe(
       4
     );
@@ -201,12 +207,15 @@ describe('Material list with detail renderer', () => {
   it('ui schema label for list', () => {
     const uischemaWithLabel = {
       ...uischema,
-      label: "My awesome label"
-    }
+      label: 'My awesome label'
+    };
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={schema} uischema={uischemaWithLabel} />
+        <MaterialListWithDetailRenderer
+          schema={schema}
+          uischema={uischemaWithLabel}
+        />
       </Provider>
     );
 
@@ -217,12 +226,15 @@ describe('Material list with detail renderer', () => {
   it('schema title for list', () => {
     const titleSchema = {
       ...schema,
-      title: "My awesome title"
+      title: 'My awesome title'
     };
     const store = initJsonFormsStore();
     wrapper = mount(
       <Provider store={store}>
-        <MaterialListWithDetailRenderer schema={titleSchema} uischema={uischema} />
+        <MaterialListWithDetailRenderer
+          schema={titleSchema}
+          uischema={uischema}
+        />
       </Provider>
     );
 

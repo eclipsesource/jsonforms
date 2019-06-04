@@ -188,7 +188,7 @@ function retrieveResolvableSchema(
 // copied and adapted from JsonRefs
 
 export const findRefs = (obj: any) => {
-  var refs = {} as any;
+  const refs = {} as any;
 
   // Validate the provided document
   if (!isArray(obj) && !isObject(obj)) {
@@ -196,10 +196,10 @@ export const findRefs = (obj: any) => {
   }
 
   // Walk the document (or sub document) and find all JSON References
-  walk([], obj, [], function({}, node: any, path: any) {
-    var processChildren = true;
-    var refDetails;
-    var refPtr;
+  walk([], obj, [], ({}, node: any, path: any) => {
+    let processChildren = true;
+    let refDetails;
+    let refPtr;
 
     if (isRefLike(node, false)) {
       refDetails = getRefDetails(node);
@@ -225,14 +225,14 @@ export const findRefs = (obj: any) => {
 
 // pure copy of JsonRefs (added types)
 
-function walk(ancestors: any, node: any, path: any, fn: any) {
-  var processChildren = true;
+const walk = (ancestors: any, node: any, path: any, fn: any) => {
+  let processChildren = true;
 
-  function walkItem(item: any, segment: any) {
+  const walkItem = (item: any, segment: any) => {
     path.push(segment);
     walk(ancestors, item, path, fn);
     path.pop();
-  }
+  };
 
   // Call the iteratee
   if (isFunction(fn)) {
@@ -245,11 +245,11 @@ function walk(ancestors: any, node: any, path: any, fn: any) {
 
     if (processChildren !== false) {
       if (isArray(node)) {
-        node.forEach(function(member, index) {
+        node.forEach((member, index) => {
           walkItem(member, index.toString());
         });
       } else if (isObject(node)) {
-        forOwn(node, function(cNode, key) {
+        forOwn(node, (cNode, key) => {
           walkItem(cNode, key);
         });
       }
@@ -257,9 +257,9 @@ function walk(ancestors: any, node: any, path: any, fn: any) {
 
     ancestors.pop();
   }
-}
+};
 
-function pathToPtr(path: any, hashPrefix: any) {
+const pathToPtr = (path: any, hashPrefix: any) => {
   if (!isArray(path)) {
     throw new Error('path must be an Array');
   }
@@ -270,32 +270,32 @@ function pathToPtr(path: any, hashPrefix: any) {
     (path.length > 0 ? '/' : '') +
     encodePath(path).join('/')
   );
-}
+};
 
-function encodePath(path: any) {
+const encodePath = (path: any) => {
   if (!isArray(path)) {
     throw new TypeError('path must be an array');
   }
 
-  return path.map(function(seg) {
+  return path.map(seg => {
     if (!isString(seg)) {
       seg = JSON.stringify(seg);
     }
 
     return seg.replace(/~/g, '~0').replace(/\//g, '~1');
   });
-}
+};
 
-var uriDetailsCache = {} as any;
-var badPtrTokenRegex = /~(?:[^01]|$)/g;
+const uriDetailsCache = {} as any;
+const badPtrTokenRegex = /~(?:[^01]|$)/g;
 
-function getRefDetails(obj: any) {
-  var details = {
+const getRefDetails = (obj: any) => {
+  const details = {
     def: obj
   } as any;
-  var cacheKey;
-  var extraKeys;
-  var uriDetails;
+  let cacheKey;
+  let extraKeys;
+  let uriDetails;
 
   try {
     if (isRefLike(obj, true)) {
@@ -345,10 +345,10 @@ function getRefDetails(obj: any) {
   }
 
   return details;
-}
+};
 
-function getRefType(refDetails: any) {
-  var type;
+const getRefType = (refDetails: any) => {
+  let type;
 
   // Convert the URI reference to one of our types
   switch (refDetails.uriDetails.reference) {
@@ -364,22 +364,22 @@ function getRefType(refDetails: any) {
   }
 
   return type;
-}
+};
 
-function getExtraRefKeys(ref: any) {
-  return Object.keys(ref).filter(function(key) {
+const getExtraRefKeys = (ref: any) => {
+  return Object.keys(ref).filter(key => {
     return key !== '$ref';
   });
-}
+};
 
-function parseURI(uri: string) {
+const parseURI = (uri: string) => {
   // We decode first to avoid doubly encoding
   return parse(uri);
-}
+};
 
-function isPtr(ptr: any, throwWithDetails: boolean) {
-  var valid = true;
-  var firstChar;
+const isPtr = (ptr: any, throwWithDetails: boolean) => {
+  let valid = true;
+  let firstChar;
 
   try {
     if (isString(ptr)) {
@@ -406,10 +406,10 @@ function isPtr(ptr: any, throwWithDetails: boolean) {
   }
 
   return valid;
-}
+};
 
-function isRefLike(obj: any, throwWithDetails: boolean) {
-  var refLike = true;
+const isRefLike = (obj: any, throwWithDetails: boolean) => {
+  let refLike = true;
 
   try {
     if (!isPlainObject(obj)) {
@@ -426,4 +426,4 @@ function isRefLike(obj: any, throwWithDetails: boolean) {
   }
 
   return refLike;
-}
+};

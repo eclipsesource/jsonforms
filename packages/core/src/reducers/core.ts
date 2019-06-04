@@ -122,19 +122,19 @@ const getRefParserOptions = (
   return state.refParserOptions;
 };
 
-function hasRefParserOption(option: any): option is InitActionOptions {
+const hasRefParserOption = (option: any): option is InitActionOptions => {
   if (option) {
     return option.refParserOptions !== undefined;
   }
   return false;
-}
+};
 
-function hasAjvOption(option: any): option is InitActionOptions {
+const hasAjvOption = (option: any): option is InitActionOptions => {
   if (option) {
     return option.ajv !== undefined;
   }
   return false;
-}
+};
 
 export const coreReducer = (
   state: JsonFormsCore = initState,

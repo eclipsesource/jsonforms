@@ -40,7 +40,7 @@ import {
   UISchemaElement,
   uiTypeIs
 } from '@jsonforms/core';
-import { Platform, IonNav } from '@ionic/angular';
+import { IonNav, Platform } from '@ionic/angular';
 import { NgRedux } from '@angular-redux/store';
 import { MasterPage } from './pages/master/master';
 import { DetailPage } from './pages/detail/detail';

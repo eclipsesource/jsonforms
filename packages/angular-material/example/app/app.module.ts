@@ -26,7 +26,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, isDevMode, NgModule } from '@angular/core';
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
 import { Actions, JsonFormsState, UISchemaTester } from '@jsonforms/core';
-import { TranslationModule, LocaleValidationModule } from 'angular-l10n';
+import { LocaleValidationModule, TranslationModule } from 'angular-l10n';
 import { AppComponent } from './app.component';
 import { JsonFormsAngularMaterialModule } from '../../src/module';
 
