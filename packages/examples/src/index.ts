@@ -63,6 +63,8 @@ import * as huge from './huge';
 export * from './register';
 export * from './example';
 
+import * as ifThenElse from './if_then_else';
+
 export {
   allOf,
   anyOf,
@@ -101,5 +103,6 @@ export {
   issue_1220,
   issue_1253,
   oneOfRecursive,
-  huge
+  huge,
+  ifThenElse
 };
